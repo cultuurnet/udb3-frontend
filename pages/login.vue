@@ -233,7 +233,13 @@
           <div class="col-sm-6 footer-logo-and-language">
             <p class="footer-by">
               <span>{{ $t('footer.by') }}</span>
-              <a href="http://www.publiq.be" class="footer-link">publiq vzw</a>
+              <a
+                href="http://www.publiq.be"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer-link"
+                >publiq vzw</a
+              >
             </p>
 
             <img
