@@ -1,19 +1,21 @@
 <template>
-  <div class="main-container">
+  <pub-main>
     <sidebar />
     <div class="content">
       <nuxt />
     </div>
-  </div>
+  </pub-main>
 </template>
 
 <script>
   import Sidebar from '../components/sidebar';
+  import PubMain from '@/publiq-ui/pub-main';
 
   export default {
     name: 'Default',
     components: {
       Sidebar,
+      PubMain,
     },
   };
 </script>
