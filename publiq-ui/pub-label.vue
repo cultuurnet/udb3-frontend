@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
   label {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 0;
   }
 </style>
