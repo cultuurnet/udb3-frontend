@@ -1,24 +1,25 @@
 <template>
-  <pub-stack v-bind="$props">
-    <pub-tag>a tag</pub-tag>
-    <pub-tag>another one</pub-tag>
-    <pub-tag>and one more</pub-tag>
-  </pub-stack>
+  <pub-inline v-bind="propsToPassDown">
+    <pub-tag v-for="tag in tags" :key="tag">{{ tag }}</pub-tag>
+  </pub-inline>
 </template>
 
 <script>
-  import PubStack from './pub-stack';
+  import PubInline, { spacingProps } from './pub-inline';
   import PubTag from './pub-tag';
 
   import { marginProps, paddingProps } from './pub-box.vue';
-  import { spacingProps } from './pub-inline.vue';
 
   export default {
     components: {
-      PubStack,
+      PubInline,
       PubTag,
     },
     props: {
+      tags: {
+        type: Array,
+        default: () => [],
+      },
       as: {
         type: [String, Object],
         default: 'ul',
@@ -26,6 +27,12 @@
       ...marginProps,
       ...paddingProps,
       ...spacingProps,
+    },
+    computed: {
+      propsToPassDown() {
+        const { tags, ...rest } = this.$props;
+        return rest;
+      },
     },
   };
 </script>

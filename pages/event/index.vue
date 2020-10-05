@@ -1,5 +1,5 @@
 <template>
-  <pub-tags :spacing="3" />
+  <pub-tags :spacing="4" :tags="['a tag', 'and another one']" />
 </template>
 
 <script>
