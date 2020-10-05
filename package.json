@@ -32,6 +32,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.2",
     "lodash.truncate": "^4.4.2",
+    "lodash.upperfirst": "^4.3.1",
     "node-sass": "^4.14.1",
     "nuxt": "^2.14.4",
     "nuxt-fontawesome": "^0.4.0",
