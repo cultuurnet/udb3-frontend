@@ -26,7 +26,7 @@
       },
       ...marginProps,
       ...paddingProps,
-      ...spacingProps,
+      ...spacingProps({ spacing: { default: 4 } }),
     },
     computed: {
       propsToPassDown() {

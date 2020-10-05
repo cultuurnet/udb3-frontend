@@ -5,15 +5,20 @@
 </template>
 
 <script>
+  import merge from 'lodash.merge';
   import PubBox from './pub-box';
   import { marginProps, paddingProps } from './pub-box.vue';
 
-  export const spacingProps = {
-    spacing: {
-      type: [Number, Object],
-      default: 0,
-    },
-  };
+  export const spacingProps = (override = {}) =>
+    merge(
+      {
+        spacing: {
+          type: [Number, Object],
+          default: 0,
+        },
+      },
+      override,
+    );
 
   export default {
     components: {
@@ -31,7 +36,7 @@
       },
       ...marginProps,
       ...paddingProps,
-      ...spacingProps,
+      ...spacingProps(),
     },
     computed: {
       propsToPassDown() {
