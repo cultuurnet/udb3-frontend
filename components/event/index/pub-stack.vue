@@ -1,5 +1,5 @@
 <template>
-  <pub-container class="element" v-bind="$props">
+  <pub-container class="ui-stack" v-bind="$props">
     <slot class="test" />
   </pub-container>
 </template>
@@ -25,10 +25,10 @@
 </script>
 
 <style lang="scss" scoped>
-  .element {
+  .ui-stack {
     flex-direction: column;
   }
-  .element /deep/ {
+  .ui-stack /deep/ {
     > *:last-child {
       margin-bottom: 0;
     }

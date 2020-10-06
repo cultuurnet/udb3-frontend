@@ -1,5 +1,5 @@
 <template>
-  <pub-box class="element" v-bind="propsToPassDown">
+  <pub-box class="pub-container" v-bind="propsToPassDown">
     <slot class="test" />
   </pub-box>
 </template>
@@ -37,7 +37,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .element {
+  .pub-container {
     display: flex;
   }
 </style>

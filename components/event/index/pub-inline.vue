@@ -1,5 +1,5 @@
 <template>
-  <pub-container class="element" v-bind="$props">
+  <pub-container class="pub-inline" v-bind="$props">
     <slot class="test" />
   </pub-container>
 </template>
@@ -32,7 +32,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .element /deep/ {
+  .pub-inline /deep/ {
     > *:last-child {
       margin-right: 0;
     }

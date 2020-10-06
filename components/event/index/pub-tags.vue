@@ -1,5 +1,5 @@
 <template>
-  <pub-inline v-bind="propsToPassDown">
+  <pub-inline v-bind="propsToPassDown" class="pub-tags">
     <pub-tag v-for="tag in tags" :key="tag">{{ tag }}</pub-tag>
   </pub-inline>
 </template>

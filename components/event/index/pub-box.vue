@@ -35,8 +35,8 @@
     ),
   });
 
-  // margin = 2 -> ui-m-2
-  // marginHorizontal = 1 -> ui-mh-2
+  // margin = 2 -> pub-m-2
+  // marginHorizontal = 1 -> pub-mh-2
   function applyLayoutClasses(property) {
     return directions.reduce((acc, direction) => {
       const propName = `${property}${upperFirst(direction)}`;
@@ -52,7 +52,7 @@
 
       return {
         ...acc,
-        [`ui-${identifier}-${value}`]: true,
+        [`pub-${identifier}-${value}`]: true,
       };
     }, {});
   }
@@ -76,9 +76,8 @@
     computed: {
       classes() {
         return {
-          reset: true,
-          element: true,
-          'reset-list': this.as === 'ol' || this.as === 'ul',
+          'pub-reset': true,
+          'pub-reset-list': this.as === 'ol' || this.as === 'ul',
           ...applyLayoutClasses.call(this, 'margin'),
           ...applyLayoutClasses.call(this, 'padding'),
         };
@@ -101,66 +100,66 @@
     @return 0;
   }
 
-  .reset {
+  .pub-reset {
     margin: 0;
     padding: 0;
   }
 
-  .reset-list {
+  .pub-reset-list {
     list-style-type: none;
     list-style-position: outside;
   }
 
   @for $spacing from 0 through 12 {
-    .ui-m-#{$spacing} {
+    .pub-m-#{$spacing} {
       margin: parseSpacing($spacing);
     }
 
-    .ui-mh-#{$spacing} {
+    .pub-mh-#{$spacing} {
       margin-left: parseSpacing($spacing);
       margin-right: parseSpacing($spacing);
     }
-    .ui-mv-#{$spacing} {
+    .pub-mv-#{$spacing} {
       margin-top: parseSpacing($spacing);
       margin-bottom: parseSpacing($spacing);
     }
 
-    .ui-mt-#{$spacing} {
+    .pub-mt-#{$spacing} {
       margin-top: parseSpacing($spacing);
     }
-    .ui-mb-#{$spacing} {
+    .pub-mb-#{$spacing} {
       margin-bottom: parseSpacing($spacing);
     }
-    .ui-mr-#{$spacing} {
+    .pub-mr-#{$spacing} {
       margin-right: parseSpacing($spacing);
     }
-    .ui-ml-#{$spacing} {
+    .pub-ml-#{$spacing} {
       margin-left: parseSpacing($spacing);
     }
 
-    .ui-p-#{$spacing} {
+    .pub-p-#{$spacing} {
       padding: parseSpacing($spacing);
     }
 
-    .ui-ph-#{$spacing} {
+    .pub-ph-#{$spacing} {
       padding-left: parseSpacing($spacing);
       padding-right: parseSpacing($spacing);
     }
-    .ui-pv-#{$spacing} {
+    .pub-pv-#{$spacing} {
       padding-top: parseSpacing($spacing);
       padding-bottom: parseSpacing($spacing);
     }
 
-    .ui-pt-#{$spacing} {
+    .pub-pt-#{$spacing} {
       padding-top: parseSpacing($spacing);
     }
-    .ui-pb-#{$spacing} {
+    .pub-pb-#{$spacing} {
       padding-bottom: parseSpacing($spacing);
     }
-    .ui-pr-#{$spacing} {
+    .pub-pr-#{$spacing} {
       padding-right: parseSpacing($spacing);
     }
-    .ui-pl-#{$spacing} {
+    .pub-pl-#{$spacing} {
       padding-left: parseSpacing($spacing);
     }
   }

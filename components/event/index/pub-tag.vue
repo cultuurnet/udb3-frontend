@@ -1,5 +1,5 @@
 <template>
-  <pub-box class="element" v-bind="$props">
+  <pub-box class="pub-tag" v-bind="$props">
     <slot />
   </pub-box>
 </template>
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .element {
+  .pub-tag {
     border: 1px solid black;
   }
 </style>
