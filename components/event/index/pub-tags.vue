@@ -5,29 +5,28 @@
 </template>
 
 <script>
-  import PubInline, { spacingProps } from './pub-inline';
+  import merge from 'lodash.merge';
+  import PubInline, { props as inlineProps } from './pub-inline';
   import PubTag from './pub-tag';
 
-  import { marginProps, paddingProps } from './pub-box.vue';
+  export const props = (override = {}) =>
+    merge(
+      {
+        tags: {
+          type: Array,
+          default: () => [],
+        },
+        ...inlineProps(),
+      },
+      override,
+    );
 
   export default {
     components: {
       PubInline,
       PubTag,
     },
-    props: {
-      tags: {
-        type: Array,
-        default: () => [],
-      },
-      as: {
-        type: [String, Object],
-        default: 'ul',
-      },
-      ...marginProps,
-      ...paddingProps,
-      ...spacingProps({ spacing: { default: 4 } }),
-    },
+    props: props({ as: { default: 'ul' }, spacing: { default: 4 } }),
     computed: {
       propsToPassDown() {
         const { tags, ...rest } = this.$props;

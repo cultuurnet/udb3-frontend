@@ -1,57 +1,37 @@
 <template>
-  <pub-box class="element" v-bind="propsToPassDown">
+  <pub-container class="element" v-bind="$props">
     <slot class="test" />
-  </pub-box>
+  </pub-container>
 </template>
 
 <script>
   import merge from 'lodash.merge';
+  import PubContainer, { props as containerProps } from './pub-container';
+  import { props as boxProps } from './pub-box';
 
-  import PubBox from './pub-box';
-  import { marginProps, paddingProps } from './pub-box.vue';
-
-  export const spacingProps = (override = {}) =>
+  export const props = (override = {}) =>
     merge(
       {
-        spacing: {
-          type: [Number, Object],
-          default: 0,
-        },
+        ...boxProps(),
+        ...containerProps(),
       },
       override,
     );
 
   export default {
     components: {
-      PubBox,
+      PubContainer,
     },
     provide() {
       return {
         injectedProps: { marginRight: this.spacing },
       };
     },
-    props: {
-      as: {
-        type: [String, Object],
-        default: 'section',
-      },
-      ...marginProps,
-      ...paddingProps,
-      ...spacingProps(),
-    },
-    computed: {
-      propsToPassDown() {
-        const { spacing, ...rest } = this.$props;
-        return rest;
-      },
-    },
+    props: props(),
   };
 </script>
 
 <style lang="scss" scoped>
-  .element {
-    display: flex;
-  }
   .element /deep/ {
     > *:last-child {
       margin-right: 0;

@@ -5,28 +5,18 @@
 </template>
 
 <script>
-  import PubBox from './pub-box';
-  import { marginProps, paddingProps } from './pub-box.vue';
+  import PubBox, { props as boxProps } from './pub-box';
 
   export default {
     components: {
       PubBox,
     },
     props: {
-      as: {
-        type: [String, Object],
-        default: 'li',
-      },
-      ...marginProps,
-      ...paddingProps,
-      paddingHorizontal: {
-        type: [String, Number],
-        default: 3,
-      },
-      paddingVertical: {
-        type: [String, Number],
-        default: 2,
-      },
+      ...boxProps({
+        as: { default: 'li' },
+        paddingVertical: { default: 2 },
+        paddingHorizontal: { default: 3 },
+      }),
     },
   };
 </script>

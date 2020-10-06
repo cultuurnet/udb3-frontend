@@ -1,28 +1,16 @@
 <template>
-  <pub-box class="element" v-bind="propsToPassDown">
-    <slot />
-  </pub-box>
+  <pub-container class="element" v-bind="$props">
+    <slot class="test" />
+  </pub-container>
 </template>
 
 <script>
-  import merge from 'lodash.merge';
-  import PubBox from './pub-box';
-  import { marginProps, paddingProps } from './pub-box.vue';
-
-  export const spacingProps = (override = {}) =>
-    merge(
-      {
-        spacing: {
-          type: [Number, Object],
-          default: 0,
-        },
-      },
-      override,
-    );
+  import PubContainer, { props as containerProps } from './pub-container';
+  import { props as boxProps } from './pub-box';
 
   export default {
     components: {
-      PubBox,
+      PubContainer,
     },
     provide() {
       return {
@@ -30,26 +18,14 @@
       };
     },
     props: {
-      as: {
-        type: [String, Object],
-        default: 'section',
-      },
-      ...marginProps,
-      ...paddingProps,
-      ...spacingProps(),
-    },
-    computed: {
-      propsToPassDown() {
-        const { spacing, ...rest } = this.$props;
-        return rest;
-      },
+      ...boxProps(),
+      ...containerProps(),
     },
   };
 </script>
 
 <style lang="scss" scoped>
   .element {
-    display: flex;
     flex-direction: column;
   }
   .element /deep/ {
