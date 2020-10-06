@@ -6,6 +6,7 @@
 
 <script>
   import upperFirst from 'lodash.upperfirst';
+  import merge from 'lodash.merge';
 
   const directions = [
     '',
@@ -56,19 +57,22 @@
     }, {});
   }
 
-  export const marginProps = prepareLayoutProps('margin');
-  export const paddingProps = prepareLayoutProps('padding');
+  export const props = (override = {}) =>
+    merge(
+      {
+        ...prepareLayoutProps('margin'),
+        ...prepareLayoutProps('padding'),
+        as: {
+          type: [String, Object],
+          default: 'div',
+        },
+      },
+      override,
+    );
 
   export default {
     inject: ['injectedProps'],
-    props: {
-      as: {
-        type: [String, Object],
-        default: 'div',
-      },
-      ...marginProps,
-      ...paddingProps,
-    },
+    props: props(),
     computed: {
       classes() {
         return {
