@@ -31,6 +31,7 @@
     "lodash-es": "^4.17.15",
     "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.2",
+    "lodash.omit": "^4.5.0",
     "lodash.truncate": "^4.4.2",
     "lodash.upperfirst": "^4.3.1",
     "node-sass": "^4.14.1",

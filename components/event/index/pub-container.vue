@@ -6,6 +6,7 @@
 
 <script>
   import merge from 'lodash.merge';
+  import omit from 'lodash.omit';
 
   import PubBox from './pub-box';
   import { props as boxProps } from './pub-box.vue';
@@ -29,8 +30,7 @@
     props: props({ as: { default: 'section' } }),
     computed: {
       propsToPassDown() {
-        const { spacing, ...rest } = this.$props;
-        return rest;
+        return omit(this.$props, ['spacing']);
       },
     },
   };

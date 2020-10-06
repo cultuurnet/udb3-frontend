@@ -6,6 +6,8 @@
 
 <script>
   import merge from 'lodash.merge';
+  import omit from 'lodash.omit';
+
   import PubInline, { props as inlineProps } from './pub-inline';
   import PubTag from './pub-tag';
 
@@ -29,8 +31,7 @@
     props: props({ as: { default: 'ul' }, spacing: { default: 4 } }),
     computed: {
       propsToPassDown() {
-        const { tags, ...rest } = this.$props;
-        return rest;
+        return omit(this.$props, ['tags']);
       },
     },
   };
