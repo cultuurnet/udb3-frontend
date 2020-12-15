@@ -34,7 +34,8 @@ export const findByIds = (apiUrl, headers, fetch) => async (eventIds) => {
   });
 
   const events = await Promise.all(mappedEvents);
-  return events.filter((event) => !event.status);
+  // only return valid events
+  return events.filter((event) => event['@id']);
 };
 
 export const getCalendarSummary = (apiUrl, headers, fetch) => async ({
