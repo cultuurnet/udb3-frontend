@@ -3,7 +3,7 @@ import { useCookiesWithOptions } from './useCookiesWithOptions';
 const FeatureFlags = {
   REACT_DASHBOARD: 'react_dashboard',
   REACT_CREATE: 'react_create',
-};
+} as const;
 
 const createCookieName = (identifier: any) => `ff_${identifier}`;
 
