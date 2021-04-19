@@ -1,4 +1,5 @@
 import { useCookies as useReactCookies } from 'react-cookie';
+import { CookieSetOptions } from 'universal-cookie';
 
 const defaultCookieOptions = {
   maxAge: 60 * 60 * 24 * 30,
@@ -6,8 +7,8 @@ const defaultCookieOptions = {
 };
 
 const useCookiesWithOptions = (
-  dependencies = [],
-  options = defaultCookieOptions,
+  dependencies: string[] = [],
+  options: CookieSetOptions = defaultCookieOptions,
 ) => {
   const [cookies, setCookie, removeCookie] = useReactCookies(dependencies);
 
