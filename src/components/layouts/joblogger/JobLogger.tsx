@@ -26,7 +26,9 @@ const JobLoggerStates = {
   WARNING: 'warning',
   BUSY: 'busy',
   COMPLETE: 'complete',
-};
+} as const;
+
+type Values<T> = T[keyof T];
 
 type JobTitleProps = {
   children: React.ReactNode;
@@ -51,7 +53,7 @@ const JobTitle = ({ children, className, ...props }: JobTitleProps) => (
 type JobLoggerProps = {
   visible: boolean;
   onClose: () => void;
-  onStatusChange: () => void;
+  onStatusChange: (status: Values<typeof JobLoggerStates>) => void;
 };
 
 const JobLogger = ({ visible, onClose, onStatusChange }: JobLoggerProps) => {

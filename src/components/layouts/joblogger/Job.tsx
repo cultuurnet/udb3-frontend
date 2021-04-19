@@ -26,11 +26,12 @@ const JobStates = {
   FINISHED: 'finished',
   FAILED: 'failed',
   STARTED: 'started',
-};
+} as const;
+
+type Values<T> = T[keyof T];
 
 type StatusIconProps = {
-  // TODO: fix this
-  state: unknown;
+  state: Values<typeof JobStates>;
 };
 
 const StatusIcon = memo(({ state }: StatusIconProps) => {
@@ -66,8 +67,7 @@ const StatusIcon = memo(({ state }: StatusIconProps) => {
 type JobProps = {
   createdAt: Date;
   finishedAt: Date;
-  // TODO: fix this
-  state: unknown;
+  state: Values<typeof JobStates>;
   messages: unknown;
   exportUrl: string;
   onClick: () => void;

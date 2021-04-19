@@ -189,9 +189,10 @@ const ComponentMap = {
   [JobLoggerStates.BUSY]: BusyIcon,
 };
 
+type Values<T> = T[keyof T];
+
 type JobLoggerStateIndicatorProps = {
-  // TODO: fix this
-  state: unknown;
+  state: Values<typeof JobLoggerStates>;
 };
 
 const JobLoggerStateIndicator = memo(

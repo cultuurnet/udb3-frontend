@@ -182,12 +182,13 @@ const PermissionTypes = {
   PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
 };
 
+type Values<T> = T[keyof T];
+
 type NotificationMenuProps = {
   countUnseenAnnouncements: number;
   onClickAnnouncementsButton: () => void;
   onClickJobLoggerButton: () => void;
-  // TODO: fix this
-  jobLoggerState: unknown;
+  jobLoggerState: Values<typeof JobLoggerStates>;
 };
 
 const NotificationMenu = memo(

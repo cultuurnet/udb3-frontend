@@ -17,6 +17,8 @@ const AnnouncementStatus = {
   UNSEEN: 'unseen',
 };
 
+type Values<T> = T[keyof T];
+
 const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');
 const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
@@ -24,8 +26,7 @@ const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
 type AnnouncementProps = {
   id: string;
   title: string;
-  // TODO: fix this
-  status: unknown;
+  status: Values<typeof AnnouncementStatus>;
   onClick: () => void;
 };
 
