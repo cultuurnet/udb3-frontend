@@ -1,6 +1,5 @@
 import getConfig from 'next/config';
 import { useEffect } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'sock... Remove this comment to see the full error message
 import socketIOClient from 'socket.io-client';
 
 const SocketMessageTypes = {
