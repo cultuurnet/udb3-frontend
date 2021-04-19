@@ -3,19 +3,23 @@ import { useIsClient } from './useIsClient';
 
 const EventTypes = {
   NAVIGATE_PREVIOUS_PAGE: 'popstate',
+} as const;
+
+type Values<T> = T[keyof T];
+
+type EventsMap = {
+  [K in Values<typeof EventTypes>]?: () => void;
 };
 
-const useHandleEvent = (eventsMap = {}) => {
+const useHandleEvent = (eventsMap: EventsMap = {}) => {
   const isClient = useIsClient();
   useEffect(() => {
     if (!isClient) return;
     Object.entries(eventsMap).forEach(([type, handler]) => {
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
       window.addEventListener(type, handler);
     });
     return () => {
       Object.entries(eventsMap).forEach(([type, handler]) => {
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
         window.removeEventListener(type, handler);
       });
     };
