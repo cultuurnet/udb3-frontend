@@ -1,27 +1,17 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import { PropTypes } from 'prop-types';
 import truncate from 'lodash/truncate';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Alert' or its correspondi... Remove this comment to see the full error message
 import stripHTML from 'string-strip-html';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Card' or its correspondin... Remove this comment to see the full error message
 import { Alert, AlertVariants } from '@/ui/Alert';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Image' or its correspondi... Remove this comment to see the full error message
 import { Card } from '@/ui/Card';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Image } from '@/ui/Image';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Text' or its correspondin... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Title' or its correspondi... Remove this comment to see the full error message
 import { Text } from '@/ui/Text';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/events' or its cor... Remove this comment to see the full error message
 import { Title } from '@/ui/Title';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/CalendarType' or i... Remove this comment to see the full error message
 import { useGetCalendarSummary } from '@/hooks/api/events';
 import { CalendarType } from '@/constants/CalendarType';
 
@@ -76,11 +66,11 @@ const Event = ({
           <Text>
             {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             {locationName} {locationCity}
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </Text>
           {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {!!organizerName && <Text>{organizerName}</Text>}
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         </Stack>
         {imageUrl && (
           <Image
@@ -92,7 +82,7 @@ const Event = ({
             backgroundRepeat="no-repeat"
             backgroundPosition="center center"
             objectFit="cover"
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           />
         )}
       </Inline>
@@ -105,7 +95,7 @@ const Event = ({
         <Text fontWeight="bold">{productionName}</Text>
       </Alert>
     </Card>
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   );
 };
 

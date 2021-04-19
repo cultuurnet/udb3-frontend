@@ -1,12 +1,9 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import flatten from 'lodash/flatten';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { Cookies } from 'react-cookie';
 import { useQuery, useQueries, useMutation } from 'react-query';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/isTokenValid' or its c... Remove this comment to see the full error message
 import { isTokenValid } from '@/utils/isTokenValid';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useCookiesWithOptions'... Remove this comment to see the full error message
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import { createHeaders, useHeaders } from './useHeaders';
 
@@ -149,7 +146,7 @@ const useAuthenticatedMutation = ({
       return '';
     }
     return JSON.parse(result);
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'text' does not exist on type 'void'.
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'text' does not exist on type 'void'.
   }, []);
 
   return useMutation(innerMutationFn, configuration);
@@ -194,7 +191,7 @@ const useAuthenticatedMutations = ({
         return JSON.parse(result);
       }),
     );
-  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'response' implicitly has an 'any' type.
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'response' implicitly has an 'any' type.
   }, []);
 
   return useMutation(innerMutationFn, configuration);

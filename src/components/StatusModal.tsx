@@ -1,15 +1,10 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Modal' or its correspondi... Remove this comment to see the full error message
 import { Modal, ModalVariants } from '@/ui/Modal';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/components/ReasonAndTypeForm... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/OfferType' or its ... Remove this comment to see the full error message
 import { ReasonAndTypeForm } from '@/components/ReasonAndTypeForm';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Spinner' or its correspon... Remove this comment to see the full error message
 import { OfferType } from '@/constants/OfferType';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/OfferStatus' or it... Remove this comment to see the full error message
 import { Spinner } from '@/ui/Spinner';
 import { OfferStatus } from '@/constants/OfferStatus';
 
@@ -63,7 +58,7 @@ const StatusModal = ({ visible, loading, className, onClose, onConfirm }) => {
           />
         </Stack>
       )}
-    {/* @ts-expect-error ts-migrate(7006) FIXME: Parameter 'e' implicitly has an 'any' type. */}
+      {/* @ts-expect-error ts-migrate(7006) FIXME: Parameter 'e' implicitly has an 'any' type. */}
     </Modal>
   );
 };

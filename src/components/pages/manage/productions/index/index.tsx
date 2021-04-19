@@ -1,37 +1,25 @@
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Page' or its correspondin... Remove this comment to see the full error message
 import { Page } from '@/ui/Page';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/InputWithLabel' or its co... Remove this comment to see the full error message
 import { InputWithLabel } from '@/ui/InputWithLabel';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
 import {
   useAddEventById,
   useDeleteEventsByIds,
   useGetProductions,
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/productions' or it... Remove this comment to see the full error message
 } from '@/hooks/api/productions';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Link' or its correspondin... Remove this comment to see the full error message
 import { Link } from '@/ui/Link';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/events' or its cor... Remove this comment to see the full error message
 import { useGetEventsByIds } from '@/hooks/api/events';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/parseOfferId' or its c... Remove this comment to see the full error message
 import { parseOfferId } from '@/utils/parseOfferId';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/authenticated-quer... Remove this comment to see the full error message
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Text' or its correspondin... Remove this comment to see the full error message
 import { Text } from '@/ui/Text';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import throttle from 'lodash/throttle';
 import { useQueryClient } from 'react-query';
 import { DeleteModal } from './DeleteModal';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Events' was resolved to '/Users/simondeb... Remove this comment to see the full error message
 import { Events } from './Events';
 import { Productions } from './Productions';
 import { dehydrate } from 'react-query/hydration';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/getApplicationServerSi... Remove this comment to see the full error message
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const productionsPerPage = 15;

@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Box' or its corresponding... Remove this comment to see the full error message
 import { Box } from '@/ui/Box';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useCookiesWithOptions'... Remove this comment to see the full error message
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/getApplicationServerSi... Remove this comment to see the full error message
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { memo, useMemo } from 'react';
 

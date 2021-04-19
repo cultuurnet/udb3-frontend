@@ -1,24 +1,15 @@
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/authenticated-quer... Remove this comment to see the full error message
 import { useEffect, useState } from 'react';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Alert' or its correspondi... Remove this comment to see the full error message
 import { Alert, AlertVariants } from '@/ui/Alert';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Page' or its correspondin... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Spinner' or its correspon... Remove this comment to see the full error message
 import { Page } from '@/ui/Page';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/parseOfferId' or its c... Remove this comment to see the full error message
 import { Spinner } from '@/ui/Spinner';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/parseOfferType' or its... Remove this comment to see the full error message
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/components/ReasonAndTypeForm... Remove this comment to see the full error message
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/OfferStatus' or it... Remove this comment to see the full error message
 import { ReasonAndTypeForm } from '@/components/ReasonAndTypeForm';
 
 import { OfferStatus } from '@/constants/OfferStatus';
@@ -71,7 +62,7 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }) => {
         {changeStatusMutation.status === QueryStatus.LOADING ? (
           <Spinner marginTop={4} />
         ) : // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-          error || changeStatusMutation.error ? (
+        error || changeStatusMutation.error ? (
           <Alert variant={AlertVariants.WARNING}>
             {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             {error.message || changeStatusMutation.error?.message}

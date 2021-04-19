@@ -1,21 +1,14 @@
 import PropTypes from 'prop-types';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/user' or its corre... Remove this comment to see the full error message
 import { useGetUser } from '@/hooks/api/user';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useCookiesWithOptions'... Remove this comment to see the full error message
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useHandleWindowMessage... Remove this comment to see the full error message
 } from '@/hooks/useHandleWindowMessage';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/isTokenValid' or its c... Remove this comment to see the full error message
 import { isTokenValid } from '@/utils/isTokenValid';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/sentry' or its corresp... Remove this comment to see the full error message
 import { setSentryUser } from '@/utils/sentry';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Sidebar' was resolved to '/Users/simonde... Remove this comment to see the full error message
 import { Sidebar } from './Sidebar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -142,7 +135,7 @@ const LayoutWrapper = ({ children }) => {
       fallback={({ error }) => <ErrorFallback error={error} />}
     >
       <Layout>{children}</Layout>
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     </Sentry.ErrorBoundary>
   );
 };

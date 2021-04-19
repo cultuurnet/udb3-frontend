@@ -1,37 +1,25 @@
 import { useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/List' or its correspondin... Remove this comment to see the full error message
 import { useTranslation } from 'react-i18next';
 
 import { List } from '@/ui/List';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/CheckboxWithLabel' or its... Remove this comment to see the full error message
 import { Title } from '@/ui/Title';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/theme' or its correspondi... Remove this comment to see the full error message
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { Panel } from '@/ui/Panel';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { getInlineProps, Inline, inlinePropTypes } from '@/ui/Inline';
 import { Spinner } from '@/ui/Spinner';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Alert' or its correspondi... Remove this comment to see the full error message
 import { Alert, AlertVariants } from '@/ui/Alert';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/DetailTable' or its corre... Remove this comment to see the full error message
 import { Input } from '@/ui/Input';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Box' or its corresponding... Remove this comment to see the full error message
 import { DetailTable } from '@/ui/DetailTable';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Text' or its correspondin... Remove this comment to see the full error message
 import { parseSpacing } from '@/ui/Box';
 import { Text } from '@/ui/Text';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/events' or its cor... Remove this comment to see the full error message
 import { useGetCalendarSummary } from '@/hooks/api/events';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/CalendarType' or i... Remove this comment to see the full error message
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { CalendarType } from '@/constants/CalendarType';
 
@@ -76,7 +64,7 @@ const Event = ({
       paddingTop={3}
       backgroundColor="white"
       className={className}
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     >
       <Stack as="div" flex={1} spacing={3}>
         <Inline as="div" justifyContent="space-between">
@@ -89,7 +77,7 @@ const Event = ({
             checked={selected}
           >
             {name}
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </CheckboxWithLabel>
           <Button
             onClick={handleClickToggleExpand}
@@ -148,7 +136,7 @@ const Actions = ({
         {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {t('productions.overview.events_in_production', {
           productionName: activeProductionName,
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         })}
       </Title>
       <Inline as="div" spacing={3}>
@@ -228,7 +216,7 @@ const AddAction = ({
         // @ts-expect-error ts-migrate(2722) FIXME: Cannot invoke an object which is possibly 'undefin... Remove this comment to see the full error message
         onClick={() => onAdd(toBeAddedEventId)}
         shouldHideText={shouldCollapse}
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       >
         {t('productions.overview.confirm')}
       </Button>
@@ -299,7 +287,7 @@ const Events = ({
             >
               {errorMessage}
             </Alert>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </Stack>
         ) : (
           <Actions
@@ -346,8 +334,8 @@ const Events = ({
                 css={
                   // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                   index !== events.length - 1
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    ? (props) => {
+                    ? // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+                      (props) => {
                         return `border-bottom: 1px solid ${getValue(
                           'borderColor',
                         )(props)};`;

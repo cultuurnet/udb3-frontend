@@ -1,19 +1,11 @@
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Text' or its correspondin... Remove this comment to see the full error message
 import { Text } from '@/ui/Text';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Page' or its correspondin... Remove this comment to see the full error message
 import { Page } from '@/ui/Page';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/TypeaheadWithLabel' or it... Remove this comment to see the full error message
 import { TypeaheadWithLabel } from '@/ui/TypeaheadWithLabel';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Event' was resolved to '/Users/simondebr... Remove this comment to see the full error message
 import { Event } from './Event';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/getApplicationServerSi... Remove this comment to see the full error message
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/parseOfferId' or its c... Remove this comment to see the full error message
 import { parseOfferId } from '@/utils/parseOfferId';
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import {
@@ -22,18 +14,12 @@ import {
   useSkipSuggestedEvents,
   useCreateWithEvents,
   useMergeProductions,
-  // @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/productions' or it... Remove this comment to see the full error message
   useAddEventsByIds,
 } from '@/hooks/api/productions';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/RadioButtonGroup' or its ... Remove this comment to see the full error message
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import throttle from 'lodash/throttle';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/api/authenticated-quer... Remove this comment to see the full error message
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Spinner' or its correspon... Remove this comment to see the full error message
 import { Spinner } from '@/ui/Spinner';
 
 const ProductionStatus = {
@@ -190,8 +176,8 @@ const Create = () => {
         ) : events.length === 0 ? (
           // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Text>{t('productions.create.no_suggested_events_found')}</Text>
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         ) : (
+          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Stack spacing={5}>
             <Text>
               {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
@@ -201,7 +187,7 @@ const Create = () => {
               </Text>{' '}
               {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {Math.round(similarity * 100)}%
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </Text>
             {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Inline spacing={4}>
@@ -257,14 +243,15 @@ const Create = () => {
                   name="production-names"
                   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'production' implicitly has an 'any' typ... Remove this comment to see the full error message
                   items={events
-                    .map((event) =>
-                      event.production
-                        ? {
-                            label: event.production.title,
-                            value: event.production.id,
-                          }
-                        : undefined,
-                    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'selected' implicitly has an 'any' type.
+                    .map(
+                      (event) =>
+                        event.production
+                          ? {
+                              label: event.production.title,
+                              value: event.production.id,
+                            }
+                          : undefined,
+                      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'selected' implicitly has an 'any' type.
                     )
                     .filter((productionName) => productionName !== undefined)}
                   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'undefined' is not assignable to ... Remove this comment to see the full error message
@@ -273,7 +260,7 @@ const Create = () => {
                     // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     setSelectedProductionId(e.target.value.toString());
                   }}
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 />
               ) : (
                 <TypeaheadWithLabel

@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/fetchFromApi' or its c... Remove this comment to see the full error message
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import {
   useAuthenticatedMutation,

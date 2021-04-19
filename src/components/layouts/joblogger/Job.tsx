@@ -1,23 +1,15 @@
 import PropTypes from 'prop-types';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Box' or its corresponding... Remove this comment to see the full error message
 import { Box } from '@/ui/Box';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Icon' or its correspondin... Remove this comment to see the full error message
 import { Icon, Icons } from '@/ui/Icon';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/List' or its correspondin... Remove this comment to see the full error message
 import { List } from '@/ui/List';
 import { formatDistance } from 'date-fns';
 import { nlBE, fr } from 'date-fns/locale';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/theme' or its correspondi... Remove this comment to see the full error message
 import { getValueFromTheme } from '@/ui/theme';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Link' or its correspondin... Remove this comment to see the full error message
 import { Link, LinkVariants } from '@/ui/Link';
 
 const getValue = getValueFromTheme('jobStatusIcon');
@@ -46,7 +38,7 @@ const StatusIcon = memo(({ state }) => {
         name={Icons.CHECK_CIRCLE}
         color={getValue('complete.circleFillColor')}
       />
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     );
   }
   return (

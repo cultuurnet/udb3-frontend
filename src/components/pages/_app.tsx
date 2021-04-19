@@ -1,16 +1,9 @@
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useCookiesWithOptions'... Remove this comment to see the full error message
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useFeatureFlag' or its... Remove this comment to see the full error message
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/i18n/index' or its correspon... Remove this comment to see the full error message
 import i18n from '@/i18n/index';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/layouts/index' or its corres... Remove this comment to see the full error message
 import Layout from '@/layouts/index';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/styles/GlobalStyle' or its c... Remove this comment to see the full error message
 import { GlobalStyle } from '@/styles/GlobalStyle';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/ThemeProvider' or its cor... Remove this comment to see the full error message
 import { ThemeProvider } from '@/ui/ThemeProvider';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/sentry' or its corresp... Remove this comment to see the full error message
 import { initializeSentry } from '@/utils/sentry';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -89,7 +82,7 @@ const Head = () => {
         key="viewport"
         name="viewport"
         content="initial-scale=1.0, width=device-width"
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <link
         key="icon"
@@ -98,7 +91,7 @@ const Head = () => {
         // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         sizes="32x32"
         href="/favicon.png"
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <title key="title">UiTdatabank</title>
       <meta name="description" content={t('description')} />

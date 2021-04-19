@@ -1,5 +1,4 @@
 import { match } from 'path-to-regexp';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/data/user' or its corre... Remove this comment to see the full error message
 import { user } from '@/test/data/user';
 
 const mockRouterWithParams = ({ query, ...rest } = {}) => {
