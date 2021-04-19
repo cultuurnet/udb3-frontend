@@ -8,7 +8,6 @@ import { initializeSentry } from '@/utils/sentry';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import NextHead from 'next/head';
-import PropTypes from 'prop-types';
 import { cloneElement } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
 import { I18nextProvider, useTranslation } from 'react-i18next';

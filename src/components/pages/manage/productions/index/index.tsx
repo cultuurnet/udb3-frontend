@@ -12,7 +12,6 @@ import { Link } from '@/ui/Link';
 import { useGetEventsByIds } from '@/hooks/api/events';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-
 import { Text } from '@/ui/Text';
 import throttle from 'lodash/throttle';
 import { useQueryClient } from 'react-query';

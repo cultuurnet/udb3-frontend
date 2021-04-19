@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { Box } from '@/ui/Box';

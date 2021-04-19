@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-
 import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
 import { List } from '@/ui/List';

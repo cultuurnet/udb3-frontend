@@ -1,12 +1,9 @@
 import { eventWithSubEvents } from '@/test/data/event';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { setupPage } from '@/test/utils/setupPage';
-
 import { waitFor, screen } from '@testing-library/react/pure';
-
 import Status from './status';
 import nl from '@/i18n/nl.json';
-
 import { renderPageWithWrapper } from '@/test/utils/renderPageWithWrapper';
 import userEvent from '@testing-library/user-event';
 import { waitForFetch } from '@/test/utils/waitForFetch';

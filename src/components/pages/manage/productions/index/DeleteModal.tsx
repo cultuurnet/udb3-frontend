@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@/ui/Box';
 import { Modal, ModalVariants } from '@/ui/Modal';

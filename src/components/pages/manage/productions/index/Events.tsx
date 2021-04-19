@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 
-import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
+import { useTranslation } from 'react-i18next';
 import { List } from '@/ui/List';
 import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
@@ -18,7 +17,6 @@ import { Input } from '@/ui/Input';
 import { DetailTable } from '@/ui/DetailTable';
 import { parseSpacing } from '@/ui/Box';
 import { Text } from '@/ui/Text';
-
 import { useGetCalendarSummary } from '@/hooks/api/events';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { CalendarType } from '@/constants/CalendarType';
