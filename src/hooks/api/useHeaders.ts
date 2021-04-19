@@ -3,7 +3,7 @@ import { useCookiesWithOptions } from '../useCookiesWithOptions';
 
 const createHeaders = (
   token: string,
-  extraHeaders: Record<string, unknown>,
+  extraHeaders: Record<string, unknown> = {},
 ): Record<string, unknown> => {
   const { publicRuntimeConfig } = getConfig();
 
@@ -14,7 +14,7 @@ const createHeaders = (
   };
 };
 
-const useHeaders = (extraHeaders: Record<string, unknown> = {}) => {
+const useHeaders = (extraHeaders?: Record<string, unknown>) => {
   const { cookies } = useCookiesWithOptions(['token']);
   return createHeaders(cookies.token, extraHeaders);
 };
