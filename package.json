@@ -72,6 +72,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^5.0.3",
     "@testing-library/user-event": "^12.8.0",
+    "@types/lodash": "^4.14.168",
     "@types/react": "^17.0.3",
     "@types/react-query": "^1.1.2",
     "@types/socket.io-client": "^1.4.36",
