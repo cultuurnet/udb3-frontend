@@ -25,20 +25,9 @@ const Svg = (props) => (
   />
 );
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...boxPropTypes
-*/
-type GroupProps = {};
+const Group = (props: unknown) => <Box as="g" fill="white" {...props} />;
 
-const Group = (props: GroupProps) => <Box as="g" fill="white" {...props} />;
-
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...boxPropTypes
-*/
-type PathProps = {};
-const Path = (props: PathProps) => <Box as="path" {...props} />;
+const Path = (props: unknown) => <Box as="path" {...props} />;
 
 const Animation = (props) => {
   const draw = keyframes`
@@ -301,10 +290,10 @@ const Animation = (props) => {
 };
 
 type ColumnProps = {
-    value?: string;
-    title?: string;
-    info?: string;
-    children?: React.ReactNode;
+  value?: string;
+  title?: string;
+  info?: string;
+  children?: React.ReactNode;
 };
 
 const Column = ({ value, title, children, ...props }: ColumnProps) => (

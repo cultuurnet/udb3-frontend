@@ -76,16 +76,13 @@ const Create = () => {
     () =>
       events
         .map((event) => event?.production)
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
         .filter((production) => !!production),
     [events],
   );
 
-  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'production' implicitly has an 'any' typ... Remove this comment to see the full error message
   const selectedProduction = useMemo(
     () =>
       availableProductions.find(
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'production' implicitly has an 'any' typ... Remove this comment to see the full error message
         (production) => production.id === selectedProductionId,
       ),
     [selectedProductionId],
@@ -132,7 +129,6 @@ const Create = () => {
     setSearchInput(trimmedSearchTerm);
   }, []);
 
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'undefined' is not assignable to ... Remove this comment to see the full error message
   const handleClickLink = () => {
     if (status === ProductionStatus.MISSING) return;
     if (status === ProductionStatus.NEW) {
@@ -143,15 +139,12 @@ const Create = () => {
       });
       return;
     }
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
-    // merge the unselected production into the selected production when there are 2 availableProductions
     if (availableProductions.length === 2) {
       const unselectedProductionId = availableProductions.find(
         (production) => production.id !== selectedProductionId,
       )?.id;
       mergeProductionsMutation.mutate({
         fromProductionId: unselectedProductionId,
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'production' implicitly has an 'any' typ... Remove this comment to see the full error message
         toProductionId: selectedProductionId,
       });
       return;
@@ -169,38 +162,26 @@ const Create = () => {
     <Page>
       <Page.Title>{t('productions.create.title')}</Page.Title>
       <Page.Content>
-        {/* @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type. */}
         {getSuggestedEventsQuery.status === QueryStatus.LOADING ? (
-          // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
           <Spinner marginTop={4} />
         ) : events.length === 0 ? (
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Text>{t('productions.create.no_suggested_events_found')}</Text>
         ) : (
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <Stack spacing={5}>
             <Text>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Text fontWeight="bold">
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 {t('productions.create.suggested_events')}
               </Text>{' '}
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {Math.round(similarity * 100)}%
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </Text>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Inline spacing={4}>
               {events.map((event) => {
                 const id = event?.['@id'] && parseOfferId(event['@id']);
                 return (
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   <Event
                     id={id}
-                    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
                     key={id}
                     title={
-                      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                       event?.name?.[i18n.language] ??
                       event?.name?.[event.mainLanguage]
                     }
@@ -220,47 +201,35 @@ const Create = () => {
                     }
                     terms={event?.terms}
                     flex={1}
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     imageUrl={event?.image}
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     description={
                       event?.description?.[i18n.language] ??
-                      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
                       event?.description?.[event.mainLanguage]
                     }
                     productionName={event?.production?.title}
-                    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'productionName' implicitly has an 'any'... Remove this comment to see the full error message
                     calendarType={event?.calendarType}
                   />
                 );
               })}
             </Inline>
-            {/* @ts-expect-error ts-migrate(7006) FIXME: Parameter 'e' implicitly has an 'any' type. */}
             <Stack spacing={4}>
               {availableProductions.length === 2 ? (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <RadioButtonGroup
                   name="production-names"
-                  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'production' implicitly has an 'any' typ... Remove this comment to see the full error message
                   items={events
-                    .map(
-                      (event) =>
-                        event.production
-                          ? {
-                              label: event.production.title,
-                              value: event.production.id,
-                            }
-                          : undefined,
-                      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'selected' implicitly has an 'any' type.
+                    .map((event) =>
+                      event.production
+                        ? {
+                            label: event.production.title,
+                            value: event.production.id,
+                          }
+                        : undefined,
                     )
                     .filter((productionName) => productionName !== undefined)}
-                  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'undefined' is not assignable to ... Remove this comment to see the full error message
                   groupLabel={t('productions.create.production_name')}
                   onChange={(e) => {
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     setSelectedProductionId(e.target.value.toString());
                   }}
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 />
               ) : (
                 <TypeaheadWithLabel
@@ -268,11 +237,9 @@ const Create = () => {
                   options={suggestedProductions}
                   labelKey={(production) => production.name}
                   disabled={!!selectedProduction}
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   placeholder={selectedProduction?.title}
                   maxWidth="43rem"
                   label={t('productions.create.production_name')}
-                  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
                   emptyLabel={t('productions.create.no_productions')}
                   minLength={minSearchLength}
                   onInputChange={throttle(handleInputSearch, 275)}

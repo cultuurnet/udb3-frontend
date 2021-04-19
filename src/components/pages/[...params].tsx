@@ -9,10 +9,12 @@ import { memo, useMemo } from 'react';
 const prefixWhenNotEmpty = (value, prefix) =>
   value ? `${prefix}${value}` : value;
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'url' does not exist on type '{ children?... Remove this comment to see the full error message
-const IFrame = memo(({ url }) => (
+type Props = {
+  url: string;
+};
+
+const IFrame = memo(({ url }: Props) => (
   <Box
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     tabIndex={0}
     as="iframe"
     src={url}
@@ -21,11 +23,6 @@ const IFrame = memo(({ url }) => (
     flex={1}
   />
 ));
-
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'propTypes' does not exist on type 'Named... Remove this comment to see the full error message
-IFrame.propTypes = {
-  url: PropTypes.string,
-};
 
 const Fallback = () => {
   const {
@@ -52,7 +49,6 @@ const Fallback = () => {
     return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
   }, [asPath, cookies.token, cookies['udb-language']]);
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return <IFrame url={legacyPath} />;
 };
 

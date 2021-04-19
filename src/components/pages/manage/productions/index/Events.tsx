@@ -25,6 +25,17 @@ import { CalendarType } from '@/constants/CalendarType';
 
 const getValue = getValueFromTheme('eventItem');
 
+type EventProps = {
+  id?: string,
+  name?: string,
+  terms?: unknown[],
+  location?: string,
+  calendarType?: string,
+  onToggle?: () => void,
+  selected?: boolean,
+  className?: string,
+};
+
 const Event = ({
   id,
   name,
@@ -34,7 +45,7 @@ const Event = ({
   onToggle,
   selected,
   className,
-}) => {
+}: EventProps) => {
   const { i18n, t } = useTranslation();
   const getCalendarSummaryQuery = useGetCalendarSummary({
     id,
@@ -51,7 +62,6 @@ const Event = ({
   const type = useMemo(() => {
     const typeId = terms.find((term) => term.domain === 'eventtype')?.id ?? '';
     // The custom keySeparator was necessary because the ids contain '.' which i18n uses as default keySeparator
-    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     return t(`offerTypes*${typeId}`, { keySeparator: '*' });
   }, [terms]);
 
@@ -64,40 +74,32 @@ const Event = ({
       paddingTop={3}
       backgroundColor="white"
       className={className}
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     >
       <Stack as="div" flex={1} spacing={3}>
         <Inline as="div" justifyContent="space-between">
           <CheckboxWithLabel
             id={id}
             name={name}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             onToggle={() => onToggle(id)}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             checked={selected}
           >
             {name}
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </CheckboxWithLabel>
           <Button
             onClick={handleClickToggleExpand}
-            // @ts-expect-error ts-migrate(2722) FIXME: Cannot invoke an object which is possibly 'undefin... Remove this comment to see the full error message
             variant={ButtonVariants.UNSTYLED}
           >
             <Icon
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               name={isExpanded ? Icons.CHEVRON_DOWN : Icons.CHEVRON_RIGHT}
             />
           </Button>
         </Inline>
         {isExpanded && (
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <DetailTable
             items={[
               { header: t('productions.event.type'), value: type },
               {
                 header: t('productions.event.when'),
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 value: getCalendarSummaryQuery.data,
               },
               { header: t('productions.event.where'), value: location },
@@ -109,15 +111,12 @@ const Event = ({
   );
 };
 
-Event.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  terms: PropTypes.array,
-  location: PropTypes.string,
-  calendarType: PropTypes.string,
-  onToggle: PropTypes.func,
-  selected: PropTypes.bool,
-  className: PropTypes.string,
+type ActionProps = {
+  loading?: boolean,
+  activeProductionName?: string,
+  onClickAdd?: () => void,
+  onClickDelete?: () => void,
+  shouldDisableDeleteButton?: boolean,
 };
 
 const Actions = ({
@@ -126,26 +125,22 @@ const Actions = ({
   onClickDelete,
   shouldDisableDeleteButton,
   loading,
-}) => {
+}: ActionProps) => {
   const { t } = useTranslation();
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
   return (
     <Inline as="div" justifyContent="space-between" alignItems="center">
       <Title>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {t('productions.overview.events_in_production', {
           productionName: activeProductionName,
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         })}
       </Title>
       <Inline as="div" spacing={3}>
         <Button
           iconName={Icons.PLUS}
           spacing={3}
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           maxHeight={parseSpacing(5)()}
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           onClick={onClickAdd}
           shouldHideText={shouldCollapse}
           disabled={loading}
@@ -155,7 +150,6 @@ const Actions = ({
         <Button
           disabled={shouldDisableDeleteButton || loading}
           variant={ButtonVariants.DANGER}
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           iconName={Icons.TRASH}
           spacing={3}
           onClick={onClickDelete}
@@ -169,13 +163,13 @@ const Actions = ({
   );
 };
 
-Actions.propTypes = {
-  loading: PropTypes.bool,
-  activeProductionName: PropTypes.string,
-  onClickAdd: PropTypes.func,
-  onClickDelete: PropTypes.func,
-  shouldDisableDeleteButton: PropTypes.bool,
-};
+type AddActionProps = {
+  onAdd?: () => void,
+  onCancel?: () => void,
+  onToBeAddedEventIdInput?: () => void,
+  toBeAddedEventId?: string,
+  className?: string,
+} & {};
 
 const AddAction = ({
   onAdd,
@@ -184,11 +178,10 @@ const AddAction = ({
   toBeAddedEventId,
   onToBeAddedEventIdInput,
   ...props
-}) => {
+}: AddActionProps) => {
   const { t } = useTranslation();
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'className' does not exist on type 'AddAc... Remove this comment to see the full error message
   return (
     <Inline
       as="div"
@@ -199,49 +192,53 @@ const AddAction = ({
     >
       <Input
         id="cdbid"
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         placeholder="cdbid"
         maxWidth="22rem"
         value={toBeAddedEventId}
         onInput={(event) =>
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           onToBeAddedEventIdInput(event.currentTarget.value.trim())
         }
       />
       <Button
         iconName={Icons.CHECK}
         spacing={3}
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'event' implicitly has an 'any' type.
         disabled={!toBeAddedEventId}
-        // @ts-expect-error ts-migrate(2722) FIXME: Cannot invoke an object which is possibly 'undefin... Remove this comment to see the full error message
         onClick={() => onAdd(toBeAddedEventId)}
         shouldHideText={shouldCollapse}
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       >
         {t('productions.overview.confirm')}
       </Button>
       <Button
-        // @ts-expect-error ts-migrate(2722) FIXME: Cannot invoke an object which is possibly 'undefin... Remove this comment to see the full error message
         variant={ButtonVariants.SECONDARY}
         iconName={Icons.TIMES}
         spacing={3}
         onClick={onCancel}
         shouldHideText={shouldCollapse}
       >
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {t('productions.overview.cancel')}
       </Button>
     </Inline>
   );
 };
 
-AddAction.propTypes = {
-  ...inlinePropTypes,
-  onAdd: PropTypes.func,
-  onCancel: PropTypes.func,
-  onToBeAddedEventIdInput: PropTypes.func,
-  toBeAddedEventId: PropTypes.string,
-};
+type EventsProps = {
+  events?: unknown[],
+  activeProductionName?: string,
+  loading?: boolean,
+  errorMessage?: string,
+  onToggleSelectEvent?: () => void,
+  selectedIds?: unknown[],
+  onClickDelete?: () => void,
+  onClickAdd?: () => void,
+  onAddEvent?: () => void,
+  onInputSearchTerm?: () => void,
+  onDismissError?: () => void,
+  onToBeAddedEventIdInput?: () => void,
+  onCancelAddEvent?: () => void,
+  toBeAddedEventId?: string,
+  isAddActionVisible?: boolean,
+  className?: string,
+} & {};
 
 const Events = ({
   events,
@@ -259,7 +256,7 @@ const Events = ({
   toBeAddedEventId,
   onToBeAddedEventIdInput,
   ...props
-}) => {
+}: EventsProps) => {
   const { i18n, t } = useTranslation();
 
   const shouldDisableDeleteButton = !(
@@ -274,7 +271,6 @@ const Events = ({
             <AddAction
               onAdd={onAddEvent}
               onCancel={onCancelAddEvent}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'onCancelAddEvent' does not exist on type... Remove this comment to see the full error message
               toBeAddedEventId={toBeAddedEventId}
               onToBeAddedEventIdInput={onToBeAddedEventIdInput}
             />
@@ -282,21 +278,16 @@ const Events = ({
               visible={!!errorMessage}
               variant={AlertVariants.WARNING}
               dismissible
-              // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
               onDismiss={onDismissError}
             >
               {errorMessage}
             </Alert>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </Stack>
         ) : (
           <Actions
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             loading={loading}
             activeProductionName={activeProductionName}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             onClickAdd={onClickAdd}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             onClickDelete={onClickDelete}
             shouldDisableDeleteButton={shouldDisableDeleteButton}
           />
@@ -305,7 +296,6 @@ const Events = ({
       {loading ? (
         <Spinner marginTop={4} />
       ) : events.length === 0 ? (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Text> {t('productions.overview.no_events')}</Text>
       ) : (
         <Panel key="panel">
@@ -315,26 +305,19 @@ const Events = ({
                 key={event.id}
                 id={event.id}
                 name={
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   event.name?.[i18n.language] ??
                   event.name?.[event.mainLanguage]
                 }
                 terms={event.terms}
                 location={
                   event.location?.name?.[i18n.language] ??
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   event.location?.name?.[event.location?.mainLanguage]
                 }
-                // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                 calendarType={event.calendarType}
                 onToggle={onToggleSelectEvent}
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 selected={event.selected}
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 css={
-                  // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                   index !== events.length - 1
-                    ? // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                       (props) => {
                         return `border-bottom: 1px solid ${getValue(
                           'borderColor',
@@ -349,28 +332,6 @@ const Events = ({
       )}
     </Stack>
   );
-};
-
-Events.propTypes = {
-  ...stackPropTypes,
-  events: PropTypes.array,
-  activeProductionName: PropTypes.string,
-  loading: PropTypes.bool,
-  errorMessage: PropTypes.string,
-  onToggleSelectEvent: PropTypes.func,
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ key: any; id: any; name: any; terms: any; ... Remove this comment to see the full error message
-  selectedIds: PropTypes.array,
-  // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-  onClickDelete: PropTypes.func,
-  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'props' implicitly has an 'any' type.
-  onClickAdd: PropTypes.func,
-  onAddEvent: PropTypes.func,
-  onInputSearchTerm: PropTypes.func,
-  onDismissError: PropTypes.func,
-  onToBeAddedEventIdInput: PropTypes.func,
-  toBeAddedEventId: PropTypes.string,
-  isAddActionVisible: PropTypes.bool,
-  className: PropTypes.string,
 };
 
 Events.defaultProps = {

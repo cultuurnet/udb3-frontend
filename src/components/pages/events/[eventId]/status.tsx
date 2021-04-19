@@ -31,9 +31,7 @@ const Status = () => {
   return (
     <StatusPageSingle
       offer={event}
-      // @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'error'. Did you mean 'Error'?
       error={getEventByIdQuery.error}
-      // @ts-expect-error ts-migrate(2539) FIXME: Cannot assign to 'useChangeStatus' because it is n... Remove this comment to see the full error message
       useChangeStatus={useChangeStatus}
     />
   );

@@ -15,6 +15,19 @@ import { Title } from '@/ui/Title';
 import { useGetCalendarSummary } from '@/hooks/api/events';
 import { CalendarType } from '@/constants/CalendarType';
 
+type Props = {
+  terms?: unknown[];
+  title?: string;
+  id?: string;
+  locationName?: string;
+  locationCity?: string;
+  organizerName?: string;
+  imageUrl?: string;
+  description?: string;
+  productionName?: string;
+  calendarType?: string;
+};
+
 const Event = ({
   terms,
   title,
@@ -27,13 +40,12 @@ const Event = ({
   productionName,
   calendarType,
   ...props
-}) => {
+}: Props) => {
   const { t, i18n } = useTranslation();
 
   const type = useMemo(() => {
     const typeId = terms.find((term) => term.domain === 'eventtype')?.id ?? '';
     // The custom keySeparator was necessary because the ids contain '.' which i18n uses as default keySeparator
-    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     return t(`offerTypes*${typeId}`, { keySeparator: '*' });
   }, [terms]);
 
@@ -53,36 +65,26 @@ const Event = ({
 
   return (
     <Card {...props} spacing={5} padding={5}>
-      {/* @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string | undefined' is not assig... Remove this comment to see the full error message */}
       <Inline justifyContent="space-between" spacing={5}>
         <Stack spacing={4}>
           <Text>{type}</Text>
           <Stack>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Title>{title}</Title>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Text>{getCalendarSummaryQuery.data}</Text>
           </Stack>
           <Text>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             {locationName} {locationCity}
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           </Text>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {!!organizerName && <Text>{organizerName}</Text>}
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         </Stack>
         {imageUrl && (
           <Image
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             width="10rem"
             height="10rem"
             src={imageUrl}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             backgroundRepeat="no-repeat"
             backgroundPosition="center center"
             objectFit="cover"
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           />
         )}
       </Inline>
@@ -91,26 +93,10 @@ const Event = ({
 
       <Alert variant={AlertVariants.DARK} visible={!!productionName}>
         {t('productions.event.part_of_production')}{' '}
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Text fontWeight="bold">{productionName}</Text>
       </Alert>
     </Card>
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   );
-};
-
-Event.propTypes = {
-  terms: PropTypes.array,
-  title: PropTypes.string,
-  id: PropTypes.string,
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-  locationName: PropTypes.string,
-  locationCity: PropTypes.string,
-  organizerName: PropTypes.string,
-  imageUrl: PropTypes.string,
-  description: PropTypes.string,
-  productionName: PropTypes.string,
-  calendarType: PropTypes.string,
 };
 
 Event.defaultProps = {

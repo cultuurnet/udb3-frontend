@@ -21,15 +21,12 @@ const cookies = new Cookies();
 if (typeof window !== 'undefined') {
   window.FeatureFlags = FeatureFlags;
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'setFeatureFlag' does not exist on type '... Remove this comment to see the full error message
   window.setFeatureFlag = (featureFlagName, value) => {
     cookies.set(createCookieName(featureFlagName), value, defaultCookieOptions);
     window.getCurrentFeatureFlagConfiguration();
   };
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCurrentFeatureFlagConfiguration' does... Remove this comment to see the full error message
   window.getCurrentFeatureFlagConfiguration = () => {
-    // eslint-disable-next-line no-console
     console.table(
       Object.entries(FeatureFlags).reduce(
         (acc, [constant, featureFlagName]) => ({
@@ -47,26 +44,22 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'providers' implicitly has an 'any... Remove this comment to see the full error message
-const ContextProvider = ({ providers, children }) => {
-  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'AccumulatedProviders' implicitly has an... Remove this comment to see the full error message
+type ContextProviderProps = {
+  providers: unknown[];
+  children: React.ReactNode;
+};
+
+const ContextProvider = ({ providers, children }: ContextProviderProps) => {
   return providers.reverse().reduce((AccumulatedProviders, current) => {
     const [CurrentProvider, currentProps] = Array.isArray(current)
       ? current
       : [current, {}];
-    // eslint-disable-next-line react/prop-types
     return (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <CurrentProvider {...currentProps}>
         {AccumulatedProviders}
       </CurrentProvider>
     );
   }, children);
-};
-
-ContextProvider.propTypes = {
-  providers: PropTypes.array,
-  children: PropTypes.node,
 };
 
 config.autoAddCss = false;
@@ -76,22 +69,17 @@ const Head = () => {
 
   return (
     <NextHead>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <meta
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         key="viewport"
         name="viewport"
         content="initial-scale=1.0, width=device-width"
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <link
         key="icon"
         rel="icon"
         type="image/png"
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         sizes="32x32"
         href="/favicon.png"
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <title key="title">UiTdatabank</title>
       <meta name="description" content={t('description')} />
@@ -102,11 +90,15 @@ const Head = () => {
 const queryClient = new QueryClient();
 initializeSentry();
 
-// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'Component' implicitly has an 'any... Remove this comment to see the full error message
 const isServer = () => typeof window === 'undefined';
 
-// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-const App = ({ Component, pageProps, children }) => {
+type AppProps = {
+  Component: () => void | React.ReactNode;
+  pageProps: unknown;
+  children: React.ReactNode;
+};
+
+const App = ({ Component, pageProps, children }: AppProps) => {
   return (
     <>
       <GlobalStyle />
@@ -124,12 +116,10 @@ const App = ({ Component, pageProps, children }) => {
             },
           ],
           [QueryClientProvider, { client: queryClient }],
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           [Hydrate, { state: pageProps?.dehydratedState ?? {} }],
         ]}
       >
         <ReactQueryDevtools initialIsOpen={false} />
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
@@ -140,12 +130,6 @@ const App = ({ Component, pageProps, children }) => {
       </ContextProvider>
     </>
   );
-};
-
-App.propTypes = {
-  Component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-  pageProps: PropTypes.object,
-  children: PropTypes.node,
 };
 
 export default App;

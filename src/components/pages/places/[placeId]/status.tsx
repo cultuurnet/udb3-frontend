@@ -13,16 +13,12 @@ const Status = () => {
   const getPlaceByIdQuery = useGetPlaceById({ id: placeId });
 
   if (getPlaceByIdQuery.status === QueryStatus.LOADING) {
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'marginTop'.
     return <Spinner marginTop={4} />;
   }
   return (
     <StatusPageSingle
-      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'offer'.
       offer={getPlaceByIdQuery.data}
-      // @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'error'. Did you mean 'Error'?
       error={getPlaceByIdQuery.error}
-      // @ts-expect-error ts-migrate(2539) FIXME: Cannot assign to 'useChangeStatus' because it is n... Remove this comment to see the full error message
       useChangeStatus={useChangeStatus}
     />
   );

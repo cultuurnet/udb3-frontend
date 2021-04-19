@@ -26,7 +26,6 @@ const setup = async () => {
   });
 
   renderPageWithWrapper(<Status />);
-  // @ts-expect-error ts-migrate(2749) FIXME: 'Status' refers to a value, but is being used as a... Remove this comment to see the full error message
   await waitFor(() => screen.getByText(`Status voor ${place.name.nl}`));
 
   return page;

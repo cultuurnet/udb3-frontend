@@ -3,13 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@/ui/Box';
 import { Modal, ModalVariants } from '@/ui/Modal';
 
+type Props = {
+  productionName?: string;
+  eventCount?: number;
+  visible?: boolean;
+  onConfirm?: () => void;
+  onClose?: () => void;
+};
+
 const DeleteModal = ({
   productionName,
   eventCount,
   visible,
   onConfirm,
   onClose,
-}) => {
+}: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -32,14 +40,6 @@ const DeleteModal = ({
       </Box>
     </Modal>
   );
-};
-
-DeleteModal.propTypes = {
-  productionName: PropTypes.string,
-  eventCount: PropTypes.number,
-  visible: PropTypes.bool,
-  onConfirm: PropTypes.func,
-  onClose: PropTypes.func,
 };
 
 export { DeleteModal };

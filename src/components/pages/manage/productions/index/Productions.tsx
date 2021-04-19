@@ -12,6 +12,17 @@ import { parseSpacing } from '@/ui/Box';
 
 const getValue = getValueFromTheme('productionItem');
 
+type Props = {
+  productions?: unknown[];
+  currentPage?: number;
+  totalItems?: number;
+  perPage?: number;
+  onClickProduction?: () => void;
+  onChangePage?: () => void;
+  className?: string;
+  loading?: boolean;
+} & {};
+
 const Productions = ({
   productions,
   currentPage,
@@ -22,7 +33,7 @@ const Productions = ({
   className,
   loading,
   ...props
-}) => {
+}: Props) => {
   const { t } = useTranslation();
   return (
     <Stack className={className} spacing={4} {...getStackProps(props)}>
@@ -79,18 +90,6 @@ const Productions = ({
       )}
     </Stack>
   );
-};
-
-Productions.propTypes = {
-  ...stackPropTypes,
-  productions: PropTypes.array,
-  currentPage: PropTypes.number,
-  totalItems: PropTypes.number,
-  perPage: PropTypes.number,
-  onClickProduction: PropTypes.func,
-  onChangePage: PropTypes.func,
-  className: PropTypes.string,
-  loading: PropTypes.bool,
 };
 
 Productions.defaultProps = {
