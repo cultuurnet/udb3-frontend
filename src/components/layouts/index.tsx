@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { useGetUser } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
@@ -46,9 +44,7 @@ const useHandleAuthentication = () => {
   // manipulation from outside the application
   useEffect(() => {
     let intervalId; // eslint-disable-line prefer-const
-    // @ts-expect-error ts-migrate(7034) FIXME: Variable 'intervalId' implicitly has type 'any' in... Remove this comment to see the full error message
     const cleanUp = () => (intervalId ? clearInterval(intervalId) : undefined);
-    // @ts-expect-error ts-migrate(7005) FIXME: Variable 'intervalId' implicitly has an 'any' type... Remove this comment to see the full error message
     if (asPath.startsWith('/login')) return cleanUp;
     intervalId = setInterval(() => {
       const cookies = new Cookies();
@@ -62,10 +58,13 @@ const useHandleAuthentication = () => {
   }, [asPath]);
 };
 
-const Layout = ({ children }) => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   const { asPath, ...router } = useRouter();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
-    // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
     'token',
   ]);
 
@@ -75,14 +74,11 @@ const Layout = ({ children }) => {
       const url = new URL(
         `${window.location.protocol}//${window.location.host}${path}`,
       );
-      // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'path' implicitly has an 'any' typ... Remove this comment to see the full error message
       const query = Object.fromEntries(url.searchParams.entries());
       const hasPage = url.searchParams.has('page');
       if (hasPage) {
         window.history.pushState(
-          // @ts-expect-error ts-migrate(2550) FIXME: Property 'fromEntries' does not exist on type 'Obj... Remove this comment to see the full error message
           undefined,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'entries' does not exist on type 'URLSear... Remove this comment to see the full error message
           '',
           `${window.location.protocol}//${window.location.host}${path}`,
         );
@@ -100,7 +96,6 @@ const Layout = ({ children }) => {
   });
   useHandleAuthentication();
 
-  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'code' implicitly has an 'any' typ... Remove this comment to see the full error message
   if (!cookies.token) return null;
 
   return (
@@ -111,17 +106,15 @@ const Layout = ({ children }) => {
   );
 };
 
-Layout.propTypes = {
-  children: PropTypes.node,
+type LayoutWrapperProps = {
+  children: React.ReactNode;
 };
 
-const LayoutWrapper = ({ children }) => {
+const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const { asPath } = useRouter();
 
   if (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     asPath.startsWith('/login') ||
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     asPath.startsWith('/404') ||
     asPath.startsWith('/500')
   ) {
@@ -129,21 +122,13 @@ const LayoutWrapper = ({ children }) => {
   }
 
   return (
-    // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
     // eslint-disable-next-line node/handle-callback-err
     <Sentry.ErrorBoundary
       fallback={({ error }) => <ErrorFallback error={error} />}
     >
       <Layout>{children}</Layout>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     </Sentry.ErrorBoundary>
   );
 };
 
-LayoutWrapper.propTypes = {
-  children: PropTypes.node,
-};
-
-// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
 export default LayoutWrapper;
-// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message

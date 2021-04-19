@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Box, parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
@@ -21,6 +20,14 @@ const AnnouncementStatus = {
 const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');
 const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
+
+type AnnouncementProps = {
+  id: string;
+  title: string;
+  // TODO: fix this
+  status: unknown;
+  onClick: () => void;
+};
 
 const Announcement = ({ id, title, status, onClick }: any) => {
   return (
@@ -64,15 +71,16 @@ const Announcement = ({ id, title, status, onClick }: any) => {
   );
 };
 
-Announcement.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  status: PropTypes.oneOf(Object.values(AnnouncementStatus)),
-  onClick: PropTypes.func,
-};
-
 Announcement.defaultProps = {
   status: AnnouncementStatus.UNSEEN,
+};
+
+type AnnouncementContentProps = {
+  title: string;
+  imageSrc?: string;
+  body: React.ReactNode;
+  callToAction?: string;
+  callToActionLabel?: string;
 };
 
 const AnnouncementContent = ({
@@ -81,7 +89,7 @@ const AnnouncementContent = ({
   body,
   callToAction,
   callToActionLabel,
-}: any) => (
+}: AnnouncementContentProps) => (
   <Stack as="article" padding={4} spacing={3} width="70%">
     <Title>{title}</Title>
     {!!imageSrc && (
@@ -140,12 +148,12 @@ const AnnouncementContent = ({
   </Stack>
 );
 
-AnnouncementContent.propTypes = {
-  title: PropTypes.string,
-  imageSrc: PropTypes.string,
-  body: PropTypes.node,
-  callToAction: PropTypes.string,
-  callToActionLabel: PropTypes.string,
+type AnnouncementsProps = {
+  visible: boolean;
+  announcements: unknown[];
+  onClickAnnouncement: () => void;
+  onShow: () => void;
+  onClose: () => void;
 };
 
 const Announcements = ({
@@ -154,7 +162,7 @@ const Announcements = ({
   onClickAnnouncement,
   onShow,
   onClose,
-}: any) => {
+}: AnnouncementsProps) => {
   const { t } = useTranslation();
 
   const activeAnnouncement = announcements.find(
@@ -210,14 +218,6 @@ const Announcements = ({
       )}
     </Modal>
   );
-};
-
-Announcements.propTypes = {
-  visible: PropTypes.bool,
-  announcements: PropTypes.array,
-  onClickAnnouncement: PropTypes.func,
-  onShow: PropTypes.func,
-  onClose: PropTypes.func,
 };
 
 Announcements.defaultProps = {

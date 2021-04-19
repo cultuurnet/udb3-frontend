@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Box } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
 import { List } from '@/ui/List';
@@ -29,16 +28,18 @@ const JobStates = {
   STARTED: 'started',
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type '{ childre... Remove this comment to see the full error message
-const StatusIcon = memo(({ state }) => {
+type StatusIconProps = {
+  // TODO: fix this
+  state: unknown;
+};
+
+const StatusIcon = memo(({ state }: StatusIconProps) => {
   if (state === JobStates.FINISHED) {
     return (
       <Icon
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         name={Icons.CHECK_CIRCLE}
         color={getValue('complete.circleFillColor')}
       />
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     );
   }
   return (
@@ -62,59 +63,50 @@ const StatusIcon = memo(({ state }) => {
   );
 });
 
-StatusIcon.propTypes = {
-  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'createdAt' implicitly has an 'any... Remove this comment to see the full error message
-  state: PropTypes.oneOf(Object.values(JobStates)),
+type JobProps = {
+  createdAt: Date;
+  finishedAt: Date;
+  // TODO: fix this
+  state: unknown;
+  messages: unknown;
+  exportUrl: string;
+  onClick: () => void;
 };
 
-// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'state' implicitly has an 'any' ty... Remove this comment to see the full error message
 const Job = ({
-  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'exportUrl' implicitly has an 'any... Remove this comment to see the full error message
   createdAt,
-  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'onClick' implicitly has an 'any' ... Remove this comment to see the full error message
   finishedAt,
   state,
   messages,
   exportUrl,
   onClick,
-}) => {
+}: JobProps) => {
   const { t, i18n } = useTranslation();
 
   const isDone = [JobStates.FINISHED, JobStates.FAILED].includes(state);
 
   const timeAgo = useMemo(
     () =>
-      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       formatDistance(isDone ? finishedAt : createdAt, new Date(), {
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         locale: dateFnsLocales[i18n.language],
       }),
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     [createdAt, finishedAt],
   );
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <List.Item paddingTop={3}>
       <Stack as="div" spacing={3} flex={1}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Inline as="div" flex={1} justifyContent="space-between">
           <Stack>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Inline forwardedAs="div" spacing={2} css="word-break: break-word;">
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Box as="span">{t('jobs.time_ago', { time: timeAgo })}</Box>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {state !== JobStates.FAILED && <StatusIcon state={state} />}
             </Inline>
             <Box forwardedAs="p" css="word-break: break-word;">
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {messages?.[state] ?? ''}
             </Box>
           </Stack>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button onClick={onClick} variant={ButtonVariants.UNSTYLED}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Icon name={Icons.TIMES} alignItems="center" />
           </Button>
         </Inline>
@@ -126,15 +118,6 @@ const Job = ({
       </Stack>
     </List.Item>
   );
-};
-
-Job.propTypes = {
-  createdAt: PropTypes.instanceOf(Date),
-  finishedAt: PropTypes.instanceOf(Date),
-  state: PropTypes.oneOf(Object.values(JobStates)),
-  messages: PropTypes.object,
-  exportUrl: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export { Job, JobStates, JobTypes };
