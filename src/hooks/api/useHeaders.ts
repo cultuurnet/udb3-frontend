@@ -12,6 +12,7 @@ const createHeaders = (token, extraHeaders) => {
 };
 
 const useHeaders = (extraHeaders = {}) => {
+  // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'never'.
   const { cookies } = useCookiesWithOptions(['token']);
   return createHeaders(cookies.token, extraHeaders);
 };

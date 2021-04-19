@@ -1,6 +1,7 @@
 import { differenceInDays, format } from 'date-fns';
 import nl from 'date-fns/locale/nl-BE';
 import fr from 'date-fns/locale/fr';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import capitalize from 'lodash/capitalize';
 
 const locales = {
@@ -17,11 +18,13 @@ const formatPeriod = (startDate, endDate, locale, t) => {
 
   const formattedDateStart = format(start, formatTypeDate, {
     locale: locales[locale],
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   });
   const formattedTimeStart = format(start, formatTypeTime);
 
   const formattedDateEnd = format(end, formatTypeDate, {
     locale: locales[locale],
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   });
   const formattedTimeEnd = format(end, formatTypeTime);
 

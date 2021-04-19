@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/theme' or its correspondi... Remove this comment to see the full error message
 import { theme } from '@/ui/theme';
 import { useIsClient } from './useIsClient';
 

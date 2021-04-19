@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 import { getValueFromTheme } from './theme';
 import { Spinner, SpinnerVariants, SpinnerSizes } from './Spinner';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './Inline' was resolved to '/Users/simondeb... Remove this comment to see the full error message
 import { getInlineProps, Inline, inlinePropTypes } from './Inline';
 import { Icon } from './Icon';
 import { cloneElement } from 'react';
@@ -21,6 +23,7 @@ const ButtonSizes = {
   LARGE: 'lg',
 };
 
+// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'props' implicitly has an 'any' type.
 const getValue = getValueFromTheme('button');
 
 const BaseButton = (props) => <Inline forwardedAs="button" {...props} />;
@@ -167,10 +170,12 @@ const Button = ({
 
   const isBootstrapVariant = variant !== ButtonVariants.UNSTYLED;
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'suffix' does not exist on type 'ButtonPr... Remove this comment to see the full error message
   const BaseButtonWithForwardedAs = (props) => (
     <BaseButton {...props} forwardedAs={forwardedAs} />
   );
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'size' does not exist on type 'ButtonProp... Remove this comment to see the full error message
   const forwardedButton = forwardedAs ? BaseButtonWithForwardedAs : BaseButton;
   const bootstrapProps = isBootstrapVariant
     ? { forwardedAs: forwardedButton, variant }
@@ -180,7 +185,9 @@ const Button = ({
     ...bootstrapProps,
     disabled,
     onClick,
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'props' implicitly has an 'any' type.
     className,
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     title,
     size,
     ...getInlineProps(props),
@@ -208,6 +215,7 @@ const Button = ({
         : !shouldHideText && (
             <Text flex={1} textAlign="left" key="text">
               {children}
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </Text>
           ),
       clonedSuffix,
@@ -216,6 +224,7 @@ const Button = ({
 
   if (isBootstrapVariant) {
     return (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <BootstrapButton {...propsToApply} css={customCSS}>
         {inner}
       </BootstrapButton>
@@ -225,6 +234,7 @@ const Button = ({
   return (
     <BaseButton
       {...propsToApply}
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       color="inherit"
       cursor="pointer"
       css={`
@@ -234,12 +244,14 @@ const Button = ({
         :focus {
           outline: auto;
         }
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         :focus:not(:focus-visible) {
           outline: none;
         }
       `}
       alignItems="center"
       justifyContent="flex-start"
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     >
       {inner}
     </BaseButton>

@@ -10,10 +10,12 @@ const useHandleEvent = (eventsMap = {}) => {
   useEffect(() => {
     if (!isClient) return;
     Object.entries(eventsMap).forEach(([type, handler]) => {
+      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
       window.addEventListener(type, handler);
     });
     return () => {
       Object.entries(eventsMap).forEach(([type, handler]) => {
+        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
         window.removeEventListener(type, handler);
       });
     };

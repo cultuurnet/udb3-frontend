@@ -2,23 +2,33 @@ import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Box' or its corresponding... Remove this comment to see the full error message
 import { Box } from '@/ui/Box';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Title' or its correspondi... Remove this comment to see the full error message
 import { Title } from '@/ui/Title';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Icon' or its correspondin... Remove this comment to see the full error message
 import { Icon, Icons } from '@/ui/Icon';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/List' or its correspondin... Remove this comment to see the full error message
 import { List } from '@/ui/List';
 
+// @ts-expect-error ts-migrate(6142) FIXME: Module './Job' was resolved to '/Users/simondebrui... Remove this comment to see the full error message
 import { Job, JobStates } from './Job';
 
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useHandleWindowMessage... Remove this comment to see the full error message
 } from '@/hooks/useHandleWindowMessage';
 
 import {
   useHandleSocketMessage,
+  // @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useHandleSocketMessage... Remove this comment to see the full error message
   SocketMessageTypes,
 } from '@/hooks/useHandleSocketMessage';
 
@@ -29,6 +39,7 @@ const JobLoggerStates = {
   COMPLETE: 'complete',
 };
 
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
 const JobTitle = ({ children, className, ...props }) => (
   <Title
     css={`
@@ -47,8 +58,10 @@ const JobTitle = ({ children, className, ...props }) => (
 JobTitle.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'visible' implicitly has an 'any' ... Remove this comment to see the full error message
 };
 
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'onClose' implicitly has an 'any' ... Remove this comment to see the full error message
 const JobLogger = ({ visible, onClose, onStatusChange }) => {
   const { t } = useTranslation();
 
@@ -56,11 +69,13 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
   const [hiddenJobIds, setHiddenJobIds] = useState([]);
 
   const activeJobs = useMemo(
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
     () => jobs.filter((job) => !hiddenJobIds.includes(job.id)),
     [jobs, hiddenJobIds],
   );
 
   const finishedJobs = useMemo(
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type 'never'.
     () => activeJobs.filter((job) => job.state === JobStates.FINISHED),
     [activeJobs],
   );
@@ -70,12 +85,16 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
   );
   const queuedJobs = useMemo(
     () => [
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type 'never'.
       ...activeJobs.filter((job) => job.state === JobStates.STARTED),
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type 'never'.
       ...activeJobs.filter((job) => job.state === JobStates.CREATED),
     ],
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'newJobState' implicitly has an 'any' ty... Remove this comment to see the full error message
     [activeJobs],
   );
 
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'jobId' implicitly has an 'any' ty... Remove this comment to see the full error message
   const updateJobState = (newJobState) => ({ job_id: jobId, location }) =>
     setJobs((previousJobs) =>
       previousJobs.map((job) => {
@@ -85,6 +104,7 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
         if (state === JobStates.FAILED) {
           // Jobs can't transition from a failed status to another status.
           return job;
+        // @ts-expect-error ts-migrate(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
         }
 
         return {
@@ -95,8 +115,10 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
           )
             ? new Date()
             : finishedAt,
+          // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'job' implicitly has an 'any' type... Remove this comment to see the full error message
           exportUrl: location || exportUrl,
         };
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(previousJobs: never[]) => any[]... Remove this comment to see the full error message
       }),
     );
 
@@ -109,10 +131,13 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
         createdAt: new Date(),
       },
       ...previousJobs,
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'id' implicitly has an 'any' type.
     ]);
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(prevHiddenJobIds: never[]) => a... Remove this comment to see the full error message
   const handleClickHideJob = (id) =>
     setHiddenJobIds((prevHiddenJobIds) => {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
       if (prevHiddenJobIds.includes(id)) return prevHiddenJobIds;
       return [...prevHiddenJobIds, id];
     });
@@ -166,31 +191,44 @@ const JobLogger = ({ visible, onClose, onStatusChange }) => {
       `}
       position="absolute"
       height="100%"
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       width={{ default: 'calc(100% - 230px)', s: 'calc(100% - 65px)' }}
       left={{ default: 230, s: 65 }}
       zIndex={1998}
     >
       <Stack padding={3} width={320} backgroundColor="white">
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Inline as="div" justifyContent="flex-end">
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button variant={ButtonVariants.UNSTYLED} onClick={onClose}>
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Icon name={Icons.TIMES} opacity={{ default: 0.5, hover: 1 }} />
           </Button>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         </Inline>
         <Stack spacing={4}>
           {jobLoggerMenus.map((jobLoggerMenu) => (
+            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Stack key={jobLoggerMenu.title}>
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <JobTitle>{jobLoggerMenu.title}</JobTitle>
               <List>
+                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 {jobLoggerMenu.items.map((job) => (
+                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   <Job
                     key={job.id}
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     createdAt={job.createdAt}
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'createdAt' does not exist on type 'never... Remove this comment to see the full error message
                     finishedAt={job.finishedAt}
                     state={job.state}
                     messages={job.messages}
                     exportUrl={job.exportUrl}
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'never'.
                     onClick={() => handleClickHideJob(job.id)}
                   />
+                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 ))}
               </List>
             </Stack>

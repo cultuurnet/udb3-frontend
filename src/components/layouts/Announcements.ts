@@ -22,7 +22,12 @@ const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');
 const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
 
-const Announcement = ({ id, title, status, onClick }) => {
+const Announcement = ({
+  id,
+  title,
+  status,
+  onClick
+}: any) => {
   return (
     <List.Item
       padding={4}
@@ -80,8 +85,8 @@ const AnnouncementContent = ({
   imageSrc,
   body,
   callToAction,
-  callToActionLabel,
-}) => (
+  callToActionLabel
+}: any) => (
   <Stack as="article" padding={4} spacing={3} width="70%">
     <Title>{title}</Title>
     {!!imageSrc && (
@@ -153,12 +158,12 @@ const Announcements = ({
   announcements,
   onClickAnnouncement,
   onShow,
-  onClose,
-}) => {
+  onClose
+}: any) => {
   const { t } = useTranslation();
 
   const activeAnnouncement = announcements.find(
-    (announcement) => announcement.status === AnnouncementStatus.ACTIVE,
+    (announcement: any) => announcement.status === AnnouncementStatus.ACTIVE,
   );
 
   return (
@@ -178,7 +183,7 @@ const Announcements = ({
               overflow-y: auto;
             `}
           >
-            {announcements.map((announcement) => {
+            {announcements.map((announcement: any) => {
               return (
                 <Announcement
                   key={announcement.uid}

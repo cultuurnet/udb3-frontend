@@ -9,6 +9,7 @@ const getApplicationServerSideProps = (callbackFn) => async ({
 }) => {
   const { publicRuntimeConfig } = getConfig();
   if (publicRuntimeConfig.environment === 'development') {
+    // @ts-expect-error ts-migrate(2322) FIXME: Type '0' is not assignable to type 'string | undef... Remove this comment to see the full error message
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
   }
 

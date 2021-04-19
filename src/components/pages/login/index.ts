@@ -2,7 +2,10 @@ import { Cookies } from 'react-cookie';
 
 const Index = () => null;
 
-export const getServerSideProps = ({ req, params }) => {
+export const getServerSideProps = ({
+  req,
+  params
+}: any) => {
   const cookies = new Cookies(req?.headers?.cookie);
 
   const language = cookies.get('udb-language') ?? 'nl';

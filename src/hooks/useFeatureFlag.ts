@@ -5,16 +5,16 @@ const FeatureFlags = {
   REACT_CREATE: 'react_create',
 };
 
-const createCookieName = (identifier) => `ff_${identifier}`;
+const createCookieName = (identifier: any) => `ff_${identifier}`;
 
-const useFeatureFlag = (featureFlagName) => {
+const useFeatureFlag = (featureFlagName: any) => {
   if (!featureFlagName) return [false, () => {}];
 
   const { cookies, setCookie } = useCookiesWithOptions();
 
   const cookieName = createCookieName(featureFlagName);
 
-  const set = (value) => setCookie(cookieName, value);
+  const set = (value: any) => setCookie(cookieName, value);
   const value = cookies?.[cookieName] ?? false;
 
   return [value === 'true', set];

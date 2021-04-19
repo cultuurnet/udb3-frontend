@@ -85,7 +85,13 @@ const IconsMap = {
   [Icons.PENCIL]: faPencilAlt,
 };
 
-const Icon = ({ name, width, height, className, ...props }) => {
+const Icon = ({
+  name,
+  width,
+  height,
+  className,
+  ...props
+}: any) => {
   return (
     <Box
       className={className}

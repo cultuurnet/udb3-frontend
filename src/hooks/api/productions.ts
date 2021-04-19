@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/fetchFromApi' or its c... Remove this comment to see the full error message
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import {
   useAuthenticatedQuery,
@@ -60,6 +61,7 @@ const deleteEventsByIds = async ({
 }) =>
   Promise.all(
     eventIds.map((eventId) =>
+      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'eventId' implicitly has an 'any' type.
       deleteEventById({ productionId, eventId, headers, silentError: true }),
     ),
   );
@@ -67,6 +69,7 @@ const deleteEventsByIds = async ({
 const useDeleteEventsByIds = (configuration = {}) =>
   useAuthenticatedMutations({
     mutationFns: deleteEventsByIds,
+    // @ts-expect-error ts-migrate(2740) FIXME: Type '({ productionId, eventIds, headers }: any) =... Remove this comment to see the full error message
     ...configuration,
   });
 
@@ -88,6 +91,7 @@ const addEventById = async ({
 const useAddEventById = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: addEventById, ...configuration });
 
+// @ts-expect-error ts-migrate(2322) FIXME: Type '({ productionId, eventId, headers, silentErr... Remove this comment to see the full error message
 const addEventsByIds = async ({
   productionId = '',
   eventIds = [],
@@ -95,6 +99,7 @@ const addEventsByIds = async ({
 } = {}) =>
   Promise.all(
     eventIds.map((eventId) =>
+      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'eventId' implicitly has an 'any' type.
       addEventById({ headers, productionId, eventId, silentError: true }),
     ),
   );
@@ -102,6 +107,7 @@ const addEventsByIds = async ({
 const useAddEventsByIds = (configuration = {}) =>
   useAuthenticatedMutations({ mutationFns: addEventsByIds, ...configuration });
 
+// @ts-expect-error ts-migrate(2740) FIXME: Type '({ productionId, eventIds, headers }?: any) ... Remove this comment to see the full error message
 const getSuggestedEvents = async ({ headers }) => {
   const response = await fetchFromApi({
     path: '/productions/suggestion',
@@ -140,6 +146,7 @@ const useSkipSuggestedEvents = (configuration = {}) =>
     ...configuration,
   });
 
+// @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, eventIds }: any) => Promise<any>... Remove this comment to see the full error message
 const createWithEvents = async ({ headers, productionName, eventIds = [] }) =>
   fetchFromApi({
     path: '/productions/',
@@ -156,6 +163,7 @@ const createWithEvents = async ({ headers, productionName, eventIds = [] }) =>
 const useCreateWithEvents = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: createWithEvents, ...configuration });
 
+// @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, productionName, eventIds }: any)... Remove this comment to see the full error message
 const mergeProductions = async ({
   headers,
   fromProductionId,
@@ -171,6 +179,7 @@ const useMergeProductions = (configuration = {}) =>
 
 export {
   useGetProductions,
+  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, fromProductionId, toProductionId... Remove this comment to see the full error message
   useDeleteEventById,
   useDeleteEventsByIds,
   useAddEventById,

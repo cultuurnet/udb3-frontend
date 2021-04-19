@@ -6,12 +6,18 @@ export const LabelVariants = {
   NORMAL: 'normal',
 };
 
-const getFontWeight = (props) => {
+const getFontWeight = (props: any) => {
   if (props.variant === LabelVariants.BOLD) return 700;
   return 'normal';
 };
 
-const Label = ({ htmlFor, children, className, variant, ...props }) => (
+const Label = ({
+  htmlFor,
+  children,
+  className,
+  variant,
+  ...props
+}: any) => (
   <Box
     forwardedAs="label"
     htmlFor={htmlFor}

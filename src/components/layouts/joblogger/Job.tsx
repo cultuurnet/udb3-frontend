@@ -1,15 +1,23 @@
 import PropTypes from 'prop-types';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Box' or its corresponding... Remove this comment to see the full error message
 import { Box } from '@/ui/Box';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Icon' or its correspondin... Remove this comment to see the full error message
 import { Icon, Icons } from '@/ui/Icon';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/List' or its correspondin... Remove this comment to see the full error message
 import { List } from '@/ui/List';
 import { formatDistance } from 'date-fns';
 import { nlBE, fr } from 'date-fns/locale';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Inline' or its correspond... Remove this comment to see the full error message
 import { Inline } from '@/ui/Inline';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Stack' or its correspondi... Remove this comment to see the full error message
 import { Stack } from '@/ui/Stack';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Button' or its correspond... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '@/ui/Button';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/theme' or its correspondi... Remove this comment to see the full error message
 import { getValueFromTheme } from '@/ui/theme';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/Link' or its correspondin... Remove this comment to see the full error message
 import { Link, LinkVariants } from '@/ui/Link';
 
 const getValue = getValueFromTheme('jobStatusIcon');
@@ -29,13 +37,16 @@ const JobStates = {
   STARTED: 'started',
 };
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type '{ childre... Remove this comment to see the full error message
 const StatusIcon = memo(({ state }) => {
   if (state === JobStates.FINISHED) {
     return (
       <Icon
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         name={Icons.CHECK_CIRCLE}
         color={getValue('complete.circleFillColor')}
       />
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     );
   }
   return (
@@ -60,11 +71,15 @@ const StatusIcon = memo(({ state }) => {
 });
 
 StatusIcon.propTypes = {
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'createdAt' implicitly has an 'any... Remove this comment to see the full error message
   state: PropTypes.oneOf(Object.values(JobStates)),
 };
 
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'state' implicitly has an 'any' ty... Remove this comment to see the full error message
 const Job = ({
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'exportUrl' implicitly has an 'any... Remove this comment to see the full error message
   createdAt,
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'onClick' implicitly has an 'any' ... Remove this comment to see the full error message
   finishedAt,
   state,
   messages,
@@ -77,26 +92,37 @@ const Job = ({
 
   const timeAgo = useMemo(
     () =>
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       formatDistance(isDone ? finishedAt : createdAt, new Date(), {
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         locale: dateFnsLocales[i18n.language],
       }),
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     [createdAt, finishedAt],
   );
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <List.Item paddingTop={3}>
       <Stack as="div" spacing={3} flex={1}>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Inline as="div" flex={1} justifyContent="space-between">
           <Stack>
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Inline forwardedAs="div" spacing={2} css="word-break: break-word;">
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Box as="span">{t('jobs.time_ago', { time: timeAgo })}</Box>
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {state !== JobStates.FAILED && <StatusIcon state={state} />}
             </Inline>
             <Box forwardedAs="p" css="word-break: break-word;">
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {messages?.[state] ?? ''}
             </Box>
           </Stack>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button onClick={onClick} variant={ButtonVariants.UNSTYLED}>
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Icon name={Icons.TIMES} alignItems="center" />
           </Button>
         </Inline>

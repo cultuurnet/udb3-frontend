@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/fetchFromApi' or its c... Remove this comment to see the full error message
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import {
   useAuthenticatedMutation,
@@ -36,6 +37,7 @@ const changeStatus = async ({ headers, id, type, reason }) =>
   });
 
 const useChangeStatus = (configuration = {}) =>
+  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, id, type, reason }: any) => Prom... Remove this comment to see the full error message
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
 export { useGetPlaceById, useChangeStatus };

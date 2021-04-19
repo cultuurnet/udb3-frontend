@@ -21,7 +21,7 @@ const Alert = ({
   children,
   className,
   ...props
-}) => {
+}: any) => {
   return (
     <Box {...getBoxProps(props)}>
       <BootstrapAlert

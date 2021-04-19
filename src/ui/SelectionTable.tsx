@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+
 import { useLayoutEffect, useMemo } from 'react';
 import { Table as BootstrapTable } from 'react-bootstrap';
 import { useTable, useRowSelect } from 'react-table';
@@ -13,7 +13,11 @@ import { Stack } from './Stack';
 
 const getValue = getValueFromTheme('selectionTable');
 
-const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
+type CheckBoxHeaderProps = {
+    getToggleAllRowsSelectedProps?: (...args: any[]) => any;
+};
+
+const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }: CheckBoxHeaderProps) => {
   const { checked, onChange } = getToggleAllRowsSelectedProps();
 
   return (
@@ -25,11 +29,11 @@ const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
   );
 };
 
-CheckBoxHeader.propTypes = {
-  getToggleAllRowsSelectedProps: PropTypes.func,
+type CheckBoxCellProps = {
+    row?: any;
 };
 
-const CheckBoxCell = ({ row }) => {
+const CheckBoxCell = ({ row }: CheckBoxCellProps) => {
   const { checked, onChange } = row.getToggleRowSelectedProps();
 
   const identifier = `checkbox-${row.id}`;
@@ -44,18 +48,15 @@ const CheckBoxCell = ({ row }) => {
   );
 };
 
-CheckBoxCell.propTypes = {
-  row: PropTypes.object,
+type SelectionTableProps = {
+    columns: any[];
+    data: any[];
+    actions?: any[];
+    onSelectionChanged?: (...args: any[]) => any;
+    translateSelectedRowCount?: (...args: any[]) => any;
 };
 
-const SelectionTable = ({
-  columns,
-  data,
-  onSelectionChanged,
-  actions,
-  translateSelectedRowCount,
-  ...props
-}) => {
+const SelectionTable = ({ columns, data, onSelectionChanged, actions, translateSelectedRowCount, ...props }: SelectionTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -179,14 +180,6 @@ const SelectionTable = ({
       </Box>
     </Stack>
   );
-};
-
-SelectionTable.propTypes = {
-  columns: PropTypes.array.isRequired,
-  data: PropTypes.array.isRequired,
-  actions: PropTypes.array,
-  onSelectionChanged: PropTypes.func,
-  translateSelectedRowCount: PropTypes.func,
 };
 
 SelectionTable.defaultProps = {

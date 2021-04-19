@@ -1,15 +1,22 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/data/event' or its corr... Remove this comment to see the full error message
 import { event } from '@/test/data/event';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/parseOfferId' or its c... Remove this comment to see the full error message
 import { parseOfferId } from '@/utils/parseOfferId';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/utils/setupPage' or its... Remove this comment to see the full error message
 import { setupPage } from '@/test/utils/setupPage';
 
 import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Status from './status';
+// @ts-expect-error ts-migrate(2732) FIXME: Cannot find module '@/i18n/nl.json'. Consider usin... Remove this comment to see the full error message
 import nl from '@/i18n/nl.json';
 
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/utils/renderPageWithWra... Remove this comment to see the full error message
 import { renderPageWithWrapper } from '@/test/utils/renderPageWithWrapper';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/utils/waitForFetch' or ... Remove this comment to see the full error message
 import { waitForFetch } from '@/test/utils/waitForFetch';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/constants/OfferStatus' or it... Remove this comment to see the full error message
 import { OfferStatus } from '@/constants/OfferStatus';
 
 const setup = async () => {
@@ -26,6 +33,7 @@ const setup = async () => {
   });
 
   renderPageWithWrapper(<Status />);
+  // @ts-expect-error ts-migrate(2749) FIXME: 'Status' refers to a value, but is being used as a... Remove this comment to see the full error message
   await waitFor(() => screen.getByText(`Status voor ${event.name.nl}`));
 
   return page;

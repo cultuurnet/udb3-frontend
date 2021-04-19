@@ -1,11 +1,20 @@
-import PropTypes from 'prop-types';
+
 import { getValueFromTheme } from './theme';
 import { Stack, stackPropTypes, getStackProps } from './Stack';
 import { Children } from 'react';
 
 const getValue = getValueFromTheme('panel');
 
-const Panel = ({ children, className, ...props }) => {
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...stackPropTypes
+*/
+type PanelProps = {
+    className?: string;
+    children?: React.ReactNode;
+};
+
+const Panel = ({ children, className, ...props }: PanelProps) => {
   const parsedChildren =
     Children.count(children) === 1 ? <>{children}</> : children;
   return (
@@ -22,15 +31,18 @@ const Panel = ({ children, className, ...props }) => {
   );
 };
 
-Panel.propTypes = {
-  ...stackPropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
-
 const getValueForPanelFooter = getValueFromTheme('panelFooter');
 
-const PanelFooter = ({ children, className, ...props }) => {
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...stackPropTypes
+*/
+type PanelFooterProps = {
+    className?: string;
+    children?: React.ReactNode;
+};
+
+const PanelFooter = ({ children, className, ...props }: PanelFooterProps) => {
   const parsedChildren =
     Children.count(children) === 1 ? <>{children}</> : children;
   return (
@@ -49,12 +61,6 @@ const PanelFooter = ({ children, className, ...props }) => {
       {parsedChildren}
     </Stack>
   );
-};
-
-PanelFooter.propTypes = {
-  ...stackPropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
 };
 
 Panel.Footer = PanelFooter;

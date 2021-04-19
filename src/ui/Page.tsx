@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+
 import { getStackProps, Stack, stackPropTypes } from './Stack';
 import { getValueFromTheme } from './theme';
 
@@ -9,7 +9,16 @@ import { getBoxProps } from './Box';
 
 const getValueForPage = getValueFromTheme('page');
 
-const Page = ({ children: rawChildren, className, ...props }) => {
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...stackPropTypes
+*/
+type PageProps = {
+    children?: React.ReactNode;
+    className?: string;
+};
+
+const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
   const children = Children.toArray(rawChildren);
 
   const title = children.find((child) => child.type === PageTitle);
@@ -50,7 +59,16 @@ const Page = ({ children: rawChildren, className, ...props }) => {
 
 const getValueForTitle = getValueFromTheme('pageTitle');
 
-const PageTitle = ({ children, className, ...props }) => (
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...inlinePropTypes
+*/
+type PageTitleProps = {
+    className?: string;
+    children?: React.ReactNode;
+};
+
+const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
   <Title
     size={1}
     className={className}
@@ -62,44 +80,38 @@ const PageTitle = ({ children, className, ...props }) => (
   </Title>
 );
 
-PageTitle.propTypes = {
-  ...inlinePropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...inlinePropTypes
+*/
+type PageActionsProps = {
+    className?: string;
+    children?: React.ReactNode;
 };
 
-const PageActions = ({ children, className, ...props }) => (
+const PageActions = ({ children, className, ...props }: PageActionsProps) => (
   <Inline className={className} spacing={3} {...getInlineProps(props)}>
     {children}
   </Inline>
 );
 
-PageActions.propTypes = {
-  ...inlinePropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...inlinePropTypes
+*/
+type PageContentProps = {
+    className?: string;
+    children?: React.ReactNode;
 };
 
-const PageContent = ({ children, className, ...props }) => (
+const PageContent = ({ children, className, ...props }: PageContentProps) => (
   <Stack className={className} spacing={3} {...getStackProps(props)}>
     {children}
   </Stack>
 );
 
-PageContent.propTypes = {
-  ...inlinePropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
-
 Page.Title = PageTitle;
 Page.Actions = PageActions;
 Page.Content = PageContent;
-
-Page.propTypes = {
-  ...stackPropTypes,
-  children: PropTypes.node,
-  className: PropTypes.string,
-};
 
 export { Page };

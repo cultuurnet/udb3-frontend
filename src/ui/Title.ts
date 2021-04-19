@@ -1,17 +1,22 @@
 import PropTypes from 'prop-types';
 import { Box, boxPropTypes, getBoxProps } from './Box';
 
-const getFontWeight = (props) => {
+const getFontWeight = (props: any) => {
   if (props.size === 1) return 300;
   return 700;
 };
 
-const getFontSize = (props) => {
+const getFontSize = (props: any) => {
   if (props.size === 1) return 1.6;
   return 1.2;
 };
 
-const Title = ({ size, children, className, ...props }) => (
+const Title = ({
+  size,
+  children,
+  className,
+  ...props
+}: any) => (
   <Box
     forwardedAs={`h${size}`}
     size={size}

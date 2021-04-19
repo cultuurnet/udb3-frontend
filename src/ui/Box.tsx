@@ -6,17 +6,17 @@ import { forwardRef } from 'react';
 
 const remInPixels = 15;
 
-const wrapStatementWithBreakpoint = (breakpoint, statementToWrap) => () => css`
+const wrapStatementWithBreakpoint = (breakpoint: any, statementToWrap: any) => () => css`
   @media (max-width: ${breakpoint}px) {
     ${statementToWrap}
   }
 `;
 
-const createCSSStatement = (key, value, parser) => () => css`
+const createCSSStatement = (key: any, value: any, parser: any) => () => css`
   ${kebabCase(key)}: ${parser ? parser(value) : value};
 `;
 
-const parseProperty = (key, parser, customValue) => (props) => {
+const parseProperty = (key: any, parser: any, customValue: any) => (props: any) => {
   if (key === undefined || key === null) return css``;
   const value = customValue || props[key];
 
@@ -62,20 +62,17 @@ const parseProperty = (key, parser, customValue) => (props) => {
   }, style);
 };
 
-const parseSpacing = (value) => () => `${(1 / remInPixels) * 2 ** value}rem`;
-const parseDimension = (value) => () =>
+const parseSpacing = (value: any) => () => `${(1 / remInPixels) * 2 ** value}rem`;
+const parseDimension = (value: any) => () =>
   typeof value === 'string' || value instanceof String ? value : `${value}px`;
 
-const parseShorthandProperty = (shorthand, propsToChange = [], parser) => (
-  props,
-) =>
-  propsToChange.reduce(
-    (acc, val) => css`
-      ${parseProperty(val, parser, props[shorthand])};
-      ${acc};
-    `,
-    css``,
-  );
+const parseShorthandProperty = (shorthand: any, propsToChange = [], parser: any) => (props: any) => propsToChange.reduce(
+  (acc, val) => css`
+    ${parseProperty(val, parser, props[shorthand])};
+    ${acc};
+  `,
+  css``,
+);
 
 const boxProps = css`
   ${parseProperty('position')};
@@ -400,7 +397,7 @@ const boxPropTypes = {
   ]),
 };
 
-const getBoxProps = (props) => pick(props, Object.keys(boxPropTypes));
+const getBoxProps = (props: any) => pick(props, Object.keys(boxPropTypes));
 
 const Box = forwardRef(({ children, ...props }, ref) => (
   <StyledBox ref={ref} {...props}>

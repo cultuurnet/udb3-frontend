@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './Box' was resolved to '/Users/simondebrui... Remove this comment to see the full error message
 import { getBoxProps, boxPropTypes, Box } from './Box';
 
 const RadioButton = ({
@@ -13,7 +14,9 @@ const RadioButton = ({
 }) => {
   return (
     <Box
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'as'.
       as="input"
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'type'.
       type="radio"
       id={id}
       name={name}
@@ -22,6 +25,7 @@ const RadioButton = ({
       onChange={onChange}
       value={value}
       className={className}
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'cursor'.
       cursor="pointer"
       {...getBoxProps(props)}
     />

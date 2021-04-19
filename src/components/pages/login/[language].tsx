@@ -6,8 +6,6 @@ import { Box, boxPropTypes } from '@/ui/Box';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { Image } from '@/ui/Image';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-
-import PropTypes from 'prop-types';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
@@ -27,14 +25,20 @@ const Svg = (props) => (
   />
 );
 
-const Group = (props) => <Box as="g" fill="white" {...props} />;
-Group.propTypes = {
-  ...boxPropTypes,
-};
-const Path = (props) => <Box as="path" {...props} />;
-Path.propTypes = {
-  ...boxPropTypes,
-};
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...boxPropTypes
+*/
+type GroupProps = {};
+
+const Group = (props: GroupProps) => <Box as="g" fill="white" {...props} />;
+
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...boxPropTypes
+*/
+type PathProps = {};
+const Path = (props: PathProps) => <Box as="path" {...props} />;
 
 const Animation = (props) => {
   const draw = keyframes`
@@ -296,7 +300,14 @@ const Animation = (props) => {
   );
 };
 
-const Column = ({ value, title, children, ...props }) => (
+type ColumnProps = {
+    value?: string;
+    title?: string;
+    info?: string;
+    children?: React.ReactNode;
+};
+
+const Column = ({ value, title, children, ...props }: ColumnProps) => (
   <Stack as="article" flex={1} spacing={4} {...props}>
     <Stack as="blockquote" alignItems="center">
       <Box as="p" fontSize="4rem" fontWeight={300} lineHeight="4rem">
@@ -311,13 +322,6 @@ const Column = ({ value, title, children, ...props }) => (
     </Box>
   </Stack>
 );
-
-Column.propTypes = {
-  value: PropTypes.string,
-  title: PropTypes.string,
-  info: PropTypes.string,
-  children: PropTypes.node,
-};
 
 const useRedirectToLanguage = () => {
   const router = useRouter();

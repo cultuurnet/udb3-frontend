@@ -14,7 +14,12 @@ const SpinnerSizes = {
 
 const getValue = getValueFromTheme('spinner');
 
-const Spinner = ({ variant, size, className, ...props }) => {
+const Spinner = ({
+  variant,
+  size,
+  className,
+  ...props
+}: any) => {
   return (
     <Box
       className={className}

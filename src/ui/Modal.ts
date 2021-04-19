@@ -21,6 +21,7 @@ const Components = {
 const Modal = ({ variant, ...props }) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
+  // @ts-expect-error ts-migrate(2749) FIXME: 'ModalVariant' refers to a value, but is being use... Remove this comment to see the full error message
   return <ModalVariant {...props} />;
 };
 

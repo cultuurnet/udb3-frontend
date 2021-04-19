@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'base... Remove this comment to see the full error message
 import base64 from 'base-64';
 
 const decode = (value) =>

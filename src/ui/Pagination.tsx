@@ -1,22 +1,26 @@
 import { Pagination as BootstrapPagination } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { getValueFromTheme } from './theme';
 import { getInlineProps, Inline, inlinePropTypes } from './Inline';
 import { useMemo } from 'react';
 
 const getValue = getValueFromTheme(`pagination`);
 
-const Pagination = ({
-  className,
-  currentPage,
-  totalItems,
-  perPage,
-  limitPages,
-  prevText,
-  nextText,
-  onChangePage,
-  ...props
-}) => {
+/*
+(ts-migrate) TODO: Migrate the remaining prop types
+...inlinePropTypes
+*/
+type Props = {
+    className?: string;
+    currentPage: number;
+    totalItems: number;
+    perPage: number;
+    limitPages: number;
+    prevText?: string;
+    nextText?: string;
+    onChangePage?: (...args: any[]) => any;
+};
+
+const Pagination = ({ className, currentPage, totalItems, perPage, limitPages, prevText, nextText, onChangePage, ...props }: Props) => {
   const pages = useMemo(() => {
     const pages = [];
     for (let i = 0; i < Math.ceil(totalItems / perPage); i++) {
@@ -131,18 +135,6 @@ const Pagination = ({
       )}
     </Inline>
   );
-};
-
-Pagination.propTypes = {
-  ...inlinePropTypes,
-  className: PropTypes.string,
-  currentPage: PropTypes.number.isRequired,
-  totalItems: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired,
-  limitPages: PropTypes.number.isRequired,
-  prevText: PropTypes.string,
-  nextText: PropTypes.string,
-  onChangePage: PropTypes.func,
 };
 
 Pagination.defaultProps = {

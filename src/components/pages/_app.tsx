@@ -1,9 +1,16 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useCookiesWithOptions'... Remove this comment to see the full error message
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/hooks/useFeatureFlag' or its... Remove this comment to see the full error message
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/i18n/index' or its correspon... Remove this comment to see the full error message
 import i18n from '@/i18n/index';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/layouts/index' or its corres... Remove this comment to see the full error message
 import Layout from '@/layouts/index';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/styles/GlobalStyle' or its c... Remove this comment to see the full error message
 import { GlobalStyle } from '@/styles/GlobalStyle';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/ui/ThemeProvider' or its cor... Remove this comment to see the full error message
 import { ThemeProvider } from '@/ui/ThemeProvider';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/sentry' or its corresp... Remove this comment to see the full error message
 import { initializeSentry } from '@/utils/sentry';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -21,11 +28,13 @@ const cookies = new Cookies();
 if (typeof window !== 'undefined') {
   window.FeatureFlags = FeatureFlags;
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'setFeatureFlag' does not exist on type '... Remove this comment to see the full error message
   window.setFeatureFlag = (featureFlagName, value) => {
     cookies.set(createCookieName(featureFlagName), value, defaultCookieOptions);
     window.getCurrentFeatureFlagConfiguration();
   };
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCurrentFeatureFlagConfiguration' does... Remove this comment to see the full error message
   window.getCurrentFeatureFlagConfiguration = () => {
     // eslint-disable-next-line no-console
     console.table(
@@ -45,13 +54,16 @@ if (typeof window !== 'undefined') {
   };
 }
 
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'providers' implicitly has an 'any... Remove this comment to see the full error message
 const ContextProvider = ({ providers, children }) => {
+  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'AccumulatedProviders' implicitly has an... Remove this comment to see the full error message
   return providers.reverse().reduce((AccumulatedProviders, current) => {
     const [CurrentProvider, currentProps] = Array.isArray(current)
       ? current
       : [current, {}];
     // eslint-disable-next-line react/prop-types
     return (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <CurrentProvider {...currentProps}>
         {AccumulatedProviders}
       </CurrentProvider>
@@ -71,17 +83,22 @@ const Head = () => {
 
   return (
     <NextHead>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <meta
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         key="viewport"
         name="viewport"
         content="initial-scale=1.0, width=device-width"
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <link
         key="icon"
         rel="icon"
         type="image/png"
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         sizes="32x32"
         href="/favicon.png"
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       />
       <title key="title">UiTdatabank</title>
       <meta name="description" content={t('description')} />
@@ -92,8 +109,10 @@ const Head = () => {
 const queryClient = new QueryClient();
 initializeSentry();
 
+// @ts-expect-error ts-migrate(7031) FIXME: Binding element 'Component' implicitly has an 'any... Remove this comment to see the full error message
 const isServer = () => typeof window === 'undefined';
 
+// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
 const App = ({ Component, pageProps, children }) => {
   return (
     <>
@@ -112,10 +131,12 @@ const App = ({ Component, pageProps, children }) => {
             },
           ],
           [QueryClientProvider, { client: queryClient }],
+          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           [Hydrate, { state: pageProps?.dehydratedState ?? {} }],
         ]}
       >
         <ReactQueryDevtools initialIsOpen={false} />
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })

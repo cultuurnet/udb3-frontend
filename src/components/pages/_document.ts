@@ -1,4 +1,5 @@
 import NextDocument from 'next/document';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import { ServerStyleSheet } from 'styled-components';
 
 class Document extends NextDocument {
@@ -10,6 +11,7 @@ class Document extends NextDocument {
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props) =>
+            // @ts-expect-error ts-migrate(2749) FIXME: 'App' refers to a value, but is being used as a ty... Remove this comment to see the full error message
             sheet.collectStyles(<App {...props} />),
         });
 
@@ -24,6 +26,7 @@ class Document extends NextDocument {
         ),
       };
     } finally {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'sheet'.
       sheet.seal();
     }
   }

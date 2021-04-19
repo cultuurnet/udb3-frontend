@@ -4,8 +4,11 @@ import {
   useAuthenticatedQuery,
 } from './authenticated-query';
 
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/utils/setupPage' or its... Remove this comment to see the full error message
 import { mockResponses, setupPage } from '@/test/utils/setupPage';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/test/utils/renderHookWithWra... Remove this comment to see the full error message
 import { renderHookWithWrapper } from '@/test/utils/renderHookWithWrapper';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@/utils/fetchFromApi' or its c... Remove this comment to see the full error message
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
 const queryFn = async ({ headers, ...queryData }) => {
@@ -69,6 +72,7 @@ describe('useAuthenticatedQuery', () => {
 
   beforeEach(() => {
     fetch.resetMocks();
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'resetMocks' does not exist on type '(inp... Remove this comment to see the full error message
     page = setupPage();
   });
 
