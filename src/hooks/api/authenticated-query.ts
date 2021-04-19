@@ -2,7 +2,7 @@ import flatten from 'lodash/flatten';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { Cookies } from 'react-cookie';
-import { useQuery, useQueries, useMutation } from 'react-query';
+import { useQuery, useQueries, useMutation, UseQueryResult } from 'react-query';
 import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import { createHeaders, useHeaders } from './useHeaders';
@@ -12,7 +12,9 @@ const QueryStatus = {
   LOADING: 'loading',
   ERROR: 'error',
   SUCCESS: 'success',
-};
+} as const;
+
+type Values<T> = T[keyof T];
 
 const prepareKey = ({ queryKey = [], queryArguments = {} } = {}) => {
   return [
@@ -38,15 +40,20 @@ const prepareArguments = ({
   ...configuration,
 });
 
-const isUnAuthorized = (status) => [401, 403].includes(status);
+const isUnAuthorized = (statusCode: number) => [401, 403].includes(statusCode);
 
-const getStatusFromResults = (results) => {
+type Status = {
+  status: Values<typeof QueryStatus>;
+  error?: Error[];
+};
+
+const getStatusFromResults = (results: UseQueryResult[]): Status => {
   if (results.some(({ status }) => status === QueryStatus.ERROR)) {
     return {
       status: QueryStatus.ERROR,
       error: results
         .map(({ error }) => error)
-        .filter((error) => error !== undefined),
+        .filter((error) => error !== undefined) as Error[],
     };
   }
 
