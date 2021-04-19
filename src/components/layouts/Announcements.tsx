@@ -30,7 +30,7 @@ type AnnouncementProps = {
   onClick: () => void;
 };
 
-const Announcement = ({ id, title, status, onClick }: any) => {
+const Announcement = ({ id, title, status, onClick }: AnnouncementProps) => {
   return (
     <List.Item
       padding={4}
@@ -223,9 +223,6 @@ const Announcements = ({
 
 Announcements.defaultProps = {
   visible: false,
-  setAnnouncements: () => {},
-  onShow: () => {},
-  onClose: () => {},
 };
 
 export { Announcements, AnnouncementStatus };
