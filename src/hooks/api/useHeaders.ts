@@ -1,7 +1,10 @@
 import getConfig from 'next/config';
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 
-const createHeaders = (token, extraHeaders) => {
+const createHeaders = (
+  token: string,
+  extraHeaders: Record<string, unknown>,
+): Record<string, unknown> => {
   const { publicRuntimeConfig } = getConfig();
 
   return {
@@ -11,8 +14,7 @@ const createHeaders = (token, extraHeaders) => {
   };
 };
 
-const useHeaders = (extraHeaders = {}) => {
-  // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'never'.
+const useHeaders = (extraHeaders: Record<string, unknown> = {}) => {
   const { cookies } = useCookiesWithOptions(['token']);
   return createHeaders(cookies.token, extraHeaders);
 };
