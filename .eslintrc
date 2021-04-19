@@ -1,6 +1,9 @@
 {
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "extends": [
-    "standard",
+    "standard-with-typescript",
     "standard-jsx",
     "standard-react",
     "prettier",
@@ -10,7 +13,8 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "unicorn/no-abusive-eslint-disable": "error",
-    "no-console": "warn"
+    "no-console": "warn",
+    "@typescript-eslint/consistent-type-definitions": "off"
   },
   "globals": {
     "fetch": false
