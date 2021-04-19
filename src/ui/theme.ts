@@ -31,7 +31,7 @@ const Breakpoints = {
   S: 's',
   M: 'm',
   L: 'l',
-};
+} as const;
 
 const theme = {
   colors,

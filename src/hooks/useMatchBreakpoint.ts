@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { theme } from '@/ui/theme';
+import { Breakpoints, theme } from '@/ui/theme';
 import { useIsClient } from './useIsClient';
 
-const useMatchBreakpoint = (breakpoint) => {
+type Values<T> = T[keyof T];
+
+const useMatchBreakpoint = (breakpoint: Values<typeof Breakpoints>) => {
   const [matches, setMatches] = useState(false);
   const isClient = useIsClient();
 
