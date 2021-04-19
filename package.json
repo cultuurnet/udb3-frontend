@@ -90,6 +90,7 @@
     "jsconfig-paths-jest-mapper": "^1.0.0",
     "prettier": "^2.1.2",
     "pretty-quick": "^3.1.0",
-    "react-test-renderer": "^17.0.1"
+    "react-test-renderer": "^17.0.1",
+    "ts-migrate": "^0.1.16"
   }
 }
