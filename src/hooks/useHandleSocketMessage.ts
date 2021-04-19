@@ -7,9 +7,15 @@ const SocketMessageTypes = {
   JOB_INFO: 'job_info',
   JOB_FINISHED: 'job_finished',
   JOB_FAILED: 'job_failed',
+} as const;
+
+type Values<T> = T[keyof T];
+
+type EventsMap = {
+  [K in Values<typeof SocketMessageTypes>]?: () => void;
 };
 
-const useHandleSocketMessage = (eventsMap = {}) => {
+const useHandleSocketMessage = (eventsMap: EventsMap = {}) => {
   const { publicRuntimeConfig } = getConfig();
 
   useEffect(() => {

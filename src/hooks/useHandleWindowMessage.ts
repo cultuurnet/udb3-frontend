@@ -10,15 +10,20 @@ const WindowMessageTypes = {
   URL_UNKNOWN: 'URL_UNKNOWN',
   JOB_ADDED: 'JOB_ADDED',
   HTTP_ERROR_CODE: 'HTTP_ERROR_CODE',
+} as const;
+
+type Values<T> = T[keyof T];
+
+type EventsMap = {
+  [K in Values<typeof WindowMessageTypes>]?: () => void;
 };
 
-const useHandleWindowMessage = (eventsMap = {}) => {
+const useHandleWindowMessage = (eventsMap: EventsMap = {}) => {
   const isClient = useIsClient();
 
   const internalHandler = (event) => {
     const { source, type, ...data } = event.data;
     if (source !== WindowMessageSources.UDB) return;
-    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     eventsMap?.[type]?.(data); // call handler when it exists
   };
 
