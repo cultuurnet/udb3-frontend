@@ -27,7 +27,7 @@ type AnnouncementProps = {
   id: string;
   title: string;
   status: Values<typeof AnnouncementStatus>;
-  onClick: () => void;
+  onClick: (id: string) => void;
 };
 
 const Announcement = ({ id, title, status, onClick }: AnnouncementProps) => {
@@ -152,7 +152,7 @@ const AnnouncementContent = ({
 type AnnouncementsProps = {
   visible: boolean;
   announcements: unknown[];
-  onClickAnnouncement: () => void;
+  onClickAnnouncement: (announcement: unknown) => void;
   onShow: () => void;
   onClose: () => void;
 };
