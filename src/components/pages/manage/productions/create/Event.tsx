@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PropTypes } from 'prop-types';
 import truncate from 'lodash/truncate';
 import stripHTML from 'string-strip-html';
 import { Alert, AlertVariants } from '@/ui/Alert';

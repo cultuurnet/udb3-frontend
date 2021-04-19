@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChangeStatusSubEvents } from '@/hooks/api/events';
@@ -19,27 +18,32 @@ import { OfferStatus } from '@/constants/OfferStatus';
 
 const getValue = getValueFromTheme('statusPage');
 
-const Status = ({ type, reason }) => {
+type StatusProps = {
+  type: string;
+  reason?: unknown;
+};
+
+const Status = ({ type, reason }: StatusProps) => {
   const { i18n } = useTranslation();
   return (
     <Stack>
       <Text>{type}</Text>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {!!reason?.[i18n.language] && (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Text color={getValue('infoTextColor')}>{reason[i18n.language]}</Text>
       )}
     </Stack>
   );
 };
 
-Status.propTypes = {
-  type: PropTypes.string.isRequired,
-  reason: PropTypes.object,
+type StatusPageMultipleProps = {
+  event: unknown;
+  refetchEvent: () => Promise<void>;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'refetchEvent' does not exist on type 'St... Remove this comment to see the full error message
-const StatusPageMultiple = ({ event, refetchEvent }) => {
+const StatusPageMultiple = ({
+  event,
+  refetchEvent,
+}: StatusPageMultipleProps) => {
   const { t, i18n } = useTranslation();
 
   const eventId = parseOfferId(event['@id']);
@@ -52,7 +56,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
 
   const selectedSubEventIds = useMemo(() => selectedRows.map((row) => row.id), [
     selectedRows,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'never'.
   ]);
 
   const handleSuccess = async () => {
@@ -65,7 +68,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
   });
 
   const handleConfirmChangeStatus = async (type, reason) =>
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'type' implicitly has an 'any' type.
     changeSubEventsMutation.mutate({
       eventId,
       subEventIds: selectedSubEventIds,
@@ -96,7 +98,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
   const data = useMemo(
     () =>
       subEvents.map((subEvent) => ({
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'subEvent' implicitly has an 'any' type.
         period: formatPeriod(
           subEvent.startDate,
           subEvent.endDate,
@@ -105,7 +106,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
         ),
         status: (
           <Status
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             type={t(
               `offerStatus.status.event.${camelCase(subEvent.status.type)}`,
             )}
@@ -118,13 +118,10 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
 
   return [
     <Page key="page">
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Page.Title>{t('offerStatus.title', { name })}</Page.Title>
       <Page.Content spacing={5}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Alert>{t('offerStatus.info')}</Alert>
         <SelectionTable
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           columns={columns}
           data={data}
           onSelectionChanged={setSelectedRows}
@@ -137,14 +134,12 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
             },
           ]}
           translateSelectedRowCount={(count) =>
-            // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'count' implicitly has an 'any' type.
             t('selectionTable.rowsSelectedCount', {
               count,
             })
           }
         />
         <Link
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           href={`/event/${eventId}/preview`}
           variant={LinkVariants.BUTTON_SUCCESS}
         >
@@ -153,7 +148,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
       </Page.Content>
     </Page>,
     <StatusModal
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       key="modal"
       visible={isModalVisible}
       loading={changeSubEventsMutation.status === QueryStatus.LOADING}
@@ -161,10 +155,6 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
       onClose={() => setIsModalVisible(false)}
     />,
   ];
-};
-
-StatusPageMultiple.propTypes = {
-  event: PropTypes.object.isRequired,
 };
 
 export { StatusPageMultiple };

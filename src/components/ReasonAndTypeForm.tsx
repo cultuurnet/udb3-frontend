@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +12,14 @@ import { OfferStatus } from '@/constants/OfferStatus';
 
 const getValue = getValueFromTheme('statusPage');
 
+type Props = {
+  offerType: string;
+  statusType: string;
+  statusReason: string;
+  onChangeStatusType: () => void;
+  onInputStatusReason: () => void;
+};
+
 const ReasonAndTypeForm = ({
   offerType,
   statusType,
@@ -20,7 +27,7 @@ const ReasonAndTypeForm = ({
   onChangeStatusType,
   onInputStatusReason,
   ...props
-}) => {
+}: Props) => {
   const { t } = useTranslation();
 
   const radioButtonItems = useMemo(
@@ -48,10 +55,8 @@ const ReasonAndTypeForm = ({
       <RadioButtonGroup
         key="offerStatus"
         groupLabel={t('offerStatus.newStatus')}
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         name="offerStatus"
         items={radioButtonItems}
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         selected={statusType}
         onChange={onChangeStatusType}
       />
@@ -59,20 +64,16 @@ const ReasonAndTypeForm = ({
         <Stack spacing={3}>
           <TextAreaWithLabel
             id="reason"
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             label={t('offerStatus.reason')}
             value={statusReason}
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             onInput={onInputStatusReason}
             disabled={statusType === OfferStatus.AVAILABLE}
           />
           {statusReason.length > 200 && (
             <Alert variant={AlertVariants.DANGER}>
               {t('offerStatus.maxLengthReason', {
-                // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                 amount: 200,
               })}
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </Alert>
           )}
         </Stack>
@@ -82,15 +83,6 @@ const ReasonAndTypeForm = ({
       </Stack>
     </Stack>
   );
-};
-
-// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-ReasonAndTypeForm.propTypes = {
-  offerType: PropTypes.string,
-  statusType: PropTypes.string,
-  statusReason: PropTypes.string,
-  onChangeStatusType: PropTypes.func,
-  onInputStatusReason: PropTypes.func,
 };
 
 export { ReasonAndTypeForm };
