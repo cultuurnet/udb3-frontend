@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 
-
 import { useTranslation } from 'react-i18next';
 import { List } from '@/ui/List';
 import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
@@ -24,14 +23,14 @@ import { CalendarType } from '@/constants/CalendarType';
 const getValue = getValueFromTheme('eventItem');
 
 type EventProps = {
-  id?: string,
-  name?: string,
-  terms?: unknown[],
-  location?: string,
-  calendarType?: string,
-  onToggle?: () => void,
-  selected?: boolean,
-  className?: string,
+  id?: string;
+  name?: string;
+  terms?: unknown[];
+  location?: string;
+  calendarType?: string;
+  onToggle?: () => void;
+  selected?: boolean;
+  className?: string;
 };
 
 const Event = ({
@@ -110,11 +109,11 @@ const Event = ({
 };
 
 type ActionProps = {
-  loading?: boolean,
-  activeProductionName?: string,
-  onClickAdd?: () => void,
-  onClickDelete?: () => void,
-  shouldDisableDeleteButton?: boolean,
+  loading?: boolean;
+  activeProductionName?: string;
+  onClickAdd?: () => void;
+  onClickDelete?: () => void;
+  shouldDisableDeleteButton?: boolean;
 };
 
 const Actions = ({
@@ -162,11 +161,11 @@ const Actions = ({
 };
 
 type AddActionProps = {
-  onAdd?: () => void,
-  onCancel?: () => void,
-  onToBeAddedEventIdInput?: () => void,
-  toBeAddedEventId?: string,
-  className?: string,
+  onAdd?: () => void;
+  onCancel?: () => void;
+  onToBeAddedEventIdInput?: () => void;
+  toBeAddedEventId?: string;
+  className?: string;
 } & {};
 
 const AddAction = ({
@@ -220,22 +219,22 @@ const AddAction = ({
 };
 
 type EventsProps = {
-  events?: unknown[],
-  activeProductionName?: string,
-  loading?: boolean,
-  errorMessage?: string,
-  onToggleSelectEvent?: () => void,
-  selectedIds?: unknown[],
-  onClickDelete?: () => void,
-  onClickAdd?: () => void,
-  onAddEvent?: () => void,
-  onInputSearchTerm?: () => void,
-  onDismissError?: () => void,
-  onToBeAddedEventIdInput?: () => void,
-  onCancelAddEvent?: () => void,
-  toBeAddedEventId?: string,
-  isAddActionVisible?: boolean,
-  className?: string,
+  events?: unknown[];
+  activeProductionName?: string;
+  loading?: boolean;
+  errorMessage?: string;
+  onToggleSelectEvent?: () => void;
+  selectedIds?: unknown[];
+  onClickDelete?: () => void;
+  onClickAdd?: () => void;
+  onAddEvent?: () => void;
+  onInputSearchTerm?: () => void;
+  onDismissError?: () => void;
+  onToBeAddedEventIdInput?: () => void;
+  onCancelAddEvent?: () => void;
+  toBeAddedEventId?: string;
+  isAddActionVisible?: boolean;
+  className?: string;
 } & {};
 
 const Events = ({
@@ -316,7 +315,7 @@ const Events = ({
                 selected={event.selected}
                 css={
                   index !== events.length - 1
-                      (props) => {
+                    ? (props) => {
                         return `border-bottom: 1px solid ${getValue(
                           'borderColor',
                         )(props)};`;
