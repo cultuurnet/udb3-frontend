@@ -1,4 +1,3 @@
-
 import { useLayoutEffect, useMemo } from 'react';
 import { Table as BootstrapTable } from 'react-bootstrap';
 import { useTable, useRowSelect } from 'react-table';
@@ -14,10 +13,12 @@ import { Stack } from './Stack';
 const getValue = getValueFromTheme('selectionTable');
 
 type CheckBoxHeaderProps = {
-    getToggleAllRowsSelectedProps?: (...args: any[]) => any;
+  getToggleAllRowsSelectedProps?: (...args: any[]) => any;
 };
 
-const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }: CheckBoxHeaderProps) => {
+const CheckBoxHeader = ({
+  getToggleAllRowsSelectedProps,
+}: CheckBoxHeaderProps) => {
   const { checked, onChange } = getToggleAllRowsSelectedProps();
 
   return (
@@ -30,7 +31,7 @@ const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }: CheckBoxHeaderProps) 
 };
 
 type CheckBoxCellProps = {
-    row?: any;
+  row?: any;
 };
 
 const CheckBoxCell = ({ row }: CheckBoxCellProps) => {
@@ -49,14 +50,21 @@ const CheckBoxCell = ({ row }: CheckBoxCellProps) => {
 };
 
 type SelectionTableProps = {
-    columns: any[];
-    data: any[];
-    actions?: any[];
-    onSelectionChanged?: (...args: any[]) => any;
-    translateSelectedRowCount?: (...args: any[]) => any;
+  columns: any[];
+  data: any[];
+  actions?: any[];
+  onSelectionChanged?: (...args: any[]) => any;
+  translateSelectedRowCount?: (...args: any[]) => any;
 };
 
-const SelectionTable = ({ columns, data, onSelectionChanged, actions, translateSelectedRowCount, ...props }: SelectionTableProps) => {
+const SelectionTable = ({
+  columns,
+  data,
+  onSelectionChanged,
+  actions,
+  translateSelectedRowCount,
+  ...props
+}: SelectionTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,

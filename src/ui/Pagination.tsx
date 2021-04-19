@@ -10,17 +10,27 @@ const getValue = getValueFromTheme(`pagination`);
 ...inlinePropTypes
 */
 type Props = {
-    className?: string;
-    currentPage: number;
-    totalItems: number;
-    perPage: number;
-    limitPages: number;
-    prevText?: string;
-    nextText?: string;
-    onChangePage?: (...args: any[]) => any;
+  className?: string;
+  currentPage: number;
+  totalItems: number;
+  perPage: number;
+  limitPages: number;
+  prevText?: string;
+  nextText?: string;
+  onChangePage?: (...args: any[]) => any;
 };
 
-const Pagination = ({ className, currentPage, totalItems, perPage, limitPages, prevText, nextText, onChangePage, ...props }: Props) => {
+const Pagination = ({
+  className,
+  currentPage,
+  totalItems,
+  perPage,
+  limitPages,
+  prevText,
+  nextText,
+  onChangePage,
+  ...props
+}: Props) => {
   const pages = useMemo(() => {
     const pages = [];
     for (let i = 0; i < Math.ceil(totalItems / perPage); i++) {

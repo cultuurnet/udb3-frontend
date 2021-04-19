@@ -1,4 +1,3 @@
-
 import { getValueFromTheme } from './theme';
 import { Stack, stackPropTypes, getStackProps } from './Stack';
 import { Children } from 'react';
@@ -10,8 +9,8 @@ const getValue = getValueFromTheme('panel');
 ...stackPropTypes
 */
 type PanelProps = {
-    className?: string;
-    children?: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const Panel = ({ children, className, ...props }: PanelProps) => {
@@ -38,8 +37,8 @@ const getValueForPanelFooter = getValueFromTheme('panelFooter');
 ...stackPropTypes
 */
 type PanelFooterProps = {
-    className?: string;
-    children?: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const PanelFooter = ({ children, className, ...props }: PanelFooterProps) => {

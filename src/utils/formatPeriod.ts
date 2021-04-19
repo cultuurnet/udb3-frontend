@@ -18,13 +18,13 @@ const formatPeriod = (startDate, endDate, locale, t) => {
 
   const formattedDateStart = format(start, formatTypeDate, {
     locale: locales[locale],
-  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   });
   const formattedTimeStart = format(start, formatTypeTime);
 
   const formattedDateEnd = format(end, formatTypeDate, {
     locale: locales[locale],
-  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   });
   const formattedTimeEnd = format(end, formatTypeTime);
 

@@ -1,4 +1,3 @@
-
 import { getStackProps, Stack, stackPropTypes } from './Stack';
 import { getValueFromTheme } from './theme';
 
@@ -14,8 +13,8 @@ const getValueForPage = getValueFromTheme('page');
 ...stackPropTypes
 */
 type PageProps = {
-    children?: React.ReactNode;
-    className?: string;
+  children?: React.ReactNode;
+  className?: string;
 };
 
 const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
@@ -64,8 +63,8 @@ const getValueForTitle = getValueFromTheme('pageTitle');
 ...inlinePropTypes
 */
 type PageTitleProps = {
-    className?: string;
-    children?: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
@@ -85,8 +84,8 @@ const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
 ...inlinePropTypes
 */
 type PageActionsProps = {
-    className?: string;
-    children?: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const PageActions = ({ children, className, ...props }: PageActionsProps) => (
@@ -100,8 +99,8 @@ const PageActions = ({ children, className, ...props }: PageActionsProps) => (
 ...inlinePropTypes
 */
 type PageContentProps = {
-    className?: string;
-    children?: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const PageContent = ({ children, className, ...props }: PageContentProps) => (

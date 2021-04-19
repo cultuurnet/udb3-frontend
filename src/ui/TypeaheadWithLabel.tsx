@@ -3,7 +3,7 @@ import {
   Typeahead,
   typeaheadDefaultProps,
   typeaheadPropTypes,
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Typeahead' was resolved to '/Users/simon... Remove this comment to see the full error message
+  // @ts-expect-error ts-migrate(6142) FIXME: Module './Typeahead' was resolved to '/Users/simon... Remove this comment to see the full error message
 } from './Typeahead';
 // @ts-expect-error ts-migrate(6142) FIXME: Module './Stack' was resolved to '/Users/simondebr... Remove this comment to see the full error message
 import { getStackProps, Stack, stackPropTypes } from './Stack';
