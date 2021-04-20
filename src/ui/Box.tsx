@@ -80,7 +80,7 @@ const parseProperty = (
 };
 
 const parseSpacing = (value: number) => () =>
-  css`
+  `
     ${(1 / remInPixels) * 2 ** value}rem
   `;
 
