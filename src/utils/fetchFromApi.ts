@@ -9,7 +9,7 @@ class FetchError extends Error {
 
 type FetchFromApiOptions = {
   path?: string;
-  searchParams?: Record<string, unknown>;
+  searchParams?: Record<string, string>;
   options?: Record<string, unknown>;
   silentError?: boolean;
 };
