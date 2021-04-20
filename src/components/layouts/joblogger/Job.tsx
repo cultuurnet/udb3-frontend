@@ -63,11 +63,15 @@ const StatusIcon = memo(({ state }: StatusIconProps) => {
   );
 });
 
+type Messages = {
+  [K in Values<typeof JobStates>]?: string;
+};
+
 type JobProps = {
   createdAt: Date;
   finishedAt: Date;
   state: Values<typeof JobStates>;
-  messages: unknown;
+  messages: Messages;
   exportUrl: string;
   onClick: () => void;
 };
