@@ -29,6 +29,28 @@ const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
 import type { Values } from '@/types/Values';
 
+const PermissionTypes = {
+  AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
+  AANBOD_MODEREREN: 'AANBOD_MODEREREN',
+  AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
+  ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
+  ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
+  GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
+  LABELS_BEHEREN: 'LABELS_BEHEREN',
+  VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
+  PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
+} as const;
+
+type Item = {
+  permission?: Values<typeof PermissionTypes>;
+  href: string;
+  iconName: Values<typeof Icons>;
+  children: React.ReactNode;
+  suffix?: React.ReactNode;
+  onClick?: () => void,
+  visible?: boolean
+};
+
 type MenuItemProps = {
   href: string;
   iconName: string;
@@ -89,14 +111,14 @@ const MenuItem = memo(
 );
 
 type MenuProps = {
-  items: unknown[];
+  items: Item[];
   title: string;
 };
 
 const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
   const Content = (contentProps) => (
     <List {...contentProps}>
-      {items.map((menuItem, index) => (
+      {items.map((menuItem, index) => (,
         <MenuItem key={index} {...menuItem} />
       ))}
     </List>
@@ -169,18 +191,6 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
 
 ProfileMenu.defaultProps = {
   profileImage: '/assets/avatar.svg',
-};
-
-const PermissionTypes = {
-  AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
-  AANBOD_MODEREREN: 'AANBOD_MODEREREN',
-  AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
-  ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
-  ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
-  GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
-  LABELS_BEHEREN: 'LABELS_BEHEREN',
-  VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
-  PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
 };
 
 type NotificationMenuProps = {
