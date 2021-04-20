@@ -1,7 +1,14 @@
-import PropTypes from 'prop-types';
 import { Checkbox } from './Checkbox';
-import { getInlineProps, Inline, inlinePropTypes } from './Inline';
+
+import { getInlineProps, Inline } from './Inline';
+import type { InlineProps } from './Inline';
+
 import { Label } from './Label';
+
+type Props = InlineProps & {
+  onToggle?: () => void;
+  children: React.ReactNode;
+};
 
 const CheckboxWithLabel = ({
   id,
@@ -12,7 +19,7 @@ const CheckboxWithLabel = ({
   children,
   className,
   ...props
-}) => {
+}: Props) => {
   return (
     <Inline
       as="div"
@@ -33,17 +40,6 @@ const CheckboxWithLabel = ({
       </Label>
     </Inline>
   );
-};
-
-CheckboxWithLabel.propTypes = {
-  ...inlinePropTypes,
-  className: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onToggle: PropTypes.func,
-  children: PropTypes.node,
 };
 
 CheckboxWithLabel.defaultprops = {

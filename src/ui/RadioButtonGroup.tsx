@@ -1,7 +1,17 @@
-import PropTypes from 'prop-types';
 import { Label, LabelVariants } from './Label';
-import { getStackProps, Stack, stackPropTypes } from './Stack';
+
+import { getStackProps, Stack } from './Stack';
+import type { StackProps } from './Stack';
+
 import { RadioButtonWithLabel } from './RadioButtonWithLabel';
+
+type Item = { value: string; label: string; info: string };
+
+type Props = StackProps & {
+  groupLabel?: string;
+  items?: Item[];
+  selected: string;
+};
 
 const RadioButtonGroup = ({
   name,
@@ -11,13 +21,10 @@ const RadioButtonGroup = ({
   className,
   onChange,
   ...props
-}) => {
+}: Props) => {
   return (
     <Stack className={className} as="div" spacing={3} {...getStackProps(props)}>
-      // @ts-expect-error ts-migrate(2709) FIXME: Cannot use namespace 'Label'
-      as a type.
       {groupLabel && <Label variant={LabelVariants.BOLD}>{groupLabel}</Label>}
-      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'role'.
       <Stack role="radiogroup" as="ul" spacing={2}>
         {items.map((item) => (
           <RadioButtonWithLabel
@@ -34,16 +41,6 @@ const RadioButtonGroup = ({
       </Stack>
     </Stack>
   );
-};
-
-RadioButtonGroup.propTypes = {
-  ...stackPropTypes,
-  name: PropTypes.string.isRequired,
-  groupLabel: PropTypes.string,
-  items: PropTypes.array,
-  selected: PropTypes.string,
-  className: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 RadioButtonGroup.defaultProps = {

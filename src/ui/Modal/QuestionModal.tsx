@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types';
 import { Modal as BootstrapModal } from 'react-bootstrap';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Button' was resolved to '/Users/simonde... Remove this comment to see the full error message
 import { Button, ButtonVariants } from '../Button';
+
+import type { ModalProps } from '../Modal';
+
+type Props = ModalProps;
 
 const QuestionModal = ({
   className,
@@ -15,7 +17,7 @@ const QuestionModal = ({
   children,
   size,
   confirmButtonDisabled,
-}) => (
+}: Props) => (
   <BootstrapModal
     className={className}
     show={visible}
@@ -65,20 +67,6 @@ const QuestionModal = ({
   </BootstrapModal>
 );
 
-QuestionModal.propTypes = {
-  className: PropTypes.string,
-  visible: PropTypes.bool,
-  title: PropTypes.string,
-  confirmTitle: PropTypes.string,
-  cancelTitle: PropTypes.string,
-  onShow: PropTypes.func,
-  onClose: PropTypes.func,
-  onConfirm: PropTypes.func,
-  children: PropTypes.node,
-  size: PropTypes.string,
-  confirmButtonDisabled: PropTypes.bool,
-};
-
 QuestionModal.defaultProps = {
   visible: false,
   confirmButtonDisabled: false,
@@ -86,6 +74,9 @@ QuestionModal.defaultProps = {
   confirmTitle: 'Ok',
   cancelTitle: 'Cancel',
   size: 'sm',
+  onShow: () => {},
+  onClose: () => {},
+  onConfirm: () => {},
 };
 
 export { QuestionModal };

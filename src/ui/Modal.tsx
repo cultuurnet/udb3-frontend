@@ -1,43 +1,43 @@
-import PropTypes from 'prop-types';
 import { QuestionModal } from './Modal/QuestionModal';
 import { ContentModal } from './Modal/ContentModal';
 
 const ModalVariants = {
   QUESTION: 'question',
   CONTENT: 'content',
-};
+} as const;
 
 const ModalSizes = {
   SM: 'sm',
   LG: 'lg',
   XL: 'xl',
-};
+} as const;
 
 const Components = {
   [ModalVariants.QUESTION]: QuestionModal,
   [ModalVariants.CONTENT]: ContentModal,
+} as const;
+
+type Values<T> = T[keyof T];
+
+type ModalProps = {
+  variant: Values<typeof ModalVariants>;
+  size: Values<typeof ModalSizes>;
+  className: string;
+  visible: boolean;
+  title: string;
+  onShow: () => void;
+  onClose: () => void;
+  children: React.ReactNode;
+  confirmTitle: string;
+  cancelTitle: string;
+  onConfirm: () => void;
+  confirmButtonDisabled: boolean;
 };
 
-const Modal = ({ variant, ...props }) => {
+const Modal = ({ variant, ...props }: ModalProps) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
-  // @ts-expect-error ts-migrate(2749) FIXME: 'ModalVariant' refers to a value, but is being use... Remove this comment to see the full error message
   return <ModalVariant {...props} />;
-};
-
-Modal.propTypes = {
-  variant: PropTypes.oneOf(Object.values(ModalVariants)),
-  size: PropTypes.oneOf(Object.values(ModalSizes)),
-  className: PropTypes.string,
-  visible: PropTypes.bool,
-  title: PropTypes.string,
-  onShow: PropTypes.func,
-  onClose: PropTypes.func,
-  children: PropTypes.node,
-  confirmTitle: PropTypes.string,
-  cancelTitle: PropTypes.string,
-  onConfirm: PropTypes.func,
-  confirmButtonDisabled: PropTypes.bool,
 };
 
 Modal.defaultProps = {
@@ -45,3 +45,4 @@ Modal.defaultProps = {
 };
 
 export { Modal, ModalVariants, ModalSizes };
+export type { ModalProps };

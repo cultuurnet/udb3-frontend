@@ -1,5 +1,9 @@
-import PropTypes from 'prop-types';
-import { getBoxProps, boxPropTypes, Box } from './Box';
+import { getBoxProps, Box } from './Box';
+import type { BoxProps } from './Box';
+
+type Props = BoxProps & {
+  onToggle?: () => void;
+};
 
 const Checkbox = ({
   id,
@@ -9,7 +13,7 @@ const Checkbox = ({
   onToggle,
   className,
   ...props
-}) => (
+}: Props) => (
   <Box
     as="input"
     type="checkbox"
@@ -24,16 +28,6 @@ const Checkbox = ({
     {...getBoxProps(props)}
   />
 );
-
-Checkbox.propTypes = {
-  ...boxPropTypes,
-  className: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onToggle: PropTypes.func,
-};
 
 Checkbox.defaultprops = {
   name: '',

@@ -1,7 +1,11 @@
-import PropTypes from 'prop-types';
-import { Box, boxPropTypes, getBoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import type { BoxProps } from './Box';
 
-const Text = ({ as, children, className, ...props }) => {
+type TextProps = BoxProps & {
+  children: React.ReactNode;
+};
+
+const Text = ({ as, children, className, ...props }: TextProps) => {
   return (
     <Box as={as} className={className} {...getBoxProps(props)}>
       {children}
@@ -9,15 +13,9 @@ const Text = ({ as, children, className, ...props }) => {
   );
 };
 
-Text.propTypes = {
-  ...boxPropTypes,
-  as: PropTypes.string,
-  children: PropTypes.node,
-  className: PropTypes.string,
-};
-
 Text.defaultProps = {
   as: 'span',
 };
 
 export { Text };
+export type { TextProps };

@@ -1,17 +1,24 @@
-import PropTypes from 'prop-types';
-import { getBoxProps, boxPropTypes, Box } from './Box';
+import { getBoxProps, Box } from './Box';
+import type { BoxProps } from './Box';
+
+type Values<T> = T[keyof T];
 
 export const LabelVariants = {
   BOLD: 'bold',
   NORMAL: 'normal',
-};
+} as const;
 
-const getFontWeight = (props: any) => {
+const getFontWeight = (props: Props) => {
   if (props.variant === LabelVariants.BOLD) return 700;
   return 'normal';
 };
 
-const Label = ({ htmlFor, children, className, variant, ...props }: any) => (
+type Props = BoxProps & {
+  variant?: Values<typeof LabelVariants>;
+  children: React.ReactNode;
+};
+
+const Label = ({ htmlFor, children, className, variant, ...props }: Props) => (
   <Box
     forwardedAs="label"
     htmlFor={htmlFor}
@@ -25,14 +32,6 @@ const Label = ({ htmlFor, children, className, variant, ...props }: any) => (
     {children}
   </Box>
 );
-
-Label.propTypes = {
-  ...boxPropTypes,
-  variant: PropTypes.string,
-  htmlFor: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
 
 Label.defaultProps = {
   variant: LabelVariants.NORMAL,
