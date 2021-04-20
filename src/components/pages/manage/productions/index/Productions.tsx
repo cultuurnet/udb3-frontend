@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
+import { getStackProps, Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
 import { List } from '@/ui/List';
 import { getValueFromTheme } from '@/ui/theme';
@@ -7,15 +7,16 @@ import { Panel } from '@/ui/Panel';
 import { Spinner } from '@/ui/Spinner';
 import { Pagination } from '@/ui/Pagination';
 import { parseSpacing } from '@/ui/Box';
+import type { Production } from '@/types/Production';
 
 const getValue = getValueFromTheme('productionItem');
 
 type Props = {
-  productions?: unknown[];
+  productions?: (Production & { active: boolean })[];
   currentPage?: number;
   totalItems?: number;
   perPage?: number;
-  onClickProduction?: () => void;
+  onClickProduction?: (id: string) => void;
   onChangePage?: () => void;
   className?: string;
   loading?: boolean;

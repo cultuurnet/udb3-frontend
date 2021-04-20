@@ -14,6 +14,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
+import type { AppProps as NextAppProps } from 'next/app';
 
 const cookies = new Cookies();
 
@@ -91,10 +92,8 @@ initializeSentry();
 
 const isServer = () => typeof window === 'undefined';
 
-type AppProps = {
-  Component: () => void | React.ReactNode;
-  pageProps: unknown;
-  children: React.ReactNode;
+type AppProps = NextAppProps & {
+  children: React.ReactElement;
 };
 
 const App = ({ Component, pageProps, children }: AppProps) => {

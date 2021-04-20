@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { List } from '@/ui/List';
-import { getStackProps, Stack, stackPropTypes } from '@/ui/Stack';
+import { getStackProps, Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -20,6 +20,7 @@ import { useGetCalendarSummary } from '@/hooks/api/events';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { CalendarType } from '@/constants/CalendarType';
 import type { Term } from '@/types/Term';
+import type { Event as EventType } from '@/types/Event';
 
 const getValue = getValueFromTheme('eventItem');
 
@@ -220,12 +221,12 @@ const AddAction = ({
 };
 
 type EventsProps = {
-  events?: unknown[];
+  events?: (EventType & { id: string; selected: boolean })[];
   activeProductionName?: string;
   loading?: boolean;
   errorMessage?: string;
   onToggleSelectEvent?: () => void;
-  selectedIds?: unknown[];
+  selectedIds?: string[];
   onClickDelete?: () => void;
   onClickAdd?: () => void;
   onAddEvent?: () => void;

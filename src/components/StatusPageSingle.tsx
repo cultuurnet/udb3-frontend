@@ -10,11 +10,11 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 import { useTranslation } from 'react-i18next';
 import { ReasonAndTypeForm } from '@/components/ReasonAndTypeForm';
-
 import { OfferStatus } from '@/constants/OfferStatus';
+import { Offer } from '@/types/Offer';
 
 type Props = {
-  offer: unknown;
+  offer: Offer;
   error?: Error;
   useChangeStatus: () => void;
 };
