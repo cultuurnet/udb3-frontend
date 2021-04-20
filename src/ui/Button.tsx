@@ -1,12 +1,15 @@
-import PropTypes from 'prop-types';
 import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 import { getValueFromTheme } from './theme';
 import { Spinner, SpinnerVariants, SpinnerSizes } from './Spinner';
-import { getInlineProps, Inline, inlinePropTypes } from './Inline';
+import { getInlineProps, Inline } from './Inline';
+import type { InlineProps } from './Inline';
 import { Icon } from './Icon';
 import { cloneElement } from 'react';
 import { Text } from './Text';
+import { ButtonVariant } from 'react-bootstrap/esm/types';
+
+type Values<T> = T[keyof T];
 
 const ButtonVariants = {
   PRIMARY: 'primary',
@@ -14,12 +17,12 @@ const ButtonVariants = {
   SUCCESS: 'success',
   DANGER: 'danger',
   UNSTYLED: 'unstyled',
-};
+} as const;
 
 const ButtonSizes = {
   MEDIUM: 'md',
   LARGE: 'lg',
-};
+} as const;
 
 const getValue = getValueFromTheme('button');
 
@@ -146,6 +149,21 @@ const customCSS = css`
   }
 `;
 
+type Props = {
+  iconName: string;
+  title: string;
+  className: string;
+  variant?: Values<typeof ButtonVariants>;
+  size?: Values<typeof ButtonSizes>;
+  suffix: React.ReactNode;
+  disabled?: boolean;
+  loading?: boolean;
+  children: React.ReactNode;
+  customChildren?: boolean;
+  shouldHideText?: boolean;
+  onClick?: () => void;
+};
+
 const Button = ({
   iconName,
   suffix,
@@ -162,10 +180,11 @@ const Button = ({
   size,
   forwardedAs,
   ...props
-}) => {
-  if (variant === ButtonVariants.SECONDARY) variant = 'outline-secondary';
+}: Props) => {
+  const bootstrapVariant =
+    variant === ButtonVariants.SECONDARY ? 'outline-secondary' : variant;
 
-  const isBootstrapVariant = variant !== ButtonVariants.UNSTYLED;
+  const isBootstrapVariant = bootstrapVariant !== ButtonVariants.UNSTYLED;
 
   const BaseButtonWithForwardedAs = (props) => (
     <BaseButton {...props} forwardedAs={forwardedAs} />
@@ -173,7 +192,7 @@ const Button = ({
 
   const forwardedButton = forwardedAs ? BaseButtonWithForwardedAs : BaseButton;
   const bootstrapProps = isBootstrapVariant
-    ? { forwardedAs: forwardedButton, variant }
+    ? { forwardedAs: forwardedButton, variant: bootstrapVariant }
     : {};
 
   const propsToApply = {
@@ -244,21 +263,6 @@ const Button = ({
       {inner}
     </BaseButton>
   );
-};
-
-Button.propTypes = {
-  ...inlinePropTypes,
-  iconName: PropTypes.string,
-  title: PropTypes.string,
-  className: PropTypes.string,
-  textAlign: PropTypes.string,
-  variant: PropTypes.string,
-  disabled: PropTypes.bool,
-  loading: PropTypes.bool,
-  children: PropTypes.node,
-  customChildren: PropTypes.bool,
-  shouldHideText: PropTypes.bool,
-  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {

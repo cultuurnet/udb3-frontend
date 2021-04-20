@@ -1,6 +1,7 @@
 import styled, {
   css,
   FlattenInterpolation,
+  FlattenSimpleInterpolation,
   ThemeProps,
 } from 'styled-components';
 
@@ -23,14 +24,14 @@ const wrapStatementWithBreakpoint = (
 const createCSSStatement = (
   key: string,
   value: string,
-  parser: (value: string) => () => string,
+  parser: (value: string) => () => FlattenSimpleInterpolation,
 ) => (): FlattenInterpolation<ThemeProps<any>> => css`
   ${kebabCase(key)}: ${parser ? parser(value) : value};
 `;
 
 const parseProperty = (
   key: string,
-  parser?: (value: string | number) => () => string,
+  parser?: (value: string | number) => () => FlattenSimpleInterpolation,
   customValue?: string,
 ) => (props: ThemeProps<Theme>): FlattenInterpolation<ThemeProps<any>> => {
   if (key === undefined || key === null) return css``;
@@ -78,15 +79,18 @@ const parseProperty = (
   }, style);
 };
 
-const parseSpacing = (value: number) => (): string =>
-  `${(1 / remInPixels) * 2 ** value}rem`;
+const parseSpacing = (value: number) => () =>
+  css`
+    ${(1 / remInPixels) * 2 ** value}rem
+  `;
 
-const parseDimension = (value: string) => () => `${value}px`;
+const parseDimension = (value) => () =>
+  typeof value === 'string' || value instanceof String ? value : `${value}px`;
 
 const parseShorthandProperty = (
   shorthand: string,
   propsToChange: string[] = [],
-  parser: (value: string | number) => () => string,
+  parser: (value: string | number) => () => FlattenSimpleInterpolation,
 ) => (props: unknown): FlattenInterpolation<ThemeProps<any>> =>
   propsToChange.reduce(
     (acc, val) => css`
@@ -204,7 +208,9 @@ type BoxProps = {
   xmlns?: string;
   viewBox?: string;
   value?: string;
+  options?: Array<unknown>;
   onChange?: () => void;
+  onClick?: () => void;
   htmlFor?: string;
   variant?: string;
   children?: React.ReactNode;
@@ -212,7 +218,6 @@ type BoxProps = {
   alignItems?: UIProp<string>;
   as?: React.ReactNode | string;
   forwardedAs?: React.ReactNode;
-  onClick?: () => void;
   margin?: UIProp<number>;
   marginTop?: UIProp<number>;
   marginBottom?: UIProp<number>;
@@ -305,7 +310,7 @@ const boxPropTypes = [
   'animation',
 ] as const;
 
-const getBoxProps = (props: unknown) => pick(props, Object.keys(boxPropTypes));
+const getBoxProps = (props: unknown) => pick(props, boxPropTypes);
 
 const Box = forwardRef<Ref<HTMLDivElement>, BoxProps>(
   ({ children, ...props }, ref) => (

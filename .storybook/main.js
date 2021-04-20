@@ -1,8 +1,8 @@
 const nextConfig = require('../next.config.js');
-const jsonConfig = require('../jsconfig.json');
+const tsConfig = require('../tsconfig.json');
 const path = require('path');
 
-const paths = Object.entries(jsonConfig.compilerOptions.paths).reduce(
+const paths = Object.entries(tsConfig.compilerOptions.paths).reduce(
   (acc, [key, val]) => {
     const parsedPath = val[0].split('/*')[0];
 
@@ -19,6 +19,16 @@ const paths = Object.entries(jsonConfig.compilerOptions.paths).reduce(
 // Export a function. Accept the base config as the only param.
 module.exports = {
   ...nextConfig,
+  typescript: {
+    check: false,
+    checkOptions: {},
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
+    },
+  },
   core: {
     builder: 'webpack5',
   },

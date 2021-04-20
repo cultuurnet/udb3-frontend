@@ -1,12 +1,13 @@
 import styled, { css } from 'styled-components';
-import { Box, boxPropTypes, boxProps, parseProperty } from './Box';
-import PropTypes from 'prop-types';
+import { Box, parseProperty, boxProps } from './Box';
+import type { BoxProps, UIProp } from './Box';
+
 import { Children, cloneElement, forwardRef } from 'react';
 import pick from 'lodash/pick';
-import { Breakpoints } from './theme';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+import { Breakpoints } from './theme';
 
-const parseStackOnProperty = () => ({ stackOn }) => {
+const parseStackOnProperty = () => ({ stackOn }: InlineProps) => {
   if (!stackOn) {
     return;
   }
@@ -31,8 +32,16 @@ const StyledBox = styled(Box)`
   ${boxProps};
 `;
 
-const Inline = forwardRef(
+type InlineProps = BoxProps & {
+  spacing?: UIProp<number>;
+  alignItems?: UIProp<string>;
+  justifyContent?: UIProp<string>;
+  stackOn?: Breakpoints;
+};
+
+const Inline = forwardRef<unknown, InlineProps>(
   ({ spacing, className, children, as, stackOn, ...props }, ref) => {
+    console.log(spacing);
     const shouldCollapse = useMatchBreakpoint(stackOn);
 
     const marginProp =
@@ -65,27 +74,12 @@ const Inline = forwardRef(
   },
 );
 
-const inlinePropTypes = {
-  ...boxPropTypes,
-  spacing: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  alignItems: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  justifyContent: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  stackOn: PropTypes.oneOf(Object.values(Breakpoints)),
-};
-
-// @ts-expect-error ts-migrate(7006) FIXME: Parameter 'props' implicitly has an 'any' type.
-const getInlineProps = (props) => pick(props, Object.keys(inlinePropTypes));
-
-Inline.propTypes = {
-  ...inlinePropTypes,
-  as: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
+const inlinePropTypes = ['spacing', 'alignItems', 'justifyContent', 'stackOn'];
+const getInlineProps = (props: unknown) => pick(props, inlinePropTypes);
 
 Inline.defaultProps = {
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ as: string; }' is not assignable to type '... Remove this comment to see the full error message
   as: 'section',
 };
 
 export { Inline, getInlineProps, inlinePropTypes, inlineProps };
+export type { InlineProps };
