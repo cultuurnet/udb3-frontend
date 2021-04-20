@@ -16,6 +16,7 @@ import { Icons } from '@/ui/Icon';
 import { Link, LinkVariants } from '@/ui/Link';
 import { OfferStatus } from '@/constants/OfferStatus';
 import type { OfferStatus as StatusProps, Type } from '@/types/OfferStatus';
+import { Event } from '@/types/Event';
 
 const getValue = getValueFromTheme('statusPage');
 
@@ -32,7 +33,7 @@ const Status = ({ type, reason }: StatusProps) => {
 };
 
 type StatusPageMultipleProps = {
-  event: unknown;
+  event: Event;
   refetchEvent: () => Promise<void>;
 };
 
