@@ -1,21 +1,25 @@
 import getConfig from 'next/config';
 
 class FetchError extends Error {
-  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'status' implicitly has an 'any' type.
   constructor(status, message) {
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'message' implicitly has an 'any' type.
     super(message);
     this.status = status;
   }
 }
 
+type FetchFromApiOptions = {
+  path?: string;
+  searchParams?: Record<string, unknown>;
+  options?: Record<string, unknown>;
+  silentError?: boolean;
+};
+
 const fetchFromApi = async ({
   path,
-  // @ts-expect-error ts-migrate(2525) FIXME: Initializer provides no value for this binding ele... Remove this comment to see the full error message
   searchParams = {},
   options = {},
   silentError = false,
-} = {}) => {
+}: FetchFromApiOptions = {}) => {
   const { publicRuntimeConfig } = getConfig();
 
   let response;
@@ -23,7 +27,6 @@ const fetchFromApi = async ({
 
   try {
     url = new URL(`${publicRuntimeConfig.apiUrl}${path}`);
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'URLSearchParams' is not assignable to type '... Remove this comment to see the full error message
     url.search = new URLSearchParams(searchParams);
   } catch (e) {
     if (!silentError) {
