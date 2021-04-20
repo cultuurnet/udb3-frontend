@@ -1,7 +1,6 @@
 import NextLink from 'next/link';
-import PropTypes from 'prop-types';
 import { getValueFromTheme } from './theme';
-import { getInlineProps, Inline, inlinePropTypes } from './Inline';
+import { getInlineProps, Inline, InlineProps, inlinePropTypes } from './Inline';
 import { cloneElement, forwardRef } from 'react';
 import { Icon } from './Icon';
 import { Text } from './Text';
@@ -9,72 +8,92 @@ import { Button, ButtonVariants } from '@/ui/Button';
 
 const getValue = getValueFromTheme('link');
 
+type Values<T> = T[keyof T];
+
 const LinkButtonVariants = {
   BUTTON_PRIMARY: ButtonVariants.PRIMARY,
   BUTTON_SECONDARY: ButtonVariants.SECONDARY,
   BUTTON_DANGER: ButtonVariants.DANGER,
   BUTTON_SUCCESS: ButtonVariants.SUCCESS,
-};
+} as const;
 
 const LinkVariants = {
   UNSTYLED: 'unstyled',
   ...LinkButtonVariants,
+} as const;
+
+type BaseLinkProps = InlineProps & {
+  title: string;
+  variant?: Values<typeof LinkVariants>;
 };
 
-const BaseLink = forwardRef(({ variant, children, ...props }, ref) => {
-  if (variant === LinkVariants.UNSTYLED) {
+const BaseLink = forwardRef<unknown, BaseLinkProps>(
+  ({ variant, children, ...props }, ref) => {
+    if (variant === LinkVariants.UNSTYLED) {
+      return (
+        <Inline
+          ref={ref}
+          forwardedAs="a"
+          display="inline-flex"
+          color={{ default: 'inherit', hover: 'inherit' }}
+          alignItems="center"
+          {...props}
+        >
+          {children}
+        </Inline>
+      );
+    }
+
+    if (Object.values(LinkButtonVariants).includes(variant)) {
+      return (
+        <Inline
+          ref={ref}
+          forwardedAs="a"
+          display="inline-flex"
+          alignItems="center"
+          {...props}
+        >
+          <Button forwardedAs="span" variant={variant}>
+            {children}
+          </Button>
+        </Inline>
+      );
+    }
+
     return (
       <Inline
         ref={ref}
         forwardedAs="a"
+        color={{
+          default: getValue<string>('color'),
+          hover: getValue<string>('color'),
+        }}
         display="inline-flex"
-        color={{ default: 'inherit', hover: 'inherit' }}
-        alignItems="center"
+        css={`
+          font-weight: 400;
+          &:hover {
+            text-decoration: underline;
+          }
+        `}
         {...props}
       >
         {children}
       </Inline>
     );
-  }
+  },
+);
 
-  if (Object.values(LinkButtonVariants).includes(variant)) {
-    return (
-      <Inline
-        ref={ref}
-        forwardedAs="a"
-        display="inline-flex"
-        alignItems="center"
-        {...props}
-      >
-        <Button forwardedAs="span" variant={variant}>
-          {children}
-        </Button>
-      </Inline>
-    );
-  }
-
-  return (
-    <Inline
-      ref={ref}
-      forwardedAs="a"
-      color={{ default: getValue('color'), hover: getValue('color') }}
-      display="inline-flex"
-      css={`
-        font-weight: 400;
-        &:hover {
-          text-decoration: underline;
-        }
-      `}
-      {...props}
-    >
-      {children}
-    </Inline>
-  );
-});
-
-BaseLink.propTypes = {
-  variant: PropTypes.string,
-  children: PropTypes.node,
+type Props = InlineProps & {
+  href: string;
+  title: string;
+  iconName: string;
+  suffix: React.ReactNode;
+  className: string;
+  children: React.ReactNode;
+  customChildren: boolean;
+  shouldHideText: boolean;
+  as: React.ReactNode;
+  variant?: Values<typeof LinkVariants>;
 };
 
 const Link = ({
@@ -88,7 +107,7 @@ const Link = ({
   variant,
   title,
   ...props
-}) => {
+}: Props) => {
   const isInternalLink = href.startsWith('/');
 
   const clonedSuffix = suffix
@@ -143,19 +162,6 @@ const Link = ({
       {inner}
     </BaseLink>
   );
-};
-
-Link.propTypes = {
-  ...inlinePropTypes,
-  href: PropTypes.string,
-  title: PropTypes.string,
-  iconName: PropTypes.string,
-  suffix: PropTypes.node,
-  className: PropTypes.string,
-  children: PropTypes.node,
-  customChildren: PropTypes.bool,
-  shouldHideText: PropTypes.bool,
-  as: PropTypes.node,
 };
 
 Link.defaultProps = {

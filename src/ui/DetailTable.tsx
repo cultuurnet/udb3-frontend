@@ -1,12 +1,18 @@
-import PropTypes from 'prop-types';
-import { getStackProps, Stack, stackPropTypes } from './Stack';
+import { getStackProps, Stack } from './Stack';
+import type { StackProps } from './Stack';
+
 import { Inline } from './Inline';
 import { Box, parseSpacing } from './Box';
 import { getValueFromTheme } from './theme';
+import { css } from 'styled-components';
 
 const getValue = getValueFromTheme('detailTable');
 
-const DetailTable = ({ items, className, ...props }) => {
+type Props = StackProps & {
+  items?: { header: string; value: string }[];
+};
+
+const DetailTable = ({ items, className, ...props }: Props) => {
   return (
     <Stack
       as="table"
@@ -22,12 +28,10 @@ const DetailTable = ({ items, className, ...props }) => {
             padding={3}
             css={
               index !== items.length - 1
-                ? (props) => {
-                    return `border-bottom: 1px solid ${getValue('borderColor')(
-                      props,
-                    )};`;
-                  }
-                : undefined
+                ? css`
+                    border-bottom: 1px solid ${getValue<string>('borderColor')};
+                  `
+                : css``
             }
           >
             <Box as="th" minWidth={parseSpacing(7)()} fontWeight="bold">
@@ -39,14 +43,6 @@ const DetailTable = ({ items, className, ...props }) => {
       </Stack>
     </Stack>
   );
-};
-
-DetailTable.propTypes = {
-  ...stackPropTypes,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({ header: PropTypes.string, value: PropTypes.string }),
-  ),
-  className: PropTypes.string,
 };
 
 DetailTable.defaultProps = {
