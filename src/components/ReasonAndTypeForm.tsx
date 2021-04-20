@@ -77,7 +77,7 @@ const ReasonAndTypeForm = ({
             </Alert>
           )}
         </Stack>
-        <Text color={getValue('infoTextColor')}>
+        <Text color={getValue<string>('infoTextColor')}>
           {t('offerStatus.reasonTip')}
         </Text>
       </Stack>
