@@ -86,7 +86,9 @@ const Job = ({
 }: JobProps) => {
   const { t, i18n } = useTranslation();
 
-  const isDone = [JobStates.FINISHED, JobStates.FAILED].includes(state);
+  const isDone = ([JobStates.FINISHED, JobStates.FAILED] as string[]).includes(
+    state,
+  );
 
   const timeAgo = useMemo(
     () =>
