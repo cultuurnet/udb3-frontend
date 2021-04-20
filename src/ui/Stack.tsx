@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Box, parseProperty, boxProps, UIProp } from './Box';
+import { Box, parseProperty, boxProps, UIProp, boxPropTypes } from './Box';
 import type { BoxProps } from './Box';
 
 import { Children, cloneElement, forwardRef } from 'react';
@@ -48,7 +48,8 @@ const Stack = forwardRef<unknown, StackProps>(
 );
 
 const stackPropTypes = ['spacing', 'alignItems', 'justifyContent', 'stackOn'];
-const getStackProps = (props: unknown) => pick(props, stackPropTypes);
+const getStackProps = (props: unknown) =>
+  pick(props, [...stackPropTypes, ...boxPropTypes]);
 
 Stack.defaultProps = {
   as: 'section',

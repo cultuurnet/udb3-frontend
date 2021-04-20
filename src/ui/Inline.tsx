@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Box, parseProperty, boxProps } from './Box';
+import { Box, parseProperty, boxProps, boxPropTypes } from './Box';
 import type { BoxProps, UIProp } from './Box';
 
 import { Children, cloneElement, forwardRef } from 'react';
@@ -41,7 +41,6 @@ type InlineProps = BoxProps & {
 
 const Inline = forwardRef<unknown, InlineProps>(
   ({ spacing, className, children, as, stackOn, ...props }, ref) => {
-    console.log(spacing);
     const shouldCollapse = useMatchBreakpoint(stackOn);
 
     const marginProp =
@@ -75,7 +74,8 @@ const Inline = forwardRef<unknown, InlineProps>(
 );
 
 const inlinePropTypes = ['spacing', 'alignItems', 'justifyContent', 'stackOn'];
-const getInlineProps = (props: unknown) => pick(props, inlinePropTypes);
+const getInlineProps = (props: unknown) =>
+  pick(props, [...boxPropTypes, ...inlinePropTypes]);
 
 Inline.defaultProps = {
   as: 'section',

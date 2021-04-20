@@ -331,6 +331,7 @@ export {
   parseDimension,
   getBoxProps,
   boxProps,
+  boxPropTypes,
 };
 
 export type { BoxProps, UIProp };
