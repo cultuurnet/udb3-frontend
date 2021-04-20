@@ -1,8 +1,17 @@
 import { Form } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import { getBoxProps, boxPropTypes, Box } from './Box';
+import { getBoxProps, Box } from './Box';
+import type { BoxProps } from './Box';
 
-const BaseInput = (props) => <Box as="input" {...props} />;
+type InputProps = {
+  type?: string;
+  placeholder?: string;
+  onInput?: () => void;
+  value?: string;
+};
+
+type Props = BoxProps & InputProps;
+
+const BaseInput = (props: Props) => <Box as="input" {...props} />;
 
 const Input = ({
   type,
@@ -12,7 +21,7 @@ const Input = ({
   className,
   value,
   ...props
-}) => (
+}: Props) => (
   <Form.Control
     forwardedAs={BaseInput}
     id={id}
@@ -27,21 +36,12 @@ const Input = ({
   />
 );
 
-const inputPropTypes = {
-  className: PropTypes.string,
-  type: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  onInput: PropTypes.func,
-};
-
-Input.propTypes = {
-  ...boxPropTypes,
-  ...inputPropTypes,
-};
-
 Input.defaultProps = {
   type: 'text',
+  placeholder: '',
+  onInput: () => {},
+  value: '',
 };
 
-export { Input, inputPropTypes };
+export { Input };
+export type { InputProps };
