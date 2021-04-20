@@ -11,9 +11,10 @@ import { Text } from '@/ui/Text';
 import { Title } from '@/ui/Title';
 import { useGetCalendarSummary } from '@/hooks/api/events';
 import { CalendarType } from '@/constants/CalendarType';
+import type { Term } from '@/types/Term';
 
 type Props = {
-  terms?: unknown[];
+  terms?: Term[];
   title?: string;
   id?: string;
   locationName?: string;

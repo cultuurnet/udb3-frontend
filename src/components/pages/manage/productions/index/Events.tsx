@@ -19,13 +19,14 @@ import { Text } from '@/ui/Text';
 import { useGetCalendarSummary } from '@/hooks/api/events';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { CalendarType } from '@/constants/CalendarType';
+import type { Term } from '@/types/Term';
 
 const getValue = getValueFromTheme('eventItem');
 
 type EventProps = {
   id?: string;
   name?: string;
-  terms?: unknown[];
+  terms?: Term[];
   location?: string;
   calendarType?: string;
   onToggle?: () => void;
