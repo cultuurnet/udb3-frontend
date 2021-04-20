@@ -11,7 +11,7 @@ const SocketMessageTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof SocketMessageTypes>]?: () => void;
+  [K in Values<typeof SocketMessageTypes>]?: (...args: unknown[]) => unknown;
 };
 
 const useHandleSocketMessage = (eventsMap: EventsMap = {}) => {

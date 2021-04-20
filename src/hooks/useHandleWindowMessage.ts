@@ -14,7 +14,7 @@ const WindowMessageTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof WindowMessageTypes>]?: () => void;
+  [K in Values<typeof WindowMessageTypes>]?: (...args: unknown[]) => unknown;
 };
 
 const useHandleWindowMessage = (eventsMap: EventsMap = {}) => {

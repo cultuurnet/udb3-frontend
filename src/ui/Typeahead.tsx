@@ -10,7 +10,7 @@ const getValue = getValueFromTheme('typeahead');
 
 type Props = BoxProps & {
   id: string;
-  options: Array<unknown>;
+  options: unknown[];
   labelKey: () => void;
   disabled: boolean;
   placeholder: string;
