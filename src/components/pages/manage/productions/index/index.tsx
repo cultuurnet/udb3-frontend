@@ -28,12 +28,13 @@ const Index = () => {
   const queryClient = useQueryClient();
 
   const [searchInput, setSearchInput] = useState('');
-
   const [activeProductionId, setActiveProductionId] = useState('');
-  const [selectedEventIds, setSelectedEventIds] = useState('');
+  const [selectedEventIds, setSelectedEventIds] = useState<string[]>([]);
   const [toBeAddedEventId, setToBeAddedEventId] = useState('');
 
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(
+    false,
+  );
   const [isAddActionVisible, setIsAddActionVisible] = useState(false);
   const [currentPageProductions, setCurrentPageProductions] = useState(1);
   const [errorMessageEvents, setErrorMessageEvents] = useState('');
