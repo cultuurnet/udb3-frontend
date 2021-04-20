@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@/ui/Box';
@@ -52,7 +52,7 @@ const JobTitle = ({ children, className, ...props }: JobTitleProps) => (
 type JobLoggerProps = {
   visible: boolean;
   onClose: () => void;
-  onStatusChange: (status: Values<typeof JobLoggerStates>) => void;
+  onStatusChange: Dispatch<SetStateAction<Values<typeof JobLoggerStates>>>;
 };
 
 const JobLogger = ({ visible, onClose, onStatusChange }: JobLoggerProps) => {
