@@ -31,7 +31,7 @@ const JobLoggerStates = {
 
 type JobTitleProps = {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 };
 
 const JobTitle = ({ children, className, ...props }: JobTitleProps) => (

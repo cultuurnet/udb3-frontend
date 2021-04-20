@@ -6,13 +6,14 @@ import { ReasonAndTypeForm } from '@/components/ReasonAndTypeForm';
 import { OfferType } from '@/constants/OfferType';
 import { Spinner } from '@/ui/Spinner';
 import { OfferStatus } from '@/constants/OfferStatus';
+import type { StatusType } from '@/types/Offer';
 
 type Props = {
   visible: boolean;
   loading: boolean;
-  className: string;
+  className?: string;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (type: StatusType, reason: string) => Promise<void>;
 };
 
 const StatusModal = ({
