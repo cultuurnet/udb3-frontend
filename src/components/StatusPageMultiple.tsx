@@ -29,7 +29,9 @@ const Status = ({ type, reason }: StatusProps) => {
     <Stack>
       <Text>{type}</Text>
       {!!reason?.[i18n.language] && (
-        <Text color={getValue('infoTextColor')}>{reason[i18n.language]}</Text>
+        <Text color={getValue<string>('infoTextColor')}>
+          {reason[i18n.language]}
+        </Text>
       )}
     </Stack>
   );
