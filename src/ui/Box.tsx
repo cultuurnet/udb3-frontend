@@ -185,11 +185,11 @@ const StyledBox = styled.div`
   ${boxProps}
 `;
 
-type BreakpointsObject<T> = {
+type UIPropObject<T> = { default?: T; hover?: T } & {
   [value in keyof Theme['breakpoints']]?: T;
 };
 
-type UIProp<T> = T | ((props: { theme: Theme }) => T) | BreakpointsObject<T>;
+type UIProp<T> = T | ((props: { theme: Theme }) => T) | UIPropObject<T>;
 
 type BoxProps = {
   id?: string;
