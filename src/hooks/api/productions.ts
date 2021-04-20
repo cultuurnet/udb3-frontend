@@ -35,13 +35,13 @@ const useGetProductions = (
     ...configuration,
   });
 
-const deleteEventById = ({
+const deleteEventById = async ({
   productionId = '',
   eventId = '',
   headers,
   silentError = false,
 } = {}) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/productions/${productionId}/events/${eventId}`,
     options: {
       method: 'DELETE',
@@ -53,15 +53,20 @@ const deleteEventById = ({
 const useDeleteEventById = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: deleteEventById, ...configuration });
 
-const deleteEventsByIds = ({ productionId = '', eventIds = [], headers }) =>
-  Promise.all(
-    eventIds.map((eventId) =>
-      deleteEventById({
-        productionId,
-        eventId,
-        headers,
-        silentError: true,
-      }),
+const deleteEventsByIds = async ({
+  productionId = '',
+  eventIds = [],
+  headers,
+}) =>
+  await Promise.all(
+    eventIds.map(
+      async (eventId) =>
+        await deleteEventById({
+          productionId,
+          eventId,
+          headers,
+          silentError: true,
+        }),
     ),
   );
 
@@ -72,13 +77,13 @@ const useDeleteEventsByIds = (configuration = {}) =>
     ...configuration,
   });
 
-const addEventById = ({
+const addEventById = async ({
   productionId,
   eventId,
   headers,
   silentError = false,
 }) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/productions/${productionId}/events/${eventId}`,
     options: {
       method: 'PUT',
@@ -90,15 +95,20 @@ const addEventById = ({
 const useAddEventById = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: addEventById, ...configuration });
 
-const addEventsByIds = ({ productionId = '', eventIds = [], headers } = {}) =>
-  Promise.all(
-    eventIds.map((eventId) =>
-      addEventById({
-        headers,
-        productionId,
-        eventId,
-        silentError: true,
-      }),
+const addEventsByIds = async ({
+  productionId = '',
+  eventIds = [],
+  headers,
+} = {}) =>
+  await Promise.all(
+    eventIds.map(
+      async (eventId) =>
+        await addEventById({
+          headers,
+          productionId,
+          eventId,
+          silentError: true,
+        }),
     ),
   );
 
@@ -125,8 +135,8 @@ const useGetSuggestedEvents = (configuration = {}) =>
     ...configuration,
   });
 
-const skipSuggestedEvents = ({ headers, eventIds = [] }) =>
-  fetchFromApi({
+const skipSuggestedEvents = async ({ headers, eventIds = [] }) =>
+  await fetchFromApi({
     path: '/productions/skip',
     options: {
       method: 'POST',
@@ -143,8 +153,8 @@ const useSkipSuggestedEvents = (configuration = {}) =>
     ...configuration,
   });
 
-const createWithEvents = ({ headers, productionName, eventIds = [] }) =>
-  fetchFromApi({
+const createWithEvents = async ({ headers, productionName, eventIds = [] }) =>
+  await fetchFromApi({
     path: '/productions/',
     options: {
       method: 'POST',
@@ -159,8 +169,12 @@ const createWithEvents = ({ headers, productionName, eventIds = [] }) =>
 const useCreateWithEvents = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: createWithEvents, ...configuration });
 
-const mergeProductions = ({ headers, fromProductionId, toProductionId }) =>
-  fetchFromApi({
+const mergeProductions = async ({
+  headers,
+  fromProductionId,
+  toProductionId,
+}) =>
+  await fetchFromApi({
     path: `/productions/${toProductionId}/merge/${fromProductionId}`,
     options: { method: 'POST', headers },
   });

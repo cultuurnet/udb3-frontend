@@ -101,8 +101,8 @@ const useGetCalendarSummary = (
     },
   });
 
-const changeStatus = ({ headers, id, type, reason }) =>
-  fetchFromApi({
+const changeStatus = async ({ headers, id, type, reason }) =>
+  await fetchFromApi({
     path: `/events/${id.toString()}/status`,
     options: {
       method: 'PUT',
@@ -114,7 +114,7 @@ const changeStatus = ({ headers, id, type, reason }) =>
 const useChangeStatus = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
-const changeStatusSubEvents = ({
+const changeStatusSubEvents = async ({
   headers,
   eventId,
   subEventIds = [],
@@ -122,7 +122,7 @@ const changeStatusSubEvents = ({
   type,
   reason,
 }) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/events/${eventId.toString()}/subEvents`,
     options: {
       method: 'PATCH',
@@ -133,7 +133,6 @@ const changeStatusSubEvents = ({
           status: {
             type,
             reason: {
-              // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'id' implicitly has an 'any' type.
               ...(subEvents[id].status.type === type &&
                 subEvents[id].status.reason),
               ...reason,

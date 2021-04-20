@@ -25,8 +25,8 @@ const useGetPlaceById = ({ req, queryClient, id }, configuration = {}) =>
     ...configuration,
   });
 
-const changeStatus = ({ headers, id, type, reason }) =>
-  fetchFromApi({
+const changeStatus = async ({ headers, id, type, reason }) =>
+  await fetchFromApi({
     path: `/places/${id.toString()}/status`,
     options: {
       method: 'PUT',
