@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import { Alert as BootstrapAlert } from 'react-bootstrap';
 import { getValueFromTheme } from './theme';
-import { getBoxProps, boxPropTypes, Box } from './Box';
+import { getBoxProps, Box, BoxProps } from './Box';
+
+type Values<T> = T[keyof T];
 
 const AlertVariants = {
   INFO: 'info',
@@ -9,9 +10,17 @@ const AlertVariants = {
   DANGER: 'danger',
   WARNING: 'warning',
   DARK: 'dark',
-};
+} as const;
 
 const getValue = getValueFromTheme(`alert`);
+
+type Props = {
+  variant?: Values<typeof AlertVariants>;
+  visible?: boolean;
+  dismissible?: boolean;
+  onDismiss?: () => void;
+  children: React.ReactNode;
+} & BoxProps;
 
 const Alert = ({
   variant,
@@ -21,7 +30,7 @@ const Alert = ({
   children,
   className,
   ...props
-}: any) => {
+}: Props) => {
   return (
     <Box {...getBoxProps(props)}>
       <BootstrapAlert
@@ -43,20 +52,11 @@ const Alert = ({
   );
 };
 
-Alert.propTypes = {
-  ...boxPropTypes,
-  className: PropTypes.string,
-  variant: PropTypes.oneOf(Object.values(AlertVariants)),
-  visible: PropTypes.bool,
-  dismissible: PropTypes.bool,
-  onDismiss: PropTypes.func,
-  children: PropTypes.node,
-};
-
 Alert.defaultProps = {
   visible: true,
   variant: AlertVariants.INFO,
   dismissible: false,
+  onDismiss: () => {},
 };
 
 export { AlertVariants, Alert };
