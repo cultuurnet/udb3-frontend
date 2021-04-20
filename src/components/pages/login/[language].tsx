@@ -2,7 +2,8 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Box, boxPropTypes } from '@/ui/Box';
+import { Box } from '@/ui/Box';
+import type { BoxProps } from '@/ui/Box';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { Image } from '@/ui/Image';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
@@ -25,9 +26,9 @@ const Svg = (props) => (
   />
 );
 
-const Group = (props: unknown) => <Box as="g" fill="white" {...props} />;
+const Group = (props: BoxProps) => <Box as="g" fill="white" {...props} />;
 
-const Path = (props: unknown) => <Box as="path" {...props} />;
+const Path = (props: BoxProps) => <Box as="path" {...props} />;
 
 const Animation = (props) => {
   const draw = keyframes`
