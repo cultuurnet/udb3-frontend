@@ -11,10 +11,6 @@ import type { Theme } from './theme';
 
 const remInPixels = 15;
 
-type BreakpointsObject<T> = {
-  [value in keyof Theme['breakpoints']]?: T;
-};
-
 const wrapStatementWithBreakpoint = (
   breakpoint: any,
   statementToWrap: any,
@@ -188,6 +184,10 @@ const boxProps = css`
 const StyledBox = styled.div`
   ${boxProps}
 `;
+
+type BreakpointsObject<T> = {
+  [value in keyof Theme['breakpoints']]?: T;
+};
 
 type UIProp<T> = T | ((props: unknown) => T) | BreakpointsObject<T>;
 
