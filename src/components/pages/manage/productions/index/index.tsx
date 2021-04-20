@@ -107,7 +107,7 @@ const Index = () => {
 
   const handleErrorAddEvent = (error) => setErrorMessageEvents(error.message);
 
-  const handleToggleSelectEvent = (selectedEventId) => {
+  const handleToggleSelectEvent = (selectedEventId: string) => {
     setIsAddActionVisible(false);
     setToBeAddedEventId('');
 
