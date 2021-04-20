@@ -1,14 +1,8 @@
 import { Modal as BootstrapModal } from 'react-bootstrap';
 
-type Props = {
-  className: string;
-  visible?: boolean;
-  title?: string;
-  size?: 'sm' | 'lg' | 'xl';
-  onShow?: () => void;
-  onClose?: () => void;
-  children: React.ReactNode;
-};
+import type { ModalProps } from '../Modal';
+
+type Props = ModalProps;
 
 const ContentModal = ({
   visible,

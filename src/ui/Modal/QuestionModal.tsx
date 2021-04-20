@@ -1,19 +1,9 @@
 import { Modal as BootstrapModal } from 'react-bootstrap';
 import { Button, ButtonVariants } from '../Button';
 
-type Props = {
-  className: string;
-  visible?: boolean;
-  title?: string;
-  confirmTitle?: string;
-  cancelTitle?: string;
-  onShow?: () => void;
-  onClose?: () => void;
-  onConfirm?: () => void;
-  size?: 'sm' | 'lg' | 'xl';
-  confirmButtonDisabled?: boolean;
-  children: React.ReactNode;
-};
+import type { ModalProps } from '../Modal';
+
+type Props = ModalProps;
 
 const QuestionModal = ({
   className,
