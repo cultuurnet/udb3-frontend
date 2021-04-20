@@ -161,7 +161,7 @@ type AnnouncementsProps = {
   visible: boolean;
   announcements: Announcement[];
   onClickAnnouncement: (announcement: Announcement) => void;
-  onShow: () => void;
+  onShow?: () => void;
   onClose: () => void;
 };
 
