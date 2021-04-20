@@ -226,10 +226,6 @@ const breakpoints = {
   [Breakpoints.L]: 1200,
 } as const;
 
-type BreakpointsObject<T> = {
-  [value in keyof typeof breakpoints]: T;
-};
-
 const theme = {
   colors,
   breakpoints,
@@ -237,6 +233,7 @@ const theme = {
 };
 
 type Theme = typeof theme;
+type Breakpoints = keyof typeof breakpoints;
 
 const getValueFromTheme = (component: string) => <T extends unknown>(
   path: string,
@@ -244,4 +241,4 @@ const getValueFromTheme = (component: string) => <T extends unknown>(
   get(props.theme, `components.${component}.${path}`);
 
 export { theme, getValueFromTheme, Breakpoints };
-export type { BreakpointsObject, Theme };
+export type { Theme };

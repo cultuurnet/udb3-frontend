@@ -7,9 +7,13 @@ import styled, {
 import kebabCase from 'lodash/kebabCase';
 import pick from 'lodash/pick';
 import { forwardRef, Ref } from 'react';
-import { BreakpointsObject } from './theme';
+import type { Theme } from './theme';
 
 const remInPixels = 15;
+
+type BreakpointsObject<T> = {
+  [value in keyof Theme['breakpoints']]?: T;
+};
 
 const wrapStatementWithBreakpoint = (
   breakpoint: any,
@@ -32,9 +36,7 @@ const parseProperty = (
   key: string,
   parser?: (value: string | number) => () => string,
   customValue?: string,
-) => (
-  props: ThemeProps<{ breakpoints: { [value: string]: number } }>,
-): FlattenInterpolation<ThemeProps<any>> => {
+) => (props: ThemeProps<Theme>): FlattenInterpolation<ThemeProps<any>> => {
   if (key === undefined || key === null) return css``;
   const value = customValue || props[key];
 
