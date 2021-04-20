@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types';
-import { Box, boxPropTypes, getBoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import type { BoxProps } from './Box';
 
-const Small = ({ children, className, ...props }) => (
+type Props = BoxProps;
+
+const Small = ({ children, className, ...props }: Props) => (
   <Box
     forwardedAs="small"
     className={className}
@@ -13,11 +15,5 @@ const Small = ({ children, className, ...props }) => (
     {children}
   </Box>
 );
-
-Small.propTypes = {
-  ...boxPropTypes,
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
 
 export { Small };
