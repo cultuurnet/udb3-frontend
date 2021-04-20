@@ -189,7 +189,7 @@ type BreakpointsObject<T> = {
   [value in keyof Theme['breakpoints']]?: T;
 };
 
-type UIProp<T> = T | ((props: unknown) => T) | BreakpointsObject<T>;
+type UIProp<T> = T | ((props: { theme: Theme }) => T) | BreakpointsObject<T>;
 
 type BoxProps = {
   id?: string;
@@ -251,7 +251,7 @@ type BoxProps = {
   flex?: UIProp<string | number>;
   cursor?: UIProp<string>;
   animation?: UIProp<string>;
-} & InputBoxProps;
+};
 
 const boxPropTypes = [
   'alignItems',
