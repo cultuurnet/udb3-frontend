@@ -101,7 +101,7 @@ const useGetCalendarSummary = (
     },
   });
 
-const changeStatus = async ({ headers, id, type, reason }) =>
+const changeStatus = ({ headers, id, type, reason }) =>
   fetchFromApi({
     path: `/events/${id.toString()}/status`,
     options: {
@@ -114,8 +114,7 @@ const changeStatus = async ({ headers, id, type, reason }) =>
 const useChangeStatus = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
-const changeStatusSubEvents = async ({
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, id, type, reason }: any) => Prom... Remove this comment to see the full error message
+const changeStatusSubEvents = ({
   headers,
   eventId,
   subEventIds = [],
