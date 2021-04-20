@@ -198,10 +198,12 @@ type BoxProps = {
   alt?: string;
   size?: number;
   type?: string;
-  checked?: string;
+  checked?: boolean;
+  role?: string;
   disabled?: boolean;
   xmlns?: string;
   viewBox?: string;
+  value?: string;
   onChange?: () => void;
   htmlFor?: string;
   variant?: string;
