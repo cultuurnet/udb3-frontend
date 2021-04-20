@@ -1,27 +1,40 @@
-import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
+import styled, {
+  css,
+  FlattenInterpolation,
+  ThemeProps,
+} from 'styled-components';
+
 import kebabCase from 'lodash/kebabCase';
 import pick from 'lodash/pick';
-import { forwardRef } from 'react';
+import { forwardRef, Ref } from 'react';
+import { BreakpointsObject } from './theme';
 
 const remInPixels = 15;
 
 const wrapStatementWithBreakpoint = (
   breakpoint: any,
   statementToWrap: any,
-) => () => css`
+) => (): FlattenInterpolation<ThemeProps<any>> => css`
   @media (max-width: ${breakpoint}px) {
     ${statementToWrap}
   }
 `;
 
-const createCSSStatement = (key: any, value: any, parser: any) => () => css`
+const createCSSStatement = (
+  key: string,
+  value: string,
+  parser: (value: string) => () => string,
+) => (): FlattenInterpolation<ThemeProps<any>> => css`
   ${kebabCase(key)}: ${parser ? parser(value) : value};
 `;
 
-const parseProperty = (key: any, parser: any, customValue: any) => (
-  props: any,
-) => {
+const parseProperty = (
+  key: string,
+  parser?: (value: string | number) => () => string,
+  customValue?: string,
+) => (
+  props: ThemeProps<{ breakpoints: { [value: string]: number } }>,
+): FlattenInterpolation<ThemeProps<any>> => {
   if (key === undefined || key === null) return css``;
   const value = customValue || props[key];
 
@@ -67,16 +80,16 @@ const parseProperty = (key: any, parser: any, customValue: any) => (
   }, style);
 };
 
-const parseSpacing = (value: any) => () =>
+const parseSpacing = (value: number) => (): string =>
   `${(1 / remInPixels) * 2 ** value}rem`;
-const parseDimension = (value: any) => () =>
-  typeof value === 'string' || value instanceof String ? value : `${value}px`;
+
+const parseDimension = (value: string) => () => `${value}px`;
 
 const parseShorthandProperty = (
-  shorthand: any,
-  propsToChange = [],
-  parser: any,
-) => (props: any) =>
+  shorthand: string,
+  propsToChange: string[] = [],
+  parser: (value: string | number) => () => string,
+) => (props: unknown): FlattenInterpolation<ThemeProps<any>> =>
   propsToChange.reduce(
     (acc, val) => css`
       ${parseProperty(val, parser, props[shorthand])};
@@ -174,252 +187,129 @@ const StyledBox = styled.div`
   ${boxProps}
 `;
 
-const boxPropTypes = {
-  alignItems: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  as: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  onClick: PropTypes.func,
-  margin: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginTop: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginBottom: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginRight: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginLeft: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginX: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  marginY: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  padding: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingTop: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingBottom: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingRight: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingLeft: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingX: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  paddingY: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  width: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  minWidth: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  maxWidth: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  height: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  justifyContent: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  maxHeight: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  minHeight: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  top: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  bottom: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  left: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  right: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  backgroundColor: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  backgroundPosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  backgroundRepeat: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  objectFit: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  fontSize: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  fontWeight: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  textAlign: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  lineHeight: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  color: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  stroke: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  zIndex: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  position: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  display: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  opacity: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  flex: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  cursor: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  animation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-    PropTypes.object,
-  ]),
+type UIProp<T> = T | ((props: unknown) => T) | BreakpointsObject<T>;
+
+type InputBoxProps = {
+  type?: string;
+  checked?: string;
+  disabled?: boolean;
+  onChange?: () => void;
 };
 
-const getBoxProps = (props: any) => pick(props, Object.keys(boxPropTypes));
+type BoxProps = {
+  id?: string;
+  name?: string;
+  src?: string;
+  alt?: string;
+  htmlFor?: string;
+  variant?: string;
+  children?: React.ReactNode;
+  className?: string;
+  alignItems?: UIProp<string>;
+  as?: React.ReactNode | string;
+  forwardedAs?: React.ReactNode;
+  onClick?: () => void;
+  margin?: UIProp<number>;
+  marginTop?: UIProp<number>;
+  marginBottom?: UIProp<number>;
+  marginRight?: UIProp<number>;
+  marginLeft?: UIProp<number>;
+  marginX?: UIProp<number>;
+  marginY?: UIProp<number>;
+  padding?: UIProp<number>;
+  paddingTop?: UIProp<number>;
+  paddingBottom?: UIProp<number>;
+  paddingRight?: UIProp<number>;
+  paddingLeft?: UIProp<number>;
+  paddingX?: UIProp<number>;
+  paddingY?: UIProp<number>;
+  width?: UIProp<string | number>;
+  minWidth?: UIProp<string | number>;
+  maxWidth?: UIProp<string | number>;
+  height?: UIProp<string | number>;
+  justifyContent?: UIProp<string>;
+  maxHeight?: UIProp<string | number>;
+  minHeight?: UIProp<string | number>;
+  top?: UIProp<string | number>;
+  bottom?: UIProp<string | number>;
+  left?: UIProp<string | number>;
+  right?: UIProp<string | number>;
+  backgroundColor?: UIProp<string>;
+  backgroundPosition?: UIProp<string>;
+  backgroundRepeat?: UIProp<string>;
+  objectFit?: UIProp<string>;
+  fontSize?: UIProp<string | number>;
+  fontWeight?: UIProp<string | number>;
+  textAlign?: UIProp<string>;
+  lineHeight?: UIProp<string | number>;
+  color?: UIProp<string>;
+  stroke?: UIProp<string>;
+  zIndex?: UIProp<number>;
+  position?: UIProp<string>;
+  display?: UIProp<string>;
+  opacity?: UIProp<number>;
+  flex?: UIProp<string | number>;
+  cursor?: UIProp<string>;
+  animation?: UIProp<string>;
+} & InputBoxProps;
 
-const Box = forwardRef(({ children, ...props }, ref) => (
-  <StyledBox ref={ref} {...props}>
-    {children}
-  </StyledBox>
-));
+const boxPropTypes = [
+  'alignItems',
+  'as',
+  'onClick',
+  'margin',
+  'marginTop',
+  'marginBottom',
+  'marginRight',
+  'marginLeft',
+  'marginX',
+  'marginY',
+  'padding',
+  'paddingTop',
+  'paddingBottom',
+  'paddingRight',
+  'paddingLeft',
+  'paddingX',
+  'paddingY',
+  'width',
+  'minWidth',
+  'maxWidth',
+  'height',
+  'justifyContent',
+  'maxHeight',
+  'minHeight',
+  'top',
+  'bottom',
+  'left',
+  'right',
+  'backgroundColor',
+  'backgroundPosition',
+  'backgroundRepeat',
+  'objectFit',
+  'fontSize',
+  'fontWeight',
+  'textAlign',
+  'lineHeight',
+  'color',
+  'stroke',
+  'zIndex',
+  'position',
+  'display',
+  'opacity',
+  'flex',
+  'cursor',
+  'animation',
+] as const;
 
-Box.propTypes = {
-  children: PropTypes.node,
-  ...boxPropTypes,
-};
+const getBoxProps = (props: unknown) => pick(props, Object.keys(boxPropTypes));
+
+const Box = forwardRef<Ref<HTMLDivElement>, BoxProps>(
+  ({ children, ...props }, ref) => (
+    <StyledBox ref={ref as any} {...props}>
+      {children}
+    </StyledBox>
+  ),
+);
 
 Box.defaultProps = {
   as: 'div',
@@ -427,10 +317,11 @@ Box.defaultProps = {
 
 export {
   Box,
-  boxProps,
-  boxPropTypes,
-  getBoxProps,
   parseProperty,
   parseSpacing,
   parseDimension,
+  getBoxProps,
+  boxProps,
 };
+
+export type { BoxProps, UIProp };
