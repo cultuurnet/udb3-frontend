@@ -7,7 +7,7 @@ describe('fetchFromApi', () => {
     const data = { data: '12345' };
     (fetch as any).mockResponseOnce(JSON.stringify(data));
     const response = await fetchFromApi({ path: '/random' });
-    const result = await (response as any).json();
+    const result = await response.json();
     const calls = (fetch as any).mock.calls;
     const [url] = calls[0];
     expect(calls.length).toStrictEqual(1);
@@ -21,7 +21,7 @@ describe('fetchFromApi', () => {
       path: '/random',
       searchParams: { foo: 'bar', id: 2 },
     });
-    const result = await (response as any).json();
+    const result = await response.json();
     const calls = (fetch as any).mock.calls;
     const [url] = calls[0];
     expect(calls.length).toStrictEqual(1);
@@ -39,7 +39,7 @@ describe('fetchFromApi', () => {
       path: '/random',
       options: { method, headers },
     });
-    const result = await (response as any).json();
+    const result = await response.json();
     const calls = (fetch as any).mock.calls;
     const [url, options] = calls[0];
     expect((fetch as any).mock.calls.length).toStrictEqual(1);

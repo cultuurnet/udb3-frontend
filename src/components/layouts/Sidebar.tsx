@@ -24,10 +24,10 @@ import { useGetEventsToModerate } from '@/hooks/api/events';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Values } from '@/types/Values';
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
-import type { Values } from '@/types/Values';
 
 const PermissionTypes = {
   AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',

@@ -383,7 +383,8 @@ const Index = () => {
   const { removeAuthenticationCookies } = useCookiesWithOptions();
   const { publicRuntimeConfig } = getConfig();
 
-  const changeLanguage = (language) => () => router.push(`/login/${language}`);
+  const changeLanguage = (language) => async () =>
+    await router.push(`/login/${language}`);
 
   const handleClickLogin = () => {
     removeAuthenticationCookies();

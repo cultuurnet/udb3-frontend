@@ -208,7 +208,7 @@ type BoxProps = {
   xmlns?: string;
   viewBox?: string;
   value?: string;
-  options?: Array<unknown>;
+  options?: unknown[];
   onChange?: () => void;
   onClick?: () => void;
   htmlFor?: string;
