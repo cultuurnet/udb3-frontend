@@ -1,17 +1,21 @@
-import PropTypes from 'prop-types';
-import { Box, boxPropTypes, getBoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import type { BoxProps } from './Box';
 
-const getFontWeight = (props: any) => {
+const getFontWeight = (props: Props) => {
   if (props.size === 1) return 300;
   return 700;
 };
 
-const getFontSize = (props: any) => {
+const getFontSize = (props: Props) => {
   if (props.size === 1) return 1.6;
   return 1.2;
 };
 
-const Title = ({ size, children, className, ...props }: any) => (
+type Props = BoxProps & {
+  children: React.ReactNode;
+};
+
+const Title = ({ size, children, className, ...props }: Props) => (
   <Box
     forwardedAs={`h${size}`}
     size={size}
@@ -25,13 +29,6 @@ const Title = ({ size, children, className, ...props }: any) => (
     {children}
   </Box>
 );
-
-Title.propTypes = {
-  ...boxPropTypes,
-  size: PropTypes.oneOf([1, 2]),
-  className: PropTypes.string,
-  children: PropTypes.node,
-};
 
 Title.defaultProps = {
   size: 2,
