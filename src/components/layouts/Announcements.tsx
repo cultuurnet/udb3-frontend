@@ -12,6 +12,15 @@ import { Title } from '@/ui/Title';
 import { Text } from '@/ui/Text';
 import type { Values } from '@/types/Values';
 
+type Announcement = {
+  uid: string;
+  title: string;
+  image: string;
+  body: HTMLDivElement;
+  callToAction: string;
+  callToActionLabel: string;
+};
+
 const AnnouncementStatus = {
   ACTIVE: 'active',
   SEEN: 'seen',
@@ -150,8 +159,8 @@ const AnnouncementContent = ({
 
 type AnnouncementsProps = {
   visible: boolean;
-  announcements: unknown[];
-  onClickAnnouncement: (announcement: unknown) => void;
+  announcements: Announcement[];
+  onClickAnnouncement: (announcement: Announcement) => void;
   onShow: () => void;
   onClose: () => void;
 };
