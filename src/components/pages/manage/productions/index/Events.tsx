@@ -225,7 +225,7 @@ type EventsProps = {
   loading?: boolean;
   errorMessage?: string;
   onToggleSelectEvent?: () => void;
-  selectedIds?: unknown[];
+  selectedIds?: string[];
   onClickDelete?: () => void;
   onClickAdd?: () => void;
   onAddEvent?: () => void;
