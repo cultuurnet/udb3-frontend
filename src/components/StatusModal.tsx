@@ -50,7 +50,7 @@ const StatusModal = ({
       className={className}
       confirmTitle={t('offerStatus.actions.save')}
       cancelTitle={t('offerStatus.actions.close')}
-      onConfirm={() => onConfirm(type, reason)}
+      onConfirm={async () => await onConfirm(type, reason)}
       onClose={onClose}
       confirmButtonDisabled={!type || reason.length > 200 || loading}
     >
