@@ -47,8 +47,8 @@ type Item = {
   iconName: Values<typeof Icons>;
   children: React.ReactNode;
   suffix?: React.ReactNode;
-  onClick?: () => void,
-  visible?: boolean
+  onClick?: () => void;
+  visible?: boolean;
 };
 
 type MenuItemProps = {
@@ -118,7 +118,7 @@ type MenuProps = {
 const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
   const Content = (contentProps) => (
     <List {...contentProps}>
-      {items.map((menuItem, index) => (,
+      {items.map((menuItem, index) => (
         <MenuItem key={index} {...menuItem} />
       ))}
     </List>
