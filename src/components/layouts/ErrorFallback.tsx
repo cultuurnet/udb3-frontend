@@ -12,9 +12,6 @@ const MailToSupportLink = () => {
   const { t } = useTranslation();
   return (
     <Link href={`mailto:${t('error.email')}`} css="display: inline">
-      // @ts-expect-error ts-migrate(7006) FIXME: Parameter '(Missing)'
-      implicitly has an 'any' type... Remove this comment to see the full error
-      message
       {t('error.email')}
     </Link>
   );
