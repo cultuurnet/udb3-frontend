@@ -1,20 +1,28 @@
-import PropTypes from 'prop-types';
 import { Spinner as BootstrapSpinner } from 'react-bootstrap';
-import { Box, boxPropTypes, getBoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import type { BoxProps } from './Box';
+
 import { getValueFromTheme } from './theme';
+
+type Values<T> = T[keyof T];
 
 const SpinnerVariants = {
   PRIMARY: 'primary',
   LIGHT: 'light',
-};
+} as const;
 
 const SpinnerSizes = {
   SMALL: 'sm',
-};
+} as const;
 
 const getValue = getValueFromTheme('spinner');
 
-const Spinner = ({ variant, size, className, ...props }: any) => {
+type Props = BoxProps & {
+  variant?: Values<typeof SpinnerVariants>;
+  size: Values<typeof SpinnerSizes>;
+};
+
+const Spinner = ({ variant, size, className, ...props }: Props) => {
   return (
     <Box
       className={className}
@@ -23,10 +31,10 @@ const Spinner = ({ variant, size, className, ...props }: any) => {
       textAlign="center"
       css={`
         .text-primary {
-          color: ${getValue('primary.color')} !important;
+          color: ${getValue<string>('primary.color')} !important;
         }
         .text-light {
-          color: ${getValue('light.color')} !important;
+          color: ${getValue<string>('light.color')} !important;
         }
       `}
       {...getBoxProps(props)}
@@ -39,13 +47,6 @@ const Spinner = ({ variant, size, className, ...props }: any) => {
       />
     </Box>
   );
-};
-
-Spinner.propTypes = {
-  ...boxPropTypes,
-  variant: PropTypes.oneOf(Object.values(SpinnerVariants)),
-  size: PropTypes.oneOf(Object.values(SpinnerSizes)),
-  className: PropTypes.string,
 };
 
 Spinner.defaultProps = {
