@@ -15,7 +15,7 @@ import { OfferStatus } from '@/constants/OfferStatus';
 
 type Props = {
   offer: unknown;
-  error?: unknown;
+  error?: Error;
   useChangeStatus: () => void;
 };
 
