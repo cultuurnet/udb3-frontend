@@ -84,10 +84,8 @@ const parseSpacing = (value: number) => () =>
     ${(1 / remInPixels) * 2 ** value}rem
   `;
 
-const parseDimension = (value: string) => () =>
-  css`
-    ${value}px
-  `;
+const parseDimension = (value) => () =>
+  typeof value === 'string' || value instanceof String ? value : `${value}px`;
 
 const parseShorthandProperty = (
   shorthand: string,
