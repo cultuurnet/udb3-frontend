@@ -7,7 +7,7 @@ import type { Values } from '@/types/Values';
 const getValue = getValueFromTheme('jobStatusIcon');
 
 type SvgProps = {
-  className: string;
+  className?: string;
 };
 
 const Svg = ({ className, ...props }: SvgProps) => {
@@ -27,7 +27,7 @@ const Svg = ({ className, ...props }: SvgProps) => {
 };
 
 type BusyIconProps = {
-  className: string;
+  className?: string;
 };
 
 const BusyIcon = ({ className }: BusyIconProps) => (
@@ -82,7 +82,7 @@ const bounceIn = keyframes`
 `;
 
 type CompleteIconProps = {
-  className: string;
+  className?: string;
 };
 
 const CompleteIcon = ({ className }: CompleteIconProps) => (
@@ -145,7 +145,7 @@ const bounce = keyframes`
 `;
 
 type WarningIconProps = {
-  className: string;
+  className?: string;
 };
 
 const WarningIcon = ({ className }: WarningIconProps) => (

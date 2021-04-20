@@ -12,19 +12,20 @@ import { Title } from '@/ui/Title';
 import { Text } from '@/ui/Text';
 import type { Values } from '@/types/Values';
 
+const AnnouncementStatus = {
+  ACTIVE: 'active',
+  SEEN: 'seen',
+  UNSEEN: 'unseen',
+} as const;
+
 type Announcement = {
+  status: Values<typeof AnnouncementStatus>;
   uid: string;
   title: string;
   image: string;
   body: HTMLDivElement;
   callToAction: string;
   callToActionLabel: string;
-};
-
-const AnnouncementStatus = {
-  ACTIVE: 'active',
-  SEEN: 'seen',
-  UNSEEN: 'unseen',
 };
 
 const getValueForAnnouncement = getValueFromTheme('announcement');
@@ -175,7 +176,8 @@ const Announcements = ({
   const { t } = useTranslation();
 
   const activeAnnouncement = announcements.find(
-    (announcement: any) => announcement.status === AnnouncementStatus.ACTIVE,
+    (announcement: Announcement) =>
+      announcement.status === AnnouncementStatus.ACTIVE,
   );
 
   return (
@@ -195,7 +197,7 @@ const Announcements = ({
               overflow-y: auto;
             `}
           >
-            {announcements.map((announcement: any) => {
+            {announcements.map((announcement: Announcement) => {
               return (
                 <Announcement
                   key={announcement.uid}
