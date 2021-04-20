@@ -5,8 +5,7 @@ import type { BoxProps } from './Box';
 
 import { Text } from './Text';
 import type { TextProps } from './Text';
-
-type Values<T> = T[keyof T];
+import type { Values } from '@/types/Values';
 
 const BadgeVariants = {
   DANGER: 'danger',

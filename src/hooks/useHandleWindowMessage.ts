@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useIsClient } from './useIsClient';
+import type { Values } from '@/types/Values';
 
 const WindowMessageSources = {
   UDB: 'UDB',
@@ -11,8 +12,6 @@ const WindowMessageTypes = {
   JOB_ADDED: 'JOB_ADDED',
   HTTP_ERROR_CODE: 'HTTP_ERROR_CODE',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type EventsMap = {
   [K in Values<typeof WindowMessageTypes>]?: () => void;

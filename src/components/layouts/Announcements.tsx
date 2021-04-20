@@ -10,14 +10,13 @@ import { Stack } from '@/ui/Stack';
 import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Text } from '@/ui/Text';
+import type { Values } from '@/types/Values';
 
 const AnnouncementStatus = {
   ACTIVE: 'active',
   SEEN: 'seen',
   UNSEEN: 'unseen',
 };
-
-type Values<T> = T[keyof T];
 
 const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');

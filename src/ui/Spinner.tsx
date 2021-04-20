@@ -1,10 +1,9 @@
 import { Spinner as BootstrapSpinner } from 'react-bootstrap';
 import { Box, getBoxProps } from './Box';
 import type { BoxProps } from './Box';
+import type { Values } from '@/types/Values';
 
 import { getValueFromTheme } from './theme';
-
-type Values<T> = T[keyof T];
 
 const SpinnerVariants = {
   PRIMARY: 'primary',

@@ -1,5 +1,6 @@
 import { QuestionModal } from './Modal/QuestionModal';
 import { ContentModal } from './Modal/ContentModal';
+import type { Values } from '@/types/Values';
 
 const ModalVariants = {
   QUESTION: 'question',
@@ -16,8 +17,6 @@ const Components = {
   [ModalVariants.QUESTION]: QuestionModal,
   [ModalVariants.CONTENT]: ContentModal,
 } as const;
-
-type Values<T> = T[keyof T];
 
 type ModalProps = {
   variant: Values<typeof ModalVariants>;

@@ -1,12 +1,11 @@
 import { Box, getBoxProps, UIProp } from './Box';
 import type { BoxProps } from './Box';
+import type { Values } from '@/types/Values';
 
 const LogoVariants = {
   DEFAULT: 'default',
   MOBILE: 'mobile',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type MobileLogoProps = {
   color: string;

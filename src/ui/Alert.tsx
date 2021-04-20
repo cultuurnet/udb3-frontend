@@ -1,8 +1,7 @@
 import { Alert as BootstrapAlert } from 'react-bootstrap';
 import { getValueFromTheme } from './theme';
 import { getBoxProps, Box, BoxProps } from './Box';
-
-type Values<T> = T[keyof T];
+import type { Values } from '@/types/Values';
 
 const AlertVariants = {
   INFO: 'info',
@@ -12,7 +11,7 @@ const AlertVariants = {
   DARK: 'dark',
 } as const;
 
-const getValue = getValueFromTheme(`alert`);
+const getValue = getValueFromTheme('alert');
 
 type Props = {
   variant?: Values<typeof AlertVariants>;

@@ -4,6 +4,7 @@ import { Box } from '@/ui/Box';
 import { getValueFromTheme } from '@/ui/theme';
 import { JobLoggerStates } from './JobLogger';
 const getValue = getValueFromTheme('jobStatusIcon');
+import type { Values } from '@/types/Values';
 
 type SvgProps = {
   className: string;
@@ -188,8 +189,6 @@ const ComponentMap = {
   [JobLoggerStates.COMPLETE]: CompleteIcon,
   [JobLoggerStates.BUSY]: BusyIcon,
 };
-
-type Values<T> = T[keyof T];
 
 type JobLoggerStateIndicatorProps = {
   state: Values<typeof JobLoggerStates>;

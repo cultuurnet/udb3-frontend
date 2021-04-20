@@ -8,6 +8,7 @@ import { Title } from '@/ui/Title';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { List } from '@/ui/List';
+import type { Values } from '@/types/Values';
 
 import { Job, JobStates } from './Job';
 
@@ -27,8 +28,6 @@ const JobLoggerStates = {
   BUSY: 'busy',
   COMPLETE: 'complete',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type JobTitleProps = {
   children: React.ReactNode;

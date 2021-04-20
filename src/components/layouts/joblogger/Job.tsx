@@ -10,6 +10,7 @@ import { Stack } from '@/ui/Stack';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { getValueFromTheme } from '@/ui/theme';
 import { Link, LinkVariants } from '@/ui/Link';
+import type { Values } from '@/types/Values';
 
 const getValue = getValueFromTheme('jobStatusIcon');
 
@@ -27,8 +28,6 @@ const JobStates = {
   FAILED: 'failed',
   STARTED: 'started',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type StatusIconProps = {
   state: Values<typeof JobStates>;

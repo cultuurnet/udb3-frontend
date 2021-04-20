@@ -27,6 +27,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
+import type { Values } from '@/types/Values';
 
 type MenuItemProps = {
   href: string;
@@ -181,8 +182,6 @@ const PermissionTypes = {
   VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
   PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
 };
-
-type Values<T> = T[keyof T];
 
 type NotificationMenuProps = {
   countUnseenAnnouncements: number;

@@ -6,6 +6,7 @@ import { useQuery, useQueries, useMutation, UseQueryResult } from 'react-query';
 import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import { createHeaders, useHeaders } from './useHeaders';
+import type { Values } from '@/types/Values';
 
 const QueryStatus = {
   IDLE: 'idle',
@@ -13,8 +14,6 @@ const QueryStatus = {
   ERROR: 'error',
   SUCCESS: 'success',
 } as const;
-
-type Values<T> = T[keyof T];
 
 const prepareKey = ({ queryKey = [], queryArguments = {} } = {}) => {
   return [

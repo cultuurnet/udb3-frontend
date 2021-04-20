@@ -5,8 +5,7 @@ import type { StackProps } from './Stack';
 
 import { Inline, getInlineProps } from './Inline';
 import type { InlineProps } from './Inline';
-
-type Values<T> = T[keyof T];
+import type { Values } from '@/types/Values';
 
 const ListVariants = {
   ORDERED: 'ordered',

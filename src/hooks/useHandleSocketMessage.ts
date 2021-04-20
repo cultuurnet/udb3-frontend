@@ -1,6 +1,7 @@
 import getConfig from 'next/config';
 import { useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
+import type { Values } from '@/types/Values';
 
 const SocketMessageTypes = {
   JOB_STARTED: 'job_started',
@@ -8,8 +9,6 @@ const SocketMessageTypes = {
   JOB_FINISHED: 'job_finished',
   JOB_FAILED: 'job_failed',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type EventsMap = {
   [K in Values<typeof SocketMessageTypes>]?: () => void;

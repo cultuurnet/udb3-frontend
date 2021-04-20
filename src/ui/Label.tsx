@@ -1,7 +1,6 @@
 import { getBoxProps, Box } from './Box';
 import type { BoxProps } from './Box';
-
-type Values<T> = T[keyof T];
+import type { Values } from '@/types/Values';
 
 export const LabelVariants = {
   BOLD: 'bold',

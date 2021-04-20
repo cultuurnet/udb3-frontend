@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useIsClient } from './useIsClient';
+import type { Values } from '@/types/Values';
 
 const EventTypes = {
   NAVIGATE_PREVIOUS_PAGE: 'popstate',
 } as const;
-
-type Values<T> = T[keyof T];
 
 type EventsMap = {
   [K in Values<typeof EventTypes>]?: () => void;
