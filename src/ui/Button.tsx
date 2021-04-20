@@ -2,12 +2,14 @@ import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 import { getValueFromTheme } from './theme';
 import { Spinner, SpinnerVariants, SpinnerSizes } from './Spinner';
+
 import { getInlineProps, Inline } from './Inline';
 import type { InlineProps } from './Inline';
+
 import { Icon } from './Icon';
 import { cloneElement } from 'react';
 import { Text } from './Text';
-import { ButtonVariant } from 'react-bootstrap/esm/types';
+import type { BoxProps } from './Box';
 
 type Values<T> = T[keyof T];
 
@@ -26,11 +28,13 @@ const ButtonSizes = {
 
 const getValue = getValueFromTheme('button');
 
-const BaseButton = (props) => <Inline forwardedAs="button" {...props} />;
+const BaseButton = (props: InlineProps) => (
+  <Inline forwardedAs="button" {...props} />
+);
 
 const customCSS = css`
   &.btn {
-    border-radius: ${getValue('borderRadius')};
+    border-radius: ${getValue<number>('borderRadius')};
     padding: ${getValue('paddingY')} ${getValue('paddingX')};
     flex-shrink: 0;
 
@@ -149,13 +153,12 @@ const customCSS = css`
   }
 `;
 
-type Props = {
-  iconName: string;
-  title: string;
-  className: string;
+type Props = BoxProps & {
+  iconName?: string;
+  title?: string;
   variant?: Values<typeof ButtonVariants>;
   size?: Values<typeof ButtonSizes>;
-  suffix: React.ReactNode;
+  suffix?: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
   children: React.ReactNode;
