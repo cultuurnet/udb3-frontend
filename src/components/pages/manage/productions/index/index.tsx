@@ -224,7 +224,7 @@ const Index = () => {
 };
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies, queryClient }) => {
+  async ({ req, cookies, queryClient }) => {
     const productions = await useGetProductions({
       req,
       queryClient,
