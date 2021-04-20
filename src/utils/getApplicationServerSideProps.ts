@@ -2,11 +2,21 @@ import Cookies from 'universal-cookie';
 import { QueryClient } from 'react-query';
 import { isTokenValid } from './isTokenValid';
 import getConfig from 'next/config';
+import type { GetServerSidePropsContext } from 'next';
+import { DehydratedState } from 'react-query/types/hydration';
 
-const getApplicationServerSideProps = (callbackFn) => async ({
-  req,
-  query,
-}) => {
+type CallbackFnOptions = Pick<GetServerSidePropsContext, 'req' | 'query'> & {
+  queryClient: QueryClient;
+  cookies: string;
+};
+
+const getApplicationServerSideProps = (
+  callbackFn?: (
+    options: CallbackFnOptions,
+  ) => Promise<{
+    props: { dehydratedState: DehydratedState; cookies: string };
+  }>,
+) => async ({ req, query }: GetServerSidePropsContext) => {
   const { publicRuntimeConfig } = getConfig();
   if (publicRuntimeConfig.environment === 'development') {
     // @ts-expect-error ts-migrate(2322) FIXME: Type '0' is not assignable to type 'string | undef... Remove this comment to see the full error message
