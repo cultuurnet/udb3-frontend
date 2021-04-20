@@ -15,13 +15,9 @@ import camelCase from 'lodash/camelCase';
 import { Icons } from '@/ui/Icon';
 import { Link, LinkVariants } from '@/ui/Link';
 import { OfferStatus } from '@/constants/OfferStatus';
+import type { OfferStatus as StatusProps, Type } from '@/types/OfferStatus';
 
 const getValue = getValueFromTheme('statusPage');
-
-type StatusProps = {
-  type: string;
-  reason?: unknown;
-};
 
 const Status = ({ type, reason }: StatusProps) => {
   const { i18n } = useTranslation();
@@ -67,7 +63,7 @@ const StatusPageMultiple = ({
     onSuccess: handleSuccess,
   });
 
-  const handleConfirmChangeStatus = async (type, reason) =>
+  const handleConfirmChangeStatus = async (type: Type, reason: string) =>
     changeSubEventsMutation.mutate({
       eventId,
       subEventIds: selectedSubEventIds,
