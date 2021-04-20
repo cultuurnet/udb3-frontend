@@ -1,5 +1,14 @@
-import PropTypes from 'prop-types';
 import { Modal as BootstrapModal } from 'react-bootstrap';
+
+type Props = {
+  className: string;
+  visible?: boolean;
+  title?: string;
+  size?: 'sm' | 'lg' | 'xl';
+  onShow?: () => void;
+  onClose?: () => void;
+  children: React.ReactNode;
+};
 
 const ContentModal = ({
   visible,
@@ -9,7 +18,7 @@ const ContentModal = ({
   children,
   size,
   className,
-}) => (
+}: Props) => (
   <BootstrapModal
     className={className}
     show={visible}
@@ -46,16 +55,6 @@ const ContentModal = ({
     <BootstrapModal.Body>{children}</BootstrapModal.Body>
   </BootstrapModal>
 );
-
-ContentModal.propTypes = {
-  className: PropTypes.string,
-  visible: PropTypes.bool,
-  title: PropTypes.string,
-  onShow: PropTypes.func,
-  onClose: PropTypes.func,
-  children: PropTypes.node,
-  size: PropTypes.string,
-};
 
 ContentModal.defaultProps = {
   visible: false,
