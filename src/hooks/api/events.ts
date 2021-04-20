@@ -102,7 +102,7 @@ const useGetCalendarSummary = (
   });
 
 const changeStatus = async ({ headers, id, type, reason }) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/events/${id.toString()}/status`,
     options: {
       method: 'PUT',
@@ -115,7 +115,6 @@ const useChangeStatus = (configuration = {}) =>
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
 const changeStatusSubEvents = async ({
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, id, type, reason }: any) => Prom... Remove this comment to see the full error message
   headers,
   eventId,
   subEventIds = [],
@@ -123,7 +122,7 @@ const changeStatusSubEvents = async ({
   type,
   reason,
 }) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/events/${eventId.toString()}/subEvents`,
     options: {
       method: 'PATCH',
@@ -134,7 +133,6 @@ const changeStatusSubEvents = async ({
           status: {
             type,
             reason: {
-              // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'id' implicitly has an 'any' type.
               ...(subEvents[id].status.type === type &&
                 subEvents[id].status.reason),
               ...reason,

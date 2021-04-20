@@ -12,7 +12,7 @@ import type { Production } from '@/types/Production';
 const getValue = getValueFromTheme('productionItem');
 
 type Props = {
-  productions?: (Production & { active: boolean })[];
+  productions?: Array<Production & { active: boolean }>;
   currentPage?: number;
   totalItems?: number;
   perPage?: number;

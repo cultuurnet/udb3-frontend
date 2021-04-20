@@ -3,8 +3,8 @@ import { css, keyframes } from 'styled-components';
 import { Box } from '@/ui/Box';
 import { getValueFromTheme } from '@/ui/theme';
 import { JobLoggerStates } from './JobLogger';
-const getValue = getValueFromTheme('jobStatusIcon');
 import type { Values } from '@/types/Values';
+const getValue = getValueFromTheme('jobStatusIcon');
 
 type SvgProps = {
   className?: string;

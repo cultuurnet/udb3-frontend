@@ -26,7 +26,7 @@ const useGetPlaceById = ({ req, queryClient, id }, configuration = {}) =>
   });
 
 const changeStatus = async ({ headers, id, type, reason }) =>
-  fetchFromApi({
+  await fetchFromApi({
     path: `/places/${id.toString()}/status`,
     options: {
       method: 'PUT',
@@ -36,7 +36,6 @@ const changeStatus = async ({ headers, id, type, reason }) =>
   });
 
 const useChangeStatus = (configuration = {}) =>
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, id, type, reason }: any) => Prom... Remove this comment to see the full error message
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
 export { useGetPlaceById, useChangeStatus };

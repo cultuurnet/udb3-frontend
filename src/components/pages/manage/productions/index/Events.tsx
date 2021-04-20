@@ -221,7 +221,7 @@ const AddAction = ({
 };
 
 type EventsProps = {
-  events?: (EventType & { id: string; selected: boolean })[];
+  events?: Array<EventType & { id: string; selected: boolean }>;
   activeProductionName?: string;
   loading?: boolean;
   errorMessage?: string;

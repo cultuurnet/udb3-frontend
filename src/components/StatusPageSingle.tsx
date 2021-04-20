@@ -50,8 +50,8 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
     setReason(newReason);
   }, [rawStatusReason]);
 
-  const handleSuccessChangeStatus = () =>
-    router.push(`/${offerType}/${offerId}/preview`);
+  const handleSuccessChangeStatus = async () =>
+    await router.push(`/${offerType}/${offerId}/preview`);
 
   const changeStatusMutation = useChangeStatus({
     onSuccess: handleSuccessChangeStatus,
@@ -103,7 +103,9 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
               </Button>
               <Button
                 variant={ButtonVariants.SECONDARY}
-                onClick={() => router.push(`/${offerType}/${offerId}/edit`)}
+                onClick={async () =>
+                  await router.push(`/${offerType}/${offerId}/edit`)
+                }
               >
                 {t('offerStatus.actions.cancel')}
               </Button>

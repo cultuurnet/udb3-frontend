@@ -23,7 +23,7 @@ const mockRouterWithParams = ({ query, ...rest } = {}) => {
 
 const mockResponses = (responses) => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockResponse' does not exist on type '(i... Remove this comment to see the full error message
-  fetch.mockResponse((req) => {
+  fetch.mockResponse(async (req) => {
     const url = req.url.split('http://localhost:3000')[1];
 
     const foundPath = Object.keys(responses).find((path) => match(path)(url));
