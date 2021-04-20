@@ -29,7 +29,7 @@ const DetailTable = ({ items, className, ...props }: Props) => {
             css={
               index !== items.length - 1
                 ? css`
-                    border-bottom: 1px solid ${getValue('borderColor')};
+                    border-bottom: 1px solid ${getValue<string>('borderColor')};
                   `
                 : css``
             }
