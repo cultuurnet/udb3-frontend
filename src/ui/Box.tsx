@@ -191,18 +191,16 @@ type BreakpointsObject<T> = {
 
 type UIProp<T> = T | ((props: unknown) => T) | BreakpointsObject<T>;
 
-type InputBoxProps = {
-  type?: string;
-  checked?: string;
-  disabled?: boolean;
-  onChange?: () => void;
-};
-
 type BoxProps = {
   id?: string;
   name?: string;
   src?: string;
   alt?: string;
+  size?: number;
+  type?: string;
+  checked?: string;
+  disabled?: boolean;
+  onChange?: () => void;
   htmlFor?: string;
   variant?: string;
   children?: React.ReactNode;
