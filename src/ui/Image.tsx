@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types';
-import { Box, boxPropTypes, getBoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import type { BoxProps } from './Box';
 
-const Image = ({ src, alt, className, ...props }) => (
+type Props = BoxProps;
+
+const Image = ({ src, alt, className, ...props }: Props) => (
   <Box
     as="img"
     src={src}
@@ -10,13 +12,6 @@ const Image = ({ src, alt, className, ...props }) => (
     {...getBoxProps(props)}
   />
 );
-
-Image.propTypes = {
-  ...boxPropTypes,
-  src: PropTypes.string,
-  alt: PropTypes.string,
-  className: PropTypes.string,
-};
 
 Image.defaultProps = {
   width: 600,
