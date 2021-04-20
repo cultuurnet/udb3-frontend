@@ -8,19 +8,19 @@ import { forwardRef, Ref } from 'react';
 
 const getValue = getValueFromTheme('typeahead');
 
-type Props = BoxProps & {
-  id: string;
+type TypeaheadProps = {
   options: unknown[];
   labelKey: () => void;
   disabled: boolean;
   placeholder: string;
   emptyLabel: string;
   minLength: number;
-  className: string;
   onInputChange: () => void;
   onSearch: () => void;
   onChange: () => void;
 };
+
+type Props = BoxProps & TypeaheadProps;
 
 const Typeahead = forwardRef<Ref<HTMLDivElement>, Props>(
   (
@@ -91,3 +91,4 @@ Typeahead.defaultProps = {
 };
 
 export { Typeahead, typeaheadDefaultProps };
+export type { TypeaheadProps };

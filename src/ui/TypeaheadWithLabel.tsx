@@ -1,13 +1,15 @@
 import { Label, LabelVariants } from './Label';
-import {
-  Typeahead,
-  typeaheadDefaultProps,
-  typeaheadPropTypes,
-} from './Typeahead';
-import { getStackProps, Stack, stackPropTypes } from './Stack';
+
+import { Typeahead, typeaheadDefaultProps } from './Typeahead';
+import type { TypeaheadProps } from './Typeahead';
+
+import { getStackProps, Stack } from './Stack';
+import type { StackProps } from './Stack';
 import { forwardRef } from 'react';
 
-const TypeaheadWithLabel = forwardRef(
+type Props = StackProps & TypeaheadProps;
+
+const TypeaheadWithLabel = forwardRef<unknown, Props>(
   (
     {
       id,
@@ -49,11 +51,6 @@ const TypeaheadWithLabel = forwardRef(
     );
   },
 );
-
-TypeaheadWithLabel.propTypes = {
-  ...stackPropTypes,
-  ...typeaheadPropTypes,
-};
 
 TypeaheadWithLabel.defaultProps = {
   ...typeaheadDefaultProps,
