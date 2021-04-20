@@ -1,8 +1,12 @@
+import { GetServerSidePropsContext } from 'next';
 import { Cookies } from 'react-cookie';
 
 const Index = () => null;
 
-export const getServerSideProps = ({ req, params }: any) => {
+export const getServerSideProps = ({
+  req,
+  params,
+}: GetServerSidePropsContext) => {
   const cookies = new Cookies(req?.headers?.cookie);
 
   const language = cookies.get('udb-language') ?? 'nl';
