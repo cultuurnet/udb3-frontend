@@ -2,12 +2,6 @@ module.exports = {
   future: {
     webpack5: true,
   },
-  stories: ['../src/ui/**/*.stories.mdx'],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-a11y',
-  ],
   async redirects() {
     // Redirects to fix non-existing paths should go in `src/redirects.js`!!!
     const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
