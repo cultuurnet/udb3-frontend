@@ -1,8 +1,8 @@
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
-import { Theme, theme } from './theme';
+import { Theme, theme as themeFallback } from './theme';
 
 const ThemeProvider = (props: { theme: Theme }) => {
-  return <SCThemeProvider theme={theme} {...props} />;
+  return <SCThemeProvider {...props} theme={props.theme ?? themeFallback} />;
 };
 
 export { ThemeProvider };
