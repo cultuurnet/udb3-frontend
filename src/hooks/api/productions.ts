@@ -73,7 +73,6 @@ const deleteEventsByIds = async ({
 const useDeleteEventsByIds = (configuration = {}) =>
   useAuthenticatedMutations({
     mutationFns: deleteEventsByIds,
-    // @ts-expect-error ts-migrate(2740) FIXME: Type '({ productionId, eventIds, headers }: any) =... Remove this comment to see the full error message
     ...configuration,
   });
 

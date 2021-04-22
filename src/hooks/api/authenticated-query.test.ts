@@ -69,7 +69,6 @@ describe('useAuthenticatedQuery', () => {
 
   beforeEach(() => {
     fetch.resetMocks();
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'resetMocks' does not exist on type '(inp... Remove this comment to see the full error message
     page = setupPage();
   });
 

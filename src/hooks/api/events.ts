@@ -60,7 +60,6 @@ const useGetEventById = ({ req, queryClient, id }, configuration = {}) =>
 const useGetEventsByIds = ({ req, queryClient, ids = [] }) => {
   const options = ids.map((id) => ({
     queryKey: ['events'],
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'id' implicitly has an 'any' type.
     queryFn: getEventById,
     queryArguments: { id },
     enabled: !!id,
@@ -150,7 +149,6 @@ const useChangeStatusSubEvents = (configuration = {}) =>
   });
 
 export {
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '({ headers, eventId, subEventIds, subEvents,... Remove this comment to see the full error message
   useGetEventsToModerate,
   useGetEventById,
   useGetEventsByIds,

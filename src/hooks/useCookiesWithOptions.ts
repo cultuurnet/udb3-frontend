@@ -14,8 +14,7 @@ const useCookiesWithOptions = (
 
   const setCookieWithOptions = (name, value) => setCookie(name, value, options);
   const removeAuthenticationCookies = () =>
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(name: string, options?: CookieS... Remove this comment to see the full error message
-    ['token', 'user'].forEach(removeCookie);
+    ['token', 'user'].forEach((name) => removeCookie(name));
 
   return {
     cookies,

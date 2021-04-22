@@ -5,10 +5,9 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import fr from './fr.json';
 import nl from './nl.json';
 
-// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+i18n.use(LanguageDetector);
+i18n.use(initReactI18next);
 i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
   .init({
     resources: {
       fr: { translation: fr },
@@ -16,12 +15,17 @@ i18n
     },
     detection: { order: ['cookie'], lookupCookie: 'udb-language' },
     fallbackLng: 'nl',
-    supportedLng: ['nl', 'fr'],
+    supportedLngs: ['nl', 'fr'],
     debug: false,
-    defaultNS: false,
+    defaultNS: undefined,
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
+  })
+  .then(() => {})
+  .catch((error) => {
+    // eslint-disable-next-line no-console
+    console.log(error);
   });
 
 export default i18n;

@@ -22,7 +22,6 @@ const mockRouterWithParams = ({ query, ...rest } = {}) => {
 };
 
 const mockResponses = (responses) => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockResponse' does not exist on type '(i... Remove this comment to see the full error message
   fetch.mockResponse(async (req) => {
     const url = req.url.split('http://localhost:3000')[1];
 
@@ -40,7 +39,6 @@ const mockResponses = (responses) => {
 
 const setupPage = ({ router, responses = {} } = {}) => {
   fetch.resetMocks();
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'resetMocks' does not exist on type '(inp... Remove this comment to see the full error message
   mockResponses({ '/user': { body: user }, ...responses });
   return { router: mockRouterWithParams(router) };
 };
