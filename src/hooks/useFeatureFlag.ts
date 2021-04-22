@@ -16,10 +16,20 @@ const useFeatureFlag = (
 
   const cookieName = createCookieName(featureFlagName);
 
-  const set = (value: boolean) => setCookie(cookieName, value);
-  const value = cookies?.[cookieName] ?? false;
+  const set = (value) => setCookie(cookieName, value);
+  const isEnabled = isFeatureFlagEnabledInCookies(featureFlagName, cookies);
 
-  return [value === 'true', set];
+  return [isEnabled, set];
 };
 
-export { useFeatureFlag, createCookieName, FeatureFlags };
+const isFeatureFlagEnabledInCookies = (featureFlagName, cookies) => {
+  const cookieName = createCookieName(featureFlagName);
+  return cookies?.[cookieName] === 'true' ?? false;
+};
+
+export {
+  useFeatureFlag,
+  createCookieName,
+  isFeatureFlagEnabledInCookies,
+  FeatureFlags,
+};
