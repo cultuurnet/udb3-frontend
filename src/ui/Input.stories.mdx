@@ -1,5 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
 import { Input } from './Input';
+import { useState } from 'react';
 
 <Meta title="Components/Input" component={Input} />
 
@@ -11,7 +12,16 @@ import { Input } from './Input';
       placeholder: 'Enter your name',
     }}
   >
-    {(args) => <Input {...args} />}
+    {(args) => {
+      const [value, setValue] = useState('');
+      return (
+        <Input
+          {...args}
+          value={value}
+          onInput={(e) => setValue(e.target.value)}
+        />
+      );
+    }}
   </Story>
 </Canvas>
 

@@ -4,6 +4,7 @@ import type { BoxProps } from './Box';
 
 type InputProps = {
   type?: string;
+  id: string;
   placeholder?: string;
   onInput?: () => void;
   value?: string;
