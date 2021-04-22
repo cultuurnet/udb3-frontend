@@ -35,7 +35,7 @@ const parseProperty = (
   customValue?: string,
 ) => (props: ThemeProps<Theme>): FlattenInterpolation<ThemeProps<any>> => {
   if (key === undefined || key === null) return css``;
-  const value = customValue || props[key];
+  const value = customValue ?? props[key];
 
   if (value === undefined) return css``;
 
@@ -216,7 +216,7 @@ type BoxProps = {
   flex?: UIProp<string | number>;
   fontSize?: UIProp<string | number>;
   fontWeight?: UIProp<string | number>;
-  forwardedAs?: React.ReactNode;
+  forwardedAs?: React.ReactNode | string;
   height?: UIProp<string | number>;
   highlightOnlyResult?: boolean;
   htmlFor?: string;
@@ -256,6 +256,7 @@ type BoxProps = {
   placeholder?: string;
   position?: UIProp<string>;
   right?: UIProp<string | number>;
+  ref?: Ref<any>;
   role?: string;
   size?: number;
   src?: string;

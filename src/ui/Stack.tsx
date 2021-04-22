@@ -13,7 +13,7 @@ const stackProps = css`
   ${parseProperty('justifyContent')};
 `;
 
-const StyledBox = styled(Box)`
+const StyledBox: React.FC<BoxProps> = styled(Box)`
   ${stackProps};
   ${boxProps};
 `;
@@ -24,20 +24,23 @@ type StackProps = BoxProps & {
   justifyContent?: UIProp<string>;
 };
 
-const Stack = forwardRef<unknown, StackProps>(
+const Stack = forwardRef<any, StackProps>(
   ({ spacing, className, children, as, ...props }, ref) => {
     const notNullChildren = Children.toArray(children).filter(
       (child) => child !== null,
     );
 
-    const clonedChildren = Children.map(notNullChildren, (child, i) => {
-      const isLastItem = i === notNullChildren.length - 1;
+    const clonedChildren = Children.map(
+      notNullChildren,
+      (child: React.DetailedReactHTMLElement<any, HTMLElement>, i) => {
+        const isLastItem = i === notNullChildren.length - 1;
 
-      return cloneElement(child, {
-        ...child.props,
-        ...(!isLastItem ? { marginBottom: spacing } : {}),
-      });
-    });
+        return cloneElement(child, {
+          ...child.props,
+          ...(!isLastItem ? { marginBottom: spacing } : {}),
+        });
+      },
+    );
 
     return (
       <StyledBox className={className} forwardedAs={as} ref={ref} {...props}>
