@@ -122,7 +122,7 @@ export const commonArgs = {
       ...commonArgs,
       variant: ButtonVariants.UNSTYLED,
       customChildren: true,
-      children: <Icon name={Icons.TIMES} />,
+      children: <Icon key="unique" name={Icons.TIMES} />,
     }}
   >
     {(args) => <Button {...args} />}
