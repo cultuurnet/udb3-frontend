@@ -5,11 +5,11 @@ import type { TypeaheadProps } from './Typeahead';
 
 import { getStackProps, Stack } from './Stack';
 import type { StackProps } from './Stack';
-import { forwardRef } from 'react';
+import { forwardRef, Ref } from 'react';
 
-type Props = StackProps & TypeaheadProps;
+type Props = StackProps & TypeaheadProps & { label?: string };
 
-const TypeaheadWithLabel = forwardRef<unknown, Props>(
+const TypeaheadWithLabel = forwardRef<Ref<HTMLDivElement>, Props>(
   (
     {
       id,
