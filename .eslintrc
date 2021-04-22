@@ -15,8 +15,10 @@
     "react/react-in-jsx-scope": "off",
     "unicorn/no-abusive-eslint-disable": "error",
     "no-console": "warn",
+    "@typescript-eslint/restrict-template-expressions": "warn",
     "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   "globals": {
     "fetch": false
