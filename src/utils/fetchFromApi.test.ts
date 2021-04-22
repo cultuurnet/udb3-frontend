@@ -19,7 +19,7 @@ describe('fetchFromApi', () => {
     (fetch as any).mockResponseOnce(JSON.stringify(data));
     const response = await fetchFromApi({
       path: '/random',
-      searchParams: { foo: 'bar', id: 2 },
+      searchParams: { foo: 'bar', id: '2' },
     });
     const result = await response.json();
     const calls = (fetch as any).mock.calls;
@@ -50,14 +50,14 @@ describe('fetchFromApi', () => {
   it('throws error on invalid URL', async () => {
     await expect(
       fetchFromApi({
-        path: true,
+        path: 'true',
       }),
     ).rejects.toThrowError('Invalid URL: http://localhost:3000true');
   });
   it('returns error on invalid URL (silentError mode)', async () => {
     await expect(
       fetchFromApi({
-        path: true,
+        path: 'true',
         silentError: true,
       }),
     ).resolves.toStrictEqual({
