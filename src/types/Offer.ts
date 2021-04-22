@@ -37,7 +37,7 @@ type Location = {
   name: { nl: string; fr: string };
   image?: string;
   modified?: string;
-  status?: OfferStatus;
+  status?: Values<typeof OfferStatus>;
   address: Address;
   contactPoint?: ContactPoint;
   labels: string[];
@@ -112,7 +112,7 @@ type SubEvent = {
   '@type': string;
   startDate: string;
   endDate: string;
-  status?: OfferStatus;
+  status?: Values<typeof OfferStatus>;
 };
 
 type OpeningHours = {
@@ -125,7 +125,7 @@ type Offer = {
   '@id': string;
   name: { [language: string]: string };
   description: { [language: string]: string };
-  status?: OfferStatus;
+  status?: Values<typeof OfferStatus>;
   availableFrom: string;
   availableTo: string;
   labels?: string[];
