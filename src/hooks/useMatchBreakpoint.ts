@@ -3,7 +3,7 @@ import { Breakpoints, theme } from '@/ui/theme';
 import { useIsClient } from './useIsClient';
 import type { Values } from '@/types/Values';
 
-const useMatchBreakpoint = (breakpoint: Values<typeof Breakpoints>) => {
+const useMatchBreakpoint = (breakpoint?: Values<typeof Breakpoints>) => {
   const [matches, setMatches] = useState(false);
   const isClient = useIsClient();
 

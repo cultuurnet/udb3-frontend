@@ -7,7 +7,7 @@ import pick from 'lodash/pick';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { Breakpoints } from './theme';
 
-const parseStackOnProperty = () => ({ stackOn }: InlineProps) => {
+const parseStackOnProperty = ({ stackOn }: InlineProps) => {
   if (!stackOn) {
     return;
   }
@@ -24,12 +24,7 @@ const inlineProps = css`
 
   ${parseProperty('alignItems')};
   ${parseProperty('justifyContent')};
-  ${parseStackOnProperty()};
-`;
-
-const StyledBox = styled(Box)`
-  ${inlineProps};
-  ${boxProps};
+  ${(props) => parseStackOnProperty(props as InlineProps)};
 `;
 
 type InlineProps = BoxProps & {
@@ -38,6 +33,11 @@ type InlineProps = BoxProps & {
   justifyContent?: UIProp<string>;
   stackOn?: Breakpoints;
 };
+
+const StyledBox: React.FC<InlineProps> = styled(Box)`
+  ${inlineProps};
+  ${boxProps};
+`;
 
 const Inline = forwardRef<unknown, InlineProps>(
   ({ spacing, className, children, as, stackOn, ...props }, ref) => {
@@ -50,14 +50,17 @@ const Inline = forwardRef<unknown, InlineProps>(
       (child) => child !== null,
     );
 
-    const clonedChildren = Children.map(notNullChildren, (child, i) => {
-      const isLastItem = i === notNullChildren.length - 1;
+    const clonedChildren = Children.map(
+      notNullChildren,
+      (child: React.DetailedReactHTMLElement<any, HTMLElement>, i) => {
+        const isLastItem = i === notNullChildren.length - 1;
 
-      return cloneElement(child, {
-        ...child.props,
-        ...(!isLastItem ? { [marginProp]: spacing } : {}),
-      });
-    });
+        return cloneElement(child, {
+          ...child.props,
+          ...(!isLastItem ? { [marginProp]: spacing } : {}),
+        });
+      },
+    );
 
     return (
       <StyledBox
