@@ -1,5 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
 import { InputWithLabel } from './InputWithLabel';
+import { useState } from 'react';
 
 <Meta title="Components/InputWithLabel" component={InputWithLabel} />
 
@@ -12,7 +13,16 @@ import { InputWithLabel } from './InputWithLabel';
       label: 'Your name:',
     }}
   >
-    {(args) => <InputWithLabel {...args} />}
+    {(args) => {
+      const [value, setValue] = useState('');
+      return (
+        <InputWithLabel
+          {...args}
+          value={value}
+          onInput={(e) => setValue(e.target.value)}
+        />
+      );
+    }}
   </Story>
 </Canvas>
 

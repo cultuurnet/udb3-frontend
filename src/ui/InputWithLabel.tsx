@@ -1,5 +1,5 @@
 import { Label, LabelVariants } from './Label';
-import { getInlineProps, Inline, inlinePropTypes } from './Inline';
+import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
 
 import type { BoxProps } from './Box';
@@ -16,6 +16,7 @@ const InputWithLabel = ({
   label,
   placeholder,
   className,
+  value,
   onInput,
   ...props
 }: Props) => (
@@ -29,7 +30,13 @@ const InputWithLabel = ({
     <Label htmlFor={id} variant={LabelVariants.BOLD}>
       {label}
     </Label>
-    <Input type={type} id={id} placeholder={placeholder} onInput={onInput} />
+    <Input
+      type={type}
+      id={id}
+      placeholder={placeholder}
+      value={value}
+      onInput={onInput}
+    />
   </Inline>
 );
 
