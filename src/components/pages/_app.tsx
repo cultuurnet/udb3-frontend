@@ -49,7 +49,10 @@ type ContextProviderProps = {
   children: React.ReactNode;
 };
 
-const ContextProvider = ({ providers, children }: ContextProviderProps) => {
+const ContextProvider = ({
+  providers,
+  children,
+}: ContextProviderProps): any => {
   return providers.reverse().reduce((AccumulatedProviders, current) => {
     const [CurrentProvider, currentProps] = Array.isArray(current)
       ? current
