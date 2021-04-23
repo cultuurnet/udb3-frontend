@@ -219,6 +219,7 @@ type BoxProps = {
   forwardedAs?: React.ReactNode | string;
   height?: UIProp<string | number>;
   highlightOnlyResult?: boolean;
+  href?: string;
   htmlFor?: string;
   id?: string;
   isLoading?: boolean;
@@ -255,12 +256,14 @@ type BoxProps = {
   paddingY?: UIProp<number>;
   placeholder?: string;
   position?: UIProp<string>;
-  right?: UIProp<string | number>;
   ref?: Ref<any>;
+  rel?: string;
+  right?: UIProp<string | number>;
   role?: string;
   size?: number;
   src?: string;
   stroke?: UIProp<string>;
+  target?: string;
   textAlign?: UIProp<string>;
   top?: UIProp<string | number>;
   type?: string;

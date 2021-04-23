@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import { getValueFromTheme } from './theme';
-import { getInlineProps, Inline, InlineProps, inlinePropTypes } from './Inline';
+import { getInlineProps, Inline, InlineProps } from './Inline';
 import { cloneElement, forwardRef } from 'react';
 import { Icon } from './Icon';
 import { Text } from './Text';
@@ -44,7 +44,7 @@ const BaseLink = forwardRef<unknown, BaseLinkProps>(
       );
     }
 
-    if (Object.values(LinkButtonVariants).includes(variant)) {
+    if (variant && Object.values(LinkButtonVariants).includes(variant)) {
       return (
         <Inline
           ref={ref}
@@ -108,7 +108,10 @@ const Link = ({
   title,
   ...props
 }: Props) => {
-  const isInternalLink = href.startsWith('/');
+  const isInternalLink = href.startsWith('/') || href.startsWith('#');
+
+  // @ts-expect-error
+  if (!React.isValidElement(suffix)) return null;
 
   const clonedSuffix = suffix
     ? cloneElement(suffix, {
