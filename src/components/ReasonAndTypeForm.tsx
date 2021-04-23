@@ -16,8 +16,8 @@ type Props = {
   offerType: string;
   statusType: string;
   statusReason: string;
-  onChangeStatusType: () => void;
-  onInputStatusReason: () => void;
+  onChangeStatusType: (e: any) => void;
+  onInputStatusReason: (e: any) => void;
 };
 
 const ReasonAndTypeForm = ({

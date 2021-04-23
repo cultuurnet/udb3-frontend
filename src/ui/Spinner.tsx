@@ -18,7 +18,7 @@ const getValue = getValueFromTheme('spinner');
 
 type Props = Omit<BoxProps, 'size'> & {
   variant?: Values<typeof SpinnerVariants>;
-  size: Values<typeof SpinnerSizes>;
+  size?: Values<typeof SpinnerSizes>;
 };
 
 const Spinner = ({ variant, size, className, ...props }: Props) => {

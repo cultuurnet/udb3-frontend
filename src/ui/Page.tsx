@@ -1,17 +1,14 @@
-import { getStackProps, Stack } from './Stack';
+import { getStackProps, Stack, StackProps } from './Stack';
 import { getValueFromTheme } from './theme';
 
 import { Title } from './Title';
-import { getInlineProps, Inline } from './Inline';
+import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Children } from 'react';
-import { getBoxProps } from './Box';
+import { BoxProps, getBoxProps } from './Box';
 
 const getValueForPage = getValueFromTheme('page');
 
-type PageProps = {
-  children?: React.ReactNode;
-  className?: string;
-};
+type PageProps = StackProps;
 
 const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
   const children = Children.toArray(rawChildren) as Array<
@@ -58,10 +55,7 @@ const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
 
 const getValueForTitle = getValueFromTheme('pageTitle');
 
-type PageTitleProps = {
-  className?: string;
-  children?: React.ReactNode;
-};
+type PageTitleProps = BoxProps;
 
 const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
   <Title
@@ -75,10 +69,7 @@ const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
   </Title>
 );
 
-type PageActionsProps = {
-  className?: string;
-  children?: React.ReactNode;
-};
+type PageActionsProps = InlineProps;
 
 const PageActions = ({ children, className, ...props }: PageActionsProps) => (
   <Inline className={className} spacing={3} {...getInlineProps(props)}>
@@ -86,10 +77,7 @@ const PageActions = ({ children, className, ...props }: PageActionsProps) => (
   </Inline>
 );
 
-type PageContentProps = {
-  className?: string;
-  children?: React.ReactNode;
-};
+type PageContentProps = StackProps;
 
 const PageContent = ({ children, className, ...props }: PageContentProps) => (
   <Stack className={className} spacing={3} {...getStackProps(props)}>

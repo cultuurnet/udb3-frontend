@@ -7,10 +7,10 @@ const EventTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof EventTypes>]?: EventListenerOrEventListenerObject;
+  [K in Values<typeof EventTypes>]: EventListenerOrEventListenerObject;
 };
 
-const useHandleEvent = (eventsMap: EventsMap = {}) => {
+const useHandleEvent = (eventsMap: EventsMap) => {
   const isClient = useIsClient();
   useEffect(() => {
     if (!isClient) return;

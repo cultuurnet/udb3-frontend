@@ -125,7 +125,7 @@ type Offer = {
   '@id': string;
   name: { [language: string]: string };
   description: { [language: string]: string };
-  status?: Values<typeof OfferStatus>;
+  status?: Status;
   availableFrom: string;
   availableTo: string;
   labels?: string[];

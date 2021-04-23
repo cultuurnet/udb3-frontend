@@ -63,7 +63,7 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
       <Page.Content spacing={5} maxWidth="36rem">
         {changeStatusMutation.status === QueryStatus.LOADING ? (
           <Spinner marginTop={4} />
-        ) : error || changeStatusMutation.error ? (
+        ) : error ?? changeStatusMutation.error ? (
           <Alert variant={AlertVariants.WARNING}>
             {error.message || changeStatusMutation.error?.message}
           </Alert>
@@ -92,7 +92,8 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
                       id: offerId,
                       type,
                       reason: {
-                        ...(offer.status.type === type && offer.status.reason),
+                        ...(offer?.status?.type === type &&
+                          offer.status.reason),
                         ...(reason.length > 0 && { [i18n.language]: reason }),
                       },
                     });
