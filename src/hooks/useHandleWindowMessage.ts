@@ -14,10 +14,10 @@ const WindowMessageTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof WindowMessageTypes>]?: (...args: unknown[]) => unknown;
+  [K in Values<typeof WindowMessageTypes>]: (...args: unknown[]) => unknown;
 };
 
-const useHandleWindowMessage = (eventsMap: EventsMap = {}) => {
+const useHandleWindowMessage = (eventsMap: EventsMap) => {
   const isClient = useIsClient();
 
   const internalHandler = (event) => {

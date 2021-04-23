@@ -11,16 +11,16 @@ const SocketMessageTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof SocketMessageTypes>]?: (...args: unknown[]) => unknown;
+  [K in Values<typeof SocketMessageTypes>]: (...args: unknown[]) => unknown;
 };
 
-const useHandleSocketMessage = (eventsMap: EventsMap = {}) => {
+const useHandleSocketMessage = (eventsMap: EventsMap) => {
   const { publicRuntimeConfig } = getConfig();
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     const socket = socketIOClient(publicRuntimeConfig.socketUrl);
     Object.entries(eventsMap).forEach(([event, handler]) => {
-      socket.on(event, handler);
+      socket.on(event, handler as Function);
     });
     return () => socket.close();
   }, []);

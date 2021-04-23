@@ -9,7 +9,7 @@ import { css } from 'styled-components';
 const getValue = getValueFromTheme('detailTable');
 
 type Props = StackProps & {
-  items?: Array<{ header: string; value: string }>;
+  items: Array<{ header: string; value: string }>;
 };
 
 const DetailTable = ({ items, className, ...props }: Props) => {

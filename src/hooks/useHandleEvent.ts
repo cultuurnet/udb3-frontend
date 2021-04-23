@@ -7,7 +7,7 @@ const EventTypes = {
 } as const;
 
 type EventsMap = {
-  [K in Values<typeof EventTypes>]?: () => void;
+  [K in Values<typeof EventTypes>]?: EventListenerOrEventListenerObject;
 };
 
 const useHandleEvent = (eventsMap: EventsMap = {}) => {

@@ -88,9 +88,10 @@ const IconsMap = {
   [Icons.PENCIL]: faPencilAlt,
 } as const;
 
-type Props = BoxProps & {
+type Props = Omit<BoxProps, 'name'> & {
   width?: string;
   height?: string;
+  name: string;
 };
 
 const Icon = ({ name, width, height, className, ...props }: Props) => {

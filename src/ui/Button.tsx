@@ -207,6 +207,9 @@ const Button = ({
     ...getInlineProps(props),
   };
 
+  // @ts-expect-error
+  if (!React.isValidElement(suffix)) return null;
+
   const clonedSuffix = suffix
     ? cloneElement(suffix, {
         ...suffix.props,
