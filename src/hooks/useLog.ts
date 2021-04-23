@@ -22,7 +22,9 @@ const useLog = (
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') return;
-    const toLog = showOnlyDifference ? diff(ref.current, variables) : variables;
+    const toLog = showOnlyDifference
+      ? diff(ref.current ?? {}, variables)
+      : variables;
     ref.current = variables;
 
     // eslint-disable-next-line no-console
