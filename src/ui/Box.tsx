@@ -1,7 +1,6 @@
 import styled, {
   css,
   FlattenInterpolation,
-  FlattenSimpleInterpolation,
   ThemeProps,
 } from 'styled-components';
 
@@ -24,14 +23,14 @@ const wrapStatementWithBreakpoint = (
 const createCSSStatement = (
   key: string,
   value: string,
-  parser: (value: string) => () => FlattenSimpleInterpolation,
+  parser?: (value: string | number) => () => string,
 ) => (): FlattenInterpolation<ThemeProps<any>> => css`
   ${kebabCase(key)}: ${parser ? parser(value) : value};
 `;
 
 const parseProperty = (
   key: string,
-  parser?: (value: string | number) => () => FlattenSimpleInterpolation,
+  parser?: (value: string | number) => () => string,
   customValue?: string,
 ) => (props: ThemeProps<Theme>): FlattenInterpolation<ThemeProps<any>> => {
   if (key === undefined || key === null) return css``;
@@ -84,14 +83,17 @@ const parseSpacing = (value: number) => () =>
     ${(1 / remInPixels) * 2 ** value}rem
   `;
 
-const parseDimension = (value) => () =>
-  typeof value === 'string' || value instanceof String ? value : `${value}px`;
+const parseDimension = (value: any) => () => {
+  const isString = typeof value === 'string' || value instanceof String;
+  if (isString) return value;
+  return `${value}px`;
+};
 
 const parseShorthandProperty = (
   shorthand: string,
   propsToChange: string[] = [],
-  parser: (value: string | number) => () => FlattenSimpleInterpolation,
-) => (props: unknown): FlattenInterpolation<ThemeProps<any>> =>
+  parser: (value: string | number) => () => string,
+) => (props: ThemeProps<Theme>): FlattenInterpolation<ThemeProps<any>> =>
   propsToChange.reduce(
     (acc, val) => css`
       ${parseProperty(val, parser, props[shorthand])};
@@ -202,7 +204,7 @@ type BoxProps = {
   alignItems?: UIProp<string>;
   alt?: string;
   animation?: UIProp<string>;
-  as?: React.ReactNode | string;
+  as?: string | React.ComponentType<any>;
   backgroundColor?: UIProp<string>;
   backgroundPosition?: UIProp<string>;
   backgroundRepeat?: UIProp<string>;
@@ -219,7 +221,7 @@ type BoxProps = {
   flex?: UIProp<string | number>;
   fontSize?: UIProp<string | number>;
   fontWeight?: UIProp<string | number>;
-  forwardedAs?: React.ReactNode | string;
+  forwardedAs?: string | React.ComponentType<any> | undefined;
   height?: UIProp<string | number>;
   highlightOnlyResult?: boolean;
   href?: string;
@@ -330,7 +332,7 @@ const getBoxProps = (props: unknown) => pick(props, boxPropTypes);
 
 const Box = forwardRef<Ref<HTMLDivElement>, BoxProps>(
   ({ children, ...props }, ref) => (
-    <StyledBox ref={ref as any} {...props}>
+    <StyledBox {...props} ref={ref as any}>
       {children}
     </StyledBox>
   ),
