@@ -7,9 +7,11 @@ import {
 import { mockResponses, setupPage } from '@/test/utils/setupPage';
 import { renderHookWithWrapper } from '@/test/utils/renderHookWithWrapper';
 import { fetchFromApi } from '@/utils/fetchFromApi';
+import { UseQueryResult } from 'react-query';
+import { RenderResult } from '@testing-library/react-hooks';
 
 const queryFn = async ({ headers, ...queryData }) => {
-  const res = await fetchFromApi({
+  const res: Response = await fetchFromApi({
     path: '/random',
     options: {
       headers,
@@ -26,7 +28,7 @@ describe('getStatusFromResults', () => {
       { status: QueryStatus.ERROR, error: 'this is an error' },
       { status: QueryStatus.ERROR, error: 'this is another error' },
       { status: QueryStatus.SUCCESS },
-    ]);
+    ] as UseQueryResult[]);
     expect(result).toStrictEqual({
       status: QueryStatus.ERROR,
       error: ['this is an error', 'this is another error'],
@@ -37,7 +39,7 @@ describe('getStatusFromResults', () => {
     const result = getStatusFromResults([
       { status: QueryStatus.SUCCESS },
       { status: QueryStatus.SUCCESS },
-    ]);
+    ] as UseQueryResult[]);
     expect(result).toStrictEqual({
       status: QueryStatus.SUCCESS,
     });
@@ -47,7 +49,7 @@ describe('getStatusFromResults', () => {
     const result = getStatusFromResults([
       { status: QueryStatus.SUCCESS },
       { status: QueryStatus.IDLE },
-    ]);
+    ] as UseQueryResult[]);
     expect(result).toStrictEqual({
       status: QueryStatus.IDLE,
     });
@@ -57,7 +59,7 @@ describe('getStatusFromResults', () => {
     const result = getStatusFromResults([
       { status: QueryStatus.IDLE },
       { status: QueryStatus.LOADING },
-    ]);
+    ] as UseQueryResult[]);
     expect(result).toStrictEqual({
       status: QueryStatus.LOADING,
     });
@@ -79,16 +81,17 @@ describe('useAuthenticatedQuery', () => {
       '/random': { body },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
-      useAuthenticatedQuery({
-        queryKey: ['random'],
-        queryFn,
-      }),
+    const { result, waitForNextUpdate } = renderHookWithWrapper(
+      async () =>
+        await useAuthenticatedQuery({
+          queryKey: ['random'],
+          queryFn,
+        }),
     );
 
     await waitForNextUpdate();
 
-    expect(result.current.data).toStrictEqual(body);
+    expect((result as RenderResult<any>).current.data).toStrictEqual(body);
   });
   it('fails on response not ok', async () => {
     const title = 'This is an error';
@@ -97,17 +100,20 @@ describe('useAuthenticatedQuery', () => {
       '/random': { body: { title }, status: 400 },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
-      useAuthenticatedQuery({
-        retry: false, // disable retry, otherwise the waitFor times out
-        queryKey: ['random'],
-        queryFn,
-      }),
+    const { result, waitForNextUpdate } = renderHookWithWrapper(
+      async () =>
+        await useAuthenticatedQuery({
+          retry: false, // disable retry, otherwise the waitFor times out
+          queryKey: ['random'],
+          queryFn,
+        }),
     );
 
     await waitForNextUpdate();
 
-    expect(result.current.error.message).toStrictEqual(title);
+    expect((result as RenderResult<any>).current.error.message).toStrictEqual(
+      title,
+    );
   });
 
   it('redirects on 401', async () => {
@@ -115,12 +121,13 @@ describe('useAuthenticatedQuery', () => {
       '/random': { status: 401 },
     });
 
-    const { waitForNextUpdate } = renderHookWithWrapper(() =>
-      useAuthenticatedQuery({
-        retry: false, // disable retry, otherwise the waitFor times out
-        queryKey: ['random'],
-        queryFn,
-      }),
+    const { waitForNextUpdate } = renderHookWithWrapper(
+      async () =>
+        await useAuthenticatedQuery({
+          retry: false, // disable retry, otherwise the waitFor times out
+          queryKey: ['random'],
+          queryFn,
+        }),
     );
 
     await waitForNextUpdate();
@@ -132,12 +139,13 @@ describe('useAuthenticatedQuery', () => {
       '/random': { status: 403 },
     });
 
-    const { waitForNextUpdate } = renderHookWithWrapper(() =>
-      useAuthenticatedQuery({
-        retry: false, // disable retry, otherwise the waitFor times out
-        queryKey: ['random'],
-        queryFn,
-      }),
+    const { waitForNextUpdate } = renderHookWithWrapper(
+      async () =>
+        await useAuthenticatedQuery({
+          retry: false, // disable retry, otherwise the waitFor times out
+          queryKey: ['random'],
+          queryFn,
+        }),
     );
 
     await waitForNextUpdate();

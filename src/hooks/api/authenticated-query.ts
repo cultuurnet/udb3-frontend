@@ -167,7 +167,7 @@ const prefetchAuthenticatedQuery = async ({
     );
   } catch {}
   // eslint-disable-next-line @typescript-eslint/return-await
-  return await queryClient.getQueryData(queryKey);
+  return await queryClient.getQueryData<any>(queryKey);
 };
 
 /// /////////////////////////////////////////////////////////////////////////////////////////////
