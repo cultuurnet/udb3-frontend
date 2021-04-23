@@ -50,7 +50,7 @@ type UseQueryOptions = Omit<
   ReactQueryUseQueryOptions<unknown, unknown, unknown, QueryKey>,
   'queryKey' | 'queryFn'
 > & {
-  queryKey: readonly string[];
+  queryKey: QueryKey;
   queryFn: QueryFunction;
 };
 

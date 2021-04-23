@@ -12,11 +12,14 @@ import { useTranslation } from 'react-i18next';
 import { ReasonAndTypeForm } from '@/components/ReasonAndTypeForm';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { Offer } from '@/types/Offer';
+import type { UseMutationResult } from 'react-query';
 
 type Props = {
   offer: Offer;
   error?: Error;
-  useChangeStatus: () => void;
+  useChangeStatus: (
+    ...args: any[]
+  ) => UseMutationResult<any, { status: number; message?: string }>;
 };
 
 const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
@@ -65,7 +68,7 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }: Props) => {
           <Spinner marginTop={4} />
         ) : error ?? changeStatusMutation.error ? (
           <Alert variant={AlertVariants.WARNING}>
-            {error.message || changeStatusMutation.error?.message}
+            {error?.message ?? changeStatusMutation.error?.message}
           </Alert>
         ) : (
           [

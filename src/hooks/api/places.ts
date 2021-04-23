@@ -15,7 +15,7 @@ const getPlaceById = async ({ headers, id }) => {
   return await res.json();
 };
 
-const useGetPlaceById = (
+const useGetPlaceById = async (
   { req, queryClient, id },
   configuration?: UseAuthenticatedQueryOptions,
 ) =>
