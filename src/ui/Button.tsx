@@ -7,7 +7,7 @@ import { getInlineProps, Inline } from './Inline';
 import type { InlineProps } from './Inline';
 
 import { Icon } from './Icon';
-import { cloneElement } from 'react';
+import { cloneElement, isValidElement } from 'react';
 import { Text } from './Text';
 
 type Values<T> = T[keyof T];
@@ -207,8 +207,7 @@ const Button = ({
     ...getInlineProps(props),
   };
 
-  // @ts-expect-error
-  if (!React.isValidElement(suffix)) return null;
+  if (isValidElement(suffix)) return null;
 
   const clonedSuffix = suffix
     ? cloneElement(suffix, {
