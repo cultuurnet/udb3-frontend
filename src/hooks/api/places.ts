@@ -3,6 +3,7 @@ import {
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import type { UseAuthenticatedQueryOptions } from './authenticated-query';
 
 const getPlaceById = async ({ headers, id }) => {
   const res = await fetchFromApi({
@@ -14,15 +15,18 @@ const getPlaceById = async ({ headers, id }) => {
   return await res.json();
 };
 
-const useGetPlaceById = ({ req, queryClient, id }, configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetPlaceById = (
+  { req, queryClient, id },
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
+  await useAuthenticatedQuery({
     req,
     queryClient,
     queryKey: ['places'],
     queryFn: getPlaceById,
     queryArguments: { id },
     enabled: !!id,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const changeStatus = async ({ headers, id, type, reason }) =>
@@ -35,7 +39,7 @@ const changeStatus = async ({ headers, id, type, reason }) =>
     },
   });
 
-const useChangeStatus = (configuration = {}) =>
+const useChangeStatus = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
 export { useGetPlaceById, useChangeStatus };

@@ -4,6 +4,7 @@ import {
   useAuthenticatedMutation,
   useAuthenticatedMutations,
 } from './authenticated-query';
+import type { UseAuthenticatedQueryOptions } from './authenticated-query';
 
 export const getProductions = async ({ headers, ...queryData }) => {
   const res = await fetchFromApi({
@@ -18,11 +19,11 @@ export const getProductions = async ({ headers, ...queryData }) => {
   return await res.json();
 };
 
-const useGetProductions = (
+const useGetProductions = async (
   { req, queryClient, name = '', start = 0, limit = 15 },
-  configuration = {},
+  configuration?: UseAuthenticatedQueryOptions,
 ) =>
-  useAuthenticatedQuery({
+  await useAuthenticatedQuery({
     req,
     queryClient,
     queryKey: ['productions'],
@@ -32,7 +33,7 @@ const useGetProductions = (
       start,
       limit,
     },
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const deleteEventById = async ({
@@ -40,7 +41,7 @@ const deleteEventById = async ({
   eventId = '',
   headers,
   silentError = false,
-} = {}) =>
+}) =>
   await fetchFromApi({
     path: `/productions/${productionId}/events/${eventId}`,
     options: {
@@ -50,7 +51,7 @@ const deleteEventById = async ({
     silentError,
   });
 
-const useDeleteEventById = (configuration = {}) =>
+const useDeleteEventById = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: deleteEventById, ...configuration });
 
 const deleteEventsByIds = async ({
@@ -70,10 +71,10 @@ const deleteEventsByIds = async ({
     ),
   );
 
-const useDeleteEventsByIds = (configuration = {}) =>
+const useDeleteEventsByIds = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutations({
     mutationFns: deleteEventsByIds,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const addEventById = async ({
@@ -91,14 +92,10 @@ const addEventById = async ({
     silentError,
   });
 
-const useAddEventById = (configuration = {}) =>
+const useAddEventById = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: addEventById, ...configuration });
 
-const addEventsByIds = async ({
-  productionId = '',
-  eventIds = [],
-  headers,
-} = {}) =>
+const addEventsByIds = async ({ productionId = '', eventIds = [], headers }) =>
   await Promise.all(
     eventIds.map(
       async (eventId) =>
@@ -111,7 +108,7 @@ const addEventsByIds = async ({
     ),
   );
 
-const useAddEventsByIds = (configuration = {}) =>
+const useAddEventsByIds = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutations({ mutationFns: addEventsByIds, ...configuration });
 
 const getSuggestedEvents = async ({ headers }) => {
@@ -127,11 +124,13 @@ const getSuggestedEvents = async ({ headers }) => {
   return await response.json();
 };
 
-const useGetSuggestedEvents = (configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetSuggestedEvents = async (
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
+  await useAuthenticatedQuery({
     queryKey: ['productions', 'suggestion'],
     queryFn: getSuggestedEvents,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const skipSuggestedEvents = async ({ headers, eventIds = [] }) =>
@@ -146,10 +145,10 @@ const skipSuggestedEvents = async ({ headers, eventIds = [] }) =>
     },
   });
 
-const useSkipSuggestedEvents = (configuration = {}) =>
+const useSkipSuggestedEvents = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({
     mutationFn: skipSuggestedEvents,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const createWithEvents = async ({ headers, productionName, eventIds = [] }) =>
@@ -165,7 +164,7 @@ const createWithEvents = async ({ headers, productionName, eventIds = [] }) =>
     },
   });
 
-const useCreateWithEvents = (configuration = {}) =>
+const useCreateWithEvents = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: createWithEvents, ...configuration });
 
 const mergeProductions = async ({
@@ -178,7 +177,7 @@ const mergeProductions = async ({
     options: { method: 'POST', headers },
   });
 
-const useMergeProductions = (configuration = {}) =>
+const useMergeProductions = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: mergeProductions, ...configuration });
 
 export {

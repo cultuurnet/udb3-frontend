@@ -3,8 +3,11 @@ import {
   useAuthenticatedQuery,
   useAuthenticatedQueries,
   useAuthenticatedMutation,
+  UseAuthenticatedQueryOptions,
 } from './authenticated-query';
 import { formatDate } from '@/utils/formatDate';
+import { NextApiRequest } from 'next';
+import { QueryClient } from 'react-query';
 
 const getEventsToModerate = async ({ headers, ...queryData }) => {
   const res = await fetchFromApi({
@@ -20,8 +23,11 @@ const getEventsToModerate = async ({ headers, ...queryData }) => {
   return await res.json();
 };
 
-const useGetEventsToModerate = (searchQuery, configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetEventsToModerate = async (
+  searchQuery: string,
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
+  await useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsToModerate,
     queryArguments: {
@@ -33,7 +39,7 @@ const useGetEventsToModerate = (searchQuery, configuration = {}) =>
       workflowStatus: 'READY_FOR_VALIDATION',
     },
     enabled: !!searchQuery,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const getEventById = async ({ headers, id }) => {
@@ -46,18 +52,29 @@ const getEventById = async ({ headers, id }) => {
   return await res.json();
 };
 
-const useGetEventById = ({ req, queryClient, id }, configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetEventById = async (
+  { req, queryClient, id },
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
+  await useAuthenticatedQuery({
     req,
     queryClient,
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
     enabled: !!id,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
-const useGetEventsByIds = ({ req, queryClient, ids = [] }) => {
+const useGetEventsByIds = async ({
+  req,
+  queryClient,
+  ids = [],
+}: {
+  req: NextApiRequest;
+  queryClient: QueryClient;
+  ids: string[];
+}) => {
   const options = ids.map((id) => ({
     queryKey: ['events'],
     queryFn: getEventById,
@@ -82,11 +99,11 @@ const getCalendarSummary = async ({ headers, id, format, locale }) => {
   return res.text();
 };
 
-const useGetCalendarSummary = (
+const useGetCalendarSummary = async (
   { id, locale, format = 'lg' },
-  configuration = {},
+  configuration?: UseAuthenticatedQueryOptions,
 ) =>
-  useAuthenticatedQuery({
+  await useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getCalendarSummary,
     queryArguments: {
@@ -94,10 +111,8 @@ const useGetCalendarSummary = (
       locale,
       format,
     },
-    configuration: {
-      enabled: !!id && !!locale,
-      ...configuration,
-    },
+    enabled: !!id && !!locale,
+    ...(configuration ?? {}),
   });
 
 const changeStatus = async ({ headers, id, type, reason }) =>
@@ -110,7 +125,7 @@ const changeStatus = async ({ headers, id, type, reason }) =>
     },
   });
 
-const useChangeStatus = (configuration = {}) =>
+const useChangeStatus = (configuration?: UseAuthenticatedQueryOptions) =>
   useAuthenticatedMutation({ mutationFn: changeStatus, ...configuration });
 
 const changeStatusSubEvents = async ({
@@ -120,6 +135,9 @@ const changeStatusSubEvents = async ({
   subEvents = [],
   type,
   reason,
+}: {
+  subEventIds: string[];
+  [key: string]: any;
 }) =>
   await fetchFromApi({
     path: `/events/${eventId.toString()}/subEvents`,
@@ -142,10 +160,12 @@ const changeStatusSubEvents = async ({
     },
   });
 
-const useChangeStatusSubEvents = (configuration = {}) =>
+const useChangeStatusSubEvents = (
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
   useAuthenticatedMutation({
     mutationFn: changeStatusSubEvents,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 export {

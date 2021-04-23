@@ -26,17 +26,32 @@ const QueryStatus = {
   SUCCESS: 'success',
 } as const;
 
+type ApiError = {
+  type?: 'ERROR';
+  status?: number;
+  message?: string;
+};
+
 type QueryKey = readonly unknown[];
+
+// TODO: this is the correct type for args, but couldn't get it to work
+// {
+//   headers: Record<string, unknown>;
+//   [key: string]: any;
+// }
+
+type QueryFunction = (args: any) => Promise<Response | ApiError>;
+
+type MutationFunction = (args: any) => Promise<Response | ApiError>;
+
+type MutationsFunction = (args: any) => Promise<Array<Response | ApiError>>;
 
 type UseQueryOptions = Omit<
   ReactQueryUseQueryOptions<unknown, unknown, unknown, QueryKey>,
   'queryKey' | 'queryFn'
 > & {
-  queryKey: QueryKey;
-  queryFn: (params: {
-    headers?: Record<string, unknown>;
-    [key: string]: unknown;
-  }) => Promise<Response>;
+  queryKey: readonly string[];
+  queryFn: QueryFunction;
 };
 
 type PrepareKeyArguments = {
@@ -131,7 +146,7 @@ const prefetchAuthenticatedQueries = async ({
       async ({ queryKey, queryFn }) =>
         await queryClient.prefetchQuery({
           queryKey,
-          queryFn: queryFn as (...args: unknown[]) => Promise<Response>,
+          queryFn: queryFn,
         }),
     ),
   );
@@ -173,7 +188,7 @@ const prefetchAuthenticatedQuery = async ({
 /// /////////////////////////////////////////////////////////////////////////////////////////////
 
 type AuthenticatedMutationArguments = UseMutationOptions & {
-  mutationFn: (args: unknown[]) => Promise<Response>;
+  mutationFn: MutationFunction;
 };
 
 const useAuthenticatedMutation = ({
@@ -188,12 +203,13 @@ const useAuthenticatedMutation = ({
   const innerMutationFn = useCallback(async (variables) => {
     const response = await mutationFn({ ...variables, headers });
 
-    if (isUnAuthorized(response?.status)) {
+    if (response?.status && isUnAuthorized(response.status)) {
       removeAuthenticationCookies();
       await router.push('/login');
+      return;
     }
 
-    const result = await response.text();
+    const result = await (response as Response).text();
 
     if (!result) {
       return '';
@@ -205,7 +221,7 @@ const useAuthenticatedMutation = ({
 };
 
 type UseAuthenticatedMutationOptions = UseMutationOptions & {
-  mutationFns: (args: unknown[]) => Promise<Response[]>;
+  mutationFns: MutationsFunction;
 };
 
 const useAuthenticatedMutations = ({
@@ -220,20 +236,26 @@ const useAuthenticatedMutations = ({
   const innerMutationFn = useCallback(async (variables) => {
     const responses = await mutationFns({ ...variables, headers });
 
-    if (responses.some((response) => isUnAuthorized(response.status))) {
+    if (
+      responses.some(
+        (response) => response.status && isUnAuthorized(response.status),
+      )
+    ) {
       removeAuthenticationCookies();
       await router.push('/login');
-    } else if (responses.some((response) => response.type === 'error')) {
+    } else if (
+      responses.some((response) => (response as ApiError)?.type === 'ERROR')
+    ) {
       const errorMessages = responses
-        .filter((response) => response.type === 'error')
-        .map((response) => JSON.stringify(response.body))
+        .filter((response) => response.type === 'ERROR')
+        .map((response) => (response as ApiError).message)
         .join(', ');
       throw new Error(errorMessages);
     }
 
     return Promise.all(
       responses.map(async (response) => {
-        const result = await response.text();
+        const result = await (response as Response).text();
 
         if (!result) {
           return '';
@@ -250,6 +272,7 @@ const useAuthenticatedMutations = ({
 type UseAuthenticatedQueryOptions = UseQueryOptions & {
   req?: NextApiRequest;
   queryClient?: QueryClient;
+  queryArguments?: Record<string, unknown>;
 };
 
 const useAuthenticatedQuery = async (options: UseAuthenticatedQueryOptions) => {
@@ -345,3 +368,5 @@ export {
   getStatusFromResults,
   QueryStatus,
 };
+
+export type { UseAuthenticatedQueryOptions };

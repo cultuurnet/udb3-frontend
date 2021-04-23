@@ -62,7 +62,7 @@ describe('fetchFromApi', () => {
       }),
     ).resolves.toStrictEqual({
       message: 'Invalid URL: http://localhost:3000true',
-      type: 'ERROR',
+      type: 'error',
     });
   });
   it('throws error on fetch error', async () => {
@@ -84,7 +84,7 @@ describe('fetchFromApi', () => {
       }),
     ).resolves.toStrictEqual({
       message: message,
-      type: 'ERROR',
+      type: 'error',
     });
   });
   it('throws error on not ok response', async () => {
@@ -108,7 +108,7 @@ describe('fetchFromApi', () => {
     ).resolves.toStrictEqual({
       message: message,
       status: 400,
-      type: 'ERROR',
+      type: 'error',
     });
   });
 });

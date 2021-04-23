@@ -69,4 +69,4 @@ const fetchFromApi = async ({
   return response;
 };
 
-export { fetchFromApi };
+export { fetchFromApi, FetchError };

@@ -1,5 +1,6 @@
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import { useAuthenticatedQuery } from './authenticated-query';
+import type { UseAuthenticatedQueryOptions } from './authenticated-query';
 
 const getUser = async ({ headers }) => {
   const res = await fetchFromApi({
@@ -11,11 +12,11 @@ const getUser = async ({ headers }) => {
   return await res.json();
 };
 
-const useGetUser = (configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetUser = async (configuration?: UseAuthenticatedQueryOptions) =>
+  await useAuthenticatedQuery({
     queryKey: ['user'],
     queryFn: getUser,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const getPermissions = async ({ headers }) => {
@@ -28,11 +29,13 @@ const getPermissions = async ({ headers }) => {
   return await res.json();
 };
 
-const useGetPermissions = (configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetPermissions = async (
+  configuration?: UseAuthenticatedQueryOptions,
+) =>
+  await useAuthenticatedQuery({
     queryKey: ['user', 'permissions'],
     queryFn: getPermissions,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 const getRoles = async ({ headers }) => {
@@ -45,11 +48,11 @@ const getRoles = async ({ headers }) => {
   return await res.json();
 };
 
-const useGetRoles = (configuration = {}) =>
-  useAuthenticatedQuery({
+const useGetRoles = async (configuration?: UseAuthenticatedQueryOptions) =>
+  await useAuthenticatedQuery({
     queryKey: ['user', 'roles'],
     queryFn: getRoles,
-    ...configuration,
+    ...(configuration ?? {}),
   });
 
 export { useGetUser, useGetPermissions, useGetRoles };

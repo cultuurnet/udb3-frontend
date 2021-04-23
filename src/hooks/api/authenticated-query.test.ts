@@ -1,7 +1,7 @@
 import {
   getStatusFromResults,
   QueryStatus,
-  useAuthenticatedQuery,
+await useAuthenticatedQuery,
 } from './authenticated-query';
 
 import { mockResponses, setupPage } from '@/test/utils/setupPage';
