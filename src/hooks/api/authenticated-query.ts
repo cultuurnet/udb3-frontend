@@ -2,11 +2,22 @@ import flatten from 'lodash/flatten';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { Cookies } from 'react-cookie';
-import { useQuery, useQueries, useMutation, UseQueryResult } from 'react-query';
+import {
+  useQuery,
+  useQueries,
+  useMutation,
+  UseMutationOptions,
+} from 'react-query';
 import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import { createHeaders, useHeaders } from './useHeaders';
 import type { Values } from '@/types/Values';
+import type {
+  UseQueryResult,
+  QueryClient,
+  UseQueryOptions as ReactQueryUseQueryOptions,
+} from 'react-query';
+import type { NextApiRequest } from 'next';
 
 const QueryStatus = {
   IDLE: 'idle',
@@ -15,26 +26,52 @@ const QueryStatus = {
   SUCCESS: 'success',
 } as const;
 
-const prepareKey = ({ queryKey = [], queryArguments = {} } = {}) => {
-  return [
-    ...flatten(queryKey),
-    Object.keys(queryArguments).length > 0 ? queryArguments : undefined,
-  ].filter((key) => key !== undefined);
+type QueryKey = readonly unknown[];
+
+type UseQueryOptions = Omit<
+  ReactQueryUseQueryOptions<unknown, unknown, unknown, QueryKey>,
+  'queryKey' | 'queryFn'
+> & {
+  queryKey: QueryKey;
+  queryFn: (params: {
+    headers?: Record<string, unknown>;
+    [key: string]: unknown;
+  }) => Promise<Response>;
+};
+
+type PrepareKeyArguments = {
+  queryKey: QueryKey;
+  queryArguments?: Record<string, unknown>;
+};
+
+const prepareKey = ({
+  queryKey,
+  queryArguments,
+}: PrepareKeyArguments): QueryKey => {
+  return [...flatten(queryKey), queryArguments].filter(
+    (key) => key !== undefined,
+  );
+};
+
+type PrepareArgumentsArguments = {
+  options: UseQueryOptions & { queryArguments?: Record<string, unknown> };
+  isTokenPresent: boolean;
+  headers: Record<string, unknown>;
 };
 
 const prepareArguments = ({
   options: {
     queryKey,
-    queryFn = () => {},
-    queryArguments = {},
+    queryFn,
+    queryArguments,
     enabled = true,
     ...configuration
-  } = {},
+  },
   isTokenPresent = false,
   headers,
-} = {}) => ({
-  queryKey: prepareKey({ queryArguments, queryKey }),
-  queryFn: () => queryFn({ ...queryArguments, headers }),
+}: PrepareArgumentsArguments): UseQueryOptions => ({
+  queryKey: prepareKey({ queryKey, queryArguments }),
+  queryFn: async () => await queryFn({ ...(queryArguments ?? {}), headers }),
   enabled: isTokenPresent && !!enabled,
   ...configuration,
 });
@@ -46,7 +83,9 @@ type Status = {
   error?: Error[];
 };
 
-const getStatusFromResults = (results: UseQueryResult[]): Status => {
+const getStatusFromResults = (
+  results: UseQueryResult[],
+): Status | undefined => {
   if (results.some(({ status }) => status === QueryStatus.ERROR)) {
     return {
       status: QueryStatus.ERROR,
@@ -71,21 +110,29 @@ const prefetchAuthenticatedQueries = async ({
   req,
   queryClient,
   options: rawOptions = [],
+}: {
+  req: NextApiRequest;
+  queryClient: QueryClient;
+  options: any[];
 }) => {
   const cookies = new Cookies(req?.headers?.cookie);
   const headers = createHeaders(cookies.get('token'));
 
-  const preparedArguments = rawOptions.map((options) =>
+  const preparedArguments = rawOptions.map((rawOption) =>
     prepareArguments({
-      options,
+      options: rawOption,
       isTokenPresent: isTokenValid(cookies.get('token')),
       headers,
     }),
   );
 
   await Promise.all(
-    preparedArguments.map(({ queryKey, queryFn }) =>
-      queryClient.prefetchQuery(queryKey, queryFn),
+    preparedArguments.map(
+      async ({ queryKey, queryFn }) =>
+        await queryClient.prefetchQuery({
+          queryKey,
+          queryFn: queryFn as (...args: unknown[]) => Promise<Response>,
+        }),
     ),
   );
 
@@ -94,8 +141,17 @@ const prefetchAuthenticatedQueries = async ({
   );
 };
 
-const prefetchAuthenticatedQuery = async ({ req, queryClient, ...options }) => {
-  const cookies = new Cookies(req?.headers?.cookie);
+type PrefetchAuthenticatedQueryOptions = UseQueryOptions & {
+  req: NextApiRequest;
+  queryClient: QueryClient;
+};
+
+const prefetchAuthenticatedQuery = async ({
+  req,
+  queryClient,
+  ...options
+}: PrefetchAuthenticatedQueryOptions) => {
+  const cookies = new Cookies(req.headers?.cookie);
   const headers = createHeaders(cookies.get('token'));
 
   const { queryKey, queryFn } = prepareArguments({
@@ -105,17 +161,25 @@ const prefetchAuthenticatedQuery = async ({ req, queryClient, ...options }) => {
   });
 
   try {
-    await queryClient.prefetchQuery(queryKey, queryFn);
+    await queryClient.prefetchQuery(
+      queryKey,
+      queryFn as (...args: unknown[]) => Promise<Response>,
+    );
   } catch {}
+  // eslint-disable-next-line @typescript-eslint/return-await
   return await queryClient.getQueryData(queryKey);
 };
 
 /// /////////////////////////////////////////////////////////////////////////////////////////////
 
+type AuthenticatedMutationArguments = UseMutationOptions & {
+  mutationFn: (args: unknown[]) => Promise<Response>;
+};
+
 const useAuthenticatedMutation = ({
-  mutationFn = () => {},
+  mutationFn,
   ...configuration
-} = {}) => {
+}: AuthenticatedMutationArguments) => {
   const router = useRouter();
   const headers = useHeaders();
 
@@ -126,7 +190,7 @@ const useAuthenticatedMutation = ({
 
     if (isUnAuthorized(response?.status)) {
       removeAuthenticationCookies();
-      router.push('/login');
+      await router.push('/login');
     }
 
     const result = await response.text();
@@ -140,10 +204,14 @@ const useAuthenticatedMutation = ({
   return useMutation(innerMutationFn, configuration);
 };
 
+type UseAuthenticatedMutationOptions = UseMutationOptions & {
+  mutationFns: (args: unknown[]) => Promise<Response[]>;
+};
+
 const useAuthenticatedMutations = ({
-  mutationFns = [],
+  mutationFns,
   ...configuration
-} = {}) => {
+}: UseAuthenticatedMutationOptions) => {
   const router = useRouter();
   const headers = useHeaders();
 
@@ -154,11 +222,11 @@ const useAuthenticatedMutations = ({
 
     if (responses.some((response) => isUnAuthorized(response.status))) {
       removeAuthenticationCookies();
-      router.push('/login');
-    } else if (responses.some((response) => response.type === 'ERROR')) {
+      await router.push('/login');
+    } else if (responses.some((response) => response.type === 'error')) {
       const errorMessages = responses
-        .filter((response) => response.type === 'ERROR')
-        .map((response) => response.title)
+        .filter((response) => response.type === 'error')
+        .map((response) => JSON.stringify(response.body))
         .join(', ');
       throw new Error(errorMessages);
     }
@@ -179,9 +247,20 @@ const useAuthenticatedMutations = ({
   return useMutation(innerMutationFn, configuration);
 };
 
-const useAuthenticatedQuery = (options = {}) => {
-  if (!!options.req && !!options.queryClient && typeof window === 'undefined') {
-    return prefetchAuthenticatedQuery(options);
+type UseAuthenticatedQueryOptions = UseQueryOptions & {
+  req?: NextApiRequest;
+  queryClient?: QueryClient;
+};
+
+const useAuthenticatedQuery = async (options: UseAuthenticatedQueryOptions) => {
+  if (
+    options.req !== undefined &&
+    options.queryClient !== undefined &&
+    typeof window === 'undefined'
+  ) {
+    return await prefetchAuthenticatedQuery(
+      options as PrefetchAuthenticatedQueryOptions,
+    );
   }
 
   const { asPath, ...router } = useRouter();
@@ -191,31 +270,31 @@ const useAuthenticatedQuery = (options = {}) => {
     'token',
   ]);
 
-  const preparedArguments = prepareArguments({
+  const useQueryOptions = prepareArguments({
     options,
     isTokenPresent: isTokenValid(cookies.token),
     headers,
   });
 
-  const result = useQuery(preparedArguments);
+  const result = useQuery<any, { status: number }>(useQueryOptions as any);
 
-  if (isUnAuthorized(result?.error?.status)) {
+  if (result.error && isUnAuthorized(result.error.status)) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
       removeAuthenticationCookies();
-      router.push('/login');
+      await router.push('/login');
     }
   }
 
   return result;
 };
 
-const useAuthenticatedQueries = ({
+const useAuthenticatedQueries = async ({
   req,
   queryClient,
   options: rawOptions = [],
 }) => {
   if (!!req && !!queryClient && typeof window === 'undefined') {
-    return prefetchAuthenticatedQueries({
+    return await prefetchAuthenticatedQueries({
       req,
       queryClient,
       options: rawOptions,
@@ -229,7 +308,7 @@ const useAuthenticatedQueries = ({
     'token',
   ]);
 
-  const options = rawOptions.map((options) =>
+  const useQueriesOptions = rawOptions.map((options) =>
     prepareArguments({
       options,
       isTokenPresent: isTokenValid(cookies.token),
@@ -237,12 +316,18 @@ const useAuthenticatedQueries = ({
     }),
   );
 
-  const results = useQueries(options);
+  const results = useQueries(useQueriesOptions as any) as Array<
+    UseQueryResult<any, { status: number }>
+  >;
 
-  if (results.some((result) => isUnAuthorized(result?.error?.status))) {
+  if (
+    results.some(
+      (result) => result?.error && isUnAuthorized(result?.error.status),
+    )
+  ) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
       removeAuthenticationCookies();
-      router.push('/login');
+      await router.push('/login');
     }
   }
 
