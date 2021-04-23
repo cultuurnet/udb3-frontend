@@ -2,7 +2,7 @@ import { Modal as BootstrapModal } from 'react-bootstrap';
 
 import type { ModalProps } from '../Modal';
 
-type Props = ModalProps;
+type Props = Omit<ModalProps, 'variant'>;
 
 const ContentModal = ({
   visible,

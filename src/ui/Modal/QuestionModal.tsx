@@ -3,7 +3,7 @@ import { Button, ButtonVariants } from '../Button';
 
 import type { ModalProps } from '../Modal';
 
-type Props = ModalProps;
+type Props = Omit<ModalProps, 'variant'>;
 
 const QuestionModal = ({
   className,
