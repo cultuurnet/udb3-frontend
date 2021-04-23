@@ -34,13 +34,13 @@ const DefaultLogo = ({ color }: DefaultLogoProps) => (
   />
 );
 
-type Logo = {
+type LogoObject = {
   Component: React.ComponentType<{ color: UIProp<string> }>;
   viewBox: string;
   width: number;
 };
 
-const LogoMap: { [key in Values<typeof LogoVariants>]: Logo } = {
+const LogoMap: { [key in Values<typeof LogoVariants>]: LogoObject } = {
   [LogoVariants.DEFAULT]: {
     Component: DefaultLogo,
     viewBox: '0 0 210 40',
@@ -53,8 +53,9 @@ const LogoMap: { [key in Values<typeof LogoVariants>]: Logo } = {
   },
 };
 
-type Props = BoxProps & {
-  variant?: Values<typeof LogoVariants>;
+type Props = Omit<BoxProps, 'color'> & {
+  variant: Values<typeof LogoVariants>;
+  color: string;
 };
 
 const Logo = ({
@@ -71,7 +72,7 @@ const Logo = ({
       className={className}
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
-      width={propWidth || width}
+      width={propWidth ?? width}
       viewBox={viewBox}
       {...getBoxProps(props)}
     >
