@@ -9,7 +9,6 @@ import type { InlineProps } from './Inline';
 import { Icon } from './Icon';
 import { cloneElement } from 'react';
 import { Text } from './Text';
-import type { BoxProps } from './Box';
 
 type Values<T> = T[keyof T];
 
@@ -153,7 +152,7 @@ const customCSS = css`
   }
 `;
 
-type Props = BoxProps & {
+type Props = InlineProps & {
   iconName?: string;
   title?: string;
   variant?: Values<typeof ButtonVariants>;

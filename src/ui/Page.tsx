@@ -1,24 +1,24 @@
-import { getStackProps, Stack, stackPropTypes } from './Stack';
+import { getStackProps, Stack } from './Stack';
 import { getValueFromTheme } from './theme';
 
 import { Title } from './Title';
-import { getInlineProps, Inline, inlinePropTypes } from './Inline';
+import { getInlineProps, Inline } from './Inline';
 import { Children } from 'react';
 import { getBoxProps } from './Box';
 
 const getValueForPage = getValueFromTheme('page');
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...stackPropTypes
-*/
 type PageProps = {
   children?: React.ReactNode;
   className?: string;
 };
 
 const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
-  const children = Children.toArray(rawChildren);
+  const children = Children.toArray(rawChildren) as Array<
+    (React.ReactChild | React.ReactFragment | React.ReactPortal) & {
+      type: React.FC;
+    }
+  >;
 
   const title = children.find((child) => child.type === PageTitle);
   const actions = children.find((child) => child.type === PageActions);
@@ -58,10 +58,6 @@ const Page = ({ children: rawChildren, className, ...props }: PageProps) => {
 
 const getValueForTitle = getValueFromTheme('pageTitle');
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...inlinePropTypes
-*/
 type PageTitleProps = {
   className?: string;
   children?: React.ReactNode;
@@ -79,10 +75,6 @@ const PageTitle = ({ children, className, ...props }: PageTitleProps) => (
   </Title>
 );
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...inlinePropTypes
-*/
 type PageActionsProps = {
   className?: string;
   children?: React.ReactNode;
@@ -94,10 +86,6 @@ const PageActions = ({ children, className, ...props }: PageActionsProps) => (
   </Inline>
 );
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...inlinePropTypes
-*/
 type PageContentProps = {
   className?: string;
   children?: React.ReactNode;

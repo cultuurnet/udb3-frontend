@@ -9,7 +9,7 @@ type Item = { value: string; label: string; info: string };
 
 type Props = StackProps & {
   groupLabel?: string;
-  items?: Item[];
+  items: Item[];
   selected: string;
 };
 

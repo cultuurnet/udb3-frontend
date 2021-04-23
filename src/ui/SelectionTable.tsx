@@ -13,7 +13,7 @@ import { Stack } from './Stack';
 const getValue = getValueFromTheme('selectionTable');
 
 type CheckBoxHeaderProps = {
-  getToggleAllRowsSelectedProps?: (...args: any[]) => any;
+  getToggleAllRowsSelectedProps: (...args: any[]) => any;
 };
 
 const CheckBoxHeader = ({
@@ -52,9 +52,9 @@ const CheckBoxCell = ({ row }: CheckBoxCellProps) => {
 type SelectionTableProps = {
   columns: any[];
   data: any[];
-  actions?: any[];
+  actions: any[];
   onSelectionChanged?: (...args: any[]) => any;
-  translateSelectedRowCount?: (...args: any[]) => any;
+  translateSelectedRowCount: (...args: any[]) => any;
 };
 
 const SelectionTable = ({

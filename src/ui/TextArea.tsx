@@ -23,6 +23,7 @@ const TextArea = ({
 }: Props) => {
   return (
     <Form.Control
+      // @ts-expect-error
       forwardedAs={BaseInput}
       id={id}
       className={className}

@@ -1,13 +1,9 @@
 import { getValueFromTheme } from './theme';
-import { Stack, stackPropTypes, getStackProps } from './Stack';
+import { Stack, getStackProps } from './Stack';
 import { Children } from 'react';
 
 const getValue = getValueFromTheme('panel');
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...stackPropTypes
-*/
 type PanelProps = {
   className?: string;
   children?: React.ReactNode;
@@ -32,10 +28,6 @@ const Panel = ({ children, className, ...props }: PanelProps) => {
 
 const getValueForPanelFooter = getValueFromTheme('panelFooter');
 
-/*
-(ts-migrate) TODO: Migrate the remaining prop types
-...stackPropTypes
-*/
 type PanelFooterProps = {
   className?: string;
   children?: React.ReactNode;
