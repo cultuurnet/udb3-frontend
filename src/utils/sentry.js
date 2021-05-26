@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import getConfig from 'next/config';
 
-import { publicRuntimeConfig } from '../../next.config';
+const { publicRuntimeConfig } = getConfig();
 
 const initializeSentry = () => {
   Sentry.init({
