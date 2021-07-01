@@ -68,6 +68,7 @@ const Event = ({
             width="10rem"
             height="10rem"
             src={imageUrl}
+            alt={title}
             backgroundRepeat="no-repeat"
             backgroundPosition="center center"
             objectFit="cover"
