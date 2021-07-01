@@ -87,7 +87,7 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
         accessor: 'status',
       },
     ],
-    [],
+    [t],
   );
 
   const data = useMemo(
@@ -108,7 +108,7 @@ const StatusPageMultiple = ({ event, refetchEvent }) => {
           />
         ),
       })),
-    [subEvents],
+    [i18n.language, subEvents, t],
   );
 
   return [
