@@ -16,14 +16,15 @@ const WindowMessageTypes = {
 const useHandleWindowMessage = (eventsMap = {}) => {
   const isClient = useIsClient();
 
-  const internalHandler = (event) => {
-    const { source, type, ...data } = event.data;
-    if (source !== WindowMessageSources.UDB) return;
-    eventsMap?.[type]?.(data); // call handler when it exists
-  };
-
   useEffect(() => {
     if (!isClient) return;
+
+    const internalHandler = (event) => {
+      const { source, type, ...data } = event.data;
+      if (source !== WindowMessageSources.UDB) return;
+      eventsMap?.[type]?.(data); // call handler when it exists
+    };
+
     window.addEventListener('message', internalHandler);
     return () => window.removeEventListener('message', internalHandler);
   }, [eventsMap, isClient]);
