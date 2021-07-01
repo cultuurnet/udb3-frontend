@@ -263,7 +263,10 @@ const Sidebar = () => {
     refetchInterval: 60000,
   });
 
-  const rawAnnouncements = getAnnouncementsQuery.data?.data ?? [];
+  const rawAnnouncements = useMemo(() => {
+    return getAnnouncementsQuery.data?.data ?? [];
+  }, [getAnnouncementsQuery.data?.data]);
+
   const getPermissionsQuery = useGetPermissions();
   const getRolesQuery = useGetRoles();
   const getEventsToModerateQuery = useGetEventsToModerate(searchQuery);
@@ -287,12 +290,6 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    if (isAnnouncementsModalVisible) {
-      setActiveAnnouncementId(announcements[0].uid);
-    }
-  }, [isAnnouncementsModalVisible]);
-
-  useEffect(() => {
     if (activeAnnouncementId) {
       const seenAnnouncements = cookies?.seenAnnouncements ?? [];
       if (!seenAnnouncements.includes(activeAnnouncementId)) {
@@ -302,7 +299,7 @@ const Sidebar = () => {
         ]);
       }
     }
-  }, [activeAnnouncementId]);
+  }, [activeAnnouncementId, cookies?.seenAnnouncements, setCookie]);
 
   useEffect(() => {
     if (rawAnnouncements.length === 0) {
@@ -317,7 +314,7 @@ const Sidebar = () => {
         ),
     );
     setCookie('seenAnnouncements', cleanedUpSeenAnnouncements);
-  }, [rawAnnouncements]);
+  }, [cookies?.seenAnnouncements, rawAnnouncements, setCookie]);
 
   useEffect(() => {
     if (!getRolesQuery.data) {
@@ -351,6 +348,12 @@ const Sidebar = () => {
     [rawAnnouncements, cookies.seenAnnouncements, activeAnnouncementId],
   );
 
+  useEffect(() => {
+    if (isAnnouncementsModalVisible) {
+      setActiveAnnouncementId(announcements[0].uid);
+    }
+  }, [announcements, isAnnouncementsModalVisible]);
+
   const countUnseenAnnouncements = useMemo(
     () =>
       announcements.filter(
@@ -379,57 +382,57 @@ const Sidebar = () => {
     },
   ];
 
-  const manageMenu = [
-    {
-      permission: PermissionTypes.AANBOD_MODEREREN,
-      href: '/manage/moderation/overview',
-      iconName: Icons.FLAG,
-      children: t('menu.validate'),
-      suffix: countEventsToModerate > 0 && (
-        <Badge>{countEventsToModerate}</Badge>
-      ),
-    },
-    {
-      permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-      href: '/manage/users/overview',
-      iconName: Icons.USER,
-      children: t('menu.users'),
-    },
-    {
-      permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-      href: '/manage/roles/overview',
-      iconName: Icons.USERS,
-      children: t('menu.roles'),
-    },
-    {
-      permission: PermissionTypes.LABELS_BEHEREN,
-      href: '/manage/labels/overview',
-      iconName: Icons.TAG,
-      children: t('menu.labels'),
-    },
-    {
-      permission: PermissionTypes.ORGANISATIES_BEHEREN,
-      href: '/manage/organizations',
-      iconName: Icons.SLIDE_SHARE,
-      children: t('menu.organizations'),
-    },
-    {
-      permission: PermissionTypes.PRODUCTIES_AANMAKEN,
-      href: '/manage/productions',
-      iconName: Icons.LAYER_GROUP,
-      children: t('menu.productions'),
-    },
-  ];
-
   const filteredManageMenu = useMemo(() => {
     if (!getPermissionsQuery.data) {
       return [];
     }
 
+    const manageMenu = [
+      {
+        permission: PermissionTypes.AANBOD_MODEREREN,
+        href: '/manage/moderation/overview',
+        iconName: Icons.FLAG,
+        children: t('menu.validate'),
+        suffix: countEventsToModerate > 0 && (
+          <Badge>{countEventsToModerate}</Badge>
+        ),
+      },
+      {
+        permission: PermissionTypes.GEBRUIKERS_BEHEREN,
+        href: '/manage/users/overview',
+        iconName: Icons.USER,
+        children: t('menu.users'),
+      },
+      {
+        permission: PermissionTypes.GEBRUIKERS_BEHEREN,
+        href: '/manage/roles/overview',
+        iconName: Icons.USERS,
+        children: t('menu.roles'),
+      },
+      {
+        permission: PermissionTypes.LABELS_BEHEREN,
+        href: '/manage/labels/overview',
+        iconName: Icons.TAG,
+        children: t('menu.labels'),
+      },
+      {
+        permission: PermissionTypes.ORGANISATIES_BEHEREN,
+        href: '/manage/organizations',
+        iconName: Icons.SLIDE_SHARE,
+        children: t('menu.organizations'),
+      },
+      {
+        permission: PermissionTypes.PRODUCTIES_AANMAKEN,
+        href: '/manage/productions',
+        iconName: Icons.LAYER_GROUP,
+        children: t('menu.productions'),
+      },
+    ];
+
     return manageMenu.filter((menuItem) =>
       getPermissionsQuery.data.includes(menuItem.permission),
     );
-  }, [getPermissionsQuery.data]);
+  }, [countEventsToModerate, getPermissionsQuery.data, t]);
 
   return [
     <Stack
