@@ -40,10 +40,10 @@ const StatusPageSingle = ({ offer, error, useChangeStatus }) => {
   }, [type]);
 
   useEffect(() => {
-    const newReason = offer?.status?.reason?.[i18n.language];
-    if (!rawStatusReason || !newReason) return;
+    const newReason = rawStatusReason?.[i18n.language];
+    if (!newReason) return;
     setReason(newReason);
-  }, [rawStatusReason]);
+  }, [i18n.language, rawStatusReason]);
 
   const handleSuccessChangeStatus = () =>
     router.push(`/${offerType}/${offerId}/preview`);
