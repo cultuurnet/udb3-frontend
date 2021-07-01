@@ -92,7 +92,7 @@ const Index = () => {
         };
       })
       .filter((event) => event);
-  }, [getEventsByIdsQuery.data]);
+  }, [getEventsByIdsQuery.data, selectedEventIds]);
 
   const handleSuccessDeleteEvents = async () => {
     await queryClient.invalidateQueries('productions');

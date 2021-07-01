@@ -328,7 +328,7 @@ const useRedirectToLanguage = () => {
     } else {
       router.push('/login/nl');
     }
-  }, [language]);
+  }, [i18n, language, router, setCookie]);
 };
 
 const ResponsiveContainer = (props) => (

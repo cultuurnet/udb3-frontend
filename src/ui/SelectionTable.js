@@ -88,7 +88,7 @@ const SelectionTable = ({
 
   const selectedRowsText = useMemo(
     () => translateSelectedRowCount(selectedFlatRows.length),
-    [selectedFlatRows.length],
+    [selectedFlatRows.length, translateSelectedRowCount],
   );
 
   return (

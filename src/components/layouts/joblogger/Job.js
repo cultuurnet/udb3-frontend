@@ -81,7 +81,7 @@ const Job = ({
       formatDistance(isDone ? finishedAt : createdAt, new Date(), {
         locale: dateFnsLocales[i18n.language],
       }),
-    [createdAt, finishedAt],
+    [createdAt, finishedAt, i18n.language, isDone],
   );
 
   return (

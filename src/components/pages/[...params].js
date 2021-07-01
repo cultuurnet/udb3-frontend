@@ -62,7 +62,7 @@ const Fallback = () => {
     );
 
     return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
-  }, [asPath, cookies.token, cookies['udb-language']]);
+  }, [asPath, cookies, publicRuntimeConfig.legacyAppUrl, queryWithoutParams]);
 
   if (notFoundPaths.includes(asPath)) {
     return <PageNotFound />;

@@ -87,7 +87,7 @@ const Create = () => {
       availableProductions.find(
         (production) => production.id === selectedProductionId,
       ),
-    [selectedProductionId],
+    [availableProductions, selectedProductionId],
   );
 
   const isEditingProduction = useMemo(
