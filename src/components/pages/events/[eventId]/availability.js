@@ -5,7 +5,7 @@ import { AvailabilityPageMultiple } from '@/components/AvailabilityPageMultiple'
 import { AvailabilityPageSingle } from '@/components/AvailabilityPageSingle';
 import { CalendarType } from '@/constants/CalendarType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-import { useChangeStatus, useGetEventById } from '@/hooks/api/events';
+import { useGetEventById } from '@/hooks/api/events';
 import { Spinner } from '@/ui/Spinner';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -30,11 +30,7 @@ const Availability = () => {
     );
 
   return (
-    <AvailabilityPageSingle
-      offer={event}
-      error={getEventByIdQuery.error}
-      useChangeStatus={useChangeStatus}
-    />
+    <AvailabilityPageSingle offer={event} error={getEventByIdQuery.error} />
   );
 };
 

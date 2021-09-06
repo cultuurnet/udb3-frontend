@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StatusForm } from '@/components/StatusForm';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
+import { useChangeStatus } from '@/hooks/api/events';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
@@ -14,7 +15,7 @@ import { Spinner } from '@/ui/Spinner';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
-const AvailabilityPageSingle = ({ offer, error, useChangeStatus }) => {
+const AvailabilityPageSingle = ({ offer, error }) => {
   const { t, i18n } = useTranslation();
   const router = useRouter();
 
@@ -113,7 +114,6 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatus }) => {
 AvailabilityPageSingle.propTypes = {
   offer: PropTypes.object.isRequired,
   error: PropTypes.object,
-  useChangeStatus: PropTypes.func.isRequired,
 };
 
 export { AvailabilityPageSingle };
