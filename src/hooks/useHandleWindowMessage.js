@@ -26,7 +26,7 @@ const useHandleWindowMessage = (eventsMap = {}) => {
     if (!isClient) return;
     window.addEventListener('message', internalHandler);
     return () => window.removeEventListener('message', internalHandler);
-  }, [isClient]);
+  }, [isClient, internalHandler]);
 };
 
 export { useHandleWindowMessage, WindowMessageTypes };

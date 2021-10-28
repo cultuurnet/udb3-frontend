@@ -270,7 +270,10 @@ const Sidebar = () => {
     refetchInterval: 60000,
   });
 
-  const rawAnnouncements = getAnnouncementsQuery.data?.data ?? [];
+  const rawAnnouncements = useMemo(
+    () => getAnnouncementsQuery.data?.data ?? [],
+    [getAnnouncementsQuery],
+  );
   const getPermissionsQuery = useGetPermissions();
   const getRolesQuery = useGetRoles();
   const getEventsToModerateQuery = useGetEventsToModerate(searchQuery);
@@ -295,12 +298,6 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    if (isAnnouncementsModalVisible) {
-      setActiveAnnouncementId(announcements[0].uid);
-    }
-  }, [isAnnouncementsModalVisible]);
-
-  useEffect(() => {
     if (activeAnnouncementId) {
       const seenAnnouncements = storage.getItem('seenAnnouncements') ?? [];
       if (!seenAnnouncements.includes(activeAnnouncementId)) {
@@ -310,7 +307,7 @@ const Sidebar = () => {
         ]);
       }
     }
-  }, [activeAnnouncementId]);
+  }, [activeAnnouncementId, storage]);
 
   useEffect(() => {
     if (rawAnnouncements.length === 0) {
@@ -325,7 +322,7 @@ const Sidebar = () => {
         ),
     );
     storage.setItem('seenAnnouncements', cleanedUpSeenAnnouncements);
-  }, [rawAnnouncements]);
+  }, [rawAnnouncements, storage]);
 
   useEffect(() => {
     // @ts-expect-error
@@ -355,8 +352,14 @@ const Sidebar = () => {
         }
         return { ...announcement, status: AnnouncementStatus.UNSEEN };
       }),
-    [rawAnnouncements, activeAnnouncementId],
+    [rawAnnouncements, activeAnnouncementId, storage],
   );
+
+  useEffect(() => {
+    if (isAnnouncementsModalVisible) {
+      setActiveAnnouncementId(announcements[0].uid);
+    }
+  }, [announcements, isAnnouncementsModalVisible]);
 
   const countUnseenAnnouncements = useMemo(
     () =>
@@ -444,7 +447,7 @@ const Sidebar = () => {
       return getPermissionsQuery.data.includes(menuItem.permission);
     });
     // @ts-expect-error
-  }, [getPermissionsQuery.data]);
+  }, [getPermissionsQuery.data, manageMenu]);
 
   return [
     <Stack

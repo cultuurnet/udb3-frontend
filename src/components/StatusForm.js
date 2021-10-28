@@ -36,7 +36,7 @@ const StatusForm = ({
         info: t(`offerStatus.status.${offerType}.unavailableInfo`),
       },
     ],
-    [offerType],
+    [offerType, t],
   );
 
   return (

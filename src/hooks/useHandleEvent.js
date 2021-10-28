@@ -18,7 +18,7 @@ const useHandleEvent = (eventsMap = {}) => {
         window.removeEventListener(type, handler);
       });
     };
-  }, [isClient]);
+  }, [isClient, eventsMap]);
 };
 
 export { EventTypes, useHandleEvent };

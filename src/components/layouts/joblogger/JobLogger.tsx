@@ -154,7 +154,7 @@ const JobLogger = ({ visible, onClose, onStatusChange }: JobLoggerProps) => {
       return;
     }
     onStatusChange(JobLoggerStates.IDLE);
-  }, [failedJobs, finishedJobs, queuedJobs]);
+  }, [failedJobs, finishedJobs, queuedJobs, onStatusChange]);
 
   const jobLoggerMenus = [
     {

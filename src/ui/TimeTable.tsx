@@ -189,7 +189,7 @@ const TimeTable = ({
     onChange(
       new Array(rowLength).fill(new Array(colHeaders.length).fill(null)),
     );
-  }, [dateStart, dateEnd]);
+  }, [dateStart, dateEnd, onChange]);
 
   const onEditCell = (rowIndex: number, colIndex: number, value: Time) => {
     onChange(

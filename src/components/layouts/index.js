@@ -22,7 +22,7 @@ const useChangeLanguage = () => {
   const { cookies } = useCookiesWithOptions(['udb-language']);
   useEffect(() => {
     i18n.changeLanguage(cookies['udb-language']);
-  }, [cookies['udb-language']]);
+  }, [cookies, i18n]);
 };
 
 const useHandleAuthentication = () => {
@@ -47,13 +47,13 @@ const useHandleAuthentication = () => {
       undefined,
       { shallow: true },
     );
-  }, [query]);
+  }, [query, cookies.token, pathname, router, setCookie]);
 
   useEffect(() => {
     if (!getUserQuery.data) return;
     setCookie('user', getUserQuery.data);
     Sentry.setUser({ id: getUserQuery.data.id });
-  }, [getUserQuery.data]);
+  }, [getUserQuery.data, setCookie]);
 
   // redirect when there is no token or user cookie
   // manipulation from outside the application
@@ -71,7 +71,7 @@ const useHandleAuthentication = () => {
       }
     }, 5000); // checking every 5 seconds
     return cleanUp;
-  }, [asPath]);
+  }, [asPath, router]);
 };
 
 const Layout = ({ children }) => {

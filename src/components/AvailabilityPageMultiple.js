@@ -100,7 +100,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
         accessor: 'bookingAvailability',
       },
     ],
-    [],
+    [t],
   );
 
   const data = useMemo(
@@ -130,7 +130,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
           </Text>
         ),
       })),
-    [subEvents],
+    [t, subEvents, i18n.language],
   );
 
   return [
