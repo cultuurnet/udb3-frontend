@@ -48,7 +48,9 @@ const Index = () => {
     },
   });
 
-  const rawProductions = getProductionsQuery.data?.member ?? [];
+  const rawProductions = useMemo(() => getProductionsQuery.data?.member ?? [], [
+    getProductionsQuery,
+  ]);
 
   useEffect(() => {
     if (rawProductions.length === 0) {

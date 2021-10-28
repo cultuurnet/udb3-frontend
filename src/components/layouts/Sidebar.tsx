@@ -369,72 +369,78 @@ const Sidebar = () => {
     [announcements],
   );
 
-  const userMenu = [
-    {
-      href: '/dashboard?tab=events&page=1',
-      iconName: Icons.HOME,
-      children: t('menu.home'),
-    },
-    {
-      href: isReactCreateFeatureFlagEnabled ? '/create' : '/event',
-      iconName: Icons.PLUS_CIRCLE,
-      children: t('menu.add'),
-    },
-    {
-      href: '/search',
-      iconName: Icons.SEARCH,
-      children: t('menu.search'),
-    },
-  ];
+  const userMenu = useMemo(
+    () => [
+      {
+        href: '/dashboard?tab=events&page=1',
+        iconName: Icons.HOME,
+        children: t('menu.home'),
+      },
+      {
+        href: isReactCreateFeatureFlagEnabled ? '/create' : '/event',
+        iconName: Icons.PLUS_CIRCLE,
+        children: t('menu.add'),
+      },
+      {
+        href: '/search',
+        iconName: Icons.SEARCH,
+        children: t('menu.search'),
+      },
+    ],
+    [t, isReactCreateFeatureFlagEnabled],
+  );
 
-  const manageMenu: MenuItemType[] = [
-    {
-      permission: PermissionTypes.AANBOD_MODEREREN,
-      href: '/manage/moderation/overview',
-      iconName: Icons.FLAG,
-      children: t('menu.validate'),
-      suffix: countEventsToModerate > 0 && (
-        <Badge>{countEventsToModerate}</Badge>
-      ),
-    },
-    {
-      permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-      href: '/manage/users/overview',
-      iconName: Icons.USER,
-      children: t('menu.users'),
-    },
-    {
-      permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-      href: '/manage/roles/overview',
-      iconName: Icons.USERS,
-      children: t('menu.roles'),
-    },
-    {
-      permission: PermissionTypes.LABELS_BEHEREN,
-      href: '/manage/labels/overview',
-      iconName: Icons.TAG,
-      children: t('menu.labels'),
-    },
-    {
-      permission: PermissionTypes.ORGANISATIES_BEHEREN,
-      href: '/manage/organizations',
-      iconName: Icons.SLIDE_SHARE,
-      children: t('menu.organizations'),
-    },
-    {
-      permission: PermissionTypes.PRODUCTIES_AANMAKEN,
-      href: '/manage/productions',
-      iconName: Icons.LAYER_GROUP,
-      children: t('menu.productions'),
-    },
-    {
-      permission: PermissionTypes.FILMS_AANMAKEN,
-      href: '/manage/movies/create',
-      iconName: Icons.VIDEO,
-      children: t('menu.movies'),
-      visible: i18n.language === 'nl',
-    },
-  ];
+  const manageMenu: MenuItemType[] = useMemo(
+    () => [
+      {
+        permission: PermissionTypes.AANBOD_MODEREREN,
+        href: '/manage/moderation/overview',
+        iconName: Icons.FLAG,
+        children: t('menu.validate'),
+        suffix: countEventsToModerate > 0 && (
+          <Badge>{countEventsToModerate}</Badge>
+        ),
+      },
+      {
+        permission: PermissionTypes.GEBRUIKERS_BEHEREN,
+        href: '/manage/users/overview',
+        iconName: Icons.USER,
+        children: t('menu.users'),
+      },
+      {
+        permission: PermissionTypes.GEBRUIKERS_BEHEREN,
+        href: '/manage/roles/overview',
+        iconName: Icons.USERS,
+        children: t('menu.roles'),
+      },
+      {
+        permission: PermissionTypes.LABELS_BEHEREN,
+        href: '/manage/labels/overview',
+        iconName: Icons.TAG,
+        children: t('menu.labels'),
+      },
+      {
+        permission: PermissionTypes.ORGANISATIES_BEHEREN,
+        href: '/manage/organizations',
+        iconName: Icons.SLIDE_SHARE,
+        children: t('menu.organizations'),
+      },
+      {
+        permission: PermissionTypes.PRODUCTIES_AANMAKEN,
+        href: '/manage/productions',
+        iconName: Icons.LAYER_GROUP,
+        children: t('menu.productions'),
+      },
+      {
+        permission: PermissionTypes.FILMS_AANMAKEN,
+        href: '/manage/movies/create',
+        iconName: Icons.VIDEO,
+        children: t('menu.movies'),
+        visible: i18n.language === 'nl',
+      },
+    ],
+    [countEventsToModerate, i18n, t],
+  );
 
   const filteredManageMenu = useMemo(() => {
     // @ts-expect-error

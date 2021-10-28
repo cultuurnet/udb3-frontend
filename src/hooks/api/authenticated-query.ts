@@ -158,21 +158,24 @@ const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
 
   const { removeAuthenticationCookies } = useCookiesWithOptions();
 
-  const innerMutationFn = useCallback(async (variables) => {
-    const response = await mutationFn({ ...variables, headers });
+  const innerMutationFn = useCallback(
+    async (variables) => {
+      const response = await mutationFn({ ...variables, headers });
 
-    if (isUnAuthorized(response?.status)) {
-      removeAuthenticationCookies();
-      router.push('/login');
-    }
+      if (isUnAuthorized(response?.status)) {
+        removeAuthenticationCookies();
+        router.push('/login');
+      }
 
-    const result = await response.text();
+      const result = await response.text();
 
-    if (!result) {
-      return '';
-    }
-    return JSON.parse(result);
-  }, []);
+      if (!result) {
+        return '';
+      }
+      return JSON.parse(result);
+    },
+    [headers, mutationFn, removeAuthenticationCookies, router],
+  );
 
   return useMutation(innerMutationFn, configuration);
 };
@@ -188,35 +191,38 @@ const useAuthenticatedMutations = ({
 
   const { removeAuthenticationCookies } = useCookiesWithOptions();
 
-  const innerMutationFn = useCallback(async (variables) => {
-    const responses = await mutationFns({ ...variables, headers });
+  const innerMutationFn = useCallback(
+    async (variables) => {
+      const responses = await mutationFns({ ...variables, headers });
 
-    if (responses.some((response) => isUnAuthorized(response.status))) {
-      removeAuthenticationCookies();
-      router.push('/login');
-      return;
-    }
+      if (responses.some((response) => isUnAuthorized(response.status))) {
+        removeAuthenticationCookies();
+        router.push('/login');
+        return;
+      }
 
-    if (responses.some(isErrorObject)) {
-      const errorMessages = responses
-        .filter(isErrorObject)
-        .map((response) => response.message)
-        .join(', ');
-      throw new Error(errorMessages);
-    }
+      if (responses.some(isErrorObject)) {
+        const errorMessages = responses
+          .filter(isErrorObject)
+          .map((response) => response.message)
+          .join(', ');
+        throw new Error(errorMessages);
+      }
 
-    return Promise.all(
-      (responses as Response[]).map(async (response) => {
-        const result = await response.text();
+      return Promise.all(
+        (responses as Response[]).map(async (response) => {
+          const result = await response.text();
 
-        if (!result) {
-          return '';
-        }
+          if (!result) {
+            return '';
+          }
 
-        return JSON.parse(result);
-      }),
-    );
-  }, []);
+          return JSON.parse(result);
+        }),
+      );
+    },
+    [headers, mutationFns, removeAuthenticationCookies, router],
+  );
 
   return useMutation(innerMutationFn, configuration);
 };

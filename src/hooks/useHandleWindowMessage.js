@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useIsClient } from './useIsClient';
 
@@ -16,11 +16,14 @@ const WindowMessageTypes = {
 const useHandleWindowMessage = (eventsMap = {}) => {
   const isClient = useIsClient();
 
-  const internalHandler = (event) => {
-    const { source, type, ...data } = event.data;
-    if (source !== WindowMessageSources.UDB) return;
-    eventsMap?.[type]?.(data); // call handler when it exists
-  };
+  const internalHandler = useCallback(
+    (event) => {
+      const { source, type, ...data } = event.data;
+      if (source !== WindowMessageSources.UDB) return;
+      eventsMap?.[type]?.(data); // call handler when it exists
+    },
+    [eventsMap],
+  );
 
   useEffect(() => {
     if (!isClient) return;

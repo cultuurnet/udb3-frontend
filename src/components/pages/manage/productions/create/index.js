@@ -71,7 +71,10 @@ const Create = () => {
     ? getProductionsQuery.data?.member ?? []
     : [];
 
-  const events = getSuggestedEventsQuery.data?.events ?? [];
+  const events = useMemo(() => getSuggestedEventsQuery.data?.events ?? [], [
+    getSuggestedEventsQuery,
+  ]);
+
   const similarity = getSuggestedEventsQuery.data?.similarity ?? 0;
 
   const availableProductions = useMemo(
