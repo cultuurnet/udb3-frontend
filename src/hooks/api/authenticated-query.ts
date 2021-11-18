@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import flatten from 'lodash/flatten';
 import type { NextApiRequest } from 'next';
 import { useRouter } from 'next/router';
@@ -145,6 +146,7 @@ const prefetchAuthenticatedQuery = async <TData>({
 
   try {
     await queryClient.prefetchQuery(queryKey, queryFn);
+    // eslint-disable-next-line no-empty
   } catch {}
 
   return await queryClient.getQueryData(queryKey);

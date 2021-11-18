@@ -39,7 +39,6 @@ class Document extends NextDocument {
             sizes="32x32"
             href="/favicon.png"
           />
-          {/* eslint-disable-next-line @next/next/no-page-custom-font */}
           <link
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
             rel="stylesheet"

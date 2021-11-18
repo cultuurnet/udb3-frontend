@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const JsConfigPathsMapper = require('jsconfig-paths-jest-mapper');
+
 const jsconfigpaths = new JsConfigPathsMapper({
   configFileName: 'tsconfig.json',
 });
