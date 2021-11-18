@@ -1,9 +1,11 @@
+import router from 'next/router';
+
 import { match } from 'path-to-regexp';
 
 import { user } from '@/test/data/user';
 
 const mockRouterWithParams = ({ query, ...rest } = {}) => {
-  const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+  const useRouter = jest.spyOn(router);
 
   const push = jest.fn();
 
