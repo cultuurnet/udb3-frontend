@@ -3,6 +3,7 @@ import { match } from 'path-to-regexp';
 import { user } from '@/test/data/user';
 
 const mockRouterWithParams = ({ query, ...rest } = {}) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
   const push = jest.fn();
