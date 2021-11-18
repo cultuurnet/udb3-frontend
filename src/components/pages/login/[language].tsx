@@ -452,10 +452,9 @@ const Index = () => {
             </Column>
             <Column value="1.000" title={t('main.channels')}>
               <Trans i18nKey="main.channels_info">
-                UiTdatabank levert informatie aan meer dan <MainChannelLink />,
-                waaronder UiTinvlaanderen, websites van steden en gemeenten,
-                thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw
-                activiteit kan verschijnen op vele agenda's.
+                {
+                  "UiTdatabank levert informatie aan meer dan <MainChannelLink />, waaronder UiTinvlaanderen, websites van steden en gemeenten, thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw activiteit kan verschijnen op vele agenda's."
+                }
               </Trans>
             </Column>
             <Column value="28.000" title={t('main.organizers')}>
