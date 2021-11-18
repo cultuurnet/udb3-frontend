@@ -14,9 +14,9 @@ type FeatureFlagName = Values<typeof FeatureFlags>;
 const useFeatureFlag = (
   featureFlagName: FeatureFlagName,
 ): [isEnabled: boolean, setIsEnabled: (value: boolean | string) => void] => {
-  if (!featureFlagName) return [false, () => {}];
-
   const { cookies, setCookie } = useCookiesWithOptions();
+
+  if (!featureFlagName) return [false, () => {}];
 
   const cookieName = createCookieName(featureFlagName);
 
