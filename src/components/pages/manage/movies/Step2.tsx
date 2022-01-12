@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import type { StackProps } from '@/ui/Stack';
-import { getStackProps } from '@/ui/Stack';
+import { getStackProps, Stack } from '@/ui/Stack';
 import {
   areAllTimeSlotsValid,
   isTimeTableEmpty,
@@ -12,7 +12,6 @@ import {
 } from '@/ui/TimeTable';
 
 import type { StepProps } from './MoviePage';
-import { Step } from './Step';
 
 type Step2Props = StackProps & StepProps;
 
@@ -26,7 +25,7 @@ const Step2 = ({
   const { t } = useTranslation();
 
   return (
-    <Step stepNumber={2} spacing={3} {...getStackProps(props)}>
+    <Stack spacing={3} {...getStackProps(props)}>
       <Box>
         <Controller
           name="timeTable"
@@ -56,7 +55,7 @@ const Step2 = ({
           )}
         </Alert>
       ) : null}
-    </Step>
+    </Stack>
   );
 };
 

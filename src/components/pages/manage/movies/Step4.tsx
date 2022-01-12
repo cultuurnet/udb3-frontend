@@ -16,7 +16,6 @@ import { getValueFromTheme } from '@/ui/theme';
 import { Typeahead } from '@/ui/Typeahead';
 
 import type { StepProps } from './MoviePage';
-import { Step } from './Step';
 
 type Step4Props = StackProps & StepProps;
 
@@ -48,69 +47,67 @@ const Step4 = ({
   ]);
 
   return (
-    <Step stepNumber={4}>
-      <Controller
-        control={control}
-        name="production"
-        render={({ field }) => {
-          const selectedProduction = field?.value;
+    <Controller
+      control={control}
+      name="production"
+      render={({ field }) => {
+        const selectedProduction = field?.value;
 
-          if (!selectedProduction) {
-            return (
-              <FormElement
-                id="step4-name-typeahead"
-                label={t('movies.create.actions.choose_name')}
-                error={
-                  errors.production
-                    ? t(
-                        `movies.create.validation_messages.production.${errors.production.type}`,
-                      )
-                    : undefined
-                }
-                Component={
-                  <Typeahead<Production & { customOption?: boolean }>
-                    newSelectionPrefix="Voeg nieuwe productie toe: "
-                    allowNew
-                    options={productions}
-                    onInputChange={throttle(setSearchInput, 275)}
-                    labelKey="name"
-                    maxWidth="43rem"
-                    selected={field.value ? [field.value] : []}
-                    onChange={(value) => {
-                      field.onChange(value?.[0]);
-                      onChange(value?.[0]);
-                    }}
-                    minLength={3}
-                  />
-                }
-                {...getStackProps(props)}
-              />
-            );
-          }
-
+        if (!selectedProduction) {
           return (
-            <Inline alignItems="center" spacing={3} {...getInlineProps(props)}>
-              <Icon
-                name={Icons.CHECK_CIRCLE}
-                color={getValue('check.circleFillColor')}
-              />
-              <Text>{selectedProduction.name}</Text>
-              <Button
-                variant={ButtonVariants.LINK}
-                onClick={() =>
-                  reset(
-                    { ...getValues(), production: undefined },
-                    { keepDirty: true },
-                  )
-                }
-              >
-                {t('movies.create.actions.change_name')}
-              </Button>
-            </Inline>
+            <FormElement
+              id="step4-name-typeahead"
+              label={t('movies.create.actions.choose_name')}
+              error={
+                errors.production
+                  ? t(
+                      `movies.create.validation_messages.production.${errors.production.type}`,
+                    )
+                  : undefined
+              }
+              Component={
+                <Typeahead<Production & { customOption?: boolean }>
+                  newSelectionPrefix="Voeg nieuwe productie toe: "
+                  allowNew
+                  options={productions}
+                  onInputChange={throttle(setSearchInput, 275)}
+                  labelKey="name"
+                  maxWidth="43rem"
+                  selected={field.value ? [field.value] : []}
+                  onChange={(value) => {
+                    field.onChange(value?.[0]);
+                    onChange(value?.[0]);
+                  }}
+                  minLength={3}
+                />
+              }
+              {...getStackProps(props)}
+            />
           );
-        }}
-      />
-    </Step>
+        }
+
+        return (
+          <Inline alignItems="center" spacing={3} {...getInlineProps(props)}>
+            <Icon
+              name={Icons.CHECK_CIRCLE}
+              color={getValue('check.circleFillColor')}
+            />
+            <Text>{selectedProduction.name}</Text>
+            <Button
+              variant={ButtonVariants.LINK}
+              onClick={() =>
+                reset(
+                  { ...getValues(), production: undefined },
+                  { keepDirty: true },
+                )
+              }
+            >
+              {t('movies.create.actions.change_name')}
+            </Button>
+          </Inline>
+        );
+      }}
+    />
   );
 };
 

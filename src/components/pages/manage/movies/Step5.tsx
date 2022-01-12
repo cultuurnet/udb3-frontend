@@ -11,6 +11,7 @@ import {
   useUpdateImageFromEvent,
 } from '@/hooks/api/events';
 import { useAddImage } from '@/hooks/api/images';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
@@ -26,7 +27,6 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { PictureDeleteModal } from './PictureDeleteModal';
 import type { FormData } from './PictureUploadModal';
 import { PictureUploadModal } from './PictureUploadModal';
-import { Step } from './Step';
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
@@ -196,7 +196,7 @@ const Step5 = ({ eventId, ...props }: Step5Props) => {
   };
 
   return (
-    <Step stepNumber={5}>
+    <Box>
       <PictureUploadModal
         visible={isPictureUploadModalVisible}
         onClose={handleCloseModal}
@@ -332,7 +332,7 @@ const Step5 = ({ eventId, ...props }: Step5Props) => {
           </Stack>
         </Stack>
       </Inline>
-    </Step>
+    </Box>
   );
 };
 
