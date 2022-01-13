@@ -88,6 +88,9 @@ const queryClient = new QueryClient();
 const isServer = () => typeof window === 'undefined';
 
 const App = ({ Component, pageProps, children }) => {
+  // eslint-disable-next-line no-console
+  console.log('Hello World');
+
   return (
     <>
       <Head />
