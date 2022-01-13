@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { format, isMatch, parse as parseDate, set as setTime } from 'date-fns';
 import { useRouter } from 'next/router';
+import type { Component } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
@@ -46,13 +47,13 @@ import { formatDateToISO } from '@/utils/formatDateToISO';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 
+import { MovieAdditionalInformationStep } from './MovieAdditionalInformationStep';
+import { MovieCinemaStep } from './MovieCinemaStep';
+import { MovieNameStep } from './MovieNameStep';
 import { MovieThemeStep } from './MovieThemeStep';
+import { MovieTimeTableStep } from './MovieTimeTableStep';
 import { PublishLaterModal } from './PublishLaterModal';
 import { Step } from './Step';
-import { Step2 } from './Step2';
-import { Step3 } from './Step3';
-import { Step4 } from './Step4';
-import { Step5 } from './Step5';
 
 type FormData = {
   theme: string;
@@ -454,29 +455,35 @@ const MoviePage = () => {
     loading: !!(field && fieldLoading === field),
   });
 
-  const steps = useMemo(() => {
+  const steps: Array<{
+    Component: unknown;
+    inputKey?: string;
+    step?: number;
+    shouldShowNextStep?: boolean;
+    additionalProps?: { [key: string]: unknown };
+  }> = useMemo(() => {
     return [
       {
         Component: MovieThemeStep,
         inputKey: 'theme',
       },
       {
-        Component: Step2,
+        Component: MovieTimeTableStep,
         inputKey: 'timeTable',
         shouldShowNextStep: isOneTimeSlotValid(watchedTimeTable),
       },
       {
-        Component: Step3,
+        Component: MovieCinemaStep,
         inputKey: 'cinema',
         shouldShowNextStep: watchedCinema !== undefined,
       },
       {
-        Component: Step4,
+        Component: MovieNameStep,
         inputKey: 'production',
         shouldShowNextStep: !!newEventId && Object.values(errors).length === 0,
       },
       {
-        Component: Step5,
+        Component: MovieAdditionalInformationStep,
         additionalProps: { eventId: newEventId },
       },
     ];
