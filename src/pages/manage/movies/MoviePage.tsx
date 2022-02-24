@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { format, isMatch, parse as parseDate, set as setTime } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';

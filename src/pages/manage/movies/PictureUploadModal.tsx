@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import type { FormEvent } from 'react';
 import { forwardRef, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
