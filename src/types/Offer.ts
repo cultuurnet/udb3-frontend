@@ -2,7 +2,7 @@ import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityTyp
 import type { CalendarType } from '@/constants/CalendarType';
 import type { OfferStatus } from '@/constants/OfferStatus';
 
-import type { SupportedLanguages } from '../i18n';
+import type { SupportedLanguages } from '../i18n/types';
 import type { ContactPoint } from './ContactPoint';
 import type { Organizer } from './Organizer';
 import type { Values } from './Values';

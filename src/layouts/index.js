@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Cookies } from 'react-cookie';
-import { useTranslation } from 'react-i18next';
 
 import { useGetUser } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
@@ -21,6 +21,8 @@ const useChangeLanguage = () => {
   const { i18n } = useTranslation();
   const { cookies } = useCookiesWithOptions(['udb-language']);
   useEffect(() => {
+    console.log({ i18n });
+    if (!i18n.changeLanguage) return;
     i18n.changeLanguage(cookies['udb-language']);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookies['udb-language']]);

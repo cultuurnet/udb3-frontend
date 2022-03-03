@@ -2,17 +2,16 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import NextHead from 'next/head';
+import { appWithTranslation, useTranslation } from 'next-i18next';
 import PropTypes from 'prop-types';
 import { cloneElement } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
-import { I18nextProvider, useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Hydrate } from 'react-query/hydration';
 
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
-import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
@@ -93,7 +92,7 @@ const App = ({ Component, pageProps, children }) => {
       <Head />
       <ContextProvider
         providers={[
-          [I18nextProvider, { i18n }],
+          // [I18nextProvider, { i18n }],
           ThemeProvider,
           [
             CookiesProvider,
@@ -127,4 +126,4 @@ App.propTypes = {
   children: PropTypes.node,
 };
 
-export default App;
+export default appWithTranslation(App);

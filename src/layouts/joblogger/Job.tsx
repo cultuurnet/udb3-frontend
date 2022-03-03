@@ -1,7 +1,7 @@
 import { formatDistance } from 'date-fns';
 import { fr, nlBE } from 'date-fns/locale';
 import { memo, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import type { Values } from '@/types/Values';
 import { Box } from '@/ui/Box';

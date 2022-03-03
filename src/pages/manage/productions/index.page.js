@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
+import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
@@ -305,7 +305,7 @@ const Index = () => {
 };
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies, queryClient }) => {
+  async ({ req, query, props, queryClient }) => {
     const productions = await useGetProductions({
       req,
       queryClient,
@@ -319,7 +319,7 @@ export const getServerSideProps = getApplicationServerSideProps(
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
-        cookies,
+        ...props,
       },
     };
   },

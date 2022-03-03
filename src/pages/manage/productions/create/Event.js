@@ -1,7 +1,7 @@
 import truncate from 'lodash/truncate';
 import { PropTypes } from 'prop-types';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import stripHTML from 'string-strip-html';
 
 import { CalendarType } from '@/constants/CalendarType';

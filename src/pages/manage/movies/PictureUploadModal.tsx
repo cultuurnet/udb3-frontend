@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import type { FormEvent } from 'react';
 import { forwardRef, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'next-i18next';
 import * as yup from 'yup';
 
 import { Button } from '@/ui/Button';

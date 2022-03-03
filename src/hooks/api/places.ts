@@ -2,7 +2,7 @@ import type { UseMutationOptions, UseQueryOptions } from 'react-query';
 
 import type { OfferCategories } from '@/constants/OfferCategories';
 import type { OfferStatus } from '@/constants/OfferStatus';
-import type { SupportedLanguages } from '@/i18n/index';
+import type { SupportedLanguages } from '@/i18n/types';
 import type { Place } from '@/types/Place';
 import type { User } from '@/types/User';
 import type { Values } from '@/types/Values';

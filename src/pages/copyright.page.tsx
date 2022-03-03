@@ -1,5 +1,5 @@
+import { useTranslation } from 'next-i18next';
 import type { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps } from '@/ui/Inline';

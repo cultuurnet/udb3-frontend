@@ -6,7 +6,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { MoviePage } from '../MoviePage';
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies, queryClient }) => {
+  async ({ req, query, props, queryClient }) => {
     const { eventId } = query;
 
     await useGetEventById({
@@ -18,7 +18,7 @@ export const getServerSideProps = getApplicationServerSideProps(
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
-        cookies,
+        ...props
       },
     };
   },

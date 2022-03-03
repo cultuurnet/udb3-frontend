@@ -1,7 +1,7 @@
 import camelCase from 'lodash/camelCase';
+import { useTranslation } from 'next-i18next';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { OfferStatus } from '@/constants/OfferStatus';
 import { QueryStatus } from '@/hooks/api/authenticated-query';

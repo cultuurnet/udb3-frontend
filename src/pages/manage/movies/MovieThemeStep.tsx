@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { MovieThemes } from '@/constants/MovieThemes';
 import type { StepProps } from '@/pages/Steps';

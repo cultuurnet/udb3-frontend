@@ -1,5 +1,5 @@
 import type { ElementType } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import type { Values } from '@/types/Values';
@@ -11,7 +11,7 @@ import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
 
-import { SupportedLanguages } from '../i18n';
+import { SupportedLanguages } from '../i18n/types';
 
 const LanguageSwitcherButton = (props) => (
   <Button

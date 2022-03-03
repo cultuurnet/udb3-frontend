@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Box, parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';

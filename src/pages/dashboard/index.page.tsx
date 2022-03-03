@@ -1,9 +1,9 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import { useRouter } from 'next/router';
+import { Trans, useTranslation } from 'next-i18next';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { Cookies } from 'react-cookie';
-import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { css } from 'styled-components';
@@ -566,12 +566,11 @@ const Dashboard = (): any => {
 };
 
 const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const cookies = new Cookies(rawCookies);
+  async ({ req, query, props, queryClient }) => {
+    const cookies = new Cookies(props.cookies);
     const user: User = cookies.get('user');
 
     await Promise.all(
-      // @ts-expect-error
       Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
         const page =
           query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
@@ -600,7 +599,7 @@ const getServerSideProps = getApplicationServerSideProps(
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
-        cookies: rawCookies,
+        ...props,
       },
     };
   },

@@ -1,8 +1,8 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import type { ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { useGetAnnouncements } from '@/hooks/api/announcements';
@@ -221,7 +221,9 @@ const NotificationMenu = memo(
     onClickJobLoggerButton,
     jobLoggerState,
   }: NotificationMenuProps) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n, ...rest } = useTranslation();
+
+    console.log({ i18n: { t, i18n, ...rest } });
 
     const notificationMenu = [
       {

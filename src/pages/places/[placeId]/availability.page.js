@@ -26,14 +26,14 @@ const Availability = () => {
 };
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies, queryClient }) => {
+  async ({ req, query, props, queryClient }) => {
     const { placeId } = query;
     await useGetPlaceById({ req, queryClient, id: placeId });
 
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
-        cookies,
+        ...props,
       },
     };
   },

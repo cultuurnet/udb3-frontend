@@ -15,7 +15,7 @@ import setWith from 'lodash/setWith';
 import unset from 'lodash/unset';
 import type { ClipboardEvent, FormEvent } from 'react';
 import { useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import type { Values } from '@/types/Values';
 

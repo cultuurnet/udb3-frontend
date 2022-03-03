@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import getConfig from 'next/config';
 import absoluteUrl from 'next-absolute-url';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
@@ -63,7 +64,9 @@ const getApplicationServerSideProps = (callbackFn) => async ({
   req,
   query,
   resolvedUrl,
+  locale,
 }) => {
+  console.log('locale', locale);
   const { publicRuntimeConfig } = getConfig();
   if (publicRuntimeConfig.environment === 'development') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -86,6 +89,7 @@ const getApplicationServerSideProps = (callbackFn) => async ({
       redirect: {
         destination: `/login?referer=${referer}`,
         permanent: false,
+        props: { ...(await serverSideTranslations(locale)) },
       },
     };
   }
@@ -114,7 +118,10 @@ const getApplicationServerSideProps = (callbackFn) => async ({
     // Return the redirect as-is if there are no additional query parameters
     // to append.
     if (!queryParameters.has('jwt')) {
-      return { redirect };
+      return {
+        redirect,
+        props: { ...(await serverSideTranslations(locale)) },
+      };
     }
 
     // Append query parameters to the redirect destination.
@@ -122,7 +129,10 @@ const getApplicationServerSideProps = (callbackFn) => async ({
     const redirectUrl = `${
       redirect.destination
     }${glue}jwt=${queryParameters.get('jwt')}`;
-    return { redirect: { ...redirect, destination: redirectUrl } };
+    return {
+      redirect: { ...redirect, destination: redirectUrl },
+      props: { ...(await serverSideTranslations(locale)) },
+    };
   }
 
   const queryClient = new QueryClient();
@@ -135,13 +145,22 @@ const getApplicationServerSideProps = (callbackFn) => async ({
 
   req.headers.cookie = cookies.toString();
 
-  if (!callbackFn) return { props: { cookies: cookies.toString() } };
+  if (!callbackFn)
+    return {
+      props: {
+        cookies: cookies.toString(),
+        ...(await serverSideTranslations(locale)),
+      },
+    };
 
   return await callbackFn({
     req,
     query,
     queryClient,
-    cookies: cookies.toString(),
+    props: {
+      cookies: cookies.toString(),
+      ...(await serverSideTranslations(locale)),
+    },
   });
 };
 

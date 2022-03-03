@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {

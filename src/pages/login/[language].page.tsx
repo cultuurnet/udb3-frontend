@@ -1,12 +1,12 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import { Trans, useTranslation } from 'next-i18next';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
 import { css, keyframes } from 'styled-components';
 
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-import { SupportedLanguages } from '@/i18n/index';
+import { SupportedLanguages } from '@/i18n/types';
 import { Footer } from '@/pages/Footer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonSizes } from '@/ui/Button';

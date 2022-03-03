@@ -1,4 +1,4 @@
-import type { SupportedLanguages } from '../i18n';
+import type { SupportedLanguages } from '../i18n/types';
 import type { Values } from './Values';
 
 type AddressInternal = {

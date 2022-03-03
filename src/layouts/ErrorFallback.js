@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'next-i18next';
 
 import { Icon, Icons } from '@/ui/Icon';
 import { Link } from '@/ui/Link';
