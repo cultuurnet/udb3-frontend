@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useGetThemesByCategoryId } from '@/hooks/api/themes';
-import type { StepProps } from '@/pages/Steps';
+import type { GeneralFormData, StepProps } from '@/pages/Steps';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -12,13 +12,13 @@ import { getValueFromTheme } from '@/ui/theme';
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-const CategoryAndThemeStep = <T extends unknown>({
+const CategoryAndThemeStep = <TFormData extends GeneralFormData>({
   control,
   reset,
   field,
   getValues,
   onChange,
-}: StepProps<T>) => {
+}: StepProps<TFormData>) => {
   const categoryId = 'test';
 
   const { t, i18n } = useTranslation();

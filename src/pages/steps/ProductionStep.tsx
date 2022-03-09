@@ -4,7 +4,7 @@ import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useGetProductions } from '@/hooks/api/productions';
-import type { StepProps } from '@/pages/Steps';
+import type { GeneralFormData, StepProps } from '@/pages/Steps';
 import type { Production } from '@/types/Production';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -16,11 +16,12 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Typeahead } from '@/ui/Typeahead';
 
-type ProductionStepProps<T> = StackProps & StepProps<T>;
+type ProductionStepProps<TFormData extends GeneralFormData> = StackProps &
+  StepProps<TFormData>;
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-const ProductionStep = <T extends unknown>({
+const ProductionStep = <TFormData extends GeneralFormData>({
   formState: { errors },
   control,
   getValues,
@@ -28,7 +29,7 @@ const ProductionStep = <T extends unknown>({
   field,
   onChange,
   ...props
-}: ProductionStepProps<T>) => {
+}: ProductionStepProps<TFormData>) => {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
 
@@ -61,7 +62,6 @@ const ProductionStep = <T extends unknown>({
               error={
                 errors.production
                   ? t(
-                      // @ts-expect-error
                       `movies.create.validation_messages.production.${errors.production.type}`,
                     )
                   : undefined

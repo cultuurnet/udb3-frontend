@@ -1,9 +1,12 @@
 import { Controller } from 'react-hook-form';
 
-import type { StepProps } from '@/pages/Steps';
+import type { GeneralFormData, StepProps } from '@/pages/Steps';
 import { Text } from '@/ui/Text';
 
-const ThemeStep = ({ control, field }: StepProps<FormData>) => {
+const ThemeStep = <TFormData extends GeneralFormData>({
+  control,
+  field,
+}: StepProps<TFormData>) => {
   return (
     <Controller
       control={control}

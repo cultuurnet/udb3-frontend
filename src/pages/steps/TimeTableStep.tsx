@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import type { StepProps } from '@/pages/Steps';
+import type { GeneralFormData, StepProps } from '@/pages/Steps';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import type { StackProps } from '@/ui/Stack';
@@ -12,16 +12,17 @@ import {
   TimeTable,
 } from '@/ui/TimeTable';
 
-type TimeTableStepProps<T> = StackProps & StepProps<T>;
+type TimeTableStepProps<TFormData extends GeneralFormData> = StackProps &
+  StepProps<TFormData>;
 
-const TimeTableStep = <T extends unknown>({
+const TimeTableStep = <TFormData extends GeneralFormData>({
   formState: { errors },
   control,
   className,
   field,
   onChange,
   ...props
-}: TimeTableStepProps<T>) => {
+}: TimeTableStepProps<TFormData>) => {
   const { t } = useTranslation();
 
   return (

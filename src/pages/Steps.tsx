@@ -1,4 +1,9 @@
-import type { Path, UseFormReturn } from 'react-hook-form';
+import type {
+  FieldError,
+  FormState,
+  Path,
+  UseFormReturn,
+} from 'react-hook-form';
 
 import type { BoxProps } from '@/ui/Box';
 import { Box } from '@/ui/Box';
@@ -8,11 +13,14 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
-// type Keys<T> = keyof T & string;
+import type { FormData as EventFormData } from './create/EventForm';
+import type { FormData as MovieFormData } from './manage/movies/MovieForm';
 
-type StepsConfiguration<T> = Array<{
+type GeneralFormData = MovieFormData | EventFormData;
+
+type StepsConfiguration<TFormData extends GeneralFormData> = Array<{
   Component: any;
-  field?: Path<T>;
+  field?: Path<TFormData>;
   step?: number;
   title: string;
   shouldShowNextStep?: boolean;
@@ -76,26 +84,55 @@ StepWrapper.defaultProps = {
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-type StepProps<T> = UseFormReturn<T> & {
+type KeepStateOptions = {
+  keepErrors: boolean;
+  keepDirty: boolean;
+  keepValues: boolean;
+  keepDefaultValues: boolean;
+  keepIsSubmitted: boolean;
+  keepTouched: boolean;
+  keepIsValid: boolean;
+  keepSubmitCount: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
+type ResetFunction<TFormData extends GeneralFormData> = (
+  values?: any,
+  keepStateOptions?: Partial<KeepStateOptions>,
+) => void;
+
+type StepProps<TFormData extends GeneralFormData> = Omit<
+  UseFormReturn<TFormData>,
+  'formState' | 'reset'
+> & {
+  reset: ResetFunction<TFormData>;
+  formState: Omit<FormState<TFormData>, 'errors'> & {
+    // TODO: make typeof TFormData work
+    errors: Record<string, FieldError>;
+  };
+} & {
   loading: boolean;
-  field: Path<T>;
+  field: Path<TFormData>;
   onChange: (value: any) => void;
 };
 
-type StepsProps<T> = UseFormReturn<T> & {
+type StepsProps<
+  TFormData extends GeneralFormData
+> = UseFormReturn<TFormData> & {
   mode: 'UPDATE' | 'CREATE';
   fieldLoading?: string;
   onChange?: (value: string, field: string) => void;
-  configuration: StepsConfiguration<T>;
+  configuration: StepsConfiguration<TFormData>;
 };
 
-const Steps = <T extends unknown>({
+const Steps = <TFormData extends GeneralFormData>({
   mode,
   onChange,
   configuration,
   fieldLoading,
   ...props
-}: StepsProps<T>) => {
+}: StepsProps<TFormData>) => {
   const keys = Object.keys(props.getValues());
 
   return (
@@ -124,7 +161,7 @@ const Steps = <T extends unknown>({
               key={`step${stepNumber}`}
               title={title}
             >
-              <Step<T>
+              <Step<TFormData>
                 key={index}
                 onChange={(value) => onChange(field, value)}
                 loading={!!(field && fieldLoading === field)}
@@ -147,4 +184,4 @@ Steps.defaultProps = {
 };
 
 export { Steps };
-export type { StepProps, StepsConfiguration };
+export type { GeneralFormData, StepProps, StepsConfiguration };

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { OfferCategories } from '@/constants/OfferCategories';
 import { useGetPlacesByQuery } from '@/hooks/api/places';
-import type { StepProps } from '@/pages/Steps';
+import type { GeneralFormData, StepProps } from '@/pages/Steps';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -20,10 +20,10 @@ import { Typeahead } from '@/ui/Typeahead';
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-type PlaceStepProps<T> = StackProps &
-  StepProps<T> & { terms: Array<Values<typeof OfferCategories>> };
+type PlaceStepProps<TFormData extends GeneralFormData> = StackProps &
+  StepProps<TFormData> & { terms: Array<Values<typeof OfferCategories>> };
 
-const PlaceStep = <T extends unknown>({
+const PlaceStep = <TFormData extends GeneralFormData>({
   formState: { errors },
   getValues,
   reset,
@@ -33,7 +33,7 @@ const PlaceStep = <T extends unknown>({
   onChange,
   terms,
   ...props
-}: PlaceStepProps<T>) => {
+}: PlaceStepProps<TFormData>) => {
   const { t, i18n } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
 
@@ -65,10 +65,9 @@ const PlaceStep = <T extends unknown>({
                 id="place-step"
                 label={t('movies.create.actions.choose_cinema')}
                 error={
-                  errors?.place
+                  errors.place
                     ? t(
-                        // @ts-expect-error
-                        `movies.create.validation_messages.cinema.${errors?.place.type}`,
+                        `movies.create.validation_messages.cinema.${errors.place.type}`,
                       )
                     : undefined
                 }
