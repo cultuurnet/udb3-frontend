@@ -108,7 +108,7 @@ type StepProps<TFormData extends GeneralFormData> = Omit<
 > & {
   reset: ResetFunction<TFormData>;
   formState: Omit<FormState<TFormData>, 'errors'> & {
-    // TODO: make typeof TFormData work
+    // TODO: make keyof TFormData work
     errors: Record<string, FieldError>;
   };
 } & {
