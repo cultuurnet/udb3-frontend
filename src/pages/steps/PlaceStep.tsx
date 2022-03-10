@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { OfferCategories } from '@/constants/OfferCategories';
 import { useGetPlacesByQuery } from '@/hooks/api/places';
-import type { GeneralFormData, StepProps } from '@/pages/Steps';
+import type { FormDataUnion, StepProps } from '@/pages/Steps';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -20,10 +20,10 @@ import { Typeahead } from '@/ui/Typeahead';
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-type PlaceStepProps<TFormData extends GeneralFormData> = StackProps &
+type PlaceStepProps<TFormData extends FormDataUnion> = StackProps &
   StepProps<TFormData> & { terms: Array<Values<typeof OfferCategories>> };
 
-const PlaceStep = <TFormData extends GeneralFormData>({
+const PlaceStep = <TFormData extends FormDataUnion>({
   formState: { errors },
   getValues,
   reset,

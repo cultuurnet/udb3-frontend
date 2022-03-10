@@ -11,11 +11,11 @@ import { Title } from '@/ui/Title';
 import type { FormData as EventFormData } from './create/EventForm';
 import type { FormData as MovieFormData } from './manage/movies/MovieForm';
 
-type GeneralFormData = MovieFormData | EventFormData;
+type FormDataUnion = MovieFormData | EventFormData;
 
-type StepsConfiguration<TFormData extends GeneralFormData> = Array<{
+type StepsConfiguration<TFormData extends FormDataUnion> = Array<{
   Component: any;
-  field?: any;
+  field?: Path<TFormData>;
   step?: number;
   title: string;
   shouldShowNextStep?: boolean;
@@ -79,7 +79,7 @@ StepWrapper.defaultProps = {
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-type StepProps<TFormData extends GeneralFormData> = Omit<
+type StepProps<TFormData extends FormDataUnion> = Omit<
   UseFormReturn<TFormData>,
   'formState'
 > & {
@@ -92,16 +92,14 @@ type StepProps<TFormData extends GeneralFormData> = Omit<
   onChange: (value: any) => void;
 };
 
-type StepsProps<
-  TFormData extends GeneralFormData
-> = UseFormReturn<TFormData> & {
+type StepsProps<TFormData extends FormDataUnion> = UseFormReturn<TFormData> & {
   mode: 'UPDATE' | 'CREATE';
   fieldLoading?: string;
   onChange?: (value: string, field: string) => void;
   configuration: StepsConfiguration<TFormData>;
 };
 
-const Steps = <TFormData extends GeneralFormData>({
+const Steps = <TFormData extends FormDataUnion>({
   mode,
   onChange,
   configuration,
@@ -159,4 +157,4 @@ Steps.defaultProps = {
 };
 
 export { Steps };
-export type { GeneralFormData, StepProps, StepsConfiguration };
+export type { FormDataUnion, StepProps, StepsConfiguration };

@@ -4,7 +4,7 @@ import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useGetProductions } from '@/hooks/api/productions';
-import type { GeneralFormData, StepProps } from '@/pages/Steps';
+import type { FormDataUnion, StepProps } from '@/pages/Steps';
 import type { Production } from '@/types/Production';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -16,12 +16,12 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Typeahead } from '@/ui/Typeahead';
 
-type ProductionStepProps<TFormData extends GeneralFormData> = StackProps &
+type ProductionStepProps<TFormData extends FormDataUnion> = StackProps &
   StepProps<TFormData>;
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-const ProductionStep = <TFormData extends GeneralFormData>({
+const ProductionStep = <TFormData extends FormDataUnion>({
   formState: { errors },
   control,
   getValues,

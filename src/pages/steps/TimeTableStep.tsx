@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import type { GeneralFormData, StepProps } from '@/pages/Steps';
+import type { FormDataUnion, StepProps } from '@/pages/Steps';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import type { StackProps } from '@/ui/Stack';
@@ -12,10 +12,10 @@ import {
   TimeTable,
 } from '@/ui/TimeTable';
 
-type TimeTableStepProps<TFormData extends GeneralFormData> = StackProps &
+type TimeTableStepProps<TFormData extends FormDataUnion> = StackProps &
   StepProps<TFormData>;
 
-const TimeTableStep = <TFormData extends GeneralFormData>({
+const TimeTableStep = <TFormData extends FormDataUnion>({
   formState: { errors },
   control,
   className,
