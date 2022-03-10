@@ -36,7 +36,7 @@ const TimeTableStep = <TFormData extends GeneralFormData>({
               <TimeTable
                 id="timetable-movies"
                 className={className}
-                value={field.value}
+                value={field.value as any}
                 onChange={(value) => {
                   field.onChange(value);
 

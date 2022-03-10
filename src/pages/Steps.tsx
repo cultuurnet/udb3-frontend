@@ -1,9 +1,4 @@
-import type {
-  FieldError,
-  FormState,
-  Path,
-  UseFormReturn,
-} from 'react-hook-form';
+import type { FieldError, Path, UseFormReturn } from 'react-hook-form';
 
 import type { BoxProps } from '@/ui/Box';
 import { Box } from '@/ui/Box';
@@ -20,7 +15,7 @@ type GeneralFormData = MovieFormData | EventFormData;
 
 type StepsConfiguration<TFormData extends GeneralFormData> = Array<{
   Component: any;
-  field?: Path<TFormData>;
+  field?: any;
   step?: number;
   title: string;
   shouldShowNextStep?: boolean;
@@ -84,32 +79,12 @@ StepWrapper.defaultProps = {
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
-type KeepStateOptions = {
-  keepErrors: boolean;
-  keepDirty: boolean;
-  keepValues: boolean;
-  keepDefaultValues: boolean;
-  keepIsSubmitted: boolean;
-  keepTouched: boolean;
-  keepIsValid: boolean;
-  keepSubmitCount: boolean;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line no-unused-vars
-type ResetFunction<TFormData extends GeneralFormData> = (
-  values?: any,
-  keepStateOptions?: Partial<KeepStateOptions>,
-) => void;
-
 type StepProps<TFormData extends GeneralFormData> = Omit<
   UseFormReturn<TFormData>,
-  'formState' | 'reset'
+  'formState'
 > & {
-  reset: ResetFunction<TFormData>;
-  formState: Omit<FormState<TFormData>, 'errors'> & {
-    // TODO: make keyof TFormData work
-    errors: Record<string, FieldError>;
+  formState: {
+    errors: Partial<Record<string, FieldError>>;
   };
 } & {
   loading: boolean;

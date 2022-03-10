@@ -74,7 +74,11 @@ const ProductionStep = <TFormData extends GeneralFormData>({
                   onInputChange={debounce(setSearchInput, 275)}
                   labelKey="name"
                   maxWidth="43rem"
-                  selected={field.value ? [field.value] : []}
+                  selected={
+                    field.value
+                      ? [field.value as Production & { customOption?: boolean }]
+                      : []
+                  }
                   onChange={(value) => {
                     field.onChange(value?.[0]);
                     onChange(value?.[0]);
