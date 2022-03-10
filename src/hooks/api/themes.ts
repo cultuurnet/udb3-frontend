@@ -19,8 +19,6 @@ const useGetThemesByCategoryId = (
   });
 
 const getThemesByCategoryId = ({ categoryId }) => {
-  console.log(categoryId);
-
   return {
     '1.7.2.0.0': { label_nl: 'Actie- en avonturenfilm' },
     '1.7.12.0.0': { label_nl: 'Animatie en kinderfilms' },
