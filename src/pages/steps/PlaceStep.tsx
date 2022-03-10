@@ -65,9 +65,9 @@ const PlaceStep = <TFormData extends FormDataUnion>({
                 id="place-step"
                 label={t('movies.create.actions.choose_cinema')}
                 error={
-                  errors.place
+                  errors?.place
                     ? t(
-                        `movies.create.validation_messages.cinema.${errors.place.type}`,
+                        `movies.create.validation_messages.cinema.${errors?.place.type}`,
                       )
                     : undefined
                 }
