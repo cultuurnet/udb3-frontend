@@ -165,8 +165,8 @@ const nextWeekWednesday = nextWednesday(new Date());
 const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 
 const MovieForm = () => {
-  const form = useForm<FormData>({
-    resolver: yupResolver(schema),
+  const form = useForm({
+    resolver: zodResolver(schema),
     defaultValues: {
       timeTable: {
         data: {},
