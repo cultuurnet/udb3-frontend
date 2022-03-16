@@ -80,10 +80,10 @@ const FooterStatus = {
   AUTO_SAVE: 'AUTO_SAVE',
 } as const;
 
-const schema = yup
+const schema = z
   .object({
-    eventTypeAndTheme: yup.object().shape({}).required(),
-    timeTable: yup
+    eventTypeAndTheme: z.object().shape({}).required(),
+    timeTable: z
       .mixed()
       .test({
         name: 'all-timeslots-valid',
@@ -94,8 +94,8 @@ const schema = yup
         test: (timeTableData) => !isTimeTableEmpty(timeTableData),
       })
       .required(),
-    place: yup.object().shape({}).required(),
-    production: yup.object().shape({}).required(),
+    place: z.object().shape({}).required(),
+    production: z.object().shape({}).required(),
   })
   .required();
 
