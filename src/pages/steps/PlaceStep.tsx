@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
@@ -82,9 +83,10 @@ const PlaceStep = <TFormData extends FormDataIntersection>({
                     }
                     selected={field.value ? [field.value as Place] : []}
                     maxWidth="43rem"
-                    onChange={(places) => {
-                      field.onChange(places?.[0]);
-                      onChange(places?.[0]);
+                    onChange={(values) => {
+                      const place = pick(values?.[0], ['@id']);
+                      field.onChange(place);
+                      onChange(place);
                     }}
                     minLength={3}
                   />

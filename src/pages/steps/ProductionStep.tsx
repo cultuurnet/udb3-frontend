@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
@@ -79,9 +80,15 @@ const ProductionStep = <TFormData extends FormDataIntersection>({
                       ? [field.value as Production & { customOption?: boolean }]
                       : []
                   }
-                  onChange={(value) => {
-                    field.onChange(value?.[0]);
-                    onChange(value?.[0]);
+                  onChange={(values) => {
+                    const production = pick(values?.[0], [
+                      'production_id',
+                      'name',
+                      'customOption',
+                    ]);
+
+                    field.onChange(production);
+                    onChange(production);
                   }}
                   minLength={3}
                 />
