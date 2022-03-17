@@ -21,11 +21,19 @@ type BookingAvailability = {
   type: Values<typeof BookingAvailabilityType>;
 };
 
-type Term = {
+type EventType = {
   label: string;
-  domain: string;
+  domain: 'eventtype';
   id: string;
 };
+
+type Theme = {
+  label: string;
+  domain: 'eventtype';
+  id: string;
+};
+
+type Term = EventType | Theme;
 
 type MediaObject = {
   '@id': string;
@@ -115,6 +123,7 @@ type Offer = {
 
 export type {
   BookingAvailability,
+  EventType,
   MediaObject,
   Offer,
   Status,
@@ -122,4 +131,5 @@ export type {
   StatusType,
   SubEvent,
   Term,
+  Theme,
 };
