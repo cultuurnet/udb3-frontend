@@ -53,7 +53,7 @@ const TimeTableStep = <TFormData extends FormDataIntersection>({
       {errors?.timeTable && (
         <Alert visible variant={AlertVariants.DANGER} maxWidth="53rem">
           {t(
-            `movies.create.validation_messages.timeTable.${errors.timeTable.type}`,
+            `movies.create.validation_messages.timeTable.${errors.timeTable.message}`,
           )}
         </Alert>
       )}
