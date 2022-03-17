@@ -42,8 +42,6 @@ import { ProductionStep } from '@/pages/steps/ProductionStep';
 import { TimeTableStep } from '@/pages/steps/TimeTableStep';
 import type { Event } from '@/types/Event';
 import type { SubEvent } from '@/types/Offer';
-import type { Place } from '@/types/Place';
-import type { Production } from '@/types/Production';
 import { WorkflowStatusMap } from '@/types/WorkflowStatus';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
@@ -51,7 +49,6 @@ import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
-import type { TimeTableValue } from '@/ui/TimeTable';
 import {
   areAllTimeSlotsValid,
   isOneTimeSlotValid,
@@ -60,16 +57,6 @@ import {
 import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { parseOfferId } from '@/utils/parseOfferId';
-
-type FormData = {
-  eventTypeAndTheme: {
-    eventType: { id: string; label: string };
-    theme: { id: string; label: string };
-  };
-  timeTable: any;
-  place: Place;
-  production: Production & { customOption?: boolean };
-};
 
 const getValue = getValueFromTheme('moviesCreatePage');
 
@@ -80,29 +67,59 @@ const FooterStatus = {
   AUTO_SAVE: 'AUTO_SAVE',
 } as const;
 
-const schema = z
+const timeTableDataSchema = z.record(z.record(z.string()));
+
+const timeTableSchema = z
   .object({
-    eventTypeAndTheme: z.object().shape({}).required(),
-    timeTable: z
-      .mixed()
-      .test({
-        name: 'all-timeslots-valid',
-        test: (timeTableData) => areAllTimeSlotsValid(timeTableData),
-      })
-      .test({
-        name: 'has-timeslot',
-        test: (timeTableData) => !isTimeTableEmpty(timeTableData),
-      })
-      .required(),
-    place: z.object().shape({}).required(),
-    production: z.object().shape({}).required(),
+    dateStart: z.string(),
+    dateEnd: z.string(),
+    data: timeTableDataSchema,
   })
-  .required();
+  .required()
+  .refine((timeTableData) => areAllTimeSlotsValid(timeTableData), {
+    message: 'all-timeslots-valid',
+  })
+  .refine((timeTableData) => !isTimeTableEmpty(timeTableData), {
+    message: 'has-timeslot',
+  });
+
+const schema = z.object({
+  eventTypeAndTheme: z
+    .object({
+      eventType: z.object({
+        id: z.string(),
+        label: z.string(),
+        domain: z.literal('eventtype'),
+      }),
+      theme: z.object({
+        id: z.string(),
+        label: z.string(),
+        domain: z.literal('theme'),
+      }),
+    })
+    .required(),
+  timeTable: timeTableSchema,
+  place: z.object({ '@id': z.string() }).required(),
+  production: z
+    .object({
+      name: z.string(),
+      production_id: z.string(),
+      customOption: z.boolean(),
+    })
+    .required(),
+});
+
+type FormData = z.infer<typeof schema>;
+type TimeTable = z.infer<typeof timeTableSchema>;
+type TimeTableData = z.infer<typeof timeTableDataSchema>;
 
 type EncodedTimeTable = Array<{ start: string; end: string }>;
 
-const convertTimeTableToSubEvents = (timeTable: TimeTableValue) => {
+const convertTimeTableToSubEvents = (
+  timeTable: TimeTable,
+): EncodedTimeTable => {
   const { data = {} } = timeTable;
+
   return Object.keys(data).reduce<EncodedTimeTable>(
     (acc, date) => [
       ...acc,
@@ -134,14 +151,14 @@ const convertTimeTableToSubEvents = (timeTable: TimeTableValue) => {
   );
 };
 
-const convertSubEventsToTimeTable = (subEvents: SubEvent[] = []) => {
+const convertSubEventsToTimeTable = (subEvents: SubEvent[] = []): TimeTable => {
   const dateStart = format(new Date(subEvents[0].startDate), 'dd/MM/yyyy');
   const dateEnd = format(
     new Date(subEvents[subEvents.length - 1].endDate),
     'dd/MM/yyyy',
   );
 
-  const data = subEvents.reduce((acc, subEvent) => {
+  const data = subEvents.reduce<TimeTableData>((acc, subEvent) => {
     const date = new Date(subEvent.startDate);
 
     const formattedDate = format(date, 'dd/MM/yyyy');
@@ -165,7 +182,7 @@ const nextWeekWednesday = nextWednesday(new Date());
 const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 
 const MovieForm = () => {
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       timeTable: {
@@ -438,7 +455,7 @@ const MovieForm = () => {
         production: {
           production_id: event.production.id,
           name: event.production.title,
-          events: event.production.otherEvents,
+          customOption: false,
         },
       },
       { keepDirty: true },
@@ -609,5 +626,5 @@ const MovieForm = () => {
   );
 };
 
-export { MovieForm };
+export { MovieForm, schema };
 export type { FormData };
