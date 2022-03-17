@@ -26,8 +26,15 @@ import { Text } from './Text';
 
 type Time = string;
 type Data = { [index: string]: Time };
+type TimeTableData = { [date: string]: Data };
 
-const isTimeTableEmpty = (timeTableData) => {
+type TimeTableValue = {
+  dateStart: string;
+  dateEnd: string;
+  data: TimeTableData;
+};
+
+const isTimeTableEmpty = (timeTableData: TimeTableData) => {
   if (Object.keys(timeTableData.data).length === 0) {
     return true;
   }
@@ -43,7 +50,7 @@ const isTimeTableEmpty = (timeTableData) => {
   return false;
 };
 
-const areAllTimeSlotsValid = (timeTableData) => {
+const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
   return Object.values(timeTableData?.data ?? {}).every((times) => {
     return Object.values(times).every((time) => {
       return isMatch(time, "HH'h'mm'm'");
@@ -51,7 +58,7 @@ const areAllTimeSlotsValid = (timeTableData) => {
   });
 };
 
-const isOneTimeSlotValid = (timeTableData) =>
+const isOneTimeSlotValid = (timeTableData: TimeTableData) =>
   Object.values(timeTableData?.data ?? {}).some((times) => {
     return Object.values(times).some((time) => isMatch(time, "HH'h'mm'm'"));
   });
@@ -215,8 +222,8 @@ const Header = ({ header, index, ...props }: HeaderProps) => {
 
 type Props = {
   id: string;
-  value;
-  onChange: (value) => void;
+  value: TimeTableValue;
+  onChange: (value: TimeTableValue) => void;
 } & StackProps;
 
 const updateCell = ({
@@ -225,6 +232,7 @@ const updateCell = ({
   index,
   value,
 }: {
+  originalData: TimeTableData;
   date: string;
   index: number;
   value: string;
@@ -301,7 +309,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
     if (payload.method === 'all') {
       onChange({
         ...value,
-        data: Object.keys(payload.data).reduce((data, index) => {
+        data: Object.keys(payload.data).reduce<TimeTableData>((data, index) => {
           return {
             ...data,
             [dateRange[index]]: payload.data[index],
@@ -482,3 +490,4 @@ export {
   isTimeTableEmpty,
   TimeTable,
 };
+export type { TimeTableData, TimeTableValue };
