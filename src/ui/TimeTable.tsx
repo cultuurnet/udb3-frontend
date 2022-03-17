@@ -26,15 +26,8 @@ import { Text } from './Text';
 
 type Time = string;
 type Data = { [index: string]: Time };
-type TimeTableData = { [date: string]: Data };
 
-type TimeTableValue = {
-  dateStart: string;
-  dateEnd: string;
-  data: TimeTableData;
-};
-
-const isTimeTableEmpty = (timeTableData: TimeTableData) => {
+const isTimeTableEmpty = (timeTableData) => {
   if (Object.keys(timeTableData.data).length === 0) {
     return true;
   }
@@ -50,7 +43,7 @@ const isTimeTableEmpty = (timeTableData: TimeTableData) => {
   return false;
 };
 
-const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
+const areAllTimeSlotsValid = (timeTableData) => {
   return Object.values(timeTableData?.data ?? {}).every((times) => {
     return Object.values(times).every((time) => {
       return isMatch(time, "HH'h'mm'm'");
@@ -58,7 +51,7 @@ const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
   });
 };
 
-const isOneTimeSlotValid = (timeTableData: TimeTableData) =>
+const isOneTimeSlotValid = (timeTableData) =>
   Object.values(timeTableData?.data ?? {}).some((times) => {
     return Object.values(times).some((time) => isMatch(time, "HH'h'mm'm'"));
   });
@@ -222,8 +215,8 @@ const Header = ({ header, index, ...props }: HeaderProps) => {
 
 type Props = {
   id: string;
-  value: TimeTableValue;
-  onChange: (value: TimeTableValue) => void;
+  value;
+  onChange: (value) => void;
 } & StackProps;
 
 const updateCell = ({
@@ -232,7 +225,6 @@ const updateCell = ({
   index,
   value,
 }: {
-  originalData: TimeTableData;
   date: string;
   index: number;
   value: string;
@@ -309,7 +301,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
     if (payload.method === 'all') {
       onChange({
         ...value,
-        data: Object.keys(payload.data).reduce<TimeTableData>((data, index) => {
+        data: Object.keys(payload.data).reduce((data, index) => {
           return {
             ...data,
             [dateRange[index]]: payload.data[index],
@@ -490,4 +482,3 @@ export {
   isTimeTableEmpty,
   TimeTable,
 };
-export type { TimeTableData, TimeTableValue };
