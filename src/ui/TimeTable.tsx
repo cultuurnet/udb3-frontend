@@ -24,9 +24,8 @@ import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
 
-type Time = string;
-type Data = { [index: string]: Time };
-type TimeTableData = { [date: string]: Data };
+type Data = Record<string, string>;
+type TimeTableData = Record<string, Data>;
 
 type TimeTableValue = {
   dateStart: string;
@@ -490,4 +489,5 @@ export {
   isTimeTableEmpty,
   TimeTable,
 };
+
 export type { TimeTableData, TimeTableValue };
