@@ -194,10 +194,10 @@
           "all-timeslots-valid": "Alle tijdssloten moet in een geldig formaat ingevoerd zijn."
         },
         "cinema": {
-          "required": "Bioscoop is verplicht."
+          "invalid_type": "Bioscoop is verplicht."
         },
         "production": {
-          "required": "Naam is verplicht."
+          "invalid_type": "Naam is verplicht."
         }
       },
       "toast": {
