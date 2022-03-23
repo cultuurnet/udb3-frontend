@@ -49,7 +49,7 @@ const isTimeTableEmpty = (timeTableData: TimeTableData) => {
   return false;
 };
 
-const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
+const areAllTimeSlotsValid = (timeTableData: TimeTableValue) => {
   return Object.values(timeTableData?.data ?? {}).every((times) => {
     return Object.values(times).every((time) => {
       return isMatch(time, "HH'h'mm'm'");
@@ -57,7 +57,7 @@ const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
   });
 };
 
-const isOneTimeSlotValid = (timeTableData: TimeTableData) =>
+const isOneTimeSlotValid = (timeTableData: TimeTableValue) =>
   Object.values(timeTableData?.data ?? {}).some((times) => {
     return Object.values(times).some((time) => isMatch(time, "HH'h'mm'm'"));
   });
