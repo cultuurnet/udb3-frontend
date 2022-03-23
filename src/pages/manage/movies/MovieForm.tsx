@@ -447,8 +447,10 @@ const MovieForm = () => {
     reset(
       {
         eventTypeAndTheme: {
-          theme: event.terms.find((term) => term.domain === 'theme'),
-          eventType: event.terms.find((term) => term.domain === 'eventtype'),
+          theme: event.terms.find((term) => term.domain === 'theme') as Theme,
+          eventType: event.terms.find(
+            (term) => term.domain === 'eventtype',
+          ) as EventType,
         },
         place: event.location,
         timeTable: convertSubEventsToTimeTable(event.subEvent),
