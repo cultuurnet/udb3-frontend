@@ -56,7 +56,7 @@ const Logo = ({
       className={className}
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
-      width={propWidth || width}
+      width={propWidth ?? width}
       viewBox={viewBox}
       {...getBoxProps(props)}
     >
