@@ -29,7 +29,7 @@ type EventType = {
 
 type Theme = {
   label: string;
-  domain: 'eventtype';
+  domain: 'theme';
   id: string;
 };
 
