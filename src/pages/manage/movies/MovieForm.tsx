@@ -41,7 +41,7 @@ import { PlaceStep } from '@/pages/steps/PlaceStep';
 import { ProductionStep } from '@/pages/steps/ProductionStep';
 import { TimeTableStep } from '@/pages/steps/TimeTableStep';
 import type { Event } from '@/types/Event';
-import type { SubEvent } from '@/types/Offer';
+import type { EventType, SubEvent, Theme } from '@/types/Offer';
 import { WorkflowStatusMap } from '@/types/WorkflowStatus';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
