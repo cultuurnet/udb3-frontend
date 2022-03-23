@@ -34,9 +34,7 @@ const DatePicker = ({
 }: Props) => {
   return (
     <Box
-      as={ReactDatePicker}
       className={className}
-      id={id}
       selected={selected}
       onChange={onChange}
       dateFormat="dd/MM/yyyy"
@@ -44,6 +42,7 @@ const DatePicker = ({
       maxDate={maxDate}
       customInput={<Input id={id} />}
       {...getBoxProps(props)}
+      as={ReactDatePicker}
     />
   );
 };
