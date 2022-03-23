@@ -12,7 +12,7 @@ const TextVariants = {
 
 type Props = BoxProps;
 
-const getColor = (variant) => {
+const getColor = (variant: keyof typeof TextVariants) => {
   if (variant === TextVariants.MUTED) return getValue('muted.color');
   if (variant === TextVariants.ERROR) return getValue('error.color');
 };
