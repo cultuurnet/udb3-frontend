@@ -112,16 +112,12 @@ const Typeahead: TypeaheadFunc = forwardRef(
 
 Typeahead.displayName = 'Typeahead';
 
-const typeaheadDefaultProps = {
-  labelKey: (item) => item,
+Typeahead.defaultProps = {
+  labelKey: (item: unknown) => item,
   onSearch: async () => {},
   disabled: false,
   minLength: 3,
 };
 
-Typeahead.defaultProps = {
-  ...typeaheadDefaultProps,
-};
-
 export type { TypeaheadProps };
-export { Typeahead, typeaheadDefaultProps };
+export { Typeahead };
