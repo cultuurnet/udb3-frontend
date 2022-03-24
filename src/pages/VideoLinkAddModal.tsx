@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -8,6 +8,7 @@ import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 
 type Props = {
   visible: boolean;
@@ -59,7 +60,10 @@ const VideoLinkAddModal = ({ visible, onConfirm, onClose }: Props) => {
           label="Link"
           info={
             <Alert variant={AlertVariants.WARNING}>
-              {t('videos.upload_modal.link_requirements')}
+              <Trans
+                i18nKey="videos.upload_modal.link_requirements" // optional -> fallbacks to defaults if not provided
+                components={{ bold: <Text fontWeight="bold" /> }}
+              />
             </Alert>
           }
           error={

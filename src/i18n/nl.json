@@ -125,7 +125,7 @@
       "validation_messages": {
         "link": "Je video-link voldoet niet aan de vereisten."
       },
-      "link_requirements": "Je kan enkel video-urls van YouTube of Vimeo toevoegen"
+      "link_requirements": "Je kan enkel video-urls van <bold>YouTube</bold> of <bold>Vimeo</bold> toevoegen"
     },
     "delete_modal": {
       "title": "Video-link verwijderen",
