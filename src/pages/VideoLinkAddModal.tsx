@@ -55,7 +55,7 @@ const VideoLinkAddModal = ({ visible, onConfirm, onClose }: Props) => {
     >
       <Stack padding={4}>
         <FormElement
-          Component={<Input {...register('link')} />}
+          Component={<Input {...register('link')} autoFocus />}
           id="video-link"
           label="Link"
           info={

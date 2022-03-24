@@ -246,7 +246,7 @@ const PictureUploadModal = ({
               `pictures.upload_modal.validation_messages.description.${errors.description.type}`,
             )
           }
-          Component={<Input {...register('description')} />}
+          Component={<Input {...register('description')} autoFocus />}
         />
         <FormElement
           id="copyrightHolder"
