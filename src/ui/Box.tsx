@@ -1,8 +1,8 @@
 import difference from 'lodash/difference';
-import kebabCase from 'lodash/kebabCase';
-import pick from 'lodash/pick';
 import isNil from 'lodash/isNil';
+import kebabCase from 'lodash/kebabCase';
 import omitBy from 'lodash/omitBy';
+import pick from 'lodash/pick';
 import type {
   ChangeEvent,
   ClipboardEvent,
