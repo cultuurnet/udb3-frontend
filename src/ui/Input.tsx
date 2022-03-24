@@ -44,6 +44,7 @@ type InputProps = {
   name?: string;
   isInvalid?: boolean;
   accept?: string;
+  autoFocus?: boolean;
 };
 
 type Props = Omit<BoxProps, 'onChange'> & InputProps;
@@ -62,13 +63,14 @@ const Input = forwardRef(
       name,
       isInvalid,
       accept,
+      autoFocus,
       ...props
     }: Props,
     ref,
   ) => (
     <Form.Control
       ref={ref}
-      forwardedAs={BaseInput}
+      forwardedAs={(props) => <BaseInput {...props} autoFocus={autoFocus} />}
       id={id}
       type={type}
       placeholder={placeholder}
