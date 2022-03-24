@@ -1,4 +1,6 @@
 import pick from 'lodash/pick';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import { Children, cloneElement, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -87,7 +89,7 @@ Inline.displayName = 'Inline';
 const inlinePropTypes = ['spacing', 'alignItems', 'justifyContent', 'stackOn'];
 
 const getInlineProps = (props: UnknownProps) =>
-  pick(props, [...boxPropTypes, ...inlinePropTypes]);
+  omitBy(pick(props, [...boxPropTypes, ...inlinePropTypes]), isNil);
 
 Inline.defaultProps = {
   as: 'section',

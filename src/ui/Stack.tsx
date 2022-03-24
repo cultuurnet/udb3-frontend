@@ -1,3 +1,5 @@
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import pick from 'lodash/pick';
 import { Children, cloneElement, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
@@ -62,7 +64,7 @@ Stack.displayName = 'Stack';
 const stackPropTypes = ['spacing', 'alignItems', 'justifyContent'];
 
 const getStackProps = (props: UnknownProps) =>
-  pick(props, [...boxPropTypes, ...stackPropTypes]);
+  omitBy(pick(props, [...boxPropTypes, ...stackPropTypes]), isNil);
 
 Stack.defaultProps = {
   as: 'section',

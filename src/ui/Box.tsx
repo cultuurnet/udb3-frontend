@@ -1,6 +1,8 @@
 import difference from 'lodash/difference';
 import kebabCase from 'lodash/kebabCase';
 import pick from 'lodash/pick';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import type {
   ChangeEvent,
   ClipboardEvent,
@@ -526,7 +528,8 @@ const StyledBox = styled.div.withConfig({
   ${boxProps}
 `;
 
-const getBoxProps = (props: UnknownProps) => pick(props, boxPropTypes);
+const getBoxProps = (props: UnknownProps) =>
+  omitBy(pick(props, boxPropTypes), isNil);
 
 const Box = forwardRef<HTMLElement, BoxProps>(({ children, ...props }, ref) => (
   <StyledBox ref={ref} {...props}>
