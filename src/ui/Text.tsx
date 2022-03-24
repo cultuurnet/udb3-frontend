@@ -20,7 +20,6 @@ const getColor = (variant: keyof typeof TextVariants) => {
 const Text = ({ as, children, className, variant, ...props }: Props) => {
   return (
     <Box
-      as={as}
       className={className}
       color={getColor(variant)}
       {...getBoxProps(props)}
