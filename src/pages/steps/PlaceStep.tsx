@@ -84,7 +84,7 @@ const PlaceStep = <TFormData extends FormDataIntersection>({
                     selected={field.value ? [field.value as Place] : []}
                     maxWidth="43rem"
                     onChange={(values) => {
-                      const place = pick(values?.[0], ['@id']);
+                      const place = pick(values?.[0], ['@id', 'name']);
                       field.onChange(place);
                       onChange(place);
                     }}
