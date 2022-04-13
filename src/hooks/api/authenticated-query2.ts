@@ -108,12 +108,7 @@ const useAuthenticatedQuery = <TQueryFnData = unknown>(
     headers,
   });
 
-  const result = useQuery<
-    TQueryFnData,
-    FetchError,
-    TQueryFnData,
-    GeneratedQueryKey
-  >(preparedOptions);
+  const result = useQuery(preparedOptions);
 
   if (
     isUnAuthorized(result?.error?.status) &&
