@@ -11,6 +11,7 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 import { Headers } from './types/Headers';
 import { useHeaders } from './useHeaders';
+import { useRouter } from 'next/router';
 
 type QueryArguments = Record<string, string>;
 
@@ -24,6 +25,8 @@ type GeneratedQueryKey = readonly [QueryKey, QueryArguments];
 type AuthenticatedQueryFunctionContext = QueryFunctionContext<GeneratedQueryKey> & {
   headers: Headers;
 };
+
+const isUnAuthorized = (status: number) => [401, 403].includes(status);
 
 const generateQueryKey = ({
   queryKey,
@@ -94,7 +97,10 @@ const useAuthenticatedQuery = <TQueryFnData = unknown>(
   options: UseAuthenticatedQueryOptions<TQueryFnData, FetchError>,
 ) => {
   const headers = useHeaders();
-  const { cookies } = useCookiesWithOptions(['token']);
+  const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
+    'token',
+  ]);
+  const router = useRouter();
 
   const preparedOptions = getPreparedOptions({
     options,
@@ -102,9 +108,26 @@ const useAuthenticatedQuery = <TQueryFnData = unknown>(
     headers,
   });
 
-  return useQuery<TQueryFnData, FetchError, TQueryFnData, GeneratedQueryKey>(
-    preparedOptions,
-  );
+  const result = useQuery<
+    TQueryFnData,
+    FetchError,
+    TQueryFnData,
+    GeneratedQueryKey
+  >(preparedOptions);
+
+  if (
+    isUnAuthorized(result?.error?.status) &&
+    !router.asPath.startsWith('/login') &&
+    router.asPath !== '/[...params]'
+  ) {
+    removeAuthenticationCookies();
+
+    router.push('/login');
+
+    return;
+  }
+
+  return result;
 };
 
 export { useAuthenticatedQuery };
