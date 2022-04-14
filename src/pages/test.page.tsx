@@ -18,7 +18,7 @@ const getEventById = async ({
 }: AuthenticatedQueryFunctionContext) => {
   const [key, { id }] = queryKey;
   const res = await fetchFromApi({
-    path: `/event/${id.toString()}`,
+    path: `/event/${id}`,
     options: {
       headers,
     },
