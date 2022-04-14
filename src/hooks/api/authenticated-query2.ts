@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   QueryFunctionContext,
   QueryKey,
@@ -11,7 +12,6 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 import { Headers } from './types/Headers';
 import { useHeaders } from './useHeaders';
-import { useRouter } from 'next/router';
 
 type QueryArguments = Record<string, string>;
 
