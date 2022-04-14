@@ -19,7 +19,7 @@ import { createHeaders, useHeaders } from './useHeaders';
 
 type QueryArguments = Record<string, string>;
 
-type GenerateUniqueQueryKeyArguments = {
+type GenerateQueryKeyArguments = {
   queryKey: QueryKey;
   queryArguments: QueryArguments;
 };
@@ -49,7 +49,7 @@ const isUnAuthorized = (status: number) => [401, 403].includes(status);
 const generateQueryKey = ({
   queryKey,
   queryArguments,
-}: GenerateUniqueQueryKeyArguments): GeneratedQueryKey => {
+}: GenerateQueryKeyArguments): GeneratedQueryKey => {
   if (Object.keys(queryArguments ?? {}).length > 0) {
     return [queryKey, queryArguments];
   }
