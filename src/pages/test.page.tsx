@@ -5,7 +5,7 @@ import {
   AuthenticatedQueryFunctionContext,
   prefetchAuthenticatedQuery,
   useAuthenticatedQuery,
-} from '@/hooks/api/authenticated-query2';
+} from '@/hooks/api/authenticated-query-v2';
 import { Event } from '@/types/Event';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
