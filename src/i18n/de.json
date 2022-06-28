@@ -85,6 +85,16 @@
     "NL": "Niederlande"
   },
   "create": {
+    "actions": {
+      "clear": "",
+      "publish": "",
+      "publish_later": "",
+      "save": ""
+    },
+    "footer": {
+      "auto_save": "",
+      "done_editing": ""
+    },
     "additionalInformation": {
       "audience": {
         "education": "Nur für Schulen",
@@ -362,16 +372,8 @@
         "change_theme": "",
         "choose_cinema": "",
         "choose_name": "",
-        "clear": "",
         "copy_table": "",
-        "description": "",
-        "publish": "",
-        "publish_later": "",
-        "save": ""
-      },
-      "footer": {
-        "auto_save": "",
-        "done_editing": ""
+        "description": ""
       },
       "step1": {
         "title": ""

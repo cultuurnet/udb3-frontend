@@ -85,6 +85,16 @@
     "NL": "Nederland"
   },
   "create": {
+    "actions": {
+      "clear": "Leegmaken",
+      "publish": "Publiceren",
+      "publish_later": "Later publiceren",
+      "save": "Opslaan"
+    },
+    "footer": {
+      "auto_save": "Je wijzigingen worden vanaf nu automatisch opgeslagen",
+      "done_editing": "Klaar met bewerken"
+    },
     "additionalInformation": {
       "audience": {
         "title": "Toegang",
@@ -353,6 +363,7 @@
     "users": "Gebruikers",
     "validate": "Valideren"
   },
+
   "movies": {
     "create": {
       "actions": {
@@ -361,16 +372,8 @@
         "change_theme": "Wijzig thema",
         "choose_cinema": "Kies een bioscoop",
         "choose_name": "Kies een naam",
-        "clear": "Leegmaken",
         "copy_table": "Kopieer tabel",
-        "description": "Beschrijving",
-        "publish": "Publiceren",
-        "publish_later": "Later publiceren",
-        "save": "Opslaan"
-      },
-      "footer": {
-        "auto_save": "Je wijzigingen worden vanaf nu automatisch opgeslagen",
-        "done_editing": "Klaar met bewerken"
+        "description": "Beschrijving"
       },
       "step1": {
         "title": "Wat voor film wil je invoeren?"
