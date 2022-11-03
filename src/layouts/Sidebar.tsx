@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
+import { css } from 'styled-components';
 
 import { useGetAnnouncementsQuery } from '@/hooks/api/announcements';
 import { useGetEventsToModerateQuery } from '@/hooks/api/events';
@@ -95,26 +96,12 @@ const MenuItem = memo(
           onClick={onClick}
           backgroundColor={{
             default: 'none',
-            hover: getValueForMenuItem('hover.backgroundColor'),
           }}
           spacing={{ default: 3, s: 0 }}
-          stackOn={Breakpoints.S}
+          stackOn={Breakpoints.L}
           customChildren
           title={label}
-        >
-          <Text
-            flex={1}
-            css={`
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            `}
-            fontSize={{ s: '9px' }}
-            textAlign={{ default: 'left', s: 'center' }}
-          >
-            {label}
-          </Text>
-        </Component>
+        ></Component>
       </List.Item>
     );
   },
@@ -201,7 +188,7 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
       alignItems="center"
       justifyContent="center"
       css={`
-        border-top: 1px solid ${getValueForMenu('borderColor')};
+        border-top: 1px solid #ddd};
       `}
     >
       <Image
@@ -211,10 +198,6 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
         borderRadius={getGlobalBorderRadius}
         alt="Profile picture"
       />
-      <Stack as="div" padding={2} spacing={2} flex={1} display={{ s: 'none' }}>
-        {user?.username && <Text>{user.userName}</Text>}
-        <Menu items={loginMenu} />
-      </Stack>
     </Inline>
   );
 };
@@ -471,12 +454,23 @@ const Sidebar = () => {
       key="sidebar"
       forwardedAs="nav"
       height="100%"
-      css={`
-        overflow: hidden;
+      css={css`
+        border-right: 1px solid #ddd;
+        svg {
+          width: 20px !important;
+          height: 20px !important;
+        }
+
+        li > a,
+        button {
+          display: flex;
+          justify-content: center;
+          padding: 1rem;
+        }
       `}
-      width={{ default: '230px', s: '65px' }}
-      backgroundColor={getValueForSidebar('backgroundColor')}
-      color={getValueForSidebar('color')}
+      width={{ default: '100px', s: '65px' }}
+      backgroundColor="#5D69E3"
+      color="#fff"
       zIndex={getValueForSidebar('zIndex')}
       padding={{ default: 2, s: 0 }}
       spacing={3}
@@ -490,23 +484,13 @@ const Sidebar = () => {
         }, 100);
       }}
     >
-      <Link
-        justifyContent="center"
-        href="/dashboard"
-        title={t('menu.home')}
-        customChildren
-      >
-        <Logo
-          variant={isSmallView ? LogoVariants.MOBILE : LogoVariants.DEFAULT}
-        />
-      </Link>
       <Stack
         paddingTop={4}
         spacing={4}
         flex={1}
         css={`
           > :not(:first-child) {
-            border-top: 1px solid ${getValueForMenu('borderColor')};
+            border-top: 1px solid #ddd};
           }
         `}
       >
@@ -515,11 +499,10 @@ const Sidebar = () => {
           justifyContent={
             filteredManageMenu.length > 0 ? 'space-between' : 'flex-end'
           }
+          flexWrap="wrap"
           flex={1}
         >
-          {filteredManageMenu.length > 0 && (
-            <Menu items={filteredManageMenu} title={t('menu.management')} />
-          )}
+          {filteredManageMenu.length > 0 && <Menu items={filteredManageMenu} />}
           <Stack>
             <NotificationMenu
               countUnseenAnnouncements={countUnseenAnnouncements}

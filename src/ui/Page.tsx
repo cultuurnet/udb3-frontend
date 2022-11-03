@@ -73,6 +73,9 @@ const PageTitle = ({ children, className, ...props }: TitleProps) => (
     className={className}
     color={getValueForTitle('color')}
     lineHeight="220%"
+    css={`
+      padding: 1rem 3rem;
+    `}
     {...getBoxProps(props)}
   >
     {children}
@@ -93,6 +96,9 @@ const PageContent = ({ children, className, ...props }: PageContentProps) => (
   <Stack
     className={className}
     spacing={3}
+    css={`
+      padding: 0 3rem;
+    `}
     paddingBottom={6}
     {...getStackProps(props)}
   >

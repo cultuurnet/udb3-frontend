@@ -108,7 +108,7 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
