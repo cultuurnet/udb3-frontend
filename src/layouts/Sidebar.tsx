@@ -195,7 +195,7 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
       children: t('menu.logout'),
       onClick: async () => {
         removeAuthenticationCookies();
-        await queryClient.invalidateQueries('user');
+        // await queryClient.invalidateQueries('user');
 
         router.push('/api/auth/logout');
       },

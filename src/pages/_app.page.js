@@ -1,4 +1,5 @@
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import '../../public/js/uitid-widget/index-de59e838.css';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import NextHead from 'next/head';
@@ -22,6 +23,26 @@ import { ThemeProvider } from '@/ui/ThemeProvider';
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
 const cookies = new Cookies();
+
+const widgetConfig = {
+  applicationName: 'UiTdatabank',
+  uitidProfileUrl: 'https://profile.uitid.be',
+  language: 'nl',
+  auth0Domain: 'https://account-acc.uitid.be',
+  loginUrl: 'http://localhost:3000/api/auth/login',
+  logoutUrl: 'http://localhost:3000/api/auth/logout',
+  accessTokenCookieName: 'token',
+  actions: [
+    {
+      url: '/dashboard?tab=events&yrdy',
+      label: 'Mijn evenementen',
+    },
+    {
+      url: '/dashboard?tab=places',
+      label: 'Mijn locaties',
+    },
+  ],
+};
 
 if (typeof window !== 'undefined') {
   window.FeatureFlags = FeatureFlags;
@@ -129,6 +150,15 @@ const App = ({ Component, pageProps, children }) => {
       >
         <GlobalStyle />
         <ReactQueryDevtools initialIsOpen={false} />
+        <Script id="uitid-widget-config" type="application/json">
+          {JSON.stringify(widgetConfig)}
+        </Script>
+        <Script
+          src="/js/uitid-widget/index-1a861695.js"
+          type="module"
+          defer
+        ></Script>
+        <div id="uitid-widget"></div>
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })

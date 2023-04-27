@@ -1,4 +1,5 @@
 import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
+import { serialize } from 'cookie';
 import { NextApiRequest } from 'next';
 import getConfig from 'next/config';
 
@@ -23,6 +24,12 @@ export default handleAuth({
   async logout(req: NextApiRequest, res) {
     const { publicRuntimeConfig } = getConfig();
     try {
+      res.setHeader('Set-Cookie', [
+        serialize('token', '', {
+          maxAge: -1,
+          path: '/',
+        }),
+      ]);
       await handleLogout(req, res, {
         returnTo: publicRuntimeConfig.baseUrl,
       });
