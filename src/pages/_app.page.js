@@ -166,7 +166,7 @@ const App = ({ Component, pageProps, children }) => {
           type="module"
           defer
         ></Script>
-        <div id="uitid-widget"></div>
+        <div id="uitid-widget" data-language=""></div>
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
