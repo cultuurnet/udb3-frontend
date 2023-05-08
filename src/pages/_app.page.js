@@ -34,7 +34,7 @@ const widgetConfig = {
   accessTokenCookieName: 'token',
   actions: [
     {
-      url: '/dashboard?tab=events&yrdy',
+      url: '/dashboard?tab=events',
       label: {
         nl: 'Mijn evenementen',
         fr: 'Mes événements',
