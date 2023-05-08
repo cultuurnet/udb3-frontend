@@ -1,5 +1,4 @@
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import '../../public/js/uitid-widget/index-de59e838.css';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import NextHead from 'next/head';
@@ -163,7 +162,7 @@ const App = ({ Component, pageProps, children }) => {
           {JSON.stringify(widgetConfig)}
         </Script>
         <Script
-          src="/js/uitid-widget/index-1a861695.js"
+          src="/js/uitid-widget/index-6feb3185.js"
           type="module"
           defer
         ></Script>
