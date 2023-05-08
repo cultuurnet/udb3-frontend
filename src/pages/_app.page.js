@@ -27,7 +27,8 @@ const cookies = new Cookies();
 const widgetConfig = {
   applicationName: 'UiTdatabank',
   uitidProfileUrl: 'https://profile.uitid.be',
-  language: 'nl',
+  uitidRegisterUrl: 'https://profile.uitid.be',
+  defaultLanguage: 'nl',
   auth0Domain: 'https://account-acc.uitid.be',
   loginUrl: 'http://localhost:3000/api/auth/login',
   logoutUrl: 'http://localhost:3000/api/auth/logout',
@@ -35,11 +36,19 @@ const widgetConfig = {
   actions: [
     {
       url: '/dashboard?tab=events&yrdy',
-      label: 'Mijn evenementen',
+      label: {
+        nl: 'Mijn evenementen',
+        fr: 'Mes événements',
+        de: 'Meine Veranstaltungen',
+      },
     },
     {
       url: '/dashboard?tab=places',
-      label: 'Mijn locaties',
+      label: {
+        nl: 'Mijn locaties',
+        fr: 'Mes lieux',
+        de: 'Meine Orte',
+      },
     },
   ],
 };
