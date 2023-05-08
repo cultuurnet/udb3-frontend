@@ -1,26 +1,6 @@
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-const widgetConfig = {
-  applicationName: 'UiTdatabank',
-  uitidProfileUrl: 'https://profile.uitid.be',
-  language: 'nl',
-  auth0Domain: 'https://account-acc.uitid.be',
-  loginUrl: 'http://localhost:3000/api/auth/login',
-  logoutUrl: 'http://localhost:3000/api/auth/logout',
-  accessTokenCookieName: 'token',
-  actions: [
-    {
-      url: '/dashboard?tab=events&yrdy',
-      label: 'Mijn evenementen',
-    },
-    {
-      url: '/dashboard?tab=places',
-      label: 'Mijn locaties',
-    },
-  ],
-};
-
 class Document extends NextDocument {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
