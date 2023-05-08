@@ -23,6 +23,13 @@ const useChangeLanguage = () => {
   const { cookies } = useCookiesWithOptions(['udb-language']);
   useEffect(() => {
     i18n.changeLanguage(cookies['udb-language']);
+
+    const uitidWidget = document.getElementById('uitid-widget');
+    const uitidWidgetLanguage =
+      uitidWidget.attributes.getNamedItem('data-language');
+    uitidWidget.attributes.setNamedItem(uitidWidgetLanguage).value =
+      cookies['udb-language'];
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookies['udb-language']]);
 };
