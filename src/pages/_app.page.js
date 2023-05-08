@@ -25,12 +25,12 @@ const cookies = new Cookies();
 
 const widgetConfig = {
   applicationName: 'UiTdatabank',
-  uitidProfileUrl: 'https://profile.uitid.be',
-  uitidRegisterUrl: 'https://profile.uitid.be',
+  uitidProfileUrl: 'https://profile-acc.uitid.be',
+  uitidRegisterUrl: 'https://profile-acc.uitid.be/login',
   defaultLanguage: 'nl',
   auth0Domain: 'https://account-acc.uitid.be',
-  loginUrl: 'http://localhost:3000/api/auth/login',
-  logoutUrl: 'http://localhost:3000/api/auth/logout',
+  loginUrl: '/api/auth/login',
+  logoutUrl: '/api/auth/logout',
   accessTokenCookieName: 'token',
   actions: [
     {
