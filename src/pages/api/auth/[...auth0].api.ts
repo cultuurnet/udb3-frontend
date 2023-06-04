@@ -24,6 +24,12 @@ export default handleAuth({
   async logout(req: NextApiRequest, res) {
     const { publicRuntimeConfig } = getConfig();
     try {
+      res.setHeader('Set-Cookie', [
+        serialize('token', '', {
+          maxAge: -1,
+          path: '/',
+        }),
+      ]);
       await handleLogout(req, res, {
         returnTo: publicRuntimeConfig.baseUrl,
       });

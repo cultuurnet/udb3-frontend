@@ -23,6 +23,35 @@ import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
 const cookies = new Cookies();
 
+const widgetConfig = {
+  applicationName: 'UiTdatabank',
+  uitidProfileUrl: 'https://profile-acc.uitid.be',
+  uitidRegisterUrl: 'https://profile-acc.uitid.be/login',
+  defaultLanguage: 'nl',
+  auth0Domain: 'https://account-acc.uitid.be',
+  loginUrl: '/api/auth/login',
+  logoutUrl: '/api/auth/logout',
+  accessTokenCookieName: 'token',
+  actions: [
+    {
+      url: '/dashboard?tab=events',
+      label: {
+        nl: 'Mijn evenementen',
+        fr: 'Mes événements',
+        de: 'Meine Veranstaltungen',
+      },
+    },
+    {
+      url: '/dashboard?tab=places',
+      label: {
+        nl: 'Mijn locaties',
+        fr: 'Mes lieux',
+        de: 'Meine Orte',
+      },
+    },
+  ],
+};
+
 if (typeof window !== 'undefined') {
   window.FeatureFlags = FeatureFlags;
 
@@ -129,6 +158,15 @@ const App = ({ Component, pageProps, children }) => {
       >
         <GlobalStyle />
         <ReactQueryDevtools initialIsOpen={false} />
+        <Script id="uitid-widget-config" type="application/json">
+          {JSON.stringify(widgetConfig)}
+        </Script>
+        <Script
+          src="/js/uitid-widget/index-6feb3185.js"
+          type="module"
+          defer
+        ></Script>
+        <div id="uitid-widget" data-language="nl"></div>
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
