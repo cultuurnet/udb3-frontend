@@ -1,35 +1,58 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { useGetAnnouncementsQuery } from '@/hooks/api/announcements';
 import { useGetEventsToModerateQuery } from '@/hooks/api/events';
-import { useGetPermissionsQuery, useGetRolesQuery } from '@/hooks/api/user';
+import {
+  useGetPermissionsQuery,
+  useGetRolesQuery,
+  useGetUserQuery,
+  User,
+} from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+import {
+  Features,
+  NewFeatureTooltip,
+  QuestionCircleIcon,
+} from '@/pages/NewFeatureTooltip';
 import type { Values } from '@/types/Values';
 import { Badge } from '@/ui/Badge';
-import { Button } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { FormElement } from '@/ui/FormElement';
+import { Icon, Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
-import { Inline } from '@/ui/Inline';
+import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
+import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Link } from '@/ui/Link';
 import type { ListProps } from '@/ui/List';
 import { List } from '@/ui/List';
 import { Logo, LogoVariants } from '@/ui/Logo';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { Breakpoints, getValueFromTheme } from '@/ui/theme';
+import {
+  Breakpoints,
+  getGlobalBorderRadius,
+  getValueFromTheme,
+} from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
+
+const { publicRuntimeConfig } = getConfig();
+
+const shouldShowBetaVersion =
+  publicRuntimeConfig.shouldShowBetaVersion === 'true';
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
@@ -89,23 +112,25 @@ const MenuItem = memo(
             default: 'none',
             hover: getValueForMenuItem('hover.backgroundColor'),
           }}
-          spacing={{ default: 3, s: 0 }}
+          spacing={{ default: 3, s: 1 }}
           stackOn={Breakpoints.S}
           customChildren
           title={label}
         >
-          <Text
-            flex={1}
-            css={`
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            `}
-            fontSize={{ s: '9px' }}
-            textAlign={{ default: 'left', s: 'center' }}
-          >
-            {label}
-          </Text>
+          {label && (
+            <Text
+              flex={1}
+              css={`
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              `}
+              fontSize={{ s: '9px' }}
+              textAlign={{ default: 'left', s: 'center' }}
+            >
+              {label}
+            </Text>
+          )}
         </Component>
       </List.Item>
     );
@@ -151,18 +176,19 @@ const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
 });
 
 type ProfileMenuProps = {
-  profileImage?: string;
+  defaultProfileImageUrl?: string;
 };
 
-const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
+const ProfileMenu = ({ defaultProfileImageUrl }: ProfileMenuProps) => {
   const { t } = useTranslation();
-  const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
-    'user',
-  ]);
-  const { publicRuntimeConfig } = getConfig();
+  const { removeAuthenticationCookies } = useCookiesWithOptions();
 
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const getUserQuery = useGetUserQuery();
+  // @ts-expect-error
+  const user = getUserQuery.data as User;
 
   const loginMenu = [
     {
@@ -172,21 +198,14 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
         removeAuthenticationCookies();
         await queryClient.invalidateQueries('user');
 
-        const getBaseUrl = () =>
-          `${window.location.protocol}//${window.location.host}`;
-
-        const queryString = new URLSearchParams({
-          destination: getBaseUrl(),
-        }).toString();
-
-        router.push(`${publicRuntimeConfig.authUrl}/logout?${queryString}`);
+        window.location.assign('/api/auth/logout');
       },
     },
   ];
 
   return (
     <Inline
-      padding={1}
+      padding={3}
       spacing={2}
       alignItems="center"
       justifyContent="center"
@@ -194,9 +213,15 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
         border-top: 1px solid ${getValueForMenu('borderColor')};
       `}
     >
-      <Image src={profileImage} width={50} height={50} alt="Profile picture" />
+      <Image
+        src={user?.picture || defaultProfileImageUrl}
+        width={40}
+        height={40}
+        borderRadius={getGlobalBorderRadius}
+        alt="Profile picture"
+      />
       <Stack as="div" padding={2} spacing={2} flex={1} display={{ s: 'none' }}>
-        <Text>{cookies?.user?.username ?? ''}</Text>
+        {user && <Text>{user['https://publiq.be/first_name']}</Text>}
         <Menu items={loginMenu} />
       </Stack>
     </Inline>
@@ -204,7 +229,7 @@ const ProfileMenu = ({ profileImage }: ProfileMenuProps) => {
 };
 
 ProfileMenu.defaultProps = {
-  profileImage: '/assets/avatar.svg',
+  defaultProfileImageUrl: '/assets/avatar.svg',
 };
 
 type NotificationMenuProps = {
@@ -245,23 +270,67 @@ const NotificationMenu = memo(
   },
 );
 
+NotificationMenu.displayName = 'NotificationMenu';
+
+type BetaVersionToggleProps = Omit<InlineProps, 'onChange'> & {
+  checked: boolean;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
+const BetaVersionToggle = ({
+  checked,
+  onChange,
+  ...props
+}: BetaVersionToggleProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <FormElement
+      id="beta-version-switch"
+      label={t('menu.beta_version')}
+      labelVariant={LabelVariants.NORMAL}
+      labelPosition={LabelPositions.LEFT}
+      css={`
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        label {
+          height: initial;
+        }
+      `}
+      fontSize={{ s: '9px' }}
+      spacing={{ default: 3, s: 1 }}
+      stackOn={Breakpoints.S}
+      Component={
+        <RadioButton
+          type={RadioButtonTypes.SWITCH}
+          checked={checked}
+          onChange={onChange}
+          {...getInlineProps(props)}
+        />
+      }
+    />
+  );
+};
+
 const Sidebar = () => {
   const { t, i18n } = useTranslation();
-
-  const [isReactCreateFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_CREATE,
-  );
 
   const storage = useLocalStorage();
 
   const [isJobLoggerVisible, setIsJobLoggerVisible] = useState(true);
   const [jobLoggerState, setJobLoggerState] = useState(JobLoggerStates.IDLE);
+
+  const [isNewCreateEnabled, setIsNewCreateEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_CREATE,
+  );
+
   const sidebarComponent = useRef();
 
-  const [
-    isAnnouncementsModalVisible,
-    setIsAnnouncementsModalVisible,
-  ] = useState(false);
+  const [announcementModalContext, setAnnouncementModalContext] =
+    useAnnouncementModalContext();
+
   const [activeAnnouncementId, setActiveAnnouncementId] = useState();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -285,7 +354,12 @@ const Sidebar = () => {
   );
 
   const toggleIsAnnouncementsModalVisible = useCallback(
-    () => setIsAnnouncementsModalVisible((prevValue) => !prevValue),
+    () =>
+      setAnnouncementModalContext((prevModalContext) => ({
+        ...prevModalContext,
+        visible: !prevModalContext.visible,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -295,11 +369,13 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    if (isAnnouncementsModalVisible) {
-      setActiveAnnouncementId(announcements[0].uid);
+    if (announcementModalContext.visible) {
+      setActiveAnnouncementId(
+        announcementModalContext.visibleAnnouncementUid ?? announcements[0].uid,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAnnouncementsModalVisible]);
+  }, [announcementModalContext.visible]);
 
   useEffect(() => {
     if (activeAnnouncementId) {
@@ -377,7 +453,7 @@ const Sidebar = () => {
       children: t('menu.home'),
     },
     {
-      href: isReactCreateFeatureFlagEnabled ? '/create' : '/event',
+      href: '/event',
       iconName: Icons.PLUS_CIRCLE,
       children: t('menu.add'),
     },
@@ -462,16 +538,16 @@ const Sidebar = () => {
       backgroundColor={getValueForSidebar('backgroundColor')}
       color={getValueForSidebar('color')}
       zIndex={getValueForSidebar('zIndex')}
-      padding={{ default: 2, s: 0 }}
+      padding={{ default: 2, s: 1 }}
       spacing={3}
       ref={sidebarComponent}
       onMouseOver={() => {
-        setTimeout(() => {
-          if (!sidebarComponent?.current) return;
-          if (document.activeElement.tagName !== 'iframe') return;
-          // @ts-expect-error
-          document.activeElement.blur();
-        }, 100);
+        if (!sidebarComponent?.current) return;
+        if (document.activeElement?.tagName?.toLowerCase() !== 'iframe') {
+          return;
+        }
+        // @ts-expect-error
+        document.activeElement.blur();
       }}
     >
       <Link
@@ -505,6 +581,39 @@ const Sidebar = () => {
             <Menu items={filteredManageMenu} title={t('menu.management')} />
           )}
           <Stack>
+            <Inline
+              display={shouldShowBetaVersion ? 'inherit' : 'none'}
+              flex={1}
+              paddingLeft={2}
+              alignItems="center"
+              justifyContent={{ default: 'space-between', s: 'center' }}
+              stackOn={Breakpoints.S}
+              padding={2}
+            >
+              <Inline
+                stackOn={Breakpoints.S}
+                spacing={{ default: 3, s: 1 }}
+                alignItems="center"
+                justifyContent={{ default: 'center', s: 'center' }}
+              >
+                <Icon name={Icons.EYE} />
+                <BetaVersionToggle
+                  checked={isNewCreateEnabled}
+                  onChange={() => {
+                    setIsNewCreateEnabled((prev) => !prev);
+                  }}
+                />
+              </Inline>
+              {!isSmallView && (
+                <Link
+                  href="/beta-version"
+                  variant={ButtonVariants.UNSTYLED}
+                  customChildren
+                >
+                  <QuestionCircleIcon />
+                </Link>
+              )}
+            </Inline>
             <NotificationMenu
               countUnseenAnnouncements={countUnseenAnnouncements}
               jobLoggerState={jobLoggerState}
@@ -524,7 +633,7 @@ const Sidebar = () => {
     />,
     <Announcements
       key="announcements"
-      visible={isAnnouncementsModalVisible}
+      visible={announcementModalContext.visible}
       announcements={announcements || []}
       onClickAnnouncement={handleClickAnnouncement}
       onClose={toggleIsAnnouncementsModalVisible}

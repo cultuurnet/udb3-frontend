@@ -1,15 +1,14 @@
-import { isMatch, parse, set } from 'date-fns';
+import { format, isMatch, nextWednesday, parse, set } from 'date-fns';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
-import { CalendarType } from '@/constants/CalendarType';
-import { useChangeCalendarMutation } from '@/hooks/api/events';
-import type { FormDataIntersection, StepProps } from '@/pages/Steps';
+import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
-import type { TimeTableValue } from '@/ui/TimeTable';
+import { TimeTableValue } from '@/ui/TimeTable';
 import {
   areAllTimeSlotsValid,
   isTimeTableEmpty,
@@ -17,7 +16,7 @@ import {
 } from '@/ui/TimeTable';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
-type EncodedTimeTable = Array<{ start: string; end: string }>;
+type EncodedTimeTable = Array<{ startDate: string; endDate: string }>;
 
 const convertTimeTableToSubEvents = (timeTable: TimeTableValue) => {
   const { data = {} } = timeTable;
@@ -42,8 +41,8 @@ const convertTimeTableToSubEvents = (timeTable: TimeTableValue) => {
         return [
           ...acc,
           {
-            start: isoDate,
-            end: isoDate,
+            startDate: isoDate,
+            endDate: isoDate,
           },
         ];
       }, []),
@@ -52,41 +51,23 @@ const convertTimeTableToSubEvents = (timeTable: TimeTableValue) => {
   );
 };
 
-const useEditCalendar = <TFormData extends FormDataIntersection>({
-  eventId,
-  onSuccess,
-}) => {
-  const changeCalendarMutation = useChangeCalendarMutation({
-    onSuccess: () => onSuccess('calendar', { shouldInvalidateEvent: false }),
-  });
+type TimeTableStepProps = StackProps & StepProps;
 
-  return async ({ timeTable }: TFormData) => {
-    await changeCalendarMutation.mutateAsync({
-      id: eventId,
-      calendarType: CalendarType.MULTIPLE,
-      timeSpans: convertTimeTableToSubEvents(timeTable),
-    });
-  };
-};
-
-type TimeTableStepProps<TFormData extends FormDataIntersection> = StackProps &
-  StepProps<TFormData>;
-
-const TimeTableStep = <TFormData extends FormDataIntersection>({
+const TimeTableStep = ({
   formState: { errors },
   control,
   className,
-  field,
+  name,
   onChange,
   ...props
-}: TimeTableStepProps<TFormData>) => {
+}: TimeTableStepProps) => {
   const { t } = useTranslation();
 
   return (
     <Stack spacing={3} {...getStackProps(props)}>
       <Box>
-        <Controller<TFormData>
-          name={field}
+        <Controller
+          name={name}
           control={control}
           render={({ field }) => {
             return (
@@ -117,4 +98,30 @@ const TimeTableStep = <TFormData extends FormDataIntersection>({
   );
 };
 
-export { convertTimeTableToSubEvents, TimeTableStep, useEditCalendar };
+const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
+const nextWeekWednesday = nextWednesday(new Date());
+
+const timeTableStepConfiguration: StepsConfiguration<'timeTable'> = {
+  Component: TimeTableStep,
+  defaultValue: {
+    data: {},
+    dateStart: formatDate(nextWeekWednesday),
+    dateEnd: formatDate(nextWeekWednesday),
+  },
+  validation: yup
+    .mixed()
+    .test({
+      name: 'all-timeslots-valid',
+      test: (timeTableData) => areAllTimeSlotsValid(timeTableData),
+    })
+    .test({
+      name: 'has-timeslot',
+      test: (timeTableData) => !isTimeTableEmpty(timeTableData),
+    })
+    .required(),
+  name: 'timeTable',
+  shouldShowStep: ({ watch }) => !!watch('typeAndTheme')?.type,
+  title: ({ t }) => t(`movies.create.step2.title`),
+};
+
+export { convertTimeTableToSubEvents, timeTableStepConfiguration };

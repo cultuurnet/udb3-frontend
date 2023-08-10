@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap';
 
 import type { BoxProps } from './Box';
 import { Box, getBoxProps } from './Box';
+import { getGlobalBorderRadius } from './theme';
 
 const BaseSelect = forwardRef<HTMLSelectElement, any>((props, ref) => (
   <Box as="select" {...props} ref={ref} />
@@ -21,30 +22,25 @@ type SelectProps = {
 
 type Props = Omit<BoxProps, 'onChange'> & SelectProps;
 
-const Select = forwardRef(
+const Select = forwardRef<HTMLInputElement, Props>(
   (
-    {
-      id,
-      onChange,
-      className,
-      value,
-      size,
-      children,
-      ariaLabel,
-      ...props
-    }: Props,
+    { id, onChange, className, value, size, children, ariaLabel, ...props },
     ref,
   ) => (
     <Form.Control
-      as={BaseSelect}
+      forwardedAs={BaseSelect}
       size={size}
       ref={ref}
       id={id}
       className={className}
-      maxWidth="43rem"
       onChange={onChange}
       value={value}
       aria-label={ariaLabel}
+      css={`
+        padding: 0.275rem 0.65rem;
+        border-radius: ${getGlobalBorderRadius};
+        max-width="43rem"
+      `}
       {...getBoxProps(props)}
     >
       {children}

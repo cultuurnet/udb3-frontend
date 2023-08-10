@@ -15,7 +15,7 @@ const colors = {
   grey6: '#999999',
   green1: '#5cb85c',
   green2: '#449d44',
-  green3: '#48874a',
+  green3: '#28a745',
   green4: '#dcf2d7',
   green5: '#c7e6c7',
   pink1: '#fcd1cf',
@@ -29,6 +29,7 @@ const colors = {
   blue1: '#f0f8ff',
   blue2: '#a3d4ff',
   blue3: '#3e88ab',
+  orange1: '#F19E49',
   textColor: '#222',
 } as const;
 
@@ -45,16 +46,30 @@ const above = 1;
 
 const zIndexPaginationPageLink = above + base;
 
-const zIndexSidebar = above + zIndexPaginationPageLink;
+const zIndexDatePickerInput = above + zIndexPaginationPageLink;
+const zIndexDatePickerButton = above + zIndexDatePickerInput;
+const zIndexDatePickerPopup = above + zIndexDatePickerButton;
+
+const zIndexSidebar = above + zIndexDatePickerPopup;
 const zIndexPageFooter = zIndexSidebar;
+
 const zIndexJobLogger = above + zIndexSidebar;
-const zIndexToast = above + zIndexSidebar;
+const zIndexToast = zIndexJobLogger;
 
 const zIndexModalBackdrop = above + zIndexToast;
+
 const zIndexModal = above + zIndexModalBackdrop;
+
+const zIndexTimePickerPopup = above + zIndexModal;
 //
 
 type BreakpointValues = Values<typeof Breakpoints>;
+
+const getGlobalBorderRadius = (props: { theme: Theme }) =>
+  props.theme.borderRadius;
+
+const getGlobalFormInputHeight = (props: { theme: Theme }) =>
+  props.theme.formInputHeight;
 
 const theme = {
   colors,
@@ -64,9 +79,11 @@ const theme = {
     [Breakpoints.M]: 992,
     [Breakpoints.L]: 1200,
   },
+  borderRadius: '8px',
+  formInputHeight: 'calc(1.5rem + 0.9rem + 2px)',
   components: {
     alert: {
-      borderRadius: 0,
+      borderRadius: '8px',
     },
     toast: {
       zIndex: zIndexToast,
@@ -93,6 +110,14 @@ const theme = {
       zIndex: zIndexModal,
       zIndexBackdrop: zIndexModalBackdrop,
     },
+    datePicker: {
+      zIndexInput: zIndexDatePickerInput,
+      zIndexButton: zIndexDatePickerButton,
+      zIndexPopup: zIndexDatePickerPopup,
+    },
+    timePicker: {
+      zIndexPopup: zIndexTimePickerPopup,
+    },
     link: {
       color: colors.udbBlue,
     },
@@ -101,30 +126,29 @@ const theme = {
       backgroundColor: colors.red1,
     },
     button: {
-      borderRadius: 0,
-      paddingX: '0.8rem',
-      paddingY: '0.267rem',
+      borderRadius: '8px',
+      paddingX: '0.9rem',
+      paddingY: '0.5rem',
+      boxShadow: {
+        small: '0px 2px 3px 0px rgba(210, 210, 210, 0.5)',
+        large: '0px 4px 6px 0px rgba(210, 210, 210, 0.7)',
+      },
       primary: {
         backgroundColor: colors.udbBlue,
         borderColor: '#00417b',
-        focusBoxShadow: 'none',
         hoverBackgroundColor: '#003461',
         hoverBorderColor: '#00213d',
         activeBackgroundColor: '#003461',
         activeBorderColor: '#00213d',
-        activeBoxShadow: 'none',
       },
       secondary: {
         color: '#333',
         backgroundColor: colors.white,
-        borderColor: '#ccc',
-        focusBoxShadow: 'none',
         hoverBackgroundColor: '#e6e6e6',
         hoverBorderColor: '#adadad',
         activeColor: '#333',
         activeBackgroundColor: '#e6e6e6',
         activeBorderColor: '#adadad',
-        activeBoxShadow: 'inset 0 3px 5px rgba(0, 0, 0, 0.125)',
       },
       success: {
         color: colors.white,
@@ -132,8 +156,6 @@ const theme = {
         hoverBackgroundColor: colors.green2,
         hoverBorderColor: colors.green3,
         backgroundColor: colors.green1,
-        activeBoxShadow: 'none',
-        focusBoxShadow: 'none',
       },
       danger: {
         color: colors.white,
@@ -141,9 +163,17 @@ const theme = {
         hoverBackgroundColor: colors.red3,
         hoverBorderColor: colors.red4,
         backgroundColor: colors.red1,
-        activeBoxShadow: 'none',
-        focusBoxShadow: 'none',
       },
+    },
+    card: {
+      boxShadow: {
+        small: '0px 2px 3px 0px rgba(210, 210, 210, 0.5)',
+        large: '0px 4px 6px 0px rgba(210, 210, 210, 0.7)',
+      },
+    },
+    global: {
+      successIcon: colors.green3,
+      warningIcon: colors.orange1,
     },
     pagination: {
       color: colors.textColor,
@@ -248,7 +278,6 @@ const theme = {
         backgroundColor: colors.white,
       },
       complete: {
-        circleFillColor: colors.green3,
         checkFillColor: colors.green4,
       },
     },
@@ -260,6 +289,9 @@ const theme = {
     },
     eventItem: {
       borderColor: colors.grey3,
+    },
+    newFeatureTooltip: {
+      backgroundColor: colors.grey6,
     },
     detailTable: {
       backgroundColor: colors.grey1,
@@ -302,10 +334,6 @@ const theme = {
       stepNumber: {
         backgroundColor: colors.grey5,
       },
-      check: {
-        circleFillColor: colors.green3,
-      },
-
       footer: {
         color: colors.textColor,
       },
@@ -317,30 +345,36 @@ const theme = {
       activeTabColor: colors.grey5,
       activeTabBackgroundColor: colors.grey1,
       hoverTabBackgroundColor: colors.grey3,
-      borderRadius: 0,
+      borderRadius: '8px',
     },
     pictureUploadBox: {
       backgroundColor: colors.white,
       borderColor: colors.grey2,
       errorBorderColor: colors.red1,
       imageIconColor: colors.grey5,
-      imageBorderColor: colors.grey2,
+      imageBackgroundColor: colors.grey1,
       mainImageBackgroundColor: colors.blue1,
-      mainImageBorderColor: colors.blue2,
-      thumbnailBorderColor: colors.grey6,
+    },
+    ageRange: {
+      rangeTextColor: colors.grey5,
     },
     priceInformation: {
       borderColor: colors.grey3,
+      iconColor: colors.grey5,
+    },
+    contactInformation: {
+      borderColor: colors.grey3,
+      iconColor: colors.grey2,
+      iconColorHover: colors.grey6,
+      errorText: colors.red,
     },
     videoUploadBox: {
       backgroundColor: colors.white,
       borderColor: colors.grey2,
       errorBorderColor: colors.red1,
       imageIconColor: colors.grey5,
-      imageBorderColor: colors.grey2,
+      imageBackgroundColor: colors.grey1,
       mainImageBackgroundColor: colors.blue1,
-      mainImageBorderColor: colors.blue2,
-      thumbnailBorderColor: colors.grey6,
     },
     toggleBox: {
       backgroundColor: colors.white,
@@ -350,10 +384,14 @@ const theme = {
       activeTextColor: colors.textColor,
       iconColor: colors.grey5,
       iconCheckColor: colors.green3,
+      boxShadow: {
+        small: '0px 2px 3px 0px rgba(210, 210, 210, 0.5)',
+        large: '0px 4px 6px 0px rgba(210, 210, 210, 0.7)',
+      },
+      hoverColor: '#e6e6e6',
     },
     dropdown: {
       activeToggleBoxShadow: 'inset 0 3px 5px rgba(0, 0, 0, 0.125)',
-      menuBorderRadius: 0,
     },
     text: {
       muted: {
@@ -363,14 +401,29 @@ const theme = {
         color: colors.red,
       },
     },
+    organizerAddModal: {
+      address: {
+        borderColor: colors.grey3,
+      },
+    },
+    offerScore: {
+      link: colors.textColor,
+    },
   },
 } as const;
 
 type Theme = typeof theme;
 
-const getValueFromTheme = (component: string) => (path: string) => (props: {
-  theme: Theme;
-}) => get(props.theme, `components.${component}.${path}`);
+const getValueFromTheme =
+  (component: string) => (path: string) => (props: { theme: Theme }) =>
+    get(props.theme, `components.${component}.${path}`);
 
-export { Breakpoints, getValueFromTheme, theme };
+export {
+  Breakpoints,
+  colors,
+  getGlobalBorderRadius,
+  getGlobalFormInputHeight,
+  getValueFromTheme,
+  theme,
+};
 export type { BreakpointValues, Theme };

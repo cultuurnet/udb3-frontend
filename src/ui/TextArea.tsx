@@ -4,12 +4,14 @@ import { Form } from 'react-bootstrap';
 
 import type { BoxProps } from './Box';
 import { Box, getBoxProps } from './Box';
+import { getGlobalBorderRadius } from './theme';
 
 type TextAreaProps = {
   name?: string;
   value?: string;
   rows?: number;
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onInput?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 type Props = Omit<BoxProps, 'onChange'> & TextAreaProps;
@@ -20,7 +22,7 @@ const BaseInput = forwardRef<HTMLTextAreaElement, Props>((props, ref) => (
 
 BaseInput.displayName = 'BaseInput';
 
-const TextArea = forwardRef<HTMLInputElement, Props>(
+const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   (
     {
       id,
@@ -38,7 +40,7 @@ const TextArea = forwardRef<HTMLInputElement, Props>(
   ) => {
     return (
       <Form.Control
-        forwardedAs={BaseInput}
+        as={BaseInput}
         id={id}
         className={className}
         width="100%"
@@ -48,7 +50,7 @@ const TextArea = forwardRef<HTMLInputElement, Props>(
         onBlur={onBlur}
         value={value}
         disabled={disabled}
-        css="border-radius: 0;"
+        borderRadius={getGlobalBorderRadius}
         rows={rows}
         ref={ref}
         name={name}

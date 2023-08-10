@@ -1,6 +1,10 @@
 import type { ReactNode, SyntheticEvent } from 'react';
 import { Children } from 'react';
-import { Tab as BootstrapTab, Tabs as BootstrapTabs } from 'react-bootstrap';
+import {
+  Tab as BootstrapTab,
+  Tabs as BootstrapTabs,
+  TabsProps,
+} from 'react-bootstrap';
 
 import type { BoxProps } from '@/ui/Box';
 import { Box, getBoxProps, parseSpacing } from '@/ui/Box';
@@ -9,11 +13,7 @@ import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`tabs`);
 
-type Props<T> = BoxProps & {
-  activeKey: T;
-  onSelect: (eventKey: string | null, e: SyntheticEvent<unknown>) => void;
-  activeBackgroundColor?: string;
-};
+type Props<T> = BoxProps & TabsProps & { activeBackgroundColor?: string };
 
 const Tabs = <T,>({
   activeKey,
@@ -45,13 +45,18 @@ const Tabs = <T,>({
         activeKey={activeKey}
         onSelect={onSelect}
         css={`
-          border-bottom-color: ${getValue('borderColor')};
+          border-bottom: none;
 
           .nav-item {
             color: ${getValue('color')};
             border-radius: ${getValue('borderRadius')};
             padding: ${parseSpacing(3)} ${parseSpacing(4)};
             margin-right: ${parseSpacing(1)};
+
+            &.nav-link {
+              border-bottom-left-radius: 0;
+              border-bottom-right-radius: 0;
+            }
 
             &:hover {
               color: ${getValue('hoverColor')};
@@ -80,7 +85,7 @@ const Tabs = <T,>({
 
 type TabProps = {
   eventKey: string;
-  title: string;
+  title: ReactNode;
   children?: ReactNode;
 };
 

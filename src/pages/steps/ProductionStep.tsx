@@ -2,6 +2,7 @@ import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
 import {
   useChangeNameMutation,
@@ -13,7 +14,11 @@ import {
   useCreateWithEventsMutation as useCreateProductionWithEventsMutation,
   useDeleteEventByIdMutation as useDeleteEventFromProductionByIdMutation,
 } from '@/hooks/api/productions';
-import type { FormDataIntersection, StepProps } from '@/pages/Steps';
+import type {
+  FormDataUnion,
+  StepProps,
+  StepsConfiguration,
+} from '@/pages/steps/Steps';
 import type { Production } from '@/types/Production';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -24,27 +29,33 @@ import { getStackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Typeahead } from '@/ui/Typeahead';
+import { valueToArray } from '@/utils/valueToArray';
 
-type ProductionStepProps<TFormData extends FormDataIntersection> = StackProps &
-  StepProps<TFormData>;
+import { UseEditArguments } from './hooks/useEditField';
 
-const getValue = getValueFromTheme('createPage');
+type ProductionStepProps = StackProps & StepProps;
 
-const useEditNameAndProduction = <TFormData extends FormDataIntersection>({
+const getGlobalValue = getValueFromTheme('global');
+
+const useEditNameAndProduction = ({
+  scope,
   onSuccess,
-  eventId,
-}) => {
-  const getEventByIdQuery = useGetEventByIdQuery({ id: eventId });
+  offerId,
+}: UseEditArguments) => {
+  const getEventByIdQuery = useGetEventByIdQuery({ id: offerId, scope });
 
-  const createProductionWithEventsMutation = useCreateProductionWithEventsMutation();
-  const addEventToProductionByIdMutation = useAddEventToProductionByIdMutation();
-  const deleteEventFromProductionByIdMutation = useDeleteEventFromProductionByIdMutation();
+  const createProductionWithEventsMutation =
+    useCreateProductionWithEventsMutation();
+  const addEventToProductionByIdMutation =
+    useAddEventToProductionByIdMutation();
+  const deleteEventFromProductionByIdMutation =
+    useDeleteEventFromProductionByIdMutation();
 
   const changeNameMutation = useChangeNameMutation({
     onSuccess: () => onSuccess('name'),
   });
 
-  return async ({ production }: TFormData) => {
+  return async ({ production }: FormDataUnion) => {
     if (!production) return;
 
     // unlink event from current production
@@ -53,7 +64,7 @@ const useEditNameAndProduction = <TFormData extends FormDataIntersection>({
       await deleteEventFromProductionByIdMutation.mutateAsync({
         // @ts-expect-error
         productionId: getEventByIdQuery.data.production.id,
-        eventId,
+        offerId,
       });
     }
 
@@ -61,34 +72,34 @@ const useEditNameAndProduction = <TFormData extends FormDataIntersection>({
       // make new production with name and event id
       await createProductionWithEventsMutation.mutateAsync({
         productionName: production.name,
-        eventIds: [eventId],
+        eventIds: [offerId],
       });
     } else {
       // link event to production
       await addEventToProductionByIdMutation.mutateAsync({
         productionId: production.production_id,
-        eventId,
+        eventId: offerId,
       });
     }
 
     // change name of event
     await changeNameMutation.mutateAsync({
-      id: eventId,
+      id: offerId,
       lang: 'nl',
       name: production.name,
     });
   };
 };
 
-const ProductionStep = <TFormData extends FormDataIntersection>({
+const ProductionStep = ({
   formState: { errors },
   control,
   getValues,
   reset,
-  field,
+  name,
   onChange,
   ...props
-}: ProductionStepProps<TFormData>) => {
+}: ProductionStepProps) => {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
 
@@ -100,23 +111,26 @@ const ProductionStep = <TFormData extends FormDataIntersection>({
     { enabled: !!searchInput },
   );
 
-  // @ts-expect-error
-  const productions = useMemo(() => getProductionsQuery.data?.member ?? [], [
+  const productions = useMemo(
     // @ts-expect-error
-    getProductionsQuery.data?.member,
-  ]);
+    () => getProductionsQuery.data?.member ?? [],
+    [
+      // @ts-expect-error
+      getProductionsQuery.data?.member,
+    ],
+  );
 
   return (
-    <Controller<TFormData>
+    <Controller
       control={control}
-      name={field}
+      name={name}
       render={({ field }) => {
         const selectedProduction = field?.value;
 
         if (!selectedProduction) {
           return (
             <FormElement
-              id="step4-name-typeahead"
+              id="production-step-name-typeahead"
               label={t('movies.create.actions.choose_name')}
               error={
                 errors?.production
@@ -126,21 +140,20 @@ const ProductionStep = <TFormData extends FormDataIntersection>({
                   : undefined
               }
               Component={
-                <Typeahead<Production & { customOption?: boolean }>
-                  newSelectionPrefix="Voeg nieuwe productie toe: "
+                <Typeahead<Production>
+                  newSelectionPrefix={t(
+                    'create.additionalInformation.production.add_new_label',
+                  )}
                   allowNew
                   options={productions}
                   onInputChange={debounce(setSearchInput, 275)}
                   labelKey="name"
                   maxWidth="43rem"
-                  selected={
-                    field.value
-                      ? [field.value as Production & { customOption?: boolean }]
-                      : []
-                  }
-                  onChange={(value) => {
-                    field.onChange(value?.[0]);
-                    onChange(value?.[0]);
+                  selected={valueToArray(field.value as Production)}
+                  onChange={(productions) => {
+                    const production = productions[0];
+                    field.onChange(production);
+                    onChange(production);
                   }}
                   minLength={3}
                 />
@@ -154,7 +167,7 @@ const ProductionStep = <TFormData extends FormDataIntersection>({
           <Inline alignItems="center" spacing={3} {...getInlineProps(props)}>
             <Icon
               name={Icons.CHECK_CIRCLE}
-              color={getValue('check.circleFillColor')}
+              color={getGlobalValue('successIcon')}
             />
             <Text>{selectedProduction.name}</Text>
             <Button
@@ -175,4 +188,12 @@ const ProductionStep = <TFormData extends FormDataIntersection>({
   );
 };
 
-export { ProductionStep, useEditNameAndProduction };
+const productionStepConfiguration: StepsConfiguration<'production'> = {
+  Component: ProductionStep,
+  validation: yup.object().shape({}).required(),
+  name: 'production',
+  shouldShowStep: ({ watch }) => !!watch('location.place'),
+  title: ({ t }) => t(`movies.create.step4.title`),
+};
+
+export { productionStepConfiguration, useEditNameAndProduction };

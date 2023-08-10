@@ -205,7 +205,7 @@ type HeaderProps = InlineProps & {
   index: number;
 };
 
-const Header = ({ header, index, ...props }: HeaderProps) => {
+const Header = ({ header, ...props }: HeaderProps) => {
   return (
     <Inline
       as="div"
@@ -440,6 +440,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
         onDateEndChange={handleDateEndChange}
       />
       <Stack
+        id="timetable"
         forwardedAs="div"
         css={`
           display: grid;
@@ -485,9 +486,8 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
 
 export {
   areAllTimeSlotsValid,
-  formatTimeValue,
   isOneTimeSlotValid,
   isTimeTableEmpty,
   TimeTable,
 };
-export type { TimeTableData, TimeTableValue };
+export type { TimeTableValue };

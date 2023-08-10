@@ -12,7 +12,7 @@ import { getInlineProps, Inline } from './Inline';
 import { Link } from './Link';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
 import { Text } from './Text';
-import { getValueFromTheme } from './theme';
+import { getGlobalFormInputHeight, getValueFromTheme } from './theme';
 
 const BootStrapVariants = {
   PRIMARY: 'primary',
@@ -44,10 +44,14 @@ const customCSS = css`
     padding: ${getValue('paddingY')} ${getValue('paddingX')};
     flex-shrink: 0;
     align-items: center;
+    min-height: ${getGlobalFormInputHeight};
+
+    border: none;
+    box-shadow: ${getValue('boxShadow.small')};
 
     &:focus,
     &.focus {
-      outline: auto;
+      outline: solid black;
     }
 
     &:focus:not(:focus-visible),
@@ -55,42 +59,52 @@ const customCSS = css`
       outline: none;
       box-shadow: none;
     }
+
+    // active & focus
+    &:not(:disabled):not(.disabled):active:focus,
+    &:not(:disabled):not(.disabled).active:focus {
+      box-shadow: ${getValue('boxShadow.small')};
+    }
   }
 
-  &.btn-primary,
-  &.btn-primary.dropdown-toggle {
+  &.btn-primary {
     color: ${getValue('primary.color')};
     background-color: ${getValue('primary.backgroundColor')};
-    border-color: ${getValue('primary.borderColor')};
+
+    &.dropdown-toggle.dropdown-toggle-split {
+      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
+      border-left: 1px solid ${getValue('primary.color')};
+    }
 
     &:hover {
       background-color: ${getValue('primary.hoverBackgroundColor')};
-      border-color: ${getValue('primary.hoverBorderColor')};
     }
 
     // active
     &.btn-primary:not(:disabled):not(.disabled):active,
     .btn-primary:not(:disabled):not(.disabled).active {
       background-color: ${getValue('primary.activeBackgroundColor')};
-      border-color: ${getValue('primary.activeBorderColor')};
-      box-shadow: ${getValue('primary.activeBoxShadow')};
-    }
-
-    &:focus,
-    &.focus {
-      box-shadow: ${getValue('primary.focusBoxShadow')};
+      box-shadow: ${getValue('boxShadow.small')};
     }
   }
 
-  &.btn-outline-secondary,
-  &.btn-outline-secondary.dropdown-toggle {
+  &.btn-outline-secondary {
     color: ${getValue('secondary.color')};
     background-color: ${getValue('secondary.backgroundColor')};
-    border-color: ${getValue('secondary.borderColor')};
+    box-shadow: ${getValue('boxShadow.large')};
+
+    &.dropdown-toggle.dropdown-toggle-split {
+      box-shadow: 4px 4px 6px 0px rgb(210 210 210 / 70%);
+      border-left: 1px solid #f0f0f0;
+    }
 
     &:hover {
       background-color: ${getValue('secondary.hoverBackgroundColor')};
-      border-color: ${getValue('secondary.hoverBorderColor')};
+    }
+
+    &.btn-outline-secondary:not(:disabled):not(.disabled):focus,
+    .btn-outline-secondary:not(:disabled):not(.disabled).focus {
+      box-shadow: ${getValue('boxShadow.large')};
     }
 
     // active
@@ -98,59 +112,44 @@ const customCSS = css`
     .btn-outline-secondary:not(:disabled):not(.disabled).active {
       color: ${getValue('secondary.activeColor')};
       background-color: ${getValue('secondary.activeBackgroundColor')};
-      border-color: ${getValue('secondary.activeBorderColor')};
-      box-shadow: ${getValue('secondary.activeBoxShadow')};
+      box-shadow: ${getValue('boxShadow.large')};
+      border: none;
     }
 
-    &:focus,
-    &.focus {
-      box-shadow: ${getValue('secondary.focusBoxShadow')};
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active {
+      color: ${getValue('secondary.activeColor')};
+      background-color: ${getValue('secondary.activeBackgroundColor')};
     }
   }
 
-  &.btn-success,
-  &.btn-success.dropdown-toggle {
+  &.btn-success {
     color: ${getValue('success.color')};
-    border-color: ${getValue('success.borderColor')};
     background-color: ${getValue('success.backgroundColor')};
+
+    &.dropdown-toggle.dropdown-toggle-split {
+      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
+      border-left: 1px solid ${getValue('success.color')};
+    }
 
     &:hover {
       background-color: ${getValue('success.hoverBackgroundColor')};
-      border-color: ${getValue('success.hoverBorderColor')};
-    }
-
-    // active & focus
-    &:not(:disabled):not(.disabled):active:focus,
-    &:not(:disabled):not(.disabled).active:focus {
-      box-shadow: ${getValue('success.activeBoxShadow')};
-    }
-
-    &:focus,
-    &.focus {
-      box-shadow: ${getValue('success.focusBoxShadow')};
     }
   }
 
-  &.btn-danger,
-  &.btn-danger.dropdown-toggle {
+  &.btn-danger {
     color: ${getValue('danger.color')};
-    border-color: ${getValue('danger.borderColor')};
     background-color: ${getValue('danger.backgroundColor')};
+    border: 1px solid ${getValue('danger.backgroundColor')};
+
+    &.dropdown-toggle.dropdown-toggle-split {
+      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
+      border: none;
+      border-left: 1px solid ${getValue('danger.color')};
+    }
 
     &:hover {
       background-color: ${getValue('danger.hoverBackgroundColor')};
-      border-color: ${getValue('danger.hoverBorderColor')};
-    }
-
-    // active & focus
-    &:not(:disabled):not(.disabled):active:focus,
-    &:not(:disabled):not(.disabled).active:focus {
-      box-shadow: ${getValue('danger.activeBoxShadow')};
-    }
-
-    &:focus,
-    &.focus {
-      box-shadow: ${getValue('danger.focusBoxShadow')};
     }
   }
 
@@ -171,6 +170,7 @@ type ButtonProps = Omit<InlineProps, 'size'> & {
   size?: Values<typeof ButtonSizes>;
   variant?: Values<typeof ButtonVariants>;
   type?: string;
+  active?: boolean;
 };
 
 const Button = ({
@@ -184,16 +184,16 @@ const Button = ({
   shouldHideText,
   onClick,
   className,
-  textAlign,
   title,
   size,
   forwardedAs,
   type,
+  active,
   ...props
 }: ButtonProps) => {
-  const isBootstrapVariant = (Object.values(
-    BootStrapVariants,
-  ) as string[]).includes(variant);
+  const isBootstrapVariant = (
+    Object.values(BootStrapVariants) as string[]
+  ).includes(variant);
   const isLinkVariant = variant === ButtonVariants.LINK;
 
   // @ts-expect-error
@@ -216,6 +216,7 @@ const Button = ({
     title,
     size,
     type,
+    active,
     ...getInlineProps(props),
   };
 

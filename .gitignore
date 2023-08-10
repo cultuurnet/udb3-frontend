@@ -55,3 +55,15 @@ node_modules/
 
 # next.js build output
 .next
+
+# typescript build info
+tsconfig.tsbuildinfo
+
+# Jenkins pipeline
+/vendor
+/pkg
+.bundle
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/playwright/.auth/

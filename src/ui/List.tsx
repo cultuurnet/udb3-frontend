@@ -6,6 +6,7 @@ import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
+import { getGlobalBorderRadius } from './theme';
 
 const ListVariants = {
   ORDERED: 'ordered',
@@ -18,9 +19,20 @@ type ListProps = StackProps & {
 
 const List = ({ children, className, variant, ...props }: ListProps) => (
   <Stack
-    as={variant === ListVariants.ORDERED ? 'ol' : 'ul'}
+    forwardedAs={variant === ListVariants.ORDERED ? 'ol' : 'ul'}
     className={className}
     variant={variant}
+    css={`
+      & li:first-child {
+        border-top-left-radius: ${getGlobalBorderRadius};
+        border-top-right-radius: ${getGlobalBorderRadius};
+      }
+
+      & li:last-child {
+        border-bottom-left-radius: ${getGlobalBorderRadius};
+        border-bottom-right-radius: ${getGlobalBorderRadius};
+      }
+    `}
     {...getStackProps(props)}
   >
     {children}

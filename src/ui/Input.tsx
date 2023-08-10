@@ -1,9 +1,11 @@
 import type { ChangeEvent } from 'react';
 import { forwardRef } from 'react';
 import { Form } from 'react-bootstrap';
+import { css } from 'styled-components';
 
 import type { BoxProps } from './Box';
 import { Box, getBoxProps } from './Box';
+import { getGlobalBorderRadius, getGlobalFormInputHeight } from './theme';
 
 const BaseInput = forwardRef<HTMLInputElement, any>((props, ref) => (
   <Box as="input" {...props} ref={ref} />
@@ -44,6 +46,7 @@ type InputProps = {
   name?: string;
   isInvalid?: boolean;
   accept?: string;
+  disabled?: boolean;
 };
 
 type Props = Omit<BoxProps, 'onChange'> & InputProps;
@@ -57,10 +60,13 @@ const Input = forwardRef(
       onChange,
       onBlur,
       onPaste,
+      onFocus,
+      onKeyDown,
       className,
       value,
       name,
       isInvalid,
+      disabled,
       accept,
       ...props
     }: Props,
@@ -68,13 +74,14 @@ const Input = forwardRef(
   ) => (
     <Form.Control
       ref={ref}
-      forwardedAs={BaseInput}
+      as={BaseInput}
       id={id}
       type={type}
       placeholder={placeholder}
       className={className}
       maxWidth="43rem"
-      css="border-radius: 0;"
+      height={getGlobalFormInputHeight}
+      borderRadius={getGlobalBorderRadius}
       onInput={onChange}
       onBlur={onBlur}
       onPaste={onPaste}
@@ -82,6 +89,10 @@ const Input = forwardRef(
       name={name}
       isInvalid={isInvalid}
       accept={accept}
+      disabled={disabled}
+      onFocus={onFocus}
+      onKeyDown={onKeyDown}
+      data-testid={props['data-testid']}
       {...getBoxProps(props)}
     />
   ),
@@ -95,4 +106,4 @@ Input.defaultProps = {
 };
 
 export { Input };
-export type { InputProps };
+export type { InputProps, InputType };

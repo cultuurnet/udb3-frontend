@@ -1,3 +1,4 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faSlideshare } from '@fortawesome/free-brands-svg-icons';
 import {
   faBell,
@@ -10,6 +11,7 @@ import {
   faChevronRight,
   faCircleNotch,
   faCopy,
+  faExclamationCircle,
   faExclamationTriangle,
   faEye,
   faEyeSlash,
@@ -17,13 +19,17 @@ import {
   faGift,
   faHome,
   faImage,
+  faInfoCircle,
   faLayerGroup,
   faPencilAlt,
   faPlus,
   faPlusCircle,
+  faQuestion,
+  faQuestionCircle,
   faSearch,
   faSignOutAlt,
   faTag,
+  faTicketAlt,
   faTimes,
   faTrash,
   faUser,
@@ -62,12 +68,17 @@ const Icons = {
   PLUS: 'plus',
   TRASH: 'trash',
   BINOCULARS: 'binoculars',
+  EXCLAMATION_CIRCLE: 'exclamationCircle',
   EXCLAMATION_TRIANGLE: 'exclamationTriangle',
   PENCIL: 'pencilAlt',
   VIDEO: 'video',
   COPY: 'copy',
   IMAGE: 'image',
   BUILDING: 'building',
+  TICKET: 'ticket',
+  INFO: 'info',
+  QUESTION: 'question',
+  QUESTION_CIRCLE: 'questionCircle',
 } as const;
 
 const IconsMap = {
@@ -101,6 +112,11 @@ const IconsMap = {
   [Icons.COPY]: faCopy,
   [Icons.IMAGE]: faImage,
   [Icons.BUILDING]: faBuilding,
+  [Icons.TICKET]: faTicketAlt,
+  [Icons.QUESTION]: faQuestion,
+  [Icons.QUESTION_CIRCLE]: faQuestionCircle,
+  [Icons.INFO]: faInfoCircle,
+  [Icons.EXCLAMATION_CIRCLE]: faExclamationCircle,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {
@@ -123,14 +139,14 @@ const Icon = ({ name, width, height, className, ...props }: Props) => {
       `}
       {...getBoxProps(props)}
     >
-      <FontAwesomeIcon icon={IconsMap[name]} />
+      <FontAwesomeIcon icon={IconsMap[name] as IconProp} />
     </Box>
   );
 };
 
 Icon.defaultProps = {
-  width: 15,
-  height: 15,
+  width: 18,
+  height: 18,
 };
 
 export { Icon, Icons };

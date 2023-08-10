@@ -1,7 +1,9 @@
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import NextHead from 'next/head';
+import Script from 'next/script';
 import PropTypes from 'prop-types';
 import { cloneElement } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
@@ -16,6 +18,8 @@ import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
+
+import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
 const cookies = new Cookies();
 
@@ -67,6 +71,19 @@ ContextProvider.propTypes = {
 
 config.autoAddCss = false;
 
+const Hotjar = () => {
+  return (
+    <Script id="hotjar">{`(function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:181435,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}</Script>
+  );
+};
+
 const Head = () => {
   const { t } = useTranslation();
 
@@ -91,6 +108,8 @@ const App = ({ Component, pageProps, children }) => {
   return (
     <>
       <Head />
+      <Hotjar />
+      <UserProvider />
       <ContextProvider
         providers={[
           [I18nextProvider, { i18n }],
@@ -105,6 +124,7 @@ const App = ({ Component, pageProps, children }) => {
           ],
           [QueryClientProvider, { client: queryClient }],
           [Hydrate, { state: pageProps?.dehydratedState ?? {} }],
+          AnnouncementModalProvider,
         ]}
       >
         <GlobalStyle />

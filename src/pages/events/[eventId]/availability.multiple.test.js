@@ -20,8 +20,8 @@ const setup = async () => {
       },
     },
     responses: {
-      '/event/:id': { body: eventWithSubEvents },
-      'events/:id/subEvents': {},
+      '/events/:id': { body: eventWithSubEvents },
+      '/events/:id/subEvents': {},
     },
   });
 
@@ -52,7 +52,9 @@ test('I can save a status', async () => {
     }),
   ).toBeDisabled();
 
-  userEvent.click(screen.getByLabelText(nl.offerStatus.status.event.available));
+  userEvent.click(
+    screen.getByLabelText(nl.offerStatus.status.events.available),
+  );
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeDisabled();
 
@@ -70,8 +72,7 @@ test('I can save a status', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
-  // 3rd API call, [url, payload] tuple
-  expect(fetch.mock.calls[2][1].body).toEqual(
+  expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
         id: 0,
@@ -98,7 +99,7 @@ test('I can save a status with a reason', async () => {
   );
 
   userEvent.click(
-    screen.getByLabelText(nl.offerStatus.status.event.unavailable),
+    screen.getByLabelText(nl.offerStatus.status.events.unavailable),
   );
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeEnabled();
@@ -119,8 +120,7 @@ test('I can save a status with a reason', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
-  // 3rd API call, [url, payload] tuple
-  expect(fetch.mock.calls[2][1].body).toEqual(
+  expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
         id: 1,
@@ -162,8 +162,11 @@ test('I can save a booking availability', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
-  // 3rd API call, [url, payload] tuple
-  expect(fetch.mock.calls[2][1].body).toEqual(
+  const filteredMockCalls = fetch.mock.calls.find((call) => {
+    return call[0].endsWith('/subEvents');
+  });
+
+  expect(filteredMockCalls[1].body).toEqual(
     JSON.stringify([
       {
         id: 1,

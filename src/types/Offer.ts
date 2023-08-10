@@ -1,12 +1,24 @@
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import type { CalendarType } from '@/constants/CalendarType';
 import type { OfferStatus } from '@/constants/OfferStatus';
+import { PriceCategory } from '@/pages/steps/AdditionalInformationStep/PriceInformation';
 
 import type { SupportedLanguages } from '../i18n';
 import type { ContactPoint } from './ContactPoint';
+import { Event } from './Event';
 import type { Organizer } from './Organizer';
+import { Place } from './Place';
 import type { Values } from './Values';
 import type { WorkflowStatus } from './WorkflowStatus';
+
+type DayOfWeek =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
 
 type StatusType = Values<typeof OfferStatus>;
 
@@ -37,7 +49,15 @@ type MediaObject = {
   inLanguage: string;
 };
 
-type BookingInfo = {
+type VideoObject = {
+  id: string;
+  embedUrl: string;
+  language: string;
+  copyrightHolder: string;
+  url: string;
+};
+
+export type BookingInfo = {
   availabilityStarts?: string;
   availabilityEnds?: string;
   price?: number;
@@ -48,23 +68,25 @@ type BookingInfo = {
   urlLabel?: { nl: string };
 };
 
-type PriceInfo = {
-  category: 'base' | 'tariff';
-  name: { nl: string };
-  price: number;
+export type PriceInfo = {
+  category: PriceCategory;
+  name: { nl?: string; en?: string; de?: string };
+  price: any;
+  priceCurrency: string;
 };
 
 type SubEvent = {
   '@type': string;
   startDate: string;
   endDate: string;
-  status?: Values<typeof OfferStatus>;
+  status?: Status;
+  bookingAvailability?: BookingAvailability;
 };
 
 type OpeningHours = {
   opens: string;
   closes: string;
-  dayOfWeek: string[];
+  dayOfWeek: DayOfWeek[];
 };
 
 type CalendarSummary = Record<
@@ -75,7 +97,7 @@ type CalendarSummary = Record<
   }
 >;
 
-type Offer = {
+type BaseOffer = {
   '@id': string;
   name: Partial<Record<Values<typeof SupportedLanguages>, string>>;
   description: Partial<Record<Values<typeof SupportedLanguages>, string>>;
@@ -93,8 +115,8 @@ type Offer = {
   modified: string;
   publisher: string;
   calendarType: Values<typeof CalendarType>;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   openingHours: OpeningHours[];
   subEvent: SubEvent[];
   performer: [{ performer: string }];
@@ -106,6 +128,7 @@ type Offer = {
   languages: Array<Values<typeof SupportedLanguages>>;
   completedLanguages: Array<Values<typeof SupportedLanguages>>;
   mediaObject?: MediaObject[];
+  videos?: VideoObject[];
   image?: string;
   typicalAgeRange: string;
   bookingInfo?: BookingInfo;
@@ -113,10 +136,27 @@ type Offer = {
   regions: string[];
 };
 
+type Offer = Place | Event;
+
+type Label = {
+  uuid: string;
+  name: string;
+  visibility: string;
+  privacy: string;
+  excluded: boolean;
+};
+
+export const hasLegacyLocation = (offer) =>
+  offer?.location && !offer?.location?.['@id'];
+
 export type {
+  BaseOffer,
   BookingAvailability,
+  DayOfWeek,
+  Label,
   MediaObject,
   Offer,
+  OpeningHours,
   Status,
   StatusReason,
   StatusType,

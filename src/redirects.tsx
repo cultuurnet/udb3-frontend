@@ -1,3 +1,4 @@
+import { FeatureFlags } from './hooks/useFeatureFlag';
 import type { SupportedLanguages } from './i18n';
 import type { Values } from './types/Values';
 
@@ -46,9 +47,10 @@ const getRedirects = (
   // than development, so we don't get permanent redirects on localhost which
   // may conflict with other projects.
   {
-    source: '/create',
-    destination: '/event',
+    source: '/event',
+    destination: '/create',
     permanent: false,
+    featureFlag: FeatureFlags.REACT_CREATE,
   },
   {
     source: '/event/:eventId/status',
@@ -69,6 +71,24 @@ const getRedirects = (
     source: '/places/:placeId/status',
     destination: '/places/:placeId/availability',
     permanent: environment !== 'development',
+  },
+  {
+    source: '/event/:eventId/edit',
+    destination: '/events/:eventId/edit',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_CREATE,
+  },
+  {
+    source: '/event/:eventId/duplicate',
+    destination: '/events/:eventId/duplicate',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_CREATE,
+  },
+  {
+    source: '/place/:placeId/edit',
+    destination: '/places/:placeId/edit',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_CREATE,
   },
   {
     source: '/:language/copyright',

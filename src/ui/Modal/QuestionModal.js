@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Modal as BootstrapModal } from 'react-bootstrap';
 
 import { Button, ButtonVariants } from '../Button';
-import { getValueFromTheme } from '../theme';
+import { getGlobalBorderRadius, getValueFromTheme } from '../theme';
 
 const getValueForModal = getValueFromTheme('modal');
 
@@ -19,6 +19,7 @@ const QuestionModal = ({
   scrollable,
   size,
   confirmButtonDisabled,
+  confirmLoading,
 }) => (
   <BootstrapModal
     className={className}
@@ -41,7 +42,7 @@ const QuestionModal = ({
       }
 
       .modal-content {
-        border-radius: 0;
+        border-radius: ${getGlobalBorderRadius};
         max-height: 95vh;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         overflow: visible;
@@ -61,9 +62,10 @@ const QuestionModal = ({
         {cancelTitle}
       </Button>
       <Button
+        loading={confirmLoading}
         variant={ButtonVariants.PRIMARY}
         onClick={onConfirm}
-        disabled={confirmButtonDisabled}
+        disabled={confirmButtonDisabled || confirmLoading}
       >
         {confirmTitle}
       </Button>

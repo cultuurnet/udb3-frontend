@@ -1,13 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { DragEvent, FormEvent } from 'react';
 import { forwardRef, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { useAutoFocus } from '@/hooks/useAutoFocus';
+import { ImageIcon } from '@/pages/PictureUploadBox';
 import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
@@ -28,9 +29,10 @@ type PictureUploadModalProps = {
   draggedImageFile?: FileList;
   imageToEdit?: { description: string; copyrightHolder: string };
   onSubmitValid: (data: FormData) => Promise<void>;
+  loading: boolean;
 };
 
-const MAX_FILE_SIZE = 5000000;
+const MAX_FILE_SIZE = 20_000_000;
 const ALLOWED_FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif'];
 
 const getValue = getValueFromTheme('pictureUploadBox');
@@ -50,6 +52,7 @@ type Props = {
   error: any;
   image: any;
   marginBottom?: number;
+  children?: React.ReactNode;
 } & RegisterProps &
   DragAndDropProps;
 
@@ -99,17 +102,13 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
               alt="preview"
               width="auto"
               maxHeight="8rem"
+              maxWidth="100%"
               objectFit="cover"
             />
             <Text>{image.name}</Text>
           </Stack>
         ) : (
-          <Icon
-            name={Icons.IMAGE}
-            width="auto"
-            height="8rem"
-            color={getValue('imageIconColor')}
-          />
+          <ImageIcon width="80" />
         )}
         <Stack spacing={3} alignItems="center">
           <Text>Sleep een bestand hierheen of</Text>
@@ -127,7 +126,9 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
           <Text variant={TextVariants.ERROR}>{error}</Text>
         </Stack>
         <Text variant={TextVariants.MUTED} textAlign="center">
-          {t('pictures.upload_modal.file_requirements')}
+          {t('pictures.upload_modal.file_requirements', {
+            maxFileSize: MAX_FILE_SIZE / 1_000_000,
+          })}
         </Text>
       </Stack>
     );
@@ -174,6 +175,7 @@ const PictureUploadModal = ({
   draggedImageFile,
   imageToEdit,
   onSubmitValid,
+  loading,
 }: PictureUploadModalProps) => {
   const { t } = useTranslation();
   const formComponent = useRef<HTMLFormElement>();
@@ -199,17 +201,19 @@ const PictureUploadModal = ({
     .required();
 
   const {
-    watch,
+    control,
     reset,
     register,
-    formState: { errors },
+    formState: { errors, dirtyFields },
     handleSubmit,
     setValue,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  const watchedFile = watch('file');
+  const [descriptionInputComponent] = useAutoFocus({ retriggerOn: visible });
+
+  const watchedFile = useWatch({ control, name: 'file' });
   const image = watchedFile?.[0];
 
   useEffect(() => {
@@ -236,6 +240,8 @@ const PictureUploadModal = ({
     setValue('file', files);
   };
 
+  const registerDescriptionProps = register('description');
+
   return (
     <Modal
       title={t('pictures.upload_modal.title')}
@@ -247,9 +253,14 @@ const PictureUploadModal = ({
           ? t('pictures.upload_modal.actions.adjust')
           : t('pictures.upload_modal.actions.upload')
       }
+      confirmLoading={loading}
       cancelTitle={t('pictures.upload_modal.actions.cancel')}
       size={ModalSizes.MD}
       onConfirm={() => {
+        if (!dirtyFields.description) {
+          onClose();
+        }
+
         formComponent.current.dispatchEvent(
           new Event('submit', { cancelable: true, bubbles: true }),
         );
@@ -272,7 +283,8 @@ const PictureUploadModal = ({
             error={
               errors?.file &&
               t(
-                `pictures.upload_modal.validation_messages.file.${errors.file.type}`,
+                `pictures.upload_modal.validation_messages.file.${errors.file?.type}`,
+                { maxFileSize: MAX_FILE_SIZE / 1_000_000 },
               )
             }
             onDrop={handleInternalOnDrop}
@@ -290,7 +302,15 @@ const PictureUploadModal = ({
               `pictures.upload_modal.validation_messages.description.${errors.description.type}`,
             )
           }
-          Component={<Input {...register('description')} />}
+          Component={
+            <Input
+              {...registerDescriptionProps}
+              ref={(element: HTMLInputElement) => {
+                registerDescriptionProps.ref(element);
+                descriptionInputComponent.current = element;
+              }}
+            />
+          }
         />
         <FormElement
           id="copyrightHolder"
@@ -317,5 +337,5 @@ const PictureUploadModal = ({
   );
 };
 
-export { MAX_FILE_SIZE, PictureUploadModal };
+export { PictureUploadModal };
 export type { FormData };

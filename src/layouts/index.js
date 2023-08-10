@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 
+import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
@@ -28,32 +30,10 @@ const useChangeLanguage = () => {
 
 const useHandleAuthentication = () => {
   const { pathname, query, asPath, ...router } = useRouter();
-  const { setCookie, cookies } = useCookiesWithOptions(['user', 'token']);
   const getUserQuery = useGetUserQuery();
 
   useEffect(() => {
-    if (!query?.jwt) return;
-
-    if (cookies.token !== query?.jwt) {
-      setCookie('token', query.jwt);
-    }
-
-    const { jwt, ...restQuery } = query;
-
-    router.push(
-      {
-        pathname,
-        query: restQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  useEffect(() => {
     if (!getUserQuery.data) return;
-    setCookie('user', getUserQuery.data);
     Sentry.setUser({ id: getUserQuery.data.id });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserQuery.data]);
@@ -66,8 +46,7 @@ const useHandleAuthentication = () => {
     if (asPath.startsWith('/login')) return cleanUp;
     intervalId = setInterval(() => {
       const cookies = new Cookies();
-      if (!isTokenValid(cookies.get('token')) || !cookies.get('user')) {
-        cookies.remove('user');
+      if (!isTokenValid(cookies.get('token'))) {
         Sentry.setUser(null);
         cookies.remove('token');
         router.push('/login');
@@ -80,6 +59,7 @@ const useHandleAuthentication = () => {
 
 const Layout = ({ children }) => {
   const { asPath, ...router } = useRouter();
+  const queryClient = useQueryClient();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
   ]);
@@ -107,11 +87,13 @@ const Layout = ({ children }) => {
     [WindowMessageTypes.HTTP_ERROR_CODE]: ({ code }) => {
       if ([401, 403].includes(code)) {
         removeAuthenticationCookies();
+        queryClient.invalidateQueries('user');
         router.push('/login');
       }
     },
   });
   useHandleAuthentication();
+  useGetTermsQuery();
 
   if (!cookies.token) return null;
 

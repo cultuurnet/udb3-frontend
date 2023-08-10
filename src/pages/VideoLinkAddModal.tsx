@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { useAutoFocus } from '@/hooks/useAutoFocus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
@@ -15,7 +16,8 @@ type Props = {
   onClose: () => void;
 };
 
-const ALLOWED_VIDEO_SOURCES_REGEX: RegExp = /^http(s?):\/\/(www\.)?((youtube\.com\/watch\?v=([^/#&?]*))|(vimeo\.com\/([^/#&?]*))|(youtu\.be\/([^/#&?]*)))/;
+const ALLOWED_VIDEO_SOURCES_REGEX: RegExp =
+  /^http(s?):\/\/(www\.)?((youtube\.com\/watch\?v=([^/#&?]*))|(vimeo\.com\/([^/#&?]*))|(youtu\.be\/([^/#&?]*)))/;
 
 type FormData = {
   link: string;
@@ -31,15 +33,20 @@ const schema = yup
 const VideoLinkAddModal = ({ visible, onConfirm, onClose }: Props) => {
   const { t } = useTranslation();
 
-  const { register, handleSubmit, formState } = useForm<FormData>({
+  const { register, handleSubmit, reset, formState } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
+  const [linkInputComponent] = useAutoFocus({ retriggerOn: visible });
 
   const handleConfirm = async () => {
     await handleSubmit((data) => {
       onConfirm(data.link);
+      reset({ link: '' });
     })();
   };
+
+  const registerLinkProps = register('link');
 
   return (
     <Modal
@@ -54,7 +61,15 @@ const VideoLinkAddModal = ({ visible, onConfirm, onClose }: Props) => {
     >
       <Stack padding={4}>
         <FormElement
-          Component={<Input {...register('link')} />}
+          Component={
+            <Input
+              {...registerLinkProps}
+              ref={(element: HTMLInputElement) => {
+                registerLinkProps.ref(element);
+                linkInputComponent.current = element;
+              }}
+            />
+          }
           id="video-link"
           label="Link"
           info={

@@ -1,18 +1,16 @@
-import type { MouseEvent, ReactNode } from 'react';
-import { Children } from 'react';
+import { Children, cloneElement } from 'react';
 import {
   ButtonGroup as BootstrapButtonGroup,
   Dropdown as BootstrapDropdown,
 } from 'react-bootstrap';
+import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 
 import type { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { Box, getBoxProps } from '@/ui/Box';
 import { Button, buttonCSS, ButtonVariants } from '@/ui/Button';
 import { Link, LinkVariants } from '@/ui/Link';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getValue = getValueFromTheme(`dropdown`);
+import { getGlobalBorderRadius } from '@/ui/theme';
 
 const DropDownVariants = {
   ...ButtonVariants,
@@ -21,39 +19,82 @@ const DropDownVariants = {
 
 type DropdownProps = BoxProps & {
   variant: Values<typeof DropDownVariants>;
+  isSplit?: boolean;
 };
 
-const Dropdown = ({ variant, children, ...props }: DropdownProps) => {
+const Dropdown = ({
+  variant,
+  isSplit,
+  children,
+  className,
+  ...props
+}: DropdownProps) => {
   const isMenuChild = (child) =>
     child.type === Dropdown.Item || child.type === Dropdown.Divider;
   const menuChildren = Children.toArray(children).filter(isMenuChild);
 
   const isPrimaryActionChild = (child) =>
     child.type === Button || child.type === Link;
-  const primaryActionChildren = Children.toArray(children).filter(
-    isPrimaryActionChild,
+  const primaryActionChild =
+    Children.toArray(children).find(isPrimaryActionChild);
+
+  const buttonVariant =
+    variant === DropDownVariants.SECONDARY ? ButtonVariants.SECONDARY : variant;
+
+  const primaryAction = cloneElement(
+    // @ts-expect-error
+    primaryActionChild,
+    {
+      // @ts-expect-error
+      ...primaryActionChild.props,
+      variant: buttonVariant,
+      className: 'primary-action',
+    },
   );
 
   return (
     <Box
       css={`
-        .dropdown-menu {
-          border-radius: ${getValue('menuBorderRadius')};
+        .dropdown .primary-action:not(:only-child) > * {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
         }
 
-        .show > .dropdown-toggle,
-        .show > .dropdown-toggle:focus:not(:focus-visible),
-        .show > .dropdown-toggle.focus:not(:focus-visible) {
-          box-shadow: ${getValue('activeToggleBoxShadow')};
+        .dropdown-menu {
+          border-radius: ${getGlobalBorderRadius};
+        }
+
+        .dropdown-divider {
+          margin: 0;
         }
       `}
+      className={className}
       {...getBoxProps(props)}
     >
       <BootstrapDropdown as={BootstrapButtonGroup}>
-        {primaryActionChildren}
+        {isSplit ? (
+          primaryAction
+        ) : (
+          <BootstrapDropdown.Toggle variant={variant} css={buttonCSS}>
+            {/* @ts-expect-error */}
+            {primaryActionChild.props.children}
+          </BootstrapDropdown.Toggle>
+        )}
         {menuChildren.length > 0 && (
           <>
-            <BootstrapDropdown.Toggle split variant={variant} css={buttonCSS} />
+            {isSplit && (
+              <BootstrapDropdown.Toggle
+                split
+                variant={variant}
+                css={`
+                  ${buttonCSS}
+                  &.btn {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                  }
+                `}
+              />
+            )}
             <BootstrapDropdown.Menu>{menuChildren}</BootstrapDropdown.Menu>
           </>
         )}
@@ -62,19 +103,25 @@ const Dropdown = ({ variant, children, ...props }: DropdownProps) => {
   );
 };
 
-type ItemProps = {
-  href?: string;
-  onClick?: (event: MouseEvent<HTMLElement>) => void;
-  children: ReactNode;
+Dropdown.defaultProps = {
+  isSplit: false,
 };
 
-const Item = ({ href, onClick, children }: ItemProps) => {
+const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
   if (onClick) {
     return (
       <BootstrapDropdown.Item
-        as={Button}
+        forwardedAs={Button}
         variant={ButtonVariants.SECONDARY}
         onClick={onClick}
+        css={`
+          &.btn {
+            flex: 1;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+          }
+        `}
       >
         {children}
       </BootstrapDropdown.Item>
@@ -92,6 +139,8 @@ const Item = ({ href, onClick, children }: ItemProps) => {
           .btn {
             flex: 1;
             border: none;
+            box-shadow: none;
+            border-radius: 0;
           }
         `}
       >

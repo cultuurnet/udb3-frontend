@@ -1,17 +1,18 @@
-import difference from 'lodash/difference';
-import kebabCase from 'lodash/kebabCase';
-import pick from 'lodash/pick';
+import { difference, kebabCase, pickBy } from 'lodash';
 import type {
   ChangeEvent,
   ClipboardEvent,
   ComponentType,
   DragEvent,
+  FocusEvent,
   FormEvent,
   HTMLProps,
+  KeyboardEvent,
   MouseEvent,
   ReactNode,
 } from 'react';
 import { forwardRef } from 'react';
+import { ReactDatePickerProps } from 'react-datepicker';
 import type {
   FlattenInterpolation,
   FlattenSimpleInterpolation,
@@ -44,12 +45,15 @@ type GeneralProps = {
   theme: Theme;
   children: ReactNode;
   className: string;
+  id: string;
+  name: string;
   as: string | ComponentType<any>;
   forwardedAs: string | ComponentType<any>;
   selected: unknown;
   dangerouslySetInnerHTML: {
     __html: string;
   };
+  [ariaKey: `aria-${string}`]: string;
 };
 
 type InlineProps = {
@@ -86,11 +90,8 @@ type SvgProps = {
   viewBox: string;
 };
 
-type DatePickerProps = {
-  dateFormat: string;
-  minDate: Date;
-  maxDate: Date;
-  customInput: ReactNode;
+type ProgressBarProps = {
+  now: number;
 };
 
 type TypeaheadProps = {
@@ -104,6 +105,9 @@ type TypeaheadProps = {
   delay: number;
   highlightOnlyResult: boolean;
   isInvalid: boolean;
+  promptText: string;
+  searchText: string;
+  positionFixed: boolean;
   allowNew:
     | boolean
     | ((
@@ -111,21 +115,24 @@ type TypeaheadProps = {
         props: Record<string, unknown>,
       ) => boolean);
   newSelectionPrefix: string;
+  renderMenuItemChildren?: (option: unknown, { text }) => JSX.Element;
   inputProps: HTMLProps<HTMLInputElement>;
+  defaultInputValue: string;
 };
 
 type SpecificComponentProps = InlineProps &
+  Omit<ReactDatePickerProps, 'onChange' | 'onSelect' | 'value' | 'selected'> &
   TitleProps &
   ListProps &
   LinkProps &
   LabelProps &
   ImageProps &
   SvgProps &
-  DatePickerProps &
+  ProgressBarProps &
   TypeaheadProps;
 
 type EventHandlerProps = {
-  onBlur: (event: FormEvent<HTMLInputElement>) => void;
+  onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
   onChange:
     | ((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void)
     | ((value: Date) => void)
@@ -139,6 +146,8 @@ type EventHandlerProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onDragOver: (event: DragEvent<HTMLElement>) => void;
   onDrop: (event: DragEvent<HTMLElement>) => void;
+  onFocus: (event: FocusEvent<HTMLElement>) => void;
+  onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
 };
 
 type Display =
@@ -186,6 +195,7 @@ type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
 
 type UIProps = {
   alignItems: UIProp<AlignItems>;
+  alignSelf: UIProp<AlignItems>;
   animation: UIProp<FlattenSimpleInterpolation>;
   backgroundColor: UIProp<string>;
   backgroundPosition: UIProp<string>;
@@ -202,7 +212,6 @@ type UIProps = {
   fontWeight: UIProp<string | number>;
   fontStyle: UIProp<string | number>;
   height: UIProp<string | number>;
-  id: UIProp<string>;
   justifyContent: UIProp<JustifyContent>;
   left: UIProp<string | number>;
   lineHeight: UIProp<string | number>;
@@ -230,6 +239,7 @@ type UIProps = {
   right: UIProp<string | number>;
   stroke: UIProp<string>;
   textAlign: UIProp<string>;
+  textDecoration: UIProp<string>;
   top: UIProp<string | number>;
   width: UIProp<string | number>;
   zIndex: UIProp<number>;
@@ -243,28 +253,28 @@ const remInPixels = 15;
 
 const FALSY_VALUES = [null, undefined, false, '', NaN, 0] as const;
 
-const wrapStatementWithBreakpoint = (
-  breakpoint: string,
-  statementToWrap: string | (() => FlattenInterpolation<{ theme: Theme }>),
-) => () => css`
-  @media (max-width: ${breakpoint}px) {
-    ${statementToWrap}
-  }
-`;
+const wrapStatementWithBreakpoint =
+  (
+    breakpoint: string,
+    statementToWrap: string | (() => FlattenInterpolation<{ theme: Theme }>),
+  ) =>
+  () =>
+    css`
+      @media (max-width: ${breakpoint}px) {
+        ${statementToWrap}
+      }
+    `;
 
-const createCSSStatement = (
-  key: string,
-  value: UIPropValue<ValidUIPropTypes>,
-  parser?: Parser,
-) => () => {
-  return css`
-    ${kebabCase(key)}: ${parser ? parser(value) : value};
-  `;
-};
+const createCSSStatement =
+  (key: string, value: UIPropValue<ValidUIPropTypes>, parser?: Parser) =>
+  () => {
+    return css`
+      ${kebabCase(key)}: ${parser ? parser(value) : value};
+    `;
+  };
 
 const isString = (value: unknown): value is string => {
-  if (typeof value === 'string' || value instanceof String) return true;
-  return false;
+  return typeof value === 'string' || value instanceof String;
 };
 
 const isNumber = (value: unknown): value is number => {
@@ -281,10 +291,7 @@ const isUIProp = (value: unknown): value is UIProp<ValidUIPropTypes> => {
 const isUIPropObject = (
   value: unknown,
 ): value is UIPropObject<ValidUIPropTypes> => {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return true;
-  }
-  return false;
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
 
 const createUIPropObject = (
@@ -299,86 +306,84 @@ const isDefined = <T,>(value: T | undefined | null): value is T => {
   return value !== undefined && value !== null;
 };
 
-const parseProperty = (key: string, parser?: Parser, customValue?: unknown) => (
-  props: UnknownProps,
-) => {
-  const value = customValue ?? props[key];
+const parseProperty =
+  (key: string, parser?: Parser, customValue?: unknown) =>
+  (props: UnknownProps) => {
+    const value = customValue ?? props[key];
 
-  if (!isUIProp(value)) return css``;
+    if (!isUIProp(value)) return css``;
 
-  const parsedValue = isUIPropObject(value) ? value : createUIPropObject(value);
+    const parsedValue = isUIPropObject(value)
+      ? value
+      : createUIPropObject(value);
 
-  const { default: defaultValue, hover, ...rest } = parsedValue;
+    const { default: defaultValue, hover, ...rest } = parsedValue;
 
-  const style = css`
-    ${isDefined<UIPropValue<ValidUIPropTypes>>(defaultValue) &&
-    createCSSStatement(key, defaultValue, parser)}
-    ${isDefined<UIPropValue<ValidUIPropTypes>>(hover) &&
-    css`
-      :hover {
-        ${createCSSStatement(key, hover, parser)}
-      }
-    `}
-  `;
-
-  if (Object.keys(rest).length === 0) {
-    return style;
-  }
-
-  const parsedBreakpoints = Object.entries(rest)
-    .map(([breakpoint]) => [
-      props?.theme?.breakpoints?.[breakpoint],
-      parsedValue?.[breakpoint],
-    ])
-    .sort(([valueA], [valueB]) => valueA - valueB);
-
-  return parsedBreakpoints.reduce((acc, [breakpoint, val], index) => {
-    if (!breakpoint || val === undefined) return acc;
-    return css`
-      ${wrapStatementWithBreakpoint(
-        breakpoint,
-        createCSSStatement(key, val, parser),
-      )};
-      ${acc};
+    const style = css`
+      ${isDefined<UIPropValue<ValidUIPropTypes>>(defaultValue) &&
+      createCSSStatement(key, defaultValue, parser)}
+      ${isDefined<UIPropValue<ValidUIPropTypes>>(hover) &&
+      css`
+        :hover {
+          ${createCSSStatement(key, hover, parser)}
+        }
+      `}
     `;
-  }, style);
-};
 
-const parseSpacing = (value: UIPropValue<number>) => (
-  props?: ThemeProps<Theme>,
-) => {
-  const parsedValue = typeof value === 'function' ? value(props) : value;
+    if (Object.keys(rest).length === 0) {
+      return style;
+    }
 
-  if (value === 0) return '0rem';
+    const parsedBreakpoints = Object.entries(rest)
+      .map(([breakpoint]) => [
+        props?.theme?.breakpoints?.[breakpoint],
+        parsedValue?.[breakpoint],
+      ])
+      .sort(([valueA], [valueB]) => valueA - valueB);
 
-  return `
+    return parsedBreakpoints.reduce((acc, [breakpoint, val], index) => {
+      if (!breakpoint || val === undefined) return acc;
+      return css`
+        ${wrapStatementWithBreakpoint(
+          breakpoint,
+          createCSSStatement(key, val, parser),
+        )};
+        ${acc};
+      `;
+    }, style);
+  };
+
+const parseSpacing =
+  (value: UIPropValue<number>) => (props?: ThemeProps<Theme>) => {
+    const parsedValue = typeof value === 'function' ? value(props) : value;
+
+    if (value === 0) return '0rem';
+
+    return `
   ${(1 / remInPixels) * 2 ** parsedValue}rem
 `;
-};
+  };
 
-const parseDimension = (value: UIPropValue<string | number>) => (
-  props: ThemeProps<Theme>,
-) => {
-  const parsedValue = typeof value === 'function' ? value(props) : value;
+const parseDimension =
+  (value: UIPropValue<string | number>) => (props: ThemeProps<Theme>) => {
+    const parsedValue = typeof value === 'function' ? value(props) : value;
 
-  if (!isString(parsedValue)) {
-    return `${Number(parsedValue)}px`;
-  }
-  return parsedValue;
-};
+    if (!isString(parsedValue)) {
+      return `${Number(parsedValue)}px`;
+    }
+    return parsedValue;
+  };
 
-const parseShorthandProperty = (
-  shorthand: string,
-  propsToChange: string[],
-  parser: Parser,
-) => (props: UnknownProps) =>
-  propsToChange.reduce(
-    (acc, val) => css`
-      ${parseProperty(val, parser, props[shorthand])};
-      ${acc};
-    `,
-    css``,
-  );
+const parseShorthandProperty =
+  (shorthand: string, propsToChange: string[], parser: Parser) =>
+  (props: UnknownProps) =>
+    propsToChange.reduce(
+      (acc, val) => css`
+        ${parseProperty(val, parser, props[shorthand])};
+        ${acc};
+      `,
+      css``,
+    );
 
 const boxProps = css`
   ${parseProperty('position')};
@@ -452,8 +457,10 @@ const boxProps = css`
   ${parseProperty('fontStyle')};
   ${parseProperty('borderRadius')};
   ${parseProperty('textAlign')};
+  ${parseProperty('textDecoration')};
   ${parseProperty('justifyContent')};
   ${parseProperty('alignItems')};
+  ${parseProperty('alignSelf')};
   ${parseProperty('lineHeight')};
   ${parseProperty('color')};
   ${parseProperty('stroke')};
@@ -471,6 +478,7 @@ const boxProps = css`
 
 const boxPropTypes = [
   'alignItems',
+  'alignSelf',
   'animation',
   'as',
   'backgroundColor',
@@ -516,6 +524,7 @@ const boxPropTypes = [
   'right',
   'stroke',
   'textAlign',
+  'textDecoration',
   'top',
   'width',
   'zIndex',
@@ -532,7 +541,15 @@ const StyledBox = styled.div.withConfig({
   ${boxProps}
 `;
 
-const getBoxProps = (props: UnknownProps) => pick(props, boxPropTypes);
+const getBoxProps = (props: UnknownProps) =>
+  pickBy(props, (_value, key) => {
+    // pass aria attributes to the DOM element
+    if (key.startsWith('aria-')) {
+      return true;
+    }
+
+    return (boxPropTypes as readonly string[]).includes(key);
+  });
 
 const Box = forwardRef<HTMLElement, BoxProps>(({ children, ...props }, ref) => (
   <StyledBox ref={ref} {...props}>
@@ -552,7 +569,6 @@ export {
   boxPropTypes,
   FALSY_VALUES,
   getBoxProps,
-  notAllowedPropsSet,
   parseDimension,
   parseProperty,
   parseSpacing,

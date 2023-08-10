@@ -10,16 +10,20 @@ type Props = InlineProps & {
   id: string;
   dateStart: Date;
   dateEnd: Date;
+  minDate?: Date;
   onDateStartChange: (date: Date) => void;
   onDateEndChange: (date: Date) => void;
+  disabled?: boolean;
 };
 
 const DatePeriodPicker = ({
   id,
   dateStart,
   dateEnd,
+  minDate,
   onDateStartChange,
   onDateEndChange,
+  disabled,
   ...props
 }: Props) => {
   const { t } = useTranslation();
@@ -30,33 +34,40 @@ const DatePeriodPicker = ({
     <Inline as="div" spacing={5} {...getInlineProps(props)}>
       <Stack spacing={2} as="div">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
-          {t('time_table.start')}
+          {t('date_period_picker.start')}
         </Label>
         <DatePicker
           id={`${idPrefix}-start`}
           selected={dateStart}
+          minDate={minDate}
           onChange={(newDateStart) => {
-            onDateStartChange(newDateStart);
-            if (dateEnd.getTime() < newDateStart.getTime()) {
+            if (dateEnd && dateEnd.getTime() < newDateStart.getTime()) {
               onDateEndChange(newDateStart);
             }
+            onDateStartChange(newDateStart);
           }}
+          disabled={disabled}
         />
       </Stack>
       <Stack spacing={2} as="div">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
-          {t('time_table.end')}
+          {t('date_period_picker.end')}
         </Label>
         <DatePicker
           id={`${idPrefix}-end`}
           selected={dateEnd}
           onChange={(newDateEnd) => {
-            onDateEndChange(newDateEnd);
-            if (dateStart.getTime() > newDateEnd.getTime()) {
+            if (dateStart && dateStart.getTime() > newDateEnd.getTime()) {
               onDateStartChange(newDateEnd);
             }
+            onDateEndChange(newDateEnd);
           }}
-          minDate={dateStart}
+          minDate={
+            dateStart && dateStart.getTime() > new Date().getTime()
+              ? dateStart
+              : new Date()
+          }
+          disabled={disabled}
         />
       </Stack>
     </Inline>

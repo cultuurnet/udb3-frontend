@@ -1,3 +1,4 @@
+import { useAnnouncementModalContext } from 'context/AnnouncementModalContext';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
@@ -91,9 +92,11 @@ const AnnouncementContent = ({
       alt={callToActionLabel ?? ''}
       width="100%"
       maxHeight="30vh"
+      objectFit="contain"
       opacity={{ hover: 0.85 }}
     />
   );
+
   return (
     <Stack as="article" padding={4} spacing={3} width="70%">
       <Title>{title}</Title>
@@ -165,17 +168,24 @@ const Announcements = ({
 }) => {
   const { t } = useTranslation();
 
+  const [modalContext, setModalContext] = useAnnouncementModalContext();
+
   const activeAnnouncement = announcements.find(
     (announcement) => announcement.status === AnnouncementStatus.ACTIVE,
   );
 
   return (
     <Modal
-      visible={visible}
+      visible={modalContext.visible}
       title={t('announcements.new_features')}
       onShow={onShow}
-      scrollable={false}
-      onClose={onClose}
+      scrollable={true}
+      onClose={() =>
+        setModalContext((prevModalContext) => ({
+          ...prevModalContext,
+          visible: false,
+        }))
+      }
     >
       {announcements.length > 0 ? (
         <Inline>

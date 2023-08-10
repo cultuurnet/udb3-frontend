@@ -1,18 +1,19 @@
-import type { Values } from '@/types/Values';
+import { ReactNode } from 'react';
 
 import { parseSpacing } from './Box';
 import { Icon, Icons } from './Icon';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
-import { getValueFromTheme } from './theme';
+import { getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`toggleBox`);
 
 type Props = StackProps & {
   active: boolean;
-  icon: Values<typeof Icons>;
-  text: string;
+  icon?: JSX.Element;
+  text: ReactNode;
+  disabled?: boolean;
 };
 
 const ToggleBox = ({
@@ -21,6 +22,7 @@ const ToggleBox = ({
   active,
   icon,
   text,
+  disabled,
   ...props
 }: Props) => {
   return (
@@ -30,46 +32,43 @@ const ToggleBox = ({
       padding={5}
       alignItems="center"
       position="relative"
+      spacing={3}
       backgroundColor={getValue(
         active ? 'activeBackgroundColor' : 'backgroundColor',
       )}
       minWidth={parseSpacing(8)}
+      borderRadius={getGlobalBorderRadius}
+      disabled={disabled}
       css={`
-        border: 1px solid ${getValue('borderColor')};
+        border: none;
+        box-shadow: ${getValue('boxShadow.large')};
+        cursor: ${disabled ? 'not-allowed' : 'pointer'};
+
+        &:hover {
+          background-color: ${disabled ? 'none' : getValue('hoverColor')};
+        }
       `}
       {...getStackProps(props)}
     >
       {active && (
         <Icon
+          css={`
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            color: ${getValue('iconCheckColor')};
+          `}
           name={Icons.CHECK_CIRCLE}
-          backgroundColor="white"
-          borderRadius="50%"
-          color={getValue('iconCheckColor')}
-          position="absolute"
-          top={-7}
-          left={-6}
-          width={15}
-          height={15}
         />
       )}
-      {icon && (
-        <Icon
-          name={icon}
-          color={getValue('iconColor')}
-          width={30}
-          height={30}
-        />
-      )}
+      {icon && <Stack>{icon}</Stack>}
       {text && (
         <Text
           color={getValue(active ? 'activeTextColor' : 'textColor')}
           fontWeight={700}
           fontSize="16px"
           css={`
-            text-decoration: ${active ? 'underline' : 'none'};
-            &:hover {
-              text-decoration: underline;
-            }
+            color: ${disabled ? 'grey' : 'initial'};
           `}
         >
           {text}

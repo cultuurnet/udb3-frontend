@@ -7,7 +7,6 @@ import { CalendarType } from '@/constants/CalendarType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { DetailTable } from '@/ui/DetailTable';
@@ -133,7 +132,6 @@ const Actions = ({
         <Button
           iconName={Icons.PENCIL}
           spacing={3}
-          maxHeight={parseSpacing(5)()}
           onClick={onClickChangeName}
           shouldHideText={shouldCollapse}
           disabled={loading}
@@ -144,7 +142,6 @@ const Actions = ({
           iconName={Icons.PLUS}
           variant={ButtonVariants.SUCCESS}
           spacing={3}
-          maxHeight={parseSpacing(5)()}
           onClick={onClickAdd}
           shouldHideText={shouldCollapse}
           disabled={loading}
@@ -157,7 +154,6 @@ const Actions = ({
           iconName={Icons.TRASH}
           spacing={3}
           onClick={onClickDelete}
-          maxHeight={parseSpacing(5)()}
           shouldHideText={shouldCollapse}
         >
           {t('productions.overview.delete')}

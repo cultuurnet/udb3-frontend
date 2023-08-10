@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import { useAddNewsletterSubscriberMutation } from '@/hooks/api/newsletter';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Image } from '@/ui/Image';
@@ -41,8 +40,14 @@ const NewsletterSignupForm = (props: Props) => {
   };
 
   return (
-    <Panel backgroundColor="white" padding={4} spacing={4} {...props}>
-      <Inline as="div" justifyContent="space-between">
+    <Panel
+      backgroundColor="white"
+      padding={5}
+      spacing={4}
+      maxWidth="64rem"
+      {...props}
+    >
+      <Inline as="div" spacing={4} flexWrap="wrap">
         {addNewsletterSubscriberMutation.status === QueryStatus.SUCCESS ? (
           <Stack spacing={4}>
             <Title>{t('dashboard.newsletter.success.title')}</Title>
@@ -74,12 +79,13 @@ const NewsletterSignupForm = (props: Props) => {
                     }}
                     value={email}
                     flex={1}
+                    minWidth="20rem"
                     maxWidth="30rem"
                   />
                 }
               />
 
-              <Button maxHeight={parseSpacing(5)()}>
+              <Button type="submit">
                 {t('dashboard.newsletter.subscribe')}
               </Button>
             </Inline>

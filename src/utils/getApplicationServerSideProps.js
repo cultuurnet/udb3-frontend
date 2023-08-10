@@ -5,10 +5,12 @@ import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
-import { useGetUserQuery } from '@/hooks/api/user';
+import { useGetUserQuery, useGetUserQueryServerSide } from '@/hooks/api/user';
+import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
 import { getRedirects } from '../redirects';
+import { FetchError } from './fetchFromApi';
 import { isTokenValid } from './isTokenValid';
 
 class Cookies extends UniversalCookies {
@@ -59,90 +61,83 @@ const getRedirect = (originalPath, environment, cookies) => {
     .find((match) => !!match);
 };
 
-const getApplicationServerSideProps = (callbackFn) => async ({
-  req,
-  query,
-  resolvedUrl,
-}) => {
-  const { publicRuntimeConfig } = getConfig();
-  if (publicRuntimeConfig.environment === 'development') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-  }
+const redirectToLogin = (cookies, req, resolvedUrl) => {
+  Sentry.setUser(null);
+  cookies.remove('token');
 
-  const rawCookies = req?.headers?.cookie ?? '';
+  const { origin } = absoluteUrl(req);
+  const referer = encodeURIComponent(`${origin}${resolvedUrl}`);
 
-  const cookies = new Cookies(rawCookies);
+  return {
+    redirect: {
+      destination: `/login?referer=${referer}`,
+      permanent: false,
+    },
+  };
+};
 
-  if (!isTokenValid(query?.jwt ?? cookies.get('token'))) {
-    cookies.remove('user');
-    Sentry.setUser(null);
-    cookies.remove('token');
-
-    const { origin } = absoluteUrl(req);
-
-    const referer = encodeURIComponent(`${origin}${resolvedUrl}`);
-
-    return {
-      redirect: {
-        destination: `/login?referer=${referer}`,
-        permanent: false,
-      },
-    };
-  }
-
-  // set token in req.headers.cookie so that the token is known when prefetching a request
-  if (query.jwt && cookies.get('token') !== query.jwt) {
-    cookies.set('token', query.jwt);
-  }
-
-  req.headers.cookie = cookies.toString();
-
-  const isDynamicUrl = !!query.params;
-  const path = isDynamicUrl ? `/${query.params.join('/')}` : resolvedUrl;
-
-  const redirect = getRedirect(
-    path,
-    publicRuntimeConfig.environment,
-    cookies.getAll(),
-  );
-
-  if (redirect) {
-    // Don't include the `params` in the redirect URL's query.
-    delete query.params;
-    const queryParameters = new URLSearchParams(query);
-
-    // Return the redirect as-is if there are no additional query parameters
-    // to append.
-    if (!queryParameters.has('jwt')) {
-      return { redirect };
+const getApplicationServerSideProps =
+  (callbackFn) =>
+  async ({ req, query, resolvedUrl }) => {
+    const { publicRuntimeConfig } = getConfig();
+    if (publicRuntimeConfig.environment === 'development') {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     }
 
-    // Append query parameters to the redirect destination.
-    const glue = redirect.destination.includes('?') ? '&' : '?';
-    const redirectUrl = `${
-      redirect.destination
-    }${glue}jwt=${queryParameters.get('jwt')}`;
-    return { redirect: { ...redirect, destination: redirectUrl } };
-  }
+    const rawCookies = req?.headers?.cookie ?? '';
 
-  const queryClient = new QueryClient();
+    const cookies = new Cookies(rawCookies, defaultCookieOptions);
 
-  const user = await useGetUserQuery({ req, queryClient });
+    req.headers.cookie = cookies.toString();
 
-  if (user) {
-    cookies.set('user', user);
-  }
+    const isDynamicUrl = !!query.params;
+    const path = isDynamicUrl ? `/${query.params.join('/')}` : resolvedUrl;
 
-  req.headers.cookie = cookies.toString();
+    const redirect = getRedirect(
+      path,
+      publicRuntimeConfig.environment,
+      cookies.getAll(),
+    );
 
-  if (!callbackFn) return { props: { cookies: cookies.toString() } };
+    if (redirect) {
+      // Don't include the `params` in the redirect URL's query.
+      delete query.params;
+      const queryParameters = new URLSearchParams(query);
 
-  return await callbackFn({
-    req,
-    query,
-    queryClient,
-    cookies: cookies.toString(),
-  });
-};
+      // Return the redirect as-is if there are no additional query parameters
+      // to append.
+      if (!queryParameters.has('jwt')) {
+        return { redirect };
+      }
+
+      // Append query parameters to the redirect destination.
+      const glue = redirect.destination.includes('?') ? '&' : '?';
+      const redirectUrl = `${
+        redirect.destination
+      }${glue}jwt=${queryParameters.get('jwt')}`;
+      return { redirect: { ...redirect, destination: redirectUrl } };
+    }
+
+    const queryClient = new QueryClient();
+
+    try {
+      await useGetUserQueryServerSide({ req, queryClient });
+    } catch (error) {
+      if (error instanceof FetchError) {
+        return redirectToLogin(cookies, req, resolvedUrl);
+      }
+    }
+
+    req.headers.cookie = cookies.toString();
+
+    if (!callbackFn) return { props: { cookies: cookies.toString() } };
+
+    return await callbackFn({
+      req,
+      query,
+      queryClient,
+      cookies: cookies.toString(),
+    });
+  };
 
 export { getApplicationServerSideProps };

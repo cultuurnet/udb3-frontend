@@ -1,13 +1,11 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const moduleExports = {
   productionBrowserSourceMaps: true,
-  stories: ['../src/ui/**/*.stories.mdx'],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-a11y',
-  ],
+  swcMinify: true,
   async redirects() {
     // Redirects to fix non-existing paths should go in `src/redirects.js`!!!
     const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
@@ -20,22 +18,37 @@ const moduleExports = {
     ];
   },
   publicRuntimeConfig: {
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
     environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
     apiUrl: process.env.NEXT_PUBLIC_API_URL,
+    auth0Domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN,
     legacyAppUrl: process.env.NEXT_PUBLIC_LEGACY_APP_URL,
     authUrl: process.env.NEXT_PUBLIC_AUTH_URL,
     socketUrl: process.env.NEXT_PUBLIC_SOCKET_URL,
     newAnnouncementsUrl: process.env.NEXT_PUBLIC_NEW_ANNOUNCEMENTS_URL,
+    taxonomyUrl: process.env.NEXT_PUBLIC_TAXONOMY_URL,
+    cultuurKuurLocationId: process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID,
     sentryDsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
     newsletterApiUrl: process.env.NEXT_PUBLIC_NEWSLETTER_API_URL,
     newsletterEmailListId: process.env.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID,
+    globalAlertMessage: process.env.NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE,
+    globalAlertVariant: process.env.NEXT_PUBLIC_GLOBAL_ALERT_VARIANT,
+    shouldShowBetaVersion: process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION,
   },
-  pageExtensions: ['page.tsx', 'page.js'],
+  pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 const SentryWebpackPluginOptions = {
   dryRun: true,
 };
+
+module.exports.withoutSentry = moduleExports;
 
 module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions);
