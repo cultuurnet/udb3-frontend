@@ -8,6 +8,7 @@ import {
   ServerSideQueryOptions,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import { useAuthenticatedQuery as useAuthenticatedQueryV2 } from './authenticated-query-v2';
 
 type User = {
   sub: string;
@@ -58,7 +59,7 @@ const getUser = async (cookies: Cookies) => {
 const useGetUserQuery = () => {
   const { cookies } = useCookiesWithOptions(['idToken']);
 
-  return useAuthenticatedQuery({
+  return useAuthenticatedQueryV2({
     queryKey: ['user'],
     queryFn: () => getUser(cookies),
   });

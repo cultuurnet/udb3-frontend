@@ -241,9 +241,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const { t, i18n } = useTranslation();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
 
@@ -361,9 +359,7 @@ const OrganizerRow = ({
   const { t, i18n } = useTranslation();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(organizer.creator);
 
@@ -550,8 +546,7 @@ const Dashboard = (): any => {
     );
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
-  const user = getUserQuery.data as User;
+  const user = getUserQuery.data;
 
   const handleSelectSorting = (event) => {
     const sortValue = event.target.value;

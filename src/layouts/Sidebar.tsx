@@ -187,8 +187,7 @@ const ProfileMenu = ({ defaultProfileImageUrl }: ProfileMenuProps) => {
   const queryClient = useQueryClient();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
-  const user = getUserQuery.data as User;
+  const user = getUserQuery.data;
 
   const loginMenu = [
     {
