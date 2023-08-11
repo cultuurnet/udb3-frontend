@@ -23,6 +23,10 @@ import type {
   SortOptions,
 } from './authenticated-query';
 import {
+  AuthenticatedQueryFunctionContext,
+  useAuthenticatedQuery as useAuthenticatedQueryV2,
+} from './authenticated-query-v2';
+import {
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -123,7 +127,7 @@ const useGetPlacesByCreatorQuery = (
 
 type GetPlacesByQueryArguments = {
   name: string;
-  terms: Array<Values<typeof EventTypes>>;
+  terms: Values<typeof EventTypes>[];
   zip?: string;
   addressLocality?: string;
   addressCountry?: Country;
@@ -131,12 +135,9 @@ type GetPlacesByQueryArguments = {
 
 const getPlacesByQuery = async ({
   headers,
-  name,
-  terms,
-  zip,
-  addressLocality,
-  addressCountry,
-}: Headers & GetPlacesByQueryArguments) => {
+
+  queryKey: { name, terms, zip, addressLocality, addressCountry },
+}) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
     '',
@@ -169,9 +170,11 @@ const getPlacesByQuery = async ({
 
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return;
   }
-  return await res.json();
+
+  return (await res.json()) as Place[];
 };
 
 const useGetPlacesByQuery = (
@@ -184,7 +187,7 @@ const useGetPlacesByQuery = (
   }: GetPlacesByQueryArguments,
   configuration = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
+  useAuthenticatedQueryV2({
     queryKey: ['places'],
     queryFn: getPlacesByQuery,
     queryArguments: {
@@ -194,7 +197,7 @@ const useGetPlacesByQuery = (
       addressCountry,
       addressLocality,
     },
-    enabled: !!name || terms.length,
+    enabled: !!name || terms.length > 0,
     ...configuration,
   });
 
