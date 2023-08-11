@@ -3,11 +3,11 @@ import jwt_decode from 'jwt-decode';
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
+import { ServerSideQueryOptions } from './authenticated-query';
 import {
-  ServerSideQueryOptions,
-  useAuthenticatedQuery,
-} from './authenticated-query';
-import { useAuthenticatedQuery as useAuthenticatedQueryV2 } from './authenticated-query-v2';
+  prefetchAuthenticatedQuery,
+  useAuthenticatedQuery as useAuthenticatedQueryV2,
+} from './authenticated-query-v2';
 
 type User = {
   sub: string;
@@ -70,7 +70,7 @@ const useGetUserQueryServerSide = (
 ) => {
   const cookies = req.cookies;
 
-  return useAuthenticatedQuery({
+  return prefetchAuthenticatedQuery({
     req,
     queryClient,
     queryKey: ['user'],
