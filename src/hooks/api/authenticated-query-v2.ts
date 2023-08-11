@@ -28,7 +28,7 @@ type GeneratedQueryKey = readonly [QueryKey, QueryArguments];
 
 type AuthenticatedQueryFunctionContext =
   QueryFunctionContext<GeneratedQueryKey> & {
-    headers: Headers;
+    headers: HeadersInit;
   };
 
 type ServerSideOptions = {
@@ -43,7 +43,14 @@ type PrefetchAuthenticatedQueryOptions<TQueryFnData> = {
 
 type UseAuthenticatedQueryOptions<TQueryFnData> = {
   queryArguments?: QueryArguments;
-} & UseQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>;
+} & Omit<
+  UseQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>,
+  'queryFn'
+> & {
+    queryFn: (
+      context: AuthenticatedQueryFunctionContext,
+    ) => TQueryFnData | Promise<TQueryFnData>;
+  };
 
 const isUnAuthorized = (status: number) => [401, 403].includes(status);
 
@@ -83,8 +90,7 @@ const getPreparedOptions = <TQueryFnData = unknown>({
   return {
     ...restOptions,
     queryKey: generatedQueryKey,
-    meta: { headers },
-    queryFn: queryFn,
+    queryFn: (context) => queryFn({ ...context, headers }),
     ...('enabled' in restOptions && {
       enabled: isTokenPresent && !!restOptions.enabled,
     }),
@@ -104,6 +110,7 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
   const headers = createHeaders(cookies.get('token'));
 
   const { queryKey, queryFn } = getPreparedOptions<TQueryFnData>({
+    // @ts-expect-error
     options,
     isTokenPresent: isTokenValid(cookies.get('token')),
     headers,

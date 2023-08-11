@@ -79,21 +79,19 @@ const useGetUserQueryServerSide = (
   });
 };
 
-const getPermissions = async ({ meta }): Promise<string[]> => {
+const getPermissions = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/user/permissions/',
-    options: {
-      headers: meta.headers as Headers,
-    },
+    options: { headers },
   });
 
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
     console.error(res);
-    return [];
+    return;
   }
 
-  return await res.json();
+  return (await res.json()) as string[];
 };
 
 const useGetPermissionsQuery = (configuration = {}) =>
@@ -103,18 +101,21 @@ const useGetPermissionsQuery = (configuration = {}) =>
     ...configuration,
   });
 
-const getRoles = async ({ meta }) => {
+const getRoles = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/user/roles/',
     options: {
-      headers: meta.headers as HeadersInit,
+      headers,
     },
   });
+
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return;
   }
-  return await res.json();
+
+  return (await res.json()) as any[];
 };
 
 const useGetRolesQuery = (configuration = {}) =>
