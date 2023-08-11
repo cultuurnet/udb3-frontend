@@ -82,15 +82,14 @@ const useGetUserQueryServerSide = (
 const getPermissions = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/user/permissions/',
-    options: {
-      headers,
-    },
+    options: { headers },
   });
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return;
   }
-  return await res.json();
+  return (await res.json()) as string[];
 };
 
 const useGetPermissionsQuery = (configuration = {}) =>
@@ -107,11 +106,14 @@ const getRoles = async ({ headers }) => {
       headers,
     },
   });
+
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return;
   }
-  return await res.json();
+
+  return (await res.json()) as any[];
 };
 
 const useGetRolesQuery = (configuration = {}) =>
