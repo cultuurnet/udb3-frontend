@@ -406,19 +406,16 @@ const Sidebar = () => {
   }, [rawAnnouncements]);
 
   useEffect(() => {
-    // @ts-expect-error
     if (!getRolesQuery.data) {
       return;
     }
 
-    // @ts-expect-error
     const validationQuery = getRolesQuery.data
       .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
       .filter((constraint) => constraint !== null)
       .join(' OR ');
 
     setSearchQuery(validationQuery);
-    // @ts-expect-error
   }, [getRolesQuery.data]);
 
   const announcements = useMemo(

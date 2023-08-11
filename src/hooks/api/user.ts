@@ -103,11 +103,11 @@ const useGetPermissionsQuery = (configuration = {}) =>
     ...configuration,
   });
 
-const getRoles = async ({ headers }) => {
+const getRoles = async ({ meta }) => {
   const res = await fetchFromApi({
     path: '/user/roles/',
     options: {
-      headers,
+      headers: meta.headers as HeadersInit,
     },
   });
   if (isErrorObject(res)) {
@@ -118,7 +118,7 @@ const getRoles = async ({ headers }) => {
 };
 
 const useGetRolesQuery = (configuration = {}) =>
-  useAuthenticatedQuery({
+  useAuthenticatedQueryV2({
     queryKey: ['user', 'roles'],
     queryFn: getRoles,
     ...configuration,
