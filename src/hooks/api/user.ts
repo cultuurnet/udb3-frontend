@@ -1,5 +1,4 @@
 import jwt_decode from 'jwt-decode';
-import getConfig from 'next/config';
 
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
@@ -80,22 +79,25 @@ const useGetUserQueryServerSide = (
   });
 };
 
-const getPermissions = async ({ headers }) => {
+const getPermissions = async ({ meta }): Promise<string[]> => {
   const res = await fetchFromApi({
     path: '/user/permissions/',
     options: {
-      headers,
+      headers: meta.headers as Headers,
     },
   });
+
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return [];
   }
+
   return await res.json();
 };
 
 const useGetPermissionsQuery = (configuration = {}) =>
-  useAuthenticatedQuery({
+  useAuthenticatedQueryV2({
     queryKey: ['user', 'permissions'],
     queryFn: getPermissions,
     ...configuration,

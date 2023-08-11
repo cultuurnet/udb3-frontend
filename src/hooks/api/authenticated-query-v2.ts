@@ -26,9 +26,10 @@ type GenerateQueryKeyArguments = {
 
 type GeneratedQueryKey = readonly [QueryKey, QueryArguments];
 
-type AuthenticatedQueryFunctionContext = QueryFunctionContext<GeneratedQueryKey> & {
-  headers: Headers;
-};
+type AuthenticatedQueryFunctionContext =
+  QueryFunctionContext<GeneratedQueryKey> & {
+    headers: Headers;
+  };
 
 type ServerSideOptions = {
   req: NextApiRequest;
@@ -60,7 +61,7 @@ const generateQueryKey = ({
 type GetPreparedOptionsArguments<TQueryFnData> = {
   options: UseAuthenticatedQueryOptions<TQueryFnData>;
   isTokenPresent: boolean;
-  headers: Headers;
+  headers: HeadersInit;
 };
 
 const getPreparedOptions = <TQueryFnData = unknown>({
@@ -79,19 +80,11 @@ const getPreparedOptions = <TQueryFnData = unknown>({
     queryArguments,
   });
 
-  const queryFunctionWithHeaders = async (
-    context: QueryFunctionContext<GeneratedQueryKey>,
-  ) => {
-    return await queryFn(
-      context,
-      // @ts-expect-error
-      headers,
-    );
-  };
   return {
     ...restOptions,
     queryKey: generatedQueryKey,
-    queryFn: queryFunctionWithHeaders,
+    meta: { headers },
+    queryFn: queryFn,
     ...('enabled' in restOptions && {
       enabled: isTokenPresent && !!restOptions.enabled,
     }),

@@ -464,7 +464,6 @@ const Sidebar = () => {
   ];
 
   const filteredManageMenu = useMemo(() => {
-    // @ts-expect-error
     if (!getPermissionsQuery.data) {
       return [];
     }
@@ -519,10 +518,8 @@ const Sidebar = () => {
     ];
 
     return manageMenu.filter((menuItem) => {
-      // @ts-expect-error
       return getPermissionsQuery.data.includes(menuItem.permission);
     });
-    // @ts-expect-error
   }, [countEventsToModerate, getPermissionsQuery.data, i18n.language, t]);
 
   return [
