@@ -135,8 +135,7 @@ type GetPlacesByQueryArguments = {
 
 const getPlacesByQuery = async ({
   headers,
-
-  queryKey: { name, terms, zip, addressLocality, addressCountry },
+  queryArguments: { name, terms, zip, addressLocality, addressCountry },
 }) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
@@ -174,7 +173,7 @@ const getPlacesByQuery = async ({
     return;
   }
 
-  return (await res.json()) as Place[];
+  return (await res.json()) as { member: Place[] };
 };
 
 const useGetPlacesByQuery = (
