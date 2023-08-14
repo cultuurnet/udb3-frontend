@@ -19,17 +19,12 @@ import { createHeaders, useHeaders } from './useHeaders';
 
 type QueryArguments = Record<string, string>;
 
-type GenerateQueryKeyArguments = {
-  queryKey: QueryKey;
-  queryArguments: QueryArguments;
-};
-
 type GeneratedQueryKey = readonly [QueryKey, QueryArguments];
 
 type AuthenticatedQueryFunctionContext<TQueryArguments = unknown> =
   QueryFunctionContext<GeneratedQueryKey> & {
     headers: HeadersInit;
-    queryArguments?: TQueryArguments;
+    queryArguments: TQueryArguments;
   };
 
 type ServerSideOptions = {
@@ -42,44 +37,52 @@ type PrefetchAuthenticatedQueryOptions<TQueryFnData> = {
 } & ServerSideOptions &
   FetchQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>;
 
-type UseAuthenticatedQueryOptions<
-  TQueryFnData,
-  TQueryArguments = QueryArguments,
+export type UseAuthenticatedQueryOptions<
+  TQueryFnData = unknown,
+  TQueryArguments extends Object = {},
 > = {
-  queryArguments?: TQueryArguments;
+  queryArguments: TQueryArguments;
 } & Omit<
   UseQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>,
   'queryFn'
 > & {
     queryFn: (
-      context: AuthenticatedQueryFunctionContext,
+      context: AuthenticatedQueryFunctionContext<TQueryArguments>,
     ) => TQueryFnData | Promise<TQueryFnData>;
   };
 
+export type UseAuthenticatedQueryWrapperOptions<
+  TQueryData = unknown,
+  TQueryArguments = unknown,
+> = Omit<UseAuthenticatedQueryOptions<TQueryData, TQueryArguments>, 'queryFn'>;
+
 const isUnAuthorized = (status: number) => [401, 403].includes(status);
 
-const generateQueryKey = ({
+const generateQueryKey = <K, A>({
   queryKey,
   queryArguments,
-}: GenerateQueryKeyArguments): GeneratedQueryKey => {
+}: {
+  queryKey: K;
+  queryArguments: A;
+}): [K, A] => {
   if (Object.keys(queryArguments ?? {}).length > 0) {
     return [queryKey, queryArguments];
   }
 
-  return [queryKey, {}];
+  return [queryKey, {} as A];
 };
 
-type GetPreparedOptionsArguments<TQueryFnData> = {
-  options: UseAuthenticatedQueryOptions<TQueryFnData>;
+type GetPreparedOptionsArguments<TQueryFnData, TQueryArguments> = {
+  options: UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>;
   isTokenPresent: boolean;
   headers: Headers;
 };
 
-const getPreparedOptions = <TQueryFnData = unknown>({
+const getPreparedOptions = <TQueryFnData = unknown, TQueryArguments = unknown>({
   options,
   isTokenPresent,
   headers,
-}: GetPreparedOptionsArguments<TQueryFnData>) => {
+}: GetPreparedOptionsArguments<TQueryFnData, TQueryArguments>) => {
   const { queryKey, queryArguments, queryFn, ...restOptions } = options;
   const generatedQueryKey = generateQueryKey({
     queryKey,
@@ -126,8 +129,11 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
   return await queryClient.getQueryData<TQueryFnData>(queryKey);
 };
 
-const useAuthenticatedQuery = <TQueryFnData = unknown>(
-  options: UseAuthenticatedQueryOptions<TQueryFnData>,
+const useAuthenticatedQuery = <
+  TQueryFnData = unknown,
+  TQueryArguments = unknown,
+>(
+  options: UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>,
 ) => {
   const headers = useHeaders();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([

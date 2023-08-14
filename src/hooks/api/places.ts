@@ -23,13 +23,15 @@ import type {
   SortOptions,
 } from './authenticated-query';
 import {
-  AuthenticatedQueryFunctionContext,
-  useAuthenticatedQuery as useAuthenticatedQueryV2,
-} from './authenticated-query-v2';
-import {
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import {
+  AuthenticatedQueryFunctionContext,
+  useAuthenticatedQuery as useAuthenticatedQueryV2,
+  UseAuthenticatedQueryOptions,
+  UseAuthenticatedQueryWrapperOptions,
+} from './authenticated-query-v2';
 import type { Headers } from './types/Headers';
 import type { User } from './user';
 
@@ -135,7 +137,13 @@ type GetPlacesByQueryArguments = {
 
 const getPlacesByQuery = async ({
   headers,
-  queryArguments: { name, terms, zip, addressLocality, addressCountry },
+  queryArguments: {
+    name,
+    terms,
+    zip = null,
+    addressLocality = null,
+    addressCountry = null,
+  },
 }) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
@@ -173,32 +181,24 @@ const getPlacesByQuery = async ({
     return;
   }
 
-  return (await res.json()) as { member: Place[] };
+  return await res.json();
 };
 
-const useGetPlacesByQuery = (
-  {
-    name,
-    terms,
-    zip,
-    addressLocality,
-    addressCountry,
-  }: GetPlacesByQueryArguments,
-  configuration = {},
-) =>
-  useAuthenticatedQueryV2({
+function wrap<T, U>(fn: (args: T) => U, defaults: (args: T) => Partial<T>) {
+  return (outerArgs: Omit<T, keyof ReturnType<typeof defaults>>): U => {
+    // @ts-expect-error
+    return fn({ ...outerArgs, ...defaults(outerArgs) } as T);
+  };
+}
+
+const useGetPlacesByQuery = wrap(
+  useAuthenticatedQueryV2<{ member: Place[] }, GetPlacesByQueryArguments>,
+  ({ enabled, queryArguments: { name, terms } }) => ({
     queryKey: ['places'],
     queryFn: getPlacesByQuery,
-    queryArguments: {
-      name,
-      terms,
-      zip,
-      addressCountry,
-      addressLocality,
-    },
-    enabled: !!name || terms.length > 0,
-    ...configuration,
-  });
+    enabled: enabled && (!!name || terms.length > 0),
+  }),
+);
 
 const changeAddress = async ({ headers, id, address, language }) =>
   fetchFromApi({
