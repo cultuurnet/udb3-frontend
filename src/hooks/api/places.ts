@@ -35,7 +35,7 @@ import {
 import type { Headers } from './types/Headers';
 import type { User } from './user';
 
-const getPlaceById = async ({ headers, id }) => {
+const getPlaceById = async ({ headers, queryArguments: { id } }) => {
   const res = await fetchFromApi({
     path: `/places/${id.toString()}`,
     options: {
@@ -44,7 +44,8 @@ const getPlaceById = async ({ headers, id }) => {
   });
   if (isErrorObject(res)) {
     // eslint-disable-next-line no-console
-    return console.error(res);
+    console.error(res);
+    return;
   }
   return await res.json();
 };
@@ -54,19 +55,14 @@ type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
   scope?: Values<typeof OfferTypes>;
 };
 
-const useGetPlaceByIdQuery = (
-  { req, queryClient, id, scope }: UseGetPlaceByIdArguments,
-  configuration: UseQueryOptions = {},
-) =>
-  useAuthenticatedQuery({
-    req,
-    queryClient,
+const useGetPlaceByIdQuery = wrap(
+  useAuthenticatedQueryV2<Place, UseGetPlaceByIdArguments>,
+  ({ queryArguments: { id, scope } }) => ({
     queryKey: ['places'],
     queryFn: getPlaceById,
-    queryArguments: { id },
     enabled: !!id && scope === OfferTypes.PLACES,
-    ...configuration,
-  });
+  }),
+);
 
 const getPlacesByCreator = async ({ headers, ...queryData }) => {
   delete headers['Authorization'];
