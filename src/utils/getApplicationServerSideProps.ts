@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/nextjs';
 import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 import absoluteUrl from 'next-absolute-url';
+import { ParsedUrlQuery } from 'querystring';
 import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
@@ -61,7 +62,13 @@ const getRedirect = (originalPath, environment, cookies) => {
     .find((match) => !!match);
 };
 
-const redirectToLogin = (cookies, req, resolvedUrl) => {
+const redirectToLogin = ({
+  cookies,
+  req,
+  resolvedUrl,
+}: Pick<ExtendedGetServerSidePropsContext, 'req' | 'resolvedUrl'> & {
+  cookies: Cookies;
+}) => {
   Sentry.setUser(null);
   cookies.remove('token');
 
@@ -91,17 +98,19 @@ const getApplicationServerSideProps =
   }: GetServerSidePropsContext) => {
     const { publicRuntimeConfig } = getConfig();
     if (publicRuntimeConfig.environment === 'development') {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     }
 
-    const rawCookies = req?.headers?.cookie ?? '';
-
-    const cookies = new Cookies(rawCookies, defaultCookieOptions);
+    const cookies = new Cookies(req.cookies);
 
     req.headers.cookie = cookies.toString();
 
+    const params = (query.params as string[]) ?? [];
+    const isDynamicUrl = Object.keys(params).length > 0;
+    const path = isDynamicUrl ? `/${params.join('/')}` : resolvedUrl;
+
     const redirect = getRedirect(
-      resolvedUrl,
+      path,
       publicRuntimeConfig.environment,
       cookies.getAll(),
     );
@@ -109,7 +118,9 @@ const getApplicationServerSideProps =
     if (redirect) {
       // Don't include the `params` in the redirect URL's query.
       delete query.params;
-      const queryParameters = new URLSearchParams(query);
+      const queryParameters = new URLSearchParams(
+        query as Record<string, string>,
+      );
 
       // Return the redirect as-is if there are no additional query parameters
       // to append.
@@ -131,7 +142,11 @@ const getApplicationServerSideProps =
       await useGetUserQueryServerSide({ req, queryClient });
     } catch (error) {
       if (error instanceof FetchError) {
-        return redirectToLogin(cookies, req, resolvedUrl);
+        return redirectToLogin({
+          cookies,
+          req,
+          resolvedUrl,
+        });
       }
     }
 

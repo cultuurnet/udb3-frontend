@@ -185,7 +185,6 @@ function wrap<T extends typeof useAuthenticatedQueryV2>(
   outerArgs: any = {},
 ): T {
   return <any>function (args) {
-    console.log({ args, outerArgs });
     return fn({ ...args, ...outerArgs(args) });
   };
 }

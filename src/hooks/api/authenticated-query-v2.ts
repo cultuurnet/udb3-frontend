@@ -141,7 +141,7 @@ function useAuthenticatedQuery<
   TQueryArguments = unknown,
 >(
   options: UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>,
-): UseQueryResult<TQueryFnData>;
+): UseQueryResult<TQueryFnData, FetchError>;
 function useAuthenticatedQuery<
   TQueryFnData = unknown,
   TQueryArguments = unknown,
@@ -149,7 +149,9 @@ function useAuthenticatedQuery<
   options:
     | UseServerSideAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>
     | UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>,
-): Promise<QueryState<TQueryFnData>> | UseQueryResult<TQueryFnData> {
+):
+  | Promise<QueryState<TQueryFnData>>
+  | UseQueryResult<TQueryFnData, FetchError> {
   if ('req' in options) {
     return prefetchAuthenticatedQuery(options);
   }
