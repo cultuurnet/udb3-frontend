@@ -180,10 +180,13 @@ const getPlacesByQuery = async ({
   return await res.json();
 };
 
-function wrap<T, U>(fn: (args: T) => U, defaults: (args: T) => Partial<T>) {
-  return (outerArgs: Omit<T, 'queryFn'>): U => {
-    // @ts-expect-error
-    return fn({ ...outerArgs, ...defaults(outerArgs) } as T);
+function wrap<T extends typeof useAuthenticatedQueryV2>(
+  fn: T,
+  outerArgs: any = {},
+): T {
+  return <any>function (args) {
+    console.log({ args, outerArgs });
+    return fn({ ...args, ...outerArgs(args) });
   };
 }
 

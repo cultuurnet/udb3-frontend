@@ -1,14 +1,15 @@
-import { NextApiRequest } from 'next';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { Cookies } from 'react-cookie';
 import {
-  FetchQueryOptions,
   QueryClient,
   QueryFunctionContext,
   QueryKey,
   useQuery,
   UseQueryOptions,
+  UseQueryResult,
 } from 'react-query';
+import { QueryState } from 'react-query/types/core/query';
 
 import { FetchError } from '@/utils/fetchFromApi';
 import { isTokenValid } from '@/utils/isTokenValid';
@@ -28,28 +29,26 @@ type AuthenticatedQueryFunctionContext<TQueryArguments = unknown> =
   };
 
 type ServerSideOptions = {
-  req: NextApiRequest;
+  req: GetServerSidePropsContext['req'];
   queryClient: QueryClient;
 };
-
-type PrefetchAuthenticatedQueryOptions<TQueryFnData> = {
-  queryArguments?: QueryArguments;
-} & ServerSideOptions &
-  FetchQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>;
 
 export type UseAuthenticatedQueryOptions<
   TQueryFnData = unknown,
   TQueryArguments extends Object = {},
 > = {
   queryArguments: TQueryArguments;
-} & Omit<
-  UseQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>,
-  'queryFn'
-> & {
-    queryFn: (
+} & Omit<UseQueryOptions<TQueryFnData, FetchError, TQueryFnData>, 'queryFn'> & {
+    queryFn?: (
       context: AuthenticatedQueryFunctionContext<TQueryArguments>,
     ) => TQueryFnData | Promise<TQueryFnData>;
   };
+
+export type UseServerSideAuthenticatedQueryOptions<
+  TQueryFnData = unknown,
+  TQueryArguments = unknown,
+> = UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments> &
+  ServerSideOptions;
 
 export type UseAuthenticatedQueryWrapperOptions<
   TQueryData = unknown,
@@ -104,7 +103,7 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
   req,
   queryClient,
   ...options
-}: PrefetchAuthenticatedQueryOptions<TQueryFnData>) => {
+}: UseServerSideAuthenticatedQueryOptions<TQueryFnData>) => {
   if (typeof window !== 'undefined') {
     throw new Error('Only use prefetchAuthenticatedQuery in server-side code');
   }
@@ -113,7 +112,6 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
   const headers = createHeaders(cookies.get('token'));
 
   const { queryKey, queryFn } = getPreparedOptions<TQueryFnData>({
-    // @ts-expect-error
     options,
     isTokenPresent: isTokenValid(cookies.get('token')),
     headers,
@@ -126,15 +124,36 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
     );
   } catch {}
 
-  return await queryClient.getQueryData<TQueryFnData>(queryKey);
+  return queryClient.getQueryState<TQueryFnData>(queryKey);
 };
 
-const useAuthenticatedQuery = <
+function useAuthenticatedQuery<
+  TQueryFnData = unknown,
+  TQueryArguments = unknown,
+>(
+  options: UseServerSideAuthenticatedQueryOptions<
+    TQueryFnData,
+    TQueryArguments
+  >,
+): Promise<QueryState<TQueryFnData>>;
+function useAuthenticatedQuery<
   TQueryFnData = unknown,
   TQueryArguments = unknown,
 >(
   options: UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>,
-) => {
+): UseQueryResult<TQueryFnData>;
+function useAuthenticatedQuery<
+  TQueryFnData = unknown,
+  TQueryArguments = unknown,
+>(
+  options:
+    | UseServerSideAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>
+    | UseAuthenticatedQueryOptions<TQueryFnData, TQueryArguments>,
+): Promise<QueryState<TQueryFnData>> | UseQueryResult<TQueryFnData> {
+  if ('req' in options) {
+    return prefetchAuthenticatedQuery(options);
+  }
+
   const headers = useHeaders();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
@@ -162,7 +181,7 @@ const useAuthenticatedQuery = <
   }
 
   return result;
-};
+}
 
 export { prefetchAuthenticatedQuery, useAuthenticatedQuery };
 export type { AuthenticatedQueryFunctionContext };
