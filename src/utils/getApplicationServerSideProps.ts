@@ -1,17 +1,17 @@
 import * as Sentry from '@sentry/nextjs';
 import getConfig from 'next/config';
+import { GetServerSidePropsContext } from 'next/types';
 import absoluteUrl from 'next-absolute-url';
 import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
-import { useGetUserQuery, useGetUserQueryServerSide } from '@/hooks/api/user';
+import { useGetUserQueryServerSide } from '@/hooks/api/user';
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
 import { getRedirects } from '../redirects';
 import { FetchError } from './fetchFromApi';
-import { isTokenValid } from './isTokenValid';
 
 class Cookies extends UniversalCookies {
   toString() {
@@ -19,7 +19,7 @@ class Cookies extends UniversalCookies {
 
     return cookieEntries.reduce((previous, [key, value], currentIndex) => {
       const end = currentIndex !== cookieEntries.length - 1 ? '; ' : '';
-      const pair = `${key}=${encodeURIComponent(value)}${end}`;
+      const pair = `${key}=${encodeURIComponent(value as string)}${end}`;
       return `${previous}${pair}`;
     }, '');
   }
@@ -76,9 +76,19 @@ const redirectToLogin = (cookies, req, resolvedUrl) => {
   };
 };
 
+type ExtendedGetServerSidePropsContext = GetServerSidePropsContext & {
+  cookies: string;
+  queryClient: QueryClient;
+};
+
 const getApplicationServerSideProps =
-  (callbackFn) =>
-  async ({ req, query, resolvedUrl }) => {
+  (callbackFn?: (context: ExtendedGetServerSidePropsContext) => any) =>
+  async ({
+    req,
+    query,
+    resolvedUrl,
+    ...context
+  }: GetServerSidePropsContext) => {
     const { publicRuntimeConfig } = getConfig();
     if (publicRuntimeConfig.environment === 'development') {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -90,11 +100,8 @@ const getApplicationServerSideProps =
 
     req.headers.cookie = cookies.toString();
 
-    const isDynamicUrl = !!query.params;
-    const path = isDynamicUrl ? `/${query.params.join('/')}` : resolvedUrl;
-
     const redirect = getRedirect(
-      path,
+      resolvedUrl,
       publicRuntimeConfig.environment,
       cookies.getAll(),
     );
@@ -133,6 +140,8 @@ const getApplicationServerSideProps =
     if (!callbackFn) return { props: { cookies: cookies.toString() } };
 
     return await callbackFn({
+      ...context,
+      resolvedUrl,
       req,
       query,
       queryClient,
