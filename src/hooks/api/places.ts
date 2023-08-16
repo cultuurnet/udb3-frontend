@@ -47,7 +47,7 @@ const getPlaceById = async ({ headers, queryArguments: { id } }) => {
     console.error(res);
     return;
   }
-  return await res.json();
+  return (await res.json()) as Place;
 };
 
 type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
@@ -181,7 +181,7 @@ const getPlacesByQuery = async ({
 };
 
 function wrap<T, U>(fn: (args: T) => U, defaults: (args: T) => Partial<T>) {
-  return (outerArgs: Omit<T, keyof ReturnType<typeof defaults>>): U => {
+  return (outerArgs: Omit<T, 'queryFn'>): U => {
     // @ts-expect-error
     return fn({ ...outerArgs, ...defaults(outerArgs) } as T);
   };
