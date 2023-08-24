@@ -16,6 +16,7 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 import { Headers } from './types/Headers';
 import { createHeaders, useHeaders } from './useHeaders';
+import { GetServerSidePropsContext } from 'next/types';
 
 type QueryArguments = Record<string, string>;
 
@@ -32,7 +33,7 @@ type AuthenticatedQueryFunctionContext =
   };
 
 type ServerSideOptions = {
-  req: NextApiRequest;
+  req: GetServerSidePropsContext['req'];
   queryClient: QueryClient;
 };
 

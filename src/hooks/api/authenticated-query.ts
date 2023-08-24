@@ -19,9 +19,10 @@ import { isErrorObject } from '@/utils/fetchFromApi';
 import { isTokenValid } from '@/utils/isTokenValid';
 
 import { createHeaders, useHeaders } from './useHeaders';
+import { GetServerSidePropsContext } from 'next/types';
 
 type ServerSideQueryOptions = {
-  req?: NextApiRequest;
+  req?: GetServerSidePropsContext['req'];
   queryClient?: QueryClient;
 };
 

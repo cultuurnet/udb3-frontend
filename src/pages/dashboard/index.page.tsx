@@ -725,10 +725,10 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const user = (await useGetUserQueryServerSide({
+    const user = await useGetUserQueryServerSide({
       req,
       queryClient,
-    })) as User;
+    });
 
     await Promise.all(
       Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {

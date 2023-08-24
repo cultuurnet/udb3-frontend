@@ -45,7 +45,7 @@ const getUser = async (cookies: Cookies) => {
     throw new FetchError(401, 'Unauthorized');
   }
 
-  const userInfo = jwt_decode(cookies.idToken) as User;
+  const userInfo = jwt_decode<User>(cookies.idToken);
   const decodedAccessToken = jwt_decode(cookies.token) as decodedAccessToken;
 
   if (Date.now() >= decodedAccessToken.exp * 1000) {
