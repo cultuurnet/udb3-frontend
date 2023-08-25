@@ -22,11 +22,7 @@ import {
   useDeletePlaceByIdMutation,
   useGetPlacesByCreatorQuery,
 } from '@/hooks/api/places';
-import {
-  useGetUserQuery,
-  useGetUserQueryServerSide,
-  User,
-} from '@/hooks/api/user';
+import { useGetUserQuery, useGetUserQueryServerSide } from '@/hooks/api/user';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Footer } from '@/pages/Footer';
 import type { Event } from '@/types/Event';

@@ -43,7 +43,7 @@ const getRedirects = (
   environment: Environment,
   language: Values<typeof SupportedLanguages> = 'nl',
 ): {
-  featureFlag?: 'react_create';
+  featureFlag?: string;
   permanent: boolean;
   destination: string;
   source: string;
