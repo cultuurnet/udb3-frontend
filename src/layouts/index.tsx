@@ -34,7 +34,7 @@ const useHandleAuthentication = () => {
 
   useEffect(() => {
     if (!getUserQuery?.data) return;
-    Sentry.setUser({ id: getUserQuery.data.id });
+    Sentry.setUser({ id: getUserQuery.data.sub });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserQuery?.data]);
 

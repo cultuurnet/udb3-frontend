@@ -725,7 +725,7 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const { data: user } = await useGetUserQueryServerSide({
+    const user = await useGetUserQueryServerSide({
       req,
       queryClient,
     });
@@ -733,10 +733,11 @@ const getServerSideProps = getApplicationServerSideProps(
     await Promise.all(
       Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
         const page =
-          query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
+          query.tab === key ? parseInt((query.page as string) ?? '1') : 1;
 
-        const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+        const sort = query?.sort as string | undefined;
+        const sortingField = sort?.split('_')[0] ?? SortingField.CREATED;
+        const sortingOrder = sort?.split('_')[1] ?? SortingOrder.DESC;
 
         return hook({
           req,

@@ -115,14 +115,7 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
     headers,
   });
 
-  try {
-    await queryClient.prefetchQuery<TQueryFnData, FetchError>(
-      queryKey,
-      queryFn,
-    );
-  } catch {}
-
-  return queryClient.getQueryState<TQueryFnData>(queryKey);
+  return queryClient.fetchQuery<TQueryFnData, FetchError>(queryKey, queryFn);
 };
 
 const useAuthenticatedQuery = <TQueryFnData = unknown>(
