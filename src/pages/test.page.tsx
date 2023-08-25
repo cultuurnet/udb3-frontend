@@ -47,7 +47,7 @@ const Test = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, cookies, queryClient }) => {
-    const eventOnServer = await prefetchAuthenticatedQuery<Event>({
+    const { data: eventOnServer } = await prefetchAuthenticatedQuery<Event>({
       req,
       queryClient,
       queryKey: ['events'],

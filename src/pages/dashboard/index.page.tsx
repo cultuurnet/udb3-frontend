@@ -725,7 +725,7 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const user = await useGetUserQueryServerSide({
+    const { data: user } = await useGetUserQueryServerSide({
       req,
       queryClient,
     });

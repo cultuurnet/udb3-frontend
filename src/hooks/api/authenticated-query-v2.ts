@@ -1,5 +1,5 @@
-import { NextApiRequest } from 'next';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { Cookies } from 'react-cookie';
 import {
   FetchQueryOptions,
@@ -14,9 +14,7 @@ import { FetchError } from '@/utils/fetchFromApi';
 import { isTokenValid } from '@/utils/isTokenValid';
 
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
-import { Headers } from './types/Headers';
 import { createHeaders, useHeaders } from './useHeaders';
-import { GetServerSidePropsContext } from 'next/types';
 
 type QueryArguments = Record<string, string>;
 
@@ -124,7 +122,7 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
     );
   } catch {}
 
-  return await queryClient.getQueryData<TQueryFnData>(queryKey);
+  return queryClient.getQueryState<TQueryFnData>(queryKey);
 };
 
 const useAuthenticatedQuery = <TQueryFnData = unknown>(
