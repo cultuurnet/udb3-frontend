@@ -25,9 +25,10 @@ type GenerateQueryKeyArguments = {
 
 type GeneratedQueryKey = readonly [QueryKey, QueryArguments];
 
-type AuthenticatedQueryFunctionContext =
+type AuthenticatedQueryFunctionContext<TQueryArguments = unknown> =
   QueryFunctionContext<GeneratedQueryKey> & {
     headers: HeadersInit;
+    queryArguments?: TQueryArguments;
   };
 
 type ServerSideOptions = {
@@ -40,8 +41,11 @@ type PrefetchAuthenticatedQueryOptions<TQueryFnData> = {
 } & ServerSideOptions &
   FetchQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>;
 
-type UseAuthenticatedQueryOptions<TQueryFnData> = {
-  queryArguments?: QueryArguments;
+type UseAuthenticatedQueryOptions<
+  TQueryFnData,
+  TQueryArguments = QueryArguments,
+> = {
+  queryArguments?: TQueryArguments;
 } & Omit<
   UseQueryOptions<TQueryFnData, FetchError, TQueryFnData, QueryKey>,
   'queryFn'
@@ -74,12 +78,7 @@ const getPreparedOptions = <TQueryFnData = unknown>({
   options,
   isTokenPresent,
   headers,
-}: GetPreparedOptionsArguments<TQueryFnData>): UseQueryOptions<
-  TQueryFnData,
-  FetchError,
-  TQueryFnData,
-  GeneratedQueryKey
-> => {
+}: GetPreparedOptionsArguments<TQueryFnData>) => {
   const { queryKey, queryArguments, queryFn, ...restOptions } = options;
   const generatedQueryKey = generateQueryKey({
     queryKey,
@@ -89,7 +88,8 @@ const getPreparedOptions = <TQueryFnData = unknown>({
   return {
     ...restOptions,
     queryKey: generatedQueryKey,
-    queryFn: (context) => queryFn({ ...context, headers }),
+    queryArguments,
+    queryFn: (context) => queryFn({ ...context, queryArguments, headers }),
     ...('enabled' in restOptions && {
       enabled: isTokenPresent && !!restOptions.enabled,
     }),
