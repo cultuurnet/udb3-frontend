@@ -42,7 +42,12 @@ const createDashboardRedirects = (environment: Environment) => {
 const getRedirects = (
   environment: Environment,
   language: Values<typeof SupportedLanguages> = 'nl',
-) => [
+): {
+  featureFlag?: 'react_create';
+  permanent: boolean;
+  destination: string;
+  source: string;
+}[] => [
   // Only make the permanent redirects really permanent in environments other
   // than development, so we don't get permanent redirects on localhost which
   // may conflict with other projects.
