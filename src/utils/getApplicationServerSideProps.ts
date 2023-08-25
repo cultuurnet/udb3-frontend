@@ -26,7 +26,7 @@ class Cookies extends UniversalCookies {
 
 const getRedirect = (originalPath, environment, cookies) => {
   return getRedirects(environment, cookies['udb-language'])
-    .map(({ source, destination, permanent, featureFlag }) => {
+    .map(({ source, destination, permanent, featureFlag = null }) => {
       // Don't follow redirects that are behind a feature flag
       if (featureFlag && !isFeatureFlagEnabledInCookies(featureFlag, cookies)) {
         return false;
