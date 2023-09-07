@@ -1,4 +1,4 @@
-import { FeatureFlags } from './hooks/useFeatureFlag';
+import { FeatureFlagName, FeatureFlags } from './hooks/useFeatureFlag';
 import type { SupportedLanguages } from './i18n';
 import type { Values } from './types/Values';
 
@@ -43,7 +43,7 @@ const getRedirects = (
   environment: Environment,
   language: Values<typeof SupportedLanguages> = 'nl',
 ): {
-  featureFlag?: string;
+  featureFlag?: FeatureFlagName;
   permanent: boolean;
   destination: string;
   source: string;
