@@ -1,5 +1,5 @@
-import { NextApiRequest } from 'next';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { Cookies } from 'react-cookie';
 import {
   FetchQueryOptions,
@@ -14,7 +14,6 @@ import { FetchError } from '@/utils/fetchFromApi';
 import { isTokenValid } from '@/utils/isTokenValid';
 
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
-import { Headers } from './types/Headers';
 import { createHeaders, useHeaders } from './useHeaders';
 
 type QueryArguments = Record<string, string>;
@@ -33,7 +32,7 @@ type AuthenticatedQueryFunctionContext<TQueryArguments = unknown> =
   };
 
 type ServerSideOptions = {
-  req: NextApiRequest;
+  req: GetServerSidePropsContext['req'];
   queryClient: QueryClient;
 };
 
@@ -72,7 +71,7 @@ const generateQueryKey = ({
 type GetPreparedOptionsArguments<TQueryFnData> = {
   options: UseAuthenticatedQueryOptions<TQueryFnData>;
   isTokenPresent: boolean;
-  headers: Headers;
+  headers: HeadersInit;
 };
 
 const getPreparedOptions = <TQueryFnData = unknown>({
@@ -116,14 +115,7 @@ const prefetchAuthenticatedQuery = async <TQueryFnData = unknown>({
     headers,
   });
 
-  try {
-    await queryClient.prefetchQuery<TQueryFnData, FetchError>(
-      queryKey,
-      queryFn,
-    );
-  } catch {}
-
-  return await queryClient.getQueryData<TQueryFnData>(queryKey);
+  return queryClient.fetchQuery<TQueryFnData, FetchError>(queryKey, queryFn);
 };
 
 const useAuthenticatedQuery = <TQueryFnData = unknown>(
