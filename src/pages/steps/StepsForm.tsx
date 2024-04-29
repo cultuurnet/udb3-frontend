@@ -168,6 +168,7 @@ const StepsForm = ({
         ? `/manage/movies/${offerId}/edit`
         : `/${scope}/${offerId}/edit`;
       await push(url, undefined, { scroll: false });
+      await reload();
     },
     onError: (error) => {
       if (error.status === DUPLICATE_STATUS_CODE) {
