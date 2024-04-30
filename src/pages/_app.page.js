@@ -92,6 +92,7 @@ const queryClient = new QueryClient();
 const isServer = () => typeof window === 'undefined';
 
 const App = ({ Component, pageProps, children }) => {
+  const withDevtools = typeof window !== 'undefined' && !window.HIDE_DEVTOOLS;
   useEffect(() => {
     if (typeof window === 'undefined') return;
     Hotjar.init(181435, 6);
@@ -119,7 +120,7 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {withDevtools && <ReactQueryDevtools initialIsOpen={false} />}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
