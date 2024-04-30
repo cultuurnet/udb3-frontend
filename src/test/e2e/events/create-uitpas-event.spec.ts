@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { test as setup } from 'playwright/types/test';
 
 const dummyEvent = {
   name: 'E2E test event with UiTPAS organizer and UiTPAS prices',
