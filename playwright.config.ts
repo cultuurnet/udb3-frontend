@@ -62,5 +62,8 @@ export default defineConfig({
   webServer: {
     command: 'yarn dev',
     port: 3000,
+    env: {
+      NEXT_PUBLIC_ENVIRONMENT: 'e2e',
+    },
   },
 });

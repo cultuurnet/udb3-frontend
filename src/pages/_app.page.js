@@ -20,6 +20,7 @@ import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
+import getConfig from 'next/config';
 
 const cookies = new Cookies();
 
@@ -92,7 +93,7 @@ const queryClient = new QueryClient();
 const isServer = () => typeof window === 'undefined';
 
 const App = ({ Component, pageProps, children }) => {
-  const withDevtools = typeof window !== 'undefined' && !window.HIDE_DEVTOOLS;
+  const { publicRuntimeConfig } = getConfig();
   useEffect(() => {
     if (typeof window === 'undefined') return;
     Hotjar.init(181435, 6);
@@ -120,7 +121,9 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
-        {withDevtools && <ReactQueryDevtools initialIsOpen={false} />}
+        {publicRuntimeConfig.environment === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })

@@ -12,10 +12,6 @@ const dummyEvent = {
   },
 };
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => (window['HIDE_DEVTOOLS'] = true));
-});
-
 test('create an event with UiTPAS organizer and UiTPAS prices', async ({
   baseURL,
   page,
