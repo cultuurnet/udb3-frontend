@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import Hotjar from '@hotjar/browser';
+import getConfig from 'next/config';
 import NextHead from 'next/head';
 import PropTypes from 'prop-types';
 import { cloneElement, useEffect } from 'react';
@@ -20,7 +21,6 @@ import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
-import getConfig from 'next/config';
 
 const cookies = new Cookies();
 
