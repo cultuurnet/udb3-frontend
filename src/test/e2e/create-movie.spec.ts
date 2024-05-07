@@ -52,13 +52,13 @@ test('create a movie', async ({ baseURL, page }) => {
   });
   await page.getByTestId('contact-info-value').fill(faker.internet.email());
   await contactButton.click();
-  await page.locator('select').nth(2).selectOption('phone');
+  await page.locator('select').nth(1).selectOption('phone');
   await page
     .getByTestId('contact-info-value')
     .nth(1)
     .fill(faker.phone.number('+336########'));
   await contactButton.click();
-  await page.locator('select').nth(3).selectOption('url');
+  await page.locator('select').nth(2).selectOption('url');
   await page
     .getByTestId('contact-info-value')
     .nth(2)

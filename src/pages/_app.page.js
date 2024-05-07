@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import Hotjar from '@hotjar/browser';
+import getConfig from 'next/config';
 import NextHead from 'next/head';
 import PropTypes from 'prop-types';
 import { cloneElement, useEffect } from 'react';
@@ -92,6 +93,7 @@ const queryClient = new QueryClient();
 const isServer = () => typeof window === 'undefined';
 
 const App = ({ Component, pageProps, children }) => {
+  const { publicRuntimeConfig } = getConfig();
   useEffect(() => {
     if (typeof window === 'undefined') return;
     Hotjar.init(181435, 6);
@@ -119,7 +121,9 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {publicRuntimeConfig.environment === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
         <Layout>
           {children ? (
             cloneElement(children, { ...children.props, ...pageProps })
