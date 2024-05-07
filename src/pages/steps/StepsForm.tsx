@@ -168,7 +168,8 @@ const StepsForm = ({
         ? `/manage/movies/${offerId}/edit`
         : `/${scope}/${offerId}/edit`;
       await push(url, undefined, { scroll: false });
-      await reload();
+      // TODO: Remove need for full reload, see III-6173
+      reload();
     },
     onError: (error) => {
       if (error.status === DUPLICATE_STATUS_CODE) {
