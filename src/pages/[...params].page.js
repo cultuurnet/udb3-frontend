@@ -41,7 +41,7 @@ const Fallback = () => {
   // for the current path, because it's possible to navigate from a 404 path to
   // another page that's handled by this same Fallback component and then the
   // boolean notFound state would not update.
-  const [notFoundPaths, setNotFoundPaths] = useState([]);
+  const [notFoundPaths, setNotFoundPaths] = useState(['/404']);
   useHandleWindowMessage({
     [WindowMessageTypes.URL_UNKNOWN]: () =>
       setNotFoundPaths([asPath, ...notFoundPaths]),
