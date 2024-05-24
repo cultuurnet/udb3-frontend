@@ -130,10 +130,7 @@ const Footer = ({
             </FooterLink>
           </List.Item>
           <List.Item>
-            <FooterLink
-              footerVariant={variant}
-              href="http://documentatie.uitdatabank.be"
-            >
+            <FooterLink footerVariant={variant} href="https://docs.publiq.be/">
               {t('footer.dev')}
             </FooterLink>
           </List.Item>
