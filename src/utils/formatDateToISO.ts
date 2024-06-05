@@ -1,5 +1,7 @@
+import { zonedTimeToUtc } from 'date-fns-tz';
+
 const formatDateToISO = (date: Date) => {
-  return date.toISOString().split('.')[0] + '+00:00';
+  return zonedTimeToUtc(date, '').toISOString().split('.')[0] + '+00:00';
 };
 
 export { formatDateToISO };
