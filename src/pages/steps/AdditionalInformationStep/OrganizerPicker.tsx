@@ -264,7 +264,11 @@ const OrganizerPicker = ({
                     renderMenuItemChildren={(org: Organizer, { text }) => {
                       const name = getOrganizerName(org, i18n.language);
                       return (
-                        <Inline spacing={3}>
+                        <Inline
+                          spacing={3}
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
                           <Text>
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
