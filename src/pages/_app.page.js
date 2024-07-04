@@ -22,9 +22,18 @@ import { ThemeProvider } from '@/ui/ThemeProvider';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
+const isServer = () => typeof window === 'undefined';
+
+if (isServer()) {
+  process.env.AUTH0_ISSUER_BASE_URL =
+    process.env.NEXT_PUBLIC_KEYCLOAK_ENABLED === 'true'
+      ? process.env.AUTH_ISSUER_BASE_URL
+      : process.env.LEGACY_AUTH_ISSUER_BASE_URL;
+}
+
 const cookies = new Cookies();
 
-if (typeof window !== 'undefined') {
+if (!isServer()) {
   window.FeatureFlags = FeatureFlags;
 
   window.setFeatureFlag = (featureFlagName, value) => {
@@ -90,12 +99,10 @@ const Head = () => {
 
 const queryClient = new QueryClient();
 
-const isServer = () => typeof window === 'undefined';
-
 const App = ({ Component, pageProps, children }) => {
   const { publicRuntimeConfig } = getConfig();
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (isServer()) return;
     Hotjar.init(181435, 6);
   }, []);
 
