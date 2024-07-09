@@ -14,7 +14,8 @@
       "@/i18n/*": ["i18n/*"],
       "@/layouts/*": ["layouts/*"],
       "@/styles/*": ["styles/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/auth/*": ["auth/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

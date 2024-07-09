@@ -1,12 +1,15 @@
-import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
 import { NextApiRequest } from 'next';
 import getConfig from 'next/config';
 
-export default handleAuth({
+import { getAuthServer } from '@/auth/node';
+
+const authServer = getAuthServer();
+
+export default authServer.handleAuth({
   async login(req, res) {
     const language = req.cookies['udb-language'] ?? 'nl';
     try {
-      await handleLogin(req, res, {
+      await authServer.handleLogin(req, res, {
         authorizationParams: {
           audience: 'https://api.publiq.be',
           scope: 'openid profile email',
@@ -23,7 +26,7 @@ export default handleAuth({
   async logout(req: NextApiRequest, res) {
     const { publicRuntimeConfig } = getConfig();
     try {
-      await handleLogout(req, res, {
+      await authServer.handleLogout(req, res, {
         returnTo: publicRuntimeConfig.baseUrl,
       });
     } catch (err) {

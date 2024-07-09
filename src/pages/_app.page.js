@@ -24,13 +24,6 @@ import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
 const isServer = () => typeof window === 'undefined';
 
-if (isServer()) {
-  process.env.AUTH0_ISSUER_BASE_URL =
-    process.env.NEXT_PUBLIC_KEYCLOAK_ENABLED === 'true'
-      ? process.env.AUTH_ISSUER_BASE_URL
-      : process.env.LEGACY_AUTH_ISSUER_BASE_URL;
-}
-
 const cookies = new Cookies();
 
 if (!isServer()) {
