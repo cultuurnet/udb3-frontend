@@ -193,6 +193,7 @@ const OrganizerPicker = ({
     <Stack width="100%" {...getStackProps(props)}>
       <FormElement
         id="create-organizer"
+        className={'w-full'}
         Component={
           organizer ? (
             <Stack>
@@ -228,13 +229,13 @@ const OrganizerPicker = ({
               </Inline>
             </Stack>
           ) : (
-            <Inline spacing={2}>
+            <Inline spacing={2} width="100%">
               <RecentUsedOrganizers
                 organizers={recentUsedOrganizers}
                 onChange={handleSelectRecentOrganizer}
                 maxWidth="45rem"
               />
-              <Stack>
+              <Stack width="100%">
                 <Text fontWeight="bold" marginBottom={4}>
                   {recentUsedOrganizers.length > 0
                     ? t(
