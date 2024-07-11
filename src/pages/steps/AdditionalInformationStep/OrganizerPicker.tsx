@@ -193,7 +193,7 @@ const OrganizerPicker = ({
     <Stack width="100%" {...getStackProps(props)}>
       <FormElement
         id="create-organizer"
-        className={'w-full'}
+        className="w-full"
         Component={
           organizer ? (
             <Stack>
