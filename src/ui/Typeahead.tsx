@@ -97,7 +97,6 @@ const TypeaheadInner = <T extends TypeaheadModel>(
 
         .dropdown-item {
           border-bottom: 1px solid ${({ theme }) => theme.colors.grey1};
-          text-wrap: auto;
         }
 
         .dropdown-item > .rbt-highlight-text {

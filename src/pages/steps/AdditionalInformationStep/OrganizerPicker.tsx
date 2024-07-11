@@ -262,19 +262,29 @@ const OrganizerPicker = ({
                     // @ts-expect-error
                     isLoading={getOrganizersByQueryQuery.isLoading}
                     labelKey={(org) => getOrganizerName(org, i18n.language)}
+                    css={`
+                      .dropdown-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      .dropdown-item span:first-child {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                      }
+                    `}
                     renderMenuItemChildren={(org: Organizer, { text }) => {
                       const name = getOrganizerName(org, i18n.language);
+
                       return (
-                        <Inline
-                          spacing={3}
-                          alignItems="center"
-                          justifyContent="space-between"
-                        >
+                        <>
                           <Text>
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
                           {isUitpasOrganizer(org) && <UitpasBadge />}
-                        </Inline>
+                        </>
                       );
                     }}
                     selected={valueToArray(organizer)}
