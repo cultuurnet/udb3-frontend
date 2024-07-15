@@ -207,15 +207,46 @@ const useGetEventByIdQuery = (
     ...configuration,
   });
 
-const useGetEventsByIdsQuery = ({ req, queryClient, ids = [] }) => {
-  const options = ids.map((id) => ({
-    queryKey: ['events'],
-    queryFn: getEventById,
-    queryArguments: { id },
-    enabled: !!id,
-  }));
+const getEventsByIds = async ({
+  headers,
+  ids,
+}: {
+  headers: Headers;
+  ids: string[];
+}) => {
+  const res = await fetchFromApi({
+    path: '/events',
+    searchParams: {
+      embedUitpasPrices: 'true',
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      q: `id:(${ids.join(' OR ')})`,
+    },
+    options: {
+      headers,
+    },
+  });
+  if (isErrorObject(res)) {
+    // eslint-disable-next-line no-console
+    return console.error(res);
+  }
+  return (await res.json()) as { member: Event[] };
+};
 
-  return useAuthenticatedQueries({ req, queryClient, options });
+const useGetEventsByIdsQuery = (
+  { req, queryClient, ids = [], scope = OfferTypes.EVENTS },
+  configuration: UseQueryOptions = {},
+) => {
+  return useAuthenticatedQuery<{ member: Event[] }>({
+    req,
+    queryClient,
+    queryKey: ['events'],
+    queryFn: getEventsByIds,
+    queryArguments: { ids },
+    refetchOnWindowFocus: false,
+    enabled: ids.length > 0 && scope === OfferTypes.EVENTS,
+    ...configuration,
+  });
 };
 
 const deleteEventById = async ({ headers, id }) =>

@@ -92,7 +92,7 @@ const Index = () => {
 
   const events = useMemo(() => {
     if (!getEventsByIdsQuery.data) return [];
-    return getEventsByIdsQuery.data
+    return getEventsByIdsQuery.data.member
       .map((event) => {
         const eventId = event?.['@id'];
         if (!eventId) return undefined;
@@ -105,8 +105,7 @@ const Index = () => {
         };
       })
       .filter((event) => event);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getEventsByIdsQuery.data]);
+  }, [getEventsByIdsQuery.data, selectedEventIds]);
 
   const handleSuccessDeleteEvents = async () => {
     await queryClient.invalidateQueries('productions');
@@ -312,7 +311,11 @@ export const getServerSideProps = getApplicationServerSideProps(
 
     const eventIds = productions?.member?.[0]?.events ?? [];
 
-    await useGetEventsByIdsQuery({ req, queryClient, ids: eventIds });
+    await useGetEventsByIdsQuery({
+      req,
+      queryClient,
+      ids: eventIds,
+    });
 
     return {
       props: {
