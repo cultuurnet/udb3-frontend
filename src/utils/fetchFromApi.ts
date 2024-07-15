@@ -37,7 +37,7 @@ const isErrorObject = (value: any): value is ErrorObject => {
 
 type FetchFromApiArguments = {
   path: string;
-  searchParams?: { [key: string]: string };
+  searchParams?: string[][] | Record<string, string> | string | URLSearchParams;
   options?: RequestInit;
   silentError?: boolean;
 };
@@ -46,7 +46,7 @@ const { publicRuntimeConfig } = getConfig();
 
 const fetchFromApi = async ({
   path,
-  searchParams = {},
+  searchParams: searchParamsInit,
   options = {},
   silentError = false,
 }: FetchFromApiArguments): Promise<ErrorObject | Response> => {
@@ -55,12 +55,14 @@ const fetchFromApi = async ({
 
   try {
     url = new URL(`${publicRuntimeConfig.apiUrl}${path}`);
-    searchParams = omit(searchParams, 'queryKey');
-    if (typeof searchParams?.q !== 'undefined' && !searchParams?.q) {
-      searchParams = omit(searchParams, 'q');
+    const searchParams = new URLSearchParams(searchParamsInit ?? {});
+    searchParams.delete('queryKey');
+
+    if (searchParams.has('q') && searchParams.get('q') === '') {
+      searchParams.delete('q');
     }
 
-    url.search = new URLSearchParams(searchParams).toString();
+    url.search = searchParams.toString();
   } catch (e) {
     if (!silentError) {
       throw new FetchError(400, e?.message ?? 'Unknown error');

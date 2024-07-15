@@ -214,14 +214,19 @@ const getEventsByIds = async ({
   headers: Headers;
   ids: string[];
 }) => {
+  const searchParams = new URLSearchParams({
+    embedUitpasPrices: 'true',
+    disableDefaultFilters: 'true',
+    embed: 'true',
+    q: `id:(${ids.join(' OR ')})`,
+  });
+
+  searchParams.append('embedCalendarSummaries[]', 'sm-text');
+  searchParams.append('embedCalendarSummaries[]', 'lg-text');
+
   const res = await fetchFromApi({
     path: '/events',
-    searchParams: {
-      embedUitpasPrices: 'true',
-      disableDefaultFilters: 'true',
-      embed: 'true',
-      q: `id:(${ids.join(' OR ')})`,
-    },
+    searchParams,
     options: {
       headers,
     },
