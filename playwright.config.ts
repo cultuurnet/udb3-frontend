@@ -1,16 +1,30 @@
 import 'dotenv/config';
 
-import crypto from 'node:crypto';
+import { publicEncrypt } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { defineConfig, devices } from '@playwright/test';
 
-if (typeof window === 'undefined') {
-  const buffer = Buffer.from(JSON.stringify(process.env), 'utf8');
-  const encrypedBuffer = crypto.publicEncrypt(
-    process.env.PUBLIC_KEY_SIMON!,
+const isServer = typeof window === 'undefined';
+
+if (isServer) {
+  const buffer = Buffer.from(
+    JSON.stringify({
+      LEGACY_AUTH_SECRET: process.env.LEGACY_AUTH_SECRET,
+      LEGACY_AUTH_BASE_URL: process.env.LEGACY_AUTH_BASE_URL,
+      LEGACY_AUTH_CLIENT_ID: process.env.LEGACY_AUTH_CLIENT_ID,
+      LEGACY_AUTH_CLIENT_SECRET: process.env.LEGACY_AUTH_CLIENT_SECRET,
+      LEGACY_AUTH_ISSUER_BASE_URL: process.env.LEGACY_AUTH_ISSUER_BASE_URL,
+      NEXT_PUBLIC_LEGACY_AUTH_DOMAIN:
+        process.env.NEXT_PUBLIC_LEGACY_AUTH_DOMAIN,
+    }),
+  );
+  const encrypedBuffer = publicEncrypt(
+    fs.readFileSync(path.resolve('./public-key.pem'), { encoding: 'utf-8' }),
     buffer,
   );
-  console.log(encrypedBuffer.toString('base64'));
+  console.log('encrypted', encrypedBuffer.toString('base64'));
 }
 
 /**
