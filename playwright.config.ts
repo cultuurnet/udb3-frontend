@@ -1,31 +1,6 @@
 import 'dotenv/config';
 
-import { publicEncrypt } from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
-
 import { defineConfig, devices } from '@playwright/test';
-
-const isServer = typeof window === 'undefined';
-
-if (isServer) {
-  const buffer = Buffer.from(
-    JSON.stringify({
-      LEGACY_AUTH_SECRET: process.env.LEGACY_AUTH_SECRET,
-      LEGACY_AUTH_BASE_URL: process.env.LEGACY_AUTH_BASE_URL,
-      LEGACY_AUTH_CLIENT_ID: process.env.LEGACY_AUTH_CLIENT_ID,
-      LEGACY_AUTH_CLIENT_SECRET: process.env.LEGACY_AUTH_CLIENT_SECRET,
-      LEGACY_AUTH_ISSUER_BASE_URL: process.env.LEGACY_AUTH_ISSUER_BASE_URL,
-      NEXT_PUBLIC_LEGACY_AUTH_DOMAIN:
-        process.env.NEXT_PUBLIC_LEGACY_AUTH_DOMAIN,
-    }),
-  );
-  const encrypedBuffer = publicEncrypt(
-    fs.readFileSync(path.resolve('./public-key.pem'), { encoding: 'utf-8' }),
-    buffer,
-  );
-  console.log('encrypted', encrypedBuffer.toString('base64'));
-}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
