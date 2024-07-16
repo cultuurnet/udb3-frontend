@@ -94,6 +94,7 @@ const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps, children }) => {
   const { publicRuntimeConfig } = getConfig();
+  console.log('publicRuntimeConfig', publicRuntimeConfig);
   useEffect(() => {
     if (isServer()) return;
     Hotjar.init(181435, 6);

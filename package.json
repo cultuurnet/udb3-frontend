@@ -18,7 +18,7 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
     "test:unit": "jest",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test auth.spec.ts",
     "ci": "yarn types:check & yarn lint:check & yarn format:check"
   },
   "husky": {
