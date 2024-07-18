@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -28,17 +27,12 @@ const Event = ({
   name,
   terms,
   location,
-  calendarType,
+  calendarSummary,
   onToggle,
   selected,
   className,
 }) => {
-  const { i18n, t } = useTranslation();
-  const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
-    id,
-    locale: i18n?.language ?? '',
-    format: calendarType === CalendarType.SINGLE ? 'lg' : 'sm',
-  });
+  const { t } = useTranslation();
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -88,7 +82,7 @@ const Event = ({
               { header: t('productions.event.type'), value: type },
               {
                 header: t('productions.event.when'),
-                value: getCalendarSummaryQuery.data,
+                value: calendarSummary,
               },
               { header: t('productions.event.where'), value: location },
             ]}
@@ -375,6 +369,11 @@ const Events = ({
                   event.location?.name?.[event.location?.mainLanguage]
                 }
                 calendarType={event.calendarType}
+                calendarSummary={
+                  event.calendarSummary[i18n.language].text[
+                    event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
+                  ]
+                }
                 onToggle={onToggleSelectEvent}
                 selected={event.selected}
                 css={
