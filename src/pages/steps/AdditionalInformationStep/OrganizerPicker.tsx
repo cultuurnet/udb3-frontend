@@ -193,6 +193,7 @@ const OrganizerPicker = ({
     <Stack width="100%" {...getStackProps(props)}>
       <FormElement
         id="create-organizer"
+        className="w-full"
         Component={
           organizer ? (
             <Stack>
@@ -228,13 +229,13 @@ const OrganizerPicker = ({
               </Inline>
             </Stack>
           ) : (
-            <Inline spacing={2}>
+            <Inline spacing={2} width="100%">
               <RecentUsedOrganizers
                 organizers={recentUsedOrganizers}
                 onChange={handleSelectRecentOrganizer}
                 maxWidth="45rem"
               />
-              <Stack>
+              <Stack width="100%">
                 <Text fontWeight="bold" marginBottom={4}>
                   {recentUsedOrganizers.length > 0
                     ? t(
@@ -261,15 +262,29 @@ const OrganizerPicker = ({
                     // @ts-expect-error
                     isLoading={getOrganizersByQueryQuery.isLoading}
                     labelKey={(org) => getOrganizerName(org, i18n.language)}
+                    css={`
+                      .dropdown-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      .dropdown-item span:first-child {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                      }
+                    `}
                     renderMenuItemChildren={(org: Organizer, { text }) => {
                       const name = getOrganizerName(org, i18n.language);
+
                       return (
-                        <Inline spacing={3}>
+                        <>
                           <Text>
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
                           {isUitpasOrganizer(org) && <UitpasBadge />}
-                        </Inline>
+                        </>
                       );
                     }}
                     selected={valueToArray(organizer)}

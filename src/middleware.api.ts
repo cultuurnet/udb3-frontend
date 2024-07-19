@@ -1,8 +1,11 @@
-import { getSession } from '@auth0/nextjs-auth0/edge';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getAuthEdgeServer } from '@/auth/edge';
+
 import { defaultCookieOptions } from './hooks/useCookiesWithOptions';
+
+const authEdgeServer = getAuthEdgeServer();
 
 export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname.startsWith('/login')) {
@@ -14,7 +17,10 @@ export const middleware = async (request: NextRequest) => {
 
     try {
       const response = NextResponse.redirect(referer);
-      const { accessToken, idToken } = await getSession(request, response);
+      const { accessToken, idToken } = await authEdgeServer.getSession(
+        request,
+        response,
+      );
       response.cookies.set('token', accessToken, defaultCookieOptions);
       response.cookies.set('idToken', idToken, defaultCookieOptions);
       response.cookies.set('auth0.redirect_uri', '', { maxAge: 0 });
