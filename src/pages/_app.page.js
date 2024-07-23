@@ -22,9 +22,11 @@ import { ThemeProvider } from '@/ui/ThemeProvider';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
+const isServer = () => typeof window === 'undefined';
+
 const cookies = new Cookies();
 
-if (typeof window !== 'undefined') {
+if (!isServer()) {
   window.FeatureFlags = FeatureFlags;
 
   window.setFeatureFlag = (featureFlagName, value) => {
@@ -90,12 +92,10 @@ const Head = () => {
 
 const queryClient = new QueryClient();
 
-const isServer = () => typeof window === 'undefined';
-
 const App = ({ Component, pageProps, children }) => {
   const { publicRuntimeConfig } = getConfig();
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (isServer()) return;
     Hotjar.init(181435, 6);
   }, []);
 

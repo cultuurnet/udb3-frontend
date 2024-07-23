@@ -207,15 +207,51 @@ const useGetEventByIdQuery = (
     ...configuration,
   });
 
-const useGetEventsByIdsQuery = ({ req, queryClient, ids = [] }) => {
-  const options = ids.map((id) => ({
-    queryKey: ['events'],
-    queryFn: getEventById,
-    queryArguments: { id },
-    enabled: !!id,
-  }));
+const getEventsByIds = async ({
+  headers,
+  ids,
+}: {
+  headers: Headers;
+  ids: string[];
+}) => {
+  const searchParams = new URLSearchParams({
+    embedUitpasPrices: 'true',
+    disableDefaultFilters: 'true',
+    embed: 'true',
+    q: `id:(${ids.join(' OR ')})`,
+  });
 
-  return useAuthenticatedQueries({ req, queryClient, options });
+  searchParams.append('embedCalendarSummaries[]', 'sm-text');
+  searchParams.append('embedCalendarSummaries[]', 'lg-text');
+
+  const res = await fetchFromApi({
+    path: '/events',
+    searchParams,
+    options: {
+      headers,
+    },
+  });
+  if (isErrorObject(res)) {
+    // eslint-disable-next-line no-console
+    return console.error(res);
+  }
+  return (await res.json()) as { member: Event[] };
+};
+
+const useGetEventsByIdsQuery = (
+  { req, queryClient, ids = [], scope = OfferTypes.EVENTS },
+  configuration: UseQueryOptions = {},
+) => {
+  return useAuthenticatedQuery<{ member: Event[] }>({
+    req,
+    queryClient,
+    queryKey: ['events'],
+    queryFn: getEventsByIds,
+    queryArguments: { ids },
+    refetchOnWindowFocus: false,
+    enabled: ids.length > 0 && scope === OfferTypes.EVENTS,
+    ...configuration,
+  });
 };
 
 const deleteEventById = async ({ headers, id }) =>
