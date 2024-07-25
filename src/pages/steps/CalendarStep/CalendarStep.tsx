@@ -1,3 +1,5 @@
+import { addMilliseconds, addMinutes, format } from 'date-fns';
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -20,6 +22,7 @@ import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
+import { formatDateToTime } from '@/utils/formatDateToTime';
 
 import { UseEditArguments } from '../hooks/useEditField';
 import {
@@ -40,9 +43,6 @@ import { convertTimeTableToSubEvents } from '../TimeTableStep';
 import { CalendarOptionToggle } from './CalendarOptionToggle';
 import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
-import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz';
-import { addMilliseconds, addMinutes, format } from 'date-fns';
-import { formatDateToTime } from '@/utils/formatDateToTime';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const changeCalendarMutation = useChangeOfferCalendarMutation({
