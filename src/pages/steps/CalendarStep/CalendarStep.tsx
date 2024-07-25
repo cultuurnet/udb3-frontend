@@ -80,7 +80,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
 
 const convertOfferToCalendarContext = (offer: Offer) => {
   const initialContext = initialCalendarContext;
-  const toBelgiumTime = (date: string) =>
+  const toBelgiumTime = (date: Date | string) =>
     addMilliseconds(new Date(date), getTimezoneOffset('Europe/Brussels'));
 
   const days = (offer.subEvent ?? []).map((subEvent) => ({
