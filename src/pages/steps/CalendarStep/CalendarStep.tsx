@@ -78,22 +78,14 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
 
 const convertOfferToCalendarContext = (offer: Offer) => {
   const initialContext = initialCalendarContext;
-  const toZoned = (date) => utcToZonedTime(date, 'Europe/Brussels');
 
-  console.log(offer);
-  const days = (offer.subEvent ?? []).map((subEvent) => {
-    console.log(
-      subEvent.startDate,
-      utcToZonedTime(subEvent.startDate, 'Europe/Brussels'),
-    );
-    return {
-      id: createDayId(),
-      startDate: toZoned(subEvent.startDate),
-      endDate: toZoned(subEvent.endDate),
-      status: subEvent.status,
-      bookingAvailability: subEvent.bookingAvailability,
-    };
-  });
+  const days = (offer.subEvent ?? []).map((subEvent) => ({
+    id: createDayId(),
+    startDate: subEvent.startDate,
+    endDate: subEvent.endDate,
+    status: subEvent.status,
+    bookingAvailability: subEvent.bookingAvailability,
+  }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
     id: createOpeninghoursId(),
@@ -107,10 +99,10 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     ...(days.length > 0 && { days }),
     ...(openingHours.length > 0 && { openingHours }),
     ...(offer?.startDate && {
-      startDate: toZoned(offer.startDate),
+      startDate: offer.startDate,
     }),
     ...(offer?.endDate && {
-      endDate: toZoned(offer.endDate),
+      endDate: offer.endDate,
     }),
   };
 
