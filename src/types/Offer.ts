@@ -76,7 +76,8 @@ export type PriceInfo = {
 };
 
 type SubEvent = {
-  '@type': string;
+  id: string;
+  '@type'?: string;
   startDate: string;
   endDate: string;
   status?: Status;

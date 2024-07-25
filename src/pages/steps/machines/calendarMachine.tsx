@@ -22,7 +22,7 @@ import {
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { OpeningHours, StatusReason } from '@/types/Offer';
+import { OpeningHours, StatusReason, SubEvent } from '@/types/Offer';
 import { Values } from '@/types/Values';
 
 const getTodayWithoutTime = () => {
@@ -70,12 +70,12 @@ const createInitialContext = () => ({
       endDate: getEndDate(),
       status: {
         type: OfferStatus.AVAILABLE,
-      } as Status,
+      },
       bookingAvailability: {
         type: BookingAvailabilityType.AVAILABLE,
-      } as BookingAvailability,
+      },
     },
-  ],
+  ] as SubEvent[],
   startDate: getStartDate(),
   endDate: getEndDate(),
   openingHours: [] as OpeningHoursWithId[],

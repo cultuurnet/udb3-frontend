@@ -1,8 +1,10 @@
 import { camelCase } from 'lodash';
 import { FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { OfferStatus } from '@/constants/OfferStatus';
+import { SubEvent } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -11,16 +13,13 @@ import { List } from '@/ui/List';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
+import { formatDateToTime } from '@/utils/formatDateToTime';
 
 import {
   useCalendarSelector,
   useIsOneOrMoreDays,
 } from '../machines/calendarMachine';
 import { FormDataUnion } from '../Steps';
-import { format, parseISO } from 'date-fns';
-import { toZonedTime } from 'date-fns-tz';
-import { SubEvent } from '@/types/Offer';
-import { formatDateToTime } from '@/utils/formatDateToTime';
 
 type ChangeTimeHandler = (id: string, hours: number, minutes: number) => void;
 
