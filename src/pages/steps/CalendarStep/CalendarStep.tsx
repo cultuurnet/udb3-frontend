@@ -40,6 +40,9 @@ import { convertTimeTableToSubEvents } from '../TimeTableStep';
 import { CalendarOptionToggle } from './CalendarOptionToggle';
 import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz';
+import { addMilliseconds, addMinutes, format } from 'date-fns';
+import { formatDateToTime } from '@/utils/formatDateToTime';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const changeCalendarMutation = useChangeOfferCalendarMutation({
@@ -77,11 +80,13 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
 
 const convertOfferToCalendarContext = (offer: Offer) => {
   const initialContext = initialCalendarContext;
+  const toBelgiumTime = (date: string) =>
+    addMilliseconds(new Date(date), getTimezoneOffset('Europe/Brussels'));
 
   const days = (offer.subEvent ?? []).map((subEvent) => ({
     id: createDayId(),
-    startDate: subEvent.startDate,
-    endDate: subEvent.endDate,
+    startDate: toBelgiumTime(subEvent.startDate),
+    endDate: toBelgiumTime(subEvent.endDate),
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
   }));

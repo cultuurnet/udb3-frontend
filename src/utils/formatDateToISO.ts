@@ -1,6 +1,10 @@
-import { formatISO } from 'date-fns';
+import { formatISO, subMilliseconds } from 'date-fns';
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz';
 
-const formatDateToISO = (date: Date) =>
-  formatISO(date).split('+')[0] + '+00:00';
+const formatDateToISO = (date: Date) => {
+  const offset = getTimezoneOffset('Europe/Brussels');
+
+  return formatISO(subMilliseconds(date, offset)).split('+')[0] + '+00:00';
+};
 
 export { formatDateToISO };
