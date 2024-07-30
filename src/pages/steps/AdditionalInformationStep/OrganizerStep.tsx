@@ -58,7 +58,7 @@ const OrganizerStep = ({
   // @ts-expect-error
   const offer: Event | Place | undefined = getOfferByIdQuery.data;
 
-  const organizer = offer?.organizer;
+  const organizer = offer?.organizer?.name ? offer?.organizer : undefined;
   const hasPriceInfo = (offer?.priceInfo ?? []).length > 0;
   const hasUitpasLabel = organizer ? isUitpasOrganizer(organizer) : false;
   const [hasUitpasTicketSales, setHasUitpasTicketSales] = useState(false);
