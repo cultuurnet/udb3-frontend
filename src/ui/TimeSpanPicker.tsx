@@ -44,8 +44,6 @@ type Props = {
 const isQuarterHour = (time: string) =>
   quarterHours.some((quarterHour) => time.endsWith(quarterHour));
 
-const timeToNumeric = (time: string) => parseInt(time.replace(':', ''));
-
 const dropDownCss = css`
   input {
     text-align: center;

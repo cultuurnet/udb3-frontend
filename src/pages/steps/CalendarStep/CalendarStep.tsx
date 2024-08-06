@@ -1,3 +1,5 @@
+import { addMilliseconds, addMinutes, format } from 'date-fns';
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -20,6 +22,7 @@ import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
+import { formatDateToTime } from '@/utils/formatDateToTime';
 
 import { UseEditArguments } from '../hooks/useEditField';
 import {
@@ -77,11 +80,13 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
 
 const convertOfferToCalendarContext = (offer: Offer) => {
   const initialContext = initialCalendarContext;
+  const toBelgiumTime = (date: Date | string) =>
+    addMilliseconds(new Date(date), getTimezoneOffset('Europe/Brussels'));
 
   const days = (offer.subEvent ?? []).map((subEvent) => ({
     id: createDayId(),
-    startDate: subEvent.startDate,
-    endDate: subEvent.endDate,
+    startDate: toBelgiumTime(subEvent.startDate),
+    endDate: toBelgiumTime(subEvent.endDate),
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
   }));
