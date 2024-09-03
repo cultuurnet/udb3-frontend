@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { OfferStatus } from '@/constants/OfferStatus';
+import { SubEvent } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -12,6 +13,7 @@ import { List } from '@/ui/List';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
+import { formatDateToTime } from '@/utils/formatDateToTime';
 
 import {
   useCalendarSelector,
@@ -27,20 +29,12 @@ const createChangeTimeHandler =
     changeTimeHandler(id, parseInt(hours), parseInt(minutes));
   };
 
-const getEndTime = (day: any) => {
-  const end = new Date(day.endDate);
-  const endHour = end.getHours().toString().padStart(2, '0');
-  const endMinutes = end.getMinutes().toString().padStart(2, '0');
-  const endTime = endHour ? `${endHour}:${endMinutes}` : `00:00`;
-  return endTime;
+const getEndTime = (day: SubEvent) => {
+  return formatDateToTime(new Date(day.endDate));
 };
 
-const getStartTime = (day: any) => {
-  const start = new Date(day.startDate);
-  const startHour = start.getHours().toString().padStart(2, '0');
-  const startMinutes = start.getMinutes().toString().padStart(2, '0');
-  const startTime = startHour ? `${startHour}:${startMinutes}` : `00:00`;
-  return startTime;
+const getStartTime = (day: SubEvent) => {
+  return formatDateToTime(new Date(day.startDate));
 };
 
 type DaysProps = {

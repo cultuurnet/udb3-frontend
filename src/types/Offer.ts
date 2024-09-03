@@ -76,9 +76,10 @@ export type PriceInfo = {
 };
 
 type SubEvent = {
-  '@type': string;
-  startDate: string;
-  endDate: string;
+  id: string;
+  '@type'?: string;
+  startDate: Date | string;
+  endDate: Date | string;
   status?: Status;
   bookingAvailability?: BookingAvailability;
 };
