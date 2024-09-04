@@ -23,7 +23,7 @@ test('create an event with calendarType single', async ({
     const context = await browser.newContext({ timezoneId });
     const page = await context.newPage();
     await page.goto(url);
-    await page.clock.install({ time: new Date('2023-09-02T12:00:00') });
+    await page.clock.install({ time: new Date('2023-01-02T12:00:00') });
     await page.waitForLoadState('networkidle');
 
     await testFn(page);
@@ -39,9 +39,9 @@ test('create an event with calendarType single', async ({
     // 3. Date
     // Use current date
     await page.getByLabel('Start').click();
-    await page.getByLabel('Start').fill('2024-01-01');
+    await page.getByLabel('Start').fill('2024-09-01');
     await page.getByLabel('Einde').click();
-    await page.getByLabel('Einde').fill('2024-01-02');
+    await page.getByLabel('Einde').fill('2024-09-02');
 
     await page.getByLabel('Beginuur').click();
     await page.getByLabel('01:00').click();
