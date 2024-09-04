@@ -87,7 +87,7 @@ test('create an event with calendarType single', async ({
       await page.goto(url);
       await page.waitForLoadState('networkidle');
       expect(
-        page.frameLocator('#iframe').getByText('van 01:00 tot 02:00'),
+        page.frameLocator('#fallback_frame').getByText('van 01:00 tot 02:00'),
       ).toBeVisible();
     },
   );

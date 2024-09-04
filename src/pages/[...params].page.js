@@ -18,7 +18,7 @@ const prefixWhenNotEmpty = (value, prefix) =>
 
 const IFrame = memo(({ url }) => (
   <Box
-    id={'iframe'}
+    id="fallback_frame"
     as="iframe"
     src={url}
     width="100%"
