@@ -16,17 +16,21 @@ test('create an event with calendarType single', async ({
   let url;
 
   async function withTimezone(
+    url: string,
     timezoneId: string,
     testFn: (page: Page) => Promise<void>,
   ) {
     const context = await browser.newContext({ timezoneId });
     const page = await context.newPage();
+    await page.goto(url);
+    await page.clock.install({ time: new Date('2023-09-02T12:00:00') });
+    await page.waitForLoadState('networkidle');
+
     await testFn(page);
     await context.close();
   }
 
-  await withTimezone('Asia/Tokyo', async (page) => {
-    await page.goto(`${baseURL}/create`);
+  await withTimezone(`${baseURL}/create`, 'Asia/Tokyo', async (page) => {
     // 1. Select event
     await page.getByRole('button', { name: 'Evenement' }).click();
     // 2. Type
@@ -34,8 +38,15 @@ test('create an event with calendarType single', async ({
 
     // 3. Date
     // Use current date
+    await page.getByLabel('Start').click();
+    await page.getByLabel('Start').fill('2024-01-01');
+    await page.getByLabel('Einde').click();
+    await page.getByLabel('Einde').fill('2024-01-02');
+
     await page.getByLabel('Beginuur').click();
     await page.getByLabel('01:00').click();
+    await page.getByLabel('Einduur').click();
+    await page.getByLabel('02:00').click();
 
     // 4. Address
     await page.getByLabel('Gemeente').click();
@@ -62,12 +73,22 @@ test('create an event with calendarType single', async ({
 
     // Publish
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+    await page.waitForLoadState('networkidle');
 
     url = page.url();
   });
 
-  await withTimezone('Europe/Brussels', async (page) => {
-    await page.goto(url);
-    expect(await page.getByLabel('Beginuur').inputValue()).toEqual('01:00');
-  });
+  await withTimezone(
+    url.replace('preview', 'edit'),
+    'Europe/Brussels',
+    async (page) => {
+      expect(await page.getByLabel('Beginuur').inputValue()).toEqual('01:00');
+
+      await page.goto(url);
+      await page.waitForLoadState('networkidle');
+      expect(
+        page.frameLocator('#iframe').getByText('van 01:00 tot 02:00'),
+      ).toBeVisible();
+    },
+  );
 });
