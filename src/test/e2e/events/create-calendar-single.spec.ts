@@ -73,7 +73,7 @@ test('create an event with calendarType single', async ({
 
     // Publish
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL('**/preview');
 
     url = page.url();
   });
