@@ -489,7 +489,7 @@
         "duplicate_name_error": " Le tarif avec le nom \"{{priceName}}\" existe déjà, veuillez utiliser un autre nom.",
         "euro": "euro",
         "free": "Gratuit",
-        "global_info": "Assurez-vous que vos informations tarifaires sont toujours valables : <ul><li>Écrivez les décimales avec une virgule.</li> <li>Ne laissez aucune ligne en blanc, saisissez toujours un groupe cible et un montant.</li><li>Donnez un maximum de deux décimales.</li></ul>",
+        "global_info": "Assurez-vous que vos informations tarifaires sont toujours valables : <ul><li>Le nom de votre catégorie de prix peut contenir jusqu'à 90 caractères.</li><li>Écrivez les décimales avec une virgule.</li> <li>Ne laissez aucune ligne en blanc, saisissez toujours un groupe cible et un montant.</li><li>Donnez un maximum de deux décimales.</li></ul>",
         "price": "Prix",
         "prices": "Prix",
         "save": "Sauver",
