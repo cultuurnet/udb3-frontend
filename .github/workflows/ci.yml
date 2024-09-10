@@ -41,7 +41,10 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install --frozen-lockfile
+          yarn add @playwright/test@latest --ignore-engines
+          npx playwright install
       - name: Run Typescript
         run: yarn types:check
 
