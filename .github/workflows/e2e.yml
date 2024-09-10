@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile
-          yarn add @playwright/test@latest
+          yarn add @playwright/test@latest --ignore-engines
           npx playwright install
 
       - uses: actions/cache@v3
