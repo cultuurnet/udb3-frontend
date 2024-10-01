@@ -28,6 +28,7 @@ import { Input } from '@/ui/Input';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
+import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
 
 const PRICE_CURRENCY: string = 'EUR';
@@ -53,6 +54,8 @@ const shouldHaveAName = (value: any) => !!value[i18n.language];
 type Name = Partial<
   Record<SupportedLanguage | 'en', ReturnType<typeof yup.string>>
 >;
+
+const UNIQUE_NAME_ERROR_TYPE = 'unique_name';
 
 const schema = yup
   .object({
@@ -86,7 +89,7 @@ const schema = yup
           priceCurrency: yup.string(),
         }),
       )
-      .test('unique_name', 'No unique name', (prices, context) => {
+      .test(UNIQUE_NAME_ERROR_TYPE, 'No unique name', (prices, context) => {
         const priceNames = (prices ?? []).map(
           (item) => item.name[i18n.language],
         );
@@ -179,6 +182,7 @@ const PriceInformation = ({
 
       return setTimeout(() => onSuccessfulChange(), 1000);
     },
+    useErrorBoundary: false,
   });
 
   const onSubmit = useCallback(
@@ -263,10 +267,19 @@ const PriceInformation = ({
 
             const registerPriceProps = register(`rates.${index}.price`);
 
+            const uniqueNameErrorFromResponse =
+              addPriceInfoMutation.error &&
+              addPriceInfoMutation.error instanceof FetchError &&
+              addPriceInfoMutation.error.body.schemaErrors?.[0]?.jsonPointer ===
+                `/priceInfo/${index}/name/nl`
+                ? UNIQUE_NAME_ERROR_TYPE
+                : undefined;
+
             const validationErrorType =
               errors.rates?.[index]?.name?.type ||
               errors.rates?.[index]?.price?.type ||
-              errors.rates?.[index]?.type;
+              errors.rates?.[index]?.type ||
+              uniqueNameErrorFromResponse;
 
             return (
               <Stack key={`rate_${rate.id}`}>
