@@ -270,7 +270,7 @@ const PriceInformation = ({
             const uniqueNameErrorFromResponse =
               addPriceInfoMutation.error &&
               addPriceInfoMutation.error instanceof FetchError &&
-              addPriceInfoMutation.error.body.schemaErrors[0]?.jsonPointer ===
+              addPriceInfoMutation.error.body.schemaErrors?.[0]?.jsonPointer ===
                 `/priceInfo/${index}/name/nl`
                 ? UNIQUE_NAME_ERROR_TYPE
                 : undefined;
