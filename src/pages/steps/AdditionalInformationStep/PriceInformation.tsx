@@ -29,6 +29,7 @@ import { getStackProps, Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { reconcileRates } from '@/utils/reconcileRates';
+import { FetchError } from '@/utils/fetchFromApi';
 
 const PRICE_CURRENCY: string = 'EUR';
 
@@ -179,6 +180,7 @@ const PriceInformation = ({
 
       return setTimeout(() => onSuccessfulChange(), 1000);
     },
+    useErrorBoundary: false,
   });
 
   const onSubmit = useCallback(
@@ -263,10 +265,19 @@ const PriceInformation = ({
 
             const registerPriceProps = register(`rates.${index}.price`);
 
+            const uniqueNameErrorFromResponse =
+              addPriceInfoMutation.error &&
+              addPriceInfoMutation.error instanceof FetchError &&
+              addPriceInfoMutation.error?.body?.schemaErrors?.[0]
+                ?.jsonPointer === `/priceInfo/${index}/name/nl`
+                ? 'unique_name'
+                : undefined;
+
             const validationErrorType =
               errors.rates?.[index]?.name?.type ||
               errors.rates?.[index]?.price?.type ||
-              errors.rates?.[index]?.type;
+              errors.rates?.[index]?.type ||
+              uniqueNameErrorFromResponse;
 
             return (
               <Stack key={`rate_${rate.id}`}>
