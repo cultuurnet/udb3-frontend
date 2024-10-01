@@ -174,10 +174,6 @@ const ContactInfoStep = ({
     let newValue = (event.target as HTMLInputElement).value;
     const infoType = contactInfoState[index].type;
 
-    if (infoType === ContactInfoTypes.URL) {
-      newValue = prefixUrlWithHttps(newValue);
-    }
-
     if (!isValidInfo(infoType, newValue)) return;
 
     const newContactInfo = [...contactInfoState];
