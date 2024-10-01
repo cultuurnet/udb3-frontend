@@ -55,6 +55,8 @@ type Name = Partial<
   Record<SupportedLanguage | 'en', ReturnType<typeof yup.string>>
 >;
 
+const UNIQUE_NAME_ERROR_TYPE = 'unique_name';
+
 const schema = yup
   .object({
     rates: yup
@@ -87,7 +89,7 @@ const schema = yup
           priceCurrency: yup.string(),
         }),
       )
-      .test('unique_name', 'No unique name', (prices, context) => {
+      .test(UNIQUE_NAME_ERROR_TYPE, 'No unique name', (prices, context) => {
         const priceNames = (prices ?? []).map(
           (item) => item.name[i18n.language],
         );
@@ -270,7 +272,7 @@ const PriceInformation = ({
               addPriceInfoMutation.error instanceof FetchError &&
               addPriceInfoMutation.error?.body?.schemaErrors?.[0]
                 ?.jsonPointer === `/priceInfo/${index}/name/nl`
-                ? 'unique_name'
+                ? UNIQUE_NAME_ERROR_TYPE
                 : undefined;
 
             const validationErrorType =
