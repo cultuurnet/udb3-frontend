@@ -28,8 +28,8 @@ import { Input } from '@/ui/Input';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
-import { reconcileRates } from '@/utils/reconcileRates';
 import { FetchError } from '@/utils/fetchFromApi';
+import { reconcileRates } from '@/utils/reconcileRates';
 
 const PRICE_CURRENCY: string = 'EUR';
 
