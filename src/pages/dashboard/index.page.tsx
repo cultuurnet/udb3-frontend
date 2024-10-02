@@ -224,11 +224,11 @@ const Row = ({
             <Text>{type}</Text>
           </Inline>
           <Inline spacing={5} flex={1} alignItems="flex-start">
-            <Inline spacing={3} alignItems="center" flexWrap="wrap" width="26%">
+            <Inline spacing={3} alignItems="center" flexWrap="wrap" width="25%">
               <Icon name={Icons.CALENDAR_ALT} />
               <Text>{date}</Text>
             </Inline>
-            <Inline>
+            <Inline width="25%">
               <DynamicBarometerIcon
                 minimumScore={0}
                 score={score}
@@ -238,7 +238,9 @@ const Row = ({
               />
               <Text marginLeft={3}>{`${score} / 100`}</Text>
             </Inline>
+            <Inline width="25%">
             <StatusIndicator label={status.label} color={status.color} />
+            </Inline>
           </Inline>
           <Inline minWidth="25%" justifyContent="flex-end">
             <>
