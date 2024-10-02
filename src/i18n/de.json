@@ -310,7 +310,7 @@
         "phone_error": "Keine gültige Telefonnummer",
         "title": "Kontakt",
         "url": "Website",
-        "url_error": "Keine gültige URL"
+        "url_error": "Keine gültige URL. Urls müssen mit http(s):// beginnen."
       },
       "booking_info": {
         "title": "Reservierung",

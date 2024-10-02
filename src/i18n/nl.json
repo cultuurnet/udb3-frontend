@@ -312,7 +312,7 @@
         "phone_error": "Geen geldig telefoonnummer",
         "title": "Contact",
         "url": "Website",
-        "url_error": "Geen geldige url"
+        "url_error": "Geen geldige url. Urls moeten starten met http(s)://"
       },
       "booking_info": {
         "title": "Reservatie",

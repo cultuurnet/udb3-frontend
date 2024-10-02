@@ -12,7 +12,6 @@ import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { isValidInfo } from '@/utils/isValidInfo';
-import { prefixUrlWithHttps } from '@/utils/url';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
 
@@ -173,10 +172,6 @@ const ContactInfoStep = ({
   ) => {
     let newValue = (event.target as HTMLInputElement).value;
     const infoType = contactInfoState[index].type;
-
-    if (infoType === ContactInfoTypes.URL) {
-      newValue = prefixUrlWithHttps(newValue);
-    }
 
     if (!isValidInfo(infoType, newValue)) return;
 

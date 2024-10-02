@@ -312,7 +312,7 @@
         "phone_error": "Pas un numéro de téléphone valide",
         "title": "Contact",
         "url": "Site web",
-        "url_error": "Pas de URL valide"
+        "url_error": "Pas de URL valide. Les urls doivent commencer par http(s)://"
       },
       "booking_info": {
         "title": "Réservation",
