@@ -38,7 +38,7 @@ import type { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
+import { Box } from '@/ui/Box';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
@@ -55,12 +55,16 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import { Image } from '@/ui/Image';
 import { formatAddressInternal } from '@/utils/formatAddress';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
 import { NewsletterSignupForm } from './NewsletterSingupForm';
+import { Icon } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
+import { DynamicBarometerIcon } from '../steps/AdditionalInformationStep/FormScore';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -144,8 +148,8 @@ const StatusIndicator = ({
           label && [
             <Box
               key="status-indicator-box"
-              width="0.60rem"
-              height="0.60rem"
+              width="0.90rem"
+              height="0.90rem"
               backgroundColor={color}
               borderRadius="50%"
               flexShrink={0}
@@ -166,7 +170,12 @@ const StatusIndicator = ({
 
 type RowProps = {
   title: string;
-  description: string;
+  description?: string;
+  type?: string;
+  typeId?: string;
+  date?: string;
+  imageUrl?: string;
+  score?: number;
   actions: ReactNode[];
   url: string;
   finishedAt?: string;
@@ -176,6 +185,11 @@ type RowProps = {
 const Row = ({
   title,
   description,
+  type,
+  typeId,
+  date,
+  imageUrl,
+  score,
   actions,
   url,
   finishedAt,
@@ -183,37 +197,69 @@ const Row = ({
   ...props
 }: RowProps) => {
   return (
-    <Inline
-      flex={1}
-      css={css`
-        display: grid;
-        gap: ${parseSpacing(4)};
-        grid-template-columns: ${status ? '5fr 3fr 1fr' : '8fr 2fr'};
-      `}
-      {...getInlineProps(props)}
-    >
-      <Stack spacing={2}>
-        <Inline spacing={3}>
-          <Link href={url} color={getValue('listItem.color')} fontWeight="bold">
-            {title}
-          </Link>
+    <Inline spacing={5} {...getInlineProps(props)} flex={1}>
+      <Image src={imageUrl} alt={title} width={100} height={100} />
+      <Stack spacing={4} flex={1}>
+        <Link
+          href={url}
+          color={getValue('listItem.color')}
+          fontWeight="bold"
+          css={`
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 35rem;
+            display: block;
+          `}
+        >
+          {title}
+        </Link>
+        <Inline
+          spacing={3}
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <Inline spacing={3} minWidth="25%">
+            <Icon name={Icons.TAG} />
+            <Text>{type}</Text>
+          </Inline>
+          <Inline spacing={5} flex={1} alignItems="flex-start">
+            <Inline spacing={3} alignItems="center" flexWrap="wrap" width="26%">
+              <Icon name={Icons.CALENDAR_ALT} />
+              <Text>{date}</Text>
+            </Inline>
+            <Inline>
+              <DynamicBarometerIcon
+                minimumScore={0}
+                score={score}
+                size={30}
+                margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
+                pointerWidth={100}
+              />
+              <Text marginLeft={3}>{`${score} / 100`}</Text>
+            </Inline>
+            <StatusIndicator label={status.label} color={status.color} />
+          </Inline>
+          <Inline minWidth="25%" justifyContent="flex-end">
+            <>
+              {finishedAt ? (
+                <Text
+                  color={getValue('listItem.passedEvent.color')}
+                  textAlign="center"
+                >
+                  {finishedAt}
+                </Text>
+              ) : (
+                actions.length > 0 && (
+                  <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
+                    {actions}
+                  </Dropdown>
+                )
+              )}
+            </>
+          </Inline>
         </Inline>
-        <Text>{description}</Text>
       </Stack>
-      {status && <StatusIndicator {...status} />}
-      <Inline justifyContent="flex-end" minWidth="11rem">
-        {finishedAt ? (
-          <Text color={getValue('listItem.passedEvent.color')}>
-            {finishedAt}
-          </Text>
-        ) : (
-          actions.length > 0 && (
-            <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
-              {actions}
-            </Dropdown>
-          )
-        )}
-      </Inline>
     </Inline>
   );
 };
@@ -249,11 +295,16 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
+  const date = offer.calendarSummary[i18n.language].text['sm'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
 
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;
+  const imageUrl = offer.image;
+  const eventScore = offer.completeness;
+
+  console.log(offer);
 
   // The custom keySeparator was necessary because the ids contain '.' which i18n uses as default keySeparator
   const eventType = typeId
@@ -308,7 +359,10 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   return (
     <Row
       title={offer.name[i18n.language] ?? offer.name[offer.mainLanguage]}
-      description={rowDescription}
+      type={eventType}
+      date={date}
+      imageUrl={imageUrl}
+      score={eventScore}
       url={previewUrl}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
@@ -465,10 +519,10 @@ const TabContent = ({
         {items.map((item, index) => (
           <List.Item
             key={item['@id']}
-            paddingLeft={4}
-            paddingRight={4}
-            paddingBottom={3}
-            paddingTop={3}
+            paddingLeft={5}
+            paddingRight={5}
+            paddingBottom={5}
+            paddingTop={5}
             backgroundColor={getValue('listItem.backgroundColor')}
             css={
               index !== items.length - 1
