@@ -16,6 +16,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
 import { Field } from './AdditionalInformationStep';
+import { GaugeInnerMarginInPercent } from 'react-gauge-component/dist/lib/GaugeComponent/types/GaugeComponentProps';
 
 const GaugeComponent = dynamic(() => import('react-gauge-component'), {
   ssr: false,
@@ -136,12 +137,24 @@ const getMinimumScore = (weights: Weights): number => {
   return minimumScore;
 };
 
-const DynamicBarometerIcon = ({ minimumScore, score, size = 70 }) => (
+type DynamicBarometerIconProps = {
+  minimumScore: number;
+  score: number;
+  size: number;
+  margin: number | GaugeInnerMarginInPercent;
+  pointerWidth?: number;
+};
+
+export const DynamicBarometerIcon = ({
+  minimumScore,
+  score,
+  size = 70,
+  margin = 0,
+  pointerWidth = 50,
+}: DynamicBarometerIconProps) => (
   <div
     css={`
       position: relative;
-      width: ${size}px;
-      height: ${size}px;
     `}
   >
     <div
@@ -157,8 +170,8 @@ const DynamicBarometerIcon = ({ minimumScore, score, size = 70 }) => (
       `}
     />
     <GaugeComponent
-      style={{ width: '100%', height: '100%' }}
-      marginInPercent={0.032}
+      style={{ width: `${size}px`, height: `${size}px` }}
+      marginInPercent={margin}
       type="radial"
       minValue={minimumScore}
       value={score}
@@ -179,7 +192,7 @@ const DynamicBarometerIcon = ({ minimumScore, score, size = 70 }) => (
       }}
       pointer={{
         color: '#B3ADB5',
-        width: 50,
+        width: pointerWidth,
         length: 0.8,
       }}
     />
@@ -322,6 +335,7 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
           minimumScore={minimumScore}
           score={score}
           size={70}
+          margin={0.032}
         />
       }
     />
