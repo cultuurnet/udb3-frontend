@@ -65,6 +65,16 @@ import { NewsletterSignupForm } from './NewsletterSingupForm';
 import { Icon } from '@/ui/Icon';
 import { Icons } from '@/ui/Icon';
 import { DynamicBarometerIcon } from '../steps/AdditionalInformationStep/FormScore';
+import { ImageIcon, ImageType } from '../PictureUploadBox';
+import {
+  FormData,
+  PictureUploadModal,
+} from '../steps/modals/PictureUploadModal';
+import {
+  useAddOfferImageMutation,
+  useUpdateOfferImageMutation,
+} from '@/hooks/api/offers';
+import { useAddImageMutation } from '@/hooks/api/images';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -171,34 +181,170 @@ const StatusIndicator = ({
 type RowProps = {
   title: string;
   description?: string;
+  eventId?: string;
   type?: string;
   typeId?: string;
+  scope?: string;
   date?: string;
   imageUrl?: string;
   score?: number;
   actions: ReactNode[];
   url: string;
   finishedAt?: string;
+  isFinished?: boolean;
   status?: Status;
 };
 
 const Row = ({
   title,
   description,
+  eventId,
   type,
   typeId,
+  scope,
   date,
   imageUrl,
   score,
   actions,
   url,
   finishedAt,
+  isFinished,
   status,
   ...props
 }: RowProps) => {
+  const { i18n } = useTranslation();
+  const queryClient = useQueryClient();
+  const { udbMainPositiveGreen, udbMainLightGreen, grey2 } = colors;
+  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
+    useState(false);
+  const [draggedImageFile, setDraggedImageFile] = useState<FileList>();
+  const [images, setImages] = useState<ImageType[]>([]);
+  const [imageToEditId, setImageToEditId] = useState('');
+  const [isImageUploading, setIsImageUploading] = useState(false);
+  const imageToEdit = useMemo(() => {
+    const image = images.find((image) => image.parsedId === imageToEditId);
+
+    if (!image) return null;
+
+    const { file, ...imageWithoutFile } = image;
+
+    return imageWithoutFile;
+  }, [images, imageToEditId]);
+
+  const addImageToEventMutation = useAddOfferImageMutation({
+    onSuccess: () => {
+      setIsPictureUploadModalVisible(false);
+      setTimeout(async () => {
+        await queryClient.invalidateQueries('events');
+        setIsImageUploading(false);
+      }, 1000);
+    },
+  });
+
+  const handleSuccessAddImage = ({ imageId }) => {
+    return addImageToEventMutation.mutate({ eventId, imageId, scope });
+  };
+
+  const addImageMutation = useAddImageMutation({
+    onSuccess: handleSuccessAddImage,
+  });
+
+  const updateOfferImageMutation = useUpdateOfferImageMutation({
+    onSuccess: async () => {
+      setIsPictureUploadModalVisible(false);
+    },
+  });
+
+  const handleSubmitValid = async ({
+    file,
+    description,
+    copyrightHolder,
+  }: FormData) => {
+    try {
+      setIsImageUploading(true);
+      if (imageToEdit) {
+        await updateOfferImageMutation.mutateAsync({
+          eventId,
+          imageId: imageToEdit.parsedId,
+          description,
+          copyrightHolder,
+          scope,
+        });
+
+        return;
+      }
+
+      await addImageMutation.mutateAsync({
+        description,
+        copyrightHolder,
+        file: file?.[0],
+        language: i18n.language,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
-      <Image src={imageUrl} alt={title} width={100} height={100} />
+      <Inline width="100">
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={100}
+            height={100}
+            css={`
+              cursor: pointer;
+            `}
+            onClick={() => setIsPictureUploadModalVisible(true)}
+          />
+        )}
+        {!imageUrl && !isFinished && (
+          <Box
+            css={`
+              ${!isImageUploading &&
+              `border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
+              :hover {
+                background-color: ${udbMainLightGreen};}`}
+            `}
+            width={100}
+            height={100}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            onClick={() => setIsPictureUploadModalVisible(true)}
+          >
+            {isImageUploading ? (
+              <Spinner />
+            ) : (
+              <ImageIcon width="50" color={udbMainPositiveGreen} />
+            )}
+          </Box>
+        )}
+        {!imageUrl && isFinished && (
+          <Box
+            css={`
+              border: 1px solid ${grey2};
+            `}
+            width={100}
+            height={100}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Icon name={Icons.IMAGE} width="45px" height="45px" color={grey2} />
+          </Box>
+        )}
+      </Inline>
+      <PictureUploadModal
+        visible={isPictureUploadModalVisible}
+        onClose={() => setIsPictureUploadModalVisible(false)}
+        draggedImageFile={draggedImageFile}
+        imageToEdit={imageToEdit}
+        onSubmitValid={handleSubmitValid}
+        loading={isImageUploading}
+      />
       <Stack spacing={4} flex={1}>
         <Link
           href={url}
@@ -239,7 +385,7 @@ const Row = ({
               <Text marginLeft={3}>{`${score} / 100`}</Text>
             </Inline>
             <Inline width="25%">
-            <StatusIndicator label={status.label} color={status.color} />
+              <StatusIndicator label={status.label} color={status.color} />
             </Inline>
           </Inline>
           <Inline minWidth="25%" justifyContent="flex-end">
@@ -305,8 +451,8 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;
   const imageUrl = offer.image;
   const eventScore = offer.completeness;
-
-  console.log(offer);
+  const eventId = parseOfferId(offer['@id']);
+  const scope = parseOfferType(offer['@context']);
 
   // The custom keySeparator was necessary because the ids contain '.' which i18n uses as default keySeparator
   const eventType = typeId
@@ -365,7 +511,10 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
       date={date}
       imageUrl={imageUrl}
       score={eventScore}
+      eventId={eventId}
+      scope={scope}
       url={previewUrl}
+      isFinished={isFinished}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
