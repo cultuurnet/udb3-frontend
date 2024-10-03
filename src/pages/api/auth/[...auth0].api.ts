@@ -13,7 +13,9 @@ export default authServer.handleAuth({
         authorizationParams: {
           audience: 'https://api.publiq.be',
           scope: 'openid profile email',
+          // TODO: Remove once keycloak migration complete
           locale: language,
+          ui_locales: language,
           referrer: 'udb',
           skip_verify_legacy: 'true',
           product_display_name: 'UiTdatabank',
@@ -25,8 +27,14 @@ export default authServer.handleAuth({
   },
   async logout(req: NextApiRequest, res) {
     const { publicRuntimeConfig } = getConfig();
+    const language = req.cookies['udb-language'] ?? 'nl';
     try {
       await authServer.handleLogout(req, res, {
+        logoutParams: {
+          // TODO: Remove once keycloak migration complete
+          locale: language,
+          ui_locales: language
+        },
         returnTo: publicRuntimeConfig.baseUrl,
       });
     } catch (err) {
