@@ -324,16 +324,18 @@ const Row = ({
         )}
         {!imageUrl && isFinished && (
           <Box
-            css={`
-              border: 1px solid ${grey2};
-            `}
             width={100}
             height={100}
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
-            <Icon name={Icons.IMAGE} width="45px" height="45px" color={grey2} />
+            <Image
+              src={`/assets/no-image-available.svg`}
+              alt="No image available"
+              width={100}
+              height={100}
+            />
           </Box>
         )}
       </Inline>
