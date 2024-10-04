@@ -16,9 +16,10 @@ const getValueForPageFooter = getValueFromTheme('pageFooter');
 type Props = StackProps & {
   children: ReactNode;
   className?: string;
+  backgroundColor?: string;
 };
 
-const Page = ({ children: rawChildren, className, ...props }: Props) => {
+const Page = ({ children: rawChildren, className, backgroundColor, ...props }: Props) => {
   const children = Children.toArray(rawChildren);
 
   // @ts-expect-error
@@ -35,7 +36,7 @@ const Page = ({ children: rawChildren, className, ...props }: Props) => {
       forwardedAs="main"
       className={className}
       flex={1}
-      backgroundColor={getValueForPage('backgroundColor')}
+      backgroundColor={backgroundColor ? backgroundColor : getValueForPage('backgroundColor')}
       minHeight="100vh"
       css={`
         overflow-x: hidden;
