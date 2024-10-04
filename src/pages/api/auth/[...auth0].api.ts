@@ -7,7 +7,7 @@ const authServer = getAuthServer();
 
 export default authServer.handleAuth({
   async login(req, res) {
-    const language = req.cookies['udb-language'] ?? 'nl';
+    const language = req.cookies['udb-language'] || 'nl';
     try {
       await authServer.handleLogin(req, res, {
         authorizationParams: {
@@ -25,15 +25,15 @@ export default authServer.handleAuth({
       res.status(error.status || 400).end(error.message);
     }
   },
-  async logout(req: NextApiRequest, res) {
+  async logout(req, res) {
     const { publicRuntimeConfig } = getConfig();
-    const language = req.cookies['udb-language'] ?? 'nl';
+    const language = req.cookies['udb-language'] || 'nl';
     try {
       await authServer.handleLogout(req, res, {
         logoutParams: {
           // TODO: Remove once keycloak migration complete
           locale: language,
-          ui_locales: language
+          ui_locales: language,
         },
         returnTo: publicRuntimeConfig.baseUrl,
       });
