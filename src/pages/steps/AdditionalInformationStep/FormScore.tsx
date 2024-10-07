@@ -81,7 +81,7 @@ const scoreWeightMapping: Weights = {
   },
 };
 
-const organizerScoreWeightMapping: Weights = {
+export const organizerScoreWeightMapping: Weights = {
   name: {
     weight: 20,
     mandatory: true,
@@ -122,12 +122,12 @@ type EntityWithMedia =
       videos: undefined;
     });
 
-const getScopeWeights = (scope: Scope): Weights =>
+export const getScopeWeights = (scope: Scope): Weights =>
   scope === ScopeTypes.ORGANIZERS
     ? organizerScoreWeightMapping
     : scoreWeightMapping;
 
-const getMinimumScore = (weights: Weights): number => {
+export const getMinimumScore = (weights: Weights): number => {
   let minimumScore = 0;
 
   Object.values(weights).forEach((scoreWeight) => {

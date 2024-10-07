@@ -68,7 +68,11 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
 import { ImageIcon, ImageType } from '../PictureUploadBox';
-import { DynamicBarometerIcon } from '../steps/AdditionalInformationStep/FormScore';
+import {
+  DynamicBarometerIcon,
+  getMinimumScore,
+  getScopeWeights,
+} from '../steps/AdditionalInformationStep/FormScore';
 import {
   FormData,
   PictureUploadModal,
@@ -222,6 +226,9 @@ const Row = ({
   const [images, setImages] = useState<ImageType[]>([]);
   const [imageToEditId, setImageToEditId] = useState('');
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isImageHovered, setIsImageHovered] = useState(false);
+  const weights = getScopeWeights(scope);
+  const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
   const imageToEdit = useMemo(() => {
     const image = images.find((image) => image.parsedId === imageToEditId);
 
@@ -285,7 +292,7 @@ const Row = ({
       console.log(error);
     }
   };
-  const [isImageHovered, setIsImageHovered] = useState(false);
+  
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
       <Inline width="100" alignItems="center">
@@ -405,7 +412,7 @@ const Row = ({
           </Stack>
           <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
             <DynamicBarometerIcon
-              minimumScore={0}
+              minimumScore={minimumScore}
               score={score}
               size={30}
               margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
