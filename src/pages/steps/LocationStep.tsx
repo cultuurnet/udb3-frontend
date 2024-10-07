@@ -31,6 +31,8 @@ import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
+import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -51,8 +53,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
