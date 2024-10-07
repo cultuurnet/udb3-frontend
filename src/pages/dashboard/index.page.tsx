@@ -15,6 +15,11 @@ import {
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
+import { useAddImageMutation } from '@/hooks/api/images';
+import {
+  useAddOfferImageMutation,
+  useUpdateOfferImageMutation,
+} from '@/hooks/api/offers';
 import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
@@ -40,6 +45,9 @@ import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
+import { Icon } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
+import { Image } from '@/ui/Image';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -55,26 +63,18 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
-import { Image } from '@/ui/Image';
 import { formatAddressInternal } from '@/utils/formatAddress';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
-import { NewsletterSignupForm } from './NewsletterSingupForm';
-import { Icon } from '@/ui/Icon';
-import { Icons } from '@/ui/Icon';
-import { DynamicBarometerIcon } from '../steps/AdditionalInformationStep/FormScore';
 import { ImageIcon, ImageType } from '../PictureUploadBox';
+import { DynamicBarometerIcon } from '../steps/AdditionalInformationStep/FormScore';
 import {
   FormData,
   PictureUploadModal,
 } from '../steps/modals/PictureUploadModal';
-import {
-  useAddOfferImageMutation,
-  useUpdateOfferImageMutation,
-} from '@/hooks/api/offers';
-import { useAddImageMutation } from '@/hooks/api/images';
+import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
 

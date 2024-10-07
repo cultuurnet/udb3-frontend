@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { GaugeInnerMarginInPercent } from 'react-gauge-component/dist/lib/GaugeComponent/types/GaugeComponentProps';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { eventTypesWithNoThemes } from '@/constants/EventTypes';
@@ -16,7 +17,6 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
 import { Field } from './AdditionalInformationStep';
-import { GaugeInnerMarginInPercent } from 'react-gauge-component/dist/lib/GaugeComponent/types/GaugeComponentProps';
 
 const GaugeComponent = dynamic(() => import('react-gauge-component'), {
   ssr: false,
