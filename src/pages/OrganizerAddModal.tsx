@@ -392,9 +392,9 @@ const OrganizerAddModal = ({
               }
               info={
                 <BlankStreetToggle
-                  onFieldChange={(value) => {
-                    setValue('address.streetAndNumber', value.streetAndNumber);
-                  }}
+                  onChange={(value) =>
+                    setValue('address.streetAndNumber', value)
+                  }
                 />
               }
             />

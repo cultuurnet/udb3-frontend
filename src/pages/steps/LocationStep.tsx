@@ -31,7 +31,7 @@ import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
+import { RadioButtonTypes } from '@/ui/RadioButton';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
@@ -258,7 +258,11 @@ const isLocationSet = (
   );
 };
 
-export const BlankStreetToggle = ({ onFieldChange }) => {
+export const BlankStreetToggle = ({
+  onChange,
+}: {
+  onChange: (address: string) => void;
+}) => {
   const { t } = useTranslation();
   const [isBlankStreet, setIsBlankStreet] = useState(false);
 
@@ -277,10 +281,7 @@ export const BlankStreetToggle = ({ onFieldChange }) => {
         const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
 
         setIsBlankStreet(!isBlankStreet);
-        onFieldChange({
-          streetAndNumber,
-          location: { streetAndNumber },
-        });
+        onChange(streetAndNumber);
       }}
     />
   );
@@ -707,7 +708,14 @@ const LocationStep = ({
                           t('location.add_modal.errors.streetAndNumber')
                         }
                         info={
-                          <BlankStreetToggle onFieldChange={onFieldChange} />
+                          <BlankStreetToggle
+                            onChange={(streetAndNumber) =>
+                              onFieldChange({
+                                streetAndNumber,
+                                location: { streetAndNumber },
+                              })
+                            }
+                          />
                         }
                       />
                     </Stack>
