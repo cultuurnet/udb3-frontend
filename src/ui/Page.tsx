@@ -19,7 +19,12 @@ type Props = StackProps & {
   backgroundColor?: string;
 };
 
-const Page = ({ children: rawChildren, className, backgroundColor, ...props }: Props) => {
+const Page = ({
+  children: rawChildren,
+  className,
+  backgroundColor,
+  ...props
+}: Props) => {
   const children = Children.toArray(rawChildren);
 
   // @ts-expect-error
@@ -36,7 +41,9 @@ const Page = ({ children: rawChildren, className, backgroundColor, ...props }: P
       forwardedAs="main"
       className={className}
       flex={1}
-      backgroundColor={backgroundColor ? backgroundColor : getValueForPage('backgroundColor')}
+      backgroundColor={
+        backgroundColor ? backgroundColor : getValueForPage('backgroundColor')
+      }
       minHeight="100vh"
       css={`
         overflow-x: hidden;
