@@ -9,7 +9,7 @@ import { dehydrate } from 'react-query/hydration';
 import { css } from 'styled-components';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { Scope } from '@/constants/OfferType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   useDeleteEventByIdMutation,
@@ -94,6 +94,8 @@ const globalAlertVariant = Object.values(AlertVariants).some(
 const getValue = getValueFromTheme('dashboardPage');
 
 const itemsPerPage = 14;
+
+const getGlobalValue = getValueFromTheme('global');
 
 const UseGetItemsByCreatorMap = {
   events: useGetEventsByCreatorQuery,
@@ -214,7 +216,7 @@ const Row = ({
 }: RowProps) => {
   const { i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const { udbMainPositiveGreen, udbMainLightGreen, grey2 } = colors;
+  const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey } = colors;
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);
   const [draggedImageFile, setDraggedImageFile] = useState<FileList>();
@@ -284,10 +286,10 @@ const Row = ({
       console.log(error);
     }
   };
-
+  const [isImageHovered, setIsImageHovered] = useState(false);
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
-      <Inline width="100">
+      <Inline width="100" alignItems="center">
         {imageUrl && (
           <Image
             src={imageUrl}
@@ -301,26 +303,41 @@ const Row = ({
           />
         )}
         {!imageUrl && !isFinished && (
-          <Box
-            css={`
-              ${!isImageUploading &&
-              `border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
-              :hover {
-                background-color: ${udbMainLightGreen};}`}
-            `}
-            width={100}
-            height={100}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            onClick={() => setIsPictureUploadModalVisible(true)}
+          <span
+            onMouseEnter={() => setIsImageHovered(true)}
+            onMouseLeave={() => setIsImageHovered(false)}
           >
-            {isImageUploading ? (
-              <Spinner />
-            ) : (
-              <ImageIcon width="50" color={udbMainPositiveGreen} />
-            )}
-          </Box>
+            <Box
+              css={`
+                ${!isImageUploading &&
+                `border: 1px solid ${udbMainGrey}; border-radius: 0.5rem;
+              :hover {
+                border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
+              }
+              :active {
+                background-color: ${udbMainLightGreen}; box-shadow: ${getValue(
+                  'boxShadow.small',
+                )};
+              }  
+                `}
+              `}
+              width={100}
+              height={100}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              onClick={() => setIsPictureUploadModalVisible(true)}
+            >
+              {isImageUploading ? (
+                <Spinner />
+              ) : (
+                <ImageIcon
+                  width="50"
+                  color={isImageHovered ? udbMainPositiveGreen : udbMainGrey}
+                />
+              )}
+            </Box>
+          </span>
         )}
         {!imageUrl && isFinished && (
           <Box
@@ -363,50 +380,58 @@ const Row = ({
           {title}
         </Link>
         <Inline
-          spacing={3}
           justifyContent="space-between"
           alignItems="flex-start"
+          css={`
+            width: 100%;
+          `}
         >
-          <Inline spacing={3} minWidth="25%">
-            <Icon name={Icons.TAG} />
-            <Text>{type}</Text>
-          </Inline>
-          <Inline spacing={5} flex={1} alignItems="flex-start">
-            <Inline spacing={3} alignItems="center" flexWrap="wrap" width="25%">
+          <Stack
+            width="22.5%"
+            spacing={3}
+            alignItems="flex-start"
+            css={`
+              word-break: break-all;
+              white-space: normal;
+            `}
+          >
+            <Inline spacing={3} alignItems="center">
+              <Icon name={Icons.TAG} />
+              <Text>{type}</Text>
+            </Inline>
+            <Inline spacing={3} alignItems="center">
               <Icon name={Icons.CALENDAR_ALT} />
               <Text>{date}</Text>
             </Inline>
-            <Inline width="25%">
-              <DynamicBarometerIcon
-                minimumScore={0}
-                score={score}
-                size={30}
-                margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
-                pointerWidth={100}
-              />
-              <Text marginLeft={3}>{`${score} / 100`}</Text>
-            </Inline>
-            <Inline width="25%">
-              <StatusIndicator label={status.label} color={status.color} />
-            </Inline>
+          </Stack>
+          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
+            <DynamicBarometerIcon
+              minimumScore={0}
+              score={score}
+              size={30}
+              margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
+              pointerWidth={100}
+            />
+            <Text marginLeft={3}>{`${score} / 100`}</Text>
           </Inline>
-          <Inline minWidth="25%" justifyContent="flex-end">
-            <>
-              {finishedAt ? (
-                <Text
-                  color={getValue('listItem.passedEvent.color')}
-                  textAlign="center"
-                >
-                  {finishedAt}
-                </Text>
-              ) : (
-                actions.length > 0 && (
-                  <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
-                    {actions}
-                  </Dropdown>
-                )
-              )}
-            </>
+          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
+            <StatusIndicator label={status.label} color={status.color} />
+          </Inline>
+          <Inline width="22.5%" justifyContent="flex-end" alignItems="center">
+            {finishedAt ? (
+              <Text
+                color={getValue('listItem.passedEvent.color')}
+                textAlign="center"
+              >
+                {finishedAt}
+              </Text>
+            ) : (
+              actions.length > 0 && (
+                <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
+                  {actions}
+                </Dropdown>
+              )
+            )}
           </Inline>
         </Inline>
       </Stack>
@@ -445,7 +470,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
-  const date = offer.calendarSummary[i18n.language].text['sm'];
+  const date = offer.calendarSummary[i18n.language].text['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
@@ -465,8 +490,6 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     offer.calendarSummary[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
-
-  const rowDescription = [eventType, period].filter(Boolean).join(' - ');
 
   const rowStatus = useMemo<RowStatus>(() => {
     if (isPlanned) {
@@ -622,9 +645,8 @@ const TabContent = ({
       <Panel
         backgroundColor="white"
         css={`
-          border-top: none !important;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
+          border: none !important;
+          box-shadow: unset !important;
         `}
       >
         <Spinner marginY={4} />
@@ -636,9 +658,8 @@ const TabContent = ({
     return (
       <Panel
         css={`
-          border-top: none !important;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
+          border: none !important;
+          box-shadow: unset !important;
         `}
         backgroundColor="white"
         minHeight="5rem"
@@ -655,17 +676,8 @@ const TabContent = ({
   return (
     <Panel
       css={`
-        border-top: none !important;
-        border-top-left-radius: 0;
-
-        & ul li:first-child {
-          border-top-left-radius: 0;
-        }
-
-        & ul li:last-child {
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
+        border: none !important;
+        box-shadow: unset !important;
       `}
     >
       <List>
@@ -677,20 +689,24 @@ const TabContent = ({
             paddingBottom={5}
             paddingTop={5}
             backgroundColor={getValue('listItem.backgroundColor')}
-            css={
-              index !== items.length - 1
-                ? css`
-                    border-bottom: 1px solid ${getValue('listItem.borderColor')};
-                  `
-                : css``
-            }
+            css={`
+              margin-top: 1rem;
+              margin-bottom: 1rem;
+              border-radius: 0.5rem;
+              box-shadow: ${getGlobalValue('boxShadow.medium')};
+            `}
           >
             <Row item={item} onDelete={onDelete} />
           </List.Item>
         ))}
       </List>
       {hasMoreThanOnePage && (
-        <Panel.Footer>
+        <Panel.Footer
+          css={`
+            border: none !important;
+            background-color: white !important;
+          `}
+        >
           <Pagination
             currentPage={page}
             totalItems={totalItems}
@@ -751,7 +767,7 @@ const Dashboard = (): any => {
     router.push(
       {
         pathname: `/dashboard`,
-        query: { tab: tabKey, page: 1, ...(tabKey === 'events' && { sort }) },
+        query: { tab: tabKey, page: 1, ...{ sort } },
       },
       undefined,
       { shallow: true },
@@ -772,9 +788,9 @@ const Dashboard = (): any => {
 
   const UseGetItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
-    ...(tab === 'events' && {
+    ...{
       sortOptions: { field: sortingField, order: sortingOrder },
-    }),
+    },
     paginationOptions: {
       start: (page - 1) * itemsPerPage,
       limit: itemsPerPage,
@@ -816,9 +832,10 @@ const Dashboard = (): any => {
   ];
 
   const createOfferUrl = CreateMap[tab];
+  const { udbMainDarkBlue } = colors;
 
   return [
-    <Page key="page">
+    <Page backgroundColor="white" key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
           ? `${t('dashboard.welcome')}, ${user['https://publiq.be/first_name']}`
@@ -856,28 +873,39 @@ const Dashboard = (): any => {
                 <Text fontWeight="bold" />
               </Trans>
             </Text>
-            {tab === 'events' && (
-              <SelectWithLabel
-                key="select"
-                id="sorting"
-                label={`${t('dashboard.sorting.label')}:`}
-                value={sort}
-                onChange={handleSelectSorting}
-                width="auto"
-                labelPosition={LabelPositions.LEFT}
-              >
-                {SORTING_OPTIONS.map((sortOption) => (
-                  <option key={sortOption} value={sortOption}>
-                    {t(`dashboard.sorting.${sortOption}`)}
-                  </option>
-                ))}
-              </SelectWithLabel>
-            )}
+            <SelectWithLabel
+              key="select"
+              id="sorting"
+              label={`${t('dashboard.sorting.label')}:`}
+              value={sort}
+              onChange={handleSelectSorting}
+              width="auto"
+              labelPosition={LabelPositions.LEFT}
+            >
+              {SORTING_OPTIONS.map((sortOption) => (
+                <option key={sortOption} value={sortOption}>
+                  {t(`dashboard.sorting.${sortOption}`)}
+                </option>
+              ))}
+            </SelectWithLabel>
           </Inline>
           <Tabs<Scope>
             activeKey={tab}
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
+            css={`
+              .nav-item {
+                border: none !important;
+
+                &.active {
+                  border-bottom: 4px solid ${udbMainDarkBlue} !important;
+                }
+
+                &:hover {
+                  background-color: transparent;
+                }
+              }
+            `}
           >
             <Tabs.Tab eventKey="events" title={t('dashboard.tabs.events')}>
               {tab === 'events' && (
