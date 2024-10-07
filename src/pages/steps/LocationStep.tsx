@@ -56,6 +56,7 @@ import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
+export const BLANK_STREET_NUMBER = '___';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -257,6 +258,34 @@ const isLocationSet = (
   );
 };
 
+export const BlankStreetToggle = ({ onFieldChange }) => {
+  const { t } = useTranslation();
+  const [isBlankStreet, setIsBlankStreet] = useState(false);
+
+  return (
+    <RadioButtonWithLabel
+      id={'blank_address'}
+      name={'blank_address'}
+      label={
+        <Text className={'ml-1'}>
+          {t('organizer.add_modal.labels.address.blank_street')}
+        </Text>
+      }
+      type={RadioButtonTypes.SWITCH}
+      checked={isBlankStreet}
+      onChange={() => {
+        const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
+
+        setIsBlankStreet(!isBlankStreet);
+        onFieldChange({
+          streetAndNumber,
+          location: { streetAndNumber },
+        });
+      }}
+    />
+  );
+};
+
 const LocationStep = ({
   formState,
   getValues,
@@ -274,7 +303,6 @@ const LocationStep = ({
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
-  const [streetless, setStreetless] = useState(false);
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -666,7 +694,7 @@ const LocationStep = ({
                         Component={
                           <Input
                             value={streetAndNumber}
-                            disabled={streetless}
+                            disabled={streetAndNumber === BLANK_STREET_NUMBER}
                             onBlur={() => onFieldChange({ streetAndNumber })}
                             onChange={handleChangeStreetAndNumber}
                           />
@@ -679,22 +707,7 @@ const LocationStep = ({
                           t('location.add_modal.errors.streetAndNumber')
                         }
                         info={
-                          <RadioButtonWithLabel
-                            id={'streetless'}
-                            label={
-                              <Text className={'ml-1'}>
-                                Ik wil mijn straat en nummer niet publiek
-                                vrijgeven
-                              </Text>
-                            }
-                            type={RadioButtonTypes.SWITCH}
-                            name={'streetless'}
-                            checked={streetless}
-                            onChange={() => {
-                              setStreetAndNumber(streetless ? '' : '---');
-                              setStreetless(!streetless);
-                            }}
-                          />
+                          <BlankStreetToggle onFieldChange={onFieldChange} />
                         }
                       />
                     </Stack>
