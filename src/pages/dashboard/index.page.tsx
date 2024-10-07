@@ -6,10 +6,9 @@ import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { css } from 'styled-components';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { Scope } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   useDeleteEventByIdMutation,
@@ -612,6 +611,9 @@ const OrganizerRow = ({
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
         </Link>,
+        <Dropdown.Item href={previewUrl} key="preview">
+          {t('dashboard.actions.preview')}
+        </Dropdown.Item>,
         permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
           <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
             {t('dashboard.actions.delete')}
@@ -831,6 +833,11 @@ const Dashboard = (): any => {
     'completeness_desc',
   ];
 
+  const filteredSortingOptions =
+    tab === 'organizers'
+      ? SORTING_OPTIONS.filter((option) => !option.includes('availableTo'))
+      : SORTING_OPTIONS;
+
   const createOfferUrl = CreateMap[tab];
   const { udbMainDarkBlue } = colors;
 
@@ -882,7 +889,7 @@ const Dashboard = (): any => {
               width="auto"
               labelPosition={LabelPositions.LEFT}
             >
-              {SORTING_OPTIONS.map((sortOption) => (
+              {filteredSortingOptions.map((sortOption) => (
                 <option key={sortOption} value={sortOption}>
                   {t(`dashboard.sorting.${sortOption}`)}
                 </option>
@@ -894,6 +901,9 @@ const Dashboard = (): any => {
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
             css={`
+              a {
+                font-size: 16px;
+              }
               .nav-item {
                 border: none !important;
 
@@ -980,12 +990,12 @@ const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           creator: user,
-          ...(key === 'events' && {
+          ...{
             sortOptions: {
               field: sortingField,
               order: sortingOrder,
             },
-          }),
+          },
           paginationOptions: {
             start: (page - 1) * itemsPerPage,
             limit: itemsPerPage,
