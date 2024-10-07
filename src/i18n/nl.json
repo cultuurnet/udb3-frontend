@@ -893,8 +893,8 @@
     }
   },
   "pagination": {
-    "next": "Volgende",
-    "previous": "Vorige"
+    "next": "\u003E",
+    "previous": "\u003C"
   },
   "pictures": {
     "add_button": "Afbeelding toevoegen",
