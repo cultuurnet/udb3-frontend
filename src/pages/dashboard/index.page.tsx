@@ -62,7 +62,6 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
-import { formatAddressInternal } from '@/utils/formatAddress';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
@@ -292,7 +291,7 @@ const Row = ({
       console.log(error);
     }
   };
-  
+
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
       <Inline width="100" alignItems="center">
@@ -392,24 +391,26 @@ const Row = ({
             width: 100%;
           `}
         >
-          <Stack
-            width="22.5%"
-            spacing={3}
-            alignItems="flex-start"
-            css={`
-              word-break: break-all;
-              white-space: normal;
-            `}
-          >
-            <Inline spacing={3} alignItems="center">
-              <Icon name={Icons.TAG} />
-              <Text>{type}</Text>
-            </Inline>
-            <Inline spacing={3} alignItems="center">
-              <Icon name={Icons.CALENDAR_ALT} />
-              <Text>{date}</Text>
-            </Inline>
-          </Stack>
+          {scope !== 'organizer' && (
+            <Stack
+              width="22.5%"
+              spacing={3}
+              alignItems="flex-start"
+              css={`
+                word-break: break-all;
+                white-space: normal;
+              `}
+            >
+              <Inline spacing={3} alignItems="center">
+                <Icon name={Icons.TAG} />
+                <Text>{type}</Text>
+              </Inline>
+              <Inline spacing={3} alignItems="center">
+                <Icon name={Icons.CALENDAR_ALT} />
+                <Text>{date}</Text>
+              </Inline>
+            </Stack>
+          )}
           <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
             <DynamicBarometerIcon
               minimumScore={minimumScore}
@@ -598,12 +599,10 @@ const OrganizerRow = ({
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(organizer.creator);
 
-  const address =
-    organizer?.address?.[i18n.language] ??
-    organizer?.address?.[organizer.mainLanguage];
-  const formattedAddress = address ? formatAddressInternal(address) : '';
   const editUrl = `/organizer/${parseOfferId(organizer['@id'])}/edit`;
   const previewUrl = `/organizer/${parseOfferId(organizer['@id'])}/preview`;
+  const score = organizer?.completeness;
+  const scope = parseOfferType(organizer['@context']);
   // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
 
@@ -613,7 +612,8 @@ const OrganizerRow = ({
         organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
       }
       url={previewUrl}
-      description={formattedAddress}
+      score={score}
+      scope={scope}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
