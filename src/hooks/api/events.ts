@@ -221,6 +221,7 @@ const getEventsByIds = async ({
     q: `id:(${ids.join(' OR ')})`,
   });
 
+  searchParams.append('embedCalendarSummaries[]', 'xs-text');
   searchParams.append('embedCalendarSummaries[]', 'sm-text');
   searchParams.append('embedCalendarSummaries[]', 'lg-text');
 
@@ -293,7 +294,7 @@ const useGetEventsByCreatorQuery = (
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
-    calendarSummaryFormats = ['lg-text', 'sm-text'],
+    calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
   }: AuthenticatedQueryOptions<
     PaginationOptions &
       SortOptions &
