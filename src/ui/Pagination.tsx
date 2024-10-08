@@ -4,6 +4,7 @@ import { Pagination as BootstrapPagination } from 'react-bootstrap';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { Icon, Icons } from './Icon';
 
 const getValue = getValueFromTheme(`pagination`);
 
@@ -23,8 +24,6 @@ const Pagination = ({
   totalItems,
   perPage,
   limitPages,
-  prevText,
-  nextText,
   onChangePage,
   ...props
 }: PaginationProps) => {
@@ -133,7 +132,7 @@ const Pagination = ({
             }
           }}
         >
-          {prevText}
+          <Icon name={Icons.ANGLE_LEFT} />
         </BootstrapPagination.Prev>
       )}
       {currentRange.map((page, index) => {
@@ -168,7 +167,7 @@ const Pagination = ({
             }
           }}
         >
-          {nextText}
+          <Icon name={Icons.ANGLE_RIGHT} />
         </BootstrapPagination.Next>
       )}
     </Inline>
@@ -180,8 +179,6 @@ Pagination.defaultProps = {
   totalItems: 1,
   perPage: 10,
   limitPages: 5,
-  prevText: 'Previous',
-  nextText: 'Next',
 };
 
 export { Pagination };

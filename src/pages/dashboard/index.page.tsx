@@ -721,8 +721,6 @@ const TabContent = ({
             currentPage={page}
             totalItems={totalItems}
             perPage={itemsPerPage}
-            prevText={t('pagination.previous')}
-            nextText={t('pagination.next')}
             onChangePage={onChangePage}
           />
         </Panel.Footer>
