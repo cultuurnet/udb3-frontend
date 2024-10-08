@@ -796,9 +796,7 @@ const Dashboard = (): any => {
 
   const UseGetItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
-    ...{
-      sortOptions: { field: sortingField, order: sortingOrder },
-    },
+    sortOptions: { field: sortingField, order: sortingOrder },
     paginationOptions: {
       start: (page - 1) * itemsPerPage,
       limit: itemsPerPage,
