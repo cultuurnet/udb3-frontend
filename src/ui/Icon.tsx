@@ -1,6 +1,8 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faSlideshare } from '@fortawesome/free-brands-svg-icons';
 import {
+  faAngleLeft,
+  faAngleRight,
   faBell,
   faBinoculars,
   faBuilding,
@@ -35,8 +37,6 @@ import {
   faUser,
   faUsers,
   faVideo,
-  faAngleLeft,
-  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

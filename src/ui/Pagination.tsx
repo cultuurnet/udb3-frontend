@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { Pagination as BootstrapPagination } from 'react-bootstrap';
 
+import { Icon, Icons } from './Icon';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
-import { Icon, Icons } from './Icon';
 
 const getValue = getValueFromTheme(`pagination`);
 
