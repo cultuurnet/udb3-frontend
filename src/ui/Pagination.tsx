@@ -3,7 +3,7 @@ import { Pagination as BootstrapPagination } from 'react-bootstrap';
 
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`pagination`);
 
@@ -28,6 +28,8 @@ const Pagination = ({
   onChangePage,
   ...props
 }: PaginationProps) => {
+  const { udbMainLightGrey } = colors;
+
   const pages = useMemo(() => {
     const pages = [];
     for (let i = 0; i < Math.ceil(totalItems / perPage); i++) {
@@ -79,6 +81,8 @@ const Pagination = ({
           color: ${getValue('color')};
           border-color: ${getValue('borderColor')};
           padding: ${getValue('paddingY')} ${getValue('paddingX')};
+          border-radius: ${getGlobalBorderRadius};
+          margin 0.2rem;
 
           &:hover {
             background-color: ${getValue('hoverBackgroundColor')};
@@ -98,12 +102,22 @@ const Pagination = ({
           z-index: ${getValue('zIndex')};
         }
 
-        .prev-btn {
-          margin-right: 0.8rem;
+        .prev-btn.disabled > span {
+        background-color: ${udbMainLightGrey};
+        color: white;
         }
 
-        .next-btn {
-          margin-left: 0.8rem;
+        .next-btn.disabled > span {
+          background-color: ${udbMainLightGrey};
+          color: white;
+          }
+
+        .prev-btn > a > span {
+          color: ${udbMainLightGrey};
+          }
+
+        .next-btn > a > span {
+        color: ${udbMainLightGrey};
         }
       `}
       {...getInlineProps(props)}
