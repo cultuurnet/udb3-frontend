@@ -44,8 +44,7 @@ import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
-import { Icon } from '@/ui/Icon';
-import { Icons } from '@/ui/Icon';
+import { Icon, Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
@@ -218,7 +217,8 @@ const Row = ({
 }: RowProps) => {
   const { i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey } = colors;
+  const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
+    colors;
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);
   const [draggedImageFile, setDraggedImageFile] = useState<FileList>();
@@ -351,12 +351,13 @@ const Row = ({
             display="flex"
             justifyContent="center"
             alignItems="center"
+            backgroundColor={grey3}
           >
             <Image
-              src={`/assets/no-image-available.svg`}
+              src={`/assets/uit-logo.svg`}
               alt="No image available"
-              width={100}
-              height={100}
+              width={45}
+              height={45}
             />
           </Box>
         )}
