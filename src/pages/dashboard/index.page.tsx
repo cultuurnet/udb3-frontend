@@ -846,7 +846,7 @@ const Dashboard = (): any => {
       : SORTING_OPTIONS;
 
   const createOfferUrl = CreateMap[tab];
-  const { udbMainDarkBlue } = colors;
+  const { udbMainDarkBlue, textColor } = colors;
 
   return [
     <Page backgroundColor="white" key="page">
@@ -908,14 +908,18 @@ const Dashboard = (): any => {
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
             css={`
-              a {
-                font-size: 16px;
+              .nav-item.nav-link {
+                font-size: 1.1rem;
+                font-weight: 300;
+                color: ${textColor};
+                padding: 0;
+                margin-right: 1.5rem;
               }
               .nav-item {
                 border: none !important;
 
                 &.active {
-                  border-bottom: 4px solid ${udbMainDarkBlue} !important;
+                  border-bottom: 3px solid ${udbMainDarkBlue} !important;
                 }
 
                 &:hover {
