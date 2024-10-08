@@ -9,7 +9,7 @@ setup('authenticate', async ({ baseURL, page }) => {
 
   await page.waitForURL(/account-acc.uitid.be\/*/);
 
-  await page.getByLabel('Je e-mailadres').fill(process.env.E2E_TEST_EMAIL);
+  await page.locator('input[name="username"]').fill(process.env.E2E_TEST_EMAIL);
   await page.getByLabel('Je wachtwoord').fill(process.env.E2E_TEST_PASSWORD);
 
   await page.getByRole('button', { name: 'Meld je aan', exact: true }).click();
