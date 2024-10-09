@@ -1,7 +1,6 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -14,11 +13,6 @@ import {
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
-import { useAddImageMutation } from '@/hooks/api/images';
-import {
-  useAddOfferImageMutation,
-  useUpdateOfferImageMutation,
-} from '@/hooks/api/offers';
 import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
@@ -43,9 +37,7 @@ import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
-import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
-import { Icon, Icons } from '@/ui/Icon';
-import { Image } from '@/ui/Image';
+import { Dropdown } from '@/ui/Dropdown';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -65,16 +57,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
-import { ImageIcon, ImageType } from '../PictureUploadBox';
-import {
-  DynamicBarometerIcon,
-  getMinimumScore,
-  getScopeWeights,
-} from '../steps/AdditionalInformationStep/FormScore';
-import {
-  FormData,
-  PictureUploadModal,
-} from '../steps/modals/PictureUploadModal';
+import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
@@ -134,7 +117,7 @@ const RowStatusToColor: Record<RowStatus, string> = {
   PLANNED: 'blue',
 };
 
-type Status = {
+export type Status = {
   color?: string;
   label?: string;
   isExternalCreator?: boolean;
@@ -142,7 +125,7 @@ type Status = {
 
 type StatusIndicatorProps = InlineProps & Status;
 
-const StatusIndicator = ({
+export const StatusIndicator = ({
   color,
   label,
   isExternalCreator,
@@ -179,276 +162,6 @@ const StatusIndicator = ({
       )}
     </Stack>
   );
-};
-
-type RowProps = {
-  title: string;
-  description?: string;
-  eventId?: string;
-  type?: string;
-  typeId?: string;
-  scope?: string;
-  date?: string;
-  imageUrl?: string;
-  score?: number;
-  actions: ReactNode[];
-  url: string;
-  finishedAt?: string;
-  isFinished?: boolean;
-  status?: Status;
-};
-
-const Row = ({
-  title,
-  description,
-  eventId,
-  type,
-  typeId,
-  scope,
-  date,
-  imageUrl,
-  score,
-  actions,
-  url,
-  finishedAt,
-  isFinished,
-  status,
-  ...props
-}: RowProps) => {
-  const { i18n } = useTranslation();
-  const queryClient = useQueryClient();
-  const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
-    colors;
-  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
-    useState(false);
-  const [draggedImageFile, setDraggedImageFile] = useState<FileList>();
-  const [images, setImages] = useState<ImageType[]>([]);
-  const [imageToEditId, setImageToEditId] = useState('');
-  const [isImageUploading, setIsImageUploading] = useState(false);
-  const [isImageHovered, setIsImageHovered] = useState(false);
-  const weights = getScopeWeights(scope);
-  const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
-  const imageToEdit = useMemo(() => {
-    const image = images.find((image) => image.parsedId === imageToEditId);
-
-    if (!image) return null;
-
-    const { file, ...imageWithoutFile } = image;
-
-    return imageWithoutFile;
-  }, [images, imageToEditId]);
-
-  const addImageToEventMutation = useAddOfferImageMutation({
-    onSuccess: () => {
-      setIsPictureUploadModalVisible(false);
-      setTimeout(async () => {
-        await queryClient.invalidateQueries('events');
-        setIsImageUploading(false);
-      }, 1000);
-    },
-  });
-
-  const handleSuccessAddImage = ({ imageId }) => {
-    return addImageToEventMutation.mutate({ eventId, imageId, scope });
-  };
-
-  const addImageMutation = useAddImageMutation({
-    onSuccess: handleSuccessAddImage,
-  });
-
-  const updateOfferImageMutation = useUpdateOfferImageMutation({
-    onSuccess: async () => {
-      setIsPictureUploadModalVisible(false);
-    },
-  });
-
-  const handleSubmitValid = async ({
-    file,
-    description,
-    copyrightHolder,
-  }: FormData) => {
-    try {
-      setIsImageUploading(true);
-      if (imageToEdit) {
-        await updateOfferImageMutation.mutateAsync({
-          eventId,
-          imageId: imageToEdit.parsedId,
-          description,
-          copyrightHolder,
-          scope,
-        });
-
-        return;
-      }
-
-      await addImageMutation.mutateAsync({
-        description,
-        copyrightHolder,
-        file: file?.[0],
-        language: i18n.language,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <Inline spacing={5} {...getInlineProps(props)} flex={1}>
-      <Inline width="100" alignItems="center">
-        {imageUrl && (
-          <Image
-            src={imageUrl}
-            alt={title}
-            width={100}
-            height={100}
-            css={`
-              cursor: pointer;
-            `}
-            onClick={() => setIsPictureUploadModalVisible(true)}
-          />
-        )}
-        {!imageUrl && !isFinished && (
-          <span
-            onMouseEnter={() => setIsImageHovered(true)}
-            onMouseLeave={() => setIsImageHovered(false)}
-          >
-            <Box
-              css={`
-                ${!isImageUploading &&
-                `border: 1px solid ${udbMainGrey}; border-radius: 0.5rem;
-              :hover {
-                border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
-              }
-              :active {
-                background-color: ${udbMainLightGreen}; box-shadow: ${getValue(
-                  'boxShadow.small',
-                )};
-              }  
-                `}
-              `}
-              width={100}
-              height={100}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              onClick={() => setIsPictureUploadModalVisible(true)}
-            >
-              {isImageUploading ? (
-                <Spinner />
-              ) : (
-                <ImageIcon
-                  width="50"
-                  color={isImageHovered ? udbMainPositiveGreen : udbMainGrey}
-                />
-              )}
-            </Box>
-          </span>
-        )}
-        {!imageUrl && isFinished && (
-          <Box
-            width={100}
-            height={100}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            backgroundColor={grey3}
-          >
-            <Image
-              src={`/assets/uit-logo.svg`}
-              alt="No image available"
-              width={45}
-              height={45}
-            />
-          </Box>
-        )}
-      </Inline>
-      <PictureUploadModal
-        visible={isPictureUploadModalVisible}
-        onClose={() => setIsPictureUploadModalVisible(false)}
-        draggedImageFile={draggedImageFile}
-        imageToEdit={imageToEdit}
-        onSubmitValid={handleSubmitValid}
-        loading={isImageUploading}
-      />
-      <Stack spacing={4} flex={1}>
-        <Link
-          href={url}
-          color={getValue('listItem.color')}
-          fontWeight="bold"
-          css={`
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 35rem;
-            display: block;
-          `}
-        >
-          {title}
-        </Link>
-        <Inline
-          justifyContent="space-between"
-          alignItems="flex-start"
-          css={`
-            width: 100%;
-          `}
-        >
-          {scope !== 'organizer' && (
-            <Stack
-              width="22.5%"
-              spacing={3}
-              alignItems="flex-start"
-              css={`
-                word-break: break-all;
-                white-space: normal;
-              `}
-            >
-              <Inline spacing={3} alignItems="center">
-                <Icon name={Icons.TAG} />
-                <Text>{type}</Text>
-              </Inline>
-              <Inline spacing={3} alignItems="center">
-                <Icon name={Icons.CALENDAR_ALT} />
-                <Text>{date}</Text>
-              </Inline>
-            </Stack>
-          )}
-          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
-            <DynamicBarometerIcon
-              minimumScore={minimumScore}
-              score={score}
-              size={30}
-              margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
-              pointerWidth={100}
-            />
-            <Text marginLeft={3}>{`${score} / 100`}</Text>
-          </Inline>
-          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
-            <StatusIndicator label={status.label} color={status.color} />
-          </Inline>
-          <Inline width="22.5%" justifyContent="flex-end" alignItems="center">
-            {finishedAt ? (
-              <Text
-                color={getValue('listItem.passedEvent.color')}
-                textAlign="center"
-              >
-                {finishedAt}
-              </Text>
-            ) : (
-              actions.length > 0 && (
-                <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
-                  {actions}
-                </Dropdown>
-              )
-            )}
-          </Inline>
-        </Inline>
-      </Stack>
-    </Inline>
-  );
-};
-
-Row.defaultProps = {
-  actions: [],
 };
 
 type ExistingOffer = Omit<Offer, 'workflowStatus'> & {
@@ -538,7 +251,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   }, [offer.availableFrom, rowStatus, t]);
 
   return (
-    <Row
+    <DashboardRow
       title={offer.name[i18n.language] ?? offer.name[offer.mainLanguage]}
       type={eventType}
       date={date}
@@ -608,7 +321,7 @@ const OrganizerRow = ({
   const permissions = getPermissionsQuery?.data ?? [];
 
   return (
-    <Row
+    <DashboardRow
       title={
         organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
       }
