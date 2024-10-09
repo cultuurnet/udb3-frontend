@@ -13,8 +13,6 @@ type PaginationProps = InlineProps & {
   totalItems: number;
   perPage: number;
   limitPages: number;
-  prevText?: string;
-  nextText?: string;
   onChangePage?: (newValue: number) => void;
 };
 
