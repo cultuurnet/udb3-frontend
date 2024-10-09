@@ -778,8 +778,9 @@ const Dashboard = (): any => {
         query: {
           tab: tabKey,
           page: 1,
-          ...(tabKey !== 'organizers' &&
-            !sort?.startsWith('availableTo') && { sort }),
+          ...(!(tabKey === 'organizers' && sort?.startsWith('availableTo')) && {
+            sort,
+          }),
         },
       },
       undefined,
@@ -1003,13 +1004,14 @@ const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           creator: user,
-          ...(key !== 'organizers' &&
-            !sortingField.startsWith('availableTo') && {
-              sortOptions: {
-                field: sortingField,
-                order: sortingOrder,
-              },
-            }),
+          ...(!(
+            key === 'organizers' && sortingField.startsWith('availableTo')
+          ) && {
+            sortOptions: {
+              field: sortingField,
+              order: sortingOrder,
+            },
+          }),
           paginationOptions: {
             start: (page - 1) * itemsPerPage,
             limit: itemsPerPage,
