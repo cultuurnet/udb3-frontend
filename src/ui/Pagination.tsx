@@ -79,7 +79,7 @@ const Pagination = ({
           border-color: ${getValue('borderColor')};
           padding: ${getValue('paddingY')} ${getValue('paddingX')};
           border-radius: ${getGlobalBorderRadius};
-          margin 0.2rem;
+          margin: 0.2rem;
 
           &:hover {
             background-color: ${getValue('hoverBackgroundColor')};
@@ -100,21 +100,29 @@ const Pagination = ({
         }
 
         .prev-btn.disabled > span {
-        background-color: ${udbMainLightGrey};
-        color: white;
+          background-color: ${udbMainLightGrey};
+          color: white;
         }
 
         .next-btn.disabled > span {
           background-color: ${udbMainLightGrey};
           color: white;
-          }
+        }
+
+        .prev-btn > .page-link {
+          padding: 0.5rem;
+        }
+
+        .next-btn > .page-link {
+          padding: 0.5rem;
+        }
 
         .prev-btn > a > span {
           color: ${udbMainLightGrey};
-          }
+        }
 
         .next-btn > a > span {
-        color: ${udbMainLightGrey};
+          color: ${udbMainLightGrey};
         }
       `}
       {...getInlineProps(props)}
