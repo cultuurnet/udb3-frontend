@@ -774,8 +774,13 @@ const Dashboard = (): any => {
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(
       {
-        pathname: `/dashboard`,
-        query: { tab: tabKey, page: 1, ...{ sort } },
+        pathname: '/dashboard',
+        query: {
+          tab: tabKey,
+          page: 1,
+          ...(tabKey !== 'organizers' &&
+            !sort?.startsWith('availableTo') && { sort }),
+        },
       },
       undefined,
       { shallow: true },
@@ -998,12 +1003,13 @@ const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           creator: user,
-          ...{
-            sortOptions: {
-              field: sortingField,
-              order: sortingOrder,
-            },
-          },
+          ...(key !== 'organizers' &&
+            !sortingField.startsWith('availableTo') && {
+              sortOptions: {
+                field: sortingField,
+                order: sortingOrder,
+              },
+            }),
           paginationOptions: {
             start: (page - 1) * itemsPerPage,
             limit: itemsPerPage,
