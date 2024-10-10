@@ -57,6 +57,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
+import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
@@ -250,6 +251,10 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     return t('dashboard.row_status.draft');
   }, [offer.availableFrom, rowStatus, t]);
 
+  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
+    useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
+
   return (
     <DashboardRow
       title={offer.name[i18n.language] ?? offer.name[offer.mainLanguage]}
@@ -261,6 +266,8 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
       scope={scope}
       url={previewUrl}
       isFinished={isFinished}
+      isImageUploading={isImageUploading}
+      onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
@@ -289,7 +296,17 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
         isExternalCreator,
       }}
       {...getInlineProps(props)}
-    />
+    >
+      <DashboardPictureUploadModal
+        eventId={eventId}
+        scope={scope}
+        isImageUploading={isImageUploading}
+        isPictureUploadModalVisible={isPictureUploadModalVisible}
+        onModalClose={() => setIsPictureUploadModalVisible(false)}
+        onImageUploadStart={() => setIsImageUploading(true)}
+        onImageUploadEnd={() => setIsImageUploading(false)}
+      />
+    </DashboardRow>
   );
 };
 
@@ -319,6 +336,9 @@ const OrganizerRow = ({
   const scope = parseOfferType(organizer['@context']);
   // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
+  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
+    useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   return (
     <DashboardRow
@@ -328,6 +348,8 @@ const OrganizerRow = ({
       url={previewUrl}
       score={score}
       scope={scope}
+      isImageUploading={isImageUploading}
+      onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
@@ -344,6 +366,16 @@ const OrganizerRow = ({
       status={{
         isExternalCreator,
       }}
+      children={
+        <DashboardPictureUploadModal
+          scope={scope}
+          isImageUploading={isImageUploading}
+          isPictureUploadModalVisible={isPictureUploadModalVisible}
+          onModalClose={() => setIsPictureUploadModalVisible(false)}
+          onImageUploadStart={() => setIsImageUploading(true)}
+          onImageUploadEnd={() => setIsImageUploading(false)}
+        />
+      }
       {...getInlineProps(props)}
     />
   );

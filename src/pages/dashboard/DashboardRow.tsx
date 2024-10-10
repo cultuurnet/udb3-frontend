@@ -1,23 +1,12 @@
 import { ReactNode, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
-import { useAddImageMutation } from '@/hooks/api/images';
-import {
-  useAddOfferImageMutation,
-  useUpdateOfferImageMutation,
-} from '@/hooks/api/offers';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
-import { ImageIcon, ImageType } from '@/pages/PictureUploadBox';
+import { ImageIcon } from '@/pages/PictureUploadBox';
 import {
   DynamicBarometerIcon,
   getMinimumScore,
   getScopeWeights,
 } from '@/pages/steps/AdditionalInformationStep/FormScore';
-import {
-  FormData,
-  PictureUploadModal,
-} from '@/pages/steps/modals/PictureUploadModal';
 import { Box } from '@/ui/Box';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
 import { Icon, Icons } from '@/ui/Icon';
@@ -45,6 +34,9 @@ type DashboardRowProps = {
   finishedAt?: string;
   isFinished?: boolean;
   status?: Status;
+  isImageUploading: boolean;
+  onModalOpen: () => void;
+  children: ReactNode;
 };
 
 export const DashboardRow = ({
@@ -62,88 +54,20 @@ export const DashboardRow = ({
   finishedAt,
   isFinished,
   status,
+  isImageUploading,
+  onModalOpen,
+  children,
   ...props
 }: DashboardRowProps) => {
-  const { i18n } = useTranslation();
-  const queryClient = useQueryClient();
   const getValue = getValueFromTheme('dashboardPage');
   const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
     colors;
-  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
-    useState(false);
-  const [draggedImageFile, setDraggedImageFile] = useState<FileList>();
-  const [images, setImages] = useState<ImageType[]>([]);
-  const [imageToEditId, setImageToEditId] = useState('');
-  const [isImageUploading, setIsImageUploading] = useState(false);
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
-  const imageToEdit = useMemo(() => {
-    const image = images.find((image) => image.parsedId === imageToEditId);
-
-    if (!image) return null;
-
-    const { file, ...imageWithoutFile } = image;
-
-    return imageWithoutFile;
-  }, [images, imageToEditId]);
-
-  const addImageToEventMutation = useAddOfferImageMutation({
-    onSuccess: () => {
-      setIsPictureUploadModalVisible(false);
-      setTimeout(async () => {
-        await queryClient.invalidateQueries('events');
-        setIsImageUploading(false);
-      }, 1000);
-    },
-  });
-
-  const handleSuccessAddImage = ({ imageId }) => {
-    return addImageToEventMutation.mutate({ eventId, imageId, scope });
-  };
-
-  const addImageMutation = useAddImageMutation({
-    onSuccess: handleSuccessAddImage,
-  });
-
-  const updateOfferImageMutation = useUpdateOfferImageMutation({
-    onSuccess: async () => {
-      setIsPictureUploadModalVisible(false);
-    },
-  });
-
-  const handleSubmitValid = async ({
-    file,
-    description,
-    copyrightHolder,
-  }: FormData) => {
-    try {
-      setIsImageUploading(true);
-      if (imageToEdit) {
-        await updateOfferImageMutation.mutateAsync({
-          eventId,
-          imageId: imageToEdit.parsedId,
-          description,
-          copyrightHolder,
-          scope,
-        });
-
-        return;
-      }
-
-      await addImageMutation.mutateAsync({
-        description,
-        copyrightHolder,
-        file: file?.[0],
-        language: i18n.language,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
+      {children}
       <Inline width="100" alignItems="center">
         {imageUrl && (
           <Image
@@ -154,7 +78,7 @@ export const DashboardRow = ({
             css={`
               cursor: pointer;
             `}
-            onClick={() => setIsPictureUploadModalVisible(true)}
+            onClick={() => onModalOpen()}
           />
         )}
         {!imageUrl && !isFinished && (
@@ -181,7 +105,7 @@ export const DashboardRow = ({
               display="flex"
               justifyContent="center"
               alignItems="center"
-              onClick={() => setIsPictureUploadModalVisible(true)}
+              onClick={() => onModalOpen()}
             >
               {isImageUploading ? (
                 <Spinner />
@@ -212,14 +136,6 @@ export const DashboardRow = ({
           </Box>
         )}
       </Inline>
-      <PictureUploadModal
-        visible={isPictureUploadModalVisible}
-        onClose={() => setIsPictureUploadModalVisible(false)}
-        draggedImageFile={draggedImageFile}
-        imageToEdit={imageToEdit}
-        onSubmitValid={handleSubmitValid}
-        loading={isImageUploading}
-      />
       <Stack spacing={4} flex={1}>
         <Link
           href={url}
