@@ -28,16 +28,27 @@ const Panel = ({ children, className, ...props }: PanelProps) => {
 
 const getValueForPanelFooter = getValueFromTheme('panelFooter');
 
-type PanelFooterProps = StackProps;
+type PanelFooterProps = StackProps & {
+  backgroundColor?: string;
+};
 
-const PanelFooter = ({ children, className, ...props }: PanelFooterProps) => {
+const PanelFooter = ({
+  children,
+  className,
+  backgroundColor,
+  ...props
+}: PanelFooterProps) => {
   const parsedChildren =
     Children.count(children) === 1 ? <>{children}</> : children;
   return (
     <Stack
       forwardedAs="footer"
       className={className}
-      backgroundColor={getValueForPanelFooter('backgroundColor')}
+      backgroundColor={
+        backgroundColor
+          ? backgroundColor
+          : getValueForPanelFooter('backgroundColor')
+      }
       css={`
         border-top: 1px solid ${getValueForPanelFooter('borderColor')};
         border-radius: ${getGlobalBorderRadius};

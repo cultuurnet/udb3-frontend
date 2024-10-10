@@ -127,6 +127,7 @@ type BaseOffer = {
   mainLanguage: Values<typeof SupportedLanguages>;
   languages: Array<Values<typeof SupportedLanguages>>;
   completedLanguages: Array<Values<typeof SupportedLanguages>>;
+  completeness: number;
   mediaObject?: MediaObject[];
   videos?: VideoObject[];
   image?: string;

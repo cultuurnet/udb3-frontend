@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { Pagination as BootstrapPagination } from 'react-bootstrap';
 
+import { Icon, Icons } from './Icon';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`pagination`);
 
@@ -12,8 +13,6 @@ type PaginationProps = InlineProps & {
   totalItems: number;
   perPage: number;
   limitPages: number;
-  prevText?: string;
-  nextText?: string;
   onChangePage?: (newValue: number) => void;
 };
 
@@ -23,11 +22,11 @@ const Pagination = ({
   totalItems,
   perPage,
   limitPages,
-  prevText,
-  nextText,
   onChangePage,
   ...props
 }: PaginationProps) => {
+  const { udbMainLightGrey } = colors;
+
   const pages = useMemo(() => {
     const pages = [];
     for (let i = 0; i < Math.ceil(totalItems / perPage); i++) {
@@ -79,6 +78,8 @@ const Pagination = ({
           color: ${getValue('color')};
           border-color: ${getValue('borderColor')};
           padding: ${getValue('paddingY')} ${getValue('paddingX')};
+          border-radius: ${getGlobalBorderRadius};
+          margin: 0.2rem;
 
           &:hover {
             background-color: ${getValue('hoverBackgroundColor')};
@@ -98,12 +99,30 @@ const Pagination = ({
           z-index: ${getValue('zIndex')};
         }
 
-        .prev-btn {
-          margin-right: 0.8rem;
+        .prev-btn.disabled > span {
+          background-color: ${udbMainLightGrey};
+          color: white;
         }
 
-        .next-btn {
-          margin-left: 0.8rem;
+        .next-btn.disabled > span {
+          background-color: ${udbMainLightGrey};
+          color: white;
+        }
+
+        .prev-btn > .page-link {
+          padding: 0.5rem;
+        }
+
+        .next-btn > .page-link {
+          padding: 0.5rem;
+        }
+
+        .prev-btn > a > span {
+          color: ${udbMainLightGrey};
+        }
+
+        .next-btn > a > span {
+          color: ${udbMainLightGrey};
         }
       `}
       {...getInlineProps(props)}
@@ -119,7 +138,7 @@ const Pagination = ({
             }
           }}
         >
-          {prevText}
+          <Icon name={Icons.ANGLE_LEFT} />
         </BootstrapPagination.Prev>
       )}
       {currentRange.map((page, index) => {
@@ -154,7 +173,7 @@ const Pagination = ({
             }
           }}
         >
-          {nextText}
+          <Icon name={Icons.ANGLE_RIGHT} />
         </BootstrapPagination.Next>
       )}
     </Inline>
@@ -166,8 +185,6 @@ Pagination.defaultProps = {
   totalItems: 1,
   perPage: 10,
   limitPages: 5,
-  prevText: 'Previous',
-  nextText: 'Next',
 };
 
 export { Pagination };

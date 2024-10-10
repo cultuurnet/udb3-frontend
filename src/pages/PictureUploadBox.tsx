@@ -19,9 +19,15 @@ const { grey5 } = colors;
 
 const getValue = getValueFromTheme('pictureUploadBox');
 
-const ImageIcon = ({ width }: { width: string }) => {
+const ImageIcon = ({
+  width,
+  color = grey5,
+}: {
+  width: string;
+  color?: string;
+}) => {
   return (
-    <CustomIcon color={grey5} name={CustomIconVariants.IMAGE} width={width} />
+    <CustomIcon color={color} name={CustomIconVariants.IMAGE} width={width} />
   );
 };
 

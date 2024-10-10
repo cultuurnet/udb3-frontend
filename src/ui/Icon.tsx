@@ -1,6 +1,8 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faSlideshare } from '@fortawesome/free-brands-svg-icons';
 import {
+  faAngleLeft,
+  faAngleRight,
   faBell,
   faBinoculars,
   faBuilding,
@@ -79,6 +81,8 @@ const Icons = {
   INFO: 'info',
   QUESTION: 'question',
   QUESTION_CIRCLE: 'questionCircle',
+  ANGLE_LEFT: 'angleLeft',
+  ANGLE_RIGHT: 'angleRight',
 } as const;
 
 const IconsMap = {
@@ -117,6 +121,8 @@ const IconsMap = {
   [Icons.QUESTION_CIRCLE]: faQuestionCircle,
   [Icons.INFO]: faInfoCircle,
   [Icons.EXCLAMATION_CIRCLE]: faExclamationCircle,
+  [Icons.ANGLE_LEFT]: faAngleLeft,
+  [Icons.ANGLE_RIGHT]: faAngleRight,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {

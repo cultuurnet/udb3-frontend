@@ -17,6 +17,7 @@ type Organizer = {
   workflowStatus: WorkflowStatus;
   languages: string[];
   completedLanguages: string[];
+  completeness: number;
   modified: string;
   images: MediaObject[];
   geo: {
