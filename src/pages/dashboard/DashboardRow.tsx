@@ -169,16 +169,22 @@ export const DashboardRow = ({
               </Inline>
             </Stack>
           )}
-          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
-            <DynamicBarometerIcon
-              minimumScore={minimumScore}
-              score={score}
-              size={30}
-              margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
-              pointerWidth={100}
-            />
-            <Text marginLeft={3}>{`${score} / 100`}</Text>
-          </Inline>
+          {score && (
+            <Inline
+              width="22.5%"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <DynamicBarometerIcon
+                minimumScore={minimumScore}
+                score={score}
+                size={30}
+                margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
+                pointerWidth={100}
+              />
+              <Text marginLeft={3}>{`${score} / 100`}</Text>
+            </Inline>
+          )}
           <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
             <StatusIndicator label={status.label} color={status.color} />
           </Inline>
