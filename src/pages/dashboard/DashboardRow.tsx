@@ -70,16 +70,7 @@ export const DashboardRow = ({
       {children}
       <Inline width="100" alignItems="center">
         {imageUrl && (
-          <Image
-            src={imageUrl}
-            alt={title}
-            width={100}
-            height={100}
-            css={`
-              cursor: pointer;
-            `}
-            onClick={() => onModalOpen()}
-          />
+          <Image src={imageUrl} alt={title} width={100} height={100} />
         )}
         {!imageUrl && !isFinished && (
           <span
