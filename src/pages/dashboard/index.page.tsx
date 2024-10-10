@@ -366,18 +366,17 @@ const OrganizerRow = ({
       status={{
         isExternalCreator,
       }}
-      children={
-        <DashboardPictureUploadModal
-          scope={scope}
-          isImageUploading={isImageUploading}
-          isPictureUploadModalVisible={isPictureUploadModalVisible}
-          onModalClose={() => setIsPictureUploadModalVisible(false)}
-          onImageUploadStart={() => setIsImageUploading(true)}
-          onImageUploadEnd={() => setIsImageUploading(false)}
-        />
-      }
       {...getInlineProps(props)}
-    />
+    >
+      <DashboardPictureUploadModal
+        scope={scope}
+        isImageUploading={isImageUploading}
+        isPictureUploadModalVisible={isPictureUploadModalVisible}
+        onModalClose={() => setIsPictureUploadModalVisible(false)}
+        onImageUploadStart={() => setIsImageUploading(true)}
+        onImageUploadEnd={() => setIsImageUploading(false)}
+      />
+    </DashboardRow>
   );
 };
 
