@@ -1,5 +1,6 @@
 import { ReactNode, useMemo, useState } from 'react';
 
+import { ScopeTypes } from '@/constants/OfferType';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
 import { ImageIcon } from '@/pages/PictureUploadBox';
 import {
@@ -149,7 +150,7 @@ export const DashboardRow = ({
             width: 100%;
           `}
         >
-          {scope !== 'organizer' && (
+          {scope !== ScopeTypes.ORGANIZERS && (
             <Stack
               width="22.5%"
               spacing={3}

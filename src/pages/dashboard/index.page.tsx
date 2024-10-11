@@ -7,7 +7,7 @@ import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { Scope } from '@/constants/OfferType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   useDeleteEventByIdMutation,
@@ -332,8 +332,9 @@ const OrganizerRow = ({
 
   const editUrl = `/organizer/${parseOfferId(organizer['@id'])}/edit`;
   const previewUrl = `/organizer/${parseOfferId(organizer['@id'])}/preview`;
+  const imageUrl = organizer?.images?.[0]?.contentUrl;
   const score = organizer?.completeness;
-  const scope = parseOfferType(organizer['@context']);
+  const organizerId = parseOfferId(organizer['@id']);
   // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
@@ -346,8 +347,9 @@ const OrganizerRow = ({
         organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
       }
       url={previewUrl}
+      imageUrl={imageUrl}
       score={score}
-      scope={scope}
+      scope={ScopeTypes.ORGANIZERS}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
@@ -369,7 +371,8 @@ const OrganizerRow = ({
       {...getInlineProps(props)}
     >
       <DashboardPictureUploadModal
-        scope={scope}
+        eventId={organizerId}
+        scope={ScopeTypes.ORGANIZERS}
         isImageUploading={isImageUploading}
         isPictureUploadModalVisible={isPictureUploadModalVisible}
         onModalClose={() => setIsPictureUploadModalVisible(false)}

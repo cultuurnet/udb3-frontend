@@ -15,7 +15,7 @@ import {
 } from '../steps/modals/PictureUploadModal';
 
 type Props = {
-  eventId?: string;
+  eventId: string;
   scope: string;
   isImageUploading: boolean;
   isPictureUploadModalVisible: boolean;
@@ -53,6 +53,7 @@ export const DashboardPictureUploadModal = ({
       onModalClose();
       setTimeout(async () => {
         await queryClient.invalidateQueries('events');
+        await queryClient.invalidateQueries('organizers');
         onImageUploadEnd();
       }, 1000);
     },
