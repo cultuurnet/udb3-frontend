@@ -664,6 +664,7 @@ const Dashboard = (): any => {
                 color: ${textColor};
                 padding: 0;
                 margin-right: 1.5rem;
+                margin-top: 0.5rem;
               }
               .nav-item {
                 border: none !important;
