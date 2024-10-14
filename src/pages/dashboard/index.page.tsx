@@ -1,15 +1,13 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { css } from 'styled-components';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { Scope } from '@/constants/OfferType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   useDeleteEventByIdMutation,
@@ -38,8 +36,8 @@ import type { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
-import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
+import { Box } from '@/ui/Box';
+import { Dropdown } from '@/ui/Dropdown';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -55,11 +53,12 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
-import { formatAddressInternal } from '@/utils/formatAddress';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
+import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
+import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
@@ -80,6 +79,8 @@ const globalAlertVariant = Object.values(AlertVariants).some(
 const getValue = getValueFromTheme('dashboardPage');
 
 const itemsPerPage = 14;
+
+const getGlobalValue = getValueFromTheme('global');
 
 const UseGetItemsByCreatorMap = {
   events: useGetEventsByCreatorQuery,
@@ -117,7 +118,7 @@ const RowStatusToColor: Record<RowStatus, string> = {
   PLANNED: 'blue',
 };
 
-type Status = {
+export type Status = {
   color?: string;
   label?: string;
   isExternalCreator?: boolean;
@@ -125,7 +126,7 @@ type Status = {
 
 type StatusIndicatorProps = InlineProps & Status;
 
-const StatusIndicator = ({
+export const StatusIndicator = ({
   color,
   label,
   isExternalCreator,
@@ -144,8 +145,8 @@ const StatusIndicator = ({
           label && [
             <Box
               key="status-indicator-box"
-              width="0.60rem"
-              height="0.60rem"
+              width="0.90rem"
+              height="0.90rem"
               backgroundColor={color}
               borderRadius="50%"
               flexShrink={0}
@@ -162,64 +163,6 @@ const StatusIndicator = ({
       )}
     </Stack>
   );
-};
-
-type RowProps = {
-  title: string;
-  description: string;
-  actions: ReactNode[];
-  url: string;
-  finishedAt?: string;
-  status?: Status;
-};
-
-const Row = ({
-  title,
-  description,
-  actions,
-  url,
-  finishedAt,
-  status,
-  ...props
-}: RowProps) => {
-  return (
-    <Inline
-      flex={1}
-      css={css`
-        display: grid;
-        gap: ${parseSpacing(4)};
-        grid-template-columns: ${status ? '5fr 3fr 1fr' : '8fr 2fr'};
-      `}
-      {...getInlineProps(props)}
-    >
-      <Stack spacing={2}>
-        <Inline spacing={3}>
-          <Link href={url} color={getValue('listItem.color')} fontWeight="bold">
-            {title}
-          </Link>
-        </Inline>
-        <Text>{description}</Text>
-      </Stack>
-      {status && <StatusIndicator {...status} />}
-      <Inline justifyContent="flex-end" minWidth="11rem">
-        {finishedAt ? (
-          <Text color={getValue('listItem.passedEvent.color')}>
-            {finishedAt}
-          </Text>
-        ) : (
-          actions.length > 0 && (
-            <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
-              {actions}
-            </Dropdown>
-          )
-        )}
-      </Inline>
-    </Inline>
-  );
-};
-
-Row.defaultProps = {
-  actions: [],
 };
 
 type ExistingOffer = Omit<Offer, 'workflowStatus'> & {
@@ -249,11 +192,16 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
+  const date = offer.calendarSummary[i18n.language].text['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
 
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;
+  const imageUrl = offer.image;
+  const eventScore = offer.completeness;
+  const eventId = parseOfferId(offer['@id']);
+  const scope = parseOfferType(offer['@context']);
 
   // The custom keySeparator was necessary because the ids contain '.' which i18n uses as default keySeparator
   const eventType = typeId
@@ -264,8 +212,6 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     offer.calendarSummary[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
-
-  const rowDescription = [eventType, period].filter(Boolean).join(' - ');
 
   const rowStatus = useMemo<RowStatus>(() => {
     if (isPlanned) {
@@ -305,11 +251,23 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     return t('dashboard.row_status.draft');
   }, [offer.availableFrom, rowStatus, t]);
 
+  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
+    useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
+
   return (
-    <Row
+    <DashboardRow
       title={offer.name[i18n.language] ?? offer.name[offer.mainLanguage]}
-      description={rowDescription}
+      type={eventType}
+      date={date}
+      imageUrl={imageUrl}
+      score={eventScore}
+      eventId={eventId}
+      scope={scope}
       url={previewUrl}
+      isFinished={isFinished}
+      isImageUploading={isImageUploading}
+      onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
@@ -338,7 +296,17 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
         isExternalCreator,
       }}
       {...getInlineProps(props)}
-    />
+    >
+      <DashboardPictureUploadModal
+        eventId={eventId}
+        scope={scope}
+        isImageUploading={isImageUploading}
+        isPictureUploadModalVisible={isPictureUploadModalVisible}
+        onModalClose={() => setIsPictureUploadModalVisible(false)}
+        onImageUploadStart={() => setIsImageUploading(true)}
+        onImageUploadEnd={() => setIsImageUploading(false)}
+      />
+    </DashboardRow>
   );
 };
 
@@ -362,26 +330,35 @@ const OrganizerRow = ({
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(organizer.creator);
 
-  const address =
-    organizer?.address?.[i18n.language] ??
-    organizer?.address?.[organizer.mainLanguage];
-  const formattedAddress = address ? formatAddressInternal(address) : '';
   const editUrl = `/organizer/${parseOfferId(organizer['@id'])}/edit`;
   const previewUrl = `/organizer/${parseOfferId(organizer['@id'])}/preview`;
+  const imageUrl = organizer?.images?.[0]?.contentUrl;
+  const score = organizer?.completeness;
+  const organizerId = parseOfferId(organizer['@id']);
   // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
+  const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
+    useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   return (
-    <Row
+    <DashboardRow
       title={
         organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
       }
       url={previewUrl}
-      description={formattedAddress}
+      imageUrl={imageUrl}
+      score={score}
+      scope={ScopeTypes.ORGANIZERS}
+      isImageUploading={isImageUploading}
+      onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
         <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
           {t('dashboard.actions.edit')}
         </Link>,
+        <Dropdown.Item href={previewUrl} key="preview">
+          {t('dashboard.actions.preview')}
+        </Dropdown.Item>,
         permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
           <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
             {t('dashboard.actions.delete')}
@@ -392,7 +369,17 @@ const OrganizerRow = ({
         isExternalCreator,
       }}
       {...getInlineProps(props)}
-    />
+    >
+      <DashboardPictureUploadModal
+        eventId={organizerId}
+        scope={ScopeTypes.ORGANIZERS}
+        isImageUploading={isImageUploading}
+        isPictureUploadModalVisible={isPictureUploadModalVisible}
+        onModalClose={() => setIsPictureUploadModalVisible(false)}
+        onImageUploadStart={() => setIsImageUploading(true)}
+        onImageUploadEnd={() => setIsImageUploading(false)}
+      />
+    </DashboardRow>
   );
 };
 
@@ -415,9 +402,8 @@ const TabContent = ({
       <Panel
         backgroundColor="white"
         css={`
-          border-top: none !important;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
+          border: none !important;
+          box-shadow: unset !important;
         `}
       >
         <Spinner marginY={4} />
@@ -429,9 +415,8 @@ const TabContent = ({
     return (
       <Panel
         css={`
-          border-top: none !important;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
+          border: none !important;
+          box-shadow: unset !important;
         `}
         backgroundColor="white"
         minHeight="5rem"
@@ -448,48 +433,41 @@ const TabContent = ({
   return (
     <Panel
       css={`
-        border-top: none !important;
-        border-top-left-radius: 0;
-
-        & ul li:first-child {
-          border-top-left-radius: 0;
-        }
-
-        & ul li:last-child {
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
+        border: none !important;
+        box-shadow: unset !important;
       `}
     >
       <List>
         {items.map((item, index) => (
           <List.Item
             key={item['@id']}
-            paddingLeft={4}
-            paddingRight={4}
-            paddingBottom={3}
-            paddingTop={3}
+            paddingLeft={5}
+            paddingRight={5}
+            paddingBottom={5}
+            paddingTop={5}
             backgroundColor={getValue('listItem.backgroundColor')}
-            css={
-              index !== items.length - 1
-                ? css`
-                    border-bottom: 1px solid ${getValue('listItem.borderColor')};
-                  `
-                : css``
-            }
+            css={`
+              margin-top: 1rem;
+              margin-bottom: 1rem;
+              border-radius: 0.5rem;
+              box-shadow: ${getGlobalValue('boxShadow.medium')};
+            `}
           >
             <Row item={item} onDelete={onDelete} />
           </List.Item>
         ))}
       </List>
       {hasMoreThanOnePage && (
-        <Panel.Footer>
+        <Panel.Footer
+          css={`
+            border: none !important;
+            background-color: white !important;
+          `}
+        >
           <Pagination
             currentPage={page}
             totalItems={totalItems}
             perPage={itemsPerPage}
-            prevText={t('pagination.previous')}
-            nextText={t('pagination.next')}
             onChangePage={onChangePage}
           />
         </Panel.Footer>
@@ -543,8 +521,14 @@ const Dashboard = (): any => {
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(
       {
-        pathname: `/dashboard`,
-        query: { tab: tabKey, page: 1, ...(tabKey === 'events' && { sort }) },
+        pathname: '/dashboard',
+        query: {
+          tab: tabKey,
+          page: 1,
+          ...(!(tabKey === 'organizers' && sort?.startsWith('availableTo')) && {
+            sort,
+          }),
+        },
       },
       undefined,
       { shallow: true },
@@ -565,9 +549,7 @@ const Dashboard = (): any => {
 
   const UseGetItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
-    ...(tab === 'events' && {
-      sortOptions: { field: sortingField, order: sortingOrder },
-    }),
+    sortOptions: { field: sortingField, order: sortingOrder },
     paginationOptions: {
       start: (page - 1) * itemsPerPage,
       limit: itemsPerPage,
@@ -608,10 +590,16 @@ const Dashboard = (): any => {
     'completeness_desc',
   ];
 
+  const filteredSortingOptions =
+    tab === 'organizers'
+      ? SORTING_OPTIONS.filter((option) => !option.includes('availableTo'))
+      : SORTING_OPTIONS;
+
   const createOfferUrl = CreateMap[tab];
+  const { udbMainDarkBlue, textColor } = colors;
 
   return [
-    <Page key="page">
+    <Page backgroundColor="white" key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
           ? `${t('dashboard.welcome')}, ${user['https://publiq.be/first_name']}`
@@ -649,28 +637,47 @@ const Dashboard = (): any => {
                 <Text fontWeight="bold" />
               </Trans>
             </Text>
-            {tab === 'events' && (
-              <SelectWithLabel
-                key="select"
-                id="sorting"
-                label={`${t('dashboard.sorting.label')}:`}
-                value={sort}
-                onChange={handleSelectSorting}
-                width="auto"
-                labelPosition={LabelPositions.LEFT}
-              >
-                {SORTING_OPTIONS.map((sortOption) => (
-                  <option key={sortOption} value={sortOption}>
-                    {t(`dashboard.sorting.${sortOption}`)}
-                  </option>
-                ))}
-              </SelectWithLabel>
-            )}
+            <SelectWithLabel
+              key="select"
+              id="sorting"
+              label={`${t('dashboard.sorting.label')}:`}
+              value={sort}
+              onChange={handleSelectSorting}
+              width="auto"
+              labelPosition={LabelPositions.LEFT}
+            >
+              {filteredSortingOptions.map((sortOption) => (
+                <option key={sortOption} value={sortOption}>
+                  {t(`dashboard.sorting.${sortOption}`)}
+                </option>
+              ))}
+            </SelectWithLabel>
           </Inline>
           <Tabs<Scope>
             activeKey={tab}
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
+            css={`
+              .nav-item.nav-link {
+                font-size: 1.1rem;
+                font-weight: 300;
+                color: ${textColor};
+                padding: 0;
+                margin-right: 1.5rem;
+                margin-top: 0.5rem;
+              }
+              .nav-item {
+                border: none !important;
+
+                &.active {
+                  border-bottom: 3px solid ${udbMainDarkBlue} !important;
+                }
+
+                &:hover {
+                  background-color: transparent;
+                }
+              }
+            `}
           >
             <Tabs.Tab eventKey="events" title={t('dashboard.tabs.events')}>
               {tab === 'events' && (
@@ -745,7 +752,9 @@ const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           creator: user,
-          ...(key === 'events' && {
+          ...(!(
+            key === 'organizers' && sortingField.startsWith('availableTo')
+          ) && {
             sortOptions: {
               field: sortingField,
               order: sortingOrder,
