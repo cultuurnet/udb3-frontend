@@ -892,10 +892,6 @@
       }
     }
   },
-  "pagination": {
-    "next": "Weiter",
-    "previous": "Zurück"
-  },
   "pictures": {
     "add_button": "Bild hinzufügen",
     "change": "Ändern",
