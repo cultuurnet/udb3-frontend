@@ -145,14 +145,13 @@ const CalendarOpeninghoursModal = ({
     idToChange: string,
   ) => {
     const checked = event.target.checked;
-    const daysOrder = Object.values(DaysOfWeek);
 
     openingHoursField.replace(
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange && checked) {
           openingHour.dayOfWeek.push(dayOfWeek);
           openingHour.dayOfWeek.sort((a, b) => {
-            return daysOrder.indexOf(a) - daysOrder.indexOf(b);
+            return DaysOfWeek.indexOf(a) - DaysOfWeek.indexOf(b);
           });
         }
         if (
