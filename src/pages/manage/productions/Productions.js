@@ -72,8 +72,6 @@ const Productions = ({
                   currentPage={currentPage}
                   totalItems={totalItems}
                   perPage={perPage}
-                  prevText={t('pagination.previous')}
-                  nextText={t('pagination.next')}
                   onChangePage={onChangePage}
                 />
               </Panel.Footer>

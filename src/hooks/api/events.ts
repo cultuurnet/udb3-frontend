@@ -221,6 +221,7 @@ const getEventsByIds = async ({
     q: `id:(${ids.join(' OR ')})`,
   });
 
+  searchParams.append('embedCalendarSummaries[]', 'xs-text');
   searchParams.append('embedCalendarSummaries[]', 'sm-text');
   searchParams.append('embedCalendarSummaries[]', 'lg-text');
 
@@ -293,7 +294,7 @@ const useGetEventsByCreatorQuery = (
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
-    calendarSummaryFormats = ['lg-text', 'sm-text'],
+    calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
   }: AuthenticatedQueryOptions<
     PaginationOptions &
       SortOptions &
@@ -411,6 +412,50 @@ const useChangeNameMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: changeName,
     mutationKey: 'events-change-name',
+    ...configuration,
+  });
+
+const changeCalendar = async ({
+  headers,
+  id,
+  calendarType,
+  timeSpans,
+  subEvent,
+  start,
+  end,
+  startDate,
+  endDate,
+  openingHours,
+  dayOfWeek,
+  opens,
+  closes,
+}) => {
+  return fetchFromApi({
+    path: `/events/${id.toString()}/calendar`,
+    options: {
+      method: 'PUT',
+      body: JSON.stringify({
+        calendarType,
+        timeSpans,
+        subEvent,
+        start,
+        end,
+        startDate,
+        endDate,
+        openingHours,
+        dayOfWeek,
+        opens,
+        closes,
+      }),
+      headers,
+    },
+  });
+};
+
+const useChangeCalendarMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeCalendar,
+    mutationKey: 'events-change-calendar',
     ...configuration,
   });
 
@@ -592,6 +637,7 @@ export {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
+  useChangeCalendarMutation,
   useChangeLocationMutation,
   useChangeNameMutation,
   useChangeOnlineUrlMutation,

@@ -150,6 +150,9 @@ const CalendarOpeninghoursModal = ({
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange && checked) {
           openingHour.dayOfWeek.push(dayOfWeek);
+          openingHour.dayOfWeek.sort((a, b) => {
+            return DaysOfWeek.indexOf(a) - DaysOfWeek.indexOf(b);
+          });
         }
         if (
           openingHour.id === idToChange &&
