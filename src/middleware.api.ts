@@ -49,7 +49,7 @@ export const middleware = async (request: NextRequest) => {
     request.nextUrl.pathname.split('/').at(-1) === 'ownership';
 
   if (isOwnershipPage && !process.env.NEXT_PUBLIC_CLAIM_OWNERSHIP_ENABLED) {
-    const url = new URL('/organizers/:id/ownership', request.url);
+    const url = new URL('/404', request.url);
     return NextResponse.redirect(url);
   }
 };
