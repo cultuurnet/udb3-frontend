@@ -66,12 +66,25 @@ export const DashboardRow = ({
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
+  const croppedImageBaseUrl = 'https://images-acc-uitdatabank.imgix.net/';
+  const imageIdAndFormat = imageUrl?.split('/').at(-1);
+  const croppedImageUrl = imageUrl
+    ? `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`
+    : undefined;
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
       {children}
-      <Inline width="100" alignItems="center">
+      <Inline alignItems="center">
         {imageUrl && (
-          <Image src={imageUrl} alt={title} width={100} height={100} />
+          <Image
+            src={croppedImageUrl}
+            alt={title}
+            width={150}
+            height={150}
+            css={`
+              border-radius: 0.5rem 0 0 0.5rem;
+            `}
+          />
         )}
         {!imageUrl && !isFinished && (
           <span
@@ -92,8 +105,8 @@ export const DashboardRow = ({
               }  
                 `}
               `}
-              width={100}
-              height={100}
+              width={150}
+              height={150}
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -112,8 +125,11 @@ export const DashboardRow = ({
         )}
         {!imageUrl && isFinished && (
           <Box
-            width={100}
-            height={100}
+            width={150}
+            height={150}
+            css={`
+              border-radius: 0.5rem 0 0 0.5rem;
+            `}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -122,13 +138,20 @@ export const DashboardRow = ({
             <Image
               src={`/assets/uit-logo.svg`}
               alt="No image available"
-              width={45}
-              height={45}
+              width={70}
+              height={70}
             />
           </Box>
         )}
       </Inline>
-      <Stack spacing={4} flex={1}>
+      <Stack
+        spacing={4}
+        flex={1}
+        css={`
+          padding: 1.5rem;
+        `}
+        justifyContent="center"
+      >
         <Link
           href={url}
           color={getValue('listItem.color')}
@@ -137,8 +160,10 @@ export const DashboardRow = ({
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            max-width: 35rem;
+            max-width: 38rem;
             display: block;
+            font-size: 18px;
+            text-decoration: none;
           `}
         >
           {title}
