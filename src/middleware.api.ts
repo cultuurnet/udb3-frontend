@@ -44,8 +44,16 @@ export const middleware = async (request: NextRequest) => {
     const url = new URL('/beta-version', request.url);
     return NextResponse.redirect(url);
   }
+
+  const isOwnershipPage =
+    request.nextUrl.pathname.split('/').at(-1) === 'ownership';
+
+  if (isOwnershipPage && !process.env.NEXT_PUBLIC_CLAIM_OWNERSHIP_ENABLED) {
+    const url = new URL('/organizers/:id/ownership', request.url);
+    return NextResponse.redirect(url);
+  }
 };
 
 export const config = {
-  matcher: ['/event', '/login'],
+  matcher: ['/event', '/login', '/organizers/:id/ownership'],
 };
