@@ -45,8 +45,7 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
-  const isOwnershipPage =
-    request.nextUrl.pathname.split('/').at(-1) === 'ownership';
+  const isOwnershipPage = request.nextUrl.pathname.endsWith('ownership');
 
   if (isOwnershipPage && !process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED) {
     const url = new URL('/404', request.url);

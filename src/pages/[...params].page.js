@@ -60,13 +60,16 @@ const Fallback = () => {
 
   const legacyPath = useMemo(() => {
     const path = new URL(`http://localhost${asPath}`).pathname;
-
+    const ownershipPaths =
+      router.asPath.startsWith('/organizer') ||
+      router.asPath.startsWith('/search');
     const queryString = prefixWhenNotEmpty(
       new URLSearchParams({
         ...queryWithoutParams,
         jwt: cookies.token,
         lang: cookies['udb-language'],
-        ownership: publicRuntimeConfig.ownershipEnabled,
+        ...(ownershipPaths &&
+          publicRuntimeConfig.ownershipEnabled && { ownership: 'true' }),
       }),
       '?',
     );
