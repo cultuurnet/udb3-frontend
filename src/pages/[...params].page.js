@@ -66,7 +66,7 @@ const Fallback = () => {
         ...queryWithoutParams,
         jwt: cookies.token,
         lang: cookies['udb-language'],
-        claimOwnership: publicRuntimeConfig.claimOwnershipEnabled,
+        ownership: publicRuntimeConfig.ownershipEnabled,
       }),
       '?',
     );
