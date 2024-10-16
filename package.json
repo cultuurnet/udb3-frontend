@@ -19,7 +19,8 @@
     "storybook:build": "build-storybook",
     "test:unit": "jest",
     "test:e2e": "playwright test",
-    "ci": "yarn types:check & yarn lint:check & yarn format:check"
+    "ci": "yarn types:check & yarn lint:check & yarn format:check",
+    "postinstall": "cd node_modules/@auth0/nextjs-auth0 && npm run build &>/dev/null || true"
   },
   "husky": {
     "hooks": {
@@ -28,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^2.4.0",
+    "@auth0/nextjs-auth0": "https://github.com/simon-debruijn/nextjs-auth0.git#1771-set-idtokenhint-when-logging-out",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
