@@ -441,10 +441,6 @@ const TabContent = ({
         {items.map((item, index) => (
           <List.Item
             key={item['@id']}
-            paddingLeft={5}
-            paddingRight={5}
-            paddingBottom={5}
-            paddingTop={5}
             backgroundColor={getValue('listItem.backgroundColor')}
             css={`
               margin-top: 1rem;
@@ -659,8 +655,6 @@ const Dashboard = (): any => {
             activeBackgroundColor="white"
             css={`
               .nav-item.nav-link {
-                font-size: 1.1rem;
-                font-weight: 300;
                 color: ${textColor};
                 padding: 0;
                 margin-right: 1.5rem;
