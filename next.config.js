@@ -48,7 +48,7 @@ const moduleExports = {
     shouldShowBetaVersion: process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION,
     hotjarEventName: process.env.NEXT_PUBLIC_HOTJAR_EVENT_NAME,
     hotjarMissingFieldName: process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME,
-    claimOwnershipEnabled: process.env.NEXT_PUBLIC_CLAIM_OWNERSHIP_ENABLED,
+    ownershipEnabled: process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
   eslint: {
