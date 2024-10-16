@@ -94,7 +94,7 @@ export const DashboardRow = ({
             <Box
               css={`
                 ${!isImageUploading &&
-                `border: 1px solid ${udbMainGrey}; border-radius: 0.5rem;
+                `border: 1px solid ${udbMainGrey}; border-radius: 0.5rem 0 0 0.5rem;
               :hover {
                 border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
               }
