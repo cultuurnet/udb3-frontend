@@ -45,7 +45,7 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
-  const isOwnershipPage = request.nextUrl.pathname.endsWith('ownership');
+  const isOwnershipPage = request.nextUrl.pathname.endsWith('ownerships');
 
   if (isOwnershipPage && !process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED) {
     const url = new URL('/404', request.url);
@@ -54,5 +54,5 @@ export const middleware = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ['/event', '/login', '/organizers/:id/ownership'],
+  matcher: ['/event', '/login', '/organizers/:id/ownerships'],
 };

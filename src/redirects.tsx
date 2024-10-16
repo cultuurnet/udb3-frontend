@@ -93,8 +93,8 @@ const getRedirects = (
     permanent: false,
   },
   {
-    source: '/organizer/:organizerId/ownership',
-    destination: '/organizers/:organizerId/ownership',
+    source: '/organizer/:organizerId/ownerships',
+    destination: '/organizers/:organizerId/ownerships',
     permanent: false,
   },
   {
