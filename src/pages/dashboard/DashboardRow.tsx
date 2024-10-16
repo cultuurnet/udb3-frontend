@@ -177,7 +177,7 @@ export const DashboardRow = ({
         >
           {scope !== ScopeTypes.ORGANIZERS && (
             <Stack
-              width="22.5%"
+              width="27%"
               spacing={3}
               alignItems="flex-start"
               css={`
@@ -196,7 +196,7 @@ export const DashboardRow = ({
             </Stack>
           )}
           <Inline
-            width="22.5%"
+            width="25%"
             justifyContent="flex-start"
             alignItems="center"
             css={!score && `visibility: hidden`}
@@ -210,7 +210,7 @@ export const DashboardRow = ({
             />
             <Text marginLeft={3}>{`${score} / 100`}</Text>
           </Inline>
-          <Inline width="22.5%" justifyContent="flex-start" alignItems="center">
+          <Inline width="25%" justifyContent="flex-start" alignItems="center">
             <StatusIndicator label={status.label} color={status.color} />
           </Inline>
           <Inline width="22.5%" justifyContent="flex-end" alignItems="center">
