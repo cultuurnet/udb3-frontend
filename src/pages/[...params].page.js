@@ -61,7 +61,8 @@ const Fallback = () => {
   const legacyPath = useMemo(() => {
     const path = new URL(`http://localhost${asPath}`).pathname;
     const ownershipPaths =
-      ((router.asPath.startsWith('/organizer') && !router.asPath.endsWith('/ownerships'))) ||
+      (router.asPath.startsWith('/organizer') &&
+        !router.asPath.endsWith('/ownerships')) ||
       router.asPath.startsWith('/search');
     const queryString = prefixWhenNotEmpty(
       new URLSearchParams({
