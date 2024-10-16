@@ -93,6 +93,11 @@ const getRedirects = (
     permanent: false,
   },
   {
+    source: '/organizer/:organizerId/ownerships',
+    destination: '/organizers/:organizerId/ownerships',
+    permanent: false,
+  },
+  {
     source: '/:language/copyright',
     destination: '/copyright',
     permanent: environment !== 'development',
