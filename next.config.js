@@ -1,5 +1,4 @@
 const { withSentryConfig } = require('@sentry/nextjs');
-const webpack = require('webpack');
 
 /**
  * @type {import('next').NextConfig}
@@ -7,15 +6,6 @@ const webpack = require('webpack');
 const moduleExports = {
   productionBrowserSourceMaps: true,
   swcMinify: true,
-  // https://github.com/auth0/nextjs-auth0/blob/main/V3_MIGRATION_GUIDE.md#using-middleware-on-next-12-requires-custom-webpack-config
-  webpack(config) {
-    config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /^next\/(navigation|headers)$/,
-      }),
-    );
-    return config;
-  },
   async redirects() {
     // Redirects to fix non-existing paths should go in `src/redirects.js`!!!
     const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
