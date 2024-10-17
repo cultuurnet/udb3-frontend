@@ -1014,6 +1014,24 @@
           "intro": "Ajoutez une image pour que les visiteurs reconnaissent mieux votre organisation"
         }
       }
+    },
+    "ownerships": {
+      "title": "Gestionnaires de {{name}}",
+      "info": "Les gestionnaires peuvent modifier et supprimer la page de l'organisation ainsi que les événements de l'organisation dans l'UiTdatabank.",
+      "actions": {
+        "add": "Ajouter un nouveau gestionnaire",
+        "back": "Retour à la page de l'organisation"
+      },
+      "owners": "Gestionnaires",
+      "table": {
+        "user": "Utilisateur",
+        "actions": {
+          "title": "Actions",
+          "approve": "Approuver",
+          "reject": "Rejeter"
+        }
+      },
+      "pending": "Demandes de gestion en attente"
     }
   },
   "selectionTable": {
