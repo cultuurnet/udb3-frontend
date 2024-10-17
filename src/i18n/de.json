@@ -838,7 +838,8 @@
           "country": "Land",
           "streetAndNumber": "Straße und Nummer",
           "title": "Adresse",
-          "zip": "Postleitzahl"
+          "zip": "Postleitzahl",
+          "blank_street": "Ich möchte meine Straße und Hausnummer nicht öffentlich bekannt geben"
         },
         "name": {
           "info": "Der offizielle öffentliche Name der Organisation",

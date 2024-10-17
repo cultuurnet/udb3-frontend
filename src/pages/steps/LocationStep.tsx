@@ -31,6 +31,8 @@ import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { RadioButtonTypes } from '@/ui/RadioButton';
+import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -54,6 +56,7 @@ import {
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
+export const BLANK_STREET_NUMBER = '___';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -252,6 +255,35 @@ const isLocationSet = (
     isCultuurKuur ||
     (location?.municipality?.name &&
       formState.touchedFields.location?.streetAndNumber)
+  );
+};
+
+export const BlankStreetToggle = ({
+  onChange,
+}: {
+  onChange: (address: string) => void;
+}) => {
+  const { t } = useTranslation();
+  const [isBlankStreet, setIsBlankStreet] = useState(false);
+
+  return (
+    <RadioButtonWithLabel
+      id={'blank_address'}
+      name={'blank_address'}
+      label={
+        <Text className={'ml-1'}>
+          {t('organizer.add_modal.labels.address.blank_street')}
+        </Text>
+      }
+      type={RadioButtonTypes.SWITCH}
+      checked={isBlankStreet}
+      onChange={() => {
+        const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
+
+        setIsBlankStreet(!isBlankStreet);
+        onChange(streetAndNumber);
+      }}
+    />
   );
 };
 
@@ -663,6 +695,7 @@ const LocationStep = ({
                         Component={
                           <Input
                             value={streetAndNumber}
+                            disabled={streetAndNumber === BLANK_STREET_NUMBER}
                             onBlur={() => onFieldChange({ streetAndNumber })}
                             onChange={handleChangeStreetAndNumber}
                           />
@@ -673,6 +706,16 @@ const LocationStep = ({
                         error={
                           formState.errors.location?.streetAndNumber &&
                           t('location.add_modal.errors.streetAndNumber')
+                        }
+                        info={
+                          <BlankStreetToggle
+                            onChange={(streetAndNumber) =>
+                              onFieldChange({
+                                streetAndNumber,
+                                location: { streetAndNumber },
+                              })
+                            }
+                          />
                         }
                       />
                     </Stack>
