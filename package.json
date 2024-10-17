@@ -14,7 +14,7 @@
     "lint:check": "next lint",
     "format": "prettier . --write --ignore-path ./.gitignore",
     "format:check": "prettier . --check --ignore-path ./.gitignore",
-    "types:check": "tsc",
+    "types:check": "tsc -v && tsc",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
     "test:unit": "jest",
