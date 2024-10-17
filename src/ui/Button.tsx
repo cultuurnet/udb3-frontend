@@ -20,6 +20,7 @@ const BootStrapVariants = {
   SECONDARY_TOGGLE: 'secondary-toggle',
   SUCCESS: 'success',
   DANGER: 'danger',
+  ICON: 'icon',
 } as const;
 
 const ButtonVariants = {
@@ -197,6 +198,47 @@ const customCSS = css`
 
     &:hover {
       background-color: ${getValue('danger.hoverBackgroundColor')};
+    }
+  }
+
+  &.btn-icon {
+    padding: 0.75rem;
+    border-radius: 50%;
+    width: 2.8rem;
+    height: 2.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+    position: relative;
+
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+      background-color: ${getValue('icon.hoverBackgroundColor')};
+    }
+
+    &:focus {
+      background-color: ${getValue('icon.focusBackgroundColor')};
+      animation: pulse 0.3s ease-out;
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
     }
   }
 

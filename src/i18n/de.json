@@ -1014,6 +1014,24 @@
           "intro": "Fügen Sie ein Bild hinzu, damit Besucher Ihre Organisation besser erkennen"
         }
       }
+    },
+    "ownerships": {
+      "title": "Verwalter von {{name}}",
+      "info": "Verwalter können die Organisationsseite und die Veranstaltungen der Organisation in der UiTdatabank bearbeiten und löschen.",
+      "actions": {
+        "add": "Neuen Verwalter hinzufügen",
+        "back": "Zurück zur Organisationsseite"
+      },
+      "owners": "Verwalter",
+      "table": {
+        "user": "Benutzer",
+        "actions": {
+          "title": "Aktionen",
+          "approve": "Genehmigen",
+          "reject": "Ablehnen"
+        }
+      },
+      "pending": "Ausstehende Anfragen zur Verwaltung"
     }
   },
   "selectionTable": {

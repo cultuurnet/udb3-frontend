@@ -33,6 +33,7 @@ import {
   faTag,
   faTicketAlt,
   faTimes,
+  faTimesCircle,
   faTrash,
   faUser,
   faUsers,
@@ -58,6 +59,7 @@ const Icons = {
   BELL: 'bell',
   GIFT: 'gift',
   TIMES: 'times',
+  TIMES_CIRCLE: 'timesCircle',
   EYE: 'eye',
   EYE_SLASH: 'eyeSlash',
   SIGN_OUT: 'signOutAlt',
@@ -123,6 +125,7 @@ const IconsMap = {
   [Icons.EXCLAMATION_CIRCLE]: faExclamationCircle,
   [Icons.ANGLE_LEFT]: faAngleLeft,
   [Icons.ANGLE_RIGHT]: faAngleRight,
+  [Icons.TIMES_CIRCLE]: faTimesCircle,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {

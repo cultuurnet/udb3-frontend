@@ -208,6 +208,10 @@ const theme = {
         hoverBorderColor: colors.red4,
         backgroundColor: '#DD5242',
       },
+      icon: {
+        hoverBackgroundColor: colors.grey4,
+        focusBackgroundColor: colors.grey3,
+      },
     },
     card: {
       boxShadow: {
