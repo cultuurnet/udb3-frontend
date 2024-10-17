@@ -20,7 +20,7 @@
     "test:unit": "jest",
     "test:e2e": "playwright test",
     "ci": "yarn types:check & yarn lint:check & yarn format:check",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package --error-on-fail=false"
   },
   "husky": {
     "hooks": {
