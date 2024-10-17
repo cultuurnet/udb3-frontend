@@ -130,60 +130,57 @@ const Alert = ({
   ...props
 }: AlertProps) => {
   return (
-    <Inline
+    <Stack
       role="alert"
       alignSelf={fullWidth ? 'normal' : 'flex-start'}
       display={visible ? 'flex' : 'none'}
       {...getInlineProps(props)}
+      padding={4}
+      borderRadius={getValue('borderRadius')}
+      variant={variant}
+      backgroundColor={getValue(`backgroundColor.${variant}`)}
+      css={`
+        position: relative;
+        border: 1px solid ${getValue(`borderColor.${variant}`)};
+        &::before {
+          position: absolute;
+          content: '';
+          top: 0;
+          left: 0;
+          width: 6px;
+          height: 100%;
+          background-color: ${getValue(`borderColor.${variant}`)};
+          display: block;
+          border-top-left-radius: ${getValue('borderRadius')};
+          border-bottom-left-radius: ${getValue('borderRadius')};
+        }
+      `}
     >
-      <Stack
-        padding={4}
-        borderRadius={getValue('borderRadius')}
-        variant={variant}
-        backgroundColor={getValue(`backgroundColor.${variant}`)}
-        css={`
-          position: relative;
-          border: 1px solid ${getValue(`borderColor.${variant}`)};
-          &::before {
-            position: absolute;
-            content: '';
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 100%;
-            background-color: ${getValue(`borderColor.${variant}`)};
-            display: block;
-            border-top-left-radius: ${getValue('borderRadius')};
-            border-bottom-left-radius: ${getValue('borderRadius')};
-          }
-        `}
-      >
-        <Inline spacing={3} alignItems="flex-start">
-          <Stack>{AlertVariantIconsMap[variant]}</Stack>
-          {typeof children !== 'string' ? (
-            <Text>{children}</Text>
-          ) : (
-            <Text
-              dangerouslySetInnerHTML={{ __html: children as string }}
-              css={`
-                strong {
-                  font-weight: bold;
-                }
+      <Inline spacing={3} alignItems="flex-start">
+        <Stack>{AlertVariantIconsMap[variant]}</Stack>
+        {typeof children !== 'string' ? (
+          <Text>{children}</Text>
+        ) : (
+          <Text
+            dangerouslySetInnerHTML={{ __html: children as string }}
+            css={`
+              strong {
+                font-weight: bold;
+              }
 
-                ul {
-                  list-style-type: disc;
-                  margin-bottom: ${parseSpacing(4)};
+              ul {
+                list-style-type: disc;
+                margin-bottom: ${parseSpacing(4)};
 
-                  li {
-                    margin-left: ${parseSpacing(5)};
-                  }
+                li {
+                  margin-left: ${parseSpacing(5)};
                 }
-              `}
-            />
-          )}
-        </Inline>
-      </Stack>
-    </Inline>
+              }
+            `}
+          />
+        )}
+      </Inline>
+    </Stack>
   );
 };
 
