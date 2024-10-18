@@ -1,4 +1,5 @@
 import { Page } from '@/ui/Page';
+import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const Ownership = () => {
   return (
@@ -15,5 +16,7 @@ const Ownership = () => {
     </Page>
   );
 };
+
+export const getServerSideProps = getApplicationServerSideProps();
 
 export default Ownership;
