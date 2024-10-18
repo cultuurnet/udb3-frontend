@@ -838,7 +838,8 @@
           "country": "Pays",
           "streetAndNumber": "Rue et numéro",
           "title": "Adresse",
-          "zip": "Code postal"
+          "zip": "Code postal",
+          "blank_street": "Je ne veux pas rendre publique ma rue et mon numéro"
         },
         "name": {
           "info": "Le nom public officiel de l'organisation",
