@@ -1,0 +1,13 @@
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/client.js b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/client.js
+index 8294f31..15847ab 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/client.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/client.js
+@@ -88,7 +88,7 @@ function get(config, _a) {
+                                 config.auth0Logout !== false)) {
+                             Object.defineProperty(client, 'endSessionUrl', {
+                                 value: function (params) {
+-                                    var id_token_hint = params.id_token_hint, post_logout_redirect_uri = params.post_logout_redirect_uri, extraParams = tslib_1.__rest(params, ["id_token_hint", "post_logout_redirect_uri"]);
++                                    var post_logout_redirect_uri = params.post_logout_redirect_uri, extraParams = tslib_1.__rest(params, ["post_logout_redirect_uri"]);
+                                     var parsedUrl = url_1.default.parse((0, url_join_1.default)(issuer.metadata.issuer, '/v2/logout'));
+                                     parsedUrl.query = tslib_1.__assign(tslib_1.__assign({}, extraParams), { returnTo: post_logout_redirect_uri, client_id: config.clientID });
+                                     Object.entries(parsedUrl.query).forEach(function (_a) {
