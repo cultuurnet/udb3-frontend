@@ -50,6 +50,7 @@ const Page = ({
         overflow-y: auto;
       `}
       spacing={5}
+      paddingY={1.5}
       position="relative"
       {...getStackProps(props)}
     >
