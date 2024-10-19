@@ -1,16 +1,16 @@
 import { Values } from '@/types/Values';
 
-const DaysOfWeek = {
-  MONDAY: 'monday',
-  TUESDAY: 'tuesday',
-  WEDNESDAY: 'wednesday',
-  THURSDAY: 'thursday',
-  FRIDAY: 'friday',
-  SATURDAY: 'saturday',
-  SUNDAY: 'sunday',
-} as const;
+const DaysOfWeek = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+] as const;
 
-type DayOfWeek = Values<typeof DaysOfWeek>;
+type DayOfWeek = (typeof DaysOfWeek)[number];
 
 export { DaysOfWeek };
 export type { DayOfWeek };
