@@ -1015,6 +1015,21 @@
           "intro": "Voeg een afbeelding toe zodat bezoekers je organisatie beter herkennen"
         }
       }
+    },
+    "ownerships": {
+      "title": "Beheerders van {{name}}",
+      "actions": {
+        "add": "Nieuwe beheerder toevoegen",
+        "back": "Terug naar organisatiepagina"
+      },
+      "modal": {
+        "title": "Beheerder toevoegen aon {{name}}",
+        "email": "E-mailadres",
+        "actions": {
+          "confirm": "Beheerder toevoegen",
+          "cancel": "Annuleren"
+        }
+      }
     }
   },
   "selectionTable": {

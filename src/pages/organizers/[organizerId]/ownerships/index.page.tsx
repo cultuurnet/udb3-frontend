@@ -14,6 +14,7 @@ const Ownership = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { register, formState, getValues } = useForm();
+  const organizer = { name: 'foobar' };
 
   const handleConfirm = () => {
     const email = getValues('email');
@@ -22,7 +23,9 @@ const Ownership = () => {
 
   return (
     <Page>
-      <Page.Title>Hello world</Page.Title>
+      <Page.Title>
+        {t('organizers.ownerships.title', { name: organizer.name })}
+      </Page.Title>
       <Page.Content>
         <Inline
           display={'grid'}
@@ -39,10 +42,10 @@ const Ownership = () => {
           </div>
           <Stack spacing={3}>
             <Button onClick={() => setIsOpen(true)}>
-              Nieuwe beheerder toevoegen
+              {t('organizers.ownerships.actions.add')}
             </Button>
             <Button variant={ButtonVariants.SECONDARY}>
-              Terug naar orgonisatiepagina
+              {t('organizers.ownerships.actions.back')}
             </Button>
           </Stack>
         </Inline>
@@ -50,9 +53,11 @@ const Ownership = () => {
           visible={isOpen}
           variant={ModalVariants.QUESTION}
           size={ModalSizes.MD}
-          title={'Beheerder toevoegen aon Democrazy'}
-          confirmTitle={t('organizer.add_modal.actions.add')}
-          cancelTitle={t('organizer.add_modal.actions.cancel')}
+          title={t('organizers.ownerships.modal.title', {
+            name: organizer.name,
+          })}
+          confirmTitle={t('organizers.ownerships.modal.actions.confirm')}
+          cancelTitle={t('organizers.ownerships.modal.actions.cancel')}
           onConfirm={handleConfirm}
           onClose={() => setIsOpen(false)}
         >
@@ -60,7 +65,7 @@ const Ownership = () => {
             <FormElement
               id={'email'}
               Component={<Input type={'email'} {...register('email')} />}
-              label={'Emailadres'}
+              label={t('organizers.ownerships.modal.email')}
               error={formState.errors.email && 'email is required'}
             />
           </Stack>
