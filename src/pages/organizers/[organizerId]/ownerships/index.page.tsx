@@ -3,8 +3,23 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { Stack } from '@/ui/Stack';
 import { Inline } from '@/ui/Inline';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/ui/Input';
+import { FormElement } from '@/ui/FormElement';
 
 const Ownership = () => {
+  const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  const { register, formState, getValues } = useForm();
+
+  const handleConfirm = () => {
+    const email = getValues('email');
+    console.log({ email });
+  };
+
   return (
     <Page>
       <Page.Title>Hello world</Page.Title>
@@ -23,12 +38,33 @@ const Ownership = () => {
             adipisci aliquam.
           </div>
           <Stack spacing={3}>
-            <Button>Nieuwe beheerder toevoegen</Button>
+            <Button onClick={() => setIsOpen(true)}>
+              Nieuwe beheerder toevoegen
+            </Button>
             <Button variant={ButtonVariants.SECONDARY}>
               Terug naar orgonisatiepagina
             </Button>
           </Stack>
         </Inline>
+        <Modal
+          visible={isOpen}
+          variant={ModalVariants.QUESTION}
+          size={ModalSizes.MD}
+          title={'Beheerder toevoegen aon Democrazy'}
+          confirmTitle={t('organizer.add_modal.actions.add')}
+          cancelTitle={t('organizer.add_modal.actions.cancel')}
+          onConfirm={handleConfirm}
+          onClose={() => setIsOpen(false)}
+        >
+          <Stack padding={4}>
+            <FormElement
+              id={'email'}
+              Component={<Input type={'email'} {...register('email')} />}
+              label={'Emailadres'}
+              error={formState.errors.email && 'email is required'}
+            />
+          </Stack>
+        </Modal>
       </Page.Content>
     </Page>
   );
