@@ -15,11 +15,24 @@ const createOwnership = async ({ headers, itemId, itemType, ownerId }) =>
     },
   });
 
+const approveOwnership = ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/approve`,
+    options: { headers, method: 'POST' },
+  });
+
 const useCreateOwnershipMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: createOwnership,
-    mutationKey: 'ownerships-add-ownership',
+    mutationKey: 'ownerships-create-ownership',
     ...configuration,
   });
 
-export { useCreateOwnershipMutation };
+const useApproveOwnershipMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: approveOwnership,
+    mutationKey: 'ownerships-approve-ownership',
+    ...configuration,
+  });
+
+export { useApproveOwnershipMutation, useCreateOwnershipMutation };

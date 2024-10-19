@@ -11,13 +11,17 @@ import { FormElement } from '@/ui/FormElement';
 import { getServerSideProps as getServerProps } from '../edit/index.page';
 import { Organizer } from '@/types/Organizer';
 import { useCreateOrganizerOwnershipMutation } from '@/hooks/api/organizers';
-import { useCreateOwnershipMutation } from '@/hooks/api/ownerships';
+import {
+  useApproveOwnershipMutation,
+  useCreateOwnershipMutation,
+} from '@/hooks/api/ownerships';
 
 const Ownership = ({ organizer }: { organizer: Organizer }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { register, formState, getValues } = useForm();
   const createOwnership = useCreateOwnershipMutation();
+  const approveOwnership = useApproveOwnershipMutation();
 
   const handleConfirm = async () => {
     const email = getValues('email');
@@ -28,7 +32,8 @@ const Ownership = ({ organizer }: { organizer: Organizer }) => {
       itemId: organizer['@id'],
     });
 
-    const ownershipId = response.data.id;
+    await approveOwnership.mutate({ ownershipId: response.data.id });
+    // Show flash message
   };
 
   return (
