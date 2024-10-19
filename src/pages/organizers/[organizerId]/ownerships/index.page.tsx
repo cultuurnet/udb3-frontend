@@ -1,5 +1,4 @@
 import { Page } from '@/ui/Page';
-import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { Stack } from '@/ui/Stack';
 import { Inline } from '@/ui/Inline';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -9,12 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/ui/Input';
 import { FormElement } from '@/ui/FormElement';
+import { getServerSideProps as getServerProps } from '../edit/index.page';
+import { Organizer } from '@/types/Organizer';
 
-const Ownership = () => {
+const Ownership = ({ organizer }: { organizer: Organizer }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { register, formState, getValues } = useForm();
-  const organizer = { name: 'foobar' };
 
   const handleConfirm = () => {
     const email = getValues('email');
@@ -75,6 +75,6 @@ const Ownership = () => {
   );
 };
 
-export const getServerSideProps = getApplicationServerSideProps();
+export const getServerSideProps = getServerProps;
 
 export default Ownership;

@@ -1023,7 +1023,7 @@
         "back": "Terug naar organisatiepagina"
       },
       "modal": {
-        "title": "Beheerder toevoegen aon {{name}}",
+        "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
         "actions": {
           "confirm": "Beheerder toevoegen",
