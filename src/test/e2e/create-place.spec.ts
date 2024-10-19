@@ -51,9 +51,10 @@ test('create a place', async ({ baseURL, page }) => {
   await page
     .getByRole('option', { name: dummyPlace.address.municipality })
     .click();
-  await page.getByLabel('Straat en nummer').click();
+  await page.getByLabel('Straat en nummer').nth(0).click();
   await page
     .getByLabel('Straat en nummer')
+    .nth(0)
     .fill(dummyPlace.address.streetAndNumber);
   // // 5. Name and Age
   await page.getByLabel('Naam van de locatie').click();
@@ -106,6 +107,7 @@ test('create a place', async ({ baseURL, page }) => {
   await page.locator('#organizer-url').fill(dummyPlace.organizer.url);
   await page
     .getByLabel('Straat en nummer')
+    .nth(0)
     .fill(dummyPlace.organizer.streetAndNumber);
   await page.getByLabel('Gemeente').fill(dummyPlace.organizer.zip);
   await page

@@ -838,7 +838,8 @@
           "country": "Land",
           "streetAndNumber": "Straat en nummer",
           "title": "Adres",
-          "zip": "Postcode"
+          "zip": "Postcode",
+          "blank_street": "Ik wil mijn straat en nummer niet publiek vrijgeven"
         },
         "name": {
           "info": "De officiële publieke naam van de organisatie",

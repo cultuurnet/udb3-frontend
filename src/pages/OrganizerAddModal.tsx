@@ -31,7 +31,12 @@ import { Title } from '@/ui/Title';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 import { City, CityPicker } from './CityPicker';
-import { DUTCH_ZIP_REGEX, GERMAN_ZIP_REGEX } from './steps/LocationStep';
+import {
+  BLANK_STREET_NUMBER,
+  BlankStreetToggle,
+  DUTCH_ZIP_REGEX,
+  GERMAN_ZIP_REGEX,
+} from './steps/LocationStep';
 
 const getValue = getValueFromTheme('organizerAddModal');
 
@@ -140,9 +145,9 @@ const OrganizerAddModal = ({
 
   const urlRegisterProps = register('url');
 
-  const [watchedUrl, watchedCountry] = useWatch({
+  const [watchedUrl, watchedCountry, watchedStreet] = useWatch({
     control,
-    name: ['url', 'address.country'],
+    name: ['url', 'address.country', 'address.streetAndNumber'],
   });
 
   const getOrganizersByWebsiteQuery = useGetOrganizersByWebsiteQuery(
@@ -371,7 +376,12 @@ const OrganizerAddModal = ({
               />
             </Stack>
             <FormElement
-              Component={<Input {...register('address.streetAndNumber')} />}
+              Component={
+                <Input
+                  {...register('address.streetAndNumber')}
+                  disabled={watchedStreet === BLANK_STREET_NUMBER}
+                />
+              }
               id="organizer-address-streetAndNumber"
               label={t('organizer.add_modal.labels.address.streetAndNumber')}
               error={
@@ -379,6 +389,13 @@ const OrganizerAddModal = ({
                 t(
                   'organizer.add_modal.validation_messages.address.streetAndNumber',
                 )
+              }
+              info={
+                <BlankStreetToggle
+                  onChange={(value) =>
+                    setValue('address.streetAndNumber', value)
+                  }
+                />
               }
             />
             <Inline spacing={4}>
