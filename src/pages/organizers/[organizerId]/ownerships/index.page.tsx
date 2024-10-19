@@ -10,15 +10,25 @@ import { Input } from '@/ui/Input';
 import { FormElement } from '@/ui/FormElement';
 import { getServerSideProps as getServerProps } from '../edit/index.page';
 import { Organizer } from '@/types/Organizer';
+import { useCreateOrganizerOwnershipMutation } from '@/hooks/api/organizers';
+import { useCreateOwnershipMutation } from '@/hooks/api/ownerships';
 
 const Ownership = ({ organizer }: { organizer: Organizer }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { register, formState, getValues } = useForm();
+  const createOwnership = useCreateOwnershipMutation();
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const email = getValues('email');
-    console.log({ email });
+    return;
+    const response = await createOwnership.mutate({
+      ownerId: email,
+      itemType: 'organizer',
+      itemId: organizer['@id'],
+    });
+
+    const ownershipId = response.data.id;
   };
 
   return (
@@ -66,7 +76,6 @@ const Ownership = ({ organizer }: { organizer: Organizer }) => {
               id={'email'}
               Component={<Input type={'email'} {...register('email')} />}
               label={t('organizers.ownerships.modal.email')}
-              error={formState.errors.email && 'email is required'}
             />
           </Stack>
         </Modal>
