@@ -1,22 +1,158 @@
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { dehydrate } from 'react-query';
+import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
+import {
+  OwnershipRequest,
+  RequestState,
+  useGetOwnershipRequestsQuery,
+} from '@/hooks/api/ownerships';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icon } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
+import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
+import { Stack } from '@/ui/Stack';
+import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { OwnershipsTable } from './OwnershipsTable';
 
 const Ownership = () => {
+  const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  const organizerId = useMemo(
+    () => router.query.organizerId as string,
+    [router.query.organizerId],
+  );
+  const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
+    id: organizerId,
+  });
+  // @ts-expect-error
+  const organizer = getOrganizerByIdQuery?.data;
+
+  const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
+    organizerId: organizerId,
+  });
+
+  const approvedRequests = useMemo(() => {
+    return (
+      // @ts-expect-error
+      getOwnershipRequestsQuery.data?.member.filter(
+        (request: OwnershipRequest) => request.state === RequestState.APPROVED,
+      ) ?? []
+    );
+  }, [getOwnershipRequestsQuery]);
+
+  const pendingRequests = useMemo(() => {
+    return (
+      // @ts-expect-error
+      getOwnershipRequestsQuery.data?.member.filter(
+        (request: OwnershipRequest) => request.state === RequestState.REQUESTED,
+      ) ?? []
+    );
+  }, [getOwnershipRequestsQuery]);
+
   return (
     <Page>
-      <Page.Title>Hello world</Page.Title>
+      <Page.Title>
+        {t('organizers.ownerships.title', {
+          name: organizer?.name?.[i18n.language],
+        })}
+      </Page.Title>
       <Page.Content>
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore eos
-          nisi maiores. Doloribus molestias magnam facilis! Eum rerum ea fugit
-          excepturi doloribus, assumenda quod vitae magni tempore voluptatum
-          adipisci aliquam.
-        </div>
+        <Inline spacing={5}>
+          <Stack spacing={5} flex={3}>
+            <Alert variant={AlertVariants.PRIMARY} fullWidth>
+              {t('organizers.ownerships.info')}
+            </Alert>
+            <Stack spacing={4}>
+              <Title size={3}>{t('organizers.ownerships.owners')}</Title>
+              <OwnershipsTable
+                requests={approvedRequests}
+                actions={
+                  <Button variant={ButtonVariants.ICON}>
+                    <Icon name={Icons.TRASH} />
+                  </Button>
+                }
+              />
+            </Stack>
+            {pendingRequests.length > 0 && (
+              <Stack spacing={4}>
+                <Title size={3}>{t('organizers.ownerships.pending')}</Title>
+                <OwnershipsTable
+                  requests={pendingRequests}
+                  actions={
+                    <Inline spacing={3}>
+                      <Button
+                        variant={ButtonVariants.SUCCESS}
+                        iconName={Icons.CHECK_CIRCLE}
+                        spacing={3}
+                      >
+                        {t('organizers.ownerships.table.actions.approve')}
+                      </Button>
+                      <Button
+                        variant={ButtonVariants.DANGER}
+                        iconName={Icons.TIMES_CIRCLE}
+                        spacing={3}
+                      >
+                        {t('organizers.ownerships.table.actions.reject')}
+                      </Button>
+                    </Inline>
+                  }
+                />
+              </Stack>
+            )}
+          </Stack>
+
+          <Stack spacing={3} flex={1}>
+            <Button
+              variant={ButtonVariants.PRIMARY}
+              css={`
+                padding: 10px 15px !important;
+              `}
+            >
+              {t('organizers.ownerships.actions.add')}
+            </Button>
+            <Button
+              variant={ButtonVariants.SECONDARY}
+              css={`
+                padding: 10px 15px !important;
+              `}
+              spacing={3}
+              iconName={Icons.ARROW_LEFT}
+              onClick={() => router.push(`/organizer/${organizerId}/preview`)}
+            >
+              {t('organizers.ownerships.actions.back')}
+            </Button>
+          </Stack>
+        </Inline>
       </Page.Content>
     </Page>
   );
 };
 
-export const getServerSideProps = getApplicationServerSideProps();
+export const getServerSideProps = getApplicationServerSideProps(
+  async ({ req, query, cookies, queryClient }) => {
+    await useGetOrganizerByIdQuery({
+      req,
+      queryClient,
+      id: query.organizerId,
+    });
+    await useGetOwnershipRequestsQuery({
+      req,
+      queryClient,
+      organizerId: query.organizerId,
+    });
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        cookies,
+      },
+    };
+  },
+);
 
 export default Ownership;
