@@ -3,6 +3,7 @@ import { faSlideshare } from '@fortawesome/free-brands-svg-icons';
 import {
   faAngleLeft,
   faAngleRight,
+  faArrowLeft,
   faBell,
   faBinoculars,
   faBuilding,
@@ -33,6 +34,7 @@ import {
   faTag,
   faTicketAlt,
   faTimes,
+  faTimesCircle,
   faTrash,
   faUser,
   faUsers,
@@ -58,6 +60,7 @@ const Icons = {
   BELL: 'bell',
   GIFT: 'gift',
   TIMES: 'times',
+  TIMES_CIRCLE: 'timesCircle',
   EYE: 'eye',
   EYE_SLASH: 'eyeSlash',
   SIGN_OUT: 'signOutAlt',
@@ -83,6 +86,7 @@ const Icons = {
   QUESTION_CIRCLE: 'questionCircle',
   ANGLE_LEFT: 'angleLeft',
   ANGLE_RIGHT: 'angleRight',
+  ARROW_LEFT: 'arrowLeft',
 } as const;
 
 const IconsMap = {
@@ -123,6 +127,8 @@ const IconsMap = {
   [Icons.EXCLAMATION_CIRCLE]: faExclamationCircle,
   [Icons.ANGLE_LEFT]: faAngleLeft,
   [Icons.ANGLE_RIGHT]: faAngleRight,
+  [Icons.TIMES_CIRCLE]: faTimesCircle,
+  [Icons.ARROW_LEFT]: faArrowLeft,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {
