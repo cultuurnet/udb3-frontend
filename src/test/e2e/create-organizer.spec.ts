@@ -61,11 +61,10 @@ test('create an organizer', async ({ baseURL, page }) => {
   await page.getByLabel('Gemeente').click();
   await page.getByLabel('Gemeente').fill(dummyOrganizer.location.municipality);
   await page.getByLabel(dummyOrganizer.location.municipality).click();
-  await page.getByLabel('Straat en nummer').click();
-  await page
-    .getByLabel('Straat en nummer')
-    .fill(dummyOrganizer.location.address);
-  await page.getByLabel('Straat en nummer').blur();
+  const streetField = await page.getByLabel('Straat en nummer').nth(0);
+  await streetField.click();
+  await streetField.fill(dummyOrganizer.location.address);
+  await streetField.blur();
 
   await page.getByText('100/100').click();
 
