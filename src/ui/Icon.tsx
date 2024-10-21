@@ -3,6 +3,7 @@ import { faSlideshare } from '@fortawesome/free-brands-svg-icons';
 import {
   faAngleLeft,
   faAngleRight,
+  faArrowLeft,
   faBell,
   faBinoculars,
   faBuilding,
@@ -38,7 +39,6 @@ import {
   faUser,
   faUsers,
   faVideo,
-  faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
