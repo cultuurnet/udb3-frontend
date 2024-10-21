@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query';
+
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -17,6 +18,7 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+
 import { OwnershipsTable } from './OwnershipsTable';
 
 const Ownership = () => {
