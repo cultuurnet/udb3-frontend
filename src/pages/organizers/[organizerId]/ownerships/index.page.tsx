@@ -1,20 +1,23 @@
-import { Page } from '@/ui/Page';
-import { Stack } from '@/ui/Stack';
-import { Inline } from '@/ui/Inline';
-import { Button, ButtonVariants } from '@/ui/Button';
-import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { Input } from '@/ui/Input';
-import { FormElement } from '@/ui/FormElement';
-import { getServerSideProps as getServerProps } from '../edit/index.page';
-import { Organizer } from '@/types/Organizer';
-import { useCreateOrganizerOwnershipMutation } from '@/hooks/api/organizers';
+import { useTranslation } from 'react-i18next';
+
 import {
   useApproveOwnershipMutation,
   useCreateOwnershipMutation,
 } from '@/hooks/api/ownerships';
+import { useToast } from '@/pages/manage/movies/useToast';
+import { Organizer } from '@/types/Organizer';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { FormElement } from '@/ui/FormElement';
+import { Inline } from '@/ui/Inline';
+import { Input } from '@/ui/Input';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
+import { Page } from '@/ui/Page';
+import { Stack } from '@/ui/Stack';
+import { Toast } from '@/ui/Toast';
+
+import { getServerSideProps as getServerProps } from '../edit/index.page';
 
 const Ownership = ({ organizer }: { organizer: Organizer }) => {
   const { t } = useTranslation();
@@ -22,6 +25,12 @@ const Ownership = ({ organizer }: { organizer: Organizer }) => {
   const { register, formState, getValues } = useForm();
   const createOwnership = useCreateOwnershipMutation();
   const approveOwnership = useApproveOwnershipMutation();
+  const toast = useToast({
+    messages: {
+      success: t('organizers.ownerships.toast.success'),
+      error: t('organizers.ownerships.toast.error'),
+    },
+  });
 
   const handleConfirm = async () => {
     const email = getValues('email');
@@ -33,7 +42,7 @@ const Ownership = ({ organizer }: { organizer: Organizer }) => {
     });
 
     await approveOwnership.mutate({ ownershipId: response.data.id });
-    // Show flash message
+    toast.trigger('success');
   };
 
   return (
@@ -84,6 +93,12 @@ const Ownership = ({ organizer }: { organizer: Organizer }) => {
             />
           </Stack>
         </Modal>
+        <Toast
+          variant="success"
+          body={toast.message}
+          visible={!!toast.message}
+          onClose={() => toast.clear()}
+        />
       </Page.Content>
     </Page>
   );
