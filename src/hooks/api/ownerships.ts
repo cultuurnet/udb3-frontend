@@ -12,6 +12,7 @@ export type OwnershipRequest = {
   id: string;
   itemId: string;
   ownerId: string;
+  ownerEmail: string;
   requesterId: string;
   state: RequestState;
 };

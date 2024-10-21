@@ -51,7 +51,7 @@ export const OwnershipsTable = ({ requests, actions }: Props) => {
               padding: 0.5rem 0;
             `}
           >
-            <List.Item>{request.requesterId}</List.Item>
+            <List.Item>{request.ownerEmail}</List.Item>
             <List.Item>{actions}</List.Item>
           </Inline>
         ))}
