@@ -38,7 +38,7 @@ import {
   faUser,
   faUsers,
   faVideo,
-  faArrowLeft
+  faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -86,7 +86,7 @@ const Icons = {
   QUESTION_CIRCLE: 'questionCircle',
   ANGLE_LEFT: 'angleLeft',
   ANGLE_RIGHT: 'angleRight',
-  ARROW_LEFT: 'arrowLeft'
+  ARROW_LEFT: 'arrowLeft',
 } as const;
 
 const IconsMap = {
@@ -128,7 +128,7 @@ const IconsMap = {
   [Icons.ANGLE_LEFT]: faAngleLeft,
   [Icons.ANGLE_RIGHT]: faAngleRight,
   [Icons.TIMES_CIRCLE]: faTimesCircle,
-  [Icons.ARROW_LEFT]: faArrowLeft
+  [Icons.ARROW_LEFT]: faArrowLeft,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {
