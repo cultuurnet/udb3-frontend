@@ -1,6 +1,8 @@
 import { UseQueryOptions } from 'react-query';
+
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+
 import {
   ServerSideQueryOptions,
   useAuthenticatedQuery,
