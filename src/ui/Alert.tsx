@@ -1,12 +1,11 @@
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
 
-import { Icon, Icons } from './Icon';
 import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
-import { Stack } from './Stack';
+import { Inline } from './Inline';
+import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { getValueFromTheme } from './theme';
 
 const IconWarning = () => {
   return (
@@ -134,7 +133,7 @@ const Alert = ({
       role="alert"
       alignSelf={fullWidth ? 'normal' : 'flex-start'}
       display={visible ? 'flex' : 'none'}
-      {...getInlineProps(props)}
+      {...getStackProps(props)}
       padding={4}
       borderRadius={getValue('borderRadius')}
       variant={variant}

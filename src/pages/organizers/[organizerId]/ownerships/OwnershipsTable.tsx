@@ -12,27 +12,27 @@ type Props = {
   renderActions: (request: OwnershipRequest) => JSX.Element;
 };
 
+const getGlobalValue = getValueFromTheme('global');
+
 export const OwnershipsTable = ({ requests, renderActions }: Props) => {
-  const getGlobalValue = getValueFromTheme('global');
   const { grey3 } = colors;
   const { t } = useTranslation();
   return (
     <Stack
-      width="100%"
       flex={1}
       padding={4}
+      marginBottom={5}
+      borderRadius="0.5rem"
+      backgroundColor="white"
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
-        border-radius: 0.5rem;
-        background-color: white;
-        margin-bottom: 2rem;
       `}
     >
       <Inline
         justifyContent="space-between"
+        paddingBottom={3}
         css={`
           border-bottom: 1px solid ${grey3};
-          padding-bottom: 0.5rem;
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
@@ -44,11 +44,11 @@ export const OwnershipsTable = ({ requests, renderActions }: Props) => {
             key={request.id}
             justifyContent="space-between"
             alignItems="center"
+            paddingY={3}
             css={`
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
               }
-              padding: 0.5rem 0;
             `}
           >
             <List.Item>{request.ownerEmail}</List.Item>

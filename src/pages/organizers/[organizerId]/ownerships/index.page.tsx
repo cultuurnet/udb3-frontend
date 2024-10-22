@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,7 +48,8 @@ const Ownership = () => {
         getOwnershipRequestsQuery.data?.member,
         'state',
       ),
-    [getOwnershipRequestsQuery],
+    // @ts-expect-error
+    [getOwnershipRequestsQuery.data],
   );
 
   const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
@@ -126,16 +127,18 @@ const Ownership = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    await useGetOrganizerByIdQuery({
-      req,
-      queryClient,
-      id: query.organizerId,
-    });
-    await useGetOwnershipRequestsQuery({
-      req,
-      queryClient,
-      organizerId: query.organizerId,
-    });
+    await Promise.all([
+      await useGetOrganizerByIdQuery({
+        req,
+        queryClient,
+        id: query.organizerId,
+      }),
+      await useGetOwnershipRequestsQuery({
+        req,
+        queryClient,
+        organizerId: query.organizerId,
+      }),
+    ]);
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
