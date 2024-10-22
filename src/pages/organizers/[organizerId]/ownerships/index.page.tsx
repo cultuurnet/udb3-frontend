@@ -52,7 +52,7 @@ const Ownership = () => {
   );
 
   const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
-  const pendingRequests = requestsByState[RequestState.APPROVED] ?? [];
+  const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
 
   return (
     <Page>
