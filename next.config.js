@@ -49,6 +49,7 @@ const moduleExports = {
     hotjarEventName: process.env.NEXT_PUBLIC_HOTJAR_EVENT_NAME,
     hotjarMissingFieldName: process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME,
     ownershipEnabled: process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED,
+    imgixUrl: process.env.NEXT_PUBLIC_IMGIX_URL,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
   eslint: {

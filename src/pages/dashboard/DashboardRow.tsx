@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
 
 import { ScopeTypes } from '@/constants/OfferType';
@@ -61,12 +62,13 @@ export const DashboardRow = ({
   ...props
 }: DashboardRowProps) => {
   const getValue = getValueFromTheme('dashboardPage');
+  const { publicRuntimeConfig } = getConfig();
   const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
     colors;
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
-  const croppedImageBaseUrl = 'https://images-acc-uitdatabank.imgix.net/';
+  const croppedImageBaseUrl = publicRuntimeConfig.imgixUrl;
   const imageIdAndFormat = imageUrl?.split('/').at(-1);
   const croppedImageUrl = imageUrl
     ? `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`
