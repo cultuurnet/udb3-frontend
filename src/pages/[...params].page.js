@@ -70,7 +70,9 @@ const Fallback = () => {
         jwt: cookies.token,
         lang: cookies['udb-language'],
         ...(ownershipPaths &&
-          publicRuntimeConfig.ownershipEnabled && { ownership: 'true' }),
+          publicRuntimeConfig.ownershipEnabled === 'true' && {
+            ownership: 'true',
+          }),
       }),
       '?',
     );
