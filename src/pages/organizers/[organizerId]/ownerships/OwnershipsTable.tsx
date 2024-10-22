@@ -9,10 +9,10 @@ import { Title } from '@/ui/Title';
 
 type Props = {
   requests: OwnershipRequest[];
-  actions: JSX.Element;
+  renderActions: (request: OwnershipRequest) => JSX.Element;
 };
 
-export const OwnershipsTable = ({ requests, actions }: Props) => {
+export const OwnershipsTable = ({ requests, renderActions }: Props) => {
   const getGlobalValue = getValueFromTheme('global');
   const { grey3 } = colors;
   const { t } = useTranslation();
@@ -52,7 +52,7 @@ export const OwnershipsTable = ({ requests, actions }: Props) => {
             `}
           >
             <List.Item>{request.ownerEmail}</List.Item>
-            <List.Item>{actions}</List.Item>
+            <List.Item>{renderActions(request)}</List.Item>
           </Inline>
         ))}
       </List>

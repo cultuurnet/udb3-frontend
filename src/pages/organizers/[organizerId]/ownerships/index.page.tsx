@@ -74,11 +74,11 @@ const Ownership = () => {
               <Title size={3}>{t('organizers.ownerships.owners')}</Title>
               <OwnershipsTable
                 requests={approvedRequests}
-                actions={
+                renderActions={() => (
                   <Button variant={ButtonVariants.ICON}>
                     <Icon name={Icons.TRASH} />
                   </Button>
-                }
+                )}
               />
             </Stack>
             {pendingRequests.length > 0 && (
@@ -86,12 +86,11 @@ const Ownership = () => {
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
                 <OwnershipsTable
                   requests={pendingRequests}
-                  actions={
+                  renderActions={(request) => (
                     <Inline spacing={3}>
                       <Button
                         variant={ButtonVariants.SUCCESS}
                         iconName={Icons.CHECK_CIRCLE}
-                        spacing={3}
                       >
                         {t('organizers.ownerships.table.actions.approve')}
                       </Button>
@@ -103,7 +102,7 @@ const Ownership = () => {
                         {t('organizers.ownerships.table.actions.reject')}
                       </Button>
                     </Inline>
-                  }
+                  )}
                 />
               </Stack>
             )}
