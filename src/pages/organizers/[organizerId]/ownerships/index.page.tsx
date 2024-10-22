@@ -1,3 +1,4 @@
+import { groupBy } from 'lodash';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +10,7 @@ import {
   RequestState,
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
+import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon } from '@/ui/Icon';
@@ -33,29 +35,24 @@ const Ownership = () => {
     id: organizerId,
   });
   // @ts-expect-error
-  const organizer = getOrganizerByIdQuery?.data;
+  const organizer: Organizer = getOrganizerByIdQuery?.data;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
     organizerId: organizerId,
   });
 
-  const approvedRequests = useMemo(() => {
-    return (
-      // @ts-expect-error
-      getOwnershipRequestsQuery.data?.member.filter(
-        (request: OwnershipRequest) => request.state === RequestState.APPROVED,
-      ) ?? []
-    );
-  }, [getOwnershipRequestsQuery]);
+  const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
+    () =>
+      groupBy(
+        // @ts-expect-error
+        getOwnershipRequestsQuery.data?.member,
+        'state',
+      ),
+    [getOwnershipRequestsQuery],
+  );
 
-  const pendingRequests = useMemo(() => {
-    return (
-      // @ts-expect-error
-      getOwnershipRequestsQuery.data?.member.filter(
-        (request: OwnershipRequest) => request.state === RequestState.REQUESTED,
-      ) ?? []
-    );
-  }, [getOwnershipRequestsQuery]);
+  const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
+  const pendingRequests = requestsByState[RequestState.APPROVED] ?? [];
 
   return (
     <Page>
@@ -91,6 +88,7 @@ const Ownership = () => {
                       <Button
                         variant={ButtonVariants.SUCCESS}
                         iconName={Icons.CHECK_CIRCLE}
+                        spacing={3}
                       >
                         {t('organizers.ownerships.table.actions.approve')}
                       </Button>
@@ -107,21 +105,12 @@ const Ownership = () => {
               </Stack>
             )}
           </Stack>
-
-          <Stack spacing={3} flex={1}>
-            <Button
-              variant={ButtonVariants.PRIMARY}
-              css={`
-                padding: 10px 15px !important;
-              `}
-            >
+          <Stack spacing={3.5} flex={1}>
+            <Button variant={ButtonVariants.PRIMARY}>
               {t('organizers.ownerships.actions.add')}
             </Button>
             <Button
               variant={ButtonVariants.SECONDARY}
-              css={`
-                padding: 10px 15px !important;
-              `}
               spacing={3}
               iconName={Icons.ARROW_LEFT}
               onClick={() => router.push(`/organizer/${organizerId}/preview`)}
