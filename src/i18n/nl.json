@@ -1015,6 +1015,24 @@
           "intro": "Voeg een afbeelding toe zodat bezoekers je organisatie beter herkennen"
         }
       }
+    },
+    "ownerships": {
+      "title": "Beheerders van {{name}}",
+      "info": "Beheerders kunnen de organisatiepagina en de evenementen van de organisatie in UiTdatabank bewerken en verwijderen.",
+      "actions": {
+        "add": "Nieuwe beheerder toevoegen",
+        "back": "Terug naar organisatiepagina"
+      },
+      "owners": "Beheerders",
+      "table": {
+        "user": "Gebruiker",
+        "actions": {
+          "title": "Acties",
+          "approve": "Goedkeuren",
+          "reject": "Afkeuren"
+        }
+      },
+      "pending": "Openstaande aanvragen tot beheer"
     }
   },
   "selectionTable": {
