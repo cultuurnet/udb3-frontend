@@ -1032,7 +1032,21 @@
           "reject": "Rejeter"
         }
       },
-      "pending": "Demandes de gestion en attente"
+      "pending": "Demandes de gestion en attente",
+      "confirm_modal": {
+        "title": "Approuver la demande de gestion",
+        "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
+        "cancel": "Annuler",
+        "confirm": "Approuver la demande",
+        "successs": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}}"
+      },
+      "reject_modal": {
+        "title": "Rejeter la demande de gestion",
+        "body": "Êtes-vous sûr de vouloir rejeter la demande de {{ownerEmail}} ?",
+        "cancel": "Annuler",
+        "confirm": "Rejeter la demande",
+        "success": "{{ownerEmail}} a été informé de votre décision."
+      }
     }
   },
   "selectionTable": {
