@@ -150,7 +150,7 @@ export const DashboardRow = ({
         spacing={4}
         flex={1}
         css={`
-          padding: 1.5rem;
+          padding: 1.2rem;
         `}
         justifyContent="center"
       >
@@ -179,17 +179,23 @@ export const DashboardRow = ({
         >
           {scope !== ScopeTypes.ORGANIZERS && (
             <Stack
-              width="27%"
+              width="25%"
               spacing={3}
               alignItems="flex-start"
               css={`
-                word-break: break-all;
+                word-break: break-word;
                 white-space: normal;
               `}
             >
               <Inline spacing={3} alignItems="center">
                 <Icon name={Icons.TAG} />
-                <Text>{type}</Text>
+                <Text
+                  css={`
+                    line-height: 1.2rem;
+                  `}
+                >
+                  {type}
+                </Text>
               </Inline>
               <Inline spacing={3} alignItems="center">
                 <Icon name={Icons.CALENDAR_ALT} />
