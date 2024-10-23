@@ -34,7 +34,7 @@ const Ownership = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const { register, formState, getValues } = useForm();
+  const { register, getValues } = useForm();
 
   const organizerId = useMemo(
     () => router.query.organizerId as string,
@@ -77,14 +77,13 @@ const Ownership = () => {
 
   const handleConfirm = async () => {
     const email = getValues('email');
-    return;
-    const response = await createOwnership.mutate({
-      ownerId: email,
+    const response = createOwnership.mutateAsync({
+      ownerEmail: email,
       itemType: 'organizer',
       itemId: organizer['@id'],
     });
 
-    await approveOwnership.mutate({ ownershipId: response.data.id });
+    await approveOwnership.mutateAsync({ ownershipId: response.data.id });
     toast.trigger('success');
   };
 
