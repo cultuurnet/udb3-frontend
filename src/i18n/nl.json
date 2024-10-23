@@ -1032,6 +1032,14 @@
           "reject": "Afkeuren"
         }
       },
+      "modal": {
+        "title": "Beheerder toevoegen aan {{name}}",
+        "email": "E-mailadres",
+        "actions": {
+          "confirm": "Beheerder toevoegen",
+          "cancel": "Annuleren"
+        }
+      },
       "pending": "Openstaande aanvragen tot beheer"
     }
   },

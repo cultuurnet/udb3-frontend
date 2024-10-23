@@ -1,5 +1,6 @@
 import { UseQueryOptions } from 'react-query';
 
+import { useAuthenticatedMutation } from '@/hooks/api/authenticated-query';
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
@@ -23,6 +24,40 @@ export const RequestState = {
 } as const;
 
 type RequestState = Values<typeof RequestState>;
+
+const createOwnership = async ({ headers, itemId, itemType, ownerId }) =>
+  fetchFromApi({
+    path: `/ownerships`,
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        ownerId,
+        itemId,
+        itemType,
+      }),
+    },
+  });
+
+const approveOwnership = ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/approve`,
+    options: { headers, method: 'POST' },
+  });
+
+const useCreateOwnershipMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: createOwnership,
+    mutationKey: 'ownerships-create-ownership',
+    ...configuration,
+  });
+
+const useApproveOwnershipMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: approveOwnership,
+    mutationKey: 'ownerships-approve-ownership',
+    ...configuration,
+  });
 
 const getOwnershipRequests = async ({ headers, organizerId }) => {
   const res = await fetchFromApi({
@@ -59,4 +94,8 @@ const useGetOwnershipRequestsQuery = (
     ...configuration,
   });
 
-export { useGetOwnershipRequestsQuery };
+export {
+  useApproveOwnershipMutation,
+  useCreateOwnershipMutation,
+  useGetOwnershipRequestsQuery,
+};

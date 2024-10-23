@@ -18,6 +18,7 @@ export const getServerSideProps = getApplicationServerSideProps(
 
     return {
       props: {
+        organizer,
         dehydratedState: dehydrate(queryClient),
         cookies,
       },
