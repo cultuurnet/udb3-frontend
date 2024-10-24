@@ -1033,6 +1033,7 @@
         }
       },
       "pending": "Demandes de gestion en attente",
+      "close": "Fermer",
       "confirm_modal": {
         "title": "Approuver la demande de gestion",
         "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",

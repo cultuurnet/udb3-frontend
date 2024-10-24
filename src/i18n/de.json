@@ -1033,6 +1033,7 @@
         }
       },
       "pending": "Ausstehende Anfragen zur Verwaltung",
+      "close": "Schließen",
       "confirm_modal": {
         "title": "Verwaltungsantrag genehmigen",
         "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
