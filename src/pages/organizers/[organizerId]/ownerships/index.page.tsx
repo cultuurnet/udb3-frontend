@@ -1,21 +1,26 @@
 import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { dehydrate } from 'react-query';
+import { useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { dehydrate, useQueryClient } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
   RequestState,
+  useApproveOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
+  useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
 import { Organizer } from '@/types/Organizer';
+import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon } from '@/ui/Icon';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
@@ -23,9 +28,20 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 
 import { OwnershipsTable } from './OwnershipsTable';
 
+const ActionType = {
+  APPROVE: 'approve',
+  REJECT: 'reject',
+} as const;
+
+type ActionType = Values<typeof ActionType>;
+
 const Ownership = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
+  const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [actionType, setActionType] = useState<ActionType>();
+  const isApproveAction = actionType === ActionType.APPROVE;
 
   const organizerId = useMemo(
     () => router.query.organizerId as string,
@@ -54,6 +70,35 @@ const Ownership = () => {
 
   const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
   const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
+
+  const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation();
+
+  const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation();
+
+  const isMutationSuccesful =
+    approveOwnershipRequestMutation.isSuccess ||
+    rejectOwnershipRequestMutation.isSuccess;
+
+  const handleConfirm = () => {
+    if (isApproveAction) {
+      approveOwnershipRequestMutation.mutate({
+        ownershipId: selectedRequest.id,
+      });
+    } else {
+      rejectOwnershipRequestMutation.mutate({
+        ownershipId: selectedRequest.id,
+      });
+    }
+  };
+
+  const handleClose = async () => {
+    if (isMutationSuccesful) {
+      await queryClient.invalidateQueries('ownership-requests');
+      setSelectedRequest(undefined);
+    } else {
+      setSelectedRequest(undefined);
+    }
+  };
 
   return (
     <Page>
@@ -90,6 +135,10 @@ const Ownership = () => {
                         variant={ButtonVariants.SUCCESS}
                         iconName={Icons.CHECK_CIRCLE}
                         spacing={3}
+                        onClick={() => {
+                          setSelectedRequest(request);
+                          setActionType(ActionType.APPROVE);
+                        }}
                       >
                         {t('organizers.ownerships.table.actions.approve')}
                       </Button>
@@ -97,12 +146,59 @@ const Ownership = () => {
                         variant={ButtonVariants.DANGER}
                         iconName={Icons.TIMES_CIRCLE}
                         spacing={3}
+                        onClick={() => {
+                          setSelectedRequest(request);
+                          setActionType(ActionType.REJECT);
+                        }}
                       >
                         {t('organizers.ownerships.table.actions.reject')}
                       </Button>
                     </Inline>
                   )}
                 />
+                <Modal
+                  title={
+                    isApproveAction
+                      ? t('organizers.ownerships.confirm_modal.title')
+                      : t('organizers.ownerships.reject_modal.title')
+                  }
+                  confirmTitle={
+                    isApproveAction
+                      ? t('organizers.ownerships.confirm_modal.confirm')
+                      : t('organizers.ownerships.reject_modal.confirm')
+                  }
+                  cancelTitle={
+                    isMutationSuccesful
+                      ? t('organizers.ownerships.close')
+                      : isApproveAction
+                      ? t('organizers.ownerships.confirm_modal.cancel')
+                      : t('organizers.ownerships.reject_modal.cancel')
+                  }
+                  visible={selectedRequest}
+                  variant={ModalVariants.QUESTION}
+                  onConfirm={handleConfirm}
+                  onClose={handleClose}
+                  size={ModalSizes.MD}
+                  confirmButtonHidden={isMutationSuccesful}
+                >
+                  <Box padding={4}>
+                    <Trans
+                      i18nKey={
+                        isMutationSuccesful
+                          ? isApproveAction
+                            ? 'organizers.ownerships.confirm_modal.successs'
+                            : 'organizers.ownerships.reject_modal.success'
+                          : isApproveAction
+                          ? 'organizers.ownerships.confirm_modal.body'
+                          : 'organizers.ownerships.reject_modal.body'
+                      }
+                      values={{
+                        ownerEmail: selectedRequest?.ownerEmail,
+                        organizerName: organizer?.name?.[i18n.language],
+                      }}
+                    ></Trans>
+                  </Box>
+                </Modal>
               </Stack>
             )}
           </Stack>
