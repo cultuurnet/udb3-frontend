@@ -19,6 +19,7 @@ const QuestionModal = ({
   scrollable,
   size,
   confirmButtonDisabled,
+  confirmButtonHidden,
   confirmLoading,
 }) => (
   <BootstrapModal
@@ -61,14 +62,16 @@ const QuestionModal = ({
       <Button variant={ButtonVariants.SECONDARY} onClick={onClose}>
         {cancelTitle}
       </Button>
-      <Button
-        loading={confirmLoading}
-        variant={ButtonVariants.PRIMARY}
-        onClick={onConfirm}
-        disabled={confirmButtonDisabled || confirmLoading}
-      >
-        {confirmTitle}
-      </Button>
+      {!confirmButtonHidden && (
+        <Button
+          loading={confirmLoading}
+          variant={ButtonVariants.PRIMARY}
+          onClick={onConfirm}
+          disabled={confirmButtonDisabled || confirmLoading}
+        >
+          {confirmTitle}
+        </Button>
+      )}
     </BootstrapModal.Footer>
   </BootstrapModal>
 );
@@ -86,11 +89,13 @@ QuestionModal.propTypes = {
   children: PropTypes.node,
   size: PropTypes.string,
   confirmButtonDisabled: PropTypes.bool,
+  confirmButtonHidden: PropTypes.bool,
 };
 
 QuestionModal.defaultProps = {
   visible: false,
   confirmButtonDisabled: false,
+  confirmButtonHidden: false,
   title: '',
   confirmTitle: 'Ok',
   cancelTitle: 'Cancel',

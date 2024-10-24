@@ -5,6 +5,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
   ServerSideQueryOptions,
+  useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
 
@@ -59,4 +60,40 @@ const useGetOwnershipRequestsQuery = (
     ...configuration,
   });
 
-export { useGetOwnershipRequestsQuery };
+const approveOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/approve`,
+    options: {
+      method: 'POST',
+      headers,
+    },
+  });
+
+const useApproveOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: approveOwnershipRequest,
+    mutationKey: 'approve-ownership-request',
+    ...configuration,
+  });
+
+const rejectOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/reject`,
+    options: {
+      method: 'POST',
+      headers,
+    },
+  });
+
+const useRejectOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: rejectOwnershipRequest,
+    mutationKey: 'reject-ownership-request',
+    ...configuration,
+  });
+
+export {
+  useApproveOwnershipRequestMutation,
+  useGetOwnershipRequestsQuery,
+  useRejectOwnershipRequestMutation,
+};
