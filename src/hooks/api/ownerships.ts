@@ -92,7 +92,7 @@ const useRejectOwnershipRequestMutation = (configuration = {}) =>
     ...configuration,
   });
 
-  const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
+const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}`,
     options: {
@@ -108,10 +108,9 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
     ...configuration,
   });
 
-
 export {
   useApproveOwnershipRequestMutation,
+  useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
-  useDeleteOwnershipRequestMutation
 };
