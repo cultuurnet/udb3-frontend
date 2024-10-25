@@ -40,7 +40,9 @@ const Ownership = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [actionType, setActionType] = useState<ActionType>();
+  const [isMutationSuccessful, setIsMutationSuccessful] = useState(false);
   const isApproveAction = actionType === ActionType.APPROVE;
 
   const organizerId = useMemo(
@@ -71,13 +73,21 @@ const Ownership = () => {
   const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
   const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
 
-  const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation();
+  const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('ownership-requests');
+      setIsMutationSuccessful(true);
+      setIsQuestionModalVisible(false);
+    },
+  });
 
-  const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation();
-
-  const isMutationSuccesful =
-    approveOwnershipRequestMutation.isSuccess ||
-    rejectOwnershipRequestMutation.isSuccess;
+  const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('ownership-requests');
+      setIsMutationSuccessful(true);
+      setIsQuestionModalVisible(false);
+    },
+  });
 
   const handleConfirm = () => {
     if (isApproveAction) {
@@ -88,15 +98,6 @@ const Ownership = () => {
       rejectOwnershipRequestMutation.mutate({
         ownershipId: selectedRequest.id,
       });
-    }
-  };
-
-  const handleClose = async () => {
-    if (isMutationSuccesful) {
-      await queryClient.invalidateQueries('ownership-requests');
-      setSelectedRequest(undefined);
-    } else {
-      setSelectedRequest(undefined);
     }
   };
 
@@ -113,6 +114,26 @@ const Ownership = () => {
             <Alert variant={AlertVariants.PRIMARY} fullWidth>
               {t('organizers.ownerships.info')}
             </Alert>
+            {isMutationSuccessful && (
+              <Alert
+                variant={AlertVariants.SUCCESS}
+                fullWidth
+                closable
+                onClose={() => setIsMutationSuccessful(false)}
+              >
+                <Trans
+                  i18nKey={
+                    isApproveAction
+                      ? 'organizers.ownerships.confirm_modal.success'
+                      : 'organizers.ownerships.reject_modal.success'
+                  }
+                  values={{
+                    ownerEmail: selectedRequest?.ownerEmail,
+                    organizerName: organizer?.name?.[i18n.language],
+                  }}
+                />
+              </Alert>
+            )}
             <Stack spacing={4}>
               <Title size={3}>{t('organizers.ownerships.owners')}</Title>
               <OwnershipsTable
@@ -136,6 +157,7 @@ const Ownership = () => {
                         iconName={Icons.CHECK_CIRCLE}
                         spacing={3}
                         onClick={() => {
+                          setIsQuestionModalVisible(true);
                           setSelectedRequest(request);
                           setActionType(ActionType.APPROVE);
                         }}
@@ -147,6 +169,7 @@ const Ownership = () => {
                         iconName={Icons.TIMES_CIRCLE}
                         spacing={3}
                         onClick={() => {
+                          setIsQuestionModalVisible(true);
                           setSelectedRequest(request);
                           setActionType(ActionType.REJECT);
                         }}
@@ -168,27 +191,20 @@ const Ownership = () => {
                       : t('organizers.ownerships.reject_modal.confirm')
                   }
                   cancelTitle={
-                    isMutationSuccesful
-                      ? t('organizers.ownerships.close')
-                      : isApproveAction
+                    isApproveAction
                       ? t('organizers.ownerships.confirm_modal.cancel')
                       : t('organizers.ownerships.reject_modal.cancel')
                   }
-                  visible={selectedRequest}
+                  visible={isQuestionModalVisible}
                   variant={ModalVariants.QUESTION}
                   onConfirm={handleConfirm}
-                  onClose={handleClose}
+                  onClose={() => setIsQuestionModalVisible(false)}
                   size={ModalSizes.MD}
-                  confirmButtonHidden={isMutationSuccesful}
                 >
                   <Box padding={4}>
                     <Trans
                       i18nKey={
-                        isMutationSuccesful
-                          ? isApproveAction
-                            ? 'organizers.ownerships.confirm_modal.successs'
-                            : 'organizers.ownerships.reject_modal.success'
-                          : isApproveAction
+                        isApproveAction
                           ? 'organizers.ownerships.confirm_modal.body'
                           : 'organizers.ownerships.reject_modal.body'
                       }
@@ -196,7 +212,7 @@ const Ownership = () => {
                         ownerEmail: selectedRequest?.ownerEmail,
                         organizerName: organizer?.name?.[i18n.language],
                       }}
-                    ></Trans>
+                    />
                   </Box>
                 </Modal>
               </Stack>
