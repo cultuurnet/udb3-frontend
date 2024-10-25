@@ -5,7 +5,10 @@ import type { InlineProps } from './Inline';
 import { Inline } from './Inline';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
-import { getValueFromTheme } from './theme';
+import { colors, getValueFromTheme } from './theme';
+import { Button } from './Button';
+import { Icon, Icons } from './Icon';
+import { ButtonVariants } from './Button';
 
 const IconWarning = () => {
   return (
@@ -119,6 +122,8 @@ type AlertProps = InlineProps & {
   variant?: Values<typeof AlertVariants>;
   visible?: boolean;
   fullWidth?: boolean;
+  closable?: boolean;
+  onClose?: () => void;
 };
 
 const Alert = ({
@@ -126,10 +131,13 @@ const Alert = ({
   visible,
   children,
   fullWidth,
+  closable,
+  onClose,
   ...props
 }: AlertProps) => {
+  const { grey1 } = colors;
   return (
-    <Stack
+    <Inline
       role="alert"
       alignSelf={fullWidth ? 'normal' : 'flex-start'}
       display={visible ? 'flex' : 'none'}
@@ -155,7 +163,7 @@ const Alert = ({
         }
       `}
     >
-      <Inline spacing={3} alignItems="flex-start">
+      <Inline spacing={3} flex={1} alignItems="center">
         <Stack>{AlertVariantIconsMap[variant]}</Stack>
         {typeof children !== 'string' ? (
           <Text>{children}</Text>
@@ -179,7 +187,34 @@ const Alert = ({
           />
         )}
       </Inline>
-    </Stack>
+      {closable && (
+        <Button
+          variant={ButtonVariants.UNSTYLED}
+          iconName={Icons.TIMES_CIRCLE}
+          alignSelf="center"
+          css={`
+            color: ${getValue(`borderColor.${variant}`)};
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+            &:hover {
+              background-color: inherit;
+              filter: brightness(95%);
+            }
+            &:active {
+              background-color: inherit;
+              filter: brightness(95%) saturate(150%);
+            }
+          `}
+          onClick={onClose}
+        ></Button>
+      )}
+    </Inline>
   );
 };
 
