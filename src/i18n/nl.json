@@ -1039,7 +1039,7 @@
         "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
         "cancel": "Annuleren",
         "confirm": "Aanvraag goedkeuren",
-        "successs": "{{ownerEmail}} is nu beheerder van {{organizerName}}"
+        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}}"
       },
       "reject_modal": {
         "title": "Aanvraag tot beheer afkeuren",

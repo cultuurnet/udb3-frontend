@@ -1039,7 +1039,7 @@
         "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
         "cancel": "Annuler",
         "confirm": "Approuver la demande",
-        "successs": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}}"
+        "success": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}}"
       },
       "reject_modal": {
         "title": "Rejeter la demande de gestion",
