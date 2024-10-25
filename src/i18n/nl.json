@@ -1047,6 +1047,12 @@
         "cancel": "Annuleren",
         "confirm": "Aanvraag afkeuren",
         "success": "{{ownerEmail}} is op de hoogte gebracht over je beslissing."
+      },
+      "delete_modal": {
+        "title": "Beheerder verwijderen",
+        "body": "Ben je zeker dat je {{ownerEmail}} wilt verwijderen als beheerder?",
+        "cancel": "Annuleren",
+        "confirm": "Beheerder verwijderen"
       }
     }
   },

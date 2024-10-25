@@ -1047,6 +1047,12 @@
         "cancel": "Annuler",
         "confirm": "Rejeter la demande",
         "success": "{{ownerEmail}} a été informé de votre décision."
+      },
+      "delete_modal": {
+        "title": "Supprimer un gestionnaire",
+        "body": "Êtes-vous sûr de vouloir supprimer {{ownerEmail}} en tant que gestionnaire ?",
+        "cancel": "Annuler",
+        "confirm": "Supprimer le gestionnaire"
       }
     }
   },

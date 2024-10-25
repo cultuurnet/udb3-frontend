@@ -1047,6 +1047,12 @@
         "cancel": "Abbrechen",
         "confirm": "Antrag ablehnen",
         "success": "{{ownerEmail}} wurde über Ihre Entscheidung informiert."
+      },
+      "delete_modal": {
+        "title": "Verwalter entfernen",
+        "body": "Sind Sie sicher, dass Sie {{ownerEmail}} als Verwalter entfernen möchten?",
+        "cancel": "Abbrechen",
+        "confirm": "Verwalter entfernen"
       }
     }
   },
