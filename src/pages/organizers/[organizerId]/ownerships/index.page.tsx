@@ -42,8 +42,11 @@ const Ownership = () => {
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [actionType, setActionType] = useState<ActionType>();
-  const [isMutationSuccessful, setIsMutationSuccessful] = useState(false);
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const isApproveAction = actionType === ActionType.APPROVE;
+  const translationsPath = `organizers.ownerships.${
+    isApproveAction ? 'confirm' : 'reject'
+  }_modal`;
 
   const organizerId = useMemo(
     () => router.query.organizerId as string,
@@ -76,7 +79,7 @@ const Ownership = () => {
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
-      setIsMutationSuccessful(true);
+      setIsSuccessAlertVisible(true);
       setIsQuestionModalVisible(false);
     },
   });
@@ -84,7 +87,7 @@ const Ownership = () => {
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
-      setIsMutationSuccessful(true);
+      setIsSuccessAlertVisible(true);
       setIsQuestionModalVisible(false);
     },
   });
@@ -114,19 +117,19 @@ const Ownership = () => {
             <Alert variant={AlertVariants.PRIMARY} fullWidth>
               {t('organizers.ownerships.info')}
             </Alert>
-            {isMutationSuccessful && (
+            {isSuccessAlertVisible && (
               <Alert
                 variant={AlertVariants.SUCCESS}
                 fullWidth
                 closable
-                onClose={() => setIsMutationSuccessful(false)}
+                onClose={() => {
+                  setIsSuccessAlertVisible(false);
+                  setSelectedRequest(undefined);
+                  setActionType(undefined);
+                }}
               >
                 <Trans
-                  i18nKey={
-                    isApproveAction
-                      ? 'organizers.ownerships.confirm_modal.success'
-                      : 'organizers.ownerships.reject_modal.success'
-                  }
+                  i18nKey={`${translationsPath}.success`}
                   values={{
                     ownerEmail: selectedRequest?.ownerEmail,
                     organizerName: organizer?.name?.[i18n.language],
@@ -180,21 +183,9 @@ const Ownership = () => {
                   )}
                 />
                 <Modal
-                  title={
-                    isApproveAction
-                      ? t('organizers.ownerships.confirm_modal.title')
-                      : t('organizers.ownerships.reject_modal.title')
-                  }
-                  confirmTitle={
-                    isApproveAction
-                      ? t('organizers.ownerships.confirm_modal.confirm')
-                      : t('organizers.ownerships.reject_modal.confirm')
-                  }
-                  cancelTitle={
-                    isApproveAction
-                      ? t('organizers.ownerships.confirm_modal.cancel')
-                      : t('organizers.ownerships.reject_modal.cancel')
-                  }
+                  title={t(`${translationsPath}.title`)}
+                  confirmTitle={t(`${translationsPath}.confirm`)}
+                  cancelTitle={t(`${translationsPath}.cancel`)}
                   visible={isQuestionModalVisible}
                   variant={ModalVariants.QUESTION}
                   onConfirm={handleConfirm}
@@ -203,11 +194,7 @@ const Ownership = () => {
                 >
                   <Box padding={4}>
                     <Trans
-                      i18nKey={
-                        isApproveAction
-                          ? 'organizers.ownerships.confirm_modal.body'
-                          : 'organizers.ownerships.reject_modal.body'
-                      }
+                      i18nKey={`${translationsPath}.body`}
                       values={{
                         ownerEmail: selectedRequest?.ownerEmail,
                         organizerName: organizer?.name?.[i18n.language],
