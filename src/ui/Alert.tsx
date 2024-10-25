@@ -1,14 +1,14 @@
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
 
+import { Button } from './Button';
+import { ButtonVariants } from './Button';
+import { Icon, Icons } from './Icon';
 import type { InlineProps } from './Inline';
 import { Inline } from './Inline';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
 import { colors, getValueFromTheme } from './theme';
-import { Button } from './Button';
-import { Icon, Icons } from './Icon';
-import { ButtonVariants } from './Button';
 
 const IconWarning = () => {
   return (
