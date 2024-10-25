@@ -92,8 +92,26 @@ const useRejectOwnershipRequestMutation = (configuration = {}) =>
     ...configuration,
   });
 
+  const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}`,
+    options: {
+      method: 'DELETE',
+      headers,
+    },
+  });
+
+const useDeleteOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteOwnershipRequest,
+    mutationKey: 'delete-ownership-request',
+    ...configuration,
+  });
+
+
 export {
   useApproveOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useDeleteOwnershipRequestMutation
 };
