@@ -1032,7 +1032,28 @@
           "reject": "Ablehnen"
         }
       },
-      "pending": "Ausstehende Anfragen zur Verwaltung"
+      "pending": "Ausstehende Anfragen zur Verwaltung",
+      "close": "Schließen",
+      "confirm_modal": {
+        "title": "Verwaltungsantrag genehmigen",
+        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
+        "cancel": "Abbrechen",
+        "confirm": "Antrag genehmigen",
+        "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}}"
+      },
+      "reject_modal": {
+        "title": "Verwaltungsantrag ablehnen",
+        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} ablehnen möchten?",
+        "cancel": "Abbrechen",
+        "confirm": "Antrag ablehnen",
+        "success": "{{ownerEmail}} wurde über Ihre Entscheidung informiert."
+      },
+      "delete_modal": {
+        "title": "Verwalter entfernen",
+        "body": "Sind Sie sicher, dass Sie {{ownerEmail}} als Verwalter entfernen möchten?",
+        "cancel": "Abbrechen",
+        "confirm": "Verwalter entfernen"
+      }
     }
   },
   "selectionTable": {
