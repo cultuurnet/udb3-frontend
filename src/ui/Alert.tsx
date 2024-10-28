@@ -192,15 +192,15 @@ const Alert = ({
           variant={ButtonVariants.UNSTYLED}
           iconName={Icons.TIMES_CIRCLE}
           alignSelf="center"
+          borderRadius="50%"
+          width="30px"
+          height="30px"
+          display="inline-flex"
+          alignItems="center"
+          justifyContent="center"
           css={`
             color: ${getValue(`borderColor.${variant}`)};
-            width: 30px;
-            height: 30px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
-            border-radius: 50%;
             transition: background 0.2s;
             &:hover {
               background-color: inherit;
