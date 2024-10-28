@@ -9,6 +9,7 @@ import {
   OwnershipRequest,
   RequestState,
   useApproveOwnershipRequestMutation,
+  useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
@@ -40,6 +41,8 @@ const Ownership = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [requestToBeDeleted, setRequestToBeDeleted] =
+    useState<OwnershipRequest>();
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [actionType, setActionType] = useState<ActionType>();
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
@@ -92,6 +95,13 @@ const Ownership = () => {
     },
   });
 
+  const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('ownership-requests');
+      setRequestToBeDeleted(undefined);
+    },
+  });
+
   const handleConfirm = () => {
     if (isApproveAction) {
       approveOwnershipRequestMutation.mutate({
@@ -141,12 +151,37 @@ const Ownership = () => {
               <Title size={3}>{t('organizers.ownerships.owners')}</Title>
               <OwnershipsTable
                 requests={approvedRequests}
-                renderActions={() => (
-                  <Button variant={ButtonVariants.ICON}>
-                    <Icon name={Icons.TRASH} />
-                  </Button>
+                renderActions={(request) => (
+                  <Button
+                    variant={ButtonVariants.ICON}
+                    iconName={Icons.TRASH}
+                    onClick={() => setRequestToBeDeleted(request)}
+                  />
                 )}
               />
+              <Modal
+                title={t('organizers.ownerships.delete_modal.title')}
+                confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
+                cancelTitle={t('organizers.ownerships.delete_modal.cancel')}
+                visible={!!requestToBeDeleted}
+                variant={ModalVariants.QUESTION}
+                onConfirm={() =>
+                  deleteOwnershipRequestMutation.mutate({
+                    ownershipId: requestToBeDeleted.id,
+                  })
+                }
+                onClose={() => setRequestToBeDeleted(undefined)}
+                size={ModalSizes.MD}
+              >
+                <Box padding={4}>
+                  <Trans
+                    i18nKey="organizers.ownerships.delete_modal.body"
+                    values={{
+                      ownerEmail: requestToBeDeleted?.ownerEmail,
+                    }}
+                  />
+                </Box>
+              </Modal>
             </Stack>
             {pendingRequests.length > 0 && (
               <Stack spacing={4}>

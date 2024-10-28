@@ -224,7 +224,7 @@ const customCSS = css`
       background-color: ${getValue('icon.hoverBackgroundColor')};
     }
 
-    &:focus {
+    &:active {
       background-color: ${getValue('icon.focusBackgroundColor')};
       animation: pulse 0.3s ease-out;
 
