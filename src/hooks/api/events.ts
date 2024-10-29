@@ -107,8 +107,8 @@ const addEvent = async ({
         mainLanguage,
         name,
         calendarType,
-        startDate,
-        endDate,
+        startDate: fromZonedTime(startDate, 'Europe/Brussels'),
+        endDate: fromZonedTime(endDate, 'Europe/Brussels'),
         subEvent: subEvent.map((it) => ({
           ...it,
           startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
