@@ -4,7 +4,7 @@ import { UseMutationOptions } from 'react-query';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
-import { Offer } from '@/types/Offer';
+import { Offer, type SubEvent } from '@/types/Offer';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
@@ -18,6 +18,7 @@ import {
   useAuthenticatedQuery,
 } from './authenticated-query';
 import type { User } from './user';
+import { fromZonedTime } from 'date-fns-tz';
 
 const getOffersByCreator = async ({ headers, ...queryData }) => {
   const res = await fetchFromApi({
@@ -162,11 +163,15 @@ const changeOfferCalendar = async ({
       body: JSON.stringify({
         calendarType,
         timeSpans,
-        subEvent,
+        subEvent: (subEvent as SubEvent[]).map((it) => ({
+          ...it,
+          startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
+          endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
+        })),
         start,
         end,
-        startDate,
-        endDate,
+        startDate: fromZonedTime(startDate, 'Europe/Brussels'),
+        endDate: fromZonedTime(endDate, 'Europe/Brussels'),
         openingHours,
         dayOfWeek,
         opens,
