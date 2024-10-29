@@ -1,20 +1,16 @@
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 
-import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
+import { useLegacyPath } from '@/hooks/useLegacyPath';
 import PageNotFound from '@/pages/404.page';
 import { Box } from '@/ui/Box';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
-
-const prefixWhenNotEmpty = (value, prefix) =>
-  value ? `${prefix}${value}` : value;
 
 const IFrame = memo(({ url }) => (
   <Box
@@ -35,14 +31,9 @@ IFrame.propTypes = {
 
 const Fallback = () => {
   const router = useRouter();
+  const { asPath } = router;
 
-  const {
-    // eslint-disable-next-line no-unused-vars
-    query: { params = [], ...queryWithoutParams },
-    asPath,
-  } = router;
-
-  const { publicRuntimeConfig } = getConfig();
+  const legacyPath = useLegacyPath();
 
   // Keep track of which paths were not found. Do not store as a single boolean
   // for the current path, because it's possible to navigate from a 404 path to
@@ -55,31 +46,6 @@ const Fallback = () => {
   });
 
   const isClientSide = useIsClient();
-
-  const { cookies } = useCookiesWithOptions(['token', 'udb-language']);
-
-  const legacyPath = useMemo(() => {
-    const path = new URL(`http://localhost${asPath}`).pathname;
-    const ownershipPaths =
-      (router.asPath.startsWith('/organizer') &&
-        !router.asPath.endsWith('/ownerships')) ||
-      router.asPath.startsWith('/search');
-    const queryString = prefixWhenNotEmpty(
-      new URLSearchParams({
-        ...queryWithoutParams,
-        jwt: cookies.token,
-        lang: cookies['udb-language'],
-        ...(ownershipPaths &&
-          publicRuntimeConfig.ownershipEnabled === 'true' && {
-            ownership: 'true',
-          }),
-      }),
-      '?',
-    );
-
-    return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asPath, cookies.token, cookies['udb-language']]);
 
   if (notFoundPaths.includes(asPath)) {
     return <PageNotFound />;
