@@ -189,7 +189,17 @@ const getEventById = async ({ headers, id }) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  const data = (await res.json()) as Event;
+  return {
+    ...data,
+    subEvent: data.subEvent.map((it) => ({
+      ...it,
+      startDate: toZonedTime(it.startDate, 'Europe/Brussels').toISOString(),
+      endDate: toZonedTime(it.endDate, 'Europe/Brussels').toISOString(),
+    })),
+    startDate: toZonedTime(data.startDate, 'Europe/Brussels').toISOString(),
+    endDate: toZonedTime(data.endDate, 'Europe/Brussels').toISOString(),
+  } as Event;
 };
 
 type UseGetEventByIdArguments = ServerSideQueryOptions & {
