@@ -18,7 +18,7 @@ type Props<T> = BoxProps & TabsProps & { activeBackgroundColor?: string };
 const Tabs = <T,>({
   activeKey,
   onSelect,
-  activeBackgroundColor,
+  activeBackgroundColor = 'white',
   children: rawChildren,
   className,
   ...props
@@ -65,7 +65,7 @@ const Tabs = <T,>({
             }
 
             &.active {
-              background-color: white;
+              background-color: ${activeBackgroundColor};
               border-bottom-color: ${getValue('activeTabBackgroundColor')};
               cursor: default;
               border-bottom: transparent;
