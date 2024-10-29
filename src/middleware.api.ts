@@ -54,7 +54,9 @@ export const middleware = async (request: NextRequest) => {
     const isOwnershipEnabled =
       process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
 
-    const redirectUrl = new URL(request.nextUrl);
+    const redirectUrl = new URL(request.url);
+    // remove the path variables from nextjs routing
+    redirectUrl.searchParams.delete('params');
 
     if (
       isOwnershipEnabled &&
