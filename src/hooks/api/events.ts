@@ -415,50 +415,6 @@ const useChangeNameMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const changeCalendar = async ({
-  headers,
-  id,
-  calendarType,
-  timeSpans,
-  subEvent,
-  start,
-  end,
-  startDate,
-  endDate,
-  openingHours,
-  dayOfWeek,
-  opens,
-  closes,
-}) => {
-  return fetchFromApi({
-    path: `/events/${id.toString()}/calendar`,
-    options: {
-      method: 'PUT',
-      body: JSON.stringify({
-        calendarType,
-        timeSpans,
-        subEvent,
-        start,
-        end,
-        startDate,
-        endDate,
-        openingHours,
-        dayOfWeek,
-        opens,
-        closes,
-      }),
-      headers,
-    },
-  });
-};
-
-const useChangeCalendarMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
-    mutationFn: changeCalendar,
-    mutationKey: 'events-change-calendar',
-    ...configuration,
-  });
-
 const changeStatus = async ({ headers, id, type, reason }) =>
   fetchFromApi({
     path: `/events/${id.toString()}/status`,
@@ -637,7 +593,6 @@ export {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
-  useChangeCalendarMutation,
   useChangeLocationMutation,
   useChangeNameMutation,
   useChangeOnlineUrlMutation,
