@@ -163,11 +163,13 @@ const changeOfferCalendar = async ({
       body: JSON.stringify({
         calendarType,
         timeSpans,
-        subEvent: (subEvent as SubEvent[]).map((it) => ({
-          ...it,
-          startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
-          endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
-        })),
+        subEvent: !!subEvent
+          ? (subEvent as SubEvent[]).map((it) => ({
+              ...it,
+              startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
+              endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
+            }))
+          : undefined,
         start,
         end,
         startDate: fromZonedTime(startDate, 'Europe/Brussels'),
