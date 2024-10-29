@@ -37,6 +37,7 @@ import {
 } from './authenticated-query';
 import type { Headers } from './types/Headers';
 import type { User } from './user';
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 
 type EventArguments = {
   description: string;
@@ -108,7 +109,11 @@ const addEvent = async ({
         calendarType,
         startDate,
         endDate,
-        subEvent,
+        subEvent: subEvent.map((it) => ({
+          ...it,
+          startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
+          endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
+        })),
         openingHours,
         terms,
         location,
