@@ -1,10 +1,11 @@
+import { fromZonedTime } from 'date-fns-tz';
 import type { UseQueryOptions } from 'react-query';
 import { UseMutationOptions } from 'react-query';
 
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
-import { Offer, type SubEvent } from '@/types/Offer';
+import { type SubEvent,Offer } from '@/types/Offer';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
@@ -18,7 +19,6 @@ import {
   useAuthenticatedQuery,
 } from './authenticated-query';
 import type { User } from './user';
-import { fromZonedTime } from 'date-fns-tz';
 
 const getOffersByCreator = async ({ headers, ...queryData }) => {
   const res = await fetchFromApi({

@@ -1,4 +1,4 @@
-import { type Page, type Browser } from '@playwright/test';
+import { type Browser,type Page } from '@playwright/test';
 
 export async function withTimezone(
   ctx: { browser: Browser; timezoneId: string },
