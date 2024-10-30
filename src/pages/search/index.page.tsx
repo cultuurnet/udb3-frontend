@@ -22,6 +22,7 @@ const Search = () => {
   const { query, ...router } = useRouter();
   const tab = (query?.tab as Scope) ?? 'event-places';
   const { udbMainDarkBlue } = colors;
+  const isClientSide = useIsClient();
 
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(
@@ -101,13 +102,16 @@ const Search = () => {
               {tab === 'event-places' && (
                 <TabContent>
                   <Stack flex={1}>
-                    <iframe
-                      height={iframeHeight ? `${iframeHeight}px` : '100%'}
-                      css={`
-                        overflow: hidden;
-                      `}
-                      src={legacyPath}
-                    ></iframe>
+                    {isClientSide && (
+                      <iframe
+                        height={
+                          iframeHeight
+                            ? `${iframeHeight}px`
+                            : `${window.innerHeight}`
+                        }
+                        src={legacyPath}
+                      ></iframe>
+                    )}
                   </Stack>
                 </TabContent>
               )}
