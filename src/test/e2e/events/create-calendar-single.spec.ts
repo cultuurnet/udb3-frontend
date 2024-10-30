@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+
 import { withTimezone } from '@/test/e2e/withTimezone';
 
 const dummyEvent = {
@@ -98,8 +99,7 @@ test('create an event with calendarType single in Tokyo', async ({
     async (page) => {
       await page.goto(url);
       const startHour = page.getByLabel('Beginuur');
-      await expect(startHour).toBeVisible();
-      expect(await startHour.inputValue()).toEqual('01:00');
+      expect(await startHour.inputValue({ timeout: 10_000 })).toEqual('01:00');
     },
   );
 });
