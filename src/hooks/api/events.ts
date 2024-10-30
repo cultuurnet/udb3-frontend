@@ -45,7 +45,7 @@ type EventArguments = {
   calendarType: Values<typeof CalendarType>;
   startDate: string;
   endDate: string;
-  subEvent: SubEvent[];
+  subEvent: SubEvent[] | undefined;
   openingHours: OpeningHours[];
   terms: Term[];
   workflowStatus: WorkflowStatus;
@@ -109,11 +109,13 @@ const addEvent = async ({
         calendarType,
         startDate: fromZonedTime(startDate, 'Europe/Brussels'),
         endDate: fromZonedTime(endDate, 'Europe/Brussels'),
-        subEvent: subEvent.map((it) => ({
-          ...it,
-          startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
-          endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
-        })),
+        subEvent: subEvent
+          ? subEvent.map((it) => ({
+              ...it,
+              startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
+              endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
+            }))
+          : undefined,
         openingHours,
         terms,
         location,
