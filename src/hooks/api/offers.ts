@@ -5,7 +5,7 @@ import { UseMutationOptions } from 'react-query';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
-import { type SubEvent,Offer } from '@/types/Offer';
+import { type SubEvent, Offer } from '@/types/Offer';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
