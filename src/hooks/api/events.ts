@@ -1,3 +1,4 @@
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import type { UseQueryOptions } from 'react-query';
 
 import type { CalendarType } from '@/constants/CalendarType';
@@ -37,7 +38,6 @@ import {
 } from './authenticated-query';
 import type { Headers } from './types/Headers';
 import type { User } from './user';
-import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 
 type EventArguments = {
   description: string;
@@ -192,16 +192,27 @@ const getEventById = async ({ headers, id }) => {
     return console.error(res);
   }
   const data = (await res.json()) as Event;
-  return {
-    ...data,
-    subEvent: data.subEvent.map((it) => ({
+
+  if (data.subEvent) {
+    data.subEvent = data.subEvent.map((it) => ({
       ...it,
       startDate: toZonedTime(it.startDate, 'Europe/Brussels').toISOString(),
       endDate: toZonedTime(it.endDate, 'Europe/Brussels').toISOString(),
-    })),
-    startDate: toZonedTime(data.startDate, 'Europe/Brussels').toISOString(),
-    endDate: toZonedTime(data.endDate, 'Europe/Brussels').toISOString(),
-  } as Event;
+    }));
+  }
+
+  if (data.startDate) {
+    data.startDate = toZonedTime(
+      data.startDate,
+      'Europe/Brussels',
+    ).toISOString();
+  }
+
+  if (data.endDate) {
+    data.endDate = toZonedTime(data.endDate, 'Europe/Brussels').toISOString();
+  }
+
+  return data;
 };
 
 type UseGetEventByIdArguments = ServerSideQueryOptions & {
