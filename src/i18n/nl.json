@@ -1040,7 +1040,28 @@
           "cancel": "Annuleren"
         }
       },
-      "pending": "Openstaande aanvragen tot beheer"
+      "pending": "Openstaande aanvragen tot beheer",
+      "close": "Sluiten",
+      "confirm_modal": {
+        "title": "Aanvraag tot beheer goedkeuren",
+        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
+        "cancel": "Annuleren",
+        "confirm": "Aanvraag goedkeuren",
+        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}}"
+      },
+      "reject_modal": {
+        "title": "Aanvraag tot beheer afkeuren",
+        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt afkeuren?",
+        "cancel": "Annuleren",
+        "confirm": "Aanvraag afkeuren",
+        "success": "{{ownerEmail}} is op de hoogte gebracht over je beslissing."
+      },
+      "delete_modal": {
+        "title": "Beheerder verwijderen",
+        "body": "Ben je zeker dat je {{ownerEmail}} wilt verwijderen als beheerder?",
+        "cancel": "Annuleren",
+        "confirm": "Beheerder verwijderen"
+      }
     }
   },
   "selectionTable": {

@@ -1,11 +1,11 @@
 import { UseQueryOptions } from 'react-query';
 
-import { useAuthenticatedMutation } from '@/hooks/api/authenticated-query';
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
   ServerSideQueryOptions,
+  useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
 
@@ -39,23 +39,10 @@ const createOwnership = async ({ headers, itemId, itemType, ownerId }) =>
     },
   });
 
-const approveOwnership = ({ headers, ownershipId }) =>
-  fetchFromApi({
-    path: `/ownerships/${ownershipId}/approve`,
-    options: { headers, method: 'POST' },
-  });
-
 const useCreateOwnershipMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: createOwnership,
     mutationKey: 'ownerships-create-ownership',
-    ...configuration,
-  });
-
-const useApproveOwnershipMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
-    mutationFn: approveOwnership,
-    mutationKey: 'ownerships-approve-ownership',
     ...configuration,
   });
 
@@ -94,8 +81,58 @@ const useGetOwnershipRequestsQuery = (
     ...configuration,
   });
 
+const approveOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/approve`,
+    options: {
+      method: 'POST',
+      headers,
+    },
+  });
+
+const useApproveOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: approveOwnershipRequest,
+    mutationKey: 'approve-ownership-request',
+    ...configuration,
+  });
+
+const rejectOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}/reject`,
+    options: {
+      method: 'POST',
+      headers,
+    },
+  });
+
+const useRejectOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: rejectOwnershipRequest,
+    mutationKey: 'reject-ownership-request',
+    ...configuration,
+  });
+
+const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
+  fetchFromApi({
+    path: `/ownerships/${ownershipId}`,
+    options: {
+      method: 'DELETE',
+      headers,
+    },
+  });
+
+const useDeleteOwnershipRequestMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteOwnershipRequest,
+    mutationKey: 'delete-ownership-request',
+    ...configuration,
+  });
+
 export {
-  useApproveOwnershipMutation,
+  useApproveOwnershipRequestMutation,
   useCreateOwnershipMutation,
+  useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
+  useRejectOwnershipRequestMutation,
 };
