@@ -131,8 +131,8 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
 
 export {
   useApproveOwnershipRequestMutation,
-  useRequestOwnershipMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useRequestOwnershipMutation,
 };

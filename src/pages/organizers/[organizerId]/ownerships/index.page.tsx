@@ -10,10 +10,10 @@ import {
   OwnershipRequest,
   RequestState,
   useApproveOwnershipRequestMutation,
-  useRequestOwnershipMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
@@ -29,6 +29,7 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
 
@@ -51,7 +52,7 @@ const Ownership = () => {
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
-  const translationsPath = `organizers.ownerships.${ActionType}_modal`;
+  const translationsPath = `organizers.ownerships.${actionType}_modal`;
   const { register, formState, getValues, setError } = useForm();
 
   const organizerId = useMemo(
@@ -93,13 +94,11 @@ const Ownership = () => {
   });
 
   const requestOwnership = useRequestOwnershipMutation({
-    onSuccess: (response) => {
-      console.log({ response });
-      approveOwnershipRequestMutation.mutate({
-        ownershipId: response.data.id,
-      });
-    },
     onError: (error) => setError('email', error.message),
+    onSuccess: (data) =>
+      approveOwnershipRequestMutation.mutate({
+        ownershipId: data.id,
+      }),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
@@ -131,7 +130,7 @@ const Ownership = () => {
         return requestOwnership.mutate({
           ownerEmail: getValues('email'),
           itemType: 'organizer',
-          itemId: organizer['@id'],
+          itemId: parseOfferId(organizer['@id']),
         });
     }
   };
