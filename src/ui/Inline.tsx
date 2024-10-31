@@ -98,7 +98,7 @@ const inlinePropTypes = [
 const getInlineProps = (props: UnknownProps) =>
   pickBy(props, (_value, key) => {
     // pass aria attributes to the DOM element
-    if (key.startsWith('aria-')) {
+    if (key.startsWith('aria-') || key.startsWith('data-')) {
       return true;
     }
 

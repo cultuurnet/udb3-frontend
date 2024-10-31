@@ -268,7 +268,7 @@ export const BlankStreetToggle = ({
 
   return (
     <RadioButtonWithLabel
-      id={'blank_address'}
+      data-testid={'blank_address'}
       name={'blank_address'}
       label={
         <Text className={'ml-1'}>
