@@ -1037,6 +1037,7 @@
       "request_modal": {
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
+        "email_error": "Geen geldig e-mailadres",
         "actions": {
           "confirm": "Beheerder toevoegen",
           "cancel": "Annuleren"

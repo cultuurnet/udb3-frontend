@@ -51,9 +51,8 @@ const Ownership = () => {
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
-  const isApproveAction = actionType === ActionType.APPROVE;
   const translationsPath = `organizers.ownerships.${ActionType}_modal`;
-  const { register, getValues } = useForm();
+  const { register, formState, getValues, setError } = useForm();
 
   const organizerId = useMemo(
     () => router.query.organizerId as string,
@@ -94,10 +93,13 @@ const Ownership = () => {
   });
 
   const requestOwnership = useRequestOwnershipMutation({
-    onSuccess: () =>
-      approveOwnershipRequestMutation.mutateAsync({
+    onSuccess: (response) => {
+      console.log({ response });
+      approveOwnershipRequestMutation.mutate({
         ownershipId: response.data.id,
-      }),
+      });
+    },
+    onError: (error) => setError('email', error.message),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
@@ -126,9 +128,8 @@ const Ownership = () => {
           ownershipId: selectedRequest.id,
         });
       case ActionType.REQUEST:
-        const email = getValues('email');
-        return requestOwnership.mutateAsync({
-          ownerEmail: email,
+        return requestOwnership.mutate({
+          ownerEmail: getValues('email'),
           itemType: 'organizer',
           itemId: organizer['@id'],
         });
@@ -264,7 +265,11 @@ const Ownership = () => {
           <Stack spacing={3.5} flex={1}>
             <Button
               variant={ButtonVariants.PRIMARY}
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                setIsSuccessAlertVisible(false);
+                setActionType(ActionType.REQUEST);
+                setIsOpen(true);
+              }}
             >
               {t('organizers.ownerships.actions.add')}
             </Button>
@@ -282,11 +287,13 @@ const Ownership = () => {
           visible={isOpen}
           variant={ModalVariants.QUESTION}
           size={ModalSizes.MD}
-          title={t('organizers.ownerships.modal.title', {
+          title={t('organizers.ownerships.request_modal.title', {
             name: organizer.name,
           })}
-          confirmTitle={t('organizers.ownerships.modal.actions.confirm')}
-          cancelTitle={t('organizers.ownerships.modal.actions.cancel')}
+          confirmTitle={t(
+            'organizers.ownerships.request_modal.actions.confirm',
+          )}
+          cancelTitle={t('organizers.ownerships.request_modal.actions.cancel')}
           onConfirm={handleConfirm}
           onClose={() => setIsOpen(false)}
         >
@@ -294,7 +301,11 @@ const Ownership = () => {
             <FormElement
               id={'email'}
               Component={<Input type={'email'} {...register('email')} />}
-              label={t('organizers.ownerships.modal.email')}
+              label={t('organizers.ownerships.request_modal.email')}
+              error={
+                formState.errors.email &&
+                t(`organizers.ownerships.request_modal.email_error`)
+              }
             />
           </Stack>
         </Modal>

@@ -39,7 +39,7 @@ const requestOwnership = async ({ headers, itemId, itemType, ownerId }) =>
     },
   });
 
-const useRequestOwnershipMutation = (configuration = {}) =>
+const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
   useAuthenticatedMutation({
     mutationFn: requestOwnership,
     mutationKey: 'ownerships-request-ownership',
