@@ -10,33 +10,32 @@ import {
   OwnershipRequest,
   RequestState,
   useApproveOwnershipRequestMutation,
-  useCreateOwnershipMutation,
+  useRequestOwnershipMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
-import { useToast } from '@/pages/manage/movies/useToast';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
-import { Toast } from '@/ui/Toast';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { OwnershipsTable } from './OwnershipsTable';
 
 const ActionType = {
-  APPROVE: 'approve',
+  APPROVE: 'confirm',
   REJECT: 'reject',
+  REQUEST: 'request',
 } as const;
 
 type ActionType = Values<typeof ActionType>;
@@ -45,17 +44,15 @@ const Ownership = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [actionType, setActionType] = useState<ActionType>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
-  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
-  const [actionType, setActionType] = useState<ActionType>();
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const isApproveAction = actionType === ActionType.APPROVE;
-  const translationsPath = `organizers.ownerships.${
-    isApproveAction ? 'confirm' : 'reject'
-  }_modal`;
-  const [isOpen, setIsOpen] = useState(false);
+  const translationsPath = `organizers.ownerships.${ActionType}_modal`;
   const { register, getValues } = useForm();
 
   const organizerId = useMemo(
@@ -96,6 +93,13 @@ const Ownership = () => {
     },
   });
 
+  const requestOwnership = useRequestOwnershipMutation({
+    onSuccess: () =>
+      approveOwnershipRequestMutation.mutateAsync({
+        ownershipId: response.data.id,
+      }),
+  });
+
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
@@ -112,38 +116,23 @@ const Ownership = () => {
   });
 
   const handleConfirm = () => {
-    if (isApproveAction) {
-      approveOwnershipRequestMutation.mutate({
-        ownershipId: selectedRequest.id,
-      });
-    } else {
-      rejectOwnershipRequestMutation.mutate({
-        ownershipId: selectedRequest.id,
-      });
+    switch (actionType) {
+      case ActionType.APPROVE:
+        return approveOwnershipRequestMutation.mutate({
+          ownershipId: selectedRequest.id,
+        });
+      case ActionType.REJECT:
+        return rejectOwnershipRequestMutation.mutate({
+          ownershipId: selectedRequest.id,
+        });
+      case ActionType.REQUEST:
+        const email = getValues('email');
+        return requestOwnership.mutateAsync({
+          ownerEmail: email,
+          itemType: 'organizer',
+          itemId: organizer['@id'],
+        });
     }
-  };
-
-  const createOwnership = useCreateOwnershipMutation();
-  const toast = useToast({
-    messages: {
-      success: t('organizers.ownerships.toast.success'),
-      error: t('organizers.ownerships.toast.error'),
-    },
-  });
-
-  const handleConfirmRequest = async () => {
-    const email = getValues('email');
-    const response = createOwnership.mutateAsync({
-      ownerEmail: email,
-      itemType: 'organizer',
-      itemId: organizer['@id'],
-    });
-
-    await approveOwnershipRequestMutation.mutateAsync({
-      ownershipId: response.data.id,
-    });
-    setIsSuccessAlertVisible(true);
-    setIsQuestionModalVisible(false);
   };
 
   return (
@@ -309,12 +298,6 @@ const Ownership = () => {
             />
           </Stack>
         </Modal>
-        <Toast
-          variant="success"
-          body={toast.message}
-          visible={!!toast.message}
-          onClose={() => toast.clear()}
-        />
       </Page.Content>
     </Page>
   );

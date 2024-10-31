@@ -25,7 +25,7 @@ export const RequestState = {
 
 type RequestState = Values<typeof RequestState>;
 
-const createOwnership = async ({ headers, itemId, itemType, ownerId }) =>
+const requestOwnership = async ({ headers, itemId, itemType, ownerId }) =>
   fetchFromApi({
     path: `/ownerships`,
     options: {
@@ -39,10 +39,10 @@ const createOwnership = async ({ headers, itemId, itemType, ownerId }) =>
     },
   });
 
-const useCreateOwnershipMutation = (configuration = {}) =>
+const useRequestOwnershipMutation = (configuration = {}) =>
   useAuthenticatedMutation({
-    mutationFn: createOwnership,
-    mutationKey: 'ownerships-create-ownership',
+    mutationFn: requestOwnership,
+    mutationKey: 'ownerships-request-ownership',
     ...configuration,
   });
 
@@ -131,7 +131,7 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
 
 export {
   useApproveOwnershipRequestMutation,
-  useCreateOwnershipMutation,
+  useRequestOwnershipMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,

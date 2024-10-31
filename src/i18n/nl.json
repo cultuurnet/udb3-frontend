@@ -1032,7 +1032,9 @@
           "reject": "Afkeuren"
         }
       },
-      "modal": {
+      "pending": "Openstaande aanvragen tot beheer",
+      "close": "Sluiten",
+      "request_modal": {
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
         "actions": {
@@ -1040,8 +1042,6 @@
           "cancel": "Annuleren"
         }
       },
-      "pending": "Openstaande aanvragen tot beheer",
-      "close": "Sluiten",
       "confirm_modal": {
         "title": "Aanvraag tot beheer goedkeuren",
         "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
