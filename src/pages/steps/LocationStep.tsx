@@ -708,14 +708,16 @@ const LocationStep = ({
                           t('location.add_modal.errors.streetAndNumber')
                         }
                         info={
-                          <BlankStreetToggle
-                            onChange={(streetAndNumber) =>
-                              onFieldChange({
-                                streetAndNumber,
-                                location: { streetAndNumber },
-                              })
-                            }
-                          />
+                          scope === ScopeTypes.ORGANIZERS && (
+                            <BlankStreetToggle
+                              onChange={(streetAndNumber) =>
+                                onFieldChange({
+                                  streetAndNumber,
+                                  location: { streetAndNumber },
+                                })
+                              }
+                            />
+                          )
                         }
                       />
                     </Stack>
