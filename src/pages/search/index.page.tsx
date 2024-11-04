@@ -23,7 +23,7 @@ const Search = () => {
   const [iframeHeight, setIframeHeight] = useState(0);
   const legacyPath = useLegacyPath();
   const { query, ...router } = useRouter();
-  const tab = (query?.tab as Scope) ?? 'event-places';
+  const tab = (query?.tab as Scope) ?? 'events-places';
   const { udbMainDarkBlue } = colors;
   const isClientSide = useIsClient();
 
@@ -60,8 +60,8 @@ const Search = () => {
             activeBackgroundColor={`${udbMainDarkBlue}`}
             customVariant={TabsCustomVariants.OUTLINED}
           >
-            <Tabs.Tab eventKey="event-places" title={t('search.event_places')}>
-              {tab === 'event-places' && (
+            <Tabs.Tab eventKey="events-places" title={t('search.events_places')}>
+              {tab === 'events-places' && (
                 <TabContent>
                   <Stack flex={1}>
                     {isClientSide && (

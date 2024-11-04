@@ -1058,7 +1058,7 @@
   },
   "search": {
     "title": "Zoeken",
-    "event_places": "Evenementen en locaties",
+    "events_places": "Evenementen en locaties",
     "organizers": "Organisaties"
   },
   "selectionTable": {

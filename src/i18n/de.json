@@ -1056,6 +1056,11 @@
       }
     }
   },
+  "search": {
+    "title": "Suchen",
+    "events_places": "Veranstaltungen und Orte",
+    "organizers": "Organisationen"
+  },
   "selectionTable": {
     "rowsSelectedCount": "{{count}} Reihe ausgewählt",
     "rowsSelectedCount_plural": "{{count}} Reihen ausgewählt"
