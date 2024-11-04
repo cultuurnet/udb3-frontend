@@ -60,7 +60,10 @@ const Search = () => {
             activeBackgroundColor={`${udbMainDarkBlue}`}
             customVariant={TabsCustomVariants.OUTLINED}
           >
-            <Tabs.Tab eventKey="events-places" title={t('search.events_places')}>
+            <Tabs.Tab
+              eventKey="events-places"
+              title={t('search.events_places')}
+            >
               {tab === 'events-places' && (
                 <TabContent>
                   <Stack flex={1}>

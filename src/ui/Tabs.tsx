@@ -87,6 +87,7 @@ const Tabs = <T,>({
     }
   `,
     outlined: `
+    border-bottom: none;
   .nav {
     margin-left: 1.5rem;
     margin-bottom: 1.5rem;
