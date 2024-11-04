@@ -12,14 +12,13 @@ import { useIsClient } from '@/hooks/useIsClient';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
-import { Tabs } from '@/ui/Tabs';
+import { Tabs, TabsCustomVariants } from '@/ui/Tabs';
 import { colors } from '@/ui/theme';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { Scope } from '../create/OfferForm';
 
 const Search = () => {
-  const { publicRuntimeConfig } = getConfig();
   const { t } = useTranslation();
   const [iframeHeight, setIframeHeight] = useState(0);
   const legacyPath = useLegacyPath();
@@ -59,37 +58,7 @@ const Search = () => {
             activeKey={tab}
             onSelect={handleSelectTab}
             activeBackgroundColor={`${udbMainDarkBlue}`}
-            css={`
-              .nav {
-                margin-left: 1.5rem;
-                margin-bottom: 1.5rem;
-              }
-              .nav-item.nav-link {
-                padding: 0.4rem 1rem;
-                border: 1px solid black;
-              }
-              .nav-item {
-                margin: 0 !important;
-                border-radius: 0;
-
-                &:first-child {
-                  border-right: none;
-                  border-radius: 0.5rem 0 0 0.5rem;
-                }
-
-                &:last-child {
-                  border-radius: 0 0.5rem 0.5rem 0;
-                }
-
-                &.active {
-                  color: white;
-                }
-
-                &.active:hover {
-                  background-color: ${udbMainDarkBlue};
-                }
-              }
-            `}
+            customVariant={TabsCustomVariants.OUTLINED}
           >
             <Tabs.Tab eventKey="event-places" title={t('search.event_places')}>
               {tab === 'event-places' && (

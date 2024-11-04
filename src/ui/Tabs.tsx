@@ -6,19 +6,30 @@ import {
   TabsProps,
 } from 'react-bootstrap';
 
+import { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { Box, getBoxProps, parseSpacing } from '@/ui/Box';
 
-import { getValueFromTheme } from './theme';
+import { colors, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`tabs`);
 
-type Props<T> = BoxProps & TabsProps & { activeBackgroundColor?: string };
+export const TabsCustomVariants = {
+  DEFAULT: 'default',
+  OUTLINED: 'outlined',
+} as const;
+
+type Props<T> = BoxProps &
+  TabsProps & {
+    activeBackgroundColor?: string;
+    customVariant?: Values<typeof TabsCustomVariants>;
+  };
 
 const Tabs = <T,>({
   activeKey,
   onSelect,
   activeBackgroundColor = 'white',
+  customVariant = TabsCustomVariants.DEFAULT,
   children: rawChildren,
   className,
   ...props
@@ -39,45 +50,87 @@ const Tabs = <T,>({
     return true;
   });
 
+  const { udbMainDarkBlue, grey1 } = colors;
+  const TabStyles = {
+    default: `
+    border-bottom: none;
+  
+    .nav-item:last-child {
+      border-right: 1px solid ${getValue('borderColor')};
+    }
+  
+    .nav-item {
+      background-color: white;
+      color: ${getValue('color')};
+      border-radius: ${getValue('borderRadius')};
+      padding: ${parseSpacing(3)} ${parseSpacing(4)};
+      border-color: ${getValue('borderColor')};
+      border-right: none;
+  
+      &.nav-link {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+  
+      &.active {
+        background-color: ${activeBackgroundColor};
+        border-bottom-color: ${getValue('activeTabBackgroundColor')};
+        cursor: default;
+        border-bottom: transparent;
+      }
+  
+      &:hover {
+        color: ${getValue('hoverColor')};
+        border-color: transparent;
+        background-color: ${getValue('hoverTabBackgroundColor')};
+      }
+    }
+  `,
+    outlined: `
+  .nav {
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .nav-item.nav-link {
+    padding: 0.4rem 1rem;
+    border: 1px solid black;
+  }
+  .nav-item {
+    margin: 0 !important;
+    border-radius: 0;
+    background-color: white;
+
+    &:hover {
+      background-color: ${grey1};
+    }
+
+    &:first-child {
+      border-right: none;
+      border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    &:last-child {
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    &.active {
+      color: white;
+      background-color: ${udbMainDarkBlue};
+    }
+
+    &.active:hover {
+      background-color: ${udbMainDarkBlue};
+    }
+  }
+`,
+  };
+
   return (
     <Box className={className} {...getBoxProps(props)}>
       <BootstrapTabs
         activeKey={activeKey}
         onSelect={onSelect}
-        css={`
-          border-bottom: none;
-
-          .nav-item:last-child {
-            border-right: 1px solid ${getValue('borderColor')};
-          }
-
-          .nav-item {
-            background-color: white;
-            color: ${getValue('color')};
-            border-radius: ${getValue('borderRadius')};
-            padding: ${parseSpacing(3)} ${parseSpacing(4)};
-            border-color: ${getValue('borderColor')};
-            border-right: none;
-
-            &.nav-link {
-              border-bottom-left-radius: 0;
-              border-bottom-right-radius: 0;
-            }
-
-            &.active {
-              background-color: ${activeBackgroundColor};
-              border-bottom-color: ${getValue('activeTabBackgroundColor')};
-              cursor: default;
-              border-bottom: transparent;
-            }
-
-            &:hover {
-              color: ${getValue('hoverColor')};
-              border-color: transparent;
-              background-color: ${getValue('hoverTabBackgroundColor')};
-            }
-          }
-        `}
+        css={TabStyles[customVariant]}
       >
         {children}
       </BootstrapTabs>
