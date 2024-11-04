@@ -16,7 +16,7 @@ const useLegacyPath = () => {
     asPath,
   } = router;
 
-  const useLegacyPath = useMemo(() => {
+  const legacyPath = useMemo(() => {
     const path = new URL(`http://localhost${asPath}`).pathname;
     const ownershipPaths =
       router.asPath.startsWith('/organizer') &&
@@ -38,7 +38,7 @@ const useLegacyPath = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath, cookies.token, cookies['udb-language']]);
 
-  return useLegacyPath;
+  return legacyPath;
 };
 
 export { useLegacyPath };
