@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import { TabContent } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import {
+  useHandleWindowMessage,
+  WindowMessageTypes,
+} from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
 import { Page } from '@/ui/Page';
@@ -36,20 +40,9 @@ const Search = () => {
       { shallow: true },
     );
 
-  useEffect(() => {
-    const handleMessage = (event) => {
-      if (event.origin !== publicRuntimeConfig.legacyAppUrl) {
-        return;
-      }
-
-      if (event.data.height) {
-        setIframeHeight(event.data.height);
-      }
-    };
-    window.addEventListener('message', handleMessage);
-
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  useHandleWindowMessage({
+    [WindowMessageTypes.PAGE_HEIGHT]: (event) => setIframeHeight(event?.height),
+  });
 
   return (
     <Page>
