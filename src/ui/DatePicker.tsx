@@ -1,8 +1,6 @@
 import 'react-datepicker/dist/react-datepicker.css';
 
-import de from 'date-fns/locale/de';
-import fr from 'date-fns/locale/fr';
-import nl from 'date-fns/locale/nl';
+import { de, fr, nl } from 'date-fns/locale';
 import { useRef } from 'react';
 import ReactDatePicker, {
   registerLocale,
