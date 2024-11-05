@@ -45,14 +45,51 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
-  const isOwnershipPage = request.nextUrl.pathname.endsWith('ownerships');
+  const isOwnershipPage =
+    (request.nextUrl.pathname.startsWith('/organizer') &&
+      !request.nextUrl.pathname.endsWith('/ownerships')) ||
+    request.nextUrl.pathname.startsWith('/search');
 
-  if (isOwnershipPage && !process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED) {
-    const url = new URL('/404', request.url);
-    return NextResponse.redirect(url);
+  if (isOwnershipPage) {
+    const isOwnershipEnabled =
+      process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
+
+    const redirectUrl = new URL(request.nextUrl);
+    // remove the path variables from nextjs routing
+    redirectUrl.searchParams.delete('params');
+
+    if (
+      isOwnershipEnabled &&
+      redirectUrl.searchParams.get('ownership') === 'true'
+    ) {
+      return NextResponse.next();
+    }
+
+    if (
+      isOwnershipEnabled &&
+      redirectUrl.searchParams.get('ownership') !== 'true'
+    ) {
+      redirectUrl.searchParams.set('ownership', 'true');
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    if (!isOwnershipEnabled && redirectUrl.searchParams.has('ownership')) {
+      redirectUrl.searchParams.delete('ownership');
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    return NextResponse.next();
   }
 };
 
 export const config = {
-  matcher: ['/event', '/login', '/organizers/:id/ownerships'],
+  matcher: [
+    '/event',
+    '/login',
+    '/organizers/:id/ownerships',
+    '/organizer/(.*)',
+    '/(.*)/ownerships',
+    '/search(.*)',
+    '/[...params]',
+  ],
 };
