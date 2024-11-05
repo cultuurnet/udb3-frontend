@@ -1,5 +1,5 @@
 import { differenceInDays, format } from 'date-fns';
-import { fr, nl } from 'date-fns/locale';
+import { fr, nlBE as nl } from 'date-fns/locale';
 import capitalize from 'lodash/capitalize';
 import type { TFunction } from 'react-i18next';
 
