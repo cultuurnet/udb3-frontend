@@ -1,16 +1,20 @@
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { memo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 
+import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
-import { useLegacyPath } from '@/hooks/useLegacyPath';
 import PageNotFound from '@/pages/404.page';
 import { Box } from '@/ui/Box';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+
+const prefixWhenNotEmpty = (value, prefix) =>
+  value ? `${prefix}${value}` : value;
 
 const IFrame = memo(({ url }) => (
   <Box
@@ -31,8 +35,6 @@ IFrame.propTypes = {
 
 const Fallback = () => {
   const router = useRouter();
-  const { asPath } = router;
-
   const { publicRuntimeConfig } = getConfig();
 
   // Keep track of which paths were not found. Do not store as a single boolean
