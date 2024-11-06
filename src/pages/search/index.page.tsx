@@ -26,6 +26,8 @@ const Search = () => {
   const tab = (query?.tab as Scope) ?? 'events-places';
   const { udbMainDarkBlue } = colors;
   const isClientSide = useIsClient();
+  const { publicRuntimeConfig } = getConfig();
+  const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
 
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(
@@ -54,37 +56,47 @@ const Search = () => {
             overflow-y: auto;
           `}
         >
-          <Tabs<Scope>
-            activeKey={tab}
-            onSelect={handleSelectTab}
-            activeBackgroundColor={`${udbMainDarkBlue}`}
-            customVariant={TabsCustomVariants.OUTLINED}
-          >
-            <Tabs.Tab
-              eventKey="events-places"
-              title={t('search.events_places')}
+          {isOwnershipEnabled && (
+            <Tabs<Scope>
+              activeKey={tab}
+              onSelect={handleSelectTab}
+              activeBackgroundColor={`${udbMainDarkBlue}`}
+              customVariant={TabsCustomVariants.OUTLINED}
             >
-              {tab === 'events-places' && (
-                <TabContent>
-                  <Stack flex={1}>
-                    {isClientSide && (
-                      <iframe
-                        height={
-                          iframeHeight
-                            ? `${iframeHeight}px`
-                            : `${window.innerHeight}`
-                        }
-                        src={legacyPath}
-                      ></iframe>
-                    )}
-                  </Stack>
-                </TabContent>
-              )}
-            </Tabs.Tab>
-            <Tabs.Tab eventKey="organizers" title={t('search.organizers')}>
-              {tab === 'organizers' && <div>Hello</div>}
-            </Tabs.Tab>
-          </Tabs>
+              <Tabs.Tab
+                eventKey="events-places"
+                title={t('search.events_places')}
+              >
+                {tab === 'events-places' && (
+                  <TabContent>
+                    <Stack flex={1}>
+                      {isClientSide && (
+                        <iframe
+                          height={
+                            iframeHeight
+                              ? `${iframeHeight}px`
+                              : `${window.innerHeight}`
+                          }
+                          src={legacyPath}
+                        ></iframe>
+                      )}
+                    </Stack>
+                  </TabContent>
+                )}
+              </Tabs.Tab>
+              <Tabs.Tab eventKey="organizers" title={t('search.organizers')}>
+                {tab === 'organizers' && <div>Hello</div>}
+              </Tabs.Tab>
+            </Tabs>
+          )}
+          {!isOwnershipEnabled && isClientSide && (
+            <iframe
+              height={
+                iframeHeight ? `${iframeHeight}px` : `${window.innerHeight}`
+              }
+              src={legacyPath}
+            ></iframe>
+          )}
         </Stack>
       </Page.Content>
     </Page>
