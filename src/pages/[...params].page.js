@@ -33,7 +33,7 @@ const Fallback = () => {
   const router = useRouter();
   const { asPath } = router;
 
-  const legacyPath = useLegacyPath();
+  const { publicRuntimeConfig } = getConfig();
 
   // Keep track of which paths were not found. Do not store as a single boolean
   // for the current path, because it's possible to navigate from a 404 path to
@@ -42,12 +42,37 @@ const Fallback = () => {
   const [notFoundPaths, setNotFoundPaths] = useState(['/404']);
   useHandleWindowMessage({
     [WindowMessageTypes.URL_UNKNOWN]: () =>
-      setNotFoundPaths([asPath, ...notFoundPaths]),
+      setNotFoundPaths([router.asPath, ...notFoundPaths]),
   });
 
   const isClientSide = useIsClient();
 
-  if (notFoundPaths.includes(asPath)) {
+  const { cookies } = useCookiesWithOptions(['token', 'udb-language']);
+  const token = cookies['token'];
+  const language = cookies['udb-language'];
+
+  const legacyPath = useMemo(() => {
+    const path = new URL(`http://localhost${router.asPath}`).pathname;
+    const { params = [], ...queryWithoutParams } = router.query;
+    const queryString = prefixWhenNotEmpty(
+      new URLSearchParams({
+        ...queryWithoutParams,
+        jwt: token,
+        lang: language,
+      }),
+      '?',
+    );
+
+    return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
+  }, [
+    language,
+    publicRuntimeConfig.legacyAppUrl,
+    router.asPath,
+    router.query,
+    token,
+  ]);
+
+  if (notFoundPaths.includes(router.asPath)) {
     return <PageNotFound />;
   }
 

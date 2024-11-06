@@ -67,20 +67,27 @@ const Layout = ({ children }) => {
   useChangeLanguage();
   useHandleWindowMessage({
     [WindowMessageTypes.URL_CHANGED]: ({ path }) => {
-      const currentPath = window.location.pathname;
-      const url = new URL(
+      const currentUrl = new URL(window.location.href);
+      const nextUrl = new URL(
         `${window.location.protocol}//${window.location.host}${path}`,
       );
-      const query = Object.fromEntries(url.searchParams.entries());
-      const hasPage = url.searchParams.has('page');
+
+      const areUrlsDeepEqual =
+        currentUrl.pathname === nextUrl.pathname &&
+        [...nextUrl.searchParams.entries()]
+          .filter(([key]) => key !== 'jwt' && key !== 'lang')
+          .every(([key, val]) => currentUrl.searchParams.get(key) === val);
+
+      if (areUrlsDeepEqual) {
+        return;
+      }
+
+      const hasPage = nextUrl.searchParams.has('page');
+
       if (hasPage) {
-        window.history.pushState(
-          undefined,
-          '',
-          `${window.location.protocol}//${window.location.host}${path}`,
-        );
+        window.history.pushState(undefined, '', nextUrl.toString());
       } else {
-        router.push({ pathname: url.pathname, query });
+        router.push(`${nextUrl.pathname}${nextUrl.search}`);
       }
     },
     [WindowMessageTypes.HTTP_ERROR_CODE]: ({ code }) => {
