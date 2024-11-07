@@ -46,9 +46,8 @@ export const middleware = async (request: NextRequest) => {
   }
 
   const isOwnershipPage =
-    (request.nextUrl.pathname.startsWith('/organizer') &&
-      !request.nextUrl.pathname.endsWith('/ownerships')) ||
-    request.nextUrl.pathname.startsWith('/search');
+    request.nextUrl.pathname.startsWith('/organizer') &&
+    !request.nextUrl.pathname.endsWith('/ownerships');
 
   if (isOwnershipPage) {
     const isOwnershipEnabled =
