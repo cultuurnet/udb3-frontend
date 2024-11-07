@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TabContent } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,7 @@ import { useIsClient } from '@/hooks/useIsClient';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
-import { Tabs, TabsCustomVariants } from '@/ui/Tabs';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { colors } from '@/ui/theme';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -61,7 +61,7 @@ const Search = () => {
               activeKey={tab}
               onSelect={handleSelectTab}
               activeBackgroundColor={`${udbMainDarkBlue}`}
-              customVariant={TabsCustomVariants.OUTLINED}
+              variant={TabsVariants.OUTLINED}
             >
               <Tabs.Tab
                 eventKey="events-places"
@@ -85,7 +85,22 @@ const Search = () => {
                 )}
               </Tabs.Tab>
               <Tabs.Tab eventKey="organizers" title={t('search.organizers')}>
-                {tab === 'organizers' && <div>Hello</div>}
+                {tab === 'organizers' && (
+                  <TabContent>
+                    <Stack flex={1}>
+                      {isClientSide && (
+                        <iframe
+                          height={
+                            iframeHeight
+                              ? `${iframeHeight}px`
+                              : `${window.innerHeight}`
+                          }
+                          src={legacyPath}
+                        ></iframe>
+                      )}
+                    </Stack>
+                  </TabContent>
+                )}
               </Tabs.Tab>
             </Tabs>
           )}

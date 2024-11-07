@@ -14,22 +14,22 @@ import { colors, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`tabs`);
 
-export const TabsCustomVariants = {
+export const TabsVariants = {
   DEFAULT: 'default',
   OUTLINED: 'outlined',
 } as const;
 
 type Props<T> = BoxProps &
-  TabsProps & {
+  Omit<TabsProps, 'variant'> & {
     activeBackgroundColor?: string;
-    customVariant?: Values<typeof TabsCustomVariants>;
+    variant?: Values<typeof TabsVariants>;
   };
 
 const Tabs = <T,>({
   activeKey,
   onSelect,
   activeBackgroundColor = 'white',
-  customVariant = TabsCustomVariants.DEFAULT,
+  variant = TabsVariants.DEFAULT,
   children: rawChildren,
   className,
   ...props
@@ -131,7 +131,7 @@ const Tabs = <T,>({
       <BootstrapTabs
         activeKey={activeKey}
         onSelect={onSelect}
-        css={TabStyles[customVariant]}
+        css={TabStyles[variant]}
       >
         {children}
       </BootstrapTabs>
