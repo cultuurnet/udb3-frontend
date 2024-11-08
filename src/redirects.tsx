@@ -1,3 +1,5 @@
+import getConfig from 'next/config';
+
 import { FeatureFlags } from './hooks/useFeatureFlag';
 import type { SupportedLanguages } from './i18n';
 import type { Values } from './types/Values';
@@ -38,6 +40,8 @@ const createDashboardRedirects = (environment: Environment) => {
     }),
   ];
 };
+
+const { publicRuntimeConfig } = getConfig();
 
 const getRedirects = (
   environment: Environment,
@@ -95,6 +99,18 @@ const getRedirects = (
   {
     source: '/organizer/:organizerId/ownerships',
     destination: '/organizers/:organizerId/ownerships',
+    permanent: false,
+  },
+  publicRuntimeConfig.ownershipEnabled === 'false' && {
+    source: '/search',
+    has: [
+      {
+        type: 'query',
+        key: 'tab',
+        value: 'organizers',
+      },
+    ],
+    destination: '/404',
     permanent: false,
   },
   {
