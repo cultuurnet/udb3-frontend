@@ -101,15 +101,13 @@ const getRedirects = (
     destination: '/organizers/:organizerId/ownerships',
     permanent: false,
   },
+  publicRuntimeConfig.ownershipEnabled === 'true' && {
+    source: '/manage/organizations',
+    destination: '/search?tab=organizers',
+    permanent: false,
+  },
   publicRuntimeConfig.ownershipEnabled === 'false' && {
-    source: '/search',
-    has: [
-      {
-        type: 'query',
-        key: 'tab',
-        value: 'organizers',
-      },
-    ],
+    source: '/search?tab=organizers',
     destination: '/404',
     permanent: false,
   },
