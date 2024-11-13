@@ -10,6 +10,7 @@ import {
   RequestState,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
+  useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
@@ -65,6 +66,10 @@ const Ownership = () => {
     organizerId: organizerId,
   });
 
+  const getOwnershipCreatorQuery = useGetOwnershipCreatorQuery({
+    organizerId: organizerId,
+  });
+
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
     () =>
       groupBy(
@@ -75,6 +80,9 @@ const Ownership = () => {
     // @ts-expect-error
     [getOwnershipRequestsQuery.data],
   );
+
+  // @ts-expect-error
+  const creator = getOwnershipCreatorQuery.data;
 
   const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
   const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
@@ -147,42 +155,45 @@ const Ownership = () => {
                 />
               </Alert>
             )}
-            <Stack spacing={4}>
-              <Title size={3}>{t('organizers.ownerships.owners')}</Title>
-              <OwnershipsTable
-                requests={approvedRequests}
-                renderActions={(request) => (
-                  <Button
-                    variant={ButtonVariants.ICON}
-                    iconName={Icons.TRASH}
-                    onClick={() => setRequestToBeDeleted(request)}
-                  />
-                )}
-              />
-              <Modal
-                title={t('organizers.ownerships.delete_modal.title')}
-                confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
-                cancelTitle={t('organizers.ownerships.delete_modal.cancel')}
-                visible={!!requestToBeDeleted}
-                variant={ModalVariants.QUESTION}
-                onConfirm={() =>
-                  deleteOwnershipRequestMutation.mutate({
-                    ownershipId: requestToBeDeleted.id,
-                  })
-                }
-                onClose={() => setRequestToBeDeleted(undefined)}
-                size={ModalSizes.MD}
-              >
-                <Box padding={4}>
-                  <Trans
-                    i18nKey="organizers.ownerships.delete_modal.body"
-                    values={{
-                      ownerEmail: requestToBeDeleted?.ownerEmail,
-                    }}
-                  />
-                </Box>
-              </Modal>
-            </Stack>
+            {(approvedRequests.length > 0 || !!creator) && (
+              <Stack spacing={4}>
+                <Title size={3}>{t('organizers.ownerships.owners')}</Title>
+                <OwnershipsTable
+                  creator={creator}
+                  requests={approvedRequests}
+                  renderActions={(request) => (
+                    <Button
+                      variant={ButtonVariants.ICON}
+                      iconName={Icons.TRASH}
+                      onClick={() => setRequestToBeDeleted(request)}
+                    />
+                  )}
+                />
+                <Modal
+                  title={t('organizers.ownerships.delete_modal.title')}
+                  confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
+                  cancelTitle={t('organizers.ownerships.delete_modal.cancel')}
+                  visible={!!requestToBeDeleted}
+                  variant={ModalVariants.QUESTION}
+                  onConfirm={() =>
+                    deleteOwnershipRequestMutation.mutate({
+                      ownershipId: requestToBeDeleted.id,
+                    })
+                  }
+                  onClose={() => setRequestToBeDeleted(undefined)}
+                  size={ModalSizes.MD}
+                >
+                  <Box padding={4}>
+                    <Trans
+                      i18nKey="organizers.ownerships.delete_modal.body"
+                      values={{
+                        ownerEmail: requestToBeDeleted?.ownerEmail,
+                      }}
+                    />
+                  </Box>
+                </Modal>
+              </Stack>
+            )}
             {pendingRequests.length > 0 && (
               <Stack spacing={4}>
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
@@ -268,6 +279,11 @@ export const getServerSideProps = getApplicationServerSideProps(
         id: query.organizerId,
       }),
       await useGetOwnershipRequestsQuery({
+        req,
+        queryClient,
+        organizerId: query.organizerId,
+      }),
+      await useGetOwnershipCreatorQuery({
         req,
         queryClient,
         organizerId: query.organizerId,
