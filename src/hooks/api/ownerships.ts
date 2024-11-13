@@ -148,7 +148,7 @@ const useGetOwnershipCreatorQuery = (
 export {
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
+  useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
-  useGetOwnershipCreatorQuery,
 };
