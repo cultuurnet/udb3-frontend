@@ -51,7 +51,7 @@ test('create a place', async ({ baseURL, page }) => {
   await page
     .getByRole('option', { name: dummyPlace.address.municipality })
     .click();
-  await expect(page.getByTestId('blank_address')).not.toBeVisible();
+  await expect(page.getByLabel('blank_address')).not.toBeVisible();
   await page.getByLabel('Straat en nummer').nth(0).click();
   await page
     .getByLabel('Straat en nummer')
