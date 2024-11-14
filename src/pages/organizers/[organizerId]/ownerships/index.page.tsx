@@ -66,6 +66,9 @@ const Ownership = () => {
 
   // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
+  const organizerName =
+    organizer?.name?.[i18n.language] ??
+    organizer?.name?.[organizer.mainLanguage];
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
     organizerId,
@@ -139,7 +142,7 @@ const Ownership = () => {
     <Page>
       <Page.Title>
         {t('organizers.ownerships.title', {
-          name: organizer?.name?.[i18n.language],
+          name: organizerName,
         })}
       </Page.Title>
       <Page.Content>
@@ -163,7 +166,7 @@ const Ownership = () => {
                   i18nKey={`${translationsPath}.success`}
                   values={{
                     ownerEmail: selectedRequest?.ownerEmail,
-                    organizerName: organizer?.name?.[i18n.language],
+                    organizerName: organizerName,
                   }}
                 />
               </Alert>
@@ -253,7 +256,7 @@ const Ownership = () => {
                       i18nKey={`${translationsPath}.body`}
                       values={{
                         ownerEmail: selectedRequest?.ownerEmail,
-                        organizerName: organizer?.name?.[i18n.language],
+                        organizerName: organizerName,
                       }}
                     />
                   </Box>

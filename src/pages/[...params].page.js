@@ -35,13 +35,6 @@ IFrame.propTypes = {
 
 const Fallback = () => {
   const router = useRouter();
-
-  const {
-    // eslint-disable-next-line no-unused-vars
-    query: { params = [], ...queryWithoutParams },
-    asPath,
-  } = router;
-
   const { publicRuntimeConfig } = getConfig();
 
   // Keep track of which paths were not found. Do not store as a single boolean
@@ -51,37 +44,37 @@ const Fallback = () => {
   const [notFoundPaths, setNotFoundPaths] = useState(['/404']);
   useHandleWindowMessage({
     [WindowMessageTypes.URL_UNKNOWN]: () =>
-      setNotFoundPaths([asPath, ...notFoundPaths]),
+      setNotFoundPaths([router.asPath, ...notFoundPaths]),
   });
 
   const isClientSide = useIsClient();
 
   const { cookies } = useCookiesWithOptions(['token', 'udb-language']);
+  const token = cookies['token'];
+  const language = cookies['udb-language'];
 
   const legacyPath = useMemo(() => {
-    const path = new URL(`http://localhost${asPath}`).pathname;
-    const ownershipPaths =
-      (router.asPath.startsWith('/organizer') &&
-        !router.asPath.endsWith('/ownerships')) ||
-      router.asPath.startsWith('/search');
+    const path = new URL(`http://localhost${router.asPath}`).pathname;
+    const { params = [], ...queryWithoutParams } = router.query;
     const queryString = prefixWhenNotEmpty(
       new URLSearchParams({
         ...queryWithoutParams,
-        jwt: cookies.token,
-        lang: cookies['udb-language'],
-        ...(ownershipPaths &&
-          publicRuntimeConfig.ownershipEnabled === 'true' && {
-            ownership: 'true',
-          }),
+        jwt: token,
+        lang: language,
       }),
       '?',
     );
 
     return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asPath, cookies.token, cookies['udb-language']]);
+  }, [
+    language,
+    publicRuntimeConfig.legacyAppUrl,
+    router.asPath,
+    router.query,
+    token,
+  ]);
 
-  if (notFoundPaths.includes(asPath)) {
+  if (notFoundPaths.includes(router.asPath)) {
     return <PageNotFound />;
   }
 

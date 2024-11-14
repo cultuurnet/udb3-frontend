@@ -1065,6 +1065,11 @@
       }
     }
   },
+  "search": {
+    "title": "Zoeken",
+    "events_places": "Evenementen en locaties",
+    "organizers": "Organisaties"
+  },
   "selectionTable": {
     "rowsSelectedCount": "{{count}} rij geselecteerd",
     "rowsSelectedCount_plural": "{{count}} rijen geselecteerd"

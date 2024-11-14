@@ -268,7 +268,6 @@ export const BlankStreetToggle = ({
 
   return (
     <RadioButtonWithLabel
-      id={'blank_address'}
       name={'blank_address'}
       label={
         <Text className={'ml-1'}>
@@ -708,14 +707,16 @@ const LocationStep = ({
                           t('location.add_modal.errors.streetAndNumber')
                         }
                         info={
-                          <BlankStreetToggle
-                            onChange={(streetAndNumber) =>
-                              onFieldChange({
-                                streetAndNumber,
-                                location: { streetAndNumber },
-                              })
-                            }
-                          />
+                          scope === ScopeTypes.ORGANIZERS && (
+                            <BlankStreetToggle
+                              onChange={(streetAndNumber) =>
+                                onFieldChange({
+                                  streetAndNumber,
+                                  location: { streetAndNumber },
+                                })
+                              }
+                            />
+                          )
                         }
                       />
                     </Stack>
