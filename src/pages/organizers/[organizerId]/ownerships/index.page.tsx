@@ -97,11 +97,23 @@ const Ownership = () => {
   });
 
   const requestOwnership = useRequestOwnershipMutation({
-    onError: (error) => setError('email', error.message),
-    onSuccess: (data) =>
-      approveOwnershipRequestMutation.mutate({
+    onError: async (error) => {
+      if (error.body.status === 409) {
+        const ownershipId = error.body.detail.split('with id ')[1];
+        setIsSuccessAlertVisible(true);
+        setIsOpen(false);
+        await approveOwnershipRequestMutation.mutateAsync({ ownershipId });
+      } else {
+        setError('email', { message: error.body.detail || error.title });
+      }
+    },
+    onSuccess: async (data) => {
+      setIsSuccessAlertVisible(true);
+      setIsOpen(false);
+      await approveOwnershipRequestMutation.mutateAsync({
         ownershipId: data.id,
-      }),
+      });
+    },
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
@@ -165,8 +177,9 @@ const Ownership = () => {
                 <Trans
                   i18nKey={`${translationsPath}.success`}
                   values={{
-                    ownerEmail: selectedRequest?.ownerEmail,
-                    organizerName: organizerName,
+                    ownerEmail:
+                      selectedRequest?.ownerEmail ?? getValues('email'),
+                    organizerName,
                   }}
                 />
               </Alert>
@@ -256,7 +269,7 @@ const Ownership = () => {
                       i18nKey={`${translationsPath}.body`}
                       values={{
                         ownerEmail: selectedRequest?.ownerEmail,
-                        organizerName: organizerName,
+                        organizerName,
                       }}
                     />
                   </Box>

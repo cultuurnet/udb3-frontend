@@ -1038,6 +1038,7 @@
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
         "email_error": "Geen geldig e-mailadres",
+        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en evenementen van {{organizerName}} bewerken.",
         "actions": {
           "confirm": "Beheerder toevoegen",
           "cancel": "Annuleren"

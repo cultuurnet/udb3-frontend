@@ -25,14 +25,14 @@ export const RequestState = {
 
 type RequestState = Values<typeof RequestState>;
 
-const requestOwnership = async ({ headers, itemId, itemType, ownerId }) =>
+const requestOwnership = async ({ headers, itemId, itemType, ownerEmail }) =>
   fetchFromApi({
     path: `/ownerships`,
     options: {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        ownerId,
+        ownerEmail,
         itemId,
         itemType,
       }),
