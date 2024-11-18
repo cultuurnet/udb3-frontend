@@ -32,6 +32,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
+import { ErrorBody, FetchError } from '@/utils/fetchFromApi';
 
 const ActionType = {
   APPROVE: 'confirm',
@@ -96,24 +97,23 @@ const Ownership = () => {
     },
   });
 
+  const approveRequestedOwnership = async (ownershipId: string) => {
+    setIsSuccessAlertVisible(true);
+    setIsOpen(false);
+
+    return approveOwnershipRequestMutation.mutateAsync({ ownershipId });
+  };
+
   const requestOwnership = useRequestOwnershipMutation({
-    onError: async (error) => {
+    onError: async (error: FetchError<ErrorBody>) => {
       if (error.body.status === 409) {
         const ownershipId = error.body.detail.split('with id ')[1];
-        setIsSuccessAlertVisible(true);
-        setIsOpen(false);
-        await approveOwnershipRequestMutation.mutateAsync({ ownershipId });
+        await approveRequestedOwnership(ownershipId);
       } else {
         setError('email', { message: error.body.detail || error.title });
       }
     },
-    onSuccess: async (data) => {
-      setIsSuccessAlertVisible(true);
-      setIsOpen(false);
-      await approveOwnershipRequestMutation.mutateAsync({
-        ownershipId: data.id,
-      });
-    },
+    onSuccess: (data: { id: string }) => approveRequestedOwnership(data.id),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
