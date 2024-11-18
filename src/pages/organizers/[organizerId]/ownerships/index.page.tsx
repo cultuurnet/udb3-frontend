@@ -63,7 +63,8 @@ const Ownership = () => {
   const organizer: Organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
-    organizer?.name?.[organizer.mainLanguage];
+    organizer?.name?.[organizer.mainLanguage] ??
+    organizer?.name;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
     organizerId: organizerId,
