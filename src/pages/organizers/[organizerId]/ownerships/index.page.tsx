@@ -28,11 +28,11 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
+import { ErrorBody, FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
-import { ErrorBody, FetchError } from '@/utils/fetchFromApi';
 
 const ActionType = {
   APPROVE: 'confirm',
