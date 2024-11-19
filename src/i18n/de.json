@@ -1053,6 +1053,14 @@
         "body": "Sind Sie sicher, dass Sie {{ownerEmail}} als Verwalter entfernen möchten?",
         "cancel": "Abbrechen",
         "confirm": "Verwalter entfernen"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Verwaltungsanfrage für {{organizerName}}",
+          "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Veranstaltungen verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+          "cancel": "Abbrechen",
+          "confirm": "Verwaltungsanfrage"
+        }
       }
     }
   },

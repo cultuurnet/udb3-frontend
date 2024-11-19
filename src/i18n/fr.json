@@ -1053,6 +1053,14 @@
         "body": "Êtes-vous sûr de vouloir supprimer {{ownerEmail}} en tant que gestionnaire ?",
         "cancel": "Annuler",
         "confirm": "Supprimer le gestionnaire"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Demande de gestion pour {{organizerName}}",
+          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses événements ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+          "cancel": "Annuler",
+          "confirm": "Demander la gestion"
+        }
       }
     }
   },
