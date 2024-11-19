@@ -47,6 +47,7 @@ export const middleware = async (request: NextRequest) => {
 
   const isOwnershipPage =
     request.nextUrl.pathname.startsWith('/organizer') &&
+    request.nextUrl.pathname.startsWith('/organizers') &&
     !request.nextUrl.pathname.endsWith('/ownerships');
 
   if (isOwnershipPage) {
@@ -87,6 +88,7 @@ export const config = {
     '/login',
     '/organizers/:id/ownerships',
     '/organizer/(.*)',
+    '/organizers/(.*)',
     '/(.*)/ownerships',
     '/search(.*)',
     '/[...params]',
