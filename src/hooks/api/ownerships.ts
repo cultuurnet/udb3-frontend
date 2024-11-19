@@ -62,6 +62,27 @@ const useGetOwnershipRequestsQuery = (
     ...configuration,
   });
 
+const requestOwnership = async ({ headers, itemId, ownerId }) =>
+  fetchFromApi({
+    path: '/ownerships',
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        itemId,
+        itemType: 'organizer',
+        ownerId,
+      }),
+    },
+  });
+
+const useRequestOwnershipMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: requestOwnership,
+    mutationKey: 'request-ownership',
+    ...configuration,
+  });
+
 const approveOwnershipRequest = async ({ headers, ownershipId }) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}/approve`,
