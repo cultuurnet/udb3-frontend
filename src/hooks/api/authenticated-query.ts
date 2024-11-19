@@ -189,6 +189,11 @@ const isDuplicateMutation = (
 
   const latestMutation = mutations.slice(-2)[0];
 
+  // If the latest mutation was unsuccessful, we don't want to trigger a false positive.
+  if (latestMutation.state.error) {
+    return false;
+  }
+
   return (
     mutations.length > 1 && isEqual(latestMutation.options.variables, variables)
   );
