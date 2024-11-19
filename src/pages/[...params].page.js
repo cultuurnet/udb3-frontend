@@ -9,10 +9,10 @@ import {
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
+import { useLegacyPath } from '@/hooks/useLegacyPath';
 import PageNotFound from '@/pages/404.page';
 import { Box } from '@/ui/Box';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
-import { useLegacyPath } from '@/hooks/useLegacyPath';
 
 const prefixWhenNotEmpty = (value, prefix) =>
   value ? `${prefix}${value}` : value;
