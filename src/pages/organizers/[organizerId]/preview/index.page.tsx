@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
@@ -18,25 +18,26 @@ import {
 } from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
+import { SupportedLanguage } from '@/i18n/index';
+import { parseLocationAttributes } from '@/pages/create/OfferForm';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
+import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
+import { getGlobalBorderRadius } from '@/ui/theme';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const [iframeHeight, setIframeHeight] = useState(0);
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
-  const iframeRef = useRef(null);
-  const legacyPath = useLegacyPath();
   const router = useRouter();
-  const isClientSide = typeof window !== 'undefined';
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
 
@@ -91,6 +92,41 @@ const OrganizersPreview = () => {
       setIsErrorAlertVisible(true);
     },
   });
+
+  useEffect(() => {
+    console.log('isOwnershipEnabled', isOwnershipEnabled);
+  }, [isOwnershipEnabled]);
+
+  const location = parseLocationAttributes(
+    organizer,
+    i18n.language as SupportedLanguage,
+    organizer.mainLanguage as SupportedLanguage,
+  ).location;
+
+  const info = [
+    { label: 'name', value: organizerName },
+    { label: 'description', value: organizer.educationalDescription },
+    {
+      label: 'address',
+      value: `${location.streetAndNumber}, ${location.postalCode} ${location.municipality.name}`,
+    },
+    {
+      label: 'contact',
+      value: Object.values(organizer.contactPoint).map((it) => (
+        <div key={it.join(', ')}>{it.join(', ')}</div>
+      )),
+    },
+    {
+      label: 'labels',
+      value: (organizer.labels ?? []).map((it) => <div key={it}>{it}</div>),
+    },
+    {
+      label: 'images',
+      value: (organizer.images ?? []).map((it) => (
+        <div key={it.contentUrl}>{it.contentUrl}</div>
+      )),
+    },
+  ];
 
   return (
     <Page>
@@ -176,28 +212,33 @@ const OrganizersPreview = () => {
                   <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
                 </Alert>
               </Stack>
-              {isClientSide && (
-                <iframe
-                  height={
-                    iframeHeight ? `${iframeHeight}px` : `${window.innerHeight}`
-                  }
-                  onLoad={() => {
-                    iframeRef.current.contentWindow.postMessage('test', '*');
-                  }}
-                  src={legacyPath}
-                  ref={iframeRef}
-                ></iframe>
-              )}
             </Stack>
           )}
-          {!isOwnershipEnabled && isClientSide && (
-            <iframe
-              height={
-                iframeHeight ? `${iframeHeight}px` : `${window.innerHeight}`
-              }
-              src={legacyPath}
-            ></iframe>
-          )}
+
+          <Stack
+            backgroundColor="white"
+            padding={4}
+            borderRadius={getGlobalBorderRadius}
+          >
+            {info.map((it, index) => {
+              const isLast = index === info.length - 1;
+              return (
+                <Inline
+                  spacing={3}
+                  paddingY={2}
+                  key={it.label}
+                  css={`
+                    border-bottom: ${isLast ? 'none' : '1px solid lightgrey'};
+                  `}
+                >
+                  <Text fontWeight="bold" width="8rem">
+                    {it.label}
+                  </Text>
+                  <div>{it.value}</div>
+                </Inline>
+              );
+            })}
+          </Stack>
         </Stack>
       </Page.Content>
     </Page>
