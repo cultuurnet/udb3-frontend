@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 const dummyOrganizer = {
   name: faker.lorem.word(),
@@ -86,6 +86,15 @@ test('create an organizer', async ({ baseURL, page }) => {
   console.log(organizerUrl);
   await test.step('Step 2: can assign ownerships on organizer', async () => {
     await page.goto(organizerUrl.replace('preview', 'ownerships'));
-    await page.getByLabel('Nieuwe beheerder toevoegen').isVisible();
+    await page
+      .getByRole('button', { name: 'Nieuwe beheerder toevoegen' })
+      .click();
+    await page.getByLabel('E-mailadres').fill(process.env.E2E_TEST_EMAIL);
+    await page.getByRole('button', { name: 'Beheerder toevoegen' }).click();
+    await page.getByRole('dialog').isHidden();
+    await expect(page.getByRole('alert').nth(1).textContent()).toContain(
+      process.env.E2E_TEST_EMAIL,
+    );
+    await page.getByText(process.env.E2E_TEST_EMAIL).isVisible();
   });
 });
