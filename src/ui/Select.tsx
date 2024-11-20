@@ -39,7 +39,7 @@ const Select = forwardRef<HTMLInputElement, Props>(
       css={`
         padding: 0.275rem 0.65rem;
         border-radius: ${getGlobalBorderRadius};
-        max-width="43rem"
+        max-width: 43rem;
       `}
       {...getBoxProps(props)}
     >
