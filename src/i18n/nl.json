@@ -990,6 +990,24 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Naam",
+      "description": "Bescrijving",
+      "educationalDescription": "Beschrijving Cultuurkuur",
+      "address": "Adres",
+      "no_address": "Geen address",
+      "contact": "Contact",
+      "no_contact": "Geen contactinformatie",
+      "labels": "Labels",
+      "images": "Afbeeldingen",
+      "no_images": "Geen afbeeldingen",
+      "mainImage": "Hoofdafbeelding",
+      "actions": {
+        "edit": "Bewerken",
+        "request": "Beheer aanvragen",
+        "back": "Terug naar dashboard"
+      }
+    },
     "create": {
       "title": "Organisatie toevoegen",
       "step1": {
