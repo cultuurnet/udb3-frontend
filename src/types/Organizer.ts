@@ -20,6 +20,7 @@ type Organizer = {
   completeness: number;
   modified: string;
   images: MediaObject[];
+  mainImage: string;
   geo: {
     latitude: number;
     longitude: number;
