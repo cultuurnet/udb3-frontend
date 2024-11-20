@@ -2,9 +2,12 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { dehydrate, useQueryClient } from 'react-query';
 
-import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
+import {
+  useGetOrganizerByIdQuery,
+  useGetOrganizerPermissions,
+} from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
   RequestState,
@@ -16,15 +19,21 @@ import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
-import { useIsClient } from '@/hooks/useIsClient';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
+import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
+import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+
+import { OrganizerTable } from './OrganizerTable';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
@@ -36,7 +45,6 @@ const OrganizersPreview = () => {
   const iframeRef = useRef(null);
   const legacyPath = useLegacyPath();
   const router = useRouter();
-  const isClientSide = typeof window !== 'undefined';
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
 
@@ -48,13 +56,22 @@ const OrganizersPreview = () => {
     id: organizerId,
   });
 
+  const getOrganizerPermissionsQuery = useGetOrganizerPermissions({
+    organizerId: organizerId,
+  });
+
+  // @ts-expect-error
+  const permissions = getOrganizerPermissionsQuery?.data.permissions ?? [];
+  const canEdit = permissions.includes('Organisaties bewerken');
+
   // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
 
-  const organizerName =
-    organizer?.name?.[i18n.language] ??
-    organizer?.name?.[organizer.mainLanguage] ??
-    organizer?.name;
+  const organizerName: string = getLanguageObjectOrFallback(
+    organizer?.name,
+    i18n.language as SupportedLanguage,
+    organizer?.mainLanguage as SupportedLanguage,
+  );
 
   useHandleWindowMessage({
     [WindowMessageTypes.OWNERSHIP_REQUEST_DIALOG_OPENED]: () =>
@@ -96,13 +113,7 @@ const OrganizersPreview = () => {
     <Page>
       <Page.Title>{organizerName}</Page.Title>
       <Page.Content>
-        <Stack
-          height="100%"
-          width="100%"
-          css={`
-            overflow-y: auto;
-          `}
-        >
+        <Stack>
           {isOwnershipEnabled && (
             <Stack flex={1}>
               <Modal
@@ -136,74 +147,120 @@ const OrganizersPreview = () => {
                 </Box>
               </Modal>
               <Stack marginBottom={5} spacing={4}>
-                <Alert
-                  variant={AlertVariants.PRIMARY}
-                  visible={isOwnershipRequested}
-                  marginBottom={5}
-                  fullWidth
-                >
-                  <Trans
-                    i18nKey="organizers.ownerships.request.pending"
-                    values={{
-                      organizerName: organizerName,
+                {isOwnershipRequested && (
+                  <Alert
+                    variant={AlertVariants.PRIMARY}
+                    marginBottom={5}
+                    fullWidth
+                  >
+                    <Trans
+                      i18nKey="organizers.ownerships.request.pending"
+                      values={{
+                        organizerName: organizerName,
+                      }}
+                    />
+                  </Alert>
+                )}
+                {isSuccessAlertVisible && (
+                  <Alert
+                    variant={AlertVariants.SUCCESS}
+                    closable
+                    onClose={() => {
+                      setIsSuccessAlertVisible(false);
                     }}
-                  />
-                </Alert>
-                <Alert
-                  variant={AlertVariants.SUCCESS}
-                  visible={isSuccessAlertVisible}
-                  closable
-                  onClose={() => {
-                    setIsSuccessAlertVisible(false);
-                  }}
-                >
-                  <Trans
-                    i18nKey="organizers.ownerships.request.confirm_modal.body"
-                    values={{
-                      organizerName: organizerName,
+                  >
+                    <Trans
+                      i18nKey="organizers.ownerships.request.confirm_modal.body"
+                      values={{
+                        organizerName: organizerName,
+                      }}
+                    />
+                  </Alert>
+                )}
+                {isErrorAlertVisible && (
+                  <Alert
+                    variant={AlertVariants.DANGER}
+                    fullWidth
+                    closable
+                    onClose={() => {
+                      setIsErrorAlertVisible(false);
                     }}
-                  />
-                </Alert>
-                <Alert
-                  variant={AlertVariants.DANGER}
-                  visible={isErrorAlertVisible}
-                  fullWidth
-                  closable
-                  onClose={() => {
-                    setIsErrorAlertVisible(false);
-                  }}
-                >
-                  <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
-                </Alert>
+                  >
+                    <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
+                  </Alert>
+                )}
               </Stack>
-              {isClientSide && (
-                <iframe
-                  height={
-                    iframeHeight ? `${iframeHeight}px` : `${window.innerHeight}`
-                  }
-                  onLoad={() => {
-                    iframeRef.current.contentWindow.postMessage('test', '*');
-                  }}
-                  src={legacyPath}
-                  ref={iframeRef}
-                ></iframe>
-              )}
+              <Inline spacing={5}>
+                <Stack flex={3}>
+                  <OrganizerTable organizer={organizer} />
+                </Stack>
+                <Stack spacing={3.5} flex={1}>
+                  {!canEdit && isOwnershipEnabled && (
+                    <Button
+                      variant={ButtonVariants.SECONDARY}
+                      onClick={() => setIsQuestionModalVisible(true)}
+                    >
+                      {t('organizers.detail.actions.request')}
+                    </Button>
+                  )}
+                  {canEdit && (
+                    <Button
+                      variant={ButtonVariants.SECONDARY}
+                      spacing={3}
+                      iconName={Icons.PENCIL}
+                      onClick={() =>
+                        router.push(`/organizer/${organizerId}/edit`)
+                      }
+                    >
+                      {t('organizers.detail.actions.edit')}
+                    </Button>
+                  )}
+
+                  <Button
+                    variant={ButtonVariants.SECONDARY}
+                    spacing={3}
+                    iconName={Icons.ARROW_LEFT}
+                    onClick={() => router.push(`/organizers`)}
+                  >
+                    {t('organizers.detail.actions.back')}
+                  </Button>
+                </Stack>
+              </Inline>
+              <iframe
+                height={iframeHeight}
+                src={legacyPath}
+                ref={iframeRef}
+              ></iframe>
             </Stack>
           )}
-          {!isOwnershipEnabled && isClientSide && (
-            <iframe
-              height={
-                iframeHeight ? `${iframeHeight}px` : `${window.innerHeight}`
-              }
-              src={legacyPath}
-            ></iframe>
-          )}
+          {!isOwnershipEnabled && <OrganizerTable organizer={organizer} />}
         </Stack>
       </Page.Content>
     </Page>
   );
 };
 
-export const getServerSideProps = getApplicationServerSideProps();
+export const getServerSideProps = getApplicationServerSideProps(
+  async ({ req, query, cookies, queryClient }) => {
+    await Promise.all([
+      await useGetOrganizerByIdQuery({
+        req,
+        queryClient,
+        id: query.organizerId,
+      }),
+      await useGetOrganizerPermissions({
+        req,
+        queryClient,
+        organizerId: query.organizerId,
+      }),
+    ]);
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        cookies,
+      },
+    };
+  },
+);
 
 export default OrganizersPreview;
