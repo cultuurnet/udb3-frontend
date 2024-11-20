@@ -84,7 +84,12 @@ export const OrganizerTable = ({ organizer }: Props) => {
           {t(title)}
         </Text>
         <Stack>
-          {urls && urls.map((url) => <Link href={url}>{url}</Link>)}
+          {urls &&
+            urls.map((url) => (
+              <Link key={url} href={url}>
+                {url}
+              </Link>
+            ))}
           <Text
             size={3}
             css={`
@@ -140,6 +145,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
         >
           {images?.map((image) => (
             <Inline
+              key={image['@id']}
               spacing={4}
               paddingTop={3}
               paddingBottom={3}
