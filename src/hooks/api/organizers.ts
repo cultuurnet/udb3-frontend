@@ -3,6 +3,7 @@ import type { UseMutationOptions, UseQueryOptions } from 'react-query';
 import type {
   AuthenticatedQueryOptions,
   PaginationOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
 import {
@@ -164,6 +165,38 @@ const getOrganizersByCreator = async ({
   }
   return await res.json();
 };
+
+type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
+  organizerId: string;
+};
+
+const getOrganizerPermissions = async ({ headers, organizerId }) => {
+  const res = await fetchFromApi({
+    path: `/organizers/${organizerId}/permissions`,
+    options: {
+      headers,
+    },
+  });
+  if (isErrorObject(res)) {
+    // eslint-disable-next-line no-console
+    return console.error(res);
+  }
+  return await res.json();
+};
+
+const useGetOrganizerPermissions = (
+  { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['ownership-permissions'],
+    queryFn: getOrganizerPermissions,
+    queryArguments: { organizerId },
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
 
 const deleteOrganizerById = async ({ headers, id }) =>
   fetchFromApi({
@@ -357,6 +390,7 @@ export {
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
   useGetOrganizerByIdQuery,
+  useGetOrganizerPermissions,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
