@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { UseQueryResult } from 'react-query';
 
 import {
@@ -12,6 +12,7 @@ import { List } from '@/ui/List';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Panel } from '@/ui/Panel';
+import { Select } from '@/ui/Select';
 import { Spinner } from '@/ui/Spinner';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -25,11 +26,15 @@ const itemsPerPage = 14;
 const OwnershipsOverviewPage = () => {
   const router = useRouter();
 
+  const [filteredState, setFilteredState] = useState<OwnershipState>(
+    OwnershipState.REJECTED,
+  );
+
   const page = parseInt((router.query.page as string) ?? '1');
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery(
     {
-      state: OwnershipState.REQUESTED,
+      state: filteredState,
       paginationOptions: {
         start: (page - 1) * itemsPerPage,
         limit: itemsPerPage,
@@ -61,6 +66,18 @@ const OwnershipsOverviewPage = () => {
           box-shadow: unset !important;
         `}
       >
+        <Select
+          selected={filteredState}
+          onChange={(event) =>
+            setFilteredState(event.target.value as OwnershipState)
+          }
+        >
+          {Object.values(OwnershipState).map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </Select>
         <List>
           {requests.map((request, index) => (
             <List.Item

@@ -16,7 +16,7 @@ export type OwnershipRequest = {
   ownerId: string;
   ownerEmail: string;
   requesterId: string;
-  state: RequestState;
+  state: OwnershipState;
 };
 
 export const OwnershipState = {
@@ -26,7 +26,7 @@ export const OwnershipState = {
   DELETED: 'deleted',
 } as const;
 
-type RequestState = Values<typeof OwnershipState>;
+export type OwnershipState = Values<typeof OwnershipState>;
 
 const getOwnershipRequests = async ({
   headers,
@@ -36,7 +36,7 @@ const getOwnershipRequests = async ({
 }: {
   headers: Headers;
   organizerId?: string;
-  state?: RequestState;
+  state?: OwnershipState;
 } & PaginationOptions) => {
   const searchParams = new URLSearchParams();
   if (paginationOptions) {
@@ -65,7 +65,7 @@ const getOwnershipRequests = async ({
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
   organizerId?: string;
-  state?: RequestState;
+  state?: OwnershipState;
 } & PaginationOptions;
 
 export type GetOwnershipRequestsResponse = {
