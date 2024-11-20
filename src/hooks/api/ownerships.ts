@@ -4,6 +4,7 @@ import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  PaginationOptions,
   ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -18,19 +19,39 @@ export type OwnershipRequest = {
   state: RequestState;
 };
 
-export const RequestState = {
-  APPROVED: 'approved',
+export const OwnershipState = {
   REQUESTED: 'requested',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  DELETED: 'deleted',
 } as const;
 
-type RequestState = Values<typeof RequestState>;
+type RequestState = Values<typeof OwnershipState>;
 
-const getOwnershipRequests = async ({ headers, organizerId }) => {
+const getOwnershipRequests = async ({
+  headers,
+  organizerId,
+  state,
+  paginationOptions,
+}: {
+  headers: Headers;
+  organizerId?: string;
+  state?: RequestState;
+} & PaginationOptions) => {
+  const searchParams = new URLSearchParams();
+  if (paginationOptions) {
+    searchParams.set('limit', `${paginationOptions.limit}`);
+    searchParams.set('offset', `${paginationOptions.start}`);
+  }
+  if (organizerId) {
+    searchParams.set('itemId', organizerId);
+  }
+  if (state) {
+    searchParams.set('state', state);
+  }
   const res = await fetchFromApi({
     path: '/ownerships/',
-    searchParams: {
-      itemId: organizerId,
-    },
+    searchParams,
     options: {
       headers,
     },
@@ -43,19 +64,33 @@ const getOwnershipRequests = async ({ headers, organizerId }) => {
 };
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
-  organizerId: string;
-};
+  organizerId?: string;
+  state?: RequestState;
+} & PaginationOptions;
 
+export type GetOwnershipRequestsResponse = {
+  '@context': string;
+  '@type': string;
+  itemsPerPage: number;
+  totalItems: number;
+  member: OwnershipRequest[];
+};
 const useGetOwnershipRequestsQuery = (
-  { req, queryClient, organizerId }: UseGetOwnershipRequestsArguments,
+  {
+    req,
+    queryClient,
+    organizerId,
+    state,
+    paginationOptions,
+  }: UseGetOwnershipRequestsArguments,
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery<OwnershipRequest[]>({
+  useAuthenticatedQuery<GetOwnershipRequestsResponse>({
     req,
     queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { organizerId },
+    queryArguments: { organizerId, state, paginationOptions },
     refetchOnWindowFocus: false,
     ...configuration,
   });

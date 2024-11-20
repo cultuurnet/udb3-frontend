@@ -2,12 +2,13 @@ import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient } from 'react-query';
+import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
+  GetOwnershipRequestsResponse,
   OwnershipRequest,
-  RequestState,
+  OwnershipState,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
@@ -25,6 +26,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
+import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { OwnershipsTable } from './OwnershipsTable';
@@ -66,21 +68,15 @@ const Ownership = () => {
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
     organizerId: organizerId,
-  });
+  }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
 
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
-    () =>
-      groupBy(
-        // @ts-expect-error
-        getOwnershipRequestsQuery.data?.member,
-        'state',
-      ),
-    // @ts-expect-error
+    () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
     [getOwnershipRequestsQuery.data],
   );
 
-  const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
-  const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
+  const approvedRequests = requestsByState[OwnershipState.APPROVED] ?? [];
+  const pendingRequests = requestsByState[OwnershipState.REQUESTED] ?? [];
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
