@@ -160,12 +160,13 @@ const OrganizersPreview = () => {
                   variant={AlertVariants.SUCCESS}
                   marginBottom={4}
                   closable
+                  fullWidth
                   onClose={() => {
                     setIsSuccessAlertVisible(false);
                   }}
                 >
                   <Trans
-                    i18nKey="organizers.ownerships.request.confirm_modal.body"
+                    i18nKey="organizers.ownerships.request.success"
                     values={{
                       organizerName: organizerName,
                     }}
