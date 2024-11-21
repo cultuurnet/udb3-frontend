@@ -74,11 +74,6 @@ const OrganizersPreview = () => {
   );
 
   useHandleWindowMessage({
-    [WindowMessageTypes.OWNERSHIP_REQUEST_DIALOG_OPENED]: () =>
-      setIsQuestionModalVisible(true),
-  });
-
-  useHandleWindowMessage({
     [WindowMessageTypes.PAGE_HEIGHT]: (event) => setIframeHeight(event?.height),
   });
 
@@ -146,56 +141,57 @@ const OrganizersPreview = () => {
                   />
                 </Box>
               </Modal>
-              <Stack marginBottom={5} spacing={4}>
-                {isOwnershipRequested && (
-                  <Alert
-                    variant={AlertVariants.PRIMARY}
-                    marginBottom={5}
-                    fullWidth
-                  >
-                    <Trans
-                      i18nKey="organizers.ownerships.request.pending"
-                      values={{
-                        organizerName: organizerName,
-                      }}
-                    />
-                  </Alert>
-                )}
-                {isSuccessAlertVisible && (
-                  <Alert
-                    variant={AlertVariants.SUCCESS}
-                    closable
-                    onClose={() => {
-                      setIsSuccessAlertVisible(false);
+              {isOwnershipRequested && (
+                <Alert
+                  variant={AlertVariants.PRIMARY}
+                  marginBottom={4}
+                  fullWidth
+                >
+                  <Trans
+                    i18nKey="organizers.ownerships.request.pending"
+                    values={{
+                      organizerName: organizerName,
                     }}
-                  >
-                    <Trans
-                      i18nKey="organizers.ownerships.request.confirm_modal.body"
-                      values={{
-                        organizerName: organizerName,
-                      }}
-                    />
-                  </Alert>
-                )}
-                {isErrorAlertVisible && (
-                  <Alert
-                    variant={AlertVariants.DANGER}
-                    fullWidth
-                    closable
-                    onClose={() => {
-                      setIsErrorAlertVisible(false);
+                  />
+                </Alert>
+              )}
+              {isSuccessAlertVisible && (
+                <Alert
+                  variant={AlertVariants.SUCCESS}
+                  marginBottom={4}
+                  closable
+                  onClose={() => {
+                    setIsSuccessAlertVisible(false);
+                  }}
+                >
+                  <Trans
+                    i18nKey="organizers.ownerships.request.confirm_modal.body"
+                    values={{
+                      organizerName: organizerName,
                     }}
-                  >
-                    <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
-                  </Alert>
-                )}
-              </Stack>
+                  />
+                </Alert>
+              )}
+              {isErrorAlertVisible && (
+                <Alert
+                  variant={AlertVariants.DANGER}
+                  marginBottom={4}
+                  fullWidth
+                  closable
+                  onClose={() => {
+                    setIsErrorAlertVisible(false);
+                  }}
+                >
+                  <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
+                </Alert>
+              )}
+
               <Inline spacing={5}>
                 <Stack flex={3}>
                   <OrganizerTable organizer={organizer} />
                 </Stack>
                 <Stack spacing={3.5} flex={1}>
-                  {!canEdit && isOwnershipEnabled && (
+                  {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                     <Button
                       variant={ButtonVariants.SECONDARY}
                       onClick={() => setIsQuestionModalVisible(true)}
@@ -215,7 +211,17 @@ const OrganizersPreview = () => {
                       {t('organizers.detail.actions.edit')}
                     </Button>
                   )}
-
+                  {canEdit && isOwnershipEnabled && !isOwnershipRequested && (
+                    <Button
+                      variant={ButtonVariants.SECONDARY}
+                      spacing={3}
+                      onClick={() =>
+                        router.push(`/organizer/${organizerId}/ownerships`)
+                      }
+                    >
+                      {t('organizers.detail.actions.manage')}
+                    </Button>
+                  )}
                   <Button
                     variant={ButtonVariants.SECONDARY}
                     spacing={3}
