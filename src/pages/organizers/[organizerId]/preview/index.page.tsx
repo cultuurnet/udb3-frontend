@@ -257,7 +257,8 @@ export const getServerSideProps = getApplicationServerSideProps(
       console.error(error);
       return {
         props: {
-          dehydratedState: {},
+          dehydratedState: dehydrate(queryClient),
+          cookies,
         },
       };
     }
