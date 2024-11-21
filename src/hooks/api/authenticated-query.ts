@@ -183,6 +183,10 @@ const isDuplicateMutation = (
     return false;
   }
 
+  if (mutationKey === 'request-ownership') {
+    return false;
+  }
+
   const mutations = queryClient.getMutationCache().findAll({
     mutationKey,
   });
