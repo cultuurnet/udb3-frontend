@@ -990,6 +990,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Nom",
+      "description": "Description",
+      "educationalDescription": "Description Cultuurkuur",
+      "address": "Adresse",
+      "no_address": "Aucune adresse",
+      "contact": "Contact",
+      "no_contact": "Aucune information de contact",
+      "labels": "Labels",
+      "images": "Images",
+      "no_images": "Aucune image",
+      "mainImage": "Image principale",
+      "actions": {
+        "edit": "Modifier",
+        "manage": "Gestion des demandes",
+        "request": "Demander gestion",
+        "back": "Retourner au tableau de bord"
+      }
+    },
     "create": {
       "title": "Ajouter une organisation",
       "step1": {
