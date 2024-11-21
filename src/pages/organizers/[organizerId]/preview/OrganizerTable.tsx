@@ -101,7 +101,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
               content?.startsWith('organizers.detail.no') && udbMainDarkGrey
             }
           >
-            {t(content)}
+            {content?.startsWith('organizers.detail.no') ? t(content) : content}
           </Text>
         </Stack>
       </Inline>
