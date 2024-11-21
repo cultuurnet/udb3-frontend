@@ -27,7 +27,7 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type LabelsStepProps = StackProps & TabContentProps;
 
-const LABEL_PATTERN = /^[0-9a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ\-_\s]{1,49}$/;
+export const LABEL_PATTERN = /^[0-9a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ\-_\s]{1,49}$/;
 
 const getGlobalValue = getValueFromTheme('global');
 const getButtonValue = getValueFromTheme('button');
