@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 const dummyOrganizer = {
   name: faker.lorem.word(),
@@ -83,18 +83,29 @@ test('create an organizer', async ({ baseURL, page }) => {
     organizerUrl = await page.url();
   });
 
-  console.log(organizerUrl);
   await test.step('Step 2: can assign ownerships on organizer', async () => {
     await page.goto(organizerUrl.replace('preview', 'ownerships'));
+
+    // Add ownership
     await page
       .getByRole('button', { name: 'Nieuwe beheerder toevoegen' })
       .click();
     await page.getByLabel('E-mailadres').fill(process.env.E2E_TEST_EMAIL);
     await page.getByRole('button', { name: 'Beheerder toevoegen' }).click();
-    await page.getByRole('dialog').isHidden();
-    await expect(page.getByRole('alert').nth(1).textContent()).toContain(
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(page.getByTestId('alert-success')).toContainText(
       process.env.E2E_TEST_EMAIL,
     );
-    await page.getByText(process.env.E2E_TEST_EMAIL).isVisible();
+    await expect(
+      page.getByRole('row').getByText(process.env.E2E_TEST_EMAIL),
+    ).toBeVisible();
+    await page.getByRole('row').getByRole('button').click();
+
+    // Delete ownership
+    await page.getByRole('button', { name: 'Beheerder verwijderen' }).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(
+      page.getByRole('row').getByText(process.env.E2E_TEST_EMAIL),
+    ).toBeHidden();
   });
 });
