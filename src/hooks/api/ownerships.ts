@@ -30,12 +30,12 @@ export type OwnershipState = Values<typeof OwnershipState>;
 
 const getOwnershipRequests = async ({
   headers,
-  organizerId,
+  itemId,
   state,
   paginationOptions,
 }: {
   headers: Headers;
-  organizerId?: string;
+  itemId?: string;
   state?: OwnershipState;
 } & PaginationOptions) => {
   const searchParams = new URLSearchParams();
@@ -43,8 +43,8 @@ const getOwnershipRequests = async ({
     searchParams.set('limit', `${paginationOptions.limit}`);
     searchParams.set('offset', `${paginationOptions.start}`);
   }
-  if (organizerId) {
-    searchParams.set('itemId', organizerId);
+  if (itemId) {
+    searchParams.set('itemId', itemId);
   }
   if (state) {
     searchParams.set('state', state);
@@ -64,7 +64,7 @@ const getOwnershipRequests = async ({
 };
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
-  organizerId?: string;
+  itemId?: string;
   state?: OwnershipState;
 } & PaginationOptions;
 
@@ -79,7 +79,7 @@ const useGetOwnershipRequestsQuery = (
   {
     req,
     queryClient,
-    organizerId,
+    itemId,
     state,
     paginationOptions,
   }: UseGetOwnershipRequestsArguments,
@@ -90,7 +90,7 @@ const useGetOwnershipRequestsQuery = (
     queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { organizerId, state, paginationOptions },
+    queryArguments: { itemId, state, paginationOptions },
     refetchOnWindowFocus: false,
     ...configuration,
   });

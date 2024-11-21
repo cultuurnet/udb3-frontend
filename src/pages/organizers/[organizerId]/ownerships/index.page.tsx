@@ -67,7 +67,7 @@ const Ownership = () => {
     organizer?.name?.[organizer.mainLanguage];
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
-    organizerId: organizerId,
+    itemId: organizerId,
   }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
 
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
@@ -269,7 +269,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       await useGetOwnershipRequestsQuery({
         req,
         queryClient,
-        organizerId: query.organizerId,
+        itemId: query.organizerId,
       }),
     ]);
     return {
