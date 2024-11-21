@@ -303,7 +303,7 @@ const Ownership = () => {
           variant={ModalVariants.QUESTION}
           size={ModalSizes.MD}
           title={t('organizers.ownerships.request_modal.title', {
-            name: organizer.name,
+            name: organizerName,
           })}
           confirmTitle={t(
             'organizers.ownerships.request_modal.actions.confirm',
