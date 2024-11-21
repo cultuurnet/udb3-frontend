@@ -43,7 +43,7 @@ export const OwnershipsTable = ({ requests, renderActions }: Props) => {
         {requests.map((request) => (
           <Inline
             key={request.id}
-            role={'row'}
+            role="row"
             justifyContent="space-between"
             alignItems="center"
             paddingY={3}
