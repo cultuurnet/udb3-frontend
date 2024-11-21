@@ -38,11 +38,9 @@ import { OrganizerTable } from './OrganizerTable';
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const [iframeHeight, setIframeHeight] = useState(0);
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
-  const iframeRef = useRef(null);
   const legacyPath = useLegacyPath();
   const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
@@ -72,10 +70,6 @@ const OrganizersPreview = () => {
     i18n.language as SupportedLanguage,
     organizer?.mainLanguage as SupportedLanguage,
   );
-
-  useHandleWindowMessage({
-    [WindowMessageTypes.PAGE_HEIGHT]: (event) => setIframeHeight(event?.height),
-  });
 
   const getUserQuery = useGetUserQuery();
   // @ts-expect-error
@@ -233,11 +227,6 @@ const OrganizersPreview = () => {
                   </Button>
                 </Stack>
               </Inline>
-              <iframe
-                height={iframeHeight}
-                src={legacyPath}
-                ref={iframeRef}
-              ></iframe>
             </Stack>
           )}
           {!isOwnershipEnabled && <OrganizerTable organizer={organizer} />}
