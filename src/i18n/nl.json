@@ -1004,6 +1004,7 @@
       "mainImage": "Hoofdafbeelding",
       "actions": {
         "edit": "Bewerken",
+        "manage": "Beheerders aanpassen",
         "request": "Beheer aanvragen",
         "back": "Terug naar dashboard"
       }
