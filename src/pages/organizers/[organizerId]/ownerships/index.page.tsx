@@ -19,7 +19,6 @@ import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
@@ -150,13 +149,7 @@ const Ownership = () => {
               <Title size={3}>{t('organizers.ownerships.owners')}</Title>
               <OwnershipsTable
                 requests={approvedRequests}
-                renderActions={(request) => (
-                  <Button
-                    variant={ButtonVariants.ICON}
-                    iconName={Icons.TRASH}
-                    onClick={() => setRequestToBeDeleted(request)}
-                  />
-                )}
+                onDelete={setRequestToBeDeleted}
               />
               <Modal
                 title={t('organizers.ownerships.delete_modal.title')}
@@ -187,34 +180,16 @@ const Ownership = () => {
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
                 <OwnershipsTable
                   requests={pendingRequests}
-                  renderActions={(request) => (
-                    <Inline spacing={3}>
-                      <Button
-                        variant={ButtonVariants.SUCCESS}
-                        iconName={Icons.CHECK_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.APPROVE);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.approve')}
-                      </Button>
-                      <Button
-                        variant={ButtonVariants.DANGER}
-                        iconName={Icons.TIMES_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.REJECT);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.reject')}
-                      </Button>
-                    </Inline>
-                  )}
+                  onApprove={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.APPROVE);
+                  }}
+                  onReject={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.REJECT);
+                  }}
                 />
                 <Modal
                   title={t(`${translationsPath}.title`)}

@@ -1,80 +1,24 @@
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
 import {
   GetOwnershipRequestsResponse,
-  OwnershipRequest,
   OwnershipState,
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
-import { Button, ButtonVariants } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
-import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Panel } from '@/ui/Panel';
 import { Select } from '@/ui/Select';
 import { Spinner } from '@/ui/Spinner';
-import { getValueFromTheme } from '@/ui/theme';
 import type { FetchError } from '@/utils/fetchFromApi';
 
-const getValue = getValueFromTheme('dashboardPage');
-const getGlobalValue = getValueFromTheme('global');
-
 const itemsPerPage = 14;
-
-const Actions = ({ request }: { request: OwnershipRequest }) => {
-  const { t } = useTranslation();
-
-  if (request.state === OwnershipState.REQUESTED) {
-    return (
-      <Inline spacing={3}>
-        <Button
-          variant={ButtonVariants.SUCCESS}
-          iconName={Icons.CHECK_CIRCLE}
-          spacing={3}
-          onClick={() => {
-            // setIsQuestionModalVisible(true);
-            // setSelectedRequest(request);
-            // setActionType(ActionType.APPROVE);
-          }}
-        >
-          {t('organizers.ownerships.table.actions.approve')}
-        </Button>
-        <Button
-          variant={ButtonVariants.DANGER}
-          iconName={Icons.TIMES_CIRCLE}
-          spacing={3}
-          onClick={() => {
-            // setIsQuestionModalVisible(true);
-            // setSelectedRequest(request);
-            // setActionType(ActionType.REJECT);
-          }}
-        >
-          {t('organizers.ownerships.table.actions.reject')}
-        </Button>
-      </Inline>
-    );
-  }
-
-  if (request.state === OwnershipState.DELETED) {
-    return null;
-  }
-
-  return (
-    <Button
-      variant={ButtonVariants.ICON}
-      iconName={Icons.TRASH}
-      onClick={() => {}}
-    />
-  );
-};
 
 const OwnershipsOverviewPage = () => {
   const router = useRouter();
@@ -169,10 +113,7 @@ const OwnershipsOverviewPage = () => {
           {getOwnershipRequestsQuery.isLoading ? (
             <Spinner />
           ) : (
-            <OwnershipsTable
-              requests={requests}
-              renderActions={(request) => <Actions request={request} />}
-            />
+            <OwnershipsTable requests={requests} />
           )}
 
           {hasMoreThanOnePage && (
