@@ -15,7 +15,6 @@ import {
   useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
 import { useGetUserQuery } from '@/hooks/api/user';
-import { useLegacyPath } from '@/hooks/useLegacyPath';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
