@@ -15,6 +15,8 @@ import {
 } from '@/utils/formatOrganizerDetail';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
+import { OrganizerLabels } from './OrganizerLabels';
+
 type Props = { organizer: Organizer };
 
 const getGlobalValue = getValueFromTheme('global');
@@ -123,14 +125,6 @@ export const OrganizerTable = ({ organizer }: Props) => {
       );
     }
 
-    const renderLabels = (title: string, labels: Organizer['hiddenLabels']) => {
-      <Inline padding={3}>
-        <Text minWidth="15rem" color={udbMainDarkGrey}>
-          {t(title)}
-        </Text>
-      </Inline>;
-    };
-
     return (
       <Inline padding={3}>
         <Text minWidth="15rem" color={udbMainDarkGrey}>
@@ -191,6 +185,22 @@ export const OrganizerTable = ({ organizer }: Props) => {
     );
   };
 
+  const renderOrganizerLabels = (title: string, organizer: Organizer) => {
+    return (
+      <Inline
+        padding={3}
+        css={`
+          border-bottom: 1px solid ${grey2};
+        `}
+      >
+        <Text minWidth="15rem" color={udbMainDarkGrey}>
+          {t(title)}
+        </Text>
+        <OrganizerLabels organizer={organizer} />
+      </Inline>
+    );
+  };
+
   return (
     <Stack
       flex={1}
@@ -219,6 +229,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
         formattedEmailAndPhone,
         organizer?.contactPoint?.url,
       )}
+      {renderOrganizerLabels('organizers.detail.labels', organizer)}
       {renderOrganizerImages('organizers.detail.images', organizer?.images)}
     </Stack>
   );
