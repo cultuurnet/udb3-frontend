@@ -59,7 +59,7 @@ const OrganizersPreview = () => {
   });
 
   // @ts-expect-error
-  const permissions = getOrganizerPermissionsQuery?.data.permissions ?? [];
+  const permissions = getOrganizerPermissionsQuery?.data?.permissions ?? [];
   const canEdit = permissions.includes('Organisaties bewerken');
 
   // @ts-expect-error
@@ -238,24 +238,34 @@ const OrganizersPreview = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    await Promise.all([
-      await useGetOrganizerByIdQuery({
-        req,
-        queryClient,
-        id: query.organizerId,
-      }),
-      await useGetOrganizerPermissions({
-        req,
-        queryClient,
-        organizerId: query.organizerId,
-      }),
-    ]);
-    return {
-      props: {
-        dehydratedState: dehydrate(queryClient),
-        cookies,
-      },
-    };
+    try {
+      await Promise.all([
+        useGetOrganizerByIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
+        }),
+        useGetOrganizerPermissions({
+          req,
+          queryClient,
+          organizerId: query.organizerId,
+        }),
+      ]);
+
+      return {
+        props: {
+          dehydratedState: dehydrate(queryClient),
+          cookies,
+        },
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          dehydratedState: {},
+        },
+      };
+    }
   },
 );
 
