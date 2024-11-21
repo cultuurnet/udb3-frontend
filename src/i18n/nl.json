@@ -1081,7 +1081,8 @@
           "confirm": "Beheer aanvragen",
           "error": "Er is iets misgelopen"
         },
-        "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling. <br/> Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
+        "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling.<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail.",
+        "success": "Je aanvraag om beheerder te worden van {{organizerName}} is succesvol verzonden!<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
       }
     }
   },
