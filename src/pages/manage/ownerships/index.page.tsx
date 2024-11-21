@@ -113,7 +113,7 @@ const OwnershipsOverviewPage = () => {
           {getOwnershipRequestsQuery.isLoading ? (
             <Spinner />
           ) : (
-            <OwnershipsTable requests={requests} />
+            <OwnershipsTable requests={requests} shouldShowItemId />
           )}
 
           {hasMoreThanOnePage && (

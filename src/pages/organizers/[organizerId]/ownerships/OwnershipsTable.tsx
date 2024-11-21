@@ -63,6 +63,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
 
 type Props = {
   requests: OwnershipRequest[];
+  shouldShowItemId: boolean;
 } & ActionHandlers;
 
 export const OwnershipsTable = ({
@@ -70,6 +71,7 @@ export const OwnershipsTable = ({
   onDelete,
   onApprove,
   onReject,
+  shouldShowItemId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
@@ -99,14 +101,14 @@ export const OwnershipsTable = ({
         paddingBottom={3}
         css={`
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: 1fr 2fr 1fr;
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
-        <Title size={3}>item id</Title>
+        {shouldShowItemId && <Title size={3}>item id</Title>}
         {hasActions && (
-          <Title size={3} justifyContent="flex-end">
+          <Title size={3}>
             {t('organizers.ownerships.table.actions.title')}
           </Title>
         )}
@@ -119,7 +121,7 @@ export const OwnershipsTable = ({
             paddingY={3}
             css={`
               display: grid;
-              grid-template-columns: repeat(3, 1fr);
+              grid-template-columns: 1fr 2fr 1fr;
 
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
@@ -127,9 +129,9 @@ export const OwnershipsTable = ({
             `}
           >
             <List.Item>{request.ownerEmail}</List.Item>
-            <List.Item>{request.itemId}</List.Item>
+            {shouldShowItemId && <List.Item>{request.itemId}</List.Item>}
             {hasActions && (
-              <List.Item justifyContent="flex-end">
+              <List.Item>
                 <Actions
                   request={request}
                   onDelete={onDelete}
