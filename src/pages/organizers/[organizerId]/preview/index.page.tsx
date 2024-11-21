@@ -188,7 +188,7 @@ const OrganizersPreview = () => {
                 <Stack spacing={3.5} flex={1}>
                   {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                     <Button
-                      variant={ButtonVariants.SECONDARY}
+                      variant={ButtonVariants.PRIMARY}
                       onClick={() => setIsQuestionModalVisible(true)}
                     >
                       {t('organizers.detail.actions.request')}
