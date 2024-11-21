@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dehydrate, useQueryClient } from 'react-query';
 
@@ -15,10 +15,6 @@ import {
   useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
 import { useGetUserQuery } from '@/hooks/api/user';
-import {
-  useHandleWindowMessage,
-  WindowMessageTypes,
-} from '@/hooks/useHandleWindowMessage';
 import { useLegacyPath } from '@/hooks/useLegacyPath';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
@@ -41,7 +37,6 @@ const OrganizersPreview = () => {
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
-  const legacyPath = useLegacyPath();
   const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
