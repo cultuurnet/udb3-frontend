@@ -25,8 +25,4 @@ const formatEmailAndPhone = ({ email, phone }: Organizer['contactPoint']) => {
   return contactDetails.join('\n');
 };
 
-const replaceHTMLTags = (text: string) => {
-  return text.replace(/<\/?[^>]+(>|$)/g, '');
-};
-
-export { formatEmailAndPhone, parseAddress, replaceHTMLTags };
+export { formatEmailAndPhone, parseAddress };
