@@ -43,7 +43,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           display="inline-flex"
           color={{ default: 'inherit', hover: 'inherit' }}
           alignItems="center"
-          {...props}
           {...getInlineProps(props)}
         >
           {children}
@@ -60,7 +59,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           as={as}
           display="inline-flex"
           alignItems="center"
-          {...props}
           {...getInlineProps(props)}
         >
           <Button forwardedAs="span" width="100%" variant={variant}>
@@ -86,7 +84,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
             text-decoration: underline;
           }
         `}
-        {...props}
         {...getInlineProps(props)}
       >
         {children}
