@@ -20,7 +20,7 @@ import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
-import { Typeahead } from '@/ui/Typeahead';
+import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type OrganizerLabelProps = {
@@ -29,7 +29,7 @@ type OrganizerLabelProps = {
 
 export const OrganizerLabels = ({ organizer }: OrganizerLabelProps) => {
   const { t } = useTranslation();
-  const ref = useRef(null);
+  const ref = useRef<TypeaheadElement<Label>>(null);
   const router = useRouter();
   const [query, setQuery] = useState('');
   // @ts-expect-error

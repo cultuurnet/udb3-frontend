@@ -24,6 +24,9 @@ type NewEntry = {
   label: string;
 };
 
+export type TypeaheadElement<T extends TypeaheadModel = TypeaheadModel> =
+  BootstrapTypeahead<T>;
+
 const isNewEntry = (value: any): value is NewEntry => {
   return !!value?.customOption;
 };
@@ -65,7 +68,7 @@ const TypeaheadInner = <T extends TypeaheadModel>(
     isLoading,
     ...props
   }: Props<T>,
-  ref: ForwardedRef<HTMLInputElement>,
+  ref: ForwardedRef<BootstrapTypeahead<T>>,
 ) => {
   const { t } = useTranslation();
 
@@ -164,7 +167,7 @@ const TypeaheadInner = <T extends TypeaheadModel>(
 };
 
 const Typeahead = forwardRef(TypeaheadInner) as <T extends TypeaheadModel>(
-  props: Props<T> & { ref?: ForwardedRef<HTMLInputElement> },
+  props: Props<T> & { ref?: ForwardedRef<BootstrapTypeahead<T>> },
 ) => ReturnType<typeof TypeaheadInner<T>>;
 
 export type { NewEntry };

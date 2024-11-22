@@ -22,7 +22,7 @@ import { Inline } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
-import { Typeahead } from '@/ui/Typeahead';
+import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type LabelsStepProps = StackProps & TabContentProps;
@@ -44,7 +44,7 @@ function LabelsStep({
   // @ts-expect-error
   const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
 
-  const ref = useRef(null);
+  const ref = useRef<TypeaheadElement<Label>>(null);
 
   const [query, setQuery] = useState('');
   // @ts-expect-error
