@@ -29,6 +29,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 import { OrganizerTable } from './OrganizerTable';
+import { Link, LinkButtonVariants } from '@/ui/Link';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
@@ -189,36 +190,32 @@ const OrganizersPreview = () => {
                     </Button>
                   )}
                   {canEdit && (
-                    <Button
-                      variant={ButtonVariants.SECONDARY}
+                    <Link
+                      variant={LinkButtonVariants.BUTTON_SECONDARY}
                       spacing={3}
                       iconName={Icons.PENCIL}
-                      onClick={() =>
-                        router.push(`/organizer/${organizerId}/edit`)
-                      }
+                      href={`/organizer/${organizerId}/edit`}
                     >
                       {t('organizers.detail.actions.edit')}
-                    </Button>
+                    </Link>
                   )}
                   {canEdit && isOwnershipEnabled && !isOwnershipRequested && (
-                    <Button
-                      variant={ButtonVariants.SECONDARY}
+                    <Link
+                      variant={LinkButtonVariants.BUTTON_SECONDARY}
                       spacing={3}
-                      onClick={() =>
-                        router.push(`/organizer/${organizerId}/ownerships`)
-                      }
+                      href={`/organizer/${organizerId}/ownerships`}
                     >
                       {t('organizers.detail.actions.manage')}
-                    </Button>
+                    </Link>
                   )}
-                  <Button
-                    variant={ButtonVariants.SECONDARY}
+                  <Link
+                    variant={LinkButtonVariants.BUTTON_SECONDARY}
                     spacing={3}
                     iconName={Icons.ARROW_LEFT}
-                    onClick={() => router.push(`/organizers`)}
+                    href={`/organizers`}
                   >
                     {t('organizers.detail.actions.back')}
-                  </Button>
+                  </Link>
                 </Stack>
               </Inline>
             </Stack>
