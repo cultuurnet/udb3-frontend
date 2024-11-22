@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import sanitizeHtml from 'sanitize-html';
 
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
@@ -11,7 +12,6 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 import {
   formatEmailAndPhone,
   parseAddress,
-  replaceHTMLTags,
 } from '@/utils/formatOrganizerDetail';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
@@ -33,6 +33,9 @@ const OrganizerInfo = ({
   urls?: string[];
 }) => {
   const { t } = useTranslation();
+  const isDescription =
+    title.startsWith('organizers.detail.description') ||
+    title.startsWith('organizers.detail.educationalDescription');
   return (
     <Inline
       padding={3}
@@ -49,15 +52,24 @@ const OrganizerInfo = ({
             {url}
           </Link>
         ))}
-        <Text
-          size={3}
-          css={`
-            white-space: pre-wrap;
-          `}
-          color={content?.startsWith('organizers.detail.no') && udbMainDarkGrey}
-        >
-          {content?.startsWith('organizers.detail.no') ? t(content) : content}
-        </Text>
+        {isDescription ? (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: content,
+            }}
+          />
+        ) : (
+          <Text
+            css={`
+              white-space: pre-wrap;
+            `}
+            color={
+              content?.startsWith('organizers.detail.no') && udbMainDarkGrey
+            }
+          >
+            {content?.startsWith('organizers.detail.no') ? t(content) : content}
+          </Text>
+        )}
       </Stack>
     </Inline>
   );
@@ -179,7 +191,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
   );
 
   const formattedDescription: string | undefined = organizer?.description
-    ? replaceHTMLTags(
+    ? sanitizeHtml(
         getLanguageObjectOrFallback(
           organizer?.description,
           i18n.language as SupportedLanguage,
@@ -190,7 +202,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
 
   const formattedEducationalDescription: string | undefined =
     organizer?.educationalDescription
-      ? replaceHTMLTags(
+      ? sanitizeHtml(
           getLanguageObjectOrFallback(
             organizer?.educationalDescription,
             i18n.language as SupportedLanguage,
