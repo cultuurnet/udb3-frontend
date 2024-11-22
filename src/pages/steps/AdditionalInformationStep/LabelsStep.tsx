@@ -65,7 +65,7 @@ function LabelsStep({
 
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
-  
+
   return (
     <Inline width={isInvalid ? '100%' : '50%'} spacing={5}>
       <Stack
