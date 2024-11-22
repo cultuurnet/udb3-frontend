@@ -93,6 +93,7 @@ export const OwnershipsTable = ({
       marginBottom={5}
       borderRadius="0.5rem"
       backgroundColor="white"
+      maxWidth="85rem"
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
@@ -101,7 +102,7 @@ export const OwnershipsTable = ({
         paddingBottom={3}
         css={`
           display: grid;
-          grid-template-columns: 1fr 2fr 1fr;
+          grid-template-columns: 1fr 1fr 18rem;
           border-bottom: 1px solid ${grey3};
         `}
       >
@@ -119,9 +120,9 @@ export const OwnershipsTable = ({
             key={request.id}
             alignItems="center"
             paddingY={3}
+            display="grid"
             css={`
-              display: grid;
-              grid-template-columns: 1fr 2fr 1fr;
+              grid-template-columns: 1fr 1fr 18rem;
 
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
