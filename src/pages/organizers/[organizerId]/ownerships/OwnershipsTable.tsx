@@ -7,6 +7,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
@@ -129,8 +130,19 @@ export const OwnershipsTable = ({
               }
             `}
           >
-            <List.Item>{request.ownerEmail}</List.Item>
-            {shouldShowItemId && <List.Item>{request.itemId}</List.Item>}
+            <List.Item>
+              <Stack>
+                <Text>{request.ownerId}</Text>
+                <Text>{request.ownerEmail}</Text>
+              </Stack>
+            </List.Item>
+            {shouldShowItemId && (
+              <List.Item>
+                <Stack>
+                  <Text>{request.itemId}</Text>
+                </Stack>
+              </List.Item>
+            )}
             {hasActions && (
               <List.Item>
                 <Actions
