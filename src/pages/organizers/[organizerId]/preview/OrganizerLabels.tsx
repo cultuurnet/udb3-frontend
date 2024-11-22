@@ -50,6 +50,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
 
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
+
   return (
     <Inline flex={1} spacing={5}>
       <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={2}>
@@ -124,8 +125,8 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
               <Text>{label}</Text>
               <Icon
                 name={Icons.TIMES}
-                width={'12px'}
-                height={'12px'}
+                width="0.8rem"
+                height="0.8rem"
                 marginLeft={1}
                 onClick={async () => {
                   await removeLabelMutation.mutateAsync({

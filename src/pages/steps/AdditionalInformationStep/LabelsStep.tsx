@@ -65,6 +65,7 @@ function LabelsStep({
 
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
+  
   return (
     <Inline width={isInvalid ? '100%' : '50%'} spacing={5}>
       <Stack
@@ -141,8 +142,8 @@ function LabelsStep({
               <Text>{label}</Text>
               <Icon
                 name={Icons.TIMES}
-                width={'12px'}
-                height={'12px'}
+                width="0.8rem"
+                height="0.8rem"
                 marginLeft={1}
                 onClick={async () => {
                   await removeLabelMutation.mutateAsync({
