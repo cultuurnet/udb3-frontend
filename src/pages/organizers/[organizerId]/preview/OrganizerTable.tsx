@@ -15,15 +15,162 @@ import {
 } from '@/utils/formatOrganizerDetail';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
-import { OrganizerLabels } from './OrganizerLabels';
+import { OrganizerLabelsForm } from './OrganizerLabels';
 
 type Props = { organizer: Organizer };
 
 const getGlobalValue = getValueFromTheme('global');
 
+const { grey2, udbMainDarkGrey } = colors;
+
+const OrganizerInfo = ({
+  title,
+  content,
+  urls,
+}: {
+  title: string;
+  content: string;
+  urls?: string[];
+}) => {
+  const { t } = useTranslation();
+  return (
+    <Inline
+      padding={3}
+      css={`
+        border-bottom: 1px solid ${grey2};
+      `}
+    >
+      <Text minWidth="15rem" color={udbMainDarkGrey} size={3}>
+        {t(title)}
+      </Text>
+      <Stack>
+        {(urls ?? []).map((url) => (
+          <Link key={url} href={url}>
+            {url}
+          </Link>
+        ))}
+        <Text
+          size={3}
+          css={`
+            white-space: pre-wrap;
+          `}
+          color={content?.startsWith('organizers.detail.no') && udbMainDarkGrey}
+        >
+          {content?.startsWith('organizers.detail.no') ? t(content) : content}
+        </Text>
+      </Stack>
+    </Inline>
+  );
+};
+
+const OrganizerImages = ({
+  title,
+  organizer,
+  images,
+}: {
+  title: string;
+  organizer: Organizer;
+  images: Organizer['images'] | undefined;
+}) => {
+  const { t } = useTranslation();
+  const isMainImage = (url: string) => {
+    return url === organizer?.mainImage;
+  };
+  if (!images || images.length === 0) {
+    return (
+      <Inline padding={3}>
+        <Text minWidth="15rem" color={udbMainDarkGrey}>
+          {t(title)}
+        </Text>
+        <Text color={udbMainDarkGrey}>{t('organizers.detail.no_images')}</Text>
+      </Inline>
+    );
+  }
+  return (
+    <Inline padding={3}>
+      <Text minWidth="15rem" color={udbMainDarkGrey}>
+        {t(title)}
+      </Text>
+      <Stack
+        spacing={3}
+        flex={1}
+        css={`
+          white-space: pre-wrap;
+        `}
+      >
+        {images?.map((image) => (
+          <Inline
+            key={image['@id']}
+            spacing={4}
+            paddingTop={3}
+            paddingBottom={3}
+            css={`
+              &:not(:last-child) {
+                border-bottom: 1px solid ${grey2};
+              }
+            `}
+          >
+            <Inline>
+              <Link href={image.contentUrl}>
+                <Image
+                  width={300}
+                  src={image.thumbnailUrl}
+                  alt={image.description}
+                />
+              </Link>
+            </Inline>
+            <Stack>
+              {isMainImage(image.thumbnailUrl) && (
+                <Text
+                  backgroundColor={udbMainDarkGrey}
+                  color="white"
+                  alignSelf="flex-start"
+                  borderRadius="3px"
+                  paddingRight={3}
+                  paddingLeft={3}
+                  fontSize="0.8rem"
+                  fontWeight="bold"
+                >
+                  {t('organizers.detail.mainImage')}
+                </Text>
+              )}
+              <Text>{image.description}</Text>
+              <Text color={udbMainDarkGrey}>
+                {`© ${image.copyrightHolder}`}
+              </Text>
+            </Stack>
+          </Inline>
+        ))}
+      </Stack>
+    </Inline>
+  );
+};
+
+const OrganizerLabels = ({
+  title,
+  organizer,
+}: {
+  title: string;
+  organizer: Organizer;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <Inline
+      padding={3}
+      css={`
+        border-bottom: 1px solid ${grey2};
+      `}
+    >
+      <Text minWidth="15rem" color={udbMainDarkGrey}>
+        {t(title)}
+      </Text>
+      <OrganizerLabelsForm organizer={organizer} />
+    </Inline>
+  );
+};
+
 export const OrganizerTable = ({ organizer }: Props) => {
-  const { grey2, udbMainDarkGrey } = colors;
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   const formattedName: string = getLanguageObjectOrFallback(
     organizer?.name,
@@ -31,7 +178,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
     organizer?.mainLanguage as SupportedLanguage,
   );
 
-  const formattedDescription: string = organizer?.description
+  const formattedDescription: string | undefined = organizer?.description
     ? replaceHTMLTags(
         getLanguageObjectOrFallback(
           organizer?.description,
@@ -39,9 +186,9 @@ export const OrganizerTable = ({ organizer }: Props) => {
           organizer?.mainLanguage as SupportedLanguage,
         ),
       )
-    : null;
+    : undefined;
 
-  const formattedEducationalDescription: string =
+  const formattedEducationalDescription: string | undefined =
     organizer?.educationalDescription
       ? replaceHTMLTags(
           getLanguageObjectOrFallback(
@@ -50,7 +197,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
             organizer?.mainLanguage as SupportedLanguage,
           ),
         )
-      : null;
+      : undefined;
 
   const formattedEmailAndPhone =
     organizer?.contactPoint &&
@@ -65,142 +212,23 @@ export const OrganizerTable = ({ organizer }: Props) => {
         organizer?.mainLanguage as SupportedLanguage,
       )
     : 'organizers.detail.no_address';
-
-  const isMainImage = (url: string) => {
-    return url === organizer?.mainImage;
-  };
-
-  const renderOrganizerInfo = (
-    title: string,
-    content: string,
-    urls?: string[],
-  ) => {
-    return (
-      <Inline
-        padding={3}
-        css={`
-          border-bottom: 1px solid ${grey2};
-        `}
-      >
-        <Text minWidth="15rem" color={udbMainDarkGrey} size={3}>
-          {t(title)}
-        </Text>
-        <Stack>
-          {urls &&
-            urls.map((url) => (
-              <Link key={url} href={url}>
-                {url}
-              </Link>
-            ))}
-          <Text
-            size={3}
-            css={`
-              white-space: pre-wrap;
-            `}
-            color={
-              content?.startsWith('organizers.detail.no') && udbMainDarkGrey
-            }
-          >
-            {content?.startsWith('organizers.detail.no') ? t(content) : content}
-          </Text>
-        </Stack>
-      </Inline>
-    );
-  };
-
-  const renderOrganizerImages = (
-    title: string,
-    images: Organizer['images'] | undefined,
-  ) => {
-    if (!images || images.length === 0) {
-      return (
-        <Inline padding={3}>
-          <Text minWidth="15rem" color={udbMainDarkGrey}>
-            {t(title)}
-          </Text>
-          <Text color={udbMainDarkGrey}>
-            {t('organizers.detail.no_images')}
-          </Text>
-        </Inline>
-      );
-    }
-
-    return (
-      <Inline padding={3}>
-        <Text minWidth="15rem" color={udbMainDarkGrey}>
-          {t(title)}
-        </Text>
-        <Stack
-          spacing={3}
-          flex={1}
-          css={`
-            white-space: pre-wrap;
-          `}
-        >
-          {images?.map((image) => (
-            <Inline
-              key={image['@id']}
-              spacing={4}
-              paddingTop={3}
-              paddingBottom={3}
-              css={`
-                &:not(:last-child) {
-                  border-bottom: 1px solid ${grey2};
-                }
-              `}
-            >
-              <Inline>
-                <Link href={image.contentUrl}>
-                  <Image
-                    width={300}
-                    src={image.thumbnailUrl}
-                    alt={image.description}
-                  />
-                </Link>
-              </Inline>
-              <Stack>
-                {isMainImage(image.thumbnailUrl) && (
-                  <Text
-                    backgroundColor={udbMainDarkGrey}
-                    color="white"
-                    alignSelf="flex-start"
-                    borderRadius="3px"
-                    paddingRight={3}
-                    paddingLeft={3}
-                    fontSize="0.8rem"
-                    fontWeight="bold"
-                  >
-                    {t('organizers.detail.mainImage')}
-                  </Text>
-                )}
-                <Text>{image.description}</Text>
-                <Text color={udbMainDarkGrey}>
-                  {`© ${image.copyrightHolder}`}
-                </Text>
-              </Stack>
-            </Inline>
-          ))}
-        </Stack>
-      </Inline>
-    );
-  };
-
-  const renderOrganizerLabels = (title: string, organizer: Organizer) => {
-    return (
-      <Inline
-        padding={3}
-        css={`
-          border-bottom: 1px solid ${grey2};
-        `}
-      >
-        <Text minWidth="15rem" color={udbMainDarkGrey}>
-          {t(title)}
-        </Text>
-        <OrganizerLabels organizer={organizer} />
-      </Inline>
-    );
-  };
-
+  const organizerDetailInfo = [
+    { title: 'organizers.detail.name', content: formattedName },
+    formattedDescription && {
+      title: 'organizers.detail.description',
+      content: formattedDescription,
+    },
+    formattedEducationalDescription && {
+      title: 'organizers.detail.educationalDescription',
+      content: formattedEducationalDescription,
+    },
+    { title: 'organizers.detail.address', content: formattedAddress },
+    {
+      title: 'organizers.detail.contact',
+      content: formattedEmailAndPhone,
+      urls: organizer?.contactPoint?.url,
+    },
+  ].filter((item) => item);
   return (
     <Stack
       flex={1}
@@ -212,25 +240,20 @@ export const OrganizerTable = ({ organizer }: Props) => {
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
-      {renderOrganizerInfo('organizers.detail.name', formattedName)}
-      {formattedDescription &&
-        renderOrganizerInfo(
-          'organizers.detail.description',
-          formattedDescription,
-        )}
-      {formattedEducationalDescription &&
-        renderOrganizerInfo(
-          'organizers.detail.educationalDescription',
-          formattedEducationalDescription,
-        )}
-      {renderOrganizerInfo('organizers.detail.address', formattedAddress)}
-      {renderOrganizerInfo(
-        'organizers.detail.contact',
-        formattedEmailAndPhone,
-        organizer?.contactPoint?.url,
-      )}
-      {renderOrganizerLabels('organizers.detail.labels', organizer)}
-      {renderOrganizerImages('organizers.detail.images', organizer?.images)}
+      {organizerDetailInfo?.map((info) => (
+        <OrganizerInfo
+          key={info?.title}
+          title={info?.title}
+          content={info?.content}
+          urls={info?.urls}
+        />
+      ))}
+      <OrganizerLabels title="organizers.detail.labels" organizer={organizer} />
+      <OrganizerImages
+        title="organizers.detail.images"
+        organizer={organizer}
+        images={organizer?.images}
+      />
     </Stack>
   );
 };

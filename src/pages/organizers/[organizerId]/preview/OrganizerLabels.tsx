@@ -27,7 +27,7 @@ type OrganizerLabelProps = {
   organizer: Organizer;
 };
 
-export const OrganizerLabels = ({ organizer }: OrganizerLabelProps) => {
+export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const { t } = useTranslation();
   const ref = useRef<TypeaheadElement<Label>>(null);
   const router = useRouter();
