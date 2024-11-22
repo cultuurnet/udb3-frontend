@@ -135,7 +135,7 @@ const Link = ({
     : undefined;
 
   const inner = [
-    <Inline spacing={3}>
+    <Inline spacing={3} key="content">
       {iconName && <Icon name={iconName} key="icon" />}
       {customChildren
         ? children
