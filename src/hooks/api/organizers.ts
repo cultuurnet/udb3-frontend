@@ -179,11 +179,15 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
 
   return handleErrorObject(res);
 };
+
+export type GetOrganizerPermissionsResponse = {
+  permissions: string[];
+};
 const useGetOrganizerPermissions = (
   { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery({
+  useAuthenticatedQuery<GetOrganizerPermissionsResponse>({
     req,
     queryClient,
     queryKey: ['ownership-permissions'],

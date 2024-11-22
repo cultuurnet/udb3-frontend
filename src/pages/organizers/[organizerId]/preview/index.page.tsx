@@ -2,9 +2,10 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient } from 'react-query';
+import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
 import {
+  GetOrganizerPermissionsResponse,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissions,
 } from '@/hooks/api/organizers';
@@ -14,7 +15,7 @@ import {
   useGetOwnershipRequestsQuery,
   useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
-import { useGetUserQuery } from '@/hooks/api/user';
+import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -26,6 +27,7 @@ import { Link, LinkButtonVariants } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
@@ -44,17 +46,15 @@ const OrganizersPreview = () => {
 
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
     id: organizerId,
-  });
+  }) as UseQueryResult<Organizer, FetchError>;
 
   const getOrganizerPermissionsQuery = useGetOrganizerPermissions({
     organizerId: organizerId,
-  });
+  }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
 
-  // @ts-expect-error
   const permissions = getOrganizerPermissionsQuery?.data?.permissions ?? [];
   const canEdit = permissions.includes('Organisaties bewerken');
 
-  // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
 
   const organizerName: string = getLanguageObjectOrFallback(
@@ -63,8 +63,8 @@ const OrganizersPreview = () => {
     organizer?.mainLanguage as SupportedLanguage,
   );
 
-  const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
+  const getUserQuery = useGetUserQuery() as UseQueryResult<User, FetchError>;
+
   const userId = getUserQuery.data?.sub;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
