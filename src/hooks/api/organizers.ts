@@ -13,10 +13,10 @@ import {
 import type { Organizer } from '@/types/Organizer';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { handleErrorObject } from '@/utils/handleErrorObject';
 
 import type { Headers } from './types/Headers';
 import type { User } from './user';
-import { handleErrorObject } from '@/utils/handleErrorObject';
 
 type HeadersAndQueryData = {
   headers: Headers;

@@ -22,6 +22,7 @@ import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Link, LinkButtonVariants } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -29,7 +30,6 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 import { OrganizerTable } from './OrganizerTable';
-import { Link, LinkButtonVariants } from '@/ui/Link';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
