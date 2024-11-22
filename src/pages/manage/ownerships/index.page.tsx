@@ -10,6 +10,7 @@ import {
 } from '@/hooks/api/ownerships';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
+import { parseSpacing } from '@/ui/Box';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
@@ -92,6 +93,7 @@ const OwnershipsOverviewPage = () => {
             onChange={async (event) => {
               await handleChangeState(event.target.value);
             }}
+            maxWidth={parseSpacing(8)}
           >
             {Object.values(OwnershipState).map((state) => (
               <option key={state} value={state}>
