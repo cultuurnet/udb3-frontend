@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OwnershipCreator, OwnershipRequest } from '@/hooks/api/ownerships';
 import { OwnershipRequest, OwnershipState } from '@/hooks/api/ownerships';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
@@ -64,11 +65,13 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
 
 type Props = {
   requests: OwnershipRequest[];
+  creator?: OwnershipCreator;
   shouldShowItemId?: boolean;
 } & ActionHandlers;
 
 export const OwnershipsTable = ({
   requests,
+  creator,
   onDelete,
   onApprove,
   onReject,
@@ -115,7 +118,8 @@ export const OwnershipsTable = ({
           </Title>
         )}
       </Inline>
-      <List>
+      <List paddingY={3}>
+        <List.Item>{creator.email}</List.Item>
         {requests.map((request) => (
           <Inline
             key={request.id}
