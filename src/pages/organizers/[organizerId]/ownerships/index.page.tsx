@@ -51,10 +51,8 @@ const Ownership = () => {
     isApproveAction ? 'confirm' : 'reject'
   }_modal`;
 
-  const organizerId = useMemo(
-    () => router.query.organizerId as string,
-    [router.query.organizerId],
-  );
+  const organizerId = router.query.organizerId as string;
+
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
     id: organizerId,
   });

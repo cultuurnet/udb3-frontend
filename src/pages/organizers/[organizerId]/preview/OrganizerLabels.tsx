@@ -1,6 +1,6 @@
 import { uniq } from 'lodash';
 import { useRouter } from 'next/router';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
@@ -38,10 +38,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   });
 
   const scope = ScopeTypes.ORGANIZERS;
-  const organizerId = useMemo(
-    () => router.query.organizerId as string,
-    [router.query.organizerId],
-  );
+  const organizerId = router.query.organizerId as string;
 
   const options = labelsQuery.data?.member ?? [];
   const [labels, setLabels] = useState<string[]>(
