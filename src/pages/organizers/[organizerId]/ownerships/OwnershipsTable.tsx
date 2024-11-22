@@ -63,7 +63,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
 
 type Props = {
   requests: OwnershipRequest[];
-  shouldShowItemId: boolean;
+  shouldShowItemId?: boolean;
 } & ActionHandlers;
 
 export const OwnershipsTable = ({
