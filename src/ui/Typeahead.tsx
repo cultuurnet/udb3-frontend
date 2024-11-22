@@ -1,6 +1,6 @@
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import type { ForwardedRef } from 'react';
+import type { ForwardedRef, Ref } from 'react';
 import { forwardRef } from 'react';
 import type { TypeaheadModel } from 'react-bootstrap-typeahead';
 import { AsyncTypeahead as BootstrapTypeahead } from 'react-bootstrap-typeahead';
@@ -86,7 +86,7 @@ const TypeaheadInner = <T extends TypeaheadModel>(
       disabled={disabled}
       className={className}
       flex={1}
-      ref={ref}
+      ref={ref as unknown as Ref<HTMLElement>}
       css={`
         input[type='time']::-webkit-calendar-picker-indicator {
           display: none;
