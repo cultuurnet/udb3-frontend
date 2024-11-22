@@ -171,19 +171,15 @@ const isDuplicateMutation = (
 
   // Temporary disable caching on price-info
   // https://jira.uitdatabank.be/browse/III-5620
-  if (mutationKey === 'offers-add-price-info') {
-    return false;
-  }
 
-  if (mutationKey === 'offers-change-calendar') {
-    return false;
-  }
+  const disabledMutations = [
+    'offers-add-price-info',
+    'offers-change-calendar',
+    'places-add',
+    'request-ownership',
+  ];
 
-  if (mutationKey === 'places-add') {
-    return false;
-  }
-
-  if (mutationKey === 'request-ownership') {
+  if (disabledMutations.includes(mutationKey)) {
     return false;
   }
 
