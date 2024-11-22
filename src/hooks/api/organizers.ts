@@ -16,6 +16,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import type { Headers } from './types/Headers';
 import type { User } from './user';
+import { handleErrorObject } from '@/utils/handleErrorObject';
 
 type HeadersAndQueryData = {
   headers: Headers;
@@ -173,17 +174,11 @@ type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
 const getOrganizerPermissions = async ({ headers, organizerId }) => {
   const res = await fetchFromApi({
     path: `/organizers/${organizerId}/permissions`,
-    options: {
-      headers,
-    },
+    options: { headers },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
-};
 
+  return handleErrorObject(res);
+};
 const useGetOrganizerPermissions = (
   { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
   configuration: UseQueryOptions = {},
