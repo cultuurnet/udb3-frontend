@@ -245,22 +245,16 @@ export const getServerSideProps = getApplicationServerSideProps(
           organizerId: query.organizerId,
         }),
       ]);
-
-      return {
-        props: {
-          dehydratedState: dehydrate(queryClient),
-          cookies,
-        },
-      };
     } catch (error) {
       console.error(error);
-      return {
-        props: {
-          dehydratedState: dehydrate(queryClient),
-          cookies,
-        },
-      };
     }
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        cookies,
+      },
+    };
   },
 );
 
