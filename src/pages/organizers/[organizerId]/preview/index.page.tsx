@@ -96,78 +96,88 @@ const OrganizersPreview = () => {
       <Page.Content>
         <Stack>
           <Stack flex={1}>
-            <Modal
-              title={t('organizers.ownerships.request.confirm_modal.title', {
-                organizerName: organizerName,
-              })}
-              confirmTitle={t(
-                'organizers.ownerships.request.confirm_modal.confirm',
-              )}
-              cancelTitle={t(
-                'organizers.ownerships.request.confirm_modal.cancel',
-              )}
-              visible={isQuestionModalVisible}
-              variant={ModalVariants.QUESTION}
-              onClose={() => setIsQuestionModalVisible(false)}
-              onConfirm={() => {
-                requestOwnershipMutation.mutate({
-                  itemId: organizerId,
-                  ownerId: userId,
-                });
-              }}
-              size={ModalSizes.MD}
-            >
-              <Box padding={4}>
-                <Trans
-                  i18nKey="organizers.ownerships.request.confirm_modal.body"
-                  values={{
-                    organizerName: organizerName,
+            {isOwnershipEnabled && (
+              <>
+                <Modal
+                  title={t(
+                    'organizers.ownerships.request.confirm_modal.title',
+                    {
+                      organizerName: organizerName,
+                    },
+                  )}
+                  confirmTitle={t(
+                    'organizers.ownerships.request.confirm_modal.confirm',
+                  )}
+                  cancelTitle={t(
+                    'organizers.ownerships.request.confirm_modal.cancel',
+                  )}
+                  visible={isQuestionModalVisible}
+                  variant={ModalVariants.QUESTION}
+                  onClose={() => setIsQuestionModalVisible(false)}
+                  onConfirm={() => {
+                    requestOwnershipMutation.mutate({
+                      itemId: organizerId,
+                      ownerId: userId,
+                    });
                   }}
-                />
-              </Box>
-            </Modal>
-            {isOwnershipRequested && (
-              <Alert variant={AlertVariants.PRIMARY} marginBottom={4} fullWidth>
-                <Trans
-                  i18nKey="organizers.ownerships.request.pending"
-                  values={{
-                    organizerName: organizerName,
-                  }}
-                />
-              </Alert>
+                  size={ModalSizes.MD}
+                >
+                  <Box padding={4}>
+                    <Trans
+                      i18nKey="organizers.ownerships.request.confirm_modal.body"
+                      values={{
+                        organizerName: organizerName,
+                      }}
+                    />
+                  </Box>
+                </Modal>
+                {isOwnershipRequested && (
+                  <Alert
+                    variant={AlertVariants.PRIMARY}
+                    marginBottom={4}
+                    fullWidth
+                  >
+                    <Trans
+                      i18nKey="organizers.ownerships.request.pending"
+                      values={{
+                        organizerName: organizerName,
+                      }}
+                    />
+                  </Alert>
+                )}
+                {isSuccessAlertVisible && (
+                  <Alert
+                    variant={AlertVariants.SUCCESS}
+                    marginBottom={4}
+                    closable
+                    fullWidth
+                    onClose={() => {
+                      setIsSuccessAlertVisible(false);
+                    }}
+                  >
+                    <Trans
+                      i18nKey="organizers.ownerships.request.success"
+                      values={{
+                        organizerName: organizerName,
+                      }}
+                    />
+                  </Alert>
+                )}
+                {isErrorAlertVisible && (
+                  <Alert
+                    variant={AlertVariants.DANGER}
+                    marginBottom={4}
+                    fullWidth
+                    closable
+                    onClose={() => {
+                      setIsErrorAlertVisible(false);
+                    }}
+                  >
+                    <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
+                  </Alert>
+                )}
+              </>
             )}
-            {isSuccessAlertVisible && (
-              <Alert
-                variant={AlertVariants.SUCCESS}
-                marginBottom={4}
-                closable
-                fullWidth
-                onClose={() => {
-                  setIsSuccessAlertVisible(false);
-                }}
-              >
-                <Trans
-                  i18nKey="organizers.ownerships.request.success"
-                  values={{
-                    organizerName: organizerName,
-                  }}
-                />
-              </Alert>
-            )}
-            {isErrorAlertVisible && (
-              <Alert
-                variant={AlertVariants.DANGER}
-                marginBottom={4}
-                fullWidth
-                closable
-                onClose={() => {
-                  setIsErrorAlertVisible(false);
-                }}
-              >
-                <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
-              </Alert>
-            )}
-
             <Inline spacing={5}>
               <Stack flex={3}>
                 <OrganizerTable organizer={organizer} />
