@@ -84,7 +84,7 @@ const OrganizersPreview = () => {
       setIsSuccessAlertVisible(true);
       setIsQuestionModalVisible(false);
     },
-    onError: async () => {
+    onError: () => {
       setIsQuestionModalVisible(false);
       setIsErrorAlertVisible(true);
     },
