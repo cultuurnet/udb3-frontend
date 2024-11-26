@@ -2,12 +2,13 @@ import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient } from 'react-query';
+import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
+  GetOwnershipRequestsResponse,
   OwnershipRequest,
-  RequestState,
+  OwnershipState,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipCreatorQuery,
@@ -19,13 +20,13 @@ import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
+import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { OwnershipsTable } from './OwnershipsTable';
@@ -67,21 +68,15 @@ const Ownership = () => {
     organizer?.name;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
-    organizerId: organizerId,
-  });
+    itemId: organizerId,
+  }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
 
   const getOwnershipCreatorQuery = useGetOwnershipCreatorQuery({
     organizerId: organizerId,
   });
 
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
-    () =>
-      groupBy(
-        // @ts-expect-error
-        getOwnershipRequestsQuery.data?.member,
-        'state',
-      ),
-    // @ts-expect-error
+    () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
     [getOwnershipRequestsQuery.data],
   );
 
@@ -163,15 +158,8 @@ const Ownership = () => {
               <Stack spacing={4}>
                 <Title size={3}>{t('organizers.ownerships.owners')}</Title>
                 <OwnershipsTable
-                  creator={creator}
                   requests={approvedRequests}
-                  renderActions={(request) => (
-                    <Button
-                      variant={ButtonVariants.ICON}
-                      iconName={Icons.TRASH}
-                      onClick={() => setRequestToBeDeleted(request)}
-                    />
-                  )}
+                  onDelete={setRequestToBeDeleted}
                 />
                 <Modal
                   title={t('organizers.ownerships.delete_modal.title')}
@@ -203,34 +191,16 @@ const Ownership = () => {
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
                 <OwnershipsTable
                   requests={pendingRequests}
-                  renderActions={(request) => (
-                    <Inline spacing={3}>
-                      <Button
-                        variant={ButtonVariants.SUCCESS}
-                        iconName={Icons.CHECK_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.APPROVE);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.approve')}
-                      </Button>
-                      <Button
-                        variant={ButtonVariants.DANGER}
-                        iconName={Icons.TIMES_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.REJECT);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.reject')}
-                      </Button>
-                    </Inline>
-                  )}
+                  onApprove={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.APPROVE);
+                  }}
+                  onReject={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.REJECT);
+                  }}
                 />
                 <Modal
                   title={t(`${translationsPath}.title`)}
@@ -285,7 +255,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       await useGetOwnershipRequestsQuery({
         req,
         queryClient,
-        organizerId: query.organizerId,
+        itemId: query.organizerId,
       }),
       await useGetOwnershipCreatorQuery({
         req,
