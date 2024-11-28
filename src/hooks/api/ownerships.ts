@@ -30,6 +30,27 @@ export const RequestState = {
 
 type RequestState = Values<typeof RequestState>;
 
+const requestOwnership = async ({ headers, itemId, itemType, ownerEmail }) =>
+  fetchFromApi({
+    path: `/ownerships`,
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        ownerEmail,
+        itemId,
+        itemType,
+      }),
+    },
+  });
+
+const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: requestOwnership,
+    mutationKey: 'ownerships-request-ownership',
+    ...configuration,
+  });
+
 const getOwnershipRequests = async ({ headers, organizerId }) => {
   const res = await fetchFromApi({
     path: '/ownerships/',
@@ -151,4 +172,5 @@ export {
   useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useRequestOwnershipMutation,
 };

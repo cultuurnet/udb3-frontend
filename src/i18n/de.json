@@ -1034,6 +1034,16 @@
       },
       "pending": "Ausstehende Anfragen zur Verwaltung",
       "close": "Schließen",
+      "request_modal": {
+        "title": "Verwalter zu {{name}} hinzufügen",
+        "email": "E-Mail-Adresse",
+        "email_error": "Not a valid email address",
+        "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}} und kann ab sofort die Organisationsseite und Veranstaltungen von {{organizerName}} bearbeiten.",
+        "actions": {
+          "confirm": "Verwalter hinzufügen",
+          "cancel": "Abbrechen"
+        }
+      },
       "confirm_modal": {
         "title": "Verwaltungsantrag genehmigen",
         "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
