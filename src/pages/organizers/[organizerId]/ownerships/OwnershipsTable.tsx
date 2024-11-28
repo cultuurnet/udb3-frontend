@@ -19,6 +19,7 @@ export const OwnershipsTable = ({ requests, renderActions }: Props) => {
   const { t } = useTranslation();
   return (
     <Stack
+      role="table"
       flex={1}
       padding={4}
       marginBottom={5}
@@ -42,6 +43,7 @@ export const OwnershipsTable = ({ requests, renderActions }: Props) => {
         {requests.map((request) => (
           <Inline
             key={request.id}
+            role="row"
             justifyContent="space-between"
             alignItems="center"
             paddingY={3}

@@ -139,6 +139,7 @@ const Alert = ({
   return (
     <Inline
       role="alert"
+      data-testid={`alert-${variant}`}
       alignSelf={fullWidth ? 'normal' : 'flex-start'}
       display={visible ? 'flex' : 'none'}
       {...getStackProps(props)}
