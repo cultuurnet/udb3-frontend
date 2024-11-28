@@ -1053,6 +1053,16 @@
       },
       "pending": "Demandes de gestion en attente",
       "close": "Fermer",
+      "request_modal": {
+        "title": "Ajouter un gestionnaire à :organizer.name",
+        "email": "Adresse e-mail",
+        "email_error": "Adresse e-mail non valide",
+        "success": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}} et peut désormais modifier la page de l'organisation et les événements de {{organizerName}}",
+        "actions": {
+          "confirm": "Ajouter un gestionnaire",
+          "cancel": "Annuler"
+        }
+      },
       "confirm_modal": {
         "title": "Approuver la demande de gestion",
         "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",

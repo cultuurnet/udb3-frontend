@@ -1,9 +1,10 @@
 import omit from 'lodash/omit';
 import getConfig from 'next/config';
 
-class FetchError extends Error {
+class FetchError<TBody = any> extends Error {
+  title?: string;
   status: number;
-  body?: any;
+  body?: TBody;
 
   constructor(status: number, message: string, body?: any) {
     super(message);
@@ -18,13 +19,16 @@ type ErrorObject = {
   message: string;
 };
 
-export type DuplicatePlaceErrorBody = {
+export type ErrorBody = {
   detail: string;
-  query?: string;
-  duplicatePlaceUri?: string;
   status: number;
   title: string;
   type: string;
+};
+
+export type DuplicatePlaceErrorBody = ErrorBody & {
+  query?: string;
+  duplicatePlaceUri?: string;
 };
 
 const isErrorObject = (value: any): value is ErrorObject => {

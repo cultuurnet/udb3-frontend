@@ -30,6 +30,28 @@ export const RequestState = {
 
 type RequestState = Values<typeof RequestState>;
 
+const requestOwnership = async ({ headers, itemId, ownerEmail, ownerId }) =>
+  fetchFromApi({
+    path: `/ownerships`,
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        itemId,
+        itemType: 'organizer',
+        ...(ownerEmail && { ownerEmail }),
+        ...(ownerId && { ownerId }),
+      }),
+    },
+  });
+
+const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: requestOwnership,
+    mutationKey: 'ownerships-request-ownership',
+    ...configuration,
+  });
+
 const getOwnershipRequests = async ({ headers, organizerId, ownerId }) => {
   const res = await fetchFromApi({
     path: '/ownerships/',
@@ -64,27 +86,6 @@ const useGetOwnershipRequestsQuery = (
     queryFn: getOwnershipRequests,
     queryArguments: { organizerId, ...(ownerId && { ownerId }) },
     refetchOnWindowFocus: false,
-    ...configuration,
-  });
-
-const requestOwnership = async ({ headers, itemId, ownerId }) =>
-  fetchFromApi({
-    path: '/ownerships',
-    options: {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        itemId,
-        itemType: 'organizer',
-        ownerId,
-      }),
-    },
-  });
-
-const useRequestOwnershipMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
-    mutationFn: requestOwnership,
-    mutationKey: 'request-ownership',
     ...configuration,
   });
 
