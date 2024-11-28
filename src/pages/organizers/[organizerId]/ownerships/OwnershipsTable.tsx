@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { OwnershipRequest } from '@/hooks/api/ownerships';
+import { OwnershipCreator, OwnershipRequest } from '@/hooks/api/ownerships';
 import { Inline } from '@/ui/Inline';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
@@ -8,13 +8,18 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 type Props = {
+  creator?: OwnershipCreator;
   requests: OwnershipRequest[];
   renderActions: (request: OwnershipRequest) => JSX.Element;
 };
 
 const getGlobalValue = getValueFromTheme('global');
 
-export const OwnershipsTable = ({ requests, renderActions }: Props) => {
+export const OwnershipsTable = ({
+  creator,
+  requests,
+  renderActions,
+}: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
   return (
@@ -39,14 +44,14 @@ export const OwnershipsTable = ({ requests, renderActions }: Props) => {
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
         <Title size={3}>{t('organizers.ownerships.table.actions.title')}</Title>
       </Inline>
-      <List>
+      <List paddingY={3}>
+        <List.Item>{creator.email}</List.Item>
         {requests.map((request) => (
           <Inline
             key={request.id}
             role="row"
             justifyContent="space-between"
             alignItems="center"
-            paddingY={3}
             css={`
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};

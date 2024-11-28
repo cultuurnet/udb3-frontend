@@ -18,6 +18,11 @@ export type OwnershipRequest = {
   state: RequestState;
 };
 
+export type OwnershipCreator = {
+  userId: string;
+  email: string;
+};
+
 export const RequestState = {
   APPROVED: 'approved',
   REQUESTED: 'requested',
@@ -129,9 +134,42 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const getOwnershipCreator = async ({ headers, organizerId }) => {
+  const res = await fetchFromApi({
+    path: `/organizers/${organizerId}/creator`,
+    options: {
+      headers,
+    },
+  });
+  if (isErrorObject(res)) {
+    // eslint-disable-next-line no-console
+    return console.error(res);
+  }
+  return await res.json();
+};
+
+type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
+  organizerId: string;
+};
+
+const useGetOwnershipCreatorQuery = (
+  { req, queryClient, organizerId }: UseGetOwnershipCreatorArguments,
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery<OwnershipCreator>({
+    req,
+    queryClient,
+    queryKey: ['ownership-creator'],
+    queryFn: getOwnershipCreator,
+    queryArguments: { organizerId },
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
+
 export {
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
+  useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
   useRequestOwnershipMutation,
