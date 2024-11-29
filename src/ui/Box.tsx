@@ -12,7 +12,7 @@ import type {
 } from 'react';
 import { forwardRef } from 'react';
 import { AsyncTypeaheadProps, TypeaheadModel } from 'react-bootstrap-typeahead';
-import { ReactDatePickerProps } from 'react-datepicker';
+import { DatePickerProps as ReactDatePickerProps } from 'react-datepicker';
 import type {
   FlattenInterpolation,
   FlattenSimpleInterpolation,

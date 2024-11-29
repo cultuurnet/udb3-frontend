@@ -53,9 +53,9 @@ const SuccessIcon = ({ active }: SuccessIconProps) => {
 };
 
 type Props = StackProps & {
-  active: boolean;
+  active?: boolean;
   icon?: JSX.Element;
-  text: ReactNode;
+  text?: ReactNode;
   disabled?: boolean;
 };
 
