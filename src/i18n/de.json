@@ -990,6 +990,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "educationalDescription": "Beschreibung Cultuurkuur",
+      "address": "Adresse",
+      "no_address": "Keine Adresse",
+      "contact": "Kontakt",
+      "no_contact": "Keine Kontaktinformationen",
+      "labels": "Labels",
+      "images": "Bilder",
+      "no_images": "Keine Bilder",
+      "mainImage": "Hauptbild",
+      "actions": {
+        "edit": "Bearbeiten",
+        "manage": "Anforderungsmanagement",
+        "request": "Verwaltung anfordern",
+        "back": "Zurück zum Dashboard"
+      }
+    },
     "create": {
       "title": "Organisation hinzufügen",
       "step1": {
@@ -1063,6 +1082,16 @@
         "body": "Sind Sie sicher, dass Sie {{ownerEmail}} als Verwalter entfernen möchten?",
         "cancel": "Abbrechen",
         "confirm": "Verwalter entfernen"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Verwaltungsanfrage für {{organizerName}}",
+          "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Veranstaltungen verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+          "cancel": "Abbrechen",
+          "confirm": "Verwaltungsanfrage"
+        },
+        "pending": "Ihre Anfrage zur Verwaltung von {{organizerName}} wird bearbeitet.<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt hat, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+        "success": "Ihre Anfrage zur Verwaltung der Seite von {{organizerName}} und ihrer Veranstaltungen wurde erfolgreich gesendet!<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail."
       }
     }
   },

@@ -990,6 +990,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Nom",
+      "description": "Description",
+      "educationalDescription": "Description Cultuurkuur",
+      "address": "Adresse",
+      "no_address": "Aucune adresse",
+      "contact": "Contact",
+      "no_contact": "Aucune information de contact",
+      "labels": "Labels",
+      "images": "Images",
+      "no_images": "Aucune image",
+      "mainImage": "Image principale",
+      "actions": {
+        "edit": "Modifier",
+        "manage": "Gestion des demandes",
+        "request": "Demander gestion",
+        "back": "Retourner au tableau de bord"
+      }
+    },
     "create": {
       "title": "Ajouter une organisation",
       "step1": {
@@ -1063,6 +1082,16 @@
         "body": "Êtes-vous sûr de vouloir supprimer {{ownerEmail}} en tant que gestionnaire ?",
         "cancel": "Annuler",
         "confirm": "Supprimer le gestionnaire"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Demande de gestion pour {{organizerName}}",
+          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses événements ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+          "cancel": "Annuler",
+          "confirm": "Demander la gestion"
+        },
+        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un administrateur actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+        "success": "Votre demande pour gérer la page de {{organizerName}} et ses événements a été envoyée avec succès !<br/>Dès qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
       }
     }
   },

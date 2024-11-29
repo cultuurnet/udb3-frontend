@@ -990,6 +990,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Naam",
+      "description": "Bescrijving",
+      "educationalDescription": "Beschrijving Cultuurkuur",
+      "address": "Adres",
+      "no_address": "Geen address",
+      "contact": "Contact",
+      "no_contact": "Geen contactinformatie",
+      "labels": "Labels",
+      "images": "Afbeeldingen",
+      "no_images": "Geen afbeeldingen",
+      "mainImage": "Hoofdafbeelding",
+      "actions": {
+        "edit": "Bewerken",
+        "manage": "Beheerders aanpassen",
+        "request": "Beheer aanvragen",
+        "back": "Terug naar dashboard"
+      }
+    },
     "create": {
       "title": "Organisatie toevoegen",
       "step1": {
@@ -1063,6 +1082,17 @@
         "body": "Ben je zeker dat je {{ownerEmail}} wilt verwijderen als beheerder?",
         "cancel": "Annuleren",
         "confirm": "Beheerder verwijderen"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Beheer aanvragen voor {{organizerName}}",
+          "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
+          "cancel": "Annuleren",
+          "confirm": "Beheer aanvragen",
+          "error": "Er is iets misgelopen"
+        },
+        "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling.<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail.",
+        "success": "Je aanvraag om beheerder te worden van {{organizerName}} is succesvol verzonden!<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
       }
     }
   },

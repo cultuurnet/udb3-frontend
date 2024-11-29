@@ -30,16 +30,17 @@ export const RequestState = {
 
 type RequestState = Values<typeof RequestState>;
 
-const requestOwnership = async ({ headers, itemId, itemType, ownerEmail }) =>
+const requestOwnership = async ({ headers, itemId, ownerEmail, ownerId }) =>
   fetchFromApi({
     path: `/ownerships`,
     options: {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        ownerEmail,
         itemId,
-        itemType,
+        itemType: 'organizer',
+        ...(ownerEmail && { ownerEmail }),
+        ...(ownerId && { ownerId }),
       }),
     },
   });
@@ -51,11 +52,12 @@ const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
     ...configuration,
   });
 
-const getOwnershipRequests = async ({ headers, organizerId }) => {
+const getOwnershipRequests = async ({ headers, organizerId, ownerId }) => {
   const res = await fetchFromApi({
     path: '/ownerships/',
     searchParams: {
       itemId: organizerId,
+      ...(ownerId && { ownerId }),
     },
     options: {
       headers,
@@ -70,10 +72,11 @@ const getOwnershipRequests = async ({ headers, organizerId }) => {
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
   organizerId: string;
+  ownerId?: string;
 };
 
 const useGetOwnershipRequestsQuery = (
-  { req, queryClient, organizerId }: UseGetOwnershipRequestsArguments,
+  { req, queryClient, organizerId, ownerId }: UseGetOwnershipRequestsArguments,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<OwnershipRequest[]>({
@@ -81,7 +84,7 @@ const useGetOwnershipRequestsQuery = (
     queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { organizerId },
+    queryArguments: { organizerId, ...(ownerId && { ownerId }) },
     refetchOnWindowFocus: false,
     ...configuration,
   });

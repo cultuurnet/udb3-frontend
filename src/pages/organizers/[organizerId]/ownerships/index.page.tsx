@@ -57,10 +57,7 @@ const Ownership = () => {
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
   const { register, formState, getValues, setError } = useForm();
 
-  const organizerId = useMemo(
-    () => router.query.organizerId as string,
-    [router.query.organizerId],
-  );
+  const organizerId = router.query.organizerId as string;
 
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
     id: organizerId,
@@ -153,7 +150,6 @@ const Ownership = () => {
       case ActionType.REQUEST:
         return requestOwnership.mutate({
           ownerEmail: getValues('email'),
-          itemType: 'organizer',
           itemId: parseOfferId(organizer['@id']),
         });
     }
