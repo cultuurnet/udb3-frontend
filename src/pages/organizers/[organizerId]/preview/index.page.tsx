@@ -205,6 +205,7 @@ const OrganizersPreview = () => {
                   <Link
                     variant={LinkButtonVariants.BUTTON_SECONDARY}
                     spacing={3}
+                    iconName={Icons.USERS}
                     href={`/organizer/${organizerId}/ownerships`}
                   >
                     {t('organizers.detail.actions.manage')}
