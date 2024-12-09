@@ -123,7 +123,7 @@ export const OwnershipsTable = ({
         )}
       </Inline>
       <List paddingY={3}>
-        <List.Item>{creator.email}</List.Item>
+        {creator?.email && <List.Item>{creator.email}</List.Item>}
         {requests.map((request) => (
           <Inline
             key={request.id}
