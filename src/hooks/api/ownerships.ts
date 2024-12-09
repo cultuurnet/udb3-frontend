@@ -1,4 +1,4 @@
-import { UseQueryOptions } from 'react-query';
+import { UseMutationResult, UseQueryOptions } from 'react-query';
 
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
@@ -129,7 +129,14 @@ const useGetOwnershipRequestsQuery = (
     ...configuration,
   });
 
-const approveOwnershipRequest = async ({ headers, ownershipId }) =>
+type ApproveOwnershipArguments = { ownershipId: string };
+
+const approveOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: {
+  headers: Headers;
+} & ApproveOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}/approve`,
     options: {
@@ -143,9 +150,16 @@ const useApproveOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: approveOwnershipRequest,
     mutationKey: 'approve-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, ApproveOwnershipArguments>;
 
-const rejectOwnershipRequest = async ({ headers, ownershipId }) =>
+type RejectOwnershipArguments = { ownershipId: string };
+
+const rejectOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: {
+  headers: Headers;
+} & RejectOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}/reject`,
     options: {
@@ -159,9 +173,14 @@ const useRejectOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: rejectOwnershipRequest,
     mutationKey: 'reject-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, RejectOwnershipArguments>;
 
-const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
+type DeleteOwnershipArguments = { ownershipId: string };
+
+const deleteOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: { headers: Headers } & DeleteOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}`,
     options: {
@@ -175,7 +194,7 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: deleteOwnershipRequest,
     mutationKey: 'delete-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, DeleteOwnershipArguments>;
 
 const getOwnershipCreator = async ({ headers, organizerId }) => {
   const res = await fetchFromApi({

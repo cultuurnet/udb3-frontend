@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
@@ -12,6 +12,7 @@ import {
 } from '@/hooks/api/organizers';
 import { getOrganizerName } from '@/pages/steps/AdditionalInformationStep/OrganizerPicker';
 import { Organizer } from '@/types/Organizer';
+import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, InlineProps } from '@/ui/Inline';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { valueToArray } from '@/utils/valueToArray';
@@ -62,29 +63,35 @@ export const OrganizerPicker = ({
   ]);
 
   return (
-    <Typeahead
-      ref={ref}
+    <FormElement
       id={'ownership-organizer-picker'}
-      maxWidth="25rem"
-      isLoading={
-        getOrganizersByQueryQuery.isLoading || getOrganizerByIdQuery.isLoading
+      label={'organizer'}
+      Component={
+        <Typeahead
+          ref={ref}
+          maxWidth="25rem"
+          isLoading={
+            getOrganizersByQueryQuery.isLoading ||
+            getOrganizerByIdQuery.isLoading
+          }
+          options={organizers}
+          selected={valueToArray(selected)}
+          onChange={onChange}
+          onInputChange={debounce((value) => {
+            const trimmed = value.trim();
+            const isEmpty = trimmed === '';
+
+            setQuery(trimmed);
+
+            if (isEmpty) {
+              ref.current.clear();
+              onChange([undefined]);
+            }
+          }, 275)}
+          labelKey={(org) => getOrganizerName(org as Organizer, i18n.language)}
+          {...getInlineProps(props)}
+        />
       }
-      options={organizers}
-      selected={valueToArray(selected)}
-      onChange={onChange}
-      onInputChange={(value) => {
-        const trimmed = value.trim();
-        const isEmpty = trimmed === '';
-
-        setQuery(trimmed);
-
-        if (isEmpty) {
-          ref.current.clear();
-          onChange([undefined]);
-        }
-      }}
-      labelKey={(org) => getOrganizerName(org as Organizer, i18n.language)}
-      {...getInlineProps(props)}
     />
   );
 };

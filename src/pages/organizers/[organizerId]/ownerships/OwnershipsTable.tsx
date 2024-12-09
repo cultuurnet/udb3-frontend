@@ -35,7 +35,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
       <Button
         variant={ButtonVariants.ICON}
         iconName={Icons.TRASH}
-        onClick={() => onDelete(request)}
+        onClick={() => onDelete?.(request)}
       />
     );
   }
@@ -47,7 +47,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
           variant={ButtonVariants.SUCCESS}
           iconName={Icons.CHECK_CIRCLE}
           spacing={3}
-          onClick={() => onApprove(request)}
+          onClick={() => onApprove?.(request)}
         >
           {t('organizers.ownerships.table.actions.approve')}
         </Button>
@@ -55,7 +55,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
           variant={ButtonVariants.DANGER}
           iconName={Icons.TIMES_CIRCLE}
           spacing={3}
-          onClick={() => onReject(request)}
+          onClick={() => onReject?.(request)}
         >
           {t('organizers.ownerships.table.actions.reject')}
         </Button>

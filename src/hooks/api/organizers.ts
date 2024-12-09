@@ -128,7 +128,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 };
 
 const useGetOrganizerByIdQuery = (
-  { id },
+  { id }: { id: string } & ServerSideQueryOptions,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOrganizerByIdResponse>({

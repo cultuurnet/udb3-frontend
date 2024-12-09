@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
-import { UseQueryResult } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import {
@@ -14,8 +14,12 @@ import {
 } from '@/hooks/api/organizers';
 import {
   GetOwnershipRequestsResponse,
+  OwnershipRequest,
   OwnershipState,
+  useApproveOwnershipRequestMutation,
+  useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
+  useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
 import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
@@ -114,6 +118,37 @@ const OwnershipsOverviewPage = () => {
     await shallowRouter.pushSearchParams({ page: `${page}` });
   };
 
+  const queryClient = useQueryClient();
+  const onSuccess = () => queryClient.invalidateQueries('ownership-requests');
+
+  const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
+    onSuccess,
+  });
+  const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
+    onSuccess,
+  });
+  const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
+    onSuccess,
+  });
+
+  const handleApprove = (request: OwnershipRequest) => {
+    approveOwnershipRequestMutation.mutate({
+      ownershipId: request.id,
+    });
+  };
+
+  const handleReject = (request: OwnershipRequest) => {
+    rejectOwnershipRequestMutation.mutate({
+      ownershipId: request.id,
+    });
+  };
+
+  const handleDelete = (request: OwnershipRequest) => {
+    deleteOwnershipRequestMutation.mutate({
+      ownershipId: request.id,
+    });
+  };
+
   return (
     <Page>
       <Page.Title>Ownerships</Page.Title>
@@ -153,7 +188,13 @@ const OwnershipsOverviewPage = () => {
           {getOwnershipRequestsQuery.isLoading ? (
             <Spinner />
           ) : (
-            <OwnershipsTable requests={requests} shouldShowItemId />
+            <OwnershipsTable
+              requests={requests}
+              shouldShowItemId
+              onApprove={handleApprove}
+              onReject={handleReject}
+              onDelete={handleDelete}
+            />
           )}
 
           {hasMoreThanOnePage && (
