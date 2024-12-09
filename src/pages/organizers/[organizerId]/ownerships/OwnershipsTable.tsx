@@ -93,6 +93,10 @@ export const OwnershipsTable = ({
     [requests],
   );
 
+  if (requests.length === 0) {
+    return <Text>no results</Text>;
+  }
+
   return (
     <Stack
       role="table"
