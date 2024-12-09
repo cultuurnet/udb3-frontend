@@ -1,12 +1,13 @@
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import {
+  GetOrganizerByIdResponse,
   GetOrganizersByQueryResponse,
   useGetOrganizerByIdQuery,
   useGetOrganizersByQueryQuery,
@@ -17,9 +18,11 @@ import {
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
+import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
 import { Organizer } from '@/types/Organizer';
 import { parseSpacing } from '@/ui/Box';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
@@ -29,6 +32,7 @@ import { Spinner } from '@/ui/Spinner';
 import { Text } from '@/ui/Text';
 import { isNewEntry, Typeahead } from '@/ui/Typeahead';
 import type { FetchError } from '@/utils/fetchFromApi';
+import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { valueToArray } from '@/utils/valueToArray';
 
@@ -46,15 +50,6 @@ const OwnershipsOverviewPage = () => {
 
   const page = parseInt((router.query.page as string) ?? '1');
 
-  const [organizerSearchInput, setOrganizerSearchInput] = useState('');
-
-  const getOrganizersByQueryQuery = useGetOrganizersByQueryQuery(
-    { name: organizerSearchInput },
-    { enabled: !!organizerSearchInput },
-  ) as UseQueryResult<GetOrganizersByQueryResponse>;
-
-  const organizers = getOrganizersByQueryQuery.data?.member ?? [];
-
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
     itemId,
     state,
@@ -68,12 +63,25 @@ const OwnershipsOverviewPage = () => {
     () => getOwnershipRequestsQuery.data?.member ?? [],
     [getOwnershipRequestsQuery.data?.member],
   );
-  const [organizerId, setOrganizerId] = useState<string>('');
+  const [organizer, setOrganizer] = useState<Organizer | undefined>();
 
-  const getOrganizerByIdQuery = useGetOrganizerByIdQuery({ id: organizerId });
+  const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
+    id: itemId,
+  }) as UseQueryResult<GetOrganizerByIdResponse>;
 
-  // @ts-expect-error
-  const organizer: Organizer | undefined = getOrganizerByIdQuery.data;
+  const fetchedOrganizer = getOrganizerByIdQuery.data;
+
+  useEffect(() => {
+    if (!fetchedOrganizer) return;
+
+    setOrganizer(fetchedOrganizer);
+  }, [fetchedOrganizer, organizer]);
+
+  useEffect(() => {
+    if (!itemId && organizer) {
+      setOrganizer(undefined);
+    }
+  }, [itemId, organizer]);
 
   const totalItems = getOwnershipRequestsQuery.data?.totalItems ?? 0;
   const hasMoreThanOnePage = Math.ceil(totalItems / itemsPerPage) > 1;
@@ -133,8 +141,13 @@ const OwnershipsOverviewPage = () => {
 
           <OrganizerPicker
             marginBottom={4}
-            onChange={setOrganizerId}
-            organizer={organizer}
+            selected={organizer}
+            onChange={async ([value]) => {
+              setOrganizer(value);
+              await handleChangeItemId(
+                value ? parseOfferId(value['@id']) : undefined,
+              );
+            }}
           />
 
           {getOwnershipRequestsQuery.isLoading ? (
@@ -163,5 +176,7 @@ const OwnershipsOverviewPage = () => {
     </Page>
   );
 };
+
+export const getServerSideProps = getApplicationServerSideProps();
 
 export default OwnershipsOverviewPage;

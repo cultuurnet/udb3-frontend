@@ -22,12 +22,6 @@ type HeadersAndQueryData = {
   headers: Headers;
 } & { [x: string]: string };
 
-type GetOrganizersArgumentsByQuery = {
-  headers: Headers;
-  embed: string;
-  q: string;
-};
-
 export type GetOrganizersByQueryResponse = { member: Organizer[] };
 
 const useGetOrganizersByQueryQuery = (
@@ -50,8 +44,8 @@ const useGetOrganizersByQueryQuery = (
       start: paginationOptions.start,
       limit: paginationOptions.limit,
     },
-    enabled: !!name,
     ...configuration,
+    enabled: !!name && configuration.enabled === true,
   });
 
 type GetOrganizersArguments = {
@@ -117,6 +111,8 @@ type GetOrganizerByIdArguments = {
   id: string;
 };
 
+export type GetOrganizerByIdResponse = Organizer | undefined;
+
 const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   const res = await fetchFromApi({
     path: `/organizers/${id.toString()}`,
@@ -132,11 +128,10 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 };
 
 const useGetOrganizerByIdQuery = (
-  { id, ...options },
+  { id },
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery({
-    ...options,
+  useAuthenticatedQuery<GetOrganizerByIdResponse>({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
