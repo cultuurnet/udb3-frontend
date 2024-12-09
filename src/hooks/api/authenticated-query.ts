@@ -56,10 +56,16 @@ const QueryStatus = {
 
 const prepareKey = ({ queryKey, queryArguments }) => {
   const key = Array.isArray(queryKey) ? queryKey : [queryKey];
-  return [
-    ...flatten(key),
-    Object.keys(queryArguments ?? {}).length > 0 ? queryArguments : undefined,
-  ].filter((key) => key !== undefined);
+  const args = Object.entries(queryArguments ?? {}).filter(
+    ([_, value]) => typeof value !== 'undefined',
+  );
+  const preparedKey = flatten(key);
+
+  if (args.length > 0) {
+    preparedKey.push(Object.fromEntries(args));
+  }
+
+  return preparedKey;
 };
 
 const prepareArguments = ({

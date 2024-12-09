@@ -113,7 +113,7 @@ type Props = Omit<StackProps, 'onChange'> & {
   onDeleteOrganizer: (organizerId: string) => void;
 };
 
-const getOrganizerName = (org: Organizer, language: string) =>
+export const getOrganizerName = (org: Organizer, language: string) =>
   (typeof org.name === 'string' ? org.name : org.name[language]) ??
   org.name[org.mainLanguage];
 

@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient } from 'react-query';
+import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
+  GetOwnershipRequestsResponse,
   OwnershipRequest,
-  RequestState,
+  OwnershipState,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipCreatorQuery,
@@ -71,29 +72,23 @@ const Ownership = () => {
     organizer?.name;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
-    organizerId,
-  });
+    itemId: organizerId,
+  }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
 
   const getOwnershipCreatorQuery = useGetOwnershipCreatorQuery({
     organizerId: organizerId,
   });
 
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
-    () =>
-      groupBy(
-        // @ts-expect-error
-        getOwnershipRequestsQuery.data?.member,
-        'state',
-      ),
-    // @ts-expect-error
+    () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
     [getOwnershipRequestsQuery.data],
   );
 
   // @ts-expect-error
   const creator = getOwnershipCreatorQuery.data;
 
-  const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
-  const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
+  const approvedRequests = requestsByState[OwnershipState.APPROVED] ?? [];
+  const pendingRequests = requestsByState[OwnershipState.REQUESTED] ?? [];
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
@@ -193,15 +188,8 @@ const Ownership = () => {
               <Stack spacing={4}>
                 <Title size={3}>{t('organizers.ownerships.owners')}</Title>
                 <OwnershipsTable
-                  creator={creator}
                   requests={approvedRequests}
-                  renderActions={(request) => (
-                    <Button
-                      variant={ButtonVariants.ICON}
-                      iconName={Icons.TRASH}
-                      onClick={() => setRequestToBeDeleted(request)}
-                    />
-                  )}
+                  onDelete={setRequestToBeDeleted}
                 />
                 <Modal
                   title={t('organizers.ownerships.delete_modal.title')}
@@ -233,34 +221,16 @@ const Ownership = () => {
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
                 <OwnershipsTable
                   requests={pendingRequests}
-                  renderActions={(request) => (
-                    <Inline spacing={3}>
-                      <Button
-                        variant={ButtonVariants.SUCCESS}
-                        iconName={Icons.CHECK_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.APPROVE);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.approve')}
-                      </Button>
-                      <Button
-                        variant={ButtonVariants.DANGER}
-                        iconName={Icons.TIMES_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.REJECT);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.reject')}
-                      </Button>
-                    </Inline>
-                  )}
+                  onApprove={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.APPROVE);
+                  }}
+                  onReject={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.REJECT);
+                  }}
                 />
                 <Modal
                   title={t(`${translationsPath}.title`)}
@@ -348,7 +318,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       await useGetOwnershipRequestsQuery({
         req,
         queryClient,
-        organizerId: query.organizerId,
+        itemId: query.organizerId,
       }),
       await useGetOwnershipCreatorQuery({
         req,
