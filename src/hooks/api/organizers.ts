@@ -28,6 +28,8 @@ type GetOrganizersArgumentsByQuery = {
   q: string;
 };
 
+export type GetOrganizersByQueryResponse = { member: Organizer[] };
+
 const useGetOrganizersByQueryQuery = (
   {
     req,
@@ -37,7 +39,7 @@ const useGetOrganizersByQueryQuery = (
   }: AuthenticatedQueryOptions<{ name?: string } & PaginationOptions> = {},
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery<{ member: Organizer[] }>({
+  useAuthenticatedQuery<GetOrganizersByQueryResponse>({
     req,
     queryClient,
     queryKey: ['organizers'],
