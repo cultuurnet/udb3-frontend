@@ -6,7 +6,7 @@ import { City, useGetCitiesByQuery } from '@/hooks/api/cities';
 import { Countries, Country } from '@/types/Country';
 import { FormElement } from '@/ui/FormElement';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Typeahead } from '@/ui/Typeahead';
+import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { valueToArray } from '@/utils/valueToArray';
 
 import { SupportedLanguages } from '../i18n';
@@ -20,7 +20,7 @@ type Props = Omit<StackProps, 'onChange'> & {
   error?: string;
 };
 
-const CityPicker = forwardRef<HTMLInputElement, Props>(
+const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
   (
     { offerId, country, name, value, onChange, onBlur, error, ...props },
     ref,

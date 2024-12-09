@@ -1,8 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { OwnershipCreator, OwnershipRequest } from '@/hooks/api/ownerships';
-import { OwnershipRequest, OwnershipState } from '@/hooks/api/ownerships';
+import {
+  OwnershipCreator,
+  OwnershipRequest,
+  OwnershipState,
+} from '@/hooks/api/ownerships';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -92,6 +95,7 @@ export const OwnershipsTable = ({
 
   return (
     <Stack
+      role="table"
       flex={1}
       padding={4}
       marginBottom={5}
@@ -123,6 +127,8 @@ export const OwnershipsTable = ({
         {requests.map((request) => (
           <Inline
             key={request.id}
+            role="row"
+            justifyContent="space-between"
             alignItems="center"
             paddingY={3}
             display="grid"

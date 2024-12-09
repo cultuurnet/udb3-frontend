@@ -20,12 +20,14 @@ type Organizer = {
   completeness: number;
   modified: string;
   images: MediaObject[];
+  mainImage: string;
   geo: {
     latitude: number;
     longitude: number;
   };
   location?: Address;
   url?: string;
+  description?: string;
   educationalDescription?: string;
 };
 

@@ -1,82 +1,70 @@
 import { uniq } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
+import { ScopeTypes } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
-import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import {
-  TabContentProps,
-  ValidationStatus,
-} from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
+import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { Label, Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
-import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
-type LabelsStepProps = StackProps & TabContentProps;
+type OrganizerLabelProps = {
+  organizer: Organizer;
+};
 
-export const LABEL_PATTERN = /^[0-9a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ\-_\s]{1,49}$/;
-
-const getGlobalValue = getValueFromTheme('global');
-const getButtonValue = getValueFromTheme('button');
-
-function LabelsStep({
-  offerId,
-  scope,
-  onValidationChange,
-  ...props
-}: LabelsStepProps) {
+export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const { t } = useTranslation();
-
-  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
-  // @ts-expect-error
-  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
-
   const ref = useRef<TypeaheadElement<Label>>(null);
-
+  const router = useRouter();
   const [query, setQuery] = useState('');
   // @ts-expect-error
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
     query,
   });
 
+  const scope = ScopeTypes.ORGANIZERS;
+  const organizerId = router.query.organizerId as string;
+
   const options = labelsQuery.data?.member ?? [];
-  const [labels, setLabels] = useState<string[]>(getUniqueLabels(entity) ?? []);
+  const [labels, setLabels] = useState<string[]>(
+    getUniqueLabels(organizer) ?? [],
+  );
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
-
-  useEffect(() => {
-    onValidationChange(
-      labels.length ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
-    );
-  }, [labels, onValidationChange]);
+  const getButtonValue = getValueFromTheme('button');
 
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
 
   return (
-    <Inline width={isInvalid ? '100%' : '50%'} spacing={5}>
-      <Stack
-        flex={1}
-        {...getStackProps(props)}
-        opacity={isWriting ? 0.5 : 1}
-        spacing={2}
-      >
+    <Inline flex={1} spacing={5}>
+      <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={2}>
         <FormElement
           id={'labels-picker'}
-          label={t('create.additionalInformation.labels.label')}
+          label={
+            <Text
+              fontSize="0.8rem"
+              fontWeight="normal"
+              variant={TextVariants.MUTED}
+            >
+              {t('create.additionalInformation.labels.info')}
+            </Text>
+          }
           loading={isWriting}
           error={
             isInvalid
@@ -104,7 +92,7 @@ function LabelsStep({
 
                 setIsInvalid(false);
                 await addLabelMutation.mutateAsync({
-                  id: offerId,
+                  id: organizerId,
                   scope,
                   label,
                 });
@@ -115,11 +103,6 @@ function LabelsStep({
             />
           }
           maxWidth={'100%'}
-          info={
-            <Text variant={TextVariants.MUTED}>
-              {t('create.additionalInformation.labels.info')}
-            </Text>
-          }
         />
         <Inline spacing={3} flexWrap="wrap">
           {labels.map((label) => (
@@ -147,7 +130,7 @@ function LabelsStep({
                 marginLeft={1}
                 onClick={async () => {
                   await removeLabelMutation.mutateAsync({
-                    id: offerId,
+                    id: organizerId,
                     scope,
                     label,
                   });
@@ -166,6 +149,4 @@ function LabelsStep({
       )}
     </Inline>
   );
-}
-
-export { LabelsStep };
+};

@@ -33,14 +33,38 @@ export const OwnershipState = {
 
 export type OwnershipState = Values<typeof OwnershipState>;
 
+const requestOwnership = async ({ headers, itemId, ownerEmail, ownerId }) =>
+  fetchFromApi({
+    path: `/ownerships`,
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        itemId,
+        itemType: 'organizer',
+        ...(ownerEmail && { ownerEmail }),
+        ...(ownerId && { ownerId }),
+      }),
+    },
+  });
+
+const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: requestOwnership,
+    mutationKey: 'ownerships-request-ownership',
+    ...configuration,
+  });
+
 const getOwnershipRequests = async ({
   headers,
   itemId,
+  ownerId,
   state,
   paginationOptions,
 }: {
   headers: Headers;
   itemId?: string;
+  ownerId?: string;
   state?: OwnershipState;
 } & PaginationOptions) => {
   const searchParams = new URLSearchParams();
@@ -50,6 +74,9 @@ const getOwnershipRequests = async ({
   }
   if (itemId) {
     searchParams.set('itemId', itemId);
+  }
+  if (ownerId) {
+    searchParams.set('ownerId', ownerId);
   }
   if (state) {
     searchParams.set('state', state);
@@ -70,6 +97,7 @@ const getOwnershipRequests = async ({
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
   itemId?: string;
+  ownerId?: string;
   state?: OwnershipState;
 } & PaginationOptions;
 
@@ -85,6 +113,7 @@ const useGetOwnershipRequestsQuery = (
     req,
     queryClient,
     itemId,
+    ownerId,
     state,
     paginationOptions,
   }: UseGetOwnershipRequestsArguments,
@@ -95,7 +124,7 @@ const useGetOwnershipRequestsQuery = (
     queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { itemId, state, paginationOptions },
+    queryArguments: { itemId, ownerId, state, paginationOptions },
     refetchOnWindowFocus: false,
     ...configuration,
   });
@@ -186,4 +215,5 @@ export {
   useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useRequestOwnershipMutation,
 };

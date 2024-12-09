@@ -177,15 +177,15 @@ const isDuplicateMutation = (
 
   // Temporary disable caching on price-info
   // https://jira.uitdatabank.be/browse/III-5620
-  if (mutationKey === 'offers-add-price-info') {
-    return false;
-  }
 
-  if (mutationKey === 'offers-change-calendar') {
-    return false;
-  }
+  const disabledMutations = [
+    'offers-add-price-info',
+    'offers-change-calendar',
+    'places-add',
+    'request-ownership',
+  ];
 
-  if (mutationKey === 'places-add') {
+  if (disabledMutations.includes(mutationKey)) {
     return false;
   }
 
@@ -194,6 +194,11 @@ const isDuplicateMutation = (
   });
 
   const latestMutation = mutations.slice(-2)[0];
+
+  // If the latest mutation was unsuccessful, we don't want to trigger a false positive.
+  if (latestMutation.state.error) {
+    return false;
+  }
 
   return (
     mutations.length > 1 && isEqual(latestMutation.options.variables, variables)

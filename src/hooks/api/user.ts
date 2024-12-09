@@ -57,7 +57,7 @@ const getUser = async (cookies: Cookies) => {
 const useGetUserQuery = () => {
   const { cookies } = useCookiesWithOptions(['idToken']);
 
-  return useAuthenticatedQuery({
+  return useAuthenticatedQuery<User>({
     queryKey: ['user'],
     queryFn: () => getUser(cookies),
   });
