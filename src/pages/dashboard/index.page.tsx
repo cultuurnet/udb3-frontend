@@ -16,6 +16,7 @@ import {
 import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
+  useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
   useDeletePlaceByIdMutation,
@@ -60,6 +61,7 @@ import { parseOfferType } from '@/utils/parseOfferType';
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
+import { Title } from '@/ui/Title';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -543,6 +545,13 @@ const Dashboard = (): any => {
     );
   };
 
+  const suggestedOrganizers = useGetSuggestedOrganizersQuery(
+    {},
+    {
+      enabled: false && tab === 'organizers',
+    },
+  );
+
   const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
     sortOptions: { field: sortingField, order: sortingOrder },
@@ -688,7 +697,25 @@ const Dashboard = (): any => {
               title={t('dashboard.tabs.organizers')}
             >
               {tab === 'organizers' && (
-                <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
+                <>
+                  <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
+                  <Title>Organisaties waarvoor je eerder al invoerde</Title>
+                  <Alert variant={AlertVariants.PRIMARY}>
+                    Voor deze organisaties voerde je eerder al evenementen in,
+                    maar je bent nog geen beheerder van deze organisaties. Ben
+                    je betrokken bij het bestuur van deze organisaties en wil je
+                    de organisatiepagina en evenementen ervan beheren? Start
+                    hier je aanvraag om beheerder te worden. Zodra een huidige
+                    beheerder je aanvraag goedkeurt, krijg je toegang en ontvang
+                    je een bevestiging via e-mail.
+                  </Alert>
+                  <TabContent
+                    {...sharedTableContentProps}
+                    Row={OrganizerRow}
+                    items={suggestedOrganizers.data}
+                    status={suggestedOrganizers.status}
+                  />
+                </>
               )}
             </Tabs.Tab>
           </Tabs>
