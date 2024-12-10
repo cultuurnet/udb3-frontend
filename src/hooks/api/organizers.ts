@@ -197,6 +197,26 @@ const useGetOrganizerPermissions = (
     ...configuration,
   });
 
+const getSuggestedOrganizersQuery = async ({ headers }) => {
+  const res = await fetchFromApi({
+    path: '/ownership/suggestions',
+    options: { headers },
+  });
+
+  return handleErrorObject(res);
+};
+
+const useGetSuggestedOrganizersQuery = (
+  {},
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: ['ownership-suggestions'],
+    queryFn: getSuggestedOrganizersQuery,
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
+
 const deleteOrganizerById = async ({ headers, id }) =>
   fetchFromApi({
     path: `/organizers/${id}`,
@@ -395,4 +415,5 @@ export {
   useGetOrganizersByWebsiteQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
+  useGetSuggestedOrganizersQuery,
 };
