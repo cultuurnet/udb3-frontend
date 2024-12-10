@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
@@ -30,8 +30,6 @@ export const OrganizerPicker = ({
 }: Props) => {
   const { i18n } = useTranslation();
 
-  const ref = useRef<TypeaheadElement>(null);
-
   const [query, setQuery] = useState('');
   const isUuid = UUID_V4_REGEX.test(query);
   const getOrganizersByQueryQuery = useGetOrganizersByQueryQuery(
@@ -52,7 +50,7 @@ export const OrganizerPicker = ({
     }
 
     if (getOrganizersByQueryQuery.data?.member) {
-      return getOrganizersByQueryQuery.data?.member;
+      return getOrganizersByQueryQuery.data.member;
     }
 
     return [];
@@ -68,7 +66,6 @@ export const OrganizerPicker = ({
       label={'organizer'}
       Component={
         <Typeahead
-          ref={ref}
           maxWidth="25rem"
           isLoading={
             getOrganizersByQueryQuery.isLoading ||
@@ -79,12 +76,10 @@ export const OrganizerPicker = ({
           onChange={onChange}
           onInputChange={debounce((value) => {
             const trimmed = value.trim();
-            const isEmpty = trimmed === '';
 
             setQuery(trimmed);
 
-            if (isEmpty) {
-              ref.current.clear();
+            if (trimmed === '') {
               onChange([undefined]);
             }
           }, 275)}

@@ -33,7 +33,18 @@ export const OwnershipState = {
 
 export type OwnershipState = Values<typeof OwnershipState>;
 
-const requestOwnership = async ({ headers, itemId, ownerEmail, ownerId }) =>
+type RequestOwnershipArguments = {
+  itemId: string;
+  ownerEmail?: string;
+  ownerId?: string;
+};
+
+const requestOwnership = async ({
+  headers,
+  itemId,
+  ownerEmail,
+  ownerId,
+}: { headers: Headers } & RequestOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships`,
     options: {
@@ -53,7 +64,7 @@ const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
     mutationFn: requestOwnership,
     mutationKey: 'ownerships-request-ownership',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, RequestOwnershipArguments>;
 
 const getOwnershipRequests = async ({
   headers,

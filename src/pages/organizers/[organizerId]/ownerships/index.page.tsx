@@ -36,7 +36,7 @@ import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
 
-const ActionType = {
+export const ActionType = {
   APPROVE: 'confirm',
   REJECT: 'reject',
   REQUEST: 'request',
@@ -309,23 +309,28 @@ const Ownership = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    await Promise.all([
-      await useGetOrganizerByIdQuery({
-        req,
-        queryClient,
-        id: query.organizerId,
-      }),
-      await useGetOwnershipRequestsQuery({
-        req,
-        queryClient,
-        itemId: query.organizerId,
-      }),
-      await useGetOwnershipCreatorQuery({
-        req,
-        queryClient,
-        organizerId: query.organizerId,
-      }),
-    ]);
+    try {
+      await Promise.all([
+        useGetOrganizerByIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
+        }),
+        useGetOwnershipRequestsQuery({
+          req,
+          queryClient,
+          itemId: query.organizerId,
+        }),
+        useGetOwnershipCreatorQuery({
+          req,
+          queryClient,
+          organizerId: query.organizerId,
+        }),
+      ]);
+    } catch (e) {
+      console.error(e);
+    }
+
     return {
       props: {
         dehydratedState: dehydrate(queryClient),

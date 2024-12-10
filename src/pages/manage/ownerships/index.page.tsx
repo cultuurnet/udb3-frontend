@@ -21,6 +21,7 @@ import {
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
+import { useOwnershipActions } from '@/hooks/ownerships/useOwnershipActions';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
 import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
@@ -119,35 +120,37 @@ const OwnershipsOverviewPage = () => {
   };
 
   const queryClient = useQueryClient();
-  const onSuccess = () => queryClient.invalidateQueries('ownership-requests');
+  // const onSuccess = () => queryClient.invalidateQueries('ownership-requests');
+  //
+  // const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
+  //   onSuccess,
+  // });
+  // const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
+  //   onSuccess,
+  // });
+  // const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
+  //   onSuccess,
+  // });
+  //
+  // const handleApprove = (request: OwnershipRequest) => {
+  //   approveOwnershipRequestMutation.mutate({
+  //     ownershipId: request.id,
+  //   });
+  // };
+  //
+  // const handleReject = (request: OwnershipRequest) => {
+  //   rejectOwnershipRequestMutation.mutate({
+  //     ownershipId: request.id,
+  //   });
+  // };
+  //
+  // const handleDelete = (request: OwnershipRequest) => {
+  //   deleteOwnershipRequestMutation.mutate({
+  //     ownershipId: request.id,
+  //   });
+  // };
 
-  const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
-    onSuccess,
-  });
-  const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
-    onSuccess,
-  });
-  const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
-    onSuccess,
-  });
-
-  const handleApprove = (request: OwnershipRequest) => {
-    approveOwnershipRequestMutation.mutate({
-      ownershipId: request.id,
-    });
-  };
-
-  const handleReject = (request: OwnershipRequest) => {
-    rejectOwnershipRequestMutation.mutate({
-      ownershipId: request.id,
-    });
-  };
-
-  const handleDelete = (request: OwnershipRequest) => {
-    deleteOwnershipRequestMutation.mutate({
-      ownershipId: request.id,
-    });
-  };
+  const { deleteOwnership, Modal, Alert } = useOwnershipActions();
 
   return (
     <Page>
@@ -160,6 +163,9 @@ const OwnershipsOverviewPage = () => {
           `}
           spacing={4}
         >
+          <Modal />
+          <Alert />
+
           <Select
             value={state}
             onChange={async (event) => {
@@ -191,9 +197,10 @@ const OwnershipsOverviewPage = () => {
             <OwnershipsTable
               requests={requests}
               shouldShowItemId
-              onApprove={handleApprove}
-              onReject={handleReject}
-              onDelete={handleDelete}
+              shouldShowOwnerId
+              //onApprove={handleApprove}
+              //onReject={handleReject}
+              onDelete={deleteOwnership}
             />
           )}
 
