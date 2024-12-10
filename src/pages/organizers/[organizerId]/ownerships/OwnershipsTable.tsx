@@ -114,14 +114,14 @@ export const OwnershipsTable = ({
         paddingBottom={3}
         css={`
           display: grid;
-          grid-template-columns: 1fr 1fr 18rem;
+          grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
         {shouldShowItemId && <Title size={3}>item id</Title>}
         {hasActions && (
-          <Title size={3}>
+          <Title size={3} justifyContent="flex-end">
             {t('organizers.ownerships.table.actions.title')}
           </Title>
         )}
@@ -132,12 +132,11 @@ export const OwnershipsTable = ({
           <Inline
             key={request.id}
             role="row"
-            justifyContent="space-between"
             alignItems="center"
             paddingY={3}
             display="grid"
             css={`
-              grid-template-columns: 1fr 1fr 18rem;
+              grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
 
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
@@ -158,7 +157,7 @@ export const OwnershipsTable = ({
               </List.Item>
             )}
             {hasActions && (
-              <List.Item>
+              <List.Item justifyContent="flex-end">
                 <Actions
                   request={request}
                   onDelete={onDelete}
