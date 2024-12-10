@@ -70,6 +70,7 @@ type Props = {
   requests: OwnershipRequest[];
   creator?: OwnershipCreator;
   shouldShowItemId?: boolean;
+  shouldShowOwnerId?: boolean;
 } & ActionHandlers;
 
 export const OwnershipsTable = ({
@@ -79,6 +80,7 @@ export const OwnershipsTable = ({
   onApprove,
   onReject,
   shouldShowItemId = false,
+  shouldShowOwnerId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
@@ -145,7 +147,7 @@ export const OwnershipsTable = ({
           >
             <List.Item>
               <Stack>
-                <Text>{request.ownerId}</Text>
+                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
                 <Text>{request.ownerEmail}</Text>
               </Stack>
             </List.Item>
