@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Alert } from 'react-bootstrap';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
@@ -12,7 +11,9 @@ import {
 } from '@/hooks/api/ownerships';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
+import { getInlineProps, InlineProps } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 
 export const ActionType = {
@@ -23,6 +24,49 @@ export const ActionType = {
 } as const;
 
 type ActionType = Values<typeof ActionType>;
+
+const OwnershipActionsAlert = ({
+  request,
+  actionType,
+  onClose,
+  ...props
+}: {
+  request?: OwnershipRequest;
+  actionType: ActionType;
+  onClose: () => void;
+} & InlineProps) => {
+  const { i18n } = useTranslation();
+  const translationsPath = `organizers.ownerships.${actionType}_modal`;
+
+  const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
+    id: request?.itemId,
+  });
+
+  // @ts-expect-error
+  const organizer: Organizer = getOrganizerByIdQuery?.data;
+  const organizerName =
+    organizer?.name?.[i18n.language] ??
+    organizer?.name?.[organizer.mainLanguage] ??
+    organizer?.name;
+
+  return (
+    <Alert
+      variant={AlertVariants.SUCCESS}
+      fullWidth
+      closable
+      onClose={onClose}
+      {...getInlineProps(props)}
+    >
+      <Trans
+        i18nKey={`${translationsPath}.success`}
+        values={{
+          ownerEmail: request?.ownerEmail,
+          organizerName,
+        }}
+      />
+    </Alert>
+  );
+};
 
 const OwnershipActionModal = ({
   request,
@@ -40,9 +84,16 @@ const OwnershipActionModal = ({
   const { t, i18n } = useTranslation();
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
 
-  const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
-    id: request?.itemId,
-  });
+  const getOrganizerByIdQuery = useGetOrganizerByIdQuery(
+    {
+      id: request?.itemId,
+    },
+    {
+      // This is needed if the filtered organizer is the same as the one from the action
+      // otherwise the query in the action will trigger the query on the page continuously
+      queryKey: ['organizers', 'action-modal'],
+    },
+  );
 
   // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
@@ -78,13 +129,13 @@ const OwnershipActionModal = ({
 export const useOwnershipActions = () => {
   const queryClient = useQueryClient();
 
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
+  const [successfulAction, setSuccessfulAction] = useState<ActionType>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const [actionType, setActionType] = useState<ActionType>();
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
-      setIsSuccessAlertVisible(true);
+      setSuccessfulAction(ActionType.APPROVE);
       setActionType(undefined);
       setSelectedRequest(undefined);
       await queryClient.invalidateQueries('ownership-requests');
@@ -93,7 +144,7 @@ export const useOwnershipActions = () => {
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
     onSuccess: async () => {
-      setIsSuccessAlertVisible(true);
+      setSuccessfulAction(ActionType.REJECT);
       setActionType(undefined);
       setSelectedRequest(undefined);
       await queryClient.invalidateQueries('ownership-requests');
@@ -102,6 +153,7 @@ export const useOwnershipActions = () => {
 
   const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
     onSuccess: async () => {
+      setSuccessfulAction(ActionType.DELETE);
       setActionType(undefined);
       setSelectedRequest(undefined);
       await queryClient.invalidateQueries('ownership-requests');
@@ -133,22 +185,36 @@ export const useOwnershipActions = () => {
     }
   };
 
-  return {
-    deleteOwnership: (request: OwnershipRequest) => {
-      setActionType(ActionType.DELETE);
+  const triggerAction =
+    (actionType: ActionType) => (request: OwnershipRequest) => {
+      setActionType(actionType);
       setSelectedRequest(request);
-    },
-    Modal: () => {
-      return (
-        <OwnershipActionModal
-          request={selectedRequest}
-          actionType={actionType}
-          isLoading={isLoading}
-          onClose={() => setSelectedRequest(undefined)}
-          onConfirm={handleConfirm}
+    };
+
+  return {
+    deleteOwnership: triggerAction(ActionType.DELETE),
+    approveOwnership: triggerAction(ActionType.APPROVE),
+    rejectOwnership: triggerAction(ActionType.REJECT),
+    Modal: () => (
+      <OwnershipActionModal
+        request={selectedRequest}
+        actionType={actionType}
+        isLoading={isLoading}
+        onClose={() => setSelectedRequest(undefined)}
+        onConfirm={handleConfirm}
+      />
+    ),
+    Alert: (props: InlineProps) =>
+      successfulAction ? (
+        <OwnershipActionsAlert
+          actionType={successfulAction}
+          onClose={() => {
+            setSuccessfulAction(undefined);
+            setSelectedRequest(undefined);
+            setActionType(undefined);
+          }}
+          {...getInlineProps(props)}
         />
-      );
-    },
-    Alert: () => (isSuccessAlertVisible ? <Alert>test</Alert> : null),
+      ) : null,
   };
 };

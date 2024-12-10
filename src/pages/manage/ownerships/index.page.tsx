@@ -119,38 +119,8 @@ const OwnershipsOverviewPage = () => {
     await shallowRouter.pushSearchParams({ page: `${page}` });
   };
 
-  const queryClient = useQueryClient();
-  // const onSuccess = () => queryClient.invalidateQueries('ownership-requests');
-  //
-  // const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
-  //   onSuccess,
-  // });
-  // const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
-  //   onSuccess,
-  // });
-  // const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
-  //   onSuccess,
-  // });
-  //
-  // const handleApprove = (request: OwnershipRequest) => {
-  //   approveOwnershipRequestMutation.mutate({
-  //     ownershipId: request.id,
-  //   });
-  // };
-  //
-  // const handleReject = (request: OwnershipRequest) => {
-  //   rejectOwnershipRequestMutation.mutate({
-  //     ownershipId: request.id,
-  //   });
-  // };
-  //
-  // const handleDelete = (request: OwnershipRequest) => {
-  //   deleteOwnershipRequestMutation.mutate({
-  //     ownershipId: request.id,
-  //   });
-  // };
-
-  const { deleteOwnership, Modal, Alert } = useOwnershipActions();
+  const { deleteOwnership, approveOwnership, rejectOwnership, Modal, Alert } =
+    useOwnershipActions();
 
   return (
     <Page>
@@ -198,8 +168,8 @@ const OwnershipsOverviewPage = () => {
               requests={requests}
               shouldShowItemId
               shouldShowOwnerId
-              //onApprove={handleApprove}
-              //onReject={handleReject}
+              onApprove={approveOwnership}
+              onReject={rejectOwnership}
               onDelete={deleteOwnership}
             />
           )}
