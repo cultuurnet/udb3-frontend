@@ -543,7 +543,7 @@ const Dashboard = (): any => {
     );
   };
 
-  const UseGetItemsByCreatorQuery = useGetItemsByCreator({
+  const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
     sortOptions: { field: sortingField, order: sortingOrder },
     paginationOptions: {
@@ -552,19 +552,19 @@ const Dashboard = (): any => {
     },
   });
 
-  const UseDeleteItemByIdMutation = useDeleteItemById({
+  const deleteItemByIdMutation = useDeleteItemById({
     onSuccess: async () => {
       await queryClient.invalidateQueries(tab);
     },
   });
 
-  const items = UseGetItemsByCreatorQuery.data?.member ?? [];
+  const items = getItemsByCreatorQuery.data?.member ?? [];
 
   const sharedTableContentProps = {
     tab,
-    status: UseGetItemsByCreatorQuery.status,
+    status: getItemsByCreatorQuery.status,
     items,
-    totalItems: UseGetItemsByCreatorQuery.data?.totalItems ?? 0,
+    totalItems: getItemsByCreatorQuery.data?.totalItems ?? 0,
     page,
     onChangePage: async (page: number) => {
       await router.push({ pathname, query: { ...query, page } }, undefined, {
@@ -702,7 +702,7 @@ const Dashboard = (): any => {
       variant={ModalVariants.QUESTION}
       visible={isModalVisible}
       onConfirm={async () => {
-        UseDeleteItemByIdMutation.mutate({
+        deleteItemByIdMutation.mutate({
           id: parseOfferId(toBeDeletedItem['@id']),
         });
         setIsModalVisible(false);
