@@ -1063,7 +1063,7 @@
           "cancel": "Abbrechen"
         }
       },
-      "confirm_modal": {
+      "approve_modal": {
         "title": "Verwaltungsantrag genehmigen",
         "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
         "cancel": "Abbrechen",

@@ -17,13 +17,13 @@ import { getInlineProps, InlineProps } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 
 export const ActionType = {
-  APPROVE: 'confirm',
+  APPROVE: 'approve',
   REJECT: 'reject',
   REQUEST: 'request',
   DELETE: 'delete',
 } as const;
 
-type ActionType = Values<typeof ActionType>;
+export type ActionType = Values<typeof ActionType>;
 
 const OwnershipActionsAlert = ({
   request,

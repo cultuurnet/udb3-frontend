@@ -17,8 +17,8 @@ import {
   useRejectOwnershipRequestMutation,
   useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
+import { ActionType } from '@/hooks/ownerships/useOwnershipActions';
 import { Organizer } from '@/types/Organizer';
-import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -35,14 +35,6 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
-
-export const ActionType = {
-  APPROVE: 'confirm',
-  REJECT: 'reject',
-  REQUEST: 'request',
-} as const;
-
-type ActionType = Values<typeof ActionType>;
 
 const Ownership = () => {
   const router = useRouter();
