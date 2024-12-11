@@ -45,7 +45,7 @@ export const OwnershipsTable = ({
         <Title size={3}>{t('organizers.ownerships.table.actions.title')}</Title>
       </Inline>
       <List paddingY={3}>
-        <List.Item>{creator.email}</List.Item>
+        {creator && <List.Item>{creator.email}</List.Item>}
         {requests.map((request) => (
           <Inline
             key={request.id}
