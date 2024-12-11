@@ -100,9 +100,8 @@ const OwnershipActionModal = ({
       // otherwise the query in the action will trigger the query on the page continuously
       queryKey: ['organizers', 'action-modal'],
     },
-  );
+  ) as UseQueryResult<GetOrganizerByIdResponse>;
 
-  // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
