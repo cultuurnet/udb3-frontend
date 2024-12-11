@@ -28,7 +28,7 @@ export const OrganizerPicker = ({
   defaultInputValue,
   ...props
 }: Props) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [query, setQuery] = useState('');
   const isUuid = UUID_V4_REGEX.test(query);
@@ -63,7 +63,7 @@ export const OrganizerPicker = ({
   return (
     <FormElement
       id={'ownership-organizer-picker'}
-      label={'organizer'}
+      label={t('ownerships.organizer_picker.label')}
       Component={
         <Typeahead
           maxWidth="25rem"

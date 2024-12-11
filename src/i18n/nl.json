@@ -733,6 +733,9 @@
   "ownerships": {
     "overview": {
       "title": "Ownerships"
+    },
+    "organizer_picker": {
+      "label": "Organisatie"
     }
   },
   "movies": {
