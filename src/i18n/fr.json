@@ -723,11 +723,20 @@
     "movies": "Films",
     "notifications": "Notifications",
     "organizations": "Organisateurs",
+    "ownerships": "Gestionnaires",
     "productions": "Productions",
     "roles": "Rôles",
     "search": "Chercher",
     "users": "Utilisateurs",
     "validate": "Valider"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Gestionnaires"
+    },
+    "organizer_picker": {
+      "label": "Organisation"
+    }
   },
   "movies": {
     "create": {
@@ -1045,6 +1054,7 @@
       "owners": "Gestionnaires",
       "table": {
         "user": "Utilisateur",
+        "no_results": "Aucun résultat trouvé",
         "actions": {
           "title": "Actions",
           "approve": "Approuver",
@@ -1063,7 +1073,7 @@
           "cancel": "Annuler"
         }
       },
-      "confirm_modal": {
+      "approve_modal": {
         "title": "Approuver la demande de gestion",
         "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
         "cancel": "Annuler",

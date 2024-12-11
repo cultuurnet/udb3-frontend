@@ -578,6 +578,12 @@ const Sidebar = () => {
         children: t('menu.organizations'),
       },
       {
+        permission: PermissionTypes.ORGANISATIES_BEHEREN,
+        href: '/manage/ownerships',
+        iconName: Icons.USERS,
+        children: t('menu.ownerships'),
+      },
+      {
         permission: PermissionTypes.PRODUCTIES_AANMAKEN,
         href: '/manage/productions',
         iconName: Icons.LAYER_GROUP,

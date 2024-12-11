@@ -723,11 +723,20 @@
     "movies": "Films",
     "notifications": "Meldingen",
     "organizations": "Organisaties",
+    "ownerships": "Ownerships",
     "productions": "Producties",
     "roles": "Rollen",
     "search": "Zoeken",
     "users": "Gebruikers",
     "validate": "Valideren"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Ownerships"
+    },
+    "organizer_picker": {
+      "label": "Organisatie"
+    }
   },
   "movies": {
     "create": {
@@ -1045,6 +1054,7 @@
       "owners": "Beheerders",
       "table": {
         "user": "Gebruiker",
+        "no_results": "Geen resultaten gevonden",
         "actions": {
           "title": "Acties",
           "approve": "Goedkeuren",
@@ -1063,7 +1073,7 @@
           "cancel": "Annuleren"
         }
       },
-      "confirm_modal": {
+      "approve_modal": {
         "title": "Aanvraag tot beheer goedkeuren",
         "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
         "cancel": "Annuleren",
@@ -1081,7 +1091,8 @@
         "title": "Beheerder verwijderen",
         "body": "Ben je zeker dat je {{ownerEmail}} wilt verwijderen als beheerder?",
         "cancel": "Annuleren",
-        "confirm": "Beheerder verwijderen"
+        "confirm": "Beheerder verwijderen",
+        "success": "De aanvraag van {{ownerEmail}} is verwijderd."
       },
       "request": {
         "confirm_modal": {

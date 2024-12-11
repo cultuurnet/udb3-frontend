@@ -11,7 +11,7 @@ import {
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
-  RequestState,
+  OwnershipState,
   useGetOwnershipRequestsQuery,
   useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
@@ -68,14 +68,14 @@ const OrganizersPreview = () => {
   const userId = getUserQuery.data?.sub;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
-    organizerId: organizerId,
+    itemId: organizerId,
     ownerId: userId,
   });
 
   // @ts-expect-error
   const userRequests = getOwnershipRequestsQuery?.data?.member;
   const isOwnershipRequested = userRequests?.some(
-    (request: OwnershipRequest) => request.state === RequestState.REQUESTED,
+    (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
   );
 
   const requestOwnershipMutation = useRequestOwnershipMutation({
