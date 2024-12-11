@@ -87,7 +87,7 @@ const getTerms = (typeAndTheme: FormDataUnion['typeAndTheme']) => {
   return { terms };
 };
 
-const getAddress = (
+export const getAddress = (
   address: Address,
   language: SupportedLanguage,
   mainLanguage: SupportedLanguage,

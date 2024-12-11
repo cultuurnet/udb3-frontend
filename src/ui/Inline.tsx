@@ -95,6 +95,8 @@ const inlinePropTypes = [
   'stackOn',
 ];
 
+const linkPropTypes = ['rel', 'target'];
+
 const getInlineProps = (props: UnknownProps) =>
   pickBy(props, (_value, key) => {
     // pass aria attributes to the DOM element
@@ -102,7 +104,11 @@ const getInlineProps = (props: UnknownProps) =>
       return true;
     }
 
-    const propTypes: string[] = [...boxPropTypes, ...inlinePropTypes];
+    const propTypes: string[] = [
+      ...boxPropTypes,
+      ...inlinePropTypes,
+      ...linkPropTypes,
+    ];
 
     return propTypes.includes(key);
   });

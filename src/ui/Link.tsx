@@ -14,7 +14,7 @@ import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('link');
 
-const LinkButtonVariants = {
+export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
   BUTTON_SECONDARY: 'secondary',
   BUTTON_DANGER: 'danger',
@@ -61,7 +61,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           alignItems="center"
           {...getInlineProps(props)}
         >
-          <Button forwardedAs="span" variant={variant}>
+          <Button forwardedAs="span" width="100%" variant={variant}>
             {children}
           </Button>
         </Inline>
@@ -135,14 +135,16 @@ const Link = ({
     : undefined;
 
   const inner = [
-    iconName && <Icon name={iconName} key="icon" />,
-    customChildren
-      ? children
-      : !shouldHideText && (
-          <Text flex={1} textAlign="left" key="text">
-            {children}
-          </Text>
-        ),
+    <Inline spacing={3} key="content">
+      {iconName && <Icon name={iconName} key="icon" />}
+      {customChildren
+        ? children
+        : !shouldHideText && (
+            <Text flex={1} textAlign="left" key="text">
+              {children}
+            </Text>
+          )}
+    </Inline>,
     clonedSuffix,
   ];
 
