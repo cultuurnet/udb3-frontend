@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 
-import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
+import {
+  GetOrganizerByIdResponse,
+  useGetOrganizerByIdQuery,
+} from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
   useApproveOwnershipRequestMutation,
@@ -31,23 +34,27 @@ const OwnershipActionsAlert = ({
   onClose,
   ...props
 }: {
-  request?: OwnershipRequest;
+  request: OwnershipRequest;
   actionType: ActionType;
   onClose: () => void;
 } & InlineProps) => {
   const { i18n } = useTranslation();
+
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
 
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
     id: request?.itemId,
-  });
+  }) as UseQueryResult<GetOrganizerByIdResponse>;
 
-  // @ts-expect-error
-  const organizer: Organizer = getOrganizerByIdQuery?.data;
+  const organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
     organizer?.name?.[organizer.mainLanguage] ??
     organizer?.name;
+
+  if (getOrganizerByIdQuery.isLoading) {
+    return null;
+  }
 
   return (
     <Alert
@@ -75,7 +82,7 @@ const OwnershipActionModal = ({
   onClose,
   isLoading,
 }: {
-  request?: OwnershipRequest;
+  request: OwnershipRequest | undefined;
   actionType: ActionType;
   onConfirm: () => void;
   onClose: () => void;
@@ -131,10 +138,16 @@ export const useOwnershipActions = () => {
 
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const [actionType, setActionType] = useState<ActionType>();
-  const [successfulAction, setSuccessfulAction] = useState<ActionType>();
+  const [successfulAction, setSuccessfulAction] = useState<{
+    request: OwnershipRequest;
+    actionType: ActionType;
+  }>();
 
-  const triggerSuccess = async (actionType: ActionType) => {
-    setSuccessfulAction(actionType);
+  const triggerSuccess = (actionType: ActionType) => async () => {
+    setSuccessfulAction({
+      request: selectedRequest,
+      actionType,
+    });
     setActionType(undefined);
     setSelectedRequest(undefined);
     await queryClient.invalidateQueries('ownership-requests');
@@ -199,7 +212,8 @@ export const useOwnershipActions = () => {
     Alert: (props: InlineProps) =>
       successfulAction ? (
         <OwnershipActionsAlert
-          actionType={successfulAction}
+          request={successfulAction.request}
+          actionType={successfulAction.actionType}
           onClose={() => {
             setSuccessfulAction(undefined);
             setSelectedRequest(undefined);
