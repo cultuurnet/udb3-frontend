@@ -132,6 +132,7 @@ const OwnershipActionModal = ({
   );
 };
 
+// TODO: Use this hook on src/pages/organizers/[organizerId]/ownerships/index.page.tsx
 export const useOwnershipActions = () => {
   const queryClient = useQueryClient();
 
