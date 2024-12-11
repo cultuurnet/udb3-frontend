@@ -580,7 +580,7 @@ const Sidebar = () => {
       {
         permission: PermissionTypes.ORGANISATIES_BEHEREN,
         href: '/manage/ownerships',
-        iconName: Icons.SLIDE_SHARE,
+        iconName: Icons.USERS,
         children: t('menu.ownerships'),
       },
       {
