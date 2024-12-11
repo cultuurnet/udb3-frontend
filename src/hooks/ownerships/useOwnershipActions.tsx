@@ -129,35 +129,27 @@ const OwnershipActionModal = ({
 export const useOwnershipActions = () => {
   const queryClient = useQueryClient();
 
-  const [successfulAction, setSuccessfulAction] = useState<ActionType>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const [actionType, setActionType] = useState<ActionType>();
+  const [successfulAction, setSuccessfulAction] = useState<ActionType>();
+
+  const triggerSuccess = async (actionType: ActionType) => {
+    setSuccessfulAction(actionType);
+    setActionType(undefined);
+    setSelectedRequest(undefined);
+    await queryClient.invalidateQueries('ownership-requests');
+  };
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
-    onSuccess: async () => {
-      setSuccessfulAction(ActionType.APPROVE);
-      setActionType(undefined);
-      setSelectedRequest(undefined);
-      await queryClient.invalidateQueries('ownership-requests');
-    },
+    onSuccess: triggerSuccess(ActionType.APPROVE),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
-    onSuccess: async () => {
-      setSuccessfulAction(ActionType.REJECT);
-      setActionType(undefined);
-      setSelectedRequest(undefined);
-      await queryClient.invalidateQueries('ownership-requests');
-    },
+    onSuccess: triggerSuccess(ActionType.REJECT),
   });
 
   const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
-    onSuccess: async () => {
-      setSuccessfulAction(ActionType.DELETE);
-      setActionType(undefined);
-      setSelectedRequest(undefined);
-      await queryClient.invalidateQueries('ownership-requests');
-    },
+    onSuccess: triggerSuccess(ActionType.DELETE),
   });
 
   const isLoading =
