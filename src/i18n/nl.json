@@ -1054,6 +1054,7 @@
       "owners": "Beheerders",
       "table": {
         "user": "Gebruiker",
+        "no_results": "Geen resultaten gevonden",
         "actions": {
           "title": "Acties",
           "approve": "Goedkeuren",

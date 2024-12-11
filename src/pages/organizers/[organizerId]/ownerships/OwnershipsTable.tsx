@@ -96,7 +96,7 @@ export const OwnershipsTable = ({
   );
 
   if (requests.length === 0) {
-    return <Text>no results</Text>;
+    return <Text>{t('organizers.ownerships.table.no_results')}</Text>;
   }
 
   return (

@@ -1054,6 +1054,7 @@
       "owners": "Verwalter",
       "table": {
         "user": "Benutzer",
+        "no_results": "Keine Ergebnisse gefunden",
         "actions": {
           "title": "Aktionen",
           "approve": "Genehmigen",
