@@ -46,7 +46,7 @@ const itemsPerPage = 14;
 const OwnershipsOverviewPage = () => {
   const router = useRouter();
   const shallowRouter = useShallowRouter();
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const state =
     (router.query.state as OwnershipState | undefined) ??
@@ -124,7 +124,7 @@ const OwnershipsOverviewPage = () => {
 
   return (
     <Page>
-      <Page.Title>Ownerships</Page.Title>
+      <Page.Title>{t('ownerships.overview.title')}</Page.Title>
       <Page.Content>
         <Panel
           css={`

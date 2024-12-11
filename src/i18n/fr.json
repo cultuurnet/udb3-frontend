@@ -723,11 +723,17 @@
     "movies": "Films",
     "notifications": "Notifications",
     "organizations": "Organisateurs",
+    "ownerships": "Gestionnaires",
     "productions": "Productions",
     "roles": "Rôles",
     "search": "Chercher",
     "users": "Utilisateurs",
     "validate": "Valider"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Gestionnaires"
+    }
   },
   "movies": {
     "create": {

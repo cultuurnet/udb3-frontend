@@ -723,11 +723,17 @@
     "movies": "Filme",
     "notifications": "Benachrichtigungen",
     "organizations": "Organisationen",
+    "ownerships": "Verwalter",
     "productions": "Produktionen",
     "roles": "Rollen",
     "search": "Suchen",
     "users": "Benutzer",
     "validate": "Validieren"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Verwalter"
+    }
   },
   "movies": {
     "create": {

@@ -730,6 +730,11 @@
     "users": "Gebruikers",
     "validate": "Valideren"
   },
+  "ownerships": {
+    "overview": {
+      "title": "Ownerships"
+    }
+  },
   "movies": {
     "create": {
       "actions": {
