@@ -80,7 +80,7 @@ const OwnershipsOverviewPage = () => {
     if (!fetchedOrganizer) return;
 
     setOrganizer(fetchedOrganizer);
-  }, [fetchedOrganizer, organizer]);
+  }, [fetchedOrganizer]);
 
   useEffect(() => {
     if (!itemId && organizer) {
