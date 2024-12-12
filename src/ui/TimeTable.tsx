@@ -113,7 +113,7 @@ type CopyPayload =
     }
   | { method: 'all'; data: { [key: string]: Data } };
 
-type RowProps = InlineProps & {
+type RowProps = Omit<InlineProps, 'date'> & {
   data: Record<string, unknown>;
   date: string;
   onCopy: (date: string) => void;

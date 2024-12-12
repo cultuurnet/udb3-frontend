@@ -1,3 +1,4 @@
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import type { UseQueryOptions } from 'react-query';
 
 import type { CalendarType } from '@/constants/CalendarType';
@@ -44,7 +45,7 @@ type EventArguments = {
   calendarType: Values<typeof CalendarType>;
   startDate: string;
   endDate: string;
-  subEvent: SubEvent[];
+  subEvent: SubEvent[] | undefined;
   openingHours: OpeningHours[];
   terms: Term[];
   workflowStatus: WorkflowStatus;
@@ -106,9 +107,15 @@ const addEvent = async ({
         mainLanguage,
         name,
         calendarType,
-        startDate,
-        endDate,
-        subEvent,
+        startDate: fromZonedTime(startDate, 'Europe/Brussels'),
+        endDate: fromZonedTime(endDate, 'Europe/Brussels'),
+        subEvent: subEvent
+          ? subEvent.map((it) => ({
+              ...it,
+              startDate: fromZonedTime(it.startDate, 'Europe/Brussels'),
+              endDate: fromZonedTime(it.endDate, 'Europe/Brussels'),
+            }))
+          : undefined,
         openingHours,
         terms,
         location,
@@ -184,7 +191,28 @@ const getEventById = async ({ headers, id }) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  const data = (await res.json()) as Event;
+
+  if (data.subEvent) {
+    data.subEvent = data.subEvent.map((it) => ({
+      ...it,
+      startDate: toZonedTime(it.startDate, 'Europe/Brussels').toISOString(),
+      endDate: toZonedTime(it.endDate, 'Europe/Brussels').toISOString(),
+    }));
+  }
+
+  if (data.startDate) {
+    data.startDate = toZonedTime(
+      data.startDate,
+      'Europe/Brussels',
+    ).toISOString();
+  }
+
+  if (data.endDate) {
+    data.endDate = toZonedTime(data.endDate, 'Europe/Brussels').toISOString();
+  }
+
+  return data;
 };
 
 type UseGetEventByIdArguments = ServerSideQueryOptions & {
@@ -415,50 +443,6 @@ const useChangeNameMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const changeCalendar = async ({
-  headers,
-  id,
-  calendarType,
-  timeSpans,
-  subEvent,
-  start,
-  end,
-  startDate,
-  endDate,
-  openingHours,
-  dayOfWeek,
-  opens,
-  closes,
-}) => {
-  return fetchFromApi({
-    path: `/events/${id.toString()}/calendar`,
-    options: {
-      method: 'PUT',
-      body: JSON.stringify({
-        calendarType,
-        timeSpans,
-        subEvent,
-        start,
-        end,
-        startDate,
-        endDate,
-        openingHours,
-        dayOfWeek,
-        opens,
-        closes,
-      }),
-      headers,
-    },
-  });
-};
-
-const useChangeCalendarMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
-    mutationFn: changeCalendar,
-    mutationKey: 'events-change-calendar',
-    ...configuration,
-  });
-
 const changeStatus = async ({ headers, id, type, reason }) =>
   fetchFromApi({
     path: `/events/${id.toString()}/status`,
@@ -637,7 +621,6 @@ export {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
-  useChangeCalendarMutation,
   useChangeLocationMutation,
   useChangeNameMutation,
   useChangeOnlineUrlMutation,
