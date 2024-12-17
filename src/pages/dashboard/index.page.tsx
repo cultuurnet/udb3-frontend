@@ -63,6 +63,8 @@ import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 import { Title } from '@/ui/Title';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { SupportedLanguage } from '@/i18n/index';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -346,9 +348,11 @@ const OrganizerRow = ({
 
   return (
     <DashboardRow
-      title={
-        organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
-      }
+      title={getLanguageObjectOrFallback(
+        organizer.name,
+        i18n.language as SupportedLanguage,
+        organizer.mainLanguage as SupportedLanguage,
+      )}
       url={previewUrl}
       imageUrl={imageUrl}
       score={score}
