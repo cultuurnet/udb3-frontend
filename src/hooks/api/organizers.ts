@@ -33,8 +33,11 @@ const useGetOrganizersByQueryQuery = (
     req,
     queryClient,
     name,
+    q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<{ name?: string } & PaginationOptions> = {},
+  }: AuthenticatedQueryOptions<
+    { name?: string; q?: string } & PaginationOptions
+  > = {},
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<{ member: Organizer[] }>({
@@ -44,6 +47,7 @@ const useGetOrganizersByQueryQuery = (
     queryFn: getOrganizers,
     queryArguments: {
       embed: true,
+      q,
       name,
       start: paginationOptions.start,
       limit: paginationOptions.limit,
@@ -57,6 +61,7 @@ type GetOrganizersArguments = {
   embed?: string;
   website?: string;
   name?: string;
+  q?: string;
   limit?: string;
   start?: string;
 };
@@ -65,6 +70,7 @@ const getOrganizers = async ({
   headers,
   website,
   name,
+  q,
   embed,
   limit,
   start,
@@ -73,6 +79,7 @@ const getOrganizers = async ({
     path: '/organizers',
     searchParams: {
       embed: `${embed}`,
+      ...(q && { q }),
       ...(website && { website }),
       ...(name && { name }),
       ...(limit && { limit }),

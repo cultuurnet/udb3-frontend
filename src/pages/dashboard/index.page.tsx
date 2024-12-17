@@ -16,6 +16,7 @@ import {
 import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
+  useGetOrganizersByQueryQuery,
   useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
@@ -413,7 +414,7 @@ const TabContent = ({
     );
   }
 
-  if (items.length === 0) {
+  if (!items?.length) {
     return (
       <Panel
         css={`
@@ -545,10 +546,19 @@ const Dashboard = (): any => {
     );
   };
 
-  const suggestedOrganizers = useGetSuggestedOrganizersQuery(
+  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
     {},
+    { enabled: tab === 'organizers' },
+  );
+
+  const suggestedOrganizers = useGetOrganizersByQueryQuery(
     {
-      enabled: false && tab === 'organizers',
+      q: suggestedOrganizerIds.data?.member
+        .map((result) => `id:${parseOfferId(result['@id'])}`)
+        .join(' OR '),
+    },
+    {
+      enabled: suggestedOrganizerIds.data?.member?.length,
     },
   );
 
@@ -712,7 +722,7 @@ const Dashboard = (): any => {
                   <TabContent
                     {...sharedTableContentProps}
                     Row={OrganizerRow}
-                    items={suggestedOrganizers.data}
+                    items={suggestedOrganizers.data?.member}
                     status={suggestedOrganizers.status}
                   />
                 </>
