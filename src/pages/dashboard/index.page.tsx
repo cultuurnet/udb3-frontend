@@ -1,9 +1,9 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import React, { ComponentType, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
@@ -16,6 +16,8 @@ import {
 import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
+  useGetOrganizersByQueryQuery,
+  useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
   useDeletePlaceByIdMutation,
@@ -27,6 +29,7 @@ import {
   useGetUserQueryServerSide,
   User,
 } from '@/hooks/api/user';
+import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
 import type { Event } from '@/types/Event';
@@ -53,7 +56,9 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
@@ -313,11 +318,13 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
 type OrganizerRowProps = InlineProps & {
   item: Organizer;
   onDelete: (item: Organizer) => void;
+  actions?: React.ReactNode[];
 };
 
 const OrganizerRow = ({
   item: organizer,
   onDelete,
+  actions,
   ...props
 }: OrganizerRowProps) => {
   const { t, i18n } = useTranslation();
@@ -343,28 +350,36 @@ const OrganizerRow = ({
 
   return (
     <DashboardRow
-      title={
-        organizer.name[i18n.language] ?? organizer.name[organizer.mainLanguage]
-      }
+      title={getLanguageObjectOrFallback(
+        organizer.name,
+        i18n.language as SupportedLanguage,
+        organizer.mainLanguage as SupportedLanguage,
+      )}
       url={previewUrl}
       imageUrl={imageUrl}
       score={score}
       scope={ScopeTypes.ORGANIZERS}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
-      actions={[
-        <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
-          {t('dashboard.actions.edit')}
-        </Link>,
-        <Dropdown.Item href={previewUrl} key="preview">
-          {t('dashboard.actions.preview')}
-        </Dropdown.Item>,
-        permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
-          <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
-            {t('dashboard.actions.delete')}
-          </Dropdown.Item>
-        ),
-      ]}
+      actions={
+        actions || [
+          <Link
+            href={editUrl}
+            variant={LinkVariants.BUTTON_SECONDARY}
+            key="edit"
+          >
+            {t('dashboard.actions.edit')}
+          </Link>,
+          <Dropdown.Item href={previewUrl} key="preview">
+            {t('dashboard.actions.preview')}
+          </Dropdown.Item>,
+          permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
+            <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
+              {t('dashboard.actions.delete')}
+            </Dropdown.Item>
+          ),
+        ]
+      }
       status={{
         isExternalCreator,
       }}
@@ -383,16 +398,33 @@ const OrganizerRow = ({
   );
 };
 
+const SuggestedOrganizerRow = (props) => (
+  <OrganizerRow {...props} actions={[]} />
+);
+
+type TabContentProps = {
+  tab: string;
+  status: string;
+  items: Item[];
+  totalItems: number;
+  page: number;
+  Row: ComponentType<any>;
+  actions?: React.ReactNode[];
+  onChangePage: (page: number) => void;
+  onDelete: (item: Item) => void;
+};
+
 const TabContent = ({
   tab,
   items,
   status,
   Row,
   page,
+  actions,
   totalItems,
   onDelete,
   onChangePage,
-}) => {
+}: TabContentProps) => {
   const { t } = useTranslation();
 
   const hasMoreThanOnePage = Math.ceil(totalItems / itemsPerPage) > 1;
@@ -411,7 +443,7 @@ const TabContent = ({
     );
   }
 
-  if (items.length === 0) {
+  if (!items?.length) {
     return (
       <Panel
         css={`
@@ -438,7 +470,7 @@ const TabContent = ({
       `}
     >
       <List>
-        {items.map((item, index) => (
+        {items.map((item) => (
           <List.Item
             key={item['@id']}
             backgroundColor={getValue('listItem.backgroundColor')}
@@ -543,7 +575,24 @@ const Dashboard = (): any => {
     );
   };
 
-  const UseGetItemsByCreatorQuery = useGetItemsByCreator({
+  // @ts-expect-error
+  const suggestedOrganizerIds: UseQueryResult<{ member: { '@id': string }[] }> =
+    useGetSuggestedOrganizersQuery({}, { enabled: tab === 'organizers' });
+
+  // @ts-expect-error
+  const suggestedOrganizers: UseQueryResult<{ member: Organizer[] }> =
+    useGetOrganizersByQueryQuery(
+      {
+        q: suggestedOrganizerIds.data?.member
+          .map((result) => `id:${parseOfferId(result['@id'])}`)
+          .join(' OR '),
+      },
+      {
+        enabled: suggestedOrganizerIds.data?.member?.length > 0,
+      },
+    );
+
+  const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
     sortOptions: { field: sortingField, order: sortingOrder },
     paginationOptions: {
@@ -552,19 +601,19 @@ const Dashboard = (): any => {
     },
   });
 
-  const UseDeleteItemByIdMutation = useDeleteItemById({
+  const deleteItemByIdMutation = useDeleteItemById({
     onSuccess: async () => {
       await queryClient.invalidateQueries(tab);
     },
   });
 
-  const items = UseGetItemsByCreatorQuery.data?.member ?? [];
+  const items = getItemsByCreatorQuery.data?.member ?? [];
 
   const sharedTableContentProps = {
     tab,
-    status: UseGetItemsByCreatorQuery.status,
+    status: getItemsByCreatorQuery.status,
     items,
-    totalItems: UseGetItemsByCreatorQuery.data?.totalItems ?? 0,
+    totalItems: getItemsByCreatorQuery.data?.totalItems ?? 0,
     page,
     onChangePage: async (page: number) => {
       await router.push({ pathname, query: { ...query, page } }, undefined, {
@@ -688,7 +737,19 @@ const Dashboard = (): any => {
               title={t('dashboard.tabs.organizers')}
             >
               {tab === 'organizers' && (
-                <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
+                <>
+                  <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
+                  <Title>{t('dashboard.suggestions.title')}</Title>
+                  <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+                    {t('dashboard.suggestions.description')}
+                  </Alert>
+                  <TabContent
+                    {...sharedTableContentProps}
+                    Row={SuggestedOrganizerRow}
+                    items={suggestedOrganizers.data?.member}
+                    status={suggestedOrganizers.status}
+                  />
+                </>
               )}
             </Tabs.Tab>
           </Tabs>
@@ -702,7 +763,7 @@ const Dashboard = (): any => {
       variant={ModalVariants.QUESTION}
       visible={isModalVisible}
       onConfirm={async () => {
-        UseDeleteItemByIdMutation.mutate({
+        deleteItemByIdMutation.mutate({
           id: parseOfferId(toBeDeletedItem['@id']),
         });
         setIsModalVisible(false);
