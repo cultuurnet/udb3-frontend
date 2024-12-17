@@ -288,6 +288,8 @@ const Ownership = () => {
           <Stack spacing={3.5} flex={1}>
             <Button
               variant={ButtonVariants.PRIMARY}
+              iconName={Icons.PLUS_CIRCLE}
+              spacing={3}
               onClick={() => {
                 setIsSuccessAlertVisible(false);
                 setActionType(ActionType.REQUEST);
