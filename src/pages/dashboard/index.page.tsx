@@ -1,9 +1,9 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { ComponentType, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
@@ -390,6 +390,17 @@ const OrganizerRow = ({
   );
 };
 
+type TabContentProps = {
+  tab: string;
+  status: string;
+  items: Item[];
+  totalItems: number;
+  page: number;
+  Row: ComponentType<any>;
+  onChangePage: (page: number) => void;
+  onDelete: (item: Item) => void;
+};
+
 const TabContent = ({
   tab,
   items,
@@ -399,7 +410,7 @@ const TabContent = ({
   totalItems,
   onDelete,
   onChangePage,
-}) => {
+}: TabContentProps) => {
   const { t } = useTranslation();
 
   const hasMoreThanOnePage = Math.ceil(totalItems / itemsPerPage) > 1;
@@ -445,7 +456,7 @@ const TabContent = ({
       `}
     >
       <List>
-        {items.map((item, index) => (
+        {items.map((item) => (
           <List.Item
             key={item['@id']}
             backgroundColor={getValue('listItem.backgroundColor')}
@@ -550,21 +561,22 @@ const Dashboard = (): any => {
     );
   };
 
-  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
-    {},
-    { enabled: tab === 'organizers' },
-  );
+  // @ts-expect-error
+  const suggestedOrganizerIds: UseQueryResult<{ member: { '@id': string }[] }> =
+    useGetSuggestedOrganizersQuery({}, { enabled: tab === 'organizers' });
 
-  const suggestedOrganizers = useGetOrganizersByQueryQuery(
-    {
-      q: suggestedOrganizerIds.data?.member
-        .map((result) => `id:${parseOfferId(result['@id'])}`)
-        .join(' OR '),
-    },
-    {
-      enabled: suggestedOrganizerIds.data?.member?.length,
-    },
-  );
+  // @ts-expect-error
+  const suggestedOrganizers: UseQueryResult<{ member: Organizer[] }> =
+    useGetOrganizersByQueryQuery(
+      {
+        q: suggestedOrganizerIds.data?.member
+          .map((result) => `id:${parseOfferId(result['@id'])}`)
+          .join(' OR '),
+      },
+      {
+        enabled: suggestedOrganizerIds.data?.member?.length > 0,
+      },
+    );
 
   const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
