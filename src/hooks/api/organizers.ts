@@ -421,7 +421,7 @@ export {
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
+  useGetSuggestedOrganizersQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
-  useGetSuggestedOrganizersQuery,
 };

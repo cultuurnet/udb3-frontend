@@ -1,7 +1,7 @@
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { ComponentType, useMemo, useState } from 'react';
+import React, { ComponentType, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -29,6 +29,7 @@ import {
   useGetUserQueryServerSide,
   User,
 } from '@/hooks/api/user';
+import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
 import type { Event } from '@/types/Event';
@@ -55,16 +56,15 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
-import { Title } from '@/ui/Title';
-import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-import { SupportedLanguage } from '@/i18n/index';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -409,6 +409,7 @@ type TabContentProps = {
   totalItems: number;
   page: number;
   Row: ComponentType<any>;
+  actions?: React.ReactNode[];
   onChangePage: (page: number) => void;
   onDelete: (item: Item) => void;
 };
