@@ -318,11 +318,13 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
 type OrganizerRowProps = InlineProps & {
   item: Organizer;
   onDelete: (item: Organizer) => void;
+  actions?: React.ReactNode[];
 };
 
 const OrganizerRow = ({
   item: organizer,
   onDelete,
+  actions,
   ...props
 }: OrganizerRowProps) => {
   const { t, i18n } = useTranslation();
@@ -359,19 +361,25 @@ const OrganizerRow = ({
       scope={ScopeTypes.ORGANIZERS}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
-      actions={[
-        <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
-          {t('dashboard.actions.edit')}
-        </Link>,
-        <Dropdown.Item href={previewUrl} key="preview">
-          {t('dashboard.actions.preview')}
-        </Dropdown.Item>,
-        permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
-          <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
-            {t('dashboard.actions.delete')}
-          </Dropdown.Item>
-        ),
-      ]}
+      actions={
+        actions || [
+          <Link
+            href={editUrl}
+            variant={LinkVariants.BUTTON_SECONDARY}
+            key="edit"
+          >
+            {t('dashboard.actions.edit')}
+          </Link>,
+          <Dropdown.Item href={previewUrl} key="preview">
+            {t('dashboard.actions.preview')}
+          </Dropdown.Item>,
+          permissions?.includes(PermissionTypes.ORGANISATIES_BEHEREN) && (
+            <Dropdown.Item onClick={() => onDelete(organizer)} key="delete">
+              {t('dashboard.actions.delete')}
+            </Dropdown.Item>
+          ),
+        ]
+      }
       status={{
         isExternalCreator,
       }}
@@ -390,6 +398,10 @@ const OrganizerRow = ({
   );
 };
 
+const SuggestedOrganizerRow = (props) => (
+  <OrganizerRow {...props} actions={[]} />
+);
+
 type TabContentProps = {
   tab: string;
   status: string;
@@ -407,6 +419,7 @@ const TabContent = ({
   status,
   Row,
   page,
+  actions,
   totalItems,
   onDelete,
   onChangePage,
@@ -737,7 +750,7 @@ const Dashboard = (): any => {
                   </Alert>
                   <TabContent
                     {...sharedTableContentProps}
-                    Row={OrganizerRow}
+                    Row={SuggestedOrganizerRow}
                     items={suggestedOrganizers.data?.member}
                     status={suggestedOrganizers.status}
                   />
