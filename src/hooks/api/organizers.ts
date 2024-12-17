@@ -199,8 +199,9 @@ const useGetOrganizerPermissions = (
 
 const getSuggestedOrganizersQuery = async ({ headers }) => {
   const res = await fetchFromApi({
-    path: '/ownership/suggestions',
+    path: '/ownerships/suggestions',
     options: { headers },
+    searchParams: { itemType: 'organizer' },
   });
 
   return handleErrorObject(res);
