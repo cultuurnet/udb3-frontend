@@ -739,15 +739,9 @@ const Dashboard = (): any => {
               {tab === 'organizers' && (
                 <>
                   <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
-                  <Title>Organisaties waarvoor je eerder al invoerde</Title>
-                  <Alert variant={AlertVariants.PRIMARY}>
-                    Voor deze organisaties voerde je eerder al evenementen in,
-                    maar je bent nog geen beheerder van deze organisaties. Ben
-                    je betrokken bij het bestuur van deze organisaties en wil je
-                    de organisatiepagina en evenementen ervan beheren? Start
-                    hier je aanvraag om beheerder te worden. Zodra een huidige
-                    beheerder je aanvraag goedkeurt, krijg je toegang en ontvang
-                    je een bevestiging via e-mail.
+                  <Title>{t('dashboard.suggestions.title')}</Title>
+                  <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+                    {t('dashboard.suggestions.description')}
                   </Alert>
                   <TabContent
                     {...sharedTableContentProps}
