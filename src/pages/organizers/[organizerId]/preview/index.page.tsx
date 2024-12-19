@@ -2,7 +2,7 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
+import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerPermissionsResponse,
@@ -13,29 +13,25 @@ import {
   OwnershipRequest,
   RequestState,
   useGetOwnershipRequestsQuery,
-  useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
 import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link, LinkButtonVariants } from '@/ui/Link';
-import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-
 import { OrganizerTable } from './OrganizerTable';
+import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
-  const queryClient = useQueryClient();
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
@@ -78,18 +74,6 @@ const OrganizersPreview = () => {
     (request: OwnershipRequest) => request.state === RequestState.REQUESTED,
   );
 
-  const requestOwnershipMutation = useRequestOwnershipMutation({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
-      setIsSuccessAlertVisible(true);
-      setIsQuestionModalVisible(false);
-    },
-    onError: () => {
-      setIsQuestionModalVisible(false);
-      setIsErrorAlertVisible(true);
-    },
-  });
-
   return (
     <Page>
       <Page.Title>{organizerName}</Page.Title>
@@ -98,39 +82,19 @@ const OrganizersPreview = () => {
           <Stack flex={1}>
             {isOwnershipEnabled && (
               <>
-                <Modal
-                  title={t(
-                    'organizers.ownerships.request.confirm_modal.title',
-                    {
-                      organizerName: organizerName,
-                    },
-                  )}
-                  confirmTitle={t(
-                    'organizers.ownerships.request.confirm_modal.confirm',
-                  )}
-                  cancelTitle={t(
-                    'organizers.ownerships.request.confirm_modal.cancel',
-                  )}
-                  visible={isQuestionModalVisible}
-                  variant={ModalVariants.QUESTION}
+                <RequestOwnershipModal
+                  organizer={organizer}
+                  isVisible={isQuestionModalVisible}
                   onClose={() => setIsQuestionModalVisible(false)}
-                  onConfirm={() => {
-                    requestOwnershipMutation.mutate({
-                      itemId: organizerId,
-                      ownerId: userId,
-                    });
+                  onSuccess={() => {
+                    setIsSuccessAlertVisible(true);
+                    setIsQuestionModalVisible(false);
                   }}
-                  size={ModalSizes.MD}
-                >
-                  <Box padding={4}>
-                    <Trans
-                      i18nKey="organizers.ownerships.request.confirm_modal.body"
-                      values={{
-                        organizerName: organizerName,
-                      }}
-                    />
-                  </Box>
-                </Modal>
+                  onError={() => {
+                    setIsQuestionModalVisible(false);
+                    setIsErrorAlertVisible(true);
+                  }}
+                />
                 {isOwnershipRequested && (
                   <Alert
                     variant={AlertVariants.PRIMARY}
