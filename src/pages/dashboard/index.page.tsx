@@ -32,6 +32,7 @@ import {
 import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
+import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 import type { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Organizer } from '@/types/Organizer';
@@ -40,7 +41,9 @@ import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
+import { Icons } from '@/ui/Icon';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -65,9 +68,6 @@ import { parseOfferType } from '@/utils/parseOfferType';
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
-import { Button, ButtonVariants } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
-import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 
 const { publicRuntimeConfig } = getConfig();
 

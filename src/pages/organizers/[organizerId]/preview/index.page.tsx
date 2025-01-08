@@ -16,6 +16,7 @@ import {
 } from '@/hooks/api/ownerships';
 import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
+import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -27,8 +28,8 @@ import { Stack } from '@/ui/Stack';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+
 import { OrganizerTable } from './OrganizerTable';
-import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 
 const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();

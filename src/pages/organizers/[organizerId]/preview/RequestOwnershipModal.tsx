@@ -1,16 +1,17 @@
-import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { Box } from '@/ui/Box';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
-import { useRouter } from 'next/router';
+
+import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
+import { useGetUserQuery, User } from '@/hooks/api/user';
+import { SupportedLanguage } from '@/i18n/index';
+import { Organizer } from '@/types/Organizer';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-import { SupportedLanguage } from '@/i18n/index';
-import { useGetUserQuery, User } from '@/hooks/api/user';
-import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
-import { Organizer } from '@/types/Organizer';
-import { useState } from 'react';
-import { Alert, AlertVariants } from '@/ui/Alert';
 
 type Props = {
   organizer: Organizer;
