@@ -621,6 +621,10 @@
       "organizers": "Meine Organisationen",
       "places": "Meine Orte"
     },
+    "suggestions": {
+      "title": "Organisationen, für die Sie sich zuvor angemeldet haben",
+      "description": "Sie haben bereits Veranstaltungen für diese Organisationen eingetragen, sind aber noch kein Administrator dieser Organisationen. Sind Sie an der Verwaltung dieser Organisationen beteiligt und möchten die Organisationsseite und ihre Veranstaltungen verwalten? Starten Sie Ihre Bewerbung um Administrator zu werden, klicken Sie hier. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, wird Ihnen der Zugriff gewährt und Sie erhalten eine Bestätigungs-E-Mail."
+    },
     "welcome": "Willkommen"
   },
   "description": "UiTdatabank liefert Informationen an mehr als 1.000 Agendas, darunter UiTinvlaanderen, Webseiten von Städten und Gemeinden, Themen-Agendas, Printmedien und mobile Apps. Auch Ihre Aktivität kann auf vielen Agendas erscheinen.",
