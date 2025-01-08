@@ -10,6 +10,7 @@ import { useGetUserQuery, User } from '@/hooks/api/user';
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
 import { Organizer } from '@/types/Organizer';
 import { bool } from 'yup';
+import { useState } from 'react';
 
 type Props = {
   organizer: Organizer;
@@ -30,6 +31,7 @@ const RequestOwnershipModal = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const organizerId = router.query.organizerId as string;
+  const [hasSucceeded, setHasSucceeded] = useState(null);
 
   const organizerName: string = getLanguageObjectOrFallback(
     organizer?.name,
@@ -44,15 +46,23 @@ const RequestOwnershipModal = ({
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
-      onSuccess();
+      if (onSuccess) onSuccess();
+      else {
+        setHasSucceeded(true);
+      }
     },
-    onError: onError,
+    onError: () => {
+      if (onError) onError();
+      else {
+        setHasSucceeded(false);
+      }
+    },
   });
 
   return (
     <Modal
       title={t('organizers.ownerships.request.confirm_modal.title', {
-        organizerName: organizerName,
+        organizerName,
       })}
       confirmTitle={t('organizers.ownerships.request.confirm_modal.confirm')}
       cancelTitle={t('organizers.ownerships.request.confirm_modal.cancel')}

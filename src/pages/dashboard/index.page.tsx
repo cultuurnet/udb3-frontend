@@ -65,6 +65,9 @@ import { parseOfferType } from '@/utils/parseOfferType';
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
+import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -398,10 +401,6 @@ const OrganizerRow = ({
   );
 };
 
-const SuggestedOrganizerRow = (props) => (
-  <OrganizerRow {...props} actions={[]} />
-);
-
 type TabContentProps = {
   tab: string;
   status: string;
@@ -420,7 +419,6 @@ const TabContent = ({
   status,
   Row,
   page,
-  actions,
   totalItems,
   onDelete,
   onChangePage,
@@ -643,7 +641,36 @@ const Dashboard = (): any => {
   const createOfferUrl = CreateMap[tab];
   const { udbMainDarkBlue, textColor } = colors;
 
-  return [
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentOrganizer, setCurrentOrganizer] = useState<Organizer | null>(
+    null,
+  );
+
+  const SuggestedOrganizerRow = useMemo(
+    () =>
+      function SuggestedOrganizerRow(props: OrganizerRowProps) {
+        return (
+          <OrganizerRow
+            {...props}
+            actions={[
+              <Button
+                key="request"
+                variant={ButtonVariants.PRIMARY}
+                onClick={() => {
+                  setCurrentOrganizer(props.item);
+                  setIsVisible(true);
+                }}
+              >
+                {t('organizers.detail.actions.request')}
+              </Button>,
+            ]}
+          />
+        );
+      },
+    [t],
+  );
+
+  return (
     <Page backgroundColor="white" key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
@@ -658,7 +685,6 @@ const Dashboard = (): any => {
             </Alert>
           </Inline>
         )}
-
         <Inline>
           <Link href={createOfferUrl} variant={LinkVariants.BUTTON_PRIMARY}>
             {t(`dashboard.create.${tab}`)}
@@ -753,39 +779,45 @@ const Dashboard = (): any => {
               )}
             </Tabs.Tab>
           </Tabs>
+          <RequestOwnershipModal
+            organizer={currentOrganizer}
+            isVisible={isVisible}
+            onClose={() => setIsVisible(false)}
+            onSuccess={() => ({})}
+            onError={() => ({})}
+          />
         </Stack>
         {i18n.language === 'nl' && <NewsletterSignupForm />}
         <Footer />
       </Page.Content>
-    </Page>,
-    <Modal
-      key="modal"
-      variant={ModalVariants.QUESTION}
-      visible={isModalVisible}
-      onConfirm={async () => {
-        deleteItemByIdMutation.mutate({
-          id: parseOfferId(toBeDeletedItem['@id']),
-        });
-        setIsModalVisible(false);
-      }}
-      onClose={() => setIsModalVisible(false)}
-      title={t('dashboard.modal.title', {
-        type: t(`dashboard.modal.types.${tab}`),
-      })}
-      confirmTitle={t('dashboard.actions.delete')}
-      cancelTitle={t('dashboard.actions.cancel')}
-    >
-      {toBeDeletedItem && (
-        <Box padding={4}>
-          {t('dashboard.modal.question', {
-            name:
-              toBeDeletedItem.name[i18n.language] ??
-              toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
-          })}
-        </Box>
-      )}
-    </Modal>,
-  ];
+      <Modal
+        variant={ModalVariants.QUESTION}
+        visible={isModalVisible}
+        onConfirm={async () => {
+          deleteItemByIdMutation.mutate({
+            id: parseOfferId(toBeDeletedItem['@id']),
+          });
+          setIsModalVisible(false);
+        }}
+        onClose={() => setIsModalVisible(false)}
+        title={t('dashboard.modal.title', {
+          type: t(`dashboard.modal.types.${tab}`),
+        })}
+        confirmTitle={t('dashboard.actions.delete')}
+        cancelTitle={t('dashboard.actions.cancel')}
+      >
+        {toBeDeletedItem && (
+          <Box padding={4}>
+            {t('dashboard.modal.question', {
+              name:
+                toBeDeletedItem.name[i18n.language] ??
+                toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
+            })}
+          </Box>
+        )}
+      </Modal>
+    </Page>
+  );
 };
 
 const getServerSideProps = getApplicationServerSideProps(
