@@ -769,6 +769,11 @@ const Dashboard = (): any => {
                   <Alert variant={AlertVariants.PRIMARY} marginY={4}>
                     {t('dashboard.suggestions.description')}
                   </Alert>
+                  <RequestOwnershipModal
+                    organizer={currentOrganizer}
+                    isVisible={isVisible}
+                    onClose={() => setIsVisible(false)}
+                  />
                   <TabContent
                     {...sharedTableContentProps}
                     Row={SuggestedOrganizerRow}
@@ -779,13 +784,6 @@ const Dashboard = (): any => {
               )}
             </Tabs.Tab>
           </Tabs>
-          <RequestOwnershipModal
-            organizer={currentOrganizer}
-            isVisible={isVisible}
-            onClose={() => setIsVisible(false)}
-            onSuccess={() => ({})}
-            onError={() => ({})}
-          />
         </Stack>
         {i18n.language === 'nl' && <NewsletterSignupForm />}
         <Footer />

@@ -86,14 +86,6 @@ const OrganizersPreview = () => {
                   organizer={organizer}
                   isVisible={isQuestionModalVisible}
                   onClose={() => setIsQuestionModalVisible(false)}
-                  onSuccess={() => {
-                    setIsSuccessAlertVisible(true);
-                    setIsQuestionModalVisible(false);
-                  }}
-                  onError={() => {
-                    setIsQuestionModalVisible(false);
-                    setIsErrorAlertVisible(true);
-                  }}
                 />
                 {isOwnershipRequested && (
                   <Alert
@@ -103,41 +95,8 @@ const OrganizersPreview = () => {
                   >
                     <Trans
                       i18nKey="organizers.ownerships.request.pending"
-                      values={{
-                        organizerName: organizerName,
-                      }}
+                      values={{ organizerName }}
                     />
-                  </Alert>
-                )}
-                {isSuccessAlertVisible && (
-                  <Alert
-                    variant={AlertVariants.SUCCESS}
-                    marginBottom={4}
-                    closable
-                    fullWidth
-                    onClose={() => {
-                      setIsSuccessAlertVisible(false);
-                    }}
-                  >
-                    <Trans
-                      i18nKey="organizers.ownerships.request.success"
-                      values={{
-                        organizerName: organizerName,
-                      }}
-                    />
-                  </Alert>
-                )}
-                {isErrorAlertVisible && (
-                  <Alert
-                    variant={AlertVariants.DANGER}
-                    marginBottom={4}
-                    fullWidth
-                    closable
-                    onClose={() => {
-                      setIsErrorAlertVisible(false);
-                    }}
-                  >
-                    <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
                   </Alert>
                 )}
               </>

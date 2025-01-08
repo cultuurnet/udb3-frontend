@@ -9,15 +9,15 @@ import { SupportedLanguage } from '@/i18n/index';
 import { useGetUserQuery, User } from '@/hooks/api/user';
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
 import { Organizer } from '@/types/Organizer';
-import { bool } from 'yup';
 import { useState } from 'react';
+import { Alert, AlertVariants } from '@/ui/Alert';
 
 type Props = {
   organizer: Organizer;
   isVisible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
-  onError: () => void;
+  onSuccess?: () => void;
+  onError?: () => void;
 };
 
 const RequestOwnershipModal = ({
@@ -31,7 +31,8 @@ const RequestOwnershipModal = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const organizerId = router.query.organizerId as string;
-  const [hasSucceeded, setHasSucceeded] = useState(null);
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
+  const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
 
   const organizerName: string = getLanguageObjectOrFallback(
     organizer?.name,
@@ -46,46 +47,69 @@ const RequestOwnershipModal = ({
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
+      onClose();
+      setIsSuccessAlertVisible(true);
       if (onSuccess) onSuccess();
-      else {
-        setHasSucceeded(true);
-      }
     },
     onError: () => {
+      onClose();
+      setIsErrorAlertVisible(true);
       if (onError) onError();
-      else {
-        setHasSucceeded(false);
-      }
     },
   });
 
   return (
-    <Modal
-      title={t('organizers.ownerships.request.confirm_modal.title', {
-        organizerName,
-      })}
-      confirmTitle={t('organizers.ownerships.request.confirm_modal.confirm')}
-      cancelTitle={t('organizers.ownerships.request.confirm_modal.cancel')}
-      visible={isVisible}
-      variant={ModalVariants.QUESTION}
-      onClose={onClose}
-      onConfirm={() => {
-        requestOwnershipMutation.mutate({
-          itemId: organizerId,
-          ownerId: userId,
-        });
-      }}
-      size={ModalSizes.MD}
-    >
-      <Box padding={4}>
-        <Trans
-          i18nKey="organizers.ownerships.request.confirm_modal.body"
-          values={{
-            organizerName: organizerName,
-          }}
-        />
-      </Box>
-    </Modal>
+    <>
+      <Modal
+        title={t('organizers.ownerships.request.confirm_modal.title', {
+          organizerName,
+        })}
+        confirmTitle={t('organizers.ownerships.request.confirm_modal.confirm')}
+        cancelTitle={t('organizers.ownerships.request.confirm_modal.cancel')}
+        visible={isVisible}
+        variant={ModalVariants.QUESTION}
+        onClose={onClose}
+        onConfirm={() => {
+          requestOwnershipMutation.mutate({
+            itemId: organizerId,
+            ownerId: userId,
+          });
+        }}
+        size={ModalSizes.MD}
+      >
+        <Box padding={4}>
+          <Trans
+            i18nKey="organizers.ownerships.request.confirm_modal.body"
+            values={{ organizerName }}
+          />
+        </Box>
+      </Modal>
+      {isSuccessAlertVisible && (
+        <Alert
+          variant={AlertVariants.SUCCESS}
+          marginBottom={4}
+          closable
+          fullWidth
+          onClose={() => setIsSuccessAlertVisible(false)}
+        >
+          <Trans
+            i18nKey="organizers.ownerships.request.success"
+            values={{ organizerName }}
+          />
+        </Alert>
+      )}
+      {isErrorAlertVisible && (
+        <Alert
+          variant={AlertVariants.DANGER}
+          marginBottom={4}
+          fullWidth
+          closable
+          onClose={() => setIsErrorAlertVisible(false)}
+        >
+          <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
+        </Alert>
+      )}
+    </>
   );
 };
 
