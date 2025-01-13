@@ -3,6 +3,7 @@ import { uniqBy } from 'lodash';
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetUserQuery } from '@/hooks/api/user';
 import { Offer } from '@/types/Offer';
+import { WorkflowStatus } from '@/types/WorkflowStatus';
 
 const useRecentLocations = () => {
   const getUserQuery = useGetUserQuery();
@@ -38,6 +39,7 @@ const useRecentLocations = () => {
     .filter(
       (location) =>
         location &&
+        location?.workflowStatus !== WorkflowStatus.REJECTED &&
         location?.name?.nl !== 'Online' &&
         !('duplicateOf' in location),
     )
