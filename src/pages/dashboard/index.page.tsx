@@ -32,6 +32,7 @@ import {
 import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
+import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 import type { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Organizer } from '@/types/Organizer';
@@ -40,7 +41,9 @@ import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
+import { Icons } from '@/ui/Icon';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -398,10 +401,6 @@ const OrganizerRow = ({
   );
 };
 
-const SuggestedOrganizerRow = (props) => (
-  <OrganizerRow {...props} actions={[]} />
-);
-
 type TabContentProps = {
   tab: string;
   status: string;
@@ -420,7 +419,6 @@ const TabContent = ({
   status,
   Row,
   page,
-  actions,
   totalItems,
   onDelete,
   onChangePage,
@@ -643,7 +641,36 @@ const Dashboard = (): any => {
   const createOfferUrl = CreateMap[tab];
   const { udbMainDarkBlue, textColor } = colors;
 
-  return [
+  const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
+  const [currentOrganizer, setCurrentOrganizer] = useState<Organizer | null>(
+    null,
+  );
+
+  const SuggestedOrganizerRow = useMemo(
+    () =>
+      function SuggestedOrganizerRow(props: OrganizerRowProps) {
+        return (
+          <OrganizerRow
+            {...props}
+            actions={[
+              <Button
+                key="request"
+                variant={ButtonVariants.PRIMARY}
+                onClick={() => {
+                  setCurrentOrganizer(props.item);
+                  setIsRequestModalVisible(true);
+                }}
+              >
+                {t('organizers.detail.actions.request')}
+              </Button>,
+            ]}
+          />
+        );
+      },
+    [t],
+  );
+
+  return (
     <Page backgroundColor="white" key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
@@ -658,7 +685,6 @@ const Dashboard = (): any => {
             </Alert>
           </Inline>
         )}
-
         <Inline>
           <Link href={createOfferUrl} variant={LinkVariants.BUTTON_PRIMARY}>
             {t(`dashboard.create.${tab}`)}
@@ -743,6 +769,11 @@ const Dashboard = (): any => {
                   <Alert variant={AlertVariants.PRIMARY} marginY={4}>
                     {t('dashboard.suggestions.description')}
                   </Alert>
+                  <RequestOwnershipModal
+                    organizer={currentOrganizer}
+                    isVisible={isRequestModalVisible}
+                    onClose={() => setIsRequestModalVisible(false)}
+                  />
                   <TabContent
                     {...sharedTableContentProps}
                     Row={SuggestedOrganizerRow}
@@ -757,35 +788,34 @@ const Dashboard = (): any => {
         {i18n.language === 'nl' && <NewsletterSignupForm />}
         <Footer />
       </Page.Content>
-    </Page>,
-    <Modal
-      key="modal"
-      variant={ModalVariants.QUESTION}
-      visible={isModalVisible}
-      onConfirm={async () => {
-        deleteItemByIdMutation.mutate({
-          id: parseOfferId(toBeDeletedItem['@id']),
-        });
-        setIsModalVisible(false);
-      }}
-      onClose={() => setIsModalVisible(false)}
-      title={t('dashboard.modal.title', {
-        type: t(`dashboard.modal.types.${tab}`),
-      })}
-      confirmTitle={t('dashboard.actions.delete')}
-      cancelTitle={t('dashboard.actions.cancel')}
-    >
-      {toBeDeletedItem && (
-        <Box padding={4}>
-          {t('dashboard.modal.question', {
-            name:
-              toBeDeletedItem.name[i18n.language] ??
-              toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
-          })}
-        </Box>
-      )}
-    </Modal>,
-  ];
+      <Modal
+        variant={ModalVariants.QUESTION}
+        visible={isModalVisible}
+        onConfirm={async () => {
+          deleteItemByIdMutation.mutate({
+            id: parseOfferId(toBeDeletedItem['@id']),
+          });
+          setIsModalVisible(false);
+        }}
+        onClose={() => setIsModalVisible(false)}
+        title={t('dashboard.modal.title', {
+          type: t(`dashboard.modal.types.${tab}`),
+        })}
+        confirmTitle={t('dashboard.actions.delete')}
+        cancelTitle={t('dashboard.actions.cancel')}
+      >
+        {toBeDeletedItem && (
+          <Box padding={4}>
+            {t('dashboard.modal.question', {
+              name:
+                toBeDeletedItem.name[i18n.language] ??
+                toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
+            })}
+          </Box>
+        )}
+      </Modal>
+    </Page>
+  );
 };
 
 const getServerSideProps = getApplicationServerSideProps(
