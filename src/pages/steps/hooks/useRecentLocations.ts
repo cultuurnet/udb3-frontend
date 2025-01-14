@@ -39,9 +39,9 @@ const useRecentLocations = () => {
     .filter(
       (location) =>
         location &&
-        location?.workflowStatus !== WorkflowStatus.REJECTED &&
-        location?.workflowStatus !== WorkflowStatus.DELETED &&
-        location?.name?.nl !== 'Online' &&
+        location.workflowStatus !== WorkflowStatus.REJECTED &&
+        location.workflowStatus !== WorkflowStatus.DELETED &&
+        location.name?.nl !== 'Online' &&
         !('duplicateOf' in location),
     )
     .slice(0, 4);
