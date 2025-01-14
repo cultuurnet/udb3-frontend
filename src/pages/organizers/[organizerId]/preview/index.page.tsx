@@ -1,7 +1,7 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
@@ -94,10 +94,9 @@ const OrganizersPreview = () => {
                     marginBottom={4}
                     fullWidth
                   >
-                    <Trans
-                      i18nKey="organizers.ownerships.request.pending"
-                      values={{ organizerName }}
-                    />
+                    {t('organizers.ownerships.request.pending', {
+                      organizerName,
+                    })}
                   </Alert>
                 )}
               </>

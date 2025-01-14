@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
@@ -79,10 +79,9 @@ const RequestOwnershipModal = ({
         size={ModalSizes.MD}
       >
         <Box padding={4}>
-          <Trans
-            i18nKey="organizers.ownerships.request.confirm_modal.body"
-            values={{ organizerName }}
-          />
+          {t('organizers.ownerships.request.confirm_modal.body', {
+            organizerName,
+          })}
         </Box>
       </Modal>
       {isSuccessAlertVisible && (
@@ -93,10 +92,7 @@ const RequestOwnershipModal = ({
           fullWidth
           onClose={() => setIsSuccessAlertVisible(false)}
         >
-          <Trans
-            i18nKey="organizers.ownerships.request.success"
-            values={{ organizerName }}
-          />
+          {t('organizers.ownerships.request.success', { organizerName })}
         </Alert>
       )}
       {isErrorAlertVisible && (
@@ -107,7 +103,7 @@ const RequestOwnershipModal = ({
           closable
           onClose={() => setIsErrorAlertVisible(false)}
         >
-          <Trans i18nKey="organizers.ownerships.request.confirm_modal.error" />
+          {t('organizers.ownerships.request.confirm_modal.error')}
         </Alert>
       )}
     </>
