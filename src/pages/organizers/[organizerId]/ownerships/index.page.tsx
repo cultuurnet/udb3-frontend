@@ -2,7 +2,7 @@ import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { dehydrate, useQueryClient } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
@@ -179,14 +179,10 @@ const Ownership = () => {
                   setActionType(undefined);
                 }}
               >
-                <Trans
-                  i18nKey={`${translationsPath}.success`}
-                  values={{
-                    ownerEmail:
-                      selectedRequest?.ownerEmail ?? getValues('email'),
-                    organizerName,
-                  }}
-                />
+                {t(`${translationsPath}.success`, {
+                  ownerEmail: selectedRequest?.ownerEmail ?? getValues('email'),
+                  organizerName,
+                })}
               </Alert>
             )}
             {(approvedRequests.length > 0 || !!creator) && (
@@ -218,12 +214,9 @@ const Ownership = () => {
                   size={ModalSizes.MD}
                 >
                   <Box padding={4}>
-                    <Trans
-                      i18nKey="organizers.ownerships.delete_modal.body"
-                      values={{
-                        ownerEmail: requestToBeDeleted?.ownerEmail,
-                      }}
-                    />
+                    {t('organizers.ownerships.delete_modal.body', {
+                      ownerEmail: requestToBeDeleted?.ownerEmail,
+                    })}
                   </Box>
                 </Modal>
               </Stack>
@@ -273,13 +266,10 @@ const Ownership = () => {
                   size={ModalSizes.MD}
                 >
                   <Box padding={4}>
-                    <Trans
-                      i18nKey={`${translationsPath}.body`}
-                      values={{
-                        ownerEmail: selectedRequest?.ownerEmail,
-                        organizerName,
-                      }}
-                    />
+                    {t(`${translationsPath}.body`, {
+                      ownerEmail: selectedRequest?.ownerEmail,
+                      organizerName,
+                    })}
                   </Box>
                 </Modal>
               </Stack>

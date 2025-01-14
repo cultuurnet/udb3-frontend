@@ -621,6 +621,10 @@
       "organizers": "Mes organisations",
       "places": "Mes lieux"
     },
+    "suggestions": {
+      "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
+      "description": "Vous avez déjà saisi des événements pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses événements ? Démarrez votre candidature pour devenir administrateur ici pour devenir. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+    },
     "welcome": "Bienvenue"
   },
   "description": "UiTdatabank alimente en outre plus de 1.000 agendas de loisirs imprimés et numériques qui proposent des informations à jour. Ce sont les agendas de chaînes audio-visuelles et de médias locaux ou nationaux, de villes et communes, de services touristiques ou de grandes organisations de coordination.",
