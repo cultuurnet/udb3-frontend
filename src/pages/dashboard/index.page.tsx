@@ -641,7 +641,7 @@ const Dashboard = (): any => {
   const createOfferUrl = CreateMap[tab];
   const { udbMainDarkBlue, textColor } = colors;
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
   const [currentOrganizer, setCurrentOrganizer] = useState<Organizer | null>(
     null,
   );
@@ -658,7 +658,7 @@ const Dashboard = (): any => {
                 variant={ButtonVariants.PRIMARY}
                 onClick={() => {
                   setCurrentOrganizer(props.item);
-                  setIsVisible(true);
+                  setIsRequestModalVisible(true);
                 }}
               >
                 {t('organizers.detail.actions.request')}
@@ -771,8 +771,8 @@ const Dashboard = (): any => {
                   </Alert>
                   <RequestOwnershipModal
                     organizer={currentOrganizer}
-                    isVisible={isVisible}
-                    onClose={() => setIsVisible(false)}
+                    isVisible={isRequestModalVisible}
+                    onClose={() => setIsRequestModalVisible(false)}
                   />
                   <TabContent
                     {...sharedTableContentProps}
