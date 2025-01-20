@@ -41,7 +41,6 @@ const moduleExports = {
     taxonomyUrl: process.env.NEXT_PUBLIC_TAXONOMY_URL,
     cultuurKuurLocationId: process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID,
     sentryDsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    newsletterApiUrl: process.env.NEXT_PUBLIC_NEWSLETTER_API_URL,
     newsletterEmailListId: process.env.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID,
     globalAlertMessage: process.env.NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE,
     globalAlertVariant: process.env.NEXT_PUBLIC_GLOBAL_ALERT_VARIANT,
