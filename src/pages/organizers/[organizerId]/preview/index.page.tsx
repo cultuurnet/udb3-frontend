@@ -186,6 +186,8 @@ const OrganizersPreview = () => {
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Button
                     variant={ButtonVariants.PRIMARY}
+                    spacing={3}
+                    iconName={Icons.PLUS_CIRCLE}
                     onClick={() => setIsQuestionModalVisible(true)}
                   >
                     {t('organizers.detail.actions.request')}
@@ -205,19 +207,20 @@ const OrganizersPreview = () => {
                   <Link
                     variant={LinkButtonVariants.BUTTON_SECONDARY}
                     spacing={3}
+                    iconName={Icons.USERS}
                     href={`/organizer/${organizerId}/ownerships`}
                   >
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
-                <Link
-                  variant={LinkButtonVariants.BUTTON_SECONDARY}
+                <Button
+                  variant={ButtonVariants.SECONDARY}
                   spacing={3}
                   iconName={Icons.ARROW_LEFT}
-                  href={`/organizers`}
+                  onClick={() => router.back()}
                 >
                   {t('organizers.detail.actions.back')}
-                </Link>
+                </Button>
               </Stack>
             </Inline>
           </Stack>
