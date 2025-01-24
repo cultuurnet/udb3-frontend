@@ -45,7 +45,7 @@ const useGetOrganizersByQueryQuery = (
       limit: paginationOptions.limit,
     },
     ...configuration,
-    enabled: !!name && configuration.enabled === true,
+    enabled: !!name && configuration.enabled !== false,
   });
 
 type GetOrganizersArguments = {
