@@ -727,11 +727,20 @@
     "movies": "Filme",
     "notifications": "Benachrichtigungen",
     "organizations": "Organisationen",
+    "ownerships": "Verwalter",
     "productions": "Produktionen",
     "roles": "Rollen",
     "search": "Suchen",
     "users": "Benutzer",
     "validate": "Validieren"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Verwalter"
+    },
+    "organizer_picker": {
+      "label": "Organisation"
+    }
   },
   "movies": {
     "create": {
@@ -1049,6 +1058,7 @@
       "owners": "Verwalter",
       "table": {
         "user": "Benutzer",
+        "no_results": "Keine Ergebnisse gefunden",
         "actions": {
           "title": "Aktionen",
           "approve": "Genehmigen",
@@ -1067,7 +1077,7 @@
           "cancel": "Abbrechen"
         }
       },
-      "confirm_modal": {
+      "approve_modal": {
         "title": "Verwaltungsantrag genehmigen",
         "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
         "cancel": "Abbrechen",

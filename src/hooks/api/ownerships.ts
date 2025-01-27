@@ -1,9 +1,10 @@
-import { UseQueryOptions } from 'react-query';
+import { UseMutationResult, UseQueryOptions } from 'react-query';
 
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  PaginationOptions,
   ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -15,7 +16,7 @@ export type OwnershipRequest = {
   ownerId: string;
   ownerEmail: string;
   requesterId: string;
-  state: RequestState;
+  state: OwnershipState;
 };
 
 export type OwnershipCreator = {
@@ -23,14 +24,27 @@ export type OwnershipCreator = {
   email: string;
 };
 
-export const RequestState = {
-  APPROVED: 'approved',
+export const OwnershipState = {
   REQUESTED: 'requested',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  DELETED: 'deleted',
 } as const;
 
-type RequestState = Values<typeof RequestState>;
+export type OwnershipState = Values<typeof OwnershipState>;
 
-const requestOwnership = async ({ headers, itemId, ownerEmail, ownerId }) =>
+type RequestOwnershipArguments = {
+  itemId: string;
+  ownerEmail?: string;
+  ownerId?: string;
+};
+
+const requestOwnership = async ({
+  headers,
+  itemId,
+  ownerEmail,
+  ownerId,
+}: { headers: Headers } & RequestOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships`,
     options: {
@@ -50,15 +64,37 @@ const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
     mutationFn: requestOwnership,
     mutationKey: 'ownerships-request-ownership',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, RequestOwnershipArguments>;
 
-const getOwnershipRequests = async ({ headers, organizerId, ownerId }) => {
+const getOwnershipRequests = async ({
+  headers,
+  itemId,
+  ownerId,
+  state,
+  paginationOptions,
+}: {
+  headers: Headers;
+  itemId?: string;
+  ownerId?: string;
+  state?: OwnershipState;
+} & PaginationOptions) => {
+  const searchParams = new URLSearchParams();
+  if (paginationOptions) {
+    searchParams.set('limit', `${paginationOptions.limit}`);
+    searchParams.set('offset', `${paginationOptions.start}`);
+  }
+  if (itemId) {
+    searchParams.set('itemId', itemId);
+  }
+  if (ownerId) {
+    searchParams.set('ownerId', ownerId);
+  }
+  if (state) {
+    searchParams.set('state', state);
+  }
   const res = await fetchFromApi({
     path: '/ownerships/',
-    searchParams: {
-      itemId: organizerId,
-      ...(ownerId && { ownerId }),
-    },
+    searchParams,
     options: {
       headers,
     },
@@ -71,25 +107,47 @@ const getOwnershipRequests = async ({ headers, organizerId, ownerId }) => {
 };
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
-  organizerId: string;
+  itemId?: string;
   ownerId?: string;
-};
+  state?: OwnershipState;
+} & PaginationOptions;
 
+export type GetOwnershipRequestsResponse = {
+  '@context': string;
+  '@type': string;
+  itemsPerPage: number;
+  totalItems: number;
+  member: OwnershipRequest[];
+};
 const useGetOwnershipRequestsQuery = (
-  { req, queryClient, organizerId, ownerId }: UseGetOwnershipRequestsArguments,
+  {
+    req,
+    queryClient,
+    itemId,
+    ownerId,
+    state,
+    paginationOptions,
+  }: UseGetOwnershipRequestsArguments,
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery<OwnershipRequest[]>({
+  useAuthenticatedQuery<GetOwnershipRequestsResponse>({
     req,
     queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { organizerId, ...(ownerId && { ownerId }) },
+    queryArguments: { itemId, ownerId, state, paginationOptions },
     refetchOnWindowFocus: false,
     ...configuration,
   });
 
-const approveOwnershipRequest = async ({ headers, ownershipId }) =>
+type ApproveOwnershipArguments = { ownershipId: string };
+
+const approveOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: {
+  headers: Headers;
+} & ApproveOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}/approve`,
     options: {
@@ -103,9 +161,16 @@ const useApproveOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: approveOwnershipRequest,
     mutationKey: 'approve-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, ApproveOwnershipArguments>;
 
-const rejectOwnershipRequest = async ({ headers, ownershipId }) =>
+type RejectOwnershipArguments = { ownershipId: string };
+
+const rejectOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: {
+  headers: Headers;
+} & RejectOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}/reject`,
     options: {
@@ -119,9 +184,14 @@ const useRejectOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: rejectOwnershipRequest,
     mutationKey: 'reject-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, RejectOwnershipArguments>;
 
-const deleteOwnershipRequest = async ({ headers, ownershipId }) =>
+type DeleteOwnershipArguments = { ownershipId: string };
+
+const deleteOwnershipRequest = async ({
+  headers,
+  ownershipId,
+}: { headers: Headers } & DeleteOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships/${ownershipId}`,
     options: {
@@ -135,7 +205,7 @@ const useDeleteOwnershipRequestMutation = (configuration = {}) =>
     mutationFn: deleteOwnershipRequest,
     mutationKey: 'delete-ownership-request',
     ...configuration,
-  });
+  }) as UseMutationResult<void, Error, DeleteOwnershipArguments>;
 
 const getOwnershipCreator = async ({ headers, organizerId }) => {
   const res = await fetchFromApi({

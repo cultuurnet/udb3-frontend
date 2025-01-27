@@ -1,27 +1,104 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { OwnershipCreator, OwnershipRequest } from '@/hooks/api/ownerships';
+import {
+  OwnershipCreator,
+  OwnershipRequest,
+  OwnershipState,
+} from '@/hooks/api/ownerships';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
-type Props = {
-  creator?: OwnershipCreator;
-  requests: OwnershipRequest[];
-  renderActions: (request: OwnershipRequest) => JSX.Element;
-};
-
 const getGlobalValue = getValueFromTheme('global');
 
+type ActionHandlers = {
+  onDelete?: (request: OwnershipRequest) => void;
+  onApprove?: (request: OwnershipRequest) => void;
+  onReject?: (request: OwnershipRequest) => void;
+};
+
+type ActionProps = {
+  request: OwnershipRequest;
+} & ActionHandlers;
+
+const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
+  const { t } = useTranslation();
+
+  if (request.state === OwnershipState.APPROVED) {
+    return (
+      <Button
+        variant={ButtonVariants.ICON}
+        iconName={Icons.TRASH}
+        onClick={() => onDelete?.(request)}
+      />
+    );
+  }
+
+  if (request.state === OwnershipState.REQUESTED) {
+    return (
+      <Inline spacing={3}>
+        <Button
+          variant={ButtonVariants.SUCCESS}
+          iconName={Icons.CHECK_CIRCLE}
+          spacing={3}
+          onClick={() => onApprove?.(request)}
+        >
+          {t('organizers.ownerships.table.actions.approve')}
+        </Button>
+        <Button
+          variant={ButtonVariants.DANGER}
+          iconName={Icons.TIMES_CIRCLE}
+          spacing={3}
+          onClick={() => onReject?.(request)}
+        >
+          {t('organizers.ownerships.table.actions.reject')}
+        </Button>
+      </Inline>
+    );
+  }
+
+  return null;
+};
+
+type Props = {
+  requests: OwnershipRequest[];
+  creator?: OwnershipCreator;
+  shouldShowItemId?: boolean;
+  shouldShowOwnerId?: boolean;
+} & ActionHandlers;
+
 export const OwnershipsTable = ({
-  creator,
   requests,
-  renderActions,
+  creator,
+  onDelete,
+  onApprove,
+  onReject,
+  shouldShowItemId = false,
+  shouldShowOwnerId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
+
+  const hasActions = useMemo(
+    () =>
+      !!requests.find(
+        (it) =>
+          it.state !== OwnershipState.DELETED &&
+          it.state !== OwnershipState.REJECTED,
+      ),
+    [requests],
+  );
+
+  if (requests.length === 0) {
+    return <Text>{t('organizers.ownerships.table.no_results')}</Text>;
+  }
+
   return (
     <Stack
       role="table"
@@ -30,36 +107,67 @@ export const OwnershipsTable = ({
       marginBottom={5}
       borderRadius="0.5rem"
       backgroundColor="white"
+      maxWidth="85rem"
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
       <Inline
-        justifyContent="space-between"
         paddingBottom={3}
         css={`
+          display: grid;
+          grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
-        <Title size={3}>{t('organizers.ownerships.table.actions.title')}</Title>
+        {shouldShowItemId && <Title size={3}>item id</Title>}
+        {hasActions && (
+          <Title size={3} justifyContent="flex-end">
+            {t('organizers.ownerships.table.actions.title')}
+          </Title>
+        )}
       </Inline>
       <List paddingY={3}>
-        {creator && <List.Item>{creator.email}</List.Item>}
+        {creator?.email && <List.Item>{creator.email}</List.Item>}
         {requests.map((request) => (
           <Inline
             key={request.id}
             role="row"
-            justifyContent="space-between"
             alignItems="center"
+            paddingY={3}
+            display="grid"
             css={`
+              grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
               }
             `}
           >
-            <List.Item>{request.ownerEmail}</List.Item>
-            <List.Item>{renderActions(request)}</List.Item>
+            <List.Item>
+              <Stack>
+                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
+                <Text>{request.ownerEmail}</Text>
+              </Stack>
+            </List.Item>
+            {shouldShowItemId && (
+              <List.Item>
+                <Stack>
+                  <Text>{request.itemId}</Text>
+                </Stack>
+              </List.Item>
+            )}
+            {hasActions && (
+              <List.Item justifyContent="flex-end">
+                <Actions
+                  request={request}
+                  onDelete={onDelete}
+                  onApprove={onApprove}
+                  onReject={onReject}
+                />
+              </List.Item>
+            )}
           </Inline>
         ))}
       </List>
