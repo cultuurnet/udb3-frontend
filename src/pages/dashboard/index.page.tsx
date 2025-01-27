@@ -600,8 +600,9 @@ const Dashboard = (): any => {
   });
 
   const deleteItemByIdMutation = useDeleteItemById({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(tab);
+    onSuccess: () => {
+      setIsModalVisible(false);
+      return queryClient.invalidateQueries(tab);
     },
   });
 
@@ -795,7 +796,6 @@ const Dashboard = (): any => {
           deleteItemByIdMutation.mutate({
             id: parseOfferId(toBeDeletedItem['@id']),
           });
-          setIsModalVisible(false);
         }}
         onClose={() => setIsModalVisible(false)}
         title={t('dashboard.modal.title', {
