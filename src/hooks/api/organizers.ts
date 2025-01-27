@@ -29,8 +29,11 @@ const useGetOrganizersByQueryQuery = (
     req,
     queryClient,
     name,
+    q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<{ name?: string } & PaginationOptions> = {},
+  }: AuthenticatedQueryOptions<
+    { name?: string; q?: string } & PaginationOptions
+  > = {},
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOrganizersByQueryResponse>({
@@ -40,6 +43,7 @@ const useGetOrganizersByQueryQuery = (
     queryFn: getOrganizers,
     queryArguments: {
       embed: true,
+      q,
       name,
       start: paginationOptions.start,
       limit: paginationOptions.limit,
@@ -53,6 +57,7 @@ type GetOrganizersArguments = {
   embed?: string;
   website?: string;
   name?: string;
+  q?: string;
   limit?: string;
   start?: string;
 };
@@ -61,6 +66,7 @@ const getOrganizers = async ({
   headers,
   website,
   name,
+  q,
   embed,
   limit,
   start,
@@ -69,6 +75,7 @@ const getOrganizers = async ({
     path: '/organizers',
     searchParams: {
       embed: `${embed}`,
+      ...(q && { q }),
       ...(website && { website }),
       ...(name && { name }),
       ...(limit && { limit }),
@@ -192,6 +199,27 @@ const useGetOrganizerPermissions = (
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
+
+const getSuggestedOrganizersQuery = async ({ headers }) => {
+  const res = await fetchFromApi({
+    path: '/ownerships/suggestions',
+    options: { headers },
+    searchParams: { itemType: 'organizer' },
+  });
+
+  return handleErrorObject(res);
+};
+
+const useGetSuggestedOrganizersQuery = (
+  {},
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: ['ownership-suggestions'],
+    queryFn: getSuggestedOrganizersQuery,
     refetchOnWindowFocus: false,
     ...configuration,
   });
@@ -392,6 +420,7 @@ export {
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
+  useGetSuggestedOrganizersQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
 };

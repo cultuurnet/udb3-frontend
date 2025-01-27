@@ -621,6 +621,10 @@
       "organizers": "Mijn organisaties",
       "places": "Mijn locaties"
     },
+    "suggestions": {
+      "title": "Organisaties waarvoor je eerder al invoerde",
+      "description": "Voor deze organisaties voerde je eerder al evenementen in, maar je bent nog geen beheerder van deze organisaties. Ben je betrokken bij het bestuur van deze organisaties en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail."
+    },
     "welcome": "Welkom"
   },
   "description": "UiTdatabank levert informatie aan meer dan 1.000 agenda's, waaronder UiTinvlaanderen, websites van steden en gemeenten, thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw activiteit kan verschijnen op vele agenda's.",
