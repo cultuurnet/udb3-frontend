@@ -6,6 +6,7 @@ import {
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -14,7 +15,6 @@ import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
-import { Alert, AlertVariants } from '@/ui/Alert';
 
 const getGlobalValue = getValueFromTheme('global');
 
