@@ -55,6 +55,7 @@ const getInputProps = (props) =>
       'placeholder',
       'type',
       'value',
+      'defaultValue',
     ].includes(key),
   );
 

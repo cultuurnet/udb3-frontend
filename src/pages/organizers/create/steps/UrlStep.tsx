@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ScopeTypes } from '@/constants/OfferType';
 import { useGetOrganizersByWebsiteQuery } from '@/hooks/api/organizers';
@@ -11,7 +11,6 @@ import { StepProps } from '@/pages/steps/Steps';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
-import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
@@ -125,16 +124,13 @@ const UrlStep = ({
                   <>
                     {searchInput && isUrlAlreadyTaken && existingOrganizer && (
                       <Alert variant={AlertVariants.WARNING}>
-                        <Trans
-                          i18nKey={`organizers.create.step1.errors.url_not_unique`}
-                          values={{
-                            organizerName: getLanguageObjectOrFallback(
-                              existingOrganizer?.name,
-                              i18n.language as SupportedLanguage,
-                              existingOrganizer.mainLanguage as SupportedLanguage,
-                            ),
-                          }}
-                        />
+                        {t('organizers.create.step1.errors.url_not_unique', {
+                          organizerName: getLanguageObjectOrFallback(
+                            existingOrganizer?.name,
+                            i18n.language as SupportedLanguage,
+                            existingOrganizer.mainLanguage as SupportedLanguage,
+                          ),
+                        })}
                       </Alert>
                     )}
                     {(!searchInput || isUrlInvalid) && (

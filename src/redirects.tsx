@@ -97,6 +97,11 @@ const getRedirects = (
     permanent: false,
   },
   {
+    source: '/organizer/:organizerId/preview',
+    destination: '/organizers/:organizerId/preview',
+    permanent: false,
+  },
+  {
     source: '/organizer/:organizerId/ownerships',
     destination: '/organizers/:organizerId/ownerships',
     permanent: false,

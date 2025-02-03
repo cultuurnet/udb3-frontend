@@ -621,6 +621,10 @@
       "organizers": "Mes organisations",
       "places": "Mes lieux"
     },
+    "suggestions": {
+      "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
+      "description": "Vous avez déjà saisi des événements pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses événements ? Démarrez votre candidature pour devenir administrateur ici pour devenir. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+    },
     "welcome": "Bienvenue"
   },
   "description": "UiTdatabank alimente en outre plus de 1.000 agendas de loisirs imprimés et numériques qui proposent des informations à jour. Ce sont les agendas de chaînes audio-visuelles et de médias locaux ou nationaux, de villes et communes, de services touristiques ou de grandes organisations de coordination.",
@@ -723,11 +727,20 @@
     "movies": "Films",
     "notifications": "Notifications",
     "organizations": "Organisateurs",
+    "ownerships": "Gestionnaires",
     "productions": "Productions",
     "roles": "Rôles",
     "search": "Chercher",
     "users": "Utilisateurs",
     "validate": "Valider"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Gestionnaires"
+    },
+    "organizer_picker": {
+      "label": "Organisation"
+    }
   },
   "movies": {
     "create": {
@@ -990,6 +1003,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Nom",
+      "description": "Description",
+      "educationalDescription": "Description Cultuurkuur",
+      "address": "Adresse",
+      "no_address": "Aucune adresse",
+      "contact": "Contact",
+      "no_contact": "Aucune information de contact",
+      "labels": "Labels",
+      "images": "Images",
+      "no_images": "Aucune image",
+      "mainImage": "Image principale",
+      "actions": {
+        "edit": "Modifier",
+        "manage": "Gestion des demandes",
+        "request": "Demander gestion",
+        "back": "Retour"
+      }
+    },
     "create": {
       "title": "Ajouter une organisation",
       "step1": {
@@ -1026,6 +1058,7 @@
       "owners": "Gestionnaires",
       "table": {
         "user": "Utilisateur",
+        "no_results": "Aucun résultat trouvé",
         "actions": {
           "title": "Actions",
           "approve": "Approuver",
@@ -1034,7 +1067,17 @@
       },
       "pending": "Demandes de gestion en attente",
       "close": "Fermer",
-      "confirm_modal": {
+      "request_modal": {
+        "title": "Ajouter un gestionnaire à :organizer.name",
+        "email": "Adresse e-mail",
+        "email_error": "Adresse e-mail non valide",
+        "success": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}} et peut désormais modifier la page de l'organisation et les événements de {{organizerName}}",
+        "actions": {
+          "confirm": "Ajouter un gestionnaire",
+          "cancel": "Annuler"
+        }
+      },
+      "approve_modal": {
         "title": "Approuver la demande de gestion",
         "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
         "cancel": "Annuler",
@@ -1053,6 +1096,16 @@
         "body": "Êtes-vous sûr de vouloir supprimer {{ownerEmail}} en tant que gestionnaire ?",
         "cancel": "Annuler",
         "confirm": "Supprimer le gestionnaire"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Demande de gestion pour {{organizerName}}",
+          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses événements ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+          "cancel": "Annuler",
+          "confirm": "Demander la gestion"
+        },
+        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un administrateur actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+        "success": "Votre demande pour gérer la page de {{organizerName}} et ses événements a été envoyée avec succès !<br/>Dès qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
       }
     }
   },

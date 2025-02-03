@@ -621,6 +621,10 @@
       "organizers": "Meine Organisationen",
       "places": "Meine Orte"
     },
+    "suggestions": {
+      "title": "Organisationen, für die Sie sich zuvor angemeldet haben",
+      "description": "Sie haben bereits Veranstaltungen für diese Organisationen eingetragen, sind aber noch kein Administrator dieser Organisationen. Sind Sie an der Verwaltung dieser Organisationen beteiligt und möchten die Organisationsseite und ihre Veranstaltungen verwalten? Starten Sie Ihre Bewerbung um Administrator zu werden, klicken Sie hier. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, wird Ihnen der Zugriff gewährt und Sie erhalten eine Bestätigungs-E-Mail."
+    },
     "welcome": "Willkommen"
   },
   "description": "UiTdatabank liefert Informationen an mehr als 1.000 Agendas, darunter UiTinvlaanderen, Webseiten von Städten und Gemeinden, Themen-Agendas, Printmedien und mobile Apps. Auch Ihre Aktivität kann auf vielen Agendas erscheinen.",
@@ -723,11 +727,20 @@
     "movies": "Filme",
     "notifications": "Benachrichtigungen",
     "organizations": "Organisationen",
+    "ownerships": "Verwalter",
     "productions": "Produktionen",
     "roles": "Rollen",
     "search": "Suchen",
     "users": "Benutzer",
     "validate": "Validieren"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Verwalter"
+    },
+    "organizer_picker": {
+      "label": "Organisation"
+    }
   },
   "movies": {
     "create": {
@@ -990,6 +1003,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "educationalDescription": "Beschreibung Cultuurkuur",
+      "address": "Adresse",
+      "no_address": "Keine Adresse",
+      "contact": "Kontakt",
+      "no_contact": "Keine Kontaktinformationen",
+      "labels": "Labels",
+      "images": "Bilder",
+      "no_images": "Keine Bilder",
+      "mainImage": "Hauptbild",
+      "actions": {
+        "edit": "Bearbeiten",
+        "manage": "Anforderungsmanagement",
+        "request": "Verwaltung anfordern",
+        "back": "Zurück"
+      }
+    },
     "create": {
       "title": "Organisation hinzufügen",
       "step1": {
@@ -1026,6 +1058,7 @@
       "owners": "Verwalter",
       "table": {
         "user": "Benutzer",
+        "no_results": "Keine Ergebnisse gefunden",
         "actions": {
           "title": "Aktionen",
           "approve": "Genehmigen",
@@ -1034,7 +1067,17 @@
       },
       "pending": "Ausstehende Anfragen zur Verwaltung",
       "close": "Schließen",
-      "confirm_modal": {
+      "request_modal": {
+        "title": "Verwalter zu {{name}} hinzufügen",
+        "email": "E-Mail-Adresse",
+        "email_error": "Not a valid email address",
+        "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}} und kann ab sofort die Organisationsseite und Veranstaltungen von {{organizerName}} bearbeiten.",
+        "actions": {
+          "confirm": "Verwalter hinzufügen",
+          "cancel": "Abbrechen"
+        }
+      },
+      "approve_modal": {
         "title": "Verwaltungsantrag genehmigen",
         "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
         "cancel": "Abbrechen",
@@ -1053,6 +1096,16 @@
         "body": "Sind Sie sicher, dass Sie {{ownerEmail}} als Verwalter entfernen möchten?",
         "cancel": "Abbrechen",
         "confirm": "Verwalter entfernen"
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Verwaltungsanfrage für {{organizerName}}",
+          "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Veranstaltungen verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+          "cancel": "Abbrechen",
+          "confirm": "Verwaltungsanfrage"
+        },
+        "pending": "Ihre Anfrage zur Verwaltung von {{organizerName}} wird bearbeitet.<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt hat, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+        "success": "Ihre Anfrage zur Verwaltung der Seite von {{organizerName}} und ihrer Veranstaltungen wurde erfolgreich gesendet!<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail."
       }
     }
   },

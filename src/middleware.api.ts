@@ -52,41 +52,6 @@ export const middleware = async (request: NextRequest) => {
     const url = new URL('/beta-version', request.url);
     return NextResponse.redirect(url);
   }
-
-  const isOwnershipPage =
-    request.nextUrl.pathname.startsWith('/organizer') &&
-    !request.nextUrl.pathname.endsWith('/ownerships');
-
-  if (isOwnershipPage) {
-    const isOwnershipEnabled =
-      process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
-
-    const redirectUrl = new URL(request.nextUrl);
-    // remove the path variables from nextjs routing
-    redirectUrl.searchParams.delete('params');
-
-    if (
-      isOwnershipEnabled &&
-      redirectUrl.searchParams.get('ownership') === 'true'
-    ) {
-      return NextResponse.next();
-    }
-
-    if (
-      isOwnershipEnabled &&
-      redirectUrl.searchParams.get('ownership') !== 'true'
-    ) {
-      redirectUrl.searchParams.set('ownership', 'true');
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    if (!isOwnershipEnabled && redirectUrl.searchParams.has('ownership')) {
-      redirectUrl.searchParams.delete('ownership');
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    return NextResponse.next();
-  }
 };
 
 export const config = {

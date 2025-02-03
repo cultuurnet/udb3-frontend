@@ -3,6 +3,7 @@ import type { UseMutationOptions, UseQueryOptions } from 'react-query';
 import type {
   AuthenticatedQueryOptions,
   PaginationOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
 import {
@@ -12,6 +13,7 @@ import {
 import type { Organizer } from '@/types/Organizer';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { handleErrorObject } from '@/utils/handleErrorObject';
 
 import type { Headers } from './types/Headers';
 import type { User } from './user';
@@ -20,34 +22,34 @@ type HeadersAndQueryData = {
   headers: Headers;
 } & { [x: string]: string };
 
-type GetOrganizersArgumentsByQuery = {
-  headers: Headers;
-  embed: string;
-  q: string;
-};
+export type GetOrganizersByQueryResponse = { member: Organizer[] };
 
 const useGetOrganizersByQueryQuery = (
   {
     req,
     queryClient,
     name,
+    q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<{ name?: string } & PaginationOptions> = {},
+  }: AuthenticatedQueryOptions<
+    { name?: string; q?: string } & PaginationOptions
+  > = {},
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery<{ member: Organizer[] }>({
+  useAuthenticatedQuery<GetOrganizersByQueryResponse>({
     req,
     queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
       embed: true,
+      q,
       name,
       start: paginationOptions.start,
       limit: paginationOptions.limit,
     },
-    enabled: !!name,
     ...configuration,
+    enabled: !!name && configuration.enabled !== false,
   });
 
 type GetOrganizersArguments = {
@@ -55,6 +57,7 @@ type GetOrganizersArguments = {
   embed?: string;
   website?: string;
   name?: string;
+  q?: string;
   limit?: string;
   start?: string;
 };
@@ -63,6 +66,7 @@ const getOrganizers = async ({
   headers,
   website,
   name,
+  q,
   embed,
   limit,
   start,
@@ -71,6 +75,7 @@ const getOrganizers = async ({
     path: '/organizers',
     searchParams: {
       embed: `${embed}`,
+      ...(q && { q }),
       ...(website && { website }),
       ...(name && { name }),
       ...(limit && { limit }),
@@ -113,6 +118,8 @@ type GetOrganizerByIdArguments = {
   id: string;
 };
 
+export type GetOrganizerByIdResponse = Organizer | undefined;
+
 const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   const res = await fetchFromApi({
     path: `/organizers/${id.toString()}`,
@@ -128,11 +135,12 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 };
 
 const useGetOrganizerByIdQuery = (
-  { id, ...options },
+  { id, req, queryClient }: { id: string } & ServerSideQueryOptions,
   configuration: UseQueryOptions = {},
 ) =>
-  useAuthenticatedQuery({
-    ...options,
+  useAuthenticatedQuery<GetOrganizerByIdResponse>({
+    req,
+    queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
@@ -164,6 +172,57 @@ const getOrganizersByCreator = async ({
   }
   return await res.json();
 };
+
+type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
+  organizerId: string;
+};
+
+const getOrganizerPermissions = async ({ headers, organizerId }) => {
+  const res = await fetchFromApi({
+    path: `/organizers/${organizerId}/permissions`,
+    options: { headers },
+  });
+
+  return handleErrorObject(res);
+};
+
+export type GetOrganizerPermissionsResponse = {
+  permissions: string[];
+};
+const useGetOrganizerPermissions = (
+  { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery<GetOrganizerPermissionsResponse>({
+    req,
+    queryClient,
+    queryKey: ['ownership-permissions'],
+    queryFn: getOrganizerPermissions,
+    queryArguments: { organizerId },
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
+
+const getSuggestedOrganizersQuery = async ({ headers }) => {
+  const res = await fetchFromApi({
+    path: '/ownerships/suggestions',
+    options: { headers },
+    searchParams: { itemType: 'organizer' },
+  });
+
+  return handleErrorObject(res);
+};
+
+const useGetSuggestedOrganizersQuery = (
+  {},
+  configuration: UseQueryOptions = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: ['ownership-suggestions'],
+    queryFn: getSuggestedOrganizersQuery,
+    refetchOnWindowFocus: false,
+    ...configuration,
+  });
 
 const deleteOrganizerById = async ({ headers, id }) =>
   fetchFromApi({
@@ -357,9 +416,11 @@ export {
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
   useGetOrganizerByIdQuery,
+  useGetOrganizerPermissions,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
+  useGetSuggestedOrganizersQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
 };

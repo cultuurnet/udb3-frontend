@@ -1,86 +1,86 @@
 import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import {
+  GetOwnershipRequestsResponse,
   OwnershipRequest,
-  RequestState,
+  OwnershipState,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
+  useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
+  useRequestOwnershipMutation,
 } from '@/hooks/api/ownerships';
+import { ActionType } from '@/hooks/ownerships/useOwnershipActions';
 import { Organizer } from '@/types/Organizer';
-import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
+import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Input } from '@/ui/Input';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Title } from '@/ui/Title';
+import { ErrorBody, FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
-
-const ActionType = {
-  APPROVE: 'approve',
-  REJECT: 'reject',
-} as const;
-
-type ActionType = Values<typeof ActionType>;
 
 const Ownership = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
-  const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [actionType, setActionType] = useState<ActionType>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
-  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
-  const [actionType, setActionType] = useState<ActionType>();
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
-  const isApproveAction = actionType === ActionType.APPROVE;
-  const translationsPath = `organizers.ownerships.${
-    isApproveAction ? 'confirm' : 'reject'
-  }_modal`;
+  const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const translationsPath = `organizers.ownerships.${actionType}_modal`;
+  const { register, formState, getValues, setError } = useForm();
 
-  const organizerId = useMemo(
-    () => router.query.organizerId as string,
-    [router.query.organizerId],
-  );
+  const organizerId = router.query.organizerId as string;
+
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({
     id: organizerId,
   });
+
   // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
-    organizer?.name?.[organizer.mainLanguage];
+    organizer?.name?.[organizer.mainLanguage] ??
+    organizer?.name;
 
   const getOwnershipRequestsQuery = useGetOwnershipRequestsQuery({
+    itemId: organizerId,
+  }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
+
+  const getOwnershipCreatorQuery = useGetOwnershipCreatorQuery({
     organizerId: organizerId,
   });
 
   const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
-    () =>
-      groupBy(
-        // @ts-expect-error
-        getOwnershipRequestsQuery.data?.member,
-        'state',
-      ),
-    // @ts-expect-error
+    () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
     [getOwnershipRequestsQuery.data],
   );
 
-  const approvedRequests = requestsByState[RequestState.APPROVED] ?? [];
-  const pendingRequests = requestsByState[RequestState.REQUESTED] ?? [];
+  // @ts-expect-error
+  const creator = getOwnershipCreatorQuery.data;
+
+  const approvedRequests = requestsByState[OwnershipState.APPROVED] ?? [];
+  const pendingRequests = requestsByState[OwnershipState.REQUESTED] ?? [];
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
@@ -88,6 +88,25 @@ const Ownership = () => {
       setIsSuccessAlertVisible(true);
       setIsQuestionModalVisible(false);
     },
+  });
+
+  const approveRequestedOwnership = async (ownershipId: string) => {
+    setIsSuccessAlertVisible(true);
+    setIsOpen(false);
+
+    return approveOwnershipRequestMutation.mutateAsync({ ownershipId });
+  };
+
+  const requestOwnership = useRequestOwnershipMutation({
+    onError: async (error: FetchError<ErrorBody>) => {
+      if (error.body.status === 409) {
+        const ownershipId = error.body.detail.split('with id ')[1];
+        await approveRequestedOwnership(ownershipId);
+      } else {
+        setError('email', { message: error.body.detail || error.title });
+      }
+    },
+    onSuccess: (data: { id: string }) => approveRequestedOwnership(data.id),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
@@ -106,14 +125,20 @@ const Ownership = () => {
   });
 
   const handleConfirm = () => {
-    if (isApproveAction) {
-      approveOwnershipRequestMutation.mutate({
-        ownershipId: selectedRequest.id,
-      });
-    } else {
-      rejectOwnershipRequestMutation.mutate({
-        ownershipId: selectedRequest.id,
-      });
+    switch (actionType) {
+      case ActionType.APPROVE:
+        return approveOwnershipRequestMutation.mutate({
+          ownershipId: selectedRequest.id,
+        });
+      case ActionType.REJECT:
+        return rejectOwnershipRequestMutation.mutate({
+          ownershipId: selectedRequest.id,
+        });
+      case ActionType.REQUEST:
+        return requestOwnership.mutate({
+          ownerEmail: getValues('email'),
+          itemId: parseOfferId(organizer['@id']),
+        });
     }
   };
 
@@ -141,84 +166,56 @@ const Ownership = () => {
                   setActionType(undefined);
                 }}
               >
-                <Trans
-                  i18nKey={`${translationsPath}.success`}
-                  values={{
-                    ownerEmail: selectedRequest?.ownerEmail,
-                    organizerName: organizerName,
-                  }}
-                />
+                {t(`${translationsPath}.success`, {
+                  ownerEmail: selectedRequest?.ownerEmail ?? getValues('email'),
+                  organizerName,
+                })}
               </Alert>
             )}
-            <Stack spacing={4}>
-              <Title size={3}>{t('organizers.ownerships.owners')}</Title>
-              <OwnershipsTable
-                requests={approvedRequests}
-                renderActions={(request) => (
-                  <Button
-                    variant={ButtonVariants.ICON}
-                    iconName={Icons.TRASH}
-                    onClick={() => setRequestToBeDeleted(request)}
-                  />
-                )}
-              />
-              <Modal
-                title={t('organizers.ownerships.delete_modal.title')}
-                confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
-                cancelTitle={t('organizers.ownerships.delete_modal.cancel')}
-                visible={!!requestToBeDeleted}
-                variant={ModalVariants.QUESTION}
-                onConfirm={() =>
-                  deleteOwnershipRequestMutation.mutate({
-                    ownershipId: requestToBeDeleted.id,
-                  })
-                }
-                onClose={() => setRequestToBeDeleted(undefined)}
-                size={ModalSizes.MD}
-              >
-                <Box padding={4}>
-                  <Trans
-                    i18nKey="organizers.ownerships.delete_modal.body"
-                    values={{
+            {(approvedRequests.length > 0 || !!creator) && (
+              <Stack spacing={4}>
+                <Title size={3}>{t('organizers.ownerships.owners')}</Title>
+                <OwnershipsTable
+                  requests={approvedRequests}
+                  onDelete={setRequestToBeDeleted}
+                />
+                <Modal
+                  title={t('organizers.ownerships.delete_modal.title')}
+                  confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
+                  cancelTitle={t('organizers.ownerships.delete_modal.cancel')}
+                  visible={!!requestToBeDeleted}
+                  variant={ModalVariants.QUESTION}
+                  onConfirm={() =>
+                    deleteOwnershipRequestMutation.mutate({
+                      ownershipId: requestToBeDeleted.id,
+                    })
+                  }
+                  onClose={() => setRequestToBeDeleted(undefined)}
+                  size={ModalSizes.MD}
+                >
+                  <Box padding={4}>
+                    {t('organizers.ownerships.delete_modal.body', {
                       ownerEmail: requestToBeDeleted?.ownerEmail,
-                    }}
-                  />
-                </Box>
-              </Modal>
-            </Stack>
+                    })}
+                  </Box>
+                </Modal>
+              </Stack>
+            )}
             {pendingRequests.length > 0 && (
               <Stack spacing={4}>
                 <Title size={3}>{t('organizers.ownerships.pending')}</Title>
                 <OwnershipsTable
                   requests={pendingRequests}
-                  renderActions={(request) => (
-                    <Inline spacing={3}>
-                      <Button
-                        variant={ButtonVariants.SUCCESS}
-                        iconName={Icons.CHECK_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.APPROVE);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.approve')}
-                      </Button>
-                      <Button
-                        variant={ButtonVariants.DANGER}
-                        iconName={Icons.TIMES_CIRCLE}
-                        spacing={3}
-                        onClick={() => {
-                          setIsQuestionModalVisible(true);
-                          setSelectedRequest(request);
-                          setActionType(ActionType.REJECT);
-                        }}
-                      >
-                        {t('organizers.ownerships.table.actions.reject')}
-                      </Button>
-                    </Inline>
-                  )}
+                  onApprove={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.APPROVE);
+                  }}
+                  onReject={(request) => {
+                    setIsQuestionModalVisible(true);
+                    setSelectedRequest(request);
+                    setActionType(ActionType.REJECT);
+                  }}
                 />
                 <Modal
                   title={t(`${translationsPath}.title`)}
@@ -231,20 +228,26 @@ const Ownership = () => {
                   size={ModalSizes.MD}
                 >
                   <Box padding={4}>
-                    <Trans
-                      i18nKey={`${translationsPath}.body`}
-                      values={{
-                        ownerEmail: selectedRequest?.ownerEmail,
-                        organizerName: organizerName,
-                      }}
-                    />
+                    {t(`${translationsPath}.body`, {
+                      ownerEmail: selectedRequest?.ownerEmail,
+                      organizerName,
+                    })}
                   </Box>
                 </Modal>
               </Stack>
             )}
           </Stack>
           <Stack spacing={3.5} flex={1}>
-            <Button variant={ButtonVariants.PRIMARY}>
+            <Button
+              variant={ButtonVariants.PRIMARY}
+              iconName={Icons.PLUS_CIRCLE}
+              spacing={3}
+              onClick={() => {
+                setIsSuccessAlertVisible(false);
+                setActionType(ActionType.REQUEST);
+                setIsOpen(true);
+              }}
+            >
               {t('organizers.ownerships.actions.add')}
             </Button>
             <Button
@@ -257,6 +260,32 @@ const Ownership = () => {
             </Button>
           </Stack>
         </Inline>
+        <Modal
+          visible={isOpen}
+          variant={ModalVariants.QUESTION}
+          size={ModalSizes.MD}
+          title={t('organizers.ownerships.request_modal.title', {
+            name: organizerName,
+          })}
+          confirmTitle={t(
+            'organizers.ownerships.request_modal.actions.confirm',
+          )}
+          cancelTitle={t('organizers.ownerships.request_modal.actions.cancel')}
+          onConfirm={handleConfirm}
+          onClose={() => setIsOpen(false)}
+        >
+          <Stack padding={4}>
+            <FormElement
+              id={'email'}
+              Component={<Input type={'email'} {...register('email')} />}
+              label={t('organizers.ownerships.request_modal.email')}
+              error={
+                formState.errors.email &&
+                t(`organizers.ownerships.request_modal.email_error`)
+              }
+            />
+          </Stack>
+        </Modal>
       </Page.Content>
     </Page>
   );
@@ -264,18 +293,28 @@ const Ownership = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    await Promise.all([
-      await useGetOrganizerByIdQuery({
-        req,
-        queryClient,
-        id: query.organizerId,
-      }),
-      await useGetOwnershipRequestsQuery({
-        req,
-        queryClient,
-        organizerId: query.organizerId,
-      }),
-    ]);
+    try {
+      await Promise.all([
+        useGetOrganizerByIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
+        }),
+        useGetOwnershipRequestsQuery({
+          req,
+          queryClient,
+          itemId: query.organizerId,
+        }),
+        useGetOwnershipCreatorQuery({
+          req,
+          queryClient,
+          organizerId: query.organizerId,
+        }),
+      ]);
+    } catch (e) {
+      console.error(e);
+    }
+
     return {
       props: {
         dehydratedState: dehydrate(queryClient),

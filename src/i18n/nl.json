@@ -621,6 +621,10 @@
       "organizers": "Mijn organisaties",
       "places": "Mijn locaties"
     },
+    "suggestions": {
+      "title": "Organisaties waarvoor je eerder al invoerde",
+      "description": "Voor deze organisaties voerde je eerder al evenementen in, maar je bent nog geen beheerder van deze organisaties. Ben je betrokken bij het bestuur van deze organisaties en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail."
+    },
     "welcome": "Welkom"
   },
   "description": "UiTdatabank levert informatie aan meer dan 1.000 agenda's, waaronder UiTinvlaanderen, websites van steden en gemeenten, thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw activiteit kan verschijnen op vele agenda's.",
@@ -723,11 +727,20 @@
     "movies": "Films",
     "notifications": "Meldingen",
     "organizations": "Organisaties",
+    "ownerships": "Ownerships",
     "productions": "Producties",
     "roles": "Rollen",
     "search": "Zoeken",
     "users": "Gebruikers",
     "validate": "Valideren"
+  },
+  "ownerships": {
+    "overview": {
+      "title": "Ownerships"
+    },
+    "organizer_picker": {
+      "label": "Organisatie"
+    }
   },
   "movies": {
     "create": {
@@ -990,6 +1003,25 @@
     }
   },
   "organizers": {
+    "detail": {
+      "name": "Naam",
+      "description": "Bescrijving",
+      "educationalDescription": "Beschrijving Cultuurkuur",
+      "address": "Adres",
+      "no_address": "Geen address",
+      "contact": "Contact",
+      "no_contact": "Geen contactinformatie",
+      "labels": "Labels",
+      "images": "Afbeeldingen",
+      "no_images": "Geen afbeeldingen",
+      "mainImage": "Hoofdafbeelding",
+      "actions": {
+        "edit": "Bewerken",
+        "manage": "Beheerders aanpassen",
+        "request": "Beheer aanvragen",
+        "back": "Ga terug"
+      }
+    },
     "create": {
       "title": "Organisatie toevoegen",
       "step1": {
@@ -1026,6 +1058,7 @@
       "owners": "Beheerders",
       "table": {
         "user": "Gebruiker",
+        "no_results": "Geen resultaten gevonden",
         "actions": {
           "title": "Acties",
           "approve": "Goedkeuren",
@@ -1034,7 +1067,17 @@
       },
       "pending": "Openstaande aanvragen tot beheer",
       "close": "Sluiten",
-      "confirm_modal": {
+      "request_modal": {
+        "title": "Beheerder toevoegen aan {{name}}",
+        "email": "E-mailadres",
+        "email_error": "Geen geldig e-mailadres",
+        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en evenementen van {{organizerName}} bewerken.",
+        "actions": {
+          "confirm": "Beheerder toevoegen",
+          "cancel": "Annuleren"
+        }
+      },
+      "approve_modal": {
         "title": "Aanvraag tot beheer goedkeuren",
         "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
         "cancel": "Annuleren",
@@ -1052,7 +1095,19 @@
         "title": "Beheerder verwijderen",
         "body": "Ben je zeker dat je {{ownerEmail}} wilt verwijderen als beheerder?",
         "cancel": "Annuleren",
-        "confirm": "Beheerder verwijderen"
+        "confirm": "Beheerder verwijderen",
+        "success": "De aanvraag van {{ownerEmail}} is verwijderd."
+      },
+      "request": {
+        "confirm_modal": {
+          "title": "Beheer aanvragen voor {{organizerName}}",
+          "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
+          "cancel": "Annuleren",
+          "confirm": "Beheer aanvragen",
+          "error": "Er is iets misgelopen"
+        },
+        "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling.<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail.",
+        "success": "Je aanvraag om beheerder te worden van {{organizerName}} is succesvol verzonden!<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
       }
     }
   },

@@ -15,7 +15,7 @@ pipeline {
         }
 
         stage('Setup and build') {
-            agent { label 'ubuntu && 16.04 && nodejs16' }
+            agent { label 'ubuntu && 20.04 && nodejs16' }
             environment {
                 GIT_SHORT_COMMIT = build.shortCommitRef()
                 ARTIFACT_VERSION = "${env.PIPELINE_VERSION}" + '+sha.' + "${env.GIT_SHORT_COMMIT}"
@@ -28,12 +28,12 @@ pipeline {
                 }
                 stage('Build') {
                     steps {
-                        sh label: 'Build binaries', script: 'bundle exec rake uitdatabank-frontend:build'
+                        sh label: 'Build binaries', script: 'bundle exec rake build'
                     }
                 }
                 stage('Build artifact') {
                     steps {
-                        sh label: 'Build artifact', script: "bundle exec rake uitdatabank-frontend:build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
+                        sh label: 'Build artifact', script: "bundle exec rake build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
                         archiveArtifacts artifacts: "pkg/*${env.ARTIFACT_VERSION}*.deb", onlyIfSuccessful: true
                     }
                 }
@@ -67,59 +67,59 @@ pipeline {
                 APPLICATION_ENVIRONMENT = 'development'
             }
             steps {
-                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'xenial'
+                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'focal'
             }
         }
 
         stage('Deploy to acceptance') {
-            agent any
+            agent { label 'ubuntu && 20.04' }
             options { skipDefaultCheckout() }
             environment {
                 APPLICATION_ENVIRONMENT = 'acceptance'
             }
             steps {
-                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'xenial'
-                triggerDeployment nodeName: 'udb3-web-acc02', timeout: 600
+                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'focal'
+                triggerDeployment nodeName: 'uitdatabank-web-acc01', timeout: 600
             }
             post {
                 always {
-                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${env.JOB_NAME} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
+                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${util.getJobDisplayName()} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
                 }
             }
         }
 
         stage('Deploy to testing') {
             input { message "Deploy to Testing?" }
-            agent any
+            agent { label 'ubuntu && 20.04' }
             options { skipDefaultCheckout() }
             environment {
                 APPLICATION_ENVIRONMENT = 'testing'
             }
             steps {
-                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'xenial'
-                triggerDeployment nodeName: 'udb3-web-test03', timeout: 600
+                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'focal'
+                triggerDeployment nodeName: 'uitdatabank-web-test01', timeout: 600
             }
             post {
                 always {
-                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${env.JOB_NAME} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
+                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${util.getJobDisplayName()} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
                 }
             }
         }
 
         stage('Deploy to production') {
             input { message "Deploy to Production?" }
-            agent any
+            agent { label 'ubuntu && 20.04' }
             options { skipDefaultCheckout() }
             environment {
                 APPLICATION_ENVIRONMENT = 'production'
             }
             steps {
-                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'xenial'
-                triggerDeployment nodeName: 'udb3-web-prod03', timeout: 600
+                publishAptlySnapshot snapshotName: "${env.REPOSITORY_NAME}-${env.PIPELINE_VERSION}", publishTarget: "${env.REPOSITORY_NAME}-${env.APPLICATION_ENVIRONMENT}", distributions: 'focal'
+                triggerDeployment nodeName: 'uitdatabank-web-prod01', timeout: 600
             }
             post {
                 always {
-                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${env.JOB_NAME} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
+                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${util.getJobDisplayName()} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
                 }
                 cleanup {
                     cleanupAptlySnapshots repository: env.REPOSITORY_NAME
@@ -128,7 +128,7 @@ pipeline {
         }
 
         stage('Tag release') {
-            agent { label 'ubuntu && 16.04' }
+            agent any
             steps {
                 copyArtifacts filter: 'pkg/*.deb', projectName: env.JOB_NAME, flatten: true, selector: specific(env.BUILD_NUMBER)
                 tagRelease commitHash: artifact.metadata(artifactFilter: '*.deb', field: 'git-ref')

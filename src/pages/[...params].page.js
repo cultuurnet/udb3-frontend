@@ -9,6 +9,7 @@ import {
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
 import { useIsClient } from '@/hooks/useIsClient';
+import { useLegacyPath } from '@/hooks/useLegacyPath';
 import PageNotFound from '@/pages/404.page';
 import { Box } from '@/ui/Box';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -49,30 +50,7 @@ const Fallback = () => {
 
   const isClientSide = useIsClient();
 
-  const { cookies } = useCookiesWithOptions(['token', 'udb-language']);
-  const token = cookies['token'];
-  const language = cookies['udb-language'];
-
-  const legacyPath = useMemo(() => {
-    const path = new URL(`http://localhost${router.asPath}`).pathname;
-    const { params = [], ...queryWithoutParams } = router.query;
-    const queryString = prefixWhenNotEmpty(
-      new URLSearchParams({
-        ...queryWithoutParams,
-        jwt: token,
-        lang: language,
-      }),
-      '?',
-    );
-
-    return `${publicRuntimeConfig.legacyAppUrl}${path}${queryString}`;
-  }, [
-    language,
-    publicRuntimeConfig.legacyAppUrl,
-    router.asPath,
-    router.query,
-    token,
-  ]);
+  const legacyPath = useLegacyPath();
 
   if (notFoundPaths.includes(router.asPath)) {
     return <PageNotFound />;
