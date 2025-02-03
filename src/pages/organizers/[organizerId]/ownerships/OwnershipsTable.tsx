@@ -97,84 +97,77 @@ export const OwnershipsTable = ({
   );
 
   return (
-    <>
-      <Stack
-        role="table"
-        flex={1}
-        padding={4}
-        marginBottom={5}
-        borderRadius="0.5rem"
-        backgroundColor="white"
-        maxWidth="85rem"
+    <Stack
+      role="table"
+      flex={1}
+      padding={4}
+      marginBottom={5}
+      borderRadius="0.5rem"
+      backgroundColor="white"
+      maxWidth="85rem"
+      css={`
+        box-shadow: ${getGlobalValue('boxShadow.medium')};
+      `}
+    >
+      <Inline
+        paddingBottom={3}
         css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
+          display: grid;
+          grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+          border-bottom: 1px solid ${grey3};
         `}
       >
-        <Inline
-          paddingBottom={3}
-          css={`
-            display: grid;
-            grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
-            border-bottom: 1px solid ${grey3};
-          `}
-        >
-          <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
-          {shouldShowItemId && <Title size={3}>item id</Title>}
-          {hasActions && (
-            <Title size={3} justifyContent="flex-end">
-              {t('organizers.ownerships.table.actions.title')}
-            </Title>
-          )}
-        </Inline>
-        <List paddingY={3}>
-          {creator?.email && <List.Item>{creator.email}</List.Item>}
-          {requests.map((request) => (
-            <Inline
-              key={request.id}
-              role="row"
-              alignItems="center"
-              paddingY={3}
-              display="grid"
-              css={`
-                grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+        <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
+        {shouldShowItemId && <Title size={3}>item id</Title>}
+        {hasActions && (
+          <Title size={3} justifyContent="flex-end">
+            {t('organizers.ownerships.table.actions.title')}
+          </Title>
+        )}
+      </Inline>
+      <List paddingY={3}>
+        {creator?.email && <List.Item>{creator.email}</List.Item>}
+        {requests.map((request) => (
+          <Inline
+            key={request.id}
+            role="row"
+            alignItems="center"
+            paddingY={3}
+            display="grid"
+            css={`
+              grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
 
-                &:not(:last-child) {
-                  border-bottom: 1px solid ${grey3};
-                }
-              `}
-            >
+              &:not(:last-child) {
+                border-bottom: 1px solid ${grey3};
+              }
+            `}
+          >
+            <List.Item>
+              <Stack>
+                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
+                <Text>{request.ownerEmail}</Text>
+              </Stack>
+            </List.Item>
+            {shouldShowItemId && (
               <List.Item>
                 <Stack>
-                  {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
-                  <Text>{request.ownerEmail}</Text>
+                  <Text>{request.itemId}</Text>
                 </Stack>
               </List.Item>
-              {shouldShowItemId && (
-                <List.Item>
-                  <Stack>
-                    <Text>{request.itemId}</Text>
-                  </Stack>
-                </List.Item>
-              )}
-              {hasActions && (
-                <List.Item justifyContent="flex-end">
-                  <Actions
-                    request={request}
-                    onDelete={onDelete}
-                    onApprove={onApprove}
-                    onReject={onReject}
-                  />
-                </List.Item>
-              )}
-            </Inline>
-          ))}
-        </List>
-      </Stack>
-      {requests.length === 0 && (
-        <Alert variant={AlertVariants.WARNING} fullWidth>
-          {t('organizers.ownerships.table.no_results')}
-        </Alert>
-      )}
-    </>
+            )}
+            {hasActions && (
+              <List.Item justifyContent="flex-end">
+                <Actions
+                  request={request}
+                  onDelete={onDelete}
+                  onApprove={onApprove}
+                  onReject={onReject}
+                />
+              </List.Item>
+            )}
+          </Inline>
+        ))}
+      </List>
+    </Stack>
   );
 };
