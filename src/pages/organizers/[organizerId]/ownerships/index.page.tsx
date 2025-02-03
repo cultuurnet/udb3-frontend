@@ -176,6 +176,7 @@ const Ownership = () => {
               <Stack spacing={4}>
                 <Title size={3}>{t('organizers.ownerships.owners')}</Title>
                 <OwnershipsTable
+                  creator={creator}
                   requests={approvedRequests}
                   onDelete={setRequestToBeDeleted}
                 />
