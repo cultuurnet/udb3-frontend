@@ -178,6 +178,7 @@ const Ownership = () => {
                 <OwnershipsTable
                   requests={approvedRequests}
                   onDelete={setRequestToBeDeleted}
+                  creator={creator}
                 />
                 <Modal
                   title={t('organizers.ownerships.delete_modal.title')}

@@ -6,6 +6,7 @@ import {
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -94,10 +95,6 @@ export const OwnershipsTable = ({
       ),
     [requests],
   );
-
-  if (requests.length === 0) {
-    return <Text>{t('organizers.ownerships.table.no_results')}</Text>;
-  }
 
   return (
     <Stack
