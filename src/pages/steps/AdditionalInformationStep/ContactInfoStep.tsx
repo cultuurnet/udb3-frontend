@@ -82,6 +82,7 @@ const ContactInfoStep = ({
   }, [contactInfo]);
 
   useEffect(() => {
+    if (!organizerContactInfo) return;
     updateContactInfoState(organizerContactInfo);
   }, [organizerContactInfo]);
 
