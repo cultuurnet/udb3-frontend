@@ -7,11 +7,13 @@ import { Cookies } from 'react-cookie';
 import {
   MutationFunction,
   QueryClient,
+  QueryFunctionContext,
+  QueryKey,
   useMutation,
   useQueries,
   useQuery,
   useQueryClient,
-  UseQueryResult,
+  UseQueryOptions,
 } from 'react-query';
 
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
@@ -26,8 +28,6 @@ type ServerSideQueryOptions = {
   req?: NextApiRequest;
   queryClient?: QueryClient;
 };
-
-type AuthenticatedQueryOptions<T> = ServerSideQueryOptions & T;
 
 type PaginationOptions = {
   paginationOptions?: {
@@ -54,7 +54,18 @@ const QueryStatus = {
   SUCCESS: 'success',
 };
 
-const prepareKey = ({ queryKey, queryArguments }) => {
+type QueryArguments = Record<string, unknown>;
+
+const prepareKey = <
+  TQueryKey extends QueryKey,
+  TQueryArguments extends QueryArguments,
+>({
+  queryKey,
+  queryArguments,
+}: {
+  queryKey: TQueryKey;
+  queryArguments: TQueryArguments;
+}) => {
   const key = Array.isArray(queryKey) ? queryKey : [queryKey];
   const args = Object.entries(queryArguments ?? {}).filter(
     ([_, value]) => typeof value !== 'undefined',
@@ -68,25 +79,35 @@ const prepareKey = ({ queryKey, queryArguments }) => {
   return preparedKey;
 };
 
-const prepareArguments = ({
+const prepareArguments = <
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+>({
   options: {
     queryKey,
     queryFn,
     queryArguments,
     enabled = true,
-    req,
-    queryClient,
     ...configuration
   },
   isTokenPresent = false,
   headers,
+}: {
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>;
+  isTokenPresent: boolean;
+  headers: Record<string, string>;
 }) => {
   const parsedQueryKey = prepareKey({ queryArguments, queryKey });
 
   return {
     queryKey: parsedQueryKey,
-    queryFn: async () =>
-      await queryFn({ ...queryArguments, headers, queryKey: parsedQueryKey }),
+    queryFn: async (ctx: QueryFunctionContext<typeof queryKey>) =>
+      await queryFn({
+        ...ctx,
+        ...queryArguments,
+        headers,
+        queryKey: parsedQueryKey,
+      }),
     enabled: isTokenPresent && !!enabled,
     ...configuration,
   };
@@ -291,23 +312,47 @@ const useAuthenticatedMutations = ({
   return useMutation(innerMutationFn, configuration);
 };
 
-type UseAuthenticatedQueryResult<TData> =
-  | Promise<TData>
-  | UseQueryResult<TData, FetchError>;
+type UseQueryOptionsWithoutQueryFn<TData, TError> = Omit<
+  UseQueryOptions<TData, TError>,
+  'queryFn'
+>;
 
-const useAuthenticatedQuery = <TData>(
-  options,
-): UseAuthenticatedQueryResult<TData> => {
-  if (!!options.req && !!options.queryClient && typeof window === 'undefined') {
-    return prefetchAuthenticatedQuery<TData>(options);
-  }
+type QueryFunction<TData> = UseQueryOptions<TData, FetchError>['queryFn'];
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+type CustomQueryFunction<
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+> = (
+  context: QueryFunctionContext & {
+    headers: Record<string, string>;
+  } & TQueryArguments,
+) => ReturnType<QueryFunction<TData>>;
+
+type UseAuthenticatedQueryOptions<
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+> = UseQueryOptionsWithoutQueryFn<TData, FetchError> & {
+  queryArguments?: TQueryArguments;
+  queryFn: CustomQueryFunction<TData, TQueryArguments>;
+};
+
+export type UseQueryOverrides<TData = unknown> = {
+  onSuccess?: (data: NoInfer<TData>) => void;
+  onError?: (err: FetchError) => void;
+  onSettled?: (
+    data: NoInfer<TData> | undefined,
+    error: FetchError | null,
+  ) => void;
+};
+
+const useAuthenticatedQuery = <
+  TData,
+  TQueryArguments extends Record<string, unknown> | undefined = undefined,
+>(
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
+) => {
   const { asPath, ...router } = useRouter();
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const headers = useHeaders();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
   ]);
@@ -318,8 +363,7 @@ const useAuthenticatedQuery = <TData>(
     headers,
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const result = useQuery<TData, FetchError>(preparedArguments);
+  const result = useQuery(preparedArguments);
 
   if (isUnAuthorized(result?.error?.status)) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
@@ -390,7 +434,6 @@ export {
 };
 
 export type {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   PaginationOptions,
   ServerSideQueryOptions,
