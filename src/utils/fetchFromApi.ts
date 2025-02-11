@@ -48,12 +48,14 @@ type FetchFromApiArguments = {
 
 const { publicRuntimeConfig } = getConfig();
 
-const fetchFromApi = async ({
+const fetchFromApi = async <TConfig extends FetchFromApiArguments>({
   path,
   searchParams: searchParamsInit,
-  options = {},
   silentError = false,
-}: FetchFromApiArguments): Promise<ErrorObject | Response> => {
+  options = {},
+}: TConfig): Promise<
+  TConfig extends { silentError?: true } ? Response | ErrorObject : Response
+> => {
   let response: Response;
   let url: URL;
 
