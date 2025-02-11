@@ -766,21 +766,25 @@ const Dashboard = (): any => {
               {tab === 'organizers' && (
                 <>
                   <TabContent {...sharedTableContentProps} Row={OrganizerRow} />
-                  <Title>{t('dashboard.suggestions.title')}</Title>
-                  <Alert variant={AlertVariants.PRIMARY} marginY={4}>
-                    {t('dashboard.suggestions.description')}
-                  </Alert>
-                  <RequestOwnershipModal
-                    organizer={currentOrganizer}
-                    isVisible={isRequestModalVisible}
-                    onClose={() => setIsRequestModalVisible(false)}
-                  />
-                  <TabContent
-                    {...sharedTableContentProps}
-                    Row={SuggestedOrganizerRow}
-                    items={suggestedOrganizers.data?.member}
-                    status={suggestedOrganizers.status}
-                  />
+                  {suggestedOrganizers.data?.member?.length > 0 && (
+                    <>
+                      <Title>{t('dashboard.suggestions.title')}</Title>
+                      <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+                        {t('dashboard.suggestions.description')}
+                      </Alert>
+                      <RequestOwnershipModal
+                        organizer={currentOrganizer}
+                        isVisible={isRequestModalVisible}
+                        onClose={() => setIsRequestModalVisible(false)}
+                      />
+                      <TabContent
+                        {...sharedTableContentProps}
+                        Row={SuggestedOrganizerRow}
+                        items={suggestedOrganizers.data?.member}
+                        status={suggestedOrganizers.status}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </Tabs.Tab>
