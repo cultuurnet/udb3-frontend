@@ -79,10 +79,7 @@ const prepareKey = <
   return preparedKey;
 };
 
-const prepareArguments = <
-  TData,
-  TQueryArguments extends Record<string, unknown>,
->({
+const prepareArguments = <TData, TQueryArguments extends QueryArguments>({
   options: {
     queryKey,
     queryFn,
@@ -312,9 +309,10 @@ const useAuthenticatedMutations = ({
   return useMutation(innerMutationFn, configuration);
 };
 
+type Handlers = 'onSuccess' | 'onError' | 'onSettled';
 type UseQueryOptionsWithoutQueryFn<TData, TError> = Omit<
   UseQueryOptions<TData, TError>,
-  'queryFn'
+  'queryFn' | Handlers
 >;
 
 type QueryFunction<TData> = UseQueryOptions<TData, FetchError>['queryFn'];
@@ -336,14 +334,10 @@ type UseAuthenticatedQueryOptions<
   queryFn: CustomQueryFunction<TData, TQueryArguments>;
 };
 
-export type UseQueryOverrides<TData = unknown> = {
-  onSuccess?: (data: NoInfer<TData>) => void;
-  onError?: (err: FetchError) => void;
-  onSettled?: (
-    data: NoInfer<TData> | undefined,
-    error: FetchError | null,
-  ) => void;
-};
+export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
+  UseQueryOptions<Awaited<ReturnType<TQueryFn>>, FetchError>,
+  Handlers | 'enabled'
+>;
 
 const useAuthenticatedQuery = <
   TData,
