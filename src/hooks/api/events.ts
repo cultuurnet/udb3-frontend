@@ -16,6 +16,7 @@ import type {
   Term,
 } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
+import { PaginatedData } from '@/types/PaginatedData';
 import type { Values } from '@/types/Values';
 import type { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
@@ -24,15 +25,13 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import type {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
   useAuthenticatedMutation,
-  useAuthenticatedQueries,
   useAuthenticatedQuery,
 } from './authenticated-query';
 import type { Headers } from './types/Headers';
@@ -147,15 +146,14 @@ const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsToModerateQuery = (searchQuery, configuration = {}) =>
-  useAuthenticatedQuery<Event[]>({
+const useGetEventsToModerateQuery = (
+  searchQuery: string,
+  configuration: ExtendQueryOptions<typeof getEventsToModerate> = {},
+) =>
+  useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsToModerate,
     queryArguments: {
@@ -187,18 +185,16 @@ const getEventById = async ({ headers, id }) => {
   return await res.json();
 };
 
-type UseGetEventByIdArguments = ServerSideQueryOptions & {
+type UseGetEventByIdArguments = {
   id: string;
   scope?: Values<typeof OfferTypes>;
 };
 
 const useGetEventByIdQuery = (
-  { req, queryClient, id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
-  configuration: UseQueryOptions = {},
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  configuration: ExtendQueryOptions<typeof getEventById> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
@@ -232,20 +228,14 @@ const getEventsByIds = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as { member: Event[] };
 };
 
 const useGetEventsByIdsQuery = (
-  { req, queryClient, ids = [], scope = OfferTypes.EVENTS },
-  configuration: UseQueryOptions = {},
+  { ids = [], scope = OfferTypes.EVENTS },
+  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
 ) => {
-  return useAuthenticatedQuery<{ member: Event[] }>({
-    req,
-    queryClient,
+  return useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
@@ -280,33 +270,23 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
 const useGetEventsByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-      }
-  >,
-  configuration: UseQueryOptions = {},
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Event[]>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {

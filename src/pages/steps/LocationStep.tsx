@@ -325,9 +325,11 @@ const LocationStep = ({
     scope,
   ]);
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope: scope as Exclude<Scope, 'organizers'> },
+    { enabled: scope !== ScopeTypes.ORGANIZERS },
+  );
 
-  // @ts-expect-error
   const audience = getOfferByIdQuery.data?.audience;
 
   const { hasRecentLocations } = useRecentLocations();
@@ -642,7 +644,9 @@ const LocationStep = ({
                   onChange={onChange}
                 />
               )}
-              {[ScopeTypes.PLACES, ScopeTypes.ORGANIZERS].includes(scope) && (
+              {([ScopeTypes.PLACES, ScopeTypes.ORGANIZERS] as Scope[]).includes(
+                scope,
+              ) && (
                 <Stack>
                   {isPlaceAddressComplete ? (
                     <Inline alignItems="center" spacing={3}>

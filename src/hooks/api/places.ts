@@ -1,4 +1,4 @@
-import type { UseMutationOptions, UseQueryOptions } from 'react-query';
+import type { UseMutationOptions } from 'react-query';
 
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
@@ -8,18 +8,18 @@ import type { SupportedLanguages } from '@/i18n/index';
 import type { Address } from '@/types/Address';
 import { Country } from '@/types/Country';
 import { OpeningHours, Term } from '@/types/Offer';
+import { PaginatedData } from '@/types/PaginatedData';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import type {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -36,25 +36,19 @@ const getPlaceById = async ({ headers, id }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
-type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
+type UseGetPlaceByIdArguments = {
   id: string;
   scope?: Values<typeof OfferTypes>;
 };
 
 const useGetPlaceByIdQuery = (
-  { req, queryClient, id, scope }: UseGetPlaceByIdArguments,
-  configuration: UseQueryOptions = {},
+  { id, scope }: UseGetPlaceByIdArguments,
+  configuration: ExtendQueryOptions<typeof getPlaceById> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['places'],
     queryFn: getPlaceById,
     queryArguments: { id },
@@ -62,45 +56,55 @@ const useGetPlaceByIdQuery = (
     ...configuration,
   });
 
-const getPlacesByCreator = async ({ headers, ...queryData }) => {
+const getPlacesByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: { headers: Headers } & {
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/places/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Place[]>;
 };
 
 const useGetPlacesByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-      }
-  >,
-  configuration: UseQueryOptions = {},
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByCreator,
     queryArguments: {
@@ -109,10 +113,10 @@ const useGetPlacesByCreatorQuery = (
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
       } ${creator?.email}) OR contributors:${creator?.email}`,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
       workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
       ...createSortingArgument(sortOptions),
       ...createEmbededCalendarSummaries(calendarSummaryFormats),
@@ -136,7 +140,9 @@ const getPlacesByQuery = async ({
   zip,
   addressLocality,
   addressCountry,
-}: Headers & GetPlacesByQueryArguments) => {
+}: GetPlacesByQueryArguments & {
+  headers: Headers;
+}) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
     '',
@@ -167,11 +173,7 @@ const getPlacesByQuery = async ({
     },
   });
 
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Place[];
 };
 
 const useGetPlacesByQuery = (
@@ -182,9 +184,9 @@ const useGetPlacesByQuery = (
     addressLocality,
     addressCountry,
   }: GetPlacesByQueryArguments,
-  configuration = {},
+  configuration: ExtendQueryOptions<typeof getPlacesByQuery> = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByQuery,
     queryArguments: {
@@ -194,7 +196,7 @@ const useGetPlacesByQuery = (
       addressCountry,
       addressLocality,
     },
-    enabled: !!name || terms.length,
+    enabled: !!name || terms.length > 0,
     ...configuration,
   });
 

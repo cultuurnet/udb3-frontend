@@ -9,8 +9,6 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     await useGetEventByIdQuery({
       id: query?.eventId,
-      req,
-      queryClient,
     });
 
     return {

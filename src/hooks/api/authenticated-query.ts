@@ -160,16 +160,19 @@ const prefetchAuthenticatedQueries = async ({
   );
 };
 
-const prefetchAuthenticatedQuery = async <TData>({
+const prefetchAuthenticatedQuery = async <
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+>({
   req,
   queryClient,
   ...options
-}): Promise<TData> => {
+}: ServerSideQueryOptions &
+  UseAuthenticatedQueryOptions<TData, TQueryArguments>): Promise<TData> => {
   const cookies = new Cookies(req?.headers?.cookie);
   const headers = createHeaders(cookies.get('token'));
 
   const { queryKey, queryFn } = prepareArguments({
-    // @ts-expect-error
     options,
     isTokenPresent: isTokenValid(cookies.get('token')),
     headers,
@@ -334,14 +337,23 @@ type UseAuthenticatedQueryOptions<
   queryFn: CustomQueryFunction<TData, TQueryArguments>;
 };
 
+export const queryOptions = <
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+>(
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
+) => {
+  return options;
+};
+
 export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
   UseQueryOptions<Awaited<ReturnType<TQueryFn>>, FetchError>,
-  Handlers | 'enabled'
+  Handlers | 'enabled' | 'queryKey'
 >;
 
 const useAuthenticatedQuery = <
   TData,
-  TQueryArguments extends Record<string, unknown> | undefined = undefined,
+  TQueryArguments extends Record<string, unknown>,
 >(
   options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
 ) => {
@@ -403,7 +415,6 @@ const useAuthenticatedQueries = ({
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const results = useQueries(options);
 
-  // @ts-expect-error
   if (results.some((result) => isUnAuthorized(result?.error?.status))) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
       removeAuthenticationCookies();
@@ -420,6 +431,7 @@ const useAuthenticatedQueries = ({
 
 export {
   getStatusFromResults,
+  prefetchAuthenticatedQuery,
   QueryStatus,
   useAuthenticatedMutation,
   useAuthenticatedMutations,

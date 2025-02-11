@@ -156,7 +156,6 @@ const PlaceStep = ({
                   }
                   Component={
                     <Typeahead
-                      // @ts-expect-error
                       isLoading={useGetPlacesQuery.isLoading}
                       options={places}
                       onInputChange={debounce(setSearchInput, 275)}

@@ -55,37 +55,28 @@ const MediaStep = ({
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
 
   const videosFromQuery = useMemo(
-    // @ts-expect-error
     () => getEntityByIdQuery.data?.videos ?? [],
-    [
-      // @ts-expect-error
-      getEntityByIdQuery.data?.videos,
-    ],
+    [getEntityByIdQuery.data?.videos],
   );
 
   const mediaObjects = useMemo(
     () =>
-      // @ts-expect-error
       getEntityByIdQuery.data?.mediaObject ??
-      // @ts-expect-error
       getEntityByIdQuery.data?.images ??
       [],
-    // @ts-expect-error
     [getEntityByIdQuery.data],
   );
 
-  const eventImage = useMemo(
-    () => {
-      if (scope === ScopeTypes.ORGANIZERS) {
-        // @ts-expect-error
-        return getEntityByIdQuery.data?.mainImage;
-      }
-      // @ts-expect-error
-      return getEntityByIdQuery.data?.image ?? [];
-    },
-    // @ts-expect-error
-    [getEntityByIdQuery.data?.image, getEntityByIdQuery.data?.mainImage, scope],
-  );
+  const eventImage = useMemo(() => {
+    if (scope === ScopeTypes.ORGANIZERS) {
+      return getEntityByIdQuery.data?.mainImage;
+    }
+    return getEntityByIdQuery.data?.image ?? [];
+  }, [
+    getEntityByIdQuery.data?.image,
+    getEntityByIdQuery.data?.mainImage,
+    scope,
+  ]);
 
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);

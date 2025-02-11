@@ -69,7 +69,6 @@ const OrganizersPreview = () => {
     ownerId: userId,
   });
 
-  // @ts-expect-error
   const userRequests = getOwnershipRequestsQuery?.data?.member;
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
@@ -158,13 +157,9 @@ export const getServerSideProps = getApplicationServerSideProps(
     try {
       await Promise.all([
         useGetOrganizerByIdQuery({
-          req,
-          queryClient,
           id: query.organizerId,
         }),
         useGetOrganizerPermissions({
-          req,
-          queryClient,
           organizerId: query.organizerId,
         }),
       ]);

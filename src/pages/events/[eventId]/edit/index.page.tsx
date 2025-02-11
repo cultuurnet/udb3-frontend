@@ -10,10 +10,9 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
+    // @ts-expect-error
     const event = (await useGetEventByIdQuery({
       id: eventId,
-      req,
-      queryClient,
     })) as Event;
 
     return {

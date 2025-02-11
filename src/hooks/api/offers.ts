@@ -1,17 +1,17 @@
-import type { UseQueryOptions } from 'react-query';
 import { UseMutationOptions } from 'react-query';
 
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { Offer } from '@/types/Offer';
+import type { Values } from '@/types/Values';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   SortOptions,
   useAuthenticatedMutation,
@@ -29,34 +29,28 @@ const getOffersByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Offer[];
 };
 
 const useGetOffersByCreatorQuery = (
   {
-    req,
-    queryClient,
     advancedQuery,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-        advancedQuery?: string;
-      }
-  >,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+      advancedQuery?: string;
+    },
   {
     queryArguments,
     ...configuration
-  }: UseQueryOptions & { queryArguments?: any } = {},
+  }: ExtendQueryOptions<typeof getOffersByCreator> & {
+    queryArguments?: any;
+  } = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,
@@ -70,9 +64,7 @@ const useGetOffersByCreatorQuery = (
   const query = advancedQuery
     ? defaultQuery.concat(' AND ', advancedQuery)
     : defaultQuery;
-  return useAuthenticatedQuery<Offer[]>({
-    req,
-    queryClient,
+  return useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getOffersByCreator,
     queryArguments: {
@@ -92,7 +84,15 @@ const useGetOffersByCreatorQuery = (
   });
 };
 
-const useGetOfferByIdQuery = ({ scope, id }, configuration = {}) => {
+type GetEventByIdOptions = Parameters<typeof useGetEventByIdQuery>['1'];
+type GetPlaceByIdOptions = Parameters<typeof useGetPlaceByIdQuery>['1'];
+
+const useGetOfferByIdQuery = <
+  TConfig extends GetEventByIdOptions | GetPlaceByIdOptions,
+>(
+  { scope, id }: { scope: Values<typeof OfferTypes>; id: string },
+  configuration: TConfig = {} as TConfig,
+) => {
   const query =
     scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
 
@@ -458,12 +458,7 @@ const useAddContactPointMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const addOfferBookingInfo = async ({
-  headers,
-  eventId,
-  bookingInfo,
-  scope,
-}) => {
+const addOfferBookingInfo = async ({ headers, eventId, bookingInfo, scope }) =>
   fetchFromApi({
     path: `/${scope}/${eventId}/bookingInfo`,
     options: {
@@ -472,7 +467,6 @@ const addOfferBookingInfo = async ({
       body: JSON.stringify({ bookingInfo }),
     },
   });
-};
 
 const useAddOfferBookingInfoMutation = (configuration = {}) =>
   useAuthenticatedMutation({

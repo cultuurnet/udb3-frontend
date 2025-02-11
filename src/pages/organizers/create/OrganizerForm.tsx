@@ -110,7 +110,6 @@ const OrganizerForm = () => {
     },
   );
 
-  // @ts-expect-error
   const organizer = getOrganizerByIdQuery?.data;
   const organizerLabels = getUniqueLabels(organizer);
 

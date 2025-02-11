@@ -17,6 +17,7 @@ const useGetEntityByIdAndScope = ({
 }) => {
   const query = getEntityQueryForScope(scope);
 
+  // @ts-expect-error
   return query({ scope, id, ...rest });
 };
 

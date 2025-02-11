@@ -1,7 +1,7 @@
 import type { UseMutationOptions, UseQueryOptions } from 'react-query';
 
 import type {
-  AuthenticatedQueryOptions,
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   SortOptions,
@@ -11,42 +11,33 @@ import {
   useAuthenticatedQuery,
 } from '@/hooks/api/authenticated-query';
 import type { Organizer } from '@/types/Organizer';
+import { PaginatedData } from '@/types/PaginatedData';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 import { handleErrorObject } from '@/utils/handleErrorObject';
 
 import type { Headers } from './types/Headers';
 import type { User } from './user';
 
-type HeadersAndQueryData = {
-  headers: Headers;
-} & { [x: string]: string };
-
-export type GetOrganizersByQueryResponse = { member: Organizer[] };
+export type GetOrganizersByQueryResponse = PaginatedData<Organizer[]>;
 
 const useGetOrganizersByQueryQuery = (
   {
-    req,
-    queryClient,
     name,
     q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<
-    { name?: string; q?: string } & PaginationOptions
-  > = {},
-  configuration: UseQueryOptions = {},
+  }: { name?: string; q?: string } & PaginationOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizersByQueryResponse>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
       embed: true,
       q,
       name,
-      start: paginationOptions.start,
-      limit: paginationOptions.limit,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
     },
     ...configuration,
     enabled: !!name && configuration.enabled !== false,
@@ -54,7 +45,7 @@ const useGetOrganizersByQueryQuery = (
 
 type GetOrganizersArguments = {
   headers: Headers;
-  embed?: string;
+  embed?: boolean;
   website?: string;
   name?: string;
   q?: string;
@@ -85,24 +76,14 @@ const getOrganizers = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as GetOrganizersByQueryResponse;
 };
 
 const useGetOrganizersByWebsiteQuery = (
-  {
-    req,
-    queryClient,
-    website,
-  }: AuthenticatedQueryOptions<{ website?: string }> = {},
-  configuration: UseQueryOptions = {},
+  { website }: { website?: string } = {},
+  configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
-  useAuthenticatedQuery<{ member: Organizer[] }>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
@@ -127,20 +108,14 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as GetOrganizerByIdResponse;
 };
 
 const useGetOrganizerByIdQuery = (
-  { id, req, queryClient }: { id: string } & ServerSideQueryOptions,
-  configuration: UseQueryOptions = {},
+  { id }: { id: string },
+  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizerByIdResponse>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
@@ -149,28 +124,35 @@ const useGetOrganizerByIdQuery = (
     ...configuration,
   });
 
-type GetOrganizersByCreator = HeadersAndQueryData;
+type GetOrganizersByCreator = { headers: Headers } & {
+  q: string;
+  limit: string;
+  start: string;
+  embed: string;
+};
 
 const getOrganizersByCreator = async ({
   headers,
-  ...queryData
+  q,
+  limit,
+  start,
+  embed,
 }: GetOrganizersByCreator) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/organizers/',
     searchParams: {
-      ...queryData,
+      q,
+      limit,
+      start,
+      embed,
     },
     options: {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Organizer[]>;
 };
 
 type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
@@ -183,19 +165,17 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
     options: { headers },
   });
 
-  return handleErrorObject(res);
+  return (await res.json()) as GetOrganizerPermissionsResponse;
 };
 
 export type GetOrganizerPermissionsResponse = {
   permissions: string[];
 };
 const useGetOrganizerPermissions = (
-  { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
-  configuration: UseQueryOptions = {},
+  { organizerId }: UseGetOrganizerPermissionsArguments,
+  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizerPermissionsResponse>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
@@ -239,22 +219,16 @@ const useDeleteOrganizerByIdMutation = (configuration = {}) =>
 
 const useGetOrganizersByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions & {
-        creator: User;
-      }
-  >,
-  configuration: UseQueryOptions = {},
+  }: PaginationOptions &
+    SortOptions & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Organizer[]>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
@@ -263,9 +237,9 @@ const useGetOrganizersByCreatorQuery = (
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
       } ${creator?.email}) OR contributors:${creator?.email}`,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
-      embed: true,
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
+      embed: 'true',
       ...createSortingArgument(sortOptions),
     },
     enabled: !!(creator?.sub && creator?.email),
