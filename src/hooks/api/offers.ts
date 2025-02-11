@@ -3,6 +3,7 @@ import { UseMutationOptions } from 'react-query';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
@@ -19,11 +20,31 @@ import {
 } from './authenticated-query';
 import type { User } from './user';
 
-const getOffersByCreator = async ({ headers, ...queryData }) => {
+const getOffersByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: { headers: Headers } & {
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   const res = await fetchFromApi({
     path: '/offers/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,
@@ -39,18 +60,17 @@ const useGetOffersByCreatorQuery = (
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
+    workflowStatus,
+    addressCountry,
   }: PaginationOptions &
     SortOptions &
     CalendarSummaryFormats & {
       creator: User;
       advancedQuery?: string;
+      workflowStatus?: string;
+      addressCountry?: string;
     },
-  {
-    queryArguments,
-    ...configuration
-  }: ExtendQueryOptions<typeof getOffersByCreator> & {
-    queryArguments?: any;
-  } = {},
+  configuration: ExtendQueryOptions<typeof getOffersByCreator> = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,
@@ -69,15 +89,16 @@ const useGetOffersByCreatorQuery = (
     queryFn: getOffersByCreator,
     queryArguments: {
       q: query,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
-      workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
+      workflowStatus:
+        workflowStatus ?? 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
       ...createSortingArgument(sortOptions),
       ...(calendarSummaryFormats &&
         createEmbededCalendarSummaries(calendarSummaryFormats)),
-      ...(queryArguments ?? {}),
+      addressCountry,
     },
     enabled: !!(creator?.sub && creator?.email),
     ...configuration,

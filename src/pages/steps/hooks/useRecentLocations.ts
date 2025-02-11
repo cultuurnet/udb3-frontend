@@ -7,23 +7,17 @@ import { WorkflowStatus } from '@/types/WorkflowStatus';
 
 const useRecentLocations = () => {
   const getUserQuery = useGetUserQuery();
-  const getOffersQuery = useGetOffersByCreatorQuery(
-    {
-      advancedQuery: '_exists_:location.id AND NOT (audienceType:"education")',
-      creator: getUserQuery?.data,
-      sortOptions: {
-        field: 'modified',
-        order: 'desc',
-      },
-      paginationOptions: { start: 0, limit: 20 },
+  const getOffersQuery = useGetOffersByCreatorQuery({
+    advancedQuery: '_exists_:location.id AND NOT (audienceType:"education")',
+    creator: getUserQuery?.data,
+    workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED',
+    addressCountry: '*',
+    sortOptions: {
+      field: 'modified',
+      order: 'desc',
     },
-    {
-      queryArguments: {
-        workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED',
-        addressCountry: '*',
-      },
-    },
-  );
+    paginationOptions: { start: 0, limit: 20 },
+  });
 
   const offers: (Offer & { location: any })[] =
     // @ts-expect-error

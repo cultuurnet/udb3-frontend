@@ -135,11 +135,33 @@ const useAddEventMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
+const getEventsToModerate = async ({
+  headers,
+  q,
+  audienceType,
+  availableTo,
+  limit,
+  start,
+  workflowStatus,
+}: {
+  headers: Headers;
+} & {
+  q: string;
+  audienceType: string;
+  availableTo: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      ...queryData,
+      q,
+      audienceType,
+      availableTo,
+      limit,
+      start,
+      workflowStatus,
       availableFrom: formatDateToISO(new Date()),
     },
     options: {
@@ -160,8 +182,8 @@ const useGetEventsToModerateQuery = (
       q: searchQuery,
       audienceType: 'everyone',
       availableTo: '*',
-      limit: 1,
-      start: 0,
+      limit: '1',
+      start: '0',
       workflowStatus: 'READY_FOR_VALIDATION',
     },
     enabled: !!searchQuery,
@@ -258,13 +280,33 @@ const useDeleteEventByIdMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsByCreator = async ({ headers, ...queryData }) => {
+const getEventsByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: { headers: Headers } & {
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,
@@ -295,10 +337,10 @@ const useGetEventsByCreatorQuery = (
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
       } ${creator?.email}) OR contributors:${creator?.email}`,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
       workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
       ...createSortingArgument(sortOptions),
       ...createEmbededCalendarSummaries(calendarSummaryFormats),
