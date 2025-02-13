@@ -44,6 +44,7 @@ type Props = StackProps & TabContentProps;
 
 const OrganizerStep = ({
   scope,
+  field,
   offerId,
   onValidationChange,
   onSuccessfulChange,
@@ -137,13 +138,11 @@ const OrganizerStep = ({
 
   useEffect(() => {
     if (!organizer) {
-      onValidationChange(ValidationStatus.NONE);
+      onValidationChange(ValidationStatus.NONE, field);
       return;
     }
-
-    onValidationChange(ValidationStatus.SUCCESS);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organizer]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [field, organizer, onValidationChange]);
 
   const createOrganizerMutation = useCreateOrganizerMutation();
 

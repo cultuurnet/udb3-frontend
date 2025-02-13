@@ -42,6 +42,7 @@ const getYoutubeThumbnailUrl = (videoUrl: string) => {
 
 const MediaStep = ({
   scope,
+  field,
   offerId,
   onSuccessfulChange,
   onValidationChange,
@@ -259,9 +260,9 @@ const MediaStep = ({
 
     onValidationChange(
       hasImages || hasVideos ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, videos]);
+  }, [images, videos, field, onValidationChange]);
 
   const imageToEdit = useMemo(() => {
     const image = images.find((image) => image.parsedId === imageToEditId);

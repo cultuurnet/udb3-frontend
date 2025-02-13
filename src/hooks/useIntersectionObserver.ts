@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useMemo, useState } from 'react';
 
 type IntersectionObserverOptions = IntersectionObserverInit & {
   freezeOnceVisible?: boolean;
@@ -20,27 +20,27 @@ const useIntersectionObserver = (
     setEntry(entry);
   };
 
+  const memoizedThreshold = useMemo(
+    () => (Array.isArray(threshold) ? [...threshold] : threshold),
+    [threshold],
+  );
+
   useEffect(() => {
     const node = elementRef?.current;
     const hasIOSupport = !!window.IntersectionObserver;
 
     if (!hasIOSupport || frozen || !node) return;
 
-    const observerParams = { threshold, root, rootMargin };
-    const observer = new IntersectionObserver(updateEntry, observerParams);
+    const observer = new IntersectionObserver(updateEntry, {
+      threshold: memoizedThreshold,
+      root,
+      rootMargin,
+    });
 
     observer.observe(node);
 
     return () => observer.disconnect();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    elementRef?.current,
-    JSON.stringify(threshold),
-    root,
-    rootMargin,
-    frozen,
-  ]);
+  }, [elementRef, memoizedThreshold, root, rootMargin, frozen]);
 
   return entry;
 };

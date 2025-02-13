@@ -39,6 +39,7 @@ const schema = yup.object({
 
 const AudienceStep = ({
   offerId,
+  field,
   onSuccessfulChange,
   onValidationChange,
   ...props
@@ -64,9 +65,8 @@ const AudienceStep = ({
       event?.audience?.audienceType ?? AudienceType.EVERYONE;
     setValue('audienceType', newAudienceType);
 
-    onValidationChange(ValidationStatus.SUCCESS);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event?.audience?.audienceType, setValue]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [field, event?.audience?.audienceType, setValue, onValidationChange]);
 
   const addAudienceMutation = useChangeAudienceMutation({
     onSuccess: onSuccessfulChange,

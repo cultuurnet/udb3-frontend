@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -114,6 +114,8 @@ const ReservationPeriod = ({
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const prevStartDateRef = useRef(new Date());
+  const prevEndDateRef = useRef(new Date());
   const [isPeriodInitialized, setIsPeriodInitialized] = useState(false);
 
   useEffect(() => {
@@ -134,22 +136,27 @@ const ReservationPeriod = ({
     setIsDatePickerVisible,
   ]);
 
-  const handleNewBookingPeriod = (startDate: Date, endDate: Date): void => {
-    handlePeriodChange(endDate, startDate);
-  };
+  const handleNewBookingPeriod = useCallback(
+    (startDate: Date, endDate: Date): void => {
+      handlePeriodChange(endDate, startDate);
+      prevStartDateRef.current = startDate;
+      prevEndDateRef.current = endDate;
+    },
+    [handlePeriodChange],
+  );
 
   useEffect(() => {
     if (!isDatePickerVisible) return;
-
     if (!endDate || !startDate) return;
+    if (endDate < startDate) return;
 
-    if (endDate < startDate) {
-      return;
+    if (
+      prevStartDateRef.current !== startDate ||
+      prevEndDateRef.current !== endDate
+    ) {
+      handleNewBookingPeriod(startDate, endDate);
     }
-
-    handleNewBookingPeriod(startDate, endDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate]);
+  }, [startDate, endDate, isDatePickerVisible, handleNewBookingPeriod]);
 
   return (
     <Stack>
@@ -227,6 +234,7 @@ type Props = StackProps & TabContentProps;
 
 const BookingInfoStep = ({
   scope,
+  field,
   offerId,
   onSuccessfulChange,
   onValidationChange,
@@ -322,6 +330,7 @@ const BookingInfoStep = ({
 
     onValidationChange(
       hasBookingInfo ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
 
     Object.values(ContactInfoType).map((type) => {
@@ -337,7 +346,7 @@ const BookingInfoStep = ({
     if (bookingInfo.availabilityEnds) {
       setValue('availabilityEnds', bookingInfo.availabilityEnds);
     }
-  }, [offerId, setValue, bookingInfo, onValidationChange]);
+  }, [field, offerId, setValue, bookingInfo, onValidationChange]);
 
   useEffect(() => {
     if (!bookingInfo?.urlLabel?.en) return;
