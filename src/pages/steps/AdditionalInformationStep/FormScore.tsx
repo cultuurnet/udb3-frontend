@@ -114,14 +114,6 @@ type Props = {
   completedFields: Record<Field, boolean>;
 };
 
-type EntityWithMedia =
-  | (Offer & { images: undefined })
-  | (Organizer & {
-      terms: undefined;
-      mediaObject: undefined;
-      videos: undefined;
-    });
-
 export const getScopeWeights = (scope: Scope): Weights =>
   scope === ScopeTypes.ORGANIZERS
     ? organizerScoreWeightMapping
@@ -208,22 +200,27 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
 
-  const entity: EntityWithMedia | undefined = getEntityByIdQuery.data;
+  const entity = getEntityByIdQuery.data;
 
-  const hasNoPossibleTheme = entity?.terms?.some(
+  const terms = entity && 'terms' in entity ? entity.terms ?? [] : undefined;
+  const mediaObject =
+    entity && 'mediaObject' in entity ? entity.mediaObject : undefined;
+  const images = entity && 'images' in entity ? entity.images : undefined;
+  const videos = entity && 'videos' in entity ? entity.videos : undefined;
+
+  const hasNoPossibleTheme = terms?.some(
     (term) =>
       term.domain === 'eventtype' && eventTypesWithNoThemes.includes(term.id),
   );
 
   const hasTheme: boolean =
-    entity?.terms?.some((term) => term.domain === 'theme') ||
+    terms?.some((term) => term.domain === 'theme') ||
     hasNoPossibleTheme ||
     scope === OfferTypes.PLACES;
 
-  const hasMediaObject: boolean =
-    (entity?.mediaObject ?? entity?.images ?? []).length > 0;
+  const hasMediaObject: boolean = (mediaObject ?? images ?? []).length > 0;
 
-  const hasVideo: boolean = (entity?.videos ?? []).length > 0;
+  const hasVideo: boolean = (videos ?? []).length > 0;
 
   const fullCompletedFields = useMemo(
     () => ({

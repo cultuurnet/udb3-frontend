@@ -2,11 +2,13 @@ import { UseMutationResult, UseQueryOptions } from 'react-query';
 
 import { Headers } from '@/hooks/api/types/Headers';
 import { Values } from '@/types/Values';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -104,7 +106,7 @@ const getOwnershipRequests = async ({
   return (await res.json()) as GetOwnershipRequestsResponse;
 };
 
-type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
+type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
@@ -117,22 +119,39 @@ export type GetOwnershipRequestsResponse = {
   totalItems: number;
   member: OwnershipRequest[];
 };
-const useGetOwnershipRequestsQuery = (
-  {
-    itemId,
-    ownerId,
-    state,
-    paginationOptions,
-  }: UseGetOwnershipRequestsArguments,
-  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
-) =>
-  useAuthenticatedQuery({
+
+const createGetOwnershipRequestsQueryOptions = ({
+  itemId,
+  ownerId,
+  state,
+  paginationOptions,
+}: UseGetOwnershipRequestsArguments) =>
+  queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
     queryArguments: { itemId, ownerId, state, paginationOptions },
     refetchOnWindowFocus: false,
+  });
+const useGetOwnershipRequestsQuery = (
+  args: UseGetOwnershipRequestsArguments,
+  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetOwnershipRequestsQueryOptions(args),
     ...configuration,
   });
+
+export const prefetchGetOwnershipRequestsQuery = async ({
+  req,
+  queryClient,
+  ...args
+}: ServerSideQueryOptions & UseGetOwnershipRequestsArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipRequestsQueryOptions(args),
+  });
+};
 
 type ApproveOwnershipArguments = { ownershipId: string };
 
@@ -215,17 +234,38 @@ type UseGetOwnershipCreatorArguments = {
   organizerId: string;
 };
 
+const createGetOwnershipCreatorQuery = ({
+  organizerId,
+}: {
+  organizerId: string;
+}) =>
+  queryOptions({
+    queryKey: ['ownership-creator'],
+    queryFn: getOwnershipCreator,
+    queryArguments: { organizerId },
+    refetchOnWindowFocus: false,
+  });
+
 const useGetOwnershipCreatorQuery = (
   { organizerId }: UseGetOwnershipCreatorArguments,
   configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
 ) =>
   useAuthenticatedQuery({
-    queryKey: ['ownership-creator'],
-    queryFn: getOwnershipCreator,
-    queryArguments: { organizerId },
-    refetchOnWindowFocus: false,
+    ...createGetOwnershipCreatorQuery({ organizerId }),
     ...configuration,
   });
+
+export const prefetchGetOwnershipCreatorQuery = async ({
+  req,
+  queryClient,
+  organizerId,
+}: ServerSideQueryOptions & UseGetOwnershipCreatorArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipCreatorQuery({ organizerId }),
+  });
+};
 
 export {
   useApproveOwnershipRequestMutation,

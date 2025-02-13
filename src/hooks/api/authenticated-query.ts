@@ -25,8 +25,8 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { createHeaders, useHeaders } from './useHeaders';
 
 type ServerSideQueryOptions = {
-  req?: NextApiRequest;
-  queryClient?: QueryClient;
+  req: NextApiRequest;
+  queryClient: QueryClient;
 };
 
 type PaginationOptions = {
@@ -348,7 +348,7 @@ export const queryOptions = <
 
 export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
   UseQueryOptions<Awaited<ReturnType<TQueryFn>>, FetchError>,
-  Handlers | 'enabled' | 'queryKey'
+  Handlers | 'enabled' | 'queryKey' | 'refetchOnWindowFocus'
 >;
 
 const useAuthenticatedQuery = <

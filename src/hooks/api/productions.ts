@@ -1,8 +1,14 @@
 import { Headers } from '@/hooks/api/types/Headers';
+import { PaginatedData } from '@/types/PaginatedData';
+import { Production } from '@/types/Production';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
   ExtendQueryOptions,
+  PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedMutations,
   useAuthenticatedQuery,
@@ -29,14 +35,14 @@ const getProductions = async ({
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Production[]>;
 };
 
-const useGetProductionsQuery = (
-  { name = '', paginationOptions = { start: 0, limit: 15 } },
-  configuration: ExtendQueryOptions<typeof getProductions> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetProductionsQueryOptions = ({
+  name = '',
+  paginationOptions = { start: 0, limit: 15 },
+}: PaginationOptions & { name?: string }) =>
+  queryOptions({
     queryKey: ['productions'],
     queryFn: getProductions,
     queryArguments: {
@@ -44,8 +50,29 @@ const useGetProductionsQuery = (
       start: `${paginationOptions.start}`,
       limit: `${paginationOptions.limit}`,
     },
+  });
+
+const useGetProductionsQuery = (
+  { name, paginationOptions }: PaginationOptions & { name?: string },
+  configuration: ExtendQueryOptions<typeof getProductions> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetProductionsQueryOptions({ name, paginationOptions }),
     ...configuration,
   });
+
+export const prefetchGetProductionsQuery = async ({
+  req,
+  queryClient,
+  name,
+  paginationOptions,
+}: ServerSideQueryOptions & PaginationOptions & { name?: string }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetProductionsQueryOptions({ name, paginationOptions }),
+  });
+};
 
 const deleteEventById = async <
   TConfig extends {

@@ -1,8 +1,10 @@
 import type { UseMutationOptions, UseQueryOptions } from 'react-query';
 
-import type {
+import {
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
@@ -111,19 +113,35 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   return (await res.json()) as GetOrganizerByIdResponse;
 };
 
-const useGetOrganizerByIdQuery = (
-  { id }: { id: string },
-  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetOrganizerOptions = ({ id }: { id: string }) =>
+  queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
     refetchOnWindowFocus: false,
     enabled: !!id,
+  });
+
+const useGetOrganizerByIdQuery = (
+  { id }: { id: string },
+  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetOrganizerOptions({ id }),
     ...configuration,
   });
 
+export const prefetchGetOrganizerByIdQuery = async ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizerOptions({ id }),
+  });
+};
 type GetOrganizersByCreator = { headers: Headers } & {
   q: string;
   limit: string;
@@ -155,7 +173,7 @@ const getOrganizersByCreator = async ({
   return (await res.json()) as PaginatedData<Organizer[]>;
 };
 
-type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
+type UseGetOrganizerPermissionsArguments = {
   organizerId: string;
 };
 

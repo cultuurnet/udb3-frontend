@@ -3,7 +3,7 @@ import type { UseMutationOptions } from 'react-query';
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import type { SupportedLanguages } from '@/i18n/index';
 import type { Address } from '@/types/Address';
 import { Country } from '@/types/Country';
@@ -16,10 +16,13 @@ import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSum
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
-import type {
+import {
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -36,7 +39,7 @@ const getPlaceById = async ({ headers, id }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as Place | undefined;
 };
 
 type UseGetPlaceByIdArguments = {
@@ -44,17 +47,44 @@ type UseGetPlaceByIdArguments = {
   scope?: Values<typeof OfferTypes>;
 };
 
+const createGetPlaceByIdQueryOptions = ({
+  id,
+  scope,
+}: {
+  id: string;
+  scope: Scope;
+}) =>
+  queryOptions({
+    queryKey: ['places'],
+    queryFn: getPlaceById,
+    queryArguments: { id },
+    enabled: !!id && scope === OfferTypes.PLACES,
+  });
+
 const useGetPlaceByIdQuery = (
   { id, scope }: UseGetPlaceByIdArguments,
   configuration: ExtendQueryOptions<typeof getPlaceById> = {},
 ) =>
   useAuthenticatedQuery({
-    queryKey: ['places'],
-    queryFn: getPlaceById,
-    queryArguments: { id },
-    enabled: !!id && scope === OfferTypes.PLACES,
+    ...createGetPlaceByIdQueryOptions({ id, scope }),
     ...configuration,
   });
+
+export const prefetchGetPlaceByIdQuery = async ({
+  req,
+  queryClient,
+  scope,
+  id,
+}: ServerSideQueryOptions & {
+  id: string;
+  scope: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetPlaceByIdQueryOptions({ scope, id }),
+  });
+};
 
 const getPlacesByCreator = async ({
   headers,

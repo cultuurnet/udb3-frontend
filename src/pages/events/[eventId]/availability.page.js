@@ -2,8 +2,10 @@ import { useRouter } from 'next/router';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
+import { ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
+  prefetchGetEventByIdQuery,
   useChangeStatusMutation,
   useChangeStatusSubEventsMutation,
   useGetEventByIdQuery,
@@ -49,7 +51,12 @@ const Availability = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const { eventId } = query;
-    await useGetEventByIdQuery({ req, queryClient, id: eventId });
+    await prefetchGetEventByIdQuery({
+      req,
+      queryClient,
+      id: eventId,
+      scope: ScopeTypes.EVENTS,
+    });
 
     return {
       props: {

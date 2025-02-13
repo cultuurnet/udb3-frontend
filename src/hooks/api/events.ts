@@ -1,7 +1,7 @@
 import type { UseQueryOptions } from 'react-query';
 
 import type { CalendarType } from '@/constants/CalendarType';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import { Video } from '@/pages/VideoUploadBox';
 import { ContactPoint } from '@/types/ContactPoint';
 import type { AttendanceMode, Event } from '@/types/Event';
@@ -24,10 +24,13 @@ import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
-import type {
+import {
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -190,7 +193,7 @@ const useGetEventsToModerateQuery = (
     ...configuration,
   });
 
-const getEventById = async ({ headers, id }) => {
+export const getEventById = async ({ headers, id }) => {
   const res = await fetchFromApi({
     path: `/events/${id.toString()}`,
     searchParams: {
@@ -200,11 +203,7 @@ const getEventById = async ({ headers, id }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Event | undefined;
 };
 
 type UseGetEventByIdArguments = {
@@ -212,18 +211,45 @@ type UseGetEventByIdArguments = {
   scope?: Values<typeof OfferTypes>;
 };
 
-const useGetEventByIdQuery = (
-  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
-  configuration: ExtendQueryOptions<typeof getEventById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetEventByIdQueryOptions = ({
+  id,
+  scope,
+}: {
+  id: string;
+  scope: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
     refetchOnWindowFocus: false,
     enabled: !!id && scope === OfferTypes.EVENTS,
+  });
+
+const useGetEventByIdQuery = (
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  configuration: ExtendQueryOptions<typeof getEventById> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetEventByIdQueryOptions({ id, scope }),
     ...configuration,
   });
+
+export const prefetchGetEventByIdQuery = async ({
+  req,
+  queryClient,
+  id,
+  scope,
+}: ServerSideQueryOptions & {
+  id: string;
+  scope: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventByIdQueryOptions({ id, scope }),
+  });
+};
 
 const getEventsByIds = async ({
   headers,
@@ -250,20 +276,53 @@ const getEventsByIds = async ({
       headers,
     },
   });
-  return (await res.json()) as { member: Event[] };
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsByIdsQuery = (
-  { ids = [], scope = OfferTypes.EVENTS },
-  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
-) => {
-  return useAuthenticatedQuery({
+const createGetEventsByIdsQueryOptions = ({
+  ids = [],
+  scope = OfferTypes.EVENTS,
+}: {
+  ids: string[];
+  scope?: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
     refetchOnWindowFocus: false,
     enabled: ids.length > 0 && scope === OfferTypes.EVENTS,
+  });
+
+const useGetEventsByIdsQuery = (
+  {
+    ids,
+    scope,
+  }: {
+    ids: string[];
+    scope?: Scope;
+  },
+  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
+) => {
+  return useAuthenticatedQuery({
+    ...createGetEventsByIdsQueryOptions({ ids, scope }),
     ...configuration,
+  });
+};
+
+export const prefetchGetEventsByIdsQuery = async ({
+  req,
+  queryClient,
+  ids,
+  scope,
+}: ServerSideQueryOptions & {
+  ids: string[];
+  scope?: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventsByIdsQueryOptions({ ids, scope }),
   });
 };
 

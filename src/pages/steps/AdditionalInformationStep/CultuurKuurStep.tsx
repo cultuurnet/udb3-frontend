@@ -114,11 +114,17 @@ const CultuurKuurStep = ({
 
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
 
-  // @ts-expect-error
-  const entity: Event | Place | Organizer | undefined = getEntityByIdQuery.data;
+  const entity = getEntityByIdQuery.data;
+  const educationalDescription =
+    'educationalDescription' in entity
+      ? entity.educationalDescription
+      : undefined;
+  const terms = 'terms' in entity ? entity.terms : undefined;
 
   useEffect(() => {
-    const newDescription = entity?.educationalDescription?.[i18n.language];
+    if (!entity) return;
+    if (!educationalDescription) return;
+    const newDescription = educationalDescription?.[i18n.language];
     if (!newDescription) return;
 
     const draftState = htmlToDraft(newDescription);
@@ -136,11 +142,11 @@ const CultuurKuurStep = ({
       isCompleted ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entity?.educationalDescription, entity?.mainLanguage, i18n.language]);
+  }, [educationalDescription, entity?.mainLanguage, i18n.language]);
 
   const eventTypeId = useMemo(() => {
-    return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
-  }, [entity?.terms]);
+    return terms?.find((term) => term.domain === 'eventtype')?.id!;
+  }, [terms]);
 
   const changeDescriptionMutation =
     useUpdateOrganizerEducationalDescriptionMutation({

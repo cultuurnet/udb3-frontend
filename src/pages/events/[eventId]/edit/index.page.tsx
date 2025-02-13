@@ -1,7 +1,7 @@
 import { dehydrate } from 'react-query/hydration';
 
-import { useGetEventByIdQuery } from '@/hooks/api/events';
-import { Event } from '@/types/Event';
+import { ScopeTypes } from '@/constants/OfferType';
+import { prefetchGetEventByIdQuery } from '@/hooks/api/events';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { OfferForm } from '../../../create/OfferForm';
@@ -10,10 +10,12 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    // @ts-expect-error
-    const event = (await useGetEventByIdQuery({
+    await prefetchGetEventByIdQuery({
+      req,
+      queryClient,
       id: eventId,
-    })) as Event;
+      scope: ScopeTypes.EVENTS,
+    });
 
     return {
       props: {

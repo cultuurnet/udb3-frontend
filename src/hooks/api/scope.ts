@@ -2,23 +2,27 @@ import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 
-const getEntityQueryForScope = (scope: Scope) =>
-  scope === ScopeTypes.ORGANIZERS
-    ? useGetOrganizerByIdQuery
-    : useGetOfferByIdQuery;
-
-const useGetEntityByIdAndScope = ({
+const useGetEntityByIdAndScope = <TScope extends Scope>({
   scope,
   id,
-  ...rest
 }: {
-  scope: Scope;
+  scope: TScope;
   id: string;
 }) => {
-  const query = getEntityQueryForScope(scope);
+  const getOrganizerById = useGetOrganizerByIdQuery(
+    { id },
+    { enabled: scope === ScopeTypes.ORGANIZERS },
+  );
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id, scope: scope as Exclude<TScope, 'organizers'> },
+    { enabled: scope !== ScopeTypes.ORGANIZERS },
+  );
 
-  // @ts-expect-error
-  return query({ scope, id, ...rest });
+  if (scope === ScopeTypes.ORGANIZERS) {
+    return getOrganizerById;
+  }
+
+  return getOfferByIdQuery;
 };
 
-export { getEntityQueryForScope, useGetEntityByIdAndScope };
+export { useGetEntityByIdAndScope };

@@ -1,6 +1,9 @@
 import { dehydrate } from 'react-query/hydration';
 
-import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
+import {
+  prefetchGetOrganizerByIdQuery,
+  useGetOrganizerByIdQuery,
+} from '@/hooks/api/organizers';
 import { Organizer } from '@/types/Organizer';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -10,10 +13,11 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { organizerId } = query;
 
-    // @ts-expect-error
-    const organizer = (await useGetOrganizerByIdQuery({
+    await prefetchGetOrganizerByIdQuery({
+      req,
+      queryClient,
       id: organizerId,
-    })) as Organizer;
+    });
 
     return {
       props: {

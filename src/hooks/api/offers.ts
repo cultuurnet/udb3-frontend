@@ -1,8 +1,8 @@
 import { UseMutationOptions } from 'react-query';
 
-import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
-import { useGetEventByIdQuery } from '@/hooks/api/events';
-import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { OfferType, OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { getEventById, useGetEventByIdQuery } from '@/hooks/api/events';
+import { getPlaceById, useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
@@ -105,19 +105,25 @@ const useGetOffersByCreatorQuery = (
   });
 };
 
-type GetEventByIdOptions = Parameters<typeof useGetEventByIdQuery>['1'];
-type GetPlaceByIdOptions = Parameters<typeof useGetPlaceByIdQuery>['1'];
+type Config<TOfferType extends Values<typeof OfferTypes>> =
+  TOfferType extends typeof OfferTypes.EVENTS
+    ? ExtendQueryOptions<typeof getEventById>
+    : ExtendQueryOptions<typeof getPlaceById>;
 
-const useGetOfferByIdQuery = <
-  TConfig extends GetEventByIdOptions | GetPlaceByIdOptions,
->(
-  { scope, id }: { scope: Values<typeof OfferTypes>; id: string },
-  configuration: TConfig = {} as TConfig,
+const useGetOfferByIdQuery = <TOfferType extends Values<typeof OfferTypes>>(
+  { scope, id }: { scope: TOfferType; id: string },
+  configuration: Config<TOfferType> = {},
 ) => {
-  const query =
-    scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
+  const getEventQuery = useGetEventByIdQuery(
+    { scope, id },
+    configuration as Config<'events'>,
+  );
+  const getPlaceQuery = useGetPlaceByIdQuery(
+    { scope, id },
+    configuration as Config<'places'>,
+  );
 
-  return query({ id, scope }, configuration);
+  return scope === OfferTypes.EVENTS ? getEventQuery : getPlaceQuery;
 };
 
 const changeOfferName = async ({ headers, id, lang, name, scope }) => {
