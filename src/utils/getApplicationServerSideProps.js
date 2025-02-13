@@ -5,10 +5,7 @@ import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
-import {
-  prefetchGetUserQuery,
-  useGetUserQueryServerSide,
-} from '@/hooks/api/user';
+import { prefetchGetUserQuery } from '@/hooks/api/user';
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
@@ -126,7 +123,7 @@ const getApplicationServerSideProps =
       await prefetchGetUserQuery({
         req,
         queryClient,
-        cookies,
+        cookies: cookies.getAll(),
       });
     } catch (error) {
       if (error instanceof FetchError) {

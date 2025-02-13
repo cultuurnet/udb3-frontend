@@ -374,20 +374,17 @@ const getEventsByCreator = async ({
   return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsByCreatorQuery = (
-  {
-    creator,
-    paginationOptions = { start: 0, limit: 50 },
-    sortOptions = { field: 'modified', order: 'desc' },
-    calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: PaginationOptions &
-    SortOptions &
-    CalendarSummaryFormats & {
-      creator: User;
-    },
-  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetEventsByCreatorQueryOptions = ({
+  creator,
+  paginationOptions = { start: 0, limit: 50 },
+  sortOptions = { field: 'modified', order: 'desc' },
+  calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
+}: PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {
@@ -405,9 +402,55 @@ const useGetEventsByCreatorQuery = (
       ...createEmbededCalendarSummaries(calendarSummaryFormats),
     },
     enabled: !!(creator?.sub && creator?.email),
+  });
+
+const useGetEventsByCreatorQuery = (
+  {
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetEventsByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+      calendarSummaryFormats,
+    }),
     ...configuration,
   });
 
+export const prefetchGetEventsByCreatorQuery = async ({
+  req,
+  queryClient,
+  creator,
+  paginationOptions,
+  sortOptions,
+  calendarSummaryFormats,
+}: ServerSideQueryOptions &
+  PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventsByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+      calendarSummaryFormats,
+    }),
+  });
+};
 const getCalendarSummary = async ({ headers, id, format, locale }) => {
   const res = await fetchFromApi({
     path: `/events/${id.toString()}/calsum`,

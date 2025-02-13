@@ -14,16 +14,19 @@ import {
   QueryStatus,
 } from '@/hooks/api/authenticated-query';
 import {
+  prefetchGetEventsByCreatorQuery,
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
 import {
+  prefetchGetOrganizersByCreatorQuery,
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
+  prefetchGetPlacesByCreatorQuery,
   useDeletePlaceByIdMutation,
   useGetPlacesByCreatorQuery,
 } from '@/hooks/api/places';
@@ -98,6 +101,12 @@ const UseGetItemsByCreatorMap = {
   events: useGetEventsByCreatorQuery,
   places: useGetPlacesByCreatorQuery,
   organizers: useGetOrganizersByCreatorQuery,
+} as const;
+
+const UseGetItemsByCreatorMapServer = {
+  events: prefetchGetEventsByCreatorQuery,
+  places: prefetchGetPlacesByCreatorQuery,
+  organizers: prefetchGetOrganizersByCreatorQuery,
 } as const;
 
 const UseDeleteItemByIdMap = {
@@ -202,7 +211,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
-  const date = offer.calendarSummary[i18n.language].text['xs'];
+  const date = offer.calendarSummary?.[i18n.language]?.text['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
@@ -219,7 +228,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     : undefined;
 
   const period =
-    offer.calendarSummary[i18n.language]?.text?.[
+    offer.calendarSummary?.[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
 
@@ -817,10 +826,14 @@ const Dashboard = (): any => {
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
     const cookies = new Cookies(rawCookies);
-    const user = await prefetchGetUserQuery(cookies.getAll());
+    const user = await prefetchGetUserQuery({
+      req,
+      queryClient,
+      cookies: cookies.getAll(),
+    });
 
     await Promise.all(
-      Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
+      Object.entries(UseGetItemsByCreatorMapServer).map(([key, hook]) => {
         const page =
           query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
 
@@ -828,6 +841,8 @@ const getServerSideProps = getApplicationServerSideProps(
         const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
 
         return hook({
+          req,
+          queryClient,
           creator: user,
           ...(!(
             key === 'organizers' && sortingField.startsWith('availableTo')

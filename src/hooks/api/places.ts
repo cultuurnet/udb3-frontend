@@ -121,20 +121,17 @@ const getPlacesByCreator = async ({
   return (await res.json()) as PaginatedData<Place[]>;
 };
 
-const useGetPlacesByCreatorQuery = (
-  {
-    creator,
-    paginationOptions = { start: 0, limit: 50 },
-    sortOptions = { field: 'modified', order: 'desc' },
-    calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: PaginationOptions &
-    SortOptions &
-    CalendarSummaryFormats & {
-      creator: User;
-    },
-  configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetPlacesByCreatorQueryOptions = ({
+  creator,
+  paginationOptions = { start: 0, limit: 50 },
+  sortOptions = { field: 'modified', order: 'desc' },
+  calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
+}: PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) =>
+  queryOptions({
     queryKey: ['places'],
     queryFn: getPlacesByCreator,
     queryArguments: {
@@ -152,8 +149,55 @@ const useGetPlacesByCreatorQuery = (
       ...createEmbededCalendarSummaries(calendarSummaryFormats),
     },
     enabled: !!(creator?.sub && creator?.email),
+  });
+
+const useGetPlacesByCreatorQuery = (
+  {
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
+) =>
+  useAuthenticatedQuery({
+    ...createGetPlacesByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+      calendarSummaryFormats,
+    }),
     ...configuration,
   });
+
+export const prefetchGetPlacesByCreatorQuery = async ({
+  req,
+  queryClient,
+  creator,
+  paginationOptions,
+  sortOptions,
+  calendarSummaryFormats,
+}: ServerSideQueryOptions &
+  PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetPlacesByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+      calendarSummaryFormats,
+    }),
+  });
+};
 
 type GetPlacesByQueryArguments = {
   name: string;
