@@ -61,7 +61,7 @@ const MediaStep = ({
     if (isOrganizer(entity)) {
       return undefined;
     }
-    return entity.videos ?? [];
+    return entity?.videos ?? [];
   }, [entity]);
 
   const mediaObjects = useMemo(() => {
