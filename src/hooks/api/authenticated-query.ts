@@ -25,9 +25,11 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { createHeaders, useHeaders } from './useHeaders';
 
 type ServerSideQueryOptions = {
-  req: NextApiRequest;
-  queryClient: QueryClient;
+  req?: NextApiRequest;
+  queryClient?: QueryClient;
 };
+
+type AuthenticatedQueryOptions<T> = ServerSideQueryOptions & T;
 
 type PaginationOptions = {
   paginationOptions?: {
@@ -54,11 +56,9 @@ const QueryStatus = {
   SUCCESS: 'success',
 };
 
-type QueryArguments = Record<string, unknown>;
-
 const prepareKey = <
   TQueryKey extends QueryKey,
-  TQueryArguments extends QueryArguments,
+  TQueryArguments extends Record<string, unknown>,
 >({
   queryKey,
   queryArguments,
@@ -79,7 +79,10 @@ const prepareKey = <
   return preparedKey;
 };
 
-const prepareArguments = <TData, TQueryArguments extends QueryArguments>({
+const prepareArguments = <
+  TData,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
+>({
   options: {
     queryKey,
     queryFn,
@@ -162,7 +165,7 @@ const prefetchAuthenticatedQueries = async ({
 
 const prefetchAuthenticatedQuery = async <
   TData,
-  TQueryArguments extends Record<string, unknown>,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
 >({
   req,
   queryClient,
@@ -353,7 +356,7 @@ export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
 
 const useAuthenticatedQuery = <
   TData,
-  TQueryArguments extends Record<string, unknown>,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
 >(
   options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
 ) => {
@@ -440,6 +443,7 @@ export {
 };
 
 export type {
+  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   PaginationOptions,
   ServerSideQueryOptions,
