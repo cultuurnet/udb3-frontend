@@ -1,7 +1,8 @@
-import type { UseMutationOptions, UseQueryOptions } from 'react-query';
+import type { UseMutationOptions } from 'react-query';
 
 import type {
   AuthenticatedQueryOptions,
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   SortOptions,
@@ -32,7 +33,7 @@ const useGetOrganizersByQueryQuery = (
   }: AuthenticatedQueryOptions<
     { name?: string; q?: string } & PaginationOptions
   > = {},
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
   useAuthenticatedQuery<GetOrganizersByQueryResponse>({
     queryKey: ['organizers'],
@@ -90,13 +91,13 @@ const getOrganizers = async ({
 
 const useGetOrganizersByWebsiteQuery = (
   { website }: AuthenticatedQueryOptions<{ website?: string }> = {},
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
-  useAuthenticatedQuery<{ member: Organizer[] }>({
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
-      embed: true,
+      embed: 'true',
       website,
     },
     ...configuration,
@@ -126,9 +127,9 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 
 const useGetOrganizerByIdQuery = (
   { id }: { id: string } & ServerSideQueryOptions,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizerByIdResponse>({
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
@@ -137,18 +138,29 @@ const useGetOrganizerByIdQuery = (
     ...configuration,
   });
 
-type GetOrganizersByCreator = HeadersAndQueryData;
+type GetOrganizersByCreator = { headers: Headers } & {
+  q: string;
+  limit: string;
+  start: string;
+  embed: string;
+};
 
 const getOrganizersByCreator = async ({
   headers,
-  ...queryData
+  q,
+  limit,
+  start,
+  embed,
 }: GetOrganizersByCreator) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/organizers/',
     searchParams: {
-      ...queryData,
+      q,
+      limit,
+      start,
+      embed,
     },
     options: {
       headers,
@@ -179,9 +191,9 @@ export type GetOrganizerPermissionsResponse = {
 };
 const useGetOrganizerPermissions = (
   { organizerId }: UseGetOrganizerPermissionsArguments,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizerPermissionsResponse>({
+  useAuthenticatedQuery({
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
@@ -201,7 +213,7 @@ const getSuggestedOrganizersQuery = async ({ headers }) => {
 
 const useGetSuggestedOrganizersQuery = (
   {},
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getSuggestedOrganizersQuery> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['ownership-suggestions'],
@@ -234,9 +246,9 @@ const useGetOrganizersByCreatorQuery = (
         creator: User;
       }
   >,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Organizer[]>({
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
@@ -245,9 +257,9 @@ const useGetOrganizersByCreatorQuery = (
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
       } ${creator?.email}) OR contributors:${creator?.email}`,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
-      embed: true,
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
+      embed: 'true',
       ...createSortingArgument(sortOptions),
     },
     enabled: !!(creator?.sub && creator?.email),

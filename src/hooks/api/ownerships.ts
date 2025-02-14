@@ -1,14 +1,16 @@
-import { UseMutationResult, UseQueryOptions } from 'react-query';
+import { UseMutationOptions, UseMutationResult } from 'react-query';
 
 import { Values } from '@/types/Values';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import type { Headers } from './types/Headers';
 
 export type OwnershipRequest = {
   id: string;
@@ -59,7 +61,7 @@ const requestOwnership = async ({
     },
   });
 
-const useRequestOwnershipMutation = (configuration: UseQueryOptions = {}) =>
+const useRequestOwnershipMutation = (configuration: UseMutationOptions = {}) =>
   useAuthenticatedMutation({
     mutationFn: requestOwnership,
     mutationKey: 'ownerships-request-ownership',
@@ -126,9 +128,9 @@ const useGetOwnershipRequestsQuery = (
     state,
     paginationOptions,
   }: UseGetOwnershipRequestsArguments,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
 ) =>
-  useAuthenticatedQuery<GetOwnershipRequestsResponse>({
+  useAuthenticatedQuery({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
     queryArguments: { itemId, ownerId, state, paginationOptions },
@@ -223,9 +225,9 @@ type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
 
 const useGetOwnershipCreatorQuery = (
   { organizerId }: UseGetOwnershipCreatorArguments,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
 ) =>
-  useAuthenticatedQuery<OwnershipCreator>({
+  useAuthenticatedQuery({
     queryKey: ['ownership-creator'],
     queryFn: getOwnershipCreator,
     queryArguments: { organizerId },

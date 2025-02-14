@@ -25,7 +25,7 @@ const getLabelsByQuery = async ({ headers, query }) => {
 };
 
 const useGetLabelsByQuery = ({ query }: { query: string }) =>
-  useAuthenticatedQuery<Label[]>({
+  useAuthenticatedQuery({
     queryKey: ['labels'],
     queryFn: getLabelsByQuery,
     queryArguments: { query },

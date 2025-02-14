@@ -75,12 +75,8 @@ const PlaceStep = ({
   );
 
   const places = useMemo<Place[]>(
-    // @ts-expect-error
     () => useGetPlacesQuery.data?.member ?? [],
-    [
-      // @ts-expect-error
-      useGetPlacesQuery.data?.member,
-    ],
+    [useGetPlacesQuery.data?.member],
   );
 
   const place = useWatch({ control, name: 'location.place' });

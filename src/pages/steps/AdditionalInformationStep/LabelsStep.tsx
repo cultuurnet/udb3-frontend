@@ -46,7 +46,6 @@ function LabelsStep({
   const ref = useRef<TypeaheadElement<Label>>(null);
 
   const [query, setQuery] = useState('');
-  // @ts-expect-error
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
     query,
   });

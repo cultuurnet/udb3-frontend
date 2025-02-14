@@ -1,4 +1,4 @@
-import type { UseMutationOptions, UseQueryOptions } from 'react-query';
+import type { UseMutationOptions } from 'react-query';
 
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
@@ -18,6 +18,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import type {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   SortOptions,
@@ -50,7 +51,7 @@ type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
 
 const useGetPlaceByIdQuery = (
   { id, scope }: UseGetPlaceByIdArguments,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getPlaceById> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['places'],
@@ -92,9 +93,9 @@ const useGetPlacesByCreatorQuery = (
         creator: User;
       }
   >,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByCreator,
     queryArguments: {
@@ -130,7 +131,7 @@ const getPlacesByQuery = async ({
   zip,
   addressLocality,
   addressCountry,
-}: Headers & GetPlacesByQueryArguments) => {
+}: { headers: Headers } & GetPlacesByQueryArguments) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
     '',
@@ -176,9 +177,9 @@ const useGetPlacesByQuery = (
     addressLocality,
     addressCountry,
   }: GetPlacesByQueryArguments,
-  configuration = {},
+  configuration: ExtendQueryOptions<typeof getPlacesByQuery> = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByQuery,
     queryArguments: {

@@ -1,4 +1,3 @@
-import type { UseQueryOptions } from 'react-query';
 import { UseMutationOptions } from 'react-query';
 
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
@@ -12,6 +11,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   SortOptions,
   useAuthenticatedMutation,
@@ -54,7 +54,9 @@ const useGetOffersByCreatorQuery = (
   {
     queryArguments,
     ...configuration
-  }: UseQueryOptions & { queryArguments?: any } = {},
+  }: ExtendQueryOptions<typeof getOffersByCreator> & {
+    queryArguments?: any;
+  } = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,

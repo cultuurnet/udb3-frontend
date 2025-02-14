@@ -1,9 +1,8 @@
-import { UseQueryOptions } from 'react-query';
-
 import { OfferTypes } from '@/constants/OfferType';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -33,7 +32,7 @@ const getCardSystemForEvent = async ({ headers, eventId }) => {
 
 const useGetCardSystemForEventQuery = (
   { scope, eventId, isUitpasOrganizer },
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getCardSystemForEvent> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['uitpas_events'],
@@ -60,7 +59,7 @@ const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
 
 const useGetCardSystemsForOrganizerQuery = (
   { scope, organizerId, isUitpasOrganizer },
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getCardSystemsForOrganizer> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['uitpas_organizers'],
