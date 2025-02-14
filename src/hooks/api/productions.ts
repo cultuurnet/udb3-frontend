@@ -24,12 +24,10 @@ const getProductions = async ({ headers, ...queryData }) => {
 };
 
 const useGetProductionsQuery = (
-  { req, queryClient, name = '', paginationOptions = { start: 0, limit: 15 } },
+  { name = '', paginationOptions = { start: 0, limit: 15 } },
   configuration = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['productions'],
     queryFn: getProductions,
     queryArguments: {

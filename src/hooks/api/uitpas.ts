@@ -32,12 +32,10 @@ const getCardSystemForEvent = async ({ headers, eventId }) => {
 };
 
 const useGetCardSystemForEventQuery = (
-  { req, queryClient, scope, eventId, isUitpasOrganizer },
+  { scope, eventId, isUitpasOrganizer },
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['uitpas_events'],
     queryFn: getCardSystemForEvent,
     queryArguments: { eventId },
@@ -61,12 +59,10 @@ const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
 };
 
 const useGetCardSystemsForOrganizerQuery = (
-  { req, queryClient, scope, organizerId, isUitpasOrganizer },
+  { scope, organizerId, isUitpasOrganizer },
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['uitpas_organizers'],
     queryFn: getCardSystemsForOrganizer,
     queryArguments: { organizerId },

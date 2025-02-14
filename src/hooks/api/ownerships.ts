@@ -121,8 +121,6 @@ export type GetOwnershipRequestsResponse = {
 };
 const useGetOwnershipRequestsQuery = (
   {
-    req,
-    queryClient,
     itemId,
     ownerId,
     state,
@@ -131,8 +129,6 @@ const useGetOwnershipRequestsQuery = (
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOwnershipRequestsResponse>({
-    req,
-    queryClient,
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
     queryArguments: { itemId, ownerId, state, paginationOptions },
@@ -226,12 +222,10 @@ type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
 };
 
 const useGetOwnershipCreatorQuery = (
-  { req, queryClient, organizerId }: UseGetOwnershipCreatorArguments,
+  { organizerId }: UseGetOwnershipCreatorArguments,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<OwnershipCreator>({
-    req,
-    queryClient,
     queryKey: ['ownership-creator'],
     queryFn: getOwnershipCreator,
     queryArguments: { organizerId },

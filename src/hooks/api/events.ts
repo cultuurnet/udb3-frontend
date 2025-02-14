@@ -193,12 +193,10 @@ type UseGetEventByIdArguments = ServerSideQueryOptions & {
 };
 
 const useGetEventByIdQuery = (
-  { req, queryClient, id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
@@ -240,12 +238,10 @@ const getEventsByIds = async ({
 };
 
 const useGetEventsByIdsQuery = (
-  { req, queryClient, ids = [], scope = OfferTypes.EVENTS },
+  { ids = [], scope = OfferTypes.EVENTS },
   configuration: UseQueryOptions = {},
 ) => {
   return useAuthenticatedQuery<{ member: Event[] }>({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
@@ -289,8 +285,6 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
 
 const useGetEventsByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
@@ -305,8 +299,6 @@ const useGetEventsByCreatorQuery = (
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<Event[]>({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {

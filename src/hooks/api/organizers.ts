@@ -26,8 +26,6 @@ export type GetOrganizersByQueryResponse = { member: Organizer[] };
 
 const useGetOrganizersByQueryQuery = (
   {
-    req,
-    queryClient,
     name,
     q,
     paginationOptions = { start: 0, limit: 10 },
@@ -37,8 +35,6 @@ const useGetOrganizersByQueryQuery = (
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOrganizersByQueryResponse>({
-    req,
-    queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
@@ -93,16 +89,10 @@ const getOrganizers = async ({
 };
 
 const useGetOrganizersByWebsiteQuery = (
-  {
-    req,
-    queryClient,
-    website,
-  }: AuthenticatedQueryOptions<{ website?: string }> = {},
+  { website }: AuthenticatedQueryOptions<{ website?: string }> = {},
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<{ member: Organizer[] }>({
-    req,
-    queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
@@ -135,12 +125,10 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 };
 
 const useGetOrganizerByIdQuery = (
-  { id, req, queryClient }: { id: string } & ServerSideQueryOptions,
+  { id }: { id: string } & ServerSideQueryOptions,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOrganizerByIdResponse>({
-    req,
-    queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
@@ -190,12 +178,10 @@ export type GetOrganizerPermissionsResponse = {
   permissions: string[];
 };
 const useGetOrganizerPermissions = (
-  { req, queryClient, organizerId }: UseGetOrganizerPermissionsArguments,
+  { organizerId }: UseGetOrganizerPermissionsArguments,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<GetOrganizerPermissionsResponse>({
-    req,
-    queryClient,
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
@@ -239,8 +225,6 @@ const useDeleteOrganizerByIdMutation = (configuration = {}) =>
 
 const useGetOrganizersByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
@@ -253,8 +237,6 @@ const useGetOrganizersByCreatorQuery = (
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<Organizer[]>({
-    req,
-    queryClient,
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {

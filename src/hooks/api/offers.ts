@@ -38,8 +38,6 @@ const getOffersByCreator = async ({ headers, ...queryData }) => {
 
 const useGetOffersByCreatorQuery = (
   {
-    req,
-    queryClient,
     advancedQuery,
     creator,
     paginationOptions = { start: 0, limit: 50 },
@@ -71,8 +69,6 @@ const useGetOffersByCreatorQuery = (
     ? defaultQuery.concat(' AND ', advancedQuery)
     : defaultQuery;
   return useAuthenticatedQuery<Offer[]>({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getOffersByCreator,
     queryArguments: {

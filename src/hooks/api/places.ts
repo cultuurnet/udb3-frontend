@@ -49,12 +49,10 @@ type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
 };
 
 const useGetPlaceByIdQuery = (
-  { req, queryClient, id, scope }: UseGetPlaceByIdArguments,
+  { id, scope }: UseGetPlaceByIdArguments,
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['places'],
     queryFn: getPlaceById,
     queryArguments: { id },
@@ -83,8 +81,6 @@ const getPlacesByCreator = async ({ headers, ...queryData }) => {
 
 const useGetPlacesByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
@@ -99,8 +95,6 @@ const useGetPlacesByCreatorQuery = (
   configuration: UseQueryOptions = {},
 ) =>
   useAuthenticatedQuery<Place[]>({
-    req,
-    queryClient,
     queryKey: ['places'],
     queryFn: getPlacesByCreator,
     queryArguments: {
