@@ -64,7 +64,7 @@ const useGetUserQuery = () => {
 };
 
 const useGetUserQueryServerSide = (
-  {}: ServerSideQueryOptions = {},
+  { req }: ServerSideQueryOptions = {},
   configuration = {},
 ) => {
   const cookies = req.cookies;
