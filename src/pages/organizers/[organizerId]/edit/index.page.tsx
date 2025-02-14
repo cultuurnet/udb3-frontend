@@ -10,11 +10,12 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { organizerId } = query;
 
-    const organizer = (await useGetOrganizerByIdQuery({
-      id: organizerId,
-      req,
-      queryClient,
-    })) as Organizer;
+    // TODO: replace by prefetch call
+    // const organizer = (await useGetOrganizerByIdQuery({
+    //   id: organizerId,
+    //   req,
+    //   queryClient,
+    // })) as Organizer;
 
     return {
       props: {

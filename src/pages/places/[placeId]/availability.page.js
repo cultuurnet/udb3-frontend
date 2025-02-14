@@ -35,7 +35,8 @@ const Availability = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const { placeId } = query;
-    await useGetPlaceByIdQuery({ req, queryClient, id: placeId });
+    // TODO: replace by prefetch call
+    //await useGetPlaceByIdQuery({ req, queryClient, id: placeId });
 
     return {
       props: {

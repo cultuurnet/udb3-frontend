@@ -816,38 +816,39 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const user = (await useGetUserQueryServerSide({
-      req,
-      queryClient,
-    })) as User;
-
-    await Promise.all(
-      Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
-        const page =
-          query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
-
-        const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
-
-        return hook({
-          req,
-          queryClient,
-          creator: user,
-          ...(!(
-            key === 'organizers' && sortingField.startsWith('availableTo')
-          ) && {
-            sortOptions: {
-              field: sortingField,
-              order: sortingOrder,
-            },
-          }),
-          paginationOptions: {
-            start: (page - 1) * itemsPerPage,
-            limit: itemsPerPage,
-          },
-        });
-      }),
-    );
+    // TODO: replace by prefetch call
+    // const user = (await useGetUserQueryServerSide({
+    //   req,
+    //   queryClient,
+    // })) as User;
+    //
+    // await Promise.all(
+    //   Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
+    //     const page =
+    //       query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
+    //
+    //     const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
+    //     const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+    //
+    //     return hook({
+    //       req,
+    //       queryClient,
+    //       creator: user,
+    //       ...(!(
+    //         key === 'organizers' && sortingField.startsWith('availableTo')
+    //       ) && {
+    //         sortOptions: {
+    //           field: sortingField,
+    //           order: sortingOrder,
+    //         },
+    //       }),
+    //       paginationOptions: {
+    //         start: (page - 1) * itemsPerPage,
+    //         limit: itemsPerPage,
+    //       },
+    //     });
+    //   }),
+    // );
 
     return {
       props: {

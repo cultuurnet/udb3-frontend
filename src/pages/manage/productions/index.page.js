@@ -303,19 +303,20 @@ const Index = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    const productions = await useGetProductionsQuery({
-      req,
-      queryClient,
-      paginationOptions: { limit: productionsPerPage, start: 0 },
-    });
-
-    const eventIds = productions?.member?.[0]?.events ?? [];
-
-    await useGetEventsByIdsQuery({
-      req,
-      queryClient,
-      ids: eventIds,
-    });
+    // TODO: replace by prefetch call
+    // const productions = await useGetProductionsQuery({
+    //   req,
+    //   queryClient,
+    //   paginationOptions: { limit: productionsPerPage, start: 0 },
+    // });
+    //
+    // const eventIds = productions?.member?.[0]?.events ?? [];
+    //
+    // await useGetEventsByIdsQuery({
+    //   req,
+    //   queryClient,
+    //   ids: eventIds,
+    // });
 
     return {
       props: {
