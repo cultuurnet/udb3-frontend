@@ -154,10 +154,8 @@ const OrganizerAddModal = ({
     {
       website: watchedUrl,
     },
-    { enabled: visible, onSuccess: (data) => {} },
+    { enabled: visible },
   );
-
-  getOrganizersByWebsiteQuery.data;
 
   const existingOrganizer: Organizer | undefined =
     getOrganizersByWebsiteQuery.data?.member?.[0];
