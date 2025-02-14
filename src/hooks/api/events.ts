@@ -229,11 +229,14 @@ const createGetEventByIdQueryOptions = ({
 const useGetEventByIdQuery = (
   { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
   configuration: ExtendQueryOptions<typeof getEventById> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetEventByIdQueryOptions({ id, scope }),
+) => {
+  const options = createGetEventByIdQueryOptions({ id, scope });
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetEventByIdQuery = async ({
   req,
@@ -304,9 +307,12 @@ const useGetEventsByIdsQuery = (
   },
   configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
 ) => {
+  const config = createGetEventsByIdsQueryOptions({ ids, scope });
+
   return useAuthenticatedQuery({
-    ...createGetEventsByIdsQueryOptions({ ids, scope }),
+    ...config,
     ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
   });
 };
 
@@ -416,16 +422,20 @@ const useGetEventsByCreatorQuery = (
       creator: User;
     },
   configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetEventsByCreatorQueryOptions({
-      creator,
-      paginationOptions,
-      sortOptions,
-      calendarSummaryFormats,
-    }),
-    ...configuration,
+) => {
+  const config = createGetEventsByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
   });
+
+  return useAuthenticatedQuery({
+    ...config,
+    ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
+  });
+};
 
 export const prefetchGetEventsByCreatorQuery = async ({
   req,

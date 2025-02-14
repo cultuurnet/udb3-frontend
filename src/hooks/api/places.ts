@@ -64,11 +64,15 @@ const createGetPlaceByIdQueryOptions = ({
 const useGetPlaceByIdQuery = (
   { id, scope }: UseGetPlaceByIdArguments,
   configuration: ExtendQueryOptions<typeof getPlaceById> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetPlaceByIdQueryOptions({ id, scope }),
+) => {
+  const config = createGetPlaceByIdQueryOptions({ id, scope });
+
+  return useAuthenticatedQuery({
+    ...config,
     ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetPlaceByIdQuery = async ({
   req,
@@ -163,16 +167,20 @@ const useGetPlacesByCreatorQuery = (
       creator: User;
     },
   configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetPlacesByCreatorQueryOptions({
-      creator,
-      paginationOptions,
-      sortOptions,
-      calendarSummaryFormats,
-    }),
-    ...configuration,
+) => {
+  const options = createGetPlacesByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
   });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
 
 export const prefetchGetPlacesByCreatorQuery = async ({
   req,

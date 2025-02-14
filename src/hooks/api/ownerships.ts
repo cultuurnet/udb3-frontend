@@ -135,11 +135,15 @@ const createGetOwnershipRequestsQueryOptions = ({
 const useGetOwnershipRequestsQuery = (
   args: UseGetOwnershipRequestsArguments,
   configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetOwnershipRequestsQueryOptions(args),
+) => {
+  const config = createGetOwnershipRequestsQueryOptions(args);
+
+  return useAuthenticatedQuery({
+    ...config,
     ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetOwnershipRequestsQuery = async ({
   req,
@@ -249,11 +253,15 @@ const createGetOwnershipCreatorQuery = ({
 const useGetOwnershipCreatorQuery = (
   { organizerId }: UseGetOwnershipCreatorArguments,
   configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetOwnershipCreatorQuery({ organizerId }),
+) => {
+  const options = createGetOwnershipCreatorQuery({ organizerId });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetOwnershipCreatorQuery = async ({
   req,

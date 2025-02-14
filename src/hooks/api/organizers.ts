@@ -125,11 +125,15 @@ const createGetOrganizerOptions = ({ id }: { id: string }) =>
 const useGetOrganizerByIdQuery = (
   { id }: { id: string },
   configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetOrganizerOptions({ id }),
+) => {
+  const config = createGetOrganizerOptions({ id });
+
+  return useAuthenticatedQuery({
+    ...config,
     ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetOrganizerByIdQuery = async ({
   req,
@@ -270,15 +274,19 @@ const useGetOrganizersByCreatorQuery = (
       creator: User;
     },
   configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetOrganizersByCreatorQueryOptions({
-      creator,
-      paginationOptions,
-      sortOptions,
-    }),
-    ...configuration,
+) => {
+  const config = createGetOrganizersByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
   });
+
+  return useAuthenticatedQuery({
+    ...config,
+    ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
+  });
+};
 
 export const prefetchGetOrganizersByCreatorQuery = async ({
   req,

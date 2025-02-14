@@ -55,11 +55,15 @@ const createGetProductionsQueryOptions = ({
 const useGetProductionsQuery = (
   { name, paginationOptions }: PaginationOptions & { name?: string },
   configuration: ExtendQueryOptions<typeof getProductions> = {},
-) =>
-  useAuthenticatedQuery({
-    ...createGetProductionsQueryOptions({ name, paginationOptions }),
+) => {
+  const config = createGetProductionsQueryOptions({ name, paginationOptions });
+
+  return useAuthenticatedQuery({
+    ...config,
     ...configuration,
+    enabled: config.enabled !== false && configuration.enabled,
   });
+};
 
 export const prefetchGetProductionsQuery = async ({
   req,
