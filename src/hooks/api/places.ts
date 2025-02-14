@@ -188,7 +188,7 @@ const useGetPlacesByQuery = (
       addressCountry,
       addressLocality,
     },
-    enabled: !!name || terms.length,
+    enabled: !!name || terms.length > 0,
     ...configuration,
   });
 
