@@ -41,7 +41,6 @@ function LabelsStep({
   const { t } = useTranslation();
 
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
-  // @ts-expect-error
   const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
 
   const ref = useRef<TypeaheadElement<Label>>(null);

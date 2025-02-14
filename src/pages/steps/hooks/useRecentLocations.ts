@@ -10,7 +10,6 @@ const useRecentLocations = () => {
   const getOffersQuery = useGetOffersByCreatorQuery(
     {
       advancedQuery: '_exists_:location.id AND NOT (audienceType:"education")',
-      // @ts-expect-error
       creator: getUserQuery?.data,
       sortOptions: {
         field: 'modified',

@@ -56,7 +56,6 @@ const Ownership = () => {
     id: organizerId,
   });
 
-  // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
@@ -76,7 +75,6 @@ const Ownership = () => {
     [getOwnershipRequestsQuery.data],
   );
 
-  // @ts-expect-error
   const creator = getOwnershipCreatorQuery.data;
 
   const approvedRequests = requestsByState[OwnershipState.APPROVED] ?? [];

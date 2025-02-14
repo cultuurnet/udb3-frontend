@@ -69,7 +69,6 @@ const OrganizersPreview = () => {
     ownerId: userId,
   });
 
-  // @ts-expect-error
   const userRequests = getOwnershipRequestsQuery?.data?.member;
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
