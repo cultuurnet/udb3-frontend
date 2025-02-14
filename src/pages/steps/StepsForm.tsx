@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { OfferType, OfferTypes } from '@/constants/OfferType';
+import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import {
   locationStepConfiguration,
   useEditLocation,
@@ -25,12 +26,9 @@ import { calendarStepConfiguration } from './CalendarStep';
 import { useAddOffer } from './hooks/useAddOffer';
 import { useEditField } from './hooks/useEditField';
 import { FooterStatus, useFooterStatus } from './hooks/useFooterStatus';
-import { useGetEvent } from './hooks/useGetEvent';
-import { useGetPlace } from './hooks/useGetPlace';
 import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
-import { nameAndAgeRangeStepConfiguration } from './NameAndAgeRangeStep';
 import { Steps, StepsConfiguration } from './Steps';
 
 const getValue = getValueFromTheme('createPage');
@@ -113,18 +111,22 @@ const StepsForm = ({
 
   const toast = useToast(toastConfiguration);
 
-  const useGetOffer = scope === OfferTypes.EVENTS ? useGetEvent : useGetPlace;
-
-  const offer = useGetOffer({
-    id: offerId,
-    onSuccess: (offer: Offer) => {
-      reset(convertOfferToFormData(offer), {
-        keepDirty: true,
-        keepDirtyValues: true,
-      });
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    {
+      scope,
+      id: offerId,
     },
-    enabled: !!scope,
-  });
+    {
+      onSuccess: (offer: Offer) => {
+        reset(convertOfferToFormData(offer), {
+          keepDirty: true,
+          keepDirtyValues: true,
+        });
+      },
+      enabled: !!scope,
+    },
+  );
+  const offer = getOfferByIdQuery.data;
 
   const publishOffer = usePublishOffer({
     scope,
