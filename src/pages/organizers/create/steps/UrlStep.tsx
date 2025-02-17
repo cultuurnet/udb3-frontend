@@ -72,6 +72,7 @@ const UrlStep = ({
     }
     clearErrors('nameAndUrl.url');
   }, [
+    query.organizerId,
     existingOrganizer,
     // @ts-expect-error
     getOrganizersByWebsiteQuery.data,
