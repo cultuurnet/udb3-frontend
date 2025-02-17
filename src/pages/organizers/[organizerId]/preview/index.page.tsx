@@ -69,7 +69,6 @@ const OrganizersPreview = () => {
     ownerId: userId,
   });
 
-  // @ts-expect-error
   const userRequests = getOwnershipRequestsQuery?.data?.member;
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
@@ -156,18 +155,19 @@ const OrganizersPreview = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
-      await Promise.all([
-        useGetOrganizerByIdQuery({
-          req,
-          queryClient,
-          id: query.organizerId,
-        }),
-        useGetOrganizerPermissions({
-          req,
-          queryClient,
-          organizerId: query.organizerId,
-        }),
-      ]);
+      // TODO: replace by prefetch
+      // await Promise.all([
+      //   useGetOrganizerByIdQuery({
+      //     req,
+      //     queryClient,
+      //     id: query.organizerId,
+      //   }),
+      //   useGetOrganizerPermissions({
+      //     req,
+      //     queryClient,
+      //     organizerId: query.organizerId,
+      //   }),
+      // ]);
     } catch (error) {
       console.error(error);
     }

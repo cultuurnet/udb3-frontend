@@ -120,7 +120,8 @@ const getApplicationServerSideProps =
     const queryClient = new QueryClient();
 
     try {
-      await useGetUserQueryServerSide({ req, queryClient });
+      // TODO: replace by prefetch call
+      // await useGetUserQueryServerSide({ req, queryClient });
     } catch (error) {
       if (error instanceof FetchError) {
         return redirectToLogin(cookies, req, resolvedUrl);

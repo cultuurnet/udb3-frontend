@@ -327,7 +327,6 @@ const LocationStep = ({
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
-  // @ts-expect-error
   const audience = getOfferByIdQuery.data?.audience;
 
   const { hasRecentLocations } = useRecentLocations();

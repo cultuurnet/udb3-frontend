@@ -1,9 +1,8 @@
-import { UseQueryOptions } from 'react-query';
-
 import { OfferTypes } from '@/constants/OfferType';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -28,12 +27,10 @@ const getCardSystemForEvent = async ({ headers, eventId }) => {
 };
 
 const useGetCardSystemForEventQuery = (
-  { req, queryClient, scope, eventId, isUitpasOrganizer },
-  configuration: UseQueryOptions = {},
+  { scope, eventId, isUitpasOrganizer },
+  configuration: ExtendQueryOptions<typeof getCardSystemForEvent> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['uitpas_events'],
     queryFn: getCardSystemForEvent,
     queryArguments: { eventId },
@@ -53,12 +50,10 @@ const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
 };
 
 const useGetCardSystemsForOrganizerQuery = (
-  { req, queryClient, scope, organizerId, isUitpasOrganizer },
-  configuration: UseQueryOptions = {},
+  { scope, organizerId, isUitpasOrganizer },
+  configuration: ExtendQueryOptions<typeof getCardSystemsForOrganizer> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['uitpas_organizers'],
     queryFn: getCardSystemsForOrganizer,
     queryArguments: { organizerId },

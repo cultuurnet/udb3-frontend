@@ -1,4 +1,4 @@
-import type { UseMutationOptions, UseQueryOptions } from 'react-query';
+import type { UseMutationOptions } from 'react-query';
 
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
@@ -19,6 +19,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import type {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   SortOptions,
@@ -46,12 +47,10 @@ type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
 };
 
 const useGetPlaceByIdQuery = (
-  { req, queryClient, id, scope }: UseGetPlaceByIdArguments,
-  configuration: UseQueryOptions = {},
+  { id, scope }: UseGetPlaceByIdArguments,
+  configuration: ExtendQueryOptions<typeof getPlaceById> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['places'],
     queryFn: getPlaceById,
     queryArguments: { id },
@@ -76,8 +75,6 @@ const getPlacesByCreator = async ({ headers, ...queryData }) => {
 
 const useGetPlacesByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
@@ -89,11 +86,9 @@ const useGetPlacesByCreatorQuery = (
         creator: User;
       }
   >,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
-    req,
-    queryClient,
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByCreator,
     queryArguments: {
@@ -129,7 +124,7 @@ const getPlacesByQuery = async ({
   zip,
   addressLocality,
   addressCountry,
-}: Headers & GetPlacesByQueryArguments) => {
+}: { headers: Headers } & GetPlacesByQueryArguments) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
     '',
@@ -156,7 +151,7 @@ const getPlacesByQuery = async ({
       status: OfferStatus.AVAILABLE,
     },
     options: {
-      headers: headers as unknown as Record<string, string>,
+      headers,
     },
   });
   return (await res.json()) as PaginatedData<Place[]>;
@@ -170,7 +165,7 @@ const useGetPlacesByQuery = (
     addressLocality,
     addressCountry,
   }: GetPlacesByQueryArguments,
-  configuration = {},
+  configuration: ExtendQueryOptions<typeof getPlacesByQuery> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['places'],
@@ -182,7 +177,7 @@ const useGetPlacesByQuery = (
       addressCountry,
       addressLocality,
     },
-    enabled: !!name || terms.length,
+    enabled: !!name || terms.length > 0,
     ...configuration,
   });
 

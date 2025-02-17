@@ -10,11 +10,12 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    const event = (await useGetEventByIdQuery({
-      id: eventId,
-      req,
-      queryClient,
-    })) as Event;
+    // TODO: replace by prefetch call
+    // const event = (await useGetEventByIdQuery({
+    //   id: eventId,
+    //   req,
+    //   queryClient,
+    // })) as Event;
 
     return {
       props: {

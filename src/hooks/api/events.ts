@@ -1,5 +1,3 @@
-import type { UseQueryOptions } from 'react-query';
-
 import type { CalendarType } from '@/constants/CalendarType';
 import { OfferTypes } from '@/constants/OfferType';
 import { Video } from '@/pages/VideoUploadBox';
@@ -26,6 +24,7 @@ import { formatDateToISO } from '@/utils/formatDateToISO';
 import type {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   ServerSideQueryOptions,
   SortOptions,
@@ -185,12 +184,10 @@ type UseGetEventByIdArguments = ServerSideQueryOptions & {
 };
 
 const useGetEventByIdQuery = (
-  { req, queryClient, id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
-  configuration: UseQueryOptions = {},
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  configuration: ExtendQueryOptions<typeof getEventById> = {},
 ) =>
   useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
@@ -228,12 +225,10 @@ const getEventsByIds = async ({
 };
 
 const useGetEventsByIdsQuery = (
-  { req, queryClient, ids = [], scope = OfferTypes.EVENTS },
-  configuration: UseQueryOptions = {},
+  { ids = [], scope = OfferTypes.EVENTS },
+  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
 ) => {
-  return useAuthenticatedQuery<{ member: Event[] }>({
-    req,
-    queryClient,
+  return useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
@@ -273,8 +268,6 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
 
 const useGetEventsByCreatorQuery = (
   {
-    req,
-    queryClient,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
@@ -286,11 +279,9 @@ const useGetEventsByCreatorQuery = (
         creator: User;
       }
   >,
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
 ) =>
   useAuthenticatedQuery<Event[]>({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {
@@ -327,7 +318,7 @@ const getCalendarSummary = async ({ headers, id, format, locale }) => {
 
 const useGetCalendarSummaryQuery = (
   { id, locale, format = 'lg' },
-  configuration: UseQueryOptions = {},
+  configuration: ExtendQueryOptions<typeof getCalendarSummary> = {},
 ) =>
   useAuthenticatedQuery({
     queryKey: ['events'],

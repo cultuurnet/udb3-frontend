@@ -208,7 +208,6 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
 
-  // @ts-expect-error
   const entity: EntityWithMedia | undefined = getEntityByIdQuery.data;
 
   const hasNoPossibleTheme = entity?.terms?.some(

@@ -1,4 +1,3 @@
-import type { UseQueryOptions } from 'react-query';
 import { UseMutationOptions } from 'react-query';
 
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
@@ -12,6 +11,7 @@ import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   SortOptions,
   useAuthenticatedMutation,
@@ -34,8 +34,6 @@ const getOffersByCreator = async ({ headers, ...queryData }) => {
 
 const useGetOffersByCreatorQuery = (
   {
-    req,
-    queryClient,
     advancedQuery,
     creator,
     paginationOptions = { start: 0, limit: 50 },
@@ -52,7 +50,9 @@ const useGetOffersByCreatorQuery = (
   {
     queryArguments,
     ...configuration
-  }: UseQueryOptions & { queryArguments?: any } = {},
+  }: ExtendQueryOptions<typeof getOffersByCreator> & {
+    queryArguments?: any;
+  } = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,
@@ -67,8 +67,6 @@ const useGetOffersByCreatorQuery = (
     ? defaultQuery.concat(' AND ', advancedQuery)
     : defaultQuery;
   return useAuthenticatedQuery<Offer[]>({
-    req,
-    queryClient,
     queryKey: ['events'],
     queryFn: getOffersByCreator,
     queryArguments: {

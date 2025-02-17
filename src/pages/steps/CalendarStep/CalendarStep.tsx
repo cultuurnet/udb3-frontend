@@ -243,7 +243,6 @@ const CalendarStep = ({
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
-  // @ts-expect-error
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   useEffect(() => {

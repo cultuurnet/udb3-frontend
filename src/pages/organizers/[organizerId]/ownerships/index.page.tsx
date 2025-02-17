@@ -56,7 +56,6 @@ const Ownership = () => {
     id: organizerId,
   });
 
-  // @ts-expect-error
   const organizer: Organizer = getOrganizerByIdQuery?.data;
   const organizerName =
     organizer?.name?.[i18n.language] ??
@@ -76,7 +75,6 @@ const Ownership = () => {
     [getOwnershipRequestsQuery.data],
   );
 
-  // @ts-expect-error
   const creator = getOwnershipCreatorQuery.data;
 
   const approvedRequests = requestsByState[OwnershipState.APPROVED] ?? [];
@@ -295,23 +293,24 @@ const Ownership = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
-      await Promise.all([
-        useGetOrganizerByIdQuery({
-          req,
-          queryClient,
-          id: query.organizerId,
-        }),
-        useGetOwnershipRequestsQuery({
-          req,
-          queryClient,
-          itemId: query.organizerId,
-        }),
-        useGetOwnershipCreatorQuery({
-          req,
-          queryClient,
-          organizerId: query.organizerId,
-        }),
-      ]);
+      // TODO: Replace by prefetch call
+      // await Promise.all([
+      //   useGetOrganizerByIdQuery({
+      //     req,
+      //     queryClient,
+      //     id: query.organizerId,
+      //   }),
+      //   useGetOwnershipRequestsQuery({
+      //     req,
+      //     queryClient,
+      //     itemId: query.organizerId,
+      //   }),
+      //   useGetOwnershipCreatorQuery({
+      //     req,
+      //     queryClient,
+      //     organizerId: query.organizerId,
+      //   }),
+      // ]);
     } catch (e) {
       console.error(e);
     }

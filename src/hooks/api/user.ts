@@ -66,14 +66,12 @@ const useGetUserQuery = () => {
 };
 
 const useGetUserQueryServerSide = (
-  { req, queryClient }: ServerSideQueryOptions = {},
+  { req }: ServerSideQueryOptions = {},
   configuration = {},
 ) => {
   const cookies = req.cookies;
 
   return useAuthenticatedQuery({
-    req,
-    queryClient,
     queryKey: ['user'],
     queryFn: () => getUser(cookies),
     ...configuration,

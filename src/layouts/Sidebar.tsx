@@ -224,7 +224,6 @@ type ProfileMenuProps = {
 
 const ProfileMenu = ({ defaultProfileImageUrl }: ProfileMenuProps) => {
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const user = getUserQuery.data as User;
 
   return (
@@ -468,19 +467,16 @@ const Sidebar = () => {
   }, [rawAnnouncements]);
 
   useEffect(() => {
-    // @ts-expect-error
     if (!getRolesQuery.data) {
       return;
     }
 
-    // @ts-expect-error
     const validationQuery = getRolesQuery.data
       .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
       .filter((constraint) => constraint !== null)
       .join(' OR ');
 
     setSearchQuery(validationQuery);
-    // @ts-expect-error
   }, [getRolesQuery.data]);
 
   useHandleWindowMessage({
@@ -538,7 +534,6 @@ const Sidebar = () => {
   ];
 
   const filteredManageMenu = useMemo(() => {
-    // @ts-expect-error
     if (!getPermissionsQuery.data) {
       return [];
     }
@@ -599,10 +594,8 @@ const Sidebar = () => {
     ];
 
     return manageMenu.filter((menuItem) => {
-      // @ts-expect-error
       return getPermissionsQuery.data.includes(menuItem.permission);
     });
-    // @ts-expect-error
   }, [countEventsToModerate, getPermissionsQuery.data, i18n.language, t]);
 
   return [

@@ -186,9 +186,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const { t, i18n } = useTranslation();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
 
@@ -334,9 +332,7 @@ const OrganizerRow = ({
 
   const getUserQuery = useGetUserQuery();
   const getPermissionsQuery = useGetPermissionsQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(organizer.creator);
 
@@ -345,7 +341,6 @@ const OrganizerRow = ({
   const imageUrl = organizer?.images?.[0]?.contentUrl;
   const score = organizer?.completeness;
   const organizerId = parseOfferId(organizer['@id']);
-  // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);
@@ -561,7 +556,6 @@ const Dashboard = (): any => {
     );
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const user = getUserQuery.data as User;
 
   const handleSelectSorting = (event) => {
@@ -573,11 +567,9 @@ const Dashboard = (): any => {
     );
   };
 
-  // @ts-expect-error
   const suggestedOrganizerIds: UseQueryResult<{ member: { '@id': string }[] }> =
     useGetSuggestedOrganizersQuery({}, { enabled: tab === 'organizers' });
 
-  // @ts-expect-error
   const suggestedOrganizers: UseQueryResult<{ member: Organizer[] }> =
     useGetOrganizersByQueryQuery(
       {
@@ -824,38 +816,39 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const user = (await useGetUserQueryServerSide({
-      req,
-      queryClient,
-    })) as User;
-
-    await Promise.all(
-      Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
-        const page =
-          query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
-
-        const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
-
-        return hook({
-          req,
-          queryClient,
-          creator: user,
-          ...(!(
-            key === 'organizers' && sortingField.startsWith('availableTo')
-          ) && {
-            sortOptions: {
-              field: sortingField,
-              order: sortingOrder,
-            },
-          }),
-          paginationOptions: {
-            start: (page - 1) * itemsPerPage,
-            limit: itemsPerPage,
-          },
-        });
-      }),
-    );
+    // TODO: replace by prefetch call
+    // const user = (await useGetUserQueryServerSide({
+    //   req,
+    //   queryClient,
+    // })) as User;
+    //
+    // await Promise.all(
+    //   Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
+    //     const page =
+    //       query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
+    //
+    //     const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
+    //     const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+    //
+    //     return hook({
+    //       req,
+    //       queryClient,
+    //       creator: user,
+    //       ...(!(
+    //         key === 'organizers' && sortingField.startsWith('availableTo')
+    //       ) && {
+    //         sortOptions: {
+    //           field: sortingField,
+    //           order: sortingOrder,
+    //         },
+    //       }),
+    //       paginationOptions: {
+    //         start: (page - 1) * itemsPerPage,
+    //         limit: itemsPerPage,
+    //       },
+    //     });
+    //   }),
+    // );
 
     return {
       props: {
