@@ -147,10 +147,6 @@ const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -180,10 +176,6 @@ const getEventById = async ({ headers, id }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -232,10 +224,6 @@ const getEventsByIds = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as { member: Event[] };
 };
 
@@ -280,10 +268,6 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -338,11 +322,6 @@ const getCalendarSummary = async ({ headers, id, format, locale }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-
   return res.text();
 };
 

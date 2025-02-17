@@ -87,10 +87,6 @@ const getPermissions = async ({ headers }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
@@ -108,10 +104,6 @@ const getRoles = async ({ headers }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 

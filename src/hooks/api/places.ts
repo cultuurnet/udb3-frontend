@@ -37,10 +37,6 @@ const getPlaceById = async ({ headers, id }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as Place | undefined;
 };
 
@@ -75,10 +71,6 @@ const getPlacesByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as PaginatedData<Place[]>;
 };
 
@@ -167,11 +159,6 @@ const getPlacesByQuery = async ({
       headers: headers as unknown as Record<string, string>,
     },
   });
-
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return (await res.json()) as PaginatedData<Place[]>;
 };
 
