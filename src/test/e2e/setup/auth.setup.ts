@@ -23,6 +23,14 @@ setup('authenticate', async ({ baseURL, page }) => {
   // Wait for network to be idle, if we save storage too early, needed storage values might not yet be available
   await page.waitForLoadState('networkidle');
 
+  // TODO: REMOVE once SSR calls are enabled again - START
+  await page.waitForURL(`${baseURL}/dashboard*`);
+
+  await page.reload();
+
+  await page.waitForLoadState('networkidle');
+  // TODO: REMOVE once SSR calls are enabled again - END
+
   await page.getByText('Welkom').waitFor();
 
   await page.context().storageState({ path: authFile });
