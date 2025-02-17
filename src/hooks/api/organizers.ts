@@ -1,9 +1,12 @@
 import type { UseMutationOptions } from 'react-query';
 
-import type {
+import {
   AuthenticatedQueryOptions,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
 import {
@@ -113,6 +116,15 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   return (await res.json()) as GetOrganizerByIdResponse;
 };
 
+const createGetOrganizerQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['organizers'],
+    queryFn: getOrganizerById,
+    queryArguments: { id },
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+
 const useGetOrganizerByIdQuery = (
   { id }: { id: string },
   configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
@@ -126,6 +138,17 @@ const useGetOrganizerByIdQuery = (
     ...configuration,
   });
 
+export const prefetchGetOrganizerByIdQuery = async ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizerQueryOptions({ id }),
+  });
+};
 type GetOrganizersByCreator = { headers: Headers } & {
   q: string;
   limit: string;
