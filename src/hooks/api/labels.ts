@@ -21,7 +21,7 @@ const getLabelsByQuery = async ({ headers, query }) => {
     return console.error(res);
   }
 
-  return await res.json();
+  return (await res.json()) as Label[];
 };
 
 const useGetLabelsByQuery = ({ query }: { query: string }) =>

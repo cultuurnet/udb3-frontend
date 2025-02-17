@@ -1,3 +1,5 @@
+import { PaginatedData } from '@/types/PaginatedData';
+import { Production } from '@/types/Production';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
@@ -20,7 +22,7 @@ const getProductions = async ({ headers, ...queryData }) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Production[]>;
 };
 
 const useGetProductionsQuery = (
