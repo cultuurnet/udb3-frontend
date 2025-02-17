@@ -5,10 +5,7 @@ import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
-import {
-  ServerSideQueryOptions,
-  useAuthenticatedQuery,
-} from './authenticated-query';
+import { useAuthenticatedQuery } from './authenticated-query';
 
 type User = {
   sub: string;
@@ -65,19 +62,6 @@ const useGetUserQuery = () => {
   });
 };
 
-const useGetUserQueryServerSide = (
-  { req }: ServerSideQueryOptions = {},
-  configuration = {},
-) => {
-  const cookies = req.cookies;
-
-  return useAuthenticatedQuery({
-    queryKey: ['user'],
-    queryFn: () => getUser(cookies),
-    ...configuration,
-  });
-};
-
 const getPermissions = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/user/permissions/',
@@ -112,10 +96,5 @@ const useGetRolesQuery = (configuration = {}) =>
     ...configuration,
   });
 
-export {
-  useGetPermissionsQuery,
-  useGetRolesQuery,
-  useGetUserQuery,
-  useGetUserQueryServerSide,
-};
+export { useGetPermissionsQuery, useGetRolesQuery, useGetUserQuery };
 export type { User };

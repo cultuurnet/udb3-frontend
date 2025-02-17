@@ -26,7 +26,6 @@ import {
 import {
   useGetPermissionsQuery,
   useGetUserQuery,
-  useGetUserQueryServerSide,
   User,
 } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';

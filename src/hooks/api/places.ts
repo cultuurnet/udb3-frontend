@@ -21,7 +21,6 @@ import type {
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -41,7 +40,7 @@ const getPlaceById = async ({ headers, id }) => {
   return (await res.json()) as Place | undefined;
 };
 
-type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
+type UseGetPlaceByIdArguments = {
   id: string;
   scope?: Values<typeof OfferTypes>;
 };
@@ -79,13 +78,11 @@ const useGetPlacesByCreatorQuery = (
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-      }
-  >,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
   configuration: ExtendQueryOptions<typeof getPlacesByCreator> = {},
 ) =>
   useAuthenticatedQuery({

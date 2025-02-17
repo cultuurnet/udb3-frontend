@@ -1,12 +1,11 @@
 import { UseMutationOptions, UseMutationResult } from 'react-query';
 
 import { Values } from '@/types/Values';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
   ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -104,7 +103,7 @@ const getOwnershipRequests = async ({
   return (await res.json()) as GetOwnershipRequestsResponse;
 };
 
-type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
+type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
@@ -211,7 +210,7 @@ const getOwnershipCreator = async ({ headers, organizerId }) => {
   return (await res.json()) as OwnershipCreator;
 };
 
-type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
+type UseGetOwnershipCreatorArguments = {
   organizerId: string;
 };
 

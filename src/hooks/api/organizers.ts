@@ -4,7 +4,6 @@ import type {
   AuthenticatedQueryOptions,
   ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
 import {
@@ -29,9 +28,7 @@ const useGetOrganizersByQueryQuery = (
     name,
     q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<
-    { name?: string; q?: string } & PaginationOptions
-  > = {},
+  }: { name?: string; q?: string } & PaginationOptions = {},
   configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
   useAuthenticatedQuery<GetOrganizersByQueryResponse>({
@@ -85,7 +82,7 @@ const getOrganizers = async ({
 };
 
 const useGetOrganizersByWebsiteQuery = (
-  { website }: AuthenticatedQueryOptions<{ website?: string }> = {},
+  { website }: { website?: string } = {},
   configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
   useAuthenticatedQuery({
@@ -117,7 +114,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
 };
 
 const useGetOrganizerByIdQuery = (
-  { id }: { id: string } & ServerSideQueryOptions,
+  { id }: { id: string },
   configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
 ) =>
   useAuthenticatedQuery({
@@ -160,7 +157,7 @@ const getOrganizersByCreator = async ({
   return await res.json();
 };
 
-type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
+type UseGetOrganizerPermissionsArguments = {
   organizerId: string;
 };
 
@@ -227,12 +224,10 @@ const useGetOrganizersByCreatorQuery = (
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions & {
-        creator: User;
-      }
-  >,
+  }: PaginationOptions &
+    SortOptions & {
+      creator: User;
+    },
   configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
 ) =>
   useAuthenticatedQuery({

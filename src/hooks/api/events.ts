@@ -26,7 +26,6 @@ import type {
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
-  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -178,7 +177,7 @@ const getEventById = async ({ headers, id }) => {
   return await res.json();
 };
 
-type UseGetEventByIdArguments = ServerSideQueryOptions & {
+type UseGetEventByIdArguments = {
   id: string;
   scope?: Values<typeof OfferTypes>;
 };
@@ -272,13 +271,11 @@ const useGetEventsByCreatorQuery = (
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-      }
-  >,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
   configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
 ) =>
   useAuthenticatedQuery<Event[]>({
