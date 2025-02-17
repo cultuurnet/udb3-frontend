@@ -116,7 +116,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   return (await res.json()) as GetOrganizerByIdResponse;
 };
 
-const createGetOrganizerQueryOptions = ({ id }: { id: string }) =>
+const createGetOrganizerByIdQueryOptions = ({ id }: { id: string }) =>
   queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
@@ -128,15 +128,15 @@ const createGetOrganizerQueryOptions = ({ id }: { id: string }) =>
 const useGetOrganizerByIdQuery = (
   { id }: { id: string },
   configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
-) =>
-  useAuthenticatedQuery({
-    queryKey: ['organizers'],
-    queryFn: getOrganizerById,
-    queryArguments: { id },
-    refetchOnWindowFocus: false,
-    enabled: !!id,
+) => {
+  const options = createGetOrganizerByIdQueryOptions({ id });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
   });
+};
 
 export const prefetchGetOrganizerByIdQuery = async ({
   req,
@@ -146,7 +146,7 @@ export const prefetchGetOrganizerByIdQuery = async ({
   return await prefetchAuthenticatedQuery({
     req,
     queryClient,
-    ...createGetOrganizerQueryOptions({ id }),
+    ...createGetOrganizerByIdQueryOptions({ id }),
   });
 };
 type GetOrganizersByCreator = { headers: Headers } & {
