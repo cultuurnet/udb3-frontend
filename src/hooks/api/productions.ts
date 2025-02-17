@@ -16,10 +16,6 @@ const getProductions = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -118,7 +114,7 @@ const getSuggestedEvents = async ({ headers }) => {
       headers,
     },
   });
-  if (response.status !== 200 || isErrorObject(response)) {
+  if (response.status !== 200) {
     // eslint-disable-next-line no-console
     console.error(response);
     return { events: [], similarity: 0 };

@@ -15,12 +15,6 @@ const getLabelsByQuery = async ({ headers, query }) => {
       headers: headers as unknown as Record<string, string>,
     },
   });
-
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-
   return await res.json();
 };
 
