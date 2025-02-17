@@ -151,7 +151,7 @@ const getPlacesByQuery = async ({
       status: OfferStatus.AVAILABLE,
     },
     options: {
-      headers: headers as unknown as Record<string, string>,
+      headers,
     },
   });
   return (await res.json()) as PaginatedData<Place[]>;

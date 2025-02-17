@@ -1,8 +1,15 @@
 import { useAuthenticatedQuery } from '@/hooks/api/authenticated-query';
+import type { Headers } from '@/hooks/api/types/Headers';
 import { Label } from '@/types/Offer';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
-const getLabelsByQuery = async ({ headers, query }) => {
+const getLabelsByQuery = async ({
+  headers,
+  query,
+}: {
+  headers: Headers;
+  query: string;
+}) => {
   const res = await fetchFromApi({
     path: '/labels/',
     searchParams: {
@@ -12,7 +19,7 @@ const getLabelsByQuery = async ({ headers, query }) => {
       suggestion: 'true',
     },
     options: {
-      headers: headers as unknown as Record<string, string>,
+      headers,
     },
   });
   return (await res.json()) as Label[];
