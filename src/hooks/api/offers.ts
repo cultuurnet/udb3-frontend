@@ -29,11 +29,7 @@ const getOffersByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Offer[];
 };
 
 const useGetOffersByCreatorQuery = (

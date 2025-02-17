@@ -23,10 +23,6 @@ const getCardSystemForEvent = async ({ headers, eventId }) => {
   if (res.status === 404) {
     return [];
   }
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -50,10 +46,6 @@ const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 

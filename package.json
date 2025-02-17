@@ -36,7 +36,7 @@
     "@fortawesome/react-fontawesome": "^0.1.12",
     "@hookform/resolvers": "^2.9.7",
     "@hotjar/browser": "^1.0.9",
-    "@sentry/nextjs": "^7.86.0",
+    "@sentry/nextjs": "^7.120.3",
     "@types/react-draft-wysiwyg": "^1.13.7",
     "@xstate/react": "^1.3.1",
     "base-64": "^1.0.0",
@@ -122,6 +122,6 @@
     "prettier": "^2.8.1",
     "pretty-quick": "^3.1.0",
     "react-test-renderer": "^17.0.1",
-    "typescript": "^4.9.4"
+    "typescript": "^5.7.3"
   }
 }

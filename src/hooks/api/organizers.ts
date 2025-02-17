@@ -13,8 +13,7 @@ import {
 } from '@/hooks/api/authenticated-query';
 import type { Organizer } from '@/types/Organizer';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
-import { handleErrorObject } from '@/utils/handleErrorObject';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import type { Headers } from './types/Headers';
 import type { User } from './user';
@@ -82,11 +81,7 @@ const getOrganizers = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as GetOrganizersByQueryResponse;
 };
 
 const useGetOrganizersByWebsiteQuery = (
@@ -118,11 +113,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as GetOrganizerByIdResponse;
 };
 
 const useGetOrganizerByIdQuery = (
@@ -166,10 +157,6 @@ const getOrganizersByCreator = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
   return await res.json();
 };
 
@@ -183,7 +170,7 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
     options: { headers },
   });
 
-  return handleErrorObject(res);
+  return (await res.json()) as GetOrganizerPermissionsResponse;
 };
 
 export type GetOrganizerPermissionsResponse = {
@@ -208,7 +195,7 @@ const getSuggestedOrganizersQuery = async ({ headers }) => {
     searchParams: { itemType: 'organizer' },
   });
 
-  return handleErrorObject(res);
+  return await res.json();
 };
 
 const useGetSuggestedOrganizersQuery = (
