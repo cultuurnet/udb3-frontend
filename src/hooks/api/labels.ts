@@ -1,6 +1,7 @@
 import { useAuthenticatedQuery } from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
 import { Label } from '@/types/Offer';
+import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 const getLabelsByQuery = async ({
@@ -22,7 +23,7 @@ const getLabelsByQuery = async ({
       headers,
     },
   });
-  return (await res.json()) as Label[];
+  return (await res.json()) as PaginatedData<Label[]>;
 };
 
 const useGetLabelsByQuery = ({ query }: { query: string }) =>
