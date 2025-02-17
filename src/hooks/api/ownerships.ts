@@ -99,7 +99,7 @@ const getOwnershipRequests = async ({
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as GetOwnershipRequestsResponse;
 };
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
@@ -210,7 +210,7 @@ const getOwnershipCreator = async ({ headers, organizerId }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as OwnershipCreator;
 };
 
 type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {

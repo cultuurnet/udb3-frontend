@@ -8,6 +8,7 @@ import type { SupportedLanguages } from '@/i18n/index';
 import type { Address } from '@/types/Address';
 import { Country } from '@/types/Country';
 import { OpeningHours, Term } from '@/types/Offer';
+import { PaginatedData } from '@/types/PaginatedData';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
@@ -36,7 +37,7 @@ const getPlaceById = async ({ headers, id }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as Place | undefined;
 };
 
 type UseGetPlaceByIdArguments = ServerSideQueryOptions & {
@@ -70,7 +71,7 @@ const getPlacesByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Place[]>;
 };
 
 const useGetPlacesByCreatorQuery = (
@@ -158,7 +159,7 @@ const getPlacesByQuery = async ({
       headers: headers as unknown as Record<string, string>,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Place[]>;
 };
 
 const useGetPlacesByQuery = (
@@ -171,7 +172,7 @@ const useGetPlacesByQuery = (
   }: GetPlacesByQueryArguments,
   configuration = {},
 ) =>
-  useAuthenticatedQuery<Place[]>({
+  useAuthenticatedQuery({
     queryKey: ['places'],
     queryFn: getPlacesByQuery,
     queryArguments: {

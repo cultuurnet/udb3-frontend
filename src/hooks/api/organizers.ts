@@ -84,7 +84,7 @@ const getOrganizers = async ({
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as GetOrganizersByQueryResponse;
 };
 
 const useGetOrganizersByWebsiteQuery = (
@@ -122,7 +122,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as GetOrganizerByIdResponse;
 };
 
 const useGetOrganizerByIdQuery = (
@@ -170,7 +170,7 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
     options: { headers },
   });
 
-  return await res.json();
+  return (await res.json()) as GetOrganizerPermissionsResponse;
 };
 
 export type GetOrganizerPermissionsResponse = {
