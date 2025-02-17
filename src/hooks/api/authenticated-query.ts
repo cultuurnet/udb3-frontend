@@ -16,6 +16,7 @@ import {
   UseQueryOptions,
 } from 'react-query';
 
+import type { Headers } from '@/hooks/api/types/Headers';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import type { CalendarSummaryFormat } from '@/utils/createEmbededCalendarSummaries';
 import type { ErrorObject, FetchError } from '@/utils/fetchFromApi';
@@ -95,7 +96,7 @@ const prepareArguments = <
 }: {
   options: UseAuthenticatedQueryOptions<TData, TQueryArguments>;
   isTokenPresent: boolean;
-  headers: Record<string, string>;
+  headers: Headers;
 }) => {
   const parsedQueryKey = prepareKey({ queryArguments, queryKey });
 
@@ -328,7 +329,7 @@ type CustomQueryFunction<
   TQueryArguments extends Record<string, unknown>,
 > = (
   context: QueryFunctionContext & {
-    headers: Record<string, string>;
+    headers: Headers;
   } & TQueryArguments,
 ) => ReturnType<QueryFunction<TData>>;
 
