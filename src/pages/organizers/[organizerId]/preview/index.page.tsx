@@ -155,18 +155,19 @@ const OrganizersPreview = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
-      await Promise.all([
-        useGetOrganizerByIdQuery({
-          req,
-          queryClient,
-          id: query.organizerId,
-        }),
-        useGetOrganizerPermissions({
-          req,
-          queryClient,
-          organizerId: query.organizerId,
-        }),
-      ]);
+      // TODO: replace by prefetch
+      // await Promise.all([
+      //   useGetOrganizerByIdQuery({
+      //     req,
+      //     queryClient,
+      //     id: query.organizerId,
+      //   }),
+      //   useGetOrganizerPermissions({
+      //     req,
+      //     queryClient,
+      //     organizerId: query.organizerId,
+      //   }),
+      // ]);
     } catch (error) {
       console.error(error);
     }
