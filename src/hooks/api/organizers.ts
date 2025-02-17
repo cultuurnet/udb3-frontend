@@ -89,7 +89,7 @@ const getOrganizers = async ({
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as GetOrganizersByQueryResponse;
 };
 
 const useGetOrganizersByWebsiteQuery = (
@@ -131,7 +131,7 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as GetOrganizerByIdResponse;
 };
 
 const useGetOrganizerByIdQuery = (
@@ -183,7 +183,7 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
     options: { headers },
   });
 
-  return handleErrorObject(res);
+  return (await handleErrorObject(res)) as GetOrganizerPermissionsResponse;
 };
 
 export type GetOrganizerPermissionsResponse = {

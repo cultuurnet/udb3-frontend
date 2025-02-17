@@ -1,5 +1,7 @@
 import jwt_decode from 'jwt-decode';
 
+import { PermissionTypes } from '@/layouts/Sidebar';
+import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
@@ -89,7 +91,7 @@ const getPermissions = async ({ headers }) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
 const useGetPermissionsQuery = (configuration = {}) =>

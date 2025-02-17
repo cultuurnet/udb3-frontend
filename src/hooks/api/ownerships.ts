@@ -103,7 +103,7 @@ const getOwnershipRequests = async ({
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as GetOwnershipRequestsResponse;
 };
 
 type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
@@ -218,7 +218,7 @@ const getOwnershipCreator = async ({ headers, organizerId }) => {
     // eslint-disable-next-line no-console
     return console.error(res);
   }
-  return await res.json();
+  return (await res.json()) as OwnershipCreator;
 };
 
 type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
