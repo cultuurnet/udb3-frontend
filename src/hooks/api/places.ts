@@ -3,7 +3,7 @@ import type { UseMutationOptions } from 'react-query';
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import type { SupportedLanguages } from '@/i18n/index';
 import type { Address } from '@/types/Address';
 import { Country } from '@/types/Country';
@@ -16,11 +16,14 @@ import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSum
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
-import type {
+import {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -45,17 +48,48 @@ type UseGetPlaceByIdArguments = {
   scope?: Values<typeof OfferTypes>;
 };
 
-const useGetPlaceByIdQuery = (
-  { id, scope }: UseGetPlaceByIdArguments,
-  configuration: ExtendQueryOptions<typeof getPlaceById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetPlaceByIdQueryOptions = ({
+  id,
+  scope,
+}: {
+  id: string;
+  scope: Scope;
+}) =>
+  queryOptions({
     queryKey: ['places'],
     queryFn: getPlaceById,
     queryArguments: { id },
     enabled: !!id && scope === OfferTypes.PLACES,
-    ...configuration,
   });
+
+const useGetPlaceByIdQuery = (
+  { id, scope }: UseGetPlaceByIdArguments,
+  configuration: ExtendQueryOptions<typeof getPlaceById> = {},
+) => {
+  const options = createGetPlaceByIdQueryOptions({ id, scope });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetPlaceByIdQuery = async ({
+  req,
+  queryClient,
+  scope,
+  id,
+}: ServerSideQueryOptions & {
+  id: string;
+  scope: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetPlaceByIdQueryOptions({ scope, id }),
+  });
+};
 
 const getPlacesByCreator = async ({ headers, ...queryData }) => {
   delete headers['Authorization'];
