@@ -48,11 +48,9 @@ const getOffersByCreator = async ({
       limit,
       start,
       workflowStatus,
-      ...(addressCountry
-        ? {
-            addressCountry,
-          }
-        : {}),
+      ...(addressCountry && {
+        addressCountry,
+      }),
     },
     options: {
       headers,
