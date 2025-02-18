@@ -21,8 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile
-          yarn add @playwright/test@latest --ignore-engines
-          npx playwright install
+          npx playwright install chromium
 
       - uses: actions/cache@v3
         with:
