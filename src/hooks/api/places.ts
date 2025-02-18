@@ -75,7 +75,7 @@ const useGetPlaceByIdQuery = (
   });
 };
 
-export const prefetchGetPlaceByIdQuery = async ({
+export const prefetchGetPlaceByIdQuery = ({
   req,
   queryClient,
   scope,
@@ -83,13 +83,12 @@ export const prefetchGetPlaceByIdQuery = async ({
 }: ServerSideQueryOptions & {
   id: string;
   scope: Scope;
-}) => {
-  return await prefetchAuthenticatedQuery({
+}) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetPlaceByIdQueryOptions({ scope, id }),
   });
-};
 
 const getPlacesByCreator = async ({
   headers,
@@ -184,7 +183,7 @@ const useGetPlacesByCreatorQuery = (
   });
 };
 
-export const prefetchGetPlacesByCreatorQuery = async ({
+export const prefetchGetPlacesByCreatorQuery = ({
   req,
   queryClient,
   creator,
@@ -196,8 +195,8 @@ export const prefetchGetPlacesByCreatorQuery = async ({
   SortOptions &
   CalendarSummaryFormats & {
     creator: User;
-  }) => {
-  return await prefetchAuthenticatedQuery({
+  }) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetPlacesByCreatorQueryOptions({
@@ -207,7 +206,6 @@ export const prefetchGetPlacesByCreatorQuery = async ({
       calendarSummaryFormats,
     }),
   });
-};
 
 type GetPlacesByQueryArguments = {
   name: string;

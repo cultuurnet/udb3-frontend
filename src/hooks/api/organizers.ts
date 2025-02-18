@@ -138,17 +138,17 @@ const useGetOrganizerByIdQuery = (
   });
 };
 
-export const prefetchGetOrganizerByIdQuery = async ({
+export const prefetchGetOrganizerByIdQuery = ({
   req,
   queryClient,
   id,
-}: ServerSideQueryOptions & { id: string }) => {
-  return await prefetchAuthenticatedQuery({
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetOrganizerByIdQueryOptions({ id }),
   });
-};
+
 type GetOrganizersByCreator = { headers: Headers } & {
   q: string;
   limit: string;
@@ -220,17 +220,16 @@ const useGetOrganizerPermissionsQuery = (
   });
 };
 
-export const prefetchGetOrganizerPermissionsQuery = async ({
+export const prefetchGetOrganizerPermissionsQuery = ({
   req,
   queryClient,
   organizerId,
-}: ServerSideQueryOptions & UseGetOrganizerPermissionsArguments) => {
-  return await prefetchAuthenticatedQuery({
+}: ServerSideQueryOptions & UseGetOrganizerPermissionsArguments) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetOrganizerPermissionsQueryOptions({ organizerId }),
   });
-};
 
 const getSuggestedOrganizersQuery = async ({ headers }) => {
   const res = await fetchFromApi({
@@ -315,7 +314,7 @@ const useGetOrganizersByCreatorQuery = (
   });
 };
 
-export const prefetchGetOrganizersByCreatorQuery = async ({
+export const prefetchGetOrganizersByCreatorQuery = ({
   req,
   queryClient,
   creator,
@@ -325,8 +324,8 @@ export const prefetchGetOrganizersByCreatorQuery = async ({
   PaginationOptions &
   SortOptions & {
     creator: User;
-  }) => {
-  return await prefetchAuthenticatedQuery({
+  }) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetOrganizersByCreatorQueryOptions({
@@ -335,7 +334,6 @@ export const prefetchGetOrganizersByCreatorQuery = async ({
       sortOptions,
     }),
   });
-};
 
 type CreateOrganizerArguments = {
   headers: Headers;

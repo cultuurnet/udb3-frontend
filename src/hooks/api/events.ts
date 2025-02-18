@@ -212,7 +212,7 @@ const useGetEventByIdQuery = (
   });
 };
 
-export const prefetchGetEventByIdQuery = async ({
+export const prefetchGetEventByIdQuery = ({
   req,
   queryClient,
   id,
@@ -220,13 +220,12 @@ export const prefetchGetEventByIdQuery = async ({
 }: ServerSideQueryOptions & {
   id: string;
   scope?: Scope;
-}) => {
-  return await prefetchAuthenticatedQuery({
+}) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetEventByIdQueryOptions({ id, scope }),
   });
-};
 
 const getEventsByIds = async ({
   headers,
@@ -290,7 +289,7 @@ const useGetEventsByIdsQuery = (
   });
 };
 
-export const prefetchGetEventsByIdsQuery = async ({
+export const prefetchGetEventsByIdsQuery = ({
   req,
   queryClient,
   ids,
@@ -298,13 +297,12 @@ export const prefetchGetEventsByIdsQuery = async ({
 }: ServerSideQueryOptions & {
   ids: string[];
   scope?: Scope;
-}) => {
-  return await prefetchAuthenticatedQuery({
+}) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetEventsByIdsQueryOptions({ ids, scope }),
   });
-};
 
 const deleteEventById = async ({ headers, id }) =>
   fetchFromApi({
@@ -412,7 +410,7 @@ const useGetEventsByCreatorQuery = (
   });
 };
 
-export const prefetchGetEventsByCreatorQuery = async ({
+export const prefetchGetEventsByCreatorQuery = ({
   req,
   queryClient,
   creator,
@@ -424,8 +422,8 @@ export const prefetchGetEventsByCreatorQuery = async ({
   SortOptions &
   CalendarSummaryFormats & {
     creator: User;
-  }) => {
-  return await prefetchAuthenticatedQuery({
+  }) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetEventsByCreatorQueryOptions({
@@ -435,7 +433,6 @@ export const prefetchGetEventsByCreatorQuery = async ({
       calendarSummaryFormats,
     }),
   });
-};
 
 const getCalendarSummary = async ({ headers, id, format, locale }) => {
   const res = await fetchFromApi({

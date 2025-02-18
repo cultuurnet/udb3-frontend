@@ -146,17 +146,16 @@ const useGetOwnershipRequestsQuery = (
   });
 };
 
-export const prefetchGetOwnershipRequestsQuery = async ({
+export const prefetchGetOwnershipRequestsQuery = ({
   req,
   queryClient,
   ...args
-}: ServerSideQueryOptions & UseGetOwnershipRequestsArguments) => {
-  return await prefetchAuthenticatedQuery({
+}: ServerSideQueryOptions & UseGetOwnershipRequestsArguments) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetOwnershipRequestsQueryOptions(args),
   });
-};
 
 type ApproveOwnershipArguments = { ownershipId: string };
 
@@ -264,17 +263,16 @@ const useGetOwnershipCreatorQuery = (
   });
 };
 
-export const prefetchGetOwnershipCreatorQuery = async ({
+export const prefetchGetOwnershipCreatorQuery = ({
   req,
   queryClient,
   organizerId,
-}: ServerSideQueryOptions & UseGetOwnershipCreatorArguments) => {
-  return await prefetchAuthenticatedQuery({
+}: ServerSideQueryOptions & UseGetOwnershipCreatorArguments) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetOwnershipCreatorQuery({ organizerId }),
   });
-};
 
 export {
   useApproveOwnershipRequestMutation,

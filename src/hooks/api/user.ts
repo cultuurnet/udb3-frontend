@@ -70,19 +70,18 @@ const useGetUserQuery = () => {
   return useAuthenticatedQuery(createGetUserQueryOptions(cookies));
 };
 
-export const prefetchGetUserQuery = async ({
+export const prefetchGetUserQuery = ({
   req,
   queryClient,
   cookies,
 }: ServerSideQueryOptions & {
   cookies: Cookies;
-}) => {
-  return await prefetchAuthenticatedQuery({
+}) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetUserQueryOptions(cookies),
   });
-};
 
 const getPermissions = async ({ headers }) => {
   const res = await fetchFromApi({

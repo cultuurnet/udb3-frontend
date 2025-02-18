@@ -53,18 +53,17 @@ const useGetProductionsQuery = (
   });
 };
 
-export const prefetchGetProductionsQuery = async ({
+export const prefetchGetProductionsQuery = ({
   req,
   queryClient,
   name,
   paginationOptions,
-}: ServerSideQueryOptions & PaginationOptions & { name?: string }) => {
-  return await prefetchAuthenticatedQuery({
+}: ServerSideQueryOptions & PaginationOptions & { name?: string }) =>
+  prefetchAuthenticatedQuery({
     req,
     queryClient,
     ...createGetProductionsQueryOptions({ name, paginationOptions }),
   });
-};
 
 const deleteEventById = async ({
   productionId = '',
