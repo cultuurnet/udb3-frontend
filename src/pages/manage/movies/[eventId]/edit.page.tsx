@@ -1,6 +1,9 @@
 import { dehydrate } from 'react-query/hydration';
 
-import { useGetEventByIdQuery } from '@/hooks/api/events';
+import {
+  prefetchGetEventByIdQuery,
+  useGetEventByIdQuery,
+} from '@/hooks/api/events';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 export { MovieForm as default } from '../MovieForm';
@@ -9,12 +12,11 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const { eventId } = query;
 
-    // TODO: replace by prefetch call
-    // await useGetEventByIdQuery({
-    //   req,
-    //   queryClient,
-    //   id: eventId,
-    // });
+    await prefetchGetEventByIdQuery({
+      req,
+      queryClient,
+      id: eventId,
+    });
 
     return {
       props: {

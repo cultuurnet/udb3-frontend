@@ -6,8 +6,10 @@ import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerPermissionsResponse,
+  prefetchGetOrganizerByIdQuery,
+  prefetchGetOrganizerPermissionsQuery,
   useGetOrganizerByIdQuery,
-  useGetOrganizerPermissions,
+  useGetOrganizerPermissionsQuery,
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -45,7 +47,7 @@ const OrganizersPreview = () => {
     id: organizerId,
   }) as UseQueryResult<Organizer, FetchError>;
 
-  const getOrganizerPermissionsQuery = useGetOrganizerPermissions({
+  const getOrganizerPermissionsQuery = useGetOrganizerPermissionsQuery({
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
 
@@ -155,19 +157,18 @@ const OrganizersPreview = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
-      // TODO: replace by prefetch
-      // await Promise.all([
-      //   useGetOrganizerByIdQuery({
-      //     req,
-      //     queryClient,
-      //     id: query.organizerId,
-      //   }),
-      //   useGetOrganizerPermissions({
-      //     req,
-      //     queryClient,
-      //     organizerId: query.organizerId,
-      //   }),
-      // ]);
+      await Promise.all([
+        prefetchGetOrganizerByIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
+        }),
+        prefetchGetOrganizerPermissionsQuery({
+          req,
+          queryClient,
+          organizerId: query.organizerId,
+        }),
+      ]);
     } catch (error) {
       console.error(error);
     }

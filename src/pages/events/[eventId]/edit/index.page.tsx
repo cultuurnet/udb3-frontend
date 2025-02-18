@@ -1,6 +1,9 @@
 import { dehydrate } from 'react-query/hydration';
 
-import { useGetEventByIdQuery } from '@/hooks/api/events';
+import {
+  prefetchGetEventByIdQuery,
+  useGetEventByIdQuery,
+} from '@/hooks/api/events';
 import { Event } from '@/types/Event';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -10,12 +13,11 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    // TODO: replace by prefetch call
-    // const event = (await useGetEventByIdQuery({
-    //   id: eventId,
-    //   req,
-    //   queryClient,
-    // })) as Event;
+    await prefetchGetEventByIdQuery({
+      id: eventId,
+      req,
+      queryClient,
+    });
 
     return {
       props: {

@@ -5,11 +5,16 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 
-import { useGetOrganizerByIdQuery } from '@/hooks/api/organizers';
+import {
+  prefetchGetOrganizerByIdQuery,
+  useGetOrganizerByIdQuery,
+} from '@/hooks/api/organizers';
 import {
   GetOwnershipRequestsResponse,
   OwnershipRequest,
   OwnershipState,
+  prefetchGetOwnershipCreatorQuery,
+  prefetchGetOwnershipRequestsQuery,
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
   useGetOwnershipCreatorQuery,
@@ -293,24 +298,23 @@ const Ownership = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
-      // TODO: Replace by prefetch call
-      // await Promise.all([
-      //   useGetOrganizerByIdQuery({
-      //     req,
-      //     queryClient,
-      //     id: query.organizerId,
-      //   }),
-      //   useGetOwnershipRequestsQuery({
-      //     req,
-      //     queryClient,
-      //     itemId: query.organizerId,
-      //   }),
-      //   useGetOwnershipCreatorQuery({
-      //     req,
-      //     queryClient,
-      //     organizerId: query.organizerId,
-      //   }),
-      // ]);
+      await Promise.all([
+        prefetchGetOrganizerByIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
+        }),
+        prefetchGetOwnershipRequestsQuery({
+          req,
+          queryClient,
+          itemId: query.organizerId,
+        }),
+        prefetchGetOwnershipCreatorQuery({
+          req,
+          queryClient,
+          organizerId: query.organizerId,
+        }),
+      ]);
     } catch (e) {
       console.error(e);
     }

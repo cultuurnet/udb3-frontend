@@ -5,8 +5,12 @@ import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-import { useGetEventsByIdsQuery } from '@/hooks/api/events';
 import {
+  prefetchGetEventsByIdsQuery,
+  useGetEventsByIdsQuery,
+} from '@/hooks/api/events';
+import {
+  prefetchGetProductionsQuery,
   useAddEventByIdMutation,
   useChangeProductionNameMutation,
   useDeleteEventsByIdsMutation,
@@ -303,20 +307,19 @@ const Index = () => {
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
-    // TODO: replace by prefetch call
-    // const productions = await useGetProductionsQuery({
-    //   req,
-    //   queryClient,
-    //   paginationOptions: { limit: productionsPerPage, start: 0 },
-    // });
-    //
-    // const eventIds = productions?.member?.[0]?.events ?? [];
-    //
-    // await useGetEventsByIdsQuery({
-    //   req,
-    //   queryClient,
-    //   ids: eventIds,
-    // });
+    const productions = await prefetchGetProductionsQuery({
+      req,
+      queryClient,
+      paginationOptions: { limit: productionsPerPage, start: 0 },
+    });
+
+    const eventIds = productions?.member?.[0]?.events ?? [];
+
+    await prefetchGetEventsByIdsQuery({
+      req,
+      queryClient,
+      ids: eventIds,
+    });
 
     return {
       props: {
