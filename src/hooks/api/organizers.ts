@@ -196,17 +196,41 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
 export type GetOrganizerPermissionsResponse = {
   permissions: string[];
 };
-const useGetOrganizerPermissions = (
-  { organizerId }: UseGetOrganizerPermissionsArguments,
-  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
-) =>
-  useAuthenticatedQuery({
+
+const createGetOrganizerPermissionsQueryOptions = ({
+  organizerId,
+}: UseGetOrganizerPermissionsArguments) =>
+  queryOptions({
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
     refetchOnWindowFocus: false,
-    ...configuration,
   });
+
+const useGetOrganizerPermissionsQuery = (
+  { organizerId }: UseGetOrganizerPermissionsArguments,
+  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
+) => {
+  const options = createGetOrganizerPermissionsQueryOptions({ organizerId });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOrganizerPermissionsQuery = async ({
+  req,
+  queryClient,
+  organizerId,
+}: ServerSideQueryOptions & UseGetOrganizerPermissionsArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizerPermissionsQueryOptions({ organizerId }),
+  });
+};
 
 const getSuggestedOrganizersQuery = async ({ headers }) => {
   const res = await fetchFromApi({
@@ -457,7 +481,7 @@ export {
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
   useGetOrganizerByIdQuery,
-  useGetOrganizerPermissions,
+  useGetOrganizerPermissionsQuery,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
