@@ -4,7 +4,13 @@ import styled, { css } from 'styled-components';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 
-import type { BoxProps, UIProp, UnknownProps } from './Box';
+import {
+  BoxProps,
+  notAllowedPropsSet,
+  UIProp,
+  UnknownProps,
+  withoutDisallowedPropsConfig,
+} from './Box';
 import {
   Box,
   boxProps,
@@ -44,7 +50,7 @@ const inlineProps = css`
   ${parseStackOnProperty()};
 `;
 
-const StyledBox = styled(Box)`
+const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
   ${inlineProps};
   ${boxProps};
 `;

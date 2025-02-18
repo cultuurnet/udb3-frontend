@@ -16,6 +16,7 @@ import { ReactDatePickerProps } from 'react-datepicker';
 import type {
   FlattenInterpolation,
   FlattenSimpleInterpolation,
+  StyledConfig,
   ThemeProps,
 } from 'styled-components';
 import styled, { css } from 'styled-components';
@@ -469,6 +470,7 @@ const boxPropTypes = [
   'display',
   'flex',
   'flexShrink',
+  'flexWrap',
   'fontSize',
   'fontWeight',
   'fontStyle',
@@ -505,7 +507,9 @@ const boxPropTypes = [
   'textAlign',
   'textDecoration',
   'top',
+  'stackOn',
   'width',
+  'size',
   'zIndex',
   'dangerouslySetInnerHTML',
 ] as const;
@@ -514,9 +518,11 @@ const notAllowedPropsSet = new Set(
   difference(boxPropTypes, ['as', 'id', 'onClick', 'dangerouslySetInnerHTML']),
 );
 
-const StyledBox = styled.div.withConfig({
+export const withoutDisallowedPropsConfig: StyledConfig = {
   shouldForwardProp: (prop) => !notAllowedPropsSet.has(prop as any),
-})`
+};
+
+const StyledBox = styled.div.withConfig(withoutDisallowedPropsConfig)`
   ${boxProps}
 `;
 
