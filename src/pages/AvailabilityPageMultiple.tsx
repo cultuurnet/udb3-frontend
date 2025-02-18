@@ -1,6 +1,6 @@
 import camelCase from 'lodash/camelCase';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OfferStatus } from '@/constants/OfferStatus';
@@ -138,6 +138,11 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
     [i18n.language, t, subEvents],
   );
 
+  const translateSelectedRowCount = useCallback(
+    (count) => t('selectionTable.rowsSelectedCount', { count }),
+    [t],
+  );
+
   return [
     <Page key="page">
       <Page.Title>{t('offerStatus.title', { name })}</Page.Title>
@@ -170,11 +175,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
                 disabled: selectedRows.length === 0,
               },
             ]}
-            translateSelectedRowCount={(count) =>
-              t('selectionTable.rowsSelectedCount', {
-                count,
-              })
-            }
+            translateSelectedRowCount={translateSelectedRowCount}
           />
         </Stack>
 
