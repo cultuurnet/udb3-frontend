@@ -208,7 +208,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
-  const date = offer.calendarSummary[i18n.language].text['xs'];
+  const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
@@ -225,7 +225,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     : undefined;
 
   const period =
-    offer.calendarSummary[i18n.language]?.text?.[
+    offer.calendarSummary?.[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
 
