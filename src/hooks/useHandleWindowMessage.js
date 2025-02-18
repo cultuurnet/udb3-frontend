@@ -21,10 +21,6 @@ const useHandleWindowMessage = (eventsMap = {}) => {
 
   const eventsMapRef = useRef(eventsMap);
 
-  useEffect(() => {
-    eventsMapRef.current = eventsMap;
-  }, [eventsMap]);
-
   const internalHandler = useCallback((event) => {
     const { source, type, ...data } = event.data;
     if (source !== WindowMessageSources.UDB) return;
