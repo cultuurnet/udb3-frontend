@@ -6,6 +6,9 @@ import { fetchFromApi } from '@/utils/fetchFromApi';
 import {
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -116,22 +119,44 @@ export type GetOwnershipRequestsResponse = {
   totalItems: number;
   member: OwnershipRequest[];
 };
-const useGetOwnershipRequestsQuery = (
-  {
-    itemId,
-    ownerId,
-    state,
-    paginationOptions,
-  }: UseGetOwnershipRequestsArguments,
-  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
-) =>
-  useAuthenticatedQuery({
+
+const createGetOwnershipRequestsQueryOptions = ({
+  itemId,
+  ownerId,
+  state,
+  paginationOptions,
+}: UseGetOwnershipRequestsArguments) =>
+  queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
     queryArguments: { itemId, ownerId, state, paginationOptions },
     refetchOnWindowFocus: false,
-    ...configuration,
   });
+
+const useGetOwnershipRequestsQuery = (
+  args: UseGetOwnershipRequestsArguments,
+  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
+) => {
+  const options = createGetOwnershipRequestsQueryOptions(args);
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOwnershipRequestsQuery = async ({
+  req,
+  queryClient,
+  ...args
+}: ServerSideQueryOptions & UseGetOwnershipRequestsArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipRequestsQueryOptions(args),
+  });
+};
 
 type ApproveOwnershipArguments = { ownershipId: string };
 
