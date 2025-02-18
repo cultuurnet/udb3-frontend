@@ -76,7 +76,7 @@ const CustomRichTextEditorLink = ({
       setLinkTitle('');
       setLinkTargetOption(config.defaultTargetOption);
     }
-  }, [expanded]);
+  }, [expanded, config.defaultTargetOption]);
 
   const updateValue = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
