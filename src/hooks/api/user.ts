@@ -5,7 +5,12 @@ import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
-import { useAuthenticatedQuery } from './authenticated-query';
+import {
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
+  useAuthenticatedQuery,
+} from './authenticated-query';
 
 type User = {
   sub: string;
@@ -53,12 +58,29 @@ const getUser = async (cookies: Cookies) => {
   return userInfo;
 };
 
+const createGetUserQueryOptions = (cookies: Cookies) =>
+  queryOptions({
+    queryKey: ['user'],
+    queryFn: () => getUser(cookies),
+  });
+
 const useGetUserQuery = () => {
   const { cookies } = useCookiesWithOptions(['idToken']);
 
-  return useAuthenticatedQuery<User>({
-    queryKey: ['user'],
-    queryFn: () => getUser(cookies),
+  return useAuthenticatedQuery(createGetUserQueryOptions(cookies));
+};
+
+export const prefetchGetUserQuery = async ({
+  req,
+  queryClient,
+  cookies,
+}: ServerSideQueryOptions & {
+  cookies: Cookies;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetUserQueryOptions(cookies),
   });
 };
 
