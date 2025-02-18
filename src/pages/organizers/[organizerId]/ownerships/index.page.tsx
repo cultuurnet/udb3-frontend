@@ -313,6 +313,7 @@ export const getServerSideProps = getApplicationServerSideProps(
         }),
       ]);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
     }
 
