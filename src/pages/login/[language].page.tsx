@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -222,9 +223,9 @@ const useRedirectToLanguage = () => {
       i18n.changeLanguage(language);
       setCookie('udb-language', language);
     } else {
-      router.push('/login/nl');
+      Router.push('/login/nl');
     }
-  }, [language, i18n, router, setCookie]);
+  }, [language, i18n, setCookie]);
 };
 
 const ResponsiveContainer = (props) => (

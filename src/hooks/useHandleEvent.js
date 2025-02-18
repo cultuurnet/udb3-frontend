@@ -12,11 +12,14 @@ const useHandleEvent = (eventsMap = {}) => {
 
   useEffect(() => {
     if (!isClient) return;
-    Object.entries(eventsMapRef.current).forEach(([type, handler]) => {
+
+    const eventsMap = eventsMapRef.current;
+
+    Object.entries(eventsMap.current).forEach(([type, handler]) => {
       window.addEventListener(type, handler);
     });
     return () => {
-      Object.entries(eventsMapRef.current).forEach(([type, handler]) => {
+      Object.entries(eventsMap.current).forEach(([type, handler]) => {
         window.removeEventListener(type, handler);
       });
     };
