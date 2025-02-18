@@ -216,10 +216,10 @@ export const prefetchGetEventByIdQuery = async ({
   req,
   queryClient,
   id,
-  scope,
+  scope = OfferTypes.EVENTS,
 }: ServerSideQueryOptions & {
   id: string;
-  scope: Scope;
+  scope?: Scope;
 }) => {
   return await prefetchAuthenticatedQuery({
     req,
@@ -256,11 +256,14 @@ const getEventsByIds = async ({
   return (await res.json()) as { member: Event[] };
 };
 
-const useGetEventsByIdsQuery = (
-  { ids = [], scope = OfferTypes.EVENTS },
-  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
-) => {
-  return useAuthenticatedQuery({
+const createGetEventsByIdsQueryOptions = ({
+  ids = [],
+  scope = OfferTypes.EVENTS,
+}: {
+  ids: string[];
+  scope?: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
