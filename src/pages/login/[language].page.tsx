@@ -224,8 +224,7 @@ const useRedirectToLanguage = () => {
     } else {
       router.push('/login/nl');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  }, [language, i18n, router, setCookie]);
 };
 
 const ResponsiveContainer = (props) => (

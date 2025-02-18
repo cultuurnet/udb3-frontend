@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useIsClient } from './useIsClient';
 
@@ -19,18 +19,25 @@ const WindowMessageTypes = {
 const useHandleWindowMessage = (eventsMap = {}) => {
   const isClient = useIsClient();
 
-  const internalHandler = (event) => {
+  const eventsMapRef = useRef(eventsMap);
+
+  useEffect(() => {
+    eventsMapRef.current = eventsMap;
+  }, [eventsMap]);
+
+  const internalHandler = useCallback((event) => {
     const { source, type, ...data } = event.data;
     if (source !== WindowMessageSources.UDB) return;
-    eventsMap?.[type]?.(data); // call handler when it exists
-  };
+    if (eventsMapRef.current?.[type]) {
+      eventsMapRef.current[type](data);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isClient) return;
     window.addEventListener('message', internalHandler);
     return () => window.removeEventListener('message', internalHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isClient]);
+  }, [isClient, internalHandler]);
 };
 
 export { useHandleWindowMessage, WindowMessageTypes };
