@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile
-          npx playwright install chromium
+          npx playwright install chromium --with-deps
 
       - uses: actions/cache@v3
         with:
@@ -31,6 +31,7 @@ jobs:
       - name: Install Playwright Browsers
         run: yarn playwright install chromium --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+
       - name: Run Playwright tests
         env:
           AUTH0_BASE_URL: ${{ secrets.AUTH0_BASE_URL }}
