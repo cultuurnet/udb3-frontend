@@ -319,13 +319,34 @@ const useDeleteEventByIdMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsByCreator = async ({ headers, ...queryData }) => {
+const getEventsByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: {
+  headers: Headers;
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,

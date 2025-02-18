@@ -91,13 +91,34 @@ export const prefetchGetPlaceByIdQuery = async ({
   });
 };
 
-const getPlacesByCreator = async ({ headers, ...queryData }) => {
+const getPlacesByCreator = async ({
+  headers,
+  q,
+  limit,
+  start,
+  embed,
+  workflowStatus,
+  disableDefaultFilters,
+}: {
+  headers: Headers;
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/places/',
     searchParams: {
-      ...queryData,
+      q,
+      limit,
+      start,
+      embed,
+      workflowStatus,
+      disableDefaultFilters,
     },
     options: {
       headers,
