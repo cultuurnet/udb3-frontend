@@ -266,7 +266,40 @@ const useGetEventsByIdsQuery = (
     queryArguments: { ids },
     refetchOnWindowFocus: false,
     enabled: ids.length > 0 && scope === OfferTypes.EVENTS,
+  });
+
+const useGetEventsByIdsQuery = (
+  {
+    ids,
+    scope,
+  }: {
+    ids: string[];
+    scope?: Scope;
+  },
+  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
+) => {
+  const options = createGetEventsByIdsQueryOptions({ ids, scope });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetEventsByIdsQuery = async ({
+  req,
+  queryClient,
+  ids,
+  scope,
+}: ServerSideQueryOptions & {
+  ids: string[];
+  scope?: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventsByIdsQueryOptions({ ids, scope }),
   });
 };
 
