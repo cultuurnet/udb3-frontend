@@ -239,17 +239,42 @@ type UseGetOwnershipCreatorArguments = {
   organizerId: string;
 };
 
-const useGetOwnershipCreatorQuery = (
-  { organizerId }: UseGetOwnershipCreatorArguments,
-  configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetOwnershipCreatorQuery = ({
+  organizerId,
+}: {
+  organizerId: string;
+}) =>
+  queryOptions({
     queryKey: ['ownership-creator'],
     queryFn: getOwnershipCreator,
     queryArguments: { organizerId },
     refetchOnWindowFocus: false,
-    ...configuration,
   });
+
+const useGetOwnershipCreatorQuery = (
+  { organizerId }: UseGetOwnershipCreatorArguments,
+  configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
+) => {
+  const options = createGetOwnershipCreatorQuery({ organizerId });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOwnershipCreatorQuery = async ({
+  req,
+  queryClient,
+  organizerId,
+}: ServerSideQueryOptions & UseGetOwnershipCreatorArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipCreatorQuery({ organizerId }),
+  });
+};
 
 export {
   useApproveOwnershipRequestMutation,
