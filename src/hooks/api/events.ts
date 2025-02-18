@@ -1,5 +1,5 @@
 import type { CalendarType } from '@/constants/CalendarType';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import { Video } from '@/pages/VideoUploadBox';
 import { ContactPoint } from '@/types/ContactPoint';
 import type { AttendanceMode, Event } from '@/types/Event';
@@ -21,11 +21,14 @@ import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
-import type {
+import {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
 import {
@@ -182,18 +185,48 @@ type UseGetEventByIdArguments = {
   scope?: Values<typeof OfferTypes>;
 };
 
-const useGetEventByIdQuery = (
-  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
-  configuration: ExtendQueryOptions<typeof getEventById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetEventByIdQueryOptions = ({
+  id,
+  scope,
+}: {
+  id: string;
+  scope: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
     refetchOnWindowFocus: false,
     enabled: !!id && scope === OfferTypes.EVENTS,
-    ...configuration,
   });
+
+const useGetEventByIdQuery = (
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  configuration: ExtendQueryOptions<typeof getEventById> = {},
+) => {
+  const options = createGetEventByIdQueryOptions({ id, scope });
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetEventByIdQuery = async ({
+  req,
+  queryClient,
+  id,
+  scope,
+}: ServerSideQueryOptions & {
+  id: string;
+  scope: Scope;
+}) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventByIdQueryOptions({ id, scope }),
+  });
+};
 
 const getEventsByIds = async ({
   headers,
