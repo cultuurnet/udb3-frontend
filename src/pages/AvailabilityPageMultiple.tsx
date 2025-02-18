@@ -104,8 +104,8 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
         accessor: 'bookingAvailability',
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+
+    [t],
   );
 
   const data = useMemo(
@@ -135,8 +135,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
           </Text>
         ),
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [subEvents],
+    [i18n.language, t, subEvents],
   );
 
   return [
