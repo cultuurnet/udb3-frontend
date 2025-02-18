@@ -242,18 +242,15 @@ const useDeleteOrganizerByIdMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const useGetOrganizersByCreatorQuery = (
-  {
-    creator,
-    paginationOptions = { start: 0, limit: 50 },
-    sortOptions = { field: 'modified', order: 'desc' },
-  }: PaginationOptions &
-    SortOptions & {
-      creator: User;
-    },
-  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetOrganizersByCreatorQueryOptions = ({
+  creator,
+  paginationOptions = { start: 0, limit: 50 },
+  sortOptions = { field: 'modified', order: 'desc' },
+}: PaginationOptions &
+  SortOptions & {
+    creator: User;
+  }) =>
+  queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
@@ -268,8 +265,53 @@ const useGetOrganizersByCreatorQuery = (
       ...createSortingArgument(sortOptions),
     },
     enabled: !!(creator?.sub && creator?.email),
-    ...configuration,
   });
+
+const useGetOrganizersByCreatorQuery = (
+  {
+    creator,
+    paginationOptions,
+    sortOptions,
+  }: PaginationOptions &
+    SortOptions & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
+) => {
+  const options = createGetOrganizersByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
+  });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOrganizersByCreatorQuery = async ({
+  req,
+  queryClient,
+  creator,
+  paginationOptions,
+  sortOptions,
+}: ServerSideQueryOptions &
+  PaginationOptions &
+  SortOptions & {
+    creator: User;
+  }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizersByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+    }),
+  });
+};
 
 type CreateOrganizerArguments = {
   headers: Headers;
