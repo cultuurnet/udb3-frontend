@@ -25,14 +25,12 @@ const useRecentLocations = () => {
     },
   );
 
-  const offers: (Offer & { location: any })[] =
-    // @ts-expect-error
-    getOffersQuery?.data?.member ?? [];
+  const offers = getOffersQuery?.data?.member ?? [];
 
   const hasRecentLocations = offers?.length > 0;
 
   const recentLocations = uniqBy(
-    offers?.map((offer) => offer.location),
+    offers?.map((offer) => ('location' in offer ? offer.location : undefined)),
     '@id',
   )
     .filter(

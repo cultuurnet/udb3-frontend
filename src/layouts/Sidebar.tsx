@@ -388,7 +388,6 @@ const Sidebar = () => {
   const getPermissionsQuery = useGetPermissionsQuery();
   const getRolesQuery = useGetRolesQuery();
   const getEventsToModerateQuery = useGetEventsToModerateQuery(searchQuery);
-  // @ts-expect-error
   const countEventsToModerate = getEventsToModerateQuery.data?.totalItems || 0;
 
   const isSmallView = useMatchBreakpoint(Breakpoints.S);
