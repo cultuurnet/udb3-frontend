@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -23,9 +23,12 @@ import { Sidebar } from './Sidebar';
 const useChangeLanguage = () => {
   const { i18n } = useTranslation();
   const { cookies } = useCookiesWithOptions(['udb-language']);
+  const language = useMemo(() => cookies['udb-language'], [cookies]);
   useEffect(() => {
-    i18n.changeLanguage(cookies['udb-language']);
-  }, [cookies, i18n]);
+    if (language) {
+      i18n.changeLanguage(language);
+    }
+  }, [language, i18n]);
 };
 
 const useHandleAuthentication = () => {
