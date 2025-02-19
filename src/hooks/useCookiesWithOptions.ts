@@ -29,9 +29,9 @@ const useCookiesWithOptions = (
     },
     [setCookie, options],
   );
-  const removeAuthenticationCookies = () =>
+  const removeAuthenticationCookies = useCallback(() => {
     ['token', 'idToken'].forEach((cookie) => removeCookie(cookie));
-
+  }, [removeCookie]);
   return {
     cookies,
     setCookie: setCookieWithOptions,
