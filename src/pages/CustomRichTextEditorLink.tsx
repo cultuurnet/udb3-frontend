@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -110,7 +111,7 @@ const CustomRichTextEditorLink = ({
           config.link.title || translations['components.controls.link.link']
         }
       >
-        <img src={config.link.icon} alt="" />
+        <Image src={config.link.icon} alt="link-icon" width={15} height={15} />
       </Option>
       <Option
         disabled={!currentState.link}
@@ -121,7 +122,12 @@ const CustomRichTextEditorLink = ({
           config.unlink.title || translations['components.controls.link.unlink']
         }
       >
-        <img src={config.unlink.icon} alt="" />
+        <Image
+          src={config.unlink.icon}
+          alt="unlink-icon"
+          width={15}
+          height={15}
+        />
       </Option>
       {expanded && isModalVisible && (
         <Stack
