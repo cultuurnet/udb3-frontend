@@ -14,6 +14,7 @@ import type {
   Term,
 } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
+import { PaginatedData } from '@/types/PaginatedData';
 import type { Values } from '@/types/Values';
 import type { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
@@ -146,11 +147,11 @@ const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
 const useGetEventsToModerateQuery = (searchQuery, configuration = {}) =>
-  useAuthenticatedQuery<Event[]>({
+  useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsToModerate,
     queryArguments: {
@@ -175,7 +176,7 @@ const getEventById = async ({ headers, id }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as Event | undefined;
 };
 
 type UseGetEventByIdArguments = ServerSideQueryOptions & {
@@ -221,7 +222,7 @@ const getEventsByIds = async ({
       headers,
     },
   });
-  return (await res.json()) as { member: Event[] };
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
 const useGetEventsByIdsQuery = (
@@ -263,7 +264,7 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Event[]>;
 };
 
 const useGetEventsByCreatorQuery = (
@@ -281,7 +282,7 @@ const useGetEventsByCreatorQuery = (
   >,
   configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
 ) =>
-  useAuthenticatedQuery<Event[]>({
+  useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {

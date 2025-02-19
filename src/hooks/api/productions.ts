@@ -3,6 +3,7 @@ import { Production } from '@/types/Production';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedMutations,
   useAuthenticatedQuery,
@@ -107,7 +108,12 @@ const addEventsByIds = async ({ productionId = '', eventIds = [], headers }) =>
 const useAddEventsByIdsMutation = (configuration = {}) =>
   useAuthenticatedMutations({ mutationFns: addEventsByIds, ...configuration });
 
-const getSuggestedEvents = async ({ headers }) => {
+const getSuggestedEvents = async ({
+  headers,
+}): Promise<{
+  events: Event[];
+  similarity: number;
+}> => {
   const response = await fetchFromApi({
     path: '/productions/suggestion',
     options: {
@@ -122,7 +128,9 @@ const getSuggestedEvents = async ({ headers }) => {
   return await response.json();
 };
 
-const useGetSuggestedEventsQuery = (configuration = {}) =>
+const useGetSuggestedEventsQuery = (
+  configuration: ExtendQueryOptions<typeof getSuggestedEvents> = {},
+) =>
   useAuthenticatedQuery({
     queryKey: ['productions', 'suggestion'],
     queryFn: getSuggestedEvents,

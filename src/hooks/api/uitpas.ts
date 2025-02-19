@@ -21,9 +21,9 @@ const getCardSystemForEvent = async ({ headers, eventId }) => {
     },
   });
   if (res.status === 404) {
-    return [];
+    return [] as CardSystem[];
   }
-  return await res.json();
+  return (await res.json()) as CardSystem[];
 };
 
 const useGetCardSystemForEventQuery = (
@@ -46,7 +46,7 @@ const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as CardSystem[];
 };
 
 const useGetCardSystemsForOrganizerQuery = (
