@@ -1,5 +1,6 @@
 import { QueryFunctionContext, useQuery } from 'react-query';
 
+import { ExtendQueryOptions } from '@/hooks/api/authenticated-query';
 import { Country } from '@/types/Country';
 
 type City = {
@@ -23,17 +24,15 @@ const getCitiesByQuery = async (
   const res = await fetch(`/api/cities?${params.toString()}`);
 
   if (!res.ok) {
-    return;
+    return undefined;
   }
 
-  const data = await res.json();
-
-  return data;
+  return (await res.json()) as City[];
 };
 
 const useGetCitiesByQuery = (
   { q, country }: GetCitiesArguments,
-  options = {},
+  options: ExtendQueryOptions<typeof getCitiesByQuery> = {},
 ) =>
   useQuery({
     queryKey: ['cities', { q, country }],
