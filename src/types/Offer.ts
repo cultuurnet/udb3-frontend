@@ -65,7 +65,12 @@ export type BookingInfo = {
   email?: string;
   description?: string;
   url?: string;
-  urlLabel?: { nl: string };
+  urlLabel?: {
+    de: string;
+    en: string;
+    fr: string;
+    nl: string;
+  };
 };
 
 export type PriceInfo = {

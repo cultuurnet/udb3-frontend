@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
@@ -142,11 +142,10 @@ const PriceInformation = ({
   const [isPricesLoaded, setIsPricesLoaded] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery(
-    { id: offerId, scope },
-    { refetchOnWindowFocus: false },
+    { id: offerId, scope: scope as Exclude<Scope, 'organizers'> },
+    { refetchOnWindowFocus: false, enabled: scope !== ScopeTypes.ORGANIZERS },
   );
 
-  // @ts-expect-error
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   const {
@@ -370,7 +369,6 @@ const PriceInformation = ({
                                 shouldValidate: false,
                               });
                               onSubmit();
-                              // @ts-expect-error
                               getOfferByIdQuery.remove();
                             }}
                           >

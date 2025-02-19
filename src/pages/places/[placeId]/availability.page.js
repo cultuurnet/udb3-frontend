@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { dehydrate } from 'react-query/hydration';
 
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
+  prefetchGetPlaceByIdQuery,
   useChangeStatusMutation,
   useGetPlaceByIdQuery,
 } from '@/hooks/api/places';
@@ -35,7 +36,12 @@ const Availability = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const { placeId } = query;
-    await useGetPlaceByIdQuery({ req, queryClient, id: placeId });
+    await prefetchGetPlaceByIdQuery({
+      req,
+      queryClient,
+      id: placeId,
+      scope: ScopeTypes.PLACES,
+    });
 
     return {
       props: {

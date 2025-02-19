@@ -8,7 +8,7 @@ import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
 import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useChangeOfferCalendarMutation,
   useGetOfferByIdQuery,
@@ -241,9 +241,13 @@ const CalendarStep = ({
     });
   }, [handleLoadInitialContext, scope, offerId]);
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope: scope as Exclude<Scope, 'organizers'> },
+    {
+      enabled: scope !== ScopeTypes.ORGANIZERS,
+    },
+  );
 
-  // @ts-expect-error
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   useEffect(() => {

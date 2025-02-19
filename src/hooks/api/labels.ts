@@ -16,16 +16,11 @@ const getLabelsByQuery = async ({ headers, query }) => {
     },
   });
 
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-
-  return await res.json();
+  return (await res.json()) as Label[];
 };
 
 const useGetLabelsByQuery = ({ query }: { query: string }) =>
-  useAuthenticatedQuery<Label[]>({
+  useAuthenticatedQuery({
     queryKey: ['labels'],
     queryFn: getLabelsByQuery,
     queryArguments: { query },

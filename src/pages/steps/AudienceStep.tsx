@@ -56,7 +56,6 @@ const AudienceStep = ({
 
   const getEventByIdQuery = useGetEventByIdQuery({ id: offerId });
 
-  // @ts-expect-error
   const event: Event | undefined = getEventByIdQuery.data;
 
   useEffect(() => {

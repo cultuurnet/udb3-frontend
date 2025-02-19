@@ -158,7 +158,6 @@ const OrganizerAddModal = ({
   );
 
   const existingOrganizer: Organizer | undefined =
-    // @ts-expect-error
     getOrganizersByWebsiteQuery.data?.member?.[0];
   const isUrlUnique = !existingOrganizer;
   const isUrlAlreadyTaken = formState.errors.url?.type === 'not_unique';

@@ -44,7 +44,6 @@ const AlertDuplicatePlace = ({
     return null;
   }
 
-  // @ts-expect-error
   const duplicatePlace = getPlaceByIdQuery.data;
 
   const duplicatePlaceName = duplicatePlace

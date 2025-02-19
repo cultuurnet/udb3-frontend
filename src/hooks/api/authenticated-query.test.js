@@ -19,7 +19,7 @@ const getCalledMutations = (path) => {
   });
 };
 
-const queryFn = async ({ headers, ...queryData }) => {
+const queryFn = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/random',
     options: {

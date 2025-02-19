@@ -1,9 +1,14 @@
 import jwt_decode from 'jwt-decode';
+import { Cookie } from 'universal-cookie';
 
+import { PermissionTypes } from '@/layouts/Sidebar';
+import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
 import {
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -54,27 +59,29 @@ const getUser = async (cookies: Cookies) => {
   return userInfo;
 };
 
-const useGetUserQuery = () => {
-  const { cookies } = useCookiesWithOptions(['idToken']);
-
-  return useAuthenticatedQuery<User>({
+const createGetUserQueryOptions = (cookies: Cookies) =>
+  queryOptions({
     queryKey: ['user'],
     queryFn: () => getUser(cookies),
   });
+
+const useGetUserQuery = () => {
+  const { cookies } = useCookiesWithOptions(['idToken']);
+
+  return useAuthenticatedQuery(createGetUserQueryOptions(cookies));
 };
 
-const useGetUserQueryServerSide = (
-  { req, queryClient }: ServerSideQueryOptions = {},
-  configuration = {},
-) => {
-  const cookies = req.cookies;
-
-  return useAuthenticatedQuery({
+export const prefetchGetUserQuery = async ({
+  req,
+  queryClient,
+  cookies,
+}: ServerSideQueryOptions & {
+  cookies: Cookies;
+}) => {
+  return await prefetchAuthenticatedQuery({
     req,
     queryClient,
-    queryKey: ['user'],
-    queryFn: () => getUser(cookies),
-    ...configuration,
+    ...createGetUserQueryOptions(cookies),
   });
 };
 
@@ -85,11 +92,7 @@ const getPermissions = async ({ headers }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
 const useGetPermissionsQuery = (configuration = {}) =>
@@ -120,10 +123,5 @@ const useGetRolesQuery = (configuration = {}) =>
     ...configuration,
   });
 
-export {
-  useGetPermissionsQuery,
-  useGetRolesQuery,
-  useGetUserQuery,
-  useGetUserQueryServerSide,
-};
+export { useGetPermissionsQuery, useGetRolesQuery, useGetUserQuery };
 export type { User };

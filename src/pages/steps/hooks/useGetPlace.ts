@@ -7,7 +7,6 @@ const useGetPlace = ({ id, onSuccess, enabled }) => {
     { onSuccess, enabled: !!id && !!enabled },
   );
 
-  // @ts-expect-error
   return getPlaceByIdQuery?.data;
 };
 

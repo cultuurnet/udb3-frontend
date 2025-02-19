@@ -1,58 +1,103 @@
+import { Headers } from '@/hooks/api/types/Headers';
+import { PaginatedData } from '@/types/PaginatedData';
+import { Production } from '@/types/Production';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
+  PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedMutations,
   useAuthenticatedQuery,
 } from './authenticated-query';
 
-const getProductions = async ({ headers, ...queryData }) => {
+const getProductions = async ({
+  headers,
+  name,
+  start,
+  limit,
+}: { headers: Headers } & {
+  name: string;
+  start: string;
+  limit: string;
+}) => {
   const res = await fetchFromApi({
     path: '/productions/',
     searchParams: {
-      ...queryData,
+      name,
+      start,
+      limit,
     },
     options: {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Production[]>;
 };
 
-const useGetProductionsQuery = (
-  { req, queryClient, name = '', paginationOptions = { start: 0, limit: 15 } },
-  configuration = {},
-) =>
-  useAuthenticatedQuery({
-    req,
-    queryClient,
+const createGetProductionsQueryOptions = ({
+  name = '',
+  paginationOptions = { start: 0, limit: 15 },
+}: PaginationOptions & { name?: string }) =>
+  queryOptions({
     queryKey: ['productions'],
     queryFn: getProductions,
     queryArguments: {
       name,
-      start: paginationOptions.start,
-      limit: paginationOptions.limit,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
     },
-    ...configuration,
   });
 
-const deleteEventById = async ({
+const useGetProductionsQuery = (
+  { name, paginationOptions }: PaginationOptions & { name?: string },
+  configuration: ExtendQueryOptions<typeof getProductions> = {},
+) => {
+  const config = createGetProductionsQueryOptions({ name, paginationOptions });
+
+  return useAuthenticatedQuery({
+    ...config,
+    ...configuration,
+    enabled: config.enabled !== false && configuration.enabled,
+  });
+};
+
+export const prefetchGetProductionsQuery = async ({
+  req,
+  queryClient,
+  name,
+  paginationOptions,
+}: ServerSideQueryOptions & PaginationOptions & { name?: string }) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetProductionsQueryOptions({ name, paginationOptions }),
+  });
+};
+
+const deleteEventById = async <
+  TConfig extends {
+    productionId: string;
+    eventId: string;
+    headers: Headers;
+    silentError?: boolean;
+  },
+>({
   productionId = '',
   eventId = '',
   headers,
   silentError = false,
-}) =>
+}: TConfig) =>
   fetchFromApi({
     path: `/productions/${productionId}/events/${eventId}`,
     options: {
       method: 'DELETE',
       headers,
     },
-    silentError,
+    silentError: silentError as TConfig['silentError'],
   });
 
 const useDeleteEventByIdMutation = (configuration = {}) =>
@@ -79,19 +124,26 @@ const useDeleteEventsByIdsMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const addEventById = async ({
+const addEventById = async <
+  TConfig extends {
+    productionId: string;
+    eventId: string;
+    headers: Headers;
+    silentError?: boolean;
+  },
+>({
   productionId,
   eventId,
   headers,
   silentError = false,
-}) =>
+}: TConfig) =>
   fetchFromApi({
     path: `/productions/${productionId}/events/${eventId}`,
     options: {
       method: 'PUT',
       headers,
     },
-    silentError,
+    silentError: silentError as TConfig['silentError'],
   });
 
 const useAddEventByIdMutation = (configuration = {}) =>
@@ -189,12 +241,19 @@ const useMergeProductionsMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const changeProductionName = async ({
+const changeProductionName = async <
+  TConfig extends {
+    productionId: string;
+    productionName: string;
+    headers: Headers;
+    silentError?: boolean;
+  },
+>({
   productionId = '',
   productionName = '',
   headers,
   silentError = false,
-}) =>
+}: TConfig) =>
   fetchFromApi({
     path: `/productions/${productionId}/name`,
     options: {
@@ -204,7 +263,7 @@ const changeProductionName = async ({
         name: productionName,
       }),
     },
-    silentError,
+    silentError: silentError as TConfig['silentError'],
   });
 
 const useChangeProductionNameMutation = (configuration = {}) =>

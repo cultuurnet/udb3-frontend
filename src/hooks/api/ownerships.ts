@@ -1,10 +1,14 @@
 import { UseMutationResult, UseQueryOptions } from 'react-query';
 
+import { Headers } from '@/hooks/api/types/Headers';
 import { Values } from '@/types/Values';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -99,14 +103,10 @@ const getOwnershipRequests = async ({
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as GetOwnershipRequestsResponse;
 };
 
-type UseGetOwnershipRequestsArguments = ServerSideQueryOptions & {
+type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
@@ -119,26 +119,43 @@ export type GetOwnershipRequestsResponse = {
   totalItems: number;
   member: OwnershipRequest[];
 };
-const useGetOwnershipRequestsQuery = (
-  {
-    req,
-    queryClient,
-    itemId,
-    ownerId,
-    state,
-    paginationOptions,
-  }: UseGetOwnershipRequestsArguments,
-  configuration: UseQueryOptions = {},
-) =>
-  useAuthenticatedQuery<GetOwnershipRequestsResponse>({
-    req,
-    queryClient,
+
+const createGetOwnershipRequestsQueryOptions = ({
+  itemId,
+  ownerId,
+  state,
+  paginationOptions,
+}: UseGetOwnershipRequestsArguments) =>
+  queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
     queryArguments: { itemId, ownerId, state, paginationOptions },
     refetchOnWindowFocus: false,
-    ...configuration,
   });
+const useGetOwnershipRequestsQuery = (
+  args: UseGetOwnershipRequestsArguments,
+  configuration: ExtendQueryOptions<typeof getOwnershipRequests> = {},
+) => {
+  const config = createGetOwnershipRequestsQueryOptions(args);
+
+  return useAuthenticatedQuery({
+    ...config,
+    ...configuration,
+    enabled: config.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOwnershipRequestsQuery = async ({
+  req,
+  queryClient,
+  ...args
+}: ServerSideQueryOptions & UseGetOwnershipRequestsArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipRequestsQueryOptions(args),
+  });
+};
 
 type ApproveOwnershipArguments = { ownershipId: string };
 
@@ -214,30 +231,49 @@ const getOwnershipCreator = async ({ headers, organizerId }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as OwnershipCreator;
 };
 
-type UseGetOwnershipCreatorArguments = ServerSideQueryOptions & {
+type UseGetOwnershipCreatorArguments = {
   organizerId: string;
 };
 
-const useGetOwnershipCreatorQuery = (
-  { req, queryClient, organizerId }: UseGetOwnershipCreatorArguments,
-  configuration: UseQueryOptions = {},
-) =>
-  useAuthenticatedQuery<OwnershipCreator>({
-    req,
-    queryClient,
+const createGetOwnershipCreatorQuery = ({
+  organizerId,
+}: {
+  organizerId: string;
+}) =>
+  queryOptions({
     queryKey: ['ownership-creator'],
     queryFn: getOwnershipCreator,
     queryArguments: { organizerId },
     refetchOnWindowFocus: false,
-    ...configuration,
   });
+
+const useGetOwnershipCreatorQuery = (
+  { organizerId }: UseGetOwnershipCreatorArguments,
+  configuration: ExtendQueryOptions<typeof getOwnershipCreator> = {},
+) => {
+  const options = createGetOwnershipCreatorQuery({ organizerId });
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOwnershipCreatorQuery = async ({
+  req,
+  queryClient,
+  organizerId,
+}: ServerSideQueryOptions & UseGetOwnershipCreatorArguments) => {
+  return await prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnershipCreatorQuery({ organizerId }),
+  });
+};
 
 export {
   useApproveOwnershipRequestMutation,

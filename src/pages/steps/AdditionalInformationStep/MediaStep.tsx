@@ -17,6 +17,7 @@ import {
   ValidationStatus,
 } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import type { FormData } from '@/pages/steps/modals/PictureUploadModal';
+import { isOrganizer } from '@/types/Organizer';
 import { Inline } from '@/ui/Inline';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Breakpoints } from '@/ui/theme';
@@ -54,38 +55,29 @@ const MediaStep = ({
 
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
 
-  const videosFromQuery = useMemo(
-    // @ts-expect-error
-    () => getEntityByIdQuery.data?.videos ?? [],
-    [
-      // @ts-expect-error
-      getEntityByIdQuery.data?.videos,
-    ],
-  );
+  const entity = getEntityByIdQuery.data;
 
-  const mediaObjects = useMemo(
-    () =>
-      // @ts-expect-error
-      getEntityByIdQuery.data?.mediaObject ??
-      // @ts-expect-error
-      getEntityByIdQuery.data?.images ??
-      [],
-    // @ts-expect-error
-    [getEntityByIdQuery.data],
-  );
+  const videosFromQuery = useMemo(() => {
+    if (isOrganizer(entity)) {
+      return undefined;
+    }
+    return entity?.videos ?? [];
+  }, [entity]);
 
-  const eventImage = useMemo(
-    () => {
-      if (scope === ScopeTypes.ORGANIZERS) {
-        // @ts-expect-error
-        return getEntityByIdQuery.data?.mainImage;
-      }
-      // @ts-expect-error
-      return getEntityByIdQuery.data?.image ?? [];
-    },
-    // @ts-expect-error
-    [getEntityByIdQuery.data?.image, getEntityByIdQuery.data?.mainImage, scope],
-  );
+  const mediaObjects = useMemo(() => {
+    if (isOrganizer(entity)) {
+      return entity?.images ?? [];
+    }
+
+    return entity?.mediaObject ?? [];
+  }, [entity]);
+
+  const eventImage = useMemo(() => {
+    if (isOrganizer(entity)) {
+      return entity?.mainImage;
+    }
+    return entity?.image;
+  }, [entity]);
 
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);

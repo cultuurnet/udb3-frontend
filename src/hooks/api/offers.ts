@@ -1,17 +1,18 @@
-import type { UseQueryOptions } from 'react-query';
 import { UseMutationOptions } from 'react-query';
 
-import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
-import { useGetEventByIdQuery } from '@/hooks/api/events';
-import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { OfferType, OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { getEventById, useGetEventByIdQuery } from '@/hooks/api/events';
+import { getPlaceById, useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
+import type { Values } from '@/types/Values';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
+  ExtendQueryOptions,
   PaginationOptions,
   SortOptions,
   useAuthenticatedMutation,
@@ -19,44 +20,57 @@ import {
 } from './authenticated-query';
 import type { User } from './user';
 
-const getOffersByCreator = async ({ headers, ...queryData }) => {
+const getOffersByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: { headers: Headers } & {
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   const res = await fetchFromApi({
     path: '/offers/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as Offer[];
 };
 
 const useGetOffersByCreatorQuery = (
   {
-    req,
-    queryClient,
     advancedQuery,
     creator,
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-        advancedQuery?: string;
-      }
-  >,
-  {
-    queryArguments,
-    ...configuration
-  }: UseQueryOptions & { queryArguments?: any } = {},
+    workflowStatus,
+    addressCountry,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+      advancedQuery?: string;
+      workflowStatus?: string;
+      addressCountry?: string;
+    },
+  configuration: ExtendQueryOptions<typeof getOffersByCreator> = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,
@@ -70,33 +84,46 @@ const useGetOffersByCreatorQuery = (
   const query = advancedQuery
     ? defaultQuery.concat(' AND ', advancedQuery)
     : defaultQuery;
-  return useAuthenticatedQuery<Offer[]>({
-    req,
-    queryClient,
+  return useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getOffersByCreator,
     queryArguments: {
       q: query,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
-      workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
+      workflowStatus:
+        workflowStatus ?? 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
       ...createSortingArgument(sortOptions),
       ...(calendarSummaryFormats &&
         createEmbededCalendarSummaries(calendarSummaryFormats)),
-      ...(queryArguments ?? {}),
+      addressCountry,
     },
     enabled: !!(creator?.sub && creator?.email),
     ...configuration,
   });
 };
 
-const useGetOfferByIdQuery = ({ scope, id }, configuration = {}) => {
-  const query =
-    scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
+type Config<TOfferType extends Values<typeof OfferTypes>> =
+  TOfferType extends typeof OfferTypes.EVENTS
+    ? ExtendQueryOptions<typeof getEventById>
+    : ExtendQueryOptions<typeof getPlaceById>;
 
-  return query({ id, scope }, configuration);
+const useGetOfferByIdQuery = <TOfferType extends Values<typeof OfferTypes>>(
+  { scope, id }: { scope: TOfferType; id: string },
+  configuration: Config<TOfferType> = {},
+) => {
+  const getEventQuery = useGetEventByIdQuery(
+    { scope, id },
+    configuration as Config<'events'>,
+  );
+  const getPlaceQuery = useGetPlaceByIdQuery(
+    { scope, id },
+    configuration as Config<'places'>,
+  );
+
+  return scope === OfferTypes.EVENTS ? getEventQuery : getPlaceQuery;
 };
 
 const changeOfferName = async ({ headers, id, lang, name, scope }) => {
@@ -458,12 +485,7 @@ const useAddContactPointMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const addOfferBookingInfo = async ({
-  headers,
-  eventId,
-  bookingInfo,
-  scope,
-}) => {
+const addOfferBookingInfo = async ({ headers, eventId, bookingInfo, scope }) =>
   fetchFromApi({
     path: `/${scope}/${eventId}/bookingInfo`,
     options: {
@@ -472,7 +494,6 @@ const addOfferBookingInfo = async ({
       body: JSON.stringify({ bookingInfo }),
     },
   });
-};
 
 const useAddOfferBookingInfoMutation = (configuration = {}) =>
   useAuthenticatedMutation({

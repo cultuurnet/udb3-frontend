@@ -1,3 +1,4 @@
+import { Event } from '@/types/Event';
 import { MediaObject } from '@/types/Offer';
 
 import type { Address } from './Address';
@@ -31,4 +32,10 @@ type Organizer = {
   educationalDescription?: string;
 };
 
+const isOrganizer = (value: unknown): value is Organizer => {
+  if (typeof value?.['@context'] !== 'string') return false;
+  return value['@context'].endsWith('/organizer');
+};
+
+export { isOrganizer };
 export type { Organizer };

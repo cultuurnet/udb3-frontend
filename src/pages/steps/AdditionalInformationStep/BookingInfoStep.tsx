@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useAddOfferBookingInfoMutation,
   useGetOfferByIdQuery,
@@ -302,9 +303,13 @@ const BookingInfoStep = ({
     },
   ];
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope: scope as Exclude<Scope, 'organizers'> },
+    {
+      enabled: scope !== ScopeTypes.ORGANIZERS,
+    },
+  );
 
-  // @ts-expect-error
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
 
   const { register, handleSubmit, formState, control, setValue, getValues } =

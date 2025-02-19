@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useAddOfferOrganizerMutation,
   useDeleteOfferOrganizerMutation,
@@ -53,7 +53,10 @@ const OrganizerStep = ({
   const { ...router } = useRouter();
   const queryClient = useQueryClient();
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope: scope as Exclude<Scope, 'organizers'> },
+    { enabled: scope !== ScopeTypes.ORGANIZERS },
+  );
 
   // @ts-expect-error
   const offer: Event | Place | undefined = getOfferByIdQuery.data;
@@ -64,7 +67,6 @@ const OrganizerStep = ({
   const [hasUitpasTicketSales, setHasUitpasTicketSales] = useState(false);
 
   const getCardSystemForEventQuery = useGetCardSystemForEventQuery(
-    // @ts-expect-error
     {
       scope,
       eventId: offerId,
@@ -87,7 +89,6 @@ const OrganizerStep = ({
       };
     }
 
-    // @ts-expect-error
     let status: number = getCardSystemForEventQuery.error?.status;
     if (hasUitpasTicketSales) {
       status = 400;
@@ -105,14 +106,12 @@ const OrganizerStep = ({
       key: UitpasTranslationKeys.SUCCESS,
     };
   }, [
-    // @ts-expect-error
     getCardSystemForEventQuery.error?.status,
     hasPriceInfo,
     hasUitpasLabel,
     hasUitpasTicketSales,
   ]);
 
-  // @ts-expect-error
   const getCardSystemsForOrganizerQuery = useGetCardSystemsForOrganizerQuery({
     scope,
     organizerId: organizer?.['@id']
@@ -121,14 +120,12 @@ const OrganizerStep = ({
     isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
   });
 
-  // @ts-expect-error
   const cardSystemForEvent = getCardSystemForEventQuery.data ?? {};
 
   const [selectedCardSystems, setSelectedCardSystems] = useState<CardSystem[]>(
     [],
   );
 
-  // @ts-expect-error
   const cardSystems = getCardSystemsForOrganizerQuery.data ?? {};
 
   const [isOrganizerAddModalVisible, setIsOrganizerAddModalVisible] =

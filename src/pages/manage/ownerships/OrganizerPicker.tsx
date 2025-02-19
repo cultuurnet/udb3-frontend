@@ -14,7 +14,7 @@ import { getOrganizerName } from '@/pages/steps/AdditionalInformationStep/Organi
 import { Organizer } from '@/types/Organizer';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, InlineProps } from '@/ui/Inline';
-import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { Typeahead } from '@/ui/Typeahead';
 import { valueToArray } from '@/utils/valueToArray';
 
 type Props = {

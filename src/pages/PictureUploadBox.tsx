@@ -37,7 +37,7 @@ type ImageType = {
   copyrightHolder: string;
   thumbnailUrl: string;
   isMain: boolean;
-  file: File;
+  file?: File;
 };
 
 type Props = StackProps & {

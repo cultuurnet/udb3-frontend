@@ -59,10 +59,8 @@ const useEditNameAndProduction = ({
     if (!production) return;
 
     // unlink event from current production
-    // @ts-expect-error
     if (getEventByIdQuery.data?.production?.id) {
       await deleteEventFromProductionByIdMutation.mutateAsync({
-        // @ts-expect-error
         productionId: getEventByIdQuery.data.production.id,
         offerId,
       });
@@ -104,7 +102,6 @@ const ProductionStep = ({
   const [searchInput, setSearchInput] = useState('');
 
   const getProductionsQuery = useGetProductionsQuery(
-    // @ts-expect-error
     {
       name: searchInput,
     },
@@ -112,12 +109,8 @@ const ProductionStep = ({
   );
 
   const productions = useMemo(
-    // @ts-expect-error
     () => getProductionsQuery.data?.member ?? [],
-    [
-      // @ts-expect-error
-      getProductionsQuery.data?.member,
-    ],
+    [getProductionsQuery.data?.member],
   );
 
   return (
