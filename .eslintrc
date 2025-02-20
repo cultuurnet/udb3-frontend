@@ -7,7 +7,7 @@
     "no-restricted-imports": "warn",
     "no-console": "warn",
     "react/display-name": "warn",
-    "react-hooks/rules-of-hooks": "warn",
+    "react-hooks/rules-of-hooks": "error",
     "@next/next/no-img-element": "off"
   }
 }
