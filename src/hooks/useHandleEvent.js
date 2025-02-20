@@ -15,11 +15,11 @@ const useHandleEvent = (eventsMap = {}) => {
 
     const eventsMap = eventsMapRef.current;
 
-    Object.entries(eventsMap.current).forEach(([type, handler]) => {
+    Object.entries(eventsMap).forEach(([type, handler]) => {
       window.addEventListener(type, handler);
     });
     return () => {
-      Object.entries(eventsMap.current).forEach(([type, handler]) => {
+      Object.entries(eventsMap).forEach(([type, handler]) => {
         window.removeEventListener(type, handler);
       });
     };
