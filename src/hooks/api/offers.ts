@@ -5,6 +5,7 @@ import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import type { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
+import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
@@ -56,7 +57,7 @@ const getOffersByCreator = async ({
       headers,
     },
   });
-  return (await res.json()) as Offer[];
+  return (await res.json()) as PaginatedData<Offer[]>;
 };
 
 const useGetOffersByCreatorQuery = (

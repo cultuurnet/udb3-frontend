@@ -14,6 +14,7 @@ import {
   useAuthenticatedQuery,
 } from '@/hooks/api/authenticated-query';
 import type { Organizer } from '@/types/Organizer';
+import { PaginatedData } from '@/types/PaginatedData';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
@@ -34,15 +35,15 @@ const useGetOrganizersByQueryQuery = (
   }: { name?: string; q?: string } & PaginationOptions = {},
   configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
-  useAuthenticatedQuery<GetOrganizersByQueryResponse>({
+  useAuthenticatedQuery({
     queryKey: ['organizers'],
     queryFn: getOrganizers,
     queryArguments: {
-      embed: true,
+      embed: 'true',
       q,
       name,
-      start: paginationOptions.start,
-      limit: paginationOptions.limit,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
     },
     ...configuration,
     enabled: !!name && configuration.enabled !== false,
@@ -177,7 +178,7 @@ const getOrganizersByCreator = async ({
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as PaginatedData<Organizer[]>;
 };
 
 type UseGetOrganizerPermissionsArguments = {
@@ -238,7 +239,12 @@ const getSuggestedOrganizersQuery = async ({ headers }) => {
     searchParams: { itemType: 'organizer' },
   });
 
-  return await res.json();
+  return (await res.json()) as PaginatedData<
+    {
+      '@id': string;
+      '@type': 'Organizer';
+    }[]
+  >;
 };
 
 const useGetSuggestedOrganizersQuery = (

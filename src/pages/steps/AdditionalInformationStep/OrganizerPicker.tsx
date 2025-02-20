@@ -163,7 +163,6 @@ const OrganizerPicker = ({
   const recentUsedOrganizers = useMemo(() => {
     const recentOrganizers = [];
 
-    // @ts-expect-error
     getOffersByCreatorQuery.data?.member.forEach((event) => {
       if (
         event.organizer &&
@@ -176,8 +175,6 @@ const OrganizerPicker = ({
     });
 
     return recentOrganizers.slice(0, MAX_RECENT_USED_ORGANIZERS);
-
-    // @ts-expect-error
   }, [getOffersByCreatorQuery.data?.member]);
 
   const organizers = getOrganizersByQueryQuery.data?.member ?? [];

@@ -31,4 +31,9 @@ type Organizer = {
   educationalDescription?: string;
 };
 
+export const isOrganizer = (value: unknown): value is Organizer => {
+  if (typeof value?.['@context'] !== 'string') return false;
+  return value['@context'].endsWith('/organizer');
+};
+
 export type { Organizer };

@@ -6,6 +6,7 @@ import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
 import {
+  ExtendQueryOptions,
   prefetchAuthenticatedQuery,
   queryOptions,
   ServerSideQueryOptions,
@@ -100,6 +101,13 @@ const useGetPermissionsQuery = (configuration = {}) =>
     ...configuration,
   });
 
+type Role = {
+  uuid: string;
+  name: string;
+  permissions: Values<typeof PermissionTypes>[];
+  constraints?: { v3?: string };
+};
+
 const getRoles = async ({ headers }) => {
   const res = await fetchFromApi({
     path: '/user/roles/',
@@ -107,10 +115,12 @@ const getRoles = async ({ headers }) => {
       headers,
     },
   });
-  return await res.json();
+  return (await res.json()) as Role[];
 };
 
-const useGetRolesQuery = (configuration = {}) =>
+const useGetRolesQuery = (
+  configuration: ExtendQueryOptions<typeof getRoles> = {},
+) =>
   useAuthenticatedQuery({
     queryKey: ['user', 'roles'],
     queryFn: getRoles,

@@ -532,7 +532,10 @@ const Dashboard = (): any => {
   const sort = (query?.sort as string) ?? 'created_desc';
 
   const useGetItemsByCreator = useMemo(
-    () => UseGetItemsByCreatorMap[tab ?? 'events'],
+    () =>
+      UseGetItemsByCreatorMap[
+        (tab as keyof typeof UseGetItemsByCreatorMap) ?? 'events'
+      ],
     [tab],
   );
 
@@ -577,20 +580,23 @@ const Dashboard = (): any => {
     );
   };
 
-  const suggestedOrganizerIds: UseQueryResult<{ member: { '@id': string }[] }> =
-    useGetSuggestedOrganizersQuery({}, { enabled: tab === 'organizers' });
+  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
+    {},
+    { enabled: tab === 'organizers' },
+  );
 
-  const suggestedOrganizers: UseQueryResult<{ member: Organizer[] }> =
-    useGetOrganizersByQueryQuery(
-      {
-        q: suggestedOrganizerIds.data?.member
-          .map((result) => `id:${parseOfferId(result['@id'])}`)
-          .join(' OR '),
-      },
-      {
-        enabled: suggestedOrganizerIds.data?.member?.length > 0,
-      },
-    );
+  suggestedOrganizerIds.data;
+
+  const suggestedOrganizers = useGetOrganizersByQueryQuery(
+    {
+      q: suggestedOrganizerIds.data?.member
+        .map((result) => `id:${parseOfferId(result['@id'])}`)
+        .join(' OR '),
+    },
+    {
+      enabled: suggestedOrganizerIds.data?.member?.length > 0,
+    },
+  );
 
   const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
