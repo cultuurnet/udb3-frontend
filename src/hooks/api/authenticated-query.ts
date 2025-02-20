@@ -26,8 +26,8 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { createHeaders, useHeaders } from './useHeaders';
 
 type ServerSideQueryOptions = {
-  req?: NextApiRequest;
-  queryClient?: QueryClient;
+  req: NextApiRequest;
+  queryClient: QueryClient;
 };
 
 type AuthenticatedQueryOptions<T> = ServerSideQueryOptions & T;

@@ -7,6 +7,8 @@ import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
 import {
   ExtendQueryOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -57,27 +59,30 @@ const getUser = async (cookies: Cookies) => {
   return userInfo;
 };
 
+const createGetUserQueryOptions = (cookies: Cookies) =>
+  queryOptions({
+    queryKey: ['user'],
+    queryFn: () => getUser(cookies),
+  });
+
 const useGetUserQuery = () => {
   const { cookies } = useCookiesWithOptions(['idToken']);
 
-  return useAuthenticatedQuery<User>({
-    queryKey: ['user'],
-    queryFn: () => getUser(cookies),
-  });
+  return useAuthenticatedQuery(createGetUserQueryOptions(cookies));
 };
 
-const useGetUserQueryServerSide = (
-  { req }: ServerSideQueryOptions = {},
-  configuration = {},
-) => {
-  const cookies = req.cookies;
-
-  return useAuthenticatedQuery({
-    queryKey: ['user'],
-    queryFn: () => getUser(cookies),
-    ...configuration,
+export const prefetchGetUserQuery = ({
+  req,
+  queryClient,
+  cookies,
+}: ServerSideQueryOptions & {
+  cookies: Cookies;
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetUserQueryOptions(cookies),
   });
-};
 
 const getPermissions = async ({ headers }) => {
   const res = await fetchFromApi({
@@ -122,10 +127,5 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
-export {
-  useGetPermissionsQuery,
-  useGetRolesQuery,
-  useGetUserQuery,
-  useGetUserQueryServerSide,
-};
+export { useGetPermissionsQuery, useGetRolesQuery, useGetUserQuery };
 export type { User };

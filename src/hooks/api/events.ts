@@ -1,5 +1,5 @@
 import type { CalendarType } from '@/constants/CalendarType';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import { Video } from '@/pages/VideoUploadBox';
 import { ContactPoint } from '@/types/ContactPoint';
 import type { AttendanceMode, Event } from '@/types/Event';
@@ -22,11 +22,13 @@ import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
-import type {
+import {
   AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   SortOptions,
 } from './authenticated-query';
@@ -179,22 +181,51 @@ const getEventById = async ({ headers, id }) => {
   return (await res.json()) as Event | undefined;
 };
 
-type UseGetEventByIdArguments = ServerSideQueryOptions & {
+type UseGetEventByIdArguments = {
   id: string;
   scope?: Values<typeof OfferTypes>;
 };
 
-const useGetEventByIdQuery = (
-  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
-  configuration: ExtendQueryOptions<typeof getEventById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetEventByIdQueryOptions = ({
+  id,
+  scope,
+}: {
+  id: string;
+  scope: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventById,
     queryArguments: { id },
     refetchOnWindowFocus: false,
     enabled: !!id && scope === OfferTypes.EVENTS,
+  });
+
+const useGetEventByIdQuery = (
+  { id, scope = OfferTypes.EVENTS }: UseGetEventByIdArguments,
+  configuration: ExtendQueryOptions<typeof getEventById> = {},
+) => {
+  const options = createGetEventByIdQueryOptions({ id, scope });
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetEventByIdQuery = ({
+  req,
+  queryClient,
+  id,
+  scope = OfferTypes.EVENTS,
+}: ServerSideQueryOptions & {
+  id: string;
+  scope?: Scope;
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventByIdQueryOptions({ id, scope }),
   });
 
 const getEventsByIds = async ({
@@ -225,19 +256,54 @@ const getEventsByIds = async ({
   return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsByIdsQuery = (
-  { ids = [], scope = OfferTypes.EVENTS },
-  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
-) => {
-  return useAuthenticatedQuery({
+const createGetEventsByIdsQueryOptions = ({
+  ids = [],
+  scope = OfferTypes.EVENTS,
+}: {
+  ids: string[];
+  scope?: Scope;
+}) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByIds,
     queryArguments: { ids },
     refetchOnWindowFocus: false,
     enabled: ids.length > 0 && scope === OfferTypes.EVENTS,
+  });
+
+const useGetEventsByIdsQuery = (
+  {
+    ids,
+    scope,
+  }: {
+    ids: string[];
+    scope?: Scope;
+  },
+  configuration: ExtendQueryOptions<typeof getEventsByIds> = {},
+) => {
+  const options = createGetEventsByIdsQueryOptions({ ids, scope });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
   });
 };
+
+export const prefetchGetEventsByIdsQuery = ({
+  req,
+  queryClient,
+  ids,
+  scope,
+}: ServerSideQueryOptions & {
+  ids: string[];
+  scope?: Scope;
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventsByIdsQueryOptions({ ids, scope }),
+  });
 
 const deleteEventById = async ({ headers, id }) =>
   fetchFromApi({
@@ -252,13 +318,34 @@ const useDeleteEventByIdMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsByCreator = async ({ headers, ...queryData }) => {
+const getEventsByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+}: {
+  headers: Headers;
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   delete headers['Authorization'];
 
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
     },
     options: {
       headers,
@@ -267,22 +354,17 @@ const getEventsByCreator = async ({ headers, ...queryData }) => {
   return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsByCreatorQuery = (
-  {
-    creator,
-    paginationOptions = { start: 0, limit: 50 },
-    sortOptions = { field: 'modified', order: 'desc' },
-    calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-      }
-  >,
-  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetEventsByCreatorQueryOptions = ({
+  creator,
+  paginationOptions = { start: 0, limit: 50 },
+  sortOptions = { field: 'modified', order: 'desc' },
+  calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
+}: PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) =>
+  queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {
@@ -291,16 +373,66 @@ const useGetEventsByCreatorQuery = (
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
       } ${creator?.email}) OR contributors:${creator?.email}`,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
       workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
       ...createSortingArgument(sortOptions),
       ...createEmbededCalendarSummaries(calendarSummaryFormats),
     },
     enabled: !!(creator?.sub && creator?.email),
+  });
+
+const useGetEventsByCreatorQuery = (
+  {
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getEventsByCreator> = {},
+) => {
+  const options = createGetEventsByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
+    calendarSummaryFormats,
+  });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetEventsByCreatorQuery = ({
+  req,
+  queryClient,
+  creator,
+  paginationOptions,
+  sortOptions,
+  calendarSummaryFormats,
+}: ServerSideQueryOptions &
+  PaginationOptions &
+  SortOptions &
+  CalendarSummaryFormats & {
+    creator: User;
+  }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetEventsByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+      calendarSummaryFormats,
+    }),
   });
 
 const getCalendarSummary = async ({ headers, id, format, locale }) => {

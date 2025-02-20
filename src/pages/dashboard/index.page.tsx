@@ -2,6 +2,7 @@ import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -10,23 +11,26 @@ import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
+  prefetchGetEventsByCreatorQuery,
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
 import {
+  prefetchGetOrganizersByCreatorQuery,
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
+  prefetchGetPlacesByCreatorQuery,
   useDeletePlaceByIdMutation,
   useGetPlacesByCreatorQuery,
 } from '@/hooks/api/places';
 import {
+  prefetchGetUserQuery,
   useGetPermissionsQuery,
   useGetUserQuery,
-  useGetUserQueryServerSide,
   User,
 } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
@@ -70,6 +74,12 @@ import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
+
+const PrefetchGetItemsByCreatorMap = {
+  events: prefetchGetEventsByCreatorQuery,
+  places: prefetchGetPlacesByCreatorQuery,
+  organizers: prefetchGetOrganizersByCreatorQuery,
+} as const;
 
 type Item = Event | Place | Organizer;
 
@@ -198,7 +208,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
-  const date = offer.calendarSummary[i18n.language].text['xs'];
+  const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
@@ -215,7 +225,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     : undefined;
 
   const period =
-    offer.calendarSummary[i18n.language]?.text?.[
+    offer.calendarSummary?.[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
 
@@ -822,39 +832,40 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    // TODO: replace by prefetch call
-    // const user = (await useGetUserQueryServerSide({
-    //   req,
-    //   queryClient,
-    // })) as User;
-    //
-    // await Promise.all(
-    //   Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
-    //     const page =
-    //       query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
-    //
-    //     const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-    //     const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
-    //
-    //     return hook({
-    //       req,
-    //       queryClient,
-    //       creator: user,
-    //       ...(!(
-    //         key === 'organizers' && sortingField.startsWith('availableTo')
-    //       ) && {
-    //         sortOptions: {
-    //           field: sortingField,
-    //           order: sortingOrder,
-    //         },
-    //       }),
-    //       paginationOptions: {
-    //         start: (page - 1) * itemsPerPage,
-    //         limit: itemsPerPage,
-    //       },
-    //     });
-    //   }),
-    // );
+    const cookies = new Cookies(rawCookies);
+    const user = await prefetchGetUserQuery({
+      req,
+      queryClient,
+      cookies: cookies.getAll(),
+    });
+
+    await Promise.all(
+      Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {
+        const page =
+          query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
+
+        const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
+        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+
+        return prefetch({
+          req,
+          queryClient,
+          creator: user,
+          ...(!(
+            key === 'organizers' && sortingField.startsWith('availableTo')
+          ) && {
+            sortOptions: {
+              field: sortingField,
+              order: sortingOrder,
+            },
+          }),
+          paginationOptions: {
+            start: (page - 1) * itemsPerPage,
+            limit: itemsPerPage,
+          },
+        });
+      }),
+    );
 
     return {
       props: {

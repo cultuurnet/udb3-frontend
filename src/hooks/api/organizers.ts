@@ -1,9 +1,11 @@
 import type { UseMutationOptions } from 'react-query';
 
-import type {
+import {
   AuthenticatedQueryOptions,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
   ServerSideQueryOptions,
   SortOptions,
 } from '@/hooks/api/authenticated-query';
@@ -30,9 +32,7 @@ const useGetOrganizersByQueryQuery = (
     name,
     q,
     paginationOptions = { start: 0, limit: 10 },
-  }: AuthenticatedQueryOptions<
-    { name?: string; q?: string } & PaginationOptions
-  > = {},
+  }: { name?: string; q?: string } & PaginationOptions = {},
   configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
   useAuthenticatedQuery({
@@ -86,7 +86,7 @@ const getOrganizers = async ({
 };
 
 const useGetOrganizersByWebsiteQuery = (
-  { website }: AuthenticatedQueryOptions<{ website?: string }> = {},
+  { website }: { website?: string } = {},
   configuration: ExtendQueryOptions<typeof getOrganizers> = {},
 ) =>
   useAuthenticatedQuery({
@@ -117,17 +117,37 @@ const getOrganizerById = async ({ headers, id }: GetOrganizerByIdArguments) => {
   return (await res.json()) as GetOrganizerByIdResponse;
 };
 
-const useGetOrganizerByIdQuery = (
-  { id }: { id: string } & ServerSideQueryOptions,
-  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetOrganizerByIdQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizerById,
     queryArguments: { id },
     refetchOnWindowFocus: false,
     enabled: !!id,
+  });
+
+const useGetOrganizerByIdQuery = (
+  { id }: { id: string },
+  configuration: ExtendQueryOptions<typeof getOrganizerById> = {},
+) => {
+  const options = createGetOrganizerByIdQueryOptions({ id });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOrganizerByIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizerByIdQueryOptions({ id }),
   });
 
 type GetOrganizersByCreator = { headers: Headers } & {
@@ -161,7 +181,7 @@ const getOrganizersByCreator = async ({
   return (await res.json()) as PaginatedData<Organizer[]>;
 };
 
-type UseGetOrganizerPermissionsArguments = ServerSideQueryOptions & {
+type UseGetOrganizerPermissionsArguments = {
   organizerId: string;
 };
 
@@ -177,16 +197,39 @@ const getOrganizerPermissions = async ({ headers, organizerId }) => {
 export type GetOrganizerPermissionsResponse = {
   permissions: string[];
 };
-const useGetOrganizerPermissions = (
-  { organizerId }: UseGetOrganizerPermissionsArguments,
-  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
-) =>
-  useAuthenticatedQuery({
+
+const createGetOrganizerPermissionsQueryOptions = ({
+  organizerId,
+}: UseGetOrganizerPermissionsArguments) =>
+  queryOptions({
     queryKey: ['ownership-permissions'],
     queryFn: getOrganizerPermissions,
     queryArguments: { organizerId },
     refetchOnWindowFocus: false,
+  });
+
+const useGetOrganizerPermissionsQuery = (
+  { organizerId }: UseGetOrganizerPermissionsArguments,
+  configuration: ExtendQueryOptions<typeof getOrganizerPermissions> = {},
+) => {
+  const options = createGetOrganizerPermissionsQueryOptions({ organizerId });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOrganizerPermissionsQuery = ({
+  req,
+  queryClient,
+  organizerId,
+}: ServerSideQueryOptions & UseGetOrganizerPermissionsArguments) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizerPermissionsQueryOptions({ organizerId }),
   });
 
 const getSuggestedOrganizersQuery = async ({ headers }) => {
@@ -228,20 +271,15 @@ const useDeleteOrganizerByIdMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const useGetOrganizersByCreatorQuery = (
-  {
-    creator,
-    paginationOptions = { start: 0, limit: 50 },
-    sortOptions = { field: 'modified', order: 'desc' },
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions & {
-        creator: User;
-      }
-  >,
-  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
-) =>
-  useAuthenticatedQuery({
+const createGetOrganizersByCreatorQueryOptions = ({
+  creator,
+  paginationOptions = { start: 0, limit: 50 },
+  sortOptions = { field: 'modified', order: 'desc' },
+}: PaginationOptions &
+  SortOptions & {
+    creator: User;
+  }) =>
+  queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
@@ -256,7 +294,51 @@ const useGetOrganizersByCreatorQuery = (
       ...createSortingArgument(sortOptions),
     },
     enabled: !!(creator?.sub && creator?.email),
+  });
+
+const useGetOrganizersByCreatorQuery = (
+  {
+    creator,
+    paginationOptions,
+    sortOptions,
+  }: PaginationOptions &
+    SortOptions & {
+      creator: User;
+    },
+  configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
+) => {
+  const options = createGetOrganizersByCreatorQueryOptions({
+    creator,
+    paginationOptions,
+    sortOptions,
+  });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOrganizersByCreatorQuery = ({
+  req,
+  queryClient,
+  creator,
+  paginationOptions,
+  sortOptions,
+}: ServerSideQueryOptions &
+  PaginationOptions &
+  SortOptions & {
+    creator: User;
+  }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOrganizersByCreatorQueryOptions({
+      creator,
+      paginationOptions,
+      sortOptions,
+    }),
   });
 
 type CreateOrganizerArguments = {
@@ -403,7 +485,7 @@ export {
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
   useGetOrganizerByIdQuery,
-  useGetOrganizerPermissions,
+  useGetOrganizerPermissionsQuery,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,

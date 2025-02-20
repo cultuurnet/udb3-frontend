@@ -3,6 +3,7 @@ import { UseMutationOptions } from 'react-query';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import type { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
@@ -20,11 +21,37 @@ import {
 } from './authenticated-query';
 import type { User } from './user';
 
-const getOffersByCreator = async ({ headers, ...queryData }) => {
+const getOffersByCreator = async ({
+  headers,
+  q,
+  disableDefaultFilters,
+  embed,
+  limit,
+  start,
+  workflowStatus,
+  addressCountry,
+}: {
+  headers: Headers;
+  q: string;
+  disableDefaultFilters: string;
+  embed: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+  addressCountry?: string;
+}) => {
   const res = await fetchFromApi({
     path: '/offers/',
     searchParams: {
-      ...queryData,
+      q,
+      disableDefaultFilters,
+      embed,
+      limit,
+      start,
+      workflowStatus,
+      ...(addressCountry && {
+        addressCountry,
+      }),
     },
     options: {
       headers,
@@ -40,20 +67,17 @@ const useGetOffersByCreatorQuery = (
     paginationOptions = { start: 0, limit: 50 },
     sortOptions = { field: 'modified', order: 'desc' },
     calendarSummaryFormats = ['lg-text', 'sm-text', 'xs-text'],
-  }: AuthenticatedQueryOptions<
-    PaginationOptions &
-      SortOptions &
-      CalendarSummaryFormats & {
-        creator: User;
-        advancedQuery?: string;
-      }
-  >,
-  {
-    queryArguments,
-    ...configuration
-  }: ExtendQueryOptions<typeof getOffersByCreator> & {
-    queryArguments?: any;
-  } = {},
+    workflowStatus = 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
+    addressCountry,
+  }: PaginationOptions &
+    SortOptions &
+    CalendarSummaryFormats & {
+      creator: User;
+      advancedQuery?: string;
+      workflowStatus?: string;
+      addressCountry?: string;
+    },
+  { ...configuration }: ExtendQueryOptions<typeof getOffersByCreator> = {},
 ) => {
   const creatorQuery = [
     `${creator?.sub}`,
@@ -72,15 +96,15 @@ const useGetOffersByCreatorQuery = (
     queryFn: getOffersByCreator,
     queryArguments: {
       q: query,
-      disableDefaultFilters: true,
-      embed: true,
-      limit: paginationOptions.limit,
-      start: paginationOptions.start,
-      workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
+      disableDefaultFilters: 'true',
+      embed: 'true',
+      limit: `${paginationOptions.limit}`,
+      start: `${paginationOptions.start}`,
+      workflowStatus,
+      addressCountry,
       ...createSortingArgument(sortOptions),
       ...(calendarSummaryFormats &&
         createEmbededCalendarSummaries(calendarSummaryFormats)),
-      ...(queryArguments ?? {}),
     },
     enabled: !!(creator?.sub && creator?.email),
     ...configuration,
