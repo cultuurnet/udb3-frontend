@@ -9,7 +9,7 @@ import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { Scope } from '@/pages/create/OfferForm';
 import { Offer } from '@/types/Offer';
-import { Organizer } from '@/types/Organizer';
+import { isOrganizer, Organizer } from '@/types/Organizer';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Notification } from '@/ui/Notification';
@@ -208,22 +208,27 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
 
-  const entity: EntityWithMedia | undefined = getEntityByIdQuery.data;
+  const entity = getEntityByIdQuery.data;
 
-  const hasNoPossibleTheme = entity?.terms?.some(
-    (term) =>
-      term.domain === 'eventtype' && eventTypesWithNoThemes.includes(term.id),
-  );
+  const hasNoPossibleTheme =
+    !isOrganizer(entity) &&
+    (entity?.terms ?? []).some(
+      (term) =>
+        term.domain === 'eventtype' && eventTypesWithNoThemes.includes(term.id),
+    );
 
   const hasTheme: boolean =
-    entity?.terms?.some((term) => term.domain === 'theme') ||
+    (!isOrganizer(entity) &&
+      (entity?.terms ?? []).some((term) => term.domain === 'theme')) ||
     hasNoPossibleTheme ||
     scope === OfferTypes.PLACES;
 
-  const hasMediaObject: boolean =
-    (entity?.mediaObject ?? entity?.images ?? []).length > 0;
+  const hasMediaObject: boolean = isOrganizer(entity)
+    ? (entity?.images ?? []).length > 0
+    : (entity?.mediaObject ?? []).length > 0;
 
-  const hasVideo: boolean = (entity?.videos ?? []).length > 0;
+  const hasVideo: boolean =
+    !isOrganizer(entity) && (entity?.videos ?? []).length > 0;
 
   const fullCompletedFields = useMemo(
     () => ({
