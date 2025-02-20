@@ -19,19 +19,11 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile
-          yarn add @playwright/test@latest --ignore-engines
-          npx playwright install
-
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        run: yarn install --frozen-lockfile
 
       - name: Install Playwright Browsers
         run: yarn playwright install chromium --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+
       - name: Run Playwright tests
         env:
           AUTH0_BASE_URL: ${{ secrets.AUTH0_BASE_URL }}
@@ -69,7 +61,7 @@ jobs:
 
         run: yarn test:e2e
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ !cancelled() }}
         with:
           name: playwright-report
           path: playwright-report/

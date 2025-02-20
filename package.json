@@ -22,12 +22,6 @@
     "ci": "yarn types:check & yarn lint:check & yarn format:check",
     "postinsall": "patch-package --error-on-fail=false"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "pre-push": "yarn lint:check"
-    }
-  },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.4.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
@@ -84,7 +78,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@playwright/test": "1.31.2",
+    "@playwright/test": "^1.50.1",
     "@storybook/addon-a11y": "^6.5.16",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
@@ -112,7 +106,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-unicorn": "^45.0.1",
-    "husky": "^4.3.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.1",
     "jest-fetch-mock": "^3.0.3",
