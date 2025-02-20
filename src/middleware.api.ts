@@ -1,6 +1,5 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { Cookies } from 'react-cookie';
 
 import { getAuthEdgeServer } from '@/auth/edge';
 
@@ -9,11 +8,13 @@ import { isTokenValid } from './utils/isTokenValid';
 
 const authEdgeServer = getAuthEdgeServer();
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname === '/') {
     const token = request.cookies.get('token');
     if (isTokenValid(token)) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL('/dashboard', baseUrl));
     }
   }
   if (request.nextUrl.pathname.startsWith('/login')) {
@@ -49,7 +50,7 @@ export const middleware = async (request: NextRequest) => {
 
     if (shouldHideBetaVersion || hasSeenConversionPage) return;
 
-    const url = new URL('/beta-version', request.url);
+    const url = new URL('/beta-version', baseUrl);
     return NextResponse.redirect(url);
   }
 };
