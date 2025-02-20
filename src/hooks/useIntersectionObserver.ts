@@ -20,10 +20,7 @@ const useIntersectionObserver = (
     setEntry(entry);
   };
 
-  const memoizedThreshold = useMemo(
-    () => (Array.isArray(threshold) ? [...threshold] : threshold),
-    [threshold],
-  );
+  const stableThreshold = JSON.stringify(threshold);
 
   useEffect(() => {
     const node = elementRef?.current;
@@ -32,7 +29,7 @@ const useIntersectionObserver = (
     if (!hasIOSupport || frozen || !node) return;
 
     const observer = new IntersectionObserver(updateEntry, {
-      threshold: memoizedThreshold,
+      threshold: JSON.parse(stableThreshold),
       root,
       rootMargin,
     });
@@ -40,7 +37,7 @@ const useIntersectionObserver = (
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, [elementRef, memoizedThreshold, root, rootMargin, frozen]);
+  }, [elementRef, stableThreshold, root, rootMargin, frozen]);
 
   return entry;
 };
