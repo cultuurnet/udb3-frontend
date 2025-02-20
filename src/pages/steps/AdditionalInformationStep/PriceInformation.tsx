@@ -147,7 +147,6 @@ const PriceInformation = ({
     { refetchOnWindowFocus: false },
   );
 
-  // @ts-expect-error
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   const {
@@ -380,7 +379,6 @@ const PriceInformation = ({
                                 shouldValidate: false,
                               });
                               onSubmit();
-                              // @ts-expect-error
                               getOfferByIdQuery.remove();
                             }}
                           >

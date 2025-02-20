@@ -312,7 +312,6 @@ const BookingInfoStep = ({
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
-  // @ts-expect-error
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
 
   const { register, handleSubmit, formState, control, setValue, getValues } =

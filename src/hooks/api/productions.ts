@@ -1,6 +1,13 @@
+import { PaginatedData } from '@/types/PaginatedData';
+import { Production } from '@/types/Production';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
 import {
+  ExtendQueryOptions,
+  PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
   useAuthenticatedMutation,
   useAuthenticatedMutations,
   useAuthenticatedQuery,
@@ -16,28 +23,46 @@ const getProductions = async ({ headers, ...queryData }) => {
       headers,
     },
   });
-  if (isErrorObject(res)) {
-    // eslint-disable-next-line no-console
-    return console.error(res);
-  }
-  return await res.json();
+  return (await res.json()) as PaginatedData<Production[]>;
 };
 
-const useGetProductionsQuery = (
-  { req, queryClient, name = '', paginationOptions = { start: 0, limit: 15 } },
-  configuration = {},
-) =>
-  useAuthenticatedQuery({
-    req,
-    queryClient,
+const createGetProductionsQueryOptions = ({
+  name = '',
+  paginationOptions = { start: 0, limit: 15 },
+}: PaginationOptions & { name?: string }) =>
+  queryOptions({
     queryKey: ['productions'],
     queryFn: getProductions,
     queryArguments: {
       name,
-      start: paginationOptions.start,
-      limit: paginationOptions.limit,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
     },
+  });
+
+const useGetProductionsQuery = (
+  { name, paginationOptions }: PaginationOptions & { name?: string },
+  configuration: ExtendQueryOptions<typeof getProductions> = {},
+) => {
+  const options = createGetProductionsQueryOptions({ name, paginationOptions });
+
+  return useAuthenticatedQuery({
+    ...options,
     ...configuration,
+    enabled: options.enabled !== false && configuration.enabled,
+  });
+};
+
+export const prefetchGetProductionsQuery = ({
+  req,
+  queryClient,
+  name,
+  paginationOptions,
+}: ServerSideQueryOptions & PaginationOptions & { name?: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetProductionsQueryOptions({ name, paginationOptions }),
   });
 
 const deleteEventById = async ({
@@ -111,14 +136,19 @@ const addEventsByIds = async ({ productionId = '', eventIds = [], headers }) =>
 const useAddEventsByIdsMutation = (configuration = {}) =>
   useAuthenticatedMutations({ mutationFns: addEventsByIds, ...configuration });
 
-const getSuggestedEvents = async ({ headers }) => {
+const getSuggestedEvents = async ({
+  headers,
+}): Promise<{
+  events: Event[];
+  similarity: number;
+}> => {
   const response = await fetchFromApi({
     path: '/productions/suggestion',
     options: {
       headers,
     },
   });
-  if (response.status !== 200 || isErrorObject(response)) {
+  if (response.status !== 200) {
     // eslint-disable-next-line no-console
     console.error(response);
     return { events: [], similarity: 0 };
@@ -126,7 +156,9 @@ const getSuggestedEvents = async ({ headers }) => {
   return await response.json();
 };
 
-const useGetSuggestedEventsQuery = (configuration = {}) =>
+const useGetSuggestedEventsQuery = (
+  configuration: ExtendQueryOptions<typeof getSuggestedEvents> = {},
+) =>
   useAuthenticatedQuery({
     queryKey: ['productions', 'suggestion'],
     queryFn: getSuggestedEvents,

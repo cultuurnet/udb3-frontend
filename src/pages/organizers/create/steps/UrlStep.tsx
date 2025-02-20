@@ -47,7 +47,6 @@ const UrlStep = ({
   );
 
   const existingOrganizers: Organizer[] | undefined =
-    // @ts-expect-error
     getOrganizersByWebsiteQuery.data?.member;
   const existingOrganizer = existingOrganizers?.[0];
 
@@ -74,7 +73,6 @@ const UrlStep = ({
   }, [
     query.organizerId,
     existingOrganizer,
-    // @ts-expect-error
     getOrganizersByWebsiteQuery.data,
     setError,
     clearErrors,

@@ -65,7 +65,6 @@ const ContactInfoStep = ({
     useState(false);
 
   const contactInfo =
-    // @ts-expect-error
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 
   const updateContactInfoState = useCallback(

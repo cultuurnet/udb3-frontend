@@ -2,7 +2,6 @@ import { uniq } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
@@ -11,7 +10,7 @@ import {
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
-import { Label, Offer } from '@/types/Offer';
+import { Label } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
@@ -32,8 +31,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const ref = useRef<TypeaheadElement<Label>>(null);
   const router = useRouter();
   const [query, setQuery] = useState('');
-  // @ts-expect-error
-  const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
+  const labelsQuery = useGetLabelsByQuery({
     query,
   });
 

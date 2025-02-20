@@ -41,19 +41,21 @@ const isErrorObject = (value: any): value is ErrorObject => {
 
 type FetchFromApiArguments = {
   path: string;
-  searchParams?: string[][] | Record<string, string> | string | URLSearchParams;
+  searchParams?: Record<string, string> | URLSearchParams;
   options?: RequestInit;
   silentError?: boolean;
 };
 
 const { publicRuntimeConfig } = getConfig();
 
-const fetchFromApi = async ({
+const fetchFromApi = async <TConfig extends FetchFromApiArguments>({
   path,
   searchParams: searchParamsInit,
   options = {},
   silentError = false,
-}: FetchFromApiArguments): Promise<ErrorObject | Response> => {
+}: TConfig): Promise<
+  TConfig extends { silentError?: true } ? Response | ErrorObject : Response
+> => {
   let response: Response;
   let url: URL;
 
