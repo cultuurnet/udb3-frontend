@@ -6,8 +6,10 @@ import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerPermissionsResponse,
+  prefetchGetOrganizerByIdQuery,
+  prefetchGetOrganizerPermissionsQuery,
   useGetOrganizerByIdQuery,
-  useGetOrganizerPermissions,
+  useGetOrganizerPermissionsQuery,
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -45,7 +47,7 @@ const OrganizersPreview = () => {
     id: organizerId,
   }) as UseQueryResult<Organizer, FetchError>;
 
-  const getOrganizerPermissionsQuery = useGetOrganizerPermissions({
+  const getOrganizerPermissionsQuery = useGetOrganizerPermissionsQuery({
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
 
@@ -69,7 +71,6 @@ const OrganizersPreview = () => {
     ownerId: userId,
   });
 
-  // @ts-expect-error
   const userRequests = getOwnershipRequestsQuery?.data?.member;
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
@@ -157,12 +158,12 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     try {
       await Promise.all([
-        useGetOrganizerByIdQuery({
+        prefetchGetOrganizerByIdQuery({
           req,
           queryClient,
           id: query.organizerId,
         }),
-        useGetOrganizerPermissions({
+        prefetchGetOrganizerPermissionsQuery({
           req,
           queryClient,
           organizerId: query.organizerId,

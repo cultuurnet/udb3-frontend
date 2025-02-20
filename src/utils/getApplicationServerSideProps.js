@@ -5,7 +5,10 @@ import { QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
-import { useGetUserQueryServerSide } from '@/hooks/api/user';
+import {
+  prefetchGetUserQuery,
+  useGetUserQueryServerSide,
+} from '@/hooks/api/user';
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
@@ -120,7 +123,11 @@ const getApplicationServerSideProps =
     const queryClient = new QueryClient();
 
     try {
-      await useGetUserQueryServerSide({ req, queryClient });
+      await prefetchGetUserQuery({
+        req,
+        queryClient,
+        cookies: cookies.getAll(),
+      });
     } catch (error) {
       if (error instanceof FetchError) {
         return redirectToLogin(cookies, req, resolvedUrl);
