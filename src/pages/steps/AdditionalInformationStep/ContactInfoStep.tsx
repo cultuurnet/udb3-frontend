@@ -104,6 +104,10 @@ const ContactInfoStep = ({
       (contactInfo) => contactInfo.value !== '',
     );
 
+    if (!onValidationChange) {
+      return;
+    }
+
     if (filteredContactInfoState.length === 0) {
       onValidationChange(ValidationStatus.NONE, field);
       return;
