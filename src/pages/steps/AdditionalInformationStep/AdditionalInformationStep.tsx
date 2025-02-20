@@ -212,6 +212,25 @@ const organizerTabOrder = [
   Fields.CULTUURKUUR,
 ];
 
+export const ValidationStatus = {
+  NONE: 'none',
+  WARNING: 'warning',
+  SUCCESS: 'success',
+} as const;
+
+export type ValidationStatus = Values<typeof ValidationStatus>;
+
+const initialValidatedFields: Record<Field, ValidationStatus> = {
+  description: ValidationStatus.NONE,
+  audience: ValidationStatus.NONE,
+  contact_info: ValidationStatus.NONE,
+  media: ValidationStatus.NONE,
+  organizer: ValidationStatus.NONE,
+  price_info: ValidationStatus.NONE,
+  booking_info: ValidationStatus.NONE,
+  contact_point: ValidationStatus.NONE,
+};
+
 const AdditionalInformationStep = ({
   offerId,
   scope,
@@ -274,34 +293,16 @@ const AdditionalInformationStep = ({
     router.push({ hash: tab }, undefined, { shallow: true });
   };
 
-  const initialValidatedFields: Record<Field, ValidationStatus> = {
-    description: ValidationStatus.NONE,
-    audience: ValidationStatus.NONE,
-    contact_info: ValidationStatus.NONE,
-    media: ValidationStatus.NONE,
-    organizer: ValidationStatus.NONE,
-    price_info: ValidationStatus.NONE,
-    booking_info: ValidationStatus.NONE,
-    contact_point: ValidationStatus.NONE,
-  };
-
-  const validatedFieldsRef = useRef<Record<Field, ValidationStatus>>(
+  const [validatedFields, setValidatedFields] = useState(
     initialValidatedFields,
   );
-  const [validatedFields, setValidatedFields] = useState<
-    Record<Field, ValidationStatus>
-  >(validatedFieldsRef.current);
 
   const handleValidationChange = useCallback(
     (status: ValidationStatus, field: string) => {
-      if (validatedFieldsRef.current[field] === status) return;
-
-      validatedFieldsRef.current = {
-        ...validatedFieldsRef.current,
+      setValidatedFields((prev) => ({
+        ...prev,
         [field]: status,
-      };
-
-      setValidatedFields({ ...validatedFieldsRef.current });
+      }));
     },
     [],
   );
@@ -396,14 +397,6 @@ const additionalInformationStepConfiguration: StepsConfiguration = {
   title: ({ t, scope }) => t(`create.additionalInformation.title.${scope}`),
   variant: AdditionalInformationStepVariant.EVENT,
 };
-
-export const ValidationStatus = {
-  NONE: 'none',
-  WARNING: 'warning',
-  SUCCESS: 'success',
-} as const;
-
-export type ValidationStatus = Values<typeof ValidationStatus>;
 
 export type { Field, TabContentProps };
 
