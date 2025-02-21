@@ -196,7 +196,7 @@ const TabTitle = ({
 
 type Props = StackProps & {
   offerId: string;
-  scope: Scope;
+  scope: OfferType;
   onChangeSuccess: (field: Field) => void;
   variant?: Values<typeof AdditionalInformationStepVariant>;
   labels?: string[];
