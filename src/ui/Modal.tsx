@@ -41,6 +41,7 @@ type Props = {
 const Modal = ({ variant = ModalVariants.CONTENT, ...props }: Props) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
+  // @ts-expect-error TS2322 TODO: Fix type error
   return <ModalVariant {...props} />;
 };
 

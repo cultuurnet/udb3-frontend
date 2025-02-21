@@ -27,13 +27,17 @@ const isServer = () => typeof window === 'undefined';
 const cookies = new Cookies();
 
 if (!isServer()) {
+  // @ts-expect-error TS2339 TODO: Fix type error
   window.FeatureFlags = FeatureFlags;
 
+  // @ts-expect-error TS2339 TODO: Fix type error
   window.setFeatureFlag = (featureFlagName, value) => {
     cookies.set(createCookieName(featureFlagName), value, defaultCookieOptions);
+    // @ts-expect-error TS2339 TODO: Fix type error
     window.getCurrentFeatureFlagConfiguration();
   };
 
+  // @ts-expect-error TS2339 TODO: Fix type error
   window.getCurrentFeatureFlagConfiguration = () => {
     // eslint-disable-next-line no-console
     console.table(

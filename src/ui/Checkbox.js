@@ -13,6 +13,7 @@ const Checkbox = ({
 }) => (
   <Box
     as="input"
+    // @ts-expect-error TS2322 TODO: Fix type error
     type="checkbox"
     id={id}
     name={name}
