@@ -5,6 +5,17 @@ import { getGlobalBorderRadius, getValueFromTheme } from '../theme';
 
 const getValueForModal = getValueFromTheme('modal');
 
+type Props = {
+  className?: string,
+  visible: boolean,
+  title: string,
+  onShow: () => void,
+  onClose: () => void,
+  scrollable: boolean,
+  children: ReactNode,
+  size: string,
+};
+
 const ContentModal = ({
   visible,
   title,
