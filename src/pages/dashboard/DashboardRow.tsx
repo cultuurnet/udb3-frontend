@@ -1,7 +1,7 @@
 import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
 
-import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { ScopeTypes } from '@/constants/OfferType';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
 import { ImageIcon } from '@/pages/PictureUploadBox';
 import {
@@ -27,7 +27,7 @@ type DashboardRowProps = {
   eventId?: string;
   type?: string;
   typeId?: string;
-  scope?: Scope;
+  scope?: string;
   date?: string;
   imageUrl?: string;
   score?: number;
