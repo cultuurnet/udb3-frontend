@@ -253,7 +253,6 @@ const PictureUploadModal = ({
           ? t('pictures.upload_modal.actions.adjust')
           : t('pictures.upload_modal.actions.upload')
       }
-      // @ts-expect-error TS2322 TODO: Fix type error
       confirmLoading={loading}
       cancelTitle={t('pictures.upload_modal.actions.cancel')}
       size={ModalSizes.MD}

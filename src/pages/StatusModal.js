@@ -29,7 +29,6 @@ const StatusModal = ({ visible, loading, className, onClose, onConfirm }) => {
   }, [type]);
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       visible={visible}
       title={t('offerStatus.changeStatus')}

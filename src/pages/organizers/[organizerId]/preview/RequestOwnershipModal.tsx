@@ -61,8 +61,6 @@ const RequestOwnershipModal = ({
 
   return (
     <>
-      {/*
-       // @ts-expect-error TS2739 TODO: Fix type error */}
       <Modal
         title={t('organizers.ownerships.request.confirm_modal.title', {
           organizerName,

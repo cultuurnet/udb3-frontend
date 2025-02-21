@@ -155,7 +155,6 @@ const PlaceAddModal = ({
   const selectedTerm = useWatch({ control, name: 'term' });
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       title={t('location.add_modal.title')}
       confirmTitle={t('location.add_modal.actions.add')}

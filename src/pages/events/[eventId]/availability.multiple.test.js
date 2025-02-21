@@ -14,6 +14,7 @@ import Availability from './availability.page';
 
 const setup = async () => {
   const page = setupPage({
+    // @ts-expect-error TS2741 TODO: Fix type error
     router: {
       query: {
         eventId: parseOfferId(eventWithSubEvents['@id']),

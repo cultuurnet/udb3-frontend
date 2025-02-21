@@ -238,8 +238,7 @@ const Index = () => {
                 onClickProduction={setActiveProductionId}
                 onChangePage={setCurrentPageProductions}
               />,
-              {/*
-               // @ts-expect-error TS2741 TODO: Fix type error */}
+              // @ts-expect-error TS2741 TODO: Fix type error
               <Events
                 key="events"
                 loading={getEventsByIdsQuery.status === QueryStatus.LOADING}
