@@ -12,6 +12,7 @@ type Props = {
   onShow: () => void,
   onClose: () => void,
   scrollable: boolean,
+  // @ts-expect-error TS2304 TODO: Fix type error
   children: ReactNode,
   size: string,
 };
