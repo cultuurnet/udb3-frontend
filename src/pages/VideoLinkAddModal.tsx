@@ -55,7 +55,6 @@ const VideoLinkAddModal = ({ visible, onConfirm, onClose }: Props) => {
   const registerLinkProps = register('link');
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       title={t('videos.upload_modal.title')}
       confirmTitle={t('videos.upload_modal.actions.add')}

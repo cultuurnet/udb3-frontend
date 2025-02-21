@@ -222,7 +222,6 @@ const OrganizerAddModal = ({
   };
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       title={t('organizer.add_modal.title')}
       confirmTitle={t('organizer.add_modal.actions.add')}

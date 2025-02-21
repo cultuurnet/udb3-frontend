@@ -169,7 +169,6 @@ const CalendarOpeninghoursModal = ({
   };
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       title={t('create.calendar.opening_hours_modal.title')}
       visible={visible}

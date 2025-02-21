@@ -16,7 +16,6 @@ const VideoLinkDeleteModal = ({ visible, onConfirm, onClose }: Props) => {
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      // @ts-expect-error TS2322 TODO: Fix type error
       onConfirm={onConfirm}
       onClose={onClose}
       title={t('videos.delete_modal.title')}

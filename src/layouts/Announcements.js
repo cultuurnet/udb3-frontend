@@ -175,7 +175,7 @@ const Announcements = ({
   );
 
   return (
-    // @ts-expect-error TS2740 TODO: Fix type error
+    // @ts-expect-error TS2741 TODO: Fix type error
     <Modal
       visible={modalContext.visible}
       title={t('announcements.new_features')}

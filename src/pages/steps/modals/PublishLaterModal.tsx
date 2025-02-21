@@ -62,7 +62,6 @@ const PublishLaterModal = ({
   };
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}

@@ -20,7 +20,6 @@ const BookingAvailabilityModal = ({
     useState('Available');
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       visible={visible}
       title={t('bookingAvailability.change')}
