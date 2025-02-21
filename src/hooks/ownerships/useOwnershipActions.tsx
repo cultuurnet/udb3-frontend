@@ -109,6 +109,7 @@ const OwnershipActionModal = ({
     organizer?.name;
 
   return (
+    // @ts-expect-error TS2739 TODO: Fix type error
     <Modal
       title={t(`${translationsPath}.title`)}
       confirmTitle={t(`${translationsPath}.confirm`)}

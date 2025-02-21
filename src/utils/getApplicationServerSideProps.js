@@ -7,6 +7,7 @@ import UniversalCookies from 'universal-cookie';
 
 import {
   prefetchGetUserQuery,
+  // @ts-expect-error TS2305 TODO: Fix type error
   useGetUserQueryServerSide,
 } from '@/hooks/api/user';
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
@@ -83,11 +84,13 @@ const getApplicationServerSideProps =
   async ({ req, query, resolvedUrl }) => {
     const { publicRuntimeConfig } = getConfig();
     if (publicRuntimeConfig.environment === 'development') {
+      // @ts-expect-error TS2322 TODO: Fix type error
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     }
 
     const rawCookies = req?.headers?.cookie ?? '';
 
+    // @ts-expect-error TS2345 TODO: Fix type error
     const cookies = new Cookies(rawCookies, defaultCookieOptions);
 
     req.headers.cookie = cookies.toString();

@@ -17,6 +17,7 @@ const Availability = () => {
   const { placeId } = router.query;
 
   const getPlaceByIdQuery = useGetPlaceByIdQuery({
+    // @ts-expect-error TS2322 TODO: Fix type error
     id: placeId,
     scope: OfferTypes.PLACES,
   });
@@ -36,6 +37,7 @@ const Availability = () => {
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const { placeId } = query;
+    // @ts-expect-error TS2345 TODO: Fix type error
     await prefetchGetPlaceByIdQuery({ req, queryClient, id: placeId });
 
     return {

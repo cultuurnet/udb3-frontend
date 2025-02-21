@@ -17,6 +17,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 const prefixWhenNotEmpty = (value, prefix) =>
   value ? `${prefix}${value}` : value;
 
+// @ts-expect-error TS2339 TODO: Fix type error
 const IFrame = memo(({ url }) => (
   <Box
     id="fallback_frame"
@@ -30,6 +31,7 @@ const IFrame = memo(({ url }) => (
 
 IFrame.displayName = 'IFrame';
 
+// @ts-expect-error TS2339 TODO: Fix type error
 IFrame.propTypes = {
   url: PropTypes.string,
 };
@@ -62,6 +64,7 @@ const Fallback = () => {
   // and then the 404 logic does not get triggered because the listener is too
   // late to get the message from the AngularJS app.
   if (isClientSide) {
+    // @ts-expect-error TS2322 TODO: Fix type error
     return <IFrame url={legacyPath} />;
   }
 

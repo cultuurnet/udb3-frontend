@@ -12,6 +12,7 @@ import {
 } from './authenticated-query';
 
 const getCalledMutations = (path) => {
+  // @ts-expect-error TS2339 TODO: Fix type error
   return fetch.mock.calls.filter((call) => {
     const url = call[0];
 
@@ -89,6 +90,7 @@ describe('useAuthenticatedQuery', () => {
   let page;
 
   beforeEach(() => {
+    // @ts-expect-error TS2339 TODO: Fix type error
     fetch.resetMocks();
     page = setupPage();
   });
@@ -179,6 +181,7 @@ describe('useAuthenticatedMutation', () => {
     const queryClient = result.current;
 
     queryClient.getMutationCache().clear();
+    // @ts-expect-error TS2339 TODO: Fix type error
     fetch.resetMocks();
     page = setupPage();
   });

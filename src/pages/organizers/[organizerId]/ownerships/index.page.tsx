@@ -183,6 +183,8 @@ const Ownership = () => {
                   onDelete={setRequestToBeDeleted}
                   creator={creator}
                 />
+                {/*
+                 // @ts-expect-error TS2739 TODO: Fix type error */}
                 <Modal
                   title={t('organizers.ownerships.delete_modal.title')}
                   confirmTitle={t('organizers.ownerships.delete_modal.confirm')}
@@ -221,6 +223,8 @@ const Ownership = () => {
                     setActionType(ActionType.REJECT);
                   }}
                 />
+                {/*
+                 // @ts-expect-error TS2739 TODO: Fix type error */}
                 <Modal
                   title={t(`${translationsPath}.title`)}
                   confirmTitle={t(`${translationsPath}.confirm`)}
@@ -264,6 +268,8 @@ const Ownership = () => {
             </Button>
           </Stack>
         </Inline>
+        {/*
+         // @ts-expect-error TS2739 TODO: Fix type error */}
         <Modal
           visible={isOpen}
           variant={ModalVariants.QUESTION}
