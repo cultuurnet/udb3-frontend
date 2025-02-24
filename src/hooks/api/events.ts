@@ -138,7 +138,15 @@ const useAddEventMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsToModerate = async ({ headers, audienceType, availableTo, limit, q, start, workflowStatus }: {
+const getEventsToModerate = async ({
+  headers,
+  audienceType,
+  availableTo,
+  limit,
+  q,
+  start,
+  workflowStatus,
+}: {
   headers: Headers;
   q: string;
   audienceType: string;
@@ -150,7 +158,12 @@ const getEventsToModerate = async ({ headers, audienceType, availableTo, limit, 
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      audienceType, availableTo, limit, q, start, workflowStatus,
+      audienceType,
+      availableTo,
+      limit,
+      q,
+      start,
+      workflowStatus,
       availableFrom: formatDateToISO(new Date()),
     },
     options: {
@@ -160,7 +173,10 @@ const getEventsToModerate = async ({ headers, audienceType, availableTo, limit, 
   return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsToModerateQuery = (searchQuery: string, configuration: ExtendQueryOptions<typeof getEventsToModerate> = {}) =>
+const useGetEventsToModerateQuery = (
+  searchQuery: string,
+  configuration: ExtendQueryOptions<typeof getEventsToModerate> = {},
+) =>
   useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsToModerate,

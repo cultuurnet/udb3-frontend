@@ -13,13 +13,13 @@ import {
   useAuthenticatedQuery,
 } from './authenticated-query';
 
-const getProductions = async ({ headers,
+const getProductions = async ({
+  headers,
   name,
   start,
-  limit
-
+  limit,
 }: {
-  headers: Headers,
+  headers: Headers;
   name: string;
   start: string;
   limit: string;
@@ -29,7 +29,7 @@ const getProductions = async ({ headers,
     searchParams: {
       name,
       start,
-      limit
+      limit,
     },
     options: {
       headers,
