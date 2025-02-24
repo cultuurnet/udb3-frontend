@@ -248,7 +248,7 @@ const getSuggestedOrganizersQuery = async ({ headers }) => {
 };
 
 const useGetSuggestedOrganizersQuery = (
-  {},
+  { },
   configuration: ExtendQueryOptions<typeof getSuggestedOrganizersQuery> = {},
 ) =>
   useAuthenticatedQuery({
@@ -283,11 +283,10 @@ const createGetOrganizersByCreatorQueryOptions = ({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
-      q: `creator:(${creator?.sub} OR ${
-        creator?.['https://publiq.be/uitidv1id']
+      q: `creator:(${creator?.sub} OR ${creator?.['https://publiq.be/uitidv1id']
           ? `${creator?.['https://publiq.be/uitidv1id']} OR`
           : ''
-      } ${creator?.email}) OR contributors:${creator?.email}`,
+        } ${creator?.email}) OR contributors:${creator?.email}`,
       limit: `${paginationOptions.limit}`,
       start: `${paginationOptions.start}`,
       embed: 'true',
@@ -350,13 +349,15 @@ type CreateOrganizerArguments = {
   contact: any;
 };
 
-const createOrganizer = ({ headers, ...body }: CreateOrganizerArguments) =>
+const createOrganizer = ({ headers, address, contact, mainLanguage, name, url }: CreateOrganizerArguments) =>
   fetchFromApi({
     path: '/organizers',
     options: {
       headers,
       method: 'POST',
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        address, contact, mainLanguage, name, url
+      }),
     },
   });
 

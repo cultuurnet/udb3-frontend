@@ -13,11 +13,23 @@ import {
   useAuthenticatedQuery,
 } from './authenticated-query';
 
-const getProductions = async ({ headers, ...queryData }) => {
+const getProductions = async ({ headers,
+  name,
+  start,
+  limit
+
+}: {
+  headers: Headers,
+  name: string;
+  start: string;
+  limit: string;
+}) => {
   const res = await fetchFromApi({
     path: '/productions/',
     searchParams: {
-      ...queryData,
+      name,
+      start,
+      limit
     },
     options: {
       headers,
