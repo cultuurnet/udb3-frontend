@@ -12,6 +12,7 @@ import {
   useAuthenticatedMutations,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import { Headers } from './types/Headers';
 
 const getProductions = async ({
   headers,
