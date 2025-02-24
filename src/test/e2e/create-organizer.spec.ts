@@ -39,7 +39,7 @@ test('create an organizer', async ({ baseURL, page }) => {
     await page
       .getByRole('button', { name: 'Contactgegevens toevoegen' })
       .click();
-    const contactInfo = page.getByTestId('contact-info-value').first()
+    const contactInfo = page.getByTestId('contact-info-value').first();
     await contactInfo.click();
     await contactInfo.fill(dummyOrganizer.email);
     await contactInfo.blur();
