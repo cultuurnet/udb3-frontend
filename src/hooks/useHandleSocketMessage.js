@@ -1,5 +1,5 @@
 import getConfig from 'next/config';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 
 const SocketMessageTypes = {
@@ -12,14 +12,15 @@ const SocketMessageTypes = {
 const useHandleSocketMessage = (eventsMap = {}) => {
   const { publicRuntimeConfig } = getConfig();
 
+  const eventsMapRef = useRef(eventsMap);
+
   useEffect(() => {
     const socket = socketIOClient(publicRuntimeConfig.socketUrl);
-    Object.entries(eventsMap).forEach(([event, handler]) => {
+    Object.entries(eventsMapRef.current).forEach(([event, handler]) => {
       socket.on(event, handler);
     });
     return () => socket.close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [publicRuntimeConfig.socketUrl]);
 };
 
 export { SocketMessageTypes, useHandleSocketMessage };

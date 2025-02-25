@@ -35,6 +35,7 @@ const getButtonValue = getValueFromTheme('button');
 function LabelsStep({
   offerId,
   scope,
+  field,
   onValidationChange,
   ...props
 }: LabelsStepProps) {
@@ -58,8 +59,9 @@ function LabelsStep({
   useEffect(() => {
     onValidationChange(
       labels.length ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
-  }, [labels, onValidationChange]);
+  }, [field, labels, onValidationChange]);
 
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
