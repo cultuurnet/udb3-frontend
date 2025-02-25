@@ -39,9 +39,10 @@ test('create an organizer', async ({ baseURL, page }) => {
     await page
       .getByRole('button', { name: 'Contactgegevens toevoegen' })
       .click();
-    await page.locator('#contact-info-value-1').click();
-    await page.locator('#contact-info-value-1').fill(dummyOrganizer.email);
-    await page.locator('#contact-info-value-1').blur();
+    const contactInfo = page.getByTestId('contact-info-value').first();
+    await contactInfo.click();
+    await contactInfo.fill(dummyOrganizer.email);
+    await contactInfo.blur();
 
     await page.getByRole('tab', { name: 'Labels' }).click();
     await page.getByLabel('Verfijn met labels').click();
