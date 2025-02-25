@@ -1,10 +1,6 @@
 import { useCookies as useReactCookies } from 'react-cookie';
 import type { CookieSetOptions } from 'universal-cookie';
-
-const defaultCookieOptions = {
-  maxAge: 60 * 60 * 24 * 30,
-  path: '/',
-};
+import { defaultCookieOptions } from '../utils/defaultCookieOptions';
 
 type Cookies = {
   'udb-language'?: string;
