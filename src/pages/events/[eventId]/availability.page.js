@@ -18,6 +18,7 @@ const Availability = () => {
   const router = useRouter();
   const { eventId } = router.query;
 
+  // @ts-expect-error TS2322 TODO: Fix type error
   const getEventByIdQuery = useGetEventByIdQuery({ id: eventId });
 
   const event = getEventByIdQuery.data;
@@ -28,6 +29,7 @@ const Availability = () => {
 
   if (event.calendarType === CalendarType.MULTIPLE)
     return (
+      // @ts-expect-error TS2786 TODO: Fix type error
       <AvailabilityPageMultiple
         event={event}
         refetchEvent={getEventByIdQuery.refetch}
