@@ -16,6 +16,7 @@ import { ReactDatePickerProps } from 'react-datepicker';
 import type {
   FlattenInterpolation,
   FlattenSimpleInterpolation,
+  StyledConfig,
   ThemeProps,
 } from 'styled-components';
 import styled, { css } from 'styled-components';
@@ -201,6 +202,7 @@ type UIProps = {
   minHeight: UIProp<string | number>;
   minWidth: UIProp<string | number>;
   objectFit: UIProp<string>;
+  overflow: UIProp<string>;
   opacity: UIProp<number>;
   padding: UIProp<number>;
   paddingBottom: UIProp<number>;
@@ -442,6 +444,7 @@ const boxProps = css`
   ${parseProperty('zIndex')};
 
   ${parseProperty('display')};
+  ${parseProperty('overflow')};
   ${parseProperty('opacity')};
   ${parseProperty('flex')};
   ${parseProperty('flexShrink')};
@@ -467,6 +470,7 @@ const boxPropTypes = [
   'display',
   'flex',
   'flexShrink',
+  'flexWrap',
   'fontSize',
   'fontWeight',
   'fontStyle',
@@ -489,6 +493,7 @@ const boxPropTypes = [
   'objectFit',
   'onClick',
   'opacity',
+  'overflow',
   'padding',
   'paddingBottom',
   'paddingLeft',
@@ -502,7 +507,9 @@ const boxPropTypes = [
   'textAlign',
   'textDecoration',
   'top',
+  'stackOn',
   'width',
+  'size',
   'zIndex',
   'dangerouslySetInnerHTML',
 ] as const;
@@ -511,9 +518,11 @@ const notAllowedPropsSet = new Set(
   difference(boxPropTypes, ['as', 'id', 'onClick', 'dangerouslySetInnerHTML']),
 );
 
-const StyledBox = styled.div.withConfig({
+export const withoutDisallowedPropsConfig: StyledConfig = {
   shouldForwardProp: (prop) => !notAllowedPropsSet.has(prop as any),
-})`
+};
+
+const StyledBox = styled.div.withConfig(withoutDisallowedPropsConfig)`
   ${boxProps}
 `;
 

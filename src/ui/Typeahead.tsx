@@ -65,7 +65,7 @@ const TypeaheadInner = <T extends TypeaheadModel>(
     hideNewInputText,
     newSelectionPrefix,
     positionFixed,
-    isLoading,
+    isLoading = false,
     ...props
   }: Props<T>,
   ref: ForwardedRef<BootstrapTypeahead<T>>,
