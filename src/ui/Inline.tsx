@@ -6,7 +6,6 @@ import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 
 import {
   BoxProps,
-  notAllowedPropsSet,
   UIProp,
   UnknownProps,
   withoutDisallowedPropsConfig,
