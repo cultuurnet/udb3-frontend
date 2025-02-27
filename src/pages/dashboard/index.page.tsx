@@ -2,6 +2,7 @@ import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -10,23 +11,26 @@ import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
+  prefetchGetEventsByCreatorQuery,
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
 import {
+  prefetchGetOrganizersByCreatorQuery,
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
+  prefetchGetPlacesByCreatorQuery,
   useDeletePlaceByIdMutation,
   useGetPlacesByCreatorQuery,
 } from '@/hooks/api/places';
 import {
+  prefetchGetUserQuery,
   useGetPermissionsQuery,
   useGetUserQuery,
-  useGetUserQueryServerSide,
   User,
 } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
@@ -70,6 +74,12 @@ import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
+
+const PrefetchGetItemsByCreatorMap = {
+  events: prefetchGetEventsByCreatorQuery,
+  places: prefetchGetPlacesByCreatorQuery,
+  organizers: prefetchGetOrganizersByCreatorQuery,
+} as const;
 
 type Item = Event | Place | Organizer;
 
@@ -186,9 +196,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const { t, i18n } = useTranslation();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
 
@@ -200,7 +208,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   );
   const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
-  const date = offer.calendarSummary[i18n.language].text['xs'];
+  const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
   const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
@@ -217,7 +225,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     : undefined;
 
   const period =
-    offer.calendarSummary[i18n.language]?.text?.[
+    offer.calendarSummary?.[i18n.language]?.text?.[
       offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
     ];
 
@@ -334,9 +342,7 @@ const OrganizerRow = ({
 
   const getUserQuery = useGetUserQuery();
   const getPermissionsQuery = useGetPermissionsQuery();
-  // @ts-expect-error
   const userId = getUserQuery.data?.sub;
-  // @ts-expect-error
   const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
   const isExternalCreator = ![userId, userIdv1].includes(organizer.creator);
 
@@ -345,7 +351,6 @@ const OrganizerRow = ({
   const imageUrl = organizer?.images?.[0]?.contentUrl;
   const score = organizer?.completeness;
   const organizerId = parseOfferId(organizer['@id']);
-  // @ts-expect-error
   const permissions = getPermissionsQuery?.data ?? [];
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);
@@ -527,7 +532,10 @@ const Dashboard = (): any => {
   const sort = (query?.sort as string) ?? 'created_desc';
 
   const useGetItemsByCreator = useMemo(
-    () => UseGetItemsByCreatorMap[tab ?? 'events'],
+    () =>
+      UseGetItemsByCreatorMap[
+        (tab as keyof typeof UseGetItemsByCreatorMap) ?? 'events'
+      ],
     [tab],
   );
 
@@ -561,7 +569,6 @@ const Dashboard = (): any => {
     );
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const user = getUserQuery.data as User;
 
   const handleSelectSorting = (event) => {
@@ -573,22 +580,23 @@ const Dashboard = (): any => {
     );
   };
 
-  // @ts-expect-error
-  const suggestedOrganizerIds: UseQueryResult<{ member: { '@id': string }[] }> =
-    useGetSuggestedOrganizersQuery({}, { enabled: tab === 'organizers' });
+  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
+    {},
+    { enabled: tab === 'organizers' },
+  );
 
-  // @ts-expect-error
-  const suggestedOrganizers: UseQueryResult<{ member: Organizer[] }> =
-    useGetOrganizersByQueryQuery(
-      {
-        q: suggestedOrganizerIds.data?.member
-          .map((result) => `id:${parseOfferId(result['@id'])}`)
-          .join(' OR '),
-      },
-      {
-        enabled: suggestedOrganizerIds.data?.member?.length > 0,
-      },
-    );
+  suggestedOrganizerIds.data;
+
+  const suggestedOrganizers = useGetOrganizersByQueryQuery(
+    {
+      q: suggestedOrganizerIds.data?.member
+        .map((result) => `id:${parseOfferId(result['@id'])}`)
+        .join(' OR '),
+    },
+    {
+      enabled: suggestedOrganizerIds.data?.member?.length > 0,
+    },
+  );
 
   const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
@@ -824,20 +832,22 @@ const Dashboard = (): any => {
 
 const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies: rawCookies, queryClient }) => {
-    const user = (await useGetUserQueryServerSide({
+    const cookies = new Cookies(rawCookies);
+    const user = await prefetchGetUserQuery({
       req,
       queryClient,
-    })) as User;
+      cookies: cookies.getAll(),
+    });
 
     await Promise.all(
-      Object.entries(UseGetItemsByCreatorMap).map(([key, hook]) => {
+      Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {
         const page =
           query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
 
         const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
         const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
 
-        return hook({
+        return prefetch({
           req,
           queryClient,
           creator: user,

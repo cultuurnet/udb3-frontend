@@ -133,7 +133,6 @@ const OrganizerPicker = ({
   const queryClient = useQueryClient();
 
   const getUserQuery = useGetUserQuery();
-  // @ts-expect-error
   const user = getUserQuery.data;
 
   const [addButtonHasBeenPressed, setAddButtonHasBeenPressed] = useState(false);
@@ -164,7 +163,6 @@ const OrganizerPicker = ({
   const recentUsedOrganizers = useMemo(() => {
     const recentOrganizers = [];
 
-    // @ts-expect-error
     getOffersByCreatorQuery.data?.member.forEach((event) => {
       if (
         event.organizer &&
@@ -177,11 +175,8 @@ const OrganizerPicker = ({
     });
 
     return recentOrganizers.slice(0, MAX_RECENT_USED_ORGANIZERS);
-
-    // @ts-expect-error
   }, [getOffersByCreatorQuery.data?.member]);
 
-  // @ts-expect-error
   const organizers = getOrganizersByQueryQuery.data?.member ?? [];
 
   const handleSelectRecentOrganizer = (organizerId: string) => {
@@ -216,7 +211,6 @@ const OrganizerPicker = ({
 
                     // If we have a dummy organizer, first set a real one
                     if (!organizer['@id']) {
-                      // @ts-expect-error
                       removed = getRandomOrganizerQuery.data?.member[0];
                       await onChange(parseOfferId(removed?.['@id']));
                     }
@@ -259,7 +253,6 @@ const OrganizerPicker = ({
                     id={'organizer-picker'}
                     maxWidth="35rem"
                     options={organizers}
-                    // @ts-expect-error
                     isLoading={getOrganizersByQueryQuery.isLoading}
                     labelKey={(org) => getOrganizerName(org, i18n.language)}
                     css={`

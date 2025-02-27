@@ -7,13 +7,16 @@ import { Cookies } from 'react-cookie';
 import {
   MutationFunction,
   QueryClient,
+  QueryFunctionContext,
+  QueryKey,
   useMutation,
   useQueries,
   useQuery,
   useQueryClient,
-  UseQueryResult,
+  UseQueryOptions,
 } from 'react-query';
 
+import type { Headers } from '@/hooks/api/types/Headers';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import type { CalendarSummaryFormat } from '@/utils/createEmbededCalendarSummaries';
 import type { ErrorObject, FetchError } from '@/utils/fetchFromApi';
@@ -23,8 +26,8 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { createHeaders, useHeaders } from './useHeaders';
 
 type ServerSideQueryOptions = {
-  req?: NextApiRequest;
-  queryClient?: QueryClient;
+  req: NextApiRequest;
+  queryClient: QueryClient;
 };
 
 type AuthenticatedQueryOptions<T> = ServerSideQueryOptions & T;
@@ -54,7 +57,16 @@ const QueryStatus = {
   SUCCESS: 'success',
 };
 
-const prepareKey = ({ queryKey, queryArguments }) => {
+const prepareKey = <
+  TQueryKey extends QueryKey,
+  TQueryArguments extends Record<string, unknown>,
+>({
+  queryKey,
+  queryArguments,
+}: {
+  queryKey: TQueryKey;
+  queryArguments: TQueryArguments;
+}) => {
   const key = Array.isArray(queryKey) ? queryKey : [queryKey];
   const args = Object.entries(queryArguments ?? {}).filter(
     ([_, value]) => typeof value !== 'undefined',
@@ -68,25 +80,35 @@ const prepareKey = ({ queryKey, queryArguments }) => {
   return preparedKey;
 };
 
-const prepareArguments = ({
+const prepareArguments = <
+  TData,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
+>({
   options: {
     queryKey,
     queryFn,
     queryArguments,
     enabled = true,
-    req,
-    queryClient,
     ...configuration
   },
   isTokenPresent = false,
   headers,
+}: {
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>;
+  isTokenPresent: boolean;
+  headers: Headers;
 }) => {
   const parsedQueryKey = prepareKey({ queryArguments, queryKey });
 
   return {
     queryKey: parsedQueryKey,
-    queryFn: async () =>
-      await queryFn({ ...queryArguments, headers, queryKey: parsedQueryKey }),
+    queryFn: async (ctx: QueryFunctionContext<typeof queryKey>) =>
+      await queryFn({
+        ...ctx,
+        ...queryArguments,
+        headers,
+        queryKey: parsedQueryKey,
+      }),
     enabled: isTokenPresent && !!enabled,
     ...configuration,
   };
@@ -142,16 +164,19 @@ const prefetchAuthenticatedQueries = async ({
   );
 };
 
-const prefetchAuthenticatedQuery = async <TData>({
+const prefetchAuthenticatedQuery = async <
+  TData,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
+>({
   req,
   queryClient,
   ...options
-}): Promise<TData> => {
+}: ServerSideQueryOptions &
+  UseAuthenticatedQueryOptions<TData, TQueryArguments>): Promise<TData> => {
   const cookies = new Cookies(req?.headers?.cookie);
   const headers = createHeaders(cookies.get('token'));
 
   const { queryKey, queryFn } = prepareArguments({
-    // @ts-expect-error
     options,
     isTokenPresent: isTokenValid(cookies.get('token')),
     headers,
@@ -291,23 +316,53 @@ const useAuthenticatedMutations = ({
   return useMutation(innerMutationFn, configuration);
 };
 
-type UseAuthenticatedQueryResult<TData> =
-  | Promise<TData>
-  | UseQueryResult<TData, FetchError>;
+type Handlers = 'onSuccess' | 'onError' | 'onSettled';
+type UseQueryOptionsWithoutQueryFn<TData, TError> = Omit<
+  UseQueryOptions<TData, TError>,
+  'queryFn' | Handlers
+>;
 
-const useAuthenticatedQuery = <TData>(
-  options,
-): UseAuthenticatedQueryResult<TData> => {
-  if (!!options.req && !!options.queryClient && typeof window === 'undefined') {
-    return prefetchAuthenticatedQuery<TData>(options);
-  }
+type QueryFunction<TData> = UseQueryOptions<TData, FetchError>['queryFn'];
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+type CustomQueryFunction<
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+> = (
+  context: QueryFunctionContext & {
+    headers: Headers;
+  } & TQueryArguments,
+) => ReturnType<QueryFunction<TData>>;
+
+type UseAuthenticatedQueryOptions<
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+> = UseQueryOptionsWithoutQueryFn<TData, FetchError> & {
+  queryArguments?: TQueryArguments;
+  queryFn: CustomQueryFunction<TData, TQueryArguments>;
+};
+
+export const queryOptions = <
+  TData,
+  TQueryArguments extends Record<string, unknown>,
+>(
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
+) => {
+  return options;
+};
+
+export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
+  UseQueryOptions<Awaited<ReturnType<TQueryFn>>, FetchError>,
+  Handlers | 'enabled' | 'queryKey' | 'refetchOnWindowFocus'
+>;
+
+const useAuthenticatedQuery = <
+  TData,
+  TQueryArguments extends Record<string, unknown> = Record<string, unknown>,
+>(
+  options: UseAuthenticatedQueryOptions<TData, TQueryArguments>,
+) => {
   const { asPath, ...router } = useRouter();
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const headers = useHeaders();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
   ]);
@@ -318,8 +373,7 @@ const useAuthenticatedQuery = <TData>(
     headers,
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const result = useQuery<TData, FetchError>(preparedArguments);
+  const result = useQuery(preparedArguments);
 
   if (isUnAuthorized(result?.error?.status)) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
@@ -365,7 +419,6 @@ const useAuthenticatedQueries = ({
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const results = useQueries(options);
 
-  // @ts-expect-error
   if (results.some((result) => isUnAuthorized(result?.error?.status))) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
       removeAuthenticationCookies();
@@ -382,6 +435,7 @@ const useAuthenticatedQueries = ({
 
 export {
   getStatusFromResults,
+  prefetchAuthenticatedQuery,
   QueryStatus,
   useAuthenticatedMutation,
   useAuthenticatedMutations,

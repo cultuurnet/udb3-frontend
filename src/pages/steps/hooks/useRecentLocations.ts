@@ -7,33 +7,24 @@ import { WorkflowStatus } from '@/types/WorkflowStatus';
 
 const useRecentLocations = () => {
   const getUserQuery = useGetUserQuery();
-  const getOffersQuery = useGetOffersByCreatorQuery(
-    {
-      advancedQuery: '_exists_:location.id AND NOT (audienceType:"education")',
-      // @ts-expect-error
-      creator: getUserQuery?.data,
-      sortOptions: {
-        field: 'modified',
-        order: 'desc',
-      },
-      paginationOptions: { start: 0, limit: 20 },
+  const getOffersQuery = useGetOffersByCreatorQuery({
+    advancedQuery: '_exists_:location.id AND NOT (audienceType:"education")',
+    creator: getUserQuery?.data,
+    sortOptions: {
+      field: 'modified',
+      order: 'desc',
     },
-    {
-      queryArguments: {
-        workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED',
-        addressCountry: '*',
-      },
-    },
-  );
+    paginationOptions: { start: 0, limit: 20 },
+    workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED',
+    addressCountry: '*',
+  });
 
-  const offers: (Offer & { location: any })[] =
-    // @ts-expect-error
-    getOffersQuery?.data?.member ?? [];
+  const offers = getOffersQuery?.data?.member ?? [];
 
   const hasRecentLocations = offers?.length > 0;
 
   const recentLocations = uniqBy(
-    offers?.map((offer) => offer.location),
+    offers?.map((offer) => ('location' in offer ? offer.location : undefined)),
     '@id',
   )
     .filter(
