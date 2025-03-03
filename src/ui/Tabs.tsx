@@ -5,13 +5,13 @@ import {
   Tabs as BootstrapTabs,
   TabsProps,
 } from 'react-bootstrap';
+import { css } from 'styled-components';
 
 import { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { Box, getBoxProps, parseSpacing } from '@/ui/Box';
 
 import { colors, getValueFromTheme } from './theme';
-import { css } from 'styled-components';
 
 const getValue = getValueFromTheme(`tabs`);
 
