@@ -455,11 +455,22 @@ const boxProps = css`
   ${parseProperty('animation')}
 `;
 
+const reactPropTypes = [
+  'as',
+  'id',
+  'onClick',
+  'onBlur',
+  'onInput',
+  'onSubmit',
+  'onChange',
+  'dangerouslySetInnerHTML',
+];
+
 const boxPropTypes = [
+  ...reactPropTypes,
   'alignItems',
   'alignSelf',
   'animation',
-  'as',
   'backgroundColor',
   'backgroundPosition',
   'backgroundRepeat',
@@ -476,7 +487,6 @@ const boxPropTypes = [
   'fontWeight',
   'fontStyle',
   'height',
-  'id',
   'justifyContent',
   'left',
   'lineHeight',
@@ -492,8 +502,6 @@ const boxPropTypes = [
   'minHeight',
   'minWidth',
   'objectFit',
-  'onClick',
-  'onSubmit',
   'opacity',
   'overflow',
   'padding',
@@ -513,18 +521,9 @@ const boxPropTypes = [
   'width',
   'size',
   'zIndex',
-  'dangerouslySetInnerHTML',
 ] as const;
 
-const notAllowedPropsSet = new Set(
-  difference(boxPropTypes, [
-    'as',
-    'id',
-    'onClick',
-    'onSubmit',
-    'dangerouslySetInnerHTML',
-  ]),
-);
+const notAllowedPropsSet = new Set(difference(boxPropTypes, reactPropTypes));
 
 export const withoutDisallowedPropsConfig: StyledConfig = {
   shouldForwardProp: (prop) => !notAllowedPropsSet.has(prop as any),
