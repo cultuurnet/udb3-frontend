@@ -493,6 +493,7 @@ const boxPropTypes = [
   'minWidth',
   'objectFit',
   'onClick',
+  'onSubmit',
   'opacity',
   'overflow',
   'padding',
@@ -516,7 +517,13 @@ const boxPropTypes = [
 ] as const;
 
 const notAllowedPropsSet = new Set(
-  difference(boxPropTypes, ['as', 'id', 'onClick', 'dangerouslySetInnerHTML']),
+  difference(boxPropTypes, [
+    'as',
+    'id',
+    'onClick',
+    'onSubmit',
+    'dangerouslySetInnerHTML',
+  ]),
 );
 
 export const withoutDisallowedPropsConfig: StyledConfig = {
