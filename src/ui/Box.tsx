@@ -470,6 +470,7 @@ const boxPropTypes = [
   'display',
   'flex',
   'flexShrink',
+  'flexDirection',
   'flexWrap',
   'fontSize',
   'fontWeight',
