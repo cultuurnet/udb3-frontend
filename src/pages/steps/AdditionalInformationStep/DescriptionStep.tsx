@@ -101,6 +101,7 @@ type DescriptionStepProps = StackProps & TabContentProps;
 
 const DescriptionStep = ({
   scope,
+  field,
   offerId,
   onSuccessfulChange,
   onValidationChange,
@@ -136,9 +137,15 @@ const DescriptionStep = ({
 
     onValidationChange(
       isCompleted ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entity?.description, entity?.mainLanguage, i18n.language]);
+  }, [
+    field,
+    entity?.description,
+    entity?.mainLanguage,
+    i18n.language,
+    onValidationChange,
+  ]);
 
   const eventTypeId = useMemo(() => {
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
@@ -172,6 +179,7 @@ const DescriptionStep = ({
 
     onValidationChange(
       isCompleted ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
 
     if (!editorState.getLastChangeType()) {

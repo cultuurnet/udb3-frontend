@@ -1,4 +1,10 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
@@ -40,6 +46,7 @@ type Props = StackProps &
 const ContactInfoStep = ({
   scope,
   offerId,
+  field,
   onSuccessfulChange,
   onValidationChange,
   organizerContactInfo,
@@ -60,30 +67,34 @@ const ContactInfoStep = ({
   const contactInfo =
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 
-  const updateContactInfoState = (newContactInfo) => {
-    const contactInfoArray = [];
-    Object.keys(contactInfo ?? {}).forEach((key) => {
-      contactInfo[key].forEach((item) => {
-        contactInfoArray.push({
-          type: key,
-          value: item,
+  const updateContactInfoState = useCallback(
+    (newContactInfo) => {
+      const contactInfoArray = [];
+
+      Object.keys(contactInfo ?? {}).forEach((key) => {
+        contactInfo[key].forEach((item) => {
+          contactInfoArray.push({
+            type: key,
+            value: item,
+          });
         });
       });
-    });
 
-    setContactInfoState(contactInfoArray);
-    setIsContactInfoInitialized(true);
-  };
+      setContactInfoState(contactInfoArray);
+      setIsContactInfoInitialized(true);
+    },
+    [contactInfo],
+  );
 
   useEffect(() => {
     if (!contactInfo || isContactInfoStateInitialized) return;
     updateContactInfoState(contactInfo);
-  }, [contactInfo]);
+  }, [contactInfo, isContactInfoStateInitialized, updateContactInfoState]);
 
   useEffect(() => {
     if (!organizerContactInfo) return;
     updateContactInfoState(organizerContactInfo);
-  }, [organizerContactInfo]);
+  }, [organizerContactInfo, updateContactInfoState]);
 
   useEffect(() => {
     if (!isContactInfoStateInitialized) return;
@@ -97,12 +108,17 @@ const ContactInfoStep = ({
     }
 
     if (filteredContactInfoState.length === 0) {
-      onValidationChange(ValidationStatus.NONE);
+      onValidationChange(ValidationStatus.NONE, field);
       return;
     }
 
-    onValidationChange(ValidationStatus.SUCCESS);
-  }, [contactInfoState]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [
+    field,
+    contactInfoState,
+    isContactInfoStateInitialized,
+    onValidationChange,
+  ]);
 
   const queryClient = useQueryClient();
 
@@ -130,7 +146,7 @@ const ContactInfoStep = ({
         return;
       }
 
-      onValidationChange(ValidationStatus.SUCCESS);
+      onValidationChange(ValidationStatus.SUCCESS, field);
       onSuccessfulChange(data);
     },
   });

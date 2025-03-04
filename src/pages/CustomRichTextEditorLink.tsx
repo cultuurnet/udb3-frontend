@@ -76,7 +76,7 @@ const CustomRichTextEditorLink = ({
       setLinkTitle('');
       setLinkTargetOption(config.defaultTargetOption);
     }
-  }, [expanded]);
+  }, [expanded, config.defaultTargetOption]);
 
   const updateValue = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -110,7 +110,7 @@ const CustomRichTextEditorLink = ({
           config.link.title || translations['components.controls.link.link']
         }
       >
-        <img src={config.link.icon} alt="" />
+        <img src={config.link.icon} alt="link-icon" />
       </Option>
       <Option
         disabled={!currentState.link}
@@ -121,7 +121,7 @@ const CustomRichTextEditorLink = ({
           config.unlink.title || translations['components.controls.link.unlink']
         }
       >
-        <img src={config.unlink.icon} alt="" />
+        <img src={config.link.icon} alt="unlink-icon" />
       </Option>
       {expanded && isModalVisible && (
         <Stack
