@@ -14,6 +14,7 @@ import Availability from './availability.page';
 
 const setup = async () => {
   const page = setupPage({
+    // @ts-expect-error TS2741 TODO: Fix type error
     router: {
       query: {
         eventId: parseOfferId(eventWithSubEvents['@id']),
@@ -72,6 +73,7 @@ test('I can save a status', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
+  // @ts-expect-error TS2339 TODO: Fix type error
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
@@ -120,6 +122,7 @@ test('I can save a status with a reason', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
+  // @ts-expect-error TS2339 TODO: Fix type error
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
@@ -162,6 +165,7 @@ test('I can save a booking availability', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
+  // @ts-expect-error TS2339 TODO: Fix type error
   const filteredMockCalls = fetch.mock.calls.find((call) => {
     return call[0].endsWith('/subEvents');
   });

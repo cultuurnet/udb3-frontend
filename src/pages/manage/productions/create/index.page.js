@@ -38,10 +38,12 @@ const Create = () => {
   const [selectedProductionId, setSelectedProductionId] = useState('');
   const typeaheadComponent = useRef();
 
+  // @ts-expect-error TS2353 TODO: Fix type error
   const getSuggestedEventsQuery = useGetSuggestedEventsQuery({ retry: false });
 
   const getProductionsQuery = useGetProductionsQuery({
     name: searchInput,
+    // @ts-expect-error TS2741 TODO: Fix type error
     paginationOptions: { limit: 10 },
   });
 
@@ -49,6 +51,7 @@ const Create = () => {
     setSelectedProductionId('');
     setSearchInput('');
     await getSuggestedEventsQuery.refetch();
+    // @ts-expect-error TS18048 TODO: Fix type error
     typeaheadComponent?.current?.clear();
   };
 
@@ -79,6 +82,7 @@ const Create = () => {
   const availableProductions = useMemo(
     () =>
       events
+        // @ts-expect-error TS2339 TODO: Fix type error
         .map((event) => event?.production)
         .filter((production) => !!production),
     [events],
@@ -159,6 +163,7 @@ const Create = () => {
     addEventsByIdsMutation.mutate({
       productionId: selectedProductionId,
       eventIds: events
+        // @ts-expect-error TS2339 TODO: Fix type error
         .filter((event) => !event.production)
         .map((event) => parseOfferId(event['@id'])),
     });
@@ -188,31 +193,45 @@ const Create = () => {
                     id={id}
                     key={id}
                     title={
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.name?.[i18n.language] ??
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.name?.[event.mainLanguage]
                     }
                     locationName={
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.location?.name?.[i18n.language] ??
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.location?.name?.[event.location.mainLanguage]
                     }
                     locationCity={
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.location?.address?.[i18n.language]
                         ?.addressLocality ??
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.location?.address?.[event.location.mainLanguage]
                         ?.addressLocality
                     }
                     organizerName={
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.organizer?.name?.[i18n.language] ??
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.organizer?.name?.[event.location.mainLanguage]
                     }
+                    // @ts-expect-error TS2339 TODO: Fix type error
                     terms={event?.terms}
                     flex={1}
+                    // @ts-expect-error TS2339 TODO: Fix type error
                     imageUrl={event?.image}
                     description={
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.description?.[i18n.language] ??
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event?.description?.[event.mainLanguage]
                     }
+                    // @ts-expect-error TS2339 TODO: Fix type error
                     productionName={event?.production?.title}
+                    // @ts-expect-error TS2339 TODO: Fix type error
                     calendarType={event?.calendarType}
                   />
                 );
@@ -224,9 +243,12 @@ const Create = () => {
                   name="production-names"
                   items={events
                     .map((event) =>
+                      // @ts-expect-error TS2339 TODO: Fix type error
                       event.production
                         ? {
+                            // @ts-expect-error TS2339 TODO: Fix type error
                             label: event.production.title,
+                            // @ts-expect-error TS2339 TODO: Fix type error
                             value: event.production.id,
                           }
                         : undefined,
