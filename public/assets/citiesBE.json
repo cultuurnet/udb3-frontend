@@ -5398,7 +5398,11 @@
       "name": "Rupelmonde (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9150"
     },
-    { "label": "9150 Kruibeke (Beveren-Kruibeke-Zwijndrecht)", "name": "Kruibeke (Beveren-Kruibeke-Zwijndrecht)", "zip": "9150" },
+    {
+      "label": "9150 Kruibeke (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Kruibeke (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "9150"
+    },
     {
       "label": "9150 Bazel (Beveren-Kruibeke-Zwijndrecht)",
       "name": "Bazel (Beveren-Kruibeke-Zwijndrecht)",
@@ -6702,7 +6706,11 @@
     { "label": "2200 Herentals", "name": "Herentals", "zip": "2200" },
     { "label": "2160 Wommelgem", "name": "Wommelgem", "zip": "2160" },
     { "label": "2110 Wijnegem", "name": "Wijnegem", "zip": "2110" },
-    { "label": "2070 Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)", "name": "Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)", "zip": "2070" },
+    {
+      "label": "2070 Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "2070"
+    },
     {
       "label": "2070 Burcht (Beveren-Kruibeke-Zwijndrecht)",
       "name": "Burcht (Beveren-Kruibeke-Zwijndrecht)",
@@ -7226,7 +7234,11 @@
       "name": "Heusden (Destelbergen)",
       "zip": "9070"
     },
-    { "label": "9120 Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)", "name": "Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)", "zip": "9120" },
+    {
+      "label": "9120 Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "9120"
+    },
     {
       "label": "9120 Kallo (Beveren-Kruibeke-Zwijndrecht)",
       "name": "Kallo (Beveren-Kruibeke-Zwijndrecht)",
