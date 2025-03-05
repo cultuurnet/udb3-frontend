@@ -4151,8 +4151,16 @@
       "name": "Leerbeek (Pajottegem)",
       "zip": "1755"
     },
-    { "label": "1755 Kester (Pajottegem)", "name": "Kester (Pajottegem)", "zip": "1755" },
-    { "label": "1755 Gooik (Pajottegem)", "name": "Gooik (Pajottegem)", "zip": "1755" },
+    {
+      "label": "1755 Kester (Pajottegem)",
+      "name": "Kester (Pajottegem)",
+      "zip": "1755"
+    },
+    {
+      "label": "1755 Gooik (Pajottegem)",
+      "name": "Gooik (Pajottegem)",
+      "zip": "1755"
+    },
     {
       "label": "1750 Sint-Martens-Lennik (Lennik)",
       "name": "Sint-Martens-Lennik (Lennik)",
@@ -4301,9 +4309,17 @@
       "name": "Tollembeek (Pajottegem)",
       "zip": "1570"
     },
-    { "label": "1570 Galmaarden (Pajottegem)", "name": "Galmaarden (Pajottegem)", "zip": "1570" },
+    {
+      "label": "1570 Galmaarden (Pajottegem)",
+      "name": "Galmaarden (Pajottegem)",
+      "zip": "1570"
+    },
     { "label": "1560 Hoeilaart", "name": "Hoeilaart", "zip": "1560" },
-    { "label": "1540 Herne (Pajottegem)", "name": "Herne (Pajottegem)", "zip": "1540" },
+    {
+      "label": "1540 Herne (Pajottegem)",
+      "name": "Herne (Pajottegem)",
+      "zip": "1540"
+    },
     {
       "label": "1540 Herfelingen (Pajottegem)",
       "name": "Herfelingen (Pajottegem)",
@@ -6912,7 +6928,11 @@
       "name": "Hofstade (Zemst)",
       "zip": "1981"
     },
-    { "label": "2150 Borsbeek (Antwerpen)", "name": "Borsbeek (Antwerpen)", "zip": "2150" },
+    {
+      "label": "2150 Borsbeek (Antwerpen)",
+      "name": "Borsbeek (Antwerpen)",
+      "zip": "2150"
+    },
     {
       "label": "2018 Antwerpen 18 (Antwerpen)",
       "name": "Antwerpen 18 (Antwerpen)",
