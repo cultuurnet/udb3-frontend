@@ -5927,80 +5927,80 @@
       "zip": "3770"
     },
     {
-      "label": "3746 Hoelbeek (Bilzen)",
-      "name": "Hoelbeek (Bilzen)",
+      "label": "3746 Hoelbeek (Bilzen-Hoeselt)",
+      "name": "Hoelbeek (Bilzen-Hoeselt)",
       "zip": "3746"
     },
     {
-      "label": "3742 Martenslinde (Bilzen)",
-      "name": "Martenslinde (Bilzen)",
+      "label": "3742 Martenslinde (Bilzen-Hoeselt)",
+      "name": "Martenslinde (Bilzen-Hoeselt)",
       "zip": "3742"
     },
     {
-      "label": "3740 Waltwilder (Bilzen)",
-      "name": "Waltwilder (Bilzen)",
+      "label": "3740 Waltwilder (Bilzen-Hoeselt)",
+      "name": "Waltwilder (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     { "label": "3740 Spouwen", "name": "Spouwen", "zip": "3740" },
     {
-      "label": "3740 Rosmeer (Bilzen)",
-      "name": "Rosmeer (Bilzen)",
+      "label": "3740 Rosmeer (Bilzen-Hoeselt)",
+      "name": "Rosmeer (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Rijkhoven (Bilzen)",
-      "name": "Rijkhoven (Bilzen)",
+      "label": "3740 Rijkhoven (Bilzen-Hoeselt)",
+      "name": "Rijkhoven (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Munsterbilzen (Bilzen)",
-      "name": "Munsterbilzen (Bilzen)",
+      "label": "3740 Munsterbilzen (Bilzen-Hoeselt)",
+      "name": "Munsterbilzen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Mopertingen (Bilzen)",
-      "name": "Mopertingen (Bilzen)",
+      "label": "3740 Mopertingen (Bilzen-Hoeselt)",
+      "name": "Mopertingen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Kleine-Spouwen (Bilzen)",
-      "name": "Kleine-Spouwen (Bilzen)",
+      "label": "3740 Kleine-Spouwen (Bilzen-Hoeselt)",
+      "name": "Kleine-Spouwen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
-    { "label": "3740 Hees (Bilzen)", "name": "Hees (Bilzen)", "zip": "3740" },
+    { "label": "3740 Hees (Bilzen-Hoeselt)", "name": "Hees (Bilzen-Hoeselt)", "zip": "3740" },
     {
-      "label": "3740 Grote-Spouwen (Bilzen)",
-      "name": "Grote-Spouwen (Bilzen)",
-      "zip": "3740"
-    },
-    {
-      "label": "3740 Eigenbilzen (Bilzen)",
-      "name": "Eigenbilzen (Bilzen)",
-      "zip": "3740"
-    },
-    { "label": "3740 Bilzen", "name": "Bilzen", "zip": "3740" },
-    {
-      "label": "3740 Beverst (Bilzen)",
-      "name": "Beverst (Bilzen)",
+      "label": "3740 Grote-Spouwen (Bilzen-Hoeselt)",
+      "name": "Grote-Spouwen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3732 Schalkhoven (Hoeselt)",
-      "name": "Schalkhoven (Hoeselt)",
+      "label": "3740 Eigenbilzen (Bilzen-Hoeselt)",
+      "name": "Eigenbilzen (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    { "label": "3740 Bilzen (Bilzen-Hoeselt)", "name": "Bilzen (Bilzen-Hoeselt)", "zip": "3740" },
+    {
+      "label": "3740 Beverst (Bilzen-Hoeselt)",
+      "name": "Beverst (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    {
+      "label": "3732 Schalkhoven (Bilzen-Hoeselt)",
+      "name": "Schalkhoven (Bilzen-Hoeselt)",
       "zip": "3732"
     },
-    { "label": "3730 Werm (Hoeselt)", "name": "Werm (Hoeselt)", "zip": "3730" },
+    { "label": "3730 Werm (Bilzen-Hoeselt)", "name": "Werm (Bilzen-Hoeselt)", "zip": "3730" },
     {
-      "label": "3730 Sint-Huibrechts-Hern (Hoeselt)",
-      "name": "Sint-Huibrechts-Hern (Hoeselt)",
+      "label": "3730 Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
+      "name": "Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
       "zip": "3730"
     },
     {
-      "label": "3730 Romershoven (Hoeselt)",
-      "name": "Romershoven (Hoeselt)",
+      "label": "3730 Romershoven (Bilzen-Hoeselt)",
+      "name": "Romershoven (Bilzen-Hoeselt)",
       "zip": "3730"
     },
-    { "label": "3730 Hoeselt", "name": "Hoeselt", "zip": "3730" },
+    { "label": "3730 Hoeselt (Bilzen-Hoeselt)", "name": "Hoeselt (Bilzen-Hoeselt)", "zip": "3730" },
     {
       "label": "3724 Vliermaal (Kortessem)",
       "name": "Vliermaal (Kortessem)",
