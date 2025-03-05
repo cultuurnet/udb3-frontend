@@ -2801,7 +2801,6 @@
     { "label": "8790 Waregem", "name": "Waregem", "zip": "8790" },
     { "label": "8780 Oostrozebeke", "name": "Oostrozebeke", "zip": "8780" },
     { "label": "8770 Ingelmunster", "name": "Ingelmunster", "zip": "8770" },
-    { "label": "8760 Meulebeke", "name": "Meulebeke", "zip": "8760" },
     {
       "label": "8755 Ruiselede (Wingene)",
       "name": "Ruiselede (Wingene)",
@@ -2849,6 +2848,11 @@
       "zip": "8710"
     },
     { "label": "8700 Tielt", "name": "Tielt", "zip": "8700" },
+    {
+      "label": "8760 Meulebeke (Tielt)",
+      "name": "Meulebeke (Tielt)",
+      "zip": "8760"
+    },
     {
       "label": "8700 Schuiferskapelle (Tielt)",
       "name": "Schuiferskapelle (Tielt)",
