@@ -2801,8 +2801,11 @@
     { "label": "8790 Waregem", "name": "Waregem", "zip": "8790" },
     { "label": "8780 Oostrozebeke", "name": "Oostrozebeke", "zip": "8780" },
     { "label": "8770 Ingelmunster", "name": "Ingelmunster", "zip": "8770" },
-    { "label": "8760 Meulebeke", "name": "Meulebeke", "zip": "8760" },
-    { "label": "8755 Ruiselede", "name": "Ruiselede", "zip": "8755" },
+    {
+      "label": "8755 Ruiselede (Wingene)",
+      "name": "Ruiselede (Wingene)",
+      "zip": "8755"
+    },
     {
       "label": "8750 Zwevezele (Wingene)",
       "name": "Zwevezele (Wingene)",
@@ -2845,6 +2848,11 @@
       "zip": "8710"
     },
     { "label": "8700 Tielt", "name": "Tielt", "zip": "8700" },
+    {
+      "label": "8760 Meulebeke (Tielt)",
+      "name": "Meulebeke (Tielt)",
+      "zip": "8760"
+    },
     {
       "label": "8700 Schuiferskapelle (Tielt)",
       "name": "Schuiferskapelle (Tielt)",
@@ -4134,17 +4142,25 @@
       "zip": "1760"
     },
     {
-      "label": "1755 Oetingen (Gooik)",
-      "name": "Oetingen (Gooik)",
+      "label": "1755 Oetingen (Pajottegem)",
+      "name": "Oetingen (Pajottegem)",
       "zip": "1755"
     },
     {
-      "label": "1755 Leerbeek (Gooik)",
-      "name": "Leerbeek (Gooik)",
+      "label": "1755 Leerbeek (Pajottegem)",
+      "name": "Leerbeek (Pajottegem)",
       "zip": "1755"
     },
-    { "label": "1755 Kester (Gooik)", "name": "Kester (Gooik)", "zip": "1755" },
-    { "label": "1755 Gooik", "name": "Gooik", "zip": "1755" },
+    {
+      "label": "1755 Kester (Pajottegem)",
+      "name": "Kester (Pajottegem)",
+      "zip": "1755"
+    },
+    {
+      "label": "1755 Gooik (Pajottegem)",
+      "name": "Gooik (Pajottegem)",
+      "zip": "1755"
+    },
     {
       "label": "1750 Sint-Martens-Lennik (Lennik)",
       "name": "Sint-Martens-Lennik (Lennik)",
@@ -4284,21 +4300,29 @@
       "zip": "1600"
     },
     {
-      "label": "1570 Vollezele (Galmaarden)",
-      "name": "Vollezele (Galmaarden)",
+      "label": "1570 Vollezele (Pajottegem)",
+      "name": "Vollezele (Pajottegem)",
       "zip": "1570"
     },
     {
-      "label": "1570 Tollembeek (Galmaarden)",
-      "name": "Tollembeek (Galmaarden)",
+      "label": "1570 Tollembeek (Pajottegem)",
+      "name": "Tollembeek (Pajottegem)",
       "zip": "1570"
     },
-    { "label": "1570 Galmaarden", "name": "Galmaarden", "zip": "1570" },
+    {
+      "label": "1570 Galmaarden (Pajottegem)",
+      "name": "Galmaarden (Pajottegem)",
+      "zip": "1570"
+    },
     { "label": "1560 Hoeilaart", "name": "Hoeilaart", "zip": "1560" },
-    { "label": "1540 Herne", "name": "Herne", "zip": "1540" },
     {
-      "label": "1540 Herfelingen (Herne)",
-      "name": "Herfelingen (Herne)",
+      "label": "1540 Herne (Pajottegem)",
+      "name": "Herne (Pajottegem)",
+      "zip": "1540"
+    },
+    {
+      "label": "1540 Herfelingen (Pajottegem)",
+      "name": "Herfelingen (Pajottegem)",
       "zip": "1540"
     },
     {
@@ -4512,8 +4536,8 @@
       "zip": "9850"
     },
     {
-      "label": "9840 Zevergem (De Pinte)",
-      "name": "Zevergem (De Pinte)",
+      "label": "9840 Zevergem (Nazareth-De Pinte)",
+      "name": "Zevergem (Nazareth-De Pinte)",
       "zip": "9840"
     },
     {
@@ -4527,33 +4551,45 @@
       "zip": "9830"
     },
     {
-      "label": "9820 Schelderode (Merelbeke)",
-      "name": "Schelderode (Merelbeke)",
+      "label": "9820 Schelderode (Merelbeke-Melle)",
+      "name": "Schelderode (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
-      "label": "9820 Munte (Merelbeke)",
-      "name": "Munte (Merelbeke)",
-      "zip": "9820"
-    },
-    { "label": "9820 Merelbeke", "name": "Merelbeke", "zip": "9820" },
-    {
-      "label": "9820 Melsen (Merelbeke)",
-      "name": "Melsen (Merelbeke)",
+      "label": "9820 Munte (Merelbeke-Melle)",
+      "name": "Munte (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
-      "label": "9820 Lemberge (Merelbeke)",
-      "name": "Lemberge (Merelbeke)",
+      "label": "9820 Merelbeke (Merelbeke-Melle)",
+      "name": "Merelbeke (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
-      "label": "9820 Bottelare (Merelbeke)",
-      "name": "Bottelare (Merelbeke)",
+      "label": "9820 Melsen (Merelbeke-Melle)",
+      "name": "Melsen (Merelbeke-Melle)",
       "zip": "9820"
     },
-    { "label": "9810 Nazareth", "name": "Nazareth", "zip": "9810" },
-    { "label": "9810 Eke (Nazareth)", "name": "Eke (Nazareth)", "zip": "9810" },
+    {
+      "label": "9820 Lemberge (Merelbeke-Melle)",
+      "name": "Lemberge (Merelbeke-Melle)",
+      "zip": "9820"
+    },
+    {
+      "label": "9820 Bottelare (Merelbeke-Melle)",
+      "name": "Bottelare (Merelbeke-Melle)",
+      "zip": "9820"
+    },
+    {
+      "label": "9810 Nazareth (Nazareth-De Pinte)",
+      "name": "Nazareth (Nazareth-De Pinte)",
+      "zip": "9810"
+    },
+    {
+      "label": "9810 Eke (Nazareth-De Pinte)",
+      "name": "Eke (Nazareth-De Pinte)",
+      "zip": "9810"
+    },
     {
       "label": "9800 Zeveren (Deinze)",
       "name": "Zeveren (Deinze)",
@@ -5321,8 +5357,16 @@
       "name": "Kemzeke (Stekene)",
       "zip": "9190"
     },
-    { "label": "9185 Wachtebeke", "name": "Wachtebeke", "zip": "9185" },
-    { "label": "9180 Moerbeke-Waas", "name": "Moerbeke-Waas", "zip": "9180" },
+    {
+      "label": "9185 Wachtebeke (Lochristi)",
+      "name": "Wachtebeke (Lochristi)",
+      "zip": "9185"
+    },
+    {
+      "label": "9180 Moerbeke-Waas (Lokeren)",
+      "name": "Moerbeke-Waas (Lokeren)",
+      "zip": "9180"
+    },
     {
       "label": "9170 Sint-Pauwels (Sint-Gillis-Waas)",
       "name": "Sint-Pauwels (Sint-Gillis-Waas)",
@@ -5350,14 +5394,18 @@
       "zip": "9160"
     },
     {
-      "label": "9150 Rupelmonde (Kruibeke)",
-      "name": "Rupelmonde (Kruibeke)",
+      "label": "9150 Rupelmonde (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Rupelmonde (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9150"
     },
-    { "label": "9150 Kruibeke", "name": "Kruibeke", "zip": "9150" },
     {
-      "label": "9150 Bazel (Kruibeke)",
-      "name": "Bazel (Kruibeke)",
+      "label": "9150 Kruibeke (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Kruibeke (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "9150"
+    },
+    {
+      "label": "9150 Bazel (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Bazel (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9150"
     },
     {
@@ -5418,10 +5466,14 @@
       "name": "Nieuwkerken-Waas (Sint-Niklaas)",
       "zip": "9100"
     },
-    { "label": "9090 Melle", "name": "Melle", "zip": "9090" },
     {
-      "label": "9090 Gontrode (Melle)",
-      "name": "Gontrode (Melle)",
+      "label": "9090 Melle (Merelbeke-Melle)",
+      "name": "Melle (Merelbeke-Melle)",
+      "zip": "9090"
+    },
+    {
+      "label": "9090 Gontrode (Merelbeke-Melle)",
+      "name": "Gontrode (Merelbeke-Melle)",
       "zip": "9090"
     },
     {
@@ -5508,7 +5560,11 @@
       "name": "Grote-Brogel (Peer)",
       "zip": "3990"
     },
-    { "label": "3980 Tessenderlo", "name": "Tessenderlo", "zip": "3980" },
+    {
+      "label": "3980 Tessenderlo (Tessenderlo-Ham)",
+      "name": "Tessenderlo (Tessenderlo-Ham)",
+      "zip": "3980"
+    },
     {
       "label": "3971 Heppen (Leopoldsburg)",
       "name": "Heppen (Leopoldsburg)",
@@ -5534,13 +5590,21 @@
       "zip": "3950"
     },
     { "label": "3950 Bocholt", "name": "Bocholt", "zip": "3950" },
-    { "label": "3945 Oostham (Ham)", "name": "Oostham (Ham)", "zip": "3945" },
     {
-      "label": "3945 Kwaadmechelen (Ham)",
-      "name": "Kwaadmechelen (Ham)",
+      "label": "3945 Oostham (Tessenderlo-Ham)",
+      "name": "Oostham (Tessenderlo-Ham)",
       "zip": "3945"
     },
-    { "label": "3945 Ham", "name": "Ham", "zip": "3945" },
+    {
+      "label": "3945 Kwaadmechelen (Tessenderlo-Ham)",
+      "name": "Kwaadmechelen (Tessenderlo-Ham)",
+      "zip": "3945"
+    },
+    {
+      "label": "3945 Ham (Tessenderlo-Ham)",
+      "name": "Ham (Tessenderlo-Ham)",
+      "zip": "3945"
+    },
     {
       "label": "3941 Eksel (Hechtel-Eksel)",
       "name": "Eksel (Hechtel-Eksel)",
@@ -5690,56 +5754,60 @@
       "zip": "3850"
     },
     {
-      "label": "3840 Voort (Borgloon)",
-      "name": "Voort (Borgloon)",
+      "label": "3840 Voort (Tongeren-Borgloon)",
+      "name": "Voort (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Rijkel (Borgloon)",
-      "name": "Rijkel (Borgloon)",
+      "label": "3840 Rijkel (Tongeren-Borgloon)",
+      "name": "Rijkel (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kuttekoven (Borgloon)",
-      "name": "Kuttekoven (Borgloon)",
+      "label": "3840 Kuttekoven (Tongeren-Borgloon)",
+      "name": "Kuttekoven (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kerniel (Borgloon)",
-      "name": "Kerniel (Borgloon)",
+      "label": "3840 Kerniel (Tongeren-Borgloon)",
+      "name": "Kerniel (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Hoepertingen (Borgloon)",
-      "name": "Hoepertingen (Borgloon)",
+      "label": "3840 Hoepertingen (Tongeren-Borgloon)",
+      "name": "Hoepertingen (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Hendrieken (Borgloon)",
-      "name": "Hendrieken (Borgloon)",
+      "label": "3840 Hendrieken (Tongeren-Borgloon)",
+      "name": "Hendrieken (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Groot-Loon (Borgloon)",
-      "name": "Groot-Loon (Borgloon)",
+      "label": "3840 Groot-Loon (Tongeren-Borgloon)",
+      "name": "Groot-Loon (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Gotem (Borgloon)",
-      "name": "Gotem (Borgloon)",
+      "label": "3840 Gotem (Tongeren-Borgloon)",
+      "name": "Gotem (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Gors-Opleeuw (Borgloon)",
-      "name": "Gors-Opleeuw (Borgloon)",
+      "label": "3840 Gors-Opleeuw (Tongeren-Borgloon)",
+      "name": "Gors-Opleeuw (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Broekom (Borgloon)",
-      "name": "Broekom (Borgloon)",
+      "label": "3840 Broekom (Tongeren-Borgloon)",
+      "name": "Broekom (Tongeren-Borgloon)",
       "zip": "3840"
     },
-    { "label": "3840 Borgloon", "name": "Borgloon", "zip": "3840" },
+    {
+      "label": "3840 Borgloon (Tongeren-Borgloon)",
+      "name": "Borgloon (Tongeren-Borgloon)",
+      "zip": "3840"
+    },
     {
       "label": "3832 Ulbeek (Wellen)",
       "name": "Ulbeek (Wellen)",
@@ -5875,152 +5943,180 @@
       "zip": "3770"
     },
     {
-      "label": "3746 Hoelbeek (Bilzen)",
-      "name": "Hoelbeek (Bilzen)",
+      "label": "3746 Hoelbeek (Bilzen-Hoeselt)",
+      "name": "Hoelbeek (Bilzen-Hoeselt)",
       "zip": "3746"
     },
     {
-      "label": "3742 Martenslinde (Bilzen)",
-      "name": "Martenslinde (Bilzen)",
+      "label": "3742 Martenslinde (Bilzen-Hoeselt)",
+      "name": "Martenslinde (Bilzen-Hoeselt)",
       "zip": "3742"
     },
     {
-      "label": "3740 Waltwilder (Bilzen)",
-      "name": "Waltwilder (Bilzen)",
+      "label": "3740 Waltwilder (Bilzen-Hoeselt)",
+      "name": "Waltwilder (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     { "label": "3740 Spouwen", "name": "Spouwen", "zip": "3740" },
     {
-      "label": "3740 Rosmeer (Bilzen)",
-      "name": "Rosmeer (Bilzen)",
+      "label": "3740 Rosmeer (Bilzen-Hoeselt)",
+      "name": "Rosmeer (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Rijkhoven (Bilzen)",
-      "name": "Rijkhoven (Bilzen)",
+      "label": "3740 Rijkhoven (Bilzen-Hoeselt)",
+      "name": "Rijkhoven (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Munsterbilzen (Bilzen)",
-      "name": "Munsterbilzen (Bilzen)",
+      "label": "3740 Munsterbilzen (Bilzen-Hoeselt)",
+      "name": "Munsterbilzen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Mopertingen (Bilzen)",
-      "name": "Mopertingen (Bilzen)",
+      "label": "3740 Mopertingen (Bilzen-Hoeselt)",
+      "name": "Mopertingen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Kleine-Spouwen (Bilzen)",
-      "name": "Kleine-Spouwen (Bilzen)",
-      "zip": "3740"
-    },
-    { "label": "3740 Hees (Bilzen)", "name": "Hees (Bilzen)", "zip": "3740" },
-    {
-      "label": "3740 Grote-Spouwen (Bilzen)",
-      "name": "Grote-Spouwen (Bilzen)",
+      "label": "3740 Kleine-Spouwen (Bilzen-Hoeselt)",
+      "name": "Kleine-Spouwen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3740 Eigenbilzen (Bilzen)",
-      "name": "Eigenbilzen (Bilzen)",
-      "zip": "3740"
-    },
-    { "label": "3740 Bilzen", "name": "Bilzen", "zip": "3740" },
-    {
-      "label": "3740 Beverst (Bilzen)",
-      "name": "Beverst (Bilzen)",
+      "label": "3740 Hees (Bilzen-Hoeselt)",
+      "name": "Hees (Bilzen-Hoeselt)",
       "zip": "3740"
     },
     {
-      "label": "3732 Schalkhoven (Hoeselt)",
-      "name": "Schalkhoven (Hoeselt)",
+      "label": "3740 Grote-Spouwen (Bilzen-Hoeselt)",
+      "name": "Grote-Spouwen (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    {
+      "label": "3740 Eigenbilzen (Bilzen-Hoeselt)",
+      "name": "Eigenbilzen (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    {
+      "label": "3740 Bilzen (Bilzen-Hoeselt)",
+      "name": "Bilzen (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    {
+      "label": "3740 Beverst (Bilzen-Hoeselt)",
+      "name": "Beverst (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
+    {
+      "label": "3732 Schalkhoven (Bilzen-Hoeselt)",
+      "name": "Schalkhoven (Bilzen-Hoeselt)",
       "zip": "3732"
     },
-    { "label": "3730 Werm (Hoeselt)", "name": "Werm (Hoeselt)", "zip": "3730" },
     {
-      "label": "3730 Sint-Huibrechts-Hern (Hoeselt)",
-      "name": "Sint-Huibrechts-Hern (Hoeselt)",
+      "label": "3730 Werm (Bilzen-Hoeselt)",
+      "name": "Werm (Bilzen-Hoeselt)",
       "zip": "3730"
     },
     {
-      "label": "3730 Romershoven (Hoeselt)",
-      "name": "Romershoven (Hoeselt)",
+      "label": "3730 Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
+      "name": "Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
       "zip": "3730"
     },
-    { "label": "3730 Hoeselt", "name": "Hoeselt", "zip": "3730" },
     {
-      "label": "3724 Vliermaal (Kortessem)",
-      "name": "Vliermaal (Kortessem)",
+      "label": "3730 Romershoven (Bilzen-Hoeselt)",
+      "name": "Romershoven (Bilzen-Hoeselt)",
+      "zip": "3730"
+    },
+    {
+      "label": "3730 Hoeselt (Bilzen-Hoeselt)",
+      "name": "Hoeselt (Bilzen-Hoeselt)",
+      "zip": "3730"
+    },
+    {
+      "label": "3724 Vliermaal (Hasselt)",
+      "name": "Vliermaal (Hasselt)",
       "zip": "3724"
     },
     {
-      "label": "3723 Guigoven (Kortessem)",
-      "name": "Guigoven (Kortessem)",
+      "label": "3723 Guigoven (Hasselt)",
+      "name": "Guigoven (Hasselt)",
       "zip": "3723"
     },
     {
-      "label": "3722 Wintershoven (Kortessem)",
-      "name": "Wintershoven (Kortessem)",
+      "label": "3722 Wintershoven (Hasselt)",
+      "name": "Wintershoven (Hasselt)",
       "zip": "3722"
     },
     {
-      "label": "3721 Vliermaalroot (Kortessem)",
-      "name": "Vliermaalroot (Kortessem)",
+      "label": "3721 Vliermaalroot (Hasselt)",
+      "name": "Vliermaalroot (Hasselt)",
       "zip": "3721"
     },
-    { "label": "3720 Kortessem", "name": "Kortessem", "zip": "3720" },
+    {
+      "label": "3720 Kortessem (Hasselt)",
+      "name": "Kortessem (Hasselt)",
+      "zip": "3720"
+    },
     { "label": "3717 Herstappe", "name": "Herstappe", "zip": "3717" },
     {
-      "label": "3700 Vreren (Tongeren)",
-      "name": "Vreren (Tongeren)",
-      "zip": "3700"
-    },
-    { "label": "3700 Tongeren", "name": "Tongeren", "zip": "3700" },
-    {
-      "label": "3700 Sluizen (Tongeren)",
-      "name": "Sluizen (Tongeren)",
+      "label": "3700 Vreren (Tongeren-Borgloon)",
+      "name": "Vreren (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Rutten (Tongeren)",
-      "name": "Rutten (Tongeren)",
+      "label": "3700 Tongeren (Tongeren-Borgloon)",
+      "name": "Tongeren (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Riksingen (Tongeren)",
-      "name": "Riksingen (Tongeren)",
+      "label": "3700 Sluizen (Tongeren-Borgloon)",
+      "name": "Sluizen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Nerem (Tongeren)",
-      "name": "Nerem (Tongeren)",
+      "label": "3700 Rutten (Tongeren-Borgloon)",
+      "name": "Rutten (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Neerrepen (Tongeren)",
-      "name": "Neerrepen (Tongeren)",
-      "zip": "3700"
-    },
-    { "label": "3700 Mal (Tongeren)", "name": "Mal (Tongeren)", "zip": "3700" },
-    {
-      "label": "3700 Lauw (Tongeren)",
-      "name": "Lauw (Tongeren)",
+      "label": "3700 Riksingen (Tongeren-Borgloon)",
+      "name": "Riksingen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Koninksem (Tongeren)",
-      "name": "Koninksem (Tongeren)",
+      "label": "3700 Nerem (Tongeren-Borgloon)",
+      "name": "Nerem (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Henis (Tongeren)",
-      "name": "Henis (Tongeren)",
+      "label": "3700 Neerrepen (Tongeren-Borgloon)",
+      "name": "Neerrepen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Diets-Heur (Tongeren)",
-      "name": "Diets-Heur (Tongeren)",
+      "label": "3700 Mal (Tongeren-Borgloon)",
+      "name": "Mal (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    {
+      "label": "3700 Lauw (Tongeren-Borgloon)",
+      "name": "Lauw (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    {
+      "label": "3700 Koninksem (Tongeren-Borgloon)",
+      "name": "Koninksem (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    {
+      "label": "3700 Henis (Tongeren-Borgloon)",
+      "name": "Henis (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    {
+      "label": "3700 Diets-Heur (Tongeren-Borgloon)",
+      "name": "Diets-Heur (Tongeren-Borgloon)",
       "zip": "3700"
     },
     { "label": "3690 Zutendaal", "name": "Zutendaal", "zip": "3690" },
@@ -6654,10 +6750,14 @@
     { "label": "2200 Herentals", "name": "Herentals", "zip": "2200" },
     { "label": "2160 Wommelgem", "name": "Wommelgem", "zip": "2160" },
     { "label": "2110 Wijnegem", "name": "Wijnegem", "zip": "2110" },
-    { "label": "2070 Zwijndrecht", "name": "Zwijndrecht", "zip": "2070" },
     {
-      "label": "2070 Burcht (Zwijndrecht)",
-      "name": "Burcht (Zwijndrecht)",
+      "label": "2070 Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Zwijndrecht (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "2070"
+    },
+    {
+      "label": "2070 Burcht (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Burcht (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "2070"
     },
     {
@@ -6808,8 +6908,8 @@
       "zip": "2970"
     },
     {
-      "label": "3700 's Herenelderen (Tongeren)",
-      "name": "'s Herenelderen (Tongeren)",
+      "label": "3700 's Herenelderen (Tongeren-Borgloon)",
+      "name": "'s Herenelderen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
@@ -6873,8 +6973,8 @@
       "zip": "2260"
     },
     {
-      "label": "1541 Sint-Pieters-Kapelle (Herne)",
-      "name": "Sint-Pieters-Kapelle (Herne)",
+      "label": "1541 Sint-Pieters-Kapelle (Pajottegem)",
+      "name": "Sint-Pieters-Kapelle (Pajottegem)",
       "zip": "1541"
     },
     { "label": "1547 Bever", "name": "Bever", "zip": "1547" },
@@ -6905,6 +7005,11 @@
       "zip": "1981"
     },
     {
+      "label": "2150 Borsbeek (Antwerpen)",
+      "name": "Borsbeek (Antwerpen)",
+      "zip": "2150"
+    },
+    {
       "label": "2018 Antwerpen 18 (Antwerpen)",
       "name": "Antwerpen 18 (Antwerpen)",
       "zip": "2018"
@@ -6929,7 +7034,6 @@
       "name": "Antwerpen 6 (Antwerpen)",
       "zip": "2060"
     },
-    { "label": "2150 Borsbeek", "name": "Borsbeek", "zip": "2150" },
     {
       "label": "2260 Tongerlo (Westerlo)",
       "name": "Tongerlo (Westerlo)",
@@ -7004,33 +7108,33 @@
       "zip": "3560"
     },
     {
-      "label": "3700 Berg (Tongeren)",
-      "name": "Berg (Tongeren)",
+      "label": "3700 Berg (Tongeren-Borgloon)",
+      "name": "Berg (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Haren (Tongeren)",
-      "name": "Haren (Tongeren)",
+      "label": "3700 Haren (Tongeren-Borgloon)",
+      "name": "Haren (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Kolmont (Tongeren)",
-      "name": "Kolmont (Tongeren)",
+      "label": "3700 Kolmont (Tongeren-Borgloon)",
+      "name": "Kolmont (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Overrepen (Tongeren)",
-      "name": "Overrepen (Tongeren)",
+      "label": "3700 Overrepen (Tongeren-Borgloon)",
+      "name": "Overrepen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Piringen (Tongeren)",
-      "name": "Piringen (Tongeren)",
+      "label": "3700 Piringen (Tongeren-Borgloon)",
+      "name": "Piringen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Widooie (Tongeren)",
-      "name": "Widooie (Tongeren)",
+      "label": "3700 Widooie (Tongeren-Borgloon)",
+      "name": "Widooie (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
@@ -7060,23 +7164,23 @@
       "zip": "3800"
     },
     {
-      "label": "3840 Bommershoven (Borgloon)",
-      "name": "Bommershoven (Borgloon)",
+      "label": "3840 Bommershoven (Tongeren-Borgloon)",
+      "name": "Bommershoven (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Haren (Borgloon)",
-      "name": "Haren (Borgloon)",
+      "label": "3840 Haren (Tongeren-Borgloon)",
+      "name": "Haren (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Jesseren (Borgloon)",
-      "name": "Jesseren (Borgloon)",
+      "label": "3840 Jesseren (Tongeren-Borgloon)",
+      "name": "Jesseren (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kolmont (Borgloon)",
-      "name": "Kolmont (Borgloon)",
+      "label": "3840 Kolmont (Tongeren-Borgloon)",
+      "name": "Kolmont (Tongeren-Borgloon)",
       "zip": "3840"
     },
     { "label": "3850 Nieuwerkerken", "name": "Nieuwerkerken", "zip": "3850" },
@@ -7174,10 +7278,14 @@
       "name": "Heusden (Destelbergen)",
       "zip": "9070"
     },
-    { "label": "9120 Beveren-Waas", "name": "Beveren-Waas", "zip": "9120" },
     {
-      "label": "9120 Kallo (Beveren-Waas)",
-      "name": "Kallo (Beveren-Waas)",
+      "label": "9120 Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Beveren-Waas (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "9120"
+    },
+    {
+      "label": "9120 Kallo (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Kallo (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9120"
     },
     {
@@ -7222,7 +7330,11 @@
       "name": "Ooike (Wortegem-Petegem)",
       "zip": "9790"
     },
-    { "label": "9840 De Pinte", "name": "De Pinte", "zip": "9840" },
+    {
+      "label": "9840 De Pinte (Nazareth-De Pinte)",
+      "name": "De Pinte (Nazareth-De Pinte)",
+      "zip": "9840"
+    },
     {
       "label": "9870 Machelen (Zulte)",
       "name": "Machelen (Zulte)",
