@@ -5560,7 +5560,7 @@
       "name": "Grote-Brogel (Peer)",
       "zip": "3990"
     },
-    { "label": "3980 Tessenderlo", "name": "Tessenderlo", "zip": "3980" },
+    { "label": "3980 Tessenderlo (Tessenderlo-Ham)", "name": "Tessenderlo (Tessenderlo-Ham)", "zip": "3980" },
     {
       "label": "3971 Heppen (Leopoldsburg)",
       "name": "Heppen (Leopoldsburg)",
@@ -5586,13 +5586,13 @@
       "zip": "3950"
     },
     { "label": "3950 Bocholt", "name": "Bocholt", "zip": "3950" },
-    { "label": "3945 Oostham (Ham)", "name": "Oostham (Ham)", "zip": "3945" },
+    { "label": "3945 Oostham (Tessenderlo-Ham)", "name": "Oostham (Tessenderlo-Ham)", "zip": "3945" },
     {
-      "label": "3945 Kwaadmechelen (Ham)",
-      "name": "Kwaadmechelen (Ham)",
+      "label": "3945 Kwaadmechelen (Tessenderlo-Ham)",
+      "name": "Kwaadmechelen (Tessenderlo-Ham)",
       "zip": "3945"
     },
-    { "label": "3945 Ham", "name": "Ham", "zip": "3945" },
+    { "label": "3945 Ham (Tessenderlo-Ham)", "name": "Ham (Tessenderlo-Ham)", "zip": "3945" },
     {
       "label": "3941 Eksel (Hechtel-Eksel)",
       "name": "Eksel (Hechtel-Eksel)",
