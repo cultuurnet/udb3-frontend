@@ -6904,6 +6904,7 @@
       "name": "Hofstade (Zemst)",
       "zip": "1981"
     },
+    { "label": "2150 Borsbeek (Antwerpen)", "name": "Borsbeek (Antwerpen)", "zip": "2150" },
     {
       "label": "2018 Antwerpen 18 (Antwerpen)",
       "name": "Antwerpen 18 (Antwerpen)",
@@ -6929,7 +6930,6 @@
       "name": "Antwerpen 6 (Antwerpen)",
       "zip": "2060"
     },
-    { "label": "2150 Borsbeek", "name": "Borsbeek", "zip": "2150" },
     {
       "label": "2260 Tongerlo (Westerlo)",
       "name": "Tongerlo (Westerlo)",
