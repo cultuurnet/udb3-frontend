@@ -4560,7 +4560,11 @@
       "name": "Munte (Merelbeke-Melle)",
       "zip": "9820"
     },
-    { "label": "9820 Merelbeke (Merelbeke-Melle)", "name": "Merelbeke (Merelbeke-Melle)", "zip": "9820" },
+    {
+      "label": "9820 Merelbeke (Merelbeke-Melle)",
+      "name": "Merelbeke (Merelbeke-Melle)",
+      "zip": "9820"
+    },
     {
       "label": "9820 Melsen (Merelbeke-Melle)",
       "name": "Melsen (Merelbeke-Melle)",
@@ -5353,8 +5357,16 @@
       "name": "Kemzeke (Stekene)",
       "zip": "9190"
     },
-    { "label": "9185 Wachtebeke (Lochristi)", "name": "Wachtebeke (Lochristi)", "zip": "9185" },
-    { "label": "9180 Moerbeke-Waas (Lokeren)", "name": "Moerbeke-Waas (Lokeren)", "zip": "9180" },
+    {
+      "label": "9185 Wachtebeke (Lochristi)",
+      "name": "Wachtebeke (Lochristi)",
+      "zip": "9185"
+    },
+    {
+      "label": "9180 Moerbeke-Waas (Lokeren)",
+      "name": "Moerbeke-Waas (Lokeren)",
+      "zip": "9180"
+    },
     {
       "label": "9170 Sint-Pauwels (Sint-Gillis-Waas)",
       "name": "Sint-Pauwels (Sint-Gillis-Waas)",
@@ -5450,7 +5462,11 @@
       "name": "Nieuwkerken-Waas (Sint-Niklaas)",
       "zip": "9100"
     },
-    { "label": "9090 Melle (Merelbeke-Melle)", "name": "Melle (Merelbeke-Melle)", "zip": "9090" },
+    {
+      "label": "9090 Melle (Merelbeke-Melle)",
+      "name": "Melle (Merelbeke-Melle)",
+      "zip": "9090"
+    },
     {
       "label": "9090 Gontrode (Merelbeke-Melle)",
       "name": "Gontrode (Merelbeke-Melle)",
