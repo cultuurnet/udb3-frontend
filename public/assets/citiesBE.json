@@ -2802,7 +2802,11 @@
     { "label": "8780 Oostrozebeke", "name": "Oostrozebeke", "zip": "8780" },
     { "label": "8770 Ingelmunster", "name": "Ingelmunster", "zip": "8770" },
     { "label": "8760 Meulebeke", "name": "Meulebeke", "zip": "8760" },
-    { "label": "8755 Ruiselede", "name": "Ruiselede", "zip": "8755" },
+    {
+      "label": "8755 Ruiselede (Wingene)",
+      "name": "Ruiselede (Wingene)",
+      "zip": "8755"
+    },
     {
       "label": "8750 Zwevezele (Wingene)",
       "name": "Zwevezele (Wingene)",
