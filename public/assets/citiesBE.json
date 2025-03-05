@@ -4134,17 +4134,17 @@
       "zip": "1760"
     },
     {
-      "label": "1755 Oetingen (Gooik)",
-      "name": "Oetingen (Gooik)",
+      "label": "1755 Oetingen (Pajottegem)",
+      "name": "Oetingen (Pajottegem)",
       "zip": "1755"
     },
     {
-      "label": "1755 Leerbeek (Gooik)",
-      "name": "Leerbeek (Gooik)",
+      "label": "1755 Leerbeek (Pajottegem)",
+      "name": "Leerbeek (Pajottegem)",
       "zip": "1755"
     },
-    { "label": "1755 Kester (Gooik)", "name": "Kester (Gooik)", "zip": "1755" },
-    { "label": "1755 Gooik", "name": "Gooik", "zip": "1755" },
+    { "label": "1755 Kester (Pajottegem)", "name": "Kester (Pajottegem)", "zip": "1755" },
+    { "label": "1755 Gooik (Pajottegem)", "name": "Gooik (Pajottegem)", "zip": "1755" },
     {
       "label": "1750 Sint-Martens-Lennik (Lennik)",
       "name": "Sint-Martens-Lennik (Lennik)",
@@ -4284,21 +4284,21 @@
       "zip": "1600"
     },
     {
-      "label": "1570 Vollezele (Galmaarden)",
-      "name": "Vollezele (Galmaarden)",
+      "label": "1570 Vollezele (Pajottegem)",
+      "name": "Vollezele (Pajottegem)",
       "zip": "1570"
     },
     {
-      "label": "1570 Tollembeek (Galmaarden)",
-      "name": "Tollembeek (Galmaarden)",
+      "label": "1570 Tollembeek (Pajottegem)",
+      "name": "Tollembeek (Pajottegem)",
       "zip": "1570"
     },
-    { "label": "1570 Galmaarden", "name": "Galmaarden", "zip": "1570" },
+    { "label": "1570 Galmaarden (Pajottegem)", "name": "Galmaarden (Pajottegem)", "zip": "1570" },
     { "label": "1560 Hoeilaart", "name": "Hoeilaart", "zip": "1560" },
-    { "label": "1540 Herne", "name": "Herne", "zip": "1540" },
+    { "label": "1540 Herne (Pajottegem)", "name": "Herne (Pajottegem)", "zip": "1540" },
     {
-      "label": "1540 Herfelingen (Herne)",
-      "name": "Herfelingen (Herne)",
+      "label": "1540 Herfelingen (Pajottegem)",
+      "name": "Herfelingen (Pajottegem)",
       "zip": "1540"
     },
     {
@@ -6873,8 +6873,8 @@
       "zip": "2260"
     },
     {
-      "label": "1541 Sint-Pieters-Kapelle (Herne)",
-      "name": "Sint-Pieters-Kapelle (Herne)",
+      "label": "1541 Sint-Pieters-Kapelle (Pajottegem)",
+      "name": "Sint-Pieters-Kapelle (Pajottegem)",
       "zip": "1541"
     },
     { "label": "1547 Bever", "name": "Bever", "zip": "1547" },
