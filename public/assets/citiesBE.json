@@ -5742,56 +5742,56 @@
       "zip": "3850"
     },
     {
-      "label": "3840 Voort (Borgloon)",
-      "name": "Voort (Borgloon)",
+      "label": "3840 Voort (Tongeren-Borgloon)",
+      "name": "Voort (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Rijkel (Borgloon)",
-      "name": "Rijkel (Borgloon)",
+      "label": "3840 Rijkel (Tongeren-Borgloon)",
+      "name": "Rijkel (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kuttekoven (Borgloon)",
-      "name": "Kuttekoven (Borgloon)",
+      "label": "3840 Kuttekoven (Tongeren-Borgloon)",
+      "name": "Kuttekoven (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kerniel (Borgloon)",
-      "name": "Kerniel (Borgloon)",
+      "label": "3840 Kerniel (Tongeren-Borgloon)",
+      "name": "Kerniel (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Hoepertingen (Borgloon)",
-      "name": "Hoepertingen (Borgloon)",
+      "label": "3840 Hoepertingen (Tongeren-Borgloon)",
+      "name": "Hoepertingen (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Hendrieken (Borgloon)",
-      "name": "Hendrieken (Borgloon)",
+      "label": "3840 Hendrieken (Tongeren-Borgloon)",
+      "name": "Hendrieken (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Groot-Loon (Borgloon)",
-      "name": "Groot-Loon (Borgloon)",
+      "label": "3840 Groot-Loon (Tongeren-Borgloon)",
+      "name": "Groot-Loon (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Gotem (Borgloon)",
-      "name": "Gotem (Borgloon)",
+      "label": "3840 Gotem (Tongeren-Borgloon)",
+      "name": "Gotem (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Gors-Opleeuw (Borgloon)",
-      "name": "Gors-Opleeuw (Borgloon)",
+      "label": "3840 Gors-Opleeuw (Tongeren-Borgloon)",
+      "name": "Gors-Opleeuw (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Broekom (Borgloon)",
-      "name": "Broekom (Borgloon)",
+      "label": "3840 Broekom (Tongeren-Borgloon)",
+      "name": "Broekom (Tongeren-Borgloon)",
       "zip": "3840"
     },
-    { "label": "3840 Borgloon", "name": "Borgloon", "zip": "3840" },
+    { "label": "3840 Borgloon (Tongeren-Borgloon)", "name": "Borgloon (Tongeren-Borgloon)", "zip": "3840" },
     {
       "label": "3832 Ulbeek (Wellen)",
       "name": "Ulbeek (Wellen)",
@@ -6040,55 +6040,55 @@
     { "label": "3720 Kortessem", "name": "Kortessem", "zip": "3720" },
     { "label": "3717 Herstappe", "name": "Herstappe", "zip": "3717" },
     {
-      "label": "3700 Vreren (Tongeren)",
-      "name": "Vreren (Tongeren)",
+      "label": "3700 Vreren (Tongeren-Borgloon)",
+      "name": "Vreren (Tongeren-Borgloon)",
       "zip": "3700"
     },
-    { "label": "3700 Tongeren", "name": "Tongeren", "zip": "3700" },
+    { "label": "3700 Tongeren (Tongeren-Borgloon)", "name": "Tongeren (Tongeren-Borgloon)", "zip": "3700" },
     {
-      "label": "3700 Sluizen (Tongeren)",
-      "name": "Sluizen (Tongeren)",
-      "zip": "3700"
-    },
-    {
-      "label": "3700 Rutten (Tongeren)",
-      "name": "Rutten (Tongeren)",
+      "label": "3700 Sluizen (Tongeren-Borgloon)",
+      "name": "Sluizen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Riksingen (Tongeren)",
-      "name": "Riksingen (Tongeren)",
+      "label": "3700 Rutten (Tongeren-Borgloon)",
+      "name": "Rutten (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Nerem (Tongeren)",
-      "name": "Nerem (Tongeren)",
+      "label": "3700 Riksingen (Tongeren-Borgloon)",
+      "name": "Riksingen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Neerrepen (Tongeren)",
-      "name": "Neerrepen (Tongeren)",
-      "zip": "3700"
-    },
-    { "label": "3700 Mal (Tongeren)", "name": "Mal (Tongeren)", "zip": "3700" },
-    {
-      "label": "3700 Lauw (Tongeren)",
-      "name": "Lauw (Tongeren)",
+      "label": "3700 Nerem (Tongeren-Borgloon)",
+      "name": "Nerem (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Koninksem (Tongeren)",
-      "name": "Koninksem (Tongeren)",
+      "label": "3700 Neerrepen (Tongeren-Borgloon)",
+      "name": "Neerrepen (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    { "label": "3700 Mal (Tongeren-Borgloon)", "name": "Mal (Tongeren-Borgloon)", "zip": "3700" },
+    {
+      "label": "3700 Lauw (Tongeren-Borgloon)",
+      "name": "Lauw (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Henis (Tongeren)",
-      "name": "Henis (Tongeren)",
+      "label": "3700 Koninksem (Tongeren-Borgloon)",
+      "name": "Koninksem (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Diets-Heur (Tongeren)",
-      "name": "Diets-Heur (Tongeren)",
+      "label": "3700 Henis (Tongeren-Borgloon)",
+      "name": "Henis (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
+    {
+      "label": "3700 Diets-Heur (Tongeren-Borgloon)",
+      "name": "Diets-Heur (Tongeren-Borgloon)",
       "zip": "3700"
     },
     { "label": "3690 Zutendaal", "name": "Zutendaal", "zip": "3690" },
@@ -6880,8 +6880,8 @@
       "zip": "2970"
     },
     {
-      "label": "3700 's Herenelderen (Tongeren)",
-      "name": "'s Herenelderen (Tongeren)",
+      "label": "3700 's Herenelderen (Tongeren-Borgloon)",
+      "name": "'s Herenelderen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
@@ -7080,33 +7080,33 @@
       "zip": "3560"
     },
     {
-      "label": "3700 Berg (Tongeren)",
-      "name": "Berg (Tongeren)",
+      "label": "3700 Berg (Tongeren-Borgloon)",
+      "name": "Berg (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Haren (Tongeren)",
-      "name": "Haren (Tongeren)",
+      "label": "3700 Haren (Tongeren-Borgloon)",
+      "name": "Haren (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Kolmont (Tongeren)",
-      "name": "Kolmont (Tongeren)",
+      "label": "3700 Kolmont (Tongeren-Borgloon)",
+      "name": "Kolmont (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Overrepen (Tongeren)",
-      "name": "Overrepen (Tongeren)",
+      "label": "3700 Overrepen (Tongeren-Borgloon)",
+      "name": "Overrepen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Piringen (Tongeren)",
-      "name": "Piringen (Tongeren)",
+      "label": "3700 Piringen (Tongeren-Borgloon)",
+      "name": "Piringen (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
-      "label": "3700 Widooie (Tongeren)",
-      "name": "Widooie (Tongeren)",
+      "label": "3700 Widooie (Tongeren-Borgloon)",
+      "name": "Widooie (Tongeren-Borgloon)",
       "zip": "3700"
     },
     {
@@ -7136,23 +7136,23 @@
       "zip": "3800"
     },
     {
-      "label": "3840 Bommershoven (Borgloon)",
-      "name": "Bommershoven (Borgloon)",
+      "label": "3840 Bommershoven (Tongeren-Borgloon)",
+      "name": "Bommershoven (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Haren (Borgloon)",
-      "name": "Haren (Borgloon)",
+      "label": "3840 Haren (Tongeren-Borgloon)",
+      "name": "Haren (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Jesseren (Borgloon)",
-      "name": "Jesseren (Borgloon)",
+      "label": "3840 Jesseren (Tongeren-Borgloon)",
+      "name": "Jesseren (Tongeren-Borgloon)",
       "zip": "3840"
     },
     {
-      "label": "3840 Kolmont (Borgloon)",
-      "name": "Kolmont (Borgloon)",
+      "label": "3840 Kolmont (Tongeren-Borgloon)",
+      "name": "Kolmont (Tongeren-Borgloon)",
       "zip": "3840"
     },
     { "label": "3850 Nieuwerkerken", "name": "Nieuwerkerken", "zip": "3850" },
