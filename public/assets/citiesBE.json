@@ -4551,29 +4551,29 @@
       "zip": "9830"
     },
     {
-      "label": "9820 Schelderode (Merelbeke)",
-      "name": "Schelderode (Merelbeke)",
+      "label": "9820 Schelderode (Merelbeke-Melle)",
+      "name": "Schelderode (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
-      "label": "9820 Munte (Merelbeke)",
-      "name": "Munte (Merelbeke)",
+      "label": "9820 Munte (Merelbeke-Melle)",
+      "name": "Munte (Merelbeke-Melle)",
       "zip": "9820"
     },
-    { "label": "9820 Merelbeke", "name": "Merelbeke", "zip": "9820" },
+    { "label": "9820 Merelbeke (Merelbeke-Melle)", "name": "Merelbeke (Merelbeke-Melle)", "zip": "9820" },
     {
-      "label": "9820 Melsen (Merelbeke)",
-      "name": "Melsen (Merelbeke)",
-      "zip": "9820"
-    },
-    {
-      "label": "9820 Lemberge (Merelbeke)",
-      "name": "Lemberge (Merelbeke)",
+      "label": "9820 Melsen (Merelbeke-Melle)",
+      "name": "Melsen (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
-      "label": "9820 Bottelare (Merelbeke)",
-      "name": "Bottelare (Merelbeke)",
+      "label": "9820 Lemberge (Merelbeke-Melle)",
+      "name": "Lemberge (Merelbeke-Melle)",
+      "zip": "9820"
+    },
+    {
+      "label": "9820 Bottelare (Merelbeke-Melle)",
+      "name": "Bottelare (Merelbeke-Melle)",
       "zip": "9820"
     },
     {
@@ -5450,10 +5450,10 @@
       "name": "Nieuwkerken-Waas (Sint-Niklaas)",
       "zip": "9100"
     },
-    { "label": "9090 Melle", "name": "Melle", "zip": "9090" },
+    { "label": "9090 Melle (Merelbeke-Melle)", "name": "Melle (Merelbeke-Melle)", "zip": "9090" },
     {
-      "label": "9090 Gontrode (Melle)",
-      "name": "Gontrode (Melle)",
+      "label": "9090 Gontrode (Merelbeke-Melle)",
+      "name": "Gontrode (Merelbeke-Melle)",
       "zip": "9090"
     },
     {
