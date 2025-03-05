@@ -6053,7 +6053,11 @@
       "name": "Vliermaalroot (Hasselt)",
       "zip": "3721"
     },
-    { "label": "3720 Kortessem (Hasselt)", "name": "Kortessem (Hasselt)", "zip": "3720" },
+    {
+      "label": "3720 Kortessem (Hasselt)",
+      "name": "Kortessem (Hasselt)",
+      "zip": "3720"
+    },
     { "label": "3717 Herstappe", "name": "Herstappe", "zip": "3717" },
     {
       "label": "3700 Vreren (Tongeren-Borgloon)",
