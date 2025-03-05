@@ -5791,7 +5791,11 @@
       "name": "Broekom (Tongeren-Borgloon)",
       "zip": "3840"
     },
-    { "label": "3840 Borgloon (Tongeren-Borgloon)", "name": "Borgloon (Tongeren-Borgloon)", "zip": "3840" },
+    {
+      "label": "3840 Borgloon (Tongeren-Borgloon)",
+      "name": "Borgloon (Tongeren-Borgloon)",
+      "zip": "3840"
+    },
     {
       "label": "3832 Ulbeek (Wellen)",
       "name": "Ulbeek (Wellen)",
@@ -6044,7 +6048,11 @@
       "name": "Vreren (Tongeren-Borgloon)",
       "zip": "3700"
     },
-    { "label": "3700 Tongeren (Tongeren-Borgloon)", "name": "Tongeren (Tongeren-Borgloon)", "zip": "3700" },
+    {
+      "label": "3700 Tongeren (Tongeren-Borgloon)",
+      "name": "Tongeren (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
     {
       "label": "3700 Sluizen (Tongeren-Borgloon)",
       "name": "Sluizen (Tongeren-Borgloon)",
@@ -6070,7 +6078,11 @@
       "name": "Neerrepen (Tongeren-Borgloon)",
       "zip": "3700"
     },
-    { "label": "3700 Mal (Tongeren-Borgloon)", "name": "Mal (Tongeren-Borgloon)", "zip": "3700" },
+    {
+      "label": "3700 Mal (Tongeren-Borgloon)",
+      "name": "Mal (Tongeren-Borgloon)",
+      "zip": "3700"
+    },
     {
       "label": "3700 Lauw (Tongeren-Borgloon)",
       "name": "Lauw (Tongeren-Borgloon)",
