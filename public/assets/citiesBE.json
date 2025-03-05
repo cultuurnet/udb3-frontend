@@ -5967,7 +5967,11 @@
       "name": "Kleine-Spouwen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
-    { "label": "3740 Hees (Bilzen-Hoeselt)", "name": "Hees (Bilzen-Hoeselt)", "zip": "3740" },
+    {
+      "label": "3740 Hees (Bilzen-Hoeselt)",
+      "name": "Hees (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
     {
       "label": "3740 Grote-Spouwen (Bilzen-Hoeselt)",
       "name": "Grote-Spouwen (Bilzen-Hoeselt)",
@@ -5978,7 +5982,11 @@
       "name": "Eigenbilzen (Bilzen-Hoeselt)",
       "zip": "3740"
     },
-    { "label": "3740 Bilzen (Bilzen-Hoeselt)", "name": "Bilzen (Bilzen-Hoeselt)", "zip": "3740" },
+    {
+      "label": "3740 Bilzen (Bilzen-Hoeselt)",
+      "name": "Bilzen (Bilzen-Hoeselt)",
+      "zip": "3740"
+    },
     {
       "label": "3740 Beverst (Bilzen-Hoeselt)",
       "name": "Beverst (Bilzen-Hoeselt)",
@@ -5989,7 +5997,11 @@
       "name": "Schalkhoven (Bilzen-Hoeselt)",
       "zip": "3732"
     },
-    { "label": "3730 Werm (Bilzen-Hoeselt)", "name": "Werm (Bilzen-Hoeselt)", "zip": "3730" },
+    {
+      "label": "3730 Werm (Bilzen-Hoeselt)",
+      "name": "Werm (Bilzen-Hoeselt)",
+      "zip": "3730"
+    },
     {
       "label": "3730 Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
       "name": "Sint-Huibrechts-Hern (Bilzen-Hoeselt)",
@@ -6000,7 +6012,11 @@
       "name": "Romershoven (Bilzen-Hoeselt)",
       "zip": "3730"
     },
-    { "label": "3730 Hoeselt (Bilzen-Hoeselt)", "name": "Hoeselt (Bilzen-Hoeselt)", "zip": "3730" },
+    {
+      "label": "3730 Hoeselt (Bilzen-Hoeselt)",
+      "name": "Hoeselt (Bilzen-Hoeselt)",
+      "zip": "3730"
+    },
     {
       "label": "3724 Vliermaal (Kortessem)",
       "name": "Vliermaal (Kortessem)",
