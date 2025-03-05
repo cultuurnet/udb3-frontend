@@ -4576,8 +4576,16 @@
       "name": "Bottelare (Merelbeke)",
       "zip": "9820"
     },
-    { "label": "9810 Nazareth (Nazareth-De Pinte)", "name": "Nazareth (Nazareth-De Pinte)", "zip": "9810" },
-    { "label": "9810 Eke (Nazareth-De Pinte)", "name": "Eke (Nazareth-De Pinte)", "zip": "9810" },
+    {
+      "label": "9810 Nazareth (Nazareth-De Pinte)",
+      "name": "Nazareth (Nazareth-De Pinte)",
+      "zip": "9810"
+    },
+    {
+      "label": "9810 Eke (Nazareth-De Pinte)",
+      "name": "Eke (Nazareth-De Pinte)",
+      "zip": "9810"
+    },
     {
       "label": "9800 Zeveren (Deinze)",
       "name": "Zeveren (Deinze)",
@@ -7250,7 +7258,11 @@
       "name": "Ooike (Wortegem-Petegem)",
       "zip": "9790"
     },
-    { "label": "9840 De Pinte (Nazareth-De Pinte)", "name": "De Pinte (Nazareth-De Pinte)", "zip": "9840" },
+    {
+      "label": "9840 De Pinte (Nazareth-De Pinte)",
+      "name": "De Pinte (Nazareth-De Pinte)",
+      "zip": "9840"
+    },
     {
       "label": "9870 Machelen (Zulte)",
       "name": "Machelen (Zulte)",
