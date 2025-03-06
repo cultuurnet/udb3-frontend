@@ -800,32 +800,32 @@ const Dashboard = (): any => {
         </Stack>
         {i18n.language === 'nl' && <NewsletterSignupForm />}
         <Footer />
+        <Modal
+          variant={ModalVariants.QUESTION}
+          visible={isModalVisible}
+          onConfirm={async () => {
+            deleteItemByIdMutation.mutate({
+              id: parseOfferId(toBeDeletedItem['@id']),
+            });
+          }}
+          onClose={() => setIsModalVisible(false)}
+          title={t('dashboard.modal.title', {
+            type: t(`dashboard.modal.types.${tab}`),
+          })}
+          confirmTitle={t('dashboard.actions.delete')}
+          cancelTitle={t('dashboard.actions.cancel')}
+        >
+          {toBeDeletedItem && (
+            <Box padding={4}>
+              {t('dashboard.modal.question', {
+                name:
+                  toBeDeletedItem.name[i18n.language] ??
+                  toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
+              })}
+            </Box>
+          )}
+        </Modal>
       </Page.Content>
-      <Modal
-        variant={ModalVariants.QUESTION}
-        visible={isModalVisible}
-        onConfirm={async () => {
-          deleteItemByIdMutation.mutate({
-            id: parseOfferId(toBeDeletedItem['@id']),
-          });
-        }}
-        onClose={() => setIsModalVisible(false)}
-        title={t('dashboard.modal.title', {
-          type: t(`dashboard.modal.types.${tab}`),
-        })}
-        confirmTitle={t('dashboard.actions.delete')}
-        cancelTitle={t('dashboard.actions.cancel')}
-      >
-        {toBeDeletedItem && (
-          <Box padding={4}>
-            {t('dashboard.modal.question', {
-              name:
-                toBeDeletedItem.name[i18n.language] ??
-                toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
-            })}
-          </Box>
-        )}
-      </Modal>
     </Page>
   );
 };
