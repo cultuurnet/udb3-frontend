@@ -608,9 +608,9 @@ const Dashboard = (): any => {
   });
 
   const deleteItemByIdMutation = useDeleteItemById({
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsModalVisible(false);
-      return queryClient.invalidateQueries(tab);
+      await queryClient.invalidateQueries(tab);
     },
   });
 
