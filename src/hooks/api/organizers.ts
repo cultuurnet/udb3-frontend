@@ -163,8 +163,13 @@ const getOrganizersByCreator = async ({
   limit,
   start,
   embed,
-}: GetOrganizersByCreator) => {
+  ...rest
+}: GetOrganizersByCreator & Record<string, string>) => {
   delete headers['Authorization'];
+
+  const sortOptions = Object.entries(rest).filter(([key]) =>
+    key.startsWith('sort'),
+  );
 
   const res = await fetchFromApi({
     path: '/organizers/',
@@ -173,6 +178,7 @@ const getOrganizersByCreator = async ({
       limit,
       start,
       embed,
+      ...Object.fromEntries(sortOptions),
     },
     options: {
       headers,
@@ -278,23 +284,29 @@ const createGetOrganizersByCreatorQueryOptions = ({
 }: PaginationOptions &
   SortOptions & {
     creator: User;
-  }) =>
-  queryOptions({
+  }) => {
+  const queryArguments = {
+    q: `creator:(${creator?.sub} OR ${
+      creator?.['https://publiq.be/uitidv1id']
+        ? `${creator?.['https://publiq.be/uitidv1id']} OR`
+        : ''
+    } ${creator?.email}) OR contributors:${creator?.email}`,
+    limit: `${paginationOptions.limit}`,
+    start: `${paginationOptions.start}`,
+    embed: 'true',
+  };
+  const sortingArguments = createSortingArgument(sortOptions);
+
+  return queryOptions({
     queryKey: ['organizers'],
     queryFn: getOrganizersByCreator,
     queryArguments: {
-      q: `creator:(${creator?.sub} OR ${
-        creator?.['https://publiq.be/uitidv1id']
-          ? `${creator?.['https://publiq.be/uitidv1id']} OR`
-          : ''
-      } ${creator?.email}) OR contributors:${creator?.email}`,
-      limit: `${paginationOptions.limit}`,
-      start: `${paginationOptions.start}`,
-      embed: 'true',
-      ...createSortingArgument(sortOptions),
-    },
+      ...queryArguments,
+      ...sortingArguments,
+    } as typeof queryArguments & typeof sortingArguments,
     enabled: !!(creator?.sub && creator?.email),
   });
+};
 
 const useGetOrganizersByCreatorQuery = (
   {
