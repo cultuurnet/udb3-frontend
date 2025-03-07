@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -178,6 +178,7 @@ const CalendarStep = ({
   const isFixedDays = useIsFixedDays();
   const isIdle = useIsIdle();
   const days = useCalendarSelector((state) => state.context.days);
+  const [isCalendarInitialized, setIsCalendarInitialized] = useState(false);
 
   const hasUnavailableSubEvent = useMemo(
     () => days.some((day) => day.status.type !== OfferStatus.AVAILABLE),
@@ -246,9 +247,9 @@ const CalendarStep = ({
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   useEffect(() => {
-    const isOnDuplicatePage = router.pathname.endsWith('/duplicate');
+    if (!offer || isCalendarInitialized) return;
 
-    if (!offer) return;
+    const isOnDuplicatePage = router.pathname.endsWith('/duplicate');
 
     const { newContext, calendarType } = convertOfferToCalendarContext(offer);
     if (isOnDuplicatePage) {
@@ -258,17 +259,9 @@ const CalendarStep = ({
         status: { type: OfferStatus.AVAILABLE },
       }));
     }
-
+    setIsCalendarInitialized(true);
     handleLoadInitialContext({ newContext, calendarType });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    handleLoadInitialContext,
-    offer?.subEvent,
-    offer?.openingHours,
-    offer?.startDate,
-    offer?.endDate,
-    offer?.calendarType,
-  ]);
+  }, [handleLoadInitialContext, offer, router.pathname, isCalendarInitialized]);
 
   const toast = useToast({
     messages: { calendar: t('create.toast.success.calendar') },
