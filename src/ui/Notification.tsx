@@ -50,7 +50,6 @@ const Notification = ({ icon, header, body }: Props) => {
         paddingBottom={4}
         paddingRight={5}
         paddingLeft={4}
-        as={BootstrapToast.Body}
         alignItems="center"
         color={getValue('textColor.dark')}
       >
