@@ -2,6 +2,7 @@ import { match } from 'path-to-regexp';
 
 import { user } from '@/test/data/user';
 
+// @ts-expect-error TS2525 TODO: Fix type error
 const mockRouterWithParams = ({ query, ...rest } = {}) => {
   const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
@@ -18,11 +19,13 @@ const mockRouterWithParams = ({ query, ...rest } = {}) => {
     ...rest,
   };
 
+  // @ts-expect-error TS2322 TODO: Fix type error
   useRouter.mockImplementation(() => mockRouter);
   return mockRouter;
 };
 
 const mockResponses = (responses) => {
+  // @ts-expect-error TS2339 TODO: Fix type error
   fetch.mockResponse((req) => {
     const url = req.url.split('http://localhost:3000')[1].split('?')[0];
 
@@ -38,7 +41,9 @@ const mockResponses = (responses) => {
   });
 };
 
+// @ts-expect-error TS2525 TODO: Fix type error
 const setupPage = ({ router, responses = {} } = {}) => {
+  // @ts-expect-error TS2339 TODO: Fix type error
   fetch.resetMocks();
   mockResponses({ '/user': { body: user }, ...responses });
   return { router: mockRouterWithParams(router) };

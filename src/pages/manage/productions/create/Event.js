@@ -1,4 +1,5 @@
 import truncate from 'lodash/truncate';
+// @ts-expect-error TS2305 TODO: Fix type error
 import { PropTypes } from 'prop-types';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
