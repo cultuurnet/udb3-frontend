@@ -1,26 +1,26 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { Alert } from 'react-bootstrap';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Audience, AudienceType } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
+import { useChangeAudienceMutation } from '@/hooks/api/events';
+import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
+import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
+import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
+import { Stack } from '@/ui/Stack';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 
 import { Scope } from '../create/OfferForm';
-import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
-import { AlertVariants } from '@/ui/Alert';
-import { Alert } from 'react-bootstrap';
-import { Stack } from '@/ui/Stack';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
-import { LabelPositions, LabelVariants } from '@/ui/Label';
-import { FormElement } from '@/ui/FormElement';
 import { CultuurKuurIcon } from '../CultuurKuurIcon';
-import { Audience, AudienceType } from '@/constants/AudienceType';
-import { useChangeAudienceMutation } from '@/hooks/api/events';
+import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
 
 type Props = InlineProps &
   StepProps & {
@@ -44,6 +44,8 @@ const ScopeStep = ({
   const { t } = useTranslation();
   const { replace } = useRouter();
 
+  const audienceField = watch('audience.audienceType');
+
   useEffect(() => {
     setValue('scope', scope);
   }, [scope, setValue]);
@@ -51,13 +53,12 @@ const ScopeStep = ({
   useEffect(() => {
     if (!audience) return;
 
-    if (!!watch('audience.audienceType')) return;
+    if (!!audienceField) return;
 
     setValue('audience.audienceType', audience);
-  }, [audience, setValue, watch('audience.audienceType')]);
+  }, [audience, setValue, audienceField]);
 
-  const isCultuurkuurEvent =
-    watch('audience.audienceType') === AudienceType.EDUCATION;
+  const isCultuurkuurEvent = audienceField === AudienceType.EDUCATION;
 
   const handleChangeScope = (
     field: ControllerRenderProps<FormDataUnion, string & Path<FormDataUnion>>,

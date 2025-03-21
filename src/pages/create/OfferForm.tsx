@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Audience } from '@/constants/AudienceType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import {
@@ -35,7 +36,6 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { City } from '../CityPicker';
 import { FormDataUnion } from '../steps/Steps';
 import { Video } from '../VideoUploadBox';
-import { Audience } from '@/constants/AudienceType';
 
 type FormData = {
   description?: any;

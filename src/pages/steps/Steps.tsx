@@ -9,6 +9,7 @@ import type {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Audience } from '@/constants/AudienceType';
 import { Scope } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
 import type { BoxProps } from '@/ui/Box';
@@ -22,7 +23,6 @@ import { FetchError } from '@/utils/fetchFromApi';
 
 import type { FormData as OfferFormData } from '../create/OfferForm';
 import type { FormData as MovieFormData } from '../manage/movies/MovieForm';
-import { Audience } from '@/constants/AudienceType';
 
 type OrganizerForm = {
   nameAndUrl: {

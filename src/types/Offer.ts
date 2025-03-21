@@ -1,3 +1,4 @@
+import { Audience } from '@/constants/AudienceType';
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import type { CalendarType } from '@/constants/CalendarType';
 import type { OfferStatus } from '@/constants/OfferStatus';
@@ -10,7 +11,6 @@ import type { Organizer } from './Organizer';
 import { isPlace, Place } from './Place';
 import type { Values } from './Values';
 import type { WorkflowStatus } from './WorkflowStatus';
-import { Audience } from '@/constants/AudienceType';
 
 type DayOfWeek =
   | 'monday'
