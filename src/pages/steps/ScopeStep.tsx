@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Audience, AudienceType } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
@@ -21,7 +22,6 @@ import { ToggleBox } from '@/ui/ToggleBox';
 import { Scope } from '../create/OfferForm';
 import { CultuurKuurIcon } from '../CultuurKuurIcon';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 type Props = InlineProps &
   StepProps & {
