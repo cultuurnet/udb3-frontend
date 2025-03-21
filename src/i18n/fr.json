@@ -1123,7 +1123,9 @@
       "types": {
         "event": "Événement",
         "place": "Lieu"
-      }
+      },
+      "cultuurkuur_event": "Événements spécifiquement pour les écoles",
+      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen."
     }
   },
   "time_table": {
