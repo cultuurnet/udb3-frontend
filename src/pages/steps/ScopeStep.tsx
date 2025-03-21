@@ -21,6 +21,7 @@ import { ToggleBox } from '@/ui/ToggleBox';
 import { Scope } from '../create/OfferForm';
 import { CultuurKuurIcon } from '../CultuurKuurIcon';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 type Props = InlineProps &
   StepProps & {
@@ -43,6 +44,10 @@ const ScopeStep = ({
 }: Props) => {
   const { t } = useTranslation();
   const { replace } = useRouter();
+
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
 
   const audienceField = watch('audience.audienceType');
 
@@ -128,45 +133,46 @@ const ScopeStep = ({
                 disabled={!!offerId}
               />
             </Inline>
-            {field.value === OfferTypes.EVENTS && (
-              <Stack spacing={4}>
-                <FormElement
-                  id={field.name}
-                  label={
-                    <>
-                      {t('steps.offerTypeStep.cultuurkuur_event')}
-                      <CultuurKuurIcon marginLeft={2} />
-                    </>
-                  }
-                  labelVariant={LabelVariants.NORMAL}
-                  labelPosition={LabelPositions.RIGHT}
-                  Component={
-                    <RadioButton
-                      type={RadioButtonTypes.SWITCH}
-                      checked={isCultuurkuurEvent}
-                      color={colors.udbMainPositiveGreen}
-                      onChange={(e) => {
-                        handleOnChangeAudience(
-                          e.target.checked
-                            ? AudienceType.EDUCATION
-                            : AudienceType.EVERYONE,
-                        );
-                      }}
-                    />
-                  }
-                />
-                {isCultuurkuurEvent && (
-                  <Alert
-                    variant={AlertVariants.PRIMARY}
-                    css={`
-                      max-width: 36.5rem;
-                    `}
-                  >
-                    {t('steps.offerTypeStep.cultuurkuur_info')}
-                  </Alert>
-                )}
-              </Stack>
-            )}
+            {isCultuurkuurFeatureFlagEnabled &&
+              field.value === OfferTypes.EVENTS && (
+                <Stack spacing={4}>
+                  <FormElement
+                    id={field.name}
+                    label={
+                      <>
+                        {t('steps.offerTypeStep.cultuurkuur_event')}
+                        <CultuurKuurIcon marginLeft={2} />
+                      </>
+                    }
+                    labelVariant={LabelVariants.NORMAL}
+                    labelPosition={LabelPositions.RIGHT}
+                    Component={
+                      <RadioButton
+                        type={RadioButtonTypes.SWITCH}
+                        checked={isCultuurkuurEvent}
+                        color={colors.udbMainPositiveGreen}
+                        onChange={(e) => {
+                          handleOnChangeAudience(
+                            e.target.checked
+                              ? AudienceType.EDUCATION
+                              : AudienceType.EVERYONE,
+                          );
+                        }}
+                      />
+                    }
+                  />
+                  {isCultuurkuurEvent && (
+                    <Alert
+                      variant={AlertVariants.PRIMARY}
+                      css={`
+                        max-width: 36.5rem;
+                      `}
+                    >
+                      {t('steps.offerTypeStep.cultuurkuur_info')}
+                    </Alert>
+                  )}
+                </Stack>
+              )}
           </Stack>
         );
       }}
