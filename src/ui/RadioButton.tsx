@@ -30,6 +30,7 @@ type RadioButtonProps = {
   isInvalid?: boolean;
   isValid?: boolean;
   checked?: boolean;
+  color?: string;
 };
 
 type Props = Omit<BoxProps, 'onChange'> & RadioButtonProps;
@@ -47,6 +48,7 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
       isInvalid,
       isValid,
       checked,
+      color = colors.udbMainBlue,
       ...props
     },
     ref,
@@ -103,8 +105,8 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
           }
 
           .custom-control-input:checked ~ .custom-control-label::before {
-            background-color: ${colors.udbMainBlue};
-            border-color: ${colors.udbMainBlue};
+            background-color: ${color};
+            border-color: ${color};
           }
 
           .custom-control-label::after {

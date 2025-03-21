@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Audience } from '@/constants/AudienceType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import {
@@ -66,7 +67,7 @@ type FormData = {
   labels?: string[];
   hiddenLabels?: string[];
   audience?: {
-    audienceType: string;
+    audienceType: Audience;
   };
 };
 

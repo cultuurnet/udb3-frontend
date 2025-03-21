@@ -9,6 +9,7 @@ import type {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Audience } from '@/constants/AudienceType';
 import { Scope } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
 import type { BoxProps } from '@/ui/Box';
@@ -127,6 +128,7 @@ const getGlobalValue = getValueFromTheme('global');
 type StepProps = UseFormReturn<FormDataUnion> & {
   scope: Scope;
   offerId?: string;
+  audience?: Audience;
   error?: FetchError;
   loading: boolean;
   name: Path<FormDataUnion>;
@@ -138,6 +140,7 @@ type StepsProps = {
   scope?: Scope;
   offerId?: string;
   labels?: string[];
+  audience?: Audience;
   mainLanguage: SupportedLanguage;
   form: UseFormReturn<FormDataUnion>;
   fieldLoading?: string;
@@ -173,6 +176,7 @@ const stepPropKeys: (keyof StepProps)[] = [
   'watch',
   'scope',
   'offerId',
+  'audience',
 ];
 
 const getStepProps = (props: UnknownProps) => pick(props, stepPropKeys);
@@ -183,6 +187,7 @@ const Steps = ({
   fieldLoading,
   form,
   offerId,
+  audience,
   mainLanguage,
   scope,
   labels,
@@ -253,6 +258,7 @@ const Steps = ({
                 offerId={offerId}
                 mainLanguage={mainLanguage}
                 scope={scope}
+                audience={audience}
                 labels={labels}
                 variant={variant}
                 {...(errors && name in errors && { error: errors[name] })}
