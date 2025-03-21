@@ -10,6 +10,7 @@ import type { Organizer } from './Organizer';
 import { isPlace, Place } from './Place';
 import type { Values } from './Values';
 import type { WorkflowStatus } from './WorkflowStatus';
+import { Audience } from '@/constants/AudienceType';
 
 type DayOfWeek =
   | 'monday'
@@ -128,7 +129,7 @@ type BaseOffer = {
   sameAs: string[];
   seeAlso: string[];
   workflowStatus: WorkflowStatus;
-  audience: { audienceType: string };
+  audience: { audienceType: Audience };
   mainLanguage: Values<typeof SupportedLanguages>;
   languages: Array<Values<typeof SupportedLanguages>>;
   completedLanguages: Array<Values<typeof SupportedLanguages>>;

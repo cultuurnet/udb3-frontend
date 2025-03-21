@@ -35,6 +35,7 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { City } from '../CityPicker';
 import { FormDataUnion } from '../steps/Steps';
 import { Video } from '../VideoUploadBox';
+import { Audience } from '@/constants/AudienceType';
 
 type FormData = {
   description?: any;
@@ -66,7 +67,7 @@ type FormData = {
   labels?: string[];
   hiddenLabels?: string[];
   audience?: {
-    audienceType: string;
+    audienceType: Audience;
   };
 };
 
