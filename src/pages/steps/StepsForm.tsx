@@ -234,7 +234,7 @@ const StepsForm = ({
     return configurations;
   }, [needsLocationMigration, isOnDuplicatePage, configurations]);
 
-  const audience = offer?.audience.audienceType;
+  const audience = offer?.audience?.audienceType;
 
   return (
     <Page>
