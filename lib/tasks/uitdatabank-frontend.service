@@ -5,12 +5,15 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 [Service]
 User=www-data
 Group=www-data
-PIDFile=/var/run/uitdatabank-frontend.pid
+PermissionsStartOnly=true
+RuntimeDirectory=uitdatabank-frontend
+RuntimeDirectoryMode=0755
+PIDFile=/run/uitdatabank-frontend/uitdatabank-frontend.pid
 Environment=NEXT_HOST=127.0.0.1
 Environment=NEXT_PORT=4000
 EnvironmentFile=-/etc/default/uitdatabank-frontend
 WorkingDirectory=/var/www/udb3-frontend
-ExecStart=/usr/bin/node node_modules/next/dist/bin/next start -H ${NEXT_HOST} -p ${NEXT_PORT}
+ExecStart=/usr/bin/node --title uitdatabank-frontend node_modules/next/dist/bin/next start -H ${NEXT_HOST} -p ${NEXT_PORT}
 Restart=on-failure
 RestartSec=10s
 Type=simple
