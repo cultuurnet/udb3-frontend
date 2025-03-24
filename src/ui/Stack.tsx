@@ -2,7 +2,13 @@ import { pickBy } from 'lodash';
 import { Children, cloneElement, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-import type { BoxProps, UIProp, UnknownProps } from './Box';
+import {
+  BoxProps,
+  getBoxProps,
+  UIProp,
+  UnknownProps,
+  withoutDisallowedPropsConfig,
+} from './Box';
 import {
   Box,
   boxProps,
@@ -27,7 +33,7 @@ const stackProps = css`
   ${parseProperty('justifyContent')};
 `;
 
-const StyledBox = styled(Box)`
+const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
   ${stackProps};
   ${boxProps};
 `;
@@ -50,7 +56,12 @@ const Stack = forwardRef<HTMLElement, Props>(
     });
 
     return (
-      <StyledBox className={className} as={as} ref={ref} {...props}>
+      <StyledBox
+        className={className}
+        as={as}
+        ref={ref}
+        {...getBoxProps(props)}
+      >
         {clonedChildren}
       </StyledBox>
     );

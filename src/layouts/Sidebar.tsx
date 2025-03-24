@@ -604,9 +604,7 @@ const Sidebar = () => {
       key="sidebar"
       forwardedAs="nav"
       height="100%"
-      css={`
-        overflow: scroll;
-      `}
+      overflow="scroll"
       width={{ default: '240px', s: '65px' }}
       backgroundColor={getValueForSidebar('backgroundColor')}
       color={getValueForSidebar('color')}

@@ -12,12 +12,25 @@ import {
   useAuthenticatedMutations,
   useAuthenticatedQuery,
 } from './authenticated-query';
+import { Headers } from './types/Headers';
 
-const getProductions = async ({ headers, ...queryData }) => {
+const getProductions = async ({
+  headers,
+  name,
+  start,
+  limit,
+}: {
+  headers: Headers;
+  name: string;
+  start: string;
+  limit: string;
+}) => {
   const res = await fetchFromApi({
     path: '/productions/',
     searchParams: {
-      ...queryData,
+      name,
+      start,
+      limit,
     },
     options: {
       headers,
