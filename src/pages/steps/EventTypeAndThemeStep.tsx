@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
+import { AudienceType } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
@@ -83,6 +84,20 @@ const VARIOUS_THEME_IDS = [
   '1.65.0.0.0', // Voeding
   '1.25.0.0.0', // Wetenschap
   '1.44.0.0.0', // Zingeving, filosofie en religie
+];
+
+const CULTUURKUUR_TYPE_IDS = [
+  '0.3.1.0.1', // Cursus met open sessies
+  '0.7.0.0.0', // Begeleide uitstap of rondleiding
+  '0.55.0.0.0', // Theatervoorstelling
+  '0.54.0.0.0', // Dansvoorstelling
+  '0.50.21.0.0', // Spel of quiz
+  '0.50.6.0.0', // Film
+  '0.3.2.0.0', // Lezing of congres
+  '0.0.0.0.0', // Tentoonstelling
+  '0.50.4.0.0', // Concert
+  '0.17.0.0.0', // Fiets- of wandelroute
+  '0.5.0.0.0', // Festival
 ];
 
 const groupNameToThemeIds = {
@@ -202,6 +217,7 @@ const EventTypeAndThemeStep = ({
   control,
   scope,
   name,
+  watch,
   onChange,
   shouldHideType,
 }: Props) => {
@@ -209,6 +225,10 @@ const EventTypeAndThemeStep = ({
   const { asPath } = useRouter();
   const [, hash] = asPath.split('#');
   const eventTypeAndThemeContainer = useRef(null);
+
+  const isCultuurkuurEvent =
+    scope === OfferTypes.EVENTS &&
+    watch('audience.audienceType') === AudienceType.EDUCATION;
 
   const typeAndTheme = useWatch({
     control,
@@ -228,6 +248,11 @@ const EventTypeAndThemeStep = ({
   const types = useMemo(
     () => sortByLocalizedName(getTypesByScopeQuery.data ?? []),
     [getTypesByScopeQuery.data, sortByLocalizedName],
+  );
+
+  const cultuurkuurTypes = useMemo(
+    () => types.filter((type) => CULTUURKUUR_TYPE_IDS.includes(type.id)),
+    [types],
   );
 
   const themes = useMemo(
@@ -289,32 +314,34 @@ const EventTypeAndThemeStep = ({
                       row-gap: ${parseSpacing(3.5)()};
                     `}
                   >
-                    {types.map(({ id, name }) => (
-                      <Button
-                        width="auto"
-                        display="inline-flex"
-                        key={id}
-                        variant={ButtonVariants.SECONDARY_TOGGLE}
-                        onClick={() => {
-                          field.onChange({
-                            ...field.value,
-                            type: { id, label: name[i18n.language] },
-                          });
-                          onChange({
-                            ...field.value,
-                            type: { id, label: name[i18n.language] },
-                          });
-                        }}
-                        css={`
-                          &.btn {
-                            padding: 0.3rem 0.7rem;
-                            box-shadow: ${getGlobalValue('boxShadow.heavy')};
-                          }
-                        `}
-                      >
-                        {name[i18n.language]}
-                      </Button>
-                    ))}
+                    {(isCultuurkuurEvent ? cultuurkuurTypes : types).map(
+                      ({ id, name }) => (
+                        <Button
+                          width="auto"
+                          display="inline-flex"
+                          key={id}
+                          variant={ButtonVariants.SECONDARY_TOGGLE}
+                          onClick={() => {
+                            field.onChange({
+                              ...field.value,
+                              type: { id, label: name[i18n.language] },
+                            });
+                            onChange({
+                              ...field.value,
+                              type: { id, label: name[i18n.language] },
+                            });
+                          }}
+                          css={`
+                            &.btn {
+                              padding: 0.3rem 0.7rem;
+                              box-shadow: ${getGlobalValue('boxShadow.heavy')};
+                            }
+                          `}
+                        >
+                          {name[i18n.language]}
+                        </Button>
+                      ),
+                    )}
                   </Inline>
                 ) : (
                   <Inline
