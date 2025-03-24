@@ -291,13 +291,13 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
         <Dropdown.Item href={previewUrl} key="preview">
           {t('dashboard.actions.preview')}
         </Dropdown.Item>,
-        offerType === 'event' && <Dropdown.Divider key="divider" />,
+        offerType === 'event' && <Dropdown.Divider key="divider1" />,
         offerType === 'event' && (
           <Dropdown.Item href={duplicateUrl} key="duplicate">
             {t('dashboard.actions.duplicate')}
           </Dropdown.Item>
         ),
-        <Dropdown.Divider key="divider" />,
+        <Dropdown.Divider key="divider2" />,
         <Dropdown.Item onClick={() => onDelete(offer)} key="delete">
           {t('dashboard.actions.delete')}
         </Dropdown.Item>,
@@ -608,9 +608,9 @@ const Dashboard = (): any => {
   });
 
   const deleteItemByIdMutation = useDeleteItemById({
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsModalVisible(false);
-      return queryClient.invalidateQueries(tab);
+      await queryClient.invalidateQueries(tab);
     },
   });
 
@@ -800,32 +800,32 @@ const Dashboard = (): any => {
         </Stack>
         {i18n.language === 'nl' && <NewsletterSignupForm />}
         <Footer />
+        <Modal
+          variant={ModalVariants.QUESTION}
+          visible={isModalVisible}
+          onConfirm={async () => {
+            deleteItemByIdMutation.mutate({
+              id: parseOfferId(toBeDeletedItem['@id']),
+            });
+          }}
+          onClose={() => setIsModalVisible(false)}
+          title={t('dashboard.modal.title', {
+            type: t(`dashboard.modal.types.${tab}`),
+          })}
+          confirmTitle={t('dashboard.actions.delete')}
+          cancelTitle={t('dashboard.actions.cancel')}
+        >
+          {toBeDeletedItem && (
+            <Box padding={4}>
+              {t('dashboard.modal.question', {
+                name:
+                  toBeDeletedItem.name[i18n.language] ??
+                  toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
+              })}
+            </Box>
+          )}
+        </Modal>
       </Page.Content>
-      <Modal
-        variant={ModalVariants.QUESTION}
-        visible={isModalVisible}
-        onConfirm={async () => {
-          deleteItemByIdMutation.mutate({
-            id: parseOfferId(toBeDeletedItem['@id']),
-          });
-        }}
-        onClose={() => setIsModalVisible(false)}
-        title={t('dashboard.modal.title', {
-          type: t(`dashboard.modal.types.${tab}`),
-        })}
-        confirmTitle={t('dashboard.actions.delete')}
-        cancelTitle={t('dashboard.actions.cancel')}
-      >
-        {toBeDeletedItem && (
-          <Box padding={4}>
-            {t('dashboard.modal.question', {
-              name:
-                toBeDeletedItem.name[i18n.language] ??
-                toBeDeletedItem.name[toBeDeletedItem.mainLanguage],
-            })}
-          </Box>
-        )}
-      </Modal>
     </Page>
   );
 };
