@@ -4,7 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { AudienceTypes, AudienceType } from '@/constants/AudienceType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import {
   useChangeAudienceMutation,
   useGetEventByIdQuery,
@@ -51,7 +51,8 @@ const AudienceStep = ({
   const event: Event | undefined = getEventByIdQuery.data;
 
   useEffect(() => {
-    const newAudienceType = event?.audience?.audienceType ?? AudienceTypes.EVERYONE;
+    const newAudienceType =
+      event?.audience?.audienceType ?? AudienceTypes.EVERYONE;
     setValue('audienceType', newAudienceType);
 
     onValidationChange(ValidationStatus.SUCCESS);

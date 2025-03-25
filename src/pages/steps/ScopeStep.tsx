@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AudienceTypes, AudienceType } from '@/constants/AudienceType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
