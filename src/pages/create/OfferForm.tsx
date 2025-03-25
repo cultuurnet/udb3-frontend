@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AudienceTypes, AudienceType } from '@/constants/AudienceType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import {
