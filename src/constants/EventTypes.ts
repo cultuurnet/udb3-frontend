@@ -64,4 +64,4 @@ const cultuurkuurTypes: string[] = [
   EventTypes.Festival,
 ];
 
-export { cultuurkuurTypes,EventTypes, eventTypesWithNoThemes };
+export { cultuurkuurTypes, EventTypes, eventTypesWithNoThemes };
