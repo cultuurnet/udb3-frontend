@@ -38,7 +38,6 @@ const ScopeStep = ({
   setValue,
   resetField,
   scope,
-  audience,
   watch,
   ...props
 }: Props) => {
@@ -54,14 +53,6 @@ const ScopeStep = ({
   useEffect(() => {
     setValue('scope', scope);
   }, [scope, setValue]);
-
-  useEffect(() => {
-    if (!audience) return;
-
-    if (!!audienceField) return;
-
-    setValue('audience.audienceType', audience);
-  }, [audience, setValue, audienceField]);
 
   const isCultuurkuurEvent = audienceField === AudienceTypes.EDUCATION;
 

@@ -128,7 +128,6 @@ const getGlobalValue = getValueFromTheme('global');
 type StepProps = UseFormReturn<FormDataUnion> & {
   scope: Scope;
   offerId?: string;
-  audience?: AudienceType;
   error?: FetchError;
   loading: boolean;
   name: Path<FormDataUnion>;
@@ -140,7 +139,6 @@ type StepsProps = {
   scope?: Scope;
   offerId?: string;
   labels?: string[];
-  audience?: AudienceType;
   mainLanguage: SupportedLanguage;
   form: UseFormReturn<FormDataUnion>;
   fieldLoading?: string;
@@ -176,7 +174,6 @@ const stepPropKeys: (keyof StepProps)[] = [
   'watch',
   'scope',
   'offerId',
-  'audience',
 ];
 
 const getStepProps = (props: UnknownProps) => pick(props, stepPropKeys);
@@ -187,7 +184,6 @@ const Steps = ({
   fieldLoading,
   form,
   offerId,
-  audience,
   mainLanguage,
   scope,
   labels,
@@ -258,7 +254,6 @@ const Steps = ({
                 offerId={offerId}
                 mainLanguage={mainLanguage}
                 scope={scope}
-                audience={audience}
                 labels={labels}
                 variant={variant}
                 {...(errors && name in errors && { error: errors[name] })}

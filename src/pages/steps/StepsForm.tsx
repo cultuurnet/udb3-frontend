@@ -234,8 +234,6 @@ const StepsForm = ({
     return configurations;
   }, [needsLocationMigration, isOnDuplicatePage, configurations]);
 
-  const audience = offer?.audience?.audienceType;
-
   return (
     <Page>
       {!needsLocationMigration && (
@@ -272,7 +270,6 @@ const StepsForm = ({
           fieldLoading={fieldLoading}
           onChangeSuccess={handleChangeSuccess}
           offerId={offerId}
-          audience={audience}
           mainLanguage={offer?.mainLanguage}
           scope={scope}
           form={form}
