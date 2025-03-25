@@ -9,7 +9,7 @@ import type {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Audience } from '@/constants/AudienceType';
+import { AudienceType } from '@/constants/AudienceType';
 import { Scope } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
 import type { BoxProps } from '@/ui/Box';
@@ -128,7 +128,7 @@ const getGlobalValue = getValueFromTheme('global');
 type StepProps = UseFormReturn<FormDataUnion> & {
   scope: Scope;
   offerId?: string;
-  audience?: Audience;
+  audience?: AudienceType;
   error?: FetchError;
   loading: boolean;
   name: Path<FormDataUnion>;
@@ -140,7 +140,7 @@ type StepsProps = {
   scope?: Scope;
   offerId?: string;
   labels?: string[];
-  audience?: Audience;
+  audience?: AudienceType;
   mainLanguage: SupportedLanguage;
   form: UseFormReturn<FormDataUnion>;
   fieldLoading?: string;

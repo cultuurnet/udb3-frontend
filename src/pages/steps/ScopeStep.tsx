@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Audience, AudienceType } from '@/constants/AudienceType';
+import { AudienceTypes, AudienceType } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -63,7 +63,7 @@ const ScopeStep = ({
     setValue('audience.audienceType', audience);
   }, [audience, setValue, audienceField]);
 
-  const isCultuurkuurEvent = audienceField === AudienceType.EDUCATION;
+  const isCultuurkuurEvent = audienceField === AudienceTypes.EDUCATION;
 
   const handleChangeScope = (
     field: ControllerRenderProps<FormDataUnion, string & Path<FormDataUnion>>,
@@ -83,7 +83,7 @@ const ScopeStep = ({
 
   const addAudienceMutation = useChangeAudienceMutation();
 
-  const handleOnChangeAudience = async (audienceType: Audience) => {
+  const handleOnChangeAudience = async (audienceType: AudienceType) => {
     setValue('audience.audienceType', audienceType);
 
     if (!offerId) return;
@@ -154,8 +154,8 @@ const ScopeStep = ({
                         onChange={(e) => {
                           handleOnChangeAudience(
                             e.target.checked
-                              ? AudienceType.EDUCATION
-                              : AudienceType.EVERYONE,
+                              ? AudienceTypes.EDUCATION
+                              : AudienceTypes.EVERYONE,
                           );
                         }}
                       />

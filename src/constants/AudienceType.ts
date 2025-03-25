@@ -1,12 +1,12 @@
 import { Values } from '@/types/Values';
 
-const AudienceType = {
+const AudienceTypes = {
   EVERYONE: 'everyone',
   MEMBERS: 'members',
   EDUCATION: 'education',
 } as const;
 
-type Audience = Values<typeof AudienceType>;
+type AudienceType = Values<typeof AudienceTypes>;
 
-export type { Audience };
-export { AudienceType };
+export type { AudienceType };
+export { AudienceTypes };

@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { CalendarType } from '@/constants/CalendarType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes } from '@/constants/OfferType';
@@ -24,7 +25,7 @@ import {
   timeTableStepConfiguration,
 } from '@/pages/steps/TimeTableStep';
 import { Countries } from '@/types/Country';
-import { AudienceType, Event } from '@/types/Event';
+import { Event } from '@/types/Event';
 import type { SubEvent } from '@/types/Offer';
 import type { Place } from '@/types/Place';
 import type { Production } from '@/types/Production';
@@ -114,7 +115,7 @@ const MovieForm = (props) => {
         id: parseOfferId(location.place['@id']),
       },
       workflowStatus: WorkflowStatus.DRAFT,
-      audienceType: AudienceType.EVERYONE,
+      audienceType: AudienceTypes.EVERYONE,
       ...getTerms(typeAndTheme),
     };
   };

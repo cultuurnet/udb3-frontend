@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Audience } from '@/constants/AudienceType';
+import { AudienceTypes, AudienceType } from '@/constants/AudienceType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import {
@@ -24,7 +24,7 @@ import {
 import { Address, AddressInternal } from '@/types/Address';
 import { ContactPoint } from '@/types/ContactPoint';
 import { Country } from '@/types/Country';
-import { AttendanceMode, AudienceType, isEvent } from '@/types/Event';
+import { AttendanceMode, isEvent } from '@/types/Event';
 import { BookingInfo, MediaObject, Offer, PriceInfo } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Place } from '@/types/Place';
@@ -67,7 +67,7 @@ type FormData = {
   labels?: string[];
   hiddenLabels?: string[];
   audience?: {
-    audienceType: Audience;
+    audienceType: AudienceType;
   };
 };
 
@@ -258,7 +258,7 @@ const OfferForm = () => {
   }: FormData) => {
     const audienceType =
       location.country && scope === OfferTypes.EVENTS
-        ? AudienceType.EVERYONE
+        ? AudienceTypes.EVERYONE
         : undefined;
 
     return {
@@ -276,7 +276,7 @@ const OfferForm = () => {
       hiddenLabels,
       workflowStatus: WorkflowStatus.DRAFT,
       ...(audienceType && {
-        audienceType: AudienceType.EVERYONE,
+        audienceType: AudienceTypes.EVERYONE,
       }),
       audience,
       ...getLocationAttributes(scope, location, i18n.language),

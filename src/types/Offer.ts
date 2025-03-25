@@ -1,4 +1,4 @@
-import { Audience } from '@/constants/AudienceType';
+import { AudienceType } from '@/constants/AudienceType';
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import type { CalendarType } from '@/constants/CalendarType';
 import type { OfferStatus } from '@/constants/OfferStatus';
@@ -129,7 +129,7 @@ type BaseOffer = {
   sameAs: string[];
   seeAlso: string[];
   workflowStatus: WorkflowStatus;
-  audience: { audienceType: Audience };
+  audience: { audienceType: AudienceType };
   mainLanguage: Values<typeof SupportedLanguages>;
   languages: Array<Values<typeof SupportedLanguages>>;
   completedLanguages: Array<Values<typeof SupportedLanguages>>;
