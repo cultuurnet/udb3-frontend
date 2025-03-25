@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
-import { AudienceType } from '@/constants/AudienceType';
+import { AudienceTypes } from '@/constants/AudienceType';
 import { cultuurkuurTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
@@ -215,7 +215,7 @@ const EventTypeAndThemeStep = ({
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
-    watch('audience.audienceType') === AudienceType.EDUCATION;
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const typeAndTheme = useWatch({
     control,
