@@ -171,7 +171,7 @@ const OfferForm = () => {
         typicalAgeRange: offer.typicalAgeRange,
       },
       audience: {
-        audienceType: offer.audience.audienceType,
+        audienceType: offer.audience?.audienceType,
       },
     };
   };
