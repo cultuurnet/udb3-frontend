@@ -7,6 +7,7 @@ import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceType } from '@/constants/AudienceType';
+import { cultuurkuurTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
@@ -26,7 +27,6 @@ import { getValueFromTheme } from '@/ui/theme';
 
 import { UseEditArguments } from './hooks/useEditField';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
-import { cultuurkuurTypes } from '@/constants/EventTypes';
 
 const DANCE_THEME_IDS = [
   '1.9.1.0.0', // Ballet en klassieke dans
