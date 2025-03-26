@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +7,7 @@ import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { AlertVariants } from '@/ui/Alert';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
@@ -126,7 +125,7 @@ const ScopeStep = ({
             </Inline>
             {isCultuurkuurFeatureFlagEnabled &&
               field.value === OfferTypes.EVENTS && (
-                <Stack spacing={4}>
+                <Stack spacing={4} maxWidth="36.5rem">
                   <FormElement
                     id={field.name}
                     label={
@@ -153,12 +152,7 @@ const ScopeStep = ({
                     }
                   />
                   {isCultuurkuurEvent && (
-                    <Alert
-                      variant={AlertVariants.PRIMARY}
-                      css={`
-                        max-width: 36.5rem;
-                      `}
-                    >
+                    <Alert variant={AlertVariants.PRIMARY}>
                       {t('steps.offerTypeStep.cultuurkuur_info')}
                     </Alert>
                   )}
