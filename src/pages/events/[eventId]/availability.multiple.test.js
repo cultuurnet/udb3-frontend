@@ -104,7 +104,10 @@ test('I can save a status with a reason', async () => {
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeEnabled();
 
-  await userEvent.type(screen.getByLabelText(nl.offerStatus.reason), 'Lorem Ipsum');
+  await userEvent.type(
+    screen.getByLabelText(nl.offerStatus.reason),
+    'Lorem Ipsum',
+  );
 
   expect(
     screen.getByRole('button', {
@@ -152,7 +155,9 @@ test('I can save a booking availability', async () => {
     }),
   );
 
-  await userEvent.click(screen.getByLabelText(nl.bookingAvailability.available));
+  await userEvent.click(
+    screen.getByLabelText(nl.bookingAvailability.available),
+  );
 
   await userEvent.click(
     screen.getByRole('button', {
