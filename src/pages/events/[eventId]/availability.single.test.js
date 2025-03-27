@@ -44,7 +44,7 @@ test('I can save a status', async () => {
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeDisabled();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.actions.save,
     }),
@@ -70,7 +70,7 @@ test('I can save a status', async () => {
 test('I can save a status with a reason', async () => {
   const page = await setup();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.temporarilyUnavailable),
   );
 
@@ -88,7 +88,7 @@ test('I can save a status with a reason', async () => {
 
   userEvent.type(screen.getByLabelText(nl.offerStatus.reason), reason);
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.actions.save,
     }),
@@ -117,7 +117,7 @@ test('I can save a status with a reason', async () => {
 test('The reason and error are cleared when switching back to "available"', async () => {
   await setup();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.temporarilyUnavailable),
   );
 
@@ -134,7 +134,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
     }),
   ).toBeDisabled();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.available),
   );
 
@@ -146,7 +146,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
 test('I can cancel', async () => {
   const page = await setup();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.actions.cancel,
     }),
