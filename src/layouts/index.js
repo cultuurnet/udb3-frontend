@@ -33,7 +33,6 @@ const useHandleAuthentication = () => {
   const getUserQuery = useGetUserQuery();
   const { cookies, removeCookie } = useCookiesWithOptions(['token']);
 
-
   useEffect(() => {
     if (!getUserQuery.data) return;
     Sentry.setUser({ id: getUserQuery.data.id });

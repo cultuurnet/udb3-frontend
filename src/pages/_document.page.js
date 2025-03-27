@@ -12,7 +12,7 @@ class Document extends NextDocument {
         originalRenderPage({
           enhanceApp: (App) => (props) =>
             sheet.collectStyles(<App {...props} />),
-          enhanceComponent: Component => {
+          enhanceComponent: (Component) => {
             Component.universalCookies = new Cookies(ctx.req?.headers?.cookie);
             return Component;
           },
