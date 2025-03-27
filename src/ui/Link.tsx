@@ -168,7 +168,7 @@ const Link = ({
         href={href}
         passHref={!!href}
         {...(process.env.STORYBOOK ? { prefetch: false } : {})}
-      >
+        legacyBehavior>
         <BaseLink
           as={as}
           className={className}
