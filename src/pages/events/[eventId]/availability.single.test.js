@@ -86,7 +86,7 @@ test('I can save a status with a reason', async () => {
 
   const reason = 'Lorem ipsum';
 
-  userEvent.type(screen.getByLabelText(nl.offerStatus.reason), reason);
+  await userEvent.type(screen.getByLabelText(nl.offerStatus.reason), reason);
 
   await userEvent.click(
     screen.getByRole('button', {
@@ -121,7 +121,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
     screen.getByLabelText(nl.offerStatus.status.events.temporarilyUnavailable),
   );
 
-  userEvent.type(
+  await userEvent.type(
     screen.getByLabelText(nl.offerStatus.reason),
     'Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvina',
   );

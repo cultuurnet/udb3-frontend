@@ -104,7 +104,7 @@ test('I can save a status with a reason', async () => {
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeEnabled();
 
-  userEvent.type(screen.getByLabelText(nl.offerStatus.reason), 'Lorem Ipsum');
+  await userEvent.type(screen.getByLabelText(nl.offerStatus.reason), 'Lorem Ipsum');
 
   expect(
     screen.getByRole('button', {
