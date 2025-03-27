@@ -31,6 +31,8 @@ const useChangeLanguage = () => {
 const useHandleAuthentication = () => {
   const { pathname, query, asPath, ...router } = useRouter();
   const getUserQuery = useGetUserQuery();
+  const { cookies, removeCookie } = useCookiesWithOptions(['token']);
+
 
   useEffect(() => {
     if (!getUserQuery.data) return;
@@ -45,10 +47,9 @@ const useHandleAuthentication = () => {
     const cleanUp = () => (intervalId ? clearInterval(intervalId) : undefined);
     if (asPath.startsWith('/login')) return cleanUp;
     intervalId = setInterval(() => {
-      const cookies = new Cookies();
-      if (!isTokenValid(cookies.get('token'))) {
+      if (!isTokenValid(cookies.token)) {
         Sentry.setUser(null);
-        cookies.remove('token');
+        removeCookie('token');
         router.push('/login');
       }
     }, 5000); // checking every 5 seconds

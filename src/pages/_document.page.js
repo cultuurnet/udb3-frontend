@@ -1,5 +1,6 @@
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import Cookies from 'universal-cookie';
 
 class Document extends NextDocument {
   static async getInitialProps(ctx) {
@@ -11,6 +12,10 @@ class Document extends NextDocument {
         originalRenderPage({
           enhanceApp: (App) => (props) =>
             sheet.collectStyles(<App {...props} />),
+          enhanceComponent: Component => {
+            Component.universalCookies = new Cookies(ctx.req.headers.cookie);
+            return Component;
+          },
         });
 
       const initialProps = await NextDocument.getInitialProps(ctx);

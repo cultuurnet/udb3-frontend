@@ -110,9 +110,7 @@ const App = ({ Component, pageProps, children }) => {
           [
             CookiesProvider,
             {
-              cookies: isServer()
-                ? new Cookies(pageProps.cookies ?? '')
-                : undefined,
+              cookies: Component.universalCookies
             },
           ],
           [QueryClientProvider, { client: queryClient }],
