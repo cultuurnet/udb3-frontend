@@ -71,6 +71,7 @@ type FooterLinkProps = {
 const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
   <Link
     {...props}
+    as="span"
     css={`
       text-decoration: underline;
       color: ${footerVariant === FooterVariants.LOGIN

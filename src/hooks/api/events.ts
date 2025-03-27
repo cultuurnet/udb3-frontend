@@ -138,11 +138,32 @@ const useAddEventMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
+const getEventsToModerate = async ({
+  headers,
+  audienceType,
+  availableTo,
+  limit,
+  q,
+  start,
+  workflowStatus,
+}: {
+  headers: Headers;
+  q: string;
+  audienceType: string;
+  availableTo: string;
+  limit: string;
+  start: string;
+  workflowStatus: string;
+}) => {
   const res = await fetchFromApi({
     path: '/events/',
     searchParams: {
-      ...queryData,
+      audienceType,
+      availableTo,
+      limit,
+      q,
+      start,
+      workflowStatus,
       availableFrom: formatDateToISO(new Date()),
     },
     options: {
@@ -152,7 +173,10 @@ const getEventsToModerate = async ({ headers, queryKey, ...queryData }) => {
   return (await res.json()) as PaginatedData<Event[]>;
 };
 
-const useGetEventsToModerateQuery = (searchQuery, configuration = {}) =>
+const useGetEventsToModerateQuery = (
+  searchQuery: string,
+  configuration: ExtendQueryOptions<typeof getEventsToModerate> = {},
+) =>
   useAuthenticatedQuery({
     queryKey: ['events'],
     queryFn: getEventsToModerate,
@@ -160,8 +184,8 @@ const useGetEventsToModerateQuery = (searchQuery, configuration = {}) =>
       q: searchQuery,
       audienceType: 'everyone',
       availableTo: '*',
-      limit: 1,
-      start: 0,
+      limit: '1',
+      start: '0',
       workflowStatus: 'READY_FOR_VALIDATION',
     },
     enabled: !!searchQuery,
@@ -326,6 +350,7 @@ const getEventsByCreator = async ({
   limit,
   start,
   workflowStatus,
+  ...rest
 }: {
   headers: Headers;
   q: string;
@@ -334,8 +359,15 @@ const getEventsByCreator = async ({
   limit: string;
   start: string;
   workflowStatus: string;
-}) => {
+} & Record<string, string>) => {
   delete headers['Authorization'];
+
+  const sortOptions = Object.entries(rest).filter(([key]) =>
+    key.startsWith('sort'),
+  );
+  const embedCalendarSummaries = Object.entries(rest).filter(([key]) =>
+    key.startsWith('embedCalendarSummaries'),
+  );
 
   const res = await fetchFromApi({
     path: '/events/',
@@ -346,6 +378,8 @@ const getEventsByCreator = async ({
       limit,
       start,
       workflowStatus,
+      ...Object.fromEntries(sortOptions),
+      ...Object.fromEntries(embedCalendarSummaries),
     },
     options: {
       headers,
@@ -363,26 +397,37 @@ const createGetEventsByCreatorQueryOptions = ({
   SortOptions &
   CalendarSummaryFormats & {
     creator: User;
-  }) =>
-  queryOptions({
+  }) => {
+  const queryArguments = {
+    q: `creator:(${creator?.sub} OR ${
+      creator?.['https://publiq.be/uitidv1id']
+        ? `${creator?.['https://publiq.be/uitidv1id']} OR`
+        : ''
+    } ${creator?.email}) OR contributors:${creator?.email}`,
+    disableDefaultFilters: 'true',
+    embed: 'true',
+    limit: `${paginationOptions.limit}`,
+    start: `${paginationOptions.start}`,
+    workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
+  };
+  const sortingArgument = createSortingArgument(sortOptions);
+  const embededCalendarSummaries = createEmbededCalendarSummaries(
+    calendarSummaryFormats,
+  );
+
+  return queryOptions({
     queryKey: ['events'],
     queryFn: getEventsByCreator,
     queryArguments: {
-      q: `creator:(${creator?.sub} OR ${
-        creator?.['https://publiq.be/uitidv1id']
-          ? `${creator?.['https://publiq.be/uitidv1id']} OR`
-          : ''
-      } ${creator?.email}) OR contributors:${creator?.email}`,
-      disableDefaultFilters: 'true',
-      embed: 'true',
-      limit: `${paginationOptions.limit}`,
-      start: `${paginationOptions.start}`,
-      workflowStatus: 'DRAFT,READY_FOR_VALIDATION,APPROVED,REJECTED',
-      ...createSortingArgument(sortOptions),
-      ...createEmbededCalendarSummaries(calendarSummaryFormats),
-    },
+      ...queryArguments,
+      ...sortingArgument,
+      ...embededCalendarSummaries,
+    } as typeof queryArguments &
+      typeof sortingArgument &
+      typeof embededCalendarSummaries,
     enabled: !!(creator?.sub && creator?.email),
   });
+};
 
 const useGetEventsByCreatorQuery = (
   {
