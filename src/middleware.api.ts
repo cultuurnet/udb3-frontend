@@ -13,7 +13,6 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname === '/') {
     const token = request.cookies.get('token')?.value;
-    console.log('inb middleware', token);
     if (isTokenValid(token)) {
       return NextResponse.redirect(new URL('/dashboard', baseUrl));
     }
