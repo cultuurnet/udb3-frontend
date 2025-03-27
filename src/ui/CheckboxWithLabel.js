@@ -22,8 +22,7 @@ const CheckboxWithLabel = ({
       spacing={3}
       {...getInlineProps(props)}
     >
-      {/*
-       // @ts-expect-error TS2741 TODO: Fix type error */}
+      {/* @ts-expect-error TS2741 TODO: Fix type error */}
       <Checkbox
         id={id}
         onToggle={onToggle}
@@ -52,7 +51,7 @@ CheckboxWithLabel.defaultprops = {
   name: '',
   checked: false,
   disabled: false,
-  onToggle: () => {},
+  onToggle: () => { },
 };
 
 export { CheckboxWithLabel };

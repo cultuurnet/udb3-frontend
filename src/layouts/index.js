@@ -106,8 +106,7 @@ const Layout = ({ children }) => {
 
   return (
     <Inline height="100vh">
-      {/*
-       // @ts-expect-error TS2786 TODO: Fix type error */}
+      {/* @ts-expect-error TS2786 TODO: Fix type error */}
       <Sidebar />
       {children}
     </Inline>

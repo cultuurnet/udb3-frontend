@@ -288,8 +288,7 @@ const PageNotFound = () => {
       flex={1}
       height="100vh"
     >
-      {/*
-       // @ts-expect-error TS2322 TODO: Fix type error */}
+      {/* @ts-expect-error TS2322 TODO: Fix type error */}
       <Stack marginBottom="1rem">
         <BrokenGuitarIllustration width={350} />
       </Stack>
