@@ -246,11 +246,11 @@ const Create = () => {
                       // @ts-expect-error TODO: Fix type error
                       event.production
                         ? {
-                          // @ts-expect-error TODO: Fix type error
-                          label: event.production.title,
-                          // @ts-expect-error TODO: Fix type error
-                          value: event.production.id,
-                        }
+                            // @ts-expect-error TODO: Fix type error
+                            label: event.production.title,
+                            // @ts-expect-error TODO: Fix type error
+                            value: event.production.id,
+                          }
                         : undefined,
                     )
                     .filter((productionName) => productionName !== undefined)}

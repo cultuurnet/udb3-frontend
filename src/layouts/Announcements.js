@@ -240,9 +240,9 @@ Announcements.propTypes = {
 
 Announcements.defaultProps = {
   visible: false,
-  setAnnouncements: () => { },
-  onShow: () => { },
-  onClose: () => { },
+  setAnnouncements: () => {},
+  onShow: () => {},
+  onClose: () => {},
 };
 
 export { Announcements, AnnouncementStatus };

@@ -92,71 +92,72 @@ const redirectToLogin = (cookies, req, resolvedUrl) => {
 
 const getApplicationServerSideProps =
   (callbackFn) =>
-    async ({ req, query, resolvedUrl }) => {
-      const { publicRuntimeConfig } = getConfig();
-      if (publicRuntimeConfig.environment === 'development') {
-        // @ts-expect-error TODO: Fix type error
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-      }
-
-      const rawCookies = req?.headers?.cookie ?? '';
-
+  async ({ req, query, resolvedUrl }) => {
+    const { publicRuntimeConfig } = getConfig();
+    if (publicRuntimeConfig.environment === 'development') {
       // @ts-expect-error TODO: Fix type error
-      const cookies = new Cookies(rawCookies, defaultCookieOptions);
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+    }
 
-      req.headers.cookie = cookies.toString();
+    const rawCookies = req?.headers?.cookie ?? '';
 
-      const isDynamicUrl = !!query.params;
-      const path = isDynamicUrl ? `/${query.params.join('/')}` : resolvedUrl;
+    // @ts-expect-error TODO: Fix type error
+    const cookies = new Cookies(rawCookies, defaultCookieOptions);
 
-      const redirect = getRedirect(
-        path,
-        publicRuntimeConfig.environment,
-        cookies.getAll(),
-      );
+    req.headers.cookie = cookies.toString();
 
-      if (redirect) {
-        // Don't include the `params` in the redirect URL's query.
-        delete query.params;
-        const queryParameters = new URLSearchParams(query);
+    const isDynamicUrl = !!query.params;
+    const path = isDynamicUrl ? `/${query.params.join('/')}` : resolvedUrl;
 
-        // Return the redirect as-is if there are no additional query parameters
-        // to append.
-        if (!queryParameters.has('jwt')) {
-          return { redirect };
-        }
+    const redirect = getRedirect(
+      path,
+      publicRuntimeConfig.environment,
+      cookies.getAll(),
+    );
 
-        // Append query parameters to the redirect destination.
-        const glue = redirect.destination.includes('?') ? '&' : '?';
-        const redirectUrl = `${redirect.destination
-          }${glue}jwt=${queryParameters.get('jwt')}`;
-        return { redirect: { ...redirect, destination: redirectUrl } };
+    if (redirect) {
+      // Don't include the `params` in the redirect URL's query.
+      delete query.params;
+      const queryParameters = new URLSearchParams(query);
+
+      // Return the redirect as-is if there are no additional query parameters
+      // to append.
+      if (!queryParameters.has('jwt')) {
+        return { redirect };
       }
 
-      const queryClient = new QueryClient();
+      // Append query parameters to the redirect destination.
+      const glue = redirect.destination.includes('?') ? '&' : '?';
+      const redirectUrl = `${
+        redirect.destination
+      }${glue}jwt=${queryParameters.get('jwt')}`;
+      return { redirect: { ...redirect, destination: redirectUrl } };
+    }
 
-      try {
-        await prefetchGetUserQuery({
-          req,
-          queryClient,
-          cookies: cookies.getAll(),
-        });
-      } catch (error) {
-        if (error instanceof FetchError) {
-          return redirectToLogin(cookies, req, resolvedUrl);
-        }
-      }
+    const queryClient = new QueryClient();
 
-      req.headers.cookie = cookies.toString();
-
-      if (!callbackFn) return { props: { cookies: cookies.toString() } };
-
-      return await callbackFn({
+    try {
+      await prefetchGetUserQuery({
         req,
-        query,
         queryClient,
-        cookies: cookies.toString(),
+        cookies: cookies.getAll(),
       });
-    };
+    } catch (error) {
+      if (error instanceof FetchError) {
+        return redirectToLogin(cookies, req, resolvedUrl);
+      }
+    }
+
+    req.headers.cookie = cookies.toString();
+
+    if (!callbackFn) return { props: { cookies: cookies.toString() } };
+
+    return await callbackFn({
+      req,
+      query,
+      queryClient,
+      cookies: cookies.toString(),
+    });
+  };
 
 export { getApplicationServerSideProps };

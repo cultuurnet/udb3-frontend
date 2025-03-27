@@ -51,7 +51,7 @@ CheckboxWithLabel.defaultprops = {
   name: '',
   checked: false,
   disabled: false,
-  onToggle: () => { },
+  onToggle: () => {},
 };
 
 export { CheckboxWithLabel };

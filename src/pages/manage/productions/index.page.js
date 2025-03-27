@@ -219,7 +219,7 @@ const Index = () => {
 
         <Inline spacing={5}>
           {getProductionsQuery.status !== QueryStatus.LOADING &&
-            productions.length === 0 ? (
+          productions.length === 0 ? (
             <Text>{t('productions.overview.no_productions')}</Text>
           ) : (
             [

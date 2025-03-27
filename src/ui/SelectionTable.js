@@ -186,7 +186,7 @@ SelectionTable.propTypes = {
 
 SelectionTable.defaultProps = {
   actions: [],
-  onSelectionChanged: () => { },
+  onSelectionChanged: () => {},
 };
 
 export { SelectionTable };

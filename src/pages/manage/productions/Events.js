@@ -378,7 +378,7 @@ const Events = ({
                 calendarType={event.calendarType}
                 calendarSummary={
                   event.calendarSummary[i18n.language].text[
-                  event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
+                    event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
                   ]
                 }
                 onToggle={onToggleSelectEvent}
