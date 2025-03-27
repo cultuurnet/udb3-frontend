@@ -657,7 +657,7 @@ const Dashboard = (): any => {
 
   const SuggestedOrganizerRow = useMemo(
     () =>
-      function SuggestedOrganizerRow(props: OrganizerRowProps) {
+      (function SuggestedOrganizerRow(props: OrganizerRowProps) {
         return (
           <OrganizerRow
             {...props}
@@ -675,7 +675,7 @@ const Dashboard = (): any => {
             ]}
           />
         );
-      },
+      }),
     [t],
   );
 
