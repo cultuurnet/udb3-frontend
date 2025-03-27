@@ -74,12 +74,15 @@ const CalendarOpeninghoursModal = ({
     },
   });
 
-  const openingHoursField = useFieldArray({ control, name: 'openingHours' });
+  const { replace, append } = useFieldArray({
+    control,
+    name: 'openingHours',
+  });
   const openingHours = useWatch({ control, name: 'openingHours' });
 
   useEffect(() => {
     if (openinghoursFromStateMachine.length === 0) {
-      openingHoursField.append({
+      append({
         id: createOpeninghoursId(),
         opens: '00:00',
         closes: '23:59',
@@ -88,16 +91,11 @@ const CalendarOpeninghoursModal = ({
       return;
     }
 
-    openingHoursField.replace(openinghoursFromStateMachine);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    openingHoursField.append,
-    openingHoursField.replace,
-    openinghoursFromStateMachine,
-  ]);
+    replace(openinghoursFromStateMachine);
+  }, [openinghoursFromStateMachine, append, replace]);
 
   const handleAddOpeningHours = () => {
-    openingHoursField.append({
+    append({
       id: createOpeninghoursId(),
       opens: '00:00',
       closes: '23:59',
@@ -106,13 +104,13 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleRemoveOpeningHours = (idToRemove: string) => {
-    openingHoursField.replace(
+    replace(
       openingHours.filter((openingHour) => openingHour.id !== idToRemove),
     );
   };
 
   const handleChangeOpens = (idToChange: string, newTime: string) => {
-    openingHoursField.replace(
+    replace(
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange) {
           return {
@@ -126,7 +124,7 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleChangeCloses = (idToChange: string, newTime: string) => {
-    openingHoursField.replace(
+    replace(
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange) {
           return {
@@ -146,7 +144,7 @@ const CalendarOpeninghoursModal = ({
   ) => {
     const checked = event.target.checked;
 
-    openingHoursField.replace(
+    replace(
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange && checked) {
           openingHour.dayOfWeek.push(dayOfWeek);

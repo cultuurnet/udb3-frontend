@@ -22,8 +22,7 @@ const useToast = ({ messages = {}, title = '' } = {}) => {
         <Text>{format(new Date(), 'HH:mm')}</Text>
       </Inline>
     ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [message],
+    [title],
   );
 
   return { message, header, clear, trigger };

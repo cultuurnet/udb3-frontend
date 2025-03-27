@@ -60,8 +60,10 @@ const Index = () => {
     },
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const rawProductions = getProductionsQuery.data?.member ?? [];
+  const rawProductions = useMemo(
+    () => getProductionsQuery.data?.member ?? [],
+    [getProductionsQuery.data?.member],
+  );
 
   useEffect(() => {
     if (rawProductions.length === 0) {

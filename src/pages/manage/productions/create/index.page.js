@@ -72,8 +72,10 @@ const Create = () => {
     ? getProductionsQuery.data?.member ?? []
     : [];
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const events = getSuggestedEventsQuery.data?.events ?? [];
+  const events = useMemo(
+    () => getSuggestedEventsQuery.data?.events ?? [],
+    [getSuggestedEventsQuery.data?.events],
+  );
   const similarity = getSuggestedEventsQuery.data?.similarity ?? 0;
 
   const availableProductions = useMemo(
@@ -89,8 +91,7 @@ const Create = () => {
       availableProductions.find(
         (production) => production.id === selectedProductionId,
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedProductionId],
+    [availableProductions, selectedProductionId],
   );
 
   const isEditingProduction = useMemo(

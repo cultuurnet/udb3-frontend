@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/nextjs';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -22,10 +23,12 @@ import { Sidebar } from './Sidebar';
 const useChangeLanguage = () => {
   const { i18n } = useTranslation();
   const { cookies } = useCookiesWithOptions(['udb-language']);
+  const language = useMemo(() => cookies['udb-language'], [cookies]);
   useEffect(() => {
-    i18n.changeLanguage(cookies['udb-language']);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cookies['udb-language']]);
+    if (language) {
+      i18n.changeLanguage(language);
+    }
+  }, [language, i18n]);
 };
 
 const useHandleAuthentication = () => {
@@ -35,7 +38,6 @@ const useHandleAuthentication = () => {
   useEffect(() => {
     if (!getUserQuery.data) return;
     Sentry.setUser({ id: getUserQuery.data.id });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserQuery.data]);
 
   // redirect when there is no token or user cookie
@@ -49,11 +51,10 @@ const useHandleAuthentication = () => {
       if (!isTokenValid(cookies.get('token'))) {
         Sentry.setUser(null);
         cookies.remove('token');
-        router.push('/login');
+        Router.push('/login');
       }
     }, 5000); // checking every 5 seconds
     return cleanUp;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath]);
 };
 

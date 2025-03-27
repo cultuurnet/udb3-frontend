@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useIsClient } from './useIsClient';
 
@@ -8,8 +8,13 @@ const EventTypes = {
 
 const useHandleEvent = (eventsMap = {}) => {
   const isClient = useIsClient();
+  const eventsMapRef = useRef(eventsMap);
+
   useEffect(() => {
     if (!isClient) return;
+
+    const eventsMap = eventsMapRef.current;
+
     Object.entries(eventsMap).forEach(([type, handler]) => {
       window.addEventListener(type, handler);
     });
@@ -18,7 +23,6 @@ const useHandleEvent = (eventsMap = {}) => {
         window.removeEventListener(type, handler);
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClient]);
 };
 
