@@ -18,7 +18,7 @@ const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
   const { checked, onChange } = getToggleAllRowsSelectedProps();
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     <Checkbox
       id={uniqueId('checkbox-')}
       checked={checked}
@@ -37,7 +37,7 @@ const CheckBoxCell = ({ row }) => {
   const identifier = `checkbox-${row.id}`;
 
   return (
-    // @ts-expect-error TS2739 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     <Checkbox
       id={identifier}
       data-testid={identifier}
@@ -186,7 +186,7 @@ SelectionTable.propTypes = {
 
 SelectionTable.defaultProps = {
   actions: [],
-  onSelectionChanged: () => {},
+  onSelectionChanged: () => { },
 };
 
 export { SelectionTable };

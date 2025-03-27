@@ -175,7 +175,7 @@ const Announcements = ({
   );
 
   return (
-    // @ts-expect-error TS2741 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     <Modal
       visible={modalContext.visible}
       title={t('announcements.new_features')}
@@ -240,9 +240,9 @@ Announcements.propTypes = {
 
 Announcements.defaultProps = {
   visible: false,
-  setAnnouncements: () => {},
-  onShow: () => {},
-  onClose: () => {},
+  setAnnouncements: () => { },
+  onShow: () => { },
+  onClose: () => { },
 };
 
 export { Announcements, AnnouncementStatus };

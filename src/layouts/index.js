@@ -34,7 +34,7 @@ const useHandleAuthentication = () => {
 
   useEffect(() => {
     if (!getUserQuery.data) return;
-    // @ts-expect-error TS2339 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     Sentry.setUser({ id: getUserQuery.data.id });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserQuery.data]);
@@ -106,7 +106,7 @@ const Layout = ({ children }) => {
 
   return (
     <Inline height="100vh">
-      {/* @ts-expect-error TS2786 TODO: Fix type error */}
+      {/* @ts-expect-error TODO: Fix type error */}
       <Sidebar />
       {children}
     </Inline>

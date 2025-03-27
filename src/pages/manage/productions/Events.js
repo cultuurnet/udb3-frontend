@@ -60,7 +60,7 @@ const Event = ({
       <Stack as="div" flex={1} spacing={3}>
         <Inline as="div" justifyContent="space-between">
           {/*
-           // @ts-expect-error TS2739 TODO: Fix type error */}
+           // @ts-expect-error TODO: Fix type error */}
           <CheckboxWithLabel
             id={id}
             name={name}
@@ -79,7 +79,7 @@ const Event = ({
           </Button>
         </Inline>
         {isExpanded && (
-          // @ts-expect-error TS2741 TODO: Fix type error
+          // @ts-expect-error TODO: Fix type error
           <DetailTable
             items={[
               { header: t('productions.event.type'), value: type },
@@ -314,7 +314,7 @@ const Events = ({
         {isAddActionVisible && (
           <Stack as="div" spacing={3}>
             {/*
-             // @ts-expect-error TS2741 TODO: Fix type error */}
+             // @ts-expect-error TODO: Fix type error */}
             <AddAction
               onAdd={onAddEvent}
               onCancel={onCancelAddEvent}
@@ -330,7 +330,7 @@ const Events = ({
         {isChangeNameActionVisible && (
           <Stack as="div" spacing={3}>
             {/*
-             // @ts-expect-error TS2741 TODO: Fix type error */}
+             // @ts-expect-error TODO: Fix type error */}
             <ChangeNameAction
               onConfirm={onConfirmChangeProductionName}
               onCancel={onCancelChangeProductionName}
@@ -378,7 +378,7 @@ const Events = ({
                 calendarType={event.calendarType}
                 calendarSummary={
                   event.calendarSummary[i18n.language].text[
-                    event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
+                  event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
                   ]
                 }
                 onToggle={onToggleSelectEvent}

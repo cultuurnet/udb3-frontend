@@ -13,7 +13,7 @@ const Checkbox = ({
 }) => (
   <Box
     as="input"
-    // @ts-expect-error TS2322 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     type="checkbox"
     id={id}
     name={name}
@@ -40,7 +40,7 @@ Checkbox.defaultprops = {
   name: '',
   checked: false,
   disabled: false,
-  onToggle: () => {},
+  onToggle: () => { },
 };
 
 export { Checkbox };

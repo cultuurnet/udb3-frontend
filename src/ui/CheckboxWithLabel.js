@@ -22,7 +22,7 @@ const CheckboxWithLabel = ({
       spacing={3}
       {...getInlineProps(props)}
     >
-      {/* @ts-expect-error TS2741 TODO: Fix type error */}
+      {/* @ts-expect-error TODO: Fix type error */}
       <Checkbox
         id={id}
         onToggle={onToggle}

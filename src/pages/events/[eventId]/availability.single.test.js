@@ -14,7 +14,7 @@ import Availability from './availability.page';
 
 const setup = async () => {
   const page = setupPage({
-    // @ts-expect-error TS2741 TODO: Fix type error
+    // @ts-expect-error TODO: Fix type error
     router: {
       query: {
         eventId: parseOfferId(event['@id']),
@@ -53,7 +53,7 @@ test('I can save a status', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
-  // @ts-expect-error TS2339 TODO: Fix type error
+  // @ts-expect-error TODO: Fix type error
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
@@ -98,7 +98,7 @@ test('I can save a status with a reason', async () => {
 
   await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
 
-  // @ts-expect-error TS2339 TODO: Fix type error
+  // @ts-expect-error TODO: Fix type error
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
       {
@@ -143,7 +143,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
 
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
-  // @ts-expect-error TS2339 TODO: Fix type error
+  // @ts-expect-error TODO: Fix type error
   expect(screen.getByLabelText(nl.offerStatus.reason).value).toBe('');
 });
 
