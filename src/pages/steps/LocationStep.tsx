@@ -642,7 +642,9 @@ const LocationStep = ({
                   onChange={onChange}
                 />
               )}
-              {[ScopeTypes.PLACES, ScopeTypes.ORGANIZERS].includes(scope) && (
+              {([ScopeTypes.PLACES, ScopeTypes.ORGANIZERS] as Scope[]).includes(
+                scope,
+              ) && (
                 <Stack>
                   {isPlaceAddressComplete ? (
                     <Inline alignItems="center" spacing={3}>
