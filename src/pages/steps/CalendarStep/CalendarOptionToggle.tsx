@@ -46,7 +46,7 @@ export const CalendarOptionToggle = ({
         minHeight={parseSpacing(7)}
         flex={1}
       />
-      {isCultuurkuurFeatureFlagEnabled && !isCultuurkuurEvent && (
+      {!(isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent) && (
         <ToggleBox
           onClick={onChooseFixedDays}
           active={isFixedDays}
