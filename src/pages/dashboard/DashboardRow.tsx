@@ -1,7 +1,7 @@
 import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
 
-import { ScopeTypes } from '@/constants/OfferType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
 import { ImageIcon } from '@/pages/PictureUploadBox';
 import {
@@ -27,7 +27,7 @@ type DashboardRowProps = {
   eventId?: string;
   type?: string;
   typeId?: string;
-  scope?: string;
+  scope?: Scope;
   date?: string;
   imageUrl?: string;
   score?: number;
@@ -221,7 +221,12 @@ export const DashboardRow = ({
           <Inline width="25%" justifyContent="flex-start" alignItems="center">
             <StatusIndicator label={status.label} color={status.color} />
           </Inline>
-          <Inline width="22.5%" justifyContent="flex-end" alignItems="center">
+          <Inline
+            width="22.5%"
+            justifyContent="flex-end"
+            alignItems="center"
+            data-testid="row-actions"
+          >
             {finishedAt ? (
               <Text
                 color={getValue('listItem.passedEvent.color')}
