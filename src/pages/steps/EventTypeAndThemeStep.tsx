@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
+import { cultuurkuurTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
@@ -202,6 +204,7 @@ const EventTypeAndThemeStep = ({
   control,
   scope,
   name,
+  watch,
   onChange,
   shouldHideType,
 }: Props) => {
@@ -209,6 +212,10 @@ const EventTypeAndThemeStep = ({
   const { asPath } = useRouter();
   const [, hash] = asPath.split('#');
   const eventTypeAndThemeContainer = useRef(null);
+
+  const isCultuurkuurEvent =
+    scope === OfferTypes.EVENTS &&
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const typeAndTheme = useWatch({
     control,
@@ -225,10 +232,12 @@ const EventTypeAndThemeStep = ({
     [i18n.language],
   );
 
-  const types = useMemo(
-    () => sortByLocalizedName(getTypesByScopeQuery.data ?? []),
-    [getTypesByScopeQuery.data, sortByLocalizedName],
-  );
+  const types = useMemo(() => {
+    const sortedTypes = sortByLocalizedName(getTypesByScopeQuery.data ?? []);
+    return isCultuurkuurEvent
+      ? sortedTypes.filter((type) => cultuurkuurTypes.includes(type.id))
+      : sortedTypes;
+  }, [getTypesByScopeQuery.data, sortByLocalizedName, isCultuurkuurEvent]);
 
   const themes = useMemo(
     () =>
