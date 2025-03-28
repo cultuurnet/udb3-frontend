@@ -4,6 +4,7 @@ import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
 import { eventTypesWithNoThemes } from '@/constants/EventTypes';
@@ -160,6 +161,7 @@ const CalendarStep = ({
   setValue,
   formState: { errors },
   onChange,
+  watch,
   ...props
 }: CalendarStepProps) => {
   const router = useRouter();
@@ -173,6 +175,10 @@ const CalendarStep = ({
   });
 
   const calendarService = useCalendarContext();
+
+  const isCultuurkuurEvent =
+    scope === OfferTypes.EVENTS &&
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const isOneOrMoreDays = useIsOneOrMoreDays();
   const isFixedDays = useIsFixedDays();
@@ -320,6 +326,7 @@ const CalendarStep = ({
           onChooseFixedDays={handleChooseFixedDays}
           width="100%"
           disableChooseFixedDays={hasUnavailableSubEvent}
+          isCultuurkuurEvent={isCultuurkuurEvent}
         />
       )}
       <Panel backgroundColor="white" padding={5}>
