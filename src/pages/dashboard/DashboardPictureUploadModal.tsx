@@ -99,6 +99,7 @@ export const DashboardPictureUploadModal = ({
         language: i18n.language,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
