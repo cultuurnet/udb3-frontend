@@ -89,14 +89,11 @@ const Job = ({
     [JobStates.FINISHED, JobStates.FAILED] as Array<Values<typeof JobStates>>
   ).includes(state);
 
-  const timeAgo = useMemo(
-    () =>
-      formatDistance(isDone ? finishedAt : createdAt, new Date(), {
-        locale: dateFnsLocales[i18n.language],
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [createdAt, finishedAt],
-  );
+  const timeAgo = useMemo(() => {
+    formatDistance(isDone ? finishedAt : createdAt, new Date(), {
+      locale: dateFnsLocales[i18n.language],
+    });
+  }, [i18n.language, isDone, createdAt, finishedAt]);
 
   return (
     <List.Item paddingTop={3}>
