@@ -99,6 +99,7 @@ type CultuurKuurStepProps = StackProps & TabContentProps;
 
 const CultuurKuurStep = ({
   scope,
+  field,
   offerId,
   onSuccessfulChange,
   onValidationChange,
@@ -134,9 +135,15 @@ const CultuurKuurStep = ({
 
     onValidationChange(
       isCompleted ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entity?.educationalDescription, entity?.mainLanguage, i18n.language]);
+  }, [
+    field,
+    entity?.educationalDescription,
+    entity?.mainLanguage,
+    i18n.language,
+    onValidationChange,
+  ]);
 
   const eventTypeId = useMemo(() => {
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
@@ -157,6 +164,7 @@ const CultuurKuurStep = ({
 
     onValidationChange(
       isCompleted ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      field,
     );
 
     if (!editorState.getLastChangeType()) {

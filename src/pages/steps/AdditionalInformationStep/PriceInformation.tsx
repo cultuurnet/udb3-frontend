@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -133,6 +133,7 @@ const defaultPriceInfoValues: FormData = {
 
 const PriceInformation = ({
   scope,
+  field,
   offerId,
   onValidationChange,
   onSuccessfulChange,
@@ -169,6 +170,12 @@ const PriceInformation = ({
   });
 
   const rates = watch('rates');
+  const ratesRef = useRef(rates);
+
+  useEffect(() => {
+    ratesRef.current = rates;
+  }, [rates]);
+
   const controlledRates = fields.map((field, index) => ({
     ...field,
     ...rates[index],
@@ -206,8 +213,8 @@ const PriceInformation = ({
   );
 
   const hasRates = useMemo(
-    () => controlledRates.filter((rate) => rate.price !== '').length > 0,
-    [controlledRates],
+    () => rates.filter((rate) => rate.price !== '').length > 0,
+    [rates],
   );
 
   useEffect(() => {
@@ -224,22 +231,26 @@ const PriceInformation = ({
 
       return onValidationChange(
         hasUitpasLabel ? ValidationStatus.WARNING : ValidationStatus.NONE,
+        field,
       );
     }
 
-    onValidationChange(ValidationStatus.SUCCESS);
+    onValidationChange(ValidationStatus.SUCCESS, field);
 
-    replace(reconcileRates(rates, priceInfo, offer));
+    replace(reconcileRates(ratesRef.current, priceInfo, offer));
     reset({}, { keepValues: true });
-    // onValidationChange is hard to wrap in useCallback in parent
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     scope,
+    field,
+    offer,
+    hasRates,
     i18n.language,
     offer?.mainLanguage,
     offer?.organizer,
     offer?.priceInfo,
     replace,
+    reset,
+    onValidationChange,
   ]);
 
   useEffect(() => {
@@ -248,12 +259,11 @@ const PriceInformation = ({
     if (!offer?.priceInfo) return;
 
     if (offer.priceInfo.length > 0) {
-      onValidationChange(ValidationStatus.SUCCESS);
+      onValidationChange(ValidationStatus.SUCCESS, field);
     }
 
     setIsPricesLoaded(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offer?.priceInfo, isPricesLoaded]);
+  }, [field, offer?.priceInfo, isPricesLoaded, onValidationChange]);
 
   return (
     <Stack {...getStackProps(props)} padding={4} spacing={5}>
