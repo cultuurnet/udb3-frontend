@@ -24,6 +24,8 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { CheckboxTree } from '@/ui/CheckboxTree';
+import { useEducationLevels } from '@/hooks/api/education-levels';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -78,6 +80,8 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     router.push(`/place/${placeId}/preview`);
   };
 
+  const levels = useEducationLevels();
+
   return (
     <Controller
       control={control}
@@ -91,6 +95,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
               name={name}
               control={control}
             />
+            {!levels.isLoading && <CheckboxTree nodes={levels.data} />}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}
