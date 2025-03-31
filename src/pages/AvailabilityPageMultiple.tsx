@@ -1,6 +1,6 @@
 import camelCase from 'lodash/camelCase';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OfferStatus } from '@/constants/OfferStatus';
@@ -104,8 +104,8 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
         accessor: 'bookingAvailability',
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+
+    [t],
   );
 
   const data = useMemo(
@@ -135,8 +135,12 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
           </Text>
         ),
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [subEvents],
+    [i18n.language, t, subEvents],
+  );
+
+  const translateSelectedRowCount = useCallback(
+    (count) => t('selectionTable.rowsSelectedCount', { count }),
+    [t],
   );
 
   return [
@@ -171,11 +175,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
                 disabled: selectedRows.length === 0,
               },
             ]}
-            translateSelectedRowCount={(count) =>
-              t('selectionTable.rowsSelectedCount', {
-                count,
-              })
-            }
+            translateSelectedRowCount={translateSelectedRowCount}
           />
         </Stack>
 
