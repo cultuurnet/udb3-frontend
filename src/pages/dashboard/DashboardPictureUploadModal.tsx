@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { Scope } from '@/constants/OfferType';
 import { useAddImageMutation } from '@/hooks/api/images';
 import {
   useAddOfferImageMutation,
@@ -16,7 +17,7 @@ import {
 
 type Props = {
   eventId: string;
-  scope: string;
+  scope: Scope;
   isImageUploading: boolean;
   isPictureUploadModalVisible: boolean;
   onModalClose: () => void;

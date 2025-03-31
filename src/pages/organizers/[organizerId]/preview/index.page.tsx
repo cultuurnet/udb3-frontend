@@ -37,7 +37,6 @@ const OrganizersPreview = () => {
   const { t, i18n } = useTranslation();
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
-  const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
   const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
@@ -88,8 +87,9 @@ const OrganizersPreview = () => {
                   organizer={organizer}
                   isVisible={isQuestionModalVisible}
                   onClose={() => setIsQuestionModalVisible(false)}
+                  onSuccess={() => setIsSuccessAlertVisible(true)}
                 />
-                {isOwnershipRequested && (
+                {isOwnershipRequested && !isSuccessAlertVisible && (
                   <Alert
                     variant={AlertVariants.PRIMARY}
                     marginBottom={4}
