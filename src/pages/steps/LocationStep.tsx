@@ -318,13 +318,7 @@ const LocationStep = ({
     if (offerId) return false;
 
     return !isLocationSet(scope, location, formState);
-  }, [
-    isLocationSet,
-    formState.touchedFields.location?.streetAndNumber,
-    location,
-    offerId,
-    scope,
-  ]);
+  }, [formState, location, offerId, scope]);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
@@ -642,7 +636,9 @@ const LocationStep = ({
                   onChange={onChange}
                 />
               )}
-              {[ScopeTypes.PLACES, ScopeTypes.ORGANIZERS].includes(scope) && (
+              {([ScopeTypes.PLACES, ScopeTypes.ORGANIZERS] as Scope[]).includes(
+                scope,
+              ) && (
                 <Stack>
                   {isPlaceAddressComplete ? (
                     <Inline alignItems="center" spacing={3}>

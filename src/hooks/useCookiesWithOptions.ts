@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useCookies as useReactCookies } from 'react-cookie';
 import type { CookieSetOptions } from 'universal-cookie';
 
@@ -22,11 +23,15 @@ const useCookiesWithOptions = (
   const [cookies, setCookie, removeCookie]: [Cookies, SetCookie, RemoveCookie] =
     useReactCookies(dependencies);
 
-  const setCookieWithOptions = (name: string, value: any) =>
-    setCookie(name, value, options);
-  const removeAuthenticationCookies = () =>
+  const setCookieWithOptions = useCallback(
+    (name: string, value: any) => {
+      setCookie(name, value, options);
+    },
+    [setCookie, options],
+  );
+  const removeAuthenticationCookies = useCallback(() => {
     ['token', 'idToken'].forEach((cookie) => removeCookie(cookie));
-
+  }, [removeCookie]);
   return {
     cookies,
     setCookie: setCookieWithOptions,

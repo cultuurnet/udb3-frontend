@@ -14,6 +14,7 @@ import { StackProps } from '@/ui/Stack';
 type PhysicalLocationStepProps = StackProps & TabContentProps & StepProps;
 
 function PhysicalLocationStep({
+  field,
   onValidationChange,
   ...props
 }: PhysicalLocationStepProps) {
@@ -26,8 +27,9 @@ function PhysicalLocationStep({
       location?.streetAndNumber
         ? ValidationStatus.SUCCESS
         : ValidationStatus.NONE,
+      field,
     );
-  }, [onValidationChange, location]);
+  }, [field, onValidationChange, location]);
 
   const onChange = (updatedLocation: FormData['location']) => {
     props.onSuccessfulChange(updatedLocation);
