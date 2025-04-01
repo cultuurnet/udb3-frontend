@@ -13,16 +13,18 @@ import {
   faFolderOpen,
   faMinusSquare,
   faPlusSquare,
-  faSquare,
 } from '@fortawesome/free-solid-svg-icons';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
+import { Controller, Path, UseFormReturn } from 'react-hook-form';
+import { FormDataUnion } from '@/pages/steps/Steps';
+import { colors } from '@/ui/theme';
 
 const icons = {
   check: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-check"
       icon={faCheckSquare}
-      width={18}
-      height={18}
+      color={colors.udbBlue}
     />
   ),
   uncheck: (
@@ -31,7 +33,8 @@ const icons = {
   halfCheck: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-half-check"
-      icon="check-square"
+      icon={faCheckSquare}
+      color={colors.udbBlue}
     />
   ),
   expandClose: (
@@ -62,12 +65,14 @@ const icons = {
     <FontAwesomeIcon
       className="rct-icon rct-icon-parent-close"
       icon={faFolder}
+      color={colors.udbMainBlue}
     />
   ),
   parentOpen: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-parent-open"
       icon={faFolderOpen}
+      color={colors.udbMainBlue}
     />
   ),
   leaf: (
