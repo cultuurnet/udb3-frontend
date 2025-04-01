@@ -95,7 +95,13 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
               name={name}
               control={control}
             />
-            {!levels.isLoading && <CheckboxTree nodes={levels.data} />}
+            {!levels.isLoading && (
+              <CheckboxTree
+                nodes={levels.data}
+                control={control}
+                name={'education_levels'}
+              />
+            )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}

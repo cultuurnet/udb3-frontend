@@ -80,7 +80,12 @@ const icons = {
   ),
 };
 
-const CheckboxTree = ({ nodes, props }: CheckboxProps) => {
+type Props = CheckboxProps &
+  UseFormReturn<FormDataUnion> & {
+    name: Path<FormDataUnion>;
+  };
+
+const CheckboxTree = ({ name, control, nodes, props }: Props) => {
   const [checked, setChecked] = useState([]);
   const [expanded, setExpanded] = useState([]);
   const [filter, setFilter] = useState('');
@@ -118,16 +123,25 @@ const CheckboxTree = ({ nodes, props }: CheckboxProps) => {
         value={filter}
         onChange={(event) => setFilter(event.target.value)}
       />
-      <ReactCheckboxTree
-        checked={checked}
-        expanded={expanded}
-        onCheck={(checked) => setChecked(checked)}
-        onExpand={(expanded) => setExpanded(expanded)}
-        icons={icons}
-        nodes={filteredNodes}
-        expandOnClick
-        showExpandAll
-        {...props}
+      <Controller
+        render={function ({ field }) {
+          console.log(field);
+          return (
+            <ReactCheckboxTree
+              checked={field.value}
+              expanded={expanded}
+              onCheck={(checked) => field.onChange(checked)}
+              onExpand={(expanded) => setExpanded(expanded)}
+              icons={icons}
+              nodes={filteredNodes}
+              expandOnClick
+              showExpandAll
+              {...props}
+            />
+          );
+        }}
+        name={name}
+        control={control}
       />
     </>
   );
