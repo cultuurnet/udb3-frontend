@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
@@ -21,7 +22,6 @@ import { ToggleBox } from '@/ui/ToggleBox';
 import { Scope } from '../create/OfferForm';
 import { CultuurKuurIcon } from '../CultuurKuurIcon';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
-import { useQueryClient } from 'react-query';
 
 type Props = InlineProps &
   StepProps & {
