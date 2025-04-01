@@ -7,14 +7,14 @@ type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left';
 
 type Props = {
   id: string;
-  tooltip: string;
+  content: string;
   placement: TooltipPlacement;
 };
 
-const Tooltip = ({ id, tooltip, placement }: Props) => {
+const Tooltip = ({ id, content, placement }: Props) => {
   return (
     <OverlayTrigger
-      overlay={<BootstrapTooltip id={id}>{tooltip}</BootstrapTooltip>}
+      overlay={<BootstrapTooltip id={id}>{content}</BootstrapTooltip>}
       placement={placement}
     >
       <span>

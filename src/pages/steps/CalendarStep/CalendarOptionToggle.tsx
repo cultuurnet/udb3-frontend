@@ -78,7 +78,7 @@ export const CalendarOptionToggle = ({
                 <p>{t('create.calendar.types.cultuurkuur')}</p>
               </Box>
               <Tooltip
-                tooltip={t('create.calendar.types.cultuurkuur_tip')}
+                content={t('create.calendar.types.cultuurkuur_tip')}
                 id={t('create.calendar.types.cultuurkuur_tip')}
                 placement="bottom"
               />
