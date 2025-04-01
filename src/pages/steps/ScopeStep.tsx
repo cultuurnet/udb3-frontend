@@ -21,6 +21,7 @@ import { ToggleBox } from '@/ui/ToggleBox';
 import { Scope } from '../create/OfferForm';
 import { CultuurKuurIcon } from '../CultuurKuurIcon';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
+import { useQueryClient } from 'react-query';
 
 type Props = InlineProps &
   StepProps & {
@@ -71,6 +72,7 @@ const ScopeStep = ({
     resetField('location');
   };
 
+  const queryClient = useQueryClient();
   const addAudienceMutation = useChangeAudienceMutation();
 
   const handleOnChangeAudience = async (audienceType: AudienceType) => {
@@ -82,6 +84,8 @@ const ScopeStep = ({
       eventId: offerId,
       audienceType,
     });
+
+    await queryClient.invalidateQueries('events');
   };
 
   return (
