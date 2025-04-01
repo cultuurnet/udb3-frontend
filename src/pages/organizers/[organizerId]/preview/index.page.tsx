@@ -137,14 +137,6 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
-                <Button
-                  variant={ButtonVariants.SECONDARY}
-                  spacing={3}
-                  iconName={Icons.ARROW_LEFT}
-                  onClick={() => router.back()}
-                >
-                  {t('organizers.detail.actions.back')}
-                </Button>
               </Stack>
             </Inline>
           </Stack>
