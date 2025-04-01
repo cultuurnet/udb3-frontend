@@ -5,6 +5,7 @@ import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -20,7 +21,7 @@ import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
-import { AttendanceMode, AudienceType } from '@/types/Event';
+import { AttendanceMode } from '@/types/Event';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -204,7 +205,7 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
 
       const changeAudiencePromise = changeAudienceMutation.mutateAsync({
         eventId: offerId,
-        audienceType: AudienceType.EDUCATION,
+        audienceType: AudienceTypes.EDUCATION,
       });
 
       await Promise.all([changeLocationPromise, changeAudiencePromise]);
@@ -223,7 +224,7 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     if (parseOfferId(location.place['@id']) !== CULTUURKUUR_LOCATION_ID) {
       changeAudienceMutation.mutate({
         eventId: offerId,
-        audienceType: AudienceType.EVERYONE,
+        audienceType: AudienceTypes.EVERYONE,
       });
     }
 
@@ -533,7 +534,7 @@ const LocationStep = ({
                         country: Countries.BE,
                         municipality: undefined,
                       });
-                      setAudienceType(AudienceType.EVERYONE);
+                      setAudienceType(AudienceTypes.EVERYONE);
                     }}
                   >
                     {t('create.location.country.change_location')}

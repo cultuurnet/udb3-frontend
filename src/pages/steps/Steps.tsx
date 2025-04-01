@@ -9,6 +9,7 @@ import type {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { AudienceType } from '@/constants/AudienceType';
 import { Scope } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
 import type { BoxProps } from '@/ui/Box';

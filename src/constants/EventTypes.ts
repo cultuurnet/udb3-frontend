@@ -50,4 +50,18 @@ const eventTypesWithNoThemes: string[] = [
   EventTypes['Spel of quiz'],
 ];
 
-export { EventTypes, eventTypesWithNoThemes };
+const cultuurkuurTypes: string[] = [
+  EventTypes['Cursus met open sessies'],
+  EventTypes['Begeleide uitstap of rondleiding'],
+  EventTypes.Theatervoorstelling,
+  EventTypes.Dansvoorstelling,
+  EventTypes['Spel of quiz'],
+  EventTypes.Film,
+  EventTypes['Lezing of congres'],
+  EventTypes.Tentoonstelling,
+  EventTypes.Concert,
+  EventTypes['Fiets- of wandelroute'],
+  EventTypes.Festival,
+];
+
+export { cultuurkuurTypes, EventTypes, eventTypesWithNoThemes };
