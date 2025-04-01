@@ -1,15 +1,12 @@
-import { OverlayTrigger } from 'react-bootstrap';
+import { OverlayTrigger, OverlayTriggerProps } from 'react-bootstrap';
 import { Tooltip as BootstrapTooltip } from 'react-bootstrap';
 
 import { QuestionCircleIcon } from '@/pages/NewFeatureTooltip';
 
-type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left';
-
 type Props = {
   id: string;
   content: string;
-  placement: TooltipPlacement;
-};
+} & Pick<OverlayTriggerProps, 'placement'>;
 
 const Tooltip = ({ id, content, placement }: Props) => {
   return (
