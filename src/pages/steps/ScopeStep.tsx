@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
@@ -71,6 +72,7 @@ const ScopeStep = ({
     resetField('location');
   };
 
+  const queryClient = useQueryClient();
   const addAudienceMutation = useChangeAudienceMutation();
 
   const handleOnChangeAudience = async (audienceType: AudienceType) => {
@@ -82,6 +84,8 @@ const ScopeStep = ({
       eventId: offerId,
       audienceType,
     });
+
+    await queryClient.invalidateQueries('events');
   };
 
   return (

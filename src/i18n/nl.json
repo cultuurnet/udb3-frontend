@@ -499,6 +499,10 @@
         "title": "Prijzen",
         "uitpas_error": "De UiTPAS prijs wordt voor jou berekend door UiTdatabank. Je kan deze niet zelf toevoegen.",
         "uitpas_info": "Het UiTPAS kansentarief wordt automatisch berekend op basis van de basisprijs en de actieve kaartsystemen.",
+        "cultuurkuur": {
+          "per_group": "per groep",
+          "per_student": "per leerling"
+        },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
           "unique_name": "De opgegeven naam in reeds gebruikt.",
@@ -1128,7 +1132,7 @@
         "event": "Evenement",
         "place": "Locatie"
       },
-      "cultuurkuur_event": "Evenementen specifiek voor scholen",
+      "cultuurkuur_event": "Dit is een evenement voor scholen",
       "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen."
     }
   },
