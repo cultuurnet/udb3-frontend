@@ -4,13 +4,13 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import {
   useChangeAudienceMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
-import { Values } from '@/types/Values';
 import { FormElement } from '@/ui/FormElement';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -20,25 +20,18 @@ import { TabContentProps } from './AdditionalInformationStep';
 
 type Props = StackProps & TabContentProps;
 
-const AudienceType = {
-  EVERYONE: 'everyone',
-  MEMBERS: 'members',
-  EDUCATION: 'education',
-} as const;
-
-type AudienceType = Values<typeof AudienceType>;
-
 type FormData = { audienceType: string };
 
 const schema = yup.object({
   audienceType: yup
     .mixed<AudienceType>()
-    .oneOf(Object.values(AudienceType))
+    .oneOf(Object.values(AudienceTypes))
     .required(),
 });
 
 const AudienceStep = ({
   offerId,
+  field,
   onSuccessfulChange,
   onValidationChange,
   ...props
@@ -60,12 +53,11 @@ const AudienceStep = ({
 
   useEffect(() => {
     const newAudienceType =
-      event?.audience?.audienceType ?? AudienceType.EVERYONE;
+      event?.audience?.audienceType ?? AudienceTypes.EVERYONE;
     setValue('audienceType', newAudienceType);
 
-    onValidationChange(ValidationStatus.SUCCESS);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event?.audience?.audienceType, setValue]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [field, event?.audience?.audienceType, setValue, onValidationChange]);
 
   const addAudienceMutation = useChangeAudienceMutation({
     onSuccess: onSuccessfulChange,
@@ -86,7 +78,7 @@ const AudienceStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
-        {Object.values(AudienceType).map((type, index) => {
+        {Object.values(AudienceTypes).map((type, index) => {
           return (
             <Fragment key={index}>
               <FormElement
@@ -101,7 +93,7 @@ const AudienceStep = ({
                 }
               />
               {watchedAudienceType === type &&
-                watchedAudienceType !== AudienceType.EVERYONE && (
+                watchedAudienceType !== AudienceTypes.EVERYONE && (
                   <Text variant="muted" maxWidth="30%">
                     {t(
                       `create.additionalInformation.audience.help.${watchedAudienceType}`,
