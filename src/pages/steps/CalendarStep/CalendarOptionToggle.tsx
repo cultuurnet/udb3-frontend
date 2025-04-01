@@ -34,6 +34,28 @@ export const CalendarOptionToggle = ({
     FeatureFlags.CULTUURKUUR,
   );
 
+  const fixedDaysToggleProps =
+    isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent
+      ? {
+          iconName: CustomIconVariants.CULTUURKUUR_CALENDAR,
+          text: (
+            <Inline spacing={2}>
+              <Box>
+                <p>{t('create.calendar.types.cultuurkuur')}</p>
+              </Box>
+              <Tooltip
+                content={t('create.calendar.types.cultuurkuur_tip')}
+                id={t('create.calendar.types.cultuurkuur_tip')}
+                placement="bottom"
+              />
+            </Inline>
+          ),
+        }
+      : {
+          iconName: CustomIconVariants.CALENDAR_MULTIPLE,
+          text: t('create.calendar.types.fixed_days'),
+        };
+
   return (
     <Inline spacing={5} alignItems="stretch" {...getInlineProps(props)}>
       <ToggleBox
@@ -46,49 +68,16 @@ export const CalendarOptionToggle = ({
         minHeight={parseSpacing(7)}
         flex={1}
       />
-      {!(isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent) && (
-        <ToggleBox
-          onClick={onChooseFixedDays}
-          active={isFixedDays}
-          icon={
-            <CustomIcon
-              name={CustomIconVariants.CALENDAR_MULTIPLE}
-              width="80"
-            />
-          }
-          text={t('create.calendar.types.fixed_days')}
-          minHeight={parseSpacing(7)}
-          flex={1}
-          disabled={disableChooseFixedDays}
-        />
-      )}
-      {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
-        <ToggleBox
-          onClick={onChooseFixedDays}
-          active={isFixedDays}
-          icon={
-            <CustomIcon
-              name={CustomIconVariants.CULTUURKUUR_CALENDAR}
-              width="80"
-            />
-          }
-          text={
-            <Inline spacing={2}>
-              <Box>
-                <p>{t('create.calendar.types.cultuurkuur')}</p>
-              </Box>
-              <Tooltip
-                content={t('create.calendar.types.cultuurkuur_tip')}
-                id={t('create.calendar.types.cultuurkuur_tip')}
-                placement="bottom"
-              />
-            </Inline>
-          }
-          minHeight={parseSpacing(7)}
-          flex={1}
-          disabled={disableChooseFixedDays}
-        />
-      )}
+
+      <ToggleBox
+        onClick={onChooseFixedDays}
+        active={isFixedDays}
+        icon={<CustomIcon name={fixedDaysToggleProps.iconName} width="80" />}
+        text={fixedDaysToggleProps.text}
+        minHeight={parseSpacing(7)}
+        flex={1}
+        disabled={disableChooseFixedDays}
+      />
     </Inline>
   );
 };
