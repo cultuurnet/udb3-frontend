@@ -40,9 +40,7 @@ export const CalendarOptionToggle = ({
           iconName: CustomIconVariants.CULTUURKUUR_CALENDAR,
           text: (
             <Inline spacing={2}>
-              <Box>
-                <p>{t('create.calendar.types.cultuurkuur')}</p>
-              </Box>
+              <Box as="p">{t('create.calendar.types.cultuurkuur')}</Box>
               <Tooltip
                 content={t('create.calendar.types.cultuurkuur_tip')}
                 id={t('create.calendar.types.cultuurkuur_tip')}
