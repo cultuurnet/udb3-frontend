@@ -126,7 +126,21 @@ export const OwnershipsTable = ({
         )}
       </Inline>
       <List paddingY={3}>
-        {creator?.email && <List.Item>{creator.email}</List.Item>}
+        {creator?.email && (
+          <Inline
+            role="row"
+            alignItems="center"
+            paddingY={3}
+            minHeight="4rem"
+            css={`
+              &:not(:last-child) {
+                border-bottom: 1px solid ${grey3};
+              }
+            `}
+          >
+            <List.Item>{creator.email}</List.Item>
+          </Inline>
+        )}
         {requests.map((request) => (
           <Inline
             key={request.id}
@@ -134,6 +148,7 @@ export const OwnershipsTable = ({
             alignItems="center"
             paddingY={3}
             display="grid"
+            minHeight="4rem"
             css={`
               grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
 
