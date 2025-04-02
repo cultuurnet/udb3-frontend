@@ -197,11 +197,9 @@ const Ownership = () => {
                   onClose={() => setRequestToBeDeleted(undefined)}
                   size={ModalSizes.MD}
                 >
-                  <Box padding={4}>
-                    {t('organizers.ownerships.delete_modal.body', {
-                      ownerEmail: requestToBeDeleted?.ownerEmail,
-                    })}
-                  </Box>
+                  <Box padding={4} dangerouslySetInnerHTML={t('organizers.ownerships.delete_modal.body', {
+                    ownerEmail: requestToBeDeleted?.ownerEmail,
+                  })} />
                 </Modal>
               </Stack>
             )}
