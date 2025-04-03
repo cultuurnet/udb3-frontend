@@ -731,7 +731,7 @@
     "movies": "Films",
     "notifications": "Meldingen",
     "organizations": "Organisaties",
-    "ownerships": "Ownerships",
+    "ownerships": "Eigenaarschap",
     "productions": "Producties",
     "roles": "Rollen",
     "search": "Zoeken",
@@ -740,7 +740,7 @@
   },
   "ownerships": {
     "overview": {
-      "title": "Ownerships"
+      "title": "Eigenaarschap"
     },
     "organizer_picker": {
       "label": "Organisatie"
