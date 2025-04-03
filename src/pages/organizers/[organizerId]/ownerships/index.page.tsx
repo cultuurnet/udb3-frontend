@@ -1,9 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
+import * as yup from 'yup';
 
 import {
   prefetchGetOrganizerByIdQuery,
@@ -31,6 +33,7 @@ import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -40,6 +43,8 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
+
+const NON_EXISTING_USER_ERROR_REGEX = /No user with email .+ was found/;
 
 const Ownership = () => {
   const router = useRouter();
@@ -53,7 +58,20 @@ const Ownership = () => {
     useState<OwnershipRequest>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
-  const { register, formState, getValues, setError } = useForm();
+  const { trigger, register, formState, getValues, setError } = useForm({
+    resolver: yupResolver(
+      yup.object({
+        email: yup.string().email(),
+      }),
+    ),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const isNonExistingUserError = !!formState.errors.email?.message?.match(
+    NON_EXISTING_USER_ERROR_REGEX,
+  );
 
   const organizerId = router.query.organizerId as string;
 
@@ -127,7 +145,10 @@ const Ownership = () => {
     },
   });
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    const isValid = await trigger();
+    if (!isValid) return;
+
     switch (actionType) {
       case ActionType.APPROVE:
         return approveOwnershipRequestMutation.mutate({
@@ -197,9 +218,15 @@ const Ownership = () => {
                   onClose={() => setRequestToBeDeleted(undefined)}
                   size={ModalSizes.MD}
                 >
-                  <Box padding={4} dangerouslySetInnerHTML={t('organizers.ownerships.delete_modal.body', {
-                    ownerEmail: requestToBeDeleted?.ownerEmail,
-                  })} />
+                  <Box
+                    padding={4}
+                    dangerouslySetInnerHTML={t(
+                      'organizers.ownerships.delete_modal.body',
+                      {
+                        ownerEmail: requestToBeDeleted?.ownerEmail,
+                      },
+                    )}
+                  />
                 </Modal>
               </Stack>
             )}
@@ -282,8 +309,23 @@ const Ownership = () => {
               Component={<Input type={'email'} {...register('email')} />}
               label={t('organizers.ownerships.request_modal.email')}
               error={
-                formState.errors.email &&
-                t(`organizers.ownerships.request_modal.email_error`)
+                formState.errors.email && (
+                  <Trans
+                    i18nKey={`organizers.ownerships.request_modal.${
+                      isNonExistingUserError
+                        ? 'email_not_known_error'
+                        : 'email_error'
+                    }`}
+                    components={[
+                      <Link
+                        key="link"
+                        href={`https://profile.uitid.be/${i18n.language}`}
+                      >
+                        Will be replaced
+                      </Link>,
+                    ]}
+                  />
+                )
               }
             />
           </Stack>
