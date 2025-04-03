@@ -18,6 +18,7 @@ import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { Controller, Path, UseFormReturn } from 'react-hook-form';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { colors } from '@/ui/theme';
+import { Input } from '@/ui/Input';
 
 const icons = {
   check: (
@@ -115,11 +116,10 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
   );
 
   return (
-    <>
-      <input
+    <div>
+      <Input
         className="filter-text"
         placeholder="Search..."
-        type="text"
         value={filter}
         onChange={(event) => setFilter(event.target.value)}
       />
@@ -143,7 +143,7 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
         name={name}
         control={control}
       />
-    </>
+    </div>
   );
 };
 

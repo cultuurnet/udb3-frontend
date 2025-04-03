@@ -26,6 +26,9 @@ import {
 } from './Steps';
 import { CheckboxTree } from '@/ui/CheckboxTree';
 import { useEducationLevels } from '@/hooks/api/education-levels';
+import { OfferTypes } from '@/constants/OfferType';
+import { AudienceTypes } from '@/constants/AudienceType';
+import { FormElement } from '@/ui/FormElement';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -81,6 +84,10 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   };
 
   const levels = useEducationLevels();
+  let isCultuurkuurEvent =
+    props.scope === OfferTypes.EVENTS &&
+    props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+  isCultuurkuurEvent = true;
 
   return (
     <Controller
@@ -90,16 +97,24 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
         return (
           <Stack spacing={4} maxWidth={parseSpacing(11)}>
             <NameStep {...getStepProps(props)} name={name} control={control} />
-            <AgeRangeStep
-              {...getStepProps(props)}
-              name={name}
-              control={control}
-            />
-            {!levels.isLoading && (
-              <CheckboxTree
-                nodes={levels.data}
+            {!isCultuurkuurEvent && (
+              <AgeRangeStep
+                {...getStepProps(props)}
+                name={name}
                 control={control}
-                name={'education_levels'}
+              />
+            )}
+            {isCultuurkuurEvent && !levels.isLoading && (
+              <FormElement
+                id={'education_levels'}
+                label={'Geschikt voor de volgende onderwijsniveaus '}
+                Component={
+                  <CheckboxTree
+                    name={'education_levels'}
+                    nodes={levels.data}
+                    control={control}
+                  />
+                }
               />
             )}
             <AlertDuplicatePlace
