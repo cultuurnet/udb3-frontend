@@ -78,9 +78,15 @@ const RequestOwnershipModal = ({
         }}
         size={ModalSizes.MD}
       >
-        <Box padding={4} dangerouslySetInnerHTML={t('organizers.ownerships.request.confirm_modal.body', {
-          organizerName,
-        })} />
+        <Box
+          padding={4}
+          dangerouslySetInnerHTML={t(
+            'organizers.ownerships.request.confirm_modal.body',
+            {
+              organizerName,
+            },
+          )}
+        />
       </Modal>
       {isSuccessAlertVisible && (
         <Alert
