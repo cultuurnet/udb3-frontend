@@ -135,6 +135,7 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
               icons={icons}
               nodes={filteredNodes}
               expandOnClick
+              checkModel="all"
               showExpandAll
               {...props}
             />
