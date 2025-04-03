@@ -19,6 +19,7 @@ import { Controller, Path, UseFormReturn } from 'react-hook-form';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { colors } from '@/ui/theme';
 import { Input } from '@/ui/Input';
+import { Stack } from '@/ui/Stack';
 
 const icons = {
   check: (
@@ -116,11 +117,12 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
   );
 
   return (
-    <div>
+    <Stack width="100%" maxWidth="43rem">
       <Input
         className="filter-text"
         placeholder="Search..."
         value={filter}
+        marginBottom={3}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
           setFilter(event.target.value);
           treeRef.current.expandAllNodes();
@@ -145,7 +147,7 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
           />
         )}
       />
-    </div>
+    </Stack>
   );
 };
 
