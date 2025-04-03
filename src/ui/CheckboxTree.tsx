@@ -3,7 +3,7 @@ import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import ReactCheckboxTree, { Node, CheckboxProps } from 'react-checkbox-tree';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   faCheckSquare,
   faChevronDown,
@@ -87,7 +87,7 @@ type Props = CheckboxProps &
   };
 
 const CheckboxTree = ({ name, control, nodes, props }: Props) => {
-  const [checked, setChecked] = useState([]);
+  const treeRef = useRef<ReactCheckboxTree>(null);
   const [expanded, setExpanded] = useState([]);
   const [filter, setFilter] = useState('');
 
@@ -121,13 +121,16 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
         className="filter-text"
         placeholder="Search..."
         value={filter}
-        onChange={(event) => setFilter(event.target.value)}
+        onChange={(event: InputEvent) => {
+          setFilter(event.target.value);
+          treeRef.current.expandAllNodes();
+        }}
       />
       <Controller
         render={function ({ field }) {
-          console.log(field);
           return (
             <ReactCheckboxTree
+              ref={treeRef}
               checked={field.value}
               expanded={expanded}
               onCheck={(checked) => field.onChange(checked)}
