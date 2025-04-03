@@ -3,7 +3,7 @@ import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import ReactCheckboxTree, { Node, CheckboxProps } from 'react-checkbox-tree';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 import {
   faCheckSquare,
   faChevronDown,
@@ -121,31 +121,29 @@ const CheckboxTree = ({ name, control, nodes, props }: Props) => {
         className="filter-text"
         placeholder="Search..."
         value={filter}
-        onChange={(event: InputEvent) => {
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
           setFilter(event.target.value);
           treeRef.current.expandAllNodes();
         }}
       />
       <Controller
-        render={function ({ field }) {
-          return (
-            <ReactCheckboxTree
-              ref={treeRef}
-              checked={field.value}
-              expanded={expanded}
-              onCheck={(checked) => field.onChange(checked)}
-              onExpand={(expanded) => setExpanded(expanded)}
-              icons={icons}
-              nodes={filteredNodes}
-              expandOnClick
-              checkModel="all"
-              showExpandAll
-              {...props}
-            />
-          );
-        }}
         name={name}
         control={control}
+        render={({ field }) => (
+          <ReactCheckboxTree
+            ref={treeRef}
+            checked={field.value}
+            expanded={expanded}
+            onCheck={(checked) => field.onChange(checked)}
+            onExpand={(expanded) => setExpanded(expanded)}
+            icons={icons}
+            nodes={filteredNodes}
+            expandOnClick
+            checkModel="all"
+            showExpandAll
+            {...props}
+          />
+        )}
       />
     </div>
   );
