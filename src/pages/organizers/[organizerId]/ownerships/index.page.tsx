@@ -93,10 +93,11 @@ const Ownership = () => {
     organizerId: organizerId,
   });
 
-  const requestsByState: { [key: string]: OwnershipRequest[] } = useMemo(
-    () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
-    [getOwnershipRequestsQuery.data],
-  );
+  const requestsByState: Partial<Record<OwnershipState, OwnershipRequest[]>> =
+    useMemo(
+      () => groupBy(getOwnershipRequestsQuery.data?.member, 'state'),
+      [getOwnershipRequestsQuery.data],
+    );
 
   const creator = getOwnershipCreatorQuery.data;
 
