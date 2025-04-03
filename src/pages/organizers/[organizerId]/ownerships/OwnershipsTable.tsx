@@ -10,6 +10,7 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -166,7 +167,9 @@ export const OwnershipsTable = ({
             {shouldShowItemId && (
               <List.Item>
                 <Stack>
-                  <Text>{request.itemId}</Text>
+                  <Link href={`/organizers/${request.itemId}/preview`}>
+                    {request.itemId}
+                  </Link>
                 </Stack>
               </List.Item>
             )}
