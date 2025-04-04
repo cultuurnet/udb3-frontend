@@ -4,10 +4,13 @@ import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { CULTUURKUUR_ORGANIZER_LABEL } from '@/constants/Organizer';
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetOrganizersByQueryQuery } from '@/hooks/api/organizers';
 import { useGetUserQuery } from '@/hooks/api/user';
 import { SupportedLanguages } from '@/i18n/index';
+import { CultuurKuurIcon } from '@/pages/CultuurKuurIcon';
+import { UitpasIcon } from '@/pages/UitpasIcon';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -38,6 +41,10 @@ const isUitpasOrganizer = (organizer: Organizer): boolean => {
       (typeof label === 'string' && label.toLowerCase().includes('uitpas')) ||
       label.toLowerCase().includes('paspartoe'),
   );
+};
+
+const isCultuurkuurOrganizer = (organizer: Organizer): boolean => {
+  return organizer.hiddenLabels?.includes(CULTUURKUUR_ORGANIZER_LABEL);
 };
 
 const RecentUsedOrganizers = ({
@@ -94,7 +101,14 @@ const RecentUsedOrganizers = ({
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
-              badge={isUitpasOrganizer(organizer) && <UitpasBadge />}
+              badge={
+                <Inline>
+                  {isUitpasOrganizer(organizer) && <UitpasIcon width="2rem" />}
+                  {isCultuurkuurOrganizer(organizer) && (
+                    <CultuurKuurIcon width="2rem" />
+                  )}
+                </Inline>
+              }
               description={
                 address && `${address.postalCode} ${address.addressLocality}`
               }
@@ -116,11 +130,6 @@ type Props = Omit<StackProps, 'onChange'> & {
 export const getOrganizerName = (org: Organizer, language: string) =>
   (typeof org.name === 'string' ? org.name : org.name[language]) ??
   org.name[org.mainLanguage];
-
-const UitpasBadge = () => {
-  const { t } = useTranslation();
-  return <Badge variant={BadgeVariants.SECONDARY}>{t('brand_uitpas')}</Badge>;
-};
 
 const OrganizerPicker = ({
   organizer,
@@ -276,7 +285,14 @@ const OrganizerPicker = ({
                           <Text>
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
-                          {isUitpasOrganizer(org) && <UitpasBadge />}
+                          <Inline spacing={2}>
+                            {isUitpasOrganizer(org) && (
+                              <UitpasIcon width="2rem" />
+                            )}
+                            {isCultuurkuurOrganizer(org) && (
+                              <CultuurKuurIcon width="2rem" />
+                            )}
+                          </Inline>
                         </>
                       );
                     }}
