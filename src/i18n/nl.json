@@ -219,6 +219,9 @@
       "is_physical": {
         "label": "Op een fysieke locatie"
       },
+      "is_cultuurkuur": {
+        "label": "Op een locatie in overleg met de school"
+      },
       "online_url": {
         "label": "Deelnamelink",
         "placeholder": "https://",
