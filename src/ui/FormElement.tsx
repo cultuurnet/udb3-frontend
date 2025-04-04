@@ -1,4 +1,4 @@
-import type { ReactNode, Ref } from 'react';
+import type { ReactElement, ReactNode, Ref } from 'react';
 import { cloneElement } from 'react';
 
 import type { Values } from '@/types/Values';
@@ -17,7 +17,7 @@ type Props = {
   label?: ReactNode;
   labelPosition?: Values<typeof LabelPositions>;
   labelVariant?: Values<typeof LabelVariants>;
-  error?: string;
+  error?: ReactElement | string;
   info?: ReactNode;
   loading?: boolean;
   maxLength?: number;
