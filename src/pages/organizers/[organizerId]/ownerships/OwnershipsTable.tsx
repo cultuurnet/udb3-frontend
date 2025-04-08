@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -13,9 +13,10 @@ import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
+import { formatDateToISO } from '@/utils/formatDateToISO';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -68,6 +69,29 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
   return null;
 };
 
+const Status = ({ request }: { request: OwnershipRequest }) => {
+  if ('approvedDate' in request) {
+    return (
+      <Text fontSize="small">
+        {`Goedgekeurd door ${request.approvedByEmail} op ${formatDateToISO(
+          new Date(request.approvedDate),
+        )}`}
+      </Text>
+    );
+  }
+
+  if ('rejectedDate' in request) {
+    return (
+      <Text fontSize="small">
+        {`Afgekeurd door ${request.rejectedByEmail} op ${formatDateToISO(
+          new Date(request.rejectedDate),
+        )}`}
+      </Text>
+    );
+  }
+  return <Text fontSize="small">{`Aangevraagd`}</Text>;
+};
+
 type Props = {
   requests: OwnershipRequest[];
   creator?: OwnershipCreator;
@@ -97,6 +121,16 @@ export const OwnershipsTable = ({
     [requests],
   );
 
+  const colsAmount = useMemo(() => {
+    let amount = 3;
+
+    if (shouldShowItemId) {
+      amount += 1;
+    }
+
+    return amount;
+  }, [shouldShowItemId]);
+
   return (
     <Stack
       role="table"
@@ -114,12 +148,13 @@ export const OwnershipsTable = ({
         paddingBottom={3}
         css={`
           display: grid;
-          grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+          grid-template-columns: repeat(${colsAmount}, 1fr);
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
-        {shouldShowItemId && <Title size={3}>item id</Title>}
+        {shouldShowItemId && <Title size={3}>Item id</Title>}
+        <Title size={3}>Status</Title>
         {hasActions && (
           <Title size={3} justifyContent="flex-end">
             {t('organizers.ownerships.table.actions.title')}
@@ -142,49 +177,54 @@ export const OwnershipsTable = ({
             <List.Item>{creator.email}</List.Item>
           </Inline>
         )}
-        {requests.map((request) => (
-          <Inline
-            key={request.id}
-            role="row"
-            alignItems="center"
-            paddingY={3}
-            display="grid"
-            minHeight="4rem"
-            css={`
-              grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+        {requests.map((request) => {
+          return (
+            <Inline
+              key={request.id}
+              role="row"
+              alignItems="center"
+              paddingY={3}
+              display="grid"
+              minHeight="4rem"
+              css={`
+                grid-template-columns: repeat(${colsAmount}, 1fr);
 
-              &:not(:last-child) {
-                border-bottom: 1px solid ${grey3};
-              }
-            `}
-          >
-            <List.Item>
-              <Stack>
-                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
-                <Text>{request.ownerEmail}</Text>
-              </Stack>
-            </List.Item>
-            {shouldShowItemId && (
+                &:not(:last-child) {
+                  border-bottom: 1px solid ${grey3};
+                }
+              `}
+            >
               <List.Item>
                 <Stack>
-                  <Link href={`/organizers/${request.itemId}/preview`}>
-                    {request.itemId}
-                  </Link>
+                  {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
+                  <Text>{request.ownerEmail}</Text>
                 </Stack>
               </List.Item>
-            )}
-            {hasActions && (
-              <List.Item justifyContent="flex-end">
-                <Actions
-                  request={request}
-                  onDelete={onDelete}
-                  onApprove={onApprove}
-                  onReject={onReject}
-                />
+              {shouldShowItemId && (
+                <List.Item>
+                  <Stack>
+                    <Link href={`/organizers/${request.itemId}/preview`}>
+                      {request.itemId}
+                    </Link>
+                  </Stack>
+                </List.Item>
+              )}
+              <List.Item>
+                <Status request={request} />
               </List.Item>
-            )}
-          </Inline>
-        ))}
+              {hasActions && (
+                <List.Item justifyContent="flex-end">
+                  <Actions
+                    request={request}
+                    onDelete={onDelete}
+                    onApprove={onApprove}
+                    onReject={onReject}
+                  />
+                </List.Item>
+              )}
+            </Inline>
+          );
+        })}
       </List>
     </Stack>
   );
