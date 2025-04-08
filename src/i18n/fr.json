@@ -1059,6 +1059,12 @@
       "table": {
         "user": "Utilisateur",
         "no_results": "Aucun résultat trouvé",
+        "status": {
+          "approved": "Approuvé",
+          "rejected": "Rejeté",
+          "approved_by": "Approuvé par {{email}} le {{date}}",
+          "rejected_by": "Rejeté par {{email}} le {{date}}"
+        },
         "actions": {
           "title": "Actions",
           "approve": "Approuver",
