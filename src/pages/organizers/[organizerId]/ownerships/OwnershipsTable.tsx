@@ -121,7 +121,7 @@ export const OwnershipsTable = ({
 
   const hasActions = useMemo(
     () =>
-      !!requests.find(
+      requests.some(
         (it) =>
           it.state !== OwnershipState.DELETED &&
           it.state !== OwnershipState.REJECTED,
@@ -129,15 +129,29 @@ export const OwnershipsTable = ({
     [requests],
   );
 
+  const hasStatus = useMemo(
+    () =>
+      requests.some(
+        (it) =>
+          it.state === OwnershipState.APPROVED ||
+          it.state === OwnershipState.REJECTED,
+      ),
+    [requests],
+  );
+
   const colsAmount = useMemo(() => {
-    let amount = 3;
+    let amount = 2;
 
     if (shouldShowItemId) {
       amount += 1;
     }
 
+    if (hasStatus) {
+      amount += 1;
+    }
+
     return amount;
-  }, [shouldShowItemId]);
+  }, [hasStatus, shouldShowItemId]);
 
   return (
     <Stack
@@ -162,7 +176,7 @@ export const OwnershipsTable = ({
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
         {shouldShowItemId && <Title size={3}>Item id</Title>}
-        <Title size={3}>Status</Title>
+        {hasStatus && <Title size={3}>Status</Title>}
         {hasActions && (
           <Title size={3} justifyContent="flex-end">
             {t('organizers.ownerships.table.actions.title')}
@@ -217,9 +231,11 @@ export const OwnershipsTable = ({
                   </Stack>
                 </List.Item>
               )}
-              <List.Item>
-                <Status request={request} />
-              </List.Item>
+              {hasStatus && (
+                <List.Item>
+                  <Status request={request} />
+                </List.Item>
+              )}
               {hasActions && (
                 <List.Item justifyContent="flex-end">
                   <Actions
