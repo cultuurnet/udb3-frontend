@@ -70,12 +70,15 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
 };
 
 const Status = ({ request }: { request: OwnershipRequest }) => {
+  const { t } = useTranslation();
+
   if ('approvedDate' in request) {
     return (
       <Text fontSize="small">
-        {`Goedgekeurd door ${request.approvedByEmail} op ${formatDateToISO(
-          new Date(request.approvedDate),
-        )}`}
+        {t('organizers.ownerships.table.status.approved_by', {
+          email: request.approvedByEmail,
+          date: formatDateToISO(new Date(request.approvedDate)),
+        })}
       </Text>
     );
   }
@@ -83,13 +86,18 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
   if ('rejectedDate' in request) {
     return (
       <Text fontSize="small">
-        {`Afgekeurd door ${request.rejectedByEmail} op ${formatDateToISO(
-          new Date(request.rejectedDate),
-        )}`}
+        {t('organizers.ownerships.table.status.rejected_by', {
+          email: request.rejectedByEmail,
+          date: formatDateToISO(new Date(request.rejectedDate)),
+        })}
       </Text>
     );
   }
-  return <Text fontSize="small">{`Aangevraagd`}</Text>;
+  return (
+    <Text fontSize="small">
+      {t(`organizers.ownerships.table.status.${request.state}`)}
+    </Text>
+  );
 };
 
 type Props = {
