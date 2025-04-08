@@ -182,7 +182,7 @@ const PriceInformation = ({
       ...rates[index],
     }));
   }, [fields, rates]);
-  
+
   const addPriceInfoMutation = useAddOfferPriceInfoMutation({
     onSuccess: (data) => {
       const isFormDirty = Object.keys(dirtyFields).length > 0;
