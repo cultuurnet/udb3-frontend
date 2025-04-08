@@ -215,7 +215,7 @@ const PriceInformation = ({
   );
 
   const hasRates = useMemo(
-    () => controlledRates.filter((rate) => rate.price !== '').length > 0,
+    () => !!controlledRates.find((rate) => rate.price !== ''),
     [controlledRates],
   );
 
