@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cloneElement } from 'react';
+import { cloneElement, forwardRef } from 'react';
 import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 
@@ -262,91 +262,126 @@ type ButtonProps = Omit<InlineProps, 'size'> & {
   active?: boolean;
 };
 
-const Button = ({
-  iconName,
-  suffix,
-  variant,
-  disabled,
-  loading,
-  children,
-  customChildren,
-  shouldHideText,
-  onClick,
-  className,
-  title,
-  size,
-  forwardedAs,
-  type,
-  active,
-  ...props
-}: ButtonProps) => {
-  const isBootstrapVariant = (
-    Object.values(BootStrapVariants) as string[]
-  ).includes(variant);
-  const isLinkVariant = variant === ButtonVariants.LINK;
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      iconName,
+      suffix,
+      variant,
+      disabled,
+      loading,
+      children,
+      customChildren,
+      shouldHideText,
+      onClick,
+      className,
+      title,
+      size,
+      forwardedAs,
+      type,
+      active,
+      ...props
+    },
+    ref,
+  ) => {
+    const isBootstrapVariant = (
+      Object.values(BootStrapVariants) as string[]
+    ).includes(variant);
+    const isLinkVariant = variant === ButtonVariants.LINK;
 
-  if (variant === ButtonVariants.SECONDARY) variant = 'secondary';
+    if (variant === ButtonVariants.SECONDARY) variant = 'secondary';
 
-  const BaseButtonWithForwardedAs = (props) => (
-    <BaseButton {...props} forwardedAs={forwardedAs} />
-  );
-
-  const forwardedButton = forwardedAs ? BaseButtonWithForwardedAs : BaseButton;
-  const bootstrapProps = isBootstrapVariant
-    ? { forwardedAs: forwardedButton, variant }
-    : {};
-
-  const propsToApply = {
-    ...bootstrapProps,
-    disabled,
-    onClick,
-    className,
-    title,
-    size,
-    type,
-    active,
-    ...getInlineProps(props),
-  };
-
-  const clonedSuffix = suffix
-    ? // @ts-expect-error
-      cloneElement(suffix, {
-        // @ts-expect-error
-        ...suffix.props,
-        css: `align-self: flex-end`,
-        key: 'suffix',
-      })
-    : undefined;
-
-  const inner = loading ? (
-    <Spinner
-      className="button-spinner"
-      variant={SpinnerVariants.LIGHT}
-      size={SpinnerSizes.SMALL}
-    />
-  ) : (
-    [
-      iconName && <Icon name={iconName} key="icon" />,
-      customChildren
-        ? children
-        : !shouldHideText && (
-            <Text flex={1} textAlign="left" key="text">
-              {children}
-            </Text>
-          ),
-      clonedSuffix,
-    ]
-  );
-
-  if (isBootstrapVariant) {
-    return (
-      <BootstrapButton {...propsToApply} css={customCSS}>
-        {inner}
-      </BootstrapButton>
+    const BaseButtonWithForwardedAs = (props) => (
+      <BaseButton {...props} forwardedAs={forwardedAs} />
     );
-  }
 
-  if (isLinkVariant) {
+    const forwardedButton = forwardedAs
+      ? BaseButtonWithForwardedAs
+      : BaseButton;
+    const bootstrapProps = isBootstrapVariant
+      ? { forwardedAs: forwardedButton, variant }
+      : {};
+
+    const propsToApply = {
+      ...bootstrapProps,
+      disabled,
+      onClick,
+      className,
+      title,
+      size,
+      type,
+      active,
+      ref,
+      ...getInlineProps(props),
+    };
+
+    const clonedSuffix = suffix
+      ? // @ts-expect-error
+        cloneElement(suffix, {
+          // @ts-expect-error
+          ...suffix.props,
+          css: `align-self: flex-end`,
+          key: 'suffix',
+        })
+      : undefined;
+
+    const inner = loading ? (
+      <Spinner
+        className="button-spinner"
+        variant={SpinnerVariants.LIGHT}
+        size={SpinnerSizes.SMALL}
+      />
+    ) : (
+      [
+        iconName && <Icon name={iconName} key="icon" />,
+        customChildren
+          ? children
+          : !shouldHideText && (
+              <Text flex={1} textAlign="left" key="text">
+                {children}
+              </Text>
+            ),
+        clonedSuffix,
+      ]
+    );
+
+    if (isBootstrapVariant) {
+      return (
+        <BootstrapButton {...propsToApply} css={customCSS}>
+          {inner}
+        </BootstrapButton>
+      );
+    }
+
+    if (isLinkVariant) {
+      return (
+        <BaseButton
+          {...propsToApply}
+          color="inherit"
+          cursor="pointer"
+          css={`
+            background: none;
+            border: none;
+
+            :focus {
+              outline: auto;
+            }
+
+            :focus:not(:focus-visible) {
+              outline: none;
+              box-shadow: none;
+            }
+          `}
+          alignItems="center"
+          justifyContent="flex-start"
+        >
+          <Link as="span" href="">
+            {children}
+          </Link>
+        </BaseButton>
+      );
+    }
+
     return (
       <BaseButton
         {...propsToApply}
@@ -368,38 +403,13 @@ const Button = ({
         alignItems="center"
         justifyContent="flex-start"
       >
-        <Link as="span" href="">
-          {children}
-        </Link>
+        {inner}
       </BaseButton>
     );
-  }
+  },
+);
 
-  return (
-    <BaseButton
-      {...propsToApply}
-      color="inherit"
-      cursor="pointer"
-      css={`
-        background: none;
-        border: none;
-
-        :focus {
-          outline: auto;
-        }
-
-        :focus:not(:focus-visible) {
-          outline: none;
-          box-shadow: none;
-        }
-      `}
-      alignItems="center"
-      justifyContent="flex-start"
-    >
-      {inner}
-    </BaseButton>
-  );
-};
+Button.displayName = 'Button';
 
 Button.defaultProps = {
   variant: ButtonVariants.PRIMARY,
