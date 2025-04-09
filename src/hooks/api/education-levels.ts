@@ -1,5 +1,5 @@
-import { useQuery } from 'react-query';
 import type { Node } from 'react-checkbox-tree';
+import { useQuery } from 'react-query';
 
 const dummyData: Node[] = [
   {

@@ -1,16 +1,6 @@
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import ReactCheckboxTree, { Node, CheckboxProps } from 'react-checkbox-tree';
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import {
   faCheckSquare,
   faChevronDown,
@@ -21,24 +11,34 @@ import {
   faMinusSquare,
   faPlusSquare,
 } from '@fortawesome/free-solid-svg-icons';
-import { faSquare } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { diff } from 'deep-object-diff';
+import { difference } from 'lodash';
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import ReactCheckboxTree, { CheckboxProps, Node } from 'react-checkbox-tree';
 import { Controller, Path, UseFormReturn } from 'react-hook-form';
-import { FormDataUnion } from '@/pages/steps/Steps';
-import { colors } from '@/ui/theme';
-import { Input } from '@/ui/Input';
-import { Stack } from '@/ui/Stack';
-import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { useQueryClient } from 'react-query';
+
 import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
-import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
+import { FormDataUnion } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
-import { diff } from 'deep-object-diff';
-import { difference } from 'lodash';
-import { useQueryClient } from 'react-query';
+import { Input } from '@/ui/Input';
+import { Stack } from '@/ui/Stack';
+import { colors } from '@/ui/theme';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 const icons = {
   check: (
@@ -130,16 +130,23 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
     const added = difference(to, from);
     const removed = difference(from, to);
 
-    await Promise.all([
+    return Promise.all([
       ...added.map((label) =>
         addLabelMutation.mutateAsync({ id: offerId, scope, label }),
       ),
       ...removed.map((label) =>
         removeLabelMutation.mutateAsync({ id: offerId, scope, label }),
       ),
+      queryClient.invalidateQueries('events'),
     ]);
-    await queryClient.invalidateQueries('events');
-  }, [addLabelMutation, entity, nodes, offerId, scope]);
+  }, [
+    queryClient,
+    addLabelMutation,
+    removeLabelMutation,
+    entity,
+    offerId,
+    scope,
+  ]);
 
   useEffect(() => {
     handleLabelChange();
@@ -185,7 +192,10 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
         ref={treeRef}
         checked={labels}
         expanded={expanded}
-        onCheck={(checked) => setLabels(checked)}
+        onCheck={(checked) => {
+          setLabels(checked);
+          handleLabelChange();
+        }}
         onExpand={(expanded) => setExpanded(expanded)}
         icons={icons}
         nodes={filteredNodes}

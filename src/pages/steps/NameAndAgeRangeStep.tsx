@@ -2,6 +2,9 @@ import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes } from '@/constants/OfferType';
+import { useEducationLevels } from '@/hooks/api/education-levels';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
@@ -10,6 +13,8 @@ import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
+import { CheckboxTree } from '@/ui/CheckboxTree';
+import { FormElement } from '@/ui/FormElement';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -24,11 +29,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { CheckboxTree } from '@/ui/CheckboxTree';
-import { useEducationLevels } from '@/hooks/api/education-levels';
-import { OfferTypes } from '@/constants/OfferType';
-import { AudienceTypes } from '@/constants/AudienceType';
-import { FormElement } from '@/ui/FormElement';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
