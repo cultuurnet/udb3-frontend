@@ -733,7 +733,7 @@
     "movies": "Films",
     "notifications": "Meldingen",
     "organizations": "Organisaties",
-    "ownerships": "Ownerships",
+    "ownerships": "Eigenaarschap",
     "productions": "Producties",
     "roles": "Rollen",
     "search": "Zoeken",
@@ -742,7 +742,7 @@
   },
   "ownerships": {
     "overview": {
-      "title": "Ownerships"
+      "title": "Eigenaarschap"
     },
     "organizer_picker": {
       "label": "Organisatie"
@@ -1079,6 +1079,7 @@
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
         "email_error": "Geen geldig e-mailadres",
+        "email_not_known_error": "Er is geen UiTID gelinkt aan dit e-mailadres. <0>Maak er eentje aan</0>",
         "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en evenementen van {{organizerName}} bewerken.",
         "actions": {
           "confirm": "Beheerder toevoegen",
