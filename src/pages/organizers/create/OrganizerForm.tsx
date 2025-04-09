@@ -33,9 +33,9 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { NameAndUrlStep } from './steps/NameAndUrlStep';
-import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 

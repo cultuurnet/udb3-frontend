@@ -17,6 +17,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { AudienceStep } from '../AudienceStep';
 import { StepsConfiguration } from '../Steps';
@@ -27,7 +28,6 @@ import { FormScore } from './FormScore';
 import { MediaStep } from './MediaStep';
 import { OrganizerStep } from './OrganizerStep';
 import { PriceInformation } from './PriceInformation';
-import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 const getGlobalValue = getValueFromTheme('global');
 
