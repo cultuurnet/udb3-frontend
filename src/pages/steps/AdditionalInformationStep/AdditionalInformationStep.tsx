@@ -27,6 +27,7 @@ import { FormScore } from './FormScore';
 import { MediaStep } from './MediaStep';
 import { OrganizerStep } from './OrganizerStep';
 import { PriceInformation } from './PriceInformation';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -339,7 +340,7 @@ const AdditionalInformationStep = ({
           }) => {
             if (
               field === Fields.CULTUURKUUR &&
-              !(labels ?? []).includes(CULTUURKUUR_ORGANIZER_LABEL)
+              !hasCultuurkuurOrganizerLabel(labels)
             ) {
               return null;
             }

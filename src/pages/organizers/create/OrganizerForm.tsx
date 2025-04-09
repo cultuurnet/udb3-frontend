@@ -35,6 +35,7 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import { NameAndUrlStep } from './steps/NameAndUrlStep';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
@@ -88,8 +89,8 @@ const OrganizerForm = () => {
   );
 
   const convertOrganizerToFormData = (organizer: Organizer) => {
-    const isCultuurkuurOrganizer = organizer?.hiddenLabels?.includes(
-      CULTUURKUUR_ORGANIZER_LABEL,
+    const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
+      organizer?.hiddenLabels,
     );
     const locationAttributes = !organizer?.address
       ? {}
