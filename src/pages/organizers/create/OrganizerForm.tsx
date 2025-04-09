@@ -1,10 +1,15 @@
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { ScopeTypes } from '@/constants/OfferType';
 import { URL_REGEX } from '@/constants/Regex';
+import {
+  useAddOfferLabelMutation,
+  useRemoveOfferLabelMutation,
+} from '@/hooks/api/offers';
 import {
   useCreateOrganizerMutation,
   useGetOrganizerByIdQuery,
@@ -31,6 +36,8 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import { NameAndUrlStep } from './steps/NameAndUrlStep';
 
+const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
+
 const typeAndThemeStepConfiguration: StepsConfiguration<'nameAndUrl'> = {
   Component: NameAndUrlStep,
   name: 'nameAndUrl',
@@ -40,10 +47,12 @@ const typeAndThemeStepConfiguration: StepsConfiguration<'nameAndUrl'> = {
     name: '',
     url: '',
     isContactUrl: true,
+    isCultuurkuur: false,
   },
   validation: yup.object({
     name: yup.string().required(),
     url: yup.string().matches(URL_REGEX).required(),
+    isCultuurkuur: yup.boolean().required(),
   }),
 };
 
@@ -56,7 +65,8 @@ const configurations = [
     shouldShowStep: (form) =>
       form.offerId &&
       form.getValues('nameAndUrl.name') &&
-      form.getValues('nameAndUrl.url'),
+      form.getValues('nameAndUrl.url') &&
+      form.getValues('nameAndUrl.cultuurkuur'),
     variant: AdditionalInformationStepVariant.ORGANIZER,
     name: 'location' as StepsConfiguration['name'],
     defaultValue: locationStepConfiguration.defaultValue,
@@ -78,6 +88,9 @@ const OrganizerForm = () => {
   );
 
   const convertOrganizerToFormData = (organizer: Organizer) => {
+    const isCultuurkuurOrganizer = organizer?.hiddenLabels?.includes(
+      CULTUURKUUR_ORGANIZER_LABEL,
+    );
     const locationAttributes = !organizer?.address
       ? {}
       : parseLocationAttributes(
@@ -93,6 +106,7 @@ const OrganizerForm = () => {
           i18n.language as SupportedLanguage,
         ) as string,
         url: organizer.url,
+        isCultuurkuur: isCultuurkuurOrganizer,
       },
       ...locationAttributes,
     };
@@ -113,8 +127,32 @@ const OrganizerForm = () => {
   const organizer = getOrganizerByIdQuery?.data;
   const organizerLabels = getUniqueLabels(organizer);
 
+  const queryClient = useQueryClient();
   const createOrganizerMutation = useCreateOrganizerMutation();
   const updateOrganizerMutation = useUpdateOrganizerMutation();
+  const addLabelMutation = useAddOfferLabelMutation();
+  const removeLabelMutation = useRemoveOfferLabelMutation();
+
+  const handleCultuurkuurLabelMutation = async (organizerId: string) => {
+    const { isCultuurkuur } = getValues('nameAndUrl');
+
+    if (isCultuurkuur) {
+      await addLabelMutation.mutateAsync({
+        id: organizerId,
+        scope,
+        label: CULTUURKUUR_ORGANIZER_LABEL,
+      });
+    }
+
+    if (!isCultuurkuur) {
+      await removeLabelMutation.mutateAsync({
+        id: organizerId,
+        scope,
+        label: CULTUURKUUR_ORGANIZER_LABEL,
+      });
+    }
+    await queryClient.invalidateQueries('organizers');
+  };
 
   const upsertOrganizer = async ({ onSuccess }) => {
     let mutation = createOrganizerMutation;
@@ -143,8 +181,10 @@ const OrganizerForm = () => {
 
   const onSuccess = () => {
     upsertOrganizer({
-      onSuccess: async (organizerId) =>
-        await push(`/organizers/${organizerId}/edit`),
+      onSuccess: async (organizerId: string) => {
+        handleCultuurkuurLabelMutation(organizerId);
+        await push(`/organizers/${organizerId}/edit`);
+      },
     });
   };
 
@@ -162,7 +202,10 @@ const OrganizerForm = () => {
           form={form}
           labels={organizerLabels}
           onChange={() => {
-            if (urlOrganizerId) onSuccess();
+            if (urlOrganizerId) {
+              onSuccess();
+              handleCultuurkuurLabelMutation(urlOrganizerId);
+            }
           }}
         />
       </Page.Content>
