@@ -14,6 +14,14 @@ import {
 } from './authenticated-query';
 import type { Headers } from './types/Headers';
 
+type ModificationInfo =
+  | {
+      approvedDate?: string;
+      approvedByEmail?: string;
+      approvedById?: string;
+    }
+  | { rejectedDate?: string; rejectedByEmail?: string; rejectedById?: string };
+
 export type OwnershipRequest = {
   id: string;
   itemId: string;
@@ -21,7 +29,7 @@ export type OwnershipRequest = {
   ownerEmail: string;
   requesterId: string;
   state: OwnershipState;
-};
+} & ModificationInfo;
 
 export type OwnershipCreator = {
   userId: string;
