@@ -221,12 +221,11 @@ const Ownership = () => {
                 >
                   <Box
                     padding={4}
-                    dangerouslySetInnerHTML={t(
-                      'organizers.ownerships.delete_modal.body',
-                      {
+                    dangerouslySetInnerHTML={{
+                      __html: t('organizers.ownerships.delete_modal.body', {
                         ownerEmail: requestToBeDeleted?.ownerEmail,
-                      },
-                    )}
+                      }),
+                    }}
                   />
                 </Modal>
               </Stack>
