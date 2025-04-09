@@ -461,10 +461,13 @@ const Sidebar = () => {
       return;
     }
 
-    const validationQuery = getRolesQuery.data
-      .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
-      .filter((constraint) => constraint !== null)
-      .join(' OR ');
+    const validationQuery = [
+      ...new Set(
+        getRolesQuery.data
+          .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
+          .filter((constraint) => constraint !== null),
+      ),
+    ].join(' OR ');
 
     setSearchQuery(validationQuery);
   }, [getRolesQuery.data]);

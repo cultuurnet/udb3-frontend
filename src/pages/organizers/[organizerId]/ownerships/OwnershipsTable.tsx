@@ -10,6 +10,7 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -126,7 +127,21 @@ export const OwnershipsTable = ({
         )}
       </Inline>
       <List paddingY={3}>
-        {creator?.email && <List.Item>{creator.email}</List.Item>}
+        {creator?.email && (
+          <Inline
+            role="row"
+            alignItems="center"
+            paddingY={3}
+            minHeight="4rem"
+            css={`
+              &:not(:last-child) {
+                border-bottom: 1px solid ${grey3};
+              }
+            `}
+          >
+            <List.Item>{creator.email}</List.Item>
+          </Inline>
+        )}
         {requests.map((request) => (
           <Inline
             key={request.id}
@@ -134,6 +149,7 @@ export const OwnershipsTable = ({
             alignItems="center"
             paddingY={3}
             display="grid"
+            minHeight="4rem"
             css={`
               grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
 
@@ -151,7 +167,9 @@ export const OwnershipsTable = ({
             {shouldShowItemId && (
               <List.Item>
                 <Stack>
-                  <Text>{request.itemId}</Text>
+                  <Link href={`/organizers/${request.itemId}/preview`}>
+                    {request.itemId}
+                  </Link>
                 </Stack>
               </List.Item>
             )}
