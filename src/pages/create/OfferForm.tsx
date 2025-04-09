@@ -173,6 +173,7 @@ const OfferForm = () => {
       audience: {
         audienceType: offer.audience?.audienceType,
       },
+      labels: offer.labels,
     };
   };
 

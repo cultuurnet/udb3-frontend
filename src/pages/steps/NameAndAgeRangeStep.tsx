@@ -82,13 +82,11 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     const placeId = parseOfferId(place['@id']);
     router.push(`/place/${placeId}/preview`);
   };
-
   const levels = useEducationLevels();
   let isCultuurkuurEvent =
     props.scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
   isCultuurkuurEvent = true;
-
   return (
     <Controller
       control={control}
@@ -106,14 +104,10 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
               <FormElement
-                id={'education_levels'}
+                id={'labels'}
                 label={'Geschikt voor de volgende onderwijsniveaus '}
                 Component={
-                  <CheckboxTree
-                    name={'education_levels'}
-                    nodes={levels.data}
-                    control={control}
-                  />
+                  <CheckboxTree {...getStepProps(props)} nodes={levels.data} />
                 }
               />
             )}
