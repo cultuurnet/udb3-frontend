@@ -13,7 +13,7 @@ import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
-import { CheckboxTree } from '@/ui/CheckboxTree';
+import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { FormElement } from '@/ui/FormElement';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
@@ -107,7 +107,10 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                 id={'labels'}
                 label={'Geschikt voor de volgende onderwijsniveaus '}
                 Component={
-                  <CheckboxTree {...getStepProps(props)} nodes={levels.data} />
+                  <LabelsCheckboxTree
+                    {...getStepProps(props)}
+                    nodes={levels.data}
+                  />
                 }
               />
             )}

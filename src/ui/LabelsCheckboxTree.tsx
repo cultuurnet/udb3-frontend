@@ -106,7 +106,7 @@ type Props = CheckboxProps & StepProps;
 const getCultuurKuurLabels = (entity) =>
   getUniqueLabels(entity).filter((label) => label.startsWith('cultuurkuur_'));
 
-const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
+const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const treeRef = useRef<ReactCheckboxTree>(null);
   const [expanded, setExpanded] = useState([]);
   const [filter, setFilter] = useState('');
@@ -202,4 +202,4 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   );
 };
 
-export { CheckboxTree };
+export { LabelsCheckboxTree };
