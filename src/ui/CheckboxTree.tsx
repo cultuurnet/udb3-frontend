@@ -38,6 +38,7 @@ import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { diff } from 'deep-object-diff';
 import { difference } from 'lodash';
+import { useQueryClient } from 'react-query';
 
 const icons = {
   check: (
@@ -105,6 +106,9 @@ type Props = CheckboxProps &
     name: Path<FormDataUnion>;
   };
 
+const getCultuurKuurLabels = (entity) =>
+  getUniqueLabels(entity).filter((label) => label.startsWith('cultuurkuur_'));
+
 const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const treeRef = useRef<ReactCheckboxTree>(null);
   const [expanded, setExpanded] = useState([]);
@@ -112,16 +116,34 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
 
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
   const entity = getEntityByIdQuery.data;
-
+  const queryClient = useQueryClient();
   const [labels, setLabels] = useState<string[]>(getUniqueLabels(entity) ?? []);
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
+  const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
+
+  const handleLabelChange = useCallback(async () => {
+    const from = getCultuurKuurLabels(entity);
+    const to = Object.values(treeRef.current.state.model.flatNodes)
+      .filter((node) => node.checkState)
+      .map((node) => node.value);
+    const added = difference(to, from);
+    const removed = difference(from, to);
+
+    await Promise.all([
+      ...added.map((label) =>
+        addLabelMutation.mutateAsync({ id: offerId, scope, label }),
+      ),
+      ...removed.map((label) =>
+        removeLabelMutation.mutateAsync({ id: offerId, scope, label }),
+      ),
+    ]);
+    await queryClient.invalidateQueries('events');
+  }, [addLabelMutation, entity, nodes, offerId, scope]);
 
   useEffect(() => {
-    const added = difference(labels, getUniqueLabels(entity));
-    const removed = difference(getUniqueLabels(entity), labels);
-    console.log({ to: labels, from: entity.labels, added, removed });
-  }, [entity, labels]);
+    handleLabelChange();
+  }, [labels]);
 
   const filterNodes = useCallback(
     (filtered: Node[], node: Node) => {
@@ -170,6 +192,7 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
         expandOnClick
         checkModel="all"
         showExpandAll
+        disabled={isWriting}
         {...props}
       />
     </Stack>
