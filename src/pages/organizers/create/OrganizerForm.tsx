@@ -136,22 +136,12 @@ const OrganizerForm = () => {
 
   const handleCultuurkuurLabelMutation = async (organizerId: string) => {
     const { isCultuurkuur } = getValues('nameAndUrl');
-
-    if (isCultuurkuur) {
-      await addLabelMutation.mutateAsync({
-        id: organizerId,
-        scope,
-        label: CULTUURKUUR_ORGANIZER_LABEL,
-      });
-    }
-
-    if (!isCultuurkuur) {
-      await removeLabelMutation.mutateAsync({
-        id: organizerId,
-        scope,
-        label: CULTUURKUUR_ORGANIZER_LABEL,
-      });
-    }
+    const mutation = isCultuurkuur ? addLabelMutation : removeLabelMutation;
+    await mutation.mutateAsync({
+      id: organizerId,
+      scope,
+      label: CULTUURKUUR_ORGANIZER_LABEL,
+    });
     await queryClient.invalidateQueries('organizers');
   };
 
