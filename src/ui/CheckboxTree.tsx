@@ -32,7 +32,7 @@ import {
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
-import { FormDataUnion } from '@/pages/steps/Steps';
+import { FormDataUnion, StepProps } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Input } from '@/ui/Input';
@@ -101,10 +101,7 @@ const icons = {
   ),
 };
 
-type Props = CheckboxProps &
-  UseFormReturn<FormDataUnion> & {
-    name: Path<FormDataUnion>;
-  };
+type Props = CheckboxProps & StepProps;
 
 const getCultuurKuurLabels = (entity) =>
   getUniqueLabels(entity).filter((label) => label.startsWith('cultuurkuur_'));
@@ -192,10 +189,7 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
         ref={treeRef}
         checked={labels}
         expanded={expanded}
-        onCheck={(checked) => {
-          setLabels(checked);
-          handleLabelChange();
-        }}
+        onCheck={(checked) => setLabels(checked)}
         onExpand={(expanded) => setExpanded(expanded)}
         icons={icons}
         nodes={filteredNodes}
@@ -203,7 +197,6 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
         checkModel="all"
         showExpandAll
         disabled={isWriting}
-        {...props}
       />
     </Stack>
   );
