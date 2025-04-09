@@ -1059,6 +1059,12 @@
       "table": {
         "user": "Utilisateur",
         "no_results": "Aucun résultat trouvé",
+        "status": {
+          "approved": "Approuvé",
+          "rejected": "Rejeté",
+          "approved_by": "Approuvé par {{email}} le {{date}}",
+          "rejected_by": "Rejeté par {{email}} le {{date}}"
+        },
         "actions": {
           "title": "Actions",
           "approve": "Approuver",
@@ -1071,6 +1077,7 @@
         "title": "Ajouter un gestionnaire à :organizer.name",
         "email": "Adresse e-mail",
         "email_error": "Adresse e-mail non valide",
+        "email_not_known_error": "Il n'y a pas d'UiTID lié à cette adresse e-mail. <0>Créez-en un</0>",
         "success": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}} et peut désormais modifier la page de l'organisation et les événements de {{organizerName}}",
         "actions": {
           "confirm": "Ajouter un gestionnaire",

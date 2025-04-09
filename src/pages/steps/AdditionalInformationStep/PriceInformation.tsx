@@ -176,10 +176,12 @@ const PriceInformation = ({
     ratesRef.current = rates;
   }, [rates]);
 
-  const controlledRates = fields.map((field, index) => ({
-    ...field,
-    ...rates[index],
-  }));
+  const controlledRates = useMemo(() => {
+    return fields.map((field, index) => ({
+      ...field,
+      ...rates[index],
+    }));
+  }, [fields, rates]);
 
   const addPriceInfoMutation = useAddOfferPriceInfoMutation({
     onSuccess: (data) => {
@@ -213,8 +215,8 @@ const PriceInformation = ({
   );
 
   const hasRates = useMemo(
-    () => rates.filter((rate) => rate.price !== '').length > 0,
-    [rates],
+    () => !!controlledRates.find((rate) => rate.price !== ''),
+    [controlledRates],
   );
 
   useEffect(() => {
