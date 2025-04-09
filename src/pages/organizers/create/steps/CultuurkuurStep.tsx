@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -23,46 +22,45 @@ const CultuurkuurStep = ({
 }: CultuurkuurStepProps) => {
   const { t } = useTranslation();
 
-  const [isCultuurkuur, setIsCultuurkuur] = useState(false);
-
   return (
     <Stack spacing={4} maxWidth="36.5rem" {...getStackProps(props)}>
       <Controller
         name={'nameAndUrl.isCultuurkuur'}
         control={control}
         render={({ field }) => (
-          <FormElement
-            id={field.name}
-            label={
-              <>
-                {t('organizers.create.step1.is_cultuurkuur')}
-                <CultuurKuurIcon marginLeft={2} />
-              </>
-            }
-            labelVariant={LabelVariants.NORMAL}
-            labelPosition={LabelPositions.RIGHT}
-            Component={
-              <RadioButton
-                type={RadioButtonTypes.SWITCH}
-                checked={field.value}
-                onChange={() => {
-                  field.onChange(!field.value);
-                  setIsCultuurkuur(!field.value);
-                  onChange({
-                    isCultuurkuur: !field.value,
-                  });
-                }}
-                color={colors.udbMainPositiveGreen}
-              />
-            }
-          />
+          <>
+            <FormElement
+              id={field.name}
+              label={
+                <>
+                  {t('organizers.create.step1.is_cultuurkuur')}
+                  <CultuurKuurIcon marginLeft={2} />
+                </>
+              }
+              labelVariant={LabelVariants.NORMAL}
+              labelPosition={LabelPositions.RIGHT}
+              Component={
+                <RadioButton
+                  type={RadioButtonTypes.SWITCH}
+                  checked={field.value}
+                  onChange={() => {
+                    field.onChange(!field.value);
+                    onChange({
+                      isCultuurkuur: !field.value,
+                    });
+                  }}
+                  color={colors.udbMainPositiveGreen}
+                />
+              }
+            />
+            {field.value && (
+              <Alert variant="primary">
+                {t('organizers.create.step1.is_cultuurkuuur_info')}
+              </Alert>
+            )}
+          </>
         )}
       />
-      {isCultuurkuur && (
-        <Alert variant="primary">
-          {t('organizers.create.step1.is_cultuurkuuur_info')}
-        </Alert>
-      )}
     </Stack>
   );
 };
