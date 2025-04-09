@@ -29,6 +29,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -68,6 +69,9 @@ const useEditNameAndAgeRange = ({
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   const router = useRouter();
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
 
   const duplicatePlaceId =
     (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
@@ -82,11 +86,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     const placeId = parseOfferId(place['@id']);
     router.push(`/place/${placeId}/preview`);
   };
+
   const levels = useEducationLevels();
-  let isCultuurkuurEvent =
+  const isCultuurkuurEvent =
     props.scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
-  isCultuurkuurEvent = true;
+
   return (
     <Controller
       control={control}
@@ -102,18 +107,20 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                 control={control}
               />
             )}
-            {isCultuurkuurEvent && !levels.isLoading && (
-              <FormElement
-                id={'labels'}
-                label={'Geschikt voor de volgende onderwijsniveaus '}
-                Component={
-                  <LabelsCheckboxTree
-                    {...getStepProps(props)}
-                    nodes={levels.data}
-                  />
-                }
-              />
-            )}
+            {isCultuurkuurFeatureFlagEnabled &&
+              isCultuurkuurEvent &&
+              !levels.isLoading && (
+                <FormElement
+                  id={'labels'}
+                  label={'Geschikt voor de volgende onderwijsniveaus '}
+                  Component={
+                    <LabelsCheckboxTree
+                      {...getStepProps(props)}
+                      nodes={levels.data}
+                    />
+                  }
+                />
+              )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}
