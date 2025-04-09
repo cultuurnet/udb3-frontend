@@ -1,5 +1,6 @@
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import {
   faCheckSquare,
@@ -12,10 +13,10 @@ import {
   faPlusSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { diff } from 'deep-object-diff';
 import { difference } from 'lodash';
 import {
   ChangeEvent,
+  Component,
   useCallback,
   useEffect,
   useMemo,
@@ -23,7 +24,6 @@ import {
   useState,
 } from 'react';
 import ReactCheckboxTree, { CheckboxProps, Node } from 'react-checkbox-tree';
-import { Controller, Path, UseFormReturn } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 
 import {
@@ -31,10 +31,7 @@ import {
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
-import { FormDataUnion, StepProps } from '@/pages/steps/Steps';
-import { Offer } from '@/types/Offer';
-import { Organizer } from '@/types/Organizer';
+import { StepProps } from '@/pages/steps/Steps';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
@@ -44,67 +41,85 @@ const icons = {
   check: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-check"
-      icon={faCheckSquare}
+      icon={faCheckSquare as IconProp}
       color={colors.udbBlue}
     />
   ),
   uncheck: (
-    <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={faSquare} />
+    <FontAwesomeIcon
+      className="rct-icon rct-icon-uncheck"
+      icon={faSquare as IconProp}
+    />
   ),
   halfCheck: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-half-check"
-      icon={faCheckSquare}
+      icon={faCheckSquare as IconProp}
       color={colors.udbBlue}
     />
   ),
   expandClose: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-expand-close"
-      icon={faChevronRight}
+      icon={faChevronRight as IconProp}
     />
   ),
   expandOpen: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-expand-open"
-      icon={faChevronDown}
+      icon={faChevronDown as IconProp}
     />
   ),
   expandAll: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-expand-all"
-      icon={faPlusSquare}
+      icon={faPlusSquare as IconProp}
     />
   ),
   collapseAll: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-collapse-all"
-      icon={faMinusSquare}
+      icon={faMinusSquare as IconProp}
     />
   ),
   parentClose: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-parent-close"
-      icon={faFolder}
+      icon={faFolder as IconProp}
       color={colors.udbMainBlue}
     />
   ),
   parentOpen: (
     <FontAwesomeIcon
       className="rct-icon rct-icon-parent-open"
-      icon={faFolderOpen}
+      icon={faFolderOpen as IconProp}
       color={colors.udbMainBlue}
     />
   ),
   leaf: (
-    <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon={faFile} />
+    <FontAwesomeIcon
+      className="rct-icon rct-icon-leaf-close"
+      icon={faFile as IconProp}
+    />
   ),
 };
 
-type Props = CheckboxProps & StepProps;
+type CheckboxState = {
+  model: {
+    flatNodes: any[];
+  };
+};
 
-const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
-  const treeRef = useRef<ReactCheckboxTree>(null);
+type ReactCheckboxTreeRef = Component<CheckboxProps, CheckboxState> & {
+  expandAllNodes: () => void;
+};
+
+const LabelsCheckboxTree = ({
+  nodes,
+  offerId,
+  scope,
+}: CheckboxProps & Pick<StepProps, 'offerId' | 'scope'>) => {
+  const treeRef = useRef<ReactCheckboxTreeRef>(null);
   const [expanded, setExpanded] = useState([]);
   const [filter, setFilter] = useState('');
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
@@ -116,16 +131,18 @@ const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
 
   const getRelevantLabels = (entity) => {
-    const existing = Object.values(treeRef.current.state.model.flatNodes).map(
-      (node) => node.value,
-    );
+    const existing = Object.values(
+      (treeRef.current.state as CheckboxState).model.flatNodes,
+    ).map((node) => node.value);
 
     return getUniqueLabels(entity).filter((label) => existing.includes(label));
   };
 
   const handleLabelChange = useCallback(async () => {
     const from = getRelevantLabels(entity);
-    const to = Object.values(treeRef.current.state.model.flatNodes)
+    const to = Object.values(
+      (treeRef.current.state as CheckboxState).model.flatNodes,
+    )
       .filter((node) => node.checkState)
       .map((node) => node.value);
     const added = difference(to, from);
@@ -159,8 +176,9 @@ const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
 
       if (
         // Node's label matches the search string
-        node.label.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) >
-          -1 ||
+        (node.label as string)
+          .toLocaleLowerCase()
+          .indexOf(filter.toLocaleLowerCase()) > -1 ||
         // Or a children has a matching node
         children.length
       ) {

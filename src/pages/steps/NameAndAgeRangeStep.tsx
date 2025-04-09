@@ -9,12 +9,13 @@ import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
-import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { FormElement } from '@/ui/FormElement';
+import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -29,7 +30,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
