@@ -80,12 +80,11 @@ const RequestOwnershipModal = ({
       >
         <Box
           padding={4}
-          dangerouslySetInnerHTML={t(
-            'organizers.ownerships.request.confirm_modal.body',
-            {
+          dangerouslySetInnerHTML={{
+            __html: t('organizers.ownerships.request.confirm_modal.body', {
               organizerName,
-            },
-          )}
+            }),
+          }}
         />
       </Modal>
       {isSuccessAlertVisible && (
