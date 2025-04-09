@@ -97,16 +97,20 @@ test('create an organizer', async ({ baseURL, page }) => {
     await expect(page.getByTestId('alert-success')).toContainText(
       process.env.E2E_TEST_EMAIL,
     );
-    await expect(
-      page.getByRole('row').getByText(process.env.E2E_TEST_EMAIL),
-    ).toBeVisible();
-    await page.getByRole('row').getByRole('button').click();
+
+    const rows = page.getByRole('row');
+    await expect(rows).toHaveCount(2);
+
+    const addedOwner = rows.nth(1).filter({
+      hasText: 'e2e.udb3.frontend@gmail.com',
+    });
+
+    await expect(addedOwner).toBeVisible({ timeout: 8_000 });
+    await addedOwner.getByRole('button').click();
 
     // Delete ownership
     await page.getByRole('button', { name: 'Beheerder verwijderen' }).click();
     await expect(page.getByRole('dialog')).toBeHidden();
-    await expect(
-      page.getByRole('row').getByText(process.env.E2E_TEST_EMAIL),
-    ).toBeHidden();
+    await expect(addedOwner.getByText(process.env.E2E_TEST_EMAIL)).toBeHidden();
   });
 });
