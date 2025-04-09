@@ -103,14 +103,10 @@ const icons = {
 
 type Props = CheckboxProps & StepProps;
 
-const getCultuurKuurLabels = (entity) =>
-  getUniqueLabels(entity).filter((label) => label.startsWith('cultuurkuur_'));
-
 const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const treeRef = useRef<ReactCheckboxTree>(null);
   const [expanded, setExpanded] = useState([]);
   const [filter, setFilter] = useState('');
-
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
   const entity = getEntityByIdQuery.data;
   const queryClient = useQueryClient();
@@ -119,23 +115,31 @@ const LabelsCheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const removeLabelMutation = useRemoveOfferLabelMutation();
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
 
+  const getRelevantLabels = (entity) => {
+    const existing = Object.values(treeRef.current.state.model.flatNodes).map(
+      (node) => node.value,
+    );
+
+    return getUniqueLabels(entity).filter((label) => existing.includes(label));
+  };
+
   const handleLabelChange = useCallback(async () => {
-    const from = getCultuurKuurLabels(entity);
+    const from = getRelevantLabels(entity);
     const to = Object.values(treeRef.current.state.model.flatNodes)
       .filter((node) => node.checkState)
       .map((node) => node.value);
     const added = difference(to, from);
     const removed = difference(from, to);
 
-    return Promise.all([
+    await Promise.all([
       ...added.map((label) =>
         addLabelMutation.mutateAsync({ id: offerId, scope, label }),
       ),
       ...removed.map((label) =>
         removeLabelMutation.mutateAsync({ id: offerId, scope, label }),
       ),
-      queryClient.invalidateQueries('events'),
     ]);
+    await queryClient.invalidateQueries('events');
   }, [
     queryClient,
     addLabelMutation,
