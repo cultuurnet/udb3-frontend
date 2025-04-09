@@ -173,7 +173,7 @@ const OrganizerForm = () => {
   const onSuccess = () => {
     upsertOrganizer({
       onSuccess: async (organizerId: string) => {
-        handleCultuurkuurLabelMutation(organizerId);
+        await handleCultuurkuurLabelMutation(organizerId);
         await push(`/organizers/${organizerId}/edit`);
       },
     });
@@ -192,10 +192,10 @@ const OrganizerForm = () => {
           configurations={configurations}
           form={form}
           labels={organizerLabels}
-          onChange={() => {
+          onChange={async () => {
             if (urlOrganizerId) {
               onSuccess();
-              handleCultuurkuurLabelMutation(urlOrganizerId);
+              await handleCultuurkuurLabelMutation(urlOrganizerId);
             }
           }}
         />
