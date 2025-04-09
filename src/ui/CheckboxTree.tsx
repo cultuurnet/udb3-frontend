@@ -118,8 +118,8 @@ const CheckboxTree = ({ nodes, offerId, scope, ...props }: Props) => {
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
   useEffect(() => {
-    const added = difference(labels, entity.labels);
-    const removed = difference(entity.labels, labels);
+    const added = difference(labels, getUniqueLabels(entity));
+    const removed = difference(getUniqueLabels(entity), labels);
     console.log({ to: labels, from: entity.labels, added, removed });
   }, [entity, labels]);
 
