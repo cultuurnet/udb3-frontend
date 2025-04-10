@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,11 +10,13 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
+import { formatDateToISO } from '@/utils/formatDateToISO';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -67,6 +69,37 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
   return null;
 };
 
+const Status = ({ request }: { request: OwnershipRequest }) => {
+  const { t } = useTranslation();
+
+  if ('approvedDate' in request) {
+    return (
+      <Text fontSize="small">
+        {t('organizers.ownerships.table.status.approved_by', {
+          email: request.approvedByEmail,
+          date: formatDateToISO(new Date(request.approvedDate)),
+        })}
+      </Text>
+    );
+  }
+
+  if ('rejectedDate' in request) {
+    return (
+      <Text fontSize="small">
+        {t('organizers.ownerships.table.status.rejected_by', {
+          email: request.rejectedByEmail,
+          date: formatDateToISO(new Date(request.rejectedDate)),
+        })}
+      </Text>
+    );
+  }
+  return (
+    <Text fontSize="small">
+      {t(`organizers.ownerships.table.status.${request.state}`)}
+    </Text>
+  );
+};
+
 type Props = {
   requests: OwnershipRequest[];
   creator?: OwnershipCreator;
@@ -88,13 +121,37 @@ export const OwnershipsTable = ({
 
   const hasActions = useMemo(
     () =>
-      !!requests.find(
+      requests.some(
         (it) =>
           it.state !== OwnershipState.DELETED &&
           it.state !== OwnershipState.REJECTED,
       ),
     [requests],
   );
+
+  const hasStatus = useMemo(
+    () =>
+      requests.some(
+        (it) =>
+          it.state === OwnershipState.APPROVED ||
+          it.state === OwnershipState.REJECTED,
+      ),
+    [requests],
+  );
+
+  const colsAmount = useMemo(() => {
+    let amount = 2;
+
+    if (shouldShowItemId) {
+      amount += 1;
+    }
+
+    if (hasStatus) {
+      amount += 1;
+    }
+
+    return amount;
+  }, [hasStatus, shouldShowItemId]);
 
   return (
     <Stack
@@ -113,12 +170,13 @@ export const OwnershipsTable = ({
         paddingBottom={3}
         css={`
           display: grid;
-          grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
+          grid-template-columns: repeat(${colsAmount}, 1fr);
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
-        {shouldShowItemId && <Title size={3}>item id</Title>}
+        {shouldShowItemId && <Title size={3}>Item id</Title>}
+        {hasStatus && <Title size={3}>Status</Title>}
         {hasActions && (
           <Title size={3} justifyContent="flex-end">
             {t('organizers.ownerships.table.actions.title')}
@@ -126,47 +184,71 @@ export const OwnershipsTable = ({
         )}
       </Inline>
       <List paddingY={3}>
-        {creator?.email && <List.Item>{creator.email}</List.Item>}
-        {requests.map((request) => (
+        {creator?.email && (
           <Inline
-            key={request.id}
             role="row"
             alignItems="center"
             paddingY={3}
-            display="grid"
+            minHeight="4rem"
             css={`
-              grid-template-columns: repeat(${shouldShowItemId ? 3 : 2}, 1fr);
-
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
               }
             `}
           >
-            <List.Item>
-              <Stack>
-                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
-                <Text>{request.ownerEmail}</Text>
-              </Stack>
-            </List.Item>
-            {shouldShowItemId && (
+            <List.Item>{creator.email}</List.Item>
+          </Inline>
+        )}
+        {requests.map((request) => {
+          return (
+            <Inline
+              key={request.id}
+              role="row"
+              alignItems="center"
+              paddingY={3}
+              display="grid"
+              minHeight="4rem"
+              css={`
+                grid-template-columns: repeat(${colsAmount}, 1fr);
+
+                &:not(:last-child) {
+                  border-bottom: 1px solid ${grey3};
+                }
+              `}
+            >
               <List.Item>
                 <Stack>
-                  <Text>{request.itemId}</Text>
+                  {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
+                  <Text>{request.ownerEmail}</Text>
                 </Stack>
               </List.Item>
-            )}
-            {hasActions && (
-              <List.Item justifyContent="flex-end">
-                <Actions
-                  request={request}
-                  onDelete={onDelete}
-                  onApprove={onApprove}
-                  onReject={onReject}
-                />
-              </List.Item>
-            )}
-          </Inline>
-        ))}
+              {shouldShowItemId && (
+                <List.Item>
+                  <Stack>
+                    <Link href={`/organizers/${request.itemId}/preview`}>
+                      {request.itemId}
+                    </Link>
+                  </Stack>
+                </List.Item>
+              )}
+              {hasStatus && (
+                <List.Item>
+                  <Status request={request} />
+                </List.Item>
+              )}
+              {hasActions && (
+                <List.Item justifyContent="flex-end">
+                  <Actions
+                    request={request}
+                    onDelete={onDelete}
+                    onApprove={onApprove}
+                    onReject={onReject}
+                  />
+                </List.Item>
+              )}
+            </Inline>
+          );
+        })}
       </List>
     </Stack>
   );

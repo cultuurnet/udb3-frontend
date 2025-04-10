@@ -501,7 +501,8 @@
         "uitpas_info": "Het UiTPAS kansentarief wordt automatisch berekend op basis van de basisprijs en de actieve kaartsystemen.",
         "cultuurkuur": {
           "per_group": "per groep",
-          "per_student": "per leerling"
+          "per_student": "per leerling",
+          "warning": "Voeg een prijs toe voor scholen, per leerling of per groep."
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
@@ -733,7 +734,7 @@
     "movies": "Films",
     "notifications": "Meldingen",
     "organizations": "Organisaties",
-    "ownerships": "Ownerships",
+    "ownerships": "Eigenaarschap",
     "productions": "Producties",
     "roles": "Rollen",
     "search": "Zoeken",
@@ -742,7 +743,7 @@
   },
   "ownerships": {
     "overview": {
-      "title": "Ownerships"
+      "title": "Eigenaarschap"
     },
     "organizer_picker": {
       "label": "Organisatie"
@@ -1037,6 +1038,8 @@
         "url": "Website",
         "url_requirements": "Om organisaties in de UiTdatabank uniek te houden, vragen we elke organisatie een unieke en geldige hyperlink.",
         "is_contact_url": "Deze URL ook gebruiken als contact website",
+        "is_cultuurkuur": "Deze organisatie heeft ook aanbod voor scholen",
+        "is_cultuurkuuur_info": "Je organisatie zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. In de volgende stap vragen we je daarom om extra scholenspecifieke informatie toe te voegen.",
         "errors": {
           "name_required": "Naam ontbreekt",
           "url_required": "Url ontbreekt",
@@ -1065,6 +1068,12 @@
       "table": {
         "user": "Gebruiker",
         "no_results": "Geen resultaten gevonden",
+        "status": {
+          "approved": "Goedgekeurd",
+          "rejected": "Afgekeurd",
+          "approved_by": "Goedgekeurd door {{email}} op {{date}}",
+          "rejected_by": "Afgekeurd door {{email}} op {{date}}"
+        },
         "actions": {
           "title": "Acties",
           "approve": "Goedkeuren",
@@ -1077,6 +1086,7 @@
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
         "email_error": "Geen geldig e-mailadres",
+        "email_not_known_error": "Er is geen UiTID gelinkt aan dit e-mailadres. <0>Maak er eentje aan</0>",
         "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en evenementen van {{organizerName}} bewerken.",
         "actions": {
           "confirm": "Beheerder toevoegen",

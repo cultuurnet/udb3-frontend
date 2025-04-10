@@ -1059,6 +1059,12 @@
       "table": {
         "user": "Benutzer",
         "no_results": "Keine Ergebnisse gefunden",
+        "status": {
+          "approved": "Genehmigt",
+          "rejected": "Abgelehnt",
+          "approved_by": "Genehmigt von {{email}} am {{date}}",
+          "rejected_by": "Abgelehnt von {{email}} am {{date}}"
+        },
         "actions": {
           "title": "Aktionen",
           "approve": "Genehmigen",
@@ -1071,6 +1077,7 @@
         "title": "Verwalter zu {{name}} hinzufügen",
         "email": "E-Mail-Adresse",
         "email_error": "Not a valid email address",
+        "email_not_known_error": "Mit dieser E-Mail-Adresse ist keine UiTID verknüpft. <0>Erstellen Sie eins</0>",
         "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}} und kann ab sofort die Organisationsseite und Veranstaltungen von {{organizerName}} bearbeiten.",
         "actions": {
           "confirm": "Verwalter hinzufügen",

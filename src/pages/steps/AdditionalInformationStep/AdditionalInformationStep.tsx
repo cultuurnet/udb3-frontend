@@ -17,6 +17,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { AudienceStep } from '../AudienceStep';
 import { StepsConfiguration } from '../Steps';
@@ -29,8 +30,6 @@ import { OrganizerStep } from './OrganizerStep';
 import { PriceInformation } from './PriceInformation';
 
 const getGlobalValue = getValueFromTheme('global');
-
-const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
 const AdditionalInformationStepVariant = {
   MOVIE: 'movie',
@@ -339,7 +338,7 @@ const AdditionalInformationStep = ({
           }) => {
             if (
               field === Fields.CULTUURKUUR &&
-              !(labels ?? []).includes(CULTUURKUUR_ORGANIZER_LABEL)
+              !hasCultuurkuurOrganizerLabel(labels)
             ) {
               return null;
             }
