@@ -188,4 +188,4 @@ const useGetEducationLevelsQuery = () => {
   });
 };
 
-export { useEducationLevels };
+export { useGetEducationLevelsQuery };

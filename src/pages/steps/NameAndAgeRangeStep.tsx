@@ -4,7 +4,7 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
-import { useEducationLevels } from '@/hooks/api/education-levels';
+import { useGetEducationLevelsQuery } from '@/hooks/api/education-levels';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
@@ -87,7 +87,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     router.push(`/place/${placeId}/preview`);
   };
 
-  const levels = useEducationLevels();
+  const levels = useGetEducationLevelsQuery();
   const isCultuurkuurEvent =
     props.scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
