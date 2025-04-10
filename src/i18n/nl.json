@@ -1067,6 +1067,12 @@
       "table": {
         "user": "Gebruiker",
         "no_results": "Geen resultaten gevonden",
+        "status": {
+          "approved": "Goedgekeurd",
+          "rejected": "Afgekeurd",
+          "approved_by": "Goedgekeurd door {{email}} op {{date}}",
+          "rejected_by": "Afgekeurd door {{email}} op {{date}}"
+        },
         "actions": {
           "title": "Acties",
           "approve": "Goedkeuren",
