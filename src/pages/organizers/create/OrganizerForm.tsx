@@ -33,11 +33,12 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
-import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
+import {
+  CULTUURKUUR_ORGANIZER_LABEL,
+  hasCultuurkuurOrganizerLabel,
+} from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { NameAndUrlStep } from './steps/NameAndUrlStep';
-
-const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
 const typeAndThemeStepConfiguration: StepsConfiguration<'nameAndUrl'> = {
   Component: NameAndUrlStep,

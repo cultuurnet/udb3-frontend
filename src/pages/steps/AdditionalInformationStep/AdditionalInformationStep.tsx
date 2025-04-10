@@ -31,8 +31,6 @@ import { PriceInformation } from './PriceInformation';
 
 const getGlobalValue = getValueFromTheme('global');
 
-const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
-
 const AdditionalInformationStepVariant = {
   MOVIE: 'movie',
   EVENT: 'event',
