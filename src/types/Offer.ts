@@ -79,6 +79,7 @@ export type PriceInfo = {
   name: { nl?: string; en?: string; de?: string };
   price: any;
   priceCurrency: string;
+  groupPrice?: boolean;
 };
 
 type SubEvent = {
