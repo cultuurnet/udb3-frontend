@@ -133,10 +133,14 @@ const ScopeStep = ({
                   <FormElement
                     id={field.name}
                     label={
-                      <>
+                      <div
+                        css={`
+                          opacity: ${offerId && isCultuurkuurEvent && '0.7'};
+                        `}
+                      >
                         {t('steps.offerTypeStep.cultuurkuur_event')}
                         <CultuurKuurIcon marginLeft={2} />
-                      </>
+                      </div>
                     }
                     labelVariant={LabelVariants.NORMAL}
                     labelPosition={LabelPositions.RIGHT}
@@ -145,6 +149,7 @@ const ScopeStep = ({
                         type={RadioButtonTypes.SWITCH}
                         checked={isCultuurkuurEvent}
                         color={colors.udbMainPositiveGreen}
+                        disabled={offerId && isCultuurkuurEvent}
                         onChange={(e) => {
                           handleOnChangeAudience(
                             e.target.checked
