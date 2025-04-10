@@ -9,7 +9,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
+import { Box, parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
@@ -133,14 +133,16 @@ const ScopeStep = ({
                   <FormElement
                     id={field.name}
                     label={
-                      <div
+                      <Box
                         css={`
-                          opacity: ${offerId && isCultuurkuurEvent && '0.7'};
+                          opacity: ${offerId && isCultuurkuurEvent
+                            ? '0.7'
+                            : '1.0'};
                         `}
                       >
                         {t('steps.offerTypeStep.cultuurkuur_event')}
                         <CultuurKuurIcon marginLeft={2} />
-                      </div>
+                      </Box>
                     }
                     labelVariant={LabelVariants.NORMAL}
                     labelPosition={LabelPositions.RIGHT}
