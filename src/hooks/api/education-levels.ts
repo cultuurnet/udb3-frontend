@@ -180,8 +180,10 @@ const dummyData: Node[] = [
   },
 ];
 
-const useEducationLevels = () => {
+const useGetEducationLevelsQuery = () => {
   return useQuery({
+    retry: false,
+    staleTime: Infinity,
     queryFn: async () => dummyData,
   });
 };
