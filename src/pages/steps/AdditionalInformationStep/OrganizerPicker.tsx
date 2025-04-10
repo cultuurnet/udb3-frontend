@@ -4,7 +4,6 @@ import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
-import { CULTUURKUUR_ORGANIZER_LABEL } from '@/constants/Organizer';
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetOrganizersByQueryQuery } from '@/hooks/api/organizers';
 import { useGetUserQuery } from '@/hooks/api/user';
@@ -14,7 +13,6 @@ import { UitpasIcon } from '@/pages/UitpasIcon';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { FormElement } from '@/ui/FormElement';
@@ -24,6 +22,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { isNewEntry, NewEntry, Typeahead } from '@/ui/Typeahead';
+import { CULTUURKUUR_ORGANIZER_LABEL } from '@/utils/hasCultuurkuurOrganizerLabel';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { valueToArray } from '@/utils/valueToArray';
 
