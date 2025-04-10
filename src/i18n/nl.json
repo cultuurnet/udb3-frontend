@@ -501,7 +501,8 @@
         "uitpas_info": "Het UiTPAS kansentarief wordt automatisch berekend op basis van de basisprijs en de actieve kaartsystemen.",
         "cultuurkuur": {
           "per_group": "per groep",
-          "per_student": "per leerling"
+          "per_student": "per leerling",
+          "warning": "Voeg een prijs toe voor scholen, per leerling of per groep."
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
