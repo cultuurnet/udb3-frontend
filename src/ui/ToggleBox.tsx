@@ -72,7 +72,8 @@ const ToggleBox = ({
     <Stack
       forwardedAs="button"
       onClick={onClick}
-      padding={5}
+      padding={4.5}
+      justifyContent="center"
       alignItems="center"
       position="relative"
       spacing={3}
@@ -125,7 +126,11 @@ const ToggleBox = ({
       {...getStackProps(props)}
     >
       <SuccessIcon active={active} />
-      {icon && <Stack>{icon}</Stack>}
+      {icon && (
+        <Stack minHeight="5rem" justifyContent="center">
+          {icon}
+        </Stack>
+      )}
       {text && (
         <Text
           color={getValue(active ? 'activeTextColor' : 'textColor')}

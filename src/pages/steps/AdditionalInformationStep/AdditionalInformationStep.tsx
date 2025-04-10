@@ -17,6 +17,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { AudienceStep } from '../AudienceStep';
 import { StepsConfiguration } from '../Steps';
@@ -29,8 +30,6 @@ import { OrganizerStep } from './OrganizerStep';
 import { PriceInformation } from './PriceInformation';
 
 const getGlobalValue = getValueFromTheme('global');
-
-const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
 const AdditionalInformationStepVariant = {
   MOVIE: 'movie',
@@ -57,10 +56,11 @@ type Field = Values<typeof Fields>;
 type TabContentProps = {
   offerId?: string;
   scope?: Scope;
+  field?: string;
   onSuccessfulChange: (
     data?: any,
   ) => typeof data extends any ? void : Promise<void>;
-  onValidationChange?: (status: ValidationStatus) => void;
+  onValidationChange?: (status: ValidationStatus, field: string) => void;
 };
 
 type TabConfig = {
@@ -211,6 +211,25 @@ const organizerTabOrder = [
   Fields.CULTUURKUUR,
 ];
 
+export const ValidationStatus = {
+  NONE: 'none',
+  WARNING: 'warning',
+  SUCCESS: 'success',
+} as const;
+
+export type ValidationStatus = Values<typeof ValidationStatus>;
+
+const initialValidatedFields: Record<Field, ValidationStatus> = {
+  description: ValidationStatus.NONE,
+  audience: ValidationStatus.NONE,
+  contact_info: ValidationStatus.NONE,
+  media: ValidationStatus.NONE,
+  organizer: ValidationStatus.NONE,
+  price_info: ValidationStatus.NONE,
+  booking_info: ValidationStatus.NONE,
+  contact_point: ValidationStatus.NONE,
+};
+
 const AdditionalInformationStep = ({
   offerId,
   scope,
@@ -221,7 +240,9 @@ const AdditionalInformationStep = ({
 }: Props) => {
   const { asPath, ...router } = useRouter();
   const containerRef = useRef(null);
-  const entry = useIntersectionObserver(containerRef, {});
+  const entry = useIntersectionObserver(containerRef, {
+    freezeOnceVisible: true,
+  });
   const isVisible = !!entry?.isIntersecting;
 
   const queryClient = useQueryClient();
@@ -233,8 +254,7 @@ const AdditionalInformationStep = ({
       }
       onChangeSuccess?.(field);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [scope, offerId, queryClient],
+    [scope, offerId, queryClient, onChangeSuccess],
   );
 
   const isOrganizer = scope === ScopeTypes.ORGANIZERS;
@@ -244,7 +264,7 @@ const AdditionalInformationStep = ({
 
   const [, hash] = asPath.split('#');
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
 
     // no scroll to when it's already visible on the screen
@@ -256,7 +276,7 @@ const AdditionalInformationStep = ({
       behavior: 'smooth',
       block: 'center',
     });
-  };
+  }, [isVisible]);
 
   useEffect(() => {
     if (isOrganizer) {
@@ -266,24 +286,25 @@ const AdditionalInformationStep = ({
     if (!hash || !Object.values(Fields).some((field) => hash === field)) return;
     setTab(hash);
     handleScroll();
-  }, [hash]);
+  }, [hash, isOrganizer, handleScroll]);
 
   const handleSelectTab = (tab: string) => {
     router.push({ hash: tab }, undefined, { shallow: true });
   };
 
-  const [validatedFields, setValidatedFields] = useState<
-    Record<Field, ValidationStatus>
-  >({
-    description: ValidationStatus.NONE,
-    audience: ValidationStatus.NONE,
-    contact_info: ValidationStatus.NONE,
-    media: ValidationStatus.NONE,
-    organizer: ValidationStatus.NONE,
-    price_info: ValidationStatus.NONE,
-    booking_info: ValidationStatus.NONE,
-    contact_point: ValidationStatus.NONE,
-  });
+  const [validatedFields, setValidatedFields] = useState(
+    initialValidatedFields,
+  );
+
+  const handleValidationChange = useCallback(
+    (status: ValidationStatus, field: string) => {
+      setValidatedFields((prev) => ({
+        ...prev,
+        [field]: status,
+      }));
+    },
+    [],
+  );
 
   const orderedTabs = useMemo(
     () =>
@@ -317,7 +338,7 @@ const AdditionalInformationStep = ({
           }) => {
             if (
               field === Fields.CULTUURKUUR &&
-              !(labels ?? []).includes(CULTUURKUUR_ORGANIZER_LABEL)
+              !hasCultuurkuurOrganizerLabel(labels)
             ) {
               return null;
             }
@@ -345,14 +366,8 @@ const AdditionalInformationStep = ({
                   minHeight={isOrganizer ? '600px' : '450px'}
                   offerId={offerId}
                   scope={scope}
-                  onValidationChange={(status) => {
-                    if (validatedFields[field] === status) return;
-
-                    setValidatedFields((prevFields) => ({
-                      ...prevFields,
-                      [field]: status as ValidationStatus,
-                    }));
-                  }}
+                  field={field}
+                  onValidationChange={handleValidationChange}
                   onSuccessfulChange={() =>
                     invalidateOfferQuery(field, shouldInvalidate)
                   }
@@ -381,14 +396,6 @@ const additionalInformationStepConfiguration: StepsConfiguration = {
   title: ({ t, scope }) => t(`create.additionalInformation.title.${scope}`),
   variant: AdditionalInformationStepVariant.EVENT,
 };
-
-export const ValidationStatus = {
-  NONE: 'none',
-  WARNING: 'warning',
-  SUCCESS: 'success',
-} as const;
-
-export type ValidationStatus = Values<typeof ValidationStatus>;
 
 export type { Field, TabContentProps };
 

@@ -384,7 +384,10 @@ const Sidebar = () => {
     refetchInterval: 60000,
   });
 
-  const rawAnnouncements = getAnnouncementsQuery.data?.data ?? [];
+  const rawAnnouncements = useMemo(
+    () => getAnnouncementsQuery.data?.data ?? [],
+    [getAnnouncementsQuery.data?.data],
+  );
   const getPermissionsQuery = useGetPermissionsQuery();
   const getRolesQuery = useGetRolesQuery();
   const getEventsToModerateQuery = useGetEventsToModerateQuery(searchQuery);
@@ -403,8 +406,7 @@ const Sidebar = () => {
         ...prevModalContext,
         visible: !prevModalContext.visible,
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [setAnnouncementModalContext],
   );
 
   const toggleIsJobLoggerVisible = useCallback(
@@ -428,15 +430,6 @@ const Sidebar = () => {
   }, [router]);
 
   useEffect(() => {
-    if (announcementModalContext.visible) {
-      setActiveAnnouncementId(
-        announcementModalContext.visibleAnnouncementUid ?? announcements[0].uid,
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [announcementModalContext.visible]);
-
-  useEffect(() => {
     if (activeAnnouncementId) {
       const seenAnnouncements = storage.getItem('seenAnnouncements') ?? [];
       if (!seenAnnouncements.includes(activeAnnouncementId)) {
@@ -446,8 +439,7 @@ const Sidebar = () => {
         ]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeAnnouncementId]);
+  }, [activeAnnouncementId, storage]);
 
   useEffect(() => {
     if (rawAnnouncements.length === 0) {
@@ -462,18 +454,20 @@ const Sidebar = () => {
         ),
     );
     storage.setItem('seenAnnouncements', cleanedUpSeenAnnouncements);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawAnnouncements]);
+  }, [rawAnnouncements, storage]);
 
   useEffect(() => {
     if (!getRolesQuery.data) {
       return;
     }
 
-    const validationQuery = getRolesQuery.data
-      .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
-      .filter((constraint) => constraint !== null)
-      .join(' OR ');
+    const validationQuery = [
+      ...new Set(
+        getRolesQuery.data
+          .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
+          .filter((constraint) => constraint !== null),
+      ),
+    ].join(' OR ');
 
     setSearchQuery(validationQuery);
   }, [getRolesQuery.data]);
@@ -502,9 +496,20 @@ const Sidebar = () => {
         }
         return { ...announcement, status: AnnouncementStatus.UNSEEN };
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rawAnnouncements, activeAnnouncementId],
+    [rawAnnouncements, activeAnnouncementId, storage],
   );
+
+  useEffect(() => {
+    if (announcementModalContext.visible) {
+      setActiveAnnouncementId(
+        announcementModalContext.visibleAnnouncementUid ?? announcements[0].uid,
+      );
+    }
+  }, [
+    announcementModalContext.visible,
+    announcementModalContext.visibleAnnouncementUid,
+    announcements,
+  ]);
 
   const countUnseenAnnouncements = useMemo(
     () =>

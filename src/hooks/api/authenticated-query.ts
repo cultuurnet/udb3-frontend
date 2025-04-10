@@ -2,6 +2,7 @@ import { isEqual } from 'lodash';
 import flatten from 'lodash/flatten';
 import type { NextApiRequest } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { useCallback } from 'react';
 import { Cookies } from 'react-cookie';
 import {
@@ -208,6 +209,8 @@ const isDuplicateMutation = (
     'offers-change-calendar',
     'places-add',
     'request-ownership',
+    'offers-add-label',
+    'offers-remove-label',
   ];
 
   if (disabledMutations.includes(mutationKey)) {
@@ -231,40 +234,47 @@ const isDuplicateMutation = (
 };
 
 const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
-  const router = useRouter();
   const headers = useHeaders();
   const queryClient = useQueryClient();
 
   const { removeAuthenticationCookies } = useCookiesWithOptions();
 
-  const innerMutationFn = useCallback(async (variables) => {
-    const isDuplicate = isDuplicateMutation(
-      queryClient,
-      mutationFn,
-      variables,
+  const innerMutationFn = useCallback(
+    async (variables) => {
+      const isDuplicate = isDuplicateMutation(
+        queryClient,
+        mutationFn,
+        variables,
+        configuration.mutationKey,
+      );
+
+      if (isDuplicate) return;
+
+      const response = await mutationFn({ ...variables, headers });
+
+      if (!response) return '';
+
+      if (isUnAuthorized(response?.status)) {
+        removeAuthenticationCookies();
+        queryClient.invalidateQueries('user');
+        Router.push('/login');
+      }
+
+      const result = await response.text();
+
+      if (!result) {
+        return '';
+      }
+      return JSON.parse(result);
+    },
+    [
+      headers,
       configuration.mutationKey,
-    );
-
-    if (isDuplicate) return;
-
-    const response = await mutationFn({ ...variables, headers });
-
-    if (!response) return '';
-
-    if (isUnAuthorized(response?.status)) {
-      removeAuthenticationCookies();
-      queryClient.invalidateQueries('user');
-      router.push('/login');
-    }
-
-    const result = await response.text();
-
-    if (!result) {
-      return '';
-    }
-    return JSON.parse(result);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      mutationFn,
+      queryClient,
+      removeAuthenticationCookies,
+    ],
+  );
 
   return useMutation(innerMutationFn, configuration);
 };
@@ -275,43 +285,44 @@ const useAuthenticatedMutations = ({
 }: {
   mutationFns: (variables: unknown) => Promise<Array<Response | ErrorObject>>;
 }) => {
-  const router = useRouter();
   const headers = useHeaders();
   const queryClient = useQueryClient();
 
   const { removeAuthenticationCookies } = useCookiesWithOptions();
 
-  const innerMutationFn = useCallback(async (variables) => {
-    const responses = await mutationFns({ ...variables, headers });
+  const innerMutationFn = useCallback(
+    async (variables) => {
+      const responses = await mutationFns({ ...variables, headers });
 
-    if (responses.some((response) => isUnAuthorized(response.status))) {
-      removeAuthenticationCookies();
-      queryClient.invalidateQueries('user');
-      router.push('/login');
-      return;
-    }
+      if (responses.some((response) => isUnAuthorized(response.status))) {
+        removeAuthenticationCookies();
+        queryClient.invalidateQueries('user');
+        Router.push('/login');
+        return;
+      }
 
-    if (responses.some(isErrorObject)) {
-      const errorMessages = responses
-        .filter(isErrorObject)
-        .map((response) => response.message)
-        .join(', ');
-      throw new Error(errorMessages);
-    }
+      if (responses.some(isErrorObject)) {
+        const errorMessages = responses
+          .filter(isErrorObject)
+          .map((response) => response.message)
+          .join(', ');
+        throw new Error(errorMessages);
+      }
 
-    return Promise.all(
-      (responses as Response[]).map(async (response) => {
-        const result = await response.text();
+      return Promise.all(
+        (responses as Response[]).map(async (response) => {
+          const result = await response.text();
 
-        if (!result) {
-          return '';
-        }
+          if (!result) {
+            return '';
+          }
 
-        return JSON.parse(result);
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+          return JSON.parse(result);
+        }),
+      );
+    },
+    [headers, mutationFns, queryClient, removeAuthenticationCookies],
+  );
 
   return useMutation(innerMutationFn, configuration);
 };
