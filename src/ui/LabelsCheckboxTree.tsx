@@ -148,14 +148,13 @@ const LabelsCheckboxTree = ({
     const added = difference(to, from);
     const removed = difference(from, to);
 
-    await Promise.all([
-      ...added.map((label) =>
-        addLabelMutation.mutateAsync({ id: offerId, scope, label }),
-      ),
-      ...removed.map((label) =>
-        removeLabelMutation.mutateAsync({ id: offerId, scope, label }),
-      ),
-    ]);
+    for (const label of added) {
+      await addLabelMutation.mutateAsync({ id: offerId, scope, label });
+    }
+    for (const label of removed) {
+      await removeLabelMutation.mutateAsync({ id: offerId, scope, label });
+    }
+
     await queryClient.invalidateQueries('events');
   }, [
     queryClient,
