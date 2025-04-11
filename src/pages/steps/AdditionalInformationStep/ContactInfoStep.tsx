@@ -10,6 +10,8 @@ import { useQueryClient } from 'react-query';
 
 import { useAddContactPointMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
@@ -17,6 +19,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 import { isValidInfo } from '@/utils/isValidInfo';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
@@ -64,6 +67,17 @@ const ContactInfoStep = ({
   const [isContactInfoStateInitialized, setIsContactInfoInitialized] =
     useState(false);
 
+  const [isCultuurkuurAlertVisible, setIsCultuurkuurAlertVisible] =
+    useState(false);
+
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
+  const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
+    getEntityByIdQuery.data?.hiddenLabels,
+  );
+
   const contactInfo =
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 
@@ -107,16 +121,30 @@ const ContactInfoStep = ({
       return;
     }
 
+    if (
+      filteredContactInfoState.length === 0 &&
+      isCultuurkuurFeatureFlagEnabled &&
+      isCultuurkuurOrganizer
+    ) {
+      onValidationChange(ValidationStatus.WARNING, field);
+      setIsCultuurkuurAlertVisible(true);
+      return;
+    }
+
     if (filteredContactInfoState.length === 0) {
       onValidationChange(ValidationStatus.NONE, field);
+      setIsCultuurkuurAlertVisible(false);
       return;
     }
 
     onValidationChange(ValidationStatus.SUCCESS, field);
+    setIsCultuurkuurAlertVisible(false);
   }, [
     field,
     contactInfoState,
     isContactInfoStateInitialized,
+    isCultuurkuurOrganizer,
+    isCultuurkuurFeatureFlagEnabled,
     onValidationChange,
   ]);
 
@@ -142,9 +170,7 @@ const ContactInfoStep = ({
       );
     },
     onSuccess: (data) => {
-      if (typeof data === 'undefined') {
-        return;
-      }
+      if (!data) return;
 
       onValidationChange(ValidationStatus.SUCCESS, field);
       onSuccessfulChange(data);
@@ -229,7 +255,7 @@ const ContactInfoStep = ({
   };
 
   return (
-    <Stack maxWidth="40rem" {...getStackProps(props)} spacing={3}>
+    <Stack maxWidth="40rem" {...getStackProps(props)} spacing={4}>
       {(contactInfoState ?? []).map((info, index) => {
         return (
           <Inline key={index} spacing={3}>
@@ -292,6 +318,11 @@ const ContactInfoStep = ({
             : t('create.additionalInformation.contact_info.add_more_multiple')}
         </Button>
       </Inline>
+      {isCultuurkuurAlertVisible && (
+        <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+          {t('create.additionalInformation.contact_info.cultuurkuur.warning')}
+        </Alert>
+      )}
     </Stack>
   );
 };
