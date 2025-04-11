@@ -209,6 +209,8 @@ const isDuplicateMutation = (
     'offers-change-calendar',
     'places-add',
     'request-ownership',
+    'offers-add-label',
+    'offers-remove-label',
   ];
 
   if (disabledMutations.includes(mutationKey)) {

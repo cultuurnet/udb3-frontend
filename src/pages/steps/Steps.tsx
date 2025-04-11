@@ -29,6 +29,7 @@ type OrganizerForm = {
     name: string;
     url: string;
     isContactUrl: boolean;
+    isCultuurkuur: boolean;
   };
 };
 
