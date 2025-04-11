@@ -1,8 +1,9 @@
 import { uniq } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UseQueryResult } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 
+import { ScopeTypes } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
@@ -56,6 +57,8 @@ function LabelsStep({
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     onValidationChange(
       labels.length ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
@@ -63,8 +66,17 @@ function LabelsStep({
     );
   }, [field, labels, onValidationChange]);
 
+  useEffect(() => {
+    setLabels(getUniqueLabels(entity));
+  }, [entity]);
+
   const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
   const [isInvalid, setIsInvalid] = useState(false);
+
+  const handleInvalidateOrganizerQuery = async () => {
+    if (scope !== ScopeTypes.ORGANIZERS) return;
+    await queryClient.invalidateQueries('organizers');
+  };
 
   return (
     <Inline width={isInvalid ? '100%' : '50%'} spacing={5}>
@@ -110,6 +122,7 @@ function LabelsStep({
                 });
 
                 setLabels(uniq([...labels, label]));
+                handleInvalidateOrganizerQuery();
                 ref.current.clear();
               }}
             />
@@ -155,6 +168,7 @@ function LabelsStep({
                   setLabels(
                     labels.filter((existingLabel) => label !== existingLabel),
                   );
+                  handleInvalidateOrganizerQuery();
                 }}
               />
             </Inline>

@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
 import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import {
   TabContentProps,
@@ -19,12 +21,12 @@ import { isUitpasOrganizer } from '@/pages/steps/AdditionalInformationStep/Organ
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Select } from '@/ui/Select';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
@@ -87,6 +89,7 @@ const schema = yup
             .oneOf(Object.values(PriceCategory)),
           price: yup.string().matches(PRICE_REGEX).required(),
           priceCurrency: yup.string(),
+          groupPrice: yup.boolean().optional(),
         }),
       )
       .test(UNIQUE_NAME_ERROR_TYPE, 'No unique name', (prices, context) => {
@@ -127,9 +130,21 @@ const defaultPriceInfoValues: FormData = {
       price: '',
       category: PriceCategory.BASE,
       priceCurrency: PRICE_CURRENCY,
+      groupPrice: undefined,
     },
   ],
 };
+
+const groupPriceOptions = [
+  {
+    label: 'create.additionalInformation.price_info.cultuurkuur.per_student',
+    value: 'false',
+  },
+  {
+    label: 'create.additionalInformation.price_info.cultuurkuur.per_group',
+    value: 'true',
+  },
+];
 
 const PriceInformation = ({
   scope,
@@ -168,6 +183,13 @@ const PriceInformation = ({
     name: 'rates',
     control,
   });
+
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
+  const isCultuurkuurEvent =
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
   const rates = watch('rates');
   const ratesRef = useRef(rates);
@@ -219,6 +241,8 @@ const PriceInformation = ({
     [controlledRates],
   );
 
+  const hasPriceInfo = !!offer?.priceInfo;
+
   useEffect(() => {
     const priceInfo = offer?.priceInfo ?? [];
 
@@ -228,24 +252,33 @@ const PriceInformation = ({
         : false;
 
     if (!hasRates) {
-      replace(priceInfo.length ? priceInfo : defaultPriceInfoValues.rates);
+      replace(
+        priceInfo.length
+          ? (priceInfo as FormData['rates'])
+          : defaultPriceInfoValues.rates,
+      );
       reset({}, { keepValues: true });
 
       return onValidationChange(
-        hasUitpasLabel ? ValidationStatus.WARNING : ValidationStatus.NONE,
+        hasUitpasLabel || isCultuurkuurEvent
+          ? ValidationStatus.WARNING
+          : ValidationStatus.NONE,
         field,
       );
     }
 
     onValidationChange(ValidationStatus.SUCCESS, field);
 
-    replace(reconcileRates(ratesRef.current, priceInfo, offer));
+    replace(
+      reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
+    );
     reset({}, { keepValues: true });
   }, [
     scope,
     field,
     offer,
     hasRates,
+    isCultuurkuurEvent,
     i18n.language,
     offer?.mainLanguage,
     offer?.organizer,
@@ -268,7 +301,7 @@ const PriceInformation = ({
   }, [field, offer?.priceInfo, isPricesLoaded, onValidationChange]);
 
   return (
-    <Stack {...getStackProps(props)} padding={4} spacing={5}>
+    <Stack {...getStackProps(props)} padding={0} spacing={5}>
       <Inline spacing={4} stackOn={Breakpoints.M}>
         <Stack flex="1 0 60%">
           {controlledRates.map((rate, index) => {
@@ -295,6 +328,7 @@ const PriceInformation = ({
             return (
               <Stack key={`rate_${rate.id}`}>
                 <Inline
+                  maxWidth="50rem"
                   css={`
                     border-bottom: 1px solid ${getValue('borderColor')};
                   `}
@@ -343,7 +377,6 @@ const PriceInformation = ({
                           Component={
                             <Input
                               width="6rem"
-                              marginRight={3}
                               {...registerPriceProps}
                               onBlur={async (e) => {
                                 await registerPriceProps.onBlur(e);
@@ -363,15 +396,39 @@ const PriceInformation = ({
                         />
                       )}
                     </Inline>
-                    <Inline>
-                      <Text
-                        variant={TextVariants.MUTED}
-                        css={`
-                          margin-right: ${parseSpacing(3)};
-                        `}
-                      >
+                    <Inline alignItems="center" spacing={3}>
+                      <Text variant={TextVariants.MUTED}>
                         {t('create.additionalInformation.price_info.euro')}
                       </Text>
+                      {isCultuurkuurFeatureFlagEnabled &&
+                        isCultuurkuurEvent && (
+                          <FormElement
+                            id={`rate_groupPrice_${rate.id}`}
+                            Component={
+                              <Select
+                                {...register(`rates.${index}.groupPrice`)}
+                                onChange={(e) => {
+                                  const value = e.target.value === 'true';
+                                  setValue(`rates.${index}.groupPrice`, value, {
+                                    shouldValidate: false,
+                                  });
+                                  onSubmit();
+                                  getOfferByIdQuery.remove();
+                                }}
+                                width="8rem"
+                              >
+                                {groupPriceOptions.map((option) => (
+                                  <option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {t(option.label)}
+                                  </option>
+                                ))}
+                              </Select>
+                            }
+                          />
+                        )}
                       {!isPriceFree(rate.price) &&
                         rate.category !== PriceCategory.UITPAS && (
                           <Button
@@ -415,51 +472,48 @@ const PriceInformation = ({
             );
           })}
           <Inline marginTop={3}>
-            <Button
-              onClick={() => {
-                append(
-                  {
-                    name: { [i18n.language as SupportedLanguage]: '' },
-                    price: '',
-                    category: PriceCategory.TARIFF,
-                    priceCurrency: PRICE_CURRENCY,
-                  },
-                  {
-                    focusName: `rates.${fields.length}.name`,
-                    shouldFocus: true,
-                  },
-                );
-              }}
-              variant={ButtonVariants.SECONDARY}
-            >
-              {t('create.additionalInformation.price_info.add')}
-            </Button>
+            {!(isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent) && (
+              <Button
+                onClick={() => {
+                  append(
+                    {
+                      name: { [i18n.language as SupportedLanguage]: '' },
+                      price: '',
+                      category: PriceCategory.TARIFF,
+                      priceCurrency: PRICE_CURRENCY,
+                      groupPrice: undefined,
+                    },
+                    {
+                      focusName: `rates.${fields.length}.name`,
+                      shouldFocus: true,
+                    },
+                  );
+                }}
+                variant={ButtonVariants.SECONDARY}
+              >
+                {t('create.additionalInformation.price_info.add')}
+              </Button>
+            )}
           </Inline>
         </Stack>
-        <Stack spacing={4}>
-          <Alert
-            fullWidth
-            css={`
-              width: 100%;
-            `}
-            variant={AlertVariants.PRIMARY}
-          >
-            {t('create.additionalInformation.price_info.global_info')}
-          </Alert>
-          {hasUitpasPrices && (
-            <Alert
-              fullWidth
-              css={`
-                width: 100%;
-              `}
-              variant={AlertVariants.PRIMARY}
-              marginBottom={3}
-            >
-              {t('create.additionalInformation.price_info.uitpas_info')}
+      </Inline>
+      <Stack spacing={4}>
+        {isCultuurkuurFeatureFlagEnabled &&
+          isCultuurkuurEvent &&
+          !hasPriceInfo && (
+            <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+              {t('create.additionalInformation.price_info.cultuurkuur.warning')}
             </Alert>
           )}
-        </Stack>
-      </Inline>
+        <Alert variant={AlertVariants.PRIMARY}>
+          {t('create.additionalInformation.price_info.global_info')}
+        </Alert>
+        {hasUitpasPrices && (
+          <Alert variant={AlertVariants.PRIMARY} marginBottom={3}>
+            {t('create.additionalInformation.price_info.uitpas_info')}
+          </Alert>
+        )}
+      </Stack>
     </Stack>
   );
 };
