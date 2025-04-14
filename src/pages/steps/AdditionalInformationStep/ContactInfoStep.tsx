@@ -106,8 +106,9 @@ const ContactInfoStep = ({
   }, [contactInfo, isContactInfoStateInitialized, updateContactInfoState]);
 
   useEffect(() => {
-    if (!organizerContactInfo) return;
-    updateContactInfoState(organizerContactInfo);
+    if (!organizerContactInfo) {
+      updateContactInfoState(organizerContactInfo);
+    }
   }, [organizerContactInfo, updateContactInfoState]);
 
   useEffect(() => {
