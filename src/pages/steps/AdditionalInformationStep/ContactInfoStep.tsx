@@ -170,12 +170,6 @@ const ContactInfoStep = ({
         context.previousEventInfo,
       );
     },
-    onSuccess: (data) => {
-      if (!data) return;
-
-      onValidationChange(ValidationStatus.SUCCESS, field);
-      onSuccessfulChange(data);
-    },
   });
 
   const parseNewContactInfo = (newContactInfo: NewContactInfo[]) => {
@@ -202,11 +196,18 @@ const ContactInfoStep = ({
       return onSuccessfulChange(contactPoint);
     }
 
-    await addContactPointMutation.mutateAsync({
-      eventId: offerId,
-      contactPoint,
-      scope,
-    });
+    await addContactPointMutation.mutateAsync(
+      {
+        eventId: offerId,
+        contactPoint,
+        scope,
+      },
+      {
+        onSuccess: () => {
+          onSuccessfulChange(contactPoint);
+        },
+      },
+    );
   };
 
   const handleChangeValue = async (
