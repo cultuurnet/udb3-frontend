@@ -100,6 +100,7 @@ const icons = {
     <FontAwesomeIcon
       className="rct-icon rct-icon-leaf-close"
       icon={faFile as IconProp}
+      color={colors.udbMainBlue}
     />
   ),
 };
@@ -111,7 +112,7 @@ type CheckboxState = {
 };
 
 type ReactCheckboxTreeRef = Component<CheckboxProps, CheckboxState> & {
-  expandAllNodes: () => void;
+  expandAllNodes: (expand: boolean) => void;
 };
 
 const LabelsCheckboxTree = ({
@@ -181,7 +182,7 @@ const LabelsCheckboxTree = ({
         // Or a children has a matching node
         children.length
       ) {
-        filtered.push({ ...node, children });
+        filtered.push({ ...node, children: children.length ? children : null });
       }
 
       return filtered;
@@ -202,8 +203,9 @@ const LabelsCheckboxTree = ({
         value={filter}
         marginBottom={3}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          setFilter(event.target.value);
-          treeRef.current.expandAllNodes();
+          const query = event.target.value;
+          setFilter(query);
+          treeRef.current.expandAllNodes(!!query);
         }}
       />
       <ReactCheckboxTree
