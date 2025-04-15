@@ -30,7 +30,7 @@ const MAX_RECENT_USED_ORGANIZERS = 4;
 
 const getValueFromGlobalTheme = getValueFromTheme('global');
 
-const isUitpasOrganizer = (organizer: Organizer): boolean => {
+const isUitpasOrganizer = (organizer: Organizer) => {
   const combinedLabels = (organizer.labels || []).concat(
     organizer.hiddenLabels || [],
   );
