@@ -16,7 +16,10 @@ import {
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { useChangeAddressMutation } from '@/hooks/api/places';
+import {
+  useChangeAddressMutation,
+  useGetMunicipalitiesQuery,
+} from '@/hooks/api/places';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
@@ -55,6 +58,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
@@ -344,6 +348,7 @@ const LocationStep = ({
   const audience = getOfferByIdQuery.data?.audience;
 
   const { hasRecentLocations } = useRecentLocations();
+  const municipalities = useGetMunicipalitiesQuery();
 
   useEffect(() => {
     if (audience?.audienceType) {
@@ -589,6 +594,14 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
+                {isCultuurkuurFeatureFlagEnabled &&
+                  !municipalities.isLoading && (
+                    <LabelsCheckboxTree
+                      {...getStepProps(props)}
+                      offerId={offerId}
+                      nodes={municipalities.data}
+                    />
+                  )}
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">
                     {t('create.location.country.location_school_info')}
