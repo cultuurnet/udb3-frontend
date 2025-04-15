@@ -54,9 +54,7 @@ test('create an event with UiTPAS organizer and UiTPAS prices', async ({
   await page.locator('#organizer-picker').fill(dummyEvent.organizer.name);
 
   await page
-    .locator('.badge-secondary')
-    .getByText('UiTPAS', { exact: true })
-    .first()
+    .locator('.uitpas-icon')
     .click();
 
   // check if alert to add prices is visible
