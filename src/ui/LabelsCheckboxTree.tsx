@@ -112,7 +112,7 @@ type CheckboxState = {
 };
 
 type ReactCheckboxTreeRef = Component<CheckboxProps, CheckboxState> & {
-  expandAllNodes: () => void;
+  expandAllNodes: (expand: boolean) => void;
 };
 
 const LabelsCheckboxTree = ({
