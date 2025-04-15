@@ -181,7 +181,7 @@ const LabelsCheckboxTree = ({
         // Or a children has a matching node
         children.length
       ) {
-        filtered.push({ ...node, children });
+        filtered.push({ ...node, children: children.length ? children : null });
       }
 
       return filtered;
