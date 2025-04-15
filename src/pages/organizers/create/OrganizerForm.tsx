@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
@@ -134,6 +134,9 @@ const OrganizerForm = () => {
   const updateOrganizerMutation = useUpdateOrganizerMutation();
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
+  const [cultuurkuurToggleValue, setCultuurkuurToggleValue] = useState(
+    getValues('nameAndUrl.isCultuurkuur'),
+  );
 
   const handleCultuurkuurLabelMutation = async (organizerId: string) => {
     const { isCultuurkuur } = getValues('nameAndUrl');
@@ -148,7 +151,8 @@ const OrganizerForm = () => {
 
   const upsertOrganizer = async ({ onSuccess }) => {
     let mutation = createOrganizerMutation;
-    const { name, url, isContactUrl } = getValues('nameAndUrl');
+    const { name, url, isContactUrl, isCultuurkuur } = getValues('nameAndUrl');
+
     let attributes: { [key: string]: any } = {
       name,
       url,
@@ -163,6 +167,11 @@ const OrganizerForm = () => {
     }
 
     const response = await mutation.mutateAsync(attributes);
+
+    if (urlOrganizerId && cultuurkuurToggleValue !== isCultuurkuur) {
+      await handleCultuurkuurLabelMutation(urlOrganizerId);
+      setCultuurkuurToggleValue(isCultuurkuur);
+    }
 
     if (!urlOrganizerId) {
       onSuccess(response.organizerId);
@@ -193,10 +202,9 @@ const OrganizerForm = () => {
           configurations={configurations}
           form={form}
           labels={organizerLabels}
-          onChange={async () => {
+          onChange={() => {
             if (urlOrganizerId) {
               onSuccess();
-              await handleCultuurkuurLabelMutation(urlOrganizerId);
             }
           }}
         />
