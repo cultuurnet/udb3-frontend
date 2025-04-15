@@ -1837,6 +1837,7 @@ const usePublishPlaceMutation = (configuration = {}) =>
 
 const useGetMunicipalitiesQuery = () =>
   useQuery({
+    queryKey: ['municipalities'],
     retry: false,
     staleTime: Infinity,
     queryFn: async () => dummyMunicipalities,

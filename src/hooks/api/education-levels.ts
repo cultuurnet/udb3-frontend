@@ -182,6 +182,7 @@ const dummyData: Node[] = [
 
 const useGetEducationLevelsQuery = () =>
   useQuery({
+    queryKey: ['education-levels'],
     retry: false,
     staleTime: Infinity,
     queryFn: async () => dummyData,
