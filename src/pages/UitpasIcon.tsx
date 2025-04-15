@@ -6,6 +6,7 @@ const UitpasIcon = (props: BoxProps) => {
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 191 138"
+      className="uitpas-icon"
       {...getBoxProps(props)}
     >
       <path
