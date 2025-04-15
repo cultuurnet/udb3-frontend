@@ -100,6 +100,7 @@ const icons = {
     <FontAwesomeIcon
       className="rct-icon rct-icon-leaf-close"
       icon={faFile as IconProp}
+      color={colors.udbMainBlue}
     />
   ),
 };
