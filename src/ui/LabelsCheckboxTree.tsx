@@ -203,8 +203,9 @@ const LabelsCheckboxTree = ({
         value={filter}
         marginBottom={3}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          setFilter(event.target.value);
-          treeRef.current.expandAllNodes();
+          const query = event.target.value;
+          setFilter(query);
+          treeRef.current.expandAllNodes(!!query);
         }}
       />
       <ReactCheckboxTree
