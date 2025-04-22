@@ -391,6 +391,9 @@ const LocationStep = ({
           const { isOnline, municipality, country, place } =
             field?.value as OfferFormData['location'];
 
+          const isDefaultZip = municipality?.zip === '0000';
+          const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
+          
           const onFieldChange = (updatedValue) => {
             updatedValue = { ...field.value, ...updatedValue };
             field.onChange(updatedValue);
@@ -450,9 +453,7 @@ const LocationStep = ({
                           country: Countries.BE,
                         })
                       }
-                      active={
-                        !!country && !isOnline && municipality?.zip !== '0000'
-                      }
+                      active={isPhysicalLocation}
                       icon={
                         <CustomIcon
                           name={CustomIconVariants.PHYSICAL}
@@ -490,11 +491,7 @@ const LocationStep = ({
                             isOnline: false,
                           })
                         }
-                        active={
-                          municipality?.zip
-                            ? municipality.zip === '0000' && !isOnline
-                            : !country && !isOnline && !municipality
-                        }
+                        active={!isPhysicalLocation && !isOnline}
                         icon={
                           <CustomIcon
                             name={CustomIconVariants.CULTUURKUUR_LOCATION}
