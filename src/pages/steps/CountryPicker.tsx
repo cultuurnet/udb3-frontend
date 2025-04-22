@@ -8,8 +8,8 @@ import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
-import { CultuurKuurIcon } from '../CultuurKuurIcon';
-import { FlagIcon } from '../FlagIcon';
+import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
+import { FlagIcon } from '../../ui/FlagIcon';
 
 type Props = BoxProps & {
   value: Country;
