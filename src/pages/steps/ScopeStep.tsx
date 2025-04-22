@@ -20,7 +20,7 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 
 import { Scope } from '../create/OfferForm';
-import { CultuurKuurIcon } from '../CultuurKuurIcon';
+import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
 
 type Props = InlineProps &

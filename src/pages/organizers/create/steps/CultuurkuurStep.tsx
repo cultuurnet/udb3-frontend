@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { CultuurKuurIcon } from '@/pages/CultuurKuurIcon';
+import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { StepProps } from '@/pages/steps/Steps';
 import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
