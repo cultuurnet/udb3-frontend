@@ -618,7 +618,7 @@ const LocationStep = ({
                     />
                     <CountryPicker
                       value={country}
-                      includeLocationSchool={scope === OfferTypes.EVENTS}
+                      showSchoolLocation={scope === OfferTypes.EVENTS}
                       onChange={(newCountry) => {
                         onFieldChange({
                           country: newCountry,

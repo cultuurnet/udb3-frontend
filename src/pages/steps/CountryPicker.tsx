@@ -15,7 +15,7 @@ import { FlagIcon } from '../FlagIcon';
 type Props = BoxProps & {
   value: Country;
   onChange: (value: Country) => void;
-  includeLocationSchool?: boolean;
+  showSchoolLocation?: boolean;
 };
 
 const getGlobalValue = getValueFromTheme('global');
@@ -26,7 +26,7 @@ const CountryPicker = ({
   value,
   onChange,
   className,
-  includeLocationSchool,
+  showSchoolLocation,
   ...props
 }: Props) => {
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ const CountryPicker = ({
 
       <Dropdown.Divider />
 
-      {!isCultuurkuurFeatureFlagEnabled && includeLocationSchool && (
+      {!isCultuurkuurFeatureFlagEnabled && showSchoolLocation && (
         <Dropdown.Item onClick={() => onChange(undefined)}>
           <Inline spacing={3}>
             <CultuurKuurIcon />
@@ -86,7 +86,7 @@ const CountryPicker = ({
 };
 
 CountryPicker.defaultProps = {
-  includeLocationSchool: false,
+  showSchoolLocation: false,
 };
 
 export { CountryPicker };
