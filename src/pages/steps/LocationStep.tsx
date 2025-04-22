@@ -17,6 +17,7 @@ import {
 } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { Address, AddressInternal } from '@/types/Address';
@@ -139,6 +140,10 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
   const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
 
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
   return async ({ location }: FormDataUnion) => {
     // For places
 
@@ -189,9 +194,9 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
       return;
     }
 
-    const isCultuurkuur = !location.country;
+    const isCultuurkuurLocation = !location.country;
 
-    if (isCultuurkuur) {
+    if (isCultuurkuurLocation) {
       await changeAttendanceMode.mutateAsync({
         eventId: offerId,
         attendanceMode: AttendanceMode.OFFLINE,
@@ -203,10 +208,12 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
         eventId: offerId,
       });
 
-      const changeAudiencePromise = changeAudienceMutation.mutateAsync({
-        eventId: offerId,
-        audienceType: AudienceTypes.EDUCATION,
-      });
+      const changeAudiencePromise = !isCultuurkuurFeatureFlagEnabled
+        ? changeAudienceMutation.mutateAsync({
+            eventId: offerId,
+            audienceType: AudienceTypes.EDUCATION,
+          })
+        : Promise.resolve();
 
       await Promise.all([changeLocationPromise, changeAudiencePromise]);
 
@@ -221,7 +228,10 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
       location: location.place['@id'],
     });
 
-    if (parseOfferId(location.place['@id']) !== CULTUURKUUR_LOCATION_ID) {
+    if (
+      parseOfferId(location.place['@id']) !== CULTUURKUUR_LOCATION_ID &&
+      !isCultuurkuurFeatureFlagEnabled
+    ) {
       changeAudienceMutation.mutate({
         eventId: offerId,
         audienceType: AudienceTypes.EVERYONE,
@@ -250,10 +260,11 @@ const isLocationSet = (
     return true;
   }
 
-  const isCultuurKuur = !location?.country && scope === OfferTypes.EVENTS;
+  const isCultuurKuurLocation =
+    !location?.country && scope === OfferTypes.EVENTS;
 
   return (
-    isCultuurKuur ||
+    isCultuurKuurLocation ||
     (location?.municipality?.name &&
       formState.touchedFields.location?.streetAndNumber)
   );
@@ -314,6 +325,14 @@ const LocationStep = ({
     name: ['location.streetAndNumber', 'location.onlineUrl', 'location'],
   });
 
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
+  const isCultuurkuurEvent =
+    scope === OfferTypes.EVENTS &&
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
   const shouldAddSpaceBelowTypeahead = useMemo(() => {
     if (offerId) return false;
 
@@ -372,6 +391,9 @@ const LocationStep = ({
           const { isOnline, municipality, country, place } =
             field?.value as OfferFormData['location'];
 
+          const isDefaultZip = municipality?.zip === '0000';
+          const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
+
           const onFieldChange = (updatedValue) => {
             updatedValue = { ...field.value, ...updatedValue };
             field.onChange(updatedValue);
@@ -428,9 +450,10 @@ const LocationStep = ({
                           isOnline: false,
                           municipality: undefined,
                           place: undefined,
+                          country: Countries.BE,
                         })
                       }
-                      active={!isOnline}
+                      active={isPhysicalLocation}
                       icon={
                         <CustomIcon
                           name={CustomIconVariants.PHYSICAL}
@@ -445,6 +468,7 @@ const LocationStep = ({
                       onClick={() =>
                         onFieldChange({
                           isOnline: true,
+                          municipality: undefined,
                         })
                       }
                       active={isOnline}
@@ -458,6 +482,28 @@ const LocationStep = ({
                       width="30%"
                       minHeight={parseSpacing(7)}
                     />
+                    {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
+                      <ToggleBox
+                        onClick={() =>
+                          onFieldChange({
+                            country: undefined,
+                            municipality: undefined,
+                            isOnline: false,
+                          })
+                        }
+                        active={!isPhysicalLocation && !isOnline}
+                        icon={
+                          <CustomIcon
+                            name={CustomIconVariants.CULTUURKUUR_LOCATION}
+                            width="80"
+                            height="80"
+                          />
+                        }
+                        text={t('create.location.is_cultuurkuur.label')}
+                        width="30%"
+                        minHeight={parseSpacing(7)}
+                      />
+                    )}
                   </Inline>
                 }
               />
@@ -540,9 +586,11 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
-                <Alert maxWidth="53rem">
-                  {t('create.location.country.location_school_info')}
-                </Alert>
+                {!isCultuurkuurFeatureFlagEnabled && (
+                  <Alert maxWidth="53rem">
+                    {t('create.location.country.location_school_info')}
+                  </Alert>
+                )}
               </>,
             );
           }
@@ -567,7 +615,7 @@ const LocationStep = ({
                     />
                     <CountryPicker
                       value={country}
-                      includeLocationSchool={scope === OfferTypes.EVENTS}
+                      showSchoolLocation={scope === OfferTypes.EVENTS}
                       onChange={(newCountry) => {
                         onFieldChange({
                           country: newCountry,
