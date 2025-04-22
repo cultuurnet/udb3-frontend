@@ -393,7 +393,7 @@ const LocationStep = ({
 
           const isDefaultZip = municipality?.zip === '0000';
           const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
-          
+
           const onFieldChange = (updatedValue) => {
             updatedValue = { ...field.value, ...updatedValue };
             field.onChange(updatedValue);
