@@ -161,6 +161,8 @@ const StepsForm = ({
 
   const initialOffer = isOnDuplicatePage ? offer : undefined;
 
+  const isEventTypeSelected = form.getValues('typeAndTheme.type');
+
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
       setFetchErrors(undefined);
@@ -209,6 +211,7 @@ const StepsForm = ({
       variant={ButtonVariants.SECONDARY}
       onClick={() => setIsPublishLaterModalVisible(true)}
       key="publishLater"
+      disabled={!isEventTypeSelected}
     >
       {t('create.actions.publish_later')}
     </Button>
@@ -291,6 +294,7 @@ const StepsForm = ({
             {footerStatus === FooterStatus.PUBLISH && [
               <Button
                 variant={ButtonVariants.SUCCESS}
+                disabled={!isEventTypeSelected}
                 onClick={() => {
                   publishOffer();
                 }}
