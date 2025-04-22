@@ -204,6 +204,7 @@ const ContactInfoStep = ({
       {
         onSuccess: () => {
           onSuccessfulChange(contactPoint);
+          onValidationChange(ValidationStatus.SUCCESS, field);
         },
       },
     );
