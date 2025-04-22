@@ -15,7 +15,9 @@ import {
 } from '@/hooks/api/offers';
 import { EventType } from '@/hooks/api/terms';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Term } from '@/types/Offer';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
@@ -201,9 +203,11 @@ type Props = StepProps & {
 };
 
 const EventTypeAndThemeStep = ({
+  offerId,
   control,
   scope,
   name,
+  setValue,
   watch,
   onChange,
   shouldHideType,
@@ -213,9 +217,21 @@ const EventTypeAndThemeStep = ({
   const [, hash] = asPath.split('#');
   const eventTypeAndThemeContainer = useRef(null);
 
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
+  const selectedType = watch('typeAndTheme.type');
+
+  const isCultuurkuurAlertVisible =
+    offerId &&
+    isCultuurkuurEvent &&
+    isCultuurkuurFeatureFlagEnabled &&
+    !selectedType;
 
   const typeAndTheme = useWatch({
     control,
@@ -248,6 +264,11 @@ const EventTypeAndThemeStep = ({
     [typeAndTheme?.type?.id, types, sortByLocalizedName],
   );
 
+  const selectedTypeId = watch('typeAndTheme.type.id');
+
+  const isTypeMatchingAudience =
+    !selectedTypeId || types.some((type) => type.id === selectedTypeId);
+
   const shouldGroupThemes = [
     '0.3.1.0.1', // Cursus met open sessies
     '0.3.1.0.0', // Lessenreeks
@@ -279,6 +300,12 @@ const EventTypeAndThemeStep = ({
       handleScroll();
     }
   }, [hash]);
+
+  useEffect(() => {
+    if (!isTypeMatchingAudience) {
+      setValue('typeAndTheme.type', undefined, { shouldDirty: true });
+    }
+  }, [isTypeMatchingAudience, setValue]);
 
   return (
     <Controller
@@ -464,6 +491,11 @@ const EventTypeAndThemeStep = ({
                   {t('create.type_and_theme.change_theme')}
                 </Button>
               </Inline>
+            )}
+            {isCultuurkuurAlertVisible && (
+              <Alert variant={AlertVariants.WARNING}>
+                {t('create.type_and_theme.cultuurkuur.warning')}
+              </Alert>
             )}
           </Stack>
         );
