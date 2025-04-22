@@ -317,7 +317,10 @@
         "phone_error": "Geen geldig telefoonnummer",
         "title": "Contact",
         "url": "Website",
-        "url_error": "Geen geldige url. Urls moeten starten met http(s)://"
+        "url_error": "Geen geldige url. Urls moeten starten met http(s)://",
+        "cultuurkuur": {
+          "warning": "Voeg een e-mailadres toe waarop scholen je kunnen contacteren."
+        }
       },
       "booking_info": {
         "title": "Reservatie",
