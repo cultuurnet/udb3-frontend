@@ -1086,7 +1086,7 @@
       },
       "approve_modal": {
         "title": "Verwaltungsantrag genehmigen",
-        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? <br/><br/> Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
+        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
         "cancel": "Abbrechen",
         "confirm": "Antrag genehmigen",
         "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}}"
