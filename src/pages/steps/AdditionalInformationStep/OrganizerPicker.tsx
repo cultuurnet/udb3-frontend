@@ -11,9 +11,9 @@ import { SupportedLanguages } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
+import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -21,6 +21,8 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { isNewEntry, NewEntry, Typeahead } from '@/ui/Typeahead';
+import { UitpasIcon } from '@/ui/UitpasIcon';
+import { CULTUURKUUR_ORGANIZER_LABEL } from '@/utils/hasCultuurkuurOrganizerLabel';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { valueToArray } from '@/utils/valueToArray';
 
@@ -28,7 +30,7 @@ const MAX_RECENT_USED_ORGANIZERS = 4;
 
 const getValueFromGlobalTheme = getValueFromTheme('global');
 
-const isUitpasOrganizer = (organizer: Organizer): boolean => {
+const isUitpasOrganizer = (organizer: Organizer) => {
   const combinedLabels = (organizer.labels || []).concat(
     organizer.hiddenLabels || [],
   );
@@ -38,6 +40,10 @@ const isUitpasOrganizer = (organizer: Organizer): boolean => {
       (typeof label === 'string' && label.toLowerCase().includes('uitpas')) ||
       label.toLowerCase().includes('paspartoe'),
   );
+};
+
+const isCultuurkuurOrganizer = (organizer: Organizer): boolean => {
+  return organizer.hiddenLabels?.includes(CULTUURKUUR_ORGANIZER_LABEL);
 };
 
 const RecentUsedOrganizers = ({
@@ -94,7 +100,14 @@ const RecentUsedOrganizers = ({
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
-              badge={isUitpasOrganizer(organizer) && <UitpasBadge />}
+              badge={
+                <Inline>
+                  {isUitpasOrganizer(organizer) && <UitpasIcon width="2rem" />}
+                  {isCultuurkuurOrganizer(organizer) && (
+                    <CultuurKuurIcon width="2rem" />
+                  )}
+                </Inline>
+              }
               description={
                 address && `${address.postalCode} ${address.addressLocality}`
               }
@@ -116,11 +129,6 @@ type Props = Omit<StackProps, 'onChange'> & {
 export const getOrganizerName = (org: Organizer, language: string) =>
   (typeof org.name === 'string' ? org.name : org.name[language]) ??
   org.name[org.mainLanguage];
-
-const UitpasBadge = () => {
-  const { t } = useTranslation();
-  return <Badge variant={BadgeVariants.SECONDARY}>{t('brand_uitpas')}</Badge>;
-};
 
 const OrganizerPicker = ({
   organizer,
@@ -276,7 +284,14 @@ const OrganizerPicker = ({
                           <Text>
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
-                          {isUitpasOrganizer(org) && <UitpasBadge />}
+                          <Inline spacing={2}>
+                            {isUitpasOrganizer(org) && (
+                              <UitpasIcon width="2rem" />
+                            )}
+                            {isCultuurkuurOrganizer(org) && (
+                              <CultuurKuurIcon width="2rem" />
+                            )}
+                          </Inline>
                         </>
                       );
                     }}

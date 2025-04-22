@@ -246,12 +246,12 @@ const theme = {
     },
     typeahead: {
       active: {
-        color: colors.white,
-        backgroundColor: colors.udbMainDarkBlue,
+        color: colors.textColor,
+        backgroundColor: colors.udbMainMediumBlue,
       },
       hover: {
-        color: colors.white,
-        backgroundColor: colors.udbMainDarkBlue,
+        color: colors.textColor,
+        backgroundColor: colors.udbMainMediumBlue,
       },
       highlight: {
         fontWeight: 'bold',
