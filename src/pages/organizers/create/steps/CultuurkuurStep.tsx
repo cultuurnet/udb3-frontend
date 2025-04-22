@@ -1,9 +1,9 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { StepProps } from '@/pages/steps/Steps';
 import { Alert } from '@/ui/Alert';
+import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { FormElement } from '@/ui/FormElement';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';

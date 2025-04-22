@@ -19,8 +19,8 @@ import { Stack } from '@/ui/Stack';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 
-import { Scope } from '../create/OfferForm';
 import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
+import { Scope } from '../create/OfferForm';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
 
 type Props = InlineProps &
