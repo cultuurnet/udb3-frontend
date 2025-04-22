@@ -7,7 +7,7 @@ import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
-import { cultuurkuurTypes } from '@/constants/EventTypes';
+import { cultuurkuurTypes, EventTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
@@ -225,13 +225,13 @@ const EventTypeAndThemeStep = ({
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
-  const selectedType = watch('typeAndTheme.type');
+  const selectedTypeId = watch('typeAndTheme.type.id');
 
   const isCultuurkuurAlertVisible =
     offerId &&
     isCultuurkuurEvent &&
     isCultuurkuurFeatureFlagEnabled &&
-    !selectedType;
+    !selectedTypeId;
 
   const typeAndTheme = useWatch({
     control,
@@ -263,8 +263,6 @@ const EventTypeAndThemeStep = ({
       ),
     [typeAndTheme?.type?.id, types, sortByLocalizedName],
   );
-
-  const selectedTypeId = watch('typeAndTheme.type.id');
 
   const isTypeMatchingAudience =
     !selectedTypeId || types.some((type) => type.id === selectedTypeId);
@@ -302,6 +300,8 @@ const EventTypeAndThemeStep = ({
   }, [hash]);
 
   useEffect(() => {
+    if (selectedTypeId === EventTypes.Film) return;
+
     if (!isTypeMatchingAudience) {
       setValue('typeAndTheme.type', undefined, { shouldDirty: true });
     }
