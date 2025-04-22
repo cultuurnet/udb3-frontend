@@ -293,7 +293,10 @@
         "various": "Varia"
       },
       "change_type": "Wijzig type",
-      "refine": "Verfijn"
+      "refine": "Verfijn",
+      "cultuurkuur": {
+        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden."
+      }
     },
     "additionalInformation": {
       "title_events": "Laat dit evenement extra opvallen",
