@@ -53,9 +53,7 @@ test('create an event with UiTPAS organizer and UiTPAS prices', async ({
   await page.getByRole('button', { name: 'Organisatie toevoegen' }).click();
   await page.locator('#organizer-picker').fill(dummyEvent.organizer.name);
 
-  await page
-    .locator('.uitpas-icon')
-    .click();
+  await page.locator('.uitpas-icon').click();
 
   // check if alert to add prices is visible
   await expect(page.getByText('Dit is een UiTPAS organisator')).toBeVisible();
