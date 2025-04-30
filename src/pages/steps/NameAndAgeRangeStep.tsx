@@ -2,14 +2,20 @@ import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes } from '@/constants/OfferType';
+import { useGetEducationLevelsQuery } from '@/hooks/api/education-levels';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
+import { FormElement } from '@/ui/FormElement';
+import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -63,6 +69,9 @@ const useEditNameAndAgeRange = ({
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   const router = useRouter();
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
 
   const duplicatePlaceId =
     (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
@@ -78,6 +87,11 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     router.push(`/place/${placeId}/preview`);
   };
 
+  const levels = useGetEducationLevelsQuery();
+  const isCultuurkuurEvent =
+    props.scope === OfferTypes.EVENTS &&
+    props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
   return (
     <Controller
       control={control}
@@ -86,11 +100,27 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
         return (
           <Stack spacing={4} maxWidth={parseSpacing(11)}>
             <NameStep {...getStepProps(props)} name={name} control={control} />
-            <AgeRangeStep
-              {...getStepProps(props)}
-              name={name}
-              control={control}
-            />
+            {!isCultuurkuurEvent && (
+              <AgeRangeStep
+                {...getStepProps(props)}
+                name={name}
+                control={control}
+              />
+            )}
+            {isCultuurkuurFeatureFlagEnabled &&
+              isCultuurkuurEvent &&
+              !levels.isLoading && (
+                <FormElement
+                  id={'labels'}
+                  label={'Geschikt voor de volgende onderwijsniveaus '}
+                  Component={
+                    <LabelsCheckboxTree
+                      {...getStepProps(props)}
+                      nodes={levels.data}
+                    />
+                  }
+                />
+              )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}

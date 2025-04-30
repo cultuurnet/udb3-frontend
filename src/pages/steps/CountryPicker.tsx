@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Countries, Country } from '@/types/Country';
 import { BoxProps, getBoxProps } from '@/ui/Box';
 import { Button } from '@/ui/Button';
@@ -8,13 +9,13 @@ import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
-import { CultuurKuurIcon } from '../CultuurKuurIcon';
-import { FlagIcon } from '../FlagIcon';
+import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
+import { FlagIcon } from '../../ui/FlagIcon';
 
 type Props = BoxProps & {
   value: Country;
   onChange: (value: Country) => void;
-  includeLocationSchool?: boolean;
+  showSchoolLocation?: boolean;
 };
 
 const getGlobalValue = getValueFromTheme('global');
@@ -25,10 +26,14 @@ const CountryPicker = ({
   value,
   onChange,
   className,
-  includeLocationSchool,
+  showSchoolLocation,
   ...props
 }: Props) => {
   const { t } = useTranslation();
+
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
 
   return (
     <Dropdown
@@ -68,7 +73,7 @@ const CountryPicker = ({
 
       <Dropdown.Divider />
 
-      {includeLocationSchool && (
+      {!isCultuurkuurFeatureFlagEnabled && showSchoolLocation && (
         <Dropdown.Item onClick={() => onChange(undefined)}>
           <Inline spacing={3}>
             <CultuurKuurIcon />
@@ -81,7 +86,7 @@ const CountryPicker = ({
 };
 
 CountryPicker.defaultProps = {
-  includeLocationSchool: false,
+  showSchoolLocation: false,
 };
 
 export { CountryPicker };

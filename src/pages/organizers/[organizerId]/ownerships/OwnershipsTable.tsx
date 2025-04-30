@@ -77,7 +77,7 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
       <Text fontSize="small">
         {t('organizers.ownerships.table.status.approved_by', {
           email: request.approvedByEmail,
-          date: formatDateToISO(new Date(request.approvedDate)),
+          date: new Date(request.approvedDate).toLocaleString('nl-BE'),
         })}
       </Text>
     );
@@ -88,7 +88,7 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
       <Text fontSize="small">
         {t('organizers.ownerships.table.status.rejected_by', {
           email: request.rejectedByEmail,
-          date: formatDateToISO(new Date(request.rejectedDate)),
+          date: new Date(request.rejectedDate).toLocaleString('nl-BE'),
         })}
       </Text>
     );
