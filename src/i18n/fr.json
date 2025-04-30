@@ -1086,7 +1086,7 @@
       },
       "approve_modal": {
         "title": "Approuver la demande de gestion",
-        "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? <br/><br/> Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
+        "body": "Êtes-vous sûr de vouloir approuver la demande de {{ownerEmail}} ? Une fois approuvée, {{ownerEmail}} pourra modifier la page de l'organisation et les événements de {{organizerName}}.",
         "cancel": "Annuler",
         "confirm": "Approuver la demande",
         "success": "{{ownerEmail}} est maintenant gestionnaire de {{organizerName}}"

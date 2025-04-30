@@ -60,4 +60,6 @@ const RadioButtonWithLabel = React.forwardRef(
   },
 );
 
+RadioButtonWithLabel.displayName = 'RadioButtonWithLabel';
+
 export { RadioButtonWithLabel };

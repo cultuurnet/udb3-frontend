@@ -1104,7 +1104,7 @@
       },
       "approve_modal": {
         "title": "Aanvraag tot beheer goedkeuren",
-        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? <br/><br/> Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
+        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
         "cancel": "Annuleren",
         "confirm": "Aanvraag goedkeuren",
         "success": "{{ownerEmail}} is nu beheerder van {{organizerName}}"

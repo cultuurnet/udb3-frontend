@@ -305,7 +305,7 @@ const EventTypeAndThemeStep = ({
     if (!isTypeMatchingAudience) {
       setValue('typeAndTheme.type', undefined, { shouldDirty: true });
     }
-  }, [isTypeMatchingAudience, setValue]);
+  }, [selectedTypeId, isTypeMatchingAudience, setValue]);
 
   return (
     <Controller
