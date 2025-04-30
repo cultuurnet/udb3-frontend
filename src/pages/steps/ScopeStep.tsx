@@ -9,7 +9,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
+import { Box, parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
@@ -133,10 +133,10 @@ const ScopeStep = ({
                   <FormElement
                     id={field.name}
                     label={
-                      <>
+                      <Box opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}>
                         {t('steps.offerTypeStep.cultuurkuur_event')}
                         <CultuurKuurIcon marginLeft={2} />
-                      </>
+                      </Box>
                     }
                     labelVariant={LabelVariants.NORMAL}
                     labelPosition={LabelPositions.RIGHT}
@@ -145,6 +145,7 @@ const ScopeStep = ({
                         type={RadioButtonTypes.SWITCH}
                         checked={isCultuurkuurEvent}
                         color={colors.udbMainPositiveGreen}
+                        disabled={offerId && isCultuurkuurEvent}
                         onChange={(e) => {
                           handleOnChangeAudience(
                             e.target.checked

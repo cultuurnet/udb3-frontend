@@ -109,6 +109,11 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
             border-color: ${color};
           }
 
+          .custom-control-input:disabled ~ .custom-control-label::before {
+            filter: opacity(50%) grayscale(25%);
+            cursor: not-allowed;
+          }
+
           .custom-control-label::after {
             font-size: 1em;
             padding: 0;
