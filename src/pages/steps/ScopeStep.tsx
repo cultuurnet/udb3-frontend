@@ -133,13 +133,7 @@ const ScopeStep = ({
                   <FormElement
                     id={field.name}
                     label={
-                      <Box
-                        css={`
-                          opacity: ${offerId && isCultuurkuurEvent
-                            ? '0.7'
-                            : '1.0'};
-                        `}
-                      >
+                      <Box opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}>
                         {t('steps.offerTypeStep.cultuurkuur_event')}
                         <CultuurKuurIcon marginLeft={2} />
                       </Box>
