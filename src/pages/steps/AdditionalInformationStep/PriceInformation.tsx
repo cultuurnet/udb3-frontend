@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
@@ -155,7 +156,6 @@ const PriceInformation = ({
   ...props
 }: TabContentProps) => {
   const { t, i18n } = useTranslation();
-  const [isPricesLoaded, setIsPricesLoaded] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery(
     { id: offerId, scope },
@@ -241,10 +241,16 @@ const PriceInformation = ({
     [controlledRates],
   );
 
-  const hasPriceInfo = !!offer?.priceInfo;
+  const hasPriceInfo = !!offer?.priceInfo.find(
+    (price) => price.category === PriceCategory.BASE,
+  );
+
+  const isCultuurkuurAlertVisible =
+    isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && !hasPriceInfo;
 
   useEffect(() => {
-    const priceInfo = offer?.priceInfo ?? [];
+    if (!offer?.priceInfo) return;
+    const priceInfo = offer.priceInfo as FormData['rates'];
 
     const hasUitpasLabel =
       offer?.organizer && scope === OfferTypes.EVENTS
@@ -267,38 +273,28 @@ const PriceInformation = ({
       );
     }
 
-    onValidationChange(ValidationStatus.SUCCESS, field);
-
     replace(
       reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
     );
     reset({}, { keepValues: true });
-  }, [
-    scope,
-    field,
-    offer,
-    hasRates,
-    isCultuurkuurEvent,
-    i18n.language,
-    offer?.mainLanguage,
-    offer?.organizer,
-    offer?.priceInfo,
-    replace,
-    reset,
-    onValidationChange,
-  ]);
 
-  useEffect(() => {
-    if (isPricesLoaded) return;
-
-    if (!offer?.priceInfo) return;
-
-    if (offer.priceInfo.length > 0) {
-      onValidationChange(ValidationStatus.SUCCESS, field);
+    if (isCultuurkuurAlertVisible) {
+      onValidationChange(ValidationStatus.WARNING, field);
+      return;
     }
 
-    setIsPricesLoaded(true);
-  }, [field, offer?.priceInfo, isPricesLoaded, onValidationChange]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [
+    offer?.priceInfo,
+    field,
+    hasRates,
+    isCultuurkuurEvent,
+    offer,
+    scope,
+    onValidationChange,
+    replace,
+    reset,
+  ]);
 
   return (
     <Stack {...getStackProps(props)} padding={0} spacing={5}>
@@ -498,13 +494,11 @@ const PriceInformation = ({
         </Stack>
       </Inline>
       <Stack spacing={4}>
-        {isCultuurkuurFeatureFlagEnabled &&
-          isCultuurkuurEvent &&
-          !hasPriceInfo && (
-            <Alert variant={AlertVariants.WARNING} marginBottom={3}>
-              {t('create.additionalInformation.price_info.cultuurkuur.warning')}
-            </Alert>
-          )}
+        {isCultuurkuurAlertVisible && (
+          <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+            {t('create.additionalInformation.price_info.cultuurkuur.warning')}
+          </Alert>
+        )}
         <Alert variant={AlertVariants.PRIMARY}>
           {t('create.additionalInformation.price_info.global_info')}
         </Alert>
