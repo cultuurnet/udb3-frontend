@@ -180,12 +180,12 @@ const dummyData: Node[] = [
   },
 ];
 
-const useGetEducationLevelsQuery = () => {
-  return useQuery({
+const useGetEducationLevelsQuery = () =>
+  useQuery({
+    queryKey: ['education-levels'],
     retry: false,
     staleTime: Infinity,
     queryFn: async () => dummyData,
   });
-};
 
 export { useGetEducationLevelsQuery };
