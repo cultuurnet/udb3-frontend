@@ -189,7 +189,8 @@ const PriceInformation = ({
   );
 
   const isCultuurkuurEvent =
-    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
+    isCultuurkuurFeatureFlagEnabled;
 
   const rates = watch('rates');
   const ratesRef = useRef(rates);
@@ -241,16 +242,17 @@ const PriceInformation = ({
     [controlledRates],
   );
 
-  const hasPriceInfo = !!offer?.priceInfo.find(
+  const hasBasePriceInfo = !!offer?.priceInfo?.find(
     (price) => price.category === PriceCategory.BASE,
   );
 
+  const hasMultiplePrices = offer?.priceInfo?.length > 1;
+
   const isCultuurkuurAlertVisible =
-    isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && !hasPriceInfo;
+    isCultuurkuurEvent && (!hasBasePriceInfo || hasMultiplePrices);
 
   useEffect(() => {
-    if (!offer?.priceInfo) return;
-    const priceInfo = offer.priceInfo as FormData['rates'];
+    const priceInfo = offer?.priceInfo ?? ([] as FormData['rates']);
 
     const hasUitpasLabel =
       offer?.organizer && scope === OfferTypes.EVENTS
@@ -278,9 +280,8 @@ const PriceInformation = ({
     );
     reset({}, { keepValues: true });
 
-    if (isCultuurkuurAlertVisible) {
-      onValidationChange(ValidationStatus.WARNING, field);
-      return;
+    if (hasMultiplePrices && isCultuurkuurEvent) {
+      return onValidationChange(ValidationStatus.WARNING, field);
     }
 
     onValidationChange(ValidationStatus.SUCCESS, field);
@@ -496,7 +497,13 @@ const PriceInformation = ({
       <Stack spacing={4}>
         {isCultuurkuurAlertVisible && (
           <Alert variant={AlertVariants.WARNING} marginBottom={3}>
-            {t('create.additionalInformation.price_info.cultuurkuur.warning')}
+            {hasBasePriceInfo
+              ? t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.multiple_prices',
+                )
+              : t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.no_price',
+                )}
           </Alert>
         )}
         <Alert variant={AlertVariants.PRIMARY}>

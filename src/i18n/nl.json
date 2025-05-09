@@ -511,7 +511,10 @@
         "cultuurkuur": {
           "per_group": "per groep",
           "per_student": "per leerling",
-          "warning": "Voeg een prijs toe voor scholen, per leerling of per groep."
+          "warning": {
+            "no_price": "Voeg een prijs toe voor scholen, per leerling of per groep.",
+            "multiple_prices": "Let op: enkel het basistarief zal zichtbaar zijn voor je Cultuurkuur-activiteit. Andere tarieven worden niet weergegeven."
+          } 
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
