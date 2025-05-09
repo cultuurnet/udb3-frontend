@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
@@ -289,6 +288,7 @@ const PriceInformation = ({
     offer?.priceInfo,
     field,
     hasRates,
+    hasMultiplePrices,
     isCultuurkuurEvent,
     offer,
     scope,
