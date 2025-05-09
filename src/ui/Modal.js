@@ -23,6 +23,7 @@ const Components = {
 const Modal = ({ variant, ...props }) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
+  // @ts-expect-error TODO: Fix type error
   return <ModalVariant {...props} />;
 };
 
