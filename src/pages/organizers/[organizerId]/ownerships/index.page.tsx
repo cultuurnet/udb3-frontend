@@ -57,6 +57,7 @@ const Ownership = () => {
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [lastRequestedEmail, setLastRequestedEmail] = useState('');
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
   const { trigger, register, formState, getValues, setError, reset } = useForm({
     resolver: yupResolver(
@@ -110,6 +111,7 @@ const Ownership = () => {
       setIsSuccessAlertVisible(true);
       setIsOpen(false);
       setIsQuestionModalVisible(false);
+      setLastRequestedEmail(getValues('email'));
       reset();
     },
   });
@@ -188,7 +190,10 @@ const Ownership = () => {
                 }}
               >
                 {t(`${translationsPath}.success`, {
-                  ownerEmail: selectedRequest?.ownerEmail ?? getValues('email'),
+                  ownerEmail:
+                    selectedRequest?.ownerEmail ??
+                    lastRequestedEmail ??
+                    getValues('email'),
                   organizerName,
                 })}
               </Alert>
