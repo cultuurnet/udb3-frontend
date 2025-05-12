@@ -892,6 +892,16 @@
       }
     }
   },
+  "cultuurkuur_modal": {
+    "selectAll": "Alles selecteren",
+    "clearAll": "Alles verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "location": {
+      "title": "Werkingsregio selecteren",
+      "selectAllProvince": "Volledige provincie selecteren"
+    }
+  },
   "location": {
     "add_modal": {
       "title": "Nieuwe locatie toevoegen",
