@@ -3,11 +3,16 @@ import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
+import {
+  HierarchicalData,
+  useGetCultuurkuurRegions,
+} from '@/hooks/api/cultuurkuur';
 import {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
@@ -17,15 +22,18 @@ import {
 } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode } from '@/types/Event';
+import { Offer } from '@/types/Offer';
+import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
-import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
+import { Alert, AlertVariants, IconSuccess } from '@/ui/Alert';
+import { Box, parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
@@ -40,14 +48,17 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { CityPicker } from '../CityPicker';
 import { CountryPicker } from './CountryPicker';
+import { CultuurkuurSelectionOverview } from './CultuurkuurSelectionOverview';
 import { UseEditArguments } from './hooks/useEditField';
 import { useRecentLocations } from './hooks/useRecentLocations';
+import { CultuurkuurModal } from './modals/CultuurkuurModal';
 import { PlaceStep } from './PlaceStep';
 import {
   FormDataUnion,
@@ -333,17 +344,44 @@ const LocationStep = ({
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
+  const [
+    isCultuukuurLocationModalVisible,
+    setIsCultuurkuurLocationModalVisible,
+  ] = useState(false);
+
   const shouldAddSpaceBelowTypeahead = useMemo(() => {
     if (offerId) return false;
 
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
+  const [selectedLocations, setSelectedLocations] = useState<
+    HierarchicalData[]
+  >([]);
+
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const audience = getOfferByIdQuery.data?.audience;
 
   const { hasRecentLocations } = useRecentLocations();
+
+  const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
+  const cultuurkuurRegions = getCultuurkuurRegionsQuery.data;
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+  const labels = useMemo(() => getUniqueLabels(entity) ?? [], [entity]);
+
+  const handleSaveCultuurkuurLocations = (locations: HierarchicalData[]) => {
+    const selectedLocationsToLabels = locations?.map(
+      (location) => location.label,
+    );
+    if (offerId) {
+      return;
+    } else {
+      setValue('labels', selectedLocationsToLabels);
+    }
+  };
 
   useEffect(() => {
     if (audience?.audienceType) {
@@ -586,6 +624,39 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
+                <Button
+                  variant={ButtonVariants.LINK}
+                  onClick={() => setIsCultuurkuurLocationModalVisible(true)}
+                >
+                  <Inline spacing={2}>
+                    <Icon name={Icons.PLUS_CIRCLE} />
+                    <span> Add province region gemeente</span>
+                  </Inline>
+                </Button>
+
+                {isCultuukuurLocationModalVisible && (
+                  <CultuurkuurModal
+                    visible={true}
+                    data={cultuurkuurRegions}
+                    selectedData={selectedLocations}
+                    title={t('cultuurkuur_modal.location.title')}
+                    checkboxTitle={t(
+                      'cultuurkuur_modal.location.selectAllProvince',
+                    )}
+                    onConfirm={(selectedLocations) => {
+                      setSelectedLocations(selectedLocations);
+                      handleSaveCultuurkuurLocations(selectedLocations);
+                      setIsCultuurkuurLocationModalVisible(false);
+                    }}
+                    onClose={() => setIsCultuurkuurLocationModalVisible(false)}
+                  />
+                )}
+                <CultuurkuurSelectionOverview
+                  selectedData={selectedLocations}
+                  cultuurkuurData={cultuurkuurRegions}
+                  labels={labels}
+                  onPreSelectedDataReady={setSelectedLocations}
+                />
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">
                     {t('create.location.country.location_school_info')}
