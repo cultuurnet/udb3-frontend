@@ -397,8 +397,8 @@ const PriceInformation = ({
                       <Text variant={TextVariants.MUTED}>
                         {t('create.additionalInformation.price_info.euro')}
                       </Text>
-                      {isCultuurkuurFeatureFlagEnabled &&
-                        isCultuurkuurEvent && (
+                      {isCultuurkuurEvent &&
+                        rate.category === PriceCategory.BASE && (
                           <FormElement
                             id={`rate_groupPrice_${rate.id}`}
                             Component={
