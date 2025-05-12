@@ -38,7 +38,7 @@ const IconWarning = () => {
   );
 };
 
-const IconSuccess = () => {
+export const IconSuccess = () => {
   return (
     <svg
       fill="none"
