@@ -57,8 +57,9 @@ const Ownership = () => {
   const [requestToBeDeleted, setRequestToBeDeleted] =
     useState<OwnershipRequest>();
   const [selectedRequest, setSelectedRequest] = useState<OwnershipRequest>();
+  const [lastRequestedEmail, setLastRequestedEmail] = useState('');
   const translationsPath = `organizers.ownerships.${actionType}_modal`;
-  const { trigger, register, formState, getValues, setError } = useForm({
+  const { trigger, register, formState, getValues, setError, reset } = useForm({
     resolver: yupResolver(
       yup.object({
         email: yup.string().email(),
@@ -108,27 +109,24 @@ const Ownership = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
       setIsSuccessAlertVisible(true);
+      setIsOpen(false);
       setIsQuestionModalVisible(false);
+      setLastRequestedEmail(getValues('email'));
+      reset();
     },
   });
 
-  const approveRequestedOwnership = async (ownershipId: string) => {
-    setIsSuccessAlertVisible(true);
-    setIsOpen(false);
-
-    return approveOwnershipRequestMutation.mutateAsync({ ownershipId });
-  };
-
   const requestOwnership = useRequestOwnershipMutation({
+    onSuccess: (data: { id: string }) =>
+      approveOwnershipRequestMutation.mutateAsync({ ownershipId: data.id }),
     onError: async (error: FetchError<ErrorBody>) => {
       if (error.body.status === 409) {
         const ownershipId = error.body.detail.split('with id ')[1];
-        await approveRequestedOwnership(ownershipId);
+        await approveOwnershipRequestMutation.mutateAsync({ ownershipId });
       } else {
         setError('email', { message: error.body.detail || error.title });
       }
     },
-    onSuccess: (data: { id: string }) => approveRequestedOwnership(data.id),
   });
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
@@ -192,7 +190,10 @@ const Ownership = () => {
                 }}
               >
                 {t(`${translationsPath}.success`, {
-                  ownerEmail: selectedRequest?.ownerEmail ?? getValues('email'),
+                  ownerEmail:
+                    selectedRequest?.ownerEmail ??
+                    lastRequestedEmail ??
+                    getValues('email'),
                   organizerName,
                 })}
               </Alert>
