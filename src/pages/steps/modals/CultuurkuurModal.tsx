@@ -137,7 +137,9 @@ const CultuurkuurModal = ({
             <Card>
               <Card.Header
                 css={`
-                  background-color: ${colors.grey1};
+                  background-color: ${selectedLabels.includes(level1.label)
+                    ? colors.green5
+                    : colors.grey1};
                 `}
               >
                 <Inline
