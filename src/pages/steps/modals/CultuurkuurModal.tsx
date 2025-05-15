@@ -129,7 +129,7 @@ const CultuurkuurModal = ({
       <Stack padding={4} spacing={5}>
         {level1Entities.map((level1) => (
           <Accordion
-            key={level1.name.nl}
+            key={level1.label}
             css={`
               margin-bottom: 2rem;
             `}
@@ -149,7 +149,7 @@ const CultuurkuurModal = ({
 
                   <CheckboxWithLabel
                     className="selectAllLevel1"
-                    id={level1.name}
+                    id={level1.label}
                     name={level1.name}
                     disabled={false}
                     onToggle={() => handleSelectionToggle(level1)}
@@ -161,7 +161,7 @@ const CultuurkuurModal = ({
               </Card.Header>
             </Card>
             {level1.children.map((level2) => (
-              <Card key={level2.name.nl}>
+              <Card key={level2.label}>
                 <Card.Header
                   css={`
                     background-color: transparent;
@@ -171,12 +171,12 @@ const CultuurkuurModal = ({
                     justifyContent="space-between"
                     alignItems="center"
                     cursor="pointer"
-                    onClick={() => toggleGroup(level2.name.nl)}
+                    onClick={() => toggleGroup(level2.label)}
                   >
                     <span>{level2.name.nl}</span>
                     <Icon
                       name={
-                        openGroup === level2.name.nl
+                        openGroup === level2.label
                           ? Icons.CHEVRON_DOWN
                           : Icons.CHEVRON_RIGHT
                       }
@@ -184,8 +184,8 @@ const CultuurkuurModal = ({
                   </Inline>
                 </Card.Header>
                 <Accordion.Collapse
-                  eventKey={level2.name.nl}
-                  in={openGroup === level2.name.nl}
+                  eventKey={level2.label}
+                  in={openGroup === level2.label}
                 >
                   <Card.Body>
                     <Inline justifyContent="flex-start" marginBottom={4}>
@@ -210,7 +210,7 @@ const CultuurkuurModal = ({
                     >
                       {sortByName(level2.children).map((leaf) => (
                         <Button
-                          key={leaf.name.nl}
+                          key={leaf.label}
                           width="auto"
                           active={selectedLabels.includes(leaf.label)}
                           display="inline-flex"
