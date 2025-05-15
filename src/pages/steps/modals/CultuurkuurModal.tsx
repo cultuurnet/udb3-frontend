@@ -13,6 +13,7 @@ import { Inline } from '@/ui/Inline';
 import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
+import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 type Props = {
   visible: boolean;
@@ -37,84 +38,21 @@ const CultuurkuurModal = ({
   onClose,
 }: Props) => {
   const { t } = useTranslation();
-
-  const level1Entities = data.map((entry) => entry);
-
-  const [selectedEntities, setSelectedEntities] = useState(selectedData);
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const selectedLabels = useMemo(
-    () => selectedEntities.map((selected) => selected.label),
-    [selectedEntities],
+  const manager = useMemo(
+    () => new CultuurkuurLabelsManager(data, selectedData),
+    [data, selectedData],
   );
 
-  const toggleGroup = (groupName: string) => {
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+
+  const toggleGroup = (groupName: string) =>
     setOpenGroup((prev) => (prev === groupName ? null : groupName));
-  };
-
-  const isGroupFullySelected = (level1Entity: HierarchicalData) => {
-    const allLeafEntities = level1Entity.children.flatMap(
-      (level2) => level2.children,
-    );
-
-    return (
-      selectedLabels.includes(level1Entity.label) ||
-      allLeafEntities.every((leaf) => selectedLabels.includes(leaf.label))
-    );
-  };
-
-  const handleSelectionToggle = (entity: HierarchicalData) => {
-    const isGroup = !!entity.children;
-
-    setSelectedEntities((prev) => {
-      const alreadySelected = prev.some((e) => e.name.nl === entity.name.nl);
-
-      if (alreadySelected) {
-        return prev.filter((e) => e.name.nl !== entity.name.nl);
-      }
-
-      if (isGroup) {
-        const allLeafEntities = entity.children.flatMap(
-          (level2) => level2.children,
-        );
-        if (isGroupFullySelected(entity)) {
-          return prev.filter(
-            (sel) =>
-              !allLeafEntities.some((leaf) => leaf.name.nl === sel.name.nl),
-          );
-        }
-        return [...prev, ...allLeafEntities, entity];
-      }
-
-      return [...prev, entity];
-    });
-  };
-
-  const areAllLeafsSelected = (leafEntities: HierarchicalData[]) =>
-    leafEntities.every((leaf) =>
-      selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
-    );
-
-  const toggleSelectAllLeafs = (leafEntities: HierarchicalData[]) => {
-    const allSelected = areAllLeafsSelected(leafEntities);
-    if (allSelected) {
-      setSelectedEntities((prev) =>
-        prev.filter(
-          (sel) => !leafEntities.some((leaf) => leaf.name.nl === sel.name.nl),
-        ),
-      );
-    } else {
-      const newSelections = leafEntities.filter(
-        (leaf) => !selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
-      );
-      setSelectedEntities((prev) => [...prev, ...newSelections]);
-    }
-  };
 
   return (
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onConfirm={() => onConfirm(selectedEntities)}
+      onConfirm={() => onConfirm(manager.selected)}
       onClose={onClose}
       title={
         <>
@@ -127,17 +65,12 @@ const CultuurkuurModal = ({
       size="lg"
     >
       <Stack padding={4} spacing={5}>
-        {level1Entities.map((level1) => (
-          <Accordion
-            key={level1.label}
-            css={`
-              margin-bottom: 2rem;
-            `}
-          >
+        {manager.available.map((level1) => (
+          <Accordion key={level1.label} style={{ marginBottom: '2rem' }}>
             <Card>
               <Card.Header
                 css={`
-                  background-color: ${selectedLabels.includes(level1.label)
+                  background-color: ${manager.isLabelSelected(level1.label)
                     ? colors.green5
                     : colors.grey1};
                 `}
@@ -145,17 +78,16 @@ const CultuurkuurModal = ({
                 <Inline
                   justifyContent="space-between"
                   alignItems="center"
-                  onClick={() => handleSelectionToggle(level1)}
+                  onClick={() => manager.handleSelectionToggle(level1)}
                 >
                   <p>{level1.name.nl}</p>
-
                   <CheckboxWithLabel
                     className="selectAllLevel1"
                     id={level1.label}
                     name={level1.name}
                     disabled={false}
-                    onToggle={() => handleSelectionToggle(level1)}
-                    checked={isGroupFullySelected(level1)}
+                    onToggle={() => manager.handleSelectionToggle(level1)}
+                    checked={manager.isGroupFullySelected(level1)}
                   >
                     {checkboxTitle}
                   </CheckboxWithLabel>
@@ -166,7 +98,9 @@ const CultuurkuurModal = ({
               <Card key={level2.label}>
                 <Card.Header
                   css={`
-                    background-color: transparent;
+                    background-color: ${manager.isLabelSelected(level1.label)
+                      ? colors.green4
+                      : 'transparent'};
                   `}
                 >
                   <Inline
@@ -195,10 +129,10 @@ const CultuurkuurModal = ({
                         variant={ButtonVariants.LINK}
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleSelectAllLeafs(level2.children);
+                          manager.toggleSelectAllLeafs(level2.children);
                         }}
                       >
-                        {areAllLeafsSelected(level2.children)
+                        {manager.areAllLeafsSelected(level2.children)
                           ? t('cultuurkuur_modal.clearAll')
                           : t('cultuurkuur_modal.selectAll')}
                       </Button>
@@ -214,12 +148,12 @@ const CultuurkuurModal = ({
                         <Button
                           key={leaf.label}
                           width="auto"
-                          active={selectedLabels.includes(leaf.label)}
+                          active={manager.isLabelSelected(leaf.label)}
                           display="inline-flex"
                           variant={ButtonVariants.SECONDARY_TOGGLE}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleSelectionToggle(leaf);
+                            manager.handleSelectionToggle(leaf);
                           }}
                         >
                           {leaf.name.nl}
