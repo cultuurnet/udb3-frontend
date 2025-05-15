@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -38,8 +38,13 @@ const CultuurkuurModal = ({
   onClose,
 }: Props) => {
   const { t } = useTranslation();
+
   const manager = useMemo(
-    () => new CultuurkuurLabelsManager(data, selectedData),
+    () =>
+      new CultuurkuurLabelsManager(
+        data,
+        selectedData.map((s) => s.label),
+      ),
     [data, selectedData],
   );
 
@@ -70,7 +75,7 @@ const CultuurkuurModal = ({
             <Card>
               <Card.Header
                 css={`
-                  background-color: ${manager.isLabelSelected(level1.label)
+                  background-color: ${manager.isGroupFullySelected(level1)
                     ? colors.green5
                     : colors.grey1};
                 `}
@@ -98,7 +103,7 @@ const CultuurkuurModal = ({
               <Card key={level2.label}>
                 <Card.Header
                   css={`
-                    background-color: ${manager.isLabelSelected(level1.label)
+                    background-color: ${manager.isGroupFullySelected(level2)
                       ? colors.green4
                       : 'transparent'};
                   `}
@@ -128,11 +133,10 @@ const CultuurkuurModal = ({
                       <Button
                         variant={ButtonVariants.LINK}
                         onClick={(e) => {
-                          e.stopPropagation();
                           manager.toggleSelectAllLeafs(level2.children);
                         }}
                       >
-                        {manager.areAllLeafsSelected(level2.children)
+                        {manager.isGroupFullySelected(level2)
                           ? t('cultuurkuur_modal.clearAll')
                           : t('cultuurkuur_modal.selectAll')}
                       </Button>
@@ -152,7 +156,6 @@ const CultuurkuurModal = ({
                           display="inline-flex"
                           variant={ButtonVariants.SECONDARY_TOGGLE}
                           onClick={(e) => {
-                            e.stopPropagation();
                             manager.handleSelectionToggle(leaf);
                           }}
                         >
