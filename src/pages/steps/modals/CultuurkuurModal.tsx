@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { sortBy } from 'lodash';
+import { useMemo, useState } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -23,9 +24,8 @@ type Props = {
   checkboxTitle: string;
 } & StackProps;
 
-const sortByName = (entities: HierarchicalData['children']) => {
-  return entities.sort((a, b) => a.name.nl.localeCompare(b.name.nl));
-};
+const sortByName = (entities: HierarchicalData['children']) =>
+  sortBy(entities, 'name.nl');
 
 const CultuurkuurModal = ({
   visible,
@@ -42,6 +42,10 @@ const CultuurkuurModal = ({
 
   const [selectedEntities, setSelectedEntities] = useState(selectedData);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const selectedLabels = useMemo(
+    () => selectedEntities.map((selected) => selected.label),
+    [selectedEntities],
+  );
 
   const toggleGroup = (groupName: string) => {
     setOpenGroup((prev) => (prev === groupName ? null : groupName));
@@ -51,8 +55,10 @@ const CultuurkuurModal = ({
     const allLeafEntities = level1Entity.children.flatMap(
       (level2) => level2.children,
     );
-    return allLeafEntities.every((leaf) =>
-      selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
+
+    return (
+      selectedLabels.includes(level1Entity.label) ||
+      allLeafEntities.every((leaf) => selectedLabels.includes(leaf.label))
     );
   };
 
@@ -206,9 +212,7 @@ const CultuurkuurModal = ({
                         <Button
                           key={leaf.name.nl}
                           width="auto"
-                          active={selectedEntities.some(
-                            (e) => e.name.nl === leaf.name.nl,
-                          )}
+                          active={selectedLabels.includes(leaf.label)}
                           display="inline-flex"
                           variant={ButtonVariants.SECONDARY_TOGGLE}
                           onClick={(e) => {
