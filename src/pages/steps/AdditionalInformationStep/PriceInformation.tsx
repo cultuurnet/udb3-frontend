@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
@@ -171,12 +172,14 @@ const PriceInformation = ({
     handleSubmit,
     watch,
     reset,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: defaultPriceInfoValues,
     shouldFocusError: false,
   });
+
+  const queryClient = useQueryClient();
 
   const { fields, replace, append, remove } = useFieldArray({
     name: 'rates',
@@ -206,11 +209,9 @@ const PriceInformation = ({
   }, [fields, rates]);
 
   const addPriceInfoMutation = useAddOfferPriceInfoMutation({
-    onSuccess: (data) => {
-      const isFormDirty = Object.keys(dirtyFields).length > 0;
-      if (typeof data === 'undefined' || !isFormDirty) return;
-
-      return setTimeout(() => onSuccessfulChange(), 1000);
+    onSuccess: async () => {
+      setTimeout(() => onSuccessfulChange(), 1000);
+      await queryClient.invalidateQueries([scope, { id: offerId }]);
     },
     useErrorBoundary: false,
   });
@@ -236,11 +237,6 @@ const PriceInformation = ({
     [rates],
   );
 
-  const hasRates = useMemo(
-    () => !!controlledRates.find((rate) => rate.price !== ''),
-    [controlledRates],
-  );
-
   const hasBasePriceInfo = !!offer?.priceInfo?.find(
     (price) => price.category === PriceCategory.BASE,
   );
@@ -258,14 +254,7 @@ const PriceInformation = ({
         ? isUitpasOrganizer(offer?.organizer)
         : false;
 
-    if (!hasRates) {
-      replace(
-        priceInfo.length
-          ? (priceInfo as FormData['rates'])
-          : defaultPriceInfoValues.rates,
-      );
-      reset({}, { keepValues: true });
-
+    if (priceInfo.length === 0) {
       return onValidationChange(
         hasUitpasLabel || isCultuurkuurEvent
           ? ValidationStatus.WARNING
@@ -287,7 +276,6 @@ const PriceInformation = ({
   }, [
     offer?.priceInfo,
     field,
-    hasRates,
     hasMultiplePrices,
     isCultuurkuurEvent,
     offer,
@@ -410,7 +398,6 @@ const PriceInformation = ({
                                     shouldValidate: false,
                                   });
                                   onSubmit();
-                                  getOfferByIdQuery.remove();
                                 }}
                                 width="8rem"
                               >
@@ -435,7 +422,6 @@ const PriceInformation = ({
                                 shouldValidate: false,
                               });
                               onSubmit();
-                              getOfferByIdQuery.remove();
                             }}
                           >
                             {t('create.additionalInformation.price_info.free')}
