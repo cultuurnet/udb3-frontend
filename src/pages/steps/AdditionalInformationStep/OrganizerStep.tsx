@@ -393,7 +393,7 @@ const OrganizerStep = ({
             <Inline key={cardSystem.id} spacing={5}>
               <CheckboxWithLabel
                 className="cardsystem-checkbox"
-                id={cardSystem.id}
+                id={String(cardSystem.id)}
                 name={cardSystem.name}
                 checked={selectedCardSystems.some(
                   ({ id }) => cardSystem.id === id,

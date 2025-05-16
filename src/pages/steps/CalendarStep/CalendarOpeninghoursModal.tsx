@@ -138,7 +138,7 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleToggleDaysOfWeek = (
-    event: ChangeEvent<HTMLFormElement>,
+    event: ChangeEvent<HTMLInputElement>,
     dayOfWeek: DayOfWeek,
     idToChange: string,
   ) => {

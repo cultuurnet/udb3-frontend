@@ -76,23 +76,20 @@ export class CultuurkuurLabelsManager {
         (e) => e !== this.getIdentifier(entity),
       );
 
-      // If it's not a group, also check if any parent groups need to be deselected
-      if (!isGroup) {
-        const flattened = this.getFlattened();
-        const parentGroups = flattened.filter((e) =>
-          this.flattenEntity(e).some(
-            (child) => this.getIdentifier(child) === this.getIdentifier(entity),
-          ),
-        );
+      const flattened = this.getFlattened();
+      const parentGroups = flattened.filter((e) =>
+        this.flattenEntity(e).some(
+          (child) => this.getIdentifier(child) === this.getIdentifier(entity),
+        ),
+      );
 
-        parentGroups.forEach((parent) => {
-          if (newSelected.includes(this.getIdentifier(parent))) {
-            newSelected = newSelected.filter(
-              (label) => label !== this.getIdentifier(parent),
-            );
-          }
-        });
-      }
+      parentGroups.forEach((parent) => {
+        if (newSelected.includes(this.getIdentifier(parent))) {
+          newSelected = newSelected.filter(
+            (label) => label !== this.getIdentifier(parent),
+          );
+        }
+      });
 
       return this.setSelected(newSelected);
     }
