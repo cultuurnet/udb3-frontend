@@ -23,13 +23,13 @@ const CultuurkuurSelectionOverview = ({ selectedData, data }: Props) => {
     <Box
       css={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '0.5rem',
-        marginTop: '1rem',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '0.25rem',
+        margin: '1rem 0',
       }}
     >
       {selection.map((item) => (
-        <Inline padding={3} alignItems="center" key={item?.label}>
+        <Inline padding={2} alignItems="center" key={item?.label}>
           <IconSuccess
             css={{
               color: 'green',
