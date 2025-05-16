@@ -68,11 +68,10 @@ describe('CultururKuurLabelsManager', () => {
 
   test('can infer a full state from leaf states', () => {
     const manager = new CultuurkuurLabelsManager(dummyMunicipalities, [
-      dummyMunicipalities[3].children[0].children[0].label,
+      dummyMunicipalities[1].children[1].children[0].label,
     ]);
-
     expect(
-      manager.isGroupFullySelected(dummyMunicipalities[3].children[0]),
+      manager.isGroupFullySelected(dummyMunicipalities[1].children[1]),
     ).toBe(true);
   });
 });

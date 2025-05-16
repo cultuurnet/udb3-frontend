@@ -2094,6 +2094,7 @@ export type HierarchicalData = {
   label?: string;
   extraLabel?: string;
   children?: HierarchicalData[];
+  parent?: HierarchicalData;
 };
 
 export type GetCultuurkuurLocationsResponse = HierarchicalData[];

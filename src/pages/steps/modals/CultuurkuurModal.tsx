@@ -14,6 +14,8 @@ import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
 import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { SupportedLanguages } from '@/i18n/index';
 
 type Props = {
   visible: boolean;
@@ -96,74 +98,76 @@ const CultuurkuurModal = ({
                 </Inline>
               </Card.Header>
             </Card>
-            {level1.children.map((level2) => (
-              <Card key={level2.label}>
-                <Card.Header
-                  css={`
-                    background-color: ${manager.isGroupFullySelected(level2)
-                      ? colors.green4
-                      : 'transparent'};
-                  `}
-                >
-                  <Inline
-                    justifyContent="space-between"
-                    alignItems="center"
-                    cursor="pointer"
-                    onClick={() => toggleGroup(level2.label)}
+            {level1.children.map((level2) => {
+              const levelIdentifier = manager.getIdentifier(level2);
+
+              return (
+                <Card key={levelIdentifier}>
+                  <Card.Header
+                    css={`
+                      background-color: ${manager.isGroupFullySelected(level2)
+                        ? colors.green4
+                        : 'transparent'};
+                    `}
                   >
-                    <span>{level2.name.nl}</span>
-                    <Icon
-                      name={
-                        openGroup === level2.label
-                          ? Icons.CHEVRON_DOWN
-                          : Icons.CHEVRON_RIGHT
-                      }
-                    />
-                  </Inline>
-                </Card.Header>
-                <Accordion.Collapse
-                  eventKey={level2.label}
-                  in={openGroup === level2.label}
-                >
-                  <Card.Body>
-                    <Inline justifyContent="flex-start" marginBottom={4}>
-                      <Button
-                        variant={ButtonVariants.LINK}
-                        onClick={(e) => {
-                          manager.toggleSelectAllLeafs(level2.children);
-                        }}
-                      >
-                        {manager.isGroupFullySelected(level2)
-                          ? t('cultuurkuur_modal.clearAll')
-                          : t('cultuurkuur_modal.selectAll')}
-                      </Button>
-                    </Inline>
-                    <Box
-                      css={`
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 1rem;
-                      `}
+                    <Inline
+                      justifyContent="space-between"
+                      alignItems="center"
+                      cursor="pointer"
+                      onClick={() => toggleGroup(levelIdentifier)}
                     >
-                      {sortByName(level2.children).map((leaf) => (
+                      <span>{level2.name.nl}</span>
+                      <Icon
+                        name={
+                          openGroup === levelIdentifier
+                            ? Icons.CHEVRON_DOWN
+                            : Icons.CHEVRON_RIGHT
+                        }
+                      />
+                    </Inline>
+                  </Card.Header>
+                  <Accordion.Collapse
+                    eventKey={levelIdentifier}
+                    in={openGroup === levelIdentifier}
+                  >
+                    <Card.Body>
+                      <Inline justifyContent="flex-start" marginBottom={4}>
                         <Button
-                          key={leaf.label}
-                          width="auto"
-                          active={manager.isLabelSelected(leaf.label)}
-                          display="inline-flex"
-                          variant={ButtonVariants.SECONDARY_TOGGLE}
-                          onClick={(e) => {
-                            manager.handleSelectionToggle(leaf);
-                          }}
+                          variant={ButtonVariants.LINK}
+                          onClick={() => manager.handleSelectionToggle(level2)}
                         >
-                          {leaf.name.nl}
+                          {manager.isGroupFullySelected(level2)
+                            ? t('cultuurkuur_modal.clearAll')
+                            : t('cultuurkuur_modal.selectAll')}
                         </Button>
-                      ))}
-                    </Box>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            ))}
+                      </Inline>
+                      <Box
+                        css={`
+                          display: grid;
+                          grid-template-columns: repeat(3, 1fr);
+                          gap: 1rem;
+                        `}
+                      >
+                        {sortByName(level2.children).map((leaf) => (
+                          <Button
+                            key={leaf.label}
+                            width="auto"
+                            active={manager.isLabelSelected(leaf.label)}
+                            display="inline-flex"
+                            variant={ButtonVariants.SECONDARY_TOGGLE}
+                            onClick={(e) => {
+                              manager.handleSelectionToggle(leaf);
+                            }}
+                          >
+                            {leaf.name.nl}
+                          </Button>
+                        ))}
+                      </Box>
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              );
+            })}
           </Accordion>
         ))}
       </Stack>
