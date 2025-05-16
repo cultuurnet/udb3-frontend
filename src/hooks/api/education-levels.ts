@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
 const dummyData: HierarchicalData[] = [

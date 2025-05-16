@@ -1,5 +1,5 @@
-import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 import { dummyMunicipalities } from '@/hooks/api/cultuurkuur';
+import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 describe('CultururKuurLabelsManager', () => {
   test('can toggle a label', () => {
@@ -23,6 +23,10 @@ describe('CultururKuurLabelsManager', () => {
     manager.handleSelectionToggle(dummyMunicipalities[0]);
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       true,
+    );
+    manager.handleSelectionToggle(dummyMunicipalities[0]);
+    expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
+      false,
     );
   });
 

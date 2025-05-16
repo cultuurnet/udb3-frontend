@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+
 import { Box, BoxProps, getBoxProps } from './Box';
 
 type CheckboxProps = BoxProps & {

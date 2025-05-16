@@ -71,7 +71,7 @@ export class CultuurkuurLabelsManager {
     const parent = entity.parent;
 
     const alreadySelected = this.isLabelSelected(this.getIdentifier(entity));
-    if (alreadySelected) {
+    if (alreadySelected && !isGroup) {
       let newSelected = this.selected.filter(
         (e) => e !== this.getIdentifier(entity),
       );
@@ -106,15 +106,15 @@ export class CultuurkuurLabelsManager {
               !allLeafEntities.some((leaf) => this.getIdentifier(leaf) === sel),
           ),
         );
+      } else {
+        return this.setSelected([
+          ...this.selected,
+          ...allLeafEntities.map((l) => this.getIdentifier(l)),
+        ]);
       }
-
-      return this.setSelected([
-        ...this.selected,
-        ...allLeafEntities.map((l) => this.getIdentifier(l)),
-      ]);
+    } else {
+      this.setSelected([...this.selected, this.getIdentifier(entity)]);
     }
-
-    this.setSelected([...this.selected, this.getIdentifier(entity)]);
 
     if (parent && this.areAllLeafsSelected(parent.children)) {
       this.setSelected([...this.selected, this.getIdentifier(parent)]);

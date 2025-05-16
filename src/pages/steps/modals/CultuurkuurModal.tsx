@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { Checkbox } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { Icon, Icons } from '@/ui/Icon';
@@ -14,7 +15,6 @@ import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
 import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
-import { Checkbox } from '@/ui/Checkbox';
 
 type Props = {
   visible: boolean;

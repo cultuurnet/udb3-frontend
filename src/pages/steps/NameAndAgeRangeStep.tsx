@@ -10,6 +10,7 @@ import {
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
@@ -30,7 +31,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 

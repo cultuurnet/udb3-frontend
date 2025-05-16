@@ -26,6 +26,7 @@ import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode } from '@/types/Event';
@@ -66,7 +67,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
