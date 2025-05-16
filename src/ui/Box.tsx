@@ -228,7 +228,7 @@ type UIProps = {
   role: UIProp<string>;
 };
 
-export type BoxProps<T extends TypeaheadModel = any> = Partial<
+type BoxProps<T extends TypeaheadModel = any> = Partial<
   UIProps & GeneralProps & SpecificComponentProps<T> & EventHandlerProps
 >;
 

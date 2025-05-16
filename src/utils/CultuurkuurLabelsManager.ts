@@ -1,6 +1,6 @@
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
-import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { SupportedLanguages } from '@/i18n/index';
+import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 export class CultuurkuurLabelsManager {
   selected: string[] = [];

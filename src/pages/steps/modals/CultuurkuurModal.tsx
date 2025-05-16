@@ -69,107 +69,115 @@ const CultuurkuurModal = ({
       size="lg"
     >
       <Stack padding={4} spacing={5}>
-        {manager.available.map((level1) => (
-          <Accordion key={level1.label} style={{ marginBottom: '2rem' }}>
-            <Card>
-              <Card.Header
-                css={`
-                  background-color: ${manager.isGroupFullySelected(level1)
-                    ? colors.green5
-                    : colors.grey1};
-                `}
-              >
-                <Inline
-                  justifyContent="space-between"
-                  alignItems="center"
-                  onClick={() => manager.handleSelectionToggle(level1)}
-                >
-                  <p>{level1.name.nl}</p>
-                  <CheckboxWithLabel
-                    className="selectAllLevel1"
-                    id={level1.label}
-                    name={level1.name}
-                    disabled={false}
-                    onToggle={() => manager.handleSelectionToggle(level1)}
-                    checked={manager.isGroupFullySelected(level1)}
-                  >
-                    {checkboxTitle}
-                  </CheckboxWithLabel>
-                </Inline>
-              </Card.Header>
-            </Card>
-            {level1.children.map((level2) => {
-              const levelIdentifier = manager.getIdentifier(level2);
+        {manager.available.map((level1) => {
+          const level1Identifier = manager.getIdentifier(level1);
 
-              return (
-                <Card key={levelIdentifier}>
-                  <Card.Header
-                    css={`
-                      background-color: ${manager.isGroupFullySelected(level2)
-                        ? colors.green4
-                        : 'transparent'};
-                    `}
+          return (
+            <Accordion key={level1Identifier} style={{ marginBottom: '2rem' }}>
+              <Card>
+                <Card.Header
+                  css={`
+                    background-color: ${manager.isGroupFullySelected(level1)
+                      ? colors.green5
+                      : colors.grey1};
+                  `}
+                >
+                  <Inline
+                    justifyContent="space-between"
+                    alignItems="center"
+                    onClick={() => manager.handleSelectionToggle(level1)}
                   >
-                    <Inline
-                      justifyContent="space-between"
-                      alignItems="center"
-                      cursor="pointer"
-                      onClick={() => toggleGroup(levelIdentifier)}
+                    <p>{level1.name.nl}</p>
+                    <CheckboxWithLabel
+                      id={level1Identifier}
+                      name={level1Identifier}
+                      disabled={false}
+                      onToggle={() => manager.handleSelectionToggle(level1)}
+                      checked={manager.isGroupFullySelected(level1)}
                     >
-                      <span>{level2.name.nl}</span>
-                      <Icon
-                        name={
-                          openGroup === levelIdentifier
-                            ? Icons.CHEVRON_DOWN
-                            : Icons.CHEVRON_RIGHT
-                        }
-                      />
-                    </Inline>
-                  </Card.Header>
-                  <Accordion.Collapse
-                    eventKey={levelIdentifier}
-                    in={openGroup === levelIdentifier}
-                  >
-                    <Card.Body>
-                      <Inline justifyContent="flex-start" marginBottom={4}>
-                        <Button
-                          variant={ButtonVariants.LINK}
-                          onClick={() => manager.handleSelectionToggle(level2)}
+                      {checkboxTitle}
+                    </CheckboxWithLabel>
+                  </Inline>
+                </Card.Header>
+              </Card>
+              {level1.children.map((level2) => {
+                const levelIdentifier = manager.getIdentifier(level2);
+
+                return (
+                  <Card key={levelIdentifier}>
+                    <Card.Header
+                      css={`
+                        background-color: ${manager.isGroupFullySelected(level2)
+                          ? colors.green4
+                          : 'transparent'};
+                      `}
+                    >
+                      <Inline
+                        justifyContent="space-between"
+                        alignItems="center"
+                        cursor="pointer"
+                        onClick={() => toggleGroup(levelIdentifier)}
+                      >
+                        <span>{levelIdentifier}</span>
+                        <Icon
+                          name={
+                            openGroup === levelIdentifier
+                              ? Icons.CHEVRON_DOWN
+                              : Icons.CHEVRON_RIGHT
+                          }
+                        />
+                      </Inline>
+                    </Card.Header>
+                    <Accordion.Collapse
+                      eventKey={levelIdentifier}
+                      in={openGroup === levelIdentifier}
+                    >
+                      <Card.Body>
+                        <CheckboxWithLabel
+                          className="selectAllLevel2"
+                          id={levelIdentifier}
+                          name={levelIdentifier}
+                          disabled={false}
+                          onToggle={() => manager.handleSelectionToggle(level2)}
+                          checked={manager.isGroupFullySelected(level2)}
+                          marginBottom={4}
                         >
                           {manager.isGroupFullySelected(level2)
                             ? t('cultuurkuur_modal.clearAll')
                             : t('cultuurkuur_modal.selectAll')}
-                        </Button>
-                      </Inline>
-                      <Box
-                        css={`
-                          display: grid;
-                          grid-template-columns: repeat(3, 1fr);
-                          gap: 1rem;
-                        `}
-                      >
-                        {sortByName(level2.children).map((leaf) => (
-                          <Button
-                            key={leaf.label}
-                            width="auto"
-                            active={manager.isLabelSelected(leaf.label)}
-                            display="inline-flex"
-                            variant={ButtonVariants.SECONDARY_TOGGLE}
-                            onClick={(e) => {
-                              manager.handleSelectionToggle(leaf);
-                            }}
-                          >
-                            {leaf.name.nl}
-                          </Button>
-                        ))}
-                      </Box>
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              );
-            })}
-          </Accordion>
-        ))}
+                        </CheckboxWithLabel>
+                        <Box
+                          css={`
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 1rem;
+                          `}
+                        >
+                          {sortByName(level2.children).map((leaf) => (
+                            <Button
+                              key={manager.getIdentifier(leaf)}
+                              width="auto"
+                              active={manager.isLabelSelected(
+                                manager.getIdentifier(leaf),
+                              )}
+                              display="inline-flex"
+                              variant={ButtonVariants.SECONDARY_TOGGLE}
+                              onClick={() => {
+                                manager.handleSelectionToggle(leaf);
+                              }}
+                            >
+                              {leaf.name.nl}
+                            </Button>
+                          ))}
+                        </Box>
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
+                );
+              })}
+            </Accordion>
+          );
+        })}
       </Stack>
     </Modal>
   );
