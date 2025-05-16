@@ -96,7 +96,7 @@ const CultuurkuurModal = ({
                   </Inline>
                 </Card.Header>
               </Card>
-              {level1.children.map((level2) => {
+              {level1.children?.map((level2) => {
                 const levelIdentifier = manager.getIdentifier(level2);
 
                 return (

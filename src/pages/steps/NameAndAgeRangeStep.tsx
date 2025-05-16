@@ -30,6 +30,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -114,9 +115,9 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                   id={'labels'}
                   label={'Geschikt voor de volgende onderwijsniveaus '}
                   Component={
-                    <LabelsCheckboxTree
+                    <CultuurkuurLabelsPicker
                       {...getStepProps(props)}
-                      nodes={levels.data}
+                      data={levels.data}
                     />
                   }
                 />

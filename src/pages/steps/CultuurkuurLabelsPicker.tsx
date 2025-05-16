@@ -5,14 +5,20 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Icon, Icons } from '@/ui/Icon';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   data: HierarchicalData[];
-  selected: string[];
-  onConfirm: (newSelected: string[]) => void;
+  selected?: string[];
+  onConfirm?: (newSelected: string[]) => void;
 };
 
-const CultuurkuurLabelsPicker = ({ data, selected, onConfirm }: Props) => {
+const CultuurkuurLabelsPicker = ({
+  data,
+  selected = [],
+  onConfirm = () => ({}),
+}: Props) => {
+  const { t } = useTranslation();
   const [
     isCultuurkuurLocationModalVisible,
     setIsCultuurkuurLocationModalVisible,

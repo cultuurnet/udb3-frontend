@@ -345,11 +345,6 @@ const LocationStep = ({
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
-  const [
-    isCultuukuurLocationModalVisible,
-    setIsCultuurkuurLocationModalVisible,
-  ] = useState(false);
-
   const shouldAddSpaceBelowTypeahead = useMemo(() => {
     if (offerId) return false;
 

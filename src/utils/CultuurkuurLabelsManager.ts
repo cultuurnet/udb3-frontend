@@ -63,9 +63,7 @@ export class CultuurkuurLabelsManager {
   }
 
   isGroupFullySelected(group: HierarchicalData) {
-    const allLeafEntities = this.flattenEntity(group);
-
-    return this.areAllLeafsSelected(allLeafEntities);
+    return this.areAllLeafsSelected(this.flattenEntity(group));
   }
 
   handleSelectionToggle(entity: HierarchicalData) {

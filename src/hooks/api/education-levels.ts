@@ -1,180 +1,240 @@
-import type { Node } from 'react-checkbox-tree';
 import { useQuery } from 'react-query';
+import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
-const dummyData: Node[] = [
+const dummyData: HierarchicalData[] = [
   {
-    label: 'Basisonderwijs',
-    value: 'cultuurkuur_basisonderwijs',
+    name: {
+      nl: 'Gewoon basisonderwijs (kleuter- en basis)',
+    },
+    label: 'cultuurkuur_Gewoon-basisonderwijs',
     children: [
       {
-        label: 'Gewoon basisonderwijs',
-        value: 'cultuurkuur_Gewoon-basisonderwijs',
+        name: {
+          nl: 'Gewoon kleuteronderwijs',
+        },
+        label: 'cultuurkuur_Gewoon-kleuteronderwijs',
         children: [
           {
-            label: 'Gewoon kleuteronderwijs',
-            value: 'cultuurkuur_Gewoon-kleuteronderwijs',
-            children: [
-              {
-                label: 'Kleuter (2-3 jaar)',
-                value: 'cultuurkuur_Kleuter-2-3-jaar',
-              },
-              {
-                label: 'Kleuter (3-4 jaar)',
-                value: 'cultuurkuur_Kleuter-3-4-jaar',
-              },
-              {
-                label: 'Kleuter (4-5 jaar)',
-                value: 'cultuurkuur_Kleuter-4-5-jaar',
-              },
-            ],
+            name: {
+              nl: 'Kleuter (2-3 jaar)',
+            },
+            label: 'cultuurkuur_Kleuter-2-3-jaar',
           },
           {
-            label: 'Gewoon lager onderwijs',
-            value: 'cultuurkuur_Gewoon-lager-onderwijs',
-            children: [
-              {
-                label: 'Eerste graad',
-                value: 'cultuurkuur_1ste-graad',
-              },
-              {
-                label: 'Tweede graad',
-                value: 'cultuurkuur_2de-graad',
-              },
-              {
-                label: 'Derde graad',
-                value: 'cultuurkuur_3de-graad',
-              },
-            ],
+            name: {
+              nl: 'Kleuter (3-4 jaar)',
+            },
+            label: 'cultuurkuur_Kleuter-3-4-jaar',
           },
           {
-            label: 'Onthaalonderwijs voor anderstalige nieuwkomers (OKAN)',
-            value:
-              'cultuurkuur_Onthaalonderwijs-voor-anderstalige-nieuwkomers (OKAN)',
+            name: {
+              nl: 'Kleuter (4-5 jaar)',
+            },
+            label: 'cultuurkuur_Kleuter-4-5-jaar',
           },
         ],
       },
       {
-        label: 'Buitengewoon basisonderwijs',
-        value: 'cultuurkuur_Buitengewoon-basisonderwijs',
+        name: {
+          nl: 'Gewoon lager onderwijs',
+        },
+        label: 'cultuurkuur_Gewoon-lager-onderwijs',
         children: [
           {
-            label: 'Buitengewoon kleuteronderwijs',
-            value: 'cultuurkuur_Buitengewoon-kleuteronderwijs',
+            name: {
+              nl: 'Eerste graad',
+            },
+            label: 'cultuurkuur_1ste-graad',
           },
           {
-            label: 'Buitengewoon lager onderwijs',
-            value: 'cultuurkuur_Buitengewoon-lager-onderwijs',
+            name: {
+              nl: 'Tweede graad',
+            },
+            label: 'cultuurkuur_2de-graad',
+          },
+          {
+            name: {
+              nl: 'Derde graad',
+            },
+            label: 'cultuurkuur_3de-graad',
           },
         ],
+      },
+      {
+        name: {
+          nl: 'Onthaalonderwijs voor anderstalige nieuwkomers (OKAN)',
+        },
+        label:
+          'cultuurkuur_Onthaalonderwijs-voor-anderstalige-nieuwkomers (OKAN)',
       },
     ],
   },
   {
-    label: 'Secundair onderwijs',
-    value: 'cultuurkuur_Secundair-onderwijs',
+    name: {
+      nl: 'Buitengewoon basisonderwijs',
+    },
+    label: 'cultuurkuur_Buitengewoon-basisonderwijs',
     children: [
       {
-        label: 'Voltijds gewoon secundair onderwijs',
-        value: 'cultuurkuur_Voltijds-gewoon-secundair-onderwijs',
-        children: [
-          {
-            label: 'Eerste graad',
-            value: 'cultuurkuur_eerste-graad',
-            children: [
-              {
-                label: 'A-stroom',
-                value: 'cultuurkuur_A-stroom',
-              },
-              {
-                label: 'B-stroom',
-                value: 'cultuurkuur_B-stroom',
-              },
-            ],
-          },
-          {
-            label: 'Tweede graad',
-            value: 'cultuurkuur_tweede-graad',
-            children: [
-              {
-                label: 'Finaliteit doorstroom',
-                value: 'cultuurkuur_finaliteit-tweede-doorstroom',
-              },
-              {
-                label: 'Finaliteit arbeidsmarkt',
-                value: 'cultuurkuur_finaliteit-tweede-arbeidsmarkt',
-              },
-              {
-                label: 'Dubbele finaliteit',
-                value: 'cultuurkuur_dubbele-tweede-finaliteit',
-              },
-            ],
-          },
-          {
-            label: 'Derde graad',
-            value: 'cultuurkuur_derde-graad',
-            children: [
-              {
-                label: 'Finaliteit doorstroom',
-                value: 'cultuurkuur_finaliteit-derdre-doorstroom',
-              },
-              {
-                label: 'Finaliteit arbeidsmarkt',
-                value: 'cultuurkuur_finaliteit-derdre-arbeidsmarkt',
-              },
-              {
-                label: 'Dubbele finaliteit',
-                value: 'cultuurkuur_dubbele-derdre-finaliteit',
-              },
-            ],
-          },
-          {
-            label: 'Secundair na Secundair (Se-n-Se)',
-            value: 'cultuurkuur_Secundair-na-secundair-(Se-n-Se)',
-          },
-          {
-            label: 'Onthaalonderwijs voor anderstalige nieuwkomers (OKAN)',
-            value:
-              'cultuurkuur_Onthaalonderwijs-voor-anderstalige-nieuwkomers-OKAN',
-          },
-        ],
+        name: {
+          nl: 'Buitengewoon kleuteronderwijs',
+        },
+        label: 'cultuurkuur_Buitengewoon-kleuteronderwijs',
       },
       {
-        label: 'Buitengewoon secundair onderwijs',
-        value: 'cultuurkuur_Buitengewoon-secundair-onderwijs',
-      },
-      {
-        label: 'Deeltijds leren en werken',
-        value: 'cultuurkuur_Deeltijds-leren-en-werken',
+        name: {
+          nl: 'Buitengewoon lager onderwijs',
+        },
+        label: 'cultuurkuur_Buitengewoon-lager-onderwijs',
       },
     ],
   },
   {
-    label: 'Hoger onderwijs',
-    value: 'cultuurkuur_Hoger-onderwijs',
-  },
-  {
-    label: 'Volwassenenonderwijs',
-    value: 'cultuurkuur_Volwassenenonderwijs',
-  },
-  {
-    label: 'Deeltijds kunstonderwijs',
-    value: 'cultuurkuur_Deeltijds-kunstonderwijs-DKO',
+    name: {
+      nl: 'Gewoon secundair onderwijs',
+    },
+    label: 'cultuurkuur_Voltijds-gewoon-secundair-onderwijs',
     children: [
       {
-        label: 'Beeldende en audiovisuele kunst',
-        value: 'cultuurkuur_Beeldende-en-audiovisuele-kunst',
+        name: {
+          nl: 'Eerste graad',
+        },
+        label: 'cultuurkuur_eerste-graad',
+        children: [
+          {
+            name: {
+              nl: 'A-stroom',
+            },
+            label: 'cultuurkuur_eerste-graad-A-stroom',
+          },
+          {
+            name: {
+              nl: 'B-stroom',
+            },
+            label: 'cultuurkuur_eerste-graad-B-stroom',
+          },
+        ],
       },
       {
-        label: 'Dans',
-        value: 'cultuurkuur_dans',
+        name: {
+          nl: 'Tweede graad',
+        },
+        label: 'cultuurkuur_tweede-graad',
+        children: [
+          {
+            name: {
+              nl: 'Finaliteit doorstroom',
+            },
+            label: 'cultuurkuur_tweede-graad-finaliteit-doorstroom',
+          },
+          {
+            name: {
+              nl: 'Finaliteit arbeidsmarkt',
+            },
+            label: 'cultuurkuur_tweede-graad-finaliteit-arbeidsmarkt',
+          },
+          {
+            name: {
+              nl: 'Dubbele finaliteit',
+            },
+            label: 'cultuurkuur_tweede-graad-dubbele-finaliteit',
+          },
+        ],
       },
       {
-        label: 'Muziek',
-        value: 'cultuurkuur_muziek',
+        name: {
+          nl: 'Derde graad',
+        },
+        label: 'cultuurkuur_derde-graad',
+        children: [
+          {
+            name: {
+              nl: 'Finaliteit doorstroom',
+            },
+            label: 'cultuurkuur_derde-graad-finaliteit-doorstroom',
+          },
+          {
+            name: {
+              nl: 'Finaliteit arbeidsmarkt',
+            },
+            label: 'cultuurkuur_derde-graad-finaliteit-arbeidsmarkt',
+          },
+          {
+            name: {
+              nl: 'Dubbele finaliteit',
+            },
+            label: 'cultuurkuur_derde-graad-dubbele-finaliteit',
+          },
+        ],
       },
       {
-        label: 'Woordkunst & drama',
-        value: 'cultuurkuur_Woordkunst-drama',
+        name: {
+          nl: 'Secundair na Secundair (Se-n-Se)',
+        },
+        label: 'cultuurkuur_Secundair-na-secundair-(Se-n-Se)',
+      },
+      {
+        name: {
+          nl: 'Onthaalonderwijs voor anderstalige nieuwkomers (OKAN)',
+        },
+        label:
+          'cultuurkuur_Onthaalonderwijs-voor-anderstalige-nieuwkomers-OKAN',
+      },
+    ],
+  },
+  {
+    name: {
+      nl: 'Buitengewoon secundair onderwijs',
+    },
+    label: 'cultuurkuur_Buitengewoon-secundair-onderwijs',
+  },
+  {
+    name: {
+      nl: 'Deeltijds leren en werken',
+    },
+    label: 'cultuurkuur_Deeltijds-leren-en-werken',
+  },
+  {
+    name: {
+      nl: 'Hoger onderwijs',
+    },
+    label: 'cultuurkuur_Hoger-onderwijs',
+  },
+  {
+    name: {
+      nl: 'Volwassenenonderwijs',
+    },
+    label: 'cultuurkuur_Volwassenenonderwijs',
+  },
+  {
+    name: {
+      nl: 'Deeltijds kunstonderwijs',
+    },
+    label: 'cultuurkuur_Deeltijds-kunstonderwijs-DKO',
+    children: [
+      {
+        name: {
+          nl: 'Beeldende en audiovisuele kunst',
+        },
+        label: 'cultuurkuur_Beeldende-en-audiovisuele-kunst',
+      },
+      {
+        name: {
+          nl: 'Dans',
+        },
+        label: 'cultuurkuur_dans',
+      },
+      {
+        name: {
+          nl: 'Muziek',
+        },
+        label: 'cultuurkuur_muziek',
+      },
+      {
+        name: {
+          nl: 'Woordkunst & drama',
+        },
+        label: 'cultuurkuur_Woordkunst-drama',
       },
     ],
   },
