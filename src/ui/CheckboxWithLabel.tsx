@@ -1,10 +1,10 @@
 import { ChangeEvent, ReactNode } from 'react';
 
 import { Checkbox } from './Checkbox';
-import { getInlineProps, Inline } from './Inline';
+import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label } from './Label';
 
-interface CheckboxWithLabelProps {
+type CheckboxWithLabelProps = InlineProps & {
   className?: string;
   id: string;
   name?: string;
@@ -12,7 +12,7 @@ interface CheckboxWithLabelProps {
   disabled?: boolean;
   onToggle?: (event: ChangeEvent<HTMLInputElement>) => void;
   children?: ReactNode;
-}
+};
 
 const CheckboxWithLabel = ({
   id,

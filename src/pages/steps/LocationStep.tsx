@@ -66,6 +66,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
@@ -619,36 +620,13 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
-                <Button
-                  variant={ButtonVariants.LINK}
-                  onClick={() => setIsCultuurkuurLocationModalVisible(true)}
-                >
-                  <Inline spacing={2}>
-                    <Icon name={Icons.PLUS_CIRCLE} />
-                    <span> Add province region gemeente</span>
-                  </Inline>
-                </Button>
-
-                {isCultuukuurLocationModalVisible && (
-                  <CultuurkuurModal
-                    visible={true}
-                    data={cultuurkuurRegions}
-                    selectedData={selectedLocations}
-                    title={t('cultuurkuur_modal.location.title')}
-                    checkboxTitle={t(
-                      'cultuurkuur_modal.location.selectAllProvince',
-                    )}
-                    onConfirm={(selectedLocations) => {
-                      setSelectedLocations(selectedLocations);
-                      handleSaveCultuurkuurLocations(selectedLocations);
-                      setIsCultuurkuurLocationModalVisible(false);
-                    }}
-                    onClose={() => setIsCultuurkuurLocationModalVisible(false)}
-                  />
-                )}
-                <CultuurkuurSelectionOverview
+                <CultuurkuurLabelsPicker
                   data={cultuurkuurRegions}
-                  selectedData={selectedLocations}
+                  selected={selectedLocations}
+                  onConfirm={(selectedLocations) => {
+                    setSelectedLocations(selectedLocations);
+                    handleSaveCultuurkuurLocations(selectedLocations);
+                  }}
                 />
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">

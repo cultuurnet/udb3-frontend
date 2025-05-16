@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -14,8 +14,6 @@ import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
 import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
-import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-import { SupportedLanguages } from '@/i18n/index';
 
 type Props = {
   visible: boolean;
@@ -24,7 +22,6 @@ type Props = {
   data: HierarchicalData[];
   selectedData: string[];
   title: string;
-  checkboxTitle: string;
 } & StackProps;
 
 const sortByName = (entities: HierarchicalData['children']) =>
@@ -33,7 +30,6 @@ const sortByName = (entities: HierarchicalData['children']) =>
 const CultuurkuurModal = ({
   visible,
   title,
-  checkboxTitle,
   data,
   selectedData,
   onConfirm,
@@ -41,7 +37,7 @@ const CultuurkuurModal = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [, setSelected] = useState<string[]>([]);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   const manager = useMemo(
@@ -95,7 +91,7 @@ const CultuurkuurModal = ({
                       onToggle={() => manager.handleSelectionToggle(level1)}
                       checked={manager.isGroupFullySelected(level1)}
                     >
-                      {checkboxTitle}
+                      {t('cultuurkuur_modal.location.selectAllProvince')}
                     </CheckboxWithLabel>
                   </Inline>
                 </Card.Header>
@@ -133,6 +129,10 @@ const CultuurkuurModal = ({
                       in={openGroup === levelIdentifier}
                     >
                       <Card.Body>
+                        <Inline
+                          justifyContent="flex-start"
+                          marginBottom={4}
+                        ></Inline>
                         <CheckboxWithLabel
                           className="selectAllLevel2"
                           id={levelIdentifier}
