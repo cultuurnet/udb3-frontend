@@ -14,6 +14,7 @@ import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
 import { colors } from '@/ui/theme';
 import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
+import { Checkbox } from '@/ui/Checkbox';
 
 type Props = {
   visible: boolean;
@@ -73,16 +74,16 @@ const CultuurkuurModal = ({
               <Card>
                 <Card.Header
                   css={`
+                    cursor: ${level1.children?.length > 0
+                      ? 'default'
+                      : 'pointer'};
                     background-color: ${manager.isGroupFullySelected(level1)
                       ? colors.green5
                       : colors.grey1};
                   `}
+                  onClick={() => manager.handleSelectionToggle(level1)}
                 >
-                  <Inline
-                    justifyContent="space-between"
-                    alignItems="center"
-                    onClick={() => manager.handleSelectionToggle(level1)}
-                  >
+                  <Inline justifyContent="space-between" alignItems="center">
                     <p>{level1.name.nl}</p>
                     <CheckboxWithLabel
                       id={level1Identifier}
@@ -98,6 +99,7 @@ const CultuurkuurModal = ({
               </Card>
               {level1.children?.map((level2) => {
                 const levelIdentifier = manager.getIdentifier(level2);
+                const levelHasChildren = level2?.children?.length > 0;
 
                 return (
                   <Card key={levelIdentifier}>
@@ -112,66 +114,86 @@ const CultuurkuurModal = ({
                         justifyContent="space-between"
                         alignItems="center"
                         cursor="pointer"
-                        onClick={() => toggleGroup(levelIdentifier)}
+                        onClick={() =>
+                          levelHasChildren
+                            ? toggleGroup(levelIdentifier)
+                            : manager.handleSelectionToggle(level2)
+                        }
                       >
-                        <span>{levelIdentifier}</span>
-                        <Icon
-                          name={
-                            openGroup === levelIdentifier
-                              ? Icons.CHEVRON_DOWN
-                              : Icons.CHEVRON_RIGHT
-                          }
-                        />
+                        <span>{level2.name.nl}</span>
+                        {levelHasChildren ? (
+                          <Icon
+                            name={
+                              openGroup === levelIdentifier
+                                ? Icons.CHEVRON_DOWN
+                                : Icons.CHEVRON_RIGHT
+                            }
+                          />
+                        ) : (
+                          <Checkbox
+                            id={levelIdentifier}
+                            name={levelIdentifier}
+                            disabled={false}
+                            onToggle={() =>
+                              manager.handleSelectionToggle(level2)
+                            }
+                            checked={manager.isGroupFullySelected(level2)}
+                          >
+                            {manager.isGroupFullySelected(level2)
+                              ? t('cultuurkuur_modal.clearAll')
+                              : t('cultuurkuur_modal.selectAll')}
+                          </Checkbox>
+                        )}
                       </Inline>
                     </Card.Header>
-                    <Accordion.Collapse
-                      eventKey={levelIdentifier}
-                      in={openGroup === levelIdentifier}
-                    >
-                      <Card.Body>
-                        <Inline
-                          justifyContent="flex-start"
-                          marginBottom={4}
-                        ></Inline>
-                        <CheckboxWithLabel
-                          className="selectAllLevel2"
-                          id={levelIdentifier}
-                          name={levelIdentifier}
-                          disabled={false}
-                          onToggle={() => manager.handleSelectionToggle(level2)}
-                          checked={manager.isGroupFullySelected(level2)}
-                          marginBottom={4}
-                        >
-                          {manager.isGroupFullySelected(level2)
-                            ? t('cultuurkuur_modal.clearAll')
-                            : t('cultuurkuur_modal.selectAll')}
-                        </CheckboxWithLabel>
-                        <Box
-                          css={`
-                            display: grid;
-                            grid-template-columns: repeat(4, 1fr);
-                            gap: 1rem;
-                          `}
-                        >
-                          {sortByName(level2.children).map((leaf) => (
-                            <Button
-                              key={manager.getIdentifier(leaf)}
-                              width="auto"
-                              active={manager.isLabelSelected(
-                                manager.getIdentifier(leaf),
-                              )}
-                              display="inline-flex"
-                              variant={ButtonVariants.SECONDARY_TOGGLE}
-                              onClick={() => {
-                                manager.handleSelectionToggle(leaf);
-                              }}
-                            >
-                              {leaf.name.nl}
-                            </Button>
-                          ))}
-                        </Box>
-                      </Card.Body>
-                    </Accordion.Collapse>
+                    {levelHasChildren && (
+                      <Accordion.Collapse
+                        eventKey={levelIdentifier}
+                        in={openGroup === levelIdentifier}
+                      >
+                        <Card.Body>
+                          <CheckboxWithLabel
+                            className="selectAllLevel2"
+                            id={levelIdentifier}
+                            name={levelIdentifier}
+                            disabled={false}
+                            onToggle={() =>
+                              manager.handleSelectionToggle(level2)
+                            }
+                            checked={manager.isGroupFullySelected(level2)}
+                            marginBottom={4}
+                          >
+                            {manager.isGroupFullySelected(level2)
+                              ? t('cultuurkuur_modal.clearAll')
+                              : t('cultuurkuur_modal.selectAll')}
+                          </CheckboxWithLabel>
+                          <Box
+                            css={`
+                              display: grid;
+                              grid-template-columns: repeat(4, 1fr);
+                              gap: 1rem;
+                            `}
+                          >
+                            {sortByName(level2.children).map((leaf) => (
+                              <Button
+                                key={manager.getIdentifier(leaf)}
+                                width="auto"
+                                active={manager.isLabelSelected(
+                                  manager.getIdentifier(leaf),
+                                )}
+                                display="inline-flex"
+                                variant={ButtonVariants.SECONDARY_TOGGLE}
+                                onClick={() => {
+                                  manager.handleSelectionToggle(leaf);
+                                }}
+                              >
+                                {leaf.name.nl}
+                              </Button>
+                            ))}
+                          </Box>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    )}
                   </Card>
                 );
               })}
