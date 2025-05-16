@@ -17,6 +17,14 @@ export class CultuurkuurLabelsManager {
     }
   }
 
+  private getFlattened() {
+    return this.available.flatMap(this.flattenEntity);
+  }
+
+  getFlattenedSelection() {
+    return this.getFlattened().filter((e) => this.isLabelSelected(e.label));
+  }
+
   isLabelSelected(label: string) {
     return this.selected.includes(label);
   }

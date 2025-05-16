@@ -18,7 +18,7 @@ const CultuurkuurSelectionOverview = ({ selectedData, data }: Props) => {
   );
 
   const selection = manager.getFlattenedSelection();
-  console.log({ selection, cultuurkuurData: data, selectedData });
+
   return (
     <Box
       css={{
