@@ -30,7 +30,9 @@ export class CultuurkuurLabelsManager {
   }
 
   areAllLeafsSelected(leafEntities: HierarchicalData[]) {
-    return leafEntities.every((leaf) => this.isLabelSelected(leaf.label));
+    return leafEntities.every(
+      (leaf) => !leaf.label || this.isLabelSelected(leaf.label),
+    );
   }
 
   isGroupFullySelected(group: HierarchicalData) {
