@@ -355,9 +355,11 @@ const LocationStep = ({
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
-  const [selectedLocations, setSelectedLocations] = useState<
-    HierarchicalData[]
-  >([]);
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+
+  const labels = useMemo(() => getUniqueLabels(entity) ?? [], [entity]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>(labels);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
@@ -368,19 +370,12 @@ const LocationStep = ({
   const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
   const cultuurkuurRegions = getCultuurkuurRegionsQuery.data;
 
-  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
-  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
-  const labels = useMemo(() => getUniqueLabels(entity) ?? [], [entity]);
-
-  const handleSaveCultuurkuurLocations = (locations: HierarchicalData[]) => {
-    const selectedLocationsToLabels = locations?.map(
-      (location) => location.label,
-    );
+  const handleSaveCultuurkuurLocations = (locations: string[]) => {
     if (offerId) {
       return;
-    } else {
-      setValue('labels', selectedLocationsToLabels);
     }
+
+    setValue('labels', locations);
   };
 
   useEffect(() => {
@@ -652,10 +647,8 @@ const LocationStep = ({
                   />
                 )}
                 <CultuurkuurSelectionOverview
+                  data={cultuurkuurRegions}
                   selectedData={selectedLocations}
-                  cultuurkuurData={cultuurkuurRegions}
-                  labels={labels}
-                  onPreSelectedDataReady={setSelectedLocations}
                 />
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">

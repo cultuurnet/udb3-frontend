@@ -3,8 +3,12 @@ import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 export class CultuurkuurLabelsManager {
   selected: string[] = [];
 
-  constructor(public available: HierarchicalData[], selected: string[] = []) {
-    const flattened = this.available.flatMap(this.flattenEntity);
+  constructor(
+    public available: HierarchicalData[],
+    selected: string[] = [],
+    private updater?: (labels: string[]) => void,
+  ) {
+    const flattened = this.getFlattened();
     for (let label of selected) {
       const entity = flattened.find((e) => e.label === label);
       if (entity && !this.selected.includes(entity.label)) {
@@ -53,30 +57,47 @@ export class CultuurkuurLabelsManager {
     const isGroup = !!entity.children;
 
     const alreadySelected = this.isLabelSelected(entity.label);
-    console.log({ entity, isGroup, alreadySelected });
     if (alreadySelected) {
-      this.selected = this.selected
-        .filter((e) => e !== entity.label)
-        .filter((e) => {
-          return this.isGroupFullySelected(e);
+      let newSelected = this.selected.filter((e) => e !== entity.label);
+
+      // If it's not a group, also check if any parent groups need to be deselected
+      if (!isGroup) {
+        const flattened = this.getFlattened();
+        const parentGroups = flattened.filter((e) =>
+          this.flattenEntity(e).some((child) => child.label === entity.label),
+        );
+
+        parentGroups.forEach((parent) => {
+          if (newSelected.includes(parent.label)) {
+            newSelected = newSelected.filter((label) => label !== parent.label);
+          }
         });
-      return;
+      }
+
+      return this.setSelected(newSelected);
     }
 
     if (isGroup) {
       const allLeafEntities = this.flattenEntity(entity);
       if (this.isGroupFullySelected(entity)) {
-        this.selected = this.selected.filter(
-          (sel) => !allLeafEntities.some((leaf) => leaf.label === sel),
+        this.setSelected(
+          this.selected.filter(
+            (sel) => !allLeafEntities.some((leaf) => leaf.label === sel),
+          ),
         );
       }
-      this.selected = [
+
+      return this.setSelected([
         ...this.selected,
         ...allLeafEntities.map((l) => l.label),
-      ];
-      return;
+      ]);
     }
 
-    this.selected = [...this.selected, entity.label];
+    this.setSelected([...this.selected, entity.label]);
+  }
+
+  setSelected(newSelected: string[]) {
+    this.selected = newSelected;
+    this.updater?.(newSelected);
   }
 }

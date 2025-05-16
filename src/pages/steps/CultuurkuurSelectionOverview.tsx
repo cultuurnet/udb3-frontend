@@ -4,39 +4,21 @@ import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { IconSuccess } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Inline } from '@/ui/Inline';
+import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 type Props = {
-  selectedData: HierarchicalData[];
-  cultuurkuurData: HierarchicalData[];
-  labels: string[];
-  onPreSelectedDataReady: (data: HierarchicalData[]) => void;
+  selectedData: string[];
+  data: HierarchicalData[];
 };
 
-const CultuurkuurSelectionOverview = ({
-  selectedData,
-  cultuurkuurData,
-  labels,
-  onPreSelectedDataReady,
-}: Props) => {
-  const flatData = useMemo(() => {
-    const flatten = (nodes: HierarchicalData[]): HierarchicalData[] =>
-      nodes.flatMap((node) => [
-        node,
-        ...(node.children ? flatten(node.children) : []),
-      ]);
+const CultuurkuurSelectionOverview = ({ selectedData, data }: Props) => {
+  const manager = useMemo(
+    () => new CultuurkuurLabelsManager(data, selectedData),
+    [data, selectedData],
+  );
 
-    return cultuurkuurData ? flatten(cultuurkuurData) : [];
-  }, [cultuurkuurData]);
-
-  const preSelectedValues = useMemo(() => {
-    return flatData.filter((region) => labels.includes(region.label));
-  }, [flatData, labels]);
-
-  useEffect(() => {
-    if (preSelectedValues.length) {
-      onPreSelectedDataReady(preSelectedValues);
-    }
-  }, [preSelectedValues, onPreSelectedDataReady]);
+  const selection = manager.getFlattenedSelection();
+  console.log({ selection, cultuurkuurData: data, selectedData });
   return (
     <Box
       css={{
@@ -46,7 +28,7 @@ const CultuurkuurSelectionOverview = ({
         marginTop: '1rem',
       }}
     >
-      {selectedData.map((item) => (
+      {selection.map((item) => (
         <Inline padding={3} alignItems="center" key={item?.label}>
           <IconSuccess
             css={{

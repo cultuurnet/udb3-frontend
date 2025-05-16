@@ -17,10 +17,10 @@ import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 type Props = {
   visible: boolean;
-  onConfirm: (selectedEntities: HierarchicalData[]) => void;
+  onConfirm: (selected: string[]) => void;
   onClose: () => void;
   data: HierarchicalData[];
-  selectedData: HierarchicalData[];
+  selectedData: string[];
   title: string;
   checkboxTitle: string;
 } & StackProps;
@@ -39,16 +39,13 @@ const CultuurkuurModal = ({
 }: Props) => {
   const { t } = useTranslation();
 
+  const [selected, setSelected] = useState<string[]>([]);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+
   const manager = useMemo(
-    () =>
-      new CultuurkuurLabelsManager(
-        data,
-        selectedData.map((s) => s.label),
-      ),
+    () => new CultuurkuurLabelsManager(data, selectedData, setSelected),
     [data, selectedData],
   );
-
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   const toggleGroup = (groupName: string) =>
     setOpenGroup((prev) => (prev === groupName ? null : groupName));
