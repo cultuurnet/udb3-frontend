@@ -10,6 +10,7 @@ import {
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
@@ -114,9 +115,9 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                   id={'labels'}
                   label={'Geschikt voor de volgende onderwijsniveaus '}
                   Component={
-                    <LabelsCheckboxTree
+                    <CultuurkuurLabelsPicker
                       {...getStepProps(props)}
-                      nodes={levels.data}
+                      data={levels.data}
                     />
                   }
                 />

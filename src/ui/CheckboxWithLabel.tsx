@@ -1,19 +1,29 @@
-import PropTypes from 'prop-types';
+import { ChangeEvent, ReactNode } from 'react';
 
 import { Checkbox } from './Checkbox';
-import { getInlineProps, Inline } from './Inline';
+import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label } from './Label';
+
+type CheckboxWithLabelProps = InlineProps & {
+  className?: string;
+  id: string;
+  name?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  onToggle?: (event: ChangeEvent<HTMLInputElement>) => void;
+  children?: ReactNode;
+};
 
 const CheckboxWithLabel = ({
   id,
-  name,
-  checked,
-  disabled,
-  onToggle,
+  name = '',
+  checked = false,
+  disabled = false,
+  onToggle = () => {},
   children,
-  className,
+  className = '',
   ...props
-}) => {
+}: CheckboxWithLabelProps) => {
   return (
     <Inline
       as="div"
@@ -34,23 +44,6 @@ const CheckboxWithLabel = ({
       </Label>
     </Inline>
   );
-};
-
-CheckboxWithLabel.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onToggle: PropTypes.func,
-  children: PropTypes.node,
-};
-
-CheckboxWithLabel.defaultprops = {
-  name: '',
-  checked: false,
-  disabled: false,
-  onToggle: () => {},
 };
 
 export { CheckboxWithLabel };
