@@ -4,7 +4,6 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
-import { useGetEducationLevelsQuery } from '@/hooks/api/education-levels';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
@@ -31,6 +30,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { useGetEducationLevelsQuery } from '@/hooks/api/cultuurkuur';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
