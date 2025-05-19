@@ -3,6 +3,7 @@ import { fetchFromApi } from '@/utils/fetchFromApi';
 import {
   ExtendQueryOptions,
   queryOptions,
+  useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
 import { useQuery } from 'react-query';
@@ -2354,5 +2355,25 @@ const useGetEducationLevelsQuery = (
     enabled: options.enabled !== false && configuration.enabled !== false,
   });
 };
+
+const bulkUpdateLabels = async ({ headers, labels }) => {
+  return fetchFromApi({
+    path: '/cultuurkuur/',
+    options: {
+      headers,
+      method: 'POST',
+      body: JSON.stringify({
+        labels,
+      }),
+    },
+  });
+};
+
+const useBulkUpdateCultuurkuurLabelsMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: bulkUpdateLabels,
+    mutationKey: 'cultuurkuur-labels-bulk',
+    ...configuration,
+  });
 
 export { useGetCultuurkuurRegions, useGetEducationLevelsQuery };
