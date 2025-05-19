@@ -8,10 +8,9 @@ import { Offer } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
@@ -532,6 +531,24 @@ const useDeleteOfferOrganizerMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const bulkUpdateLabels = async ({ headers, offerId, labels }) => {
+  return fetchFromApi({
+    path: `/events/${offerId}/labels`,
+    options: {
+      headers,
+      method: 'PUT',
+      body: JSON.stringify({ labels }),
+    },
+  });
+};
+
+const useBulkUpdateOfferLabelsMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: bulkUpdateLabels,
+    mutationKey: 'cultuurkuur-labels-bulk',
+    ...configuration,
+  });
+
 export {
   useAddContactPointMutation,
   useAddOfferBookingInfoMutation,
@@ -544,6 +561,7 @@ export {
   useChangeDescriptionMutation,
   useChangeOfferCalendarMutation,
   useChangeOfferNameMutation,
+  useBulkUpdateOfferLabelsMutation,
   useChangeOfferThemeMutation,
   useChangeOfferTypeMutation,
   useChangeOfferTypicalAgeRangeMutation,
