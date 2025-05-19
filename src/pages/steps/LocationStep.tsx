@@ -615,14 +615,18 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
-                <CultuurkuurLabelsPicker
-                  data={cultuurkuurRegions}
-                  selected={selectedLocations}
-                  onConfirm={(selectedLocations) => {
-                    setSelectedLocations(selectedLocations);
-                    handleSaveCultuurkuurLocations(selectedLocations);
-                  }}
-                />
+                {isCultuurkuurFeatureFlagEnabled &&
+                  isCultuurkuurEvent &&
+                  !getCultuurkuurRegionsQuery.isLoading && (
+                    <CultuurkuurLabelsPicker
+                      data={cultuurkuurRegions}
+                      selected={selectedLocations}
+                      onConfirm={(selectedLocations) => {
+                        setSelectedLocations(selectedLocations);
+                        handleSaveCultuurkuurLocations(selectedLocations);
+                      }}
+                    />
+                  )}
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">
                     {t('create.location.country.location_school_info')}
