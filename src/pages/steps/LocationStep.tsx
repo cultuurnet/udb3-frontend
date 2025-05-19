@@ -20,7 +20,10 @@ import {
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import {
+  useBulkUpdateOfferLabelsMutation,
+  useGetOfferByIdQuery,
+} from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -365,10 +368,16 @@ const LocationStep = ({
 
   const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
   const cultuurkuurRegions = getCultuurkuurRegionsQuery.data;
+  const updateLabels = useBulkUpdateOfferLabelsMutation();
 
-  const handleSaveCultuurkuurLocations = (locations: string[]) => {
+  const handleSaveCultuurkuurLocations = async (locations: string[]) => {
     if (offerId) {
+      console.log({ labels, locations });
       return;
+      return updateLabels.mutate({
+        offerId,
+        labels: locations,
+      });
     }
 
     setValue('labels', locations);
