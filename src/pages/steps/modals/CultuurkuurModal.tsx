@@ -22,7 +22,7 @@ type Props = {
   onClose: () => void;
   data: HierarchicalData[];
   selectedData: string[];
-  title: string;
+  translationKey?: string;
 } & StackProps;
 
 const sortByName = (entities: HierarchicalData['children']) =>
@@ -30,13 +30,14 @@ const sortByName = (entities: HierarchicalData['children']) =>
 
 const CultuurkuurModal = ({
   visible,
-  title,
   data,
   selectedData,
   onConfirm,
   onClose,
+  translationKey,
 }: Props) => {
   const { t } = useTranslation();
+  const title = t(`cultuurkuur_modal.${translationKey}.title`);
 
   const [, setSelected] = useState<string[]>([]);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
@@ -92,7 +93,7 @@ const CultuurkuurModal = ({
                       onToggle={() => manager.handleSelectionToggle(level1)}
                       checked={manager.isGroupFullySelected(level1)}
                     >
-                      {t('cultuurkuur_modal.location.selectAllProvince')}
+                      {t(`cultuurkuur_modal.${translationKey}.selectAll`)}
                     </CheckboxWithLabel>
                   </Inline>
                 </Card.Header>

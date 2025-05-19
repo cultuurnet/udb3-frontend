@@ -898,8 +898,14 @@
     "save": "Opslaan",
     "cancel": "Annuleren",
     "location": {
+      "add": "Add province region gemeente",
       "title": "Werkingsregio selecteren",
-      "selectAllProvince": "Volledige provincie selecteren"
+      "selectAll": "Volledige provincie selecteren"
+    },
+    "education": {
+      "add": "ADD_EDUCATION_LEVELS",
+      "title": "SELECT_EDUCATION_LEVELS",
+      "selectAll": "SELECT_ALL_LEVELS"
     }
   },
   "location": {

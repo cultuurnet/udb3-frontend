@@ -118,6 +118,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                     <CultuurkuurLabelsPicker
                       {...getStepProps(props)}
                       data={levels.data}
+                      translationKey="education"
                     />
                   }
                 />
