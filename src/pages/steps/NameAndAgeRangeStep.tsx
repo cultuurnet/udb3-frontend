@@ -37,6 +37,7 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
+import { useQueryClient } from 'react-query';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -111,15 +112,16 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
     [entity, formLabels],
   );
-  const updateLabels = useBulkUpdateOfferLabelsMutation();
 
-  const handleSaveCultuurkuurLocations = async (locations: string[]) => {
-    if (offerId) {
-      return updateLabels.mutate({ offerId, labels: locations });
-    }
+  const queryClient = useQueryClient();
+  const updateLabels = useBulkUpdateOfferLabelsMutation({
+    onSuccess: async () => await queryClient.invalidateQueries('events'),
+  });
 
-    props.setValue('labels', locations);
-  };
+  const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
+    offerId
+      ? updateLabels.mutate({ offerId, labels: newLabels })
+      : props.setValue('labels', newLabels);
 
   return (
     <Controller
@@ -139,20 +141,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
             {isCultuurkuurFeatureFlagEnabled &&
               isCultuurkuurEvent &&
               !levels.isLoading && (
-                <FormElement
-                  id={'labels'}
-                  label={'Geschikt voor de volgende onderwijsniveaus '}
-                  Component={
-                    <CultuurkuurLabelsPicker
-                      {...getStepProps(props)}
-                      translationKey="education"
-                      data={levels.data}
-                      selected={labels}
-                      onConfirm={(newSelectedLevels) => {
-                        handleSaveCultuurkuurLocations(newSelectedLevels);
-                      }}
-                    />
-                  }
+                <CultuurkuurLabelsPicker
+                  {...getStepProps(props)}
+                  translationKey="education"
+                  data={levels.data}
+                  selected={labels}
+                  onConfirm={handleCultuurkuurLabelsChange}
                 />
               )}
             <AlertDuplicatePlace

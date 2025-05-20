@@ -64,6 +64,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { useQueryClient } from 'react-query';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
@@ -363,17 +364,17 @@ const LocationStep = ({
 
   const { hasRecentLocations } = useRecentLocations();
 
+  const queryClient = useQueryClient();
   const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
   const cultuurkuurRegions = getCultuurkuurRegionsQuery.data;
-  const updateLabels = useBulkUpdateOfferLabelsMutation();
+  const updateLabels = useBulkUpdateOfferLabelsMutation({
+    onSuccess: async () => await queryClient.invalidateQueries('events'),
+  });
 
-  const handleSaveCultuurkuurLocations = async (locations: string[]) => {
-    if (offerId) {
-      return updateLabels.mutate({ offerId, labels: locations });
-    }
-
-    setValue('labels', locations);
-  };
+  const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
+    offerId
+      ? updateLabels.mutate({ offerId, labels: newLabels })
+      : setValue('labels', newLabels);
 
   useEffect(() => {
     if (audience?.audienceType) {
@@ -622,9 +623,7 @@ const LocationStep = ({
                     <CultuurkuurLabelsPicker
                       data={cultuurkuurRegions}
                       selected={labels}
-                      onConfirm={(selectedLocations) => {
-                        handleSaveCultuurkuurLocations(selectedLocations);
-                      }}
+                      onConfirm={handleCultuurkuurLabelsChange}
                     />
                   )}
                 {!isCultuurkuurFeatureFlagEnabled && (
