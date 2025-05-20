@@ -155,7 +155,6 @@ const PriceInformation = ({
   ...props
 }: TabContentProps) => {
   const { t, i18n } = useTranslation();
-  const [isPricesLoaded, setIsPricesLoaded] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery(
     { id: offerId, scope },
@@ -189,7 +188,8 @@ const PriceInformation = ({
   );
 
   const isCultuurkuurEvent =
-    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
+    isCultuurkuurFeatureFlagEnabled;
 
   const rates = watch('rates');
   const ratesRef = useRef(rates);
@@ -241,10 +241,17 @@ const PriceInformation = ({
     [controlledRates],
   );
 
-  const hasPriceInfo = !!offer?.priceInfo;
+  const hasBasePriceInfo = !!offer?.priceInfo?.find(
+    (price) => price.category === PriceCategory.BASE,
+  );
+
+  const hasMultiplePrices = offer?.priceInfo?.length > 1;
+
+  const isCultuurkuurAlertVisible =
+    isCultuurkuurEvent && (!hasBasePriceInfo || hasMultiplePrices);
 
   useEffect(() => {
-    const priceInfo = offer?.priceInfo ?? [];
+    const priceInfo = offer?.priceInfo ?? ([] as FormData['rates']);
 
     const hasUitpasLabel =
       offer?.organizer && scope === OfferTypes.EVENTS
@@ -267,38 +274,28 @@ const PriceInformation = ({
       );
     }
 
-    onValidationChange(ValidationStatus.SUCCESS, field);
-
     replace(
       reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
     );
     reset({}, { keepValues: true });
-  }, [
-    scope,
-    field,
-    offer,
-    hasRates,
-    isCultuurkuurEvent,
-    i18n.language,
-    offer?.mainLanguage,
-    offer?.organizer,
-    offer?.priceInfo,
-    replace,
-    reset,
-    onValidationChange,
-  ]);
 
-  useEffect(() => {
-    if (isPricesLoaded) return;
-
-    if (!offer?.priceInfo) return;
-
-    if (offer.priceInfo.length > 0) {
-      onValidationChange(ValidationStatus.SUCCESS, field);
+    if (hasMultiplePrices && isCultuurkuurEvent) {
+      return onValidationChange(ValidationStatus.WARNING, field);
     }
 
-    setIsPricesLoaded(true);
-  }, [field, offer?.priceInfo, isPricesLoaded, onValidationChange]);
+    onValidationChange(ValidationStatus.SUCCESS, field);
+  }, [
+    offer?.priceInfo,
+    field,
+    hasRates,
+    hasMultiplePrices,
+    isCultuurkuurEvent,
+    offer,
+    scope,
+    onValidationChange,
+    replace,
+    reset,
+  ]);
 
   return (
     <Stack {...getStackProps(props)} padding={0} spacing={5}>
@@ -400,8 +397,8 @@ const PriceInformation = ({
                       <Text variant={TextVariants.MUTED}>
                         {t('create.additionalInformation.price_info.euro')}
                       </Text>
-                      {isCultuurkuurFeatureFlagEnabled &&
-                        isCultuurkuurEvent && (
+                      {isCultuurkuurEvent &&
+                        rate.category === PriceCategory.BASE && (
                           <FormElement
                             id={`rate_groupPrice_${rate.id}`}
                             Component={
@@ -498,13 +495,17 @@ const PriceInformation = ({
         </Stack>
       </Inline>
       <Stack spacing={4}>
-        {isCultuurkuurFeatureFlagEnabled &&
-          isCultuurkuurEvent &&
-          !hasPriceInfo && (
-            <Alert variant={AlertVariants.WARNING} marginBottom={3}>
-              {t('create.additionalInformation.price_info.cultuurkuur.warning')}
-            </Alert>
-          )}
+        {isCultuurkuurAlertVisible && (
+          <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+            {hasBasePriceInfo
+              ? t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.multiple_prices',
+                )
+              : t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.no_price',
+                )}
+          </Alert>
+        )}
         <Alert variant={AlertVariants.PRIMARY}>
           {t('create.additionalInformation.price_info.global_info')}
         </Alert>
