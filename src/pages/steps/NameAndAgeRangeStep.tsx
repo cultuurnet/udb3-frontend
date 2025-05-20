@@ -176,7 +176,7 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
-      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex).required(),
+      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');
