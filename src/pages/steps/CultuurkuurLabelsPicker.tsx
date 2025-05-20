@@ -38,17 +38,19 @@ const CultuurkuurLabelsPicker = ({
           <span>{t(`cultuurkuur_modal.${translationKey}.add`)}</span>
         </Inline>
       </Button>
-      <CultuurkuurModal
-        visible={isCultuurkuurLocationModalVisible}
-        data={data}
-        selectedData={selected}
-        translationKey={translationKey}
-        onConfirm={(newSelected) => {
-          setIsCultuurkuurLocationModalVisible(false);
-          onConfirm(newSelected);
-        }}
-        onClose={() => setIsCultuurkuurLocationModalVisible(false)}
-      />
+      {isCultuurkuurLocationModalVisible && (
+        <CultuurkuurModal
+          visible
+          data={data}
+          selectedData={selected}
+          translationKey={translationKey}
+          onConfirm={(newSelected) => {
+            setIsCultuurkuurLocationModalVisible(false);
+            onConfirm(newSelected);
+          }}
+          onClose={() => setIsCultuurkuurLocationModalVisible(false)}
+        />
+      )}
       <CultuurkuurSelectionOverview data={data} selectedData={selected} />
     </>
   );
