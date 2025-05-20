@@ -4,6 +4,7 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 
 export class CultuurkuurLabelsManager {
   selected: string[] = [];
+  unknown: string[] = [];
 
   constructor(
     public available: HierarchicalData[],
@@ -17,6 +18,8 @@ export class CultuurkuurLabelsManager {
       const entity = flattened.find((e) => this.getIdentifier(e) === label);
       if (entity && !this.selected.includes(this.getIdentifier(entity))) {
         this.handleSelectionToggle(entity);
+      } else if (!entity) {
+        this.unknown.push(label);
       }
     }
   }
@@ -119,6 +122,8 @@ export class CultuurkuurLabelsManager {
   }
 
   setSelected(newSelected: string[]) {
+    newSelected = [...new Set([...newSelected, ...this.unknown])].sort();
+
     this.selected = newSelected;
     this.updater?.(newSelected);
   }

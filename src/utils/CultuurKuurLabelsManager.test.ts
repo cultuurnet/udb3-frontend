@@ -78,4 +78,25 @@ describe('CultururKuurLabelsManager', () => {
       manager.isGroupFullySelected(dummyMunicipalities[1].children[1]),
     ).toBe(true);
   });
+
+  test('can keep unknown labels around', () => {
+    const manager = new CultuurkuurLabelsManager(dummyMunicipalities, [
+      dummyMunicipalities[1].children[1].children[0].label,
+      dummyMunicipalities[1].children[0].children[1].label,
+      'foobar',
+    ]);
+
+    manager.handleSelectionToggle(
+      dummyMunicipalities[1].children[1].children[0],
+    );
+    manager.handleSelectionToggle(
+      dummyMunicipalities[1].children[0].children[0],
+    );
+
+    expect(manager.selected).toEqual([
+      dummyMunicipalities[1].children[0].children[0].label,
+      dummyMunicipalities[1].children[0].children[1].label,
+      'foobar',
+    ]);
+  });
 });
