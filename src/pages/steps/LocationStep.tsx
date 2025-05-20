@@ -3,16 +3,12 @@ import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
-import {
-  HierarchicalData,
-  useGetCultuurkuurRegions,
-} from '@/hooks/api/cultuurkuur';
+import { useGetCultuurkuurRegions } from '@/hooks/api/cultuurkuur';
 import {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
@@ -36,8 +32,8 @@ import { AttendanceMode } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
-import { Alert, AlertVariants, IconSuccess } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
@@ -59,10 +55,8 @@ import { prefixUrlWithHttps } from '@/utils/url';
 
 import { CityPicker } from '../CityPicker';
 import { CountryPicker } from './CountryPicker';
-import { CultuurkuurSelectionOverview } from './CultuurkuurSelectionOverview';
 import { UseEditArguments } from './hooks/useEditField';
 import { useRecentLocations } from './hooks/useRecentLocations';
-import { CultuurkuurModal } from './modals/CultuurkuurModal';
 import { PlaceStep } from './PlaceStep';
 import {
   FormDataUnion,
@@ -357,8 +351,11 @@ const LocationStep = ({
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
   const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
 
-  const labels = useMemo(() => getUniqueLabels(entity) ?? [], [entity]);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>(labels);
+  const formLabels = watch('labels');
+  const labels = useMemo(
+    () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
+    [entity, formLabels],
+  );
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
@@ -372,12 +369,7 @@ const LocationStep = ({
 
   const handleSaveCultuurkuurLocations = async (locations: string[]) => {
     if (offerId) {
-      console.log({ labels, locations });
-      return;
-      return updateLabels.mutate({
-        offerId,
-        labels: locations,
-      });
+      return updateLabels.mutate({ offerId, labels: locations });
     }
 
     setValue('labels', locations);
@@ -629,9 +621,8 @@ const LocationStep = ({
                   !getCultuurkuurRegionsQuery.isLoading && (
                     <CultuurkuurLabelsPicker
                       data={cultuurkuurRegions}
-                      selected={selectedLocations}
+                      selected={labels}
                       onConfirm={(selectedLocations) => {
-                        setSelectedLocations(selectedLocations);
                         handleSaveCultuurkuurLocations(selectedLocations);
                       }}
                     />

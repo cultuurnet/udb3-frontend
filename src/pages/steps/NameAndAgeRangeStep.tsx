@@ -6,6 +6,7 @@ import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetEducationLevelsQuery } from '@/hooks/api/cultuurkuur';
 import {
+  useBulkUpdateOfferLabelsMutation,
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
@@ -31,6 +32,11 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { useMemo, useState } from 'react';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { Offer } from '@/types/Offer';
+import { Organizer } from '@/types/Organizer';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -69,6 +75,7 @@ const useEditNameAndAgeRange = ({
 };
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
+  const { scope, offerId, getValues } = props;
   const router = useRouter();
   const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.CULTUURKUUR,
@@ -90,8 +97,29 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
 
   const levels = useGetEducationLevelsQuery();
   const isCultuurkuurEvent =
-    props.scope === OfferTypes.EVENTS &&
+    scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({
+    id: offerId,
+    scope: scope,
+  });
+
+  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+  const formLabels = props.watch('labels');
+  const labels = useMemo(
+    () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
+    [entity, formLabels],
+  );
+  const updateLabels = useBulkUpdateOfferLabelsMutation();
+
+  const handleSaveCultuurkuurLocations = async (locations: string[]) => {
+    if (offerId) {
+      return updateLabels.mutate({ offerId, labels: locations });
+    }
+
+    props.setValue('labels', locations);
+  };
 
   return (
     <Controller
@@ -117,8 +145,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                   Component={
                     <CultuurkuurLabelsPicker
                       {...getStepProps(props)}
-                      data={levels.data}
                       translationKey="education"
+                      data={levels.data}
+                      selected={labels}
+                      onConfirm={(newSelectedLevels) => {
+                        handleSaveCultuurkuurLocations(newSelectedLevels);
+                      }}
                     />
                   }
                 />
