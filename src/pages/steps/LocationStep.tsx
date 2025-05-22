@@ -3,6 +3,7 @@ import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -64,7 +65,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { useQueryClient } from 'react-query';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
