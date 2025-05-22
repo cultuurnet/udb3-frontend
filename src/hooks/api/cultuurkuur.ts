@@ -2366,7 +2366,8 @@ const useGetEducationLevelsQuery = (
 };
 
 const useCultuurkuurLabelsPickerProps = (
-  props: Pick<StepProps, 'offerId' | 'scope' | 'setValue' | 'watch'>,
+  props: Pick<StepProps, 'offerId' | 'scope'> &
+    Partial<Pick<StepProps, 'setValue' | 'watch'>>,
   available: UseQueryResult<HierarchicalData[]>,
 ) => {
   const { offerId, scope, setValue, watch } = props;
@@ -2376,7 +2377,7 @@ const useCultuurkuurLabelsPickerProps = (
   });
 
   const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
-  const formLabels = watch('labels');
+  const formLabels = watch?.('labels');
   const labels = useMemo(
     () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
     [entity, formLabels],
@@ -2384,13 +2385,13 @@ const useCultuurkuurLabelsPickerProps = (
 
   const queryClient = useQueryClient();
   const updateLabels = useBulkUpdateOfferLabelsMutation({
-    onSuccess: async () => await queryClient.invalidateQueries('events'),
+    onSuccess: async () => await queryClient.invalidateQueries(scope),
   });
 
   const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
     offerId
       ? updateLabels.mutate({ scope, offerId, labels: newLabels })
-      : setValue('labels', newLabels);
+      : setValue?.('labels', newLabels);
 
   return {
     selected: labels,
