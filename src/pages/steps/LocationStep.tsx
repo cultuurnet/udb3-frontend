@@ -9,7 +9,10 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
-import { useGetCultuurkuurRegions } from '@/hooks/api/cultuurkuur';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+} from '@/hooks/api/cultuurkuur';
 import {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
@@ -349,19 +352,8 @@ const LocationStep = ({
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
-  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
-  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
-
-  const formLabels = watch('labels');
-  const labels = useMemo(
-    () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
-    [entity, formLabels],
-  );
-
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
-
   const audience = getOfferByIdQuery.data?.audience;
-
   const { hasRecentLocations } = useRecentLocations();
 
   const queryClient = useQueryClient();
@@ -373,7 +365,7 @@ const LocationStep = ({
 
   const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
     offerId
-      ? updateLabels.mutate({ scope, offerId, labels: newLabels })
+      ? updateLabels.mutate({ offerId, labels: newLabels })
       : setValue('labels', newLabels);
 
   useEffect(() => {
@@ -406,6 +398,12 @@ const LocationStep = ({
 
     setStreetAndNumber(e.target.value);
   };
+
+  const regions = useGetCultuurkuurRegions();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    regions,
+  );
 
   return (
     <Stack
@@ -619,11 +617,10 @@ const LocationStep = ({
                 </Inline>
                 {isCultuurkuurFeatureFlagEnabled &&
                   isCultuurkuurEvent &&
-                  !getCultuurkuurRegionsQuery.isLoading && (
+                  !regions.isLoading && (
                     <CultuurkuurLabelsPicker
-                      data={cultuurkuurRegions}
-                      selected={labels}
-                      onConfirm={handleCultuurkuurLabelsChange}
+                      translationKey={'location'}
+                      {...labelsPickerProps}
                     />
                   )}
                 {!isCultuurkuurFeatureFlagEnabled && (

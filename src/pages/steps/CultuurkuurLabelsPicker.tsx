@@ -12,14 +12,14 @@ type Props = {
   data: HierarchicalData[];
   selected?: string[];
   onConfirm?: (newSelected: string[]) => void;
-  translationKey?: string;
+  translationKey: string;
 };
 
 const CultuurkuurLabelsPicker = ({
   data,
   selected = [],
   onConfirm = () => ({}),
-  translationKey = 'location',
+  translationKey,
 }: Props) => {
   const { t } = useTranslation();
   const [
@@ -35,7 +35,7 @@ const CultuurkuurLabelsPicker = ({
       >
         <Inline spacing={2}>
           <Icon name={Icons.PLUS_CIRCLE} />
-          <span>{t(`cultuurkuur_modal.${translationKey}.add`)}</span>
+          <span>{t(`cultuurkuur_modal.title.${translationKey}`)}</span>
         </Inline>
       </Button>
       {isCultuurkuurLocationModalVisible && (

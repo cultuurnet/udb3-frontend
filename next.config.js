@@ -19,10 +19,6 @@ const moduleExports = {
     environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
     apiUrl: process.env.NEXT_PUBLIC_API_URL,
-    authDomain:
-      process.env.NEXT_PUBLIC_KEYCLOAK_ENABLED === 'true'
-        ? process.env.NEXT_PUBLIC_AUTH_DOMAIN
-        : process.env.NEXT_PUBLIC_LEGACY_AUTH_DOMAIN,
     legacyAppUrl: process.env.NEXT_PUBLIC_LEGACY_APP_URL,
     authUrl: process.env.NEXT_PUBLIC_AUTH_URL,
     socketUrl: process.env.NEXT_PUBLIC_SOCKET_URL,

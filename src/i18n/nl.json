@@ -513,7 +513,10 @@
         "cultuurkuur": {
           "per_group": "per groep",
           "per_student": "per leerling",
-          "warning": "Voeg een prijs toe voor scholen, per leerling of per groep."
+          "warning": {
+            "no_price": "Voeg een prijs toe voor scholen, per leerling of per groep.",
+            "multiple_prices": "Let op: enkel het basistarief zal zichtbaar zijn voor je Cultuurkuur-activiteit. Andere tarieven worden niet weergegeven."
+          }
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
@@ -899,15 +902,9 @@
     "clearAll": "Alles verwijderen",
     "save": "Opslaan",
     "cancel": "Annuleren",
-    "location": {
-      "add": "Add province region gemeente",
-      "title": "Werkingsregio selecteren",
-      "selectAll": "Volledige provincie selecteren"
-    },
-    "education": {
-      "add": "ADD_EDUCATION_LEVELS",
-      "title": "SELECT_EDUCATION_LEVELS",
-      "selectAll": "SELECT_ALL_LEVELS"
+    "title": {
+      "location": "Provincie regio gemeente toevoegen",
+      "education": "Onderwijsniveaus toevoegen"
     }
   },
   "location": {
