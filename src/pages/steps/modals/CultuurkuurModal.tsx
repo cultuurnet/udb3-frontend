@@ -82,7 +82,6 @@ const CultuurkuurModal = ({
                       ? colors.green5
                       : colors.grey1};
                   `}
-                  onClick={() => manager.handleSelectionToggle(level1)}
                 >
                   <Inline justifyContent="space-between" alignItems="center">
                     <p>{level1.name.nl}</p>
