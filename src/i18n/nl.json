@@ -475,8 +475,10 @@
         }
       },
       "cultuurkuur": {
-        "title": "Cultuurkuur",
-        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur."
+        "title": "Voor scholen",
+        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur.",
+        "tailored": "Ik werk activiteiten uit op maat van scholen",
+        "on_location": "Ik organiseer ook activiteiten op verplaatsing"
       },
       "location": {
         "title": "Locatie",
