@@ -120,7 +120,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
 
   const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
     offerId
-      ? updateLabels.mutate({ offerId, labels: newLabels })
+      ? updateLabels.mutate({ scope, offerId, labels: newLabels })
       : props.setValue('labels', newLabels);
 
   return (

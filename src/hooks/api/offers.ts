@@ -531,9 +531,9 @@ const useDeleteOfferOrganizerMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const bulkUpdateLabels = async ({ headers, offerId, labels }) => {
+const bulkUpdateLabels = async ({ headers, scope, offerId, labels }) => {
   return fetchFromApi({
-    path: `/events/${offerId}/labels`,
+    path: `/${scope}/${offerId}/labels`,
     options: {
       headers,
       method: 'PUT',
