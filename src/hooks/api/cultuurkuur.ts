@@ -2389,7 +2389,7 @@ const useCultuurkuurLabelsPickerProps = (
 
   const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
     offerId
-      ? updateLabels.mutate({ offerId, labels: newLabels })
+      ? updateLabels.mutate({ scope, offerId, labels: newLabels })
       : setValue('labels', newLabels);
 
   return {
