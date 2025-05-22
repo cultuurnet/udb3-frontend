@@ -1,4 +1,15 @@
+import { useMemo } from 'react';
+import { useQueryClient, UseQueryResult } from 'react-query';
+
+import { AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes } from '@/constants/OfferType';
+import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { StepProps } from '@/pages/steps/Steps';
+import { Offer } from '@/types/Offer';
+import { Organizer } from '@/types/Organizer';
 import { fetchFromApi } from '@/utils/fetchFromApi';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import {
   ExtendQueryOptions,
@@ -2354,4 +2365,42 @@ const useGetEducationLevelsQuery = (
   });
 };
 
-export { useGetCultuurkuurRegions, useGetEducationLevelsQuery };
+const useCultuurkuurLabelsPickerProps = (
+  props: Pick<StepProps, 'offerId' | 'scope' | 'setValue' | 'watch'>,
+  available: UseQueryResult<HierarchicalData[]>,
+) => {
+  const { offerId, scope, setValue, watch } = props;
+  const getEntityByIdQuery = useGetEntityByIdAndScope({
+    id: offerId,
+    scope: scope,
+  });
+
+  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+  const formLabels = watch('labels');
+  const labels = useMemo(
+    () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
+    [entity, formLabels],
+  );
+
+  const queryClient = useQueryClient();
+  const updateLabels = useBulkUpdateOfferLabelsMutation({
+    onSuccess: async () => await queryClient.invalidateQueries('events'),
+  });
+
+  const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
+    offerId
+      ? updateLabels.mutate({ offerId, labels: newLabels })
+      : setValue('labels', newLabels);
+
+  return {
+    selected: labels,
+    data: available.data,
+    onConfirm: handleCultuurkuurLabelsChange,
+  };
+};
+
+export {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+  useGetEducationLevelsQuery,
+};

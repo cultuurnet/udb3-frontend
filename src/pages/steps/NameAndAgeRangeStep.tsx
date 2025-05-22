@@ -6,7 +6,10 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
-import { useGetEducationLevelsQuery } from '@/hooks/api/cultuurkuur';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetEducationLevelsQuery,
+} from '@/hooks/api/cultuurkuur';
 import {
   useBulkUpdateOfferLabelsMutation,
   useChangeOfferNameMutation,
@@ -76,7 +79,7 @@ const useEditNameAndAgeRange = ({
 };
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
-  const { scope, offerId, getValues } = props;
+  const { scope } = props;
   const router = useRouter();
   const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.CULTUURKUUR,
@@ -96,32 +99,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     router.push(`/place/${placeId}/preview`);
   };
 
-  const levels = useGetEducationLevelsQuery();
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
-  const getEntityByIdQuery = useGetEntityByIdAndScope({
-    id: offerId,
-    scope: scope,
-  });
-
-  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
-  const formLabels = props.watch('labels');
-  const labels = useMemo(
-    () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
-    [entity, formLabels],
-  );
-
-  const queryClient = useQueryClient();
-  const updateLabels = useBulkUpdateOfferLabelsMutation({
-    onSuccess: async () => await queryClient.invalidateQueries('events'),
-  });
-
-  const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
-    offerId
-      ? updateLabels.mutate({ offerId, labels: newLabels })
-      : props.setValue('labels', newLabels);
+  const levels = useGetEducationLevelsQuery();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(props, levels);
 
   return (
     <Controller
@@ -142,11 +125,8 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
               isCultuurkuurEvent &&
               !levels.isLoading && (
                 <CultuurkuurLabelsPicker
-                  {...getStepProps(props)}
                   translationKey="education"
-                  data={levels.data}
-                  selected={labels}
-                  onConfirm={handleCultuurkuurLabelsChange}
+                  {...labelsPickerProps}
                 />
               )}
             <AlertDuplicatePlace
