@@ -2,8 +2,15 @@ import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { useGetCultuurkuurRegions } from '@/hooks/api/cultuurkuur';
+import {
+  useAddOfferLabelMutation,
+  useBulkUpdateOfferLabelsMutation,
+  useRemoveOfferLabelMutation,
+} from '@/hooks/api/offers';
 import {
   useDeleteOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerEducationalDescriptionMutation,
@@ -11,16 +18,21 @@ import {
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
+import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints } from '@/ui/theme';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
+import { CultuurkuurLabelsPicker } from '../CultuurkuurLabelsPicker';
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
 
 const htmlToDraft =
@@ -84,18 +96,107 @@ const DescriptionTips = ({
 
   return (
     (eventTypeId || scope === ScopeTypes.ORGANIZERS) && (
-      <Alert
-        css={`
-          margin-top: 1.86rem;
-        `}
-      >
-        {t('create.additionalInformation.cultuurkuur.tip')}
-      </Alert>
+      <Box marginTop={5}>
+        <Alert>{t('create.additionalInformation.cultuurkuur.tip')}</Alert>
+      </Box>
     )
   );
 };
 
 type CultuurKuurStepProps = StackProps & TabContentProps;
+
+type CultuurLabelsProps = Pick<TabContentProps, 'offerId' | 'scope'>;
+
+const CULTUURKUUR_TAILORED_LABEL = 'cultuurkuur_op_maat';
+const CULTUURKUUR_ON_SITE_LABEL = 'cultuurkuur_op_verplaatsing';
+
+const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
+  const { t } = useTranslation();
+
+  const queryClient = useQueryClient();
+
+  const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
+  const cultuurkuurRegions = getCultuurkuurRegionsQuery.data ?? [];
+
+  const addLabelMutation = useAddOfferLabelMutation();
+  const removeLabelMutation = useRemoveOfferLabelMutation();
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+
+  const labels = useMemo(() => {
+    return getUniqueLabels(entity) ?? [];
+  }, [entity]);
+
+  const [selectedLocations, setSelectedLocations] = useState<string[]>(labels);
+
+  useEffect(() => {
+    setSelectedLocations(labels);
+  }, [labels]);
+
+  const updateLocationLabels = useBulkUpdateOfferLabelsMutation({
+    onSuccess: async () =>
+      await queryClient.invalidateQueries([scope, { id: offerId }]),
+  });
+
+  const isCultuurkuurLabelsPickerVisible = labels.includes(
+    CULTUURKUUR_ON_SITE_LABEL,
+  );
+
+  const handleSelectedLocationsMutation = (selectedLocations) => {
+    updateLocationLabels.mutate({ scope, offerId, labels: selectedLocations });
+  };
+
+  const handleLabelMutation = async (label: string) => {
+    const hasLabel = labels.includes(label);
+    const mutation = hasLabel ? removeLabelMutation : addLabelMutation;
+    await mutation.mutateAsync(
+      {
+        id: offerId,
+        scope,
+        label: label,
+      },
+      {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries([scope, { id: offerId }]);
+        },
+      },
+    );
+  };
+
+  return (
+    <Stack spacing={4}>
+      <CheckboxWithLabel
+        id="tailored"
+        name={t('create.additionalInformation.cultuurkuur.tailored')}
+        onToggle={() => handleLabelMutation(CULTUURKUUR_TAILORED_LABEL)}
+        checked={labels.includes(CULTUURKUUR_TAILORED_LABEL)}
+      >
+        {t('create.additionalInformation.cultuurkuur.tailored')}
+      </CheckboxWithLabel>
+      <CheckboxWithLabel
+        id="onSite"
+        name={t('create.additionalInformation.cultuurkuur.on_location')}
+        onToggle={() => {
+          handleLabelMutation(CULTUURKUUR_ON_SITE_LABEL);
+        }}
+        checked={labels.includes(CULTUURKUUR_ON_SITE_LABEL)}
+      >
+        {t('create.additionalInformation.cultuurkuur.on_location')}
+      </CheckboxWithLabel>
+      {isCultuurkuurLabelsPickerVisible && (
+        <CultuurkuurLabelsPicker
+          data={cultuurkuurRegions}
+          selected={selectedLocations}
+          onConfirm={(selectedLocations) => {
+            setSelectedLocations([...labels, ...selectedLocations]);
+            handleSelectedLocationsMutation(selectedLocations);
+          }}
+        />
+      )}
+    </Stack>
+  );
+};
 
 const CultuurKuurStep = ({
   scope,
@@ -191,34 +292,39 @@ const CultuurKuurStep = ({
   };
 
   return (
-    <Inline
-      stackOn={Breakpoints.L}
-      css={`
-        gap: 2rem;
-      `}
-    >
-      <FormElement
-        flex="1 0 50%"
-        id="create-description"
-        label={t('create.additionalInformation.description.title')}
-        Component={
-          <RichTextEditor
-            editorState={editorState}
-            onEditorStateChange={setEditorState}
-            onBlur={handleBlur}
-          />
-        }
-        info={
-          <DescriptionInfo
-            description={plainTextDescription}
-            onClear={handleClear}
-            eventTypeId={eventTypeId}
-          />
-        }
-        {...getStackProps(props)}
-      />
-      <DescriptionTips scope={scope} eventTypeId={eventTypeId} />
-    </Inline>
+    <Stack spacing={5} paddingTop={2}>
+      <Box>
+        <CultuurkuurLabels offerId={offerId} scope={scope} />
+      </Box>
+      <Inline
+        stackOn={Breakpoints.L}
+        css={`
+          gap: 2rem;
+        `}
+      >
+        <FormElement
+          flex="1 0 50%"
+          id="create-description"
+          label={t('create.additionalInformation.description.title')}
+          Component={
+            <RichTextEditor
+              editorState={editorState}
+              onEditorStateChange={setEditorState}
+              onBlur={handleBlur}
+            />
+          }
+          info={
+            <DescriptionInfo
+              description={plainTextDescription}
+              onClear={handleClear}
+              eventTypeId={eventTypeId}
+            />
+          }
+          {...getStackProps(props)}
+        />
+        <DescriptionTips scope={scope} eventTypeId={eventTypeId} />
+      </Inline>
+    </Stack>
   );
 };
 
