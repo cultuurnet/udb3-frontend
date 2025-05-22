@@ -4,8 +4,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import {
+  CULTUURKUUR_ON_SITE_LABEL,
+  CULTUURKUUR_TAILORED_LABEL,
+} from '@/constants/Labels';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
-import { useGetCultuurkuurRegions } from '@/hooks/api/cultuurkuur';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+} from '@/hooks/api/cultuurkuur';
 import {
   useAddOfferLabelMutation,
   useBulkUpdateOfferLabelsMutation,
@@ -108,16 +115,15 @@ type CultuurKuurStepProps = StackProps & TabContentProps;
 
 type CultuurLabelsProps = Pick<TabContentProps, 'offerId' | 'scope'>;
 
-const CULTUURKUUR_TAILORED_LABEL = 'cultuurkuur_op_maat';
-const CULTUURKUUR_ON_SITE_LABEL = 'cultuurkuur_op_verplaatsing';
-
 const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
   const { t } = useTranslation();
 
   const queryClient = useQueryClient();
-
-  const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
-  const cultuurkuurRegions = getCultuurkuurRegionsQuery.data ?? [];
+  const regions = useGetCultuurkuurRegions();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId },
+    regions,
+  );
 
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
@@ -129,24 +135,9 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
     return getUniqueLabels(entity) ?? [];
   }, [entity]);
 
-  const [selectedLocations, setSelectedLocations] = useState<string[]>(labels);
-
-  useEffect(() => {
-    setSelectedLocations(labels);
-  }, [labels]);
-
-  const updateLocationLabels = useBulkUpdateOfferLabelsMutation({
-    onSuccess: async () =>
-      await queryClient.invalidateQueries([scope, { id: offerId }]),
-  });
-
   const isCultuurkuurLabelsPickerVisible = labels.includes(
     CULTUURKUUR_ON_SITE_LABEL,
   );
-
-  const handleSelectedLocationsMutation = (selectedLocations) => {
-    updateLocationLabels.mutate({ scope, offerId, labels: selectedLocations });
-  };
 
   const handleLabelMutation = async (label: string) => {
     const hasLabel = labels.includes(label);
@@ -185,14 +176,10 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
       >
         {t('create.additionalInformation.cultuurkuur.on_location')}
       </CheckboxWithLabel>
-      {isCultuurkuurLabelsPickerVisible && (
+      {isCultuurkuurLabelsPickerVisible && !regions.isLoading && (
         <CultuurkuurLabelsPicker
-          data={cultuurkuurRegions}
-          selected={selectedLocations}
-          onConfirm={(selectedLocations) => {
-            setSelectedLocations([...labels, ...selectedLocations]);
-            handleSelectedLocationsMutation(selectedLocations);
-          }}
+          translationKey={'location'}
+          {...labelsPickerProps}
         />
       )}
     </Stack>
