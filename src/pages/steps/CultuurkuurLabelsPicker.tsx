@@ -35,7 +35,7 @@ const CultuurkuurLabelsPicker = ({
       >
         <Inline spacing={2}>
           <Icon name={Icons.PLUS_CIRCLE} />
-          <span>{t(`cultuurkuur_modal.${translationKey}.add`)}</span>
+          <span>{t(`cultuurkuur_modal.title.${translationKey}`)}</span>
         </Inline>
       </Button>
       {isCultuurkuurLocationModalVisible && (

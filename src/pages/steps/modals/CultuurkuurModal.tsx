@@ -37,7 +37,7 @@ const CultuurkuurModal = ({
   translationKey,
 }: Props) => {
   const { t } = useTranslation();
-  const title = t(`cultuurkuur_modal.${translationKey}.title`);
+  const title = t(`cultuurkuur_modal.title.${translationKey}`);
 
   const [, setSelected] = useState<string[]>([]);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
@@ -93,7 +93,7 @@ const CultuurkuurModal = ({
                       onToggle={() => manager.handleSelectionToggle(level1)}
                       checked={manager.isGroupFullySelected(level1)}
                     >
-                      {t(`cultuurkuur_modal.${translationKey}.selectAll`)}
+                      {t(`cultuurkuur_modal.selectAll`)}
                     </CheckboxWithLabel>
                   </Inline>
                 </Card.Header>
