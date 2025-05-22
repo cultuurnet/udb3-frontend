@@ -34,6 +34,7 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import { CultuurkuurLabelsPicker } from '../CultuurkuurLabelsPicker';
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
@@ -208,6 +209,10 @@ const CultuurKuurStep = ({
 }: CultuurKuurStepProps) => {
   const { t, i18n } = useTranslation();
 
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const plainTextDescription = useMemo(
     () => editorState.getCurrentContent().getPlainText(),
@@ -293,9 +298,11 @@ const CultuurKuurStep = ({
 
   return (
     <Stack spacing={5} paddingTop={2}>
-      <Box>
-        <CultuurkuurLabels offerId={offerId} scope={scope} />
-      </Box>
+      {isCultuurkuurFeatureFlagEnabled && (
+        <Box>
+          <CultuurkuurLabels offerId={offerId} scope={scope} />
+        </Box>
+      )}
       <Inline
         stackOn={Breakpoints.L}
         css={`
