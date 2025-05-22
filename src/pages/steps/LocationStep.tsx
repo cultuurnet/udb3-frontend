@@ -356,18 +356,6 @@ const LocationStep = ({
   const audience = getOfferByIdQuery.data?.audience;
   const { hasRecentLocations } = useRecentLocations();
 
-  const queryClient = useQueryClient();
-  const getCultuurkuurRegionsQuery = useGetCultuurkuurRegions();
-  const cultuurkuurRegions = getCultuurkuurRegionsQuery.data;
-  const updateLabels = useBulkUpdateOfferLabelsMutation({
-    onSuccess: async () => await queryClient.invalidateQueries('events'),
-  });
-
-  const handleCultuurkuurLabelsChange = (newLabels: string[]) =>
-    offerId
-      ? updateLabels.mutate({ offerId, labels: newLabels })
-      : setValue('labels', newLabels);
-
   useEffect(() => {
     if (audience?.audienceType) {
       setAudienceType(audience.audienceType);
