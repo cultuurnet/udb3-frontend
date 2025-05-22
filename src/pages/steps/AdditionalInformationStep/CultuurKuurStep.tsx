@@ -16,6 +16,7 @@ import {
   useUpdateOrganizerEducationalDescriptionMutation,
 } from '@/hooks/api/organizers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
@@ -34,7 +35,6 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import { CultuurkuurLabelsPicker } from '../CultuurkuurLabelsPicker';
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
