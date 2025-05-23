@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -21,8 +22,10 @@ import {
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
 import {
+  useAddOfferLabelMutation,
   useBulkUpdateOfferLabelsMutation,
   useGetOfferByIdQuery,
+  useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
@@ -328,6 +331,8 @@ const LocationStep = ({
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
+  const queryClient = useQueryClient();
+
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -355,6 +360,34 @@ const LocationStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
   const audience = getOfferByIdQuery.data?.audience;
   const { hasRecentLocations } = useRecentLocations();
+
+  const offer = getOfferByIdQuery.data;
+
+  const labels = useMemo(() => getUniqueLabels(offer) ?? [], [offer]);
+
+  const addLabelMutation = useAddOfferLabelMutation();
+  const removeLabelMutation = useRemoveOfferLabelMutation();
+
+  const handleCultuurkuurLabel = async (label?: string) => {
+    if (!labels.includes(CULTUURKUUR_ON_SITE_LABEL) && !label) return;
+    const mutation =
+      label === CULTUURKUUR_ON_SITE_LABEL
+        ? addLabelMutation
+        : removeLabelMutation;
+
+    await mutation.mutateAsync(
+      {
+        id: offerId,
+        scope,
+        label: CULTUURKUUR_ON_SITE_LABEL,
+      },
+      {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries([scope, { id: offerId }]);
+        },
+      },
+    );
+  };
 
   useEffect(() => {
     if (audience?.audienceType) {
@@ -462,14 +495,15 @@ const LocationStep = ({
                     {...getInlineProps(props)}
                   >
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: false,
                           municipality: undefined,
                           place: undefined,
                           country: Countries.BE,
-                        })
-                      }
+                        });
+                        handleCultuurkuurLabel();
+                      }}
                       active={isPhysicalLocation}
                       icon={
                         <CustomIcon
@@ -482,12 +516,13 @@ const LocationStep = ({
                       minHeight={parseSpacing(7)}
                     />
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: true,
                           municipality: undefined,
-                        })
-                      }
+                        });
+                        handleCultuurkuurLabel();
+                      }}
                       active={isOnline}
                       icon={
                         <CustomIcon
@@ -501,13 +536,14 @@ const LocationStep = ({
                     />
                     {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
                       <ToggleBox
-                        onClick={() =>
+                        onClick={() => {
                           onFieldChange({
                             country: undefined,
                             municipality: undefined,
                             isOnline: false,
-                          })
-                        }
+                          });
+                          handleCultuurkuurLabel(CULTUURKUUR_ON_SITE_LABEL);
+                        }}
                         active={!isPhysicalLocation && !isOnline}
                         icon={
                           <CustomIcon
