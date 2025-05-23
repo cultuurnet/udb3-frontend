@@ -5,6 +5,8 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 export class CultuurkuurLabelsManager {
   selected: string[] = [];
   unknown: string[] = [];
+  partial = false;
+  mapping: { [key: string]: string | null } = {};
 
   constructor(
     public available: HierarchicalData[],
@@ -12,12 +14,19 @@ export class CultuurkuurLabelsManager {
     private updater?: (labels: string[]) => void,
   ) {
     this.flattenEntity = this.flattenEntity.bind(this);
+    this.partial = !!available[0].extraLabel;
 
     const flattened = this.getFlattened();
+    for (let entity of flattened) {
+      this.mapping[this.getIdentifier(entity)] = entity.parent
+        ? this.getIdentifier(entity.parent)
+        : null;
+    }
+
     for (let label of selected) {
       const entity = flattened.find((e) => this.getIdentifier(e) === label);
       if (entity && !this.selected.includes(this.getIdentifier(entity))) {
-        this.handleSelectionToggle(entity);
+        this.toggle(entity);
       } else if (!entity) {
         this.unknown.push(label);
       }
@@ -33,6 +42,16 @@ export class CultuurkuurLabelsManager {
 
   getFlattened() {
     return this.available.flatMap(this.flattenEntity);
+  }
+
+  getSelected() {
+    return this.selected.filter((selected) => !selected.includes(' ')).sort();
+  }
+
+  find(entity: string | HierarchicalData) {
+    const needle =
+      typeof entity === 'string' ? entity : this.getIdentifier(entity);
+    return this.getFlattened().find((e) => this.getIdentifier(e) === needle);
   }
 
   getFlattenedSelection() {
@@ -69,20 +88,19 @@ export class CultuurkuurLabelsManager {
     return this.areAllLeafsSelected(this.flattenEntity(group));
   }
 
-    const isGroup = !!entity.children;
-    const parent = entity.parent;
   toggle(entity: HierarchicalData) {
+    const identifier = this.getIdentifier(entity);
+    const fullEntity = this.find(entity);
+    const isGroup = !!fullEntity.children;
 
-    const alreadySelected = this.isLabelSelected(this.getIdentifier(entity));
+    const alreadySelected = this.isLabelSelected(identifier);
     if (alreadySelected && !isGroup) {
-      let newSelected = this.selected.filter(
-        (e) => e !== this.getIdentifier(entity),
-      );
+      let newSelected = this.selected.filter((e) => e !== identifier);
 
       const flattened = this.getFlattened();
       const parentGroups = flattened.filter((e) =>
         this.flattenEntity(e).some(
-          (child) => this.getIdentifier(child) === this.getIdentifier(entity),
+          (child) => this.getIdentifier(child) === identifier,
         ),
       );
 
@@ -113,11 +131,18 @@ export class CultuurkuurLabelsManager {
         ]);
       }
     } else {
-      this.setSelected([...this.selected, this.getIdentifier(entity)]);
+      this.setSelected([...this.selected, identifier]);
     }
 
-    if (parent && this.areAllLeafsSelected(parent.children)) {
-      this.setSelected([...this.selected, this.getIdentifier(parent)]);
+    let parent = this.mapping[identifier];
+    while (parent) {
+      const fullParent = this.find(parent);
+      const parentLabel =
+        !this.partial || this.isGroupFullySelected(fullParent)
+          ? parent
+          : fullParent.extraLabel ?? parent;
+      this.setSelected([...this.selected, this.partial ? parentLabel : parent]);
+      parent = this.mapping[parent];
     }
   }
 

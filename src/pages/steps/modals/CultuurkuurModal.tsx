@@ -54,7 +54,7 @@ const CultuurkuurModal = ({
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onConfirm={() => onConfirm(manager.selected)}
+      onConfirm={() => onConfirm(manager.getSelected())}
       onClose={onClose}
       title={
         <>

@@ -88,10 +88,51 @@ describe('CultururKuurLabelsManager', () => {
     manager.toggle(dummyMunicipalities[1].children[1].children[0]);
     manager.toggle(dummyMunicipalities[1].children[0].children[0]);
 
-    expect(manager.selected).toEqual([
+    expect(manager.getSelected()).toEqual([
+      dummyMunicipalities[1].extraLabel,
       dummyMunicipalities[1].children[0].children[0].label,
       dummyMunicipalities[1].children[0].children[1].label,
       'foobar',
     ]);
+  });
+
+  test('can send extra labels when present', () => {
+    const manager = new CultuurkuurLabelsManager(dummyMunicipalities);
+
+    manager.toggle(dummyMunicipalities[0].children[0].children[0]);
+
+    expect(manager.getSelected()).toEqual([
+      dummyMunicipalities[0].extraLabel,
+      dummyMunicipalities[0].children[0].children[0].label,
+    ]);
+  });
+
+  test('can get full chain of parent labels', () => {
+    let manager = new CultuurkuurLabelsManager(dummyEducationLevels);
+    manager.toggle(dummyEducationLevels[0].children[0].children[0]);
+
+    expect(manager.getSelected()).toEqual([
+      dummyEducationLevels[0].label,
+      dummyEducationLevels[0].children[0].label,
+      dummyEducationLevels[0].children[0].children[0].label,
+    ]);
+
+    manager = new CultuurkuurLabelsManager(dummyEducationLevels);
+    manager.toggle(dummyEducationLevels[0]);
+
+    expect(manager.selected).toEqual(
+      [
+        dummyEducationLevels[0].label,
+        dummyEducationLevels[0].children[0].label,
+        dummyEducationLevels[0].children[0].children[0].label,
+        dummyEducationLevels[0].children[0].children[1].label,
+        dummyEducationLevels[0].children[0].children[2].label,
+        dummyEducationLevels[0].children[1].label,
+        dummyEducationLevels[0].children[1].children[0].label,
+        dummyEducationLevels[0].children[1].children[1].label,
+        dummyEducationLevels[0].children[1].children[2].label,
+        dummyEducationLevels[0].children[2].label,
+      ].sort(),
+    );
   });
 });
