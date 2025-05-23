@@ -895,6 +895,16 @@
       }
     }
   },
+  "cultuurkuur_modal": {
+    "selectAll": "Alles selecteren",
+    "clearAll": "Alles verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "title": {
+      "location": "Provincie regio gemeente toevoegen",
+      "education": "Onderwijsniveaus toevoegen"
+    }
+  },
   "location": {
     "add_modal": {
       "title": "Nieuwe locatie toevoegen",

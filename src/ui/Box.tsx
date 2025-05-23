@@ -95,6 +95,11 @@ type ProgressBarProps = {
   now: number;
 };
 
+type InputProps = {
+  type: string;
+  checked: boolean;
+};
+
 type SpecificComponentProps<T extends TypeaheadModel> = InlineProps &
   Omit<ReactDatePickerProps, 'onChange' | 'onSelect' | 'value' | 'selected'> &
   TitleProps &
@@ -102,6 +107,7 @@ type SpecificComponentProps<T extends TypeaheadModel> = InlineProps &
   LinkProps &
   LabelProps &
   ImageProps &
+  InputProps &
   SvgProps &
   ProgressBarProps &
   Omit<AsyncTypeaheadProps<T>, 'id' | 'size' | 'onChange' | 'selected'>;
