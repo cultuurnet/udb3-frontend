@@ -24,8 +24,9 @@ export class CultuurkuurLabelsManager {
     }
 
     for (let label of selected) {
-      const entity = flattened.find((e) => this.getIdentifier(e) === label);
-      if (entity && !this.selected.includes(this.getIdentifier(entity))) {
+      const entity = this.find(label);
+      const isSelected = this.isLabelSelected(label);
+      if (entity && !isSelected) {
         this.toggle(entity);
       } else if (!entity) {
         this.unknown.push(label);
@@ -45,7 +46,20 @@ export class CultuurkuurLabelsManager {
   }
 
   getSelected() {
-    return this.selected.filter((selected) => !selected.includes(' ')).sort();
+    const finalSelection = this.selected.filter((selected) =>
+      this.isRealLabel(selected),
+    );
+
+    return finalSelection
+      .filter((selected) => {
+        const parent = this.mapping[selected];
+        if (this.partial && finalSelection.includes(parent)) {
+          return false;
+        }
+
+        return true;
+      })
+      .sort();
   }
 
   find(entity: string | HierarchicalData) {
@@ -61,7 +75,16 @@ export class CultuurkuurLabelsManager {
   }
 
   isLabelSelected(label: string) {
-    return label ? this.selected.includes(label) : false;
+    if (!label) {
+      return false;
+    }
+    const parent = this.mapping[label];
+    const parents = [label, parent, this.mapping[parent]].filter(Boolean);
+    return parents.some((selected) => this.getSelected().includes(selected));
+  }
+
+  isRealLabel(label: string | null) {
+    return label && !label.includes(' ');
   }
 
   flattenEntity(entity: HierarchicalData): HierarchicalData[] {
@@ -79,9 +102,11 @@ export class CultuurkuurLabelsManager {
   }
 
   areAllLeafsSelected(leafEntities: HierarchicalData[]) {
-    return leafEntities.every((leaf) =>
-      this.isLabelSelected(this.getIdentifier(leaf)),
-    );
+    return leafEntities.every((leaf) => {
+      const identifier = this.getIdentifier(leaf);
+
+      return !this.isRealLabel(identifier) || this.isLabelSelected(identifier);
+    });
   }
 
   isGroupFullySelected(group: HierarchicalData) {
@@ -125,9 +150,11 @@ export class CultuurkuurLabelsManager {
           ),
         );
       } else {
+        const other =
+          this.partial && entity.extraLabel ? [entity] : allLeafEntities;
         return this.setSelected([
           ...this.selected,
-          ...allLeafEntities.map((l) => this.getIdentifier(l)),
+          ...other.map((l) => this.getIdentifier(l)),
         ]);
       }
     } else {
