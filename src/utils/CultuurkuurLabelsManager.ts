@@ -69,9 +69,9 @@ export class CultuurkuurLabelsManager {
     return this.areAllLeafsSelected(this.flattenEntity(group));
   }
 
-  handleSelectionToggle(entity: HierarchicalData) {
     const isGroup = !!entity.children;
     const parent = entity.parent;
+  toggle(entity: HierarchicalData) {
 
     const alreadySelected = this.isLabelSelected(this.getIdentifier(entity));
     if (alreadySelected && !isGroup) {

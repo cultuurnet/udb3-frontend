@@ -1,4 +1,7 @@
-import { dummyMunicipalities } from '@/hooks/api/cultuurkuur';
+import {
+  dummyEducationLevels,
+  dummyMunicipalities,
+} from '@/hooks/api/cultuurkuur';
 import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 describe('CultururKuurLabelsManager', () => {
@@ -7,9 +10,7 @@ describe('CultururKuurLabelsManager', () => {
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       false,
     );
-    manager.handleSelectionToggle(
-      dummyMunicipalities[0].children[0].children[0],
-    );
+    manager.toggle(dummyMunicipalities[0].children[0].children[0]);
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       true,
     );
@@ -20,11 +21,11 @@ describe('CultururKuurLabelsManager', () => {
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       false,
     );
-    manager.handleSelectionToggle(dummyMunicipalities[0]);
+    manager.toggle(dummyMunicipalities[0]);
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       true,
     );
-    manager.handleSelectionToggle(dummyMunicipalities[0]);
+    manager.toggle(dummyMunicipalities[0]);
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       false,
     );
@@ -32,7 +33,7 @@ describe('CultururKuurLabelsManager', () => {
 
   test('can test if group is fully selected', () => {
     const manager = new CultuurkuurLabelsManager(dummyMunicipalities);
-    manager.handleSelectionToggle(dummyMunicipalities[0]);
+    manager.toggle(dummyMunicipalities[0]);
     expect(manager.isGroupFullySelected(dummyMunicipalities[0])).toBe(true);
     expect(
       manager.isGroupFullySelected(dummyMunicipalities[0].children[0]),
@@ -41,9 +42,7 @@ describe('CultururKuurLabelsManager', () => {
       manager.isLabelSelected('cultuurkuur_werkingsregio_provincie_nis-01000'),
     ).toBe(true);
 
-    manager.handleSelectionToggle(
-      dummyMunicipalities[0].children[0].children[0],
-    );
+    manager.toggle(dummyMunicipalities[0].children[0].children[0]);
     expect(manager.isLabelSelected('cultuurkuur_werkingsregio_nis-21001')).toBe(
       false,
     );
@@ -86,12 +85,8 @@ describe('CultururKuurLabelsManager', () => {
       'foobar',
     ]);
 
-    manager.handleSelectionToggle(
-      dummyMunicipalities[1].children[1].children[0],
-    );
-    manager.handleSelectionToggle(
-      dummyMunicipalities[1].children[0].children[0],
-    );
+    manager.toggle(dummyMunicipalities[1].children[1].children[0]);
+    manager.toggle(dummyMunicipalities[1].children[0].children[0]);
 
     expect(manager.selected).toEqual([
       dummyMunicipalities[1].children[0].children[0].label,

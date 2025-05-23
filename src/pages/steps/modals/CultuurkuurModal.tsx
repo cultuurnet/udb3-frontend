@@ -89,7 +89,7 @@ const CultuurkuurModal = ({
                       id={level1Identifier}
                       name={level1Identifier}
                       disabled={false}
-                      onToggle={() => manager.handleSelectionToggle(level1)}
+                      onToggle={() => manager.toggle(level1)}
                       checked={manager.isGroupFullySelected(level1)}
                     >
                       {t(`cultuurkuur_modal.selectAll`)}
@@ -117,7 +117,7 @@ const CultuurkuurModal = ({
                         onClick={() =>
                           levelHasChildren
                             ? toggleGroup(levelIdentifier)
-                            : manager.handleSelectionToggle(level2)
+                            : manager.toggle(level2)
                         }
                       >
                         <span>{level2.name.nl}</span>
@@ -134,9 +134,7 @@ const CultuurkuurModal = ({
                             id={levelIdentifier}
                             name={levelIdentifier}
                             disabled={false}
-                            onToggle={() =>
-                              manager.handleSelectionToggle(level2)
-                            }
+                            onToggle={() => manager.toggle(level2)}
                             checked={manager.isGroupFullySelected(level2)}
                           >
                             {manager.isGroupFullySelected(level2)
@@ -157,9 +155,7 @@ const CultuurkuurModal = ({
                             id={levelIdentifier}
                             name={levelIdentifier}
                             disabled={false}
-                            onToggle={() =>
-                              manager.handleSelectionToggle(level2)
-                            }
+                            onToggle={() => manager.toggle(level2)}
                             checked={manager.isGroupFullySelected(level2)}
                             marginBottom={4}
                           >
@@ -184,7 +180,7 @@ const CultuurkuurModal = ({
                                 display="inline-flex"
                                 variant={ButtonVariants.SECONDARY_TOGGLE}
                                 onClick={() => {
-                                  manager.handleSelectionToggle(leaf);
+                                  manager.toggle(leaf);
                                 }}
                               >
                                 {leaf.name.nl}
