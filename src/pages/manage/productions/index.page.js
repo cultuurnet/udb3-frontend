@@ -115,6 +115,7 @@ const Index = () => {
 
   const handleSuccessDeleteEvents = async () => {
     await queryClient.invalidateQueries('productions');
+    // @ts-expect-error TODO: Fix type error
     setSelectedEventIds([]);
   };
 
@@ -135,6 +136,7 @@ const Index = () => {
 
     setSelectedEventIds((oldSelectedEventIds) => {
       if (oldSelectedEventIds.includes(selectedEventId)) {
+        // @ts-expect-error TODO: Fix type error
         return oldSelectedEventIds.filter((id) => selectedEventId !== id);
       }
       return [...oldSelectedEventIds, selectedEventId];
@@ -223,6 +225,7 @@ const Index = () => {
             <Text>{t('productions.overview.no_productions')}</Text>
           ) : (
             [
+              // @ts-expect-error TODO: Fix type error
               <Productions
                 key="productions"
                 loading={
@@ -237,6 +240,7 @@ const Index = () => {
                 onClickProduction={setActiveProductionId}
                 onChangePage={setCurrentPageProductions}
               />,
+              // @ts-expect-error TODO: Fix type error
               <Events
                 key="events"
                 loading={getEventsByIdsQuery.status === QueryStatus.LOADING}

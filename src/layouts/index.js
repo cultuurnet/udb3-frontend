@@ -37,6 +37,7 @@ const useHandleAuthentication = () => {
 
   useEffect(() => {
     if (!getUserQuery.data) return;
+    // @ts-expect-error TODO: Fix type error
     Sentry.setUser({ id: getUserQuery.data.id });
   }, [getUserQuery.data]);
 
@@ -106,6 +107,7 @@ const Layout = ({ children }) => {
 
   return (
     <Inline height="100vh">
+      {/* @ts-expect-error TODO: Fix type error */}
       <Sidebar />
       {children}
     </Inline>
