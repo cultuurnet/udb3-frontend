@@ -69,6 +69,7 @@ const CultuurkuurModal = ({
       <Stack padding={4} spacing={5}>
         {manager.available.map((level1) => {
           const level1Identifier = manager.getIdentifier(level1);
+          const isGroupSelected = manager.isGroupFullySelected(level1);
 
           return (
             <Accordion key={level1Identifier} style={{ marginBottom: '2rem' }}>
@@ -78,7 +79,7 @@ const CultuurkuurModal = ({
                     cursor: ${level1.children?.length > 0
                       ? 'default'
                       : 'pointer'};
-                    background-color: ${manager.isGroupFullySelected(level1)
+                    background-color: ${isGroupSelected
                       ? colors.green5
                       : colors.grey1};
                   `}
@@ -90,7 +91,7 @@ const CultuurkuurModal = ({
                       name={level1Identifier}
                       disabled={false}
                       onToggle={() => manager.toggle(level1)}
-                      checked={manager.isGroupFullySelected(level1)}
+                      checked={isGroupSelected}
                     >
                       {t(`cultuurkuur_modal.selectAll`)}
                     </CheckboxWithLabel>
@@ -100,12 +101,15 @@ const CultuurkuurModal = ({
               {level1.children?.map((level2) => {
                 const levelIdentifier = manager.getIdentifier(level2);
                 const levelHasChildren = level2?.children?.length > 0;
+                const labelSelected = manager.isLabelSelected(
+                  manager.getIdentifier(level2),
+                );
 
                 return (
                   <Card key={levelIdentifier}>
                     <Card.Header
                       css={`
-                        background-color: ${manager.isGroupFullySelected(level2)
+                        background-color: ${labelSelected
                           ? colors.green4
                           : 'transparent'};
                       `}
@@ -135,9 +139,9 @@ const CultuurkuurModal = ({
                             name={levelIdentifier}
                             disabled={false}
                             onToggle={() => manager.toggle(level2)}
-                            checked={manager.isGroupFullySelected(level2)}
+                            checked={labelSelected}
                           >
-                            {manager.isGroupFullySelected(level2)
+                            {labelSelected
                               ? t('cultuurkuur_modal.clearAll')
                               : t('cultuurkuur_modal.selectAll')}
                           </Checkbox>
