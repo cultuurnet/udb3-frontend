@@ -369,6 +369,18 @@ const LocationStep = ({
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
   const handleCultuurkuurLabel = async (label?: string) => {
+    if (!offerId) {
+      if (label === CULTUURKUUR_ON_SITE_LABEL) {
+        setValue('labels', [...labels, CULTUURKUUR_ON_SITE_LABEL]);
+      } else {
+        setValue(
+          'labels',
+          labels.filter((l) => l !== CULTUURKUUR_ON_SITE_LABEL),
+        );
+      }
+      return;
+    }
+
     if (!labels.includes(CULTUURKUUR_ON_SITE_LABEL) && !label) return;
     const mutation =
       label === CULTUURKUUR_ON_SITE_LABEL
