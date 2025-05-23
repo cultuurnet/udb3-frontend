@@ -2066,7 +2066,7 @@ export const dummyMunicipalities: HierarchicalData[] = [
   },
 ];
 
-const dummyData: HierarchicalData[] = [
+export const dummyEducationLevels: HierarchicalData[] = [
   {
     name: {
       nl: 'Gewoon basisonderwijs (kleuter- en basis)',
