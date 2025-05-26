@@ -153,4 +153,23 @@ describe('CultururKuurLabelsManager', () => {
       ].sort(),
     );
   });
+
+  test('ignores parents when using partial toggling', () => {
+    let manager = new CultuurkuurLabelsManager(dummyEducationLevels);
+    manager.toggle(dummyEducationLevels[0].children[1].children[1]);
+
+    expect(
+      manager.isLabelSelected(dummyEducationLevels[0].children[2].label),
+    ).toBe(false);
+    expect(
+      manager.isLabelSelected(
+        dummyEducationLevels[0].children[0].children[0].label,
+      ),
+    ).toBe(false);
+
+    manager.toggle(dummyEducationLevels[0].children[2]);
+    expect(
+      manager.isLabelSelected(dummyEducationLevels[0].children[2].label),
+    ).toBe(false);
+  });
 });

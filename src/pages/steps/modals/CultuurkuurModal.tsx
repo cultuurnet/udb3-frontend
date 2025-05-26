@@ -69,7 +69,9 @@ const CultuurkuurModal = ({
       <Stack padding={4} spacing={5}>
         {manager.available.map((level1) => {
           const level1Identifier = manager.getIdentifier(level1);
-          const isGroupSelected = manager.isGroupFullySelected(level1);
+          const isGroupSelected = manager.partial
+            ? manager.isGroupFullySelected(level1)
+            : false;
 
           return (
             <Accordion key={level1Identifier} style={{ marginBottom: '2rem' }}>
@@ -99,14 +101,15 @@ const CultuurkuurModal = ({
                 </Card.Header>
               </Card>
               {level1.children?.map((level2) => {
-                const levelIdentifier = manager.getIdentifier(level2);
+                const level2Identifier = manager.getIdentifier(level2);
                 const levelHasChildren = level2?.children?.length > 0;
-                const labelSelected = manager.isLabelSelected(
-                  manager.getIdentifier(level2),
-                );
+                const labelSelected =
+                  manager.partial || !levelHasChildren
+                    ? manager.isLabelSelected(level2Identifier)
+                    : false;
 
                 return (
-                  <Card key={levelIdentifier}>
+                  <Card key={level2Identifier}>
                     <Card.Header
                       css={`
                         background-color: ${labelSelected
@@ -120,7 +123,7 @@ const CultuurkuurModal = ({
                         cursor="pointer"
                         onClick={() =>
                           levelHasChildren
-                            ? toggleGroup(levelIdentifier)
+                            ? toggleGroup(level2Identifier)
                             : manager.toggle(level2)
                         }
                       >
@@ -128,15 +131,15 @@ const CultuurkuurModal = ({
                         {levelHasChildren ? (
                           <Icon
                             name={
-                              openGroup === levelIdentifier
+                              openGroup === level2Identifier
                                 ? Icons.CHEVRON_DOWN
                                 : Icons.CHEVRON_RIGHT
                             }
                           />
                         ) : (
                           <Checkbox
-                            id={levelIdentifier}
-                            name={levelIdentifier}
+                            id={level2Identifier}
+                            name={level2Identifier}
                             disabled={false}
                             onToggle={() => manager.toggle(level2)}
                             checked={labelSelected}
@@ -150,14 +153,14 @@ const CultuurkuurModal = ({
                     </Card.Header>
                     {levelHasChildren && (
                       <Accordion.Collapse
-                        eventKey={levelIdentifier}
-                        in={openGroup === levelIdentifier}
+                        eventKey={level2Identifier}
+                        in={openGroup === level2Identifier}
                       >
                         <Card.Body>
                           <CheckboxWithLabel
                             className="selectAllLevel2"
-                            id={levelIdentifier}
-                            name={levelIdentifier}
+                            id={level2Identifier}
+                            name={level2Identifier}
                             disabled={false}
                             onToggle={() => manager.toggle(level2)}
                             checked={manager.isGroupFullySelected(level2)}

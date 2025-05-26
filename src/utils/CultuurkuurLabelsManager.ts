@@ -80,6 +80,10 @@ export class CultuurkuurLabelsManager {
     }
     const parent = this.mapping[label];
     const parents = [label, parent, this.mapping[parent]].filter(Boolean);
+    if (!this.partial) {
+      return this.getSelected().includes(label);
+    }
+
     return parents.some((selected) => this.getSelected().includes(selected));
   }
 
