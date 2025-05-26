@@ -88,7 +88,9 @@ export class CultuurkuurLabelsManager {
   }
 
   isRealLabel(label: string | null) {
-    return label && !label.includes(' ');
+    const isSanitized = !label.includes(' ') || label.includes('(OKAN)');
+
+    return label && isSanitized;
   }
 
   flattenEntity(entity: HierarchicalData): HierarchicalData[] {

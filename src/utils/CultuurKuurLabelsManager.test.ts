@@ -170,6 +170,6 @@ describe('CultururKuurLabelsManager', () => {
     manager.toggle(dummyEducationLevels[0].children[2]);
     expect(
       manager.isLabelSelected(dummyEducationLevels[0].children[2].label),
-    ).toBe(false);
+    ).toBe(true);
   });
 });
