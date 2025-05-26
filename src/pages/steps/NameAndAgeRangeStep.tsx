@@ -125,7 +125,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
               isCultuurkuurEvent &&
               !levels.isLoading && (
                 <CultuurkuurLabelsPicker
-                  translationKey="education"
+                  labelsKey="education"
                   {...labelsPickerProps}
                 />
               )}

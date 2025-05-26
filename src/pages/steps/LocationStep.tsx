@@ -655,7 +655,7 @@ const LocationStep = ({
                   isCultuurkuurEvent &&
                   !regions.isLoading && (
                     <CultuurkuurLabelsPicker
-                      translationKey={'location'}
+                      labelsKey="location"
                       {...labelsPickerProps}
                     />
                   )}

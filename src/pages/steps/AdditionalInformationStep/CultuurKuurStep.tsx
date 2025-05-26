@@ -177,10 +177,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
         {t('create.additionalInformation.cultuurkuur.on_location')}
       </CheckboxWithLabel>
       {isCultuurkuurLabelsPickerVisible && !regions.isLoading && (
-        <CultuurkuurLabelsPicker
-          translationKey={'location'}
-          {...labelsPickerProps}
-        />
+        <CultuurkuurLabelsPicker labelsKey="location" {...labelsPickerProps} />
       )}
     </Stack>
   );

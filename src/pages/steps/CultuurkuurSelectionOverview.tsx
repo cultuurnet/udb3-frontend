@@ -1,24 +1,13 @@
-import { useEffect, useMemo } from 'react';
-
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { IconSuccess } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Inline } from '@/ui/Inline';
-import { CultuurkuurLabelsManager } from '@/utils/CultuurkuurLabelsManager';
 
 type Props = {
-  selectedData: string[];
-  data: HierarchicalData[];
+  selectedData: HierarchicalData[];
 };
 
-const CultuurkuurSelectionOverview = ({ selectedData, data }: Props) => {
-  const manager = useMemo(
-    () => new CultuurkuurLabelsManager(data, selectedData),
-    [data, selectedData],
-  );
-
-  const selection = manager.getFlattenedSelection();
-
+const CultuurkuurSelectionOverview = ({ selectedData }: Props) => {
   return (
     <Box
       css={{
@@ -28,7 +17,7 @@ const CultuurkuurSelectionOverview = ({ selectedData, data }: Props) => {
         margin: '1rem 0',
       }}
     >
-      {selection.map((item) => (
+      {selectedData.map((item) => (
         <Inline padding={2} alignItems="center" key={item?.label}>
           <IconSuccess
             css={{

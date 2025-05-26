@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
@@ -10,48 +10,62 @@ import { Inline } from '@/ui/Inline';
 
 type Props = {
   data: HierarchicalData[];
-  selected?: string[];
-  onConfirm?: (newSelected: string[]) => void;
-  translationKey: string;
+  selectedData: string[];
+  onConfirm?: (newSelected: string[], translationKey: string) => void;
+  labelsKey: string;
 };
 
 const CultuurkuurLabelsPicker = ({
   data,
-  selected = [],
-  onConfirm = () => ({}),
-  translationKey,
+  selectedData,
+  labelsKey,
+  onConfirm,
 }: Props) => {
   const { t } = useTranslation();
-  const [
-    isCultuurkuurLocationModalVisible,
-    setIsCultuurkuurLocationModalVisible,
-  ] = useState(false);
+  const [isCultuurkuurModalVisible, setIsCultuurkuurModalVisible] =
+    useState(false);
+
+  const flatData = useMemo(() => {
+    const flatten = (nodes: HierarchicalData[]): HierarchicalData[] =>
+      nodes.flatMap((node) => [
+        node,
+        ...(node.children ? flatten(node.children) : []),
+      ]);
+
+    return data ? flatten(data) : [];
+  }, [data]);
+
+  const preSelectedValues = useMemo(() => {
+    return flatData.filter((data) => selectedData.includes(data.label));
+  }, [flatData, selectedData]);
 
   return (
     <>
       <Button
         variant={ButtonVariants.LINK}
-        onClick={() => setIsCultuurkuurLocationModalVisible(true)}
+        onClick={() => setIsCultuurkuurModalVisible(true)}
       >
         <Inline spacing={2}>
           <Icon name={Icons.PLUS_CIRCLE} />
-          <span>{t(`cultuurkuur_modal.title.${translationKey}`)}</span>
+          <span>{t(`cultuurkuur_modal.title.${labelsKey}`)}</span>
         </Inline>
       </Button>
-      {isCultuurkuurLocationModalVisible && (
+      {isCultuurkuurModalVisible && (
         <CultuurkuurModal
           visible
+          title={t(`cultuurkuur_modal.title.${labelsKey}`)}
+          checkboxTitle={t('cultuurkuur_modal.selectAll')}
           data={data}
-          selectedData={selected}
-          translationKey={translationKey}
-          onConfirm={(newSelected) => {
-            setIsCultuurkuurLocationModalVisible(false);
-            onConfirm(newSelected);
+          labelsKey={labelsKey}
+          selectedData={preSelectedValues}
+          onConfirm={(selectedEntities) => {
+            setIsCultuurkuurModalVisible(false);
+            onConfirm(selectedEntities, labelsKey);
           }}
-          onClose={() => setIsCultuurkuurLocationModalVisible(false)}
+          onClose={() => setIsCultuurkuurModalVisible(false)}
         />
       )}
-      <CultuurkuurSelectionOverview data={data} selectedData={selected} />
+      <CultuurkuurSelectionOverview selectedData={preSelectedValues} />
     </>
   );
 };
