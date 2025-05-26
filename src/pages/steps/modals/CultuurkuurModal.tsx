@@ -61,7 +61,7 @@ const CultuurkuurModal = ({
     const leaves = getAllLeafNodes(entity);
 
     return leaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
+      selectedEntities.some((sel) => sel.label === leaf.label),
     );
   };
 
@@ -74,12 +74,12 @@ const CultuurkuurModal = ({
 
     setSelectedEntities((prev) => {
       const allSelected = leaves.every((leaf) =>
-        prev.some((sel) => sel.name.nl === leaf.name.nl),
+        prev.some((sel) => sel.label === leaf.label),
       );
 
       if (allSelected) {
         let updated = prev.filter(
-          (sel) => !leaves.some((leaf) => leaf.name.nl === sel.name.nl),
+          (sel) => !leaves.some((leaf) => leaf.label === sel.label),
         );
 
         if (isEducationLabel) {
@@ -92,7 +92,7 @@ const CultuurkuurModal = ({
       } else {
         let updated = [...prev];
         const newSelections = leaves.filter(
-          (leaf) => !prev.some((sel) => sel.name.nl === leaf.name.nl),
+          (leaf) => !prev.some((sel) => sel.label === leaf.label),
         );
         updated.push(...newSelections);
 
@@ -110,7 +110,7 @@ const CultuurkuurModal = ({
   const handleSelectionToggleEducation = (entity: HierarchicalData) => {
     setSelectedEntities((prev) => {
       let updated = [...prev];
-      const isSelected = updated.some((e) => e.name.nl === entity.name.nl);
+      const isSelected = updated.some((e) => e.label === entity.label);
 
       if (isSelected) {
         updated = removeAndCleanParents(entity, updated, data);
@@ -126,7 +126,7 @@ const CultuurkuurModal = ({
   const areAllLeafsSelected = (entities: HierarchicalData[] = []) => {
     const allLeaves = entities.flatMap(getAllLeafNodes);
     return allLeaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
+      selectedEntities.some((sel) => sel.label === leaf.label),
     );
   };
 
@@ -139,13 +139,13 @@ const CultuurkuurModal = ({
     );
 
     const allSelected = allLeaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.name.nl === leaf.name.nl),
+      selectedEntities.some((sel) => sel.label === leaf.label),
     );
 
     if (allSelected) {
       setSelectedEntities((prev) => {
         let updated = prev.filter(
-          (sel) => !allLeaves.some((leaf) => leaf.name.nl === sel.name.nl),
+          (sel) => !allLeaves.some((leaf) => leaf.label === sel.label),
         );
 
         if (isEducationLabel) {
@@ -160,7 +160,7 @@ const CultuurkuurModal = ({
       setSelectedEntities((prev) => {
         const updated = [...prev];
         allLeaves.forEach((leaf) => {
-          if (!updated.some((e) => e.name.nl === leaf.name.nl)) {
+          if (!updated.some((e) => e.label === leaf.label)) {
             if (isEducationLabel) {
               addWithParents(leaf, updated, data);
             } else {
@@ -232,6 +232,7 @@ const CultuurkuurModal = ({
 
               {level1.children?.map((level2) => {
                 const level2Name = level2?.name?.nl || '';
+                const level2Label = level2?.label;
                 const hasChildren = (level2?.children?.length || 0) > 0;
 
                 return (
@@ -274,7 +275,7 @@ const CultuurkuurModal = ({
                                 : handleSelectionToggle(level2)
                             }
                             checked={selectedEntities.some(
-                              (e) => e?.name?.nl === level2Name,
+                              (e) => e?.label === level2Label,
                             )}
                           />
                         </Inline>
@@ -309,12 +310,13 @@ const CultuurkuurModal = ({
                           >
                             {sortByName(level2.children)?.map((leaf) => {
                               const leafName = leaf?.name?.nl || '';
+                              const leafLabel = leaf?.label;
                               return (
                                 <Button
                                   key={leafName}
                                   width="auto"
                                   active={selectedEntities.some(
-                                    (e) => e?.name?.nl === leafName,
+                                    (e) => e?.label === leafLabel,
                                   )}
                                   display="inline-flex"
                                   variant={ButtonVariants.SECONDARY_TOGGLE}

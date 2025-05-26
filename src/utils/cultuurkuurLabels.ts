@@ -77,7 +77,7 @@ const findParent = (
   list: HierarchicalData[],
 ): HierarchicalData | null => {
   for (const item of list) {
-    if (item.children?.some((c) => c.name.nl === target.name.nl)) {
+    if (item.children?.some((c) => c.label === target.label)) {
       return item;
     }
     const found = item.children && findParent(target, item.children);
@@ -91,7 +91,7 @@ const addWithParents = (
   selected: HierarchicalData[],
   data: HierarchicalData[],
 ) => {
-  if (!selected.some((e) => e.name.nl === node.name.nl)) {
+  if (!selected.some((e) => e.label === node.label)) {
     selected.push(node);
   }
   const parent = findParent(node, data);
@@ -103,15 +103,15 @@ const removeAndCleanParents = (
   selected: HierarchicalData[],
   data: HierarchicalData[],
 ): HierarchicalData[] => {
-  selected = selected.filter((e) => e.name.nl !== node.name.nl);
+  selected = selected.filter((e) => e.label !== node.label);
 
   const parent = findParent(node, data);
   if (!parent) return selected;
 
   const hasOtherSelected = parent.children?.some(
     (child) =>
-      child.name.nl !== node.name.nl &&
-      selected.some((e) => e.name.nl === child.name.nl),
+      child.label !== node.label &&
+      selected.some((e) => e.label === child.label),
   );
 
   if (!hasOtherSelected) {
