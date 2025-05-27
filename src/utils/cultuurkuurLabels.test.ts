@@ -4,6 +4,7 @@ import {
 } from '@/utils/cultuurkuurLabels';
 import { useState } from 'react';
 import { act, renderHook } from '@testing-library/react-hooks';
+import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
 export const dummyMunicipalities: HierarchicalData[] = [
   {
@@ -2339,11 +2340,173 @@ describe('CultururKuurLabelsManager', () => {
         dummyMunicipalities[0].children[0].children[0],
       ),
     ).toBe(true);
-    result.current.handleSelectionToggle(dummyMunicipalities[0]);
+    act(() => {
+      result.current.handleSelectionToggle(dummyMunicipalities[0]);
+    });
     expect(
       result.current.isGroupFullySelected(
         dummyMunicipalities[0].children[0].children[0],
       ),
     ).toBe(false);
+  });
+
+  test('can test if group is fully selected', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('location', dummyMunicipalities),
+    );
+    result.current.handleSelectionToggle(dummyMunicipalities[0]);
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      true,
+    );
+    expect(
+      result.current.isGroupFullySelected(dummyMunicipalities[0].children[0]),
+    ).toBe(true);
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      true,
+    );
+
+    act(() => {
+      result.current.handleSelectionToggle(
+        dummyMunicipalities[0].children[0].children[0],
+      );
+    });
+
+    expect(
+      result.current.isGroupFullySelected(
+        dummyMunicipalities[0].children[0].children[0],
+      ),
+    ).toBe(false);
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      false,
+    );
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      false,
+    );
+  });
+
+  test('can pass pre-selected data', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('location', dummyMunicipalities, [
+        dummyMunicipalities[0],
+        dummyMunicipalities[0].children[0].children[0],
+      ]),
+    );
+
+    expect(result.current.getSelected()).toEqual([
+      dummyMunicipalities[0].label,
+    ]);
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      true,
+    );
+    expect(
+      result.current.isGroupFullySelected(dummyMunicipalities[0].children[0]),
+    ).toBe(true);
+    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
+      true,
+    );
+    expect(
+      result.current.isGroupFullySelected(
+        dummyMunicipalities[0].children[0].children[1],
+      ),
+    ).toBe(true);
+  });
+
+  test('can infer a full state from leaf states', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('location', dummyMunicipalities, [
+        dummyMunicipalities[1].children[1].children[0],
+      ]),
+    );
+
+    expect(
+      result.current.isGroupFullySelected(dummyMunicipalities[1].children[1]),
+    ).toBe(true);
+  });
+
+  test('can send extra labels when present', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('location', dummyMunicipalities),
+    );
+
+    act(() =>
+      result.current.handleSelectionToggle(
+        dummyMunicipalities[0].children[0].children[0],
+      ),
+    );
+
+    expect(result.current.getSelected()).toEqual([
+      dummyMunicipalities[0].extraLabel,
+      dummyMunicipalities[0].children[0].children[0].label,
+    ]);
+  });
+
+  test('can toggle parents from the leaves', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('education', dummyEducationLevels),
+    );
+    act(() => {
+      result.current.handleSelectionToggle(
+        dummyEducationLevels[0].children[0].children[0],
+      );
+    });
+
+    expect(result.current.getSelected()).toEqual(
+      [
+        dummyEducationLevels[0].label,
+        dummyEducationLevels[0].children[0].label,
+        dummyEducationLevels[0].children[0].children[0].label,
+      ].sort(),
+    );
+  });
+
+  test('can toggle the leaves from parents', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('education', dummyEducationLevels),
+    );
+    act(() => {
+      result.current.handleSelectionToggle(dummyEducationLevels[0]);
+    });
+
+    expect(result.current.getSelected()).toEqual(
+      [
+        dummyEducationLevels[0].label,
+        dummyEducationLevels[0].children[0].label,
+        dummyEducationLevels[0].children[0].children[0].label,
+        dummyEducationLevels[0].children[0].children[1].label,
+        dummyEducationLevels[0].children[0].children[2].label,
+        dummyEducationLevels[0].children[1].label,
+        dummyEducationLevels[0].children[1].children[0].label,
+        dummyEducationLevels[0].children[1].children[1].label,
+        dummyEducationLevels[0].children[1].children[2].label,
+        dummyEducationLevels[0].children[2].label,
+      ].sort(),
+    );
+  });
+
+  test('ignores parents when using partial toggling', () => {
+    const { result } = renderHook(() =>
+      useLabelsManager('education', dummyEducationLevels),
+    );
+    act(() => {
+      result.current.handleSelectionToggle(
+        dummyEducationLevels[0].children[1].children[1],
+      );
+    });
+
+    expect(
+      result.current.isGroupFullySelected(dummyEducationLevels[0].children[2]),
+    ).toBe(false);
+    expect(
+      result.current.isGroupFullySelected(
+        dummyEducationLevels[0].children[0].children[0],
+      ),
+    ).toBe(false);
+
+    act(() => {
+      result.current.handleSelectionToggle(dummyEducationLevels[0].children[2]);
+    });
+    expect(
+      result.current.isGroupFullySelected(dummyEducationLevels[0].children[2]),
+    ).toBe(true);
   });
 });

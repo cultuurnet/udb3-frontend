@@ -58,10 +58,6 @@ const CultuurkuurModal = ({
     setOpenGroup((prev) => (prev === groupName ? null : groupName));
   };
 
-  // Level1
-
-  // Select whole group
-
   const handleSelectionToggleEducation = (entity: HierarchicalData) => {
     setSelectedEntities((prev) => {
       let updated = [...prev];

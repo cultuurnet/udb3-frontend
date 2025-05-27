@@ -184,9 +184,12 @@ const useLabelsManager = (
   };
 
   const getSelected = () => {
-    return labelsKey === 'location'
-      ? handleSelectedLocations(selectedEntities, data)
-      : dataToLabels(selectedEntities);
+    const final =
+      labelsKey === 'location'
+        ? handleSelectedLocations(selectedEntities, data)
+        : dataToLabels(selectedEntities);
+
+    return final.sort();
   };
 
   return {
