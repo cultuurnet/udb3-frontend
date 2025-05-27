@@ -142,7 +142,28 @@ const useLabelsManager = (
     );
   };
 
+  const handleSelectionToggleEducation = (entity: HierarchicalData) => {
+    setSelectedEntities((prev) => {
+      let updated = [...prev];
+      const isSelected = updated.some((e) => e.label === entity.label);
+
+      if (isSelected) {
+        updated = removeAndCleanParents(entity, updated, data);
+      } else {
+        addWithParents(entity, updated, data);
+      }
+
+      return updated;
+    });
+  };
+
   const handleSelectionToggle = (entity: HierarchicalData) => {
+    if (labelsKey === 'education') {
+      handleSelectionToggleEducation(entity);
+      toggleSelectAllLeafs(entity.children);
+      return;
+    }
+
     const leaves = getAllLeafNodes(entity);
     const isEducationLabel = !entity.label
       .toLowerCase()
@@ -192,12 +213,65 @@ const useLabelsManager = (
     return final.sort();
   };
 
+  // Level2 children
+  const areAllLeafsSelected = (entities: HierarchicalData[] = []) => {
+    const allLeaves = entities.flatMap(getAllLeafNodes);
+    return allLeaves.every((leaf) =>
+      selectedEntities.some((sel) => sel.label === leaf.label),
+    );
+  };
+
+  // Select All - Clear All
+  const toggleSelectAllLeafs = (entities: HierarchicalData[] = []) => {
+    const allLeaves = entities.flatMap(getAllLeafNodes);
+
+    const isEducationLabel = !entities.some((e) =>
+      e.label.toLowerCase().includes('werkingsregio'),
+    );
+
+    const allSelected = allLeaves.every((leaf) =>
+      selectedEntities.some((sel) => sel.label === leaf.label),
+    );
+
+    if (allSelected) {
+      setSelectedEntities((prev) => {
+        let updated = prev.filter(
+          (sel) => !allLeaves.some((leaf) => leaf.label === sel.label),
+        );
+
+        if (isEducationLabel) {
+          allLeaves.forEach((leaf) => {
+            updated = removeAndCleanParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      });
+    } else {
+      setSelectedEntities((prev) => {
+        const updated = [...prev];
+        allLeaves.forEach((leaf) => {
+          if (!updated.some((e) => e.label === leaf.label)) {
+            if (isEducationLabel) {
+              addWithParents(leaf, updated, data);
+            } else {
+              updated.push(leaf);
+            }
+          }
+        });
+        return updated;
+      });
+    }
+  };
+
   return {
     selectedEntities,
     setSelectedEntities,
     isGroupFullySelected,
     handleSelectionToggle,
     getSelected,
+    areAllLeafsSelected,
+    toggleSelectAllLeafs,
   } as const;
 };
 

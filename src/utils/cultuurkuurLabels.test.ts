@@ -1,10 +1,7 @@
-import {
-  getSelectedEntities,
-  useLabelsManager,
-} from '@/utils/cultuurkuurLabels';
-import { useState } from 'react';
 import { act, renderHook } from '@testing-library/react-hooks';
+
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
+import { useLabelsManager } from '@/utils/cultuurkuurLabels';
 
 export const dummyMunicipalities: HierarchicalData[] = [
   {
@@ -2294,7 +2291,7 @@ export const dummyEducationLevels: HierarchicalData[] = [
   },
 ];
 
-describe('CultururKuurLabelsManager', () => {
+describe('cultuurkuur labels helpers', () => {
   test('can toggle a label', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities),
@@ -2463,6 +2460,7 @@ describe('CultururKuurLabelsManager', () => {
     const { result } = renderHook(() =>
       useLabelsManager('education', dummyEducationLevels),
     );
+
     act(() => {
       result.current.handleSelectionToggle(dummyEducationLevels[0]);
     });
