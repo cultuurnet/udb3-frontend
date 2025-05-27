@@ -45,9 +45,9 @@ const CultuurkuurModal = ({
 }: Props) => {
   const { t } = useTranslation();
   const {
-    selectedEntities,
     isGroupFullySelected,
     handleSelectionToggle,
+    isSelected,
     getSelected,
     areAllLeafsSelected,
     toggleSelectAllLeafs,
@@ -112,7 +112,6 @@ const CultuurkuurModal = ({
 
               {level1.children?.map((level2) => {
                 const level2Name = level2?.name?.nl || '';
-                const level2Label = level2?.label;
                 const hasChildren = (level2?.children?.length || 0) > 0;
 
                 return (
@@ -150,9 +149,7 @@ const CultuurkuurModal = ({
                             id={level2Name}
                             name={level2Name}
                             onToggle={() => handleSelectionToggle(level2)}
-                            checked={selectedEntities.some(
-                              (e) => e?.label === level2Label,
-                            )}
+                            checked={isSelected(level2)}
                           />
                         </Inline>
                       )}
@@ -186,14 +183,12 @@ const CultuurkuurModal = ({
                           >
                             {sortByName(level2.children)?.map((leaf) => {
                               const leafName = leaf?.name?.nl || '';
-                              const leafLabel = leaf?.label;
+
                               return (
                                 <Button
                                   key={leafName}
                                   width="auto"
-                                  active={selectedEntities.some(
-                                    (e) => e?.label === leafLabel,
-                                  )}
+                                  active={isSelected(leaf)}
                                   display="inline-flex"
                                   variant={ButtonVariants.SECONDARY_TOGGLE}
                                   onClick={() => handleSelectionToggle(leaf)}

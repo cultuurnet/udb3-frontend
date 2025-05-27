@@ -134,12 +134,13 @@ const useLabelsManager = (
       : selectedData,
   );
 
+  const isSelected = (leaf: HierarchicalData) =>
+    selectedEntities.some((sel) => sel.label === leaf.label);
+
   const isGroupFullySelected = (entity: HierarchicalData) => {
     const leaves = getAllLeafNodes(entity);
 
-    return leaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.label === leaf.label),
-    );
+    return leaves.every((leaf) => isSelected(leaf));
   };
 
   const handleSelectionToggleEducation = (entity: HierarchicalData) => {
@@ -265,13 +266,12 @@ const useLabelsManager = (
   };
 
   return {
-    selectedEntities,
-    setSelectedEntities,
     isGroupFullySelected,
     handleSelectionToggle,
     getSelected,
     areAllLeafsSelected,
     toggleSelectAllLeafs,
+    isSelected,
   } as const;
 };
 
