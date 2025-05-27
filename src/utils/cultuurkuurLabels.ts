@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
 const sortByName = (entities: HierarchicalData['children'] = []) => {
@@ -121,6 +123,28 @@ const removeAndCleanParents = (
   return selected;
 };
 
+const useLabelsManager = (labelsKey, selectedData) => {
+  const [selectedEntities, setSelectedEntities] = useState(
+    labelsKey === 'location'
+      ? expandLevel1WithChildren(selectedData)
+      : selectedData,
+  );
+
+  const isGroupFullySelected = (entity: HierarchicalData) => {
+    const leaves = getAllLeafNodes(entity);
+
+    return leaves.every((leaf) =>
+      selectedEntities.some((sel) => sel.label === leaf.label),
+    );
+  };
+
+  return {
+    selectedEntities,
+    setSelectedEntities,
+    isGroupFullySelected,
+  } as const;
+};
+
 export {
   addWithParents,
   dataToLabels,
@@ -130,4 +154,5 @@ export {
   handleSelectedLocations,
   removeAndCleanParents,
   sortByName,
+  useLabelsManager,
 };

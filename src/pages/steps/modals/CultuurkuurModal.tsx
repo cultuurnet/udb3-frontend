@@ -15,11 +15,11 @@ import { colors } from '@/ui/theme';
 import {
   addWithParents,
   dataToLabels,
-  expandLevel1WithChildren,
   getAllLeafNodes,
   handleSelectedLocations,
   removeAndCleanParents,
   sortByName,
+  useLabelsManager,
 } from '@/utils/cultuurkuurLabels';
 
 type Props = {
@@ -44,11 +44,8 @@ const CultuurkuurModal = ({
   onClose,
 }: Props) => {
   const { t } = useTranslation();
-  const [selectedEntities, setSelectedEntities] = useState<HierarchicalData[]>(
-    labelsKey === 'location'
-      ? expandLevel1WithChildren(selectedData)
-      : selectedData,
-  );
+  const { selectedEntities, setSelectedEntities, isGroupFullySelected } =
+    useLabelsManager(labelsKey, selectedData);
 
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
@@ -57,13 +54,6 @@ const CultuurkuurModal = ({
   };
 
   // Level1
-  const isGroupFullySelected = (entity: HierarchicalData) => {
-    const leaves = getAllLeafNodes(entity);
-
-    return leaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.label === leaf.label),
-    );
-  };
 
   // Select whole group
   const handleSelectionToggle = (entity: HierarchicalData) => {
