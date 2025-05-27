@@ -2291,8 +2291,8 @@ export const dummyEducationLevels: HierarchicalData[] = [
   },
 ];
 
-describe('cultuurkuur labels helpers', () => {
-  test('can toggle a label', () => {
+describe('useLabelsManager', () => {
+  test('can toggle a single leaf', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities),
     );
@@ -2316,7 +2316,7 @@ describe('cultuurkuur labels helpers', () => {
     ).toBe(true);
   });
 
-  test('can toggle a level', () => {
+  test('can toggle an entire level', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities),
     );
@@ -2326,9 +2326,11 @@ describe('cultuurkuur labels helpers', () => {
         dummyMunicipalities[0].children[0].children[0],
       ),
     ).toBe(false);
+
     act(() => {
       result.current.handleSelectionToggle(dummyMunicipalities[0]);
     });
+
     expect(result.current.getSelected()).toEqual([
       dummyMunicipalities[0].label,
     ]);
@@ -2337,9 +2339,11 @@ describe('cultuurkuur labels helpers', () => {
         dummyMunicipalities[0].children[0].children[0],
       ),
     ).toBe(true);
+
     act(() => {
       result.current.handleSelectionToggle(dummyMunicipalities[0]);
     });
+
     expect(
       result.current.isGroupFullySelected(
         dummyMunicipalities[0].children[0].children[0],
@@ -2347,20 +2351,21 @@ describe('cultuurkuur labels helpers', () => {
     ).toBe(false);
   });
 
-  test('can test if group is fully selected', () => {
+  test('can untoggle a leaf from a toggled group', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities),
     );
-    result.current.handleSelectionToggle(dummyMunicipalities[0]);
+
+    act(() => {
+      result.current.handleSelectionToggle(dummyMunicipalities[0]);
+    });
+
     expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
       true,
     );
     expect(
       result.current.isGroupFullySelected(dummyMunicipalities[0].children[0]),
     ).toBe(true);
-    expect(result.current.isGroupFullySelected(dummyMunicipalities[0])).toBe(
-      true,
-    );
 
     act(() => {
       result.current.handleSelectionToggle(
@@ -2381,7 +2386,7 @@ describe('cultuurkuur labels helpers', () => {
     );
   });
 
-  test('can pass pre-selected data', () => {
+  test('can pass initial selection state', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities, [
         dummyMunicipalities[0],
@@ -2408,7 +2413,7 @@ describe('cultuurkuur labels helpers', () => {
     ).toBe(true);
   });
 
-  test('can infer a full state from leaf states', () => {
+  test('can expand selection from initial selection state', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities, [
         dummyMunicipalities[1].children[1].children[0],
@@ -2420,7 +2425,7 @@ describe('cultuurkuur labels helpers', () => {
     ).toBe(true);
   });
 
-  test('can send extra labels when present', () => {
+  test('can use extraLabel fields when present', () => {
     const { result } = renderHook(() =>
       useLabelsManager('location', dummyMunicipalities),
     );
@@ -2437,10 +2442,11 @@ describe('cultuurkuur labels helpers', () => {
     ]);
   });
 
-  test('can toggle parents from the leaves', () => {
+  test('can expand selection from leaves', () => {
     const { result } = renderHook(() =>
       useLabelsManager('education', dummyEducationLevels),
     );
+
     act(() => {
       result.current.handleSelectionToggle(
         dummyEducationLevels[0].children[0].children[0],
@@ -2456,7 +2462,7 @@ describe('cultuurkuur labels helpers', () => {
     );
   });
 
-  test('can toggle the leaves from parents', () => {
+  test('can expand selection from parents', () => {
     const { result } = renderHook(() =>
       useLabelsManager('education', dummyEducationLevels),
     );
@@ -2481,28 +2487,31 @@ describe('cultuurkuur labels helpers', () => {
     );
   });
 
-  test('ignores parents when using partial toggling', () => {
+  test('does not toggle siblings when parent gets partially toggled', () => {
     const { result } = renderHook(() =>
       useLabelsManager('education', dummyEducationLevels),
     );
-    act(() => {
+
+    act(() =>
       result.current.handleSelectionToggle(
         dummyEducationLevels[0].children[1].children[1],
-      );
-    });
+      ),
+    );
 
     expect(
       result.current.isGroupFullySelected(dummyEducationLevels[0].children[2]),
     ).toBe(false);
+
     expect(
       result.current.isGroupFullySelected(
         dummyEducationLevels[0].children[0].children[0],
       ),
     ).toBe(false);
 
-    act(() => {
-      result.current.handleSelectionToggle(dummyEducationLevels[0].children[2]);
-    });
+    act(() =>
+      result.current.handleSelectionToggle(dummyEducationLevels[0].children[2]),
+    );
+
     expect(
       result.current.isGroupFullySelected(dummyEducationLevels[0].children[2]),
     ).toBe(true);
