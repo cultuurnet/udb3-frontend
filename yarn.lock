@@ -2987,16 +2987,12 @@
     lodash "^4.17.15"
     redent "^3.0.0"
 
-"@testing-library/react-hooks@^5.0.3":
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-5.1.3.tgz#f722cc526025be2c16966a9a081edf47a2528721"
-  integrity sha512-UdEUtlQapQ579NEcXDAUE275u+KUsPtxW7NmFrNt0bE6lW8lqNCyxDK0RSuECmNZ/S0/fgP00W9RWRhVKO/hRg==
+"@testing-library/react-hooks@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-8.0.1.tgz#0924bbd5b55e0c0c0502d1754657ada66947ca12"
+  integrity sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@types/react" ">=16.9.0"
-    "@types/react-dom" ">=16.9.0"
-    "@types/react-test-renderer" ">=16.9.0"
-    filter-console "^0.1.1"
     react-error-boundary "^3.1.0"
 
 "@testing-library/react@^11.1.0":
@@ -3508,13 +3504,6 @@
     date-fns "^2.0.1"
     react-popper "^2.2.5"
 
-"@types/react-dom@>=16.9.0":
-  version "18.0.10"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.10.tgz#3b66dec56aa0f16a6cc26da9e9ca96c35c0b4352"
-  integrity sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-draft-wysiwyg@^1.13.7":
   version "1.13.7"
   resolved "https://registry.yarnpkg.com/@types/react-draft-wysiwyg/-/react-draft-wysiwyg-1.13.7.tgz#b63a32c4481c40be97dbee04043f34915993fac4"
@@ -3530,13 +3519,6 @@
   dependencies:
     react-query "*"
 
-"@types/react-test-renderer@>=16.9.0":
-  version "18.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-18.0.0.tgz#7b7f69ca98821ea5501b21ba24ea7b6139da2243"
-  integrity sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-transition-group@^4.4.1":
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.5.tgz#aae20dcf773c5aa275d5b9f7cdbca638abc5e416"
@@ -3544,7 +3526,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.14.8", "@types/react@>=16.9.0", "@types/react@>=16.9.11":
+"@types/react@*", "@types/react@>=16.14.8", "@types/react@>=16.9.11":
   version "18.0.28"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.28.tgz#accaeb8b86f4908057ad629a26635fe641480065"
   integrity sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==
@@ -7479,11 +7461,6 @@ fill-range@^7.0.1:
   integrity sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==
   dependencies:
     to-regex-range "^5.0.1"
-
-filter-console@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/filter-console/-/filter-console-0.1.1.tgz#6242be28982bba7415bcc6db74a79f4a294fa67c"
-  integrity sha512-zrXoV1Uaz52DqPs+qEwNJWJFAWZpYJ47UNmpN9q4j+/EYsz85uV0DC9k8tRND5kYmoVzL0W+Y75q4Rg8sRJCdg==
 
 finalhandler@1.2.0:
   version "1.2.0"
