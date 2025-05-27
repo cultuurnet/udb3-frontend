@@ -123,7 +123,11 @@ const removeAndCleanParents = (
   return selected;
 };
 
-const useLabelsManager = (labelsKey, selectedData) => {
+const useLabelsManager = (
+  labelsKey: string,
+  data: HierarchicalData[],
+  selectedData: HierarchicalData[] = [],
+) => {
   const [selectedEntities, setSelectedEntities] = useState(
     labelsKey === 'location'
       ? expandLevel1WithChildren(selectedData)
@@ -138,10 +142,59 @@ const useLabelsManager = (labelsKey, selectedData) => {
     );
   };
 
+  const handleSelectionToggle = (entity: HierarchicalData) => {
+    const leaves = getAllLeafNodes(entity);
+    const isEducationLabel = !entity.label
+      .toLowerCase()
+      .includes('werkingsregio');
+
+    setSelectedEntities((prev) => {
+      const allSelected = leaves.every((leaf) =>
+        prev.some((sel) => sel.label === leaf.label),
+      );
+
+      if (allSelected) {
+        let updated = prev.filter(
+          (sel) => !leaves.some((leaf) => leaf.label === sel.label),
+        );
+
+        if (isEducationLabel) {
+          leaves.forEach((leaf) => {
+            updated = removeAndCleanParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      } else {
+        let updated = [...prev];
+        const newSelections = leaves.filter(
+          (leaf) => !prev.some((sel) => sel.label === leaf.label),
+        );
+        updated.push(...newSelections);
+
+        if (isEducationLabel) {
+          newSelections.forEach((leaf) => {
+            addWithParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      }
+    });
+  };
+
+  const getSelected = () => {
+    return labelsKey === 'location'
+      ? handleSelectedLocations(selectedEntities, data)
+      : dataToLabels(selectedEntities);
+  };
+
   return {
     selectedEntities,
     setSelectedEntities,
     isGroupFullySelected,
+    handleSelectionToggle,
+    getSelected,
   } as const;
 };
 

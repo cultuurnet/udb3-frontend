@@ -44,8 +44,13 @@ const CultuurkuurModal = ({
   onClose,
 }: Props) => {
   const { t } = useTranslation();
-  const { selectedEntities, setSelectedEntities, isGroupFullySelected } =
-    useLabelsManager(labelsKey, selectedData);
+  const {
+    selectedEntities,
+    setSelectedEntities,
+    isGroupFullySelected,
+    handleSelectionToggle,
+    getSelected,
+  } = useLabelsManager(labelsKey, data, selectedData);
 
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
@@ -56,46 +61,6 @@ const CultuurkuurModal = ({
   // Level1
 
   // Select whole group
-  const handleSelectionToggle = (entity: HierarchicalData) => {
-    const leaves = getAllLeafNodes(entity);
-    const isEducationLabel = !entity.label
-      .toLowerCase()
-      .includes('werkingsregio');
-
-    setSelectedEntities((prev) => {
-      const allSelected = leaves.every((leaf) =>
-        prev.some((sel) => sel.label === leaf.label),
-      );
-
-      if (allSelected) {
-        let updated = prev.filter(
-          (sel) => !leaves.some((leaf) => leaf.label === sel.label),
-        );
-
-        if (isEducationLabel) {
-          leaves.forEach((leaf) => {
-            updated = removeAndCleanParents(leaf, updated, data);
-          });
-        }
-
-        return updated;
-      } else {
-        let updated = [...prev];
-        const newSelections = leaves.filter(
-          (leaf) => !prev.some((sel) => sel.label === leaf.label),
-        );
-        updated.push(...newSelections);
-
-        if (isEducationLabel) {
-          newSelections.forEach((leaf) => {
-            addWithParents(leaf, updated, data);
-          });
-        }
-
-        return updated;
-      }
-    });
-  };
 
   const handleSelectionToggleEducation = (entity: HierarchicalData) => {
     setSelectedEntities((prev) => {
@@ -167,13 +132,7 @@ const CultuurkuurModal = ({
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onConfirm={() =>
-        onConfirm(
-          labelsKey === 'location'
-            ? handleSelectedLocations(selectedEntities, data)
-            : dataToLabels(selectedEntities),
-        )
-      }
+      onConfirm={() => onConfirm(getSelected())}
       onClose={onClose}
       title={
         <>
