@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -11,24 +9,17 @@ import {
   useGetEducationLevelsQuery,
 } from '@/hooks/api/cultuurkuur';
 import {
-  useBulkUpdateOfferLabelsMutation,
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
-import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
-import { Offer } from '@/types/Offer';
-import { Organizer } from '@/types/Organizer';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
-import { FormElement } from '@/ui/FormElement';
-import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
-import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
