@@ -3,11 +3,17 @@ import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+} from '@/hooks/api/cultuurkuur';
 import {
   useChangeAttendanceModeMutation,
   useChangeAudienceMutation,
@@ -15,14 +21,23 @@ import {
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import {
+  useAddOfferLabelMutation,
+  useBulkUpdateOfferLabelsMutation,
+  useGetOfferByIdQuery,
+  useRemoveOfferLabelMutation,
+} from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode } from '@/types/Event';
+import { Offer } from '@/types/Offer';
+import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -40,6 +55,7 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { prefixUrlWithHttps } from '@/utils/url';
@@ -315,6 +331,8 @@ const LocationStep = ({
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
+  const queryClient = useQueryClient();
+
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -340,10 +358,48 @@ const LocationStep = ({
   }, [formState, location, offerId, scope]);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
-
   const audience = getOfferByIdQuery.data?.audience;
-
   const { hasRecentLocations } = useRecentLocations();
+
+  const offer = getOfferByIdQuery.data;
+
+  const labels = useMemo(() => getUniqueLabels(offer) ?? [], [offer]);
+
+  const addLabelMutation = useAddOfferLabelMutation();
+  const removeLabelMutation = useRemoveOfferLabelMutation();
+
+  const handleCultuurkuurLabel = async (label?: string) => {
+    if (!offerId) {
+      if (label === CULTUURKUUR_ON_SITE_LABEL) {
+        setValue('labels', [...labels, CULTUURKUUR_ON_SITE_LABEL]);
+      } else {
+        setValue(
+          'labels',
+          labels.filter((l) => l !== CULTUURKUUR_ON_SITE_LABEL),
+        );
+      }
+      return;
+    }
+
+    if (!labels.includes(CULTUURKUUR_ON_SITE_LABEL) && !label) return;
+    const mutation =
+      label === CULTUURKUUR_ON_SITE_LABEL
+        ? addLabelMutation
+        : removeLabelMutation;
+
+    await mutation.mutateAsync(
+      {
+        id: offerId,
+        scope,
+        label: CULTUURKUUR_ON_SITE_LABEL,
+      },
+      {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries([scope, { id: offerId }]);
+        },
+      },
+    );
+  };
 
   useEffect(() => {
     if (audience?.audienceType) {
@@ -375,6 +431,12 @@ const LocationStep = ({
 
     setStreetAndNumber(e.target.value);
   };
+
+  const regions = useGetCultuurkuurRegions();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    regions,
+  );
 
   return (
     <Stack
@@ -445,14 +507,15 @@ const LocationStep = ({
                     {...getInlineProps(props)}
                   >
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: false,
                           municipality: undefined,
                           place: undefined,
                           country: Countries.BE,
-                        })
-                      }
+                        });
+                        handleCultuurkuurLabel();
+                      }}
                       active={isPhysicalLocation}
                       icon={
                         <CustomIcon
@@ -465,12 +528,13 @@ const LocationStep = ({
                       minHeight={parseSpacing(7)}
                     />
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: true,
                           municipality: undefined,
-                        })
-                      }
+                        });
+                        handleCultuurkuurLabel();
+                      }}
                       active={isOnline}
                       icon={
                         <CustomIcon
@@ -484,13 +548,14 @@ const LocationStep = ({
                     />
                     {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
                       <ToggleBox
-                        onClick={() =>
+                        onClick={() => {
                           onFieldChange({
                             country: undefined,
                             municipality: undefined,
                             isOnline: false,
-                          })
-                        }
+                          });
+                          handleCultuurkuurLabel(CULTUURKUUR_ON_SITE_LABEL);
+                        }}
                         active={!isPhysicalLocation && !isOnline}
                         icon={
                           <CustomIcon
@@ -586,6 +651,14 @@ const LocationStep = ({
                     {t('create.location.country.change_location')}
                   </Button>
                 </Inline>
+                {isCultuurkuurFeatureFlagEnabled &&
+                  isCultuurkuurEvent &&
+                  !regions.isLoading && (
+                    <CultuurkuurLabelsPicker
+                      labelsKey="location"
+                      {...labelsPickerProps}
+                    />
+                  )}
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">
                     {t('create.location.country.location_school_info')}

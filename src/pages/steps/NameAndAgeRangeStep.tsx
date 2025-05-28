@@ -4,18 +4,20 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
-import { useGetEducationLevelsQuery } from '@/hooks/api/education-levels';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetEducationLevelsQuery,
+} from '@/hooks/api/cultuurkuur';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
-import { FormElement } from '@/ui/FormElement';
-import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
 import { Stack } from '@/ui/Stack';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -68,6 +70,7 @@ const useEditNameAndAgeRange = ({
 };
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
+  const { scope } = props;
   const router = useRouter();
   const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.CULTUURKUUR,
@@ -87,10 +90,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     router.push(`/place/${placeId}/preview`);
   };
 
-  const levels = useGetEducationLevelsQuery();
   const isCultuurkuurEvent =
-    props.scope === OfferTypes.EVENTS &&
+    scope === OfferTypes.EVENTS &&
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
+  const levels = useGetEducationLevelsQuery();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(props, levels);
 
   return (
     <Controller
@@ -110,15 +115,9 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
             {isCultuurkuurFeatureFlagEnabled &&
               isCultuurkuurEvent &&
               !levels.isLoading && (
-                <FormElement
-                  id={'labels'}
-                  label={'Geschikt voor de volgende onderwijsniveaus '}
-                  Component={
-                    <LabelsCheckboxTree
-                      {...getStepProps(props)}
-                      nodes={levels.data}
-                    />
-                  }
+                <CultuurkuurLabelsPicker
+                  labelsKey="education"
+                  {...labelsPickerProps}
                 />
               )}
             <AlertDuplicatePlace
@@ -142,7 +141,7 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
-      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex).required(),
+      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');

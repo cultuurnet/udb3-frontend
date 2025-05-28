@@ -475,8 +475,10 @@
         }
       },
       "cultuurkuur": {
-        "title": "Cultuurkuur",
-        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur."
+        "title": "Voor scholen",
+        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur.",
+        "tailored": "Ik werk activiteiten uit op maat van scholen",
+        "on_location": "Ik organiseer ook activiteiten op verplaatsing"
       },
       "location": {
         "title": "Locatie",
@@ -893,6 +895,16 @@
         "url": "Je website voldoet niet aan de vereisten.",
         "url_not_unique": "Dit adres wordt al gebruikt door de organisatie '{{organizerName}}'. Geef een unieke website op of <setOrganizerLink>gebruik {{organizerName}} als organisatie</setOrganizerLink>."
       }
+    }
+  },
+  "cultuurkuur_modal": {
+    "selectAll": "Alles selecteren",
+    "clearAll": "Alles verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "title": {
+      "location": "Provincie regio gemeente toevoegen",
+      "education": "Onderwijsniveaus toevoegen"
     }
   },
   "location": {
