@@ -4,11 +4,15 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, Scope, ScopeTypes } from '@/constants/OfferType';
+import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
+import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
@@ -262,6 +266,21 @@ const AdditionalInformationStep = ({
     isOrganizer ? Fields.CONTACT_INFO : Fields.DESCRIPTION,
   );
 
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope },
+    { refetchOnWindowFocus: false },
+  );
+
+  const offer: Offer | undefined = getOfferByIdQuery.data;
+
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
+  const isCultuurkuurEvent =
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
+    isCultuurkuurFeatureFlagEnabled;
+
   const [, hash] = asPath.split('#');
 
   const handleScroll = useCallback(() => {
@@ -348,6 +367,8 @@ const AdditionalInformationStep = ({
               : true;
 
             if (!shouldShowTab) return null;
+
+            if (field === 'audience' && isCultuurkuurEvent) return null;
 
             return (
               <Tabs.Tab
