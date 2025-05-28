@@ -64,8 +64,6 @@ const ContactInfoStep = ({
   );
 
   const [isFieldFocused, setIsFieldFocused] = useState(false);
-  const [isContactInfoStateInitialized, setIsContactInfoInitialized] =
-    useState(false);
 
   const [isCultuurkuurAlertVisible, setIsCultuurkuurAlertVisible] =
     useState(false);
@@ -74,66 +72,45 @@ const ContactInfoStep = ({
     FeatureFlags.CULTUURKUUR,
   );
 
-  const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
-    getEntityByIdQuery.data?.hiddenLabels,
-  );
+  const isCultuurkuurOrganizer =
+    hasCultuurkuurOrganizerLabel(getEntityByIdQuery.data?.hiddenLabels) &&
+    isCultuurkuurFeatureFlagEnabled;
 
-  const contactInfo =
+  const rawContactInfo =
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 
-  const updateContactInfoState = useCallback(
-    (newContactInfo) => {
-      const contactInfoArray = [];
-
-      Object.keys(contactInfo ?? {}).forEach((key) => {
-        contactInfo[key].forEach((item) => {
-          contactInfoArray.push({
-            type: key,
-            value: item,
-          });
-        });
-      });
-
-      setContactInfoState(contactInfoArray);
-      setIsContactInfoInitialized(true);
-    },
-    [contactInfo],
+  const hasAnyContactInfo = ['email', 'phone', 'url'].some(
+    (key) =>
+      rawContactInfo?.[key]?.length > 0 && rawContactInfo?.[key]?.value !== '',
   );
 
   useEffect(() => {
-    if (!contactInfo || isContactInfoStateInitialized) return;
-    updateContactInfoState(contactInfo);
-  }, [contactInfo, isContactInfoStateInitialized, updateContactInfoState]);
+    if (!rawContactInfo) return;
+
+    const contactInfoArray: NewContactInfo[] = [];
+
+    Object.entries(rawContactInfo).forEach(([type, values]) => {
+      (values as string[]).forEach((value) => {
+        contactInfoArray.push({ type, value });
+      });
+    });
+
+    setContactInfoState(contactInfoArray);
+  }, [rawContactInfo]);
 
   useEffect(() => {
-    if (!organizerContactInfo) return;
-    updateContactInfoState(organizerContactInfo);
-  }, [organizerContactInfo, updateContactInfoState]);
-
-  useEffect(() => {
-    if (!isContactInfoStateInitialized) return;
-
-    const filteredContactInfoState = contactInfoState.filter(
-      (contactInfo) => contactInfo.value !== '',
-    );
-
     if (!onValidationChange) {
       return;
     }
 
-    if (
-      filteredContactInfoState.length === 0 &&
-      isCultuurkuurFeatureFlagEnabled &&
-      isCultuurkuurOrganizer
-    ) {
+    if (!hasAnyContactInfo && isCultuurkuurOrganizer) {
       onValidationChange(ValidationStatus.WARNING, field);
       setIsCultuurkuurAlertVisible(true);
       return;
     }
 
-    if (filteredContactInfoState.length === 0) {
+    if (!hasAnyContactInfo) {
       onValidationChange(ValidationStatus.NONE, field);
-      setIsCultuurkuurAlertVisible(false);
       return;
     }
 
@@ -142,9 +119,8 @@ const ContactInfoStep = ({
   }, [
     field,
     contactInfoState,
-    isContactInfoStateInitialized,
     isCultuurkuurOrganizer,
-    isCultuurkuurFeatureFlagEnabled,
+    hasAnyContactInfo,
     onValidationChange,
   ]);
 
@@ -202,9 +178,9 @@ const ContactInfoStep = ({
         scope,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           onSuccessfulChange(contactPoint);
-          onValidationChange(ValidationStatus.SUCCESS, field);
+          await queryClient.invalidateQueries([scope, { id: offerId }]);
         },
       },
     );
@@ -252,8 +228,6 @@ const ContactInfoStep = ({
     newContactInfo[index].value = '';
 
     setContactInfoState(newContactInfo);
-
-    await handleAddContactInfoMutation(newContactInfo);
   };
 
   return (
