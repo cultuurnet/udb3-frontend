@@ -9,6 +9,7 @@ import {
   useChangeAudienceMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
 import { FormElement } from '@/ui/FormElement';
@@ -17,7 +18,6 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 
 import { TabContentProps } from './AdditionalInformationStep';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 type Props = StackProps & TabContentProps;
 
