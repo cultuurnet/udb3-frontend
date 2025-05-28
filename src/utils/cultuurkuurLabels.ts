@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
 const sortByName = (entities: HierarchicalData['children'] = []) => {
@@ -121,6 +123,158 @@ const removeAndCleanParents = (
   return selected;
 };
 
+const useLabelsManager = (
+  labelsKey: string,
+  data: HierarchicalData[],
+  selectedData: HierarchicalData[] = [],
+) => {
+  const [selectedEntities, setSelectedEntities] = useState(
+    labelsKey === 'location'
+      ? expandLevel1WithChildren(selectedData)
+      : selectedData,
+  );
+
+  const isSelected = (leaf: HierarchicalData) =>
+    selectedEntities.some((sel) => sel.label === leaf.label);
+
+  const isGroupFullySelected = (entity: HierarchicalData) => {
+    const leaves = getAllLeafNodes(entity);
+
+    return leaves.every((leaf) => isSelected(leaf));
+  };
+
+  const handleSelectionToggleEducation = (entity: HierarchicalData) => {
+    setSelectedEntities((prev) => {
+      let updated = [...prev];
+      const isSelected = updated.some((e) => e.label === entity.label);
+
+      if (isSelected) {
+        updated = removeAndCleanParents(entity, updated, data);
+      } else {
+        addWithParents(entity, updated, data);
+      }
+
+      return updated;
+    });
+  };
+
+  const handleSelectionToggle = (entity: HierarchicalData) => {
+    if (labelsKey === 'education') {
+      handleSelectionToggleEducation(entity);
+      toggleSelectAllLeafs(entity.children);
+      return;
+    }
+
+    const leaves = getAllLeafNodes(entity);
+    const isEducationLabel = !entity.label
+      .toLowerCase()
+      .includes('werkingsregio');
+
+    setSelectedEntities((prev) => {
+      const allSelected = leaves.every((leaf) =>
+        prev.some((sel) => sel.label === leaf.label),
+      );
+
+      if (allSelected) {
+        let updated = prev.filter(
+          (sel) => !leaves.some((leaf) => leaf.label === sel.label),
+        );
+
+        if (isEducationLabel) {
+          leaves.forEach((leaf) => {
+            updated = removeAndCleanParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      } else {
+        let updated = [...prev];
+        const newSelections = leaves.filter(
+          (leaf) => !prev.some((sel) => sel.label === leaf.label),
+        );
+        updated.push(...newSelections);
+
+        if (isEducationLabel) {
+          newSelections.forEach((leaf) => {
+            addWithParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      }
+    });
+  };
+
+  const getSelected = () => {
+    const final =
+      labelsKey === 'location'
+        ? handleSelectedLocations(selectedEntities, data)
+        : dataToLabels(selectedEntities);
+
+    return final.sort();
+  };
+
+  // Level2 children
+  const areAllLeafsSelected = (entities: HierarchicalData[] = []) => {
+    const allLeaves = entities.flatMap(getAllLeafNodes);
+    return allLeaves.every((leaf) =>
+      selectedEntities.some((sel) => sel.label === leaf.label),
+    );
+  };
+
+  // Select All - Clear All
+  const toggleSelectAllLeafs = (entities: HierarchicalData[] = []) => {
+    const allLeaves = entities.flatMap(getAllLeafNodes);
+
+    const isEducationLabel = !entities.some((e) =>
+      e.label.toLowerCase().includes('werkingsregio'),
+    );
+
+    const allSelected = allLeaves.every((leaf) =>
+      selectedEntities.some((sel) => sel.label === leaf.label),
+    );
+
+    if (allSelected) {
+      setSelectedEntities((prev) => {
+        let updated = prev.filter(
+          (sel) => !allLeaves.some((leaf) => leaf.label === sel.label),
+        );
+
+        if (isEducationLabel) {
+          allLeaves.forEach((leaf) => {
+            updated = removeAndCleanParents(leaf, updated, data);
+          });
+        }
+
+        return updated;
+      });
+    } else {
+      setSelectedEntities((prev) => {
+        const updated = [...prev];
+        allLeaves.forEach((leaf) => {
+          if (!updated.some((e) => e.label === leaf.label)) {
+            if (isEducationLabel) {
+              addWithParents(leaf, updated, data);
+            } else {
+              updated.push(leaf);
+            }
+          }
+        });
+        return updated;
+      });
+    }
+  };
+
+  return {
+    isGroupFullySelected,
+    handleSelectionToggle,
+    getSelected,
+    areAllLeafsSelected,
+    toggleSelectAllLeafs,
+    isSelected,
+  } as const;
+};
+
 export {
   addWithParents,
   dataToLabels,
@@ -130,4 +284,5 @@ export {
   handleSelectedLocations,
   removeAndCleanParents,
   sortByName,
+  useLabelsManager,
 };

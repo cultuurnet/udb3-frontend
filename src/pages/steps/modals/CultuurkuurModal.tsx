@@ -15,11 +15,11 @@ import { colors } from '@/ui/theme';
 import {
   addWithParents,
   dataToLabels,
-  expandLevel1WithChildren,
   getAllLeafNodes,
   handleSelectedLocations,
   removeAndCleanParents,
   sortByName,
+  useLabelsManager,
 } from '@/utils/cultuurkuurLabels';
 
 type Props = {
@@ -44,11 +44,14 @@ const CultuurkuurModal = ({
   onClose,
 }: Props) => {
   const { t } = useTranslation();
-  const [selectedEntities, setSelectedEntities] = useState<HierarchicalData[]>(
-    labelsKey === 'location'
-      ? expandLevel1WithChildren(selectedData)
-      : selectedData,
-  );
+  const {
+    isGroupFullySelected,
+    handleSelectionToggle,
+    isSelected,
+    getSelected,
+    areAllLeafsSelected,
+    toggleSelectAllLeafs,
+  } = useLabelsManager(labelsKey, data, selectedData);
 
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
@@ -56,134 +59,11 @@ const CultuurkuurModal = ({
     setOpenGroup((prev) => (prev === groupName ? null : groupName));
   };
 
-  // Level1
-  const isGroupFullySelected = (entity: HierarchicalData) => {
-    const leaves = getAllLeafNodes(entity);
-
-    return leaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.label === leaf.label),
-    );
-  };
-
-  // Select whole group
-  const handleSelectionToggle = (entity: HierarchicalData) => {
-    const leaves = getAllLeafNodes(entity);
-    const isEducationLabel = !entity.label
-      .toLowerCase()
-      .includes('werkingsregio');
-
-    setSelectedEntities((prev) => {
-      const allSelected = leaves.every((leaf) =>
-        prev.some((sel) => sel.label === leaf.label),
-      );
-
-      if (allSelected) {
-        let updated = prev.filter(
-          (sel) => !leaves.some((leaf) => leaf.label === sel.label),
-        );
-
-        if (isEducationLabel) {
-          leaves.forEach((leaf) => {
-            updated = removeAndCleanParents(leaf, updated, data);
-          });
-        }
-
-        return updated;
-      } else {
-        let updated = [...prev];
-        const newSelections = leaves.filter(
-          (leaf) => !prev.some((sel) => sel.label === leaf.label),
-        );
-        updated.push(...newSelections);
-
-        if (isEducationLabel) {
-          newSelections.forEach((leaf) => {
-            addWithParents(leaf, updated, data);
-          });
-        }
-
-        return updated;
-      }
-    });
-  };
-
-  const handleSelectionToggleEducation = (entity: HierarchicalData) => {
-    setSelectedEntities((prev) => {
-      let updated = [...prev];
-      const isSelected = updated.some((e) => e.label === entity.label);
-
-      if (isSelected) {
-        updated = removeAndCleanParents(entity, updated, data);
-      } else {
-        addWithParents(entity, updated, data);
-      }
-
-      return updated;
-    });
-  };
-
-  // Level2 children
-  const areAllLeafsSelected = (entities: HierarchicalData[] = []) => {
-    const allLeaves = entities.flatMap(getAllLeafNodes);
-    return allLeaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.label === leaf.label),
-    );
-  };
-
-  // Select All - Clear All
-  const toggleSelectAllLeafs = (entities: HierarchicalData[] = []) => {
-    const allLeaves = entities.flatMap(getAllLeafNodes);
-
-    const isEducationLabel = !entities.some((e) =>
-      e.label.toLowerCase().includes('werkingsregio'),
-    );
-
-    const allSelected = allLeaves.every((leaf) =>
-      selectedEntities.some((sel) => sel.label === leaf.label),
-    );
-
-    if (allSelected) {
-      setSelectedEntities((prev) => {
-        let updated = prev.filter(
-          (sel) => !allLeaves.some((leaf) => leaf.label === sel.label),
-        );
-
-        if (isEducationLabel) {
-          allLeaves.forEach((leaf) => {
-            updated = removeAndCleanParents(leaf, updated, data);
-          });
-        }
-
-        return updated;
-      });
-    } else {
-      setSelectedEntities((prev) => {
-        const updated = [...prev];
-        allLeaves.forEach((leaf) => {
-          if (!updated.some((e) => e.label === leaf.label)) {
-            if (isEducationLabel) {
-              addWithParents(leaf, updated, data);
-            } else {
-              updated.push(leaf);
-            }
-          }
-        });
-        return updated;
-      });
-    }
-  };
-
   return (
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onConfirm={() =>
-        onConfirm(
-          labelsKey === 'location'
-            ? handleSelectedLocations(selectedEntities, data)
-            : dataToLabels(selectedEntities),
-        )
-      }
+      onConfirm={() => onConfirm(getSelected())}
       onClose={onClose}
       title={
         <>
@@ -232,7 +112,6 @@ const CultuurkuurModal = ({
 
               {level1.children?.map((level2) => {
                 const level2Name = level2?.name?.nl || '';
-                const level2Label = level2?.label;
                 const hasChildren = (level2?.children?.length || 0) > 0;
 
                 return (
@@ -269,14 +148,8 @@ const CultuurkuurModal = ({
                           <CheckboxWithLabel
                             id={level2Name}
                             name={level2Name}
-                            onToggle={() =>
-                              labelsKey === 'education'
-                                ? handleSelectionToggleEducation(level2)
-                                : handleSelectionToggle(level2)
-                            }
-                            checked={selectedEntities.some(
-                              (e) => e?.label === level2Label,
-                            )}
+                            onToggle={() => handleSelectionToggle(level2)}
+                            checked={isSelected(level2)}
                           />
                         </Inline>
                       )}
@@ -310,21 +183,15 @@ const CultuurkuurModal = ({
                           >
                             {sortByName(level2.children)?.map((leaf) => {
                               const leafName = leaf?.name?.nl || '';
-                              const leafLabel = leaf?.label;
+
                               return (
                                 <Button
                                   key={leafName}
                                   width="auto"
-                                  active={selectedEntities.some(
-                                    (e) => e?.label === leafLabel,
-                                  )}
+                                  active={isSelected(leaf)}
                                   display="inline-flex"
                                   variant={ButtonVariants.SECONDARY_TOGGLE}
-                                  onClick={(e) => {
-                                    labelsKey === 'education'
-                                      ? handleSelectionToggleEducation(leaf)
-                                      : handleSelectionToggle(leaf);
-                                  }}
+                                  onClick={() => handleSelectionToggle(leaf)}
                                 >
                                   {leafName}
                                 </Button>
