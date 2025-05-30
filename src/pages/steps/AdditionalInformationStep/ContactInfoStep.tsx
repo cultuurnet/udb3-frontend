@@ -84,6 +84,8 @@ const ContactInfoStep = ({
       rawContactInfo?.[key]?.length > 0 && rawContactInfo?.[key]?.value !== '',
   );
 
+  const hasEmail = rawContactInfo?.email?.some((email) => email !== '');
+
   useEffect(() => {
     if (!rawContactInfo) return;
 
@@ -103,7 +105,7 @@ const ContactInfoStep = ({
       return;
     }
 
-    if (!hasAnyContactInfo && isCultuurkuurOrganizer) {
+    if (!hasEmail && isCultuurkuurOrganizer) {
       onValidationChange(ValidationStatus.WARNING, field);
       setIsCultuurkuurAlertVisible(true);
       return;
