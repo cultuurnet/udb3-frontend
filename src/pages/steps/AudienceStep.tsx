@@ -9,6 +9,7 @@ import {
   useChangeAudienceMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
 import { FormElement } from '@/ui/FormElement';
@@ -51,6 +52,10 @@ const AudienceStep = ({
 
   const event: Event | undefined = getEventByIdQuery.data;
 
+  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.CULTUURKUUR,
+  );
+
   useEffect(() => {
     const newAudienceType =
       event?.audience?.audienceType ?? AudienceTypes.EVERYONE;
@@ -78,31 +83,37 @@ const AudienceStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
-        {Object.values(AudienceTypes).map((type, index) => {
-          return (
-            <Fragment key={index}>
-              <FormElement
-                id={`audience-${type}`}
-                Component={
-                  <RadioButtonWithLabel
-                    {...register(`audienceType`)}
-                    label={t(`create.additionalInformation.audience.${type}`)}
-                    checked={watchedAudienceType === type}
-                    onChange={() => handleOnChangeAudience(type)}
-                  />
-                }
-              />
-              {watchedAudienceType === type &&
-                watchedAudienceType !== AudienceTypes.EVERYONE && (
-                  <Text variant="muted" maxWidth="30%">
-                    {t(
-                      `create.additionalInformation.audience.help.${watchedAudienceType}`,
-                    )}
-                  </Text>
-                )}
-            </Fragment>
-          );
-        })}
+        {Object.values(AudienceTypes)
+          .filter(
+            (type) =>
+              !isCultuurkuurFeatureFlagEnabled ||
+              type !== AudienceTypes.EDUCATION,
+          )
+          .map((type, index) => {
+            return (
+              <Fragment key={index}>
+                <FormElement
+                  id={`audience-${type}`}
+                  Component={
+                    <RadioButtonWithLabel
+                      {...register(`audienceType`)}
+                      label={t(`create.additionalInformation.audience.${type}`)}
+                      checked={watchedAudienceType === type}
+                      onChange={() => handleOnChangeAudience(type)}
+                    />
+                  }
+                />
+                {watchedAudienceType === type &&
+                  watchedAudienceType !== AudienceTypes.EVERYONE && (
+                    <Text variant="muted" maxWidth="30%">
+                      {t(
+                        `create.additionalInformation.audience.help.${watchedAudienceType}`,
+                      )}
+                    </Text>
+                  )}
+              </Fragment>
+            );
+          })}
       </Stack>
     </Stack>
   );
