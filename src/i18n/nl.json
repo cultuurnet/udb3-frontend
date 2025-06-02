@@ -905,6 +905,12 @@
     "title": {
       "location": "Provincie regio gemeente toevoegen",
       "education": "Onderwijsniveaus toevoegen"
+    },
+    "overview": {
+      "locations": "werkingregios",
+      "education_levels": "onderwijsniveaus",
+      "selected": "zijn geselecteerd",
+      "change": "Wijzig"
     }
   },
   "location": {
