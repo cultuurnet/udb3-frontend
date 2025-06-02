@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Button } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
+import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
   selectedData: HierarchicalData[];
@@ -16,7 +17,11 @@ const CultuurkuurSelectionOverview = ({
   onOpenModal,
 }: Props) => {
   const { t } = useTranslation();
-  const selectedCount = selectedData.length;
+  const selectedCount = (
+    labelsKey === 'location'
+      ? expandLevel1WithChildren(selectedData)
+      : selectedData
+  ).length;
 
   if (selectedCount === 0) return null;
 
