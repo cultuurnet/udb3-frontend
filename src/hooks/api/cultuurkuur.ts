@@ -102,8 +102,6 @@ const useCultuurkuurLabelsPickerProps = (
     );
   }, [labels]);
 
-  console.log(locationLabels);
-
   const educationLabels = useMemo(() => {
     return labels.filter(
       (label) =>
@@ -112,8 +110,6 @@ const useCultuurkuurLabelsPickerProps = (
         !label.startsWith('cultuurkuur_werkingsregio'),
     );
   }, [labels]);
-
-  console.log(educationLabels);
 
   const otherLabels = useMemo(() => {
     return labels.filter((label) => !label.startsWith('cultuurkuur_'));
