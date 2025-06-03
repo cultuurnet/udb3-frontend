@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -21,6 +22,8 @@ const CultuurkuurStep = ({
   ...props
 }: CultuurkuurStepProps) => {
   const { t } = useTranslation();
+  const router = useRouter();
+  const organizerId = router.query.organizerId as string;
 
   return (
     <Stack spacing={4} maxWidth="36.5rem" {...getStackProps(props)}>
@@ -43,6 +46,7 @@ const CultuurkuurStep = ({
                 <RadioButton
                   type={RadioButtonTypes.SWITCH}
                   checked={field.value}
+                  disabled={!!organizerId && field.value}
                   onChange={() => {
                     field.onChange(!field.value);
                     onChange({
