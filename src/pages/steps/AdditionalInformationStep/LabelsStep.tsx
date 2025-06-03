@@ -1,3 +1,4 @@
+import { getRoles } from '@testing-library/react';
 import { uniq } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,7 @@ import {
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useGetRolesQuery } from '@/hooks/api/user';
 import {
   TabContentProps,
   ValidationStatus,
@@ -25,6 +27,7 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 
 type LabelsStepProps = StackProps & TabContentProps;
 
@@ -58,6 +61,21 @@ function LabelsStep({
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
   const queryClient = useQueryClient();
+
+  const getRolesQuery = useGetRolesQuery();
+  const roles = getRolesQuery.data?.[0]?.permissions;
+  const isGodUser = roles?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
+
+  const cultuurkuurLabels = labels.filter((label) =>
+    label.startsWith('cultuurkuur_'),
+  );
+  const otherLabels = labels.filter(
+    (label) => !label.startsWith('cultuurkuur_'),
+  );
+
+  const labelsToShow = isGodUser
+    ? [...cultuurkuurLabels, ...otherLabels]
+    : [...otherLabels];
 
   useEffect(() => {
     onValidationChange(
@@ -135,7 +153,7 @@ function LabelsStep({
           }
         />
         <Inline spacing={3} flexWrap="wrap">
-          {labels.map((label) => (
+          {labelsToShow.map((label) => (
             <Inline
               key={label}
               borderRadius={getGlobalBorderRadius}
