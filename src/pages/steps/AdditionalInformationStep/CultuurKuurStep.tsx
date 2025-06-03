@@ -135,8 +135,8 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
     return getUniqueLabels(entity) ?? [];
   }, [entity]);
 
-  const isCultuurkuurLabelsPickerVisible = labels.includes(
-    CULTUURKUUR_ON_SITE_LABEL,
+  const [isOnSiteActive, setIsOnSiteActive] = useState(
+    labels.includes(CULTUURKUUR_ON_SITE_LABEL),
   );
 
   const handleLabelMutation = async (label: string) => {
@@ -170,13 +170,16 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
         id="onSite"
         name={t('create.additionalInformation.cultuurkuur.on_location')}
         onToggle={() => {
-          handleLabelMutation(CULTUURKUUR_ON_SITE_LABEL);
+          setIsOnSiteActive(!isOnSiteActive);
+          if (labels.includes(CULTUURKUUR_ON_SITE_LABEL)) {
+            labelsPickerProps.onConfirm([], 'location');
+          }
         }}
-        checked={labels.includes(CULTUURKUUR_ON_SITE_LABEL)}
+        checked={isOnSiteActive}
       >
         {t('create.additionalInformation.cultuurkuur.on_location')}
       </CheckboxWithLabel>
-      {isCultuurkuurLabelsPickerVisible && !regions.isLoading && (
+      {isOnSiteActive && !regions.isLoading && (
         <CultuurkuurLabelsPicker labelsKey="location" {...labelsPickerProps} />
       )}
     </Stack>
