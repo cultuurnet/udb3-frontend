@@ -364,7 +364,7 @@ const LocationStep = ({
   useEffect(() => {
     if (
       audienceField !== AudienceTypes.EDUCATION &&
-      !location.country &&
+      !location?.country &&
       isCultuurkuurFeatureFlagEnabled
     ) {
       field.onChange({
@@ -377,7 +377,7 @@ const LocationStep = ({
   }),
     [
       audienceField,
-      location.country,
+      location?.country,
       isCultuurkuurFeatureFlagEnabled,
       setValue,
     ];
