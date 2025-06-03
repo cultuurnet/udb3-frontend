@@ -136,11 +136,13 @@ const useCultuurkuurLabelsPickerProps = (
       ...otherLabels,
     ];
 
+    const locationLabelsToMutate = hasNewLabels
+      ? [...newLocationLabelsWithRest, CULTUURKUUR_ON_SITE_LABEL]
+      : newLocationLabelsWithRest;
+
     const labelsToMutate =
       labelsKey === 'location'
-        ? hasNewLabels
-          ? [...newLocationLabelsWithRest, CULTUURKUUR_ON_SITE_LABEL]
-          : newLocationLabelsWithRest
+        ? locationLabelsToMutate
         : newEducationLabelsWithRest;
 
     return offerId
