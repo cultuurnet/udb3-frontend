@@ -11,13 +11,10 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import {
-  addWithParents,
-  dataToLabels,
   getAllLeafNodes,
-  handleSelectedLocations,
-  removeAndCleanParents,
   sortByName,
   useLabelsManager,
 } from '@/utils/cultuurkuurLabels';
@@ -90,13 +87,11 @@ const CultuurkuurModal = ({
               <Card>
                 <Card.Header
                   css={`
-                    background-color: ${isGroupFullySelected(level1)
-                      ? colors.green5
-                      : colors.grey1};
+                    background-color: ${colors.grey1};
                   `}
                 >
                   <Inline justifyContent="space-between" alignItems="center">
-                    <p>{level1Name}</p>
+                    <Text>{level1Name}</Text>
                     <CheckboxWithLabel
                       className="selectAllLevel1"
                       id={level1Name}
@@ -113,14 +108,14 @@ const CultuurkuurModal = ({
               {level1.children?.map((level2) => {
                 const level2Name = level2?.name?.nl || '';
                 const hasChildren = (level2?.children?.length || 0) > 0;
+                const leafs = getAllLeafNodes(level2);
+                const selectedCount = leafs.filter(isSelected).length;
 
                 return (
                   <Card key={level2Name}>
                     <Card.Header
                       css={`
-                        background-color: ${isGroupFullySelected(level2)
-                          ? colors.green4
-                          : 'transparent'};
+                        background-color: transparent;
                       `}
                     >
                       {hasChildren ? (
@@ -130,7 +125,20 @@ const CultuurkuurModal = ({
                           cursor="pointer"
                           onClick={() => toggleGroup(level2Name)}
                         >
-                          <span>{level2Name}</span>
+                          <Box display="flex" alignItems="baseline">
+                            <p>{level2Name}</p>
+                            {selectedCount > 0 && (
+                              <span
+                                className="badge badge-pill badge-success ml-1"
+                                css={`
+                                  background-color: ${colors.udbMainPositiveGreen} !important;
+                                `}
+                              >
+                                {selectedCount}
+                              </span>
+                            )}
+                          </Box>
+
                           <Icon
                             name={
                               openGroup === level2Name

@@ -122,6 +122,7 @@ const ContactInfoStep = ({
     field,
     contactInfoState,
     isCultuurkuurOrganizer,
+    hasEmail,
     hasAnyContactInfo,
     onValidationChange,
   ]);
