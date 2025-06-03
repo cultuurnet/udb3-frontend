@@ -10,7 +10,7 @@ const displayCultuurkuurLabels = (roles: string[], labels: string[]) => {
     (label) => !label.startsWith('cultuurkuur_'),
   );
 
-  return isGodUser ? [...cultuurkuurLabels, ...otherLabels] : [...otherLabels];
+  return isGodUser ? [...cultuurkuurLabels, ...otherLabels] : otherLabels;
 };
 
 export { displayCultuurkuurLabels };
