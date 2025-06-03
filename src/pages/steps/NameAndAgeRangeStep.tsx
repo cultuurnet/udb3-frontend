@@ -32,6 +32,8 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { useTranslation } from 'react-i18next';
+import { Text } from '@/ui/Text';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -71,6 +73,7 @@ const useEditNameAndAgeRange = ({
 
 const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   const { scope } = props;
+  const { t } = useTranslation();
   const router = useRouter();
   const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.CULTUURKUUR,
@@ -115,10 +118,15 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
             {isCultuurkuurFeatureFlagEnabled &&
               isCultuurkuurEvent &&
               !levels.isLoading && (
-                <CultuurkuurLabelsPicker
-                  labelsKey="education"
-                  {...labelsPickerProps}
-                />
+                <>
+                  <Text fontWeight="bold" marginBottom={2}>
+                    {t(`create.name_and_age.age.title`)}
+                  </Text>
+                  <CultuurkuurLabelsPicker
+                    labelsKey="education"
+                    {...labelsPickerProps}
+                  />
+                </>
               )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
