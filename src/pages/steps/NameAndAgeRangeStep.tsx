@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -19,6 +20,7 @@ import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -32,8 +34,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { useTranslation } from 'react-i18next';
-import { Text } from '@/ui/Text';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
