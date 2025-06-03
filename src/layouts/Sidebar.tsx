@@ -6,6 +6,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { useGetAnnouncementsQuery } from '@/hooks/api/announcements';
 import { useGetEventsToModerateQuery } from '@/hooks/api/events';
@@ -50,7 +51,6 @@ import { Title } from '@/ui/Title';
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
-import { PermissionTypes } from '@/constants/PermissionTypes';
 
 const { publicRuntimeConfig } = getConfig();
 
