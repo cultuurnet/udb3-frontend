@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -13,14 +13,14 @@ import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
+import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -75,9 +75,6 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   const { scope } = props;
   const { t } = useTranslation();
   const router = useRouter();
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
 
   const duplicatePlaceId =
     (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
@@ -115,19 +112,33 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                 control={control}
               />
             )}
-            {isCultuurkuurFeatureFlagEnabled &&
-              isCultuurkuurEvent &&
-              !levels.isLoading && (
-                <>
-                  <Text fontWeight="bold" marginBottom={2}>
-                    {t(`create.name_and_age.age.title`)}
-                  </Text>
-                  <CultuurkuurLabelsPicker
-                    labelsKey="education"
-                    {...labelsPickerProps}
-                  />
-                </>
-              )}
+            {isCultuurkuurEvent && !levels.isLoading && (
+              <>
+                <Text fontWeight="bold" marginBottom={2}>
+                  {t(`create.name_and_age.age.title`)}
+                </Text>
+                <CultuurkuurLabelsPicker
+                  labelsKey="education"
+                  {...labelsPickerProps}
+                />
+                <Text variant={TextVariants.MUTED} maxWidth={parseSpacing(9)}>
+                  <Trans
+                    i18nKey={'create.name_and_age.cultuurkuur.info'}
+                    components={{
+                      link1: (
+                        <Link
+                          css={`
+                            text-decoration: underline;
+                            font-weight: bold;
+                          `}
+                          href={t('create.name_and_age.cultuurkuur.link')}
+                        />
+                      ),
+                    }}
+                  ></Trans>
+                </Text>
+              </>
+            )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}
