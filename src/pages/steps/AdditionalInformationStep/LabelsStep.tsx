@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useGetRolesQuery } from '@/hooks/api/user';
 import {
   TabContentProps,
   ValidationStatus,
@@ -24,6 +26,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type LabelsStepProps = StackProps & TabContentProps;
@@ -58,6 +61,10 @@ function LabelsStep({
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
   const queryClient = useQueryClient();
+
+  const getRolesQuery = useGetRolesQuery();
+  const roles = getRolesQuery.data?.[0]?.permissions;
+  const labelsToShow = displayCultuurkuurLabels(roles, labels);
 
   useEffect(() => {
     onValidationChange(
@@ -135,7 +142,7 @@ function LabelsStep({
           }
         />
         <Inline spacing={3} flexWrap="wrap">
-          {labels.map((label) => (
+          {labelsToShow.map((label) => (
             <Inline
               key={label}
               borderRadius={getGlobalBorderRadius}

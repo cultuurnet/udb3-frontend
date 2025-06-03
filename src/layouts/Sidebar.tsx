@@ -6,6 +6,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { useGetAnnouncementsQuery } from '@/hooks/api/announcements';
 import { useGetEventsToModerateQuery } from '@/hooks/api/events';
@@ -59,19 +60,6 @@ const shouldShowBetaVersion =
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
-
-const PermissionTypes = {
-  AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
-  AANBOD_MODEREREN: 'AANBOD_MODEREREN',
-  AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
-  ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
-  ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
-  GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
-  LABELS_BEHEREN: 'LABELS_BEHEREN',
-  VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
-  PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
-  FILMS_AANMAKEN: 'FILMS_AANMAKEN',
-} as const;
 
 type MenuItemType = {
   href?: string;
