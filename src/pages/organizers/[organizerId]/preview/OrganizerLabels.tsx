@@ -9,6 +9,7 @@ import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
+import { useGetRolesQuery } from '@/hooks/api/user';
 import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { Label } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
@@ -20,6 +21,7 @@ import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type OrganizerLabelProps = {
@@ -42,6 +44,11 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const [labels, setLabels] = useState<string[]>(
     getUniqueLabels(organizer) ?? [],
   );
+
+  const getRolesQuery = useGetRolesQuery();
+  const roles = getRolesQuery.data?.[0]?.permissions;
+  const labelsToShow = displayCultuurkuurLabels(roles, labels);
+
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
   const getButtonValue = getValueFromTheme('button');
@@ -103,7 +110,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
           maxWidth={'100%'}
         />
         <Inline spacing={3} flexWrap="wrap">
-          {labels.map((label) => (
+          {labelsToShow.map((label) => (
             <Inline
               key={label}
               borderRadius={getGlobalBorderRadius}
