@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
 import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { StepProps } from '@/pages/steps/Steps';
@@ -94,8 +95,10 @@ const useCultuurkuurLabelsPickerProps = (
   );
 
   const locationLabels = useMemo(() => {
-    return labels.filter((label) =>
-      label.startsWith('cultuurkuur_werkingsregio'),
+    return labels.filter(
+      (label) =>
+        label.startsWith('cultuurkuur_werkingsregio') &&
+        label === CULTUURKUUR_ON_SITE_LABEL,
     );
   }, [labels]);
 
@@ -103,6 +106,7 @@ const useCultuurkuurLabelsPickerProps = (
     return labels.filter(
       (label) =>
         label.startsWith('cultuurkuur_') &&
+        label !== CULTUURKUUR_ON_SITE_LABEL &&
         !label.startsWith('cultuurkuur_werkingsregio'),
     );
   }, [labels]);
@@ -120,10 +124,24 @@ const useCultuurkuurLabelsPickerProps = (
     newLabels: string[],
     labelsKey: string,
   ) => {
+    const hasNewLabels = newLabels.length > 0;
+    const newLocationLabelsWithRest = [
+      ...newLabels,
+      ...educationLabels,
+      ...otherLabels,
+    ];
+    const newEducationLabelsWithRest = [
+      ...newLabels,
+      ...locationLabels,
+      ...otherLabels,
+    ];
+
     const labelsToMutate =
       labelsKey === 'location'
-        ? [...newLabels, ...educationLabels, ...otherLabels]
-        : [...newLabels, ...locationLabels, ...otherLabels];
+        ? hasNewLabels
+          ? [...newLocationLabelsWithRest, CULTUURKUUR_ON_SITE_LABEL]
+          : newLocationLabelsWithRest
+        : newEducationLabelsWithRest;
 
     return offerId
       ? updateLabels.mutate({ scope, offerId, labels: labelsToMutate })
