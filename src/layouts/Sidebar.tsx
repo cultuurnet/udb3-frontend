@@ -50,6 +50,7 @@ import { Title } from '@/ui/Title';
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -59,19 +60,6 @@ const shouldShowBetaVersion =
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
-
-const PermissionTypes = {
-  AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
-  AANBOD_MODEREREN: 'AANBOD_MODEREREN',
-  AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
-  ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
-  ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
-  GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
-  LABELS_BEHEREN: 'LABELS_BEHEREN',
-  VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
-  PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
-  FILMS_AANMAKEN: 'FILMS_AANMAKEN',
-} as const;
 
 type MenuItemType = {
   href?: string;
