@@ -15,6 +15,7 @@ import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { colors } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -159,6 +160,7 @@ const UrlStep = ({
                                 <RadioButton
                                   type={RadioButtonTypes.SWITCH}
                                   checked={value}
+                                  color={colors.udbMainPositiveGreen}
                                   {...field}
                                 />
                               }
