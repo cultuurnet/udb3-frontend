@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Button } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
+import { Text } from '@/ui/Text';
 import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
@@ -27,11 +28,7 @@ const CultuurkuurSelectionOverview = ({
 
   return (
     <Inline alignItems="center" marginTop={4} spacing={2}>
-      <p
-        css={`
-          margin: 0;
-        `}
-      >
+      <Text>
         <span
           css={`
             font-weight: bold;
@@ -53,7 +50,7 @@ const CultuurkuurSelectionOverview = ({
           )}
         </span>
         <span>{t('cultuurkuur_modal.overview.selected')}</span>
-      </p>
+      </Text>
       <Button variant="link" onClick={onOpenModal}>
         {t('cultuurkuur_modal.overview.change')}
       </Button>

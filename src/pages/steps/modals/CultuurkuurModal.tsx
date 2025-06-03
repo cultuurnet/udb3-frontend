@@ -11,13 +11,10 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalVariants } from '@/ui/Modal';
 import { Stack, StackProps } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import {
-  addWithParents,
-  dataToLabels,
   getAllLeafNodes,
-  handleSelectedLocations,
-  removeAndCleanParents,
   sortByName,
   useLabelsManager,
 } from '@/utils/cultuurkuurLabels';
@@ -94,7 +91,7 @@ const CultuurkuurModal = ({
                   `}
                 >
                   <Inline justifyContent="space-between" alignItems="center">
-                    <p>{level1Name}</p>
+                    <Text>{level1Name}</Text>
                     <CheckboxWithLabel
                       className="selectAllLevel1"
                       id={level1Name}

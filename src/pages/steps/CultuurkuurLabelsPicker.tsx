@@ -43,9 +43,7 @@ const CultuurkuurLabelsPicker = ({
     <>
       <Button
         variant={ButtonVariants.LINK}
-        css={`
-          padding-left: 0 !important;
-        `}
+        paddingLeft={0}
         onClick={() => setIsCultuurkuurModalVisible(true)}
       >
         <Inline spacing={2}>
