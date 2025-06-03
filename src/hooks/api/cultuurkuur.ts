@@ -105,8 +105,8 @@ const useCultuurkuurLabelsPickerProps = (
   const educationLabels = useMemo(() => {
     return labels.filter(
       (label) =>
-        (label.startsWith('cultuurkuur_') ||
-          label !== CULTUURKUUR_ON_SITE_LABEL) &&
+        label.startsWith('cultuurkuur_') &&
+        label !== CULTUURKUUR_ON_SITE_LABEL &&
         !label.startsWith('cultuurkuur_werkingsregio'),
     );
   }, [labels]);
