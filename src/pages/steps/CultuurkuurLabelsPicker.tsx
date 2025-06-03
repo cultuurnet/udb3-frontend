@@ -43,6 +43,7 @@ const CultuurkuurLabelsPicker = ({
     <>
       <Button
         variant={ButtonVariants.LINK}
+        paddingLeft={0}
         onClick={() => setIsCultuurkuurModalVisible(true)}
       >
         <Inline spacing={2}>
@@ -65,7 +66,11 @@ const CultuurkuurLabelsPicker = ({
           onClose={() => setIsCultuurkuurModalVisible(false)}
         />
       )}
-      <CultuurkuurSelectionOverview selectedData={preSelectedValues} />
+      <CultuurkuurSelectionOverview
+        selectedData={preSelectedValues}
+        onOpenModal={() => setIsCultuurkuurModalVisible(true)}
+        labelsKey={labelsKey}
+      />
     </>
   );
 };

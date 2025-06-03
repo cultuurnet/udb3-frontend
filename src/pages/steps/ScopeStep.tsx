@@ -6,6 +6,11 @@ import { useQueryClient } from 'react-query';
 
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+  useGetEducationLevelsQuery,
+} from '@/hooks/api/cultuurkuur';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -74,9 +79,25 @@ const ScopeStep = ({
 
   const queryClient = useQueryClient();
   const addAudienceMutation = useChangeAudienceMutation();
+  const regions = useGetCultuurkuurRegions();
+
+  const levels = useGetEducationLevelsQuery();
+  const labelsPickerLocationProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    regions,
+  );
+  const labelsPickerEducationLevelProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    levels,
+  );
 
   const handleOnChangeAudience = async (audienceType: AudienceType) => {
     setValue('audience.audienceType', audienceType);
+
+    if (audienceType !== AudienceTypes.EDUCATION) {
+      labelsPickerLocationProps.onConfirm([], 'location');
+      labelsPickerEducationLevelProps.onConfirm([], 'education');
+    }
 
     if (!offerId) return;
 
