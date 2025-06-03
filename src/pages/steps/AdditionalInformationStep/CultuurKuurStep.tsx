@@ -15,7 +15,6 @@ import {
 } from '@/hooks/api/cultuurkuur';
 import {
   useAddOfferLabelMutation,
-  useBulkUpdateOfferLabelsMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import {
@@ -23,7 +22,6 @@ import {
   useUpdateOrganizerEducationalDescriptionMutation,
 } from '@/hooks/api/organizers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
@@ -196,10 +194,6 @@ const CultuurKuurStep = ({
 }: CultuurKuurStepProps) => {
   const { t, i18n } = useTranslation();
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const plainTextDescription = useMemo(
     () => editorState.getCurrentContent().getPlainText(),
@@ -285,11 +279,10 @@ const CultuurKuurStep = ({
 
   return (
     <Stack spacing={5} paddingTop={2}>
-      {isCultuurkuurFeatureFlagEnabled && (
-        <Box>
-          <CultuurkuurLabels offerId={offerId} scope={scope} />
-        </Box>
-      )}
+      <Box>
+        <CultuurkuurLabels offerId={offerId} scope={scope} />
+      </Box>
+
       <Inline
         stackOn={Breakpoints.L}
         css={`

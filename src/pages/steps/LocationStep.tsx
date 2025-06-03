@@ -3,7 +3,6 @@ import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -20,23 +19,14 @@ import {
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import {
-  useAddOfferLabelMutation,
-  useBulkUpdateOfferLabelsMutation,
-  useGetOfferByIdQuery,
-  useRemoveOfferLabelMutation,
-} from '@/hooks/api/offers';
+import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
-import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode } from '@/types/Event';
-import { Offer } from '@/types/Offer';
-import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -54,9 +44,7 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { isValidUrl } from '@/utils/isValidInfo';
-import { parseOfferId } from '@/utils/parseOfferId';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { CityPicker } from '../CityPicker';
@@ -155,10 +143,6 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
   const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   return async ({ location }: FormDataUnion) => {
     // For places
 
@@ -223,14 +207,7 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
         eventId: offerId,
       });
 
-      const changeAudiencePromise = !isCultuurkuurFeatureFlagEnabled
-        ? changeAudienceMutation.mutateAsync({
-            eventId: offerId,
-            audienceType: AudienceTypes.EDUCATION,
-          })
-        : Promise.resolve();
-
-      await Promise.all([changeLocationPromise, changeAudiencePromise]);
+      await changeLocationPromise;
 
       return;
     }
@@ -242,16 +219,6 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
       attendanceMode: AttendanceMode.OFFLINE,
       location: location.place['@id'],
     });
-
-    if (
-      parseOfferId(location.place['@id']) !== CULTUURKUUR_LOCATION_ID &&
-      !isCultuurkuurFeatureFlagEnabled
-    ) {
-      changeAudienceMutation.mutate({
-        eventId: offerId,
-        audienceType: AudienceTypes.EVERYONE,
-      });
-    }
 
     deleteOnlineUrl.mutate({
       eventId: offerId,
@@ -340,10 +307,6 @@ const LocationStep = ({
     name: ['location.streetAndNumber', 'location.onlineUrl', 'location'],
   });
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
@@ -362,11 +325,7 @@ const LocationStep = ({
   const { field } = useController({ name: 'location', control });
 
   useEffect(() => {
-    if (
-      audienceField !== AudienceTypes.EDUCATION &&
-      !location?.country &&
-      isCultuurkuurFeatureFlagEnabled
-    ) {
+    if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
       field.onChange({
         country: 'BE',
         municipality: undefined,
@@ -375,18 +334,9 @@ const LocationStep = ({
       });
     }
   }),
-    [
-      audienceField,
-      location?.country,
-      isCultuurkuurFeatureFlagEnabled,
-      setValue,
-    ];
+    [audienceField, location?.country, setValue];
 
   useEffect(() => {
-    if (audience?.audienceType && !isCultuurkuurFeatureFlagEnabled) {
-      setAudienceType(audience.audienceType);
-    }
-
     if (!locationStreetAndNumber && !locationOnlineUrl) return;
 
     if (locationStreetAndNumber) {
@@ -396,12 +346,7 @@ const LocationStep = ({
     if (locationOnlineUrl) {
       setOnlineUrl(locationOnlineUrl);
     }
-  }, [
-    locationStreetAndNumber,
-    locationOnlineUrl,
-    audience?.audienceType,
-    isCultuurkuurFeatureFlagEnabled,
-  ]);
+  }, [locationStreetAndNumber, locationOnlineUrl]);
 
   const handleChangeStreetAndNumber = (e: ChangeEvent<HTMLInputElement>) => {
     const shouldShowNextStepInCreate =
@@ -532,7 +477,7 @@ const LocationStep = ({
                       width="30%"
                       minHeight={parseSpacing(7)}
                     />
-                    {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
+                    {isCultuurkuurEvent && (
                       <ToggleBox
                         onClick={() => {
                           onFieldChange({
@@ -617,42 +562,18 @@ const LocationStep = ({
           if (!country || municipality?.zip === '0000') {
             return renderFieldWithRecentLocations(
               <>
-                {isCultuurkuurFeatureFlagEnabled && (
-                  <Text fontWeight="bold" marginBottom={3}>
-                    {t('create.location.is_cultuurkuur.title')}
-                  </Text>
-                )}
-                {!isCultuurkuurFeatureFlagEnabled && (
-                  <Inline alignItems="center" spacing={3} marginBottom={3}>
-                    <Icon
-                      name={Icons.CHECK_CIRCLE}
-                      color={getGlobalValue('successColor')}
-                    />
-                    <Text>{t('create.location.country.location_school')}</Text>
-                    <Button
-                      variant={ButtonVariants.LINK}
-                      onClick={() => {
-                        onFieldChange({
-                          country: Countries.BE,
-                          municipality: undefined,
-                        });
-                        setAudienceType(AudienceTypes.EVERYONE);
-                      }}
-                    >
-                      {t('create.location.country.change_location')}
-                    </Button>
-                  </Inline>
-                )}
-                {isCultuurkuurFeatureFlagEnabled &&
-                  isCultuurkuurEvent &&
-                  !regions.isLoading && (
-                    <CultuurkuurLabelsPicker
-                      labelsKey="location"
-                      {...labelsPickerProps}
-                    />
-                  )}
+                <Text fontWeight="bold" marginBottom={3}>
+                  {t('create.location.is_cultuurkuur.title')}
+                </Text>
 
-                {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
+                {isCultuurkuurEvent && !regions.isLoading && (
+                  <CultuurkuurLabelsPicker
+                    labelsKey="location"
+                    {...labelsPickerProps}
+                  />
+                )}
+
+                {isCultuurkuurEvent && (
                   <Text
                     variant={TextVariants.MUTED}
                     maxWidth={parseSpacing(9)}
@@ -660,11 +581,6 @@ const LocationStep = ({
                   >
                     {t('create.location.is_cultuurkuur.info')}
                   </Text>
-                )}
-                {!isCultuurkuurFeatureFlagEnabled && (
-                  <Alert maxWidth="53rem">
-                    {t('create.location.country.location_school_info')}
-                  </Alert>
                 )}
               </>,
             );

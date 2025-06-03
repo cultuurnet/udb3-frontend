@@ -9,7 +9,6 @@ import {
   useChangeAudienceMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
 import { FormElement } from '@/ui/FormElement';
@@ -52,10 +51,6 @@ const AudienceStep = ({
 
   const event: Event | undefined = getEventByIdQuery.data;
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   useEffect(() => {
     const newAudienceType =
       event?.audience?.audienceType ?? AudienceTypes.EVERYONE;
@@ -84,11 +79,7 @@ const AudienceStep = ({
           {t('create.additionalInformation.audience.title')}
         </Text>
         {Object.values(AudienceTypes)
-          .filter(
-            (type) =>
-              !isCultuurkuurFeatureFlagEnabled ||
-              type !== AudienceTypes.EDUCATION,
-          )
+          .filter((type) => type !== AudienceTypes.EDUCATION)
           .map((type, index) => {
             return (
               <Fragment key={index}>
