@@ -1,35 +1,60 @@
+import { useTranslation } from 'react-i18next';
+
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
-import { IconSuccess } from '@/ui/Alert';
-import { Box } from '@/ui/Box';
+import { Button } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
+import { Text } from '@/ui/Text';
+import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
   selectedData: HierarchicalData[];
+  labelsKey: string;
+  onOpenModal: () => void;
 };
 
-const CultuurkuurSelectionOverview = ({ selectedData }: Props) => {
+const CultuurkuurSelectionOverview = ({
+  selectedData,
+  labelsKey,
+  onOpenModal,
+}: Props) => {
+  const { t } = useTranslation();
+  const selectedCount = (
+    labelsKey === 'location'
+      ? expandLevel1WithChildren(selectedData)
+      : selectedData
+  ).length;
+
+  if (selectedCount === 0) return null;
+
   return (
-    <Box
-      css={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '0.25rem',
-        margin: '1rem 0',
-      }}
-    >
-      {selectedData.map((item) => (
-        <Inline padding={2} alignItems="center" key={item?.label}>
-          <IconSuccess
-            css={{
-              color: 'green',
-              marginRight: '0.5rem',
-              fontSize: '1rem',
-            }}
-          />
-          <span>{item?.name?.nl}</span>
-        </Inline>
-      ))}
-    </Box>
+    <Inline alignItems="center" marginTop={4} spacing={2}>
+      <Text>
+        <span
+          css={`
+            font-weight: bold;
+            margin-right: 4px;
+          `}
+        >
+          {selectedCount}
+        </span>
+        <span
+          css={`
+            font-weight: bold;
+            margin-right: 4px;
+          `}
+        >
+          {t(
+            labelsKey === 'location'
+              ? 'cultuurkuur_modal.overview.locations'
+              : 'cultuurkuur_modal.overview.education_levels',
+          )}
+        </span>
+        <span>{t('cultuurkuur_modal.overview.selected')}</span>
+      </Text>
+      <Button variant="link" onClick={onOpenModal}>
+        {t('cultuurkuur_modal.overview.change')}
+      </Button>
+    </Inline>
   );
 };
 

@@ -1,14 +1,13 @@
 import { TFunction } from 'i18next';
 import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
+import { Controller, useController, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { EventTypes } from '@/constants/EventTypes';
-import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -331,8 +330,6 @@ const LocationStep = ({
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
-  const queryClient = useQueryClient();
-
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -359,50 +356,34 @@ const LocationStep = ({
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
   const audience = getOfferByIdQuery.data?.audience;
+  const audienceField = watch('audience.audienceType');
   const { hasRecentLocations } = useRecentLocations();
 
-  const offer = getOfferByIdQuery.data;
-
-  const labels = useMemo(() => getUniqueLabels(offer) ?? [], [offer]);
-
-  const addLabelMutation = useAddOfferLabelMutation();
-  const removeLabelMutation = useRemoveOfferLabelMutation();
-
-  const handleCultuurkuurLabel = async (label?: string) => {
-    if (!offerId) {
-      if (label === CULTUURKUUR_ON_SITE_LABEL) {
-        setValue('labels', [...labels, CULTUURKUUR_ON_SITE_LABEL]);
-      } else {
-        setValue(
-          'labels',
-          labels.filter((l) => l !== CULTUURKUUR_ON_SITE_LABEL),
-        );
-      }
-      return;
-    }
-
-    if (!labels.includes(CULTUURKUUR_ON_SITE_LABEL) && !label) return;
-    const mutation =
-      label === CULTUURKUUR_ON_SITE_LABEL
-        ? addLabelMutation
-        : removeLabelMutation;
-
-    await mutation.mutateAsync(
-      {
-        id: offerId,
-        scope,
-        label: CULTUURKUUR_ON_SITE_LABEL,
-      },
-      {
-        onSuccess: async () => {
-          await queryClient.invalidateQueries([scope, { id: offerId }]);
-        },
-      },
-    );
-  };
+  const { field } = useController({ name: 'location', control });
 
   useEffect(() => {
-    if (audience?.audienceType) {
+    if (
+      audienceField !== AudienceTypes.EDUCATION &&
+      !location?.country &&
+      isCultuurkuurFeatureFlagEnabled
+    ) {
+      field.onChange({
+        country: 'BE',
+        municipality: undefined,
+        place: undefined,
+        isOnline: false,
+      });
+    }
+  }),
+    [
+      audienceField,
+      location?.country,
+      isCultuurkuurFeatureFlagEnabled,
+      setValue,
+    ];
+
+  useEffect(() => {
+    if (audience?.audienceType && !isCultuurkuurFeatureFlagEnabled) {
       setAudienceType(audience.audienceType);
     }
 
@@ -415,7 +396,12 @@ const LocationStep = ({
     if (locationOnlineUrl) {
       setOnlineUrl(locationOnlineUrl);
     }
-  }, [locationStreetAndNumber, locationOnlineUrl, audience]);
+  }, [
+    locationStreetAndNumber,
+    locationOnlineUrl,
+    audience?.audienceType,
+    isCultuurkuurFeatureFlagEnabled,
+  ]);
 
   const handleChangeStreetAndNumber = (e: ChangeEvent<HTMLInputElement>) => {
     const shouldShowNextStepInCreate =
@@ -514,7 +500,7 @@ const LocationStep = ({
                           place: undefined,
                           country: Countries.BE,
                         });
-                        handleCultuurkuurLabel();
+                        labelsPickerProps.onConfirm([], 'location');
                       }}
                       active={isPhysicalLocation}
                       icon={
@@ -533,7 +519,7 @@ const LocationStep = ({
                           isOnline: true,
                           municipality: undefined,
                         });
-                        handleCultuurkuurLabel();
+                        labelsPickerProps.onConfirm([], 'location');
                       }}
                       active={isOnline}
                       icon={
@@ -554,7 +540,6 @@ const LocationStep = ({
                             municipality: undefined,
                             isOnline: false,
                           });
-                          handleCultuurkuurLabel(CULTUURKUUR_ON_SITE_LABEL);
                         }}
                         active={!isPhysicalLocation && !isOnline}
                         icon={
@@ -632,25 +617,32 @@ const LocationStep = ({
           if (!country || municipality?.zip === '0000') {
             return renderFieldWithRecentLocations(
               <>
-                <Inline alignItems="center" spacing={3} marginBottom={3}>
-                  <Icon
-                    name={Icons.CHECK_CIRCLE}
-                    color={getGlobalValue('successColor')}
-                  />
-                  <Text>{t('create.location.country.location_school')}</Text>
-                  <Button
-                    variant={ButtonVariants.LINK}
-                    onClick={() => {
-                      onFieldChange({
-                        country: Countries.BE,
-                        municipality: undefined,
-                      });
-                      setAudienceType(AudienceTypes.EVERYONE);
-                    }}
-                  >
-                    {t('create.location.country.change_location')}
-                  </Button>
-                </Inline>
+                {isCultuurkuurFeatureFlagEnabled && (
+                  <Text fontWeight="bold" marginBottom={3}>
+                    {t('create.location.is_cultuurkuur.title')}
+                  </Text>
+                )}
+                {!isCultuurkuurFeatureFlagEnabled && (
+                  <Inline alignItems="center" spacing={3} marginBottom={3}>
+                    <Icon
+                      name={Icons.CHECK_CIRCLE}
+                      color={getGlobalValue('successColor')}
+                    />
+                    <Text>{t('create.location.country.location_school')}</Text>
+                    <Button
+                      variant={ButtonVariants.LINK}
+                      onClick={() => {
+                        onFieldChange({
+                          country: Countries.BE,
+                          municipality: undefined,
+                        });
+                        setAudienceType(AudienceTypes.EVERYONE);
+                      }}
+                    >
+                      {t('create.location.country.change_location')}
+                    </Button>
+                  </Inline>
+                )}
                 {isCultuurkuurFeatureFlagEnabled &&
                   isCultuurkuurEvent &&
                   !regions.isLoading && (
@@ -659,6 +651,16 @@ const LocationStep = ({
                       {...labelsPickerProps}
                     />
                   )}
+
+                {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
+                  <Text
+                    variant={TextVariants.MUTED}
+                    maxWidth={parseSpacing(9)}
+                    marginTop={3}
+                  >
+                    {t('create.location.is_cultuurkuur.info')}
+                  </Text>
+                )}
                 {!isCultuurkuurFeatureFlagEnabled && (
                   <Alert maxWidth="53rem">
                     {t('create.location.country.location_school_info')}
