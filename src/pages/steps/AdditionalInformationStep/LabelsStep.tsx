@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
@@ -26,8 +27,8 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
-import { PermissionTypes } from '@/constants/PermissionTypes';
 
 type LabelsStepProps = StackProps & TabContentProps;
 
@@ -64,18 +65,7 @@ function LabelsStep({
 
   const getRolesQuery = useGetRolesQuery();
   const roles = getRolesQuery.data?.[0]?.permissions;
-  const isGodUser = roles?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
-
-  const cultuurkuurLabels = labels.filter((label) =>
-    label.startsWith('cultuurkuur_'),
-  );
-  const otherLabels = labels.filter(
-    (label) => !label.startsWith('cultuurkuur_'),
-  );
-
-  const labelsToShow = isGodUser
-    ? [...cultuurkuurLabels, ...otherLabels]
-    : [...otherLabels];
+  const labelsToShow = displayCultuurkuurLabels(roles, labels);
 
   useEffect(() => {
     onValidationChange(
