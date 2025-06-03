@@ -97,7 +97,7 @@ const useCultuurkuurLabelsPickerProps = (
   const locationLabels = useMemo(() => {
     return labels.filter(
       (label) =>
-        label.startsWith('cultuurkuur_werkingsregio') &&
+        label.startsWith('cultuurkuur_werkingsregio') ||
         label === CULTUURKUUR_ON_SITE_LABEL,
     );
   }, [labels]);
