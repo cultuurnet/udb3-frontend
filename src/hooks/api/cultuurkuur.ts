@@ -150,10 +150,17 @@ const useCultuurkuurLabelsPickerProps = (
       : setValue?.('labels', labelsToMutate);
   };
 
+  const handleClearCultuurkuurLabels = () => {
+    return offerId
+      ? updateLabels.mutate({ scope, offerId, labels: otherLabels })
+      : setValue?.('labels', otherLabels);
+  };
+
   return {
     selectedData: labels,
     data: available.data,
     onConfirm: handleCultuurkuurLabelsChange,
+    onClean: handleClearCultuurkuurLabels,
   };
 };
 
