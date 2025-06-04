@@ -85,7 +85,7 @@ const ScopeStep = ({
     setValue('audience.audienceType', audienceType);
 
     if (audienceType !== AudienceTypes.EDUCATION) {
-      labelsPickerEducationLevelProps.onConfirm([], 'education');
+      labelsPickerEducationLevelProps.onClean([]);
     }
 
     if (!offerId) return;

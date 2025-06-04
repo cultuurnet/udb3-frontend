@@ -324,6 +324,12 @@ const LocationStep = ({
 
   const { field } = useController({ name: 'location', control });
 
+  const regions = useGetCultuurkuurRegions();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    regions,
+  );
+
   useEffect(() => {
     if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
       field.onChange({
@@ -332,7 +338,6 @@ const LocationStep = ({
         place: undefined,
         isOnline: false,
       });
-      labelsPickerProps.onConfirm([], 'location');
     }
   }),
     [audienceField, location?.country, setValue];
@@ -363,12 +368,6 @@ const LocationStep = ({
 
     setStreetAndNumber(e.target.value);
   };
-
-  const regions = useGetCultuurkuurRegions();
-  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
-    { scope, offerId, setValue, watch },
-    regions,
-  );
 
   return (
     <Stack
