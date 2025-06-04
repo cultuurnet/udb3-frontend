@@ -29,7 +29,7 @@ import { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
-import { Box } from '@/ui/Box';
+import { Box, parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
@@ -180,7 +180,19 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
         {t('create.additionalInformation.cultuurkuur.on_location')}
       </CheckboxWithLabel>
       {isOnSiteActive && !regions.isLoading && (
-        <CultuurkuurLabelsPicker labelsKey="location" {...labelsPickerProps} />
+        <>
+          <CultuurkuurLabelsPicker
+            labelsKey="location"
+            {...labelsPickerProps}
+          />
+          <Text
+            variant={TextVariants.MUTED}
+            maxWidth={parseSpacing(9)}
+            marginTop={3}
+          >
+            {t('create.location.is_cultuurkuur.info')}
+          </Text>
+        </>
       )}
     </Stack>
   );

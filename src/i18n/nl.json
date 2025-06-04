@@ -913,8 +913,8 @@
       "education": "Onderwijsniveaus toevoegen"
     },
     "overview": {
-      "locations": "werkingsregio's",
-      "education_levels": "onderwijsniveaus",
+      "locations": "{{count}} werkingsregio's",
+      "education_levels": "{{count}} onderwijsniveaus",
       "selected": "zijn geselecteerd",
       "change": "Wijzig"
     }
