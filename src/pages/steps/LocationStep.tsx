@@ -373,6 +373,7 @@ const LocationStep = ({
         place: undefined,
         isOnline: false,
       });
+      labelsPickerProps.onConfirm([], 'location');
     }
   }),
     [

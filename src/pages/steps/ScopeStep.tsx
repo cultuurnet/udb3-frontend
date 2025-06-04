@@ -79,13 +79,8 @@ const ScopeStep = ({
 
   const queryClient = useQueryClient();
   const addAudienceMutation = useChangeAudienceMutation();
-  const regions = useGetCultuurkuurRegions();
 
   const levels = useGetEducationLevelsQuery();
-  const labelsPickerLocationProps = useCultuurkuurLabelsPickerProps(
-    { scope, offerId, setValue, watch },
-    regions,
-  );
   const labelsPickerEducationLevelProps = useCultuurkuurLabelsPickerProps(
     { scope, offerId, setValue, watch },
     levels,
@@ -95,7 +90,6 @@ const ScopeStep = ({
     setValue('audience.audienceType', audienceType);
 
     if (audienceType !== AudienceTypes.EDUCATION) {
-      labelsPickerLocationProps.onConfirm([], 'location');
       labelsPickerEducationLevelProps.onConfirm([], 'education');
     }
 
