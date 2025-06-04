@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { AudienceTypes } from '@/constants/AudienceType';
-import { OfferType, Scope, ScopeTypes } from '@/constants/OfferType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
@@ -273,13 +272,8 @@ const AdditionalInformationStep = ({
 
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
-    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
-    isCultuurkuurFeatureFlagEnabled;
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
   const [, hash] = asPath.split('#');
 
