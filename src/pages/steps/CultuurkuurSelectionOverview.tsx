@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next';
 
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Button } from '@/ui/Button';
+import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
+import { getValueFromTheme } from '@/ui/theme';
 import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
@@ -18,6 +20,8 @@ const CultuurkuurSelectionOverview = ({
   onOpenModal,
 }: Props) => {
   const { t } = useTranslation();
+  const getGlobalValue = getValueFromTheme('global');
+
   const selectedCount = (
     labelsKey === 'location'
       ? expandLevel1WithChildren(selectedData)
@@ -27,29 +31,22 @@ const CultuurkuurSelectionOverview = ({
   if (selectedCount === 0) return null;
 
   return (
-    <Inline alignItems="center" marginTop={4} spacing={2}>
+    <Inline spacing={1}>
+      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
       <Text>
-        <span
-          css={`
-            font-weight: bold;
-            margin-right: 4px;
-          `}
-        >
-          {selectedCount}
-        </span>
-        <span
-          css={`
-            font-weight: bold;
-            margin-right: 4px;
-          `}
-        >
-          {t(
-            labelsKey === 'location'
-              ? 'cultuurkuur_modal.overview.locations'
-              : 'cultuurkuur_modal.overview.education_levels',
-          )}
-        </span>
-        <span>{t('cultuurkuur_modal.overview.selected')}</span>
+        <Inline alignItems="center">
+          <Button variant="link" onClick={onOpenModal}>
+            <span>
+              {t(
+                labelsKey === 'location'
+                  ? 'cultuurkuur_modal.overview.locations'
+                  : 'cultuurkuur_modal.overview.education_levels',
+                { count: selectedCount },
+              )}
+            </span>
+          </Button>
+          <span>{t('cultuurkuur_modal.overview.selected')}</span>
+        </Inline>
       </Text>
       <Button variant="link" onClick={onOpenModal}>
         {t('cultuurkuur_modal.overview.change')}

@@ -39,18 +39,23 @@ const CultuurkuurLabelsPicker = ({
     return flatData.filter((data) => selectedData.includes(data.label));
   }, [flatData, selectedData]);
 
+  const hasPreselectedValues = preSelectedValues.length === 0;
+
   return (
     <>
-      <Button
-        variant={ButtonVariants.LINK}
-        paddingLeft={0}
-        onClick={() => setIsCultuurkuurModalVisible(true)}
-      >
-        <Inline spacing={2}>
-          <Icon name={Icons.PLUS_CIRCLE} />
-          <span>{t(`cultuurkuur_modal.title.${labelsKey}`)}</span>
-        </Inline>
-      </Button>
+      {hasPreselectedValues && (
+        <Button
+          variant={ButtonVariants.LINK}
+          paddingLeft={0}
+          marginBottom={hasPreselectedValues ? 0 : 4}
+          onClick={() => setIsCultuurkuurModalVisible(true)}
+        >
+          <Inline spacing={2}>
+            <Icon name={Icons.PLUS_CIRCLE} />
+            <span>{t(`cultuurkuur_modal.title.${labelsKey}`)}</span>
+          </Inline>
+        </Button>
+      )}
       {isCultuurkuurModalVisible && (
         <CultuurkuurModal
           visible

@@ -114,14 +114,18 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
               <>
-                <Text fontWeight="bold" marginBottom={2}>
+                <Text fontWeight="bold" marginBottom={3}>
                   {t(`create.name_and_age.age.title`)}
                 </Text>
                 <CultuurkuurLabelsPicker
                   labelsKey="education"
                   {...labelsPickerProps}
                 />
-                <Text variant={TextVariants.MUTED} maxWidth={parseSpacing(9)}>
+                <Text
+                  variant={TextVariants.MUTED}
+                  maxWidth={parseSpacing(9)}
+                  marginTop={3}
+                >
                   <Trans
                     i18nKey={'create.name_and_age.cultuurkuur.info'}
                     components={{
@@ -129,7 +133,6 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                         <Link
                           css={`
                             text-decoration: underline;
-                            font-weight: bold;
                           `}
                           href={t('create.name_and_age.cultuurkuur.link')}
                         />
