@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Countries, Country } from '@/types/Country';
 import { BoxProps, getBoxProps } from '@/ui/Box';
 import { Button } from '@/ui/Button';
@@ -9,7 +8,6 @@ import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
-import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
 import { FlagIcon } from '../../ui/FlagIcon';
 
 type Props = BoxProps & {
@@ -30,10 +28,6 @@ const CountryPicker = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
-
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
 
   return (
     <Dropdown
@@ -72,15 +66,6 @@ const CountryPicker = ({
       ))}
 
       <Dropdown.Divider />
-
-      {!isCultuurkuurFeatureFlagEnabled && showSchoolLocation && (
-        <Dropdown.Item onClick={() => onChange(undefined)}>
-          <Inline spacing={3}>
-            <CultuurKuurIcon />
-            <Text>{t('country_picker.location_school')}</Text>
-          </Inline>
-        </Dropdown.Item>
-      )}
     </Dropdown>
   );
 };

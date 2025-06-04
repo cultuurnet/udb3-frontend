@@ -1,16 +1,9 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { useAddContactPointMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -68,14 +61,9 @@ const ContactInfoStep = ({
   const [isCultuurkuurAlertVisible, setIsCultuurkuurAlertVisible] =
     useState(false);
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
+  const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
+    getEntityByIdQuery.data?.hiddenLabels,
   );
-
-  const isCultuurkuurOrganizer =
-    hasCultuurkuurOrganizerLabel(getEntityByIdQuery.data?.hiddenLabels) &&
-    isCultuurkuurFeatureFlagEnabled;
-
   const rawContactInfo =
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 

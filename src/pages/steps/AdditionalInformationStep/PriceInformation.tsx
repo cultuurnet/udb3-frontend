@@ -12,7 +12,6 @@ import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import {
   TabContentProps,
@@ -186,14 +185,8 @@ const PriceInformation = ({
     control,
   });
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
-    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
-    isCultuurkuurFeatureFlagEnabled;
-
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
   const rates = watch('rates');
   const ratesRef = useRef(rates);
 
@@ -455,7 +448,7 @@ const PriceInformation = ({
             );
           })}
           <Inline marginTop={3}>
-            {!(isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent) && (
+            {!isCultuurkuurEvent && (
               <Button
                 onClick={() => {
                   append(
