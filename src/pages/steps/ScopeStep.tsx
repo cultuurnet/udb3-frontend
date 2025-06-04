@@ -12,7 +12,6 @@ import {
   useGetEducationLevelsQuery,
 } from '@/hooks/api/cultuurkuur';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box, parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
@@ -48,10 +47,6 @@ const ScopeStep = ({
 }: Props) => {
   const { t } = useTranslation();
   const { replace } = useRouter();
-
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
 
   const audienceField = watch('audience.audienceType');
 
@@ -142,42 +137,41 @@ const ScopeStep = ({
                 disabled={!!offerId}
               />
             </Inline>
-            {isCultuurkuurFeatureFlagEnabled &&
-              field.value === OfferTypes.EVENTS && (
-                <Stack spacing={4} maxWidth="36.5rem">
-                  <FormElement
-                    id={field.name}
-                    label={
-                      <Box opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}>
-                        {t('steps.offerTypeStep.cultuurkuur_event')}
-                        <CultuurKuurIcon marginLeft={2} />
-                      </Box>
-                    }
-                    labelVariant={LabelVariants.NORMAL}
-                    labelPosition={LabelPositions.RIGHT}
-                    Component={
-                      <RadioButton
-                        type={RadioButtonTypes.SWITCH}
-                        checked={isCultuurkuurEvent}
-                        color={colors.udbMainPositiveGreen}
-                        disabled={offerId && isCultuurkuurEvent}
-                        onChange={(e) => {
-                          handleOnChangeAudience(
-                            e.target.checked
-                              ? AudienceTypes.EDUCATION
-                              : AudienceTypes.EVERYONE,
-                          );
-                        }}
-                      />
-                    }
-                  />
-                  {isCultuurkuurEvent && (
-                    <Alert variant={AlertVariants.PRIMARY}>
-                      {t('steps.offerTypeStep.cultuurkuur_info')}
-                    </Alert>
-                  )}
-                </Stack>
-              )}
+            {field.value === OfferTypes.EVENTS && (
+              <Stack spacing={4} maxWidth="36.5rem">
+                <FormElement
+                  id={field.name}
+                  label={
+                    <Box opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}>
+                      {t('steps.offerTypeStep.cultuurkuur_event')}
+                      <CultuurKuurIcon marginLeft={2} />
+                    </Box>
+                  }
+                  labelVariant={LabelVariants.NORMAL}
+                  labelPosition={LabelPositions.RIGHT}
+                  Component={
+                    <RadioButton
+                      type={RadioButtonTypes.SWITCH}
+                      checked={isCultuurkuurEvent}
+                      color={colors.udbMainPositiveGreen}
+                      disabled={offerId && isCultuurkuurEvent}
+                      onChange={(e) => {
+                        handleOnChangeAudience(
+                          e.target.checked
+                            ? AudienceTypes.EDUCATION
+                            : AudienceTypes.EVERYONE,
+                        );
+                      }}
+                    />
+                  }
+                />
+                {isCultuurkuurEvent && (
+                  <Alert variant={AlertVariants.PRIMARY}>
+                    {t('steps.offerTypeStep.cultuurkuur_info')}
+                  </Alert>
+                )}
+              </Stack>
+            )}
           </Stack>
         );
       }}

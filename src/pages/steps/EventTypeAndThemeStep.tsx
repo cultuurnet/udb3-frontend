@@ -15,7 +15,6 @@ import {
 } from '@/hooks/api/offers';
 import { EventType } from '@/hooks/api/terms';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Term } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -217,10 +216,6 @@ const EventTypeAndThemeStep = ({
   const [, hash] = asPath.split('#');
   const eventTypeAndThemeContainer = useRef(null);
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
@@ -228,10 +223,7 @@ const EventTypeAndThemeStep = ({
   const selectedTypeId = watch('typeAndTheme.type.id');
 
   const isCultuurkuurAlertVisible =
-    offerId &&
-    isCultuurkuurEvent &&
-    isCultuurkuurFeatureFlagEnabled &&
-    !selectedTypeId;
+    offerId && isCultuurkuurEvent && !selectedTypeId;
 
   const typeAndTheme = useWatch({
     control,
