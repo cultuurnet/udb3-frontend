@@ -9,7 +9,7 @@ import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
-import { useGetRolesQuery } from '@/hooks/api/user';
+import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { Label } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
@@ -45,9 +45,9 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
     getUniqueLabels(organizer) ?? [],
   );
 
-  const getRolesQuery = useGetRolesQuery();
-  const roles = getRolesQuery.data?.[0]?.permissions;
-  const labelsToShow = displayCultuurkuurLabels(roles, labels);
+  const getPermissionsQuery = useGetPermissionsQuery();
+  const permissions = getPermissionsQuery.data;
+  const labelsToShow = displayCultuurkuurLabels(permissions, labels);
 
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
