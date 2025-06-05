@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
-import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { useGetRolesQuery } from '@/hooks/api/user';
+import { useGetPermissionsQuery, useGetRolesQuery } from '@/hooks/api/user';
 import {
   TabContentProps,
   ValidationStatus,
@@ -62,9 +61,9 @@ function LabelsStep({
 
   const queryClient = useQueryClient();
 
-  const getRolesQuery = useGetRolesQuery();
-  const roles = getRolesQuery.data?.[0]?.permissions;
-  const labelsToShow = displayCultuurkuurLabels(roles, labels);
+  const getPermissionsQuery = useGetPermissionsQuery();
+  const permissions = getPermissionsQuery.data;
+  const labelsToShow = displayCultuurkuurLabels(permissions, labels);
 
   useEffect(() => {
     onValidationChange(
