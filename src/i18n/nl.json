@@ -1179,7 +1179,8 @@
         "place": "Locatie"
       },
       "cultuurkuur_event": "Dit is een evenement voor scholen",
-      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen."
+      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
+      "cultuurkuur_tooltip": "Deze knop maakt van je evenement een evenement voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
     }
   },
   "themes": {

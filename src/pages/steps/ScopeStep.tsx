@@ -22,6 +22,7 @@ import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
+import { Tooltip } from '@/ui/Tooltip';
 
 import { CultuurKuurIcon } from '../../ui/CultuurKuurIcon';
 import { Scope } from '../create/OfferForm';
@@ -142,10 +143,21 @@ const ScopeStep = ({
                 <FormElement
                   id={field.name}
                   label={
-                    <Box opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}>
-                      {t('steps.offerTypeStep.cultuurkuur_event')}
+                    <Inline
+                      alignItems="center"
+                      spacing={2}
+                      opacity={offerId && isCultuurkuurEvent ? 0.7 : 1.0}
+                    >
+                      <span>{t('steps.offerTypeStep.cultuurkuur_event')}</span>
                       <CultuurKuurIcon marginLeft={2} />
-                    </Box>
+                      {offerId && !isCultuurkuurEvent && (
+                        <Tooltip
+                          content={t('steps.offerTypeStep.cultuurkuur_tooltip')}
+                          id={t('steps.offerTypeStep.cultuurkuur_tooltip')}
+                          placement="bottom"
+                        />
+                      )}
+                    </Inline>
                   }
                   labelVariant={LabelVariants.NORMAL}
                   labelPosition={LabelPositions.RIGHT}
@@ -165,6 +177,7 @@ const ScopeStep = ({
                     />
                   }
                 />
+
                 {isCultuurkuurEvent && (
                   <Alert variant={AlertVariants.PRIMARY}>
                     {t('steps.offerTypeStep.cultuurkuur_info')}
