@@ -7,6 +7,10 @@ import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { StepProps } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
+import {
+  getEducationLabels,
+  getLocationLabels,
+} from '@/utils/cultuurkuurLabels';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
@@ -95,20 +99,11 @@ const useCultuurkuurLabelsPickerProps = (
   );
 
   const locationLabels = useMemo(() => {
-    return labels.filter(
-      (label) =>
-        label.startsWith('cultuurkuur_werkingsregio') ||
-        label === CULTUURKUUR_ON_SITE_LABEL,
-    );
+    return getLocationLabels(labels);
   }, [labels]);
 
   const educationLabels = useMemo(() => {
-    return labels.filter(
-      (label) =>
-        label.startsWith('cultuurkuur_') &&
-        label !== CULTUURKUUR_ON_SITE_LABEL &&
-        !label.startsWith('cultuurkuur_werkingsregio'),
-    );
+    return getEducationLabels(labels);
   }, [labels]);
 
   const otherLabels = useMemo(() => {

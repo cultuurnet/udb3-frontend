@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Cultuurkuur';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 
 const sortByName = (entities: HierarchicalData['children'] = []) => {
@@ -10,6 +11,25 @@ const sortByName = (entities: HierarchicalData['children'] = []) => {
 
 const dataToLabels = (newData: HierarchicalData[]) => {
   return newData.map((data) => data.label);
+};
+
+const getLocationLabels = (labels: string[]) => {
+  return labels?.filter(
+    (label) =>
+      label.startsWith('cultuurkuur_werkingsregio') ||
+      label === CULTUURKUUR_ON_SITE_LABEL,
+  );
+};
+
+const getEducationLabels = (labels: string[]) => {
+  {
+    return labels?.filter(
+      (label) =>
+        label.startsWith('cultuurkuur_') &&
+        label !== CULTUURKUUR_ON_SITE_LABEL &&
+        !label.startsWith('cultuurkuur_werkingsregio'),
+    );
+  }
 };
 
 const getAllLeafNodes = (entity: HierarchicalData): HierarchicalData[] => {
@@ -281,6 +301,8 @@ export {
   expandLevel1WithChildren,
   findParent,
   getAllLeafNodes,
+  getEducationLabels,
+  getLocationLabels,
   handleSelectedLocations,
   removeAndCleanParents,
   sortByName,
