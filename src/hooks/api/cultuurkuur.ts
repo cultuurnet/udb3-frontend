@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
-import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Cultuurkuur';
 import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { StepProps } from '@/pages/steps/Steps';
