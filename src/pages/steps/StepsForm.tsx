@@ -21,7 +21,12 @@ import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Toast } from '@/ui/Toast';
+import {
+  getEducationLabels,
+  getLocationLabels,
+} from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 import { useToast } from '../manage/movies/useToast';
 import { DUPLICATE_STATUS_CODE } from '../PlaceAddModal';
@@ -166,6 +171,12 @@ const StepsForm = ({
 
   const isEventTypeSelected = form.getValues('typeAndTheme.type');
 
+  const labels = getUniqueLabels(offer);
+
+  const hasCultuurkuurLocationLabels = getLocationLabels(labels).length > 0;
+
+  const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
+
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
       setFetchErrors(undefined);
@@ -231,7 +242,11 @@ const StepsForm = ({
       variant={ButtonVariants.SECONDARY}
       onClick={() => setIsPublishLaterModalVisible(true)}
       key="publishLater"
-      disabled={!isEventTypeSelected}
+      disabled={
+        !isEventTypeSelected ||
+        !hasCultuurkuurEducationLabels ||
+        !hasCultuurkuurLocationLabels
+      }
     >
       {t('create.actions.publish_later')}
     </Button>
@@ -314,7 +329,11 @@ const StepsForm = ({
             {footerStatus === FooterStatus.PUBLISH && [
               <Button
                 variant={ButtonVariants.SUCCESS}
-                disabled={!isEventTypeSelected}
+                disabled={
+                  !isEventTypeSelected ||
+                  !hasCultuurkuurEducationLabels ||
+                  !hasCultuurkuurLocationLabels
+                }
                 onClick={() => {
                   publishOffer();
                 }}
