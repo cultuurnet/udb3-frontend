@@ -3,6 +3,10 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import {
+  CULTUURKUUR_EDUCATION_LABELS_ERROR,
+  CULTUURKUUR_LOCATION_LABELS_ERROR,
+} from '@/constants/Cultuurkuur';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   locationStepConfiguration,
@@ -30,7 +34,6 @@ import { useGetPlace } from './hooks/useGetPlace';
 import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
-import { nameAndAgeRangeStepConfiguration } from './NameAndAgeRangeStep';
 import { Steps, StepsConfiguration } from './Steps';
 
 const getValue = getValueFromTheme('createPage');
@@ -174,8 +177,25 @@ const StepsForm = ({
       reload();
     },
     onError: (error) => {
-      if (error.status === DUPLICATE_STATUS_CODE) {
-        setFetchErrors({ nameAndAgeRange: error });
+      const newErrors: Record<string, any> = {};
+
+      const { status, message } = error;
+
+      const parsedMessage = JSON.parse(message);
+
+      if (
+        status === DUPLICATE_STATUS_CODE ||
+        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR)
+      ) {
+        newErrors.nameAndAgeRange = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_LOCATION_LABELS_ERROR)) {
+        newErrors.location = error;
+      }
+
+      if (Object.keys(newErrors).length) {
+        setFetchErrors(newErrors);
       }
     },
     convertFormDataToOffer,

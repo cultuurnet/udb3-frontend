@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_EDUCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
 import { OfferTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -97,6 +98,10 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
   const levels = useGetEducationLevelsQuery();
   const labelsPickerProps = useCultuurkuurLabelsPickerProps(props, levels);
 
+  const isEducationLabelError =
+    error?.message.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasEducationLabels;
+
   return (
     <Controller
       control={control}
@@ -140,6 +145,11 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                     }}
                   ></Trans>
                 </Text>
+                {isEducationLabelError && (
+                  <Text variant={TextVariants.ERROR}>
+                    {t('cultuurkuur_modal.overview.error_education_levels')}
+                  </Text>
+                )}
               </>
             )}
             <AlertDuplicatePlace

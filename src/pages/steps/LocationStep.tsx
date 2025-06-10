@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -19,7 +20,6 @@ import {
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
@@ -293,6 +293,7 @@ const LocationStep = ({
   setValue,
   trigger,
   watch,
+  error,
   ...props
 }: PlaceStepProps) => {
   const { t } = useTranslation();
@@ -317,18 +318,26 @@ const LocationStep = ({
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
-  const audience = getOfferByIdQuery.data?.audience;
   const audienceField = watch('audience.audienceType');
   const { hasRecentLocations } = useRecentLocations();
 
   const { field } = useController({ name: 'location', control });
+
+  const { isOnline, country } = field?.value as OfferFormData['location'];
 
   const regions = useGetCultuurkuurRegions();
   const labelsPickerProps = useCultuurkuurLabelsPickerProps(
     { scope, offerId, setValue, watch },
     regions,
   );
+
+  const isPhysicalLocation = !!country && !isOnline;
+
+  const isLocationLabelError =
+    error?.message.includes(CULTUURKUUR_LOCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasLocationLabels &&
+    !isPhysicalLocation &&
+    !isOnline;
 
   useEffect(() => {
     if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
@@ -762,6 +771,11 @@ const LocationStep = ({
           );
         }}
       />
+      {isLocationLabelError && (
+        <Text variant={TextVariants.ERROR}>
+          {t('cultuurkuur_modal.overview.error_locations')}
+        </Text>
+      )}
     </Stack>
   );
 };

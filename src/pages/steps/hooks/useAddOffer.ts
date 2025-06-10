@@ -1,3 +1,11 @@
+import getConfig from 'next/config';
+
+import { AudienceTypes } from '@/constants/AudienceType';
+import {
+  CULTUURKUUR_EDUCATION_LABELS_ERROR,
+  CULTUURKUUR_LOCATION_LABELS_ERROR,
+  CULTUURKUUR_ON_SITE_LABEL,
+} from '@/constants/Cultuurkuur';
 import { OfferTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
@@ -8,6 +16,10 @@ import {
 } from '@/hooks/api/productions';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
+import {
+  getEducationLabels,
+  getLocationLabels,
+} from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
 
 type UseAddOfferArgument = {
@@ -25,6 +37,7 @@ const useAddOffer = ({
   label,
   initialOffer,
 }: UseAddOfferArgument) => {
+  const { publicRuntimeConfig } = getConfig();
   const addEventMutation = useAddEventMutation();
   const addPlaceMutation = useAddPlaceMutation();
 
@@ -34,6 +47,8 @@ const useAddOffer = ({
     useCreateProductionWithEventsMutation();
   const addEventToProductionByIdMutation =
     useAddEventToProductionByIdMutation();
+
+  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
 
   return async (formData: FormDataUnion) => {
     const { scope, production } = formData;
@@ -46,6 +61,33 @@ const useAddOffer = ({
     };
 
     const payload = convertFormDataToOffer(fullOffer);
+
+    const isCultuurkuurEvent =
+      payload.audience?.audienceType === AudienceTypes.EDUCATION;
+
+    if (isCultuurkuurEvent) {
+      const educationLabels = getEducationLabels(payload.labels);
+
+      const locationLabels = getLocationLabels(payload.labels);
+
+      const errors = [];
+
+      if (!educationLabels || educationLabels.length === 0) {
+        errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
+      }
+
+      if (
+        payload.location?.id === CULTUURKUUR_LOCATION_ID &&
+        (!locationLabels || locationLabels.length === 0)
+      ) {
+        errors.push(CULTUURKUUR_LOCATION_LABELS_ERROR);
+      }
+
+      if (errors.length > 0) {
+        onError?.(new FetchError(403, JSON.stringify(errors)));
+        return;
+      }
+    }
 
     const addOfferMutation =
       scope === OfferTypes.EVENTS ? addEventMutation : addPlaceMutation;
