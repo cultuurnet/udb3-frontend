@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import {
   CULTUURKUUR_EDUCATION_LABELS_ERROR,
   CULTUURKUUR_LOCATION_LABELS_ERROR,
@@ -169,13 +170,18 @@ const StepsForm = ({
 
   const initialOffer = isOnDuplicatePage ? offer : undefined;
 
+  const isCultuurkuurEvent =
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+
   const isEventTypeSelected = form.getValues('typeAndTheme.type');
 
   const labels = getUniqueLabels(offer);
 
-  const hasCultuurkuurLocationLabels = getLocationLabels(labels).length > 0;
+  const hasCultuurkuurLocationLabels =
+    isCultuurkuurEvent && getLocationLabels(labels).length > 0;
 
-  const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
+  const hasCultuurkuurEducationLabels =
+    isCultuurkuurEvent && getEducationLabels(labels).length > 0;
 
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
