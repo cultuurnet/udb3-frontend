@@ -22,14 +22,12 @@ const getLocationLabels = (labels: string[]) => {
 };
 
 const getEducationLabels = (labels: string[]) => {
-  {
-    return labels?.filter(
-      (label) =>
-        label.startsWith('cultuurkuur_') &&
-        label !== CULTUURKUUR_ON_SITE_LABEL &&
-        !label.startsWith('cultuurkuur_werkingsregio'),
-    );
-  }
+  return labels?.filter(
+    (label) =>
+      label.startsWith('cultuurkuur_') &&
+      label !== CULTUURKUUR_ON_SITE_LABEL &&
+      !label.startsWith('cultuurkuur_werkingsregio'),
+  );
 };
 
 const getAllLeafNodes = (entity: HierarchicalData): HierarchicalData[] => {
