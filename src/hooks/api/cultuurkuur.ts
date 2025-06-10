@@ -102,9 +102,13 @@ const useCultuurkuurLabelsPickerProps = (
     return getLocationLabels(labels);
   }, [labels]);
 
+  const hasLocationLabels = locationLabels && locationLabels?.length > 0;
+
   const educationLabels = useMemo(() => {
     return getEducationLabels(labels);
   }, [labels]);
+
+  const hasEducationLabels = educationLabels && educationLabels.length > 0;
 
   const otherLabels = useMemo(() => {
     return labels.filter((label) => !label.startsWith('cultuurkuur_'));
@@ -154,6 +158,8 @@ const useCultuurkuurLabelsPickerProps = (
   return {
     selectedData: labels,
     data: available.data,
+    hasLocationLabels: hasLocationLabels,
+    hasEducationLabels: hasEducationLabels,
     onConfirm: handleCultuurkuurLabelsChange,
     onClean: handleClearCultuurkuurLabels,
   };
