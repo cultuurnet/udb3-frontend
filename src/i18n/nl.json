@@ -916,7 +916,9 @@
       "locations": "{{count}} werkingsregio's",
       "education_levels": "{{count}} onderwijsniveaus",
       "selected": "zijn geselecteerd",
-      "change": "Wijzig"
+      "change": "Wijzig",
+      "error_locations": "Selecteer minstens één werkingsregio",
+      "error_education_levels": "Selecteer minstens één onderwijsniveau"
     }
   },
   "location": {
