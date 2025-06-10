@@ -333,11 +333,17 @@ const LocationStep = ({
 
   const isPhysicalLocation = !!country && !isOnline;
 
-  const isLocationLabelError =
+  const isNewEventWithoutLabels =
     error?.message.includes(CULTUURKUUR_LOCATION_LABELS_ERROR) &&
     !labelsPickerProps.hasLocationLabels &&
     !isPhysicalLocation &&
     !isOnline;
+
+  const isExistingEventWithoutLabels =
+    offerId && !labelsPickerProps.hasLocationLabels;
+
+  const isLocationLabelErrorVisible =
+    isNewEventWithoutLabels || isExistingEventWithoutLabels;
 
   useEffect(() => {
     if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
@@ -771,7 +777,7 @@ const LocationStep = ({
           );
         }}
       />
-      {isLocationLabelError && (
+      {isLocationLabelErrorVisible && (
         <Text variant={TextVariants.ERROR}>
           {t('cultuurkuur_modal.overview.error_locations')}
         </Text>

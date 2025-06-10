@@ -72,7 +72,13 @@ const useEditNameAndAgeRange = ({
   };
 };
 
-const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
+const NameAndAgeRangeStep = ({
+  offerId,
+  control,
+  name,
+  error,
+  ...props
+}: StepProps) => {
   const { scope } = props;
   const { t } = useTranslation();
   const router = useRouter();
@@ -96,11 +102,20 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
     props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const levels = useGetEducationLevelsQuery();
-  const labelsPickerProps = useCultuurkuurLabelsPickerProps(props, levels);
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId },
+    levels,
+  );
 
-  const isEducationLabelError =
+  const isNewEventWithoutLabels =
     error?.message.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) &&
     !labelsPickerProps.hasEducationLabels;
+
+  const isExistingEventWithoutLabels =
+    offerId && !labelsPickerProps.hasEducationLabels;
+
+  const isEducationLabelErrorVisible =
+    isNewEventWithoutLabels || isExistingEventWithoutLabels;
 
   return (
     <Controller
@@ -145,7 +160,7 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                     }}
                   ></Trans>
                 </Text>
-                {isEducationLabelError && (
+                {isEducationLabelErrorVisible && (
                   <Text variant={TextVariants.ERROR}>
                     {t('cultuurkuur_modal.overview.error_education_levels')}
                   </Text>
