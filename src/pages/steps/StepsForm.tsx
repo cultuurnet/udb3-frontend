@@ -184,6 +184,7 @@ const StepsForm = ({
   const isButtonDisabled =
     isCultuurkuurEvent &&
     (!hasCultuurkuurEducationLabels ||
+      !hasCultuurkuurLocationLabels ||
       !isEventTypeSelected);
 
   const addOffer = useAddOffer({
