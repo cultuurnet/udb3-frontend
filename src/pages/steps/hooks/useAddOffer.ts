@@ -5,6 +5,8 @@ import {
   CULTUURKUUR_EDUCATION_LABELS_ERROR,
   CULTUURKUUR_LOCATION_LABELS_ERROR,
   CULTUURKUUR_ON_SITE_LABEL,
+  CULTUURKUUR_THEME_ERROR,
+  CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
 import { OfferTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
@@ -70,6 +72,10 @@ const useAddOffer = ({
 
       const locationLabels = getLocationLabels(payload.labels);
 
+      const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
+
+      const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
+
       const errors = [];
 
       if (!educationLabels || educationLabels.length === 0) {
@@ -81,6 +87,14 @@ const useAddOffer = ({
         (!locationLabels || locationLabels.length === 0)
       ) {
         errors.push(CULTUURKUUR_LOCATION_LABELS_ERROR);
+      }
+
+      if (!isTypeSelected) {
+        errors.push(CULTUURKUUR_TYPE_ERROR);
+      }
+
+      if (!isThemeSelected) {
+        errors.push(CULTUURKUUR_THEME_ERROR);
       }
 
       if (errors.length > 0) {

@@ -7,12 +7,16 @@ import { AudienceTypes } from '@/constants/AudienceType';
 import {
   CULTUURKUUR_EDUCATION_LABELS_ERROR,
   CULTUURKUUR_LOCATION_LABELS_ERROR,
+  CULTUURKUUR_THEME_ERROR,
+  CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
+import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
   locationStepConfiguration,
   useEditLocation,
 } from '@/pages/steps/LocationStep';
+import { Event } from '@/types/Event';
 import { hasLegacyLocation, Offer } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -28,6 +32,7 @@ import {
 } from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import { useToast } from '../manage/movies/useToast';
 import { DUPLICATE_STATUS_CODE } from '../PlaceAddModal';
@@ -173,19 +178,50 @@ const StepsForm = ({
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
-  const isEventTypeSelected = form.getValues('typeAndTheme.type');
+  const isCultuurkuurEventTypeSelected =
+    form.getValues('typeAndTheme.type') || offer?.terms?.length > 0;
 
   const labels = getUniqueLabels(offer);
 
-  const hasCultuurkuurLocationLabels = getLocationLabels(labels).length > 0;
+  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
+
+  const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
+
+  const hasCultuurkuurLocationLabels =
+    CULTUURKUUR_LOCATION_ID !== locationId
+      ? true
+      : getLocationLabels(labels).length > 0;
 
   const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
+
+  const getTypesByScopeQuery = useGetTypesByScopeQuery({
+    scope,
+  });
+
+  const eventTypes = getTypesByScopeQuery.data;
+
+  const hasEventThemes =
+    eventTypes
+      ?.filter((eventType) =>
+        offer?.terms?.some((term) => term.id === eventType.id),
+      )
+      .map((eventType) => eventType.otherSuggestedTerms ?? [])
+      .flat().length > 0;
+
+  const hasSelectedThemes = eventTypes?.some((eventType) =>
+    eventType.otherSuggestedTerms?.some((suggestedTerm) =>
+      offer?.terms?.some((term) => term.id === suggestedTerm.id),
+    ),
+  );
+
+  const isCultuurkuurThemeSelected = !hasEventThemes || hasSelectedThemes;
 
   const isButtonDisabled =
     isCultuurkuurEvent &&
     (!hasCultuurkuurEducationLabels ||
       !hasCultuurkuurLocationLabels ||
-      !isEventTypeSelected);
+      !isCultuurkuurEventTypeSelected ||
+      !isCultuurkuurThemeSelected);
 
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
@@ -213,6 +249,14 @@ const StepsForm = ({
 
       if (parsedMessage?.includes(CULTUURKUUR_LOCATION_LABELS_ERROR)) {
         newErrors.location = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_TYPE_ERROR)) {
+        newErrors.typeAndTheme = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_THEME_ERROR)) {
+        newErrors.typeAndTheme = error;
       }
 
       if (Object.keys(newErrors).length) {

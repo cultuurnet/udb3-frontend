@@ -134,13 +134,12 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
   );
 };
 
-const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
+const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
   const { i18n } = useTranslation();
   const changeAddressMutation = useChangeAddressMutation();
   const changeOnlineUrl = useChangeOnlineUrlMutation();
   const deleteOnlineUrl = useDeleteOnlineUrlMutation();
   const changeAttendanceMode = useChangeAttendanceModeMutation();
-  const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
 
   return async ({ location }: FormDataUnion) => {
@@ -174,10 +173,13 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     // For events
 
     if (location.isOnline) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.ONLINE,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.ONLINE,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       if (location.onlineUrl) {
         changeOnlineUrl.mutate({
@@ -185,9 +187,12 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
           onlineUrl: location.onlineUrl,
         });
       } else {
-        deleteOnlineUrl.mutate({
-          eventId: offerId,
-        });
+        deleteOnlineUrl.mutate(
+          {
+            eventId: offerId,
+          },
+          { onSuccess: () => onSuccess(scope) },
+        );
       }
 
       return;
@@ -196,33 +201,45 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     const isCultuurkuurLocation = !location.country;
 
     if (isCultuurkuurLocation) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.OFFLINE,
-        location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.OFFLINE,
+          location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
-      const changeLocationPromise = changeLocationMutation.mutateAsync({
-        locationId: CULTUURKUUR_LOCATION_ID,
-        eventId: offerId,
-      });
-
-      await changeLocationPromise;
+      await changeLocationMutation.mutateAsync(
+        {
+          locationId: CULTUURKUUR_LOCATION_ID,
+          eventId: offerId,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       return;
     }
 
     if (!location.place) return;
 
-    await changeAttendanceMode.mutateAsync({
-      eventId: offerId,
-      attendanceMode: AttendanceMode.OFFLINE,
-      location: location.place['@id'],
-    });
+    await changeAttendanceMode.mutateAsync(
+      {
+        eventId: offerId,
+        attendanceMode: AttendanceMode.OFFLINE,
+        location: location.place['@id'],
+      },
+      {
+        onSuccess: () => onSuccess(scope),
+      },
+    );
 
-    deleteOnlineUrl.mutate({
-      eventId: offerId,
-    });
+    deleteOnlineUrl.mutate(
+      {
+        eventId: offerId,
+      },
+      { onSuccess: () => onSuccess(scope) },
+    );
   };
 };
 
@@ -299,7 +316,6 @@ const LocationStep = ({
   const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
-  const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
   const [hasOnlineUrlError, setHasOnlineUrlError] = useState(false);
   const scope = watch('scope') ?? props.scope;
@@ -340,7 +356,10 @@ const LocationStep = ({
     !isOnline;
 
   const isExistingEventWithoutLabels =
-    offerId && !labelsPickerProps.hasLocationLabels;
+    offerId &&
+    !labelsPickerProps.hasLocationLabels &&
+    !isPhysicalLocation &&
+    !isOnline;
 
   const isLocationLabelErrorVisible =
     isNewEventWithoutLabels || isExistingEventWithoutLabels;

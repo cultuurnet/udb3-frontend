@@ -115,7 +115,8 @@ const NameAndAgeRangeStep = ({
     offerId && !labelsPickerProps.hasEducationLabels;
 
   const isEducationLabelErrorVisible =
-    isNewEventWithoutLabels || isExistingEventWithoutLabels;
+    isCultuurkuurEvent &&
+    (isNewEventWithoutLabels || isExistingEventWithoutLabels);
 
   return (
     <Controller
