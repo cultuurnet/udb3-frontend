@@ -15,14 +15,12 @@ type NameStepProps = StackProps & StepProps;
 const NameStep = ({
   formState: { errors },
   control,
-  watch,
+  scope,
   onChange,
   mainLanguage,
   ...props
 }: NameStepProps) => {
   const { t, i18n } = useTranslation();
-
-  const scope = watch('scope');
 
   return (
     <Stack {...getStackProps(props)}>

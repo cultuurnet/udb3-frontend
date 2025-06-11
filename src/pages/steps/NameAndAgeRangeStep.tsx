@@ -76,10 +76,12 @@ const NameAndAgeRangeStep = ({
   offerId,
   control,
   name,
+  scope,
   error,
+  watch,
+  setValue,
   ...props
 }: StepProps) => {
-  const { scope } = props;
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -99,11 +101,11 @@ const NameAndAgeRangeStep = ({
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
-    props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const levels = useGetEducationLevelsQuery();
   const labelsPickerProps = useCultuurkuurLabelsPickerProps(
-    { scope, offerId },
+    { scope, offerId, setValue, watch },
     levels,
   );
 
@@ -125,7 +127,12 @@ const NameAndAgeRangeStep = ({
       render={() => {
         return (
           <Stack spacing={4} maxWidth={parseSpacing(11)}>
-            <NameStep {...getStepProps(props)} name={name} control={control} />
+            <NameStep
+              {...getStepProps(props)}
+              name={name}
+              scope={scope}
+              control={control}
+            />
             {!isCultuurkuurEvent && (
               <AgeRangeStep
                 {...getStepProps(props)}
