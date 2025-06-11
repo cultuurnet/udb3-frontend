@@ -183,7 +183,14 @@ const StepsForm = ({
 
   const labels = getUniqueLabels(offer);
 
-  const hasCultuurkuurLocationLabels = getLocationLabels(labels).length > 0;
+  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
+
+  const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
+
+  const hasCultuurkuurLocationLabels =
+    CULTUURKUUR_LOCATION_ID !== locationId
+      ? true
+      : getLocationLabels(labels).length > 0;
 
   const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
 

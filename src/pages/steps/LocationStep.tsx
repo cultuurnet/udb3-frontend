@@ -134,7 +134,7 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
   );
 };
 
-const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
+const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
   const { i18n } = useTranslation();
   const changeAddressMutation = useChangeAddressMutation();
   const changeOnlineUrl = useChangeOnlineUrlMutation();
@@ -173,10 +173,13 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     // For events
 
     if (location.isOnline) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.ONLINE,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.ONLINE,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       if (location.onlineUrl) {
         changeOnlineUrl.mutate({
@@ -184,9 +187,12 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
           onlineUrl: location.onlineUrl,
         });
       } else {
-        deleteOnlineUrl.mutate({
-          eventId: offerId,
-        });
+        deleteOnlineUrl.mutate(
+          {
+            eventId: offerId,
+          },
+          { onSuccess: () => onSuccess(scope) },
+        );
       }
 
       return;
@@ -195,16 +201,22 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     const isCultuurkuurLocation = !location.country;
 
     if (isCultuurkuurLocation) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.OFFLINE,
-        location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.OFFLINE,
+          location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
-      const changeLocationPromise = changeLocationMutation.mutateAsync({
-        locationId: CULTUURKUUR_LOCATION_ID,
-        eventId: offerId,
-      });
+      const changeLocationPromise = changeLocationMutation.mutateAsync(
+        {
+          locationId: CULTUURKUUR_LOCATION_ID,
+          eventId: offerId,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       await changeLocationPromise;
 
@@ -213,15 +225,23 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
 
     if (!location.place) return;
 
-    await changeAttendanceMode.mutateAsync({
-      eventId: offerId,
-      attendanceMode: AttendanceMode.OFFLINE,
-      location: location.place['@id'],
-    });
+    await changeAttendanceMode.mutateAsync(
+      {
+        eventId: offerId,
+        attendanceMode: AttendanceMode.OFFLINE,
+        location: location.place['@id'],
+      },
+      {
+        onSuccess: () => onSuccess(scope),
+      },
+    );
 
-    deleteOnlineUrl.mutate({
-      eventId: offerId,
-    });
+    deleteOnlineUrl.mutate(
+      {
+        eventId: offerId,
+      },
+      { onSuccess: () => onSuccess(scope) },
+    );
   };
 };
 

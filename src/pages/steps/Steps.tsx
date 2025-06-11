@@ -244,10 +244,6 @@ const Steps = ({
               <Step
                 key={index}
                 onChange={() => {
-                  if (!form.formState.dirtyFields[name]) {
-                    return;
-                  }
-
                   onChange(name);
                 }}
                 loading={!!(name && fieldLoading === name)}

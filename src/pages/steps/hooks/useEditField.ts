@@ -66,8 +66,8 @@ const useEditField = ({ scope, onSuccess, offerId, handleSubmit }) => {
 
     const editEvent = editMap[editedField];
 
-    handleSubmit(async (formData: FormDataUnion) =>
-      editEvent(formData, editedField),
+    handleSubmit(
+      async (formData: FormDataUnion) => await editEvent(formData, editedField),
     )();
   };
 
