@@ -177,11 +177,14 @@ const StepsForm = ({
 
   const labels = getUniqueLabels(offer);
 
-  const hasCultuurkuurLocationLabels =
-    isCultuurkuurEvent && getLocationLabels(labels).length > 0;
+  const hasCultuurkuurLocationLabels = getLocationLabels(labels).length > 0;
 
-  const hasCultuurkuurEducationLabels =
-    isCultuurkuurEvent && getEducationLabels(labels).length > 0;
+  const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
+
+  const isButtonDisabled =
+    isCultuurkuurEvent &&
+    (!hasCultuurkuurEducationLabels ||
+      !isEventTypeSelected);
 
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
@@ -251,8 +254,7 @@ const StepsForm = ({
       disabled={
         !isEventTypeSelected ||
         !hasCultuurkuurEducationLabels ||
-        !hasCultuurkuurLocationLabels
-      }
+      disabled={isButtonDisabled}
     >
       {t('create.actions.publish_later')}
     </Button>
@@ -338,8 +340,7 @@ const StepsForm = ({
                 disabled={
                   !isEventTypeSelected ||
                   !hasCultuurkuurEducationLabels ||
-                  !hasCultuurkuurLocationLabels
-                }
+                disabled={isButtonDisabled}
                 onClick={() => {
                   publishOffer();
                 }}
