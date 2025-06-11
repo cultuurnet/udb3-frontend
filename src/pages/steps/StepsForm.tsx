@@ -251,9 +251,6 @@ const StepsForm = ({
       variant={ButtonVariants.SECONDARY}
       onClick={() => setIsPublishLaterModalVisible(true)}
       key="publishLater"
-      disabled={
-        !isEventTypeSelected ||
-        !hasCultuurkuurEducationLabels ||
       disabled={isButtonDisabled}
     >
       {t('create.actions.publish_later')}
@@ -337,9 +334,6 @@ const StepsForm = ({
             {footerStatus === FooterStatus.PUBLISH && [
               <Button
                 variant={ButtonVariants.SUCCESS}
-                disabled={
-                  !isEventTypeSelected ||
-                  !hasCultuurkuurEducationLabels ||
                 disabled={isButtonDisabled}
                 onClick={() => {
                   publishOffer();
