@@ -301,7 +301,8 @@
       "change_type": "Wijzig type",
       "refine": "Verfijn",
       "cultuurkuur": {
-        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden."
+        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden.",
+        "error": "Kies een thema"
       }
     },
     "additionalInformation": {

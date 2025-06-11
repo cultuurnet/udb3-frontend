@@ -140,7 +140,6 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
   const changeOnlineUrl = useChangeOnlineUrlMutation();
   const deleteOnlineUrl = useDeleteOnlineUrlMutation();
   const changeAttendanceMode = useChangeAttendanceModeMutation();
-  const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
 
   return async ({ location }: FormDataUnion) => {
@@ -299,7 +298,6 @@ const LocationStep = ({
   const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
-  const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
   const [hasOnlineUrlError, setHasOnlineUrlError] = useState(false);
   const scope = watch('scope') ?? props.scope;
@@ -340,7 +338,10 @@ const LocationStep = ({
     !isOnline;
 
   const isExistingEventWithoutLabels =
-    offerId && !labelsPickerProps.hasLocationLabels;
+    offerId &&
+    !labelsPickerProps.hasLocationLabels &&
+    !isPhysicalLocation &&
+    !isOnline;
 
   const isLocationLabelErrorVisible =
     isNewEventWithoutLabels || isExistingEventWithoutLabels;
