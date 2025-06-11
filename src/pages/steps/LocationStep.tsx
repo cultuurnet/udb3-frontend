@@ -210,15 +210,13 @@ const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
         { onSuccess: () => onSuccess(scope) },
       );
 
-      const changeLocationPromise = changeLocationMutation.mutateAsync(
+      await changeLocationMutation.mutateAsync(
         {
           locationId: CULTUURKUUR_LOCATION_ID,
           eventId: offerId,
         },
         { onSuccess: () => onSuccess(scope) },
       );
-
-      await changeLocationPromise;
 
       return;
     }
