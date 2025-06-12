@@ -11,7 +11,9 @@ const isValidUrl = (url: string) => {
   try {
     const urlObj = new URL(url);
 
-    const urlRegex = new RegExp(/http(s?):\/\/(?:www\.)?[\w-]+\.[a-zA-Z]{2,}/);
+    const urlRegex = new RegExp(
+      /^https?:\/\/(?:www\.)?(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?$/,
+    );
 
     if (!urlRegex.test(urlObj.toString())) {
       throw new Error('not a valid url');
