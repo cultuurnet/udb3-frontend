@@ -137,7 +137,7 @@ const Footer = ({
       <Stack alignItems="flex-start">
         <List alignItems={{ xs: 'center' }}>
           {footerLinks.map((link) => (
-            <List.Item>
+            <List.Item key={link.label}>
               <FooterLink footerVariant={variant} href={link.href}>
                 {t(link.label)}
               </FooterLink>
