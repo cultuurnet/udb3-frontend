@@ -7,7 +7,7 @@ import { useQueryClient } from 'react-query';
 import {
   CULTUURKUUR_ON_SITE_LABEL,
   CULTUURKUUR_TAILORED_LABEL,
-} from '@/constants/Labels';
+} from '@/constants/Cultuurkuur';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,

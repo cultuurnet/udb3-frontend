@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -14,19 +15,18 @@ import {
 } from '@/hooks/api/cultuurkuur';
 import {
   useChangeAttendanceModeMutation,
-  useChangeAudienceMutation,
   useChangeLocationMutation,
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useChangeAddressMutation } from '@/hooks/api/places';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
-import { AttendanceMode } from '@/types/Event';
+import { AttendanceMode, Event } from '@/types/Event';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -45,6 +45,7 @@ import { getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
+import { parseOfferId } from '@/utils/parseOfferId';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { CityPicker } from '../CityPicker';
@@ -134,13 +135,12 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
   );
 };
 
-const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
+const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
   const { i18n } = useTranslation();
   const changeAddressMutation = useChangeAddressMutation();
   const changeOnlineUrl = useChangeOnlineUrlMutation();
   const deleteOnlineUrl = useDeleteOnlineUrlMutation();
   const changeAttendanceMode = useChangeAttendanceModeMutation();
-  const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
 
   return async ({ location }: FormDataUnion) => {
@@ -174,10 +174,13 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     // For events
 
     if (location.isOnline) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.ONLINE,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.ONLINE,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       if (location.onlineUrl) {
         changeOnlineUrl.mutate({
@@ -185,9 +188,12 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
           onlineUrl: location.onlineUrl,
         });
       } else {
-        deleteOnlineUrl.mutate({
-          eventId: offerId,
-        });
+        deleteOnlineUrl.mutate(
+          {
+            eventId: offerId,
+          },
+          { onSuccess: () => onSuccess(scope) },
+        );
       }
 
       return;
@@ -196,33 +202,45 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     const isCultuurkuurLocation = !location.country;
 
     if (isCultuurkuurLocation) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.OFFLINE,
-        location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.OFFLINE,
+          location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
-      const changeLocationPromise = changeLocationMutation.mutateAsync({
-        locationId: CULTUURKUUR_LOCATION_ID,
-        eventId: offerId,
-      });
-
-      await changeLocationPromise;
+      await changeLocationMutation.mutateAsync(
+        {
+          locationId: CULTUURKUUR_LOCATION_ID,
+          eventId: offerId,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       return;
     }
 
     if (!location.place) return;
 
-    await changeAttendanceMode.mutateAsync({
-      eventId: offerId,
-      attendanceMode: AttendanceMode.OFFLINE,
-      location: location.place['@id'],
-    });
+    await changeAttendanceMode.mutateAsync(
+      {
+        eventId: offerId,
+        attendanceMode: AttendanceMode.OFFLINE,
+        location: location.place['@id'],
+      },
+      {
+        onSuccess: () => onSuccess(scope),
+      },
+    );
 
-    deleteOnlineUrl.mutate({
-      eventId: offerId,
-    });
+    deleteOnlineUrl.mutate(
+      {
+        eventId: offerId,
+      },
+      { onSuccess: () => onSuccess(scope) },
+    );
   };
 };
 
@@ -293,12 +311,12 @@ const LocationStep = ({
   setValue,
   trigger,
   watch,
+  error,
   ...props
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
-  const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
   const [hasOnlineUrlError, setHasOnlineUrlError] = useState(false);
   const scope = watch('scope') ?? props.scope;
@@ -317,18 +335,39 @@ const LocationStep = ({
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
-  const audience = getOfferByIdQuery.data?.audience;
   const audienceField = watch('audience.audienceType');
   const { hasRecentLocations } = useRecentLocations();
 
   const { field } = useController({ name: 'location', control });
+
+  const { isOnline, country } = field?.value as OfferFormData['location'];
+
+  const isPhysicalLocation = !!country && !isOnline;
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity = getEntityByIdQuery.data as Event;
+
+  const locationId = parseOfferId((entity as Event)?.location?.['@id'] ?? '');
 
   const regions = useGetCultuurkuurRegions();
   const labelsPickerProps = useCultuurkuurLabelsPickerProps(
     { scope, offerId, setValue, watch },
     regions,
   );
+
+  const isNewEventWithoutLabels =
+    error?.message.includes(CULTUURKUUR_LOCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasLocationLabels &&
+    !isPhysicalLocation &&
+    !isOnline;
+
+  const isExistingEventWithoutLabels =
+    offerId &&
+    !labelsPickerProps.hasLocationLabels &&
+    CULTUURKUUR_LOCATION_ID === locationId;
+
+  const isLocationLabelErrorVisible =
+    isNewEventWithoutLabels || isExistingEventWithoutLabels;
 
   useEffect(() => {
     if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
@@ -762,6 +801,11 @@ const LocationStep = ({
           );
         }}
       />
+      {isLocationLabelErrorVisible && (
+        <Text variant={TextVariants.ERROR}>
+          {t('cultuurkuur_modal.overview.error_locations')}
+        </Text>
+      )}
     </Stack>
   );
 };
