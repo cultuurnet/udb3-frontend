@@ -203,6 +203,7 @@ const OrganizerForm = () => {
           form={form}
           labels={organizerLabels}
           onChange={() => {
+            if (!form.getFieldState('nameAndUrl').isDirty) return;
             if (urlOrganizerId) {
               onSuccess();
             }
