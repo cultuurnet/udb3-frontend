@@ -150,7 +150,7 @@ const useGetOwnershipRequestsQuery = (
   return useAuthenticatedQuery({
     ...options,
     ...configuration,
-    enabled: options.enabled !== false && !configuration.enabled,
+    enabled: options.enabled !== false && configuration.enabled !== false,
   });
 };
 
