@@ -301,7 +301,8 @@
       "change_type": "Wijzig type",
       "refine": "Verfijn",
       "cultuurkuur": {
-        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden."
+        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden.",
+        "error": "Kies een thema"
       }
     },
     "additionalInformation": {
@@ -916,7 +917,9 @@
       "locations": "{{count}} werkingsregio's",
       "education_levels": "{{count}} onderwijsniveaus",
       "selected": "zijn geselecteerd",
-      "change": "Wijzig"
+      "change": "Wijzig",
+      "error_locations": "Selecteer minstens één werkingsregio",
+      "error_education_levels": "Selecteer minstens één onderwijsniveau"
     }
   },
   "location": {

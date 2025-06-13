@@ -1,12 +1,16 @@
 import { useMemo } from 'react';
 import { useQueryClient, UseQueryResult } from 'react-query';
 
-import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Labels';
+import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Cultuurkuur';
 import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { StepProps } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
+import {
+  getEducationLabels,
+  getLocationLabels,
+} from '@/utils/cultuurkuurLabels';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
@@ -95,21 +99,16 @@ const useCultuurkuurLabelsPickerProps = (
   );
 
   const locationLabels = useMemo(() => {
-    return labels.filter(
-      (label) =>
-        label.startsWith('cultuurkuur_werkingsregio') ||
-        label === CULTUURKUUR_ON_SITE_LABEL,
-    );
+    return getLocationLabels(labels);
   }, [labels]);
 
+  const hasLocationLabels = locationLabels && locationLabels?.length > 0;
+
   const educationLabels = useMemo(() => {
-    return labels.filter(
-      (label) =>
-        label.startsWith('cultuurkuur_') &&
-        label !== CULTUURKUUR_ON_SITE_LABEL &&
-        !label.startsWith('cultuurkuur_werkingsregio'),
-    );
+    return getEducationLabels(labels);
   }, [labels]);
+
+  const hasEducationLabels = educationLabels && educationLabels.length > 0;
 
   const otherLabels = useMemo(() => {
     return labels.filter((label) => !label.startsWith('cultuurkuur_'));
@@ -159,6 +158,8 @@ const useCultuurkuurLabelsPickerProps = (
   return {
     selectedData: labels,
     data: available.data,
+    hasLocationLabels: hasLocationLabels,
+    hasEducationLabels: hasEducationLabels,
     onConfirm: handleCultuurkuurLabelsChange,
     onClean: handleClearCultuurkuurLabels,
   };

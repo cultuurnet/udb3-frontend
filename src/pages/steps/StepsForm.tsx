@@ -3,11 +3,20 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { AudienceTypes } from '@/constants/AudienceType';
+import {
+  CULTUURKUUR_EDUCATION_LABELS_ERROR,
+  CULTUURKUUR_LOCATION_LABELS_ERROR,
+  CULTUURKUUR_THEME_ERROR,
+  CULTUURKUUR_TYPE_ERROR,
+} from '@/constants/Cultuurkuur';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
+import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
   locationStepConfiguration,
   useEditLocation,
 } from '@/pages/steps/LocationStep';
+import { Event } from '@/types/Event';
 import { hasLegacyLocation, Offer } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -17,7 +26,13 @@ import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Toast } from '@/ui/Toast';
+import {
+  getEducationLabels,
+  getLocationLabels,
+} from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import { useToast } from '../manage/movies/useToast';
 import { DUPLICATE_STATUS_CODE } from '../PlaceAddModal';
@@ -30,7 +45,6 @@ import { useGetPlace } from './hooks/useGetPlace';
 import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
-import { nameAndAgeRangeStepConfiguration } from './NameAndAgeRangeStep';
 import { Steps, StepsConfiguration } from './Steps';
 
 const getValue = getValueFromTheme('createPage');
@@ -161,7 +175,53 @@ const StepsForm = ({
 
   const initialOffer = isOnDuplicatePage ? offer : undefined;
 
-  const isEventTypeSelected = form.getValues('typeAndTheme.type');
+  const isCultuurkuurEvent =
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+
+  const isCultuurkuurEventTypeSelected =
+    form.getValues('typeAndTheme.type') || offer?.terms?.length > 0;
+
+  const labels = getUniqueLabels(offer);
+
+  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
+
+  const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
+
+  const hasCultuurkuurLocationLabels =
+    CULTUURKUUR_LOCATION_ID !== locationId
+      ? true
+      : getLocationLabels(labels).length > 0;
+
+  const hasCultuurkuurEducationLabels = getEducationLabels(labels).length > 0;
+
+  const getTypesByScopeQuery = useGetTypesByScopeQuery({
+    scope,
+  });
+
+  const eventTypes = getTypesByScopeQuery.data;
+
+  const hasEventThemes =
+    eventTypes
+      ?.filter((eventType) =>
+        offer?.terms?.some((term) => term.id === eventType.id),
+      )
+      .map((eventType) => eventType.otherSuggestedTerms ?? [])
+      .flat().length > 0;
+
+  const hasSelectedThemes = eventTypes?.some((eventType) =>
+    eventType.otherSuggestedTerms?.some((suggestedTerm) =>
+      offer?.terms?.some((term) => term.id === suggestedTerm.id),
+    ),
+  );
+
+  const isCultuurkuurThemeSelected = !hasEventThemes || hasSelectedThemes;
+
+  const isButtonDisabled =
+    isCultuurkuurEvent &&
+    (!hasCultuurkuurEducationLabels ||
+      !hasCultuurkuurLocationLabels ||
+      !isCultuurkuurEventTypeSelected ||
+      !isCultuurkuurThemeSelected);
 
   const addOffer = useAddOffer({
     onSuccess: async (scope, offerId) => {
@@ -174,8 +234,33 @@ const StepsForm = ({
       reload();
     },
     onError: (error) => {
-      if (error.status === DUPLICATE_STATUS_CODE) {
-        setFetchErrors({ nameAndAgeRange: error });
+      const newErrors: Record<string, any> = {};
+
+      const { status, message } = error;
+
+      const parsedMessage = JSON.parse(message);
+
+      if (
+        status === DUPLICATE_STATUS_CODE ||
+        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR)
+      ) {
+        newErrors.nameAndAgeRange = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_LOCATION_LABELS_ERROR)) {
+        newErrors.location = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_TYPE_ERROR)) {
+        newErrors.typeAndTheme = error;
+      }
+
+      if (parsedMessage?.includes(CULTUURKUUR_THEME_ERROR)) {
+        newErrors.typeAndTheme = error;
+      }
+
+      if (Object.keys(newErrors).length) {
+        setFetchErrors(newErrors);
       }
     },
     convertFormDataToOffer,
@@ -211,7 +296,7 @@ const StepsForm = ({
       variant={ButtonVariants.SECONDARY}
       onClick={() => setIsPublishLaterModalVisible(true)}
       key="publishLater"
-      disabled={!isEventTypeSelected}
+      disabled={isButtonDisabled}
     >
       {t('create.actions.publish_later')}
     </Button>
@@ -294,7 +379,7 @@ const StepsForm = ({
             {footerStatus === FooterStatus.PUBLISH && [
               <Button
                 variant={ButtonVariants.SUCCESS}
-                disabled={!isEventTypeSelected}
+                disabled={isButtonDisabled}
                 onClick={() => {
                   publishOffer();
                 }}
