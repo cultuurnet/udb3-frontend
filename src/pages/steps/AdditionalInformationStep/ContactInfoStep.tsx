@@ -248,7 +248,7 @@ const ContactInfoStep = ({
                   value={info.value}
                   onChange={(e) => {
                     const newContactInfoState = [...contactInfoState];
-                    newContactInfoState[index].value = e.target.value;
+                    newContactInfoState[index].value = e.target.value.trim();
                     setContactInfoState(newContactInfoState);
                     setIsFieldFocused(true);
                   }}
