@@ -37,11 +37,11 @@ import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { RadioButtonTypes } from '@/ui/RadioButton';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
@@ -261,21 +261,23 @@ export const BlankStreetToggle = ({
   const [isBlankStreet, setIsBlankStreet] = useState(false);
 
   return (
-    <RadioButtonWithLabel
-      name={'blank_address'}
-      label={
-        <Text className={'ml-1'}>
-          {t('organizer.add_modal.labels.address.blank_street')}
-        </Text>
+    <FormElement
+      id="blank_address"
+      label={t('organizer.add_modal.labels.address.blank_street')}
+      labelVariant={LabelVariants.NORMAL}
+      labelPosition={LabelPositions.RIGHT}
+      Component={
+        <RadioButton
+          type={RadioButtonTypes.SWITCH}
+          color={colors.udbMainPositiveGreen}
+          checked={isBlankStreet}
+          onChange={() => {
+            const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
+            setIsBlankStreet(!isBlankStreet);
+            onChange(streetAndNumber);
+          }}
+        />
       }
-      type={RadioButtonTypes.SWITCH}
-      checked={isBlankStreet}
-      onChange={() => {
-        const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
-
-        setIsBlankStreet(!isBlankStreet);
-        onChange(streetAndNumber);
-      }}
     />
   );
 };
@@ -306,6 +308,13 @@ const LocationStep = ({
     control,
     name: ['location.streetAndNumber', 'location.onlineUrl', 'location'],
   });
+
+  const hasStreetAndNumber =
+    !!locationStreetAndNumber &&
+    locationStreetAndNumber !== BLANK_STREET_NUMBER;
+
+  const [isBlankStreetToggleVisible, setIsBlankStreetToggleVisible] =
+    useState(hasStreetAndNumber);
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -343,16 +352,27 @@ const LocationStep = ({
     [audienceField, location?.country, setValue];
 
   useEffect(() => {
-    if (!locationStreetAndNumber && !locationOnlineUrl) return;
+    if (!locationStreetAndNumber && !locationOnlineUrl) {
+      setIsBlankStreetToggleVisible(false);
+      return;
+    }
 
     if (locationStreetAndNumber) {
       setStreetAndNumber(locationStreetAndNumber);
     }
 
+    if (hasStreetAndNumber) {
+      setIsBlankStreetToggleVisible(true);
+    }
+
+    if (locationStreetAndNumber === BLANK_STREET_NUMBER) {
+      setStreetAndNumber('');
+    }
+
     if (locationOnlineUrl) {
       setOnlineUrl(locationOnlineUrl);
     }
-  }, [locationStreetAndNumber, locationOnlineUrl]);
+  }, [locationStreetAndNumber, locationOnlineUrl, hasStreetAndNumber]);
 
   const handleChangeStreetAndNumber = (e: ChangeEvent<HTMLInputElement>) => {
     const shouldShowNextStepInCreate =
@@ -650,7 +670,6 @@ const LocationStep = ({
                       municipality: undefined,
                       streetAndNumber: undefined,
                     });
-                    setStreetAndNumber('');
                   }}
                 >
                   {t(
@@ -692,7 +711,6 @@ const LocationStep = ({
                           onFieldChange({
                             streetAndNumber: undefined,
                           });
-                          setStreetAndNumber('');
                         }}
                       >
                         {t(`create.location.street_and_number.change`)}
@@ -729,8 +747,12 @@ const LocationStep = ({
                         Component={
                           <Input
                             value={streetAndNumber}
-                            disabled={streetAndNumber === BLANK_STREET_NUMBER}
-                            onBlur={() => onFieldChange({ streetAndNumber })}
+                            onBlur={() => {
+                              onFieldChange({ streetAndNumber });
+                              hasStreetAndNumber
+                                ? setIsBlankStreetToggleVisible(true)
+                                : setIsBlankStreetToggleVisible(false);
+                            }}
                             onChange={handleChangeStreetAndNumber}
                           />
                         }
@@ -741,23 +763,25 @@ const LocationStep = ({
                           formState.errors.location?.streetAndNumber &&
                           t('location.add_modal.errors.streetAndNumber')
                         }
-                        info={
-                          scope === ScopeTypes.ORGANIZERS && (
-                            <BlankStreetToggle
-                              onChange={(streetAndNumber) =>
-                                onFieldChange({
-                                  streetAndNumber,
-                                  location: { streetAndNumber },
-                                })
-                              }
-                            />
-                          )
-                        }
                       />
                     </Stack>
                   )}
                 </Stack>
               )}
+              <Stack marginTop={3}>
+                {scope === ScopeTypes.ORGANIZERS &&
+                  isBlankStreetToggleVisible && (
+                    <BlankStreetToggle
+                      onChange={(streetAndNumber) => {
+                        setIsBlankStreetToggleVisible(false);
+                        onFieldChange({
+                          streetAndNumber,
+                          location: { streetAndNumber },
+                        });
+                      }}
+                    />
+                  )}
+              </Stack>
             </>,
           );
         }}
