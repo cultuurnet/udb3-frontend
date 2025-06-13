@@ -124,7 +124,7 @@ const LayoutWrapper = ({ children }) => {
     asPath.startsWith('/404') ||
     asPath.startsWith('/500')
   ) {
-    return <>{children}</>;
+    return <Inline height="100vh">{children}</Inline>;
   }
 
   return (
