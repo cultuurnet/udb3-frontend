@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_EDUCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
 import { OfferTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -71,8 +72,16 @@ const useEditNameAndAgeRange = ({
   };
 };
 
-const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
-  const { scope } = props;
+const NameAndAgeRangeStep = ({
+  offerId,
+  control,
+  name,
+  scope,
+  error,
+  watch,
+  setValue,
+  ...props
+}: StepProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -92,10 +101,24 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
-    props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const levels = useGetEducationLevelsQuery();
-  const labelsPickerProps = useCultuurkuurLabelsPickerProps(props, levels);
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    levels,
+  );
+
+  const isNewEventWithoutLabels =
+    error?.message.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasEducationLabels;
+
+  const isExistingEventWithoutLabels =
+    offerId && !labelsPickerProps.hasEducationLabels;
+
+  const isEducationLabelErrorVisible =
+    isCultuurkuurEvent &&
+    (isNewEventWithoutLabels || isExistingEventWithoutLabels);
 
   return (
     <Controller
@@ -104,7 +127,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
       render={() => {
         return (
           <Stack spacing={4} maxWidth={parseSpacing(11)}>
-            <NameStep {...getStepProps(props)} name={name} control={control} />
+            <NameStep
+              {...getStepProps(props)}
+              name={name}
+              scope={scope}
+              control={control}
+            />
             {!isCultuurkuurEvent && (
               <AgeRangeStep
                 {...getStepProps(props)}
@@ -140,6 +168,11 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                     }}
                   ></Trans>
                 </Text>
+                {isEducationLabelErrorVisible && (
+                  <Text variant={TextVariants.ERROR}>
+                    {t('cultuurkuur_modal.overview.error_education_levels')}
+                  </Text>
+                )}
               </>
             )}
             <AlertDuplicatePlace
