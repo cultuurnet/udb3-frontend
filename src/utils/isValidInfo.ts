@@ -1,5 +1,7 @@
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
 const PHONE_REGEX = /^[0-9\/\-_.+ ]{0,15}$/;
+const URL_REGEX_FOR_FORCING_PROTOCOL_AND_TLD =
+  /^https?:\/\/(?:www\.)?(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?$/;
 
 const isValidEmail = (email: string) => {
   return (
@@ -11,9 +13,7 @@ const isValidUrl = (url: string) => {
   try {
     const urlObj = new URL(url);
 
-    const urlRegex = new RegExp(/http(s?):\/\/(?:www\.)?[\w-]+\.[a-zA-Z]{2,}/);
-
-    if (!urlRegex.test(urlObj.toString())) {
+    if (!URL_REGEX_FOR_FORCING_PROTOCOL_AND_TLD.test(urlObj.toString())) {
       throw new Error('not a valid url');
     }
 
