@@ -304,13 +304,17 @@ const Index = () => {
   return (
     <Stack
       width="100%"
+      height="100vh"
+      display="flex"
+      flexDirection="column"
       alignItems="center"
       spacing={6}
       backgroundColor={getValueForPage('backgroundColor')}
     >
       <Stack
         width="100%"
-        height={isSmallView ? 'auto' : isXLargeView ? 900 : 800}
+        height={isSmallView ? 'auto' : isXLargeView ? '100vh' : 800}
+        flexShrink={0}
       >
         <Inline
           width="100%"
