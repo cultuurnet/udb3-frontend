@@ -12,6 +12,7 @@ import { Box } from '@/ui/Box';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 type Props = {
   organizer: Organizer;
@@ -31,7 +32,9 @@ const RequestOwnershipModal = ({
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const organizerId = router.query.organizerId as string;
+  const organizerIdFromQuery = router.query.organizerId as string;
+  const organizerIdFromOffer = parseOfferId(organizer?.['@id'] ?? '');
+  const organizerId = organizerIdFromQuery ?? organizerIdFromOffer;
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
 
