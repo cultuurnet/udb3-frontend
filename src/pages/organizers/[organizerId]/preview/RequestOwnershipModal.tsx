@@ -32,9 +32,9 @@ const RequestOwnershipModal = ({
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const organizerIdFromQuery = router.query.organizerId as string;
-  const organizerIdFromOffer = parseOfferId(organizer?.['@id'] ?? '');
-  const organizerId = organizerIdFromQuery ?? organizerIdFromOffer;
+  const organizerId =
+    (router.query.organizerId as string) ??
+    parseOfferId(organizer?.['@id'] ?? '');
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
 
