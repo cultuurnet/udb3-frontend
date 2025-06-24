@@ -5425,29 +5425,33 @@
       "zip": "9140"
     },
     {
-      "label": "9130 Verrebroek (Beveren)",
-      "name": "Verrebroek (Beveren)",
+      "label": "9130 Verrebroek (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Verrebroek (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9130"
     },
     {
-      "label": "9130 Kieldrecht (Beveren)",
-      "name": "Kieldrecht (Beveren)",
+      "label": "9130 Kieldrecht (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Kieldrecht (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9130"
     },
-    { "label": "9130 Doel (Beveren)", "name": "Doel (Beveren)", "zip": "9130" },
     {
-      "label": "9120 Vrasene (Beveren)",
-      "name": "Vrasene (Beveren)",
+      "label": "9130 Doel (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Doel (Beveren-Kruibeke-Zwijndrecht)",
+      "zip": "9130"
+    },
+    {
+      "label": "9120 Vrasene (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Vrasene (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9120"
     },
     {
-      "label": "9120 Melsele (Beveren)",
-      "name": "Melsele (Beveren)",
+      "label": "9120 Melsele (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Melsele (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9120"
     },
     {
-      "label": "9120 Haasdonk (Beveren)",
-      "name": "Haasdonk (Beveren)",
+      "label": "9120 Haasdonk (Beveren-Kruibeke-Zwijndrecht)",
+      "name": "Haasdonk (Beveren-Kruibeke-Zwijndrecht)",
       "zip": "9120"
     },
     {
