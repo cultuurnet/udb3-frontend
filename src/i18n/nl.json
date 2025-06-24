@@ -283,8 +283,8 @@
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen"
       },
       "cultuurkuur": {
-        "info": "Voeg de onderwijsniveaus toe waarvoor je activiteit geschikt is. Meer uitleg over de nieuwe structuur van het secundair onderwijs vind je <link1>hier</link1>.",
-        "link": "https://www.vlaanderen.be/onderwijs-en-vorming/opleidingsinhouden/opleidingsinhouden-per-onderwijsniveau/opleidingsinhouden-secundair-onderwijs-incl-buso-ov4-duaal-leren-en-werken"
+        "info": "Voeg de onderwijsniveaus toe waarvoor je activiteit geschikt is. Meer info over de nieuwe structuur van het onderwijs vind je <link1>hier</link1>.",
+        "link": "https://www.cultuurkuur.be/inspiratie/aanbod-voor-scholen-kies-het-juiste-onderwijsniveau"
       }
     },
     "type_and_theme": {
