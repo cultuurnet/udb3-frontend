@@ -76,7 +76,6 @@ const RequestOwnershipModal = ({
         onConfirm={() => {
           requestOwnershipMutation.mutate({
             itemId: organizerId,
-            ownerId: userId,
           });
         }}
         size={ModalSizes.MD}
