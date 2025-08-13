@@ -1,21 +1,23 @@
 import getConfig from 'next/config';
+import { useTranslation } from 'react-i18next';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import {
   CULTUURKUUR_EDUCATION_LABELS_ERROR,
   CULTUURKUUR_LOCATION_LABELS_ERROR,
-  CULTUURKUUR_ON_SITE_LABEL,
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
-import { OfferTypes } from '@/constants/OfferType';
+import { ErrorCodes } from '@/constants/ErrorCodes';
+import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
-import { useAddPlaceMutation } from '@/hooks/api/places';
+import { getPlacesByQuery, useAddPlaceMutation } from '@/hooks/api/places';
 import {
   useAddEventByIdMutation as useAddEventToProductionByIdMutation,
   useCreateWithEventsMutation as useCreateProductionWithEventsMutation,
 } from '@/hooks/api/productions';
+import { useHeaders } from '@/hooks/api/useHeaders';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import {
@@ -39,10 +41,11 @@ const useAddOffer = ({
   label,
   initialOffer,
 }: UseAddOfferArgument) => {
+  const { i18n } = useTranslation();
   const { publicRuntimeConfig } = getConfig();
   const addEventMutation = useAddEventMutation();
   const addPlaceMutation = useAddPlaceMutation();
-
+  const headers = useHeaders();
   const addLabelMutation = useAddOfferLabelMutation();
 
   const createProductionWithEventsMutation =
@@ -67,6 +70,8 @@ const useAddOffer = ({
     const isCultuurkuurEvent =
       payload.audience?.audienceType === AudienceTypes.EDUCATION;
 
+    const errors = [];
+
     if (isCultuurkuurEvent) {
       const educationLabels = getEducationLabels(payload.labels);
 
@@ -75,8 +80,6 @@ const useAddOffer = ({
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
-
-      const errors = [];
 
       if (!educationLabels || educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
@@ -96,11 +99,26 @@ const useAddOffer = ({
       if (!isThemeSelected) {
         errors.push(CULTUURKUUR_THEME_ERROR);
       }
+    }
 
-      if (errors.length > 0) {
-        onError?.(new FetchError(403, JSON.stringify(errors)));
-        return;
+    if (scope === ScopeTypes.PLACES) {
+      const places = await getPlacesByQuery({
+        headers,
+        name: payload.name[i18n.language],
+        terms: [],
+        zip: payload.address[i18n.language].postalCode,
+        streetAddress: payload.address[i18n.language].streetAddress,
+        addressLocality: payload.address[i18n.language].addressLocality,
+        addressCountry: payload.address[i18n.language].addressCountry,
+      });
+      if (places.totalItems > 0) {
+        errors.push(ErrorCodes.DUPLICATE_PLACE_ERROR, places.member[0]['@id']);
       }
+    }
+
+    if (errors.length > 0) {
+      onError?.(new FetchError(403, JSON.stringify(errors)));
+      return;
     }
 
     const addOfferMutation =

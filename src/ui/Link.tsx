@@ -104,6 +104,8 @@ type LinkProps = BaseLinkProps & {
   suffix?: ReactNode;
   customChildren?: boolean;
   shouldHideText?: boolean;
+  target?: string;
+  rel?: string;
 };
 
 const Link = ({
@@ -117,6 +119,8 @@ const Link = ({
   variant,
   title,
   as,
+  target,
+  rel,
   ...props
 }: LinkProps) => {
   const isInternalLink = [
@@ -175,6 +179,8 @@ const Link = ({
           variant={variant}
           title={title}
           {...getInlineProps(props)}
+          target={target}
+          rel={rel}
         >
           {inner}
         </BaseLink>
