@@ -46,6 +46,7 @@ import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
 import { Steps, StepsConfiguration } from './Steps';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 
 const getValue = getValueFromTheme('createPage');
 
@@ -242,7 +243,8 @@ const StepsForm = ({
 
       if (
         status === DUPLICATE_STATUS_CODE ||
-        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR)
+        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) ||
+        parsedMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)
       ) {
         newErrors.nameAndAgeRange = error;
       }

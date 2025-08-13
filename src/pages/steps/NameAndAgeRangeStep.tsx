@@ -35,6 +35,7 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
@@ -85,10 +86,26 @@ const NameAndAgeRangeStep = ({
   const { t } = useTranslation();
   const router = useRouter();
 
-  const duplicatePlaceId =
-    (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
-      ? parseOfferId(error.body.duplicatePlaceUri)
-      : undefined;
+  const duplicatePlaceId = (() => {
+    const body = error?.body as DuplicatePlaceErrorBody;
+
+    if (body?.duplicatePlaceUri) {
+      return parseOfferId(body.duplicatePlaceUri);
+    }
+
+    if (error?.message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)) {
+      const parsedMessage = JSON.parse(error.message);
+      const placeUri = parsedMessage.find((message: string) =>
+        message.includes('/place'),
+      );
+
+      if (placeUri) {
+        return parseOfferId(placeUri);
+      }
+    }
+
+    return undefined;
+  })();
 
   const duplicatePlaceQuery = (error?.body as DuplicatePlaceErrorBody)?.query
     ? error.body.query
