@@ -856,17 +856,19 @@ const LocationStep = ({
                   )}
                 </Stack>
               )}
-              <Stack marginTop={5}>
-                {existingPlaces.length > 0 && isExistingPlacesVisible && (
-                  <LocationSuggestions
-                    locations={existingPlaces}
-                    title={'create.location.existing_locations.title'}
-                    onFieldChange={onFieldChange}
-                    alertVisible={false}
-                    isRecentLocations={false}
-                  />
+              {scope === ScopeTypes.PLACES &&
+                existingPlaces.length > 0 &&
+                isExistingPlacesVisible && (
+                  <Stack marginTop={5}>
+                    <LocationSuggestions
+                      locations={existingPlaces}
+                      title={'create.location.existing_locations.title'}
+                      onFieldChange={onFieldChange}
+                      alertVisible={false}
+                      isRecentLocations={false}
+                    />
+                  </Stack>
                 )}
-              </Stack>
               <Stack marginTop={3}>
                 {scope === ScopeTypes.ORGANIZERS &&
                   isBlankStreetToggleVisible && (
