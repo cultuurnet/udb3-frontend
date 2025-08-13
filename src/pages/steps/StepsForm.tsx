@@ -10,6 +10,7 @@ import {
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
@@ -46,7 +47,6 @@ import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
 import { Steps, StepsConfiguration } from './Steps';
-import { ErrorCodes } from '@/constants/ErrorCodes';
 
 const getValue = getValueFromTheme('createPage');
 

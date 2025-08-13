@@ -30,6 +30,7 @@ import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode, Event } from '@/types/Event';
+import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -41,6 +42,7 @@ import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { Link } from '@/ui/Link';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
@@ -62,8 +64,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { Place } from '@/types/Place';
-import { Link } from '@/ui/Link';
 
 const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;

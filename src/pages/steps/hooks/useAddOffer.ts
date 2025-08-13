@@ -1,4 +1,5 @@
 import getConfig from 'next/config';
+import { useTranslation } from 'react-i18next';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import {
@@ -7,6 +8,7 @@ import {
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
@@ -15,6 +17,7 @@ import {
   useAddEventByIdMutation as useAddEventToProductionByIdMutation,
   useCreateWithEventsMutation as useCreateProductionWithEventsMutation,
 } from '@/hooks/api/productions';
+import { useHeaders } from '@/hooks/api/useHeaders';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
 import {
@@ -22,10 +25,6 @@ import {
   getLocationLabels,
 } from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
-import { useTranslation } from 'react-i18next';
-import { useHeaders } from '@/hooks/api/useHeaders';
-import { Scope } from '@sentry/nextjs';
-import { ErrorCodes } from '@/constants/ErrorCodes';
 
 type UseAddOfferArgument = {
   onSuccess: (scope: FormDataUnion['scope'], offerId: string) => void;

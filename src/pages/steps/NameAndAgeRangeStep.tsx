@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { CULTUURKUUR_EDUCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -35,7 +36,6 @@ import {
   StepProps,
   StepsConfiguration,
 } from './Steps';
-import { ErrorCodes } from '@/constants/ErrorCodes';
 
 const numberHyphenNumberRegex = /^(\d*-)?\d*$/;
 
