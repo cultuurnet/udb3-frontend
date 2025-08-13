@@ -104,6 +104,7 @@ type LinkProps = BaseLinkProps & {
   suffix?: ReactNode;
   customChildren?: boolean;
   shouldHideText?: boolean;
+  newTab?: boolean;
 };
 
 const Link = ({
@@ -117,6 +118,7 @@ const Link = ({
   variant,
   title,
   as,
+  newTab,
   ...props
 }: LinkProps) => {
   const isInternalLink = [
@@ -163,6 +165,8 @@ const Link = ({
   }
 
   if (isInternalLink) {
+    const target = newTab ? '_blank' : undefined;
+    const rel = newTab ? 'noopener' : undefined;
     return (
       <NextLink
         href={href}
@@ -175,6 +179,8 @@ const Link = ({
           variant={variant}
           title={title}
           {...getInlineProps(props)}
+          target={target}
+          rel={rel}
         >
           {inner}
         </BaseLink>
