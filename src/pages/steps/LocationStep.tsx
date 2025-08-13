@@ -453,8 +453,8 @@ const LocationStep = ({
   const useGetPlacesQuery = useGetPlacesByQuery(
     {
       terms: [],
-      zip: location.municipality?.zip,
-      addressLocality: location.municipality?.name,
+      zip: location?.municipality?.zip,
+      addressLocality: location?.municipality?.name,
       addressCountry: country,
       searchTerm: streetAndNumber,
     },
