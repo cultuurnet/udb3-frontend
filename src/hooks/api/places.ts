@@ -306,7 +306,7 @@ const useGetPlacesByQuery = (
       streetAddress,
       searchTerm,
     },
-    enabled: !!searchTerm || !!streetAddress || terms.length > 0,
+    enabled: (!!name && !!streetAddress && !!zip) || !!searchTerm,
     ...configuration,
   });
 

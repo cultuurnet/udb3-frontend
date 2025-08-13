@@ -450,16 +450,13 @@ const LocationStep = ({
     setStreetAndNumber(e.target.value);
   };
 
-  const useGetPlacesQuery = useGetPlacesByQuery(
-    {
-      terms: [],
-      zip: location?.municipality?.zip,
-      addressLocality: location?.municipality?.name,
-      addressCountry: country,
-      searchTerm: streetAndNumber,
-    },
-    { enabled: !!streetAndNumber },
-  );
+  const useGetPlacesQuery = useGetPlacesByQuery({
+    terms: [],
+    zip: location?.municipality?.zip,
+    addressLocality: location?.municipality?.name,
+    addressCountry: country,
+    searchTerm: streetAndNumber,
+  });
 
   const existingPlaces = useMemo<Place[]>(
     () => useGetPlacesQuery.data?.member ?? [],
