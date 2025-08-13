@@ -86,7 +86,8 @@ function ButtonCard({
         marginBottom={4}
         title={title}
         width="20rem"
-        newTab
+        target="_blank"
+        rel="noopener"
         css={buttonCardStyling}
       >
         <Stack>{buttonContent}</Stack>
