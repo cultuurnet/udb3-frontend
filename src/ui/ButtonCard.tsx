@@ -1,11 +1,12 @@
 import React, { ComponentProps } from 'react';
+import { css } from 'styled-components';
 
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Paragraph } from '@/ui/Paragraph';
 import { Text } from '@/ui/Text';
-import { getGlobalBorderRadius } from '@/ui/theme';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
-import { Link, LinkButtonVariants } from './Link';
+import { Link } from './Link';
 import { Stack } from './Stack';
 
 function ButtonCard({
@@ -22,18 +23,20 @@ function ButtonCard({
   hasEllipsisOnTitle?: boolean;
   href?: string;
 }) {
-  const buttonCardStyling = `
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background-color: white;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  const getGlobalValue = getValueFromTheme('global');
 
-  &:hover {
-    background-color: #e6e6e6;
-  }
-`;
+  const buttonCardStyling = css`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    box-shadow: ${getGlobalValue('boxShadow.heavy')};
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
+  `;
   const buttonContent = (
     <>
       <Paragraph
