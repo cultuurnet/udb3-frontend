@@ -86,26 +86,24 @@ const NameAndAgeRangeStep = ({
   const { t } = useTranslation();
   const router = useRouter();
 
-  const duplicatePlaceId = (() => {
-    const body = error?.body as DuplicatePlaceErrorBody;
+  const errorBody = error?.body as DuplicatePlaceErrorBody;
+  const errorMessage = error?.message;
 
-    if (body?.duplicatePlaceUri) {
-      return parseOfferId(body.duplicatePlaceUri);
-    }
-
-    if (error?.message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)) {
-      const parsedMessage = JSON.parse(error.message);
+  const getPlaceIdFromDuplicatePlaceError = (errorMessage: string) => {
+    if (errorMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)) {
+      const parsedMessage = JSON.parse(errorMessage);
       const placeUri = parsedMessage.find((message: string) =>
         message.includes('/place'),
       );
-
-      if (placeUri) {
-        return parseOfferId(placeUri);
-      }
+      return parseOfferId(placeUri);
     }
 
     return undefined;
-  })();
+  };
+
+  const duplicatePlaceId = errorBody?.duplicatePlaceUri
+    ? parseOfferId(errorBody.duplicatePlaceUri)
+    : getPlaceIdFromDuplicatePlaceError(errorMessage);
 
   const duplicatePlaceQuery = (error?.body as DuplicatePlaceErrorBody)?.query
     ? error.body.query
