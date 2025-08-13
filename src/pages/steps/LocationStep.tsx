@@ -97,7 +97,7 @@ const LocationSuggestions = ({
   return (
     <Stack {...props} spacing={5}>
       <Inline>
-        <Text fontWeight={'bold'}>{t(`${title}`)}</Text>
+        <Text fontWeight={'bold'}>{title}</Text>
       </Inline>
       {alertVisible && (
         <Alert variant={AlertVariants.PRIMARY} marginY={4}>
@@ -507,7 +507,7 @@ const LocationStep = ({
                   <LocationSuggestions
                     flex={1}
                     locations={recentLocations}
-                    title={'create.location.recent_locations.title'}
+                    title={t('create.location.recent_locations.title')}
                     onFieldChange={onFieldChange}
                   />
                 )}
@@ -862,7 +862,7 @@ const LocationStep = ({
                   <Stack marginTop={5}>
                     <LocationSuggestions
                       locations={existingPlaces}
-                      title={'create.location.existing_locations.title'}
+                      title={t('create.location.existing_locations.title')}
                       onFieldChange={onFieldChange}
                       alertVisible={false}
                       isRecentLocations={false}
