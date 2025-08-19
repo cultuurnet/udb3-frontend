@@ -190,9 +190,7 @@ const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
         },
       };
 
-      if (scope === OfferTypes.PLACES) {
-        await checkDuplicatePlace({ headers, offerId, location });
-      }
+      await checkDuplicatePlace({ headers, offerId, location });
 
       changeAddressMutation.mutate(
         {
