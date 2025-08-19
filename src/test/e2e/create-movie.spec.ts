@@ -50,25 +50,25 @@ test('create a movie', async ({ baseURL, page }) => {
   const contactButton = await page.getByRole('button', {
     name: 'Meer contactgegevens toevoegen',
   });
-  await page.getByTestId('contact-info-value').fill(faker.internet.email());
+  await page.getByTestId('contact-info-value').nth(0).fill(faker.internet.email());
   await contactButton.click();
-  await page.locator('select').nth(1).selectOption('phone');
+  await page.locator('select').last().selectOption('phone');
   await page
     .getByTestId('contact-info-value')
-    .nth(1)
+    .last()
     .fill(faker.phone.number('+336########'));
   await contactButton.click();
-  await page.locator('select').nth(2).selectOption('url');
+  await page.locator('select').last().selectOption('url');
   await page
     .getByTestId('contact-info-value')
-    .nth(2)
+    .last()
     .fill(faker.internet.url());
   await contactButton.click();
   await page
     .getByTestId('contact-info-value')
-    .nth(3)
+    .last()
     .fill(faker.internet.email());
-  await page.getByRole('tabpanel').getByRole('button').nth(3).click();
+  await page.getByRole('tabpanel').getByRole('button').last().click();
 
   // Publish
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
