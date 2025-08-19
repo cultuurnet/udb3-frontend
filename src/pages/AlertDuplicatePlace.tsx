@@ -55,40 +55,21 @@ const AlertDuplicatePlace = ({
 
   return (
     <Alert variant={variant} maxWidth="50rem">
-      {offerId ? (
-        <Trans
-          i18nKey={labelKey}
-          components={{
-            placeLink: (
-              <Link
-                href={`/place/${placeId}/preview`}
-                display={'inline-block'}
-                fontWeight={'bold'}
-                textDecoration={'underline'}
-                padding={0}
-              />
-            ),
-          }}
-        />
-      ) : (
-        <Trans
-          i18nKey={labelKey}
-          values={{
-            placeName: duplicatePlaceName,
-          }}
-          components={{
-            placeLink: (
-              <Link
-                href={`/place/${placeId}/preview`}
-                display={'inline-block'}
-                fontWeight={'bold'}
-                textDecoration={'underline'}
-                padding={0}
-              />
-            ),
-          }}
-        />
-      )}
+      <Trans
+        i18nKey={labelKey}
+        values={offerId ? undefined : { placeName: duplicatePlaceName }}
+        components={{
+          placeLink: (
+            <Link
+              href={`/place/${placeId}/preview`}
+              display="inline-block"
+              fontWeight="bold"
+              textDecoration="underline"
+              padding={0}
+            />
+          ),
+        }}
+      />
     </Alert>
   );
 };
