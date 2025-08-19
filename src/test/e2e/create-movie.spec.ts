@@ -50,7 +50,10 @@ test('create a movie', async ({ baseURL, page }) => {
   const contactButton = await page.getByRole('button', {
     name: 'Meer contactgegevens toevoegen',
   });
-  await page.getByTestId('contact-info-value').nth(0).fill(faker.internet.email());
+  await page
+    .getByTestId('contact-info-value')
+    .nth(0)
+    .fill(faker.internet.email());
   await contactButton.click();
   await page.locator('select').last().selectOption('phone');
   await page
