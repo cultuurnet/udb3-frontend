@@ -239,7 +239,13 @@ const StepsForm = ({
 
       const { status, message } = error;
 
-      const parsedMessage = JSON.parse(message);
+      const parsedMessage = (() => {
+        try {
+          return JSON.parse(message);
+        } catch {
+          return message;
+        }
+      })();
 
       if (
         status === DUPLICATE_STATUS_CODE ||
