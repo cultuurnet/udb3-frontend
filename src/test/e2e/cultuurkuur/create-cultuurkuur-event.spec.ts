@@ -92,4 +92,13 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await expect(
     iframe.getByText('Locatie in overleg met de school.'),
   ).toBeVisible();
+
+  // Edit mode
+  await iframe.getByRole('button', { name: 'Bewerken' }).click();
+
+  await page.waitForURL(/\/events\/.*\/edit/, {
+    waitUntil: 'domcontentloaded',
+  });
+
+  await expect(page.locator('input#scope')).toBeDisabled();
 });
