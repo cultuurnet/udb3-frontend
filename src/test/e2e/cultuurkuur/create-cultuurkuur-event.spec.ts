@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
-test('create a cultuurkuur event', async ({ baseURL, page }) => {
+test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.goto(`${baseURL}/create`);
   await page.getByRole('button', { name: 'Evenement' }).click();
   await page.getByText('Dit is een evenement voor scholen').click();
@@ -23,12 +23,12 @@ test('create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.getByLabel('Naam van het evenement').fill('E2E Cultuurkuur Event');
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
-  // Should get error when trying to save without 'education' regions
 
   await page
     .getByRole('button', { name: 'Provincie, regio of gemeente toevoegen' })
     .click();
 
+  // Should get error when trying to save without 'education' regions
   await expect(
     page.getByText('Selecteer minstens één werkingsregio'),
   ).toBeVisible();
@@ -81,47 +81,15 @@ test('create a cultuurkuur event', async ({ baseURL, page }) => {
     ),
   ).toBeVisible();
 
-  // Verify labels
-  //   await page.getByRole('tab', { name: 'Labels' }).click();
-
-  //   await expect(page.getByText('cultuurkuur_op_verplaatsing')).toBeVisible();
-
-  //   await expect(
-  //     page.getByText('cultuurkuur_werkingsregio_nis-34042'),
-  //   ).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_werkingsregio_nis-34027'),
-  //   ).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_werkingsregio_nis-34022'),
-  //   ).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_werkingsregio_nis-30000'),
-  //   ).toBeVisible();
-  //   await expect(page.getByText('cultuurkuur_Kleuter-4-5-jaar')).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_Gewoon-kleuteronderwijs'),
-  //   ).toBeVisible();
-  //   await expect(page.getByText('cultuurkuur_1ste-graad')).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_Gewoon-basisonderwijs'),
-  //   ).toBeVisible();
-  //   await expect(
-  //     page.getByText('cultuurkuur_Gewoon-lager-onderwijs'),
-  //   ).toBeVisible();
-
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
-  await page.waitForLoadState('networkidle');
+  await page.waitForURL(/\/event\/.*\/preview/, {
+    waitUntil: 'domcontentloaded',
+  });
 
-  await page.screenshot({ path: 'ck-preview.png' });
-
-  await expect(page.getByText('Specifiek voor scholen')).toBeVisible();
+  const iframe = page.frameLocator('iframe');
+  await expect(iframe.getByText('Specifiek voor scholen')).toBeVisible();
   await expect(
-    page.getByText('Bekijk je evenement op cultuurkuur.be'),
-  ).toBeVisible();
-
-  await expect(
-    page.getByText('Locatie in overleg met de school.'),
+    iframe.getByText('Locatie in overleg met de school.'),
   ).toBeVisible();
 });
