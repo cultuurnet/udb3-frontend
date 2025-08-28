@@ -16,6 +16,10 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.getByRole('button', { name: 'Tekst en muziektheater' }).click();
 
   await page
+    .getByRole('button', { name: 'Tijdstip in overleg met de school' })
+    .click();
+
+  await page
     .getByRole('button', { name: 'Op een locatie in overleg met de school' })
     .click();
 
@@ -80,6 +84,8 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
       'Voeg een prijs toe voor scholen, per leerling of per groep.',
     ),
   ).toBeVisible();
+  await page.getByRole('combobox').selectOption('per leerling');
+  await page.getByRole('combobox').selectOption('per groep');
 
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
