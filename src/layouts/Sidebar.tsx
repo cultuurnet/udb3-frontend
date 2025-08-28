@@ -22,6 +22,7 @@ import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
+import { useIsClient } from '@/hooks/useIsClient';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { QuestionCircleIcon } from '@/pages/NewFeatureTooltip';
@@ -349,6 +350,8 @@ const Sidebar = () => {
 
   const router = useRouter();
 
+  const isClient = useIsClient();
+
   const [isJobLoggerVisible, setIsJobLoggerVisible] = useState(true);
   const [jobLoggerState, setJobLoggerState] = useState(JobLoggerStates.IDLE);
 
@@ -658,12 +661,14 @@ const Sidebar = () => {
                 width="100%"
               >
                 <Icon name={Icons.EYE} />
-                <BetaVersionToggle
-                  checked={isNewCreateEnabled}
-                  onChange={() => {
-                    setIsNewCreateEnabled((prev) => !prev);
-                  }}
-                />
+                {isClient && (
+                  <BetaVersionToggle
+                    checked={isNewCreateEnabled}
+                    onChange={() => {
+                      setIsNewCreateEnabled((prev) => !prev);
+                    }}
+                  />
+                )}
               </Inline>
             </Inline>
             <NotificationMenu
@@ -672,7 +677,7 @@ const Sidebar = () => {
               onClickAnnouncementsButton={toggleIsAnnouncementsModalVisible}
               onClickJobLoggerButton={toggleIsJobLoggerVisible}
             />
-            <ProfileMenu />
+            {isClient && <ProfileMenu />}
           </Stack>
         </Stack>
       </Stack>
