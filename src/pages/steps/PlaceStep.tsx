@@ -34,7 +34,7 @@ const getGlobalValue = getValueFromTheme('global');
 
 type PlaceStepProps = StackProps &
   StepProps & {
-    terms: Array<Values<typeof EventTypes>>;
+    terms?: Array<Values<typeof EventTypes>>;
     municipality?: City;
     country?: Country;
     chooseLabel: (t: TFunction) => string;
@@ -49,7 +49,7 @@ const PlaceStep = ({
   name,
   loading,
   onChange,
-  terms,
+  terms = [],
   municipality,
   country,
   chooseLabel,
@@ -266,10 +266,6 @@ const placeStepConfiguration: StepsConfiguration<'location'> = {
     municipality: undefined,
     onlineUrl: undefined,
   },
-};
-
-PlaceStep.defaultProps = {
-  terms: [],
 };
 
 export { PlaceStep, placeStepConfiguration };

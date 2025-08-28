@@ -137,7 +137,7 @@ type Props = Omit<BoxProps, 'width' | 'height'> & {
   height?: number | string;
 };
 
-const Icon = ({ name, width, height, className, ...props }: Props) => {
+const Icon = ({ name, width = 18, height = 18, className, ...props }: Props) => {
   return (
     <Box
       display="flex"
@@ -154,11 +154,6 @@ const Icon = ({ name, width, height, className, ...props }: Props) => {
       <FontAwesomeIcon icon={IconsMap[name] as IconProp} />
     </Box>
   );
-};
-
-Icon.defaultProps = {
-  width: 18,
-  height: 18,
 };
 
 export { Icon, Icons };

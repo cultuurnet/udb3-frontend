@@ -38,16 +38,16 @@ type Props = Omit<BoxProps, 'onChange'> & RadioButtonProps;
 const RadioButton = forwardRef<HTMLInputElement, Props>(
   (
     {
-      type,
+      type = 'radio',
       id,
       onChange,
       className,
       value,
       name,
-      disabled,
-      isInvalid,
+      disabled = false,
+      isInvalid = false,
       isValid,
-      checked,
+      checked = false,
       color = colors.udbMainBlue,
       ...props
     },
@@ -139,13 +139,6 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
 );
 
 RadioButton.displayName = 'RadioButton';
-
-RadioButton.defaultProps = {
-  type: 'radio',
-  isInvalid: false,
-  disabled: false,
-  checked: false,
-};
 
 export { RadioButton, RadioButtonTypes };
 export type { RadioButtonProps };

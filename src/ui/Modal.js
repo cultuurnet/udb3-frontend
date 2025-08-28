@@ -20,7 +20,7 @@ const Components = {
   [ModalVariants.CONTENT]: ContentModal,
 };
 
-const Modal = ({ variant, ...props }) => {
+const Modal = ({ variant = ModalVariants.CONTENT, ...props }) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
   return <ModalVariant {...props} />;
@@ -40,10 +40,6 @@ Modal.propTypes = {
   cancelTitle: PropTypes.string,
   onConfirm: PropTypes.func,
   confirmButtonDisabled: PropTypes.bool,
-};
-
-Modal.defaultProps = {
-  variant: ModalVariants.CONTENT,
 };
 
 export { Modal, ModalSizes, ModalVariants };

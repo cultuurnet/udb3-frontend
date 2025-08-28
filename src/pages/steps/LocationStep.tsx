@@ -912,8 +912,6 @@ const locationStepConfiguration: StepsConfiguration<'location'> = {
   }),
 };
 
-LocationStep.defaultProps = {};
-
 export {
   DUTCH_ZIP_REGEX,
   GERMAN_ZIP_REGEX,

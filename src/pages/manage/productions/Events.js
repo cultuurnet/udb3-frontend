@@ -277,9 +277,9 @@ ChangeNameAction.propTypes = {
 };
 
 const Events = ({
-  events,
+  events = [],
   activeProductionName,
-  loading,
+  loading = false,
   errorMessage,
   onToggleSelectEvent,
   onAddEvent,
@@ -411,11 +411,6 @@ Events.propTypes = {
   isAddActionVisible: PropTypes.bool,
   isChangeNameActionVisible: PropTypes.bool,
   className: PropTypes.string,
-};
-
-Events.defaultProps = {
-  events: [],
-  loading: false,
 };
 
 export { Events };

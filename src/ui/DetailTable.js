@@ -8,7 +8,7 @@ import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('detailTable');
 
-const DetailTable = ({ items, className, ...props }) => {
+const DetailTable = ({ items = [], className, ...props }) => {
   return (
     <Stack
       as="table"
@@ -46,10 +46,6 @@ DetailTable.propTypes = {
     PropTypes.shape({ header: PropTypes.string, value: PropTypes.string }),
   ),
   className: PropTypes.string,
-};
-
-DetailTable.defaultProps = {
-  items: [],
 };
 
 export { DetailTable };

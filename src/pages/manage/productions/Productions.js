@@ -14,14 +14,14 @@ import { Title } from '@/ui/Title';
 const getValue = getValueFromTheme('productionItem');
 
 const Productions = ({
-  productions,
+  productions = [],
   currentPage,
   totalItems,
   perPage,
   onClickProduction,
   onChangePage,
   className,
-  loading,
+  loading = false,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -92,11 +92,6 @@ Productions.propTypes = {
   onChangePage: PropTypes.func,
   className: PropTypes.string,
   loading: PropTypes.bool,
-};
-
-Productions.defaultProps = {
-  productions: [],
-  loading: false,
 };
 
 export { Productions };

@@ -22,7 +22,16 @@ type Props = Omit<StackProps, 'onChange'> & {
 
 const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
   (
-    { offerId, country, name, value, onChange, onBlur, error, ...props },
+    {
+      offerId,
+      country = Countries.BE,
+      name,
+      value,
+      onChange,
+      onBlur,
+      error,
+      ...props
+    },
     ref,
   ) => {
     const { t, i18n } = useTranslation();
@@ -85,10 +94,6 @@ const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
 );
 
 CityPicker.displayName = 'CityPicker';
-
-CityPicker.defaultProps = {
-  country: Countries.BE,
-};
 
 export { CityPicker };
 export type { City };

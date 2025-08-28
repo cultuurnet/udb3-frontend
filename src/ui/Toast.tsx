@@ -71,7 +71,12 @@ type Props = {
   onClose?: () => void;
 };
 
-const Toast = ({ variant, visible, body, onClose }: Props) => {
+const Toast = ({
+  variant = ToastVariants.PRIMARY,
+  visible = true,
+  body = '',
+  onClose,
+}: Props) => {
   const icon = useMemo(() => {
     const icons = {
       [ToastVariants.PRIMARY]: Icons.QUESTION_CIRCLE,
@@ -106,12 +111,6 @@ const Toast = ({ variant, visible, body, onClose }: Props) => {
       </Paragraph>
     </BootstrapToast>
   );
-};
-
-Toast.defaultProps = {
-  variant: ToastVariants.PRIMARY,
-  visible: true,
-  body: '',
 };
 
 export { Toast, ToastVariants };

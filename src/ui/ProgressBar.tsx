@@ -1,4 +1,4 @@
-import { ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
+  import { ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
 
 import type { Values } from '@/types/Values';
 
@@ -29,7 +29,5 @@ const ProgressBar = ({ progress, variant, ...props }: Props) => {
     ></Box>
   );
 };
-
-ProgressBar.defaultProps = {};
 
 export { ProgressBar, ProgressBarVariants };

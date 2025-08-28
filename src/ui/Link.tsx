@@ -28,10 +28,12 @@ const LinkVariants = {
 
 type BaseLinkProps = InlineProps & {
   variant?: Values<typeof LinkVariants>;
+  as?: keyof JSX.IntrinsicElements;
 };
 
 const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
-  ({ href, variant, title, children, className, as, ...props }, ref) => {
+  ({ href, variant, title, children, className, as = 'a', ...props }, ref) => {
+    // Unstyled link
     if (variant === LinkVariants.UNSTYLED) {
       return (
         <Inline
@@ -94,25 +96,23 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
 
 BaseLink.displayName = 'BaseLink';
 
-BaseLink.defaultProps = {
-  as: 'a',
-};
-
-type LinkProps = BaseLinkProps & {
+type LinkProps = {
+  children?: React.ReactNode;
+  className?: string;
   href: string;
   iconName?: Values<typeof Icons>;
   suffix?: ReactNode;
   customChildren?: boolean;
   shouldHideText?: boolean;
-};
+} & BaseLinkProps;
 
 const Link = ({
   href,
   iconName,
   suffix,
   children,
-  customChildren,
-  shouldHideText,
+  customChildren = false,
+  shouldHideText = false,
   className,
   variant,
   title,
@@ -196,11 +196,6 @@ const Link = ({
       {inner}
     </BaseLink>
   );
-};
-
-Link.defaultProps = {
-  customChildren: false,
-  shouldHideText: false,
 };
 
 export { Link, LinkVariants };

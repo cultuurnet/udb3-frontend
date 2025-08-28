@@ -35,7 +35,7 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
 
 const DatePicker = ({
   id,
-  selected,
+  selected = new Date(),
   onChange,
   className,
   minDate,
@@ -212,10 +212,6 @@ const DatePicker = ({
       />
     </Inline>
   );
-};
-
-DatePicker.defaultProps = {
-  selected: new Date(),
 };
 
 export { DatePicker };

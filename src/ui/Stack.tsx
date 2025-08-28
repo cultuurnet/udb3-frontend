@@ -39,7 +39,7 @@ const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
 `;
 
 const Stack = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as, ...props }, ref) => {
+  ({ spacing, className, children, as = 'section', ...props }, ref) => {
     const validChildren = Children.toArray(children).filter(
       (child) => !FALSY_VALUES.includes(child),
     );
@@ -83,10 +83,6 @@ const getStackProps = (props: UnknownProps) =>
 
     return propTypes.includes(key);
   });
-
-Stack.defaultProps = {
-  as: 'section',
-};
 
 export { getStackProps, Stack };
 export type { Props as StackProps };

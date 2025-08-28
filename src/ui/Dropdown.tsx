@@ -27,7 +27,7 @@ const { grey1 } = colors;
 
 const Dropdown = ({
   variant,
-  isSplit,
+  isSplit = false,
   children,
   className,
   ...props
@@ -121,9 +121,6 @@ const Dropdown = ({
   );
 };
 
-Dropdown.defaultProps = {
-  isSplit: false,
-};
 
 const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
   if (onClick) {

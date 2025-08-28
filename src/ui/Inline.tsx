@@ -55,7 +55,7 @@ const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
 `;
 
 const Inline = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as, stackOn, ...props }, ref) => {
+  ({ spacing, className, children, as = 'span', stackOn, ...props }, ref) => {
     const shouldCollapse = useMatchBreakpoint(stackOn);
 
     const marginProp =
@@ -117,10 +117,6 @@ const getInlineProps = (props: UnknownProps) =>
 
     return propTypes.includes(key);
   });
-
-Inline.defaultProps = {
-  as: 'section',
-};
 
 export { getInlineProps, Inline };
 export type { Props as InlineProps };

@@ -51,7 +51,7 @@ export const DashboardRow = ({
   date,
   imageUrl,
   score,
-  actions,
+  actions = [],
   url,
   finishedAt,
   isFinished,
@@ -246,8 +246,4 @@ export const DashboardRow = ({
       </Stack>
     </Inline>
   );
-};
-
-DashboardRow.defaultProps = {
-  actions: [],
 };

@@ -66,7 +66,7 @@ type InputProps = HTMLProps<HTMLInputElement> & {
 
 type Props = Omit<BoxProps, 'onChange' | 'onBlur'> & InputProps;
 
-const Input = forwardRef(({ onChange, className, ...props }: Props, ref) => (
+const Input = forwardRef(({ onChange, className, type = 'text', isInvalid = false, ...props }: Props, ref) => (
   <Form.Control
     ref={ref}
     as={BaseInput}
@@ -80,11 +80,6 @@ const Input = forwardRef(({ onChange, className, ...props }: Props, ref) => (
 ));
 
 Input.displayName = 'Input';
-
-Input.defaultProps = {
-  type: 'text',
-  isInvalid: false,
-};
 
 export { Input };
 export type { InputProps, InputType };

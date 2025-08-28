@@ -8,17 +8,17 @@ const getValueForModal = getValueFromTheme('modal');
 
 const QuestionModal = ({
   className,
-  visible,
-  title,
-  confirmTitle,
-  cancelTitle,
+  visible = false,
+  title = '',
+  confirmTitle = 'Ok',
+  cancelTitle = 'Cancel',
   onShow,
   onClose,
   onConfirm,
   children,
-  scrollable,
-  size,
-  confirmButtonDisabled,
+  scrollable = true,
+  size = 'sm',
+  confirmButtonDisabled = false,
   confirmLoading,
 }) => (
   <BootstrapModal
@@ -86,16 +86,6 @@ QuestionModal.propTypes = {
   children: PropTypes.node,
   size: PropTypes.string,
   confirmButtonDisabled: PropTypes.bool,
-};
-
-QuestionModal.defaultProps = {
-  visible: false,
-  confirmButtonDisabled: false,
-  title: '',
-  confirmTitle: 'Ok',
-  cancelTitle: 'Cancel',
-  size: 'sm',
-  scrollable: true,
 };
 
 export { QuestionModal };

@@ -549,17 +549,15 @@ const getBoxProps = (props: UnknownProps) =>
     return (boxPropTypes as readonly string[]).includes(key);
   });
 
-const Box = forwardRef<HTMLElement, BoxProps>(({ children, ...props }, ref) => (
-  <StyledBox ref={ref} {...props}>
-    {children}
-  </StyledBox>
-));
+const Box = forwardRef<HTMLElement, BoxProps<any>>(
+  ({ children, as = 'div', ...props }, ref) => (
+    <StyledBox ref={ref} as={as} {...props}>
+      {children}
+    </StyledBox>
+  ),
+);
 
 Box.displayName = 'Box';
-
-Box.defaultProps = {
-  as: 'div',
-};
 
 export {
   Box,

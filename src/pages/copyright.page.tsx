@@ -12,11 +12,11 @@ import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const NumberedList = ({
-  steps,
+  steps = [],
   stepTranslationPath,
   ...props
 }: {
-  steps: number[];
+  steps?: number[];
   stepTranslationPath: string;
 } & InlineProps) => {
   const { t } = useTranslation();
@@ -36,10 +36,6 @@ const NumberedList = ({
       ))}
     </List>
   );
-};
-
-NumberedList.defaultProps = {
-  steps: [],
 };
 
 const Copyright = () => {
@@ -100,8 +96,10 @@ const Copyright = () => {
       <Page.Content spacing={5}>
         {questionsAndAnswers.map(({ question, answer }) => (
           <Stack key={question} spacing={3}>
-            <Title size={2}>{question}</Title>
-            {answer}
+            <>
+              <Title size={2}>{question}</Title>
+              {answer}
+            </>
           </Stack>
         ))}
       </Page.Content>
