@@ -82,12 +82,41 @@ const CultuurkuurModal = ({
               key={level1Name}
               css={`
                 margin-bottom: 2rem;
+                border: 1px solid ${colors.grey3};
+                border-radius: 0.5rem;
+                overflow: hidden;
+
+                .accordion-item {
+                  border: none;
+                  border-radius: 0;
+                  margin-bottom: 0;
+                }
+
+                .card {
+                  border: none;
+                  border-radius: 0 !important;
+                }
+
+                .card:not(:first-child) .card-header {
+                  border-top: 1px solid ${colors.grey3};
+                }
+
+                .card-header {
+                  border-radius: 0 !important;
+                  border: none;
+                }
+
+                .card-body {
+                  border-radius: 0 !important;
+                  border-top: 1px solid ${colors.grey3};
+                }
               `}
             >
               <Card>
                 <Card.Header
                   css={`
                     background-color: ${colors.grey1};
+                    padding: 1rem;
                   `}
                 >
                   <Inline justifyContent="space-between" alignItems="center">
@@ -110,12 +139,14 @@ const CultuurkuurModal = ({
                 const hasChildren = (level2?.children?.length || 0) > 0;
                 const leafs = getAllLeafNodes(level2);
                 const selectedCount = leafs.filter(isSelected).length;
+                
 
                 return (
                   <Card key={level2Name}>
                     <Card.Header
                       css={`
                         background-color: transparent;
+                        padding: 1rem;
                       `}
                     >
                       {hasChildren ? (
@@ -129,7 +160,7 @@ const CultuurkuurModal = ({
                             <p>{level2Name}</p>
                             {selectedCount > 0 && (
                               <span
-                                className="badge badge-pill badge-success ml-1"
+                                className="badge rounded-pill bg-success ms-1"
                                 css={`
                                   background-color: ${colors.udbMainPositiveGreen} !important;
                                 `}

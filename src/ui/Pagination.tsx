@@ -76,10 +76,10 @@ const Pagination = ({
 
         .page-link {
           color: ${getValue('color')};
-          border-color: ${getValue('borderColor')};
+          border: 1px solid ${getValue('borderColor')};
           padding: ${getValue('paddingY')} ${getValue('paddingX')};
           border-radius: ${getGlobalBorderRadius};
-          margin: 0.2rem;
+          margin: 0.4rem;
 
           &:hover {
             background-color: ${getValue('hoverBackgroundColor')};

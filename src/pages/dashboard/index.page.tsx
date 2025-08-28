@@ -738,13 +738,12 @@ const Dashboard = (): any => {
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
             css={`
-              .nav-item.nav-link {
-                color: ${textColor};
-                padding: 0;
-                margin-right: 1.5rem;
-                margin-top: 0.5rem;
-              }
+              .nav-link,
               .nav-item {
+                color: ${textColor};
+                padding: 0 !important;
+                margin-right: 1rem;
+                margin-top: 0.5rem;
                 border: none !important;
 
                 &.active {
@@ -752,7 +751,7 @@ const Dashboard = (): any => {
                 }
 
                 &:hover {
-                  background-color: transparent;
+                  background-color: transparent !important;
                 }
               }
             `}
