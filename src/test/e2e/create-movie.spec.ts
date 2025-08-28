@@ -55,8 +55,8 @@ test('create a movie', async ({ baseURL, page }) => {
   await page.locator('select').nth(1).selectOption('phone');
   await page
     .getByTestId('contact-info-value')
-    .nth(1)
-    .fill(faker.phone.number('+336########'));
+    .last()
+    .fill(faker.phone.number({style: 'international'}));
   await contactButton.click();
   await page.locator('select').nth(2).selectOption('url');
   await page
