@@ -156,7 +156,7 @@ const PlaceStep = ({
                       options={places}
                       onInputChange={debounce(setSearchInput, 275)}
                       filterBy={filterByCallback}
-                      labelKey={(place) =>
+                      labelKey={(place: Place) =>
                         getPlaceName(place.name, place.mainLanguage)
                       }
                       renderMenuItemChildren={(place: Place, { text }) => {

@@ -262,7 +262,7 @@ const OrganizerPicker = ({
                     maxWidth="35rem"
                     options={organizers}
                     isLoading={getOrganizersByQueryQuery.isLoading}
-                    labelKey={(org) => getOrganizerName(org, i18n.language)}
+                    labelKey={(org: Organizer) => getOrganizerName(org, i18n.language)}
                     css={`
                       .dropdown-item {
                         display: flex;
