@@ -77,7 +77,7 @@ const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
               ref={ref}
               isLoading={getCitiesQuery.isLoading}
               options={cities}
-              labelKey={(city) => city.label}
+              labelKey={(city: City) => city.label}
               selected={valueToArray(value)}
               onInputChange={debounce(setCitySearchInput, 275)}
               onChange={([value]: [City]) => onChange(value)}

@@ -3,7 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
-import { useRef } from 'react';
+import { Component, ComponentType, useRef } from 'react';
 import ReactDatePicker, {
   registerLocale,
   setDefaultLocale,
@@ -168,7 +168,7 @@ const DatePicker = ({
       `}
     >
       <Box
-        forwardedAs={ReactDatePicker}
+        forwardedAs={ReactDatePicker as unknown as ComponentType<any>}
         ref={datePickerRef}
         className={className}
         id={id}
@@ -179,7 +179,7 @@ const DatePicker = ({
         showYearDropdown
         minDate={minDate}
         maxDate={maxDate}
-        customInput={<Input id={id} />}
+        customInput={<Input id={id} value={selected ? selected.toLocaleDateString() : ''} />}
         disabled={disabled}
         locale={i18n.language}
         css={`

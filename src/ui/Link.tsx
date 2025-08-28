@@ -45,6 +45,8 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           display="inline-flex"
           color={{ default: 'inherit', hover: 'inherit' }}
           alignItems="center"
+          width="100%"
+          textDecoration="none"
           {...getInlineProps(props)}
         >
           {children}
@@ -52,6 +54,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
       );
     }
 
+    // Button-styled link
     if (Object.values(LinkButtonVariants).includes(variant)) {
       return (
         <Inline
@@ -62,6 +65,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           display="inline-flex"
           alignItems="center"
           {...getInlineProps(props)}
+          textDecoration="none"
         >
           <Button forwardedAs="span" width="100%" variant={variant}>
             {children}
@@ -70,6 +74,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
       );
     }
 
+    // Default styled link
     return (
       <Inline
         className={className}
@@ -81,7 +86,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
         fontWeight={400}
         css={`
           text-decoration: underline;
-
           &:hover {
             text-decoration: underline;
           }
@@ -119,36 +123,30 @@ const Link = ({
   as,
   ...props
 }: LinkProps) => {
-  const isInternalLink = [
-    (val: string) => val.startsWith('/'),
-    (val: string) => val.startsWith('#'),
-  ].some((predicate) => predicate(href));
+  const isInternalLink = href.startsWith('/') || href.startsWith('#');
 
-  const clonedSuffix = suffix
-    ? // @ts-expect-error
-      cloneElement(suffix, {
-        // @ts-expect-error
-        ...suffix.props,
-        key: 'suffix',
-        css: `align-self: flex-end`,
-      })
-    : undefined;
+  const clonedSuffix =
+    suffix && typeof suffix === 'object' && 'type' in suffix
+      ? cloneElement(suffix as React.ReactElement, {
+          key: 'suffix',
+          css: `align-self: flex-end`,
+        })
+      : suffix;
 
-  const inner = [
-    <Inline spacing={3} key="content">
-      {iconName && <Icon name={iconName} key="icon" />}
-      {customChildren
-        ? children
-        : !shouldHideText && (
-            <Text flex={1} textAlign="left" key="text">
-              {children}
-            </Text>
-          )}
-    </Inline>,
-    clonedSuffix,
-  ];
+  const content = (
+    <>
+      <Inline spacing={3}>
+        {iconName && <Icon name={iconName} />}
+        {customChildren
+          ? children
+          : !shouldHideText && <Text flex={1}>{children}</Text>}
+      </Inline>
+      {clonedSuffix}
+    </>
+  );
 
-  if (href === '') {
+  // Render empty href as BaseLink
+  if (!href) {
     return (
       <BaseLink
         as={as}
@@ -157,31 +155,29 @@ const Link = ({
         title={title}
         {...getInlineProps(props)}
       >
-        {inner}
+        {content}
       </BaseLink>
     );
   }
 
+  // Internal links
   if (isInternalLink) {
     return (
-      <NextLink
-        href={href}
-        passHref={!!href}
-        {...(process.env.STORYBOOK ? { prefetch: false } : {})}
-      >
+      <NextLink href={href} passHref legacyBehavior>
         <BaseLink
-          as={as}
+          as="a"
           className={className}
           variant={variant}
           title={title}
           {...getInlineProps(props)}
         >
-          {inner}
+          {content}
         </BaseLink>
       </NextLink>
     );
   }
 
+  // External links
   return (
     <BaseLink
       as={as}
@@ -193,7 +189,7 @@ const Link = ({
       title={title}
       {...getInlineProps(props)}
     >
-      {inner}
+      {content}
     </BaseLink>
   );
 };

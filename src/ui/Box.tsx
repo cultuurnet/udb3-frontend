@@ -11,7 +11,7 @@ import type {
   ReactNode,
 } from 'react';
 import { forwardRef } from 'react';
-import { AsyncTypeaheadProps, TypeaheadModel } from 'react-bootstrap-typeahead';
+import { UseAsyncProps } from 'react-bootstrap-typeahead';
 import { ReactDatePickerProps } from 'react-datepicker';
 import type {
   FlattenInterpolation,
@@ -100,7 +100,7 @@ type InputProps = {
   checked: boolean;
 };
 
-type SpecificComponentProps<T extends TypeaheadModel> = InlineProps &
+type SpecificComponentProps = InlineProps &
   Omit<ReactDatePickerProps, 'onChange' | 'onSelect' | 'value' | 'selected'> &
   TitleProps &
   ListProps &
@@ -110,7 +110,7 @@ type SpecificComponentProps<T extends TypeaheadModel> = InlineProps &
   InputProps &
   SvgProps &
   ProgressBarProps &
-  Omit<AsyncTypeaheadProps<T>, 'id' | 'size' | 'onChange' | 'selected'>;
+  Omit<UseAsyncProps, 'id' | 'size' | 'onChange' | 'selected'>;
 
 type EventHandlerProps = {
   onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -228,8 +228,8 @@ type UIProps = {
   role: UIProp<string>;
 };
 
-type BoxProps<T extends TypeaheadModel = any> = Partial<
-  UIProps & GeneralProps & SpecificComponentProps<T> & EventHandlerProps
+type BoxProps<T = any> = Partial<
+  UIProps & GeneralProps & SpecificComponentProps & EventHandlerProps
 >;
 
 const remInPixels = 15;

@@ -71,10 +71,10 @@ const Input = forwardRef(({ onChange, className, type = 'text', isInvalid = fals
     ref={ref}
     as={BaseInput}
     maxWidth="43rem"
-    height={getGlobalFormInputHeight}
+    height={`${getGlobalFormInputHeight}`}
     borderRadius={getGlobalBorderRadius}
     onInput={onChange}
-    {...getInputProps(props)}
+    {...getInputProps({ type, isInvalid, ...props })}
     {...getBoxProps(props)}
   />
 ));
