@@ -58,7 +58,8 @@ const Dropdown = ({
   return (
     <Box
       css={`
-        .dropdown.btn-group {
+        .dropdown,
+        .btn-group {
           box-shadow: ${getGlobalValue('boxShadow.heavy')};
           border-radius: ${getGlobalBorderRadius};
         }
@@ -76,7 +77,7 @@ const Dropdown = ({
           margin: 0;
         }
 
-        .dropdown.btn-group {
+        .btn-group {
           .btn-secondary {
             box-shadow: none;
           }
