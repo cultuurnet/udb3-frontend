@@ -93,6 +93,7 @@ const Tabs = <T,>({
         margin-bottom: 1.5rem;
       }
       .nav-link {
+        color: ${getValue('color')};
         padding: 0.4rem 1rem;
         border: 1px solid black;
         margin: 0 !important;
