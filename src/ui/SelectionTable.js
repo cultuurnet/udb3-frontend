@@ -48,7 +48,6 @@ const CheckBoxCell = ({ row }) => {
 CheckBoxCell.propTypes = {
   row: PropTypes.object,
 };
-e;
 
 const SelectionTable = ({
   columns,
