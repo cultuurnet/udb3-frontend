@@ -139,7 +139,6 @@ const CultuurkuurModal = ({
                 const hasChildren = (level2?.children?.length || 0) > 0;
                 const leafs = getAllLeafNodes(level2);
                 const selectedCount = leafs.filter(isSelected).length;
-                
 
                 return (
                   <Card key={level2Name}>

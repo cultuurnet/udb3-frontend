@@ -9,11 +9,10 @@ import { getValueFromTheme } from '@/ui/theme';
 
 const getValue = getValueFromTheme(`richTextEditor`);
 
-
 const Editor = dynamic<EditorProps>(
   () =>
     import('react-draft-wysiwyg').then(
-      (mod) => mod.Editor as unknown as React.ComponentType<EditorProps>
+      (mod) => mod.Editor as unknown as React.ComponentType<EditorProps>,
     ),
   { ssr: false },
 );

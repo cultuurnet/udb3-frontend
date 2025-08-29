@@ -211,7 +211,9 @@ type ProfileMenuProps = {
   defaultProfileImageUrl?: string;
 };
 
-const ProfileMenu = ({ defaultProfileImageUrl = '/assets/avatar.svg' }: ProfileMenuProps) => {
+const ProfileMenu = ({
+  defaultProfileImageUrl = '/assets/avatar.svg',
+}: ProfileMenuProps) => {
   const getUserQuery = useGetUserQuery();
   const user = getUserQuery.data as User;
 
@@ -244,7 +246,6 @@ const ProfileMenu = ({ defaultProfileImageUrl = '/assets/avatar.svg' }: ProfileM
     </Inline>
   );
 };
-
 
 type NotificationMenuProps = {
   countUnseenAnnouncements: number;

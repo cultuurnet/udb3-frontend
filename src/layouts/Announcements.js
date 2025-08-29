@@ -25,7 +25,12 @@ const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');
 const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
 
-const Announcement = ({ id, title, status = AnnouncementStatus.UNSEEN, onClick }) => {
+const Announcement = ({
+  id,
+  title,
+  status = AnnouncementStatus.UNSEEN,
+  onClick,
+}) => {
   return (
     <List.Item
       padding={4}

@@ -113,17 +113,28 @@ type Props = {
   country: Country;
 } & BoxProps;
 
-const FlagIcon = ({ country, width = '1.4rem', height = '1.4rem', ...props }: Props) => {
+const FlagIcon = ({
+  country,
+  width = '1.4rem',
+  height = '1.4rem',
+  ...props
+}: Props) => {
   if (country === Countries.BE) {
-    return <FlagBelgium width={width} height={height} {...getBoxProps(props)} />;
+    return (
+      <FlagBelgium width={width} height={height} {...getBoxProps(props)} />
+    );
   }
 
   if (country === Countries.NL) {
-    return <FlagNetherlands width={width} height={height} {...getBoxProps(props)} />;
+    return (
+      <FlagNetherlands width={width} height={height} {...getBoxProps(props)} />
+    );
   }
 
   if (country === Countries.DE) {
-    return <FlagGermany width={width} height={height} {...getBoxProps(props)} />;
+    return (
+      <FlagGermany width={width} height={height} {...getBoxProps(props)} />
+    );
   }
 
   return null;

@@ -26,7 +26,8 @@ type NewEntry = {
 
 type TypeaheadOption = string | Record<string, any>;
 
-export type TypeaheadElement<T extends TypeaheadOption = TypeaheadOption> = CoreTypeahead;
+export type TypeaheadElement<T extends TypeaheadOption = TypeaheadOption> =
+  CoreTypeahead;
 
 const isNewEntry = (value: any): value is NewEntry => {
   return !!value?.customOption;
@@ -167,7 +168,9 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
   );
 };
 
-const Typeahead = forwardRef(TypeaheadInner) as <T extends TypeaheadOption = TypeaheadOption>(
+const Typeahead = forwardRef(TypeaheadInner) as <
+  T extends TypeaheadOption = TypeaheadOption,
+>(
   props: Props<T> & { ref?: ForwardedRef<TypeaheadElement<T>> },
 ) => ReturnType<typeof TypeaheadInner<T>>;
 

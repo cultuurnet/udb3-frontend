@@ -4,7 +4,17 @@ import styled, { css } from 'styled-components';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 
-import { Box, BoxProps, boxProps, boxPropTypes, FALSY_VALUES, parseProperty, UIProp, UnknownProps, withoutDisallowedPropsConfig } from './Box';
+import {
+  Box,
+  BoxProps,
+  boxProps,
+  boxPropTypes,
+  FALSY_VALUES,
+  parseProperty,
+  UIProp,
+  UnknownProps,
+  withoutDisallowedPropsConfig,
+} from './Box';
 import type { BreakpointValues } from './theme';
 
 type InlineProps = {
@@ -14,14 +24,16 @@ type InlineProps = {
 
 type Props = BoxProps & InlineProps;
 
-const parseStackOnProperty = () => ({ stackOn }: Props) => {
-  if (!stackOn) return;
-  return css`
-    @media (max-width: ${(props) => props.theme.breakpoints[stackOn]}px) {
-      flex-direction: column;
-    }
-  `;
-};
+const parseStackOnProperty =
+  () =>
+  ({ stackOn }: Props) => {
+    if (!stackOn) return;
+    return css`
+      @media (max-width: ${(props) => props.theme.breakpoints[stackOn]}px) {
+        flex-direction: column;
+      }
+    `;
+  };
 
 const inlineProps = css`
   display: flex;
@@ -41,7 +53,8 @@ const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
 const Inline = forwardRef<HTMLElement, Props>(
   ({ spacing, className, children, as = 'span', stackOn, ...props }, ref) => {
     const shouldCollapse = useMatchBreakpoint(stackOn);
-    const marginProp = shouldCollapse && stackOn ? 'marginBottom' : 'marginRight';
+    const marginProp =
+      shouldCollapse && stackOn ? 'marginBottom' : 'marginRight';
 
     const validChildren = Children.toArray(children).filter(
       (child) => !FALSY_VALUES.includes(child),
@@ -58,7 +71,13 @@ const Inline = forwardRef<HTMLElement, Props>(
     });
 
     return (
-      <StyledBox as={as} className={className} stackOn={stackOn} {...props} ref={ref}>
+      <StyledBox
+        as={as}
+        className={className}
+        stackOn={stackOn}
+        {...props}
+        ref={ref}
+      >
         {clonedChildren}
       </StyledBox>
     );
@@ -67,13 +86,23 @@ const Inline = forwardRef<HTMLElement, Props>(
 
 Inline.displayName = 'Inline';
 
-const inlinePropTypes = ['spacing', 'alignItems', 'alignSelf', 'justifyContent', 'stackOn'];
+const inlinePropTypes = [
+  'spacing',
+  'alignItems',
+  'alignSelf',
+  'justifyContent',
+  'stackOn',
+];
 const linkPropTypes = ['rel', 'target'];
 
 const getInlineProps = (props: UnknownProps) =>
   pickBy(props, (_value, key) => {
     if (key.startsWith('aria-')) return true;
-    const propTypes: string[] = [...boxPropTypes, ...inlinePropTypes, ...linkPropTypes];
+    const propTypes: string[] = [
+      ...boxPropTypes,
+      ...inlinePropTypes,
+      ...linkPropTypes,
+    ];
     return propTypes.includes(key);
   });
 

@@ -179,7 +179,12 @@ const DatePicker = ({
         showYearDropdown
         minDate={minDate}
         maxDate={maxDate}
-        customInput={<Input id={id} value={selected ? selected.toLocaleDateString() : ''} />}
+        customInput={
+          <Input
+            id={id}
+            value={selected ? selected.toLocaleDateString() : ''}
+          />
+        }
         disabled={disabled}
         locale={i18n.language}
         css={`

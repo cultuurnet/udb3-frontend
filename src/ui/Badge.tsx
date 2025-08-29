@@ -19,7 +19,12 @@ type Props = BoxProps & {
   variant?: Values<typeof BadgeVariants>;
 };
 
-const Badge = ({ children, className, variant = BadgeVariants.DANGER, ...props }: Props) => {
+const Badge = ({
+  children,
+  className,
+  variant = BadgeVariants.DANGER,
+  ...props
+}: Props) => {
   return (
     <BootstrapBadge
       as={BaseBadge}

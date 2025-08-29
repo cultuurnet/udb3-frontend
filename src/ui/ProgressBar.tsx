@@ -1,4 +1,4 @@
-  import { ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
+import { ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
 
 import type { Values } from '@/types/Values';
 
