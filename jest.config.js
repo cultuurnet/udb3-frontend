@@ -4,6 +4,7 @@ const jsconfigpaths = new JsConfigPathsMapper({
 });
 
 module.exports = {
+  testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   transform: {
     '^.+\\.(js|ts|tsx)$': 'babel-jest',
