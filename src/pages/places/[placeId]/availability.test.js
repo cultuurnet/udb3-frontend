@@ -110,7 +110,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
 
   await userEvent.type(
     screen.getByLabelText(nl.offerStatus.reason),
-    'Blalala',
+    'Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvina',
   );
 
   expect(screen.getByRole('alert')).toBeInTheDocument();
