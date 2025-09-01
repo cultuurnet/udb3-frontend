@@ -72,4 +72,9 @@ test('Create a cultuurkuur organizer', async ({ baseURL, page }) => {
   await page.waitForURL(/\/organizers\/.*\/edit/, {
     waitUntil: 'domcontentloaded',
   });
+
+  // check if cultuurkuur checkbox is disabled
+  await expect(
+    page.getByLabel('Deze organisatie heeft ook aanbod voor scholen'),
+  ).toBeDisabled();
 });
