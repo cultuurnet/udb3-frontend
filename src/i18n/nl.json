@@ -208,6 +208,9 @@
         "other": "Of kies een andere locatie",
         "pick": "Kies een locatie"
       },
+      "existing_locations": {
+        "title": "We vinden al plaatsen op dit adres. Misschien kan jij een onze suggesties hergebruiken?"
+      },
       "validation_messages": {
         "street_and_number": {
           "required": "Je straat en nummer voldoen niet aan de vereisten."

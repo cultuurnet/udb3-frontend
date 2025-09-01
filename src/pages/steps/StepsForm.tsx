@@ -10,6 +10,7 @@ import {
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
@@ -238,11 +239,18 @@ const StepsForm = ({
 
       const { status, message } = error;
 
-      const parsedMessage = JSON.parse(message);
+      const parsedMessage = (() => {
+        try {
+          return JSON.parse(message);
+        } catch {
+          return message;
+        }
+      })();
 
       if (
         status === DUPLICATE_STATUS_CODE ||
-        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR)
+        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) ||
+        parsedMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)
       ) {
         newErrors.nameAndAgeRange = error;
       }
