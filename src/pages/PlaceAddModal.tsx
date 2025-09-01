@@ -168,7 +168,6 @@ const PlaceAddModal = ({
       <Stack padding={4} spacing={4}>
         <AlertDuplicatePlace
           variant={AlertVariants.WARNING}
-          onSelectPlace={handleUseOriginalPlace}
           placeId={duplicatePlaceInfo?.id}
           query={duplicatePlaceInfo?.query}
           labelKey={`location.add_modal.errors.duplicate_place`}

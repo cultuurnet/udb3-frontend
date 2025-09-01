@@ -15,6 +15,7 @@ import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
+import { useHeaders } from '@/hooks/api/useHeaders';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
@@ -23,6 +24,7 @@ import { parseSpacing } from '@/ui/Box';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
+import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -45,6 +47,7 @@ const useEditNameAndAgeRange = ({
   offerId,
   mainLanguage,
 }: UseEditArguments) => {
+  const headers = useHeaders();
   const changeNameMutation = useChangeOfferNameMutation({
     onSuccess: () => onSuccess('basic_info'),
   });
@@ -53,8 +56,12 @@ const useEditNameAndAgeRange = ({
     onSuccess: () => onSuccess('basic_info'),
   });
 
-  return async ({ nameAndAgeRange }: FormDataUnion) => {
+  return async ({ nameAndAgeRange, location }: FormDataUnion) => {
     const { name, typicalAgeRange } = nameAndAgeRange;
+
+    if (scope === OfferTypes.PLACES) {
+      await checkDuplicatePlace({ headers, offerId, location, name });
+    }
 
     if (typicalAgeRange) {
       await changeTypicalAgeRangeMutation.mutateAsync({
@@ -108,11 +115,6 @@ const NameAndAgeRangeStep = ({
   const duplicatePlaceQuery = (error?.body as DuplicatePlaceErrorBody)?.query
     ? error.body.query
     : undefined;
-
-  const goToLocationDetailPage = (place: Place) => {
-    const placeId = parseOfferId(place['@id']);
-    router.push(`/place/${placeId}/preview`);
-  };
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -194,8 +196,12 @@ const NameAndAgeRangeStep = ({
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}
               query={duplicatePlaceQuery}
-              labelKey="create.name_and_age.name.duplicate_place"
-              onSelectPlace={goToLocationDetailPage}
+              offerId={offerId}
+              labelKey={
+                offerId
+                  ? 'location.add_modal.errors.duplicate_place_edit_page'
+                  : 'create.name_and_age.name.duplicate_place'
+              }
             />
           </Stack>
         );
