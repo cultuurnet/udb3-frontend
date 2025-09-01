@@ -37,10 +37,10 @@ const setup = async () => {
 test('I can save a status', async () => {
   const page = await setup();
 
-  userEvent.click(screen.getByTestId('checkbox-0'));
-  userEvent.click(screen.getByTestId('checkbox-2'));
+  await userEvent.click(screen.getByTestId('checkbox-0'));
+  await userEvent.click(screen.getByTestId('checkbox-2'));
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.changeStatus,
     }),
@@ -52,7 +52,7 @@ test('I can save a status', async () => {
     }),
   ).toBeDisabled();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.available),
   );
 
@@ -64,7 +64,7 @@ test('I can save a status', async () => {
     }),
   ).toBeEnabled();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.actions.save,
     }),
@@ -89,22 +89,22 @@ test('I can save a status', async () => {
 test('I can save a status with a reason', async () => {
   const page = await setup();
 
-  userEvent.click(screen.getByTestId('checkbox-1'));
-  userEvent.click(screen.getByTestId('checkbox-2'));
+  await userEvent.click(screen.getByTestId('checkbox-1'));
+  await userEvent.click(screen.getByTestId('checkbox-2'));
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.changeStatus,
     }),
   );
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.unavailable),
   );
 
   expect(screen.getByLabelText(nl.offerStatus.reason)).toBeEnabled();
 
-  userEvent.type(screen.getByLabelText(nl.offerStatus.reason), 'Lorem Ipsum');
+  await userEvent.type(screen.getByLabelText(nl.offerStatus.reason), 'Lorem Ipsum');
 
   expect(
     screen.getByRole('button', {
@@ -112,7 +112,7 @@ test('I can save a status with a reason', async () => {
     }),
   ).toBeEnabled();
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.offerStatus.actions.save,
     }),
@@ -143,18 +143,18 @@ test('I can save a status with a reason', async () => {
 test('I can save a booking availability', async () => {
   const page = await setup();
 
-  userEvent.click(screen.getByTestId('checkbox-1'));
-  userEvent.click(screen.getByTestId('checkbox-2'));
+  await userEvent.click(screen.getByTestId('checkbox-1'));
+  await userEvent.click(screen.getByTestId('checkbox-2'));
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.bookingAvailability.change,
     }),
   );
 
-  userEvent.click(screen.getByLabelText(nl.bookingAvailability.available));
+  await userEvent.click(screen.getByLabelText(nl.bookingAvailability.available));
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByRole('button', {
       name: nl.bookingAvailability.actions.save,
     }),
