@@ -84,7 +84,7 @@ const RecentUsedOrganizers = ({
       </Alert>
       <Inline spacing={4} justifyContent="flex-start" flexWrap="wrap">
         {organizers.map((organizer, index) => {
-          if (organizer.name === undefined) return null;
+          if (!organizer.name) return null;
 
           const name =
             typeof organizer.name === 'string'
