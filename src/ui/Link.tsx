@@ -54,7 +54,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
       );
     }
 
-    // Button-styled link
     if (Object.values(LinkButtonVariants).includes(variant)) {
       return (
         <Inline
@@ -74,7 +73,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
       );
     }
 
-    // Default styled link
     return (
       <Inline
         className={className}
@@ -149,7 +147,6 @@ const Link = ({
     </>
   );
 
-  // Render empty href as BaseLink
   if (!href) {
     return (
       <BaseLink
@@ -164,7 +161,6 @@ const Link = ({
     );
   }
 
-  // Internal links
   if (isInternalLink) {
     return (
       <NextLink href={href} passHref legacyBehavior>
@@ -183,7 +179,6 @@ const Link = ({
     );
   }
 
-  // External links
   return (
     <BaseLink
       as={as}
