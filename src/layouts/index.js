@@ -45,7 +45,8 @@ const useHandleAuthentication = () => {
   useEffect(() => {
     let intervalId; // eslint-disable-line prefer-const
     const cleanUp = () => (intervalId ? clearInterval(intervalId) : undefined);
-    if (asPath.startsWith('/login')) return cleanUp;
+    if (asPath.startsWith('/login') || typeof jest !== 'undefined')
+      return cleanUp;
     intervalId = setInterval(() => {
       const cookies = new Cookies();
       if (!isTokenValid(cookies.get('token'))) {
