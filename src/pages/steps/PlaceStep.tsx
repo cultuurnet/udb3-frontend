@@ -65,7 +65,7 @@ const PlaceStep = ({
 
   const useGetPlacesQuery = useGetPlacesByQuery(
     {
-      name: searchInput,
+      searchTerm: searchInput,
       terms,
       zip: municipality?.zip,
       addressLocality: municipality?.name,

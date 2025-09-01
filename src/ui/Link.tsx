@@ -108,6 +108,8 @@ type LinkProps = {
   suffix?: ReactNode;
   customChildren?: boolean;
   shouldHideText?: boolean;
+  target?: string;
+  rel?: string;
 } & BaseLinkProps;
 
 const Link = ({
@@ -121,6 +123,8 @@ const Link = ({
   variant,
   title,
   as,
+  target,
+  rel,
   ...props
 }: LinkProps) => {
   const isInternalLink = href.startsWith('/') || href.startsWith('#');
@@ -170,6 +174,8 @@ const Link = ({
           variant={variant}
           title={title}
           {...getInlineProps(props)}
+          target={target}
+          rel={rel}
         >
           {content}
         </BaseLink>

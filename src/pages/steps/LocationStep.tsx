@@ -19,7 +19,10 @@ import {
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useChangeAddressMutation } from '@/hooks/api/places';
+import {
+  useChangeAddressMutation,
+  useGetPlacesByQuery,
+} from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
@@ -27,6 +30,7 @@ import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import { AttendanceMode, Event } from '@/types/Event';
+import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -38,6 +42,7 @@ import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { Link } from '@/ui/Link';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
@@ -71,20 +76,34 @@ const API_URL = publicRuntimeConfig.apiUrl;
 
 const getGlobalValue = getValueFromTheme('global');
 
-const RecentLocations = ({ onFieldChange, ...props }) => {
+type LocationSuggestionProps = {
+  locations: Place[];
+  title: string;
+  alertVisible?: boolean;
+  isRecentLocations?: boolean;
+  onFieldChange?: (value: any) => void;
+} & StackProps;
+
+const LocationSuggestions = ({
+  onFieldChange,
+  locations,
+  title,
+  alertVisible = true,
+  isRecentLocations = true,
+  ...props
+}: LocationSuggestionProps) => {
   const { t, i18n } = useTranslation();
-  const { recentLocations: locations } = useRecentLocations();
 
   return (
-    <Stack {...props}>
+    <Stack {...props} spacing={5}>
       <Inline>
-        <Text fontWeight={'bold'}>
-          {t('create.location.recent_locations.title')}
-        </Text>
+        <Text fontWeight={'bold'}>{title}</Text>
       </Inline>
-      <Alert variant={AlertVariants.PRIMARY} marginY={4}>
-        {t('create.location.recent_locations.info')}
-      </Alert>
+      {alertVisible && (
+        <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+          {t('create.location.recent_locations.info')}
+        </Alert>
+      )}
       <Inline
         display={'grid'}
         css={`
@@ -97,12 +116,14 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
             location.address,
             location.mainLanguage,
           );
+          const locationId = parseOfferId(location['@id']);
 
           return (
             <ButtonCard
               key={location['@id']}
               width={'auto'}
               marginBottom={0}
+              href={isRecentLocations ? null : `/place/${locationId}/preview`}
               onClick={() =>
                 onFieldChange({
                   municipality: {
@@ -316,7 +337,7 @@ const LocationStep = ({
   error,
   ...props
 }: PlaceStepProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -333,6 +354,7 @@ const LocationStep = ({
 
   const [isBlankStreetToggleVisible, setIsBlankStreetToggleVisible] =
     useState(hasStreetAndNumber);
+  const [isExistingPlacesVisible, setIsExistingPlacesVisible] = useState(false);
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -428,6 +450,21 @@ const LocationStep = ({
     setStreetAndNumber(e.target.value);
   };
 
+  const useGetPlacesQuery = useGetPlacesByQuery({
+    terms: [],
+    zip: location?.municipality?.zip,
+    addressLocality: location?.municipality?.name,
+    addressCountry: country,
+    searchTerm: streetAndNumber,
+  });
+
+  const existingPlaces = useMemo<Place[]>(
+    () => useGetPlacesQuery.data?.member ?? [],
+    [useGetPlacesQuery.data?.member],
+  );
+
+  const { recentLocations } = useRecentLocations();
+
   return (
     <Stack
       {...getStackProps(props)}
@@ -464,7 +501,12 @@ const LocationStep = ({
               {scope === OfferTypes.EVENTS && OnlineToggle}
               <Inline spacing={5}>
                 {showRecentLocations && hasRecentLocations && (
-                  <RecentLocations flex={1} onFieldChange={onFieldChange} />
+                  <LocationSuggestions
+                    flex={1}
+                    locations={recentLocations}
+                    title={t('create.location.recent_locations.title')}
+                    onFieldChange={onFieldChange}
+                  />
                 )}
                 <Stack
                   minHeight={showRecentLocations ? '450px' : 'none'}
@@ -791,6 +833,10 @@ const LocationStep = ({
                               hasStreetAndNumber
                                 ? setIsBlankStreetToggleVisible(true)
                                 : setIsBlankStreetToggleVisible(false);
+                              setIsExistingPlacesVisible(true);
+                            }}
+                            onFocus={() => {
+                              setIsExistingPlacesVisible(false);
                             }}
                             onChange={handleChangeStreetAndNumber}
                           />
@@ -807,6 +853,19 @@ const LocationStep = ({
                   )}
                 </Stack>
               )}
+              {scope === ScopeTypes.PLACES &&
+                existingPlaces.length > 0 &&
+                isExistingPlacesVisible && (
+                  <Stack marginTop={5}>
+                    <LocationSuggestions
+                      locations={existingPlaces}
+                      title={t('create.location.existing_locations.title')}
+                      onFieldChange={onFieldChange}
+                      alertVisible={false}
+                      isRecentLocations={false}
+                    />
+                  </Stack>
+                )}
               <Stack marginTop={3}>
                 {scope === ScopeTypes.ORGANIZERS &&
                   isBlankStreetToggleVisible && (

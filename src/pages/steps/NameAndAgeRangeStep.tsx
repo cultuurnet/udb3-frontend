@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { CULTUURKUUR_EDUCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
@@ -85,10 +86,24 @@ const NameAndAgeRangeStep = ({
   const { t } = useTranslation();
   const router = useRouter();
 
-  const duplicatePlaceId =
-    (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
-      ? parseOfferId(error.body.duplicatePlaceUri)
-      : undefined;
+  const errorBody = error?.body as DuplicatePlaceErrorBody;
+  const errorMessage = error?.message;
+
+  const getPlaceIdFromDuplicatePlaceError = (errorMessage: string) => {
+    if (errorMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)) {
+      const parsedMessage = JSON.parse(errorMessage);
+      const placeUri = parsedMessage.find((message: string) =>
+        message.includes('/place'),
+      );
+      return parseOfferId(placeUri);
+    }
+
+    return undefined;
+  };
+
+  const duplicatePlaceId = errorBody?.duplicatePlaceUri
+    ? parseOfferId(errorBody.duplicatePlaceUri)
+    : getPlaceIdFromDuplicatePlaceError(errorMessage);
 
   const duplicatePlaceQuery = (error?.body as DuplicatePlaceErrorBody)?.query
     ? error.body.query
