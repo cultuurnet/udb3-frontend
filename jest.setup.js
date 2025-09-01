@@ -40,3 +40,15 @@ jest.mock('@/hooks/useCookiesWithOptions.ts', () => ({
 setConfig({
   publicRuntimeConfig: { apiUrl: 'http://localhost:3000' },
 });
+
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    pathname: '/test',
+    query: {},
+  }),
+  push: jest.fn(),
+  default: {
+    push: jest.fn(),
+  },
+}));
