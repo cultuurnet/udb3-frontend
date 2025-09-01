@@ -2,11 +2,12 @@ import { TFunction } from 'i18next';
 import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -24,6 +25,7 @@ import {
   useGetPlacesByQuery,
 } from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useHeaders } from '@/hooks/api/useHeaders';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
@@ -48,11 +50,14 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
+import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
+import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { prefixUrlWithHttps } from '@/utils/url';
 
+import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
 import { CityPicker } from '../CityPicker';
 import { CountryPicker } from './CountryPicker';
 import { UseEditArguments } from './hooks/useEditField';
@@ -158,6 +163,8 @@ const LocationSuggestions = ({
 
 const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
   const { i18n } = useTranslation();
+  const headers = useHeaders();
+
   const changeAddressMutation = useChangeAddressMutation();
   const changeOnlineUrl = useChangeOnlineUrlMutation();
   const deleteOnlineUrl = useDeleteOnlineUrlMutation();
@@ -183,11 +190,16 @@ const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
         },
       };
 
-      changeAddressMutation.mutate({
-        id: offerId,
-        address: address[i18n.language],
-        language: i18n.language,
-      });
+      await checkDuplicatePlace({ headers, offerId, location });
+
+      changeAddressMutation.mutate(
+        {
+          id: offerId,
+          address: address[i18n.language],
+          language: i18n.language,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       return;
     }
@@ -380,6 +392,8 @@ const LocationStep = ({
 
   const locationId = parseOfferId((entity as Event)?.location?.['@id'] ?? '');
 
+  const entityId = parseOfferId(entity?.['@id'] ?? '');
+
   const regions = useGetCultuurkuurRegions();
   const labelsPickerProps = useCultuurkuurLabelsPickerProps(
     { scope, offerId, setValue, watch },
@@ -464,6 +478,12 @@ const LocationStep = ({
   );
 
   const { recentLocations } = useRecentLocations();
+
+  const errorBody = error?.body as DuplicatePlaceErrorBody;
+
+  const duplicatePlaceId = errorBody?.duplicatePlaceUri
+    ? parseOfferId(errorBody.duplicatePlaceUri)
+    : undefined;
 
   return (
     <Stack
@@ -855,7 +875,8 @@ const LocationStep = ({
               )}
               {scope === ScopeTypes.PLACES &&
                 existingPlaces.length > 0 &&
-                isExistingPlacesVisible && (
+                isExistingPlacesVisible &&
+                !entityId && (
                   <Stack marginTop={5}>
                     <LocationSuggestions
                       locations={existingPlaces}
@@ -866,6 +887,18 @@ const LocationStep = ({
                     />
                   </Stack>
                 )}
+              <Stack marginTop={5}>
+                <AlertDuplicatePlace
+                  variant={AlertVariants.DANGER}
+                  placeId={duplicatePlaceId}
+                  offerId={offerId}
+                  labelKey={
+                    offerId
+                      ? 'location.add_modal.errors.duplicate_place_edit_page'
+                      : 'create.name_and_age.name.duplicate_place'
+                  }
+                />
+              </Stack>
               <Stack marginTop={3}>
                 {scope === ScopeTypes.ORGANIZERS &&
                   isBlankStreetToggleVisible && (

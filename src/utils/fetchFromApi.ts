@@ -1,4 +1,3 @@
-import omit from 'lodash/omit';
 import getConfig from 'next/config';
 
 class FetchError<TBody = any> extends Error {
@@ -13,6 +12,14 @@ class FetchError<TBody = any> extends Error {
   }
 }
 
+class CustomValidationError extends Error {
+  body?: ErrorBody | DuplicatePlaceErrorBody;
+  constructor(message: string, body?: ErrorBody | DuplicatePlaceErrorBody) {
+    super(message);
+    this.body = body;
+  }
+}
+
 type ErrorObject = {
   type: 'ERROR';
   status?: number;
@@ -20,10 +27,10 @@ type ErrorObject = {
 };
 
 export type ErrorBody = {
-  detail: string;
-  status: number;
-  title: string;
-  type: string;
+  detail?: string;
+  status?: number;
+  title?: string;
+  type?: string;
 };
 
 export type DuplicatePlaceErrorBody = ErrorBody & {
@@ -121,5 +128,5 @@ const fetchFromApi = async <TConfig extends FetchFromApiArguments>({
   return response;
 };
 
-export { FetchError, fetchFromApi, isErrorObject };
+export { CustomValidationError, FetchError, fetchFromApi, isErrorObject };
 export type { ErrorObject };

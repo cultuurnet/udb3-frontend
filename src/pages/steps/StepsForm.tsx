@@ -31,7 +31,7 @@ import {
   getEducationLabels,
   getLocationLabels,
 } from '@/utils/cultuurkuurLabels';
-import { FetchError } from '@/utils/fetchFromApi';
+import { CustomValidationError, FetchError } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -276,14 +276,35 @@ const StepsForm = ({
     initialOffer,
   });
 
-  const handleChangeSuccess = (editedField: string) =>
+  const handleChangeSuccess = (editedField: string) => {
+    setFetchErrors(undefined);
     toast.trigger(editedField);
+  };
 
   const { handleChange, fieldLoading } = useEditField({
     scope,
     offerId,
     handleSubmit,
     onSuccess: handleChangeSuccess,
+    onError: (error: CustomValidationError) => {
+      const newErrors: Record<string, any> = {};
+
+      const { message, body } = error;
+
+      if (
+        message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR) &&
+        body.type === 'Location'
+      ) {
+        newErrors.location = error;
+      }
+      if (
+        message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR) &&
+        body.type === 'NameAndAgeRange'
+      ) {
+        newErrors.nameAndAgeRange = error;
+      }
+      setFetchErrors(newErrors);
+    },
   });
 
   const [isPublishLaterModalVisible, setIsPublishLaterModalVisible] =
