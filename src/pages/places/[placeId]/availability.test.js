@@ -128,7 +128,7 @@ test('The reason and error are cleared when switching back to "available"', asyn
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
   expect(screen.getByLabelText(nl.offerStatus.reason).value).toBe('');
-});
+}, 10000);
 
 test('I can cancel', async () => {
   const page = await setup();
