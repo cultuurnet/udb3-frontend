@@ -51,9 +51,7 @@ const useHandleAuthentication = () => {
       if (!isTokenValid(cookies.get('token'))) {
         Sentry.setUser(null);
         cookies.remove('token');
-        if (Router && Router.isReady) {
-          Router.push('/login');
-        }
+        Router.push('/login');
       }
     }, 5000); // checking every 5 seconds
     return cleanUp;
