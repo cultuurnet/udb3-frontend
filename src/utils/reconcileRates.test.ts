@@ -29,8 +29,10 @@ describe('reconcileRates', () => {
       },
     ];
 
-    expect(reconcileRates(currentRates, newRates)).toMatchSnapshot();
-    expect(reconcileRates(currentRates, [])).toEqual([
+    expect(
+      reconcileRates(currentRates, newRates, uitpasLabels),
+    ).toMatchSnapshot();
+    expect(reconcileRates(currentRates, [], uitpasLabels)).toEqual([
       {
         name: { nl: 'Base Tarif' },
         category: PriceCategory.BASE,
