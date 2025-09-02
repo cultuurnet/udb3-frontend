@@ -18,6 +18,7 @@ import {
   useGetCardSystemForEventQuery,
   useGetCardSystemsForOrganizerQuery,
 } from '@/hooks/api/uitpas';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { Event } from '@/types/Event';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -52,6 +53,7 @@ const OrganizerStep = ({
 }: Props) => {
   const { t, i18n } = useTranslation();
   const { ...router } = useRouter();
+  const { uitpasLabels } = useUitpasLabels();
   const queryClient = useQueryClient();
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
@@ -61,7 +63,9 @@ const OrganizerStep = ({
 
   const organizer = offer?.organizer?.name ? offer?.organizer : undefined;
   const hasPriceInfo = (offer?.priceInfo ?? []).length > 0;
-  const hasUitpasLabel = organizer ? isUitpasOrganizer(organizer) : false;
+  const hasUitpasLabel = organizer
+    ? isUitpasOrganizer(organizer, uitpasLabels)
+    : false;
   const [hasUitpasTicketSales, setHasUitpasTicketSales] = useState(false);
 
   const getCardSystemForEventQuery = useGetCardSystemForEventQuery(
