@@ -9,6 +9,21 @@ fetchMock.enableMocks();
 // eslint-disable-next-line no-console
 console.error = jest.fn();
 
+const mockRouter = {
+  push: jest.fn(),
+  replace: jest.fn(),
+  prefetch: jest.fn(),
+  pathname: '/',
+  query: {},
+  asPath: '/',
+};
+
+jest.mock('next/router', () => ({
+  __esModule: true,
+  default: mockRouter,
+  useRouter: () => mockRouter,
+}));
+
 jest.mock('@/layouts/Sidebar.tsx', () => ({
   __esModule: true,
   Sidebar: () => {
