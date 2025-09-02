@@ -12,8 +12,7 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
-  useState,
+  useSyncExternalStore,
 } from 'react';
 import {
   Actions,
@@ -556,22 +555,19 @@ export const useCalendarContext = () => useContext(CalendarMachineContext);
 
 export const useCalendarSelector = <T,>(
   selector: (state: CalendarState) => T,
-): T => {
+) => {
   const calendarService = useCalendarContext();
 
-  const [value, setValue] = useState(() =>
-    selector(calendarService.getSnapshot()),
+  return useSyncExternalStore(
+    (callback) => {
+      const sub = calendarService.subscribe(callback);
+      return () => sub.unsubscribe();
+    },
+    () => selector(calendarService.getSnapshot()),// client side
+    () => selector(calendarService.getSnapshot()) // server side
   );
-
-  useEffect(() => {
-    const sub = calendarService.subscribe((state) => {
-      setValue(selector(state));
-    });
-    return () => sub.unsubscribe();
-  }, [calendarService, selector]);
-
-  return value;
 };
+
 export const useIsOneOrMoreDays = () =>
   useCalendarSelector(
     (state) => state.matches('single') || state.matches('multiple'),
