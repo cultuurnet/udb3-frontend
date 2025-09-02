@@ -130,13 +130,13 @@ const Link = ({
   const clonedSuffix =
     suffix && typeof suffix === 'object' && 'type' in suffix
       ? cloneElement(suffix as React.ReactElement, {
+          ...suffix.props,
           key: 'suffix',
-          css: `align-self: flex-end`,
         })
       : suffix;
 
   const content = (
-    <>
+    <Inline justifyContent="space-between" width="100%">
       <Inline spacing={3}>
         {iconName && <Icon name={iconName} />}
         {customChildren
@@ -144,7 +144,7 @@ const Link = ({
           : !shouldHideText && <Text flex={1}>{children}</Text>}
       </Inline>
       {clonedSuffix}
-    </>
+    </Inline>
   );
 
   if (!href) {
