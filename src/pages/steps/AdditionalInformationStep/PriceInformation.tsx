@@ -242,13 +242,14 @@ const PriceInformation = ({
   const isCultuurkuurAlertVisible =
     isCultuurkuurEvent && (!hasBasePriceInfo || hasMultiplePrices);
 
+  const hasUitpasLabel = useMemo(() => {
+    return offer?.organizer && scope === OfferTypes.EVENTS
+      ? isUitpasOrganizer(offer?.organizer, uitpasLabels)
+      : false;
+  }, [offer?.organizer, scope, uitpasLabels]);
+
   useEffect(() => {
     const priceInfo = offer?.priceInfo ?? ([] as FormData['rates']);
-
-    const hasUitpasLabel =
-      offer?.organizer && scope === OfferTypes.EVENTS
-        ? isUitpasOrganizer(offer?.organizer, uitpasLabels)
-        : false;
 
     if (priceInfo.length === 0) {
       return onValidationChange(
@@ -284,6 +285,7 @@ const PriceInformation = ({
     onValidationChange,
     replace,
     reset,
+    hasUitpasLabel,
   ]);
 
   return (
