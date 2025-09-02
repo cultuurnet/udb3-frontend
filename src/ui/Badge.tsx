@@ -13,8 +13,6 @@ const BadgeVariants = {
   INFO: 'info',
 } as const;
 
-const BaseBadge = (props: BoxProps) => <Text {...props} />;
-
 type Props = BoxProps & {
   variant?: Values<typeof BadgeVariants>;
 };
@@ -27,17 +25,16 @@ const Badge = ({
 }: Props) => {
   return (
     <BootstrapBadge
-      as={BaseBadge}
-      className={className}
-      variant={variant}
-      lineHeight="inherit"
-      height="min-content"
-      {...getBoxProps(props)}
-      backgroundColor={
-        variant === BadgeVariants.INFO ? colors.udbMainBlue : undefined
-      }
+      bg={variant}
+      css={`
+        &.badge {
+          align-self: center;
+        }
+        background-color: ${variant === BadgeVariants.INFO &&
+        colors.udbMainBlue} !important;
+      `}
     >
-      {children}
+      <Text {...getBoxProps(props)}>{children}</Text>
     </BootstrapBadge>
   );
 };
