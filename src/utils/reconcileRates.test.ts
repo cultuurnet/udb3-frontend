@@ -7,6 +7,8 @@ const uitpasOffer = {
   organizer: { labels: ['uitpas'] },
 } as Offer;
 
+const uitpasLabels = ['uitpas'];
+
 describe('reconcileRates', () => {
   it('can overwrite default values', () => {
     const currentRates = [
@@ -54,7 +56,7 @@ describe('reconcileRates', () => {
       },
     ];
 
-    expect(reconcileRates(currentRates, [])).toEqual([
+    expect(reconcileRates(currentRates, [], uitpasLabels)).toEqual([
       {
         name: { nl: 'foo' },
         category: PriceCategory.BASE,
@@ -96,7 +98,7 @@ describe('reconcileRates', () => {
     ];
 
     expect(
-      reconcileRates(currentRates, newRates, uitpasOffer),
+      reconcileRates(currentRates, newRates, uitpasLabels, uitpasOffer),
     ).toMatchSnapshot();
   });
 
@@ -132,7 +134,7 @@ describe('reconcileRates', () => {
     ];
 
     expect(
-      reconcileRates(currentRates, newRates, uitpasOffer),
+      reconcileRates(currentRates, newRates, uitpasLabels, uitpasOffer),
     ).toMatchSnapshot();
   });
 
@@ -174,7 +176,7 @@ describe('reconcileRates', () => {
     ];
 
     expect(
-      reconcileRates(currentRates, newRates, uitpasOffer),
+      reconcileRates(currentRates, newRates, uitpasLabels, uitpasOffer),
     ).toMatchSnapshot();
   });
 
@@ -204,7 +206,7 @@ describe('reconcileRates', () => {
     ];
 
     expect(
-      reconcileRates(currentRates, newRates, {
+      reconcileRates(currentRates, newRates, uitpasLabels, {
         ...uitpasOffer,
         mainLanguage: 'fr',
       }),
@@ -252,6 +254,8 @@ describe('reconcileRates', () => {
       },
     ];
 
-    expect(reconcileRates(currentRates, [], uitpasOffer)).toHaveLength(2);
+    expect(
+      reconcileRates(currentRates, [], uitpasLabels, uitpasOffer),
+    ).toHaveLength(2);
   });
 });

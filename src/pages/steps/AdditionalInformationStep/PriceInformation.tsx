@@ -260,7 +260,12 @@ const PriceInformation = ({
     }
 
     replace(
-      reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
+      reconcileRates(
+        ratesRef.current,
+        priceInfo,
+        uitpasLabels,
+        offer,
+      ) as FormData['rates'],
     );
     reset({}, { keepValues: true });
 
