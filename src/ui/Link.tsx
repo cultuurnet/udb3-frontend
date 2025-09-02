@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
-import { cloneElement, forwardRef } from 'react';
+import { cloneElement, forwardRef, isValidElement } from 'react';
 
 import type { Values } from '@/types/Values';
 import { Button } from '@/ui/Button';
@@ -128,8 +128,8 @@ const Link = ({
   const isInternalLink = href.startsWith('/') || href.startsWith('#');
 
   const clonedSuffix =
-    suffix && typeof suffix === 'object' && 'type' in suffix
-      ? cloneElement(suffix as React.ReactElement, {
+    suffix && isValidElement(suffix)
+      ? cloneElement(suffix, {
           ...suffix.props,
           key: 'suffix',
         })
