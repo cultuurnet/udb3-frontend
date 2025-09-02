@@ -32,6 +32,7 @@ import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 
 const PRICE_CURRENCY: string = 'EUR';
 
@@ -161,6 +162,8 @@ const PriceInformation = ({
     { refetchOnWindowFocus: false },
   );
 
+  const { uitpasLabels } = useUitpasLabels();
+
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   const {
@@ -244,7 +247,7 @@ const PriceInformation = ({
 
     const hasUitpasLabel =
       offer?.organizer && scope === OfferTypes.EVENTS
-        ? isUitpasOrganizer(offer?.organizer)
+        ? isUitpasOrganizer(offer?.organizer, uitpasLabels)
         : false;
 
     if (priceInfo.length === 0) {
