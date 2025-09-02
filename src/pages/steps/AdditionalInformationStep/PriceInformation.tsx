@@ -12,6 +12,7 @@ import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import {
   TabContentProps,
@@ -32,7 +33,6 @@ import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
-import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 
 const PRICE_CURRENCY: string = 'EUR';
 
