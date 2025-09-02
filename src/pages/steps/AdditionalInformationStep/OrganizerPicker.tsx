@@ -101,7 +101,7 @@ const RecentUsedOrganizers = ({
 
           return (
             <ButtonCard
-              key={organizer['@id']}
+              key={index}
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
