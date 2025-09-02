@@ -563,8 +563,8 @@ export const useCalendarSelector = <T,>(
       const sub = calendarService.subscribe(callback);
       return () => sub.unsubscribe();
     },
-    () => selector(calendarService.getSnapshot()),// client side
-    () => selector(calendarService.getSnapshot()) // server side
+    () => selector(calendarService.getSnapshot()), // client side
+    () => selector(calendarService.getSnapshot()), // server side
   );
 };
 
