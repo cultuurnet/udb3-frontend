@@ -25,7 +25,7 @@ export function reconcileRates(
     currentRates.length === 1 && currentRates[0].price === '';
 
   const hasUitpasOrganizer =
-    offer?.organizer && isUitpasOrganizer(offer?.organizer);
+    offer?.organizer && isUitpasOrganizer(offer?.organizer, ['uitpas']);
 
   // If the form is in its initial state, replace it entirely
   if (isDefaultValue && newRates.length) {
