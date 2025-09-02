@@ -47,7 +47,7 @@ const Select = forwardRef<HTMLSelectElement, Props>(
       value={value}
       aria-label={ariaLabel}
       borderRadius={getGlobalBorderRadius}
-      maxtWidth={maxWidth}
+      maxWidth={maxWidth}
       {...getBoxProps(props)}
     >
       {children}
