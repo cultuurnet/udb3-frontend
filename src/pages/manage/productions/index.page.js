@@ -31,8 +31,6 @@ import { Productions } from './Productions';
 
 const productionsPerPage = 15;
 
-const productionsQueryKey = ['productions', { limit: 15, name: '', start: 0 }];
-
 const Index = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -59,6 +57,15 @@ const Index = () => {
       limit: productionsPerPage,
     },
   });
+
+  const productionsQueryKey = [
+    'productions',
+    {
+      name: searchInput ?? '',
+      start: `${(currentPageProductions - 1) * productionsPerPage}`,
+      limit: `${productionsPerPage}`,
+    },
+  ];
 
   const rawProductions = useMemo(
     () => getProductionsQuery.data?.member ?? [],
@@ -160,6 +167,7 @@ const Index = () => {
       const previousProductions = queryClient.getQueryData(productionsQueryKey);
 
       queryClient.setQueryData(productionsQueryKey, (productions) => {
+        if (!productions) return;
         return {
           ...productions,
           member: productions.member.map((oldProduction) => {
