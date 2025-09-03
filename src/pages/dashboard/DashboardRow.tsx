@@ -206,7 +206,7 @@ export const DashboardRow = ({
           <Inline
             width="25%"
             justifyContent="flex-start"
-            alignItems="center"
+            alignItems="flex-start"
             css={!score && `visibility: hidden`}
           >
             <DynamicBarometerIcon
