@@ -172,37 +172,35 @@ const PlaceStep = ({
                           mainLanguage,
                         );
                         return (
-                          <>
-                            <Stack>
-                              <Inline justifyContent="space-between">
-                                <Text
-                                  maxWidth="90%"
-                                  css={`
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                  `}
-                                >
-                                  <Highlighter search={text}>
-                                    {placeName}
-                                  </Highlighter>
-                                </Text>
-                                {isUitpasLocation(place, uitpasLabels) && (
-                                  <UitpasIcon width="2rem" />
-                                )}
-                              </Inline>
+                          <Stack>
+                            <Inline justifyContent="space-between">
                               <Text
-                                className={'address'}
+                                maxWidth="90%"
                                 css={`
-                                  color: ${({ theme }) => theme.colors.grey6};
+                                  overflow: hidden;
+                                  text-overflow: ellipsis;
+                                  white-space: nowrap;
                                 `}
                               >
                                 <Highlighter search={text}>
-                                  {streetAddress}
+                                  {placeName}
                                 </Highlighter>
                               </Text>
-                            </Stack>
-                          </>
+                              {isUitpasLocation(place, uitpasLabels) && (
+                                <UitpasIcon width="2rem" />
+                              )}
+                            </Inline>
+                            <Text
+                              className={'address'}
+                              css={`
+                                color: ${({ theme }) => theme.colors.grey6};
+                              `}
+                            >
+                              <Highlighter search={text}>
+                                {streetAddress}
+                              </Highlighter>
+                            </Text>
+                          </Stack>
                         );
                       }}
                       selected={valueToArray(selectedPlace as Place)}
