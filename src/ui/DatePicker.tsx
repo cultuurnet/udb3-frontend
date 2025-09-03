@@ -206,6 +206,7 @@ const DatePicker = ({
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             border-left: none;
+            min-height: 0;
 
             z-index: ${getValue('zIndexButton')};
 
