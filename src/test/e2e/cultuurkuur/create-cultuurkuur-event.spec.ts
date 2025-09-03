@@ -69,6 +69,8 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   // Save event
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
+  await page.waitForLoadState('networkidle');
+
   await expect(
     page.getByText('Zorg dat je publiek geen informatie mist'),
   ).toBeVisible();
@@ -76,6 +78,8 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page
     .getByRole('textbox', { name: 'rdw-editor' })
     .fill(faker.lorem.paragraphs(2));
+
+  await expect(page.getByRole('tab', { name: 'Toegang' })).toBeHidden();
 
   await page.getByRole('tab', { name: 'Prijzen' }).click();
 
