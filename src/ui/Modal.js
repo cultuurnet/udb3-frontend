@@ -31,7 +31,7 @@ Modal.propTypes = {
   size: PropTypes.oneOf(Object.values(ModalSizes)),
   className: PropTypes.string,
   visible: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.node,
   onShow: PropTypes.func,
   scrollable: PropTypes.bool,
   onClose: PropTypes.func,

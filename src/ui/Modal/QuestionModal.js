@@ -76,7 +76,7 @@ const QuestionModal = ({
 QuestionModal.propTypes = {
   className: PropTypes.string,
   visible: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.node,
   confirmTitle: PropTypes.string,
   cancelTitle: PropTypes.string,
   onShow: PropTypes.func,
