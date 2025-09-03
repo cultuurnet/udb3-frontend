@@ -27,6 +27,7 @@ import { isOneTimeSlotValid } from '@/ui/TimeTable';
 import { isNewEntry, Typeahead } from '@/ui/Typeahead';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { isUitpasLocation } from '@/utils/uitpas';
 import { valueToArray } from '@/utils/valueToArray';
 
 import { City } from '../CityPicker';
@@ -119,14 +120,6 @@ const PlaceStep = ({
     );
   };
 
-  const isUitpasLocation = (location: Place) => {
-    if (!location.labels || location.labels.length === 0) {
-      return false;
-    }
-
-    return location.labels.some((label) => uitpasLabels.includes(label));
-  };
-
   return (
     <Stack {...getStackProps(props)}>
       <Controller
@@ -194,7 +187,7 @@ const PlaceStep = ({
                                     {placeName}
                                   </Highlighter>
                                 </Text>
-                                {isUitpasLocation(place) && (
+                                {isUitpasLocation(place, uitpasLabels) && (
                                   <UitpasIcon width="2rem" />
                                 )}
                               </Inline>
