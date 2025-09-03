@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
 import { useGetPlacesByQuery } from '@/hooks/api/places';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
 import { Address, AddressInternal } from '@/types/Address';
@@ -24,6 +25,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { isOneTimeSlotValid } from '@/ui/TimeTable';
 import { isNewEntry, Typeahead } from '@/ui/Typeahead';
+import { UitpasIcon } from '@/ui/UitpasIcon';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { valueToArray } from '@/utils/valueToArray';
 
@@ -60,6 +62,8 @@ const PlaceStep = ({
   const [searchInput, setSearchInput] = useState('');
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
+
+  const { uitpasLabels } = useUitpasLabels();
 
   const isMovie = terms.includes(EventTypes.Bioscoop);
 
@@ -115,6 +119,14 @@ const PlaceStep = ({
     );
   };
 
+  const isUitpasLocation = (location: Place) => {
+    if (!location.labels || location.labels.length === 0) {
+      return false;
+    }
+
+    return location.labels.some((label) => uitpasLabels.includes(label));
+  };
+
   return (
     <Stack {...getStackProps(props)}>
       <Controller
@@ -167,28 +179,37 @@ const PlaceStep = ({
                           mainLanguage,
                         );
                         return (
-                          <Stack
-                            css={`
-                              .address {
-                                color: ${({ theme }) => theme.colors.grey6};
-                              }
-
-                              &:hover .address {
-                                color: white;
-                              }
-                            `}
-                          >
-                            <Text>
-                              <Highlighter search={text}>
-                                {placeName}
-                              </Highlighter>
-                            </Text>
-                            <Text className={'address'}>
-                              <Highlighter search={text}>
-                                {streetAddress}
-                              </Highlighter>
-                            </Text>
-                          </Stack>
+                          <>
+                            <Stack>
+                              <Inline justifyContent="space-between">
+                                <Text
+                                  maxWidth="90%"
+                                  css={`
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                  `}
+                                >
+                                  <Highlighter search={text}>
+                                    {placeName}
+                                  </Highlighter>
+                                </Text>
+                                {isUitpasLocation(place) && (
+                                  <UitpasIcon width="2rem" />
+                                )}
+                              </Inline>
+                              <Text
+                                className={'address'}
+                                css={`
+                                  color: ${({ theme }) => theme.colors.grey6};
+                                `}
+                              >
+                                <Highlighter search={text}>
+                                  {streetAddress}
+                                </Highlighter>
+                              </Text>
+                            </Stack>
+                          </>
                         );
                       }}
                       selected={valueToArray(selectedPlace as Place)}
