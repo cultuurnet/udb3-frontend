@@ -33,7 +33,8 @@ const Badge = ({
         &.badge {
           align-self: center;
         }
-        background-color: ${variant === BadgeVariants.INFO ? colors.udbMainBlue : 'inherit'} !important;
+        ${variant === BadgeVariants.INFO &&
+        `background-color: ${colors.udbMainBlue} !important;`}
       `}
     >
       <Text {...getBoxProps(props)}>{children}</Text>
