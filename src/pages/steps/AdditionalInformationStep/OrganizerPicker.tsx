@@ -7,6 +7,7 @@ import { useQueryClient } from 'react-query';
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetOrganizersByQueryQuery } from '@/hooks/api/organizers';
 import { useGetUserQuery } from '@/hooks/api/user';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguages } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
@@ -30,15 +31,15 @@ const MAX_RECENT_USED_ORGANIZERS = 4;
 
 const getValueFromGlobalTheme = getValueFromTheme('global');
 
-const isUitpasOrganizer = (organizer: Organizer) => {
+const isUitpasOrganizer = (organizer: Organizer, uitpasLabels: string[]) => {
+  if (!uitpasLabels || uitpasLabels.length === 0) return false;
+
   const combinedLabels = (organizer.labels || []).concat(
     organizer.hiddenLabels || [],
   );
 
   return combinedLabels.some(
-    (label) =>
-      (typeof label === 'string' && label.toLowerCase().includes('uitpas')) ||
-      label.toLowerCase().includes('paspartoe'),
+    (label) => typeof label === 'string' && uitpasLabels.includes(label),
   );
 };
 
@@ -55,6 +56,8 @@ const RecentUsedOrganizers = ({
   onChange: (organizerId: string) => void;
 } & StackProps) => {
   const { t } = useTranslation();
+
+  const { uitpasLabels } = useUitpasLabels();
 
   if (organizers.length === 0) {
     return null;
@@ -104,7 +107,9 @@ const RecentUsedOrganizers = ({
               hasEllipsisOnTitle={true}
               badge={
                 <Inline>
-                  {isUitpasOrganizer(organizer) && <UitpasIcon width="2rem" />}
+                  {isUitpasOrganizer(organizer, uitpasLabels) && (
+                    <UitpasIcon width="2rem" />
+                  )}
                   {isCultuurkuurOrganizer(organizer) && (
                     <CultuurKuurIcon width="2rem" />
                   )}
@@ -144,6 +149,8 @@ const OrganizerPicker = ({
 
   const getUserQuery = useGetUserQuery();
   const user = getUserQuery.data;
+
+  const { uitpasLabels } = useUitpasLabels();
 
   const [addButtonHasBeenPressed, setAddButtonHasBeenPressed] = useState(false);
   const [organizerSearchInput, setOrganizerSearchInput] = useState('');
@@ -287,7 +294,7 @@ const OrganizerPicker = ({
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
                           <Inline spacing={2}>
-                            {isUitpasOrganizer(org) && (
+                            {isUitpasOrganizer(org, uitpasLabels) && (
                               <UitpasIcon width="2rem" />
                             )}
                             {isCultuurkuurOrganizer(org) && (

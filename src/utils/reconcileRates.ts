@@ -8,6 +8,7 @@ const parseNumber = (number: string | number): number =>
 export function reconcileRates(
   currentRates: PriceInfo[],
   newRates: PriceInfo[],
+  uitpasLabels: string[],
   offer?: Offer,
 ): PriceInfo[] {
   const mainLanguage = offer?.mainLanguage;
@@ -25,7 +26,7 @@ export function reconcileRates(
     currentRates.length === 1 && currentRates[0].price === '';
 
   const hasUitpasOrganizer =
-    offer?.organizer && isUitpasOrganizer(offer?.organizer);
+    offer?.organizer && isUitpasOrganizer(offer?.organizer, uitpasLabels);
 
   // If the form is in its initial state, replace it entirely
   if (isDefaultValue && newRates.length) {
