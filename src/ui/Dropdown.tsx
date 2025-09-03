@@ -159,7 +159,7 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
           .btn {
             flex: 1;
             border: none;
-            box-shadow: none; !important;
+            box-shadow: none !important;
             border-radius: 0 !important;
 
             &:hover {
