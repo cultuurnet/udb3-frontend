@@ -12,6 +12,7 @@ import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import {
   TabContentProps,
@@ -161,6 +162,8 @@ const PriceInformation = ({
     { refetchOnWindowFocus: false },
   );
 
+  const { uitpasLabels } = useUitpasLabels();
+
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   const {
@@ -239,13 +242,14 @@ const PriceInformation = ({
   const isCultuurkuurAlertVisible =
     isCultuurkuurEvent && (!hasBasePriceInfo || hasMultiplePrices);
 
+  const hasUitpasLabel = useMemo(() => {
+    return offer?.organizer && scope === OfferTypes.EVENTS
+      ? isUitpasOrganizer(offer?.organizer, uitpasLabels)
+      : false;
+  }, [offer?.organizer, scope, uitpasLabels]);
+
   useEffect(() => {
     const priceInfo = offer?.priceInfo ?? ([] as FormData['rates']);
-
-    const hasUitpasLabel =
-      offer?.organizer && scope === OfferTypes.EVENTS
-        ? isUitpasOrganizer(offer?.organizer)
-        : false;
 
     if (priceInfo.length === 0) {
       return onValidationChange(
@@ -257,7 +261,12 @@ const PriceInformation = ({
     }
 
     replace(
-      reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
+      reconcileRates(
+        ratesRef.current,
+        priceInfo,
+        uitpasLabels,
+        offer,
+      ) as FormData['rates'],
     );
     reset({}, { keepValues: true });
 
@@ -276,6 +285,7 @@ const PriceInformation = ({
     onValidationChange,
     replace,
     reset,
+    hasUitpasLabel,
   ]);
 
   return (
