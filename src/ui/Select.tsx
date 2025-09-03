@@ -6,12 +6,6 @@ import type { BoxProps } from './Box';
 import { Box, getBoxProps } from './Box';
 import { getGlobalBorderRadius } from './theme';
 
-const BaseSelect = forwardRef<HTMLSelectElement, any>((props, ref) => (
-  <Box as="select" {...props} ref={ref} />
-));
-
-BaseSelect.displayName = 'BaseSelect';
-
 type SelectProps = {
   id?: string;
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -37,21 +31,23 @@ const Select = forwardRef<HTMLSelectElement, Props>(
     },
     ref,
   ) => (
-    <Form.Select
-      as={BaseSelect}
-      size={size}
-      ref={ref}
-      id={id}
-      className={className}
-      onChange={onChange}
-      value={value}
-      aria-label={ariaLabel}
-      borderRadius={getGlobalBorderRadius}
-      maxWidth={maxWidth}
+    <Box
       {...getBoxProps(props)}
+      maxWidth={maxWidth}
+      borderRadius={getGlobalBorderRadius}
     >
-      {children}
-    </Form.Select>
+      <Form.Select
+        ref={ref}
+        size={size}
+        id={id}
+        className={className}
+        onChange={onChange}
+        value={value}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </Form.Select>
+    </Box>
   ),
 );
 
