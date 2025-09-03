@@ -60,17 +60,24 @@ const Tabs = <T,>({
         border-right: 1px solid ${getValue('borderColor')};
       }
 
-      .nav-link {
+      .nav-item .nav-link {
         background-color: white;
         color: ${getValue('color')};
         border-radius: ${getValue('borderRadius')};
         border-color: ${getValue('borderColor')};
-        border-right: none;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
 
-        &.nav-link {
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
+      .nav-item:not(:last-child) .nav-link {
+        border-right: none;
+      }
+
+      .nav-item:last-child .nav-link {
+        border-right: 1px solid ${getValue('borderColor')};
+      }
+
+      .nav-item .nav-link {
 
         &.active {
           background-color: ${activeBackgroundColor};
