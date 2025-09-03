@@ -78,7 +78,6 @@ const Tabs = <T,>({
       }
 
       .nav-item .nav-link {
-
         &.active {
           background-color: ${activeBackgroundColor};
           border-bottom-color: ${getValue('activeTabBackgroundColor')};
