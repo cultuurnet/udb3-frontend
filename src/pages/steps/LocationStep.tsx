@@ -26,6 +26,7 @@ import {
 } from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { useHeaders } from '@/hooks/api/useHeaders';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
@@ -50,11 +51,13 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
+import { UitpasIcon } from '@/ui/UitpasIcon';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
+import { isUitpasLocation } from '@/utils/uitpas';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
@@ -98,6 +101,7 @@ const LocationSuggestions = ({
   ...props
 }: LocationSuggestionProps) => {
   const { t, i18n } = useTranslation();
+  const { uitpasLabels } = useUitpasLabels();
 
   return (
     <Stack {...props} spacing={5}>
@@ -129,6 +133,13 @@ const LocationSuggestions = ({
               width={'auto'}
               marginBottom={0}
               href={isRecentLocations ? null : `/place/${locationId}/preview`}
+              badge={
+                <Inline>
+                  {isUitpasLocation(location, uitpasLabels) && (
+                    <UitpasIcon width="2rem" />
+                  )}
+                </Inline>
+              }
               onClick={() =>
                 onFieldChange({
                   municipality: {
