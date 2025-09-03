@@ -1,5 +1,5 @@
 import { pickBy } from 'lodash';
-import { Children, cloneElement, forwardRef } from 'react';
+import { Children, cloneElement, forwardRef, isValidElement } from 'react';
 import styled, { css } from 'styled-components';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
@@ -62,11 +62,17 @@ const Inline = forwardRef<HTMLElement, Props>(
 
     const clonedChildren = Children.map(validChildren, (child, i) => {
       const isLastItem = i === validChildren.length - 1;
+
+      const isBoxComponent =
+        isValidElement(child) && typeof child.type !== 'string';
+
       // @ts-expect-error
       return cloneElement(child, {
         // @ts-expect-error
         ...child.props,
-        ...(!isLastItem && spacing ? { [marginProp]: spacing } : {}),
+        ...(!isLastItem && spacing && isBoxComponent
+          ? { [marginProp]: spacing }
+          : {}),
       });
     });
 
