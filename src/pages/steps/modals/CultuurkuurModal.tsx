@@ -72,7 +72,7 @@ const CultuurkuurModal = ({
       cancelTitle={t('cultuurkuur_modal.cancel')}
       size="lg"
     >
-      <Stack padding={4} spacing={5}>
+      <Stack padding={4}>
         {data.map((level1) => {
           const level1Name = level1?.name?.nl || '';
           const hasChildren = (level1?.children?.length || 0) > 0;
