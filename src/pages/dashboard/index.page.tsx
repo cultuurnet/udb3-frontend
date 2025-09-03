@@ -740,7 +740,7 @@ const Dashboard = (): any => {
             css={`
               .nav-link,
               .nav-item {
-                color: ${textColor};
+                color: ${textColor} !important;
                 padding: 0 !important;
                 margin-right: 1rem;
                 margin-top: 0.5rem;
