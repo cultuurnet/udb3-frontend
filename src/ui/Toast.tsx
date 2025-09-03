@@ -103,8 +103,8 @@ const Toast = ({
         color={getValue('textColor.dark')}
         className={'d-flex justify-content-between align-items-center flex-row'}
       >
-        <span className={'d-flex mr-2'}>
-          {icon && <Icon name={icon} className={`text-${variant} mr-2`} />}
+        <span className={'d-flex me-2'}>
+          {icon && <Icon name={icon} className={`text-${variant} me-2`} />}
           {body}
         </span>
         {onClose && <Icon name={Icons.TIMES} onClick={onClose} width={10} />}
