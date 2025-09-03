@@ -105,6 +105,8 @@ const RecentUsedOrganizers = ({
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
+              width="40rem"
+              maxWidth="95%"
               badge={
                 <Inline>
                   {isUitpasOrganizer(organizer, uitpasLabels) && (
@@ -244,7 +246,6 @@ const OrganizerPicker = ({
               <RecentUsedOrganizers
                 organizers={recentUsedOrganizers}
                 onChange={handleSelectRecentOrganizer}
-                maxWidth="45rem"
               />
               <Stack width="100%">
                 <Text fontWeight="bold" marginBottom={4}>
