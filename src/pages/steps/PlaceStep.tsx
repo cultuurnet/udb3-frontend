@@ -171,11 +171,16 @@ const PlaceStep = ({
                           address,
                           mainLanguage,
                         );
+
+                        const isUitpas = isUitpasLocation(place, uitpasLabels);
+
                         return (
                           <Stack>
                             <Inline justifyContent="space-between">
                               <Text
-                                maxWidth="90%"
+                                maxWidth={`calc(100% - ${
+                                  isUitpas ? '3rem' : '0rem'
+                                })`}
                                 css={`
                                   overflow: hidden;
                                   text-overflow: ellipsis;
@@ -186,9 +191,7 @@ const PlaceStep = ({
                                   {placeName}
                                 </Highlighter>
                               </Text>
-                              {isUitpasLocation(place, uitpasLabels) && (
-                                <UitpasIcon width="2rem" />
-                              )}
+                              {isUitpas && <UitpasIcon width="2rem" />}
                             </Inline>
                             <Text
                               className={'address'}
