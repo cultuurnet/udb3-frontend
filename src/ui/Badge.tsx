@@ -15,10 +15,12 @@ const BadgeVariants = {
 
 type Props = BoxProps & {
   variant?: Values<typeof BadgeVariants>;
+  pill?: boolean;
 };
 
 const Badge = ({
   children,
+  pill,
   className,
   variant = BadgeVariants.DANGER,
   ...props
@@ -26,6 +28,7 @@ const Badge = ({
   return (
     <BootstrapBadge
       bg={variant}
+      pill={pill}
       css={`
         &.badge {
           align-self: center;
