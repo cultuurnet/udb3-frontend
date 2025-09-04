@@ -49,9 +49,13 @@ function LabelsStep({
 
   const ref = useRef<TypeaheadElement<Label>>(null);
 
-  const [query, setQuery] = useState('');
+  const [name, setName] = useState('');
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
-    query,
+    name,
+    paginationOptions: {
+      start: 0,
+      limit: 6,
+    },
   });
 
   const options = labelsQuery.data?.member ?? [];
@@ -113,7 +117,7 @@ function LabelsStep({
               newSelectionPrefix={t(
                 'create.additionalInformation.labels.add_new_label',
               )}
-              onSearch={setQuery}
+              onSearch={setName}
               onChange={async (newLabels: Label[]) => {
                 const label = newLabels[0]?.name;
                 if (!label || !label.match(LABEL_PATTERN)) {
