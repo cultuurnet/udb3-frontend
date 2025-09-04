@@ -1,7 +1,10 @@
 import { Place } from '@/types/Place';
 
 export const isUitpasLocation = (location: Place, uitpasLabels: string[]) => {
-  if (!location.labels && !location.hiddenLabels) {
+  if (
+    (!location.labels || location.labels.length === 0) &&
+    (!location.hiddenLabels || location.hiddenLabels.length === 0)
+  ) {
     return false;
   }
 
