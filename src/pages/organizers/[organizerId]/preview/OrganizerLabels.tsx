@@ -39,6 +39,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
       start: 0,
       limit: 6,
     },
+    onlySuggestions: true,
   });
 
   const scope = ScopeTypes.ORGANIZERS;

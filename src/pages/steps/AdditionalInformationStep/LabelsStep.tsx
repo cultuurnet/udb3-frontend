@@ -56,6 +56,7 @@ function LabelsStep({
       start: 0,
       limit: 6,
     },
+    onlySuggestions: true,
   });
 
   const options = labelsQuery.data?.member ?? [];

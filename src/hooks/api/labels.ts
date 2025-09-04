@@ -15,11 +15,17 @@ export const prefetchGetLabelsQuery = ({
   queryClient,
   name,
   paginationOptions,
-}: ServerSideQueryOptions & PaginationOptions & { name?: string }) =>
+  onlySuggestions = false,
+}: ServerSideQueryOptions &
+  PaginationOptions & { name?: string } & { onlySuggestions?: boolean }) =>
   prefetchAuthenticatedQuery({
     req,
     queryClient,
-    ...createGetLabelsQueryOptions({ name, paginationOptions }),
+    ...createGetLabelsQueryOptions({
+      name,
+      paginationOptions,
+      onlySuggestions,
+    }),
   });
 
 const getLabels = async ({
@@ -27,11 +33,13 @@ const getLabels = async ({
   name,
   start,
   limit,
+  suggestion,
 }: {
   headers: Headers;
   name: string;
   start: string;
   limit: string;
+  suggestion: boolean;
 }) => {
   const res = await fetchFromApi({
     path: '/labels/',
@@ -39,7 +47,7 @@ const getLabels = async ({
       query: name,
       limit: limit,
       start: start,
-      suggestion: 'true',
+      suggestion: suggestion,
     },
     options: {
       headers,
@@ -51,7 +59,8 @@ const getLabels = async ({
 const createGetLabelsQueryOptions = ({
   name = '',
   paginationOptions = { start: 0, limit: 10 },
-}: PaginationOptions & { name?: string }) =>
+  onlySuggestions = false,
+}: PaginationOptions & { name?: string } & { onlySuggestions?: boolean }) =>
   queryOptions({
     queryKey: ['labels'],
     queryFn: getLabels,
@@ -59,14 +68,20 @@ const createGetLabelsQueryOptions = ({
       name,
       start: `${paginationOptions.start}`,
       limit: `${paginationOptions.limit}`,
+      suggestion: onlySuggestions,
     },
   });
 
 const useGetLabelsByQuery = ({
   name,
   paginationOptions = { start: 0, limit: 10 },
-}: PaginationOptions & { name: string }) => {
-  const options = createGetLabelsQueryOptions({ name, paginationOptions });
+  onlySuggestions = false,
+}: PaginationOptions & { name: string } & { onlySuggestions?: boolean }) => {
+  const options = createGetLabelsQueryOptions({
+    name,
+    paginationOptions,
+    onlySuggestions,
+  });
 
   return useAuthenticatedQuery({
     ...options,
