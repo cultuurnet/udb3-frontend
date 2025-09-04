@@ -40,6 +40,8 @@ jobs:
           NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION: ${{ secrets.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION }}
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          E2E_TEST_ADMIN_EMAIL: ${{ secrets.E2E_TEST_ADMIN_EMAIL }}
+          E2E_TEST_ADMIN_PASSWORD: ${{ secrets.E2E_TEST_ADMIN_PASSWORD }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_BASE_URL: ${{ secrets.AUTH_BASE_URL }}
           AUTH_ISSUER_BASE_URL: ${{ secrets.AUTH_ISSUER_BASE_URL }}

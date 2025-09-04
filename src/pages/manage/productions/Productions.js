@@ -38,7 +38,7 @@ const Productions = ({
             {t('productions.overview.production')}
           </Title>,
           <Panel key="panel">
-            <List>
+            <List id="productions-list">
               {productions.map((production, index) => (
                 <List.Item
                   paddingLeft={4}
