@@ -1,9 +1,13 @@
 import { Place } from '@/types/Place';
 
 export const isUitpasLocation = (location: Place, uitpasLabels: string[]) => {
-  if (!location.labels || location.labels.length === 0) {
+  if (!location.labels && !location.hiddenLabels) {
     return false;
   }
 
-  return location.labels.some((label) => uitpasLabels.includes(label));
+  const allLabels = [
+    ...new Set([...(location.labels || []), ...(location.hiddenLabels || [])]),
+  ];
+
+  return allLabels.some((label) => uitpasLabels.includes(label));
 };
