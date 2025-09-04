@@ -20,13 +20,13 @@ export const prefetchGetLabelsQuery = ({
     req,
     queryClient,
     ...createGetLabelsQueryOptions({ name, paginationOptions }),
-});
+  });
 
 const getLabels = async ({
   headers,
   name,
   start,
-  limit
+  limit,
 }: {
   headers: Headers;
   name: string;
@@ -50,27 +50,27 @@ const getLabels = async ({
 
 const createGetLabelsQueryOptions = ({
   name = '',
-  paginationOptions = { start: 0, limit: 10 }
-}: PaginationOptions & { name?: string}) => queryOptions({
-  queryKey: ['labels'],
-  queryFn: getLabels,
-  queryArguments: {
-    name,
-    start: `${paginationOptions.start}`,
-    limit: `${paginationOptions.limit}`,
-  }
-});
+  paginationOptions = { start: 0, limit: 10 },
+}: PaginationOptions & { name?: string }) =>
+  queryOptions({
+    queryKey: ['labels'],
+    queryFn: getLabels,
+    queryArguments: {
+      name,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
+    },
+  });
 
 const useGetLabelsByQuery = ({
   name,
-  paginationOptions = { start: 0, limit: 10 }
-}: PaginationOptions & { name: string}) => {
+  paginationOptions = { start: 0, limit: 10 },
+}: PaginationOptions & { name: string }) => {
   const options = createGetLabelsQueryOptions({ name, paginationOptions });
 
   return useAuthenticatedQuery({
     ...options,
   });
-}
-
+};
 
 export { useGetLabelsByQuery };

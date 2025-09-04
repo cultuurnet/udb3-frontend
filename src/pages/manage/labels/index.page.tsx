@@ -1,11 +1,13 @@
-
 import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-import { prefetchGetLabelsQuery, useGetLabelsByQuery } from '@/hooks/api/labels';
+import {
+  prefetchGetLabelsQuery,
+  useGetLabelsByQuery,
+} from '@/hooks/api/labels';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
@@ -16,12 +18,12 @@ import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-const labelsPerPage = 10
+const labelsPerPage = 10;
 
 const LabelsOverviewPage = () => {
-  const { t } = useTranslation()
-  const [searchInput, setSearchInput] = useState('')
-  const [currentPageLabels, setCurrentPageLabels] = useState(1)
+  const { t } = useTranslation();
+  const [searchInput, setSearchInput] = useState('');
+  const [currentPageLabels, setCurrentPageLabels] = useState(1);
 
   const labelsQuery = useGetLabelsByQuery({
     name: searchInput,
@@ -29,27 +31,24 @@ const LabelsOverviewPage = () => {
       start: (currentPageLabels - 1) * labelsPerPage,
       limit: labelsPerPage,
     },
-  })
+  });
   const totalItemsLabels = labelsQuery.data?.totalItems ?? 0;
   const labels = useMemo(
     () => labelsQuery.data?.member ?? [],
     [labelsQuery.data?.member],
-  )
+  );
 
   const handleInputSearch = useCallback((event) => {
     const searchTerm = event.target.value.toString().trim();
     setCurrentPageLabels(1);
     setSearchInput(searchTerm);
-  }, [])
+  }, []);
 
   return (
     <Page>
       <Page.Title>{t('labels.overview.title')}</Page.Title>
       <Page.Actions>
-        <Link
-          href="/manage/labels/create"
-          css="text-transform: lowercase;"
-        >
+        <Link href="/manage/labels/create" css="text-transform: lowercase;">
           {t('labels.overview.create')}
         </Link>
       </Page.Actions>
@@ -67,13 +66,13 @@ const LabelsOverviewPage = () => {
 
         <Stack spacing={5}>
           {labelsQuery.status === QueryStatus.LOADING ? (
-            <Spinner/>
+            <Spinner />
           ) : (
             <Stack>
               <code>{JSON.stringify(labels)}</code>
               <code>{totalItemsLabels}</code>
             </Stack>
-        )}
+          )}
           {labelsQuery.status !== QueryStatus.LOADING && labels.length === 0 ? (
             <Alert variant={AlertVariants.WARNING}>
               {t('labels.overview.no_results')}
@@ -82,11 +81,12 @@ const LabelsOverviewPage = () => {
           {labelsQuery.status === QueryStatus.ERROR ? (
             <Alert variant={AlertVariants.WARNING}>
               console.log(labelsQuery.error);
-              {t('labels.overview.something_wrong') + ' ' + '<em>more information to come later</em>'}
+              {t('labels.overview.something_wrong') +
+                ' ' +
+                '<em>more information to come later</em>'}
             </Alert>
           ) : null}
         </Stack>
-
 
         <Pagination
           currentPage={currentPageLabels}
@@ -105,12 +105,15 @@ export const getServerSideProps = getApplicationServerSideProps(
       req,
       queryClient,
       paginationOptions: { limit: labelsPerPage, start: 0 },
-    })
+    });
 
-    return { props: {
+    return {
+      props: {
         dehydratedState: dehydrate(queryClient),
         cookies,
-      } };
-  })
+      },
+    };
+  },
+);
 
 export default LabelsOverviewPage;
