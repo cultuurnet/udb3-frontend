@@ -25,7 +25,12 @@ const getValueForAnnouncement = getValueFromTheme('announcement');
 const getValueForAnnouncementList = getValueFromTheme('announcementList');
 const getValueForAnnouncementContent = getValueFromTheme('announcementContent');
 
-const Announcement = ({ id, title, status, onClick }) => {
+const Announcement = ({
+  id,
+  title,
+  status = AnnouncementStatus.UNSEEN,
+  onClick,
+}) => {
   return (
     <List.Item
       padding={4}
@@ -73,10 +78,6 @@ Announcement.propTypes = {
   title: PropTypes.string.isRequired,
   status: PropTypes.oneOf(Object.values(AnnouncementStatus)),
   onClick: PropTypes.func,
-};
-
-Announcement.defaultProps = {
-  status: AnnouncementStatus.UNSEEN,
 };
 
 const AnnouncementContent = ({
@@ -160,11 +161,11 @@ AnnouncementContent.propTypes = {
 };
 
 const Announcements = ({
-  visible,
+  visible = false,
   announcements,
   onClickAnnouncement,
-  onShow,
-  onClose,
+  onShow = () => {},
+  onClose = () => {},
 }) => {
   const { t } = useTranslation();
 
@@ -235,13 +236,6 @@ Announcements.propTypes = {
   onClickAnnouncement: PropTypes.func,
   onShow: PropTypes.func,
   onClose: PropTypes.func,
-};
-
-Announcements.defaultProps = {
-  visible: false,
-  setAnnouncements: () => {},
-  onShow: () => {},
-  onClose: () => {},
 };
 
 export { Announcements, AnnouncementStatus };

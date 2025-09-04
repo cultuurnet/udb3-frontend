@@ -40,12 +40,14 @@ const useHandleAuthentication = () => {
     Sentry.setUser({ id: getUserQuery.data.id });
   }, [getUserQuery.data]);
 
-  // redirect when there is no token or user cookie
-  // manipulation from outside the application
+  // Check token validity every 5 seconds and redirect to login if expired
   useEffect(() => {
-    let intervalId; // eslint-disable-line prefer-const
+    let intervalId;
     const cleanUp = () => (intervalId ? clearInterval(intervalId) : undefined);
-    if (asPath.startsWith('/login')) return cleanUp;
+    // Skip login page to prevent infinite redirect loop
+    if (asPath.startsWith('/login')) {
+      return cleanUp;
+    }
     intervalId = setInterval(() => {
       const cookies = new Cookies();
       if (!isTokenValid(cookies.get('token'))) {
@@ -53,7 +55,8 @@ const useHandleAuthentication = () => {
         cookies.remove('token');
         Router.push('/login');
       }
-    }, 5000); // checking every 5 seconds
+    }, 5000);
+
     return cleanUp;
   }, [asPath]);
 };

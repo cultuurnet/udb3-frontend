@@ -37,7 +37,7 @@ const getGlobalValue = getValueFromTheme('global');
 
 type PlaceStepProps = StackProps &
   StepProps & {
-    terms: Array<Values<typeof EventTypes>>;
+    terms?: Array<Values<typeof EventTypes>>;
     municipality?: City;
     country?: Country;
     chooseLabel: (t: TFunction) => string;
@@ -52,7 +52,7 @@ const PlaceStep = ({
   name,
   loading,
   onChange,
-  terms,
+  terms = [],
   municipality,
   country,
   chooseLabel,
@@ -161,7 +161,7 @@ const PlaceStep = ({
                       options={places}
                       onInputChange={debounce(setSearchInput, 275)}
                       filterBy={filterByCallback}
-                      labelKey={(place) =>
+                      labelKey={(place: Place) =>
                         getPlaceName(place.name, place.mainLanguage)
                       }
                       renderMenuItemChildren={(place: Place, { text }) => {
@@ -281,10 +281,6 @@ const placeStepConfiguration: StepsConfiguration<'location'> = {
     municipality: undefined,
     onlineUrl: undefined,
   },
-};
-
-PlaceStep.defaultProps = {
-  terms: [],
 };
 
 export { PlaceStep, placeStepConfiguration };

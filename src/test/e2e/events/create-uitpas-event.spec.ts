@@ -62,7 +62,7 @@ test('create an event with UiTPAS organizer and UiTPAS prices', async ({
   await expect(
     page
       .getByRole('tab', { name: 'Prijzen' })
-      .locator('.fa-exclamation-circle'),
+      .locator('.fa-circle-exclamation'),
   ).toBeVisible();
 
   await page.getByRole('tab', { name: 'Prijzen' }).click();
@@ -72,7 +72,7 @@ test('create an event with UiTPAS organizer and UiTPAS prices', async ({
   await page.locator('.tab-pane.active').click();
 
   await expect(
-    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // go to organizer tab to verify if event is considered an uitpas organizer

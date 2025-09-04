@@ -26,7 +26,14 @@ type Props = BoxProps & {
   required?: boolean;
 };
 
-const Label = ({ htmlFor, children, className, variant, ...props }: Props) => (
+const Label = ({
+  htmlFor,
+  children,
+  className,
+  variant = LabelVariants.NORMAL,
+  required = false,
+  ...props
+}: Props) => (
   <Inline
     forwardedAs="label"
     htmlFor={htmlFor}
@@ -40,10 +47,5 @@ const Label = ({ htmlFor, children, className, variant, ...props }: Props) => (
     <Text>{children}</Text>
   </Inline>
 );
-
-Label.defaultProps = {
-  variant: LabelVariants.NORMAL,
-  required: false,
-};
 
 export { Label, LabelPositions, LabelVariants };

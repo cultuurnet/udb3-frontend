@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`reconcileRates can append embedded UiTPAS prices 1`] = `
-Array [
-  Object {
+[
+  {
     "category": "base",
-    "name": Object {
+    "name": {
       "nl": "foobar",
     },
     "price": "20,00",
     "priceCurrency": "EUR",
   },
-  Object {
+  {
     "category": "uitpas",
-    "name": Object {
+    "name": {
       "nl": "foobar",
     },
     "price": "25,00",
@@ -22,10 +22,10 @@ Array [
 `;
 
 exports[`reconcileRates can overwrite default values 1`] = `
-Array [
-  Object {
+[
+  {
     "category": "base",
-    "name": Object {
+    "name": {
       "nl": "foobar",
     },
     "price": "15,00",
@@ -35,18 +35,18 @@ Array [
 `;
 
 exports[`reconcileRates does not add back deleted prices 1`] = `
-Array [
-  Object {
+[
+  {
     "category": "base",
-    "name": Object {
+    "name": {
       "nl": "foo",
     },
     "price": "20,00",
     "priceCurrency": "EUR",
   },
-  Object {
+  {
     "category": "uitpas",
-    "name": Object {
+    "name": {
       "nl": "uitpas",
     },
     "price": "20,00",
@@ -56,18 +56,18 @@ Array [
 `;
 
 exports[`reconcileRates can updated embedded UiTPAS prices 1`] = `
-Array [
-  Object {
+[
+  {
     "category": "base",
-    "name": Object {
+    "name": {
       "nl": "foo",
     },
     "price": "15,00",
     "priceCurrency": "EUR",
   },
-  Object {
+  {
     "category": "uitpas",
-    "name": Object {
+    "name": {
       "nl": "bar",
     },
     "price": "20,00",

@@ -6,13 +6,13 @@ import { getGlobalBorderRadius, getValueFromTheme } from '../theme';
 const getValueForModal = getValueFromTheme('modal');
 
 const ContentModal = ({
-  visible,
-  title,
-  scrollable,
-  onShow,
-  onClose,
+  visible = false,
+  title = '',
+  scrollable = true,
+  onShow = () => {},
+  onClose = () => {},
   children,
-  size,
+  size = 'xl',
   className,
 }) => (
   <BootstrapModal
@@ -63,15 +63,6 @@ ContentModal.propTypes = {
   scrollable: PropTypes.bool,
   children: PropTypes.node,
   size: PropTypes.string,
-};
-
-ContentModal.defaultProps = {
-  visible: false,
-  title: '',
-  size: 'xl',
-  scrollable: true,
-  onShow: () => {},
-  onClose: () => {},
 };
 
 export { ContentModal };

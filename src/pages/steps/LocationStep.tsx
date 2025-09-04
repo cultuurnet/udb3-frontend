@@ -727,7 +727,7 @@ const LocationStep = ({
                       name="city-picker-location-step"
                       country={country}
                       offerId={offerId}
-                      value={field.value?.municipality}
+                      value={field.value?.municipality || null}
                       onChange={(value) => {
                         onFieldChange({
                           municipality: value,
@@ -1014,8 +1014,6 @@ const locationStepConfiguration: StepsConfiguration<'location'> = {
     });
   }),
 };
-
-LocationStep.defaultProps = {};
 
 export {
   DUTCH_ZIP_REGEX,

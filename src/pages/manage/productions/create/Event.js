@@ -15,16 +15,16 @@ import { Text } from '@/ui/Text';
 import { Title } from '@/ui/Title';
 
 const Event = ({
-  terms,
-  title,
+  terms = [],
+  title = '',
   id,
-  locationName,
-  locationCity,
-  organizerName,
+  locationName = '',
+  locationCity = '',
+  organizerName = '',
   imageUrl,
-  description: rawDescription,
+  description: rawDescription = '',
   productionName,
-  calendarType,
+  calendarType = CalendarType.SINGLE,
   ...props
 }) => {
   const { t, i18n } = useTranslation();
@@ -97,16 +97,6 @@ Event.propTypes = {
   description: PropTypes.string,
   productionName: PropTypes.string,
   calendarType: PropTypes.string,
-};
-
-Event.defaultProps = {
-  locationName: '',
-  locationCity: '',
-  organizerName: '',
-  terms: [],
-  description: '',
-  title: '',
-  calendarType: CalendarType.SINGLE,
 };
 
 export { Event };

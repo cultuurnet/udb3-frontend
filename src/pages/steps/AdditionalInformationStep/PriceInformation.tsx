@@ -402,7 +402,6 @@ const PriceInformation = ({
                                   });
                                   onSubmit();
                                 }}
-                                width="8rem"
                               >
                                 {groupPriceOptions.map((option) => (
                                   <option

@@ -12,13 +12,13 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname === '/') {
-    const token = request.cookies.get('token');
+    const token = request.cookies.get('token')?.value;
     if (isTokenValid(token)) {
       return NextResponse.redirect(new URL('/dashboard', baseUrl));
     }
   }
   if (request.nextUrl.pathname.startsWith('/login')) {
-    const referer = request.cookies.get('auth0.redirect_uri');
+    const referer = request.cookies.get('auth0.redirect_uri')?.value;
 
     if (!referer) {
       return;
@@ -46,7 +46,7 @@ export const middleware = async (request: NextRequest) => {
       process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION !== 'true';
 
     const hasSeenConversionPage =
-      request.cookies.get('has_seen_beta_conversion_page') === 'true';
+      request.cookies.get('has_seen_beta_conversion_page')?.value === 'true';
 
     if (shouldHideBetaVersion || hasSeenConversionPage) return;
 

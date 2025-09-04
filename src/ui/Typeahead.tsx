@@ -2,8 +2,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import type { ForwardedRef, Ref } from 'react';
 import { forwardRef } from 'react';
-import type { TypeaheadModel } from 'react-bootstrap-typeahead';
 import { AsyncTypeahead as BootstrapTypeahead } from 'react-bootstrap-typeahead';
+import CoreTypeahead from 'react-bootstrap-typeahead/types/core/Typeahead';
 import { useTranslation } from 'react-i18next';
 
 import { InputType } from '@/ui/Input';
@@ -24,21 +24,23 @@ type NewEntry = {
   label: string;
 };
 
-export type TypeaheadElement<T extends TypeaheadModel = TypeaheadModel> =
-  BootstrapTypeahead<T>;
+type TypeaheadOption = string | Record<string, any>;
+
+export type TypeaheadElement<T extends TypeaheadOption = TypeaheadOption> =
+  CoreTypeahead;
 
 const isNewEntry = (value: any): value is NewEntry => {
   return !!value?.customOption;
 };
 
-type Props<T extends TypeaheadModel> = BoxProps<T> & {
+type Props<T extends TypeaheadOption = TypeaheadOption> = BoxProps & {
   isInvalid?: boolean;
   inputType?: InputType;
   inputRequired?: boolean;
   hideNewInputText?: boolean;
 };
 
-const TypeaheadInner = <T extends TypeaheadModel>(
+const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
   {
     id,
     name,
@@ -68,7 +70,7 @@ const TypeaheadInner = <T extends TypeaheadModel>(
     isLoading = false,
     ...props
   }: Props<T>,
-  ref: ForwardedRef<BootstrapTypeahead<T>>,
+  ref: ForwardedRef<TypeaheadElement<T>>,
 ) => {
   const { t } = useTranslation();
 
@@ -166,8 +168,10 @@ const TypeaheadInner = <T extends TypeaheadModel>(
   );
 };
 
-const Typeahead = forwardRef(TypeaheadInner) as <T extends TypeaheadModel>(
-  props: Props<T> & { ref?: ForwardedRef<BootstrapTypeahead<T>> },
+const Typeahead = forwardRef(TypeaheadInner) as <
+  T extends TypeaheadOption = TypeaheadOption,
+>(
+  props: Props<T> & { ref?: ForwardedRef<TypeaheadElement<T>> },
 ) => ReturnType<typeof TypeaheadInner<T>>;
 
 export type { NewEntry };

@@ -46,11 +46,11 @@ const FormElement = ({
   id,
   ref,
   label,
-  labelPosition,
-  labelVariant,
+  labelPosition = LabelPositions.TOP,
+  labelVariant = LabelVariants.BOLD,
   error,
   info,
-  loading,
+  loading = false,
   Component,
   className,
   maxLength,
@@ -157,12 +157,6 @@ const FormElement = ({
       </Stack>
     </Wrapper>
   );
-};
-
-FormElement.defaultProps = {
-  labelPosition: LabelPositions.TOP,
-  labelVariant: LabelVariants.BOLD,
-  loading: false,
 };
 
 export { FormElement };

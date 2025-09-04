@@ -24,7 +24,7 @@ const CountryPicker = ({
   value,
   onChange,
   className,
-  showSchoolLocation,
+  showSchoolLocation = false,
   ...props
 }: Props) => {
   const { t } = useTranslation();
@@ -68,10 +68,6 @@ const CountryPicker = ({
       <Dropdown.Divider />
     </Dropdown>
   );
-};
-
-CountryPicker.defaultProps = {
-  showSchoolLocation: false,
 };
 
 export { CountryPicker };

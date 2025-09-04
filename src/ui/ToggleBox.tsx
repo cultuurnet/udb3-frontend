@@ -53,18 +53,18 @@ const SuccessIcon = ({ active }: SuccessIconProps) => {
 };
 
 type Props = StackProps & {
-  active: boolean;
+  active?: boolean;
   icon?: JSX.Element;
-  text: ReactNode;
+  text?: ReactNode;
   disabled?: boolean;
 };
 
 const ToggleBox = ({
   children,
   onClick,
-  active,
-  icon,
-  text,
+  active = false,
+  icon = undefined,
+  text = '',
   disabled,
   ...props
 }: Props) => {
@@ -143,12 +143,6 @@ const ToggleBox = ({
       {children}
     </Stack>
   );
-};
-
-ToggleBox.defaultProps = {
-  active: false,
-  icon: undefined,
-  text: '',
 };
 
 export { ToggleBox };

@@ -25,7 +25,7 @@ const commonCss = css`
 
     z-index: ${getValue('zIndex')};
 
-    min-width: ${parseSpacing(8)()};
+    min-width: fit-content;
 
     box-shadow: ${getGlobalValue('boxShadow.heavy')};
   }
@@ -51,6 +51,7 @@ const Notification = ({ icon, header, body }: Props) => {
         paddingRight={5}
         paddingLeft={4}
         alignItems="center"
+        justifyContent="center"
         color={getValue('textColor.dark')}
       >
         {icon && <Stack alignItems="center">{icon}</Stack>}

@@ -12,11 +12,11 @@ import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const NumberedList = ({
-  steps,
+  steps = [],
   stepTranslationPath,
   ...props
 }: {
-  steps: number[];
+  steps?: number[];
   stepTranslationPath: string;
 } & InlineProps) => {
   const { t } = useTranslation();
@@ -36,10 +36,6 @@ const NumberedList = ({
       ))}
     </List>
   );
-};
-
-NumberedList.defaultProps = {
-  steps: [],
 };
 
 const Copyright = () => {
