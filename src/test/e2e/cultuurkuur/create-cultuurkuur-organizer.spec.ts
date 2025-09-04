@@ -28,6 +28,8 @@ test('Create a cultuurkuur organizer', async ({ baseURL, page }) => {
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
+  await page.waitForLoadState('networkidle');
+
   await expect(
     page.getByText(
       'Voeg een e-mailadres toe waarop scholen je kunnen contacteren.',
