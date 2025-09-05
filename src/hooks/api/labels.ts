@@ -10,6 +10,15 @@ import { Label } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
 
+export const labelsToTableData = (labels: Label[]) =>
+  labels.map((label) => ({
+    name: label.name,
+    invisible: label.visibility,
+    private: label.privacy,
+    excluded: label.excluded,
+    options: label.uuid,
+  }));
+
 export const prefetchGetLabelsQuery = ({
   req,
   queryClient,
@@ -47,7 +56,7 @@ const getLabels = async ({
       query: name,
       limit: limit,
       start: start,
-      suggestion: suggestion,
+      suggestion: suggestion.toString(),
     },
     options: {
       headers,
