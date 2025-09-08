@@ -130,13 +130,17 @@ const StepsForm = ({
 
   const toast = useToast(toastConfiguration);
 
-  const useGetOfferQuery = scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
+  const useGetOfferQuery =
+    scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
 
-  const offerQuery = useGetOfferQuery({
-    id: offerId,
-  }, {
-    enabled: !!scope && !!offerId,
-  });
+  const offerQuery = useGetOfferQuery(
+    {
+      id: offerId,
+    },
+    {
+      enabled: !!scope && !!offerId,
+    },
+  );
 
   const offer = offerQuery?.data;
 

@@ -9,7 +9,13 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 
-const StatusModal = ({ visible, loading, className = "", onClose, onConfirm }) => {
+const StatusModal = ({
+  visible,
+  loading,
+  className = '',
+  onClose,
+  onConfirm,
+}) => {
   const { t } = useTranslation();
 
   const [type, setType] = useState('');

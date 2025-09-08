@@ -173,9 +173,7 @@ describe('useAuthenticatedMutation', () => {
   let page;
 
   beforeEach(async () => {
-    const { result } = renderHookWithWrapper(() =>
-      useQueryClient(),
-    );
+    const { result } = renderHookWithWrapper(() => useQueryClient());
 
     await waitFor(() => {
       expect(result.current).toBeDefined();
@@ -200,9 +198,12 @@ describe('useAuthenticatedMutation', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(result.current).toBeDefined();
+      },
+      { timeout: 3000 },
+    );
 
     const mutation = result.current;
 

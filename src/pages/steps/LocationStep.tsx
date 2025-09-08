@@ -425,7 +425,7 @@ const LocationStep = ({
   const isLocationLabelErrorVisible =
     isNewEventWithoutLabels || isExistingEventWithoutLabels;
 
-  useEffect(() => {
+  (useEffect(() => {
     if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
       field.onChange({
         country: 'BE',
@@ -435,7 +435,7 @@ const LocationStep = ({
       });
     }
   }),
-    [audienceField, location?.country, setValue];
+    [audienceField, location?.country, setValue]);
 
   useEffect(() => {
     if (!locationStreetAndNumber && !locationOnlineUrl) {
