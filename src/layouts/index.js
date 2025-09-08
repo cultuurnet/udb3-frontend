@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/nextjs';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
 import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
     [WindowMessageTypes.HTTP_ERROR_CODE]: ({ code }) => {
       if ([401, 403].includes(code)) {
         removeAuthenticationCookies();
-        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         router.push('/login');
       }
     },

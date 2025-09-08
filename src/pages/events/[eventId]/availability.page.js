@@ -1,5 +1,5 @@
+import { dehydrate } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';

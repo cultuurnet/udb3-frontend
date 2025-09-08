@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
@@ -207,7 +207,9 @@ const PriceInformation = ({
   const addPriceInfoMutation = useAddOfferPriceInfoMutation({
     onSuccess: async () => {
       setTimeout(() => onSuccessfulChange(), 1000);
-      await queryClient.invalidateQueries([scope, { id: offerId }]);
+      await queryClient.invalidateQueries({
+        queryKey: [scope, { id: offerId }],
+      });
     },
     useErrorBoundary: false,
   });

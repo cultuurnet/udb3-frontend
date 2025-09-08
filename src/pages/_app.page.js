@@ -3,15 +3,15 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import Hotjar from '@hotjar/browser';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HydrationBoundary } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import getConfig from 'next/config';
 import NextHead from 'next/head';
 import PropTypes from 'prop-types';
 import { cloneElement, useEffect } from 'react';
 import { Cookies, CookiesProvider } from 'react-cookie';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { Hydrate } from 'react-query/hydration';
 
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
@@ -116,7 +116,7 @@ const App = ({ Component, pageProps, children }) => {
             },
           ],
           [QueryClientProvider, { client: queryClient }],
-          [Hydrate, { state: pageProps?.dehydratedState ?? {} }],
+          [HydrationBoundary, { state: pageProps?.dehydratedState ?? {} }],
           AnnouncementModalProvider,
         ]}
       >

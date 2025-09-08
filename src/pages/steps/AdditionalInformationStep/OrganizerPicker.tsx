@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetOrganizersByQueryQuery } from '@/hooks/api/organizers';
@@ -314,7 +314,9 @@ const OrganizerPicker = ({
 
                       if (isNewEntry(organizer)) {
                         onAddNewOrganizer(organizer);
-                        queryClient.invalidateQueries('organizers');
+                        queryClient.invalidateQueries({
+                          queryKey: ['organizers'],
+                        });
                         return;
                       }
 

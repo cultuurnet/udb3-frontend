@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -13,6 +13,8 @@ import {
 import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { useGetEventByIdQuery } from '@/hooks/api/events';
+import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import {
   locationStepConfiguration,
   useEditLocation,
@@ -128,18 +130,26 @@ const StepsForm = ({
 
   const toast = useToast(toastConfiguration);
 
-  const useGetOffer = scope === OfferTypes.EVENTS ? useGetEvent : useGetPlace;
+  const useGetOfferQuery = scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
 
-  const offer = useGetOffer({
+  const offerQuery = useGetOfferQuery({
     id: offerId,
-    onSuccess: (offer: Offer) => {
-      reset(convertOfferToFormData(offer), {
+  }, {
+    enabled: !!scope && !!offerId,
+  });
+
+  const offer = offerQuery?.data;
+
+  const stableReset = useCallback(reset, [reset]);
+
+  useEffect(() => {
+    if (offerQuery.isSuccess && offerQuery.data) {
+      stableReset(convertOfferToFormData(offerQuery.data), {
         keepDirty: true,
         keepDirtyValues: true,
       });
-    },
-    enabled: !!scope,
-  });
+    }
+  }, [offerQuery.isSuccess, offerQuery.data, stableReset]);
 
   const publishOffer = usePublishOffer({
     scope,

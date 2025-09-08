@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { ScopeTypes } from '@/constants/OfferType';
@@ -84,6 +84,8 @@ const OrganizerForm = () => {
 
   const { handleSubmit, formState, getValues, reset } = form;
 
+  const stableReset = useCallback(reset, [reset]);
+
   const urlOrganizerId = useMemo(
     () => query.organizerId as string,
     [query.organizerId],
@@ -118,13 +120,21 @@ const OrganizerForm = () => {
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery(
     { id: urlOrganizerId },
     {
-      onSuccess: (organizer: Organizer) => {
-        reset(convertOrganizerToFormData(organizer), {
-          keepDirty: true,
-        });
-      },
+      enabled: !!urlOrganizerId,
     },
   );
+
+  useEffect(() => {
+    if (getOrganizerByIdQuery.isSuccess && getOrganizerByIdQuery.data) {
+      stableReset(convertOrganizerToFormData(getOrganizerByIdQuery.data), {
+        keepDirty: true,
+      });
+    }
+  }, [
+    getOrganizerByIdQuery.isSuccess,
+    getOrganizerByIdQuery.data,
+    stableReset,
+  ]);
 
   const organizer = getOrganizerByIdQuery?.data;
   const organizerLabels = getUniqueLabels(organizer);
@@ -146,7 +156,7 @@ const OrganizerForm = () => {
       scope,
       label: CULTUURKUUR_ORGANIZER_LABEL,
     });
-    await queryClient.invalidateQueries('organizers');
+    await queryClient.invalidateQueries({ queryKey: ['organizers'] });
   };
 
   const upsertOrganizer = async ({ onSuccess }) => {
