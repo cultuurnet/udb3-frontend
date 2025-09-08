@@ -1,4 +1,5 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { waitFor } from '@testing-library/react';
 
 import { renderHookWithWrapper } from '@/test/utils/renderHookWithWrapper';
 import { mockResponses, setupPage } from '@/test/utils/setupPage';
@@ -100,16 +101,16 @@ describe('useAuthenticatedQuery', () => {
       '/random': { body },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useAuthenticatedQuery({
         queryKey: ['random'],
         queryFn,
       }),
     );
 
-    await waitForNextUpdate();
-
-    expect(result.current.data).toStrictEqual(body);
+    await waitFor(() => {
+      expect(result.current.data).toStrictEqual(body);
+    });
   });
   it('fails on response not ok', async () => {
     const title = 'This is an error';
@@ -118,7 +119,7 @@ describe('useAuthenticatedQuery', () => {
       '/random': { body: { title }, status: 400 },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useAuthenticatedQuery({
         retry: false, // disable retry, otherwise the waitFor times out
         queryKey: ['random'],
@@ -126,9 +127,9 @@ describe('useAuthenticatedQuery', () => {
       }),
     );
 
-    await waitForNextUpdate();
-
-    expect(result.current.error.message).toStrictEqual(title);
+    await waitFor(() => {
+      expect(result.current.error.message).toStrictEqual(title);
+    });
   });
 
   it('redirects on 401', async () => {
@@ -136,7 +137,7 @@ describe('useAuthenticatedQuery', () => {
       '/random': { status: 401 },
     });
 
-    const { waitForNextUpdate } = renderHookWithWrapper(() =>
+    renderHookWithWrapper(() =>
       useAuthenticatedQuery({
         retry: false, // disable retry, otherwise the waitFor times out
         queryKey: ['random'],
@@ -144,8 +145,9 @@ describe('useAuthenticatedQuery', () => {
       }),
     );
 
-    await waitForNextUpdate();
-    expect(page.router.push).toBeCalledWith('/login');
+    await waitFor(() => {
+      expect(page.router.push).toBeCalledWith('/login');
+    });
   });
 
   it('redirects on 403', async () => {
@@ -153,7 +155,7 @@ describe('useAuthenticatedQuery', () => {
       '/random': { status: 403 },
     });
 
-    const { waitForNextUpdate } = renderHookWithWrapper(() =>
+    renderHookWithWrapper(() =>
       useAuthenticatedQuery({
         retry: false, // disable retry, otherwise the waitFor times out
         queryKey: ['random'],
@@ -161,8 +163,9 @@ describe('useAuthenticatedQuery', () => {
       }),
     );
 
-    await waitForNextUpdate();
-    expect(page.router.push).toBeCalledWith('/login');
+    await waitFor(() => {
+      expect(page.router.push).toBeCalledWith('/login');
+    });
   });
 });
 
@@ -170,11 +173,13 @@ describe('useAuthenticatedMutation', () => {
   let page;
 
   beforeEach(async () => {
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useQueryClient(),
     );
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      expect(result.current).toBeDefined();
+    });
 
     const queryClient = result.current;
 
@@ -188,16 +193,16 @@ describe('useAuthenticatedMutation', () => {
       '/mutate': { status: 204 },
     });
 
-    const { waitForNextUpdate, result } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useAuthenticatedMutation({
         mutationKey: 'mutate-something',
         mutationFn: mutationFn,
       }),
     );
 
-    await waitForNextUpdate({
-      timeout: 3000,
-    });
+    await waitFor(() => {
+      expect(result.current).toBeDefined();
+    }, { timeout: 3000 });
 
     const mutation = result.current;
 
@@ -233,8 +238,12 @@ describe('useAuthenticatedMutation', () => {
       }),
     );
 
-    await mutation1Hook.waitForNextUpdate();
-    await mutation2Hook.waitForNextUpdate();
+    await waitFor(() => {
+      expect(mutation1Hook.result.current).toBeDefined();
+    });
+    await waitFor(() => {
+      expect(mutation2Hook.result.current).toBeDefined();
+    });
 
     const mutation1 = mutation1Hook.result.current;
     const mutation2 = mutation2Hook.result.current;
@@ -257,14 +266,16 @@ describe('useAuthenticatedMutation', () => {
       '/mutate': { status: 204 },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useAuthenticatedMutation({
         mutationKey: 'mutate-something',
         mutationFn: mutationFn,
       }),
     );
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      expect(result.current).toBeDefined();
+    });
 
     const mutation = result.current;
 
@@ -286,14 +297,16 @@ describe('useAuthenticatedMutation', () => {
       '/mutate': { status: 204 },
     });
 
-    const { result, waitForNextUpdate } = renderHookWithWrapper(() =>
+    const { result } = renderHookWithWrapper(() =>
       useAuthenticatedMutation({
         mutationKey: 'mutate-something',
         mutationFn: mutationFn,
       }),
     );
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      expect(result.current).toBeDefined();
+    });
 
     const mutation = result.current;
 
