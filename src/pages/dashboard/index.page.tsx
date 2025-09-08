@@ -4,8 +4,8 @@ import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
-import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
+import Cookies from 'universal-cookie';
 
 import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';

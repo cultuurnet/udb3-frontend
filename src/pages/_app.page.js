@@ -10,8 +10,9 @@ import getConfig from 'next/config';
 import NextHead from 'next/head';
 import PropTypes from 'prop-types';
 import { cloneElement, useEffect } from 'react';
-import { Cookies, CookiesProvider } from 'react-cookie';
+import { CookiesProvider } from 'react-cookie';
 import { I18nextProvider, useTranslation } from 'react-i18next';
+import Cookies from 'universal-cookie';
 
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
