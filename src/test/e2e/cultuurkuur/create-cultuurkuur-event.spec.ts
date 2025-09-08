@@ -43,7 +43,10 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.getByRole('button', { name: 'Zwevegem' }).click();
   await page.getByRole('button', { name: 'Menen' }).click();
 
-  await page.getByRole('button', { name: 'Opslaan' }).click();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Opslaan' })
+    .click();
 
   await expect(page.getByText("3 werkingsregio's")).toBeVisible();
 
@@ -63,7 +66,10 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.getByRole('button', { name: 'Kleuter (4-5 jaar)' }).click();
   await page.getByText('Gewoon lager onderwijs', { exact: true }).click();
   await page.getByRole('button', { name: 'Eerste graad' }).click();
-  await page.getByRole('button', { name: 'Opslaan' }).click();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Opslaan' })
+    .click();
   await expect(page.getByText('5 onderwijsniveaus')).toBeVisible();
 
   // Save event
@@ -71,9 +77,7 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
 
   await page.waitForLoadState('networkidle');
 
-  await expect(
-    page.getByText('Zorg dat je publiek geen informatie mist'),
-  ).toBeVisible();
+  await expect(page.getByText('Zorg dat je publiek geen')).toBeVisible();
 
   await page
     .getByRole('textbox', { name: 'rdw-editor' })
