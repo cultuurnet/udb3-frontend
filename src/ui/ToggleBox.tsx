@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ReactElement } from 'react';
 
 import { parseSpacing } from './Box';
 import type { StackProps } from './Stack';
@@ -54,7 +54,7 @@ const SuccessIcon = ({ active }: SuccessIconProps) => {
 
 type Props = StackProps & {
   active?: boolean;
-  icon?: JSX.Element;
+  icon?: ReactElement;
   text?: ReactNode;
   disabled?: boolean;
 };

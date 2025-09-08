@@ -123,7 +123,7 @@ const OrganizerAddModal = ({
     url: [],
   });
 
-  const formComponent = useRef<HTMLFormElement>();
+  const formComponent = useRef<HTMLFormElement>(null);
 
   const {
     register,
