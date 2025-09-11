@@ -46,8 +46,6 @@ const RequestOwnershipModal = ({
 
   const getUserQuery = useGetUserQuery() as UseQueryResult<User, FetchError>;
 
-  const userId = getUserQuery.data?.sub;
-
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries('ownership-requests');
