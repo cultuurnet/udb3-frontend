@@ -39,7 +39,7 @@ const NameStep = ({
                 maxLength={90}
                 Component={
                   <Input
-                    value={field.value?.name?.[language]}
+                    value={field.value?.name?.[language] || ''}
                     onChange={(event) => {
                       field.onChange({
                         ...field.value,

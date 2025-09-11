@@ -1,7 +1,6 @@
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient, UseQueryResult } from 'react-query';
 

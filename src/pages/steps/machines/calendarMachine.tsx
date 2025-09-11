@@ -8,7 +8,12 @@ import {
   setYear,
 } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { createContext, ReactNode, useContext } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useSyncExternalStore,
+} from 'react';
 import {
   Actions,
   assign,
@@ -552,7 +557,15 @@ export const useCalendarSelector = <T,>(
   selector: (state: CalendarState) => T,
 ) => {
   const calendarService = useCalendarContext();
-  return useSelector(calendarService, selector) as T;
+
+  return useSyncExternalStore(
+    (callback) => {
+      const sub = calendarService.subscribe(callback);
+      return () => sub.unsubscribe();
+    },
+    () => selector(calendarService.getSnapshot()), // client side
+    () => selector(calendarService.getSnapshot()), // server side
+  );
 };
 
 export const useIsOneOrMoreDays = () =>

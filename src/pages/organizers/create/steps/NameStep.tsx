@@ -34,7 +34,7 @@ const NameStep = ({
                 flex={2}
                 Component={
                   <Input
-                    value={field.value?.name}
+                    value={field.value?.name || ''}
                     onChange={(event) => {
                       field.onChange({
                         ...field.value,

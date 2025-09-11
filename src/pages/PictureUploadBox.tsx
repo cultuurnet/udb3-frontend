@@ -98,7 +98,7 @@ const PictureUploadBox = ({
       >
         <Stack
           spacing={4}
-          maxHeight={380}
+          maxHeight="380px"
           padding={4}
           css={`
             overflow: auto;

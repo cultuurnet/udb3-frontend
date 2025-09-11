@@ -84,7 +84,7 @@ const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
 );
 
 type Props = {
-  isProfileLinkVisible: boolean;
+  isProfileLinkVisible?: boolean;
   variant?: Values<typeof FooterVariants>;
   wrapper?: ElementType;
   onChangeLanguage?: (
@@ -93,9 +93,11 @@ type Props = {
 };
 
 const Footer = ({
-  wrapper: Wrapper,
+  wrapper: Wrapper = (props) => (
+    <Inline width="100%" justifyContent="space-between" {...props} />
+  ),
   onChangeLanguage,
-  isProfileLinkVisible,
+  isProfileLinkVisible = true,
   variant = FooterVariants.DEFAULT,
   ...props
 }: Props) => {
@@ -192,15 +194,6 @@ const Footer = ({
       </Stack>
     </Wrapper>
   );
-};
-
-const Wrapper = (props) => (
-  <Inline width="100%" justifyContent="space-between" {...props} />
-);
-
-Footer.defaultProps = {
-  isProfileLinkVisible: true,
-  wrapper: Wrapper,
 };
 
 export { Footer, FooterVariants };

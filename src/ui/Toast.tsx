@@ -71,7 +71,12 @@ type Props = {
   onClose?: () => void;
 };
 
-const Toast = ({ variant, visible, body, onClose }: Props) => {
+const Toast = ({
+  variant = ToastVariants.PRIMARY,
+  visible = true,
+  body = '',
+  onClose,
+}: Props) => {
   const icon = useMemo(() => {
     const icons = {
       [ToastVariants.PRIMARY]: Icons.QUESTION_CIRCLE,
@@ -98,20 +103,14 @@ const Toast = ({ variant, visible, body, onClose }: Props) => {
         color={getValue('textColor.dark')}
         className={'d-flex justify-content-between align-items-center flex-row'}
       >
-        <span className={'d-flex mr-2'}>
-          {icon && <Icon name={icon} className={`text-${variant} mr-2`} />}
+        <span className={'d-flex me-2'}>
+          {icon && <Icon name={icon} className={`text-${variant} me-2`} />}
           {body}
         </span>
         {onClose && <Icon name={Icons.TIMES} onClick={onClose} width={10} />}
       </Paragraph>
     </BootstrapToast>
   );
-};
-
-Toast.defaultProps = {
-  variant: ToastVariants.PRIMARY,
-  visible: true,
-  body: '',
 };
 
 export { Toast, ToastVariants };

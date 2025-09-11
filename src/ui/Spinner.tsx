@@ -23,7 +23,12 @@ type Props = Omit<BoxProps, 'size'> & {
   size?: Values<typeof SpinnerSizes>;
 };
 
-const Spinner = ({ variant, size, className, ...props }: Props) => {
+const Spinner = ({
+  variant = SpinnerVariants.PRIMARY,
+  size,
+  className,
+  ...props
+}: Props) => {
   return (
     <Inline
       forwardedAs="div"
@@ -50,10 +55,6 @@ const Spinner = ({ variant, size, className, ...props }: Props) => {
       />
     </Inline>
   );
-};
-
-Spinner.defaultProps = {
-  variant: SpinnerVariants.PRIMARY,
 };
 
 export { Spinner, SpinnerSizes, SpinnerVariants };

@@ -127,8 +127,8 @@ type AlertProps = InlineProps & {
 };
 
 const Alert = ({
-  variant,
-  visible,
+  variant = AlertVariants.PRIMARY,
+  visible = true,
   children,
   fullWidth,
   closable,
@@ -217,11 +217,6 @@ const Alert = ({
       )}
     </Inline>
   );
-};
-
-Alert.defaultProps = {
-  visible: true,
-  variant: AlertVariants.PRIMARY,
 };
 
 export { Alert, AlertVariants };

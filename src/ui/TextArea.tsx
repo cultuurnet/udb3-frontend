@@ -29,8 +29,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       className,
       onInput,
       value,
-      disabled,
-      rows,
+      disabled = false,
+      rows = 3,
       onChange,
       onBlur,
       name,
@@ -61,11 +61,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
 );
 
 TextArea.displayName = 'TextArea';
-
-TextArea.defaultProps = {
-  disabled: false,
-  rows: 3,
-};
 
 export { TextArea };
 export type { TextAreaProps };

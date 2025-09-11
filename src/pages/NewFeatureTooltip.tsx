@@ -21,8 +21,7 @@ const QuestionCircleIcon = () => {
   return (
     <Badge
       variant={BadgeVariants.SECONDARY}
-      borderRadius={'50%'}
-      padding={2}
+      pill
       css={css`
         aspect-ratio: 1 / 1;
 

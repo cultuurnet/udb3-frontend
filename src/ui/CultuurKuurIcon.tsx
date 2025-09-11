@@ -1,12 +1,15 @@
 import { Box, BoxProps, getBoxProps } from '@/ui/Box';
 
 const CultuurKuurIcon = (props: BoxProps) => {
+  const { width = '1.4rem', height = '1.4rem', ...rest } = props;
   return (
     <Box
       as="svg"
       viewBox="0 0 264 264"
       xmlns="http://www.w3.org/2000/svg"
-      {...getBoxProps(props)}
+      width={width}
+      height={height}
+      {...getBoxProps(rest)}
     >
       <path
         d="M71.9 114.5C71.9 121.5 66.3 127.1 59.3 127.1C52.3 127.1 46.7 121.5 46.7 114.5C46.7 107.5 52.3 101.9 59.3 101.9C66.2 101.9 71.9 107.6 71.9 114.5Z"
@@ -22,11 +25,6 @@ const CultuurKuurIcon = (props: BoxProps) => {
       />
     </Box>
   );
-};
-
-CultuurKuurIcon.defaultProps = {
-  width: '1.4rem',
-  height: '1.4rem',
 };
 
 export { CultuurKuurIcon };

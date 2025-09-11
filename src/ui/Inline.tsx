@@ -1,21 +1,19 @@
 import { pickBy } from 'lodash';
-import { Children, cloneElement, forwardRef } from 'react';
+import { Children, cloneElement, forwardRef, isValidElement } from 'react';
 import styled, { css } from 'styled-components';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 
 import {
-  BoxProps,
-  UIProp,
-  UnknownProps,
-  withoutDisallowedPropsConfig,
-} from './Box';
-import {
   Box,
+  BoxProps,
   boxProps,
   boxPropTypes,
   FALSY_VALUES,
   parseProperty,
+  UIProp,
+  UnknownProps,
+  withoutDisallowedPropsConfig,
 } from './Box';
 import type { BreakpointValues } from './theme';
 
@@ -29,9 +27,7 @@ type Props = BoxProps & InlineProps;
 const parseStackOnProperty =
   () =>
   ({ stackOn }: Props) => {
-    if (!stackOn) {
-      return;
-    }
+    if (!stackOn) return;
     return css`
       @media (max-width: ${(props) => props.theme.breakpoints[stackOn]}px) {
         flex-direction: column;
@@ -55,9 +51,8 @@ const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
 `;
 
 const Inline = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as, stackOn, ...props }, ref) => {
+  ({ spacing, className, children, as = 'span', stackOn, ...props }, ref) => {
     const shouldCollapse = useMatchBreakpoint(stackOn);
-
     const marginProp =
       shouldCollapse && stackOn ? 'marginBottom' : 'marginRight';
 
@@ -68,11 +63,16 @@ const Inline = forwardRef<HTMLElement, Props>(
     const clonedChildren = Children.map(validChildren, (child, i) => {
       const isLastItem = i === validChildren.length - 1;
 
+      const isBoxComponent =
+        isValidElement(child) && typeof child.type !== 'string';
+
       // @ts-expect-error
       return cloneElement(child, {
         // @ts-expect-error
         ...child.props,
-        ...(!isLastItem && spacing ? { [marginProp]: spacing } : {}),
+        ...(!isLastItem && spacing && isBoxComponent
+          ? { [marginProp]: spacing }
+          : {}),
       });
     });
 
@@ -99,28 +99,18 @@ const inlinePropTypes = [
   'justifyContent',
   'stackOn',
 ];
-
 const linkPropTypes = ['rel', 'target'];
 
 const getInlineProps = (props: UnknownProps) =>
   pickBy(props, (_value, key) => {
-    // pass aria attributes to the DOM element
-    if (key.startsWith('aria-')) {
-      return true;
-    }
-
+    if (key.startsWith('aria-')) return true;
     const propTypes: string[] = [
       ...boxPropTypes,
       ...inlinePropTypes,
       ...linkPropTypes,
     ];
-
     return propTypes.includes(key);
   });
-
-Inline.defaultProps = {
-  as: 'section',
-};
 
 export { getInlineProps, Inline };
 export type { Props as InlineProps };

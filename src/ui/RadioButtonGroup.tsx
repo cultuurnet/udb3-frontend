@@ -20,11 +20,12 @@ type Props = {
 };
 
 const RadioButtonGroup = ({
-  name,
-  items,
+  name = '',
+  items = [],
   selected,
   className,
   onChange,
+  groupLabel = '',
   ...props
 }: Props) => {
   return (
@@ -45,12 +46,6 @@ const RadioButtonGroup = ({
       </Stack>
     </Stack>
   );
-};
-
-RadioButtonGroup.defaultProps = {
-  name: '',
-  groupLabel: '',
-  items: [],
 };
 
 export { RadioButtonGroup };

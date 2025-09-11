@@ -22,7 +22,16 @@ type Props = Omit<StackProps, 'onChange'> & {
 
 const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
   (
-    { offerId, country, name, value, onChange, onBlur, error, ...props },
+    {
+      offerId,
+      country = Countries.BE,
+      name,
+      value,
+      onChange,
+      onBlur,
+      error,
+      ...props
+    },
     ref,
   ) => {
     const { t, i18n } = useTranslation();
@@ -68,7 +77,7 @@ const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
               ref={ref}
               isLoading={getCitiesQuery.isLoading}
               options={cities}
-              labelKey={(city) => city.label}
+              labelKey={(city: City) => city.label}
               selected={valueToArray(value)}
               onInputChange={debounce(setCitySearchInput, 275)}
               onChange={([value]: [City]) => onChange(value)}
@@ -85,10 +94,6 @@ const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
 );
 
 CityPicker.displayName = 'CityPicker';
-
-CityPicker.defaultProps = {
-  country: Countries.BE,
-};
 
 export { CityPicker };
 export type { City };
