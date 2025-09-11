@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
@@ -20,7 +20,6 @@ import {
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
-  useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
   prefetchGetPlacesByCreatorQuery,
@@ -71,6 +70,7 @@ import { parseOfferType } from '@/utils/parseOfferType';
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
+import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -574,21 +574,42 @@ const Dashboard = (): any => {
     );
   };
 
-  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
-    {},
+  const getOffersByCreatorQuery = useGetOffersByCreatorQuery(
+    {
+      advancedQuery: '_exists_:organizer.id',
+      creator: user,
+      paginationOptions: { start: 0, limit: 30 },
+    },
     { enabled: tab === 'organizers' },
   );
 
-  suggestedOrganizerIds.data;
+  const recentUsedOrganizers = useMemo(() => {
+    const recentOrganizers = [];
+
+    getOffersByCreatorQuery.data?.member.forEach((event) => {
+      if (
+        event.organizer &&
+        !recentOrganizers.some(
+          (recentOrganizer) =>
+            recentOrganizer['@id'] === event.organizer['@id'],
+        )
+      )
+        recentOrganizers.push(event.organizer);
+    });
+
+    return recentOrganizers.slice(0, 10);
+  }, [getOffersByCreatorQuery.data?.member]);
 
   const suggestedOrganizers = useGetOrganizersByQueryQuery(
     {
-      q: suggestedOrganizerIds.data?.member
-        .map((result) => `id:${parseOfferId(result['@id'])}`)
-        .join(' OR '),
+      q:
+        recentUsedOrganizers
+          .map((organizer) => `id:${parseOfferId(organizer['@id'])}`)
+          .join(' OR ') +
+        ` NOT creator:"${user?.['https://publiq.be/uitidv1id'] ?? user?.sub}"`,
     },
     {
-      enabled: suggestedOrganizerIds.data?.member?.length > 0,
+      enabled: tab === 'organizers' && recentUsedOrganizers.length > 0,
     },
   );
 
