@@ -1163,7 +1163,10 @@
           "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
           "cancel": "Annuleren",
           "confirm": "Beheer aanvragen",
-          "error": "Er is iets misgelopen"
+          "error": {
+            "general": "Er is iets misgelopen",
+            "409": "Je hebt al een lopende aanvraag voor deze organisatie."
+          }
         },
         "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling.<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail.",
         "success": "Je aanvraag om beheerder te worden van {{organizerName}} is succesvol verzonden!<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
