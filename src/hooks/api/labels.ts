@@ -41,16 +41,12 @@ const getLabels = async ({
   limit: string;
   suggestion: boolean;
 }) => {
-  let searchParams = new URLSearchParams({
+  const searchParams = new URLSearchParams({
     query: name,
     limit: limit,
     start: start,
+    ...(suggestion && { suggestion: 'true' }),
   });
-  if (suggestion) {
-    // The API expects 'suggestion' to be a string 'true' or 'false'
-    // or not be included at all.
-    searchParams.append('suggestion', 'true');
-  }
   const res = await fetchFromApi({
     path: '/labels/',
     searchParams,
