@@ -47,7 +47,6 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
-import { Icons } from '@/ui/Icon';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -223,11 +222,6 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const eventType = typeId
     ? t(`eventTypes*${typeId}`, { keySeparator: '*' })
     : undefined;
-
-  const period =
-    offer.calendarSummary?.[i18n.language]?.text?.[
-      offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
-    ];
 
   const rowStatus = useMemo<RowStatus>(() => {
     if (isPlanned) {
