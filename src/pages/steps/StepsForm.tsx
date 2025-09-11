@@ -153,7 +153,7 @@ const StepsForm = ({
         keepDirtyValues: true,
       });
     }
-  }, [offerQuery.isSuccess, offerQuery.data, stableReset]);
+  }, [offerQuery.isSuccess, offerQuery.data, stableReset, convertOfferToFormData]);
 
   const publishOffer = usePublishOffer({
     scope,

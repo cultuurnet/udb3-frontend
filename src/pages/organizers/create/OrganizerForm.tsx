@@ -91,7 +91,7 @@ const OrganizerForm = () => {
     [query.organizerId],
   );
 
-  const convertOrganizerToFormData = (organizer: Organizer) => {
+  const convertOrganizerToFormData = useCallback((organizer: Organizer) => {
     const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
       organizer?.hiddenLabels,
     );
@@ -114,7 +114,7 @@ const OrganizerForm = () => {
       },
       ...locationAttributes,
     };
-  };
+  }, [i18n.language]);
 
   // TODO better type query
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery(
@@ -134,6 +134,7 @@ const OrganizerForm = () => {
     getOrganizerByIdQuery.isSuccess,
     getOrganizerByIdQuery.data,
     stableReset,
+    convertOrganizerToFormData,
   ]);
 
   const organizer = getOrganizerByIdQuery?.data;
