@@ -126,29 +126,21 @@ test('The reason and error are cleared when switching back to "available"', asyn
     'Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvina',
   );
 
-  await waitFor(() => {
-    expect(screen.getByRole('alert')).toBeInTheDocument();
-  });
+  expect(screen.getByRole('alert')).toBeInTheDocument();
 
-  await waitFor(() => {
-    expect(
-      screen.getByRole('button', {
-        name: nl.offerStatus.actions.save,
-      }),
-    ).toBeDisabled();
-  });
+  expect(
+    screen.getByRole('button', {
+      name: nl.offerStatus.actions.save,
+    }),
+  ).toBeDisabled();
 
   await userEvent.click(
     screen.getByLabelText(nl.offerStatus.status.events.available),
   );
 
-  await waitFor(() => {
-    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-  });
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
-  await waitFor(() => {
-    expect(screen.getByLabelText(nl.offerStatus.reason).value).toBe('');
-  });
+  expect(screen.getByLabelText(nl.offerStatus.reason).value).toBe('');
 }, 10000);
 
 test('I can cancel', async () => {
