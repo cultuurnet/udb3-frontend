@@ -217,14 +217,17 @@ const isDuplicateMutation = (
     return false;
   }
 
-  const mutations = queryClient.getMutationCache().findAll({
-    mutationKey: [mutationKey],
+  const allMutations = queryClient.getMutationCache().findAll();
+
+  const mutations = allMutations.filter((mutation) => {
+    const currentMutationKey = mutation.options?.mutationKey;
+    return currentMutationKey.includes(mutationKey);
   });
 
   const latestMutation = mutations.slice(-2)[0];
 
   // If the latest mutation was unsuccessful, we don't want to trigger a false positive.
-  if (latestMutation?.state?.error) {
+  if (latestMutation?.state.error) {
     return false;
   }
 
