@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
 import { Label } from 'types/Offer';
 
-import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
-  labelsToTableData,
+  PaginationOptions,
+  QueryStatus,
+  ServerSideQueryOptions,
+} from '@/hooks/api/authenticated-query';
+import {
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
@@ -30,6 +33,15 @@ const LabelsOverviewPage = () => {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
   const [currentPageLabels, setCurrentPageLabels] = useState(1);
+
+  const labelsToTableData = (labels: Label[]) =>
+    labels.map((label) => ({
+      name: label.name,
+      invisible: label.visibility,
+      private: label.privacy,
+      excluded: label.excluded,
+      options: label.uuid,
+    }));
 
   const labelsQuery = useGetLabelsByQuery({
     name: searchInput,
@@ -160,7 +172,7 @@ const LabelsOverviewPage = () => {
   );
 };
 
-export const getServerSideProps = getApplicationServerSideProps(
+const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const labels = await prefetchGetLabelsQuery({
       req,
