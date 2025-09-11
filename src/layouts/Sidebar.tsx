@@ -554,7 +554,7 @@ const Sidebar = () => {
       },
       {
         permission: PermissionTypes.LABELS_BEHEREN,
-        href: '/manage/labels',
+        href: '/manage/labels/overview',
         iconName: Icons.TAG,
         children: t('menu.labels'),
       },
