@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
 import { Label } from 'types/Offer';
@@ -20,8 +20,8 @@ import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
-import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const labelsPerPage = 10;
 const getGlobalValue = getValueFromTheme('global');
@@ -44,11 +44,14 @@ const LabelsOverviewPage = () => {
     [labelsQuery.data?.member],
   );
 
-  const handleInputSearch = useCallback((event) => {
-    const searchTerm = event.target.value.toString().trim();
-    setCurrentPageLabels(1);
-    setSearchInput(searchTerm);
-  }, []);
+  const handleInputSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const searchTerm: string = event.target.value.toString().trim();
+      setCurrentPageLabels(1);
+      setSearchInput(searchTerm);
+    },
+    [],
+  );
 
   return (
     <Page>
@@ -139,7 +142,6 @@ const LabelsOverviewPage = () => {
           ) : null}
           {labelsQuery.status === QueryStatus.ERROR ? (
             <Alert variant={AlertVariants.WARNING}>
-              console.log(labelsQuery.error);
               {t('labels.overview.something_wrong') +
                 ' ' +
                 '<em>more information to come later</em>'}
@@ -150,7 +152,7 @@ const LabelsOverviewPage = () => {
         <Pagination
           currentPage={currentPageLabels}
           totalItems={totalItemsLabels}
-          perPage={10}
+          perPage={labelsPerPage}
           onChangePage={setCurrentPageLabels}
         />
       </Page.Content>
