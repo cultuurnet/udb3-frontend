@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { Small } from './Small';
 
 const meta: Meta<typeof Small> = {

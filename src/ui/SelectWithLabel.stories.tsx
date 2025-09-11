@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SelectWithLabel } from './SelectWithLabel';
+
 import { LabelPositions } from './Label';
+import { SelectWithLabel } from './SelectWithLabel';
 
 const meta: Meta<typeof SelectWithLabel> = {
   title: 'Components/SelectWithLabel',

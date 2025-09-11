@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Link, LinkVariants } from './Link';
-import { Icon, Icons } from './Icon';
-import { Text } from '@/ui/Text';
+
 import { Inline } from '@/ui/Inline';
+import { Text } from '@/ui/Text';
+
+import { Icon, Icons } from './Icon';
+import { Link, LinkVariants } from './Link';
 
 const meta: Meta<typeof Link> = {
   title: 'Components/Link',

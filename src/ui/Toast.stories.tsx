@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { Toast, ToastVariants } from './Toast';
 
 const meta: Meta<typeof Toast> = {

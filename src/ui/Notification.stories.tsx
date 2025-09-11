@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
+import { Icon, Icons } from './Icon';
 import { Notification } from './Notification';
 import { Text } from './Text';
-import { Icon, Icons } from './Icon';
 
 const meta: Meta<typeof Notification> = {
   title: 'Components/Notification',

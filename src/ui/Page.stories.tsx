@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
+import { Link } from './Link';
 import { Page } from './Page';
 import { Text } from './Text';
-import { Link } from './Link';
 
 const meta: Meta<typeof Page> = {
   title: 'Components/Page',

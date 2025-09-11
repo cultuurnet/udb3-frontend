@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+
 import { TimeTable } from './TimeTable';
 
 const meta: Meta<typeof TimeTable> = {
@@ -38,7 +39,7 @@ export const Default: Story = {
       },
     },
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [value, setValue] = useState(args.value);
 
     return <TimeTable {...args} value={value} onChange={setValue} />;

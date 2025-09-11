@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import type { Values } from '@/types/Values';
-import { Dropdown, DropDownVariants } from './Dropdown';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Link, LinkVariants } from '@/ui/Link';
+
+import { Dropdown, DropDownVariants } from './Dropdown';
 
 const meta: Meta<typeof Dropdown> = {
   title: 'Components/Dropdown',
@@ -37,12 +39,12 @@ export const WithButton: Story = {
       <Dropdown {...args}>
         <Button variant={buttonVariant}>Primary action</Button>
         <Dropdown.Item href="#example-href-1">Example href 1</Dropdown.Item>
-        <Dropdown.Item onClick={() => console.log('Example onClick 1')}>
+        <Dropdown.Item onClick={() => {}}>
           Example onClick 1
         </Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item href="#example-href-2">Example href 2</Dropdown.Item>
-        <Dropdown.Item onClick={() => console.log('Example onClick 2')}>
+        <Dropdown.Item onClick={() => {}}>
           Example onClick 2
         </Dropdown.Item>
       </Dropdown>
@@ -71,12 +73,12 @@ export const WithLink: Story = {
           Primary action
         </Link>
         <Dropdown.Item href="#example-href-1">Example href 1</Dropdown.Item>
-        <Dropdown.Item onClick={() => console.log('Example onClick 1')}>
+        <Dropdown.Item onClick={() => {}}>
           Example onClick 1
         </Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item href="#example-href-2">Example href 2</Dropdown.Item>
-        <Dropdown.Item onClick={() => console.log('Example onClick 2')}>
+        <Dropdown.Item onClick={() => {}}>
           Example onClick 2
         </Dropdown.Item>
       </Dropdown>

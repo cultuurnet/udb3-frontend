@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+
 import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 
@@ -33,7 +34,7 @@ export const Default: Story = {
   parameters: {
     controls: { exclude: ['variant'] },
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [activeKey, setActiveKey] = useState(args.activeKey || 'places');
 
     return (
@@ -65,7 +66,7 @@ export const Outlined: Story = {
   parameters: {
     controls: { exclude: ['variant'] },
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [activeKey, setActiveKey] = useState(args.activeKey || 'events');
 
     return (

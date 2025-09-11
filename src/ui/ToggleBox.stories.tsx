@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ToggleBox } from './ToggleBox';
+
 import { Icon, Icons } from './Icon';
+import { ToggleBox } from './ToggleBox';
 
 const meta: Meta<typeof ToggleBox> = {
   title: 'Components/ToggleBox',

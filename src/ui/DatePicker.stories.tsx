@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+
 import { DatePicker } from './DatePicker';
 
 const meta: Meta<typeof DatePicker> = {
@@ -20,7 +21,7 @@ export const Default: Story = {
   args: {
     selected: new Date('2024-01-01'),
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [selected, setSelected] = useState(args.selected);
 
     return <DatePicker {...args} selected={selected} onChange={setSelected} />;

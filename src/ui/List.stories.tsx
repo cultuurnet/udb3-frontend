@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { List, ListVariants } from './List';
 
 const meta: Meta<typeof List> = {

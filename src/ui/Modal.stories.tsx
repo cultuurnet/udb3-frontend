@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Modal, ModalVariants } from './Modal';
+
 import { Button } from './Button';
+import { Modal, ModalVariants } from './Modal';
 
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
@@ -36,7 +37,7 @@ export const Content: Story = {
       include: ['size', 'title', 'children'],
     },
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [visible, setVisible] = useState(false);
     return (
       <>
@@ -60,7 +61,7 @@ export const Question: Story = {
       include: ['cancelTitle', 'confirmTitle', 'size', 'title', 'children'],
     },
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [visible, setVisible] = useState(false);
     return (
       <>

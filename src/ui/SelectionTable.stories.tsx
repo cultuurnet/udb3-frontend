@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SelectionTable } from './SelectionTable';
+
 import { Icons } from './Icon';
+import { SelectionTable } from './SelectionTable';
 
 const meta: Meta<typeof SelectionTable> = {
   title: 'Components/SelectionTable',

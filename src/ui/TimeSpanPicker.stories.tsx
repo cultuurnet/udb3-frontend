@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { TimeSpanPicker } from './TimeSpanPicker';
 
 const meta: Meta<typeof TimeSpanPicker> = {

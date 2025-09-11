@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+
 import { RadioButtonGroup } from './RadioButtonGroup';
-import { Text } from './Text';
 import { Stack } from './Stack';
+import { Text } from './Text';
 
 const meta: Meta<typeof RadioButtonGroup> = {
   title: 'Components/RadioButtonGroup',
@@ -29,7 +30,7 @@ export const Default: Story = {
       { label: 'Prague', value: 'prague', info: 'Info about Prague' },
     ],
   },
-  render: (args) => {
+  render: function RenderComponent(args) {
     const [selected, setSelected] = useState(args.selected);
     const selectedItem = args.items?.find((item) => item.value === selected);
 

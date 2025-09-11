@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
+import { Breakpoints } from '@/ui/theme';
+
 import { Box } from './Box';
 import { Inline } from './Inline';
-import { Breakpoints } from '@/ui/theme';
 
 const meta: Meta<typeof Inline> = {
   title: 'Primitives/Inline',

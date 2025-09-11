@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Title, TitleVariants } from './Title';
 import { parameterize } from '@sentry/nextjs';
+import type { Meta, StoryObj } from '@storybook/react';
+
+import { Title, TitleVariants } from './Title';
 
 const meta: Meta<typeof Title> = {
   title: 'Components/Title',

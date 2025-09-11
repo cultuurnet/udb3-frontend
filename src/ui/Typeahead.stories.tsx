@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { Typeahead } from './Typeahead';
 
 const meta: Meta<typeof Typeahead> = {
