@@ -12,9 +12,9 @@ import {
 } from '@/constants/Cultuurkuur';
 import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
-import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
   locationStepConfiguration,
   useEditLocation,

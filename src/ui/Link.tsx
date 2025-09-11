@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import type { ReactNode, ElementType, ReactElement } from 'react';
+import type { ElementType, ReactElement,ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement } from 'react';
 
 import type { Values } from '@/types/Values';

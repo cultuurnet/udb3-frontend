@@ -3,7 +3,7 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, ReactElement } from 'react';
+import { ReactElement,useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
