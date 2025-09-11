@@ -91,30 +91,33 @@ const OrganizerForm = () => {
     [query.organizerId],
   );
 
-  const convertOrganizerToFormData = useCallback((organizer: Organizer) => {
-    const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
-      organizer?.hiddenLabels,
-    );
-    const locationAttributes = !organizer?.address
-      ? {}
-      : parseLocationAttributes(
-          organizer,
-          i18n.language as SupportedLanguage,
-          organizer.mainLanguage as SupportedLanguage,
-        );
+  const convertOrganizerToFormData = useCallback(
+    (organizer: Organizer) => {
+      const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
+        organizer?.hiddenLabels,
+      );
+      const locationAttributes = !organizer?.address
+        ? {}
+        : parseLocationAttributes(
+            organizer,
+            i18n.language as SupportedLanguage,
+            organizer.mainLanguage as SupportedLanguage,
+          );
 
-    return {
-      nameAndUrl: {
-        name: getLanguageObjectOrFallback(
-          organizer.name,
-          i18n.language as SupportedLanguage,
-        ) as string,
-        url: organizer.url,
-        isCultuurkuur: isCultuurkuurOrganizer,
-      },
-      ...locationAttributes,
-    };
-  }, [i18n.language]);
+      return {
+        nameAndUrl: {
+          name: getLanguageObjectOrFallback(
+            organizer.name,
+            i18n.language as SupportedLanguage,
+          ) as string,
+          url: organizer.url,
+          isCultuurkuur: isCultuurkuurOrganizer,
+        },
+        ...locationAttributes,
+      };
+    },
+    [i18n.language],
+  );
 
   // TODO better type query
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery(
