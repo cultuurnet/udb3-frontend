@@ -659,7 +659,6 @@ const Sidebar = () => {
                 width="100%"
               >
                 <Icon name={Icons.EYE} />
-
                 <BetaVersionToggle
                   checked={isNewCreateEnabled}
                   onChange={() => {
