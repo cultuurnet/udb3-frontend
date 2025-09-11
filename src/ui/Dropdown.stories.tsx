@@ -39,14 +39,10 @@ export const WithButton: Story = {
       <Dropdown {...args}>
         <Button variant={buttonVariant}>Primary action</Button>
         <Dropdown.Item href="#example-href-1">Example href 1</Dropdown.Item>
-        <Dropdown.Item onClick={() => {}}>
-          Example onClick 1
-        </Dropdown.Item>
+        <Dropdown.Item onClick={() => {}}>Example onClick 1</Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item href="#example-href-2">Example href 2</Dropdown.Item>
-        <Dropdown.Item onClick={() => {}}>
-          Example onClick 2
-        </Dropdown.Item>
+        <Dropdown.Item onClick={() => {}}>Example onClick 2</Dropdown.Item>
       </Dropdown>
     );
   },
@@ -73,14 +69,10 @@ export const WithLink: Story = {
           Primary action
         </Link>
         <Dropdown.Item href="#example-href-1">Example href 1</Dropdown.Item>
-        <Dropdown.Item onClick={() => {}}>
-          Example onClick 1
-        </Dropdown.Item>
+        <Dropdown.Item onClick={() => {}}>Example onClick 1</Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item href="#example-href-2">Example href 2</Dropdown.Item>
-        <Dropdown.Item onClick={() => {}}>
-          Example onClick 2
-        </Dropdown.Item>
+        <Dropdown.Item onClick={() => {}}>Example onClick 2</Dropdown.Item>
       </Dropdown>
     );
   },

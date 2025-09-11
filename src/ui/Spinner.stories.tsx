@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Spinner, SpinnerSizes,SpinnerVariants } from './Spinner';
+import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
 
 const SpinnerWrapper = ({ children, variant }) => {
   const isLight = variant === SpinnerVariants.LIGHT;

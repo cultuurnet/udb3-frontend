@@ -59,9 +59,9 @@ const DesignPrinciples = () => (
       <h2>Spacing</h2>
       <p>
         Components should never have a margin by default. When you put two
-        components next to each other they should &ldquo;stick&rdquo; by default. This way
-        you can easily play with different spacing depending on the place where
-        you use them.
+        components next to each other they should &ldquo;stick&rdquo; by
+        default. This way you can easily play with different spacing depending
+        on the place where you use them.
       </p>
       <p>
         When you want to add margin or padding to a component, you can use the
@@ -224,8 +224,8 @@ const DesignPrinciples = () => (
       <p>
         When you want to add styling to a component your first reflex should be
         to use the existing properties exposed by <code>Box</code>. When
-        <code>Box</code> doesn&apos;t contain the property you&rsquo;re looking for, you
-        can look into adding it as a property.
+        <code>Box</code> doesn&apos;t contain the property you&rsquo;re looking
+        for, you can look into adding it as a property.
       </p>
       <pre>
         <code>{`<MyComponent backgroundColor="red" />`}</code>
@@ -270,9 +270,10 @@ const getValue = getValueFromTheme('myComponent');
         place to define how it&apos;s styled and how it should behave.
       </p>
       <p>
-        Props on the custom components should not be passed &ldquo;automatically&rdquo; to
-        the Bootstrap component underneath. We define a specific list of props
-        we use per component to prevent too much flexibility. If we
+        Props on the custom components should not be passed
+        &ldquo;automatically&rdquo; to the Bootstrap component underneath. We
+        define a specific list of props we use per component to prevent too much
+        flexibility. If we
         <strong>do</strong> need access to a prop that&rsquo;s not currently
         available, it can always be added. Restricting access to props down the
         line is harder.
