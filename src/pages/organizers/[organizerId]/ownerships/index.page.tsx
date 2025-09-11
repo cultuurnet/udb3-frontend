@@ -1,10 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  dehydrate,
+  useQueryClient,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { dehydrate, useQueryClient, UseQueryResult } from 'react-query';
 import * as yup from 'yup';
 
 import {
@@ -107,7 +111,7 @@ const Ownership = () => {
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
+      await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
       setIsSuccessAlertVisible(true);
       setIsOpen(false);
       setIsQuestionModalVisible(false);
@@ -131,7 +135,7 @@ const Ownership = () => {
 
   const rejectOwnershipRequestMutation = useRejectOwnershipRequestMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
+      await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
       setIsSuccessAlertVisible(true);
       setIsQuestionModalVisible(false);
     },
@@ -139,7 +143,7 @@ const Ownership = () => {
 
   const deleteOwnershipRequestMutation = useDeleteOwnershipRequestMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
+      await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
       setRequestToBeDeleted(undefined);
     },
   });

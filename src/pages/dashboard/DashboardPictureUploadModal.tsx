@@ -1,6 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { Scope } from '@/constants/OfferType';
 import { useAddImageMutation } from '@/hooks/api/images';
@@ -53,8 +53,8 @@ export const DashboardPictureUploadModal = ({
     onSuccess: () => {
       onModalClose();
       setTimeout(async () => {
-        await queryClient.invalidateQueries('events');
-        await queryClient.invalidateQueries('organizers');
+        await queryClient.invalidateQueries({ queryKey: ['events'] });
+        await queryClient.invalidateQueries({ queryKey: ['organizers'] });
         onImageUploadEnd();
       }, 1000);
     },

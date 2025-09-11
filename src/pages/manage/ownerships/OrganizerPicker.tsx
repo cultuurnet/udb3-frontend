@@ -1,7 +1,7 @@
+import { UseQueryResult } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UseQueryResult } from 'react-query';
 
 import { UUID_V4_REGEX } from '@/constants/Regex';
 import {

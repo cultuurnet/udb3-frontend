@@ -1,5 +1,6 @@
 import { pickBy } from 'lodash';
 import { Children, cloneElement, forwardRef, isValidElement } from 'react';
+import type { ExecutionContext } from 'styled-components';
 import styled, { css } from 'styled-components';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
@@ -12,10 +13,9 @@ import {
   FALSY_VALUES,
   parseProperty,
   UIProp,
-  UnknownProps,
   withoutDisallowedPropsConfig,
 } from './Box';
-import type { BreakpointValues } from './theme';
+import type { BreakpointValues, Theme } from './theme';
 
 type InlineProps = {
   spacing?: UIProp<number>;
@@ -26,10 +26,10 @@ type Props = BoxProps & InlineProps;
 
 const parseStackOnProperty =
   () =>
-  ({ stackOn }: Props) => {
-    if (!stackOn) return;
+  (props: ExecutionContext & { theme?: Theme; stackOn?: BreakpointValues }) => {
+    if (!props.stackOn) return;
     return css`
-      @media (max-width: ${(props) => props.theme.breakpoints[stackOn]}px) {
+      @media (max-width: ${props.theme?.breakpoints?.[props.stackOn]}px) {
         flex-direction: column;
       }
     `;
@@ -101,7 +101,7 @@ const inlinePropTypes = [
 ];
 const linkPropTypes = ['rel', 'target'];
 
-const getInlineProps = (props: UnknownProps) =>
+const getInlineProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
     if (key.startsWith('aria-')) return true;
     const propTypes: string[] = [

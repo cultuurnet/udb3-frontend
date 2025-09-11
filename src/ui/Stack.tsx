@@ -6,7 +6,6 @@ import {
   BoxProps,
   getBoxProps,
   UIProp,
-  UnknownProps,
   withoutDisallowedPropsConfig,
 } from './Box';
 import {
@@ -72,7 +71,7 @@ Stack.displayName = 'Stack';
 
 const stackPropTypes = ['spacing', 'alignItems', 'justifyContent'];
 
-const getStackProps = (props: UnknownProps) =>
+const getStackProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
     // pass aria attributes to the DOM element
     if (key.startsWith('aria-')) {

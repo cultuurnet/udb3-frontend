@@ -1,7 +1,7 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
 import { useGetUserQuery, User } from '@/hooks/api/user';
@@ -50,7 +50,7 @@ const RequestOwnershipModal = ({
 
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
+      await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
       onClose();
       setIsSuccessAlertVisible(true);
       if (onSuccess) onSuccess();

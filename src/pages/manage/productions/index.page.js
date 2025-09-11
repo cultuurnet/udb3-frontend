@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
@@ -121,7 +121,7 @@ const Index = () => {
   }, [getEventsByIdsQuery.data, selectedEventIds]);
 
   const handleSuccessDeleteEvents = async () => {
-    await queryClient.invalidateQueries('productions');
+    await queryClient.invalidateQueries({ queryKey: ['productions'] });
     setSelectedEventIds([]);
   };
 
@@ -130,7 +130,7 @@ const Index = () => {
   });
 
   const handleSuccessAddEvent = async () => {
-    await queryClient.invalidateQueries('productions');
+    await queryClient.invalidateQueries({ queryKey: ['productions'] });
     setToBeAddedEventId('');
   };
 
@@ -162,7 +162,7 @@ const Index = () => {
         name: toBeChangedProductionName,
       };
 
-      await queryClient.cancelQueries(productionsQueryKey);
+      await queryClient.cancelQueries({ queryKey: productionsQueryKey });
 
       const previousProductions = queryClient.getQueryData(productionsQueryKey);
 
@@ -192,7 +192,7 @@ const Index = () => {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries(productionsQueryKey);
+      queryClient.invalidateQueries({ queryKey: productionsQueryKey });
     },
   });
 

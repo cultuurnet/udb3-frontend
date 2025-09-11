@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import type { ReactNode } from 'react';
+import type { ElementType, ReactElement, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement } from 'react';
 
 import type { Values } from '@/types/Values';
@@ -28,7 +28,7 @@ const LinkVariants = {
 
 type BaseLinkProps = InlineProps & {
   variant?: Values<typeof LinkVariants>;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
 };
 
 const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
@@ -128,8 +128,10 @@ const Link = ({
 
   const clonedSuffix =
     suffix && isValidElement(suffix)
-      ? cloneElement(suffix, {
-          ...suffix.props,
+      ? cloneElement(suffix as ReactElement, {
+          ...(suffix.props && typeof suffix.props === 'object'
+            ? suffix.props
+            : {}),
           key: 'suffix',
         })
       : suffix;
@@ -162,9 +164,9 @@ const Link = ({
 
   if (isInternalLink) {
     return (
-      <NextLink href={href} passHref legacyBehavior>
+      <NextLink href={href}>
         <BaseLink
-          as="a"
+          as="span"
           className={className}
           variant={variant}
           title={title}
