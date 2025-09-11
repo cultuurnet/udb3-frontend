@@ -58,7 +58,7 @@ const getLabels = async ({
 
 const createGetLabelsQueryOptions = ({
   name = '',
-  paginationOptions = { start: 0, limit: 10 },
+  paginationOptions = { start: 0, limit: 6 },
   onlySuggestions = false,
 }: PaginationOptions & { name?: string } & { onlySuggestions?: boolean }) =>
   queryOptions({
@@ -74,7 +74,7 @@ const createGetLabelsQueryOptions = ({
 
 const useGetLabelsByQuery = ({
   name,
-  paginationOptions = { start: 0, limit: 10 },
+  paginationOptions = { start: 0, limit: 6 },
   onlySuggestions = false,
 }: PaginationOptions & { name: string } & { onlySuggestions?: boolean }) => {
   const options = createGetLabelsQueryOptions({

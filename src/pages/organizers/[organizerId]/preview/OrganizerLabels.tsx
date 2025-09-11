@@ -35,10 +35,6 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const [name, setName] = useState('');
   const labelsQuery = useGetLabelsByQuery({
     name,
-    paginationOptions: {
-      start: 0,
-      limit: 6,
-    },
     onlySuggestions: true,
   });
 

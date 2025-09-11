@@ -52,10 +52,6 @@ function LabelsStep({
   const [name, setName] = useState('');
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
     name,
-    paginationOptions: {
-      start: 0,
-      limit: 6,
-    },
     onlySuggestions: true,
   });
 
