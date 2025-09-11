@@ -8,7 +8,7 @@ import {
 import type { Headers } from '@/hooks/api/types/Headers';
 import { Label } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 const prefetchGetLabelsQuery = ({
   req,
@@ -41,14 +41,19 @@ const getLabels = async ({
   limit: string;
   suggestion: boolean;
 }) => {
+  let searchParams = new URLSearchParams({
+    query: name,
+    limit: limit,
+    start: start,
+  });
+  if (suggestion) {
+    // The API expects 'suggestion' to be a string 'true' or 'false'
+    // or not be included at all.
+    searchParams.append('suggestion', 'true');
+  }
   const res = await fetchFromApi({
     path: '/labels/',
-    searchParams: {
-      query: name,
-      limit: limit,
-      start: start,
-      suggestion: `${suggestion}`,
-    },
+    searchParams,
     options: {
       headers,
     },
