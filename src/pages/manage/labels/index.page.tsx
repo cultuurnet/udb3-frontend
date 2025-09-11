@@ -2,9 +2,11 @@ import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
+import { Label } from 'types/Offer';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
+  labelsToTableData,
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
@@ -16,9 +18,13 @@ import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
+import { Table } from '@/ui/Table';
+import { Text } from '@/ui/Text';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 const labelsPerPage = 10;
+const getGlobalValue = getValueFromTheme('global');
 
 const LabelsOverviewPage = () => {
   const { t } = useTranslation();
@@ -33,7 +39,7 @@ const LabelsOverviewPage = () => {
     },
   });
   const totalItemsLabels = labelsQuery.data?.totalItems ?? 0;
-  const labels = useMemo(
+  const labels: Label[] = useMemo(
     () => labelsQuery.data?.member ?? [],
     [labelsQuery.data?.member],
   );
@@ -68,9 +74,62 @@ const LabelsOverviewPage = () => {
           {labelsQuery.status === QueryStatus.LOADING ? (
             <Spinner />
           ) : (
-            <Stack>
-              <code>{JSON.stringify(labels)}</code>
-              <code>{totalItemsLabels}</code>
+            <Stack
+              backgroundColor="white"
+              padding={4}
+              borderRadius={getGlobalBorderRadius}
+              spacing={5}
+              css={`
+                box-shadow: ${getGlobalValue('boxShadow.medium')};
+              `}
+            >
+              {labelsQuery.status === QueryStatus.SUCCESS &&
+              labels.length > 0 ? (
+                <Table
+                  actions={[]}
+                  columns={[
+                    {
+                      Header: t('labels.overview.table.name'),
+                      accessor: 'name',
+                      Cell: ({ cell }) => <Text>{cell.value}</Text>,
+                    },
+                    {
+                      Header: t('labels.overview.table.invisible'),
+                      accessor: 'invisible',
+                      Cell: ({ cell }) =>
+                        cell.value === 'invisible' ? (
+                          <Text>{t('labels.overview.table.invisible')}</Text>
+                        ) : null,
+                    },
+                    {
+                      Header: t('labels.overview.table.private'),
+                      accessor: 'private',
+                      Cell: ({ cell }) =>
+                        cell.value === 'private' ? (
+                          <Text>{t('labels.overview.table.private')}</Text>
+                        ) : null,
+                    },
+                    {
+                      Header: t('labels.overview.table.excluded'),
+                      accessor: 'excluded',
+                      Cell: ({ cell }) =>
+                        cell.value === true ? (
+                          <Text>{t('labels.overview.table.excluded')}</Text>
+                        ) : null,
+                    },
+                    {
+                      Header: t('labels.overview.table.options'),
+                      accessor: 'options',
+                      Cell: ({ cell }) => (
+                        <Link href={'/manage/labels/' + cell.value}>
+                          {t('labels.overview.table.edit')}
+                        </Link>
+                      ),
+                    },
+                  ]}
+                  data={labelsToTableData(labels)}
+                />
+              ) : null}
             </Stack>
           )}
           {labelsQuery.status !== QueryStatus.LOADING && labels.length === 0 ? (
