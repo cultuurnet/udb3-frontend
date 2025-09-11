@@ -1,20 +1,20 @@
 import debounce from 'lodash/debounce';
+import Router from 'next/router';
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
 import { Label } from 'types/Offer';
 
-import {
-  PaginationOptions,
-  QueryStatus,
-  ServerSideQueryOptions,
-} from '@/hooks/api/authenticated-query';
+import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
 import { Alert, AlertVariants } from '@/ui/Alert';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Icons } from '@/ui/Icon';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
 import { Page } from '@/ui/Page';
@@ -51,6 +51,57 @@ const LabelsOverviewPage = () => {
     },
   });
   const totalItemsLabels = labelsQuery.data?.totalItems ?? 0;
+  const actions = [
+    {
+      iconName: Icons.PLUS,
+      title: t('labels.overview.create'),
+      onClick: () => Router.push('/manage/labels/create'),
+      disabled: false,
+    },
+  ];
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('labels.overview.table.name'),
+        accessor: 'name',
+        Cell: ({ cell }) => <Text>{cell.value}</Text>,
+      },
+      {
+        Header: t('labels.overview.table.invisible'),
+        accessor: 'invisible',
+        Cell: ({ cell }) =>
+          cell.value === 'invisible' ? (
+            <Text>{t('labels.overview.table.invisible')}</Text>
+          ) : null,
+      },
+      {
+        Header: t('labels.overview.table.private'),
+        accessor: 'private',
+        Cell: ({ cell }) =>
+          cell.value === 'private' ? (
+            <Text>{t('labels.overview.table.private')}</Text>
+          ) : null,
+      },
+      {
+        Header: t('labels.overview.table.excluded'),
+        accessor: 'excluded',
+        Cell: ({ cell }) =>
+          cell.value === true ? (
+            <Text>{t('labels.overview.table.excluded')}</Text>
+          ) : null,
+      },
+      {
+        Header: t('labels.overview.table.options'),
+        accessor: 'options',
+        Cell: ({ cell }) => (
+          <Link href={'/manage/labels/' + cell.value}>
+            {t('labels.overview.table.edit')}
+          </Link>
+        ),
+      },
+    ],
+    [t],
+  );
   const labels: Label[] = useMemo(
     () => labelsQuery.data?.member ?? [],
     [labelsQuery.data?.member],
@@ -68,11 +119,6 @@ const LabelsOverviewPage = () => {
   return (
     <Page>
       <Page.Title>{t('labels.overview.title')}</Page.Title>
-      <Page.Actions>
-        <Link href="/manage/labels/create" css="text-transform: lowercase;">
-          {t('labels.overview.create')}
-        </Link>
-      </Page.Actions>
       <Page.Content spacing={5}>
         <FormElement
           id="labels-overview-search"
@@ -100,50 +146,34 @@ const LabelsOverviewPage = () => {
             >
               {labelsQuery.status === QueryStatus.SUCCESS &&
               labels.length > 0 ? (
-                <Table
-                  actions={[]}
-                  columns={[
-                    {
-                      Header: t('labels.overview.table.name'),
-                      accessor: 'name',
-                      Cell: ({ cell }) => <Text>{cell.value}</Text>,
-                    },
-                    {
-                      Header: t('labels.overview.table.invisible'),
-                      accessor: 'invisible',
-                      Cell: ({ cell }) =>
-                        cell.value === 'invisible' ? (
-                          <Text>{t('labels.overview.table.invisible')}</Text>
-                        ) : null,
-                    },
-                    {
-                      Header: t('labels.overview.table.private'),
-                      accessor: 'private',
-                      Cell: ({ cell }) =>
-                        cell.value === 'private' ? (
-                          <Text>{t('labels.overview.table.private')}</Text>
-                        ) : null,
-                    },
-                    {
-                      Header: t('labels.overview.table.excluded'),
-                      accessor: 'excluded',
-                      Cell: ({ cell }) =>
-                        cell.value === true ? (
-                          <Text>{t('labels.overview.table.excluded')}</Text>
-                        ) : null,
-                    },
-                    {
-                      Header: t('labels.overview.table.options'),
-                      accessor: 'options',
-                      Cell: ({ cell }) => (
-                        <Link href={'/manage/labels/' + cell.value}>
-                          {t('labels.overview.table.edit')}
-                        </Link>
-                      ),
-                    },
-                  ]}
-                  data={labelsToTableData(labels)}
-                />
+                <Stack spacing={3}>
+                  <Inline
+                    forwardedAs="div"
+                    width="100%"
+                    alignItems="center"
+                    spacing={5}
+                  >
+                    <Inline spacing={3}>
+                      {actions.map(({ iconName, title, onClick, disabled }) => (
+                        <Button
+                          key={title}
+                          variant={ButtonVariants.SECONDARY}
+                          onClick={onClick}
+                          disabled={disabled}
+                          iconName={iconName}
+                          spacing={3}
+                        >
+                          {title}
+                        </Button>
+                      ))}
+                    </Inline>
+                  </Inline>
+                  <Table
+                    actions={actions}
+                    columns={columns}
+                    data={labelsToTableData(labels)}
+                  />
+                </Stack>
               ) : null}
             </Stack>
           )}
