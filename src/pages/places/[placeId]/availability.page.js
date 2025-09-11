@@ -21,6 +21,10 @@ const Availability = () => {
     scope: OfferTypes.PLACES,
   });
 
+  if (!getPlaceByIdQuery.data) {
+    return null;
+  }
+
   if (getPlaceByIdQuery.status === QueryStatus.LOADING) {
     return <Spinner marginTop={4} />;
   }

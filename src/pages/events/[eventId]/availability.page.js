@@ -22,6 +22,10 @@ const Availability = () => {
 
   const event = getEventByIdQuery.data;
 
+  if (!event) {
+    return null;
+  }
+
   if (getEventByIdQuery.status === QueryStatus.LOADING) {
     return <Spinner marginTop={4} />;
   }
