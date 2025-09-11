@@ -1111,7 +1111,7 @@
           "cancel": "Abbrechen",
           "confirm": "Verwaltungsanfrage",
           "error": {
-            "general": "Eine Fehler ist aufgetreten.",
+            "general": "Ein Fehler ist aufgetreten.",
             "409": "Sie haben bereits eine laufende Anfrage für diese Organisation."
           }
         },
