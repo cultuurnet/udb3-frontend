@@ -22,6 +22,7 @@ const meta: Meta<typeof Link> = {
       options: Object.values(LinkVariants),
     },
     href: { control: { type: 'text' } },
+    children: { control: { type: 'text' } },
   },
 };
 
@@ -66,7 +67,7 @@ export const UnstyledExternal: Story = {
 export const CustomChildren: Story = {
   args: {
     customChildren: true,
-    iconName: 'user',
+    iconName: Icons.USER,
     href: 'https://www.google.com',
     variant: LinkVariants.UNSTYLED,
   },
@@ -77,7 +78,8 @@ export const CustomChildren: Story = {
   },
   argTypes: {
     iconName: {
-      control: { type: 'text' },
+      control: { type: 'select' },
+      options: Object.values(Icons),
     },
   },
   render: (args) => (

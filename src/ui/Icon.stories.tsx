@@ -8,6 +8,13 @@ const meta: Meta<typeof Icon> = {
   parameters: {
     layout: 'centered',
   },
+
+  argTypes: {
+    name: {
+      control: { type: 'select' },
+      options: Object.values(Icons),
+    },
+  },
 };
 
 export default meta;
