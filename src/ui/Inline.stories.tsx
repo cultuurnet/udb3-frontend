@@ -26,15 +26,15 @@ type Story = StoryObj<typeof meta>;
 
 const boxProps = {
   children: 'A Box',
-  display: 'flex' as const,
-  justifyContent: 'center' as const,
-  alignItems: 'center' as const,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   backgroundColor: '#004f94',
   width: 300,
   height: 100,
   color: 'white',
   padding: 4,
-};
+} as const;
 
 export const Default: Story = {
   args: {
