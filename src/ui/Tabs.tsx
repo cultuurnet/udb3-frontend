@@ -112,12 +112,12 @@ const Tabs = <T,>({
 
         &.active {
           color: white;
-          background-color: ${udbMainDarkBlue};
+          background-color: ${activeBackgroundColor};
           border: 1px solid black;
         }
 
         &.active:hover {
-          background-color: ${udbMainDarkBlue};
+          background-color: ${activeBackgroundColor};
         }
       }
 

@@ -62,6 +62,12 @@ const VariantToStylesMap = {
       background-color: ${getValue('danger.backgroundColor')} !important;
     }
   `,
+  [ToastVariants.WARNING]: css`
+    ${commonCss}
+    &.bg-warning {
+      background-color: ${getValue('warning.backgroundColor')} !important;
+    }
+  `,
 };
 
 type Props = {
