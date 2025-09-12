@@ -27,7 +27,7 @@ export const Danger: Story = {
   },
 };
 
-export const Secundary: Story = {
+export const Secondary: Story = {
   args: {
     variant: BadgeVariants.SECONDARY,
     children: 'Published',
