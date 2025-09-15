@@ -139,14 +139,18 @@ const OrganizersPreview = () => {
                 )}
                 <Link
                   variant={LinkButtonVariants.BUTTON_SECONDARY}
-                  href={`/search?query=organizer.id:${organizerId} AND _type:event`}
+                  href={`/search?query=organizer.id:${encodeURIComponent(
+                    organizerId,
+                  )} AND _type:event`}
                   iconName={Icons.CALENDAR_ALT}
                 >
                   {t('organizers.detail.actions.events')}
                 </Link>
                 <Link
                   variant={LinkButtonVariants.BUTTON_SECONDARY}
-                  href={`/search?query=organizer.id:${organizerId} AND _type:place`}
+                  href={`/search?query=organizer.id:${encodeURIComponent(
+                    organizerId,
+                  )} AND _type:place`}
                   iconName={Icons.BUILDING}
                 >
                   {t('organizers.detail.actions.places')}
