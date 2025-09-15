@@ -15,6 +15,7 @@ import {
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
+import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import {
   prefetchGetOrganizersByCreatorQuery,
   useDeleteOrganizerByIdMutation,
@@ -70,7 +71,6 @@ import { parseOfferType } from '@/utils/parseOfferType';
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
-import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 
 const { publicRuntimeConfig } = getConfig();
 
