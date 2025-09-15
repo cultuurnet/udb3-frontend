@@ -137,6 +137,20 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
+                <Link
+                  variant={LinkButtonVariants.BUTTON_SECONDARY}
+                  href={`/search?query=organizer.id:${organizerId} AND _type:event`}
+                  iconName={Icons.CALENDAR_ALT}
+                >
+                  {t('organizers.detail.actions.events')}
+                </Link>
+                <Link
+                  variant={LinkButtonVariants.BUTTON_SECONDARY}
+                  href={`/search?query=organizer.id:${organizerId} AND _type:place`}
+                  iconName={Icons.BUILDING}
+                >
+                  {t('organizers.detail.actions.places')}
+                </Link>
               </Stack>
             </Inline>
           </Stack>
