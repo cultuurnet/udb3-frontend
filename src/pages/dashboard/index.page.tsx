@@ -584,7 +584,7 @@ const Dashboard = (): any => {
   );
 
   const recentUsedOrganizers = useMemo(() => {
-    const recentOrganizers = [];
+    const recentOrganizers: Organizer[] = [];
 
     getOffersByCreatorQuery.data?.member.forEach((event) => {
       if (
