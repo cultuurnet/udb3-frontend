@@ -1069,7 +1069,9 @@
         "edit": "Bewerken",
         "manage": "Beheerders aanpassen",
         "request": "Beheer aanvragen",
-        "back": "Ga terug"
+        "back": "Ga terug",
+        "events": "Aanbod evenementen",
+        "places": "Aanbod locaties"
       }
     },
     "create": {

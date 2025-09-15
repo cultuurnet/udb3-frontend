@@ -1019,7 +1019,9 @@
         "edit": "Bearbeiten",
         "manage": "Anforderungsmanagement",
         "request": "Verwaltung anfordern",
-        "back": "Zurück"
+        "back": "Zurück",
+        "events": "Veranstaltungen anzeigen",
+        "places": "Orte anzeigen"
       }
     },
     "create": {
