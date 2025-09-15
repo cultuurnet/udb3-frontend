@@ -1020,8 +1020,8 @@
         "manage": "Anforderungsmanagement",
         "request": "Verwaltung anfordern",
         "back": "Zurück",
-        "events": "Veranstaltungen anzeigen",
-        "places": "Orte anzeigen"
+        "events": "Veranstaltungen verwalten",
+        "places": "Orte verwalten"
       }
     },
     "create": {

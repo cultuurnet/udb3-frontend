@@ -1070,8 +1070,8 @@
         "manage": "Beheerders aanpassen",
         "request": "Beheer aanvragen",
         "back": "Ga terug",
-        "events": "Aanbod evenementen",
-        "places": "Aanbod locaties"
+        "events": "Beheer evenementen",
+        "places": "Beheer locaties"
       }
     },
     "create": {
