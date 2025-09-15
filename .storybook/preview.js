@@ -13,7 +13,10 @@ export const parameters = {
     },
   },
   actions: { argTypesRegex: '^on.*' },
-  controls: { sort: 'alpha' },
+  controls: {
+    sort: 'alpha',
+    exclude: ['as'],
+  },
   docs: {
     components: {
       Canvas: CustomCanvas,

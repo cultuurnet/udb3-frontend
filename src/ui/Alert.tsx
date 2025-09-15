@@ -135,7 +135,6 @@ const Alert = ({
   onClose,
   ...props
 }: AlertProps) => {
-  const { grey1 } = colors;
   return (
     <Inline
       role="alert"

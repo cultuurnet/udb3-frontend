@@ -1,5 +1,5 @@
 import { Canvas } from '@storybook/addon-docs/blocks';
-import { styled } from '@storybook/theming';
+import styled from 'styled-components';
 
 const SyledCanvas = styled(Canvas)`
   pre {
