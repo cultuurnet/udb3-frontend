@@ -33,7 +33,6 @@ type BaseLinkProps = InlineProps & {
 
 const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
   ({ href, variant, title, children, className, as = 'a', ...props }, ref) => {
-    // Unstyled link
     if (variant === LinkVariants.UNSTYLED) {
       return (
         <Inline

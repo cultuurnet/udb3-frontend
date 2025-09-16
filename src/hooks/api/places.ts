@@ -257,7 +257,7 @@ const getPlacesByQuery = async ({
     name ? `name.\\*:"${name}"` : '',
     zip && addressCountry === 'BE' ? `address.\\*.postalCode:"${zip}"` : '',
     addressLocality ? `address.\\*.addressLocality:${addressLocality}` : '',
-    streetAddress ? `address.\\*.streetAddress:${streetAddress}` : '',
+    streetAddress ? `address.\\*.streetAddress:"${streetAddress}"` : '',
   ].filter((argument) => !!argument);
 
   const res = await fetchFromApi({
