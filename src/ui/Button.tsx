@@ -258,7 +258,7 @@ type ButtonProps = Omit<InlineProps, 'size'> & {
   shouldHideText?: boolean;
   size?: Values<typeof ButtonSizes>;
   variant?: Values<typeof ButtonVariants>;
-  type?: string;
+  type?: 'button' | 'submit' | 'reset';
   active?: boolean;
 };
 
@@ -267,19 +267,20 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       iconName,
       suffix,
-      variant,
-      disabled,
-      loading,
+      variant = ButtonVariants.PRIMARY,
+      disabled = false,
+      loading = false,
       children,
-      customChildren,
-      shouldHideText,
+      customChildren = false,
+      shouldHideText = false,
       onClick,
       className,
       title,
       size,
       forwardedAs,
-      type,
+      type = 'button',
       active,
+      textAlign = 'center',
       ...props
     },
     ref,
@@ -410,15 +411,5 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
-
-Button.defaultProps = {
-  variant: ButtonVariants.PRIMARY,
-  disabled: false,
-  loading: false,
-  customChildren: false,
-  shouldHideText: false,
-  textAlign: 'center',
-  type: 'button',
-};
 
 export { Button, customCSS as buttonCSS, ButtonSizes, ButtonVariants };

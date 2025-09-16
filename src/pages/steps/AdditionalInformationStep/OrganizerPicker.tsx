@@ -105,6 +105,8 @@ const RecentUsedOrganizers = ({
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
+              width="40rem"
+              maxWidth="95%"
               badge={
                 <Inline>
                   {isUitpasOrganizer(organizer, uitpasLabels) && (
@@ -244,7 +246,6 @@ const OrganizerPicker = ({
               <RecentUsedOrganizers
                 organizers={recentUsedOrganizers}
                 onChange={handleSelectRecentOrganizer}
-                maxWidth="45rem"
               />
               <Stack width="100%">
                 <Text fontWeight="bold" marginBottom={4}>
@@ -271,7 +272,9 @@ const OrganizerPicker = ({
                     maxWidth="35rem"
                     options={organizers}
                     isLoading={getOrganizersByQueryQuery.isLoading}
-                    labelKey={(org) => getOrganizerName(org, i18n.language)}
+                    labelKey={(org: Organizer) =>
+                      getOrganizerName(org, i18n.language)
+                    }
                     css={`
                       .dropdown-item {
                         display: flex;

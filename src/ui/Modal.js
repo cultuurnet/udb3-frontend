@@ -20,7 +20,7 @@ const Components = {
   [ModalVariants.CONTENT]: ContentModal,
 };
 
-const Modal = ({ variant, ...props }) => {
+const Modal = ({ variant = ModalVariants.CONTENT, ...props }) => {
   const ModalVariant = Components[variant];
   if (!ModalVariant) return null;
   return <ModalVariant {...props} />;
@@ -31,7 +31,7 @@ Modal.propTypes = {
   size: PropTypes.oneOf(Object.values(ModalSizes)),
   className: PropTypes.string,
   visible: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.node,
   onShow: PropTypes.func,
   scrollable: PropTypes.bool,
   onClose: PropTypes.func,
@@ -40,10 +40,6 @@ Modal.propTypes = {
   cancelTitle: PropTypes.string,
   onConfirm: PropTypes.func,
   confirmButtonDisabled: PropTypes.bool,
-};
-
-Modal.defaultProps = {
-  variant: ModalVariants.CONTENT,
 };
 
 export { Modal, ModalSizes, ModalVariants };

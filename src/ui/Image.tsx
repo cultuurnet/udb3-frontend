@@ -6,19 +6,23 @@ type Props = BoxProps & {
   alt: string;
 };
 
-const Image = ({ src, alt, className, ...props }: Props) => (
+const Image = ({
+  src,
+  alt,
+  className,
+  width = 600,
+  height = 'auto',
+  ...props
+}: Props) => (
   <Box
     as="img"
     src={src}
     alt={alt}
     className={className}
+    width={width}
+    height={height}
     {...getBoxProps(props)}
   />
 );
-
-Image.defaultProps = {
-  width: 600,
-  height: 'auto',
-};
 
 export { Image };

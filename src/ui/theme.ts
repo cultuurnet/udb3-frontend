@@ -239,7 +239,7 @@ const theme = {
       borderColor: colors.grey2,
       focusBoxShadow: 'none',
       paddingX: '0.84rem',
-      paddingY: '0.44rem',
+      paddingY: '0.3rem',
       pageLink: {
         zIndex: zIndexPaginationPageLink,
       },

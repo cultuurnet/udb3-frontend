@@ -40,8 +40,8 @@ type TitleProps = InlineProps & {
 };
 
 const Title = ({
-  size,
-  variant,
+  size = 2,
+  variant = TitleVariants.DEFAULT,
   children,
   className,
   ...props
@@ -62,11 +62,6 @@ const Title = ({
       {typeof children === 'string' ? <Text>{children}</Text> : children}
     </Inline>
   );
-};
-
-Title.defaultProps = {
-  size: 2,
-  variant: TitleVariants.DEFAULT,
 };
 
 export { Title, TitleVariants };

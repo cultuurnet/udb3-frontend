@@ -230,10 +230,11 @@ const ContactInfoStep = ({
               alignSelf="flex-start"
               height="2.38rem"
               width="30%"
+              value={info.type}
               onChange={(e) => handleChangeContactInfoType(e, index)}
             >
               {Object.values(ContactInfoTypes).map((type) => (
-                <option value={type} selected={info.type === type} key={type}>
+                <option value={type} key={type}>
                   {t(`create.additionalInformation.contact_info.${type}`)}
                 </option>
               ))}

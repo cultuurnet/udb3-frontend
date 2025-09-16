@@ -2,14 +2,18 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import dynamic from 'next/dynamic';
 import { ComponentProps } from 'react';
+import type { EditorProps } from 'react-draft-wysiwyg';
 
 import { CustomRichTextEditorLink } from '@/pages/CustomRichTextEditorLink';
 import { getValueFromTheme } from '@/ui/theme';
 
 const getValue = getValueFromTheme(`richTextEditor`);
 
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then(({ Editor }) => Editor),
+const Editor = dynamic<EditorProps>(
+  () =>
+    import('react-draft-wysiwyg').then(
+      (mod) => mod.Editor as unknown as React.ComponentType<EditorProps>,
+    ),
   { ssr: false },
 );
 

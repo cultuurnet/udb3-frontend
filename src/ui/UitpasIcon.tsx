@@ -1,13 +1,16 @@
 import { Box, BoxProps, getBoxProps } from '@/ui/Box';
 
 const UitpasIcon = (props: BoxProps) => {
+  const { width = '1.4rem', height = '1.4rem', ...rest } = props;
   return (
     <Box
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 191 138"
       className="uitpas-icon"
-      {...getBoxProps(props)}
+      width={width}
+      height={height}
+      {...getBoxProps(rest)}
     >
       <path
         id="Pasvorm"
@@ -38,8 +41,4 @@ const UitpasIcon = (props: BoxProps) => {
   );
 };
 
-UitpasIcon.defaultProps = {
-  width: '1.4rem',
-  height: '1.4rem',
-};
 export { UitpasIcon };
