@@ -79,7 +79,13 @@ const useAddOffer = ({
 
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
+      console.log('isThemeSelected', isThemeSelected);
+
+      // TODO check if type is selected but without themes it should still submit
+
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
+
+      console.log('isTypeSelected', isTypeSelected);
 
       if (!educationLabels || educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
@@ -97,6 +103,7 @@ const useAddOffer = ({
       }
 
       if (!isThemeSelected) {
+        // This is happening but it should only happen when there are actual themes for the selected type
         errors.push(CULTUURKUUR_THEME_ERROR);
       }
     }
