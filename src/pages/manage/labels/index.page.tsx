@@ -147,10 +147,7 @@ const LabelsOverviewPage = () => {
               {labelsQuery.status === QueryStatus.SUCCESS &&
               labels.length > 0 ? (
                 <Stack spacing={3}>
-                  <Inline
-                    alignItems="center"
-                    spacing={5}
-                  >
+                  <Inline alignItems="center" spacing={5}>
                     <Inline spacing={3}>
                       {actions.map(({ iconName, title, onClick, disabled }) => (
                         <Button
