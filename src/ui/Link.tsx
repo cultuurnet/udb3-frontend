@@ -170,7 +170,7 @@ const Link = ({
           text-decoration: none;
           margin: 0 !important;
           padding: 0 !important;
-          ${{ ...props }}
+          ${getInlineProps(props)}
         `}
       >
         <BaseLink
