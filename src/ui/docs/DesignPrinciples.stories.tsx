@@ -54,7 +54,7 @@ const DesignPrinciples = () => (
       margin-bottom: 1rem;}
     `}</style>
     <div>
-      <h1>Design principles 💅🏼</h1>
+      <h1>Design principles</h1>
 
       <h2>Spacing</h2>
       <p>
