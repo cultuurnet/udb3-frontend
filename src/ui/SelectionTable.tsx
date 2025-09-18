@@ -88,7 +88,6 @@ const SelectionTable = ({
 
   return (
     <Stack spacing={3}>
-      {/* Actions Row */}
       <Inline forwardedAs="div" width="100%" alignItems="center" spacing={5}>
         <Text
           minWidth="11rem"
@@ -114,7 +113,6 @@ const SelectionTable = ({
         </Inline>
       </Inline>
 
-      {/* Table */}
       <Table
         columns={columns}
         data={data}
