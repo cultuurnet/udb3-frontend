@@ -1,3 +1,4 @@
+import { kebabCase } from 'lodash';
 import NextLink from 'next/link';
 import type { ElementType, ReactElement, ReactNode } from 'react';
 import { cloneElement, forwardRef, isValidElement } from 'react';
@@ -13,6 +14,12 @@ import { Text } from './Text';
 import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('link');
+
+const generateCSS = (props: Record<string, any>, allowedProps: string[]) =>
+  allowedProps
+    .filter((prop) => props[prop])
+    .map((prop) => `${kebabCase(prop)}: ${props[prop]};`)
+    .join(' ');
 
 export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
@@ -170,7 +177,7 @@ const Link = ({
           text-decoration: none;
           margin: 0 !important;
           padding: 0 !important;
-          ${getInlineProps(props)}
+          ${generateCSS(props, ['display', 'width', 'justifyContent'])}
         `}
       >
         <BaseLink
