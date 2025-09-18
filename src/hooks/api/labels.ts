@@ -1,6 +1,12 @@
 import { useQuery } from 'react-query';
 
-import { useAuthenticatedQuery } from '@/hooks/api/authenticated-query';
+import {
+  PaginationOptions,
+  prefetchAuthenticatedQuery,
+  queryOptions,
+  ServerSideQueryOptions,
+  useAuthenticatedQuery,
+} from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
 import { Label } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
@@ -8,21 +14,46 @@ import { fetchFromApi } from '@/utils/fetchFromApi';
 
 type UitpasLabels = Record<string, string>;
 
-const getLabelsByQuery = async ({
+const prefetchGetLabelsQuery = ({
+  req,
+  queryClient,
+  name,
+  paginationOptions,
+  onlySuggestions = false,
+}: ServerSideQueryOptions &
+  PaginationOptions & { name?: string } & { onlySuggestions?: boolean }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetLabelsQueryOptions({
+      name,
+      paginationOptions,
+      onlySuggestions,
+    }),
+  });
+
+const getLabels = async ({
   headers,
-  query,
+  name,
+  start,
+  limit,
+  suggestion,
 }: {
   headers: Headers;
-  query: string;
+  name: string;
+  start: string;
+  limit: string;
+  suggestion: boolean;
 }) => {
+  const searchParams = new URLSearchParams({
+    query: name,
+    limit: limit,
+    start: start,
+    ...(suggestion && { suggestion: 'true' }),
+  });
   const res = await fetchFromApi({
     path: '/labels/',
-    searchParams: {
-      query,
-      limit: '6',
-      start: '0',
-      suggestion: 'true',
-    },
+    searchParams,
     options: {
       headers,
     },
@@ -30,13 +61,37 @@ const getLabelsByQuery = async ({
   return (await res.json()) as PaginatedData<Label[]>;
 };
 
-const useGetLabelsByQuery = ({ query }: { query: string }) =>
-  useAuthenticatedQuery({
+const createGetLabelsQueryOptions = ({
+  name = '',
+  paginationOptions = { start: 0, limit: 6 },
+  onlySuggestions = false,
+}: PaginationOptions & { name?: string } & { onlySuggestions?: boolean }) =>
+  queryOptions({
     queryKey: ['labels'],
-    queryFn: getLabelsByQuery,
-    queryArguments: { query },
-    enabled: !!query,
+    queryFn: getLabels,
+    queryArguments: {
+      name,
+      start: `${paginationOptions.start}`,
+      limit: `${paginationOptions.limit}`,
+      suggestion: onlySuggestions,
+    },
   });
+
+const useGetLabelsByQuery = ({
+  name,
+  paginationOptions = { start: 0, limit: 6 },
+  onlySuggestions = false,
+}: PaginationOptions & { name: string } & { onlySuggestions?: boolean }) => {
+  const options = createGetLabelsQueryOptions({
+    name,
+    paginationOptions,
+    onlySuggestions,
+  });
+
+  return useAuthenticatedQuery({
+    ...options,
+  });
+};
 
 const getUitpasLabelsQuery = async (): Promise<UitpasLabels> => {
   const res = await fetchFromApi({
@@ -57,8 +112,8 @@ const useGetUitpasLabelsQuery = () =>
   });
 
 export {
-  getLabelsByQuery,
   getUitpasLabelsQuery,
+  prefetchGetLabelsQuery,
   useGetLabelsByQuery,
   useGetUitpasLabelsQuery,
 };

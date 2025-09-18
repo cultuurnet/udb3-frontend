@@ -32,9 +32,10 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const { t } = useTranslation();
   const ref = useRef<TypeaheadElement<Label>>(null);
   const router = useRouter();
-  const [query, setQuery] = useState('');
+  const [name, setName] = useState('');
   const labelsQuery = useGetLabelsByQuery({
-    query,
+    name,
+    onlySuggestions: true,
   });
 
   const scope = ScopeTypes.ORGANIZERS;
@@ -88,7 +89,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
               newSelectionPrefix={t(
                 'create.additionalInformation.labels.add_new_label',
               )}
-              onSearch={setQuery}
+              onSearch={setName}
               onChange={async (newLabels: Label[]) => {
                 const label = newLabels[0]?.name;
                 if (!label || !label.match(LABEL_PATTERN)) {
