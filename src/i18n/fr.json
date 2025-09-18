@@ -1191,5 +1191,25 @@
         "link": "Votre lien vidéo ne répond pas aux exigences."
       }
     }
+  },
+  "labels": {
+    "overview": {
+      "title": "Étiquettes",
+      "create": "Ajouter",
+      "search": {
+        "label": "Rechercher par nom d'étiquette:",
+        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+      },
+      "no_results": "Aucun étiquettes trouvé.",
+      "something_wrong": "Une erreur s'est produite lors de la recherche:",
+      "table": {
+        "name": "Nom",
+        "invisible": "Invisible",
+        "private": "Privé",
+        "excluded": "Exclu",
+        "options": "Options",
+        "edit": "Modifier"
+      }
+    }
   }
 }
