@@ -168,7 +168,9 @@ const Link = ({
         href={href}
         css={`
           text-decoration: none;
-          width: 100%;
+          margin: 0 !important;
+          padding: 0 !important;
+          ${{ ...props }}
         `}
       >
         <BaseLink

@@ -616,6 +616,8 @@ const Sidebar = () => {
     >
       <Link
         alignSelf="center"
+        display="flex"
+        justifyContent="center"
         href="/dashboard"
         title={t('menu.home')}
         customChildren
