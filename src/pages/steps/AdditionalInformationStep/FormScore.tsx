@@ -17,6 +17,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
 import { Field } from './AdditionalInformationStep';
+import { Box } from '@/ui/Box';
 
 const GaugeComponent = dynamic(() => import('react-gauge-component'), {
   ssr: false,
@@ -152,7 +153,7 @@ export const DynamicBarometerIcon = ({
   margin = 0,
   pointerWidth = 50,
 }: DynamicBarometerIconProps) => (
-  <div
+  <Box
     css={`
       position: relative;
     `}
@@ -196,7 +197,7 @@ export const DynamicBarometerIcon = ({
         length: 0.8,
       }}
     />
-  </div>
+  </Box>
 );
 
 const FormScore = ({ completedFields, offerId, scope }: Props) => {
