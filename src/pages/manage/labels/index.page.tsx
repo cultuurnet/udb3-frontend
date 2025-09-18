@@ -157,7 +157,7 @@ const LabelsOverviewPage = () => {
                       {actions.map(({ iconName, title, onClick, disabled }) => (
                         <Button
                           key={title}
-                          variant={ButtonVariants.SECONDARY}
+                          variant={ButtonVariants.PRIMARY}
                           onClick={onClick}
                           disabled={disabled}
                           iconName={iconName}
