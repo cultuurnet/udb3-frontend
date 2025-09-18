@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot-preview[bot]' && github.event.pull_request.merged == true
+    if: github.actor != 'dependabot-preview[bot]' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     steps:
       - uses: actions/checkout@v4
         with:
