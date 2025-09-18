@@ -10,6 +10,7 @@ import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { Scope } from '@/pages/create/OfferForm';
 import { Offer } from '@/types/Offer';
 import { isOrganizer, Organizer } from '@/types/Organizer';
+import { Box } from '@/ui/Box';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Notification } from '@/ui/Notification';
@@ -17,7 +18,6 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 
 import { Field } from './AdditionalInformationStep';
-import { Box } from '@/ui/Box';
 
 const GaugeComponent = dynamic(() => import('react-gauge-component'), {
   ssr: false,
