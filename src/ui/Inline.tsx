@@ -1,5 +1,5 @@
 import { pickBy } from 'lodash';
-import { Children, cloneElement, forwardRef, isValidElement } from 'react';
+import { Children, cloneElement, forwardRef, isValidElement, Fragment } from 'react';
 import type { ExecutionContext } from 'styled-components';
 import styled, { css } from 'styled-components';
 
@@ -64,7 +64,7 @@ const Inline = forwardRef<HTMLElement, Props>(
       const isLastItem = i === validChildren.length - 1;
 
       const isBoxComponent =
-        isValidElement(child) && typeof child.type !== 'string';
+        isValidElement(child) && typeof child.type !== 'string' && child.type !== Fragment;
 
       // @ts-expect-error
       return cloneElement(child, {
