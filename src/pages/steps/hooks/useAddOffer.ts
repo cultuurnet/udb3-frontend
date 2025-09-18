@@ -83,7 +83,8 @@ const useAddOffer = ({
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
       const selectedTypeId = fullOffer?.typeAndTheme?.type?.id;
 
-      const typeHasNoThemes = eventTypesWithNoThemes.includes(selectedTypeId);
+      const typeHasNoThemes =
+        selectedTypeId && eventTypesWithNoThemes.includes(selectedTypeId);
 
       if (!educationLabels || educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
