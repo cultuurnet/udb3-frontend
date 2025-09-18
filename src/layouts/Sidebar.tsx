@@ -105,7 +105,7 @@ const MenuItem = memo(
 
           :hover {
             background-color: ${getValueForMenuItem('hover.backgroundColor')};
-              border-radius: 8px;
+            border-radius: 8px;
           }
 
           :before {
