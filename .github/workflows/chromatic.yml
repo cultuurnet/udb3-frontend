@@ -1,13 +1,13 @@
 name: 'Chromatic'
 on:
-  pull_request:
-    types:
-      - closed
+  push:
+    branches:
+      - main
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot-preview[bot]' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    if: github.actor != 'dependabot-preview[bot]'
     steps:
       - uses: actions/checkout@v4
         with:
