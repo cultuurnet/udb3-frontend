@@ -9,6 +9,7 @@ import {
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
 import { ErrorCodes } from '@/constants/ErrorCodes';
+import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
@@ -79,13 +80,10 @@ const useAddOffer = ({
 
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
-      console.log('isThemeSelected', isThemeSelected);
-
-      // TODO check if type is selected but without themes it should still submit
-
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
+      const selectedTypeId = fullOffer?.typeAndTheme?.type?.id;
 
-      console.log('isTypeSelected', isTypeSelected);
+      const typeHasNoThemes = eventTypesWithNoThemes.includes(selectedTypeId);
 
       if (!educationLabels || educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
@@ -102,8 +100,7 @@ const useAddOffer = ({
         errors.push(CULTUURKUUR_TYPE_ERROR);
       }
 
-      if (!isThemeSelected) {
-        // This is happening but it should only happen when there are actual themes for the selected type
+      if (!isThemeSelected && !typeHasNoThemes) {
         errors.push(CULTUURKUUR_THEME_ERROR);
       }
     }
