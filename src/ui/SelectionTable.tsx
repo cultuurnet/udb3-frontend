@@ -48,7 +48,7 @@ CheckBoxCell.propTypes = {
 const SelectionTable = ({
   columns,
   data,
-  onSelectionChanged,
+  onSelectionChanged = (_rows) => {},
   actions = [],
   translateSelectedRowCount,
   ...props
@@ -139,11 +139,6 @@ SelectionTable.propTypes = {
   actions: PropTypes.array,
   onSelectionChanged: PropTypes.func,
   translateSelectedRowCount: PropTypes.func,
-};
-
-SelectionTable.defaultProps = {
-  actions: [],
-  onSelectionChanged: () => {},
 };
 
 export { SelectionTable };

@@ -96,7 +96,7 @@ const UrlStep = ({
                 flex={2}
                 Component={
                   <Input
-                    value={field.value?.url}
+                    value={field.value?.url || ''}
                     onChange={(event) => {
                       const value = (event.target as HTMLInputElement).value;
                       setSearchInput(value);

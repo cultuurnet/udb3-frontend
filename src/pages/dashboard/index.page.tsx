@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
@@ -15,12 +15,12 @@ import {
   useDeleteEventByIdMutation,
   useGetEventsByCreatorQuery,
 } from '@/hooks/api/events';
+import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import {
   prefetchGetOrganizersByCreatorQuery,
   useDeleteOrganizerByIdMutation,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
-  useGetSuggestedOrganizersQuery,
 } from '@/hooks/api/organizers';
 import {
   prefetchGetPlacesByCreatorQuery,
@@ -47,7 +47,6 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
-import { Icons } from '@/ui/Icon';
 import type { InlineProps } from '@/ui/Inline';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
@@ -223,11 +222,6 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const eventType = typeId
     ? t(`eventTypes*${typeId}`, { keySeparator: '*' })
     : undefined;
-
-  const period =
-    offer.calendarSummary?.[i18n.language]?.text?.[
-      offer.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
-    ];
 
   const rowStatus = useMemo<RowStatus>(() => {
     if (isPlanned) {
@@ -580,21 +574,42 @@ const Dashboard = (): any => {
     );
   };
 
-  const suggestedOrganizerIds = useGetSuggestedOrganizersQuery(
-    {},
+  const getOffersByCreatorQuery = useGetOffersByCreatorQuery(
+    {
+      advancedQuery: '_exists_:organizer.id',
+      creator: user,
+      paginationOptions: { start: 0, limit: 30 },
+    },
     { enabled: tab === 'organizers' },
   );
 
-  suggestedOrganizerIds.data;
+  const recentUsedOrganizers = useMemo(() => {
+    const recentOrganizers: Organizer[] = [];
+
+    getOffersByCreatorQuery.data?.member.forEach((event) => {
+      if (
+        event.organizer &&
+        !recentOrganizers.some(
+          (recentOrganizer) =>
+            recentOrganizer['@id'] === event.organizer['@id'],
+        )
+      )
+        recentOrganizers.push(event.organizer);
+    });
+
+    return recentOrganizers.slice(0, 10);
+  }, [getOffersByCreatorQuery.data?.member]);
 
   const suggestedOrganizers = useGetOrganizersByQueryQuery(
     {
-      q: suggestedOrganizerIds.data?.member
-        .map((result) => `id:${parseOfferId(result['@id'])}`)
-        .join(' OR '),
+      q:
+        recentUsedOrganizers
+          .map((organizer) => `id:${parseOfferId(organizer['@id'])}`)
+          .join(' OR ') +
+        ` NOT creator:"${user?.['https://publiq.be/uitidv1id'] ?? user?.sub}"`,
     },
     {
-      enabled: suggestedOrganizerIds.data?.member?.length > 0,
+      enabled: tab === 'organizers' && recentUsedOrganizers.length > 0,
     },
   );
 
@@ -738,13 +753,12 @@ const Dashboard = (): any => {
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
             css={`
-              .nav-item.nav-link {
-                color: ${textColor};
-                padding: 0;
-                margin-right: 1.5rem;
-                margin-top: 0.5rem;
-              }
+              .nav-link,
               .nav-item {
+                color: ${textColor} !important;
+                padding: 0 !important;
+                margin-right: 1rem;
+                margin-top: 0.5rem;
                 border: none !important;
 
                 &.active {
@@ -752,7 +766,7 @@ const Dashboard = (): any => {
                 }
 
                 &:hover {
-                  background-color: transparent;
+                  background-color: transparent !important;
                 }
               }
             `}

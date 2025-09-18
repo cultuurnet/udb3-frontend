@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
+import { useQueryClient } from 'react-query';
 
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
-import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -37,16 +36,13 @@ const RequestOwnershipModal = ({
     parseOfferId(organizer?.['@id'] ?? '');
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const organizerName: string = getLanguageObjectOrFallback(
     organizer?.name,
     i18n.language as SupportedLanguage,
     organizer?.mainLanguage as SupportedLanguage,
   );
-
-  const getUserQuery = useGetUserQuery() as UseQueryResult<User, FetchError>;
-
-  const userId = getUserQuery.data?.sub;
 
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
@@ -55,7 +51,15 @@ const RequestOwnershipModal = ({
       setIsSuccessAlertVisible(true);
       if (onSuccess) onSuccess();
     },
-    onError: () => {
+    onError: (err: FetchError) => {
+      err.status === 409
+        ? setErrorMessage(
+            t('organizers.ownerships.request.confirm_modal.error.409'),
+          )
+        : setErrorMessage(
+            t('organizers.ownerships.request.confirm_modal.error.general'),
+          );
+
       onClose();
       setIsErrorAlertVisible(true);
       if (onError) onError();
@@ -108,7 +112,7 @@ const RequestOwnershipModal = ({
           closable
           onClose={() => setIsErrorAlertVisible(false)}
         >
-          {t('organizers.ownerships.request.confirm_modal.error')}
+          {errorMessage}
         </Alert>
       )}
     </>

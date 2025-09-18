@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
 import { useGetPlacesByQuery } from '@/hooks/api/places';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
 import { Address, AddressInternal } from '@/types/Address';
@@ -24,7 +25,9 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { isOneTimeSlotValid } from '@/ui/TimeTable';
 import { isNewEntry, Typeahead } from '@/ui/Typeahead';
+import { UitpasIcon } from '@/ui/UitpasIcon';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { isUitpasLocation } from '@/utils/uitpas';
 import { valueToArray } from '@/utils/valueToArray';
 
 import { City } from '../CityPicker';
@@ -34,7 +37,7 @@ const getGlobalValue = getValueFromTheme('global');
 
 type PlaceStepProps = StackProps &
   StepProps & {
-    terms: Array<Values<typeof EventTypes>>;
+    terms?: Array<Values<typeof EventTypes>>;
     municipality?: City;
     country?: Country;
     chooseLabel: (t: TFunction) => string;
@@ -49,7 +52,7 @@ const PlaceStep = ({
   name,
   loading,
   onChange,
-  terms,
+  terms = [],
   municipality,
   country,
   chooseLabel,
@@ -61,11 +64,13 @@ const PlaceStep = ({
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
 
+  const { uitpasLabels } = useUitpasLabels();
+
   const isMovie = terms.includes(EventTypes.Bioscoop);
 
   const useGetPlacesQuery = useGetPlacesByQuery(
     {
-      name: searchInput,
+      searchTerm: searchInput,
       terms,
       zip: municipality?.zip,
       addressLocality: municipality?.name,
@@ -156,7 +161,7 @@ const PlaceStep = ({
                       options={places}
                       onInputChange={debounce(setSearchInput, 275)}
                       filterBy={filterByCallback}
-                      labelKey={(place) =>
+                      labelKey={(place: Place) =>
                         getPlaceName(place.name, place.mainLanguage)
                       }
                       renderMenuItemChildren={(place: Place, { text }) => {
@@ -166,24 +171,34 @@ const PlaceStep = ({
                           address,
                           mainLanguage,
                         );
-                        return (
-                          <Stack
-                            css={`
-                              .address {
-                                color: ${({ theme }) => theme.colors.grey6};
-                              }
 
-                              &:hover .address {
-                                color: white;
-                              }
-                            `}
-                          >
-                            <Text>
-                              <Highlighter search={text}>
-                                {placeName}
-                              </Highlighter>
-                            </Text>
-                            <Text className={'address'}>
+                        const isUitpas = isUitpasLocation(place, uitpasLabels);
+
+                        return (
+                          <Stack>
+                            <Inline justifyContent="space-between">
+                              <Text
+                                maxWidth={`calc(100% - ${
+                                  isUitpas ? '3rem' : '0rem'
+                                })`}
+                                css={`
+                                  overflow: hidden;
+                                  text-overflow: ellipsis;
+                                  white-space: nowrap;
+                                `}
+                              >
+                                <Highlighter search={text}>
+                                  {placeName}
+                                </Highlighter>
+                              </Text>
+                              {isUitpas && <UitpasIcon width="2rem" />}
+                            </Inline>
+                            <Text
+                              className={'address'}
+                              css={`
+                                color: ${({ theme }) => theme.colors.grey6};
+                              `}
+                            >
                               <Highlighter search={text}>
                                 {streetAddress}
                               </Highlighter>
@@ -266,10 +281,6 @@ const placeStepConfiguration: StepsConfiguration<'location'> = {
     municipality: undefined,
     onlineUrl: undefined,
   },
-};
-
-PlaceStep.defaultProps = {
-  terms: [],
 };
 
 export { PlaceStep, placeStepConfiguration };

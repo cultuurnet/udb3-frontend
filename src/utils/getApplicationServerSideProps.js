@@ -1,14 +1,11 @@
 import * as Sentry from '@sentry/nextjs';
 import getConfig from 'next/config';
 import absoluteUrl from 'next-absolute-url';
-import { QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
-import {
-  prefetchGetUserQuery,
-  useGetUserQueryServerSide,
-} from '@/hooks/api/user';
+import { prefetchGetUserQuery } from '@/hooks/api/user';
 import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
@@ -136,7 +133,14 @@ const getApplicationServerSideProps =
 
     req.headers.cookie = cookies.toString();
 
-    if (!callbackFn) return { props: { cookies: cookies.toString() } };
+    if (!callbackFn) {
+      return {
+        props: {
+          dehydratedState: dehydrate(queryClient),
+          cookies: cookies.toString(),
+        },
+      };
+    }
 
     return await callbackFn({
       req,

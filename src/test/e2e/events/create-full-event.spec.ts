@@ -14,7 +14,7 @@ const dummyEvent = {
   },
   bookingInfo: {
     email: faker.internet.email(),
-    phone: faker.phone.number('##########'),
+    phone: faker.phone.number({ style: 'international' }),
     url: faker.internet.url(),
   },
   image: {
@@ -81,26 +81,28 @@ test('create event with all possible fields filled in', async ({
   await page.getByText('Geef een enthousiaste').click();
 
   await expect(
-    page.getByRole('tab', { name: 'Beschrijving' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Beschrijving' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // // Add image & video url
   await page.getByRole('tab', { name: 'Afbeelding & video' }).click();
   await page.getByRole('button', { name: 'Afbeelding toevoegen' }).click();
   await page.setInputFiles('input[type="file"]', 'upload/e2e-image.jpg');
-  await page.getByLabel('Beschrijving').fill(dummyEvent.image.description);
+  await page
+    .getByRole('textbox', { name: 'Beschrijving' })
+    .fill(dummyEvent.image.description);
   await page.getByLabel('Copyright').fill(dummyEvent.image.copyright);
   await page.getByRole('button', { name: 'Uploaden' }).click();
   await expect(page.getByText(dummyEvent.image.description)).toBeVisible();
   await page.getByRole('button', { name: 'Videolink toevoegen' }).click();
   await page.getByLabel('Link').locator('visible=true').fill(dummyEvent.video);
-  await page.getByRole('button', { name: 'Toevoegen' }).click();
+  await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
   await expect(page.getByRole('img', { name: 'video' })).toBeVisible();
   await expect(page.getByText(dummyEvent.video)).toBeVisible();
   await expect(
     page
       .getByRole('tab', { name: 'Afbeelding & video' })
-      .locator('.fa-check-circle'),
+      .locator('.fa-circle-check'),
   ).toBeVisible();
 
   // // Prices
@@ -110,7 +112,7 @@ test('create event with all possible fields filled in', async ({
 
   await page.getByText('BasistariefeuroGratisTarief toevoegen').click();
   await expect(
-    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Organizer
@@ -129,7 +131,7 @@ test('create event with all possible fields filled in', async ({
     .click();
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
   await expect(
-    page.getByRole('tab', { name: 'Organisatie' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Organisatie' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Contact
@@ -143,7 +145,7 @@ test('create event with all possible fields filled in', async ({
     .getByRole('button', { name: 'Meer contactgegevens toevoegen' })
     .click();
   await expect(
-    page.getByRole('tab', { name: 'Contact' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Contact' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // BookingInfo
@@ -179,7 +181,7 @@ test('create event with all possible fields filled in', async ({
     .fill(endReservationDate.toLocaleDateString());
 
   await expect(
-    page.getByRole('tab', { name: 'Reservatie' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Reservatie' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Add labels

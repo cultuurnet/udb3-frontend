@@ -1,3 +1,5 @@
+import { useQuery } from 'react-query';
+
 import {
   PaginationOptions,
   prefetchAuthenticatedQuery,
@@ -9,6 +11,8 @@ import type { Headers } from '@/hooks/api/types/Headers';
 import { Label } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi } from '@/utils/fetchFromApi';
+
+type UitpasLabels = Record<string, string>;
 
 const prefetchGetLabelsQuery = ({
   req,
@@ -89,4 +93,27 @@ const useGetLabelsByQuery = ({
   });
 };
 
-export { prefetchGetLabelsQuery, useGetLabelsByQuery };
+const getUitpasLabelsQuery = async (): Promise<UitpasLabels> => {
+  const res = await fetchFromApi({
+    path: '/uitpas/labels',
+  });
+  return await res.json();
+};
+
+const useGetUitpasLabelsQuery = () =>
+  useQuery({
+    queryKey: ['uitpas-labels'],
+    queryFn: getUitpasLabelsQuery,
+    staleTime: 1000 * 60 * 60, // 1 hour
+    cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+export {
+  prefetchGetLabelsQuery,
+  getUitpasLabelsQuery,
+  useGetLabelsByQuery,
+  useGetUitpasLabelsQuery,
+};

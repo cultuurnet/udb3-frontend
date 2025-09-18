@@ -1109,7 +1109,11 @@
           "title": "Demande de gestion pour {{organizerName}}",
           "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses événements ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
           "cancel": "Annuler",
-          "confirm": "Demander la gestion"
+          "confirm": "Demander la gestion",
+          "error": {
+            "general": "Une erreur s'est produite lors de l'envoi de votre demande.",
+            "409": "Vous avez déjà une demande en cours pour cette organisation."
+          }
         },
         "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un administrateur actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
         "success": "Votre demande pour gérer la page de {{organizerName}} et ses événements a été envoyée avec succès !<br/>Dès qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."

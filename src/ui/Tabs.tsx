@@ -9,7 +9,7 @@ import { css } from 'styled-components';
 
 import { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
-import { Box, getBoxProps, parseSpacing } from '@/ui/Box';
+import { Box, getBoxProps } from '@/ui/Box';
 
 import { colors, getValueFromTheme } from './theme';
 
@@ -56,23 +56,28 @@ const Tabs = <T,>({
     default: css`
       border-bottom: none;
 
-      .nav-item:last-child {
+      .nav-link:last-child {
         border-right: 1px solid ${getValue('borderColor')};
       }
 
-      .nav-item {
+      .nav-item .nav-link {
         background-color: white;
         color: ${getValue('color')};
         border-radius: ${getValue('borderRadius')};
-        padding: ${parseSpacing(3)} ${parseSpacing(4)};
         border-color: ${getValue('borderColor')};
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .nav-item:not(:last-child) .nav-link {
         border-right: none;
+      }
 
-        &.nav-link {
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
+      .nav-item:last-child .nav-link {
+        border-right: 1px solid ${getValue('borderColor')};
+      }
 
+      .nav-item .nav-link {
         &.active {
           background-color: ${activeBackgroundColor};
           border-bottom-color: ${getValue('activeTabBackgroundColor')};
@@ -93,36 +98,40 @@ const Tabs = <T,>({
         margin-left: 1.5rem;
         margin-bottom: 1.5rem;
       }
-      .nav-item.nav-link {
+      .nav-link {
+        color: ${getValue('color')};
         padding: 0.4rem 1rem;
         border: 1px solid black;
-      }
-      .nav-item {
         margin: 0 !important;
-        border-radius: 0;
         background-color: white;
 
         &:hover {
           background-color: ${grey1};
-        }
-
-        &:first-child {
-          border-right: none;
-          border-radius: 0.5rem 0 0 0.5rem;
-        }
-
-        &:last-child {
-          border-radius: 0 0.5rem 0.5rem 0;
+          border: 1px solid black;
         }
 
         &.active {
           color: white;
-          background-color: ${udbMainDarkBlue};
+          background-color: ${activeBackgroundColor};
+          border: 1px solid black;
         }
 
         &.active:hover {
-          background-color: ${udbMainDarkBlue};
+          background-color: ${activeBackgroundColor};
         }
+      }
+
+      .nav-item:first-child .nav-link {
+        border-radius: 0.5rem 0 0 0.5rem;
+        border-right: none;
+      }
+
+      .nav-item:last-child .nav-link {
+        border-radius: 0 0.5rem 0.5rem 0;
+      }
+
+      .nav-item:first-child .nav-link.active {
+        border-right: none;
       }
     `,
   };

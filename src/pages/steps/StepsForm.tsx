@@ -10,6 +10,7 @@ import {
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import {
@@ -30,7 +31,7 @@ import {
   getEducationLabels,
   getLocationLabels,
 } from '@/utils/cultuurkuurLabels';
-import { FetchError } from '@/utils/fetchFromApi';
+import { CustomValidationError, FetchError } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -238,11 +239,18 @@ const StepsForm = ({
 
       const { status, message } = error;
 
-      const parsedMessage = JSON.parse(message);
+      const parsedMessage = (() => {
+        try {
+          return JSON.parse(message);
+        } catch {
+          return message;
+        }
+      })();
 
       if (
         status === DUPLICATE_STATUS_CODE ||
-        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR)
+        parsedMessage?.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) ||
+        parsedMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)
       ) {
         newErrors.nameAndAgeRange = error;
       }
@@ -268,14 +276,35 @@ const StepsForm = ({
     initialOffer,
   });
 
-  const handleChangeSuccess = (editedField: string) =>
+  const handleChangeSuccess = (editedField: string) => {
+    setFetchErrors(undefined);
     toast.trigger(editedField);
+  };
 
   const { handleChange, fieldLoading } = useEditField({
     scope,
     offerId,
     handleSubmit,
     onSuccess: handleChangeSuccess,
+    onError: (error: CustomValidationError) => {
+      const newErrors: Record<string, any> = {};
+
+      const { message, body } = error;
+
+      if (
+        message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR) &&
+        body.type === 'Location'
+      ) {
+        newErrors.location = error;
+      }
+      if (
+        message.includes(ErrorCodes.DUPLICATE_PLACE_ERROR) &&
+        body.type === 'NameAndAgeRange'
+      ) {
+        newErrors.nameAndAgeRange = error;
+      }
+      setFetchErrors(newErrors);
+    },
   });
 
   const [isPublishLaterModalVisible, setIsPublishLaterModalVisible] =
