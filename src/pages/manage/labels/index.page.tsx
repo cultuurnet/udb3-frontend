@@ -148,8 +148,6 @@ const LabelsOverviewPage = () => {
               labels.length > 0 ? (
                 <Stack spacing={3}>
                   <Inline
-                    forwardedAs="div"
-                    width="100%"
                     alignItems="center"
                     spacing={5}
                   >
