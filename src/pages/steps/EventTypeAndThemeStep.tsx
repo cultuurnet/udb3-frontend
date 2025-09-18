@@ -281,6 +281,7 @@ const EventTypeAndThemeStep = ({
     error?.message?.includes(CULTUURKUUR_THEME_ERROR) && !selectedThemeId;
 
   const isCultuurkuurThemeErrorVisible =
+    themes.length > 0 &&
     isCultuurkuurEvent &&
     !!selectedTypeId &&
     (isNewCultuurkuurEventWithoutTheme ||
