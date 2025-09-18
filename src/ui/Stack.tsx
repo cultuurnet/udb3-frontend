@@ -1,5 +1,11 @@
 import { pickBy } from 'lodash';
-import { Children, cloneElement, forwardRef, isValidElement, Fragment } from 'react';
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  Fragment,
+  isValidElement,
+} from 'react';
 import styled, { css } from 'styled-components';
 
 import {
@@ -47,13 +53,17 @@ const Stack = forwardRef<HTMLElement, Props>(
       const isLastItem = i === validChildren.length - 1;
 
       const isBoxComponent =
-        isValidElement(child) && typeof child.type !== 'string' && child.type !== Fragment;
+        isValidElement(child) &&
+        typeof child.type !== 'string' &&
+        child.type !== Fragment;
 
       // @ts-expect-error
       return cloneElement(child, {
         // @ts-expect-error
         ...child.props,
-        ...(!isLastItem && spacing && isBoxComponent ? { marginBottom: spacing } : {}),
+        ...(!isLastItem && spacing && isBoxComponent
+          ? { marginBottom: spacing }
+          : {}),
       });
     });
 
