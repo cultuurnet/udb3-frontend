@@ -164,7 +164,13 @@ const Link = ({
 
   if (isInternalLink) {
     return (
-      <NextLink href={href} css={`text-decoration: none;`}>
+      <NextLink
+        href={href}
+        css={`
+          text-decoration: none;
+          width: 100%;
+        `}
+      >
         <BaseLink
           as="span"
           className={className}

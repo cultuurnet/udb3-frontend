@@ -103,6 +103,10 @@ const MenuItem = memo(
 
           color: ${isActive ? getValueForMenuItem('active.color') : 'inherit'};
 
+          :hover {
+            background-color: ${getValueForMenuItem('hover.backgroundColor')};
+          }
+
           :before {
             content: '';
             width: 4px;
