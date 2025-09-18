@@ -91,6 +91,7 @@ const Inline = forwardRef<HTMLElement, Props>(
         stackOn={stackOn}
         {...props}
         ref={ref}
+        suppressHydrationWarning
       >
         {clonedChildren}
       </StyledBox>

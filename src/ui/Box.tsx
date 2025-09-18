@@ -543,7 +543,7 @@ const getBoxProps = (props: Record<string, any>) =>
 
 const Box = forwardRef<HTMLElement, BoxProps<any>>(
   ({ children, as = 'div', ...props }, ref) => (
-    <StyledBox ref={ref} as={as} {...props}>
+    <StyledBox ref={ref} as={as} {...props} suppressHydrationWarning>
       {children}
     </StyledBox>
   ),
