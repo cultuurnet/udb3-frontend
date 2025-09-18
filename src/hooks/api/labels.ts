@@ -112,8 +112,8 @@ const useGetUitpasLabelsQuery = () =>
   });
 
 export {
-  prefetchGetLabelsQuery,
   getUitpasLabelsQuery,
+  prefetchGetLabelsQuery,
   useGetLabelsByQuery,
   useGetUitpasLabelsQuery,
 };
