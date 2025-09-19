@@ -1,10 +1,3 @@
-import { isEqual } from 'lodash';
-import flatten from 'lodash/flatten';
-import type { NextApiRequest } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
-import { useCallback } from 'react';
-import { Cookies } from 'react-cookie';
 import {
   MutationFunction,
   QueryClient,
@@ -15,7 +8,14 @@ import {
   useQuery,
   useQueryClient,
   UseQueryOptions,
-} from 'react-query';
+} from '@tanstack/react-query';
+import { isEqual } from 'lodash';
+import flatten from 'lodash/flatten';
+import type { NextApiRequest } from 'next';
+import { useRouter } from 'next/router';
+import Router from 'next/router';
+import { useCallback } from 'react';
+import Cookies from 'universal-cookie';
 
 import type { Headers } from '@/hooks/api/types/Headers';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
@@ -156,7 +156,7 @@ const prefetchAuthenticatedQueries = async ({
 
   await Promise.all(
     preparedArguments.map(({ queryKey, queryFn }) =>
-      queryClient.prefetchQuery(queryKey, queryFn),
+      queryClient.prefetchQuery({ queryKey, queryFn }),
     ),
   );
 
@@ -183,7 +183,7 @@ const prefetchAuthenticatedQuery = async <
     headers,
   });
 
-  return await queryClient.fetchQuery(queryKey, queryFn);
+  return await queryClient.fetchQuery({ queryKey, queryFn });
 };
 
 /// /////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,19 +217,22 @@ const isDuplicateMutation = (
     return false;
   }
 
-  const mutations = queryClient.getMutationCache().findAll({
-    mutationKey,
+  const allMutations = queryClient.getMutationCache().findAll();
+
+  const mutations = allMutations.filter((mutation) => {
+    const currentMutationKey = mutation.options?.mutationKey;
+    return currentMutationKey.includes(mutationKey);
   });
 
   const latestMutation = mutations.slice(-2)[0];
 
   // If the latest mutation was unsuccessful, we don't want to trigger a false positive.
-  if (latestMutation.state.error) {
+  if (latestMutation?.state.error) {
     return false;
   }
 
   return (
-    mutations.length > 1 && isEqual(latestMutation.options.variables, variables)
+    mutations.length > 1 && isEqual(latestMutation.state.variables, variables)
   );
 };
 
@@ -256,7 +259,7 @@ const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
 
       if (isUnAuthorized(response?.status)) {
         removeAuthenticationCookies();
-        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         Router.push('/login');
       }
 
@@ -276,7 +279,7 @@ const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
     ],
   );
 
-  return useMutation(innerMutationFn, configuration);
+  return useMutation({ mutationFn: innerMutationFn, ...configuration });
 };
 
 const useAuthenticatedMutations = ({
@@ -296,7 +299,7 @@ const useAuthenticatedMutations = ({
 
       if (responses.some((response) => isUnAuthorized(response.status))) {
         removeAuthenticationCookies();
-        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         Router.push('/login');
         return;
       }
@@ -324,13 +327,12 @@ const useAuthenticatedMutations = ({
     [headers, mutationFns, queryClient, removeAuthenticationCookies],
   );
 
-  return useMutation(innerMutationFn, configuration);
+  return useMutation({ mutationFn: innerMutationFn, ...configuration });
 };
 
-type Handlers = 'onSuccess' | 'onError' | 'onSettled';
 type UseQueryOptionsWithoutQueryFn<TData, TError> = Omit<
   UseQueryOptions<TData, TError>,
-  'queryFn' | Handlers
+  'queryFn' | 'onError' | 'onSettled'
 >;
 
 type QueryFunction<TData> = UseQueryOptions<TData, FetchError>['queryFn'];
@@ -342,7 +344,7 @@ type CustomQueryFunction<
   context: QueryFunctionContext & {
     headers: Headers;
   } & TQueryArguments,
-) => ReturnType<QueryFunction<TData>>;
+) => Promise<TData>;
 
 type UseAuthenticatedQueryOptions<
   TData,
@@ -363,8 +365,13 @@ export const queryOptions = <
 
 export type ExtendQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
   UseQueryOptions<Awaited<ReturnType<TQueryFn>>, FetchError>,
-  Handlers | 'enabled' | 'queryKey' | 'refetchOnWindowFocus'
->;
+  'enabled' | 'refetchOnWindowFocus'
+> & {
+  queryKey?: UseQueryOptions<
+    Awaited<ReturnType<TQueryFn>>,
+    FetchError
+  >['queryKey'];
+};
 
 const useAuthenticatedQuery = <
   TData,
@@ -428,12 +435,12 @@ const useAuthenticatedQueries = ({
   );
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const results = useQueries(options);
+  const results = useQueries({ queries: options });
 
   if (results.some((result) => isUnAuthorized(result?.error?.status))) {
     if (!asPath.startsWith('/login') && asPath !== '/[...params]') {
       removeAuthenticationCookies();
-      queryClient.invalidateQueries('user');
+      queryClient.invalidateQueries({ queryKey: ['user'] });
       router.push('/login');
     }
   }

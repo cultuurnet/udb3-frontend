@@ -1,4 +1,4 @@
-import { dehydrate } from 'react-query/hydration';
+import { dehydrate } from '@tanstack/react-query';
 
 import { prefetchGetOrganizerByIdQuery } from '@/hooks/api/organizers';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';

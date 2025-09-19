@@ -1,6 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { useAddContactPointMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
@@ -171,7 +171,9 @@ const ContactInfoStep = ({
       {
         onSuccess: async () => {
           onSuccessfulChange(contactPoint);
-          await queryClient.invalidateQueries([scope, { id: offerId }]);
+          await queryClient.invalidateQueries({
+            queryKey: [scope, { id: offerId }],
+          });
         },
       },
     );

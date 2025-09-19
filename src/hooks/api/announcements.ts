@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import getConfig from 'next/config';
-import { useQuery } from 'react-query';
 
 const getAnnouncements = async ({ queryKey }) => {
   const { publicRuntimeConfig } = getConfig();
@@ -13,11 +13,11 @@ const getAnnouncements = async ({ queryKey }) => {
 };
 
 const useGetAnnouncementsQuery = (configuration = {}) => {
-  return useQuery(
-    ['announcement', { includeDisabled: false }],
-    getAnnouncements,
-    configuration,
-  );
+  return useQuery({
+    queryKey: ['announcement', { includeDisabled: false }],
+    queryFn: getAnnouncements,
+    ...configuration,
+  });
 };
 
 export { useGetAnnouncementsQuery };
