@@ -14,12 +14,12 @@ import { CookiesProvider } from 'react-cookie';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
-import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
 import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
+import { defaultCookieOptions } from '@/utils/defaultCookieOptions';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 

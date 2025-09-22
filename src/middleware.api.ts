@@ -3,15 +3,10 @@ import { NextResponse } from 'next/server';
 
 import { getAuthEdgeServer } from '@/auth/edge';
 
+import { defaultCookieOptions } from './utils/defaultCookieOptions';
 import { isTokenValid } from './utils/isTokenValid';
 
 const authEdgeServer = getAuthEdgeServer();
-
-// Import defaultCookieOptions directly to avoid React imports in middleware
-const defaultCookieOptions = {
-  maxAge: 60 * 60 * 24 * 30,
-  path: '/',
-};
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 

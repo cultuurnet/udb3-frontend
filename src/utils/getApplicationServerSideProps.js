@@ -6,10 +6,10 @@ import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
 import { prefetchGetUserQuery } from '@/hooks/api/user';
-import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
 import { getRedirects } from '../redirects';
+import { defaultCookieOptions } from './defaultCookieOptions';
 import { FetchError } from './fetchFromApi';
 
 class Cookies extends UniversalCookies {
