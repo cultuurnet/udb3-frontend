@@ -73,7 +73,6 @@ const Stack = forwardRef<HTMLElement, Props>(
         as={as}
         ref={ref}
         {...getBoxProps(props)}
-        suppressHydrationWarning
       >
         {clonedChildren}
       </StyledBox>
