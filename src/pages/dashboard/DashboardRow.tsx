@@ -51,7 +51,7 @@ export const DashboardRow = ({
   date,
   imageUrl,
   score,
-  actions,
+  actions = [],
   url,
   finishedAt,
   isFinished,
@@ -206,7 +206,7 @@ export const DashboardRow = ({
           <Inline
             width="25%"
             justifyContent="flex-start"
-            alignItems="center"
+            alignItems="flex-start"
             css={!score && `visibility: hidden`}
           >
             <DynamicBarometerIcon
@@ -246,8 +246,4 @@ export const DashboardRow = ({
       </Stack>
     </Inline>
   );
-};
-
-DashboardRow.defaultProps = {
-  actions: [],
 };

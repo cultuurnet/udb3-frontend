@@ -56,8 +56,10 @@ test('create an organizer', async ({ baseURL, page }) => {
     await page
       .locator('input[type=file]')
       .setInputFiles('./src/test/data/image.png');
-    await page.getByLabel('Beschrijving').click();
-    await page.getByLabel('Beschrijving').fill(dummyOrganizer.image.name);
+    await page.getByRole('textbox', { name: 'Beschrijving' }).click();
+    await page
+      .getByRole('textbox', { name: 'Beschrijving' })
+      .fill(dummyOrganizer.image.name);
     await page.getByLabel('Copyright').click();
     await page.getByLabel('Copyright').fill(dummyOrganizer.image.copyright);
     await page.getByRole('button', { name: 'Uploaden' }).click();
@@ -89,10 +91,12 @@ test('create an organizer', async ({ baseURL, page }) => {
 
     // Add ownership
     await page
-      .getByRole('button', { name: 'Nieuwe beheerder toevoegen' })
+      .getByRole('button', { name: 'Nieuwe beheerder toevoegen', exact: true })
       .click();
     await page.getByLabel('E-mailadres').fill(process.env.E2E_TEST_EMAIL);
-    await page.getByRole('button', { name: 'Beheerder toevoegen' }).click();
+    await page
+      .getByRole('button', { name: 'Beheerder toevoegen', exact: true })
+      .click();
     await expect(page.getByRole('dialog')).toBeHidden();
     await expect(page.getByTestId('alert-success')).toContainText(
       process.env.E2E_TEST_EMAIL,

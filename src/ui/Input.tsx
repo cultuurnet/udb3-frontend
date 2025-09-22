@@ -66,25 +66,25 @@ type InputProps = HTMLProps<HTMLInputElement> & {
 
 type Props = Omit<BoxProps, 'onChange' | 'onBlur'> & InputProps;
 
-const Input = forwardRef(({ onChange, className, ...props }: Props, ref) => (
-  <Form.Control
-    ref={ref}
-    as={BaseInput}
-    maxWidth="43rem"
-    height={getGlobalFormInputHeight}
-    borderRadius={getGlobalBorderRadius}
-    onInput={onChange}
-    {...getInputProps(props)}
-    {...getBoxProps(props)}
-  />
-));
+const Input = forwardRef(
+  (
+    { onChange, className, type = 'text', isInvalid = false, ...props }: Props,
+    ref,
+  ) => (
+    <Form.Control
+      ref={ref}
+      as={BaseInput}
+      maxWidth="43rem"
+      height={`${getGlobalFormInputHeight}`}
+      borderRadius={getGlobalBorderRadius}
+      onInput={onChange}
+      {...getInputProps({ type, isInvalid, ...props })}
+      {...getBoxProps(props)}
+    />
+  ),
+);
 
 Input.displayName = 'Input';
-
-Input.defaultProps = {
-  type: 'text',
-  isInvalid: false,
-};
 
 export { Input };
 export type { InputProps, InputType };

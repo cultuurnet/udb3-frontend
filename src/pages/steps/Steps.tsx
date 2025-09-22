@@ -95,7 +95,7 @@ type StepWrapperProps = StackProps & {
 const StepWrapper = ({
   stepNumber,
   children,
-  title,
+  title = '',
   ...props
 }: StepWrapperProps) => {
   return (
@@ -117,10 +117,6 @@ const StepWrapper = ({
       {children}
     </Stack>
   );
-};
-
-StepWrapper.defaultProps = {
-  title: '',
 };
 
 const getValue = getValueFromTheme('createPage');
@@ -180,9 +176,9 @@ const stepPropKeys: (keyof StepProps)[] = [
 const getStepProps = (props: UnknownProps) => pick(props, stepPropKeys);
 
 const Steps = ({
-  onChange,
+  onChange = () => {},
   configurations,
-  fieldLoading,
+  fieldLoading = '',
   form,
   offerId,
   mainLanguage,
@@ -268,11 +264,6 @@ const Steps = ({
       )}
     </Stack>
   );
-};
-
-Steps.defaultProps = {
-  onChange: () => {},
-  fieldLoading: '',
 };
 
 export { getStepProps, Steps };

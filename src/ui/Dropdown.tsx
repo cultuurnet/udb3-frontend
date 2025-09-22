@@ -27,7 +27,7 @@ const { grey1 } = colors;
 
 const Dropdown = ({
   variant,
-  isSplit,
+  isSplit = false,
   children,
   className,
   ...props
@@ -58,7 +58,8 @@ const Dropdown = ({
   return (
     <Box
       css={`
-        .dropdown.btn-group {
+        .dropdown,
+        .btn-group {
           box-shadow: ${getGlobalValue('boxShadow.heavy')};
           border-radius: ${getGlobalBorderRadius};
         }
@@ -76,7 +77,7 @@ const Dropdown = ({
           margin: 0;
         }
 
-        .dropdown.btn-group {
+        .btn-group {
           .btn-secondary {
             box-shadow: none;
           }
@@ -121,16 +122,13 @@ const Dropdown = ({
   );
 };
 
-Dropdown.defaultProps = {
-  isSplit: false,
-};
-
 const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
   if (onClick) {
     return (
       <BootstrapDropdown.Item
-        forwardedAs={Button}
-        variant={ButtonVariants.SECONDARY}
+        forwardedAs={(props) => (
+          <Button variant={ButtonVariants.SECONDARY} {...props} />
+        )}
         onClick={onClick}
         css={`
           &.btn {
@@ -149,16 +147,24 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
   if (href) {
     return (
       <BootstrapDropdown.Item
-        forwardedAs={Link}
-        variant={LinkVariants.BUTTON_SECONDARY}
-        href={href}
-        padding={0}
+        forwardedAs={(props) => (
+          <Link
+            variant={LinkVariants.BUTTON_SECONDARY}
+            href={href}
+            padding={0}
+            {...props}
+          />
+        )}
         css={`
           .btn {
             flex: 1;
             border: none;
-            box-shadow: none;
-            border-radius: 0;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+
+            &:hover {
+              border-radius: 0 !important;
+            }
           }
         `}
       >
