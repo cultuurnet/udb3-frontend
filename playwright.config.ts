@@ -78,6 +78,7 @@ export default defineConfig({
   webServer: {
     command: 'yarn build && yarn start',
     port: 3000,
+    timeout: 120 * 1000,
     env: {
       NEXT_PUBLIC_ENVIRONMENT: 'e2e',
     },
