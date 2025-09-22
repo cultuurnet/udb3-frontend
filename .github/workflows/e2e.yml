@@ -22,7 +22,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright tests
         env:
@@ -48,7 +48,7 @@ jobs:
           AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
           AUTH_CLIENT_SECRET: ${{ secrets.AUTH_CLIENT_SECRET }}
 
-        run: yarn test:e2e
+        run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
