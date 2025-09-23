@@ -1,6 +1,6 @@
 import uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRowSelect } from 'react-table';
 
 import { Button, ButtonVariants } from './Button';
@@ -71,7 +71,7 @@ const SelectionTable = ({
     setSelectedFlatRows(currentSelection);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!onSelectionChanged || !selectedFlatRows) return;
     onSelectionChanged(
       selectedFlatRows.map((row) => ({
