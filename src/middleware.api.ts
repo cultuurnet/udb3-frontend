@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { getAuthEdgeServer } from '@/auth/edge';
 
-import { defaultCookieOptions } from './utils/defaultCookieOptions';
+import { DEFAULT_COOKIE_OPTIONS } from './constants/Cookies';
 import { isTokenValid } from './utils/isTokenValid';
 
 const authEdgeServer = getAuthEdgeServer();
@@ -30,8 +30,8 @@ export const middleware = async (request: NextRequest) => {
         request,
         response,
       );
-      response.cookies.set('token', accessToken, defaultCookieOptions);
-      response.cookies.set('idToken', idToken, defaultCookieOptions);
+      response.cookies.set('token', accessToken, DEFAULT_COOKIE_OPTIONS);
+      response.cookies.set('idToken', idToken, DEFAULT_COOKIE_OPTIONS);
       response.cookies.set('auth0.redirect_uri', '', { maxAge: 0 });
       return response;
     } catch (err) {

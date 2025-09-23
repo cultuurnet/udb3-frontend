@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useCookies as useReactCookies } from 'react-cookie';
 import type { CookieSetOptions } from 'universal-cookie';
 
-import { defaultCookieOptions } from '@/utils/defaultCookieOptions';
+import { DEFAULT_COOKIE_OPTIONS } from '@/constants/Cookies';
 
 type Cookies = {
   'udb-language'?: string;
@@ -12,7 +12,7 @@ type Cookies = {
 
 const useCookiesWithOptions = (
   dependencies: string[] = [],
-  options: CookieSetOptions = defaultCookieOptions,
+  options: CookieSetOptions = DEFAULT_COOKIE_OPTIONS,
 ) => {
   const [cookies, setCookie, removeCookie] = useReactCookies(dependencies);
 
@@ -33,5 +33,5 @@ const useCookiesWithOptions = (
   };
 };
 
-export { defaultCookieOptions, useCookiesWithOptions };
+export { useCookiesWithOptions };
 export type { Cookies };

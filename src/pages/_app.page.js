@@ -14,12 +14,12 @@ import { CookiesProvider } from 'react-cookie';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
+import { DEFAULT_COOKIE_OPTIONS } from '@/constants/Cookies';
 import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
 import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
-import { defaultCookieOptions } from '@/utils/defaultCookieOptions';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
@@ -31,7 +31,11 @@ if (!isServer()) {
   window.FeatureFlags = FeatureFlags;
 
   window.setFeatureFlag = (featureFlagName, value) => {
-    cookies.set(createCookieName(featureFlagName), value, defaultCookieOptions);
+    cookies.set(
+      createCookieName(featureFlagName),
+      value,
+      DEFAULT_COOKIE_OPTIONS,
+    );
     window.getCurrentFeatureFlagConfiguration();
   };
 

@@ -5,11 +5,11 @@ import absoluteUrl from 'next-absolute-url';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
+import { DEFAULT_COOKIE_OPTIONS } from '@/constants/Cookies';
 import { prefetchGetUserQuery } from '@/hooks/api/user';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
 import { getRedirects } from '../redirects';
-import { defaultCookieOptions } from './defaultCookieOptions';
 import { FetchError } from './fetchFromApi';
 
 class Cookies extends UniversalCookies {
@@ -85,7 +85,7 @@ const getApplicationServerSideProps =
 
     const rawCookies = req?.headers?.cookie ?? '';
 
-    const cookies = new Cookies(rawCookies, defaultCookieOptions);
+    const cookies = new Cookies(rawCookies, DEFAULT_COOKIE_OPTIONS);
 
     req.headers.cookie = cookies.toString();
 
