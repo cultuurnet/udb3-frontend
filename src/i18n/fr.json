@@ -450,7 +450,7 @@
         "change": "Modifier l'organisateur",
         "title": "Organisateur",
         "select_recent_used_organizer": "Réutiliser une organisation",
-        "select_recent_used_organizer_info": "Nous avons préparé pour vous les organisations pour lesquelles vous vous êtes récemment inscrit. Ajoutez-les d'un simple clic.",
+        "select_recent_used_organizer_info": "Voici les organisations pour lesquelles vous avez récemment saisi des événements. Ajoutez-les d'un simple clic. Les administrateurs de l'organisation sélectionnée pourront également modifier l'événement ultérieurement.",
         "or_choose_other_organizer": "Ou ajouter une nouvelle organisation",
         "choose_other_organizer": "Ajouter une nouvelle organisation",
         "uitpas_cardsystems": "UiTPAS systèmes de cartes",
@@ -1019,7 +1019,9 @@
         "edit": "Modifier",
         "manage": "Gestion des demandes",
         "request": "Demander gestion",
-        "back": "Retour"
+        "back": "Retour",
+        "events": "Gestion d'événements",
+        "places": "Gestion des lieux"
       }
     },
     "create": {
@@ -1060,6 +1062,7 @@
         "user": "Utilisateur",
         "no_results": "Aucun résultat trouvé",
         "status": {
+          "requested": "Demandé",
           "approved": "Approuvé",
           "rejected": "Rejeté",
           "approved_by": "Approuvé par {{email}} le {{date}}",
