@@ -120,70 +120,63 @@ const LabelsOverviewPage = () => {
     <Page>
       <Page.Title>{t('labels.overview.title')}</Page.Title>
       <Page.Content spacing={5}>
-        <FormElement
-          id="labels-overview-search"
-          label={t('labels.overview.search.label')}
-          Component={
-            <Input
-              placeholder={t('labels.overview.search.placeholder')}
-              onChange={debounce(handleInputSearch, 275)}
-            />
-          }
-        />
-
-        <Stack spacing={5}>
-          {labelsQuery.status === QueryStatus.LOADING ? (
-            <Spinner />
-          ) : (
-            <Stack
-              backgroundColor="white"
-              padding={4}
-              borderRadius={getGlobalBorderRadius}
-              spacing={5}
-              css={`
-                box-shadow: ${getGlobalValue('boxShadow.medium')};
-              `}
-            >
-              {labelsQuery.status === QueryStatus.SUCCESS &&
-              labels.length > 0 ? (
-                <Stack spacing={3}>
-                  <Inline alignItems="center" spacing={5}>
-                    <Inline spacing={3}>
-                      {actions.map(({ iconName, title, onClick, disabled }) => (
-                        <Button
-                          key={title}
-                          variant={ButtonVariants.PRIMARY}
-                          onClick={onClick}
-                          disabled={disabled}
-                          iconName={iconName}
-                          spacing={3}
-                        >
-                          {title}
-                        </Button>
-                      ))}
-                    </Inline>
-                  </Inline>
-                  <Table
-                    actions={actions}
-                    columns={columns}
-                    data={labelsToTableData(labels)}
-                  />
-                </Stack>
-              ) : null}
-            </Stack>
-          )}
-          {labelsQuery.status !== QueryStatus.LOADING && labels.length === 0 ? (
-            <Alert variant={AlertVariants.WARNING}>
-              {t('labels.overview.no_results')}
-            </Alert>
-          ) : null}
-          {labelsQuery.status === QueryStatus.ERROR ? (
-            <Alert variant={AlertVariants.WARNING}>
+        <Stack spacing={4}>
+          <FormElement
+            id="labels-overview-search"
+            label={t('labels.overview.search.label')}
+            Component={
+              <Input
+                placeholder={t('labels.overview.search.placeholder')}
+                onChange={debounce(handleInputSearch, 275)}
+              />
+            }
+          />
+          {labelsQuery.status === QueryStatus.SUCCESS &&
+            labels.length === 0 && (
+              <Alert variant={AlertVariants.WARNING} fullWidth={true}>
+                {t('labels.overview.no_results')}
+              </Alert>
+            )}
+          {labelsQuery.status === QueryStatus.ERROR && (
+            <Alert variant={AlertVariants.WARNING} fullWidth={true}>
               {t('labels.overview.something_wrong') +
                 ' ' +
-                '<em>more information to come later</em>'}
+                labelsQuery.error?.message}
             </Alert>
-          ) : null}
+          )}
+        </Stack>
+
+        <Stack
+          backgroundColor="white"
+          padding={4}
+          borderRadius={getGlobalBorderRadius}
+          spacing={4}
+          css={`
+            box-shadow: ${getGlobalValue('boxShadow.medium')};
+          `}
+        >
+          <Inline alignItems="center" spacing={5}>
+            <Inline spacing={3}>
+              {actions.map(({ iconName, title, onClick, disabled }) => (
+                <Button
+                  key={title}
+                  variant={ButtonVariants.PRIMARY}
+                  onClick={onClick}
+                  disabled={disabled}
+                  iconName={iconName}
+                  spacing={3}
+                >
+                  {title}
+                </Button>
+              ))}
+            </Inline>
+          </Inline>
+          {labelsQuery.status === QueryStatus.LOADING && <Spinner />}
+          {labelsQuery.status === QueryStatus.SUCCESS && labels.length > 0 && (
+            <Inline spacing={5}>
+              <Table columns={columns} data={labelsToTableData(labels)} />
+            </Inline>
+          )}
         </Stack>
 
         <Pagination
