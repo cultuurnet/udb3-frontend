@@ -1114,6 +1114,7 @@
         "user": "Gebruiker",
         "no_results": "Geen resultaten gevonden",
         "status": {
+          "requested": "Aangevraagd",
           "approved": "Goedgekeurd",
           "rejected": "Afgekeurd",
           "approved_by": "Goedgekeurd door {{email}} op {{date}}",

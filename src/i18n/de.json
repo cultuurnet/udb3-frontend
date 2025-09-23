@@ -1062,6 +1062,7 @@
         "user": "Benutzer",
         "no_results": "Keine Ergebnisse gefunden",
         "status": {
+          "requested": "Angefordert",
           "approved": "Genehmigt",
           "rejected": "Abgelehnt",
           "approved_by": "Genehmigt von {{email}} am {{date}}",
