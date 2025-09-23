@@ -197,7 +197,7 @@ const LabelsOverviewPage = () => {
   );
 };
 
-const getServerSideProps = getApplicationServerSideProps(
+export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, cookies, queryClient }) => {
     const labels = await prefetchGetLabelsQuery({
       req,
