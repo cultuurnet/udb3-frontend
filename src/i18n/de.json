@@ -448,7 +448,7 @@
         "change": "Ändern Organisator",
         "title": "Organisator",
         "select_recent_used_organizer": "Eine Organisation wiederverwenden",
-        "select_recent_used_organizer_info": "Wir haben für Sie die Organisationen vorbereitet, für die Sie sich kürzlich angemeldet haben. Fügen Sie sie mit einem einfachen Klick hinzu.",
+        "select_recent_used_organizer_info": "Dies sind die Organisationen, für die Sie kürzlich Veranstaltungen eingetragen haben. Fügen Sie diese mit einem Klick hinzu. Administratoren der ausgewählten Organisation können die Veranstaltung auch später bearbeiten.",
         "or_choose_other_organizer": "Fügen Sie eine Organisation hinzu",
         "choose_other_organizer": "Wählen Sie eine Organisation aus",
         "uitpas_cardsystems": "UiTPAS Kartensysteme",
