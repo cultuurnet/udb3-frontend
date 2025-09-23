@@ -1019,7 +1019,9 @@
         "edit": "Modifier",
         "manage": "Gestion des demandes",
         "request": "Demander gestion",
-        "back": "Retour"
+        "back": "Retour",
+        "events": "Gestion d'événements",
+        "places": "Gestion des lieux"
       }
     },
     "create": {
