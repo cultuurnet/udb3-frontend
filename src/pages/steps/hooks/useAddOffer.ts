@@ -83,7 +83,7 @@ const useAddOffer = ({
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
       const selectedTypeId = fullOffer?.typeAndTheme?.type?.id;
 
-      const typeHasNoThemes =
+      const hasTypeNoThemes =
         selectedTypeId && eventTypesWithNoThemes.includes(selectedTypeId);
 
       if (!educationLabels || educationLabels.length === 0) {
@@ -101,7 +101,7 @@ const useAddOffer = ({
         errors.push(CULTUURKUUR_TYPE_ERROR);
       }
 
-      if (!isThemeSelected && !typeHasNoThemes) {
+      if (!isThemeSelected && !hasTypeNoThemes) {
         errors.push(CULTUURKUUR_THEME_ERROR);
       }
     }
