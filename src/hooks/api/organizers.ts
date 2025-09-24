@@ -1,4 +1,4 @@
-import type { UseMutationOptions } from 'react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
 
 import {
   AuthenticatedQueryOptions,

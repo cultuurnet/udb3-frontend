@@ -1,8 +1,8 @@
+import { dehydrate, UseQueryResult } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerPermissionsResponse,

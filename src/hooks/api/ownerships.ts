@@ -1,4 +1,4 @@
-import { UseMutationOptions, UseMutationResult } from 'react-query';
+import { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 
 import { Values } from '@/types/Values';
 import { fetchFromApi } from '@/utils/fetchFromApi';

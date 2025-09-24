@@ -1,12 +1,17 @@
 import { pickBy } from 'lodash';
-import { Children, cloneElement, forwardRef } from 'react';
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  Fragment,
+  isValidElement,
+} from 'react';
 import styled, { css } from 'styled-components';
 
 import {
   BoxProps,
   getBoxProps,
   UIProp,
-  UnknownProps,
   withoutDisallowedPropsConfig,
 } from './Box';
 import {
@@ -47,11 +52,18 @@ const Stack = forwardRef<HTMLElement, Props>(
     const clonedChildren = Children.map(validChildren, (child, i) => {
       const isLastItem = i === validChildren.length - 1;
 
+      const isBoxComponent =
+        isValidElement(child) &&
+        typeof child.type !== 'string' &&
+        child.type !== Fragment;
+
       // @ts-expect-error
       return cloneElement(child, {
         // @ts-expect-error
         ...child.props,
-        ...(!isLastItem && spacing ? { marginBottom: spacing } : {}),
+        ...(!isLastItem && spacing && isBoxComponent
+          ? { marginBottom: spacing }
+          : {}),
       });
     });
 
@@ -72,7 +84,7 @@ Stack.displayName = 'Stack';
 
 const stackPropTypes = ['spacing', 'alignItems', 'justifyContent'];
 
-const getStackProps = (props: UnknownProps) =>
+const getStackProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
     // pass aria attributes to the DOM element
     if (key.startsWith('aria-')) {

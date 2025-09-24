@@ -10,6 +10,7 @@ import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { Scope } from '@/pages/create/OfferForm';
 import { Offer } from '@/types/Offer';
 import { isOrganizer, Organizer } from '@/types/Organizer';
+import { Box } from '@/ui/Box';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Notification } from '@/ui/Notification';
@@ -152,7 +153,7 @@ export const DynamicBarometerIcon = ({
   margin = 0,
   pointerWidth = 50,
 }: DynamicBarometerIconProps) => (
-  <div
+  <Box
     css={`
       position: relative;
     `}
@@ -196,7 +197,7 @@ export const DynamicBarometerIcon = ({
         length: 0.8,
       }}
     />
-  </div>
+  </Box>
 );
 
 const FormScore = ({ completedFields, offerId, scope }: Props) => {

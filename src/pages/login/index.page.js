@@ -1,5 +1,5 @@
 import absoluteUrl from 'next-absolute-url';
-import { Cookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 const Index = () => null;
 

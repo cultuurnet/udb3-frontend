@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import {
@@ -249,7 +249,7 @@ const BookingInfoStep = ({
   // TODO: refactor
   const eventId = offerId;
 
-  const formComponent = useRef<HTMLFormElement>();
+  const formComponent = useRef<HTMLFormElement>(null);
 
   const UrlLabelType = {
     BUY: 'buy',
