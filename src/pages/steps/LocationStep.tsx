@@ -2,7 +2,7 @@ import { TFunction } from 'i18next';
 import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
@@ -557,14 +557,21 @@ const LocationStep = ({
                   )}
                   {isBrusselsZip && (
                     <Alert variant="primary">
-                      {t('create.location.is_brussels_alert.message')}{' '}
-                      <a
-                        href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {t('create.location.is_brussels_alert.cta')}
-                      </a>
+                      <Trans
+                        i18nKey={'create.location.is_brussels_alert.message'}
+                        components={{
+                          link1: (
+                            <Link
+                              href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
+                              rel="noopener noreferrer"
+                              display="inline-block"
+                              fontWeight="bold"
+                              textDecoration="underline"
+                              padding={0}
+                            />
+                          ),
+                        }}
+                      />
                     </Alert>
                   )}
                   {children}
