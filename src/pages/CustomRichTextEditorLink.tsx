@@ -160,9 +160,17 @@ const CustomRichTextEditorLink = ({
           <Inline justifyContent={'center'} spacing={3}>
             <Button
               variant={ButtonVariants.PRIMARY}
-              onClick={() =>
-                onChange('link', linkTitle, linkTarget, linkTargetOption)
-              }
+              onClick={() => {
+                onChange('link', linkTitle, linkTarget, linkTargetOption);
+                requestAnimationFrame(() => {
+                  const editorElement = document.querySelector(
+                    '.public-DraftEditor-content',
+                  );
+                  if (editorElement) {
+                    (editorElement as HTMLElement).focus();
+                  }
+                });
+              }}
               disabled={!linkTarget || !linkTitle}
             >
               {t('organizer.add_modal.actions.add')}
