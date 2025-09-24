@@ -511,6 +511,11 @@ const LocationStep = ({
             field?.value as OfferFormData['location'];
 
           const isDefaultZip = municipality?.zip === '0000';
+          const isBrusselsZip =
+            municipality?.zip &&
+            Number(municipality.zip) >= 1000 &&
+            Number(municipality.zip) <= 1210;
+
           const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
 
           const onFieldChange = (updatedValue) => {
@@ -549,6 +554,17 @@ const LocationStep = ({
                         ? t('create.location.recent_locations.other')
                         : t('create.location.recent_locations.pick')}
                     </Text>
+                  )}
+                  {isBrusselsZip && (
+                    <Alert variant="primary">
+                      {t('create.location.is_brussels_alert.message')}{' '}
+                      <a
+                        href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
+                        target="_blank"
+                      >
+                        {t('create.location.is_brussels_alert.cta')}
+                      </a>
+                    </Alert>
                   )}
                   {children}
                 </Stack>
