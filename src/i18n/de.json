@@ -217,6 +217,10 @@
       "is_physical": {
         "label": "An einem physischen Ort"
       },
+      "is_brussels_alert": {
+        "message": "Für Aktivitäten in Brüssel arbeitet UiTdatabank mit visit.brussels zusammen. Tragen Sie Ihre Brüsseler Aktivitäten auf agenda.brussels ein, und sie erscheinen automatisch in UiTdatabank und UiTinvlaanderen. Planen Sie mit Ihrem Mitgliedsverband eine Reise nach Brüssel? Oder organisieren Sie eine Schulaktivität? Dann können Sie weiterhin Informationen in UiTdatabank eingeben.",
+        "cta": "Weitere Informationen"
+      },
       "online_url": {
         "label": "Teilnahmelink",
         "placeholder": "https://",
