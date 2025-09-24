@@ -143,8 +143,8 @@ App.propTypes = {
 };
 
 App.getInitialProps = async ({ ctx }) => {
-  const language =
-    ctx?.req?.headers?.cookie?.match(/udb-language=([^;]+)/)?.[1] || 'nl';
+  const serverCookies = new Cookies(ctx?.req?.headers?.cookie);
+  const language = serverCookies.get('udb-language') || 'nl';
 
   if (isServer()) await i18n.changeLanguage(language);
 
