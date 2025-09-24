@@ -2,12 +2,11 @@ import { TFunction } from 'i18next';
 import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
-import { ErrorCodes } from '@/constants/ErrorCodes';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -360,7 +359,7 @@ const LocationStep = ({
   error,
   ...props
 }: PlaceStepProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
