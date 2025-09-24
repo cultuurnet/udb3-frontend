@@ -9,6 +9,7 @@ import {
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
 import { ErrorCodes } from '@/constants/ErrorCodes';
+import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
@@ -80,6 +81,10 @@ const useAddOffer = ({
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
       const isTypeSelected = !!fullOffer?.typeAndTheme?.type;
+      const selectedTypeId = fullOffer?.typeAndTheme?.type?.id;
+
+      const hasTypeNoThemes =
+        selectedTypeId && eventTypesWithNoThemes.includes(selectedTypeId);
 
       if (!educationLabels || educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
@@ -96,7 +101,7 @@ const useAddOffer = ({
         errors.push(CULTUURKUUR_TYPE_ERROR);
       }
 
-      if (!isThemeSelected) {
+      if (!isThemeSelected && !hasTypeNoThemes) {
         errors.push(CULTUURKUUR_THEME_ERROR);
       }
     }
