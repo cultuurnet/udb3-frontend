@@ -142,4 +142,13 @@ App.propTypes = {
   children: PropTypes.node,
 };
 
+App.getInitialProps = async ({ ctx }) => {
+  const language =
+    ctx?.req?.headers?.cookie?.match(/udb-language=([^;]+)/)?.[1] || 'nl';
+
+  if (isServer()) await i18n.changeLanguage(language);
+
+  return { pageProps: { language } };
+};
+
 export default App;
