@@ -561,6 +561,7 @@ const LocationStep = ({
                       <a
                         href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {t('create.location.is_brussels_alert.cta')}
                       </a>
