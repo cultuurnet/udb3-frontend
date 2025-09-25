@@ -7,7 +7,6 @@ import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
-import { ErrorCodes } from '@/constants/ErrorCodes';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
@@ -360,7 +359,7 @@ const LocationStep = ({
   error,
   ...props
 }: PlaceStepProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
@@ -512,6 +511,11 @@ const LocationStep = ({
             field?.value as OfferFormData['location'];
 
           const isDefaultZip = municipality?.zip === '0000';
+          const isBrusselsZip =
+            municipality?.zip &&
+            Number(municipality.zip) >= 1000 &&
+            Number(municipality.zip) <= 1210;
+
           const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
 
           const onFieldChange = (updatedValue) => {
@@ -550,6 +554,25 @@ const LocationStep = ({
                         ? t('create.location.recent_locations.other')
                         : t('create.location.recent_locations.pick')}
                     </Text>
+                  )}
+                  {isBrusselsZip && (
+                    <Alert variant="primary">
+                      <Trans
+                        i18nKey={'create.location.is_brussels_alert.message'}
+                        components={{
+                          link1: (
+                            <Link
+                              href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
+                              rel="noopener noreferrer"
+                              display="inline-block"
+                              fontWeight="bold"
+                              textDecoration="underline"
+                              padding={0}
+                            />
+                          ),
+                        }}
+                      />
+                    </Alert>
                   )}
                   {children}
                 </Stack>

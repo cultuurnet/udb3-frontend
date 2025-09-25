@@ -227,6 +227,9 @@
         "title": "Ik verplaats me naar",
         "info": "Voeg locaties toe naar waar je je wil verplaatsen. Zo vinden de juiste scholen jouw aanbod."
       },
+      "is_brussels_alert": {
+        "message": "Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen. Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je wel verder invoeren op UiTdatabank. <link1>Meer info</link1>"
+      },
       "online_url": {
         "label": "Deelnamelink",
         "placeholder": "https://",
@@ -471,7 +474,7 @@
         "change": "Wijzig organisatie",
         "title": "Organisatie",
         "select_recent_used_organizer": "Een organisatie hergebruiken",
-        "select_recent_used_organizer_info": "We hebben de organisaties waarvoor je recent invoerde hier voor je klaargezet. Met één klik voeg je ze toe.",
+        "select_recent_used_organizer_info": "Dit zijn de organisaties waarvoor je onlangs evenementen invoerde. Voeg ze met één klik toe. Beheerders van de geselecteerde organisatie kunnen het evenement later ook bewerken.",
         "or_choose_other_organizer": "Of een nieuwe organisatie toevoegen",
         "choose_other_organizer": "Een nieuwe organisatie toevoegen",
         "uitpas_cardsystems": "UiTPAS Kaartsystemen",
@@ -1114,6 +1117,7 @@
         "user": "Gebruiker",
         "no_results": "Geen resultaten gevonden",
         "status": {
+          "requested": "Aangevraagd",
           "approved": "Goedgekeurd",
           "rejected": "Afgekeurd",
           "approved_by": "Goedgekeurd door {{email}} op {{date}}",
