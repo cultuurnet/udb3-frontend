@@ -1,18 +1,14 @@
 import uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo } from 'react';
-import { Table as BootstrapTable } from 'react-bootstrap';
-import { useRowSelect, useTable } from 'react-table';
+import { useEffect, useMemo, useState } from 'react';
+import { useRowSelect } from 'react-table';
 
-import { Box, getBoxProps } from './Box';
 import { Button, ButtonVariants } from './Button';
 import { Checkbox } from './Checkbox';
 import { Inline } from './Inline';
 import { Stack } from './Stack';
+import { Table } from './Table';
 import { Text } from './Text';
-import { getValueFromTheme } from './theme';
-
-const getValue = getValueFromTheme('selectionTable');
 
 const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
   const { checked, onChange } = getToggleAllRowsSelectedProps();
@@ -57,16 +53,10 @@ const SelectionTable = ({
   translateSelectedRowCount,
   ...props
 }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    selectedFlatRows,
-  } = useTable({ columns, data }, useRowSelect, (hooks) => {
+  const [selectedFlatRows, setSelectedFlatRows] = useState([]);
+
+  const selectionHook = (hooks) => {
     hooks.visibleColumns.push((columns) => [
-      // Add a selection column containing Checkbox components to the left of the table
       {
         id: 'selection',
         Header: CheckBoxHeader,
@@ -74,9 +64,14 @@ const SelectionTable = ({
       },
       ...columns,
     ]);
-  });
+  };
 
-  useLayoutEffect(() => {
+  const handleTableReady = (tableInstance) => {
+    const { selectedFlatRows: currentSelection } = tableInstance;
+    setSelectedFlatRows(currentSelection);
+  };
+
+  useEffect(() => {
     if (!onSelectionChanged || !selectedFlatRows) return;
     onSelectionChanged(
       selectedFlatRows.map((row) => ({
@@ -88,7 +83,6 @@ const SelectionTable = ({
 
   const selectedRowsText = useMemo(
     () => translateSelectedRowCount(selectedFlatRows.length),
-
     [selectedFlatRows.length, translateSelectedRowCount],
   );
 
@@ -118,58 +112,23 @@ const SelectionTable = ({
           ))}
         </Inline>
       </Inline>
-      <Box
-        forwardedAs={BootstrapTable}
+
+      <Table
+        columns={columns}
+        data={data}
+        plugins={[useRowSelect]}
+        tableHooks={[selectionHook]}
+        onTableReady={handleTableReady}
         css={`
           &.table th,
           &.table td {
-            padding: 0.75rem;
-            vertical-align: top;
-            border-top: 1px solid ${getValue('borderColor')};
             :first-child {
               width: 100px;
             }
           }
-          &.table thead th {
-            border-bottom: 1px solid ${getValue('borderColor')};
-          }
         `}
-        {...getTableProps()}
-        {...getBoxProps(props)}
-      >
-        <thead>
-          {headerGroups.map((headerGroup, indexHeaderGroup) => (
-            <tr key={indexHeaderGroup} {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, indexHeader) => (
-                <Box
-                  as="th"
-                  key={indexHeader}
-                  {...column.getHeaderProps()}
-                  color={getValue('color')}
-                >
-                  {column.render('Header')}
-                </Box>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, indexRow) => {
-            prepareRow(row);
-            return (
-              <tr key={indexRow} {...row.getRowProps()}>
-                {row.cells.map((cell, indexCell) => {
-                  return (
-                    <td key={indexCell} {...cell.getCellProps()}>
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Box>
+        {...props}
+      />
     </Stack>
   );
 };

@@ -82,6 +82,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_DUPLICATE,
   },
   {
+    source: '/manage/labels/overview',
+    destination: '/manage/labels',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_LABELS_OVERVIEW,
+  },
+  {
     source: '/place/:placeId/edit',
     destination: '/places/:placeId/edit',
     permanent: false,
