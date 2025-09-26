@@ -94,7 +94,7 @@ const LabelsOverviewPage = () => {
         Header: t('labels.overview.table.options'),
         accessor: 'options',
         Cell: ({ cell }) => (
-          <Link href={'/manage/labels/' + cell.value}>
+          <Link href={'/manage/labels/' + cell.value + '/edit'}>
             {t('labels.overview.table.edit')}
           </Link>
         ),

@@ -1,10 +1,12 @@
 import { useQuery } from 'react-query';
 
 import {
+  ExtendQueryOptions,
   PaginationOptions,
   prefetchAuthenticatedQuery,
   queryOptions,
   ServerSideQueryOptions,
+  useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
@@ -111,9 +113,199 @@ const useGetUitpasLabelsQuery = () =>
     refetchOnReconnect: false,
   });
 
+// Label details (by id)
+const getLabelById = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/labels/${id}`,
+    options: { headers },
+  });
+  return (await res.json()) as Label;
+};
+
+const createGetLabelByIdQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['labels'],
+    queryFn: getLabelById,
+    queryArguments: { id },
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+const useGetLabelByIdQuery = (
+  { id }: { id: string },
+  configuration?: ExtendQueryOptions<typeof getLabelById>,
+) => {
+  const options = createGetLabelByIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...(configuration || {}),
+    enabled: options.enabled !== false && configuration?.enabled !== false,
+  });
+};
+
+const prefetchGetLabelByIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetLabelByIdQueryOptions({ id }),
+  });
+
+// Create label
+type CreateLabelArgs = {
+  headers: Headers;
+  name: string;
+  isVisible: boolean;
+  isPrivate: boolean;
+  parentId?: string;
+};
+
+const createLabel = async ({
+  headers,
+  name,
+  isVisible,
+  isPrivate,
+  parentId,
+}: CreateLabelArgs) => {
+  const body: Record<string, unknown> = {
+    name,
+    visibility: isVisible ? 'visible' : 'invisible',
+    privacy: isPrivate ? 'private' : 'public',
+  };
+  if (parentId) body.parentId = parentId;
+  return fetchFromApi({
+    path: '/labels/',
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    },
+  });
+};
+
+const useCreateLabelMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: createLabel,
+    mutationKey: 'labels-create',
+    ...configuration,
+  });
+
+// Update visibility/privacy via commands
+type UpdateLabelFlagsArgs = {
+  headers: Headers;
+  id: string;
+  command: 'MakeVisible' | 'MakeInvisible' | 'MakePrivate' | 'MakePublic';
+};
+
+const updateLabel = async ({ headers, id, command }: UpdateLabelFlagsArgs) =>
+  fetchFromApi({
+    path: `/labels/${id}`,
+    options: {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ command }),
+    },
+  });
+
+const useUpdateLabelVisibilityMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: ({
+      headers,
+      id,
+      makeVisible,
+    }: {
+      headers: Headers;
+      id: string;
+      makeVisible: boolean;
+    }) =>
+      updateLabel({
+        headers,
+        id,
+        command: makeVisible ? 'MakeVisible' : 'MakeInvisible',
+      }),
+    mutationKey: 'labels-update-visibility',
+    ...configuration,
+  });
+
+const useUpdateLabelPrivacyMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: ({
+      headers,
+      id,
+      makePrivate,
+    }: {
+      headers: Headers;
+      id: string;
+      makePrivate: boolean;
+    }) =>
+      updateLabel({
+        headers,
+        id,
+        command: makePrivate ? 'MakePrivate' : 'MakePublic',
+      }),
+    mutationKey: 'labels-update-privacy',
+    ...configuration,
+  });
+
+// Delete label
+const deleteLabel = async ({ headers, id }: { headers: Headers; id: string }) =>
+  fetchFromApi({
+    path: `/labels/${id}`,
+    options: { method: 'DELETE', headers },
+  });
+
+const useDeleteLabelMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteLabel,
+    mutationKey: 'labels-delete',
+    ...configuration,
+  });
+
+// Utility: check if a label name is unique (case-insensitive)
+const useIsLabelNameUnique = ({
+  name,
+  currentName,
+}: {
+  name: string;
+  currentName?: string;
+}) => {
+  const raw = (name || '').trim();
+  const enabled = raw.length >= 2;
+  const { data, isLoading } = useGetLabelsByQuery({
+    name: raw,
+    paginationOptions: { start: 0, limit: 1 },
+    onlySuggestions: true,
+  });
+  const isSameAsCurrent =
+    currentName && currentName.toLowerCase() === raw.toLowerCase();
+  const found = (data?.member ?? []).find(
+    (l: any) => (l?.name ?? '').toLowerCase() === raw.toLowerCase(),
+  );
+  return {
+    isUnique: isSameAsCurrent ? true : !found,
+    isLoading: enabled && isLoading,
+  };
+};
+
 export {
   getUitpasLabelsQuery,
+  prefetchGetLabelByIdQuery,
   prefetchGetLabelsQuery,
+  useCreateLabelMutation,
+  useDeleteLabelMutation,
+  useGetLabelByIdQuery,
   useGetLabelsByQuery,
   useGetUitpasLabelsQuery,
+  useIsLabelNameUnique,
+  useUpdateLabelPrivacyMutation,
+  useUpdateLabelVisibilityMutation,
 };

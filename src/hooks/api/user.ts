@@ -2,7 +2,7 @@ import jwt_decode from 'jwt-decode';
 
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Values } from '@/types/Values';
-import { FetchError, fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { FetchError, fetchFromApi } from '@/utils/fetchFromApi';
 
 import { Cookies, useCookiesWithOptions } from '../useCookiesWithOptions';
 import {
@@ -101,11 +101,26 @@ const getPermissions = async ({ headers }) => {
   return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
-const useGetPermissionsQuery = (configuration = {}) =>
-  useAuthenticatedQuery({
+const createGetPermissionsQueryOptions = () =>
+  queryOptions({
     queryKey: ['user', 'permissions'],
     queryFn: getPermissions,
+  });
+
+const useGetPermissionsQuery = (configuration = {}) =>
+  useAuthenticatedQuery({
+    ...createGetPermissionsQueryOptions(),
     ...configuration,
+  });
+
+const prefetchGetPermissionsQuery = ({
+  req,
+  queryClient,
+}: ServerSideQueryOptions) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetPermissionsQueryOptions(),
   });
 
 type Role = {
@@ -134,5 +149,10 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
-export { useGetPermissionsQuery, useGetRolesQuery, useGetUserQuery };
+export {
+  prefetchGetPermissionsQuery,
+  useGetPermissionsQuery,
+  useGetRolesQuery,
+  useGetUserQuery,
+};
 export type { User };
