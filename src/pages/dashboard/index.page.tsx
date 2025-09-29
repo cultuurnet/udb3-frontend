@@ -449,12 +449,10 @@ const TabContent = ({
         `}
         backgroundColor="white"
         minHeight="5rem"
-        alignItems="center"
+        alignItems="flex-start"
         justifyContent="center"
       >
-        <Text margin={3} maxWidth="36rem">
-          {t(`dashboard.no_items.${tab}`)}
-        </Text>
+        <Text maxWidth="36rem">{t(`dashboard.no_items.${tab}`)}</Text>
       </Panel>
     );
   }
