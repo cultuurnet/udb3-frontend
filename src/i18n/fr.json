@@ -587,7 +587,7 @@
     },
     "no_items": {
       "events": "Aucun événement trouvé.",
-      "organizers": "Aucune organisation trouvée.",
+      "organizers": "Vous ne gérez actuellement aucune organisation.",
       "places": "Aucun lieu trouvé."
     },
     "row_status": {

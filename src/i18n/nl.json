@@ -618,7 +618,7 @@
     },
     "no_items": {
       "events": "Geen evenementen gevonden",
-      "organizers": "Geen organisaties gevonden",
+      "organizers": "Je beheert op dit moment geen organisaties.",
       "places": "Geen locaties gevonden"
     },
     "row_status": {
