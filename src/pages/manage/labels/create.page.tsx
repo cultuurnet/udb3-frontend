@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dehydrate } from 'react-query/hydration';
 
@@ -41,7 +41,7 @@ const LabelsCreatePage = () => {
 
   const { isUnique } = useIsLabelNameUnique({ name });
 
-  const nameError = (() => {
+  const nameError = useMemo(() => {
     if (!touched) return undefined;
     if (!name || name.trim().length === 0)
       return t('labels.form.errors.name_required');
@@ -52,7 +52,7 @@ const LabelsCreatePage = () => {
     if (SEMICOLON_REGEX.test(name)) return t('labels.form.errors.semicolon');
     if (!isUnique) return t('labels.form.errors.name_unique');
     return undefined;
-  })();
+  }, [touched, name, isUnique, t]);
 
   const isSubmitting = createLabelMutation.isLoading;
   const handleCreate = async () => {
