@@ -191,8 +191,8 @@ const LabelsOverviewPage = () => {
 };
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, query, cookies, queryClient }) => {
-    const labels = await prefetchGetLabelsQuery({
+  async ({ req, cookies, queryClient }) => {
+    await prefetchGetLabelsQuery({
       req,
       queryClient,
       paginationOptions: { limit: labelsPerPage, start: 0 },
