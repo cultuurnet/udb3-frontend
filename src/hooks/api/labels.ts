@@ -10,7 +10,12 @@ import {
   useAuthenticatedQuery,
 } from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
-import { Label } from '@/types/Offer';
+import {
+  Label,
+  LabelPrivacyTypes,
+  LabelValidationInformation,
+  LabelVisibilityTypes,
+} from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
@@ -176,10 +181,13 @@ const createLabel = async ({
   isPrivate,
   parentId,
 }: CreateLabelArgs) => {
+  const raw = (name || '').trim();
   const body: Record<string, unknown> = {
-    name,
-    visibility: isVisible ? 'visible' : 'invisible',
-    privacy: isPrivate ? 'private' : 'public',
+    name: raw,
+    visibility: isVisible
+      ? LabelVisibilityTypes.VISIBLE
+      : LabelVisibilityTypes.INVISIBLE,
+    privacy: isPrivate ? LabelPrivacyTypes.PRIVATE : LabelPrivacyTypes.PUBLIC,
   };
   if (parentId) body.parentId = parentId;
   return fetchFromApi({
@@ -279,7 +287,7 @@ const useIsLabelNameUnique = ({
   currentName?: string;
 }) => {
   const raw = (name || '').trim();
-  const enabled = raw.length >= 2;
+  const enabled = raw.length >= LabelValidationInformation.MIN_LENGTH;
   const { data, isLoading } = useGetLabelsByQuery({
     name: raw,
     paginationOptions: { start: 0, limit: 1 },

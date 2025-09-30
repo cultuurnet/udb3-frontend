@@ -1,12 +1,14 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { LabelValidationInformation } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 type Props = {
   mode: 'create' | 'edit';
@@ -28,6 +30,7 @@ type Props = {
   onCreateRenamed?: () => Promise<void> | void;
   footer?: ReactNode;
 };
+const getGlobalValue = getValueFromTheme('global');
 
 const LabelForm = ({
   mode,
@@ -38,7 +41,7 @@ const LabelForm = ({
   isPrivate,
   setIsPrivate,
   nameError,
-  maxNameLength = 255,
+  maxNameLength = LabelValidationInformation.MAX_LENGTH,
   touched = false,
   setTouched = () => {},
   isSubmitting = false,
@@ -52,13 +55,13 @@ const LabelForm = ({
 
   return (
     <Stack
-      spacing={5}
+      spacing={3}
       maxWidth="48rem"
       backgroundColor="white"
       padding={4}
-      borderRadius="8px"
+      borderRadius={getGlobalBorderRadius}
       css={`
-        box-shadow: 0 4px 16px 0 #00000012;
+        box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
       <FormElement
@@ -74,7 +77,6 @@ const LabelForm = ({
           />
         }
       />
-
       <CheckboxWithLabel
         id="label-visible"
         name="isVisible"
@@ -83,7 +85,6 @@ const LabelForm = ({
       >
         {t('labels.form.fields.is_visible')}
       </CheckboxWithLabel>
-
       <CheckboxWithLabel
         id="label-private"
         name="isPrivate"
@@ -108,7 +109,7 @@ const LabelForm = ({
         {mode === 'create' && (
           <Button
             variant={ButtonVariants.PRIMARY}
-            disabled={!!nameError || isSubmitting}
+            disabled={!!nameError || isSubmitting || !touched}
             onClick={() => onCreateRenamed()}
           >
             {t('labels.form.actions.create')}

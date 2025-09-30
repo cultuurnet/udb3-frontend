@@ -13,16 +13,12 @@ import {
   useGetPermissionsQuery,
 } from '@/hooks/api/user';
 import { PermissionTypes } from '@/layouts/Sidebar';
+import { LabelValidationInformation } from '@/types/Offer';
 import { Page } from '@/ui/Page';
-import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import LabelForm from './labelForm';
-
-const MAX_NAME = 255;
-const MIN_NAME = 2;
-const SEMICOLON_REGEX = /;/;
 
 const LabelsCreatePage = () => {
   const { t } = useTranslation();
@@ -45,11 +41,16 @@ const LabelsCreatePage = () => {
     if (!touched) return undefined;
     if (!name || name.trim().length === 0)
       return t('labels.form.errors.name_required');
-    if (name.length < MIN_NAME)
-      return t('labels.form.errors.name_min', { count: MIN_NAME });
-    if (name.length > MAX_NAME)
-      return t('labels.form.errors.name_max', { count: MAX_NAME });
-    if (SEMICOLON_REGEX.test(name)) return t('labels.form.errors.semicolon');
+    if (name.length < LabelValidationInformation.MIN_LENGTH)
+      return t('labels.form.errors.name_min', {
+        count: LabelValidationInformation.MIN_LENGTH,
+      });
+    if (name.length > LabelValidationInformation.MAX_LENGTH)
+      return t('labels.form.errors.name_max', {
+        count: LabelValidationInformation.MAX_LENGTH,
+      });
+    if (LabelValidationInformation.SEMICOLON_REGEX.test(name))
+      return t('labels.form.errors.semicolon');
     if (!isUnique) return t('labels.form.errors.name_unique');
     return undefined;
   }, [touched, name, isUnique, t]);
@@ -67,32 +68,36 @@ const LabelsCreatePage = () => {
     router.push('/manage/labels');
   };
 
+  if (!hasManageLabelsPermission) {
+    return (
+      <Page>
+        <Page.Title>{t('labels.create.title', 'Create label')}</Page.Title>
+        <Page.Content>
+          <Text>{t('errors.forbidden', 'You do not have access.')}</Text>
+        </Page.Content>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <Page.Title>{t('labels.create.title', 'Create label')}</Page.Title>
       <Page.Content>
-        {!hasManageLabelsPermission && (
-          <Stack>
-            <Text>{t('errors.forbidden', 'You do not have access.')}</Text>
-          </Stack>
-        )}
-        {hasManageLabelsPermission && (
-          <LabelForm
-            mode="create"
-            name={name}
-            setName={setName}
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-            isPrivate={isPrivate}
-            setIsPrivate={setIsPrivate}
-            nameError={nameError}
-            touched={touched}
-            setTouched={setTouched}
-            isSubmitting={isSubmitting}
-            onCreateRenamed={handleCreate}
-            onCancel={() => router.push('/manage/labels')}
-          />
-        )}
+        <LabelForm
+          mode="create"
+          name={name}
+          setName={setName}
+          isVisible={isVisible}
+          setIsVisible={setIsVisible}
+          isPrivate={isPrivate}
+          setIsPrivate={setIsPrivate}
+          nameError={nameError}
+          touched={touched}
+          setTouched={setTouched}
+          isSubmitting={isSubmitting}
+          onCreateRenamed={handleCreate}
+          onCancel={() => router.push('/manage/labels')}
+        />
       </Page.Content>
     </Page>
   );

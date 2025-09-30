@@ -17,6 +17,11 @@ import {
   useGetPermissionsQuery,
 } from '@/hooks/api/user';
 import { PermissionTypes } from '@/layouts/Sidebar';
+import {
+  LabelPrivacyTypes,
+  LabelValidationInformation,
+  LabelVisibilityTypes,
+} from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -24,10 +29,6 @@ import { Text } from '@/ui/Text';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import LabelForm from '../labelForm';
-
-const MAX_NAME = 255;
-const MIN_NAME = 2;
-const SEMICOLON_REGEX = /;/;
 
 const LabelEditPage = () => {
   const { t } = useTranslation();
@@ -76,8 +77,8 @@ const LabelEditPage = () => {
   useEffect(() => {
     if (!label) return;
     setName(label.name || '');
-    setIsVisible(label.visibility !== 'invisible');
-    setIsPrivate(label.privacy === 'private');
+    setIsVisible(label.visibility !== LabelVisibilityTypes.INVISIBLE);
+    setIsPrivate(label.privacy === LabelPrivacyTypes.PRIVATE);
   }, [label]);
 
   const { isUnique } = useIsLabelNameUnique({ name, currentName: label?.name });
@@ -89,11 +90,16 @@ const LabelEditPage = () => {
     if (!nameChanged || !touched) return undefined;
     if (!name || name.trim().length === 0)
       return t('labels.form.errors.name_required');
-    if (name.length < MIN_NAME)
-      return t('labels.form.errors.name_min', { count: MIN_NAME });
-    if (name.length > MAX_NAME)
-      return t('labels.form.errors.name_max', { count: MAX_NAME });
-    if (SEMICOLON_REGEX.test(name)) return t('labels.form.errors.semicolon');
+    if (name.length < LabelValidationInformation.MIN_LENGTH)
+      return t('labels.form.errors.name_min', {
+        count: LabelValidationInformation.MIN_LENGTH,
+      });
+    if (name.length > LabelValidationInformation.MAX_LENGTH)
+      return t('labels.form.errors.name_max', {
+        count: LabelValidationInformation.MAX_LENGTH,
+      });
+    if (LabelValidationInformation.SEMICOLON_REGEX.test(name))
+      return t('labels.form.errors.semicolon');
     if (!isUnique) return t('labels.form.errors.name_unique');
     return undefined;
   }, [nameChanged, touched, name, isUnique, t]);
@@ -140,8 +146,9 @@ const LabelEditPage = () => {
 
       // Otherwise, just update the flags.
       const visibilityChanged =
-        (label.visibility !== 'invisible') !== isVisible;
-      const privacyChanged = (label.privacy === 'private') !== isPrivate;
+        (label.visibility !== LabelVisibilityTypes.INVISIBLE) !== isVisible;
+      const privacyChanged =
+        (label.privacy === LabelPrivacyTypes.PRIVATE) !== isPrivate;
       if (visibilityChanged) {
         await updateVisibilityMutation.mutateAsync({
           headers,
