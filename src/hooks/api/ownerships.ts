@@ -29,6 +29,7 @@ export type OwnershipRequest = {
   ownerEmail: string;
   requesterId: string;
   state: OwnershipState;
+  created: string;
 } & ModificationInfo;
 
 export type OwnershipCreator = {
