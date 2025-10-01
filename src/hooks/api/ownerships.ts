@@ -91,7 +91,7 @@ const getOwnershipRequests = async ({
   const searchParams = new URLSearchParams();
   if (paginationOptions) {
     searchParams.set('limit', `${paginationOptions.limit}`);
-    searchParams.set('offset', `${paginationOptions.start}`);
+    searchParams.set('start', `${paginationOptions.start}`);
   }
   if (itemId) {
     searchParams.set('itemId', itemId);
