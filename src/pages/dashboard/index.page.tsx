@@ -9,6 +9,7 @@ import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { SortOrder } from '@/constants/SortOrder';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   prefetchGetEventsByCreatorQuery,
@@ -505,11 +506,6 @@ const SortingField = {
   COMPLETENESS: 'completeness',
 } as const;
 
-const SortingOrder = {
-  ASC: 'asc',
-  DESC: 'desc',
-} as const;
-
 const Dashboard = (): any => {
   const { t, i18n } = useTranslation();
   const { pathname, query, asPath, ...router } = useRouter();
@@ -536,7 +532,7 @@ const Dashboard = (): any => {
   }, [sort]);
 
   const sortingOrder = useMemo(() => {
-    return sort?.split('_')?.[1] ?? SortingOrder.DESC;
+    return sort?.split('_')?.[1] ?? SortOrder.DESC;
   }, [sort]);
 
   const useDeleteItemById = useMemo(
@@ -857,7 +853,7 @@ const getServerSideProps = getApplicationServerSideProps(
           query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
 
         const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+        const sortingOrder = query?.sort?.split('_')[1] ?? SortOrder.DESC;
 
         return prefetch({
           req,
