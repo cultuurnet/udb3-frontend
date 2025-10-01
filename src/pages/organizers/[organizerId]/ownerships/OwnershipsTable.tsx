@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SortOrder, SortOrderType } from '@/constants/SortOrder';
-import { SortOptions } from '@/hooks/api/authenticated-query';
 import {
   OwnershipCreator,
   OwnershipRequest,
@@ -25,7 +24,7 @@ type ActionHandlers = {
   onDelete?: (request: OwnershipRequest) => void;
   onApprove?: (request: OwnershipRequest) => void;
   onReject?: (request: OwnershipRequest) => void;
-  onSort?: (order: SortOptions) => void;
+  onSort?: (order: SortOrderType) => void;
 };
 
 type ActionProps = {
