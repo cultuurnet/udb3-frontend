@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SortOrder, SortOrderType } from '@/constants/SortOrder';
+import { SortOptions } from '@/hooks/api/authenticated-query';
 import {
   OwnershipCreator,
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
-import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { Text, TextVariants } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
-import { formatDateToISO } from '@/utils/formatDateToISO';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -25,6 +25,7 @@ type ActionHandlers = {
   onDelete?: (request: OwnershipRequest) => void;
   onApprove?: (request: OwnershipRequest) => void;
   onReject?: (request: OwnershipRequest) => void;
+  onSort?: (order: SortOptions) => void;
 };
 
 type ActionProps = {
@@ -114,14 +115,14 @@ export const OwnershipsTable = ({
   onDelete,
   onApprove,
   onReject,
+  onSort,
   shouldShowItemId = false,
   shouldShowOwnerId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
   const router = useRouter();
-  const [newestFirst, setNewestFirst] = useState(true);
-  const [sortedRequests, setSortedRequests] = useState(requests);
+  const [_, setSortOrder] = useState<SortOrderType>(SortOrder.DESC);
 
   const hasActions = useMemo(
     () =>
@@ -149,20 +150,6 @@ export const OwnershipsTable = ({
     isOnManagePage &&
     requests.some((it) => it.state === OwnershipState.REQUESTED) &&
     requests.some((it) => !!it.created);
-
-  useEffect(() => {
-    setSortedRequests(
-      [...requests].sort((a, b) =>
-        newestFirst
-          ? new Date(b.created).getTime() - new Date(a.created).getTime()
-          : new Date(a.created).getTime() - new Date(b.created).getTime(),
-      ),
-    );
-  }, [requests, newestFirst]);
-
-  const toggleSort = () => {
-    setNewestFirst(!newestFirst);
-  };
 
   const gridTemplateColumns = useMemo(() => {
     const columns = ['2fr'];
@@ -215,7 +202,17 @@ export const OwnershipsTable = ({
         {hasDate && (
           <Inline spacing={2} alignItems="center">
             <Title size={3}>Aanvraag Datum</Title>
-            <Button onClick={toggleSort} variant={ButtonVariants.UNSTYLED}>
+            <Button
+              onClick={() =>
+                setSortOrder((prev) => {
+                  const order =
+                    prev === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC;
+                  onSort?.(order);
+                  return order;
+                })
+              }
+              variant={ButtonVariants.UNSTYLED}
+            >
               <Icon name={Icons.SORT} alignItems="center" />
             </Button>
           </Inline>
@@ -245,7 +242,7 @@ export const OwnershipsTable = ({
             <List.Item css="min-width: 0; ">{creator.email}</List.Item>
           </Inline>
         )}
-        {sortedRequests.map((request) => (
+        {requests.map((request) => (
           <Inline
             key={request.id}
             role="row"
