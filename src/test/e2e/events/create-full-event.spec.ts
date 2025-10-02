@@ -175,7 +175,7 @@ test('create event with all possible fields filled in', async ({
   await page.getByPlaceholder('Website').click();
   await page.getByPlaceholder('Website').fill(dummyEvent.bookingInfo.url);
 
-  await page.getByLabel('Koop tickets').check();
+  await page.getByRole('radio', { name: 'Koop tickets' }).click();
 
   await page
     .getByRole('button', { name: 'Reservatieperiode toevoegen' })

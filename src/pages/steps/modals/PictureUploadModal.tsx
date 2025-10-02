@@ -178,7 +178,7 @@ const PictureUploadModal = ({
   loading,
 }: PictureUploadModalProps) => {
   const { t } = useTranslation();
-  const formComponent = useRef<HTMLFormElement>();
+  const formComponent = useRef<HTMLFormElement>(null);
 
   const schema = yup
     .object()

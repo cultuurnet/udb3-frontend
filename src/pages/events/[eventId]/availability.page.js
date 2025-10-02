@@ -1,5 +1,5 @@
+import { dehydrate } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { dehydrate } from 'react-query/hydration';
 
 import { CalendarType } from '@/constants/CalendarType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
@@ -21,6 +21,10 @@ const Availability = () => {
   const getEventByIdQuery = useGetEventByIdQuery({ id: eventId });
 
   const event = getEventByIdQuery.data;
+
+  if (!event) {
+    return null;
+  }
 
   if (getEventByIdQuery.status === QueryStatus.LOADING) {
     return <Spinner marginTop={4} />;

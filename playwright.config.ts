@@ -76,8 +76,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'yarn dev',
+    command: 'yarn build && yarn start',
     port: 3000,
+    timeout: 240 * 1000,
     env: {
       NEXT_PUBLIC_ENVIRONMENT: 'e2e',
     },

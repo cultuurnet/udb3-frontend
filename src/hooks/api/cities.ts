@@ -1,4 +1,4 @@
-import { QueryFunctionContext, useQuery } from 'react-query';
+import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
 
 import { ExtendQueryOptions } from '@/hooks/api/authenticated-query';
 import { Country } from '@/types/Country';
