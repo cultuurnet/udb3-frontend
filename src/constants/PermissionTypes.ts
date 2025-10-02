@@ -11,4 +11,10 @@ const PermissionTypes = {
   FILMS_AANMAKEN: 'FILMS_AANMAKEN',
 } as const;
 
-export { PermissionTypes };
+const EventPermissionTypes = {
+  AANBOD_BEWERKEN: 'Aanbod bewerken',
+  AANBOD_MODEREREN: 'Aanbod modereren',
+  AANBOD_VERWIJDEREN: 'Aanbod verwijderen',
+} as const;
+
+export { EventPermissionTypes, PermissionTypes };
