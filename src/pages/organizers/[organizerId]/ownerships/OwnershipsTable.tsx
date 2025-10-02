@@ -240,7 +240,7 @@ export const OwnershipsTable = ({
               }
             `}
           >
-            <List.Item css="min-width: 0; ">{creator.email}</List.Item>
+            <List.Item>{creator.email}</List.Item>
           </Inline>
         )}
         {requests.map((request) => (
