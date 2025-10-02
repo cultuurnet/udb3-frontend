@@ -1,10 +1,11 @@
 import { dehydrate } from 'react-query/hydration';
 
-import { EventPermissionTypes } from '@/constants/PermissionTypes';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetEventByIdQuery,
   prefetchGetEventPermissionsQuery,
 } from '@/hooks/api/events';
+import { formatPermission } from '@/utils/formatPermission';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { OfferForm } from '../../../create/OfferForm';
@@ -33,7 +34,7 @@ export const getServerSideProps = getApplicationServerSideProps(
 
     if (
       permissions?.length === 0 ||
-      !permissions.includes(EventPermissionTypes.AANBOD_BEWERKEN)
+      !permissions.includes(formatPermission(PermissionTypes.AANBOD_BEWERKEN))
     ) {
       return {
         redirect: {
