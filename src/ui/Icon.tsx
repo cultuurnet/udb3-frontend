@@ -31,6 +31,7 @@ import {
   faQuestionCircle,
   faSearch,
   faSignOutAlt,
+  faSort,
   faTag,
   faTicketAlt,
   faTimes,
@@ -87,6 +88,7 @@ const Icons = {
   ANGLE_LEFT: 'angleLeft',
   ANGLE_RIGHT: 'angleRight',
   ARROW_LEFT: 'arrowLeft',
+  SORT: 'sort',
 } as const;
 
 const IconsMap = {
@@ -129,6 +131,7 @@ const IconsMap = {
   [Icons.ANGLE_RIGHT]: faAngleRight,
   [Icons.TIMES_CIRCLE]: faTimesCircle,
   [Icons.ARROW_LEFT]: faArrowLeft,
+  [Icons.SORT]: faSort,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {
