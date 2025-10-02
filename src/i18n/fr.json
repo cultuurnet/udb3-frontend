@@ -217,6 +217,9 @@
       "is_physical": {
         "label": "Dans un lieu physique"
       },
+      "is_brussels_alert": {
+        "message": "Pour vos activités à Bruxelles, UiTdatabank collabore avec visit.brussels. Saisissez vos activités bruxelloises sur agenda.brussels et elles apparaîtront automatiquement dans UiTdatabank et UiTinvlaanderen. Vous prévoyez un voyage à Bruxelles avec votre association membre ? Ou vous organisez une activité scolaire ? Vous pouvez ensuite continuer à saisir vos informations sur UiTdatabank. <link1>Plus d'informations</link1>"
+      },
       "municipality": {
         "change_be": "Changer de commune",
         "change_de": "Changer de résidence",
@@ -450,7 +453,7 @@
         "change": "Modifier l'organisateur",
         "title": "Organisateur",
         "select_recent_used_organizer": "Réutiliser une organisation",
-        "select_recent_used_organizer_info": "Nous avons préparé pour vous les organisations pour lesquelles vous vous êtes récemment inscrit. Ajoutez-les d'un simple clic.",
+        "select_recent_used_organizer_info": "Voici les organisations pour lesquelles vous avez récemment saisi des événements. Ajoutez-les d'un simple clic. Les administrateurs de l'organisation sélectionnée pourront également modifier l'événement ultérieurement.",
         "or_choose_other_organizer": "Ou ajouter une nouvelle organisation",
         "choose_other_organizer": "Ajouter une nouvelle organisation",
         "uitpas_cardsystems": "UiTPAS systèmes de cartes",
@@ -584,7 +587,7 @@
     },
     "no_items": {
       "events": "Aucun événement trouvé.",
-      "organizers": "Aucune organisation trouvée.",
+      "organizers": "Vous ne gérez actuellement aucune organisation.",
       "places": "Aucun lieu trouvé."
     },
     "row_status": {
@@ -1062,6 +1065,7 @@
         "user": "Utilisateur",
         "no_results": "Aucun résultat trouvé",
         "status": {
+          "requested": "Demandé",
           "approved": "Approuvé",
           "rejected": "Rejeté",
           "approved_by": "Approuvé par {{email}} le {{date}}",
@@ -1195,6 +1199,26 @@
       "title": "Ajouter un lien vidéo",
       "validation_messages": {
         "link": "Votre lien vidéo ne répond pas aux exigences."
+      }
+    }
+  },
+  "labels": {
+    "overview": {
+      "title": "Étiquettes",
+      "create": "Ajouter",
+      "search": {
+        "label": "Rechercher par nom d'étiquette:",
+        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+      },
+      "no_results": "Aucun étiquettes trouvé.",
+      "something_wrong": "Une erreur s'est produite lors de la recherche:",
+      "table": {
+        "name": "Nom",
+        "invisible": "Invisible",
+        "private": "Privé",
+        "excluded": "Exclu",
+        "options": "Options",
+        "edit": "Modifier"
       }
     }
   }

@@ -50,7 +50,7 @@ const getValue = getValueFromTheme('priceInformation');
 
 const isNotUitpas = (value: any) =>
   value[i18n.language] &&
-  !value[i18n.language].toLowerCase().startsWith('uitpas');
+  !value[i18n.language].toLowerCase().includes('uitpas');
 
 const shouldHaveAName = (value: any) => !!value[i18n.language];
 

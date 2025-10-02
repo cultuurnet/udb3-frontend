@@ -1,6 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+const brusselsMessage =
+  'Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen.';
+
 const dummyEvent = {
   name: 'E2E test event with all possible fields filled in',
   description: faker.lorem.words(200),
@@ -51,10 +54,21 @@ test('create event with all possible fields filled in', async ({
 
   // // 4. Address
   await page.getByLabel('Gemeente').click();
+  await page.getByLabel('Gemeente').fill('1000');
+  await page.getByRole('option', { name: '1000 Brussel' }).click();
+  // Should see the brussels
+  await expect(page.getByText(brusselsMessage)).toBeVisible();
+
+  await page.getByRole('button', { name: 'Wijzig gemeente' }).click();
+
   await page.getByLabel('Gemeente').fill(dummyEvent.address.zip);
   await page
     .getByRole('option', { name: dummyEvent.address.municipality })
     .click();
+
+  // Brussels alert should be gone
+  await expect(page.getByText(brusselsMessage)).toBeHidden();
+
   await page.getByLabel('Kies een locatie').click();
 
   await page
