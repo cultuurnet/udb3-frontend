@@ -158,6 +158,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
           `}
         >
           <SelectionTable
+            hover
             columns={columns}
             data={data}
             onSelectionChanged={setSelectedRows}

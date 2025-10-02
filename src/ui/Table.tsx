@@ -34,17 +34,19 @@ const Table = ({
     <Box
       forwardedAs={BootstrapTable}
       css={`
-        &.table th,
         &.table td {
           padding: 0.75rem;
           vertical-align: top;
           border-top: 1px solid ${getValue('borderColor')};
         }
         &.table thead th {
-          border-bottom: 1px solid ${getValue('borderColor')};
+          padding: 0.75rem;
+          vertical-align: top;
+          border-bottom: 2px solid ${getValue('borderColor')};
+          font-weight: 600;
         }
       `}
-      {...getTableProps()}
+      {...getTableProps(props)}
       {...getBoxProps(props)}
     >
       <thead>
