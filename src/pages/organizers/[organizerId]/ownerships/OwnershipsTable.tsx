@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SortOrder, SortOrderType } from '@/constants/SortOrder';
+import { SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {
   OwnershipCreator,
   OwnershipRequest,

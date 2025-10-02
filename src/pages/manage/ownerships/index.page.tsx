@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UseQueryResult } from 'react-query';
 
-import { SortOrder, SortOrderType } from '@/constants/SortOrder';
+import { SortField, SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {
   GetOrganizerByIdResponse,
   useGetOrganizerByIdQuery,
@@ -52,7 +52,7 @@ const OwnershipsOverviewPage = () => {
       limit: itemsPerPage,
     },
     sortOptions: {
-      field: 'created',
+      field: SortField.CREATED,
       order: sortOrder,
     },
   }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;

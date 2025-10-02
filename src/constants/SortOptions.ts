@@ -5,7 +5,13 @@ const SortOrder = {
   DESC: 'desc',
 } as const;
 
+const SortField = {
+  AVAILABLETO: 'availableTo',
+  CREATED: 'created',
+  COMPLETENESS: 'completeness',
+} as const;
+
 type SortOrderType = Values<typeof SortOrder>;
 
-export { SortOrder };
+export { SortField, SortOrder };
 export type { SortOrderType };
