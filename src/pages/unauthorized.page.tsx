@@ -26,10 +26,10 @@ const Unauthorized = () => {
         height="auto"
         color={getValue('iconColor')}
       />
-      <Title size={1}>{t('401.title')}</Title>
-      <Title size={2}>{t('401.sub_title')}</Title>
+      <Title size={1}>{t('unauthorized.title')}</Title>
+      <Title size={2}>{t('unauthorized.sub_title')}</Title>
       <Link href="/dashboard" width="max-content">
-        {t('401.redirect')}
+        {t('unauthorized.redirect')}
       </Link>
     </Stack>
   );
