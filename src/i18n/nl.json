@@ -4,6 +4,11 @@
     "sub_title": "Je klikte op een link naar een pagina die we helaas niet vinden in de UiTdatabank.",
     "title": "Spijtig, deze pagina bestaat niet (meer)"
   },
+  "401": {
+    "title": "Geen toegang",
+    "sub_title": "Je hebt geen toegang tot deze pagina. Controleer of je de juiste rechten hebt.",
+    "redirect": "Ga terug naar de homepagina"
+  },
   "announcements": {
     "new_features": "Nieuw in UiTdatabank",
     "no_features": "Er zijn momenteel geen nieuwigheden."
