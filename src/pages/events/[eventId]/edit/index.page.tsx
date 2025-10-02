@@ -1,9 +1,6 @@
 import { dehydrate } from 'react-query/hydration';
 
-import {
-  EventPermissionTypes,
-  PermissionTypes,
-} from '@/constants/PermissionTypes';
+import { EventPermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetEventByIdQuery,
   prefetchGetEventPermissionsQuery,
@@ -29,14 +26,14 @@ export const getServerSideProps = getApplicationServerSideProps(
       }),
     ]);
 
-    const permissions = queryClient.getQueryData([
+    const { permissions } = queryClient.getQueryData([
       'event-permissions',
       { eventId },
     ]);
 
     if (
-      permissions?.permissions?.length === 0 ||
-      !permissions.permissions.includes(EventPermissionTypes.AANBOD_BEWERKEN)
+      permissions?.length === 0 ||
+      !permissions.includes(EventPermissionTypes.AANBOD_BEWERKEN)
     ) {
       return {
         redirect: {
