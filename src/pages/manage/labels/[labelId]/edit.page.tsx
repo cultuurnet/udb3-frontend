@@ -132,7 +132,7 @@ const LabelEditPage = () => {
         // Try to get the ID from response body or Location header
         let newLabelId = response.uuid;
 
-        if ((newLabelId = response.uuid)) {
+        if (newLabelId) {
           router.push(
             `/manage/labels/${newLabelId}/edit?success=created&name=${encodeURIComponent(
               name.trim(),
