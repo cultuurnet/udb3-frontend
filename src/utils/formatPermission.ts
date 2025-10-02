@@ -1,5 +1,3 @@
-import { PermissionsType } from '@/constants/PermissionTypes';
-
 const formatPermission = (permission: string) =>
   permission
     .replace(/_/g, ' ')
