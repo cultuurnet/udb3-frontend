@@ -44,7 +44,7 @@ const Table = ({
           border-bottom: 1px solid ${getValue('borderColor')};
         }
       `}
-      {...getTableProps()}
+      {...getTableProps(props)}
       {...getBoxProps(props)}
     >
       <thead>

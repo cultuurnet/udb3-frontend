@@ -174,7 +174,13 @@ const LabelsOverviewPage = () => {
           {labelsQuery.status === QueryStatus.LOADING && <Spinner />}
           {labelsQuery.status === QueryStatus.SUCCESS && labels.length > 0 && (
             <Inline spacing={5}>
-              <Table columns={columns} data={labelsToTableData(labels)} />
+              <Table
+                striped
+                bordered
+                hover
+                columns={columns}
+                data={labelsToTableData(labels)}
+              />
             </Inline>
           )}
         </Stack>
