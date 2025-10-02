@@ -126,9 +126,9 @@ export const OwnershipsTable = ({
   const hasActions = useMemo(
     () =>
       requests.some(
-        (it) =>
-          it.state !== OwnershipState.DELETED &&
-          it.state !== OwnershipState.REJECTED,
+        (request) =>
+          request.state !== OwnershipState.DELETED &&
+          request.state !== OwnershipState.REJECTED,
       ),
     [requests],
   );
@@ -136,9 +136,9 @@ export const OwnershipsTable = ({
   const hasStatus = useMemo(
     () =>
       requests.some(
-        (it) =>
-          it.state === OwnershipState.APPROVED ||
-          it.state === OwnershipState.REJECTED,
+        (request) =>
+          request.state === OwnershipState.APPROVED ||
+          request.state === OwnershipState.REJECTED,
       ),
     [requests],
   );
@@ -147,8 +147,8 @@ export const OwnershipsTable = ({
 
   const hasDate =
     isOnManagePage &&
-    requests.some((it) => it.state === OwnershipState.REQUESTED) &&
-    requests.some((it) => !!it.created);
+    requests.some((request) => request.state === OwnershipState.REQUESTED) &&
+    requests.some((request) => !!request.created);
 
   const gridTemplateColumns = useMemo(() => {
     const columns = ['2fr'];
@@ -203,9 +203,11 @@ export const OwnershipsTable = ({
             <Title size={3}>Aanvraag Datum</Title>
             <Button
               onClick={() =>
-                setSortOrder((prev) => {
+                setSortOrder((prevOrder) => {
                   const order =
-                    prev === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC;
+                    prevOrder === SortOrder.ASC
+                      ? SortOrder.DESC
+                      : SortOrder.ASC;
                   onSort?.(order);
                   return order;
                 })
