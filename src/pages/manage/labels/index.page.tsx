@@ -10,6 +10,7 @@ import {
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -33,6 +34,9 @@ const LabelsOverviewPage = () => {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
   const [currentPageLabels, setCurrentPageLabels] = useState(1);
+  const [isReactLabelsCreateEditFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_LABELS_CREATE_EDIT,
+  );
 
   const labelsToTableData = (labels: Label[]) =>
     labels.map((label) => ({
@@ -70,37 +74,42 @@ const LabelsOverviewPage = () => {
         Header: t('labels.overview.table.invisible'),
         accessor: 'invisible',
         Cell: ({ cell }) =>
-          cell.value === 'invisible' ? (
+          cell.value === 'invisible' && (
             <Text>{t('labels.overview.table.invisible')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.private'),
         accessor: 'private',
         Cell: ({ cell }) =>
-          cell.value === 'private' ? (
+          cell.value === 'private' && (
             <Text>{t('labels.overview.table.private')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.excluded'),
         accessor: 'excluded',
         Cell: ({ cell }) =>
-          cell.value === true ? (
+          cell.value === true && (
             <Text>{t('labels.overview.table.excluded')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.options'),
         accessor: 'options',
-        Cell: ({ cell }) => (
-          <Link href={'/manage/labels/' + cell.value + '/edit'}>
-            {t('labels.overview.table.edit')}
-          </Link>
-        ),
+        Cell: ({ cell }) =>
+          isReactLabelsCreateEditFeatureFlagEnabled ? (
+            <Link href={`/manage/labels/${cell.value}/edit`}>
+              {t('labels.overview.table.edit')}
+            </Link>
+          ) : (
+            <Link href={`/manage/labels/${cell.value}`}>
+              {t('labels.overview.table.edit')}
+            </Link>
+          ),
       },
     ],
-    [t],
+    [t, isReactLabelsCreateEditFeatureFlagEnabled],
   );
   const labels: Label[] = useMemo(
     () => labelsQuery.data?.member ?? [],

@@ -8,6 +8,8 @@ import {
   useIsLabelNameUnique,
 } from '@/hooks/api/labels';
 import { useHeaders } from '@/hooks/api/useHeaders';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import Fallback from '@/pages/[...params].page';
 import { LabelValidationInformation } from '@/types/Offer';
 import { Page } from '@/ui/Page';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -15,6 +17,10 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import LabelForm from './labelForm';
 
 const LabelsCreatePage = () => {
+  const [isReactLabelsCreateEditFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_LABELS_CREATE_EDIT,
+  );
+
   const { t } = useTranslation();
   const router = useRouter();
   const headers = useHeaders();
@@ -57,6 +63,7 @@ const LabelsCreatePage = () => {
     });
     router.push('/manage/labels');
   };
+  if (!isReactLabelsCreateEditFeatureFlagEnabled) return <Fallback />;
 
   return (
     <Page>
