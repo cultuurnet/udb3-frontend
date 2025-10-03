@@ -1220,6 +1220,33 @@
         "options": "Optionen",
         "edit": "Bearbeiten"
       }
+    },
+    "form": {
+      "actions": {
+        "cancel": "Abbrechen",
+        "create": "Hinzufügen",
+        "save": "Speichern"
+      },
+      "errors": {
+        "semicolon": "Der Name des Labels darf kein Semikolon (;) enthalten.",
+        "name_required": "Name ist ein Pflichtfeld.",
+        "name_unique": "Dieser Name wird bereits von einem anderen Label verwendet.",
+        "name_max": "Ein Label darf maximal 255 Zeichen enthalten.",
+        "name_min": "Ein Label muss aus mindestens 2 Zeichen bestehen."
+      },
+      "fields": {
+        "name": "Name",
+        "is_visible": "In Publikationskanälen anzeigen",
+        "is_private": "Für bestimmte Benutzergruppen reserviert"
+      }
+    },
+    "create": {
+      "title": "Label hinzufügen"
+    },
+    "edit": {
+      "title": "Label bearbeiten",
+      "success_created": "Label '{{name}}' erfolgreich hinzugefügt",
+      "success_updated": "Label '{{name}}' erfolgreich geändert"
     }
   }
 }
