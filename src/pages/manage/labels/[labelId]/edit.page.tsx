@@ -13,11 +13,6 @@ import {
 } from '@/hooks/api/labels';
 import { useHeaders } from '@/hooks/api/useHeaders';
 import {
-  prefetchGetPermissionsQuery,
-  useGetPermissionsQuery,
-} from '@/hooks/api/user';
-import { PermissionTypes } from '@/layouts/Sidebar';
-import {
   LabelPrivacyTypes,
   LabelValidationInformation,
   LabelVisibilityTypes,
@@ -25,7 +20,6 @@ import {
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import LabelForm from '../labelForm';
@@ -43,10 +37,6 @@ const LabelEditPage = () => {
     name?: string;
   };
   const headers = useHeaders();
-  const permissionsQuery = useGetPermissionsQuery();
-  const hasManageLabelsPermission = (permissionsQuery.data || []).includes(
-    PermissionTypes.LABELS_BEHEREN,
-  );
 
   const { data: label } = useGetLabelByIdQuery(
     { id: labelId },
@@ -59,7 +49,6 @@ const LabelEditPage = () => {
   const [touched, setTouched] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Handle success message from query params (for newly created labels)
   useEffect(() => {
     if (success === 'created' && successName) {
       setSuccessMessage(
@@ -67,7 +56,6 @@ const LabelEditPage = () => {
           name: successName,
         }),
       );
-      // Clean up the URL by removing query params
       router.replace(`/manage/labels/${labelId}/edit`, undefined, {
         shallow: true,
       });
@@ -83,7 +71,6 @@ const LabelEditPage = () => {
 
   const { isUnique } = useIsLabelNameUnique({ name, currentName: label?.name });
 
-  // Check if the name has been changed from the original.
   const nameChanged = label?.name && name.trim() !== label.name;
 
   const nameError = useMemo(() => {
@@ -119,7 +106,6 @@ const LabelEditPage = () => {
     setSuccessMessage('');
 
     try {
-      // Create a new label if the name is edited.
       if (nameChanged) {
         if (nameError) return;
         const response = await createLabelMutation.mutateAsync({
@@ -129,7 +115,6 @@ const LabelEditPage = () => {
           isPrivate,
           parentId: labelId,
         });
-        // Try to get the ID from response body or Location header
         let newLabelId = response.uuid;
 
         if (newLabelId) {
@@ -144,7 +129,6 @@ const LabelEditPage = () => {
         return;
       }
 
-      // Otherwise, just update the flags.
       const visibilityChanged =
         (label.visibility !== LabelVisibilityTypes.INVISIBLE) !== isVisible;
       const privacyChanged =
@@ -173,17 +157,6 @@ const LabelEditPage = () => {
       // Error handling is managed by the mutation hooks
     }
   };
-
-  if (!hasManageLabelsPermission) {
-    return (
-      <Page>
-        <Page.Title>{t('labels.edit.title', 'Edit label')}</Page.Title>
-        <Page.Content>
-          <Text>{t('errors.forbidden', 'You do not have access.')}</Text>
-        </Page.Content>
-      </Page>
-    );
-  }
 
   return (
     <Page>
@@ -221,12 +194,7 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { labelId } = query as { labelId: string };
 
-    await Promise.all([
-      prefetchGetPermissionsQuery({ req, queryClient }),
-      labelId
-        ? prefetchGetLabelByIdQuery({ req, queryClient, id: labelId })
-        : Promise.resolve(),
-    ]);
+    await prefetchGetLabelByIdQuery({ req, queryClient, id: labelId });
 
     return {
       props: {

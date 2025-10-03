@@ -8,14 +8,8 @@ import {
   useIsLabelNameUnique,
 } from '@/hooks/api/labels';
 import { useHeaders } from '@/hooks/api/useHeaders';
-import {
-  prefetchGetPermissionsQuery,
-  useGetPermissionsQuery,
-} from '@/hooks/api/user';
-import { PermissionTypes } from '@/layouts/Sidebar';
 import { LabelValidationInformation } from '@/types/Offer';
 import { Page } from '@/ui/Page';
-import { Text } from '@/ui/Text';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import LabelForm from './labelForm';
@@ -25,10 +19,6 @@ const LabelsCreatePage = () => {
   const router = useRouter();
   const headers = useHeaders();
   const createLabelMutation = useCreateLabelMutation();
-  const permissionsQuery = useGetPermissionsQuery();
-  const hasManageLabelsPermission = (permissionsQuery.data || []).includes(
-    PermissionTypes.LABELS_BEHEREN,
-  );
 
   const [name, setName] = useState('');
   const [isVisible, setIsVisible] = useState(true);
@@ -68,17 +58,6 @@ const LabelsCreatePage = () => {
     router.push('/manage/labels');
   };
 
-  if (!hasManageLabelsPermission) {
-    return (
-      <Page>
-        <Page.Title>{t('labels.create.title', 'Create label')}</Page.Title>
-        <Page.Content>
-          <Text>{t('errors.forbidden', 'You do not have access.')}</Text>
-        </Page.Content>
-      </Page>
-    );
-  }
-
   return (
     <Page>
       <Page.Title>{t('labels.create.title', 'Create label')}</Page.Title>
@@ -104,9 +83,7 @@ const LabelsCreatePage = () => {
 };
 
 export const getServerSideProps = getApplicationServerSideProps(
-  async ({ req, queryClient, cookies }) => {
-    await prefetchGetPermissionsQuery({ req, queryClient });
-
+  async ({ queryClient, cookies }) => {
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
