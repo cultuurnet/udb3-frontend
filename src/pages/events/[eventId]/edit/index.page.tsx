@@ -14,18 +14,11 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    await Promise.all([
-      prefetchGetEventByIdQuery({
-        id: eventId,
-        req,
-        queryClient,
-      }),
-      prefetchGetEventPermissionsQuery({
-        req,
-        queryClient,
-        eventId: eventId,
-      }),
-    ]);
+    await prefetchGetEventPermissionsQuery({
+      req,
+      queryClient,
+      eventId: eventId,
+    });
 
     const { permissions } = queryClient.getQueryData([
       'event-permissions',
@@ -43,6 +36,12 @@ export const getServerSideProps = getApplicationServerSideProps(
         },
       };
     }
+
+    await prefetchGetEventByIdQuery({
+      id: eventId,
+      req,
+      queryClient,
+    });
 
     return {
       props: {
