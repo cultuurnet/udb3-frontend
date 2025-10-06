@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Toast as BootstrapToast } from 'react-bootstrap';
 import { css } from 'styled-components';
 
@@ -32,9 +33,9 @@ const commonCss = css`
 `;
 
 type Props = {
-  icon?: JSX.Element;
-  header?: JSX.Element;
-  body: JSX.Element;
+  icon?: ReactElement;
+  header?: ReactElement;
+  body: ReactElement;
 };
 
 const Notification = ({ icon, header, body }: Props) => {

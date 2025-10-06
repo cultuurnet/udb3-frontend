@@ -19,7 +19,7 @@ const useLog = (
   variables,
   { rawData = false, showOnlyDifference = false } = {},
 ) => {
-  const ref = useRef();
+  const ref = useRef(undefined);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') return;

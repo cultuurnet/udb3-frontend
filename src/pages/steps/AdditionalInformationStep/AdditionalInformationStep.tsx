@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { mapValues, sortBy } from 'lodash';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
@@ -253,7 +253,9 @@ const AdditionalInformationStep = ({
   const invalidateOfferQuery = useCallback(
     async (field: Field, shouldInvalidate: boolean) => {
       if (shouldInvalidate) {
-        await queryClient.invalidateQueries([scope, { id: offerId }]);
+        await queryClient.invalidateQueries({
+          queryKey: [scope, { id: offerId }],
+        });
       }
       onChangeSuccess?.(field);
     },

@@ -20,7 +20,7 @@ export const useAutoFocus = <T extends HTMLElement>({
   focusOnLoad = true,
   retriggerOn = undefined,
 }: UseAutoFocusOptions = {}): UseAutoFocusReturn<T> => {
-  const element = useRef<T>();
+  const element = useRef<T>(null);
   const focus = () => element.current?.focus();
 
   useEffect(() => {
