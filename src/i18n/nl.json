@@ -618,7 +618,7 @@
     },
     "no_items": {
       "events": "Geen evenementen gevonden",
-      "organizers": "Geen organisaties gevonden",
+      "organizers": "Je beheert op dit moment geen organisaties.",
       "places": "Geen locaties gevonden"
     },
     "row_status": {
@@ -1253,6 +1253,26 @@
       "title": "Videolink toevoegen",
       "validation_messages": {
         "link": "Je videolink voldoet niet aan de vereisten."
+      }
+    }
+  },
+  "labels": {
+    "overview": {
+      "title": "Labels",
+      "create": "Toevoegen",
+      "search": {
+        "label": "Zoeken op labelnaam:",
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+      },
+      "no_results": "Geen labels gevonden.",
+      "something_wrong": "Er ging iets mis tijdens het zoeken:",
+      "table": {
+        "name": "Naam",
+        "invisible": "Verborgen",
+        "private": "Voorbehouden",
+        "excluded": "Uitgesloten",
+        "options": "Opties",
+        "edit": "Bewerken"
       }
     }
   }

@@ -587,7 +587,7 @@
     },
     "no_items": {
       "events": "Keine Veranstaltungen gefunden",
-      "organizers": "Keine Organisationen gefunden",
+      "organizers": "Du verwaltest derzeit keine Organisationen.",
       "places": "Keine Orte gefunden"
     },
     "row_status": {
@@ -1199,6 +1199,26 @@
       "title": "Videolink hinzufügen",
       "validation_messages": {
         "link": "Ihr Videolink entspricht nicht den Anforderungen."
+      }
+    }
+  },
+  "labels": {
+    "overview": {
+      "title": "Labels",
+      "create": "Hinzufügen",
+      "search": {
+        "label": "Nach Labelnamen suchen:",
+        "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
+      },
+      "no_results": "Keine Labels gefunden.",
+      "something_wrong": "Es ging etwas schief bei der Suche:",
+      "table": {
+        "name": "Name",
+        "invisible": "Unsichtbar",
+        "private": "Privat",
+        "excluded": "Ausgeschlossen",
+        "options": "Optionen",
+        "edit": "Bearbeiten"
       }
     }
   }
