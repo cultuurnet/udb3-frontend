@@ -24,8 +24,8 @@ import {
 import {
   OwnershipRequest,
   OwnershipState,
-  prefetchGetOwnedOrganizersQuery,
-  useGetOwnedOrganizersQuery,
+  prefetchGetOwnershipRequestsQuery,
+  useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
 import {
   prefetchGetPlacesByCreatorQuery,
@@ -616,8 +616,12 @@ const Dashboard = (): any => {
     },
   );
 
-  const { data: ownedOrganizers } = useGetOwnedOrganizersQuery(
-    { ownerId: user?.sub },
+  const { data: ownedOrganizers } = useGetOwnershipRequestsQuery(
+    {
+      ownerId: user?.sub,
+      itemType: 'organizer',
+      state: OwnershipState.APPROVED,
+    },
     { enabled: !!user?.sub },
   );
 
@@ -873,22 +877,27 @@ const getServerSideProps = getApplicationServerSideProps(
       cookies: cookies.getAll(),
     });
 
-    await prefetchGetOwnedOrganizersQuery({
+    await prefetchGetOwnershipRequestsQuery({
       req,
       queryClient,
       ownerId: user?.sub,
+      itemType: 'organizer',
+      state: OwnershipState.APPROVED,
     });
 
     const ownedOrganizers =
-      queryClient.getQueryData(['owned-organizers', { ownerId: user?.sub }]) ||
-      {};
+      queryClient.getQueryData([
+        'ownership-requests',
+        {
+          ownerId: user?.sub,
+          itemType: 'organizer',
+          state: OwnershipState.APPROVED,
+        },
+      ]) || {};
 
-    const ownedOrganizerIds = ownedOrganizers?.member
-      ?.filter(
-        (organizer: OwnershipRequest) =>
-          organizer.state === OwnershipState.APPROVED,
-      )
-      ?.map((organizer: OwnershipRequest) => organizer.itemId);
+    const ownedOrganizerIds = ownedOrganizers?.member?.map(
+      (organizer: OwnershipRequest) => organizer.itemId,
+    );
 
     await Promise.all(
       Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {

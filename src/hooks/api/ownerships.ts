@@ -81,11 +81,13 @@ const getOwnershipRequests = async ({
   ownerId,
   state,
   paginationOptions,
+  itemType,
 }: {
   headers: Headers;
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
+  itemType?: string;
 } & PaginationOptions) => {
   const searchParams = new URLSearchParams();
   if (paginationOptions) {
@@ -101,6 +103,9 @@ const getOwnershipRequests = async ({
   if (state) {
     searchParams.set('state', state);
   }
+  if (itemType) {
+    searchParams.set('itemType', itemType);
+  }
   const res = await fetchFromApi({
     path: '/ownerships/',
     searchParams,
@@ -115,6 +120,7 @@ type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
+  itemType?: string;
 } & PaginationOptions;
 
 export type GetOwnershipRequestsResponse = {
@@ -129,12 +135,13 @@ const createGetOwnershipRequestsQueryOptions = ({
   itemId,
   ownerId,
   state,
+  itemType,
   paginationOptions,
 }: UseGetOwnershipRequestsArguments) =>
   queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { itemId, ownerId, state, paginationOptions },
+    queryArguments: { itemId, ownerId, state, paginationOptions, itemType },
     refetchOnWindowFocus: false,
   });
 
@@ -279,65 +286,9 @@ export const prefetchGetOwnershipCreatorQuery = ({
     ...createGetOwnershipCreatorQuery({ organizerId }),
   });
 
-const getOwnedOrganizers = async ({
-  headers,
-  ownerId,
-}: {
-  headers: HeadersInit;
-  ownerId: string;
-}) => {
-  const searchParams = new URLSearchParams();
-  searchParams.set('itemType', 'organizer');
-  searchParams.set('ownerId', ownerId);
-
-  const res = await fetchFromApi({
-    path: '/ownerships',
-    searchParams,
-    options: { headers },
-  });
-  return (await res.json()) as { member: OwnershipRequest[] };
-};
-
-const createGetOwnedOrganizersQuery = ({ ownerId }: { ownerId: string }) =>
-  queryOptions({
-    queryKey: ['owned-organizers'],
-    queryFn: getOwnedOrganizers,
-    queryArguments: { ownerId },
-    refetchOnWindowFocus: false,
-  });
-
-type UseGetOwnedOrganizersArguments = {
-  ownerId: string;
-};
-
-const useGetOwnedOrganizersQuery = (
-  args: UseGetOwnedOrganizersArguments,
-  configuration: ExtendQueryOptions<typeof getOwnedOrganizers> = {},
-) => {
-  const options = createGetOwnedOrganizersQuery(args);
-
-  return useAuthenticatedQuery({
-    ...options,
-    ...configuration,
-    enabled: options.enabled !== false && configuration.enabled !== false,
-  });
-};
-
-export const prefetchGetOwnedOrganizersQuery = ({
-  req,
-  queryClient,
-  ...args
-}: ServerSideQueryOptions & UseGetOwnedOrganizersArguments) =>
-  prefetchAuthenticatedQuery({
-    req,
-    queryClient,
-    ...createGetOwnedOrganizersQuery(args),
-  });
-
 export {
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
-  useGetOwnedOrganizersQuery,
   useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
