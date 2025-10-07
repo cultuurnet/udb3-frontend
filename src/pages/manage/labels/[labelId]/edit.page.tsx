@@ -1,4 +1,4 @@
-import { dehydrate } from 'react-query/hydration';
+import { dehydrate } from '@tanstack/react-query';
 
 import { prefetchGetLabelByIdQuery } from '@/hooks/api/labels';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';

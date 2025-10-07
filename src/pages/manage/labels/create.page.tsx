@@ -1,4 +1,4 @@
-import { dehydrate } from 'react-query/hydration';
+import { dehydrate } from '@tanstack/react-query';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import Fallback from '@/pages/[...params].page';

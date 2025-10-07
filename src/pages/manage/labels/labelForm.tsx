@@ -143,9 +143,9 @@ const LabelForm = () => {
   const createLabelMutation = useCreateLabelMutation();
 
   const isSubmitting =
-    updateVisibilityMutation.isLoading ||
-    updatePrivacyMutation.isLoading ||
-    createLabelMutation.isLoading;
+    updateVisibilityMutation.isPending ||
+    updatePrivacyMutation.isPending ||
+    createLabelMutation.isPending;
 
   const onSubmit = async (data: FormData) => {
     setSuccessMessage('');
