@@ -94,11 +94,4 @@ Table.propTypes = {
   onTableReady: PropTypes.func,
 };
 
-Table.defaultProps = {
-  plugins: [],
-  tableHooks: [],
-  tableOptions: {},
-  onTableReady: null,
-};
-
 export { Table };
