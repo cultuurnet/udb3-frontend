@@ -118,7 +118,6 @@ const useGetUitpasLabelsQuery = () =>
     refetchOnReconnect: false,
   });
 
-// Label details (by id)
 const getLabelById = async ({
   headers,
   id,
@@ -165,7 +164,6 @@ const prefetchGetLabelByIdQuery = ({
     ...createGetLabelByIdQueryOptions({ id }),
   });
 
-// Create label
 type CreateLabelArgs = {
   headers: Headers;
   name: string;
@@ -181,9 +179,9 @@ const createLabel = async ({
   isPrivate,
   parentId,
 }: CreateLabelArgs) => {
-  const raw = (name || '').trim();
+  const trimmedName = (name || '').trim();
   const body: Record<string, unknown> = {
-    name: raw,
+    name: trimmedName,
     visibility: isVisible
       ? LabelVisibilityTypes.VISIBLE
       : LabelVisibilityTypes.INVISIBLE,
@@ -207,7 +205,6 @@ const useCreateLabelMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Update visibility/privacy via commands
 type UpdateLabelFlagsArgs = {
   headers: Headers;
   id: string;
@@ -264,7 +261,6 @@ const useUpdateLabelPrivacyMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Delete label
 const deleteLabel = async ({ headers, id }: { headers: Headers; id: string }) =>
   fetchFromApi({
     path: `/labels/${id}`,
@@ -278,7 +274,6 @@ const useDeleteLabelMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Utility: check if a label name is unique (case-insensitive)
 const useIsLabelNameUnique = ({
   name,
   currentName,
@@ -286,17 +281,17 @@ const useIsLabelNameUnique = ({
   name: string;
   currentName?: string;
 }) => {
-  const raw = (name || '').trim();
-  const enabled = raw.length >= LabelValidationInformation.MIN_LENGTH;
+  const trimmedName = (name || '').trim();
+  const enabled = trimmedName.length >= LabelValidationInformation.MIN_LENGTH;
   const { data, isLoading } = useGetLabelsByQuery({
-    name: raw,
+    name: trimmedName,
     paginationOptions: { start: 0, limit: 1 },
     onlySuggestions: true,
   });
   const isSameAsCurrent =
-    currentName && currentName.toLowerCase() === raw.toLowerCase();
+    currentName && currentName.toLowerCase() === trimmedName.toLowerCase();
   const found = (data?.member ?? []).find(
-    (l: any) => (l?.name ?? '').toLowerCase() === raw.toLowerCase(),
+    (l: Label) => (l?.name ?? '').toLowerCase() === trimmedName.toLowerCase(),
   );
   return {
     isUnique: isSameAsCurrent ? true : !found,
