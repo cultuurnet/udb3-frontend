@@ -34,43 +34,54 @@ const Table = ({
     <Box
       forwardedAs={BootstrapTable}
       css={`
-        &.table th,
         &.table td {
           padding: 0.75rem;
           vertical-align: top;
           border-top: 1px solid ${getValue('borderColor')};
         }
         &.table thead th {
-          border-bottom: 1px solid ${getValue('borderColor')};
+          padding: 0.75rem;
+          vertical-align: top;
+          border-bottom: 2px solid ${getValue('borderColor')};
+          font-weight: 600;
         }
       `}
-      {...getTableProps()}
+      {...getTableProps(props)}
       {...getBoxProps(props)}
     >
       <thead>
-        {headerGroups.map((headerGroup, indexHeaderGroup) => (
-          <tr key={indexHeaderGroup} {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, indexHeader) => (
-              <Box
-                as="th"
-                key={indexHeader}
-                {...column.getHeaderProps()}
-                color={getValue('color')}
-              >
-                {column.render('Header')}
-              </Box>
-            ))}
-          </tr>
-        ))}
+        {headerGroups.map((headerGroup, indexHeaderGroup) => {
+          const { key, ...headerGroupProps } =
+            headerGroup.getHeaderGroupProps();
+          return (
+            <tr key={key || indexHeaderGroup} {...headerGroupProps}>
+              {headerGroup.headers.map((column, indexHeader) => {
+                const { key, ...headerProps } = column.getHeaderProps();
+                return (
+                  <Box
+                    as="th"
+                    key={key || indexHeader}
+                    {...headerProps}
+                    color={getValue('color')}
+                  >
+                    {column.render('Header')}
+                  </Box>
+                );
+              })}
+            </tr>
+          );
+        })}
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row, indexRow) => {
           prepareRow(row);
+          const { key, ...rowProps } = row.getRowProps();
           return (
-            <tr key={indexRow} {...row.getRowProps()}>
+            <tr key={key || indexRow} {...rowProps}>
               {row.cells.map((cell, indexCell) => {
+                const { key, ...cellProps } = cell.getCellProps();
                 return (
-                  <td key={indexCell} {...cell.getCellProps()}>
+                  <td key={key || indexCell} {...cellProps}>
                     {cell.render('Cell')}
                   </td>
                 );
@@ -90,13 +101,6 @@ Table.propTypes = {
   tableHooks: PropTypes.array,
   tableOptions: PropTypes.object,
   onTableReady: PropTypes.func,
-};
-
-Table.defaultProps = {
-  plugins: [],
-  tableHooks: [],
-  tableOptions: {},
-  onTableReady: null,
 };
 
 export { Table };
