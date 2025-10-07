@@ -21,9 +21,9 @@ import {
 } from '@/hooks/api/labels';
 import { useHeaders } from '@/hooks/api/useHeaders';
 import {
-  LabelPrivacyTypes,
+  LabelPrivacyOptions,
   LabelValidationInformation,
-  LabelVisibilityTypes,
+  LabelVisibilityOptions,
 } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -123,8 +123,8 @@ const LabelForm = () => {
     if (isEditMode && label) {
       reset({
         name: label.name || '',
-        isVisible: label.visibility !== LabelVisibilityTypes.INVISIBLE,
-        isPrivate: label.privacy === LabelPrivacyTypes.PRIVATE,
+        isVisible: label.visibility !== LabelVisibilityOptions.INVISIBLE,
+        isPrivate: label.privacy === LabelPrivacyOptions.PRIVATE,
       });
     } else if (!isEditMode) {
       reset({
@@ -194,10 +194,10 @@ const LabelForm = () => {
       }
 
       const visibilityChanged =
-        (label.visibility !== LabelVisibilityTypes.INVISIBLE) !==
+        (label.visibility !== LabelVisibilityOptions.INVISIBLE) !==
         data.isVisible;
       const privacyChanged =
-        (label.privacy === LabelPrivacyTypes.PRIVATE) !== data.isPrivate;
+        (label.privacy === LabelPrivacyOptions.PRIVATE) !== data.isPrivate;
 
       if (visibilityChanged) {
         await updateVisibilityMutation.mutateAsync({

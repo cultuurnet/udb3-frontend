@@ -12,9 +12,9 @@ import {
 import type { Headers } from '@/hooks/api/types/Headers';
 import {
   Label,
-  LabelPrivacyTypes,
+  LabelPrivacyOptions,
   LabelValidationInformation,
-  LabelVisibilityTypes,
+  LabelVisibilityOptions,
 } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi } from '@/utils/fetchFromApi';
@@ -182,9 +182,11 @@ const createLabel = async ({
   const body = {
     name: (name || '').trim(),
     visibility: isVisible
-      ? LabelVisibilityTypes.VISIBLE
-      : LabelVisibilityTypes.INVISIBLE,
-    privacy: isPrivate ? LabelPrivacyTypes.PRIVATE : LabelPrivacyTypes.PUBLIC,
+      ? LabelVisibilityOptions.VISIBLE
+      : LabelVisibilityOptions.INVISIBLE,
+    privacy: isPrivate
+      ? LabelPrivacyOptions.PRIVATE
+      : LabelPrivacyOptions.PUBLIC,
     parentId: parentId || undefined,
   };
   return fetchFromApi({

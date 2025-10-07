@@ -154,15 +154,15 @@ type Label = {
   excluded: boolean;
 };
 
-const LabelVisibilityTypes = {
-  VISIBLE: 'visible',
-  INVISIBLE: 'invisible',
-} as const;
+enum LabelVisibilityOptions {
+  VISIBLE = 'visible',
+  INVISIBLE = 'invisible',
+}
 
-const LabelPrivacyTypes = {
-  PRIVATE: 'private',
-  PUBLIC: 'public',
-} as const;
+enum LabelPrivacyOptions {
+  PRIVATE = 'private',
+  PUBLIC = 'public',
+}
 
 const LabelValidationInformation = {
   MAX_LENGTH: 255,
@@ -195,4 +195,8 @@ export type {
   Term,
 };
 
-export { LabelPrivacyTypes, LabelValidationInformation, LabelVisibilityTypes };
+export {
+  LabelPrivacyOptions,
+  LabelValidationInformation,
+  LabelVisibilityOptions,
+};
