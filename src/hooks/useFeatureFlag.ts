@@ -74,7 +74,7 @@ const isFeatureFlagEnabledInCookies = (
   cookies: any,
 ) => {
   const cookieName = createCookieName(featureFlagName);
-  return cookies?.[cookieName] === 'true';
+  return cookies?.[cookieName] === true || cookies?.[cookieName] === 'true';
 };
 
 export {
