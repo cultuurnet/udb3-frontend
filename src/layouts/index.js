@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/nextjs';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
-import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import Cookies from 'universal-cookie';
 
 import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
@@ -20,10 +20,9 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Sidebar } from './Sidebar';
 
-const useChangeLanguage = () => {
+const useChangeLanguage = (language) => {
   const { i18n } = useTranslation();
-  const { cookies } = useCookiesWithOptions(['udb-language']);
-  const language = useMemo(() => cookies['udb-language'], [cookies]);
+
   useEffect(() => {
     if (language) {
       i18n.changeLanguage(language);
@@ -66,9 +65,10 @@ const Layout = ({ children }) => {
   const queryClient = useQueryClient();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
+    'udb-language',
   ]);
 
-  useChangeLanguage();
+  useChangeLanguage(cookies['udb-language']);
   useHandleWindowMessage({
     [WindowMessageTypes.URL_CHANGED]: ({ path }) => {
       const currentUrl = new URL(window.location.href);
@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
     [WindowMessageTypes.HTTP_ERROR_CODE]: ({ code }) => {
       if ([401, 403].includes(code)) {
         removeAuthenticationCookies();
-        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         router.push('/login');
       }
     },

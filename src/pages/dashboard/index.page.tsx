@@ -1,11 +1,11 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
-import { Cookies } from 'react-cookie';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+import Cookies from 'universal-cookie';
 
 import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
@@ -623,7 +623,7 @@ const Dashboard = (): any => {
   const deleteItemByIdMutation = useDeleteItemById({
     onSuccess: async () => {
       setIsModalVisible(false);
-      await queryClient.invalidateQueries(tab);
+      await queryClient.invalidateQueries({ queryKey: [tab] });
     },
   });
 
