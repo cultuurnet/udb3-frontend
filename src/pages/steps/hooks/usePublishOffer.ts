@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
 import { usePublishEventMutation } from '@/hooks/api/events';
@@ -10,10 +10,9 @@ const usePublishOffer = ({ scope, id, onSuccess }) => {
 
   const mutationOptions = {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        scope === OfferTypes.EVENTS ? 'events' : 'places',
-        { id },
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: [scope === OfferTypes.EVENTS ? 'events' : 'places', { id }],
+      });
       onSuccess();
     },
   };

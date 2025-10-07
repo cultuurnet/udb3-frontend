@@ -13,25 +13,18 @@ import type {
 import { forwardRef } from 'react';
 import { UseAsyncProps } from 'react-bootstrap-typeahead';
 import { ReactDatePickerProps } from 'react-datepicker';
-import type {
-  FlattenInterpolation,
-  FlattenSimpleInterpolation,
-  StyledConfig,
-  ThemeProps,
-} from 'styled-components';
+import type { ExecutionContext, RuleSet } from 'styled-components';
 import styled, { css } from 'styled-components';
 
 import type { BreakpointValues, Theme } from './theme';
 
 type ValidUIPropTypes = string | number;
 
-type UnknownProps = { [key: string]: any } & { theme?: Theme };
-
-type UIPropValue<T> = T | ((props: ThemeProps<Theme>) => T);
+type UIPropValue<T> = T | ((props: { theme: Theme }) => T);
 
 type Parser = (
   value: UIPropValue<ValidUIPropTypes>,
-) => (props?: ThemeProps<Theme>) => string;
+) => (props?: { theme: Theme }) => string;
 
 type UIPropObject<T> = {
   default?: UIPropValue<T>;
@@ -176,7 +169,7 @@ type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
 type UIProps = {
   alignItems: UIProp<AlignItems>;
   alignSelf: UIProp<AlignItems>;
-  animation: UIProp<FlattenSimpleInterpolation>;
+  animation: UIProp<RuleSet>;
   backgroundColor: UIProp<string>;
   backgroundPosition: UIProp<string>;
   backgroundRepeat: UIProp<string>;
@@ -239,14 +232,13 @@ const FALSY_VALUES = [null, undefined, false, '', NaN, 0] as const;
 const wrapStatementWithBreakpoint =
   (
     breakpoint: string,
-    statementToWrap: string | (() => FlattenInterpolation<{ theme: Theme }>),
+    statementToWrap: string | (() => RuleSet<{ theme: Theme }>),
   ) =>
-  () =>
-    css`
-      @media (max-width: ${breakpoint}px) {
-        ${statementToWrap}
-      }
-    `;
+  () => css`
+    @media (max-width: ${breakpoint}px) {
+      ${statementToWrap}
+    }
+  `;
 
 const createCSSStatement =
   (key: string, value: UIPropValue<ValidUIPropTypes>, parser?: Parser) =>
@@ -291,7 +283,7 @@ const isDefined = <T,>(value: T | undefined | null): value is T => {
 
 const parseProperty =
   (key: string, parser?: Parser, customValue?: unknown) =>
-  (props: UnknownProps) => {
+  (props: ExecutionContext & { theme?: Theme }) => {
     const value = customValue ?? props[key];
 
     if (!isUIProp(value)) return css``;
@@ -337,7 +329,7 @@ const parseProperty =
   };
 
 const parseSpacing =
-  (value: UIPropValue<number>) => (props?: ThemeProps<Theme>) => {
+  (value: UIPropValue<number>) => (props?: { theme: Theme }) => {
     const parsedValue = typeof value === 'function' ? value(props) : value;
 
     if (value === 0) return '0rem';
@@ -348,7 +340,7 @@ const parseSpacing =
   };
 
 const parseDimension =
-  (value: UIPropValue<string | number>) => (props: ThemeProps<Theme>) => {
+  (value: UIPropValue<string | number>) => (props: { theme: Theme }) => {
     const parsedValue = typeof value === 'function' ? value(props) : value;
 
     if (!isString(parsedValue)) {
@@ -359,7 +351,7 @@ const parseDimension =
 
 const parseShorthandProperty =
   (shorthand: string, propsToChange: string[], parser: Parser) =>
-  (props: UnknownProps) =>
+  (props: ExecutionContext & { theme?: Theme }) =>
     propsToChange.reduce(
       (acc, val) => css`
         ${parseProperty(val, parser, props[shorthand])};
@@ -531,7 +523,7 @@ const boxPropTypes = [
 
 const notAllowedPropsSet = new Set(difference(boxPropTypes, reactPropTypes));
 
-export const withoutDisallowedPropsConfig: StyledConfig = {
+export const withoutDisallowedPropsConfig = {
   shouldForwardProp: (prop) => !notAllowedPropsSet.has(prop as any),
 };
 
@@ -539,7 +531,7 @@ const StyledBox = styled.div.withConfig(withoutDisallowedPropsConfig)`
   ${boxProps}
 `;
 
-const getBoxProps = (props: UnknownProps) =>
+const getBoxProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
     // pass aria attributes to the DOM element
     if (key.startsWith('aria-')) {
@@ -570,4 +562,4 @@ export {
   parseSpacing,
 };
 
-export type { BoxProps, UIProp, UnknownProps };
+export type { BoxProps, UIProp };

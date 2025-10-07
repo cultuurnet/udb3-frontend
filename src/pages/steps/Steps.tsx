@@ -145,10 +145,6 @@ type StepsProps = {
   errors?: { [key: string]: FetchError };
 };
 
-type UnknownProps = {
-  [key: string]: any;
-};
-
 const stepPropKeys: (keyof StepProps)[] = [
   'clearErrors',
   'control',
@@ -173,7 +169,7 @@ const stepPropKeys: (keyof StepProps)[] = [
   'offerId',
 ];
 
-const getStepProps = (props: UnknownProps) => pick(props, stepPropKeys);
+const getStepProps = (props: Record<string, any>) => pick(props, stepPropKeys);
 
 const Steps = ({
   onChange = () => {},

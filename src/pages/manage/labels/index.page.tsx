@@ -1,8 +1,8 @@
+import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import Router from 'next/router';
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { dehydrate } from 'react-query/hydration';
 import { Label } from 'types/Offer';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';

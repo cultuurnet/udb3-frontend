@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Controller, ControllerRenderProps, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
@@ -96,7 +96,7 @@ const ScopeStep = ({
       audienceType,
     });
 
-    await queryClient.invalidateQueries('events');
+    await queryClient.invalidateQueries({ queryKey: ['events'] });
   };
 
   return (

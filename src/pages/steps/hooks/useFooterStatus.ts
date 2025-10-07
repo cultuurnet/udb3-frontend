@@ -1,6 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useQueryClient } from 'react-query';
 
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { isEvent } from '@/types/Event';
