@@ -999,7 +999,7 @@
       "no_productions": "Keine Produktionen gefunden.",
       "production": "Produktion",
       "search": {
-        "label": "Nach Produktionsnamen suchen:",
+        "label": "Nach Produktionsnamen suchen",
         "placeholder": "Erstellen Sie eine Suchanfrage von mindestens 3 Zeichen."
       },
       "title": "Produktionen"
@@ -1207,7 +1207,7 @@
       "title": "Labels",
       "create": "Hinzufügen",
       "search": {
-        "label": "Nach Labelnamen suchen:",
+        "label": "Nach Labelnamen suchen",
         "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
       },
       "no_results": "Keine Labels gefunden.",

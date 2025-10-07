@@ -29,6 +29,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 
 const labelsPerPage = 10;
 const getGlobalValue = getValueFromTheme('global');
+const getTableValue = getValueFromTheme('selectionTable');
 
 const LabelsOverviewPage = () => {
   const { t } = useTranslation();
@@ -178,12 +179,17 @@ const LabelsOverviewPage = () => {
           backgroundColor="white"
           padding={4}
           borderRadius={getGlobalBorderRadius}
-          spacing={4}
           css={`
             box-shadow: ${getGlobalValue('boxShadow.medium')};
           `}
         >
-          <Inline alignItems="center" spacing={5}>
+          <Inline
+            alignItems="center"
+            paddingBottom={4}
+            css={`
+              border-bottom: 2px solid ${getTableValue('borderColor')};
+            `}
+          >
             <Inline spacing={3}>
               {actions.map(({ iconName, title, onClick, disabled }) => (
                 <Button
@@ -201,8 +207,21 @@ const LabelsOverviewPage = () => {
           </Inline>
           {labelsQuery.status === QueryStatus.LOADING && <Spinner />}
           {labelsQuery.status === QueryStatus.SUCCESS && labels.length > 0 && (
-            <Inline spacing={5}>
-              <Table columns={columns} data={labelsToTableData(labels)} />
+            <Inline
+              spacing={5}
+              css={`
+                & table th:first-child {
+                  min-width: 27em;
+                }
+              `}
+            >
+              <Table
+                striped
+                bordered
+                hover
+                columns={columns}
+                data={labelsToTableData(labels)}
+              />
             </Inline>
           )}
         </Stack>
