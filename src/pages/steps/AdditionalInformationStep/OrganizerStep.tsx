@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -68,16 +68,20 @@ const OrganizerStep = ({
     : false;
   const [hasUitpasTicketSales, setHasUitpasTicketSales] = useState(false);
 
-  const getCardSystemForEventQuery = useGetCardSystemForEventQuery(
-    {
-      scope,
-      eventId: offerId,
-      isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
-    },
-    {
-      onSuccess: (data) => setSelectedCardSystems(Object.values(data)),
-    },
-  );
+  const getCardSystemForEventQuery = useGetCardSystemForEventQuery({
+    scope,
+    eventId: offerId,
+    isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
+  });
+
+  useEffect(() => {
+    if (
+      getCardSystemForEventQuery.isSuccess &&
+      getCardSystemForEventQuery.data
+    ) {
+      setSelectedCardSystems(Object.values(getCardSystemForEventQuery.data));
+    }
+  }, [getCardSystemForEventQuery.isSuccess, getCardSystemForEventQuery.data]);
 
   const uitpasAlertData = useMemo(() => {
     if (!hasUitpasLabel) {
@@ -166,7 +170,7 @@ const OrganizerStep = ({
   const addCardSystemToEventMutation = useAddCardSystemToEventMutation({
     onSuccess: (data) => {
       onSuccessfulChange(data);
-      queryClient.invalidateQueries('uitpas_events');
+      queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
     },
     onError: handleUitpasTicketSalesError,
   });
@@ -175,7 +179,7 @@ const OrganizerStep = ({
     useDeleteCardSystemFromEventMutation({
       onSuccess: (data) => {
         onSuccessfulChange(data);
-        queryClient.invalidateQueries('uitpas_events');
+        queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
       },
       onError: handleUitpasTicketSalesError,
     });
@@ -212,8 +216,8 @@ const OrganizerStep = ({
   const changeDistributionKey = useChangeDistributionKeyMutation({
     onSuccess: (data) => {
       onSuccessfulChange(data);
-      queryClient.invalidateQueries([scope, { id: offerId }]);
-      queryClient.invalidateQueries('uitpas_events');
+      queryClient.invalidateQueries({ queryKey: [scope, { id: offerId }] });
+      queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
     },
   });
 

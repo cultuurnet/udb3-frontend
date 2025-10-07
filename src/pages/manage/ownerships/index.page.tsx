@@ -1,8 +1,8 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UseQueryResult } from 'react-query';
 
 import { SortField, SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {

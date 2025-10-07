@@ -1,7 +1,7 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { uniq } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
@@ -77,12 +77,12 @@ function LabelsStep({
     setLabels(getUniqueLabels(entity));
   }, [entity]);
 
-  const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
+  const isWriting = addLabelMutation.isPending || removeLabelMutation.isPending;
   const [isInvalid, setIsInvalid] = useState(false);
 
   const handleInvalidateOrganizerQuery = async () => {
     if (scope !== ScopeTypes.ORGANIZERS) return;
-    await queryClient.invalidateQueries('organizers');
+    await queryClient.invalidateQueries({ queryKey: ['organizers'] });
   };
 
   return (
