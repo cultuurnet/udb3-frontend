@@ -179,15 +179,14 @@ const createLabel = async ({
   isPrivate,
   parentId,
 }: CreateLabelArgs) => {
-  const trimmedName = (name || '').trim();
-  const body: Record<string, unknown> = {
-    name: trimmedName,
+  const body = {
+    name: (name || '').trim(),
     visibility: isVisible
       ? LabelVisibilityTypes.VISIBLE
       : LabelVisibilityTypes.INVISIBLE,
     privacy: isPrivate ? LabelPrivacyTypes.PRIVATE : LabelPrivacyTypes.PUBLIC,
+    parentId: parentId ? parentId : undefined,
   };
-  if (parentId) body.parentId = parentId;
   return fetchFromApi({
     path: '/labels',
     options: {
