@@ -151,17 +151,15 @@ const LabelsOverviewPage = () => {
           backgroundColor="white"
           padding={4}
           borderRadius={getGlobalBorderRadius}
-          spacing={4}
           css={`
             box-shadow: ${getGlobalValue('boxShadow.medium')};
           `}
         >
           <Inline
             alignItems="center"
+            paddingBottom={4}
             css={`
-              padding-bottom: 1em;
               border-bottom: 2px solid ${getTableValue('borderColor')};
-              margin-bottom: 0px;
             `}
           >
             <Inline spacing={3}>
