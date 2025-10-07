@@ -191,7 +191,7 @@ const createLabel = async ({
   };
   if (parentId) body.parentId = parentId;
   return fetchFromApi({
-    path: '/labels/',
+    path: '/labels',
     options: {
       method: 'POST',
       headers,
