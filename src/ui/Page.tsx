@@ -84,7 +84,7 @@ const PageTitle = ({ children, className, ...props }: TitleProps) => (
     size={1}
     className={className}
     color={getValueForTitle('color')}
-    lineHeight="220%"
+    lineHeight="235%"
     paddingY={3}
     {...getBoxProps(props)}
   >

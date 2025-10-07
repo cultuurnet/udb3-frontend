@@ -1,12 +1,12 @@
 import * as Sentry from '@sentry/nextjs';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import absoluteUrl from 'next-absolute-url';
-import { dehydrate, QueryClient } from 'react-query';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';
 
+import { DEFAULT_COOKIE_OPTIONS } from '@/constants/Cookies';
 import { prefetchGetUserQuery } from '@/hooks/api/user';
-import { defaultCookieOptions } from '@/hooks/useCookiesWithOptions';
 import { isFeatureFlagEnabledInCookies } from '@/hooks/useFeatureFlag';
 
 import { getRedirects } from '../redirects';
@@ -85,7 +85,7 @@ const getApplicationServerSideProps =
 
     const rawCookies = req?.headers?.cookie ?? '';
 
-    const cookies = new Cookies(rawCookies, defaultCookieOptions);
+    const cookies = new Cookies(rawCookies, DEFAULT_COOKIE_OPTIONS);
 
     req.headers.cookie = cookies.toString();
 

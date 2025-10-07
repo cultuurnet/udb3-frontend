@@ -1,9 +1,9 @@
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 
-const useGetEvent = ({ id, onSuccess, enabled }) => {
+const useGetEvent = ({ id, enabled }) => {
   const getEventByIdQuery = useGetEventByIdQuery(
     { id },
-    { onSuccess, enabled: !!id && !!enabled },
+    { enabled: !!id && !!enabled },
   );
 
   return getEventByIdQuery?.data;
