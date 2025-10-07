@@ -185,7 +185,7 @@ const createLabel = async ({
       ? LabelVisibilityTypes.VISIBLE
       : LabelVisibilityTypes.INVISIBLE,
     privacy: isPrivate ? LabelPrivacyTypes.PRIVATE : LabelPrivacyTypes.PUBLIC,
-    parentId: parentId ? parentId : undefined,
+    parentId: parentId || undefined,
   };
   return fetchFromApi({
     path: '/labels',
