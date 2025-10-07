@@ -88,7 +88,8 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_LABELS_OVERVIEW,
   },
   {
-    source: '/manage/labels/:labelId',
+    source:
+      '/manage/labels/:labelId([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
     destination: '/manage/labels/:labelId/edit',
     permanent: false,
     featureFlag: FeatureFlags.REACT_LABELS_CREATE_EDIT,
