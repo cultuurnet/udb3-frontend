@@ -69,7 +69,7 @@ const Create = () => {
   });
 
   const suggestedProductions = searchInput
-    ? (getProductionsQuery.data?.member ?? [])
+    ? getProductionsQuery.data?.member ?? []
     : [];
 
   const events = useMemo(
