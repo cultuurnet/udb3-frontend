@@ -1211,6 +1211,8 @@
         "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
       },
       "no_results": "Keine Labels gefunden.",
+      "success_created": "Label '{{name}}' erfolgreich hinzugefügt.",
+      "success_updated": "Label '{{name}}' erfolgreich geändert.",
       "something_wrong": "Es ging etwas schief bei der Suche:",
       "table": {
         "name": "Name",
@@ -1244,9 +1246,7 @@
       "title": "Label hinzufügen"
     },
     "edit": {
-      "title": "Label bearbeiten",
-      "success_created": "Label '{{name}}' erfolgreich hinzugefügt",
-      "success_updated": "Label '{{name}}' erfolgreich geändert"
+      "title": "Label bearbeiten"
     }
   }
 }

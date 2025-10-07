@@ -1,7 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import Router from 'next/router';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Label } from 'types/Offer';
 
@@ -32,11 +32,25 @@ const getGlobalValue = getValueFromTheme('global');
 
 const LabelsOverviewPage = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [searchInput, setSearchInput] = useState('');
   const [currentPageLabels, setCurrentPageLabels] = useState(1);
+  const [successMessage, setSuccessMessage] = useState('');
   const [isReactLabelsCreateEditFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.REACT_LABELS_CREATE_EDIT,
   );
+
+  useEffect(() => {
+    if (router.query.success === 'created') {
+      const labelName = router.query.name as string;
+      setSuccessMessage(
+        t('labels.overview.success_created', { name: labelName }),
+      );
+      router.replace('/manage/labels', undefined, {
+        shallow: true,
+      });
+    }
+  }, [router, t]);
 
   const labelsToTableData = (labels: Label[]) =>
     labels.map((label) => ({
@@ -140,6 +154,11 @@ const LabelsOverviewPage = () => {
               />
             }
           />
+          {successMessage && (
+            <Alert variant={AlertVariants.SUCCESS} fullWidth={true}>
+              {successMessage}
+            </Alert>
+          )}
           {labelsQuery.status === QueryStatus.SUCCESS &&
             labels.length === 0 && (
               <Alert variant={AlertVariants.WARNING} fullWidth={true}>

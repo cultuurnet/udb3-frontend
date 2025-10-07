@@ -1211,6 +1211,8 @@
         "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
       },
       "no_results": "Aucun étiquettes trouvé.",
+      "success_created": "Étiquette '{{name}}' créée avec succès.",
+      "success_updated": "Étiquette '{{name}}' mise à jour avec succès.",
       "something_wrong": "Une erreur s'est produite lors de la recherche:",
       "table": {
         "name": "Nom",
@@ -1244,9 +1246,7 @@
       "title": "Créer une étiquette"
     },
     "edit": {
-      "title": "Modifier une étiquette",
-      "success_created": "Étiquette '{{name}}' créée avec succès",
-      "success_updated": "Étiquette '{{name}}' mise à jour avec succès"
+      "title": "Modifier une étiquette"
     }
   }
 }

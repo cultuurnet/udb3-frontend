@@ -109,7 +109,7 @@ const LabelForm = () => {
   useEffect(() => {
     if (success === 'created' && successName && labelId) {
       setSuccessMessage(
-        t('labels.edit.success_created', {
+        t('labels.overview.success_created', {
           name: successName,
         }),
       );
@@ -162,7 +162,9 @@ const LabelForm = () => {
           isVisible: data.isVisible,
           isPrivate: data.isPrivate,
         });
-        router.push('/manage/labels');
+        router.push(
+          `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
+        );
         return;
       }
 
@@ -213,7 +215,7 @@ const LabelForm = () => {
       }
 
       setSuccessMessage(
-        t('labels.edit.success_updated', {
+        t('labels.overview.success_updated', {
           name: label.name,
         }),
       );

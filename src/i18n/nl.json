@@ -1265,6 +1265,8 @@
         "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
       },
       "no_results": "Geen labels gevonden.",
+      "success_created": "Label '{{name}}' succesvol toegevoegd.",
+      "success_updated": "Label '{{name}}' succesvol gewijzigd.",
       "something_wrong": "Er ging iets mis tijdens het zoeken:",
       "table": {
         "name": "Naam",
@@ -1298,9 +1300,7 @@
       "title": "Label toevoegen"
     },
     "edit": {
-      "title": "Label bewerken",
-      "success_created": "Label '{{name}}' succesvol toegevoegd",
-      "success_updated": "Label '{{name}}' succesvol gewijzigd"
+      "title": "Label bewerken"
     }
   }
 }
