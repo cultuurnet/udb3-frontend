@@ -279,9 +279,65 @@ export const prefetchGetOwnershipCreatorQuery = ({
     ...createGetOwnershipCreatorQuery({ organizerId }),
   });
 
+const getOwnedOrganizers = async ({
+  headers,
+  ownerId,
+}: {
+  headers: HeadersInit;
+  ownerId: string;
+}) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('itemType', 'organizer');
+  searchParams.set('ownerId', ownerId);
+
+  const res = await fetchFromApi({
+    path: '/ownerships',
+    searchParams,
+    options: { headers },
+  });
+  return (await res.json()) as { member: OwnershipRequest[] };
+};
+
+const createGetOwnedOrganizersQuery = ({ ownerId }: { ownerId: string }) =>
+  queryOptions({
+    queryKey: ['owned-organizers'],
+    queryFn: getOwnedOrganizers,
+    queryArguments: { ownerId },
+    refetchOnWindowFocus: false,
+  });
+
+type UseGetOwnedOrganizersArguments = {
+  ownerId: string;
+};
+
+const useGetOwnedOrganizersQuery = (
+  args: UseGetOwnedOrganizersArguments,
+  configuration: ExtendQueryOptions<typeof getOwnedOrganizers> = {},
+) => {
+  const options = createGetOwnedOrganizersQuery(args);
+
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetOwnedOrganizersQuery = ({
+  req,
+  queryClient,
+  ...args
+}: ServerSideQueryOptions & UseGetOwnedOrganizersArguments) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetOwnedOrganizersQuery(args),
+  });
+
 export {
   useApproveOwnershipRequestMutation,
   useDeleteOwnershipRequestMutation,
+  useGetOwnedOrganizersQuery,
   useGetOwnershipCreatorQuery,
   useGetOwnershipRequestsQuery,
   useRejectOwnershipRequestMutation,
