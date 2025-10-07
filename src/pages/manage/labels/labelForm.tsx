@@ -304,8 +304,8 @@ const LabelFormFields = ({
     mode === 'edit' && nameChanged
       ? t('labels.form.actions.create')
       : mode === 'edit'
-      ? t('labels.form.actions.save')
-      : t('labels.form.actions.create');
+        ? t('labels.form.actions.save')
+        : t('labels.form.actions.create');
 
   const nameError =
     formState.errors.name?.message ||

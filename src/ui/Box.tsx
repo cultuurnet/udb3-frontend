@@ -234,12 +234,11 @@ const wrapStatementWithBreakpoint =
     breakpoint: string,
     statementToWrap: string | (() => RuleSet<{ theme: Theme }>),
   ) =>
-  () =>
-    css`
-      @media (max-width: ${breakpoint}px) {
-        ${statementToWrap}
-      }
-    `;
+  () => css`
+    @media (max-width: ${breakpoint}px) {
+      ${statementToWrap}
+    }
+  `;
 
 const createCSSStatement =
   (key: string, value: UIPropValue<ValidUIPropTypes>, parser?: Parser) =>
