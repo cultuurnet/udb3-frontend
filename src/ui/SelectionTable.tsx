@@ -1,6 +1,6 @@
 import uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRowSelect } from 'react-table';
 
 import { Button, ButtonVariants } from './Button';
@@ -54,6 +54,9 @@ const SelectionTable = ({
   ...props
 }) => {
   const [selectedFlatRows, setSelectedFlatRows] = useState([]);
+  const onSelectionChangedRef = useRef(onSelectionChanged);
+
+  onSelectionChangedRef.current = onSelectionChanged;
 
   const selectionHook = (hooks) => {
     hooks.visibleColumns.push((columns) => [
@@ -68,18 +71,21 @@ const SelectionTable = ({
 
   const handleTableReady = (tableInstance) => {
     const { selectedFlatRows: currentSelection } = tableInstance;
-    setSelectedFlatRows(currentSelection);
+    setTimeout(() => {
+      setSelectedFlatRows(currentSelection);
+    }, 0);
   };
 
   useEffect(() => {
-    if (!onSelectionChanged || !selectedFlatRows) return;
-    onSelectionChanged(
-      selectedFlatRows.map((row) => ({
-        id: parseInt(row.id),
-        values: { ...row.values },
-      })),
-    );
-  }, [onSelectionChanged, selectedFlatRows]);
+    if (!selectedFlatRows) return;
+
+    const mappedRows = selectedFlatRows.map((row) => ({
+      id: parseInt(row.id),
+      values: { ...row.values },
+    }));
+
+    onSelectionChangedRef.current(mappedRows);
+  }, [selectedFlatRows]);
 
   const selectedRowsText = useMemo(
     () => translateSelectedRowCount(selectedFlatRows.length),
