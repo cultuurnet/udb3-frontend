@@ -1,8 +1,8 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import {

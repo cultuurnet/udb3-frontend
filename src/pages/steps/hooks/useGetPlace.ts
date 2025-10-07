@@ -1,10 +1,10 @@
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 
-const useGetPlace = ({ id, onSuccess, enabled }) => {
+const useGetPlace = ({ id, enabled }) => {
   const getPlaceByIdQuery = useGetPlaceByIdQuery(
     { id, scope: OfferTypes.PLACES },
-    { onSuccess, enabled: !!id && !!enabled },
+    { enabled: !!id && !!enabled },
   );
 
   return getPlaceByIdQuery?.data;

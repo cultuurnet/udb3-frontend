@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import getConfig from 'next/config';
-import { useQuery } from 'react-query';
 
 import { Scope } from '@/constants/OfferType';
 
@@ -41,7 +41,9 @@ const getTerms = async (): Promise<TermsData> => {
 };
 
 const useGetTermsQuery = (configuration = {}) =>
-  useQuery(['terms'], getTerms, {
+  useQuery({
+    queryKey: ['terms'],
+    queryFn: getTerms,
     retry: false,
     staleTime: Infinity,
     ...configuration,

@@ -54,7 +54,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const removeLabelMutation = useRemoveOfferLabelMutation();
   const getButtonValue = getValueFromTheme('button');
 
-  const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
+  const isWriting = addLabelMutation.isPending || removeLabelMutation.isPending;
   const [isInvalid, setIsInvalid] = useState(false);
 
   return (

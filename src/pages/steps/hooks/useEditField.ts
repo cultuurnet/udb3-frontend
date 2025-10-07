@@ -1,5 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
 
 import { OfferType } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
@@ -37,7 +37,7 @@ const useEditField = ({ scope, onSuccess, offerId, handleSubmit, onError }) => {
     onSuccess(editedField);
 
     if (!shouldInvalidateEvent) return;
-    queryClient.invalidateQueries([scope, { id: offerId }]);
+    queryClient.invalidateQueries({ queryKey: [scope, { id: offerId }] });
   };
 
   const editArguments = {
