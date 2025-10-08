@@ -55,7 +55,7 @@ import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 const { publicRuntimeConfig } = getConfig();
 
 const shouldShowBetaVersion =
-  publicRuntimeConfig.shouldShowBetaVersion === 'true';
+  process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION === 'true';
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
