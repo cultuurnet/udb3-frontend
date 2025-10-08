@@ -202,7 +202,8 @@ const StepsForm = ({
 
   const labels = getUniqueLabels(offer);
 
-  const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
+  const CULTUURKUUR_LOCATION_ID =
+    process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
 
   const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
 
