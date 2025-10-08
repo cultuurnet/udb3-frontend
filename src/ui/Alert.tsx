@@ -109,6 +109,8 @@ const AlertVariants = {
   DARK: 'dark',
 } as const;
 
+export type AlertVariantsType = Values<typeof AlertVariants>;
+
 const AlertVariantIconsMap = {
   [AlertVariants.PRIMARY]: <IconInfo />,
   [AlertVariants.SUCCESS]: <IconSuccess />,

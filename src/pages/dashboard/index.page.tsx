@@ -88,9 +88,9 @@ const globalAlertMessages =
     : undefined;
 
 const globalAlertVariant = Object.values(AlertVariants).some(
-  (variant) => variant === publicRuntimeConfig.globalAlertVariant,
+  (variant) => variant === process.env.GLOBAL_ALERT_VARIANT,
 )
-  ? publicRuntimeConfig.globalAlertVariant
+  ? (process.env.NEXT_PUBLIC_GLOBAL_ALERT_VARIANT as AlertVariantsType)
   : AlertVariants.PRIMARY;
 
 const getValue = getValueFromTheme('dashboardPage');
