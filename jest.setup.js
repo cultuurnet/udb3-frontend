@@ -2,7 +2,6 @@ import '@testing-library/jest-dom';
 
 import base64 from 'base-64';
 import fetchMock from 'jest-fetch-mock';
-import { setConfig } from 'next/config';
 
 fetchMock.enableMocks();
 
@@ -51,7 +50,3 @@ jest.mock('@/hooks/useCookiesWithOptions.ts', () => ({
     removeAuthenticationCookies: jest.fn(),
   }),
 }));
-
-setConfig({
-  publicRuntimeConfig: { apiUrl: 'http://localhost:3000' },
-});
