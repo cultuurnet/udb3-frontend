@@ -29,7 +29,6 @@ const useLegacyPath = () => {
     router.asPath,
     jwt,
     lang,
-    process.env.NEXT_PUBLIC_LEGACY_APP_URL,
     searchParams,
   ]);
 

@@ -17,7 +17,7 @@ const useHandleSocketMessage = (eventsMap = {}) => {
       socket.on(event, handler);
     });
     return () => socket.close();
-  }, [process.env.NEXT_PUBLIC_SOCKET_URL]);
+  }, []);
 };
 
 export { SocketMessageTypes, useHandleSocketMessage };
