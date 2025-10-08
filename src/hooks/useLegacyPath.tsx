@@ -24,12 +24,7 @@ const useLegacyPath = () => {
       searchParams.toString(),
       '?',
     )}`;
-  }, [
-    router.asPath,
-    jwt,
-    lang,
-    searchParams,
-  ]);
+  }, [router.asPath, jwt, lang, searchParams]);
 
   return legacyPath;
 };
