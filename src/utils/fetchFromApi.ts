@@ -67,7 +67,7 @@ const fetchFromApi = async <TConfig extends FetchFromApiArguments>({
   let url: URL;
 
   try {
-    url = new URL(`${publicRuntimeConfig.apiUrl}${path}`);
+    url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${path}`);
     const searchParams = new URLSearchParams(searchParamsInit ?? {});
     searchParams.delete('queryKey');
 

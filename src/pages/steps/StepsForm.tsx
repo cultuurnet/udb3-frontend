@@ -113,8 +113,8 @@ const StepsForm = ({
     useState(true);
   const [fetchErrors, setFetchErrors] = useState<Record<string, FetchError>>();
   const { publicRuntimeConfig } = getConfig();
-  const eventName = publicRuntimeConfig.hotjarEventName;
-  const missingFieldName = publicRuntimeConfig.hotjarMissingFieldName;
+  const eventName = process.env.NEXT_PUBLIC_HOTJAR_EVENT_NAME;
+  const missingFieldName = process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME;
   const { handleSubmit, reset } = form;
 
   const { query, push, pathname, reload } = useRouter();
@@ -203,7 +203,7 @@ const StepsForm = ({
 
   const labels = getUniqueLabels(offer);
 
-  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
+  const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
 
   const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
 

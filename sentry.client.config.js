@@ -30,7 +30,7 @@ Sentry.init({
   // You can remove this option if you're not planning to use the Sentry Session Replay feature:
   integrations: [
     new Sentry.Replay({
-      networkDetailAllowUrls: [publicRuntimeConfig.apiUrl],
+      networkDetailAllowUrls: [process.env.NEXT_PUBLIC_API_URL],
       maskAllText: true,
       blockAllMedia: true,
     }),

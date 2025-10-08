@@ -7,7 +7,7 @@ const createHeaders = (token, extraHeaders) => {
 
   return {
     Authorization: `Bearer ${token}`,
-    'X-Api-Key': publicRuntimeConfig.apiKey,
+    'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY,
     ...extraHeaders,
   };
 };

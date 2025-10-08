@@ -54,7 +54,7 @@ const useAddOffer = ({
   const addEventToProductionByIdMutation =
     useAddEventToProductionByIdMutation();
 
-  const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
+  const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
 
   return async (formData: FormDataUnion) => {
     const { scope, production } = formData;

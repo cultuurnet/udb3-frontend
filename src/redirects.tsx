@@ -112,12 +112,12 @@ const getRedirects = (
     destination: '/organizers/:organizerId/ownerships',
     permanent: false,
   },
-  publicRuntimeConfig.ownershipEnabled === 'true' && {
+  process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true' && {
     source: '/manage/organizations',
     destination: '/search?tab=organizers',
     permanent: false,
   },
-  publicRuntimeConfig.ownershipEnabled === 'false' && {
+  process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'false' && {
     source: '/search?tab=organizers',
     destination: '/404',
     permanent: false,

@@ -32,7 +32,7 @@ const DISABLED_TERMS = [
 
 const getTerms = async (): Promise<TermsData> => {
   const { publicRuntimeConfig } = getConfig();
-  const res = await fetch(`${publicRuntimeConfig.taxonomyUrl}/terms`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_TAXONOMY_URL}/terms`);
   const { terms } = await res.json();
   const allowedTerms = terms.filter(
     (term: EventType) => !DISABLED_TERMS.includes(term.id),

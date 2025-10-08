@@ -35,7 +35,7 @@ export default authServer.handleAuth({
           locale: language,
           ui_locales: language,
         },
-        returnTo: publicRuntimeConfig.baseUrl,
+        returnTo: process.env.NEXT_PUBLIC_BASE_URL,
       });
     } catch (err) {
       res.status(err.status || 400).end();

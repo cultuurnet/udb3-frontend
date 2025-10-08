@@ -68,7 +68,7 @@ export const DashboardRow = ({
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
-  const croppedImageBaseUrl = publicRuntimeConfig.imgixUrl;
+  const croppedImageBaseUrl = process.env.NEXT_PUBLIC_IMGIX_URL;
   const imageIdAndFormat = imageUrl?.split('/').at(-1);
   const croppedImageUrl = imageUrl
     ? `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`

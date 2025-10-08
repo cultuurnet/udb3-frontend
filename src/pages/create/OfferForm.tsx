@@ -220,7 +220,7 @@ const OfferForm = () => {
     if (!country) {
       return {
         location: {
-          id: publicRuntimeConfig.cultuurKuurLocationId,
+          id: process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID,
         },
       };
     }

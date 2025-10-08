@@ -94,7 +94,7 @@ const getApplicationServerSideProps =
 
     const redirect = getRedirect(
       path,
-      publicRuntimeConfig.environment,
+      process.env.NEXT_PUBLIC_ENVIRONMENT,
       cookies.getAll(),
     );
 

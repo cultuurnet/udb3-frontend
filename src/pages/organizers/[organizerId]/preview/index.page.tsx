@@ -39,7 +39,7 @@ const OrganizersPreview = () => {
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
-  const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
+  const isOwnershipEnabled = process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
   const organizerId = router.query.organizerId as string;
 
   const getOrganizerByIdQuery = useGetOrganizerByIdQuery({

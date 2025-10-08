@@ -78,8 +78,8 @@ export const BLANK_STREET_NUMBER = '___';
 
 const { publicRuntimeConfig } = getConfig();
 
-const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
-const API_URL = publicRuntimeConfig.apiUrl;
+const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getGlobalValue = getValueFromTheme('global');
 

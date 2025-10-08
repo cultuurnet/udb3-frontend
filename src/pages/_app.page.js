@@ -126,7 +126,7 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
-        {publicRuntimeConfig?.environment === 'development' && (
+        {process.env.NEXT_PUBLIC_ENVIRONMENT === 'development' && (
           <ReactQueryDevtools initialIsOpen={false} />
         )}
         <Layout>

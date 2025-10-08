@@ -17,12 +17,12 @@ const useLegacyPath = () => {
   const lang = cookies['udb-language'];
 
   const legacyPath = useMemo(() => {
-    const path = new URL(router.asPath, publicRuntimeConfig.legacyAppUrl)
+    const path = new URL(router.asPath, process.env.NEXT_PUBLIC_LEGACY_APP_URL)
       .pathname;
     searchParams.set('jwt', jwt);
     searchParams.set('lang', lang);
 
-    return `${publicRuntimeConfig.legacyAppUrl}${path}${prefixWhenNotEmpty(
+    return `${process.env.NEXT_PUBLIC_LEGACY_APP_URL}${path}${prefixWhenNotEmpty(
       searchParams.toString(),
       '?',
     )}`;
@@ -30,7 +30,7 @@ const useLegacyPath = () => {
     router.asPath,
     jwt,
     lang,
-    publicRuntimeConfig.legacyAppUrl,
+    process.env.NEXT_PUBLIC_LEGACY_APP_URL,
     searchParams,
   ]);
 

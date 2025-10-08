@@ -84,7 +84,7 @@ const MenuItem = memo(
   }: MenuItemProps) => {
     const { asPath } = useRouter();
 
-    const baseUrl = publicRuntimeConfig.baseUrl;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const currentPath = new URL(asPath, baseUrl).pathname;
     const path = new URL(href, baseUrl).pathname;
 

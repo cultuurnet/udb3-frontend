@@ -15,12 +15,12 @@ const useHandleSocketMessage = (eventsMap = {}) => {
   const eventsMapRef = useRef(eventsMap);
 
   useEffect(() => {
-    const socket = socketIOClient(publicRuntimeConfig.socketUrl);
+    const socket = socketIOClient(process.env.NEXT_PUBLIC_SOCKET_URL);
     Object.entries(eventsMapRef.current).forEach(([event, handler]) => {
       socket.on(event, handler);
     });
     return () => socket.close();
-  }, [publicRuntimeConfig.socketUrl]);
+  }, [process.env.NEXT_PUBLIC_SOCKET_URL]);
 };
 
 export { SocketMessageTypes, useHandleSocketMessage };

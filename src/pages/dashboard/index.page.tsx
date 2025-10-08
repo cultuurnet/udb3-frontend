@@ -83,8 +83,8 @@ const PrefetchGetItemsByCreatorMap = {
 type Item = Event | Place | Organizer;
 
 const globalAlertMessages =
-  typeof publicRuntimeConfig.globalAlertMessage === 'string'
-    ? JSON.parse(publicRuntimeConfig.globalAlertMessage)
+  typeof process.env.NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE === 'string'
+    ? JSON.parse(process.env.NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE)
     : undefined;
 
 const globalAlertVariant = Object.values(AlertVariants).some(

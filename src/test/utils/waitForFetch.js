@@ -6,7 +6,7 @@ const waitForFetch = async (path) => {
 
   await waitFor(() =>
     expect(fetch).toBeCalledWith(
-      `${publicRuntimeConfig.apiUrl}${path}`,
+      `${process.env.NEXT_PUBLIC_API_URL}${path}`,
       expect.anything(),
     ),
   );

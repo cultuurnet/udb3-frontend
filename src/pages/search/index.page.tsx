@@ -27,7 +27,7 @@ const Search = () => {
   const { udbMainDarkBlue } = colors;
   const isClientSide = useIsClient();
   const { publicRuntimeConfig } = getConfig();
-  const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
+  const isOwnershipEnabled = process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
 
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(

@@ -13,7 +13,7 @@ const addNewsletter = ({
   const { publicRuntimeConfig } = getConfig();
 
   return fetch(
-    `${publicRuntimeConfig.apiUrl}/mailing-list/${publicRuntimeConfig.newsletterEmailListId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/mailing-list/${process.env.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID}`,
     {
       headers,
       method: 'PUT',
