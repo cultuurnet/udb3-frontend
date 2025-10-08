@@ -1,4 +1,3 @@
-import getConfig from 'next/config';
 import { useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 

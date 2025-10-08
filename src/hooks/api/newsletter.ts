@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 import { useAuthenticatedMutation } from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
 

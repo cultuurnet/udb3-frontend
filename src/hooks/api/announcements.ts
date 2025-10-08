@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import getConfig from 'next/config';
 
 const getAnnouncements = async ({ queryKey }) => {
   const [_key, options] = queryKey;

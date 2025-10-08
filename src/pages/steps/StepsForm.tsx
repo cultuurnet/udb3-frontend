@@ -1,4 +1,3 @@
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -202,7 +201,8 @@ const StepsForm = ({
 
   const labels = getUniqueLabels(offer);
 
-  const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
+  const CULTUURKUUR_LOCATION_ID =
+    process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
 
   const locationId = parseOfferId((offer as Event)?.location?.['@id'] ?? '');
 

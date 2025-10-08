@@ -1,4 +1,3 @@
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

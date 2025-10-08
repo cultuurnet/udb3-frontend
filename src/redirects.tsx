@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 import { FeatureFlags } from './hooks/useFeatureFlag';
 import type { SupportedLanguages } from './i18n';
 import type { Values } from './types/Values';

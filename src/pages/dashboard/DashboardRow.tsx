@@ -1,4 +1,3 @@
-import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';

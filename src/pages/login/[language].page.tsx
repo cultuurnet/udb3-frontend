@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
@@ -267,7 +266,9 @@ const Index = () => {
   const handleClickLogin = () => {
     const { referer } = query;
 
-    const fallbackUri = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
+    const fallbackUri = new URL(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,
+    );
     fallbackUri.searchParams.set('tab', 'events');
 
     const redirectUri = referer ?? fallbackUri.toString();

@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 
 const createHeaders = (token, extraHeaders) => {

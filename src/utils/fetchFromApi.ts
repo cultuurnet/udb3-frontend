@@ -1,5 +1,3 @@
-import getConfig from 'next/config';
-
 class FetchError<TBody = any> extends Error {
   title?: string;
   status: number;

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import getConfig from 'next/config';
 
 import { Scope } from '@/constants/OfferType';
 

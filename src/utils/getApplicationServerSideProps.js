@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import getConfig from 'next/config';
 import absoluteUrl from 'next-absolute-url';
 import { generatePath, matchPath } from 'react-router';
 import UniversalCookies from 'universal-cookie';

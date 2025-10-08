@@ -1,5 +1,4 @@
 import { NextApiRequest } from 'next';
-import getConfig from 'next/config';
 
 import { getAuthServer } from '@/auth/node';
 
