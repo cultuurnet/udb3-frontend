@@ -79,7 +79,7 @@ const getApplicationServerSideProps =
   (callbackFn) =>
   async ({ req, query, resolvedUrl }) => {
     const { publicRuntimeConfig } = getConfig();
-    if (publicRuntimeConfig.environment === 'development') {
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'development') {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     }
 
