@@ -10,8 +10,6 @@ const addNewsletter = ({
   headers: Headers;
   email: string;
 }) => {
-  const { publicRuntimeConfig } = getConfig();
-
   return fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/mailing-list/${process.env.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID}`,
     {

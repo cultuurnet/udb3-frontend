@@ -78,7 +78,6 @@ const redirectToLogin = (cookies, req, resolvedUrl) => {
 const getApplicationServerSideProps =
   (callbackFn) =>
   async ({ req, query, resolvedUrl }) => {
-    const { publicRuntimeConfig } = getConfig();
     if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'development') {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     }

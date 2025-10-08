@@ -26,7 +26,6 @@ const Search = () => {
   const tab = (query?.tab as Scope) ?? 'events-places';
   const { udbMainDarkBlue } = colors;
   const isClientSide = useIsClient();
-  const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED === 'true';
 
   const handleSelectTab = async (tabKey: Scope) =>

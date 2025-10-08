@@ -136,7 +136,6 @@ const parseLocationAttributes = (
 const OfferForm = () => {
   const { t, i18n } = useTranslation();
   const { query, asPath } = useRouter();
-  const { publicRuntimeConfig } = getConfig();
 
   const scope = useMemo(() => {
     if (

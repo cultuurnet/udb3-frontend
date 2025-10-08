@@ -3,8 +3,6 @@ import getConfig from 'next/config';
 import { useCookiesWithOptions } from '../useCookiesWithOptions';
 
 const createHeaders = (token, extraHeaders) => {
-  const { publicRuntimeConfig } = getConfig();
-
   return {
     Authorization: `Bearer ${token}`,
     'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY,

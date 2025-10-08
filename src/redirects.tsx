@@ -41,8 +41,6 @@ const createDashboardRedirects = (environment: Environment) => {
   ];
 };
 
-const { publicRuntimeConfig } = getConfig();
-
 const getRedirects = (
   environment: Environment,
   language: Values<typeof SupportedLanguages> = 'nl',

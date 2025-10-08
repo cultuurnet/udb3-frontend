@@ -26,7 +26,6 @@ export default authServer.handleAuth({
     }
   },
   async logout(req, res) {
-    const { publicRuntimeConfig } = getConfig();
     const language = req.cookies['udb-language'] || 'nl';
     try {
       await authServer.handleLogout(req, res, {

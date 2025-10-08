@@ -36,7 +36,6 @@ IFrame.propTypes = {
 
 const Fallback = () => {
   const router = useRouter();
-  const { publicRuntimeConfig } = getConfig();
 
   // Keep track of which paths were not found. Do not store as a single boolean
   // for the current path, because it's possible to navigate from a 404 path to

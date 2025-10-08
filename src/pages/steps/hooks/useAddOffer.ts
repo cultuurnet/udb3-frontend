@@ -43,7 +43,6 @@ const useAddOffer = ({
   initialOffer,
 }: UseAddOfferArgument) => {
   const { i18n } = useTranslation();
-  const { publicRuntimeConfig } = getConfig();
   const addEventMutation = useAddEventMutation();
   const addPlaceMutation = useAddPlaceMutation();
   const headers = useHeaders();

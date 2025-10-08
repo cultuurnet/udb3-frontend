@@ -9,7 +9,6 @@ const useLegacyPath = () => {
   const { cookies } = useCookiesWithOptions(['token', 'udb-language']);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { publicRuntimeConfig } = getConfig();
   const prefixWhenNotEmpty = (value, prefix) =>
     value ? `${prefix}${value}` : value;
 

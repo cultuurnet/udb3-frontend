@@ -76,8 +76,6 @@ const GERMAN_ZIP_REGEX: RegExp = /\b\d{5}\b/;
 const DUTCH_ZIP_REGEX: RegExp = /^\d{4}([A-Za-z0-9]{2})?$/;
 export const BLANK_STREET_NUMBER = '___';
 
-const { publicRuntimeConfig } = getConfig();
-
 const CULTUURKUUR_LOCATION_ID = process.env.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

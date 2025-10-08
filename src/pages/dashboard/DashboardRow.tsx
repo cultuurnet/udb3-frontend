@@ -62,7 +62,6 @@ export const DashboardRow = ({
   ...props
 }: DashboardRowProps) => {
   const getValue = getValueFromTheme('dashboardPage');
-  const { publicRuntimeConfig } = getConfig();
   const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
     colors;
   const [isImageHovered, setIsImageHovered] = useState(false);

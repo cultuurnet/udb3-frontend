@@ -259,7 +259,6 @@ const MainChannelLink = () => {
 const Index = () => {
   const { query, ...router } = useRouter();
   const { t, i18n } = useTranslation();
-  const { publicRuntimeConfig } = getConfig();
   const { setCookie } = useCookiesWithOptions();
 
   const handleChangeLanguage = (language: string) => async () =>

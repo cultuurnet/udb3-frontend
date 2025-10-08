@@ -112,7 +112,6 @@ const StepsForm = ({
   const [isDuplicateButtonDisabled, setIsDuplicateButtonDisabled] =
     useState(true);
   const [fetchErrors, setFetchErrors] = useState<Record<string, FetchError>>();
-  const { publicRuntimeConfig } = getConfig();
   const eventName = process.env.NEXT_PUBLIC_HOTJAR_EVENT_NAME;
   const missingFieldName = process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME;
   const { handleSubmit, reset } = form;

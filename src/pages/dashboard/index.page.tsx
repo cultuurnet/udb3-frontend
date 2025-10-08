@@ -72,8 +72,6 @@ import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
 import { NewsletterSignupForm } from './NewsletterSingupForm';
 
-const { publicRuntimeConfig } = getConfig();
-
 const PrefetchGetItemsByCreatorMap = {
   events: prefetchGetEventsByCreatorQuery,
   places: prefetchGetPlacesByCreatorQuery,

@@ -10,8 +10,6 @@ const SocketMessageTypes = {
 };
 
 const useHandleSocketMessage = (eventsMap = {}) => {
-  const { publicRuntimeConfig } = getConfig();
-
   const eventsMapRef = useRef(eventsMap);
 
   useEffect(() => {

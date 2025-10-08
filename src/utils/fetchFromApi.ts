@@ -53,8 +53,6 @@ type FetchFromApiArguments = {
   silentError?: boolean;
 };
 
-const { publicRuntimeConfig } = getConfig();
-
 const fetchFromApi = async <TConfig extends FetchFromApiArguments>({
   path,
   searchParams: searchParamsInit,

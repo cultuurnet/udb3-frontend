@@ -1,6 +1,5 @@
 import Hotjar from '@hotjar/browser';
 import { useQueryClient } from '@tanstack/react-query';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { ChangeEvent, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -51,8 +50,6 @@ import { Title } from '@/ui/Title';
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
-
-const { publicRuntimeConfig } = getConfig();
 
 const shouldShowBetaVersion =
   process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION === 'true';
