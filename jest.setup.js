@@ -50,3 +50,5 @@ jest.mock('@/hooks/useCookiesWithOptions.ts', () => ({
     removeAuthenticationCookies: jest.fn(),
   }),
 }));
+
+process.env.NEXT_PUBLIC_API_URL = 'http://localhost:3000';
