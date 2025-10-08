@@ -1,13 +1,11 @@
-import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
 import { format, isAfter, isFuture } from 'date-fns';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
-import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
@@ -43,7 +41,7 @@ import type { Organizer } from '@/types/Organizer';
 import type { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
-import { Alert, AlertVariants } from '@/ui/Alert';
+import { Alert, AlertVariants, AlertVariantsType } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
