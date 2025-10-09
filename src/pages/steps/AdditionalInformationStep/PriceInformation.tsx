@@ -340,6 +340,12 @@ const PriceInformation = ({
                     border-bottom: 1px solid ${getValue('borderColor')};
                   `}
                 >
+      <Stack marginBottom={4}>
+        <Text fontWeight="bold">
+          {t('create.additionalInformation.price_info.prices')}
+        </Text>
+        <Text>{t('create.additionalInformation.price_info.subtitle')}</Text>
+      </Stack>
                   <Inline
                     width="100%"
                     paddingY={3}
