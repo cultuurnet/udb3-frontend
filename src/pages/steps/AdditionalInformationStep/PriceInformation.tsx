@@ -409,6 +409,9 @@ const PriceInformation = ({
                                 <Input
                                   width="6rem"
                                   paddingLeft={4.5}
+                                  {...(rate.category === PriceCategory.BASE && {
+                                    'data-testid': 'basic-rate',
+                                  })}
                                   {...registerPriceProps}
                                   onBlur={async (e) => {
                                     const trimmedValue = e.target.value.trim();
