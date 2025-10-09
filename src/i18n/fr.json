@@ -8,34 +8,6 @@
     "new_features": "Nouveau dans UiTdatabank",
     "no_features": "Il n'y a actuellement aucune nouveauté."
   },
-  "beta_version": {
-    "title": "Vous voulez essayer la dernière version de l'UiTdatabank ? ",
-    "intro1": "Nous travaillons d'arrache-pied sur un nouveau formulaire d'entrée dans la banque de données UiTd afin que vous puissiez saisir vos activités encore plus facilement. Vous l'avez déjà essayé ? Passez à la dernière version de l'UiTdatabank et testez dès maintenant toutes les nouvelles fonctionnalités.",
-    "intro2": "Quelles sont les nouveautés ?",
-    "improvements": [
-      {
-        "prefix": "Plus de possibilités :",
-        "text": "vous pouvez ajouter des événements en ligne, télécharger une vidéo et bien plus encore."
-      },
-      {
-        "prefix": "Moins de travail :",
-        "text": "nous préparons déjà le nom de votre organisation pour vous, de sorte que vous ne devez pas remplir ce champ à chaque fois. Plus tard, nous ferons de même avec les autres informations que vous avez saisies précédemment."
-      },
-      {
-        "prefix": "Une aide supplémentaire :",
-        "text": " le score de complétude vous donne un retour immédiat et des conseils sur la manière de saisir votre événement ou votre lieu de réunion de la manière la plus complète possible."
-      }
-    ],
-    "outro1": "Souhaitez-vous être parmi les premiers à tester le nouveau formulaire d'inscription ?",
-    "confirm": {
-      "title": "J'aime l'essayer",
-      "info": "Commencez tout de suite <boldText>avec</boldText> la nouvelle version de l'UiTdatabank."
-    },
-    "cancel": {
-      "title": "Je vais attendre un peu plus longtemps",
-      "info": "Vous avez encore beaucoup de temps pour passer à la nouvelle version."
-    }
-  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuler",
@@ -722,7 +694,6 @@
   "menu": {
     "add": "Remplir",
     "announcements": "Nouveautés",
-    "beta_version": "Version bêta",
     "home": "Home",
     "labels": "Étiquettes",
     "logout": "Déconnecter",
