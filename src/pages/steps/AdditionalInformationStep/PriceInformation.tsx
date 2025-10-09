@@ -411,6 +411,12 @@ const PriceInformation = ({
                                   paddingLeft={4.5}
                                   {...registerPriceProps}
                                   onBlur={async (e) => {
+                                    const trimmedValue = e.target.value.trim();
+                                    setValue(
+                                      `rates.${index}.price`,
+                                      trimmedValue,
+                                    );
+
                                     await registerPriceProps.onBlur(e);
                                     const isValid = await trigger();
                                     if (!isValid) {
