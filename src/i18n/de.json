@@ -217,6 +217,9 @@
       "is_physical": {
         "label": "An einem physischen Ort"
       },
+      "is_brussels_alert": {
+        "message": "Für Aktivitäten in Brüssel arbeitet UiTdatabank mit visit.brussels zusammen. Tragen Sie Ihre Brüsseler Aktivitäten auf agenda.brussels ein, und sie erscheinen automatisch in UiTdatabank und UiTinvlaanderen. Planen Sie mit Ihrem Mitgliedsverband eine Reise nach Brüssel? Oder organisieren Sie eine Schulaktivität? Dann können Sie weiterhin Informationen in UiTdatabank eingeben. <link1>Weitere Informationen</link1>"
+      },
       "online_url": {
         "label": "Teilnahmelink",
         "placeholder": "https://",
@@ -448,7 +451,7 @@
         "change": "Ändern Organisator",
         "title": "Organisator",
         "select_recent_used_organizer": "Eine Organisation wiederverwenden",
-        "select_recent_used_organizer_info": "Wir haben für Sie die Organisationen vorbereitet, für die Sie sich kürzlich angemeldet haben. Fügen Sie sie mit einem einfachen Klick hinzu.",
+        "select_recent_used_organizer_info": "Dies sind die Organisationen, für die Sie kürzlich Veranstaltungen eingetragen haben. Fügen Sie diese mit einem Klick hinzu. Administratoren der ausgewählten Organisation können die Veranstaltung auch später bearbeiten.",
         "or_choose_other_organizer": "Fügen Sie eine Organisation hinzu",
         "choose_other_organizer": "Wählen Sie eine Organisation aus",
         "uitpas_cardsystems": "UiTPAS Kartensysteme",
@@ -584,7 +587,7 @@
     },
     "no_items": {
       "events": "Keine Veranstaltungen gefunden",
-      "organizers": "Keine Organisationen gefunden",
+      "organizers": "Du verwaltest derzeit keine Organisationen.",
       "places": "Keine Orte gefunden"
     },
     "row_status": {
@@ -996,7 +999,7 @@
       "no_productions": "Keine Produktionen gefunden.",
       "production": "Produktion",
       "search": {
-        "label": "Nach Produktionsnamen suchen:",
+        "label": "Nach Produktionsnamen suchen",
         "placeholder": "Erstellen Sie eine Suchanfrage von mindestens 3 Zeichen."
       },
       "title": "Produktionen"
@@ -1019,7 +1022,9 @@
         "edit": "Bearbeiten",
         "manage": "Anforderungsmanagement",
         "request": "Verwaltung anfordern",
-        "back": "Zurück"
+        "back": "Zurück",
+        "events": "Veranstaltungen verwalten",
+        "places": "Orte verwalten"
       }
     },
     "create": {
@@ -1060,6 +1065,7 @@
         "user": "Benutzer",
         "no_results": "Keine Ergebnisse gefunden",
         "status": {
+          "requested": "Angefordert",
           "approved": "Genehmigt",
           "rejected": "Abgelehnt",
           "approved_by": "Genehmigt von {{email}} am {{date}}",
@@ -1109,7 +1115,11 @@
           "title": "Verwaltungsanfrage für {{organizerName}}",
           "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Veranstaltungen verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
           "cancel": "Abbrechen",
-          "confirm": "Verwaltungsanfrage"
+          "confirm": "Verwaltungsanfrage",
+          "error": {
+            "general": "Ein Fehler ist aufgetreten.",
+            "409": "Sie haben bereits eine laufende Anfrage für diese Organisation."
+          }
         },
         "pending": "Ihre Anfrage zur Verwaltung von {{organizerName}} wird bearbeitet.<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt hat, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
         "success": "Ihre Anfrage zur Verwaltung der Seite von {{organizerName}} und ihrer Veranstaltungen wurde erfolgreich gesendet!<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail."
@@ -1189,6 +1199,26 @@
       "title": "Videolink hinzufügen",
       "validation_messages": {
         "link": "Ihr Videolink entspricht nicht den Anforderungen."
+      }
+    }
+  },
+  "labels": {
+    "overview": {
+      "title": "Labels",
+      "create": "Hinzufügen",
+      "search": {
+        "label": "Nach Labelnamen suchen",
+        "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
+      },
+      "no_results": "Keine Labels gefunden.",
+      "something_wrong": "Es ging etwas schief bei der Suche:",
+      "table": {
+        "name": "Name",
+        "invisible": "Unsichtbar",
+        "private": "Privat",
+        "excluded": "Ausgeschlossen",
+        "options": "Optionen",
+        "edit": "Bearbeiten"
       }
     }
   }

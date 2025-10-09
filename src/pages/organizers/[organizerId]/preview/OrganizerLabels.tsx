@@ -9,6 +9,7 @@ import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
+import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { Label } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
@@ -20,6 +21,7 @@ import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type OrganizerLabelProps = {
@@ -30,9 +32,10 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const { t } = useTranslation();
   const ref = useRef<TypeaheadElement<Label>>(null);
   const router = useRouter();
-  const [query, setQuery] = useState('');
+  const [name, setName] = useState('');
   const labelsQuery = useGetLabelsByQuery({
-    query,
+    name,
+    onlySuggestions: true,
   });
 
   const scope = ScopeTypes.ORGANIZERS;
@@ -42,11 +45,16 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
   const [labels, setLabels] = useState<string[]>(
     getUniqueLabels(organizer) ?? [],
   );
+
+  const getPermissionsQuery = useGetPermissionsQuery();
+  const permissions = getPermissionsQuery.data;
+  const labelsToShow = displayCultuurkuurLabels(permissions, labels);
+
   const addLabelMutation = useAddOfferLabelMutation();
   const removeLabelMutation = useRemoveOfferLabelMutation();
   const getButtonValue = getValueFromTheme('button');
 
-  const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
+  const isWriting = addLabelMutation.isPending || removeLabelMutation.isPending;
   const [isInvalid, setIsInvalid] = useState(false);
 
   return (
@@ -81,7 +89,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
               newSelectionPrefix={t(
                 'create.additionalInformation.labels.add_new_label',
               )}
-              onSearch={setQuery}
+              onSearch={setName}
               onChange={async (newLabels: Label[]) => {
                 const label = newLabels[0]?.name;
                 if (!label || !label.match(LABEL_PATTERN)) {
@@ -103,7 +111,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
           maxWidth={'100%'}
         />
         <Inline spacing={3} flexWrap="wrap">
-          {labels.map((label) => (
+          {labelsToShow.map((label) => (
             <Inline
               key={label}
               borderRadius={getGlobalBorderRadius}

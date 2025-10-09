@@ -1,6 +1,7 @@
+import { kebabCase } from 'lodash';
 import NextLink from 'next/link';
-import type { ReactNode } from 'react';
-import { cloneElement, forwardRef } from 'react';
+import type { ElementType, ReactElement, ReactNode } from 'react';
+import { cloneElement, forwardRef, isValidElement } from 'react';
 
 import type { Values } from '@/types/Values';
 import { Button } from '@/ui/Button';
@@ -13,6 +14,12 @@ import { Text } from './Text';
 import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('link');
+
+const generateCSS = (props: Record<string, any>, allowedProps: string[]) =>
+  allowedProps
+    .filter((prop) => props[prop])
+    .map((prop) => `${kebabCase(prop)}: ${props[prop]};`)
+    .join(' ');
 
 export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
@@ -28,10 +35,11 @@ const LinkVariants = {
 
 type BaseLinkProps = InlineProps & {
   variant?: Values<typeof LinkVariants>;
+  as?: ElementType;
 };
 
 const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
-  ({ href, variant, title, children, className, as, ...props }, ref) => {
+  ({ href, variant, title, children, className, as = 'a', ...props }, ref) => {
     if (variant === LinkVariants.UNSTYLED) {
       return (
         <Inline
@@ -43,6 +51,8 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           display="inline-flex"
           color={{ default: 'inherit', hover: 'inherit' }}
           alignItems="center"
+          width="100%"
+          textDecoration="none"
           {...getInlineProps(props)}
         >
           {children}
@@ -60,6 +70,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           display="inline-flex"
           alignItems="center"
           {...getInlineProps(props)}
+          textDecoration="none"
         >
           <Button forwardedAs="span" width="100%" variant={variant}>
             {children}
@@ -79,7 +90,6 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
         fontWeight={400}
         css={`
           text-decoration: underline;
-
           &:hover {
             text-decoration: underline;
           }
@@ -94,61 +104,58 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
 
 BaseLink.displayName = 'BaseLink';
 
-BaseLink.defaultProps = {
-  as: 'a',
-};
-
-type LinkProps = BaseLinkProps & {
+type LinkProps = {
+  children?: React.ReactNode;
+  className?: string;
   href: string;
   iconName?: Values<typeof Icons>;
   suffix?: ReactNode;
   customChildren?: boolean;
   shouldHideText?: boolean;
-};
+  target?: string;
+  rel?: string;
+} & BaseLinkProps;
 
 const Link = ({
   href,
   iconName,
   suffix,
   children,
-  customChildren,
-  shouldHideText,
+  customChildren = false,
+  shouldHideText = false,
   className,
   variant,
   title,
   as,
+  target,
+  rel,
   ...props
 }: LinkProps) => {
-  const isInternalLink = [
-    (val: string) => val.startsWith('/'),
-    (val: string) => val.startsWith('#'),
-  ].some((predicate) => predicate(href));
+  const isInternalLink = href.startsWith('/') || href.startsWith('#');
 
-  const clonedSuffix = suffix
-    ? // @ts-expect-error
-      cloneElement(suffix, {
-        // @ts-expect-error
-        ...suffix.props,
-        key: 'suffix',
-        css: `align-self: flex-end`,
-      })
-    : undefined;
+  const clonedSuffix =
+    suffix && isValidElement(suffix)
+      ? cloneElement(suffix as ReactElement, {
+          ...(suffix.props && typeof suffix.props === 'object'
+            ? suffix.props
+            : {}),
+          key: 'suffix',
+        })
+      : suffix;
 
-  const inner = [
-    <Inline spacing={3} key="content">
-      {iconName && <Icon name={iconName} key="icon" />}
-      {customChildren
-        ? children
-        : !shouldHideText && (
-            <Text flex={1} textAlign="left" key="text">
-              {children}
-            </Text>
-          )}
-    </Inline>,
-    clonedSuffix,
-  ];
+  const content = (
+    <Inline justifyContent="space-between" width="100%">
+      <Inline spacing={3}>
+        {iconName && <Icon name={iconName} />}
+        {customChildren
+          ? children
+          : !shouldHideText && <Text flex={1}>{children}</Text>}
+      </Inline>
+      {clonedSuffix}
+    </Inline>
+  );
 
-  if (href === '') {
+  if (!href) {
     return (
       <BaseLink
         as={as}
@@ -157,7 +164,7 @@ const Link = ({
         title={title}
         {...getInlineProps(props)}
       >
-        {inner}
+        {content}
       </BaseLink>
     );
   }
@@ -166,17 +173,23 @@ const Link = ({
     return (
       <NextLink
         href={href}
-        passHref={!!href}
-        {...(process.env.STORYBOOK ? { prefetch: false } : {})}
+        css={`
+          text-decoration: none;
+          margin: 0 !important;
+          padding: 0 !important;
+          ${generateCSS(props, ['display', 'width', 'justifyContent'])}
+        `}
       >
         <BaseLink
-          as={as}
+          as="span"
           className={className}
           variant={variant}
           title={title}
           {...getInlineProps(props)}
+          target={target}
+          rel={rel}
         >
-          {inner}
+          {content}
         </BaseLink>
       </NextLink>
     );
@@ -193,14 +206,9 @@ const Link = ({
       title={title}
       {...getInlineProps(props)}
     >
-      {inner}
+      {content}
     </BaseLink>
   );
-};
-
-Link.defaultProps = {
-  customChildren: false,
-  shouldHideText: false,
 };
 
 export { Link, LinkVariants };

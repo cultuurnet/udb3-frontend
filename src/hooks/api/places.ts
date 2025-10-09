@@ -1,4 +1,4 @@
-import type { UseMutationOptions } from 'react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
 
 import { CalendarType } from '@/constants/CalendarType';
 import type { EventTypes } from '@/constants/EventTypes';
@@ -229,11 +229,13 @@ export const prefetchGetPlacesByCreatorQuery = ({
   });
 
 type GetPlacesByQueryArguments = {
-  name: string;
+  name?: string;
   terms: Array<Values<typeof EventTypes>>;
   zip?: string;
+  searchTerm?: string;
   addressLocality?: string;
   addressCountry?: Country;
+  streetAddress?: string;
 };
 
 const getPlacesByQuery = async ({
@@ -243,6 +245,8 @@ const getPlacesByQuery = async ({
   zip,
   addressLocality,
   addressCountry,
+  streetAddress,
+  searchTerm,
 }: { headers: Headers } & GetPlacesByQueryArguments) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
@@ -250,8 +254,10 @@ const getPlacesByQuery = async ({
   );
   const queryArguments = [
     termsString,
+    name ? `name.\\*:"${name}"` : '',
     zip && addressCountry === 'BE' ? `address.\\*.postalCode:"${zip}"` : '',
     addressLocality ? `address.\\*.addressLocality:${addressLocality}` : '',
+    streetAddress ? `address.\\*.streetAddress:"${streetAddress}"` : '',
   ].filter((argument) => !!argument);
 
   const res = await fetchFromApi({
@@ -259,7 +265,6 @@ const getPlacesByQuery = async ({
     searchParams: {
       // eslint-disable-next-line no-useless-escape
       q: queryArguments.join(' AND '),
-      text: `*${name}*`,
       addressCountry,
       embed: 'true',
       disableDefaultFilters: 'true',
@@ -268,6 +273,7 @@ const getPlacesByQuery = async ({
       ['sort[created]']: 'desc',
       limit: '1000',
       status: OfferStatus.AVAILABLE,
+      ...(searchTerm && { text: `*${searchTerm}*` }),
     },
     options: {
       headers,
@@ -283,6 +289,8 @@ const useGetPlacesByQuery = (
     zip,
     addressLocality,
     addressCountry,
+    streetAddress,
+    searchTerm,
   }: GetPlacesByQueryArguments,
   configuration: ExtendQueryOptions<typeof getPlacesByQuery> = {},
 ) =>
@@ -295,8 +303,10 @@ const useGetPlacesByQuery = (
       zip,
       addressCountry,
       addressLocality,
+      streetAddress,
+      searchTerm,
     },
-    enabled: !!name || terms.length > 0,
+    enabled: (!!name && !!streetAddress && !!zip) || !!searchTerm,
     ...configuration,
   });
 
@@ -438,6 +448,7 @@ const usePublishPlaceMutation = (configuration = {}) =>
 
 export {
   getPlaceById,
+  getPlacesByQuery,
   useAddPlaceMutation,
   useChangeAddressMutation,
   useChangeStatusMutation,

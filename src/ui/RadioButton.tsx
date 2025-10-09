@@ -38,16 +38,16 @@ type Props = Omit<BoxProps, 'onChange'> & RadioButtonProps;
 const RadioButton = forwardRef<HTMLInputElement, Props>(
   (
     {
-      type,
+      type = 'radio',
       id,
       onChange,
       className,
       value,
       name,
-      disabled,
-      isInvalid,
+      disabled = false,
+      isInvalid = false,
       isValid,
-      checked,
+      checked = false,
       color = colors.udbMainBlue,
       ...props
     },
@@ -67,69 +67,40 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
       disabled={disabled}
       checked={checked}
       css={`
-        &.custom-switch {
+        &.form-switch {
           font-size: 1rem;
           width: 2.5em;
           height: 1.3em;
-          min-height: initial;
           padding: 0;
           margin: 0.2em;
 
-          .custom-control-input {
-            padding: 0;
+          .form-check-input {
+            width: 2.5em;
+            height: 1.3em;
             margin: 0;
-          }
+            cursor: pointer;
 
-          .custom-control-label {
-            font-size: 1em;
-            width: 100%;
-            height: 100%;
-
-            padding: 0;
-            margin: 0;
-          }
-
-          .custom-control-label::before {
-            font-size: 1em;
-            padding: 0;
-            margin: 0;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 3rem;
-          }
-
-          .custom-control-input:focus ~ .custom-control-label::before {
-            box-shadow: 0 0 0 0.2em rgb(0 123 255 / 25%);
-          }
-
-          .custom-control-input:checked ~ .custom-control-label::before {
-            background-color: ${color};
+            &:checked {
+              background-color: ${color};
+              border-color: ${color};
+            }
+            &:focus {
             border-color: ${color};
           }
 
-          .custom-control-input:disabled ~ .custom-control-label::before {
-            filter: opacity(50%) grayscale(25%);
+          .form-check-input:focus {
+            box-shadow: 0 0 0 0.2em rgb(0 123 255 / 25%);
+          }
+
+          .form-check-input:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
           }
 
-          .custom-control-label::after {
+          .form-check-label {
             font-size: 1em;
-            padding: 0;
-            margin: 0;
-            top: 0.2em;
-            left: 0.2em;
-            height: calc(1em - 0.1em);
-            width: calc(1em - 0.1em);
-            border-radius: calc(2rem - (1.5rem / 2));
-          }
-
-          .custom-control-input:checked ~ .custom-control-label::after {
-            font-size: 1em;
-            transform: initial;
-            left: initial;
-            right: 0.2em;
+            margin-left: 0.5em;
+            cursor: pointer;
           }
         }
       `}
@@ -139,13 +110,6 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
 );
 
 RadioButton.displayName = 'RadioButton';
-
-RadioButton.defaultProps = {
-  type: 'radio',
-  isInvalid: false,
-  disabled: false,
-  checked: false,
-};
 
 export { RadioButton, RadioButtonTypes };
 export type { RadioButtonProps };

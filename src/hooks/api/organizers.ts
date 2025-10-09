@@ -1,4 +1,4 @@
-import type { UseMutationOptions } from 'react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
 
 import {
   AuthenticatedQueryOptions,
@@ -46,7 +46,7 @@ const useGetOrganizersByQueryQuery = (
       limit: `${paginationOptions.limit}`,
     },
     ...configuration,
-    enabled: !!name && configuration.enabled !== false,
+    enabled: (!!name || !!q) && configuration.enabled,
   });
 
 type GetOrganizersArguments = {

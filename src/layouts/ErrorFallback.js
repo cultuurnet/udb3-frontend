@@ -14,11 +14,7 @@ const getValue = getValueFromTheme('pageError');
 
 const MailToSupportLink = () => {
   const { t } = useTranslation();
-  return (
-    <Link href={`mailto:${t('error.email')}`} css="display: inline">
-      {t('error.email')}
-    </Link>
-  );
+  return <Link href={`mailto:${t('error.email')}`}>{t('error.email')}</Link>;
 };
 
 const ErrorFallback = ({ error }) => {
@@ -44,13 +40,13 @@ const ErrorFallback = ({ error }) => {
         height="auto"
         color={getValue('iconColor')}
       />
-      <Title size={1}>{t('error.title')}</Title>
       <Text maxWidth={550}>
-        <Trans i18nKey="error.description">
-          Er ging iets mis. Herlaad de pagina om opnieuw te proberen. Neem
-          contact op met <MailToSupportLink /> als dit probleem zich blijft
-          voordoen
-        </Trans>
+        <Trans
+          i18nKey={'error.description'}
+          components={{
+            1: <MailToSupportLink />,
+          }}
+        ></Trans>
       </Text>
     </Stack>
   );

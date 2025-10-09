@@ -17,7 +17,13 @@ const getColor = (variant) => {
   if (variant === TextVariants.ERROR) return getValue('error.color');
 };
 
-const Text = ({ as, children, className, variant, ...props }: Props) => {
+const Text = ({
+  as = 'span',
+  children,
+  className,
+  variant = TextVariants.REGULAR,
+  ...props
+}: Props) => {
   return (
     <Box
       as={as}
@@ -28,11 +34,6 @@ const Text = ({ as, children, className, variant, ...props }: Props) => {
       {children}
     </Box>
   );
-};
-
-Text.defaultProps = {
-  as: 'span',
-  variant: TextVariants.REGULAR,
 };
 
 export { Text, TextVariants };

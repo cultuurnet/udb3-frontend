@@ -15,7 +15,7 @@ const FeatureFlags = {
   REACT_CREATE: 'react_create',
   ORGANIZER_CREATE: 'organizer_create',
   REACT_DUPLICATE: 'react_duplicate',
-  CULTUURKUUR: 'cultuurkuur',
+  REACT_LABELS_OVERVIEW: 'react_labels_overview',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;
@@ -74,7 +74,7 @@ const isFeatureFlagEnabledInCookies = (
   cookies: any,
 ) => {
   const cookieName = createCookieName(featureFlagName);
-  return cookies?.[cookieName] === 'true';
+  return cookies?.[cookieName] === true || cookies?.[cookieName] === 'true';
 };
 
 export {

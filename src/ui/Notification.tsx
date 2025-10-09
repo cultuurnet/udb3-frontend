@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Toast as BootstrapToast } from 'react-bootstrap';
 import { css } from 'styled-components';
 
@@ -25,16 +26,16 @@ const commonCss = css`
 
     z-index: ${getValue('zIndex')};
 
-    min-width: ${parseSpacing(8)()};
+    min-width: fit-content;
 
     box-shadow: ${getGlobalValue('boxShadow.heavy')};
   }
 `;
 
 type Props = {
-  icon?: JSX.Element;
-  header?: JSX.Element;
-  body: JSX.Element;
+  icon?: ReactElement;
+  header?: ReactElement;
+  body: ReactElement;
 };
 
 const Notification = ({ icon, header, body }: Props) => {
@@ -51,6 +52,7 @@ const Notification = ({ icon, header, body }: Props) => {
         paddingRight={5}
         paddingLeft={4}
         alignItems="center"
+        justifyContent="center"
         color={getValue('textColor.dark')}
       >
         {icon && <Stack alignItems="center">{icon}</Stack>}

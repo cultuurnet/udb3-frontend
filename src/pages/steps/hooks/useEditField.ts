@@ -1,5 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
 
 import { OfferType } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
@@ -9,6 +9,7 @@ import { useEditNameAndAgeRange } from '@/pages/steps/NameAndAgeRangeStep';
 import { useEditNameAndProduction } from '@/pages/steps/ProductionStep';
 import { FormDataUnion } from '@/pages/steps/Steps';
 import { Offer } from '@/types/Offer';
+import { CustomValidationError } from '@/utils/fetchFromApi';
 
 import { useEditCalendar } from '../CalendarStep/CalendarStep';
 
@@ -20,10 +21,11 @@ type UseEditArguments = {
   scope: OfferType;
   offerId: string;
   onSuccess: (editedField: string, options?: HandleSuccessOptions) => void;
+  onError?: (error: CustomValidationError) => void;
   mainLanguage: SupportedLanguage;
 };
 
-const useEditField = ({ scope, onSuccess, offerId, handleSubmit }) => {
+const useEditField = ({ scope, onSuccess, offerId, handleSubmit, onError }) => {
   const queryClient = useQueryClient();
   const [fieldLoading, setFieldLoading] = useState<string>();
   const offer = queryClient.getQueryData<Offer>([scope, { id: offerId }]);
@@ -35,13 +37,14 @@ const useEditField = ({ scope, onSuccess, offerId, handleSubmit }) => {
     onSuccess(editedField);
 
     if (!shouldInvalidateEvent) return;
-    queryClient.invalidateQueries([scope, { id: offerId }]);
+    queryClient.invalidateQueries({ queryKey: [scope, { id: offerId }] });
   };
 
   const editArguments = {
     scope,
     offerId,
     onSuccess: handleSuccess,
+    onError,
     mainLanguage: offer?.mainLanguage,
   };
 
@@ -66,9 +69,13 @@ const useEditField = ({ scope, onSuccess, offerId, handleSubmit }) => {
 
     const editEvent = editMap[editedField];
 
-    handleSubmit(async (formData: FormDataUnion) =>
-      editEvent(formData, editedField),
-    )();
+    handleSubmit(async (formData: FormDataUnion) => {
+      try {
+        await editEvent(formData, editedField);
+      } catch (error) {
+        onError?.(new CustomValidationError(error.message, error.body));
+      }
+    })();
   };
 
   return { handleChange, fieldLoading };

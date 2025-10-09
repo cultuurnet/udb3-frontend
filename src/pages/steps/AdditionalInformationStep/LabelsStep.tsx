@@ -1,7 +1,7 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { uniq } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { ScopeTypes } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
@@ -10,6 +10,7 @@ import {
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useGetPermissionsQuery, useGetRolesQuery } from '@/hooks/api/user';
 import {
   TabContentProps,
   ValidationStatus,
@@ -24,6 +25,7 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
+import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type LabelsStepProps = StackProps & TabContentProps;
@@ -47,9 +49,10 @@ function LabelsStep({
 
   const ref = useRef<TypeaheadElement<Label>>(null);
 
-  const [query, setQuery] = useState('');
+  const [name, setName] = useState('');
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
-    query,
+    name,
+    onlySuggestions: true,
   });
 
   const options = labelsQuery.data?.member ?? [];
@@ -58,6 +61,10 @@ function LabelsStep({
   const removeLabelMutation = useRemoveOfferLabelMutation();
 
   const queryClient = useQueryClient();
+
+  const getPermissionsQuery = useGetPermissionsQuery();
+  const permissions = getPermissionsQuery.data;
+  const labelsToShow = displayCultuurkuurLabels(permissions, labels);
 
   useEffect(() => {
     onValidationChange(
@@ -70,12 +77,12 @@ function LabelsStep({
     setLabels(getUniqueLabels(entity));
   }, [entity]);
 
-  const isWriting = addLabelMutation.isLoading || removeLabelMutation.isLoading;
+  const isWriting = addLabelMutation.isPending || removeLabelMutation.isPending;
   const [isInvalid, setIsInvalid] = useState(false);
 
   const handleInvalidateOrganizerQuery = async () => {
     if (scope !== ScopeTypes.ORGANIZERS) return;
-    await queryClient.invalidateQueries('organizers');
+    await queryClient.invalidateQueries({ queryKey: ['organizers'] });
   };
 
   return (
@@ -107,7 +114,7 @@ function LabelsStep({
               newSelectionPrefix={t(
                 'create.additionalInformation.labels.add_new_label',
               )}
-              onSearch={setQuery}
+              onSearch={setName}
               onChange={async (newLabels: Label[]) => {
                 const label = newLabels[0]?.name;
                 if (!label || !label.match(LABEL_PATTERN)) {
@@ -135,7 +142,7 @@ function LabelsStep({
           }
         />
         <Inline spacing={3} flexWrap="wrap">
-          {labels.map((label) => (
+          {labelsToShow.map((label) => (
             <Inline
               key={label}
               borderRadius={getGlobalBorderRadius}

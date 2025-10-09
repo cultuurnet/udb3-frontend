@@ -247,6 +247,12 @@ const ChangeNameAction = ({
         maxWidth="22rem"
         value={changedProductionName}
         onChange={(event) => onChangedProductionName(event.currentTarget.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            onConfirm();
+          }
+        }}
       />
       <Button
         iconName={Icons.CHECK}
@@ -277,9 +283,9 @@ ChangeNameAction.propTypes = {
 };
 
 const Events = ({
-  events,
+  events = [],
   activeProductionName,
-  loading,
+  loading = false,
   errorMessage,
   onToggleSelectEvent,
   onAddEvent,
@@ -411,11 +417,6 @@ Events.propTypes = {
   isAddActionVisible: PropTypes.bool,
   isChangeNameActionVisible: PropTypes.bool,
   className: PropTypes.string,
-};
-
-Events.defaultProps = {
-  events: [],
-  loading: false,
 };
 
 export { Events };

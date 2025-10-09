@@ -22,7 +22,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright tests
         env:
@@ -40,13 +40,16 @@ jobs:
           NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION: ${{ secrets.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION }}
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          E2E_TEST_ADMIN_EMAIL: ${{ secrets.E2E_TEST_ADMIN_EMAIL }}
+          E2E_TEST_ADMIN_PASSWORD: ${{ secrets.E2E_TEST_ADMIN_PASSWORD }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_BASE_URL: ${{ secrets.AUTH_BASE_URL }}
           AUTH_ISSUER_BASE_URL: ${{ secrets.AUTH_ISSUER_BASE_URL }}
           AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
           AUTH_CLIENT_SECRET: ${{ secrets.AUTH_CLIENT_SECRET }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-        run: yarn test:e2e
+        run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

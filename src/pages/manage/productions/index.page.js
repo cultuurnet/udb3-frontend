@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
@@ -31,8 +31,6 @@ import { Productions } from './Productions';
 
 const productionsPerPage = 15;
 
-const productionsQueryKey = ['productions', { limit: 15, name: '', start: 0 }];
-
 const Index = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -59,6 +57,15 @@ const Index = () => {
       limit: productionsPerPage,
     },
   });
+
+  const productionsQueryKey = [
+    'productions',
+    {
+      name: searchInput ?? '',
+      start: `${(currentPageProductions - 1) * productionsPerPage}`,
+      limit: `${productionsPerPage}`,
+    },
+  ];
 
   const rawProductions = useMemo(
     () => getProductionsQuery.data?.member ?? [],
@@ -114,7 +121,7 @@ const Index = () => {
   }, [getEventsByIdsQuery.data, selectedEventIds]);
 
   const handleSuccessDeleteEvents = async () => {
-    await queryClient.invalidateQueries('productions');
+    await queryClient.invalidateQueries({ queryKey: ['productions'] });
     setSelectedEventIds([]);
   };
 
@@ -123,7 +130,7 @@ const Index = () => {
   });
 
   const handleSuccessAddEvent = async () => {
-    await queryClient.invalidateQueries('productions');
+    await queryClient.invalidateQueries({ queryKey: ['productions'] });
     setToBeAddedEventId('');
   };
 
@@ -155,11 +162,12 @@ const Index = () => {
         name: toBeChangedProductionName,
       };
 
-      await queryClient.cancelQueries(productionsQueryKey);
+      await queryClient.cancelQueries({ queryKey: productionsQueryKey });
 
       const previousProductions = queryClient.getQueryData(productionsQueryKey);
 
       queryClient.setQueryData(productionsQueryKey, (productions) => {
+        if (!productions) return;
         return {
           ...productions,
           member: productions.member.map((oldProduction) => {
@@ -184,7 +192,7 @@ const Index = () => {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries(productionsQueryKey);
+      queryClient.invalidateQueries({ queryKey: productionsQueryKey });
     },
   });
 

@@ -1,8 +1,8 @@
+import { dehydrate, UseQueryResult } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { dehydrate, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerPermissionsResponse,
@@ -137,6 +137,24 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
+                <Link
+                  variant={LinkButtonVariants.BUTTON_SECONDARY}
+                  href={`/search?query=organizer.id:${encodeURIComponent(
+                    organizerId,
+                  )} AND _type:event`}
+                  iconName={Icons.CALENDAR_ALT}
+                >
+                  {t('organizers.detail.actions.events')}
+                </Link>
+                <Link
+                  variant={LinkButtonVariants.BUTTON_SECONDARY}
+                  href={`/search?query=organizer.id:${encodeURIComponent(
+                    organizerId,
+                  )} AND _type:place`}
+                  iconName={Icons.BUILDING}
+                >
+                  {t('organizers.detail.actions.places')}
+                </Link>
               </Stack>
             </Inline>
           </Stack>

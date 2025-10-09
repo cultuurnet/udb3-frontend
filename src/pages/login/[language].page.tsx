@@ -3,7 +3,7 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo } from 'react';
+import { ReactElement, useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
@@ -81,7 +81,7 @@ const OvalSvg = ({ ...props }: StackProps) => {
 };
 
 type USPCardProps = {
-  icon: JSX.Element;
+  icon: ReactElement;
   quantity: string;
   title: string;
   text: string | React.ReactElement;
@@ -304,13 +304,17 @@ const Index = () => {
   return (
     <Stack
       width="100%"
+      height="100vh"
+      display="flex"
+      flexDirection="column"
       alignItems="center"
       spacing={6}
       backgroundColor={getValueForPage('backgroundColor')}
     >
       <Stack
         width="100%"
-        height={isSmallView ? 'auto' : isXLargeView ? 900 : 800}
+        height={isSmallView ? 'auto' : isXLargeView ? '100vh' : 800}
+        flexShrink={0}
       >
         <Inline
           width="100%"

@@ -1,22 +1,30 @@
 import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_EDUCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
+import { ErrorCodes } from '@/constants/ErrorCodes';
 import { OfferTypes } from '@/constants/OfferType';
-import { useGetEducationLevelsQuery } from '@/hooks/api/education-levels';
+import {
+  useCultuurkuurLabelsPickerProps,
+  useGetEducationLevelsQuery,
+} from '@/hooks/api/cultuurkuur';
 import {
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { useHeaders } from '@/hooks/api/useHeaders';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
-import { FormElement } from '@/ui/FormElement';
-import { LabelsCheckboxTree } from '@/ui/LabelsCheckboxTree';
+import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
+import { Text, TextVariants } from '@/ui/Text';
+import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -39,6 +47,7 @@ const useEditNameAndAgeRange = ({
   offerId,
   mainLanguage,
 }: UseEditArguments) => {
+  const headers = useHeaders();
   const changeNameMutation = useChangeOfferNameMutation({
     onSuccess: () => onSuccess('basic_info'),
   });
@@ -47,8 +56,12 @@ const useEditNameAndAgeRange = ({
     onSuccess: () => onSuccess('basic_info'),
   });
 
-  return async ({ nameAndAgeRange }: FormDataUnion) => {
+  return async ({ nameAndAgeRange, location }: FormDataUnion) => {
     const { name, typicalAgeRange } = nameAndAgeRange;
+
+    if (scope === OfferTypes.PLACES) {
+      await checkDuplicatePlace({ headers, offerId, location, name });
+    }
 
     if (typicalAgeRange) {
       await changeTypicalAgeRangeMutation.mutateAsync({
@@ -67,30 +80,62 @@ const useEditNameAndAgeRange = ({
   };
 };
 
-const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
+const NameAndAgeRangeStep = ({
+  offerId,
+  control,
+  name,
+  scope,
+  error,
+  watch,
+  setValue,
+  ...props
+}: StepProps) => {
+  const { t } = useTranslation();
   const router = useRouter();
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
 
-  const duplicatePlaceId =
-    (error?.body as DuplicatePlaceErrorBody) && error.body.duplicatePlaceUri
-      ? parseOfferId(error.body.duplicatePlaceUri)
-      : undefined;
+  const errorBody = error?.body as DuplicatePlaceErrorBody;
+  const errorMessage = error?.message;
+
+  const getPlaceIdFromDuplicatePlaceError = (errorMessage: string) => {
+    if (errorMessage?.includes(ErrorCodes.DUPLICATE_PLACE_ERROR)) {
+      const parsedMessage = JSON.parse(errorMessage);
+      const placeUri = parsedMessage.find((message: string) =>
+        message.includes('/place'),
+      );
+      return parseOfferId(placeUri);
+    }
+
+    return undefined;
+  };
+
+  const duplicatePlaceId = errorBody?.duplicatePlaceUri
+    ? parseOfferId(errorBody.duplicatePlaceUri)
+    : getPlaceIdFromDuplicatePlaceError(errorMessage);
 
   const duplicatePlaceQuery = (error?.body as DuplicatePlaceErrorBody)?.query
     ? error.body.query
     : undefined;
 
-  const goToLocationDetailPage = (place: Place) => {
-    const placeId = parseOfferId(place['@id']);
-    router.push(`/place/${placeId}/preview`);
-  };
+  const isCultuurkuurEvent =
+    scope === OfferTypes.EVENTS &&
+    watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const levels = useGetEducationLevelsQuery();
-  const isCultuurkuurEvent =
-    props.scope === OfferTypes.EVENTS &&
-    props.watch('audience.audienceType') === AudienceTypes.EDUCATION;
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    levels,
+  );
+
+  const isNewEventWithoutLabels =
+    error?.message.includes(CULTUURKUUR_EDUCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasEducationLabels;
+
+  const isExistingEventWithoutLabels =
+    offerId && !labelsPickerProps.hasEducationLabels;
+
+  const isEducationLabelErrorVisible =
+    isCultuurkuurEvent &&
+    (isNewEventWithoutLabels || isExistingEventWithoutLabels);
 
   return (
     <Controller
@@ -99,7 +144,12 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
       render={() => {
         return (
           <Stack spacing={4} maxWidth={parseSpacing(11)}>
-            <NameStep {...getStepProps(props)} name={name} control={control} />
+            <NameStep
+              {...getStepProps(props)}
+              name={name}
+              scope={scope}
+              control={control}
+            />
             {!isCultuurkuurEvent && (
               <AgeRangeStep
                 {...getStepProps(props)}
@@ -107,26 +157,51 @@ const NameAndAgeRangeStep = ({ control, name, error, ...props }: StepProps) => {
                 control={control}
               />
             )}
-            {isCultuurkuurFeatureFlagEnabled &&
-              isCultuurkuurEvent &&
-              !levels.isLoading && (
-                <FormElement
-                  id={'labels'}
-                  label={'Geschikt voor de volgende onderwijsniveaus '}
-                  Component={
-                    <LabelsCheckboxTree
-                      {...getStepProps(props)}
-                      nodes={levels.data}
-                    />
-                  }
+            {isCultuurkuurEvent && !levels.isLoading && (
+              <>
+                <Text fontWeight="bold" marginBottom={3}>
+                  {t(`create.name_and_age.age.title`)}
+                </Text>
+                <CultuurkuurLabelsPicker
+                  labelsKey="education"
+                  {...labelsPickerProps}
                 />
-              )}
+                <Text
+                  variant={TextVariants.MUTED}
+                  maxWidth={parseSpacing(9)}
+                  marginTop={3}
+                >
+                  <Trans
+                    i18nKey={'create.name_and_age.cultuurkuur.info'}
+                    components={{
+                      link1: (
+                        <Link
+                          css={`
+                            text-decoration: underline;
+                          `}
+                          href={t('create.name_and_age.cultuurkuur.link')}
+                        />
+                      ),
+                    }}
+                  ></Trans>
+                </Text>
+                {isEducationLabelErrorVisible && (
+                  <Text variant={TextVariants.ERROR}>
+                    {t('cultuurkuur_modal.overview.error_education_levels')}
+                  </Text>
+                )}
+              </>
+            )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}
               placeId={duplicatePlaceId}
               query={duplicatePlaceQuery}
-              labelKey="create.name_and_age.name.duplicate_place"
-              onSelectPlace={goToLocationDetailPage}
+              offerId={offerId}
+              labelKey={
+                offerId
+                  ? 'location.add_modal.errors.duplicate_place_edit_page'
+                  : 'create.name_and_age.name.duplicate_place'
+              }
             />
           </Stack>
         );
@@ -142,7 +217,7 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
-      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex).required(),
+      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');

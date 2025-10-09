@@ -1,14 +1,17 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { mapValues, sortBy } from 'lodash';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
-import { OfferType, Scope, ScopeTypes } from '@/constants/OfferType';
+import { AudienceTypes } from '@/constants/AudienceType';
+import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
+import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
@@ -250,7 +253,9 @@ const AdditionalInformationStep = ({
   const invalidateOfferQuery = useCallback(
     async (field: Field, shouldInvalidate: boolean) => {
       if (shouldInvalidate) {
-        await queryClient.invalidateQueries([scope, { id: offerId }]);
+        await queryClient.invalidateQueries({
+          queryKey: [scope, { id: offerId }],
+        });
       }
       onChangeSuccess?.(field);
     },
@@ -261,6 +266,16 @@ const AdditionalInformationStep = ({
   const [tab, setTab] = useState(
     isOrganizer ? Fields.CONTACT_INFO : Fields.DESCRIPTION,
   );
+
+  const getOfferByIdQuery = useGetOfferByIdQuery(
+    { id: offerId, scope },
+    { refetchOnWindowFocus: false },
+  );
+
+  const offer: Offer | undefined = getOfferByIdQuery.data;
+
+  const isCultuurkuurEvent =
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
   const [, hash] = asPath.split('#');
 
@@ -348,6 +363,8 @@ const AdditionalInformationStep = ({
               : true;
 
             if (!shouldShowTab) return null;
+
+            if (field === 'audience' && isCultuurkuurEvent) return null;
 
             return (
               <Tabs.Tab

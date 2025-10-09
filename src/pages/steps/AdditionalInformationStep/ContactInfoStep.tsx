@@ -1,16 +1,9 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { useAddContactPointMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -64,76 +57,50 @@ const ContactInfoStep = ({
   );
 
   const [isFieldFocused, setIsFieldFocused] = useState(false);
-  const [isContactInfoStateInitialized, setIsContactInfoInitialized] =
-    useState(false);
 
   const [isCultuurkuurAlertVisible, setIsCultuurkuurAlertVisible] =
     useState(false);
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurOrganizer = hasCultuurkuurOrganizerLabel(
     getEntityByIdQuery.data?.hiddenLabels,
   );
-
-  const contactInfo =
+  const rawContactInfo =
     getEntityByIdQuery.data?.contactPoint ?? organizerContactInfo;
 
-  const updateContactInfoState = useCallback(
-    (newContactInfo) => {
-      const contactInfoArray = [];
-
-      Object.keys(contactInfo ?? {}).forEach((key) => {
-        contactInfo[key].forEach((item) => {
-          contactInfoArray.push({
-            type: key,
-            value: item,
-          });
-        });
-      });
-
-      setContactInfoState(contactInfoArray);
-      setIsContactInfoInitialized(true);
-    },
-    [contactInfo],
+  const hasAnyContactInfo = ['email', 'phone', 'url'].some(
+    (key) =>
+      rawContactInfo?.[key]?.length > 0 && rawContactInfo?.[key]?.value !== '',
   );
 
-  useEffect(() => {
-    if (!contactInfo || isContactInfoStateInitialized) return;
-    updateContactInfoState(contactInfo);
-  }, [contactInfo, isContactInfoStateInitialized, updateContactInfoState]);
+  const hasEmail = rawContactInfo?.email?.some((email) => email !== '');
 
   useEffect(() => {
-    if (!organizerContactInfo) return;
-    updateContactInfoState(organizerContactInfo);
-  }, [organizerContactInfo, updateContactInfoState]);
+    if (!rawContactInfo) return;
+
+    const contactInfoArray: NewContactInfo[] = [];
+
+    Object.entries(rawContactInfo).forEach(([type, values]) => {
+      (values as string[]).forEach((value) => {
+        contactInfoArray.push({ type, value });
+      });
+    });
+
+    setContactInfoState(contactInfoArray);
+  }, [rawContactInfo]);
 
   useEffect(() => {
-    if (!isContactInfoStateInitialized) return;
-
-    const filteredContactInfoState = contactInfoState.filter(
-      (contactInfo) => contactInfo.value !== '',
-    );
-
     if (!onValidationChange) {
       return;
     }
 
-    if (
-      filteredContactInfoState.length === 0 &&
-      isCultuurkuurFeatureFlagEnabled &&
-      isCultuurkuurOrganizer
-    ) {
+    if (!hasEmail && isCultuurkuurOrganizer) {
       onValidationChange(ValidationStatus.WARNING, field);
       setIsCultuurkuurAlertVisible(true);
       return;
     }
 
-    if (filteredContactInfoState.length === 0) {
+    if (!hasAnyContactInfo) {
       onValidationChange(ValidationStatus.NONE, field);
-      setIsCultuurkuurAlertVisible(false);
       return;
     }
 
@@ -142,9 +109,9 @@ const ContactInfoStep = ({
   }, [
     field,
     contactInfoState,
-    isContactInfoStateInitialized,
     isCultuurkuurOrganizer,
-    isCultuurkuurFeatureFlagEnabled,
+    hasEmail,
+    hasAnyContactInfo,
     onValidationChange,
   ]);
 
@@ -202,9 +169,11 @@ const ContactInfoStep = ({
         scope,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           onSuccessfulChange(contactPoint);
-          onValidationChange(ValidationStatus.SUCCESS, field);
+          await queryClient.invalidateQueries({
+            queryKey: [scope, { id: offerId }],
+          });
         },
       },
     );
@@ -252,8 +221,6 @@ const ContactInfoStep = ({
     newContactInfo[index].value = '';
 
     setContactInfoState(newContactInfo);
-
-    await handleAddContactInfoMutation(newContactInfo);
   };
 
   return (
@@ -265,10 +232,11 @@ const ContactInfoStep = ({
               alignSelf="flex-start"
               height="2.38rem"
               width="30%"
+              value={info.type}
               onChange={(e) => handleChangeContactInfoType(e, index)}
             >
               {Object.values(ContactInfoTypes).map((type) => (
-                <option value={type} selected={info.type === type} key={type}>
+                <option value={type} key={type}>
                   {t(`create.additionalInformation.contact_info.${type}`)}
                 </option>
               ))}
@@ -283,7 +251,7 @@ const ContactInfoStep = ({
                   value={info.value}
                   onChange={(e) => {
                     const newContactInfoState = [...contactInfoState];
-                    newContactInfoState[index].value = e.target.value;
+                    newContactInfoState[index].value = e.target.value.trim();
                     setContactInfoState(newContactInfoState);
                     setIsFieldFocused(true);
                   }}

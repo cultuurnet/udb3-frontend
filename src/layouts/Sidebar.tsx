@@ -1,11 +1,12 @@
 import Hotjar from '@hotjar/browser';
+import { useQueryClient } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { ChangeEvent, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { useGetAnnouncementsQuery } from '@/hooks/api/announcements';
 import { useGetEventsToModerateQuery } from '@/hooks/api/events';
@@ -54,24 +55,11 @@ import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 const { publicRuntimeConfig } = getConfig();
 
 const shouldShowBetaVersion =
-  publicRuntimeConfig.shouldShowBetaVersion === 'true';
+  publicRuntimeConfig?.shouldShowBetaVersion === 'true';
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
-
-const PermissionTypes = {
-  AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
-  AANBOD_MODEREREN: 'AANBOD_MODEREREN',
-  AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
-  ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
-  ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
-  GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
-  LABELS_BEHEREN: 'LABELS_BEHEREN',
-  VOORZIENINGEN_BEWERKEN: 'VOORZIENINGEN_BEWERKEN',
-  PRODUCTIES_AANMAKEN: 'PRODUCTIES_AANMAKEN',
-  FILMS_AANMAKEN: 'FILMS_AANMAKEN',
-} as const;
 
 type MenuItemType = {
   href?: string;
@@ -114,6 +102,11 @@ const MenuItem = memo(
           position: relative;
 
           color: ${isActive ? getValueForMenuItem('active.color') : 'inherit'};
+
+          :hover {
+            background-color: ${getValueForMenuItem('hover.backgroundColor')};
+            border-radius: 8px;
+          }
 
           :before {
             content: '';
@@ -222,7 +215,9 @@ type ProfileMenuProps = {
   defaultProfileImageUrl?: string;
 };
 
-const ProfileMenu = ({ defaultProfileImageUrl }: ProfileMenuProps) => {
+const ProfileMenu = ({
+  defaultProfileImageUrl = '/assets/avatar.svg',
+}: ProfileMenuProps) => {
   const getUserQuery = useGetUserQuery();
   const user = getUserQuery.data as User;
 
@@ -254,10 +249,6 @@ const ProfileMenu = ({ defaultProfileImageUrl }: ProfileMenuProps) => {
       </Stack>
     </Inline>
   );
-};
-
-ProfileMenu.defaultProps = {
-  defaultProfileImageUrl: '/assets/avatar.svg',
 };
 
 type NotificationMenuProps = {
@@ -301,7 +292,7 @@ const NotificationMenu = memo(
         children: t('menu.logout'),
         onClick: async () => {
           removeAuthenticationCookies();
-          await queryClient.invalidateQueries('user');
+          await queryClient.invalidateQueries({ queryKey: ['user'] });
 
           window.location.assign('/api/auth/logout');
         },
@@ -371,7 +362,7 @@ const Sidebar = () => {
     FeatureFlags.REACT_CREATE,
   );
 
-  const sidebarComponent = useRef();
+  const sidebarComponent = useRef<HTMLElement>(null);
 
   const [announcementModalContext, setAnnouncementModalContext] =
     useAnnouncementModalContext();
@@ -474,7 +465,7 @@ const Sidebar = () => {
 
   useHandleWindowMessage({
     [WindowMessageTypes.OFFER_MODERATED]: () =>
-      queryClient.invalidateQueries(['events']),
+      queryClient.invalidateQueries({ queryKey: ['events'] }),
     [WindowMessageTypes.OPEN_ANNOUNCEMENT_MODAL]: ({ id }) => {
       setAnnouncementModalContext((prevModalContext) => ({
         ...prevModalContext,
@@ -625,6 +616,8 @@ const Sidebar = () => {
       }}
     >
       <Link
+        alignSelf="center"
+        display="flex"
         justifyContent="center"
         href="/dashboard"
         title={t('menu.home')}

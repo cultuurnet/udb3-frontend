@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Box, parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
@@ -30,29 +29,24 @@ export const CalendarOptionToggle = ({
   const isOneOrMoreDays = useIsOneOrMoreDays();
   const isFixedDays = useIsFixedDays();
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
-  const fixedDaysToggleProps =
-    isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent
-      ? {
-          iconName: CustomIconVariants.CULTUURKUUR_CALENDAR,
-          text: (
-            <Inline spacing={2}>
-              <Box as="p">{t('create.calendar.types.cultuurkuur')}</Box>
-              <Tooltip
-                content={t('create.calendar.types.cultuurkuur_tip')}
-                id={t('create.calendar.types.cultuurkuur_tip')}
-                placement="bottom"
-              />
-            </Inline>
-          ),
-        }
-      : {
-          iconName: CustomIconVariants.CALENDAR_MULTIPLE,
-          text: t('create.calendar.types.fixed_days'),
-        };
+  const fixedDaysToggleProps = isCultuurkuurEvent
+    ? {
+        iconName: CustomIconVariants.CULTUURKUUR_CALENDAR,
+        text: (
+          <Inline spacing={2}>
+            <Box as="p">{t('create.calendar.types.cultuurkuur')}</Box>
+            <Tooltip
+              content={t('create.calendar.types.cultuurkuur_tip')}
+              id={t('create.calendar.types.cultuurkuur_tip')}
+              placement="bottom"
+            />
+          </Inline>
+        ),
+      }
+    : {
+        iconName: CustomIconVariants.CALENDAR_MULTIPLE,
+        text: t('create.calendar.types.fixed_days'),
+      };
 
   return (
     <Inline spacing={5} alignItems="stretch" {...getInlineProps(props)}>

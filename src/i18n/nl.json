@@ -208,6 +208,9 @@
         "other": "Of kies een andere locatie",
         "pick": "Kies een locatie"
       },
+      "existing_locations": {
+        "title": "We vinden al plaatsen op dit adres. Misschien kan jij een onze suggesties hergebruiken?"
+      },
       "validation_messages": {
         "street_and_number": {
           "required": "Je straat en nummer voldoen niet aan de vereisten."
@@ -220,7 +223,12 @@
         "label": "Op een fysieke locatie"
       },
       "is_cultuurkuur": {
-        "label": "Op een locatie in overleg met de school"
+        "label": "Op een locatie in overleg met de school",
+        "title": "Ik verplaats me naar",
+        "info": "Voeg locaties toe naar waar je je wil verplaatsen. Zo vinden de juiste scholen jouw aanbod."
+      },
+      "is_brussels_alert": {
+        "message": "Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen. Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je wel verder invoeren op UiTdatabank. <link1>Meer info</link1>"
       },
       "online_url": {
         "label": "Deelnamelink",
@@ -279,6 +287,10 @@
         "age": "jaar",
         "error_max_lower_than_min": "De maximumleeftijd kan niet lager zijn dan de minimumleeftijd.",
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen"
+      },
+      "cultuurkuur": {
+        "info": "Voeg de onderwijsniveaus toe waarvoor je activiteit geschikt is. Meer info over de nieuwe structuur van het onderwijs vind je <link1>hier</link1>.",
+        "link": "https://www.cultuurkuur.be/inspiratie/aanbod-voor-scholen-kies-het-juiste-onderwijsniveau"
       }
     },
     "type_and_theme": {
@@ -295,7 +307,8 @@
       "change_type": "Wijzig type",
       "refine": "Verfijn",
       "cultuurkuur": {
-        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden."
+        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden.",
+        "error": "Kies een thema"
       }
     },
     "additionalInformation": {
@@ -461,7 +474,7 @@
         "change": "Wijzig organisatie",
         "title": "Organisatie",
         "select_recent_used_organizer": "Een organisatie hergebruiken",
-        "select_recent_used_organizer_info": "We hebben de organisaties waarvoor je recent invoerde hier voor je klaargezet. Met één klik voeg je ze toe.",
+        "select_recent_used_organizer_info": "Dit zijn de organisaties waarvoor je onlangs evenementen invoerde. Voeg ze met één klik toe. Beheerders van de geselecteerde organisatie kunnen het evenement later ook bewerken.",
         "or_choose_other_organizer": "Of een nieuwe organisatie toevoegen",
         "choose_other_organizer": "Een nieuwe organisatie toevoegen",
         "uitpas_cardsystems": "UiTPAS Kaartsystemen",
@@ -475,8 +488,10 @@
         }
       },
       "cultuurkuur": {
-        "title": "Cultuurkuur",
-        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur."
+        "title": "Voor scholen",
+        "tip": "Geef een enthousiaste omschrijving van je organisatie, specifiek gericht naar scholen en leerkrachten. Deze beschrijving verschijnt enkel op cultuurkuur.be, het platform voor onderwijs en cultuur.",
+        "tailored": "Ik werk activiteiten uit op maat van scholen",
+        "on_location": "Ik organiseer ook activiteiten op verplaatsing"
       },
       "location": {
         "title": "Locatie",
@@ -603,7 +618,7 @@
     },
     "no_items": {
       "events": "Geen evenementen gevonden",
-      "organizers": "Geen organisaties gevonden",
+      "organizers": "Je beheert op dit moment geen organisaties.",
       "places": "Geen locaties gevonden"
     },
     "row_status": {
@@ -895,6 +910,24 @@
       }
     }
   },
+  "cultuurkuur_modal": {
+    "selectAll": "Alles selecteren",
+    "clearAll": "Alles verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "title": {
+      "location": "Provincie, regio of gemeente toevoegen",
+      "education": "Onderwijsniveaus toevoegen"
+    },
+    "overview": {
+      "locations": "{{count}} werkingsregio's",
+      "education_levels": "{{count}} onderwijsniveaus",
+      "selected": "zijn geselecteerd",
+      "change": "Wijzig",
+      "error_locations": "Selecteer minstens één werkingsregio",
+      "error_education_levels": "Selecteer minstens één onderwijsniveau"
+    }
+  },
   "location": {
     "add_modal": {
       "title": "Nieuwe locatie toevoegen",
@@ -921,7 +954,8 @@
         "type": "Categorie is een verplicht veld.",
         "postalCode": " Je postcode voldoet niet aan de vereisten.",
         "duplicate_place_generic": "De locatie die je wilt aanmaken bestaat al in de UiTdatabank.",
-        "duplicate_place": "De locatie die je wilt aanmaken bestaat al in de UiTdatabank. Gebruik <placeLink>{{placeName}}</placeLink> als locatie."
+        "duplicate_place": "De locatie die je wilt aanmaken bestaat al in de UiTdatabank. Gebruik <placeLink>{{placeName}}</placeLink> als locatie.",
+        "duplicate_place_edit_page": "De opgegeven wijziging komt overeen met een <placeLink>bestaande locatie</placeLink> in onze databank. Pas de huidige locatie niet aan naar een reeds bestaande locatie, maar gebruik de bestaande locatie zelf."
       }
     }
   },
@@ -1015,7 +1049,7 @@
       "no_productions": "Geen producties gevonden.",
       "production": "Productie",
       "search": {
-        "label": "Zoeken op productienaam:",
+        "label": "Zoeken op productienaam",
         "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
       },
       "title": "Producties"
@@ -1038,7 +1072,9 @@
         "edit": "Bewerken",
         "manage": "Beheerders aanpassen",
         "request": "Beheer aanvragen",
-        "back": "Ga terug"
+        "back": "Ga terug",
+        "events": "Beheer evenementen",
+        "places": "Beheer locaties"
       }
     },
     "create": {
@@ -1081,6 +1117,7 @@
         "user": "Gebruiker",
         "no_results": "Geen resultaten gevonden",
         "status": {
+          "requested": "Aangevraagd",
           "approved": "Goedgekeurd",
           "rejected": "Afgekeurd",
           "approved_by": "Goedgekeurd door {{email}} op {{date}}",
@@ -1132,7 +1169,10 @@
           "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
           "cancel": "Annuleren",
           "confirm": "Beheer aanvragen",
-          "error": "Er is iets misgelopen"
+          "error": {
+            "general": "Er is iets misgelopen",
+            "409": "Je hebt al een lopende aanvraag voor deze organisatie."
+          }
         },
         "pending": "Je aanvraag tot het beheer van {{organizerName}} is in behandeling.<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail.",
         "success": "Je aanvraag om beheerder te worden van {{organizerName}} is succesvol verzonden!<br/>Zodra een huidige beheerder je aanvraag heeft goedgekeurd, krijg je toegang en ontvang je een bevestiging via e-mail."
@@ -1155,7 +1195,8 @@
         "place": "Locatie"
       },
       "cultuurkuur_event": "Dit is een evenement voor scholen",
-      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen."
+      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
+      "cultuurkuur_tooltip": "Deze knop maakt van je evenement een evenement voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
     }
   },
   "themes": {
@@ -1212,6 +1253,26 @@
       "title": "Videolink toevoegen",
       "validation_messages": {
         "link": "Je videolink voldoet niet aan de vereisten."
+      }
+    }
+  },
+  "labels": {
+    "overview": {
+      "title": "Labels",
+      "create": "Toevoegen",
+      "search": {
+        "label": "Zoeken op labelnaam",
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+      },
+      "no_results": "Geen labels gevonden.",
+      "something_wrong": "Er ging iets mis tijdens het zoeken:",
+      "table": {
+        "name": "Naam",
+        "invisible": "Verborgen",
+        "private": "Voorbehouden",
+        "excluded": "Uitgesloten",
+        "options": "Opties",
+        "edit": "Bewerken"
       }
     }
   }

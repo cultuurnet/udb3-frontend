@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 import { parseSpacing } from './Box';
 import type { StackProps } from './Stack';
@@ -53,18 +53,18 @@ const SuccessIcon = ({ active }: SuccessIconProps) => {
 };
 
 type Props = StackProps & {
-  active: boolean;
-  icon?: JSX.Element;
-  text: ReactNode;
+  active?: boolean;
+  icon?: ReactElement;
+  text?: ReactNode;
   disabled?: boolean;
 };
 
 const ToggleBox = ({
   children,
   onClick,
-  active,
-  icon,
-  text,
+  active = false,
+  icon = undefined,
+  text = '',
   disabled,
   ...props
 }: Props) => {
@@ -143,12 +143,6 @@ const ToggleBox = ({
       {children}
     </Stack>
   );
-};
-
-ToggleBox.defaultProps = {
-  active: false,
-  icon: undefined,
-  text: '',
 };
 
 export { ToggleBox };

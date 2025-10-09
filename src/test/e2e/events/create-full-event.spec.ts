@@ -1,6 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+const brusselsMessage =
+  'Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen.';
+
 const dummyEvent = {
   name: 'E2E test event with all possible fields filled in',
   description: faker.lorem.words(200),
@@ -14,7 +17,7 @@ const dummyEvent = {
   },
   bookingInfo: {
     email: faker.internet.email(),
-    phone: faker.phone.number('##########'),
+    phone: faker.phone.number({ style: 'international' }),
     url: faker.internet.url(),
   },
   image: {
@@ -51,10 +54,21 @@ test('create event with all possible fields filled in', async ({
 
   // // 4. Address
   await page.getByLabel('Gemeente').click();
+  await page.getByLabel('Gemeente').fill('1000');
+  await page.getByRole('option', { name: '1000 Brussel' }).click();
+  // Should see the brussels
+  await expect(page.getByText(brusselsMessage)).toBeVisible();
+
+  await page.getByRole('button', { name: 'Wijzig gemeente' }).click();
+
   await page.getByLabel('Gemeente').fill(dummyEvent.address.zip);
   await page
     .getByRole('option', { name: dummyEvent.address.municipality })
     .click();
+
+  // Brussels alert should be gone
+  await expect(page.getByText(brusselsMessage)).toBeHidden();
+
   await page.getByLabel('Kies een locatie').click();
 
   await page
@@ -81,26 +95,28 @@ test('create event with all possible fields filled in', async ({
   await page.getByText('Geef een enthousiaste').click();
 
   await expect(
-    page.getByRole('tab', { name: 'Beschrijving' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Beschrijving' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // // Add image & video url
   await page.getByRole('tab', { name: 'Afbeelding & video' }).click();
   await page.getByRole('button', { name: 'Afbeelding toevoegen' }).click();
   await page.setInputFiles('input[type="file"]', 'upload/e2e-image.jpg');
-  await page.getByLabel('Beschrijving').fill(dummyEvent.image.description);
+  await page
+    .getByRole('textbox', { name: 'Beschrijving' })
+    .fill(dummyEvent.image.description);
   await page.getByLabel('Copyright').fill(dummyEvent.image.copyright);
   await page.getByRole('button', { name: 'Uploaden' }).click();
   await expect(page.getByText(dummyEvent.image.description)).toBeVisible();
   await page.getByRole('button', { name: 'Videolink toevoegen' }).click();
   await page.getByLabel('Link').locator('visible=true').fill(dummyEvent.video);
-  await page.getByRole('button', { name: 'Toevoegen' }).click();
+  await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
   await expect(page.getByRole('img', { name: 'video' })).toBeVisible();
   await expect(page.getByText(dummyEvent.video)).toBeVisible();
   await expect(
     page
       .getByRole('tab', { name: 'Afbeelding & video' })
-      .locator('.fa-check-circle'),
+      .locator('.fa-circle-check'),
   ).toBeVisible();
 
   // // Prices
@@ -110,7 +126,7 @@ test('create event with all possible fields filled in', async ({
 
   await page.getByText('BasistariefeuroGratisTarief toevoegen').click();
   await expect(
-    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Organizer
@@ -129,7 +145,7 @@ test('create event with all possible fields filled in', async ({
     .click();
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
   await expect(
-    page.getByRole('tab', { name: 'Organisatie' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Organisatie' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Contact
@@ -143,7 +159,7 @@ test('create event with all possible fields filled in', async ({
     .getByRole('button', { name: 'Meer contactgegevens toevoegen' })
     .click();
   await expect(
-    page.getByRole('tab', { name: 'Contact' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Contact' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // BookingInfo
@@ -159,7 +175,7 @@ test('create event with all possible fields filled in', async ({
   await page.getByPlaceholder('Website').click();
   await page.getByPlaceholder('Website').fill(dummyEvent.bookingInfo.url);
 
-  await page.getByLabel('Koop tickets').check();
+  await page.getByRole('radio', { name: 'Koop tickets' }).click();
 
   await page
     .getByRole('button', { name: 'Reservatieperiode toevoegen' })
@@ -179,7 +195,7 @@ test('create event with all possible fields filled in', async ({
     .fill(endReservationDate.toLocaleDateString());
 
   await expect(
-    page.getByRole('tab', { name: 'Reservatie' }).locator('.fa-check-circle'),
+    page.getByRole('tab', { name: 'Reservatie' }).locator('.fa-circle-check'),
   ).toBeVisible();
 
   // Add labels

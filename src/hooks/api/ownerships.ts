@@ -1,4 +1,4 @@
-import { UseMutationOptions, UseMutationResult } from 'react-query';
+import { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 
 import { Values } from '@/types/Values';
 import { fetchFromApi } from '@/utils/fetchFromApi';
@@ -48,14 +48,12 @@ export type OwnershipState = Values<typeof OwnershipState>;
 type RequestOwnershipArguments = {
   itemId: string;
   ownerEmail?: string;
-  ownerId?: string;
 };
 
 const requestOwnership = async ({
   headers,
   itemId,
   ownerEmail,
-  ownerId,
 }: { headers: Headers } & RequestOwnershipArguments) =>
   fetchFromApi({
     path: `/ownerships`,
@@ -66,7 +64,6 @@ const requestOwnership = async ({
         itemId,
         itemType: 'organizer',
         ...(ownerEmail && { ownerEmail }),
-        ...(ownerId && { ownerId }),
       }),
     },
   });

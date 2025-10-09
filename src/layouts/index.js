@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/nextjs';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
-import { Cookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import Cookies from 'universal-cookie';
 
 import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
@@ -20,10 +20,9 @@ import { isTokenValid } from '@/utils/isTokenValid';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Sidebar } from './Sidebar';
 
-const useChangeLanguage = () => {
+const useChangeLanguage = (language) => {
   const { i18n } = useTranslation();
-  const { cookies } = useCookiesWithOptions(['udb-language']);
-  const language = useMemo(() => cookies['udb-language'], [cookies]);
+
   useEffect(() => {
     if (language) {
       i18n.changeLanguage(language);
@@ -40,12 +39,14 @@ const useHandleAuthentication = () => {
     Sentry.setUser({ id: getUserQuery.data.id });
   }, [getUserQuery.data]);
 
-  // redirect when there is no token or user cookie
-  // manipulation from outside the application
+  // Check token validity every 5 seconds and redirect to login if expired
   useEffect(() => {
-    let intervalId; // eslint-disable-line prefer-const
+    let intervalId;
     const cleanUp = () => (intervalId ? clearInterval(intervalId) : undefined);
-    if (asPath.startsWith('/login')) return cleanUp;
+    // Skip login page to prevent infinite redirect loop
+    if (asPath.startsWith('/login')) {
+      return cleanUp;
+    }
     intervalId = setInterval(() => {
       const cookies = new Cookies();
       if (!isTokenValid(cookies.get('token'))) {
@@ -53,7 +54,8 @@ const useHandleAuthentication = () => {
         cookies.remove('token');
         Router.push('/login');
       }
-    }, 5000); // checking every 5 seconds
+    }, 5000);
+
     return cleanUp;
   }, [asPath]);
 };
@@ -63,9 +65,10 @@ const Layout = ({ children }) => {
   const queryClient = useQueryClient();
   const { cookies, removeAuthenticationCookies } = useCookiesWithOptions([
     'token',
+    'udb-language',
   ]);
 
-  useChangeLanguage();
+  useChangeLanguage(cookies['udb-language']);
   useHandleWindowMessage({
     [WindowMessageTypes.URL_CHANGED]: ({ path }) => {
       const currentUrl = new URL(window.location.href);
@@ -94,7 +97,7 @@ const Layout = ({ children }) => {
     [WindowMessageTypes.HTTP_ERROR_CODE]: ({ code }) => {
       if ([401, 403].includes(code)) {
         removeAuthenticationCookies();
-        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         router.push('/login');
       }
     },
@@ -124,7 +127,7 @@ const LayoutWrapper = ({ children }) => {
     asPath.startsWith('/404') ||
     asPath.startsWith('/500')
   ) {
-    return <>{children}</>;
+    return <Inline height="100vh">{children}</Inline>;
   }
 
   return (

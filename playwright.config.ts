@@ -41,17 +41,33 @@ export default defineConfig({
   projects: [
     // Setup project
     {
-      name: 'setup',
-      testMatch: /.*\.setup\.ts/,
+      name: 'setup-user',
+      testMatch: /auth\.setup\.ts/,
     },
-
     {
-      name: 'chromium',
+      name: 'setup-admin',
+      testMatch: /auth-admin\.setup\.ts/,
+    },
+    // Regular user tests
+    {
+      name: 'chromium-user',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
-      dependencies: ['setup'],
+      dependencies: ['setup-user'],
+      testIgnore: /.*admin.*\.spec\.ts/, // Ignore admin test files
+    },
+
+    // Admin user tests
+    {
+      name: 'chromium-admin',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/admin.json',
+      },
+      dependencies: ['setup-admin'],
+      testMatch: /.*admin.*\.spec\.ts/, // Only run admin test files
     },
   ],
 
@@ -60,8 +76,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'yarn dev',
+    command: 'yarn build && yarn start',
     port: 3000,
+    timeout: 240 * 1000,
     env: {
       NEXT_PUBLIC_ENVIRONMENT: 'e2e',
     },

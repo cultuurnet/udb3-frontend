@@ -1,28 +1,38 @@
 import { TFunction } from 'i18next';
 import getConfig from 'next/config';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Controller, useController, useWatch } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import { CULTUURKUUR_LOCATION_LABELS_ERROR } from '@/constants/Cultuurkuur';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
+  useCultuurkuurLabelsPickerProps,
+  useGetCultuurkuurRegions,
+} from '@/hooks/api/cultuurkuur';
+import {
   useChangeAttendanceModeMutation,
-  useChangeAudienceMutation,
   useChangeLocationMutation,
   useChangeOnlineUrlMutation,
   useDeleteOnlineUrlMutation,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { useChangeAddressMutation } from '@/hooks/api/places';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import {
+  useChangeAddressMutation,
+  useGetPlacesByQuery,
+} from '@/hooks/api/places';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useHeaders } from '@/hooks/api/useHeaders';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import { FormData as OfferFormData } from '@/pages/create/OfferForm';
+import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
-import { AttendanceMode } from '@/types/Event';
+import { AttendanceMode, Event } from '@/types/Event';
+import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -33,17 +43,23 @@ import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { RadioButtonTypes } from '@/ui/RadioButton';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { Link } from '@/ui/Link';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
+import { UitpasIcon } from '@/ui/UitpasIcon';
+import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
+import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
+import { isUitpasLocation } from '@/utils/uitpas';
 import { prefixUrlWithHttps } from '@/utils/url';
 
+import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
 import { CityPicker } from '../CityPicker';
 import { CountryPicker } from './CountryPicker';
 import { UseEditArguments } from './hooks/useEditField';
@@ -67,20 +83,35 @@ const API_URL = publicRuntimeConfig.apiUrl;
 
 const getGlobalValue = getValueFromTheme('global');
 
-const RecentLocations = ({ onFieldChange, ...props }) => {
+type LocationSuggestionProps = {
+  locations: Place[];
+  title: string;
+  alertVisible?: boolean;
+  isRecentLocations?: boolean;
+  onFieldChange?: (value: any) => void;
+} & StackProps;
+
+const LocationSuggestions = ({
+  onFieldChange,
+  locations,
+  title,
+  alertVisible = true,
+  isRecentLocations = true,
+  ...props
+}: LocationSuggestionProps) => {
   const { t, i18n } = useTranslation();
-  const { recentLocations: locations } = useRecentLocations();
+  const { uitpasLabels } = useUitpasLabels();
 
   return (
-    <Stack {...props}>
+    <Stack {...props} spacing={5}>
       <Inline>
-        <Text fontWeight={'bold'}>
-          {t('create.location.recent_locations.title')}
-        </Text>
+        <Text fontWeight={'bold'}>{title}</Text>
       </Inline>
-      <Alert variant={AlertVariants.PRIMARY} marginY={4}>
-        {t('create.location.recent_locations.info')}
-      </Alert>
+      {alertVisible && (
+        <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+          {t('create.location.recent_locations.info')}
+        </Alert>
+      )}
       <Inline
         display={'grid'}
         css={`
@@ -93,12 +124,21 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
             location.address,
             location.mainLanguage,
           );
+          const locationId = parseOfferId(location['@id']);
 
           return (
             <ButtonCard
               key={location['@id']}
               width={'auto'}
               marginBottom={0}
+              href={isRecentLocations ? null : `/place/${locationId}/preview`}
+              badge={
+                <Inline>
+                  {isUitpasLocation(location, uitpasLabels) && (
+                    <UitpasIcon width="2rem" />
+                  )}
+                </Inline>
+              }
               onClick={() =>
                 onFieldChange({
                   municipality: {
@@ -131,18 +171,15 @@ const RecentLocations = ({ onFieldChange, ...props }) => {
   );
 };
 
-const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
+const useEditLocation = ({ scope, offerId, onSuccess }: UseEditArguments) => {
   const { i18n } = useTranslation();
+  const headers = useHeaders();
+
   const changeAddressMutation = useChangeAddressMutation();
   const changeOnlineUrl = useChangeOnlineUrlMutation();
   const deleteOnlineUrl = useDeleteOnlineUrlMutation();
   const changeAttendanceMode = useChangeAttendanceModeMutation();
-  const changeAudienceMutation = useChangeAudienceMutation();
   const changeLocationMutation = useChangeLocationMutation();
-
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
 
   return async ({ location }: FormDataUnion) => {
     // For places
@@ -163,11 +200,16 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
         },
       };
 
-      changeAddressMutation.mutate({
-        id: offerId,
-        address: address[i18n.language],
-        language: i18n.language,
-      });
+      await checkDuplicatePlace({ headers, offerId, location });
+
+      changeAddressMutation.mutate(
+        {
+          id: offerId,
+          address: address[i18n.language],
+          language: i18n.language,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       return;
     }
@@ -175,10 +217,13 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     // For events
 
     if (location.isOnline) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.ONLINE,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.ONLINE,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       if (location.onlineUrl) {
         changeOnlineUrl.mutate({
@@ -186,9 +231,12 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
           onlineUrl: location.onlineUrl,
         });
       } else {
-        deleteOnlineUrl.mutate({
-          eventId: offerId,
-        });
+        deleteOnlineUrl.mutate(
+          {
+            eventId: offerId,
+          },
+          { onSuccess: () => onSuccess(scope) },
+        );
       }
 
       return;
@@ -197,50 +245,45 @@ const useEditLocation = ({ scope, offerId }: UseEditArguments) => {
     const isCultuurkuurLocation = !location.country;
 
     if (isCultuurkuurLocation) {
-      await changeAttendanceMode.mutateAsync({
-        eventId: offerId,
-        attendanceMode: AttendanceMode.OFFLINE,
-        location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
-      });
+      await changeAttendanceMode.mutateAsync(
+        {
+          eventId: offerId,
+          attendanceMode: AttendanceMode.OFFLINE,
+          location: `${API_URL}/place/${CULTUURKUUR_LOCATION_ID}`,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
-      const changeLocationPromise = changeLocationMutation.mutateAsync({
-        locationId: CULTUURKUUR_LOCATION_ID,
-        eventId: offerId,
-      });
-
-      const changeAudiencePromise = !isCultuurkuurFeatureFlagEnabled
-        ? changeAudienceMutation.mutateAsync({
-            eventId: offerId,
-            audienceType: AudienceTypes.EDUCATION,
-          })
-        : Promise.resolve();
-
-      await Promise.all([changeLocationPromise, changeAudiencePromise]);
+      await changeLocationMutation.mutateAsync(
+        {
+          locationId: CULTUURKUUR_LOCATION_ID,
+          eventId: offerId,
+        },
+        { onSuccess: () => onSuccess(scope) },
+      );
 
       return;
     }
 
     if (!location.place) return;
 
-    await changeAttendanceMode.mutateAsync({
-      eventId: offerId,
-      attendanceMode: AttendanceMode.OFFLINE,
-      location: location.place['@id'],
-    });
-
-    if (
-      parseOfferId(location.place['@id']) !== CULTUURKUUR_LOCATION_ID &&
-      !isCultuurkuurFeatureFlagEnabled
-    ) {
-      changeAudienceMutation.mutate({
+    await changeAttendanceMode.mutateAsync(
+      {
         eventId: offerId,
-        audienceType: AudienceTypes.EVERYONE,
-      });
-    }
+        attendanceMode: AttendanceMode.OFFLINE,
+        location: location.place['@id'],
+      },
+      {
+        onSuccess: () => onSuccess(scope),
+      },
+    );
 
-    deleteOnlineUrl.mutate({
-      eventId: offerId,
-    });
+    deleteOnlineUrl.mutate(
+      {
+        eventId: offerId,
+      },
+      { onSuccess: () => onSuccess(scope) },
+    );
   };
 };
 
@@ -279,21 +322,23 @@ export const BlankStreetToggle = ({
   const [isBlankStreet, setIsBlankStreet] = useState(false);
 
   return (
-    <RadioButtonWithLabel
-      name={'blank_address'}
-      label={
-        <Text className={'ml-1'}>
-          {t('organizer.add_modal.labels.address.blank_street')}
-        </Text>
+    <FormElement
+      id="blank_address"
+      label={t('organizer.add_modal.labels.address.blank_street')}
+      labelVariant={LabelVariants.NORMAL}
+      labelPosition={LabelPositions.RIGHT}
+      Component={
+        <RadioButton
+          type={RadioButtonTypes.SWITCH}
+          color={colors.udbMainPositiveGreen}
+          checked={isBlankStreet}
+          onChange={() => {
+            const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
+            setIsBlankStreet(!isBlankStreet);
+            onChange(streetAndNumber);
+          }}
+        />
       }
-      type={RadioButtonTypes.SWITCH}
-      checked={isBlankStreet}
-      onChange={() => {
-        const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
-
-        setIsBlankStreet(!isBlankStreet);
-        onChange(streetAndNumber);
-      }}
     />
   );
 };
@@ -311,12 +356,12 @@ const LocationStep = ({
   setValue,
   trigger,
   watch,
+  error,
   ...props
 }: PlaceStepProps) => {
   const { t } = useTranslation();
 
   const [streetAndNumber, setStreetAndNumber] = useState('');
-  const [audienceType, setAudienceType] = useState('');
   const [onlineUrl, setOnlineUrl] = useState('');
   const [hasOnlineUrlError, setHasOnlineUrlError] = useState(false);
   const scope = watch('scope') ?? props.scope;
@@ -325,9 +370,13 @@ const LocationStep = ({
     name: ['location.streetAndNumber', 'location.onlineUrl', 'location'],
   });
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
+  const hasStreetAndNumber =
+    !!locationStreetAndNumber &&
+    locationStreetAndNumber !== BLANK_STREET_NUMBER;
+
+  const [isBlankStreetToggleVisible, setIsBlankStreetToggleVisible] =
+    useState(hasStreetAndNumber);
+  const [isExistingPlacesVisible, setIsExistingPlacesVisible] = useState(false);
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -339,27 +388,76 @@ const LocationStep = ({
     return !isLocationSet(scope, location, formState);
   }, [formState, location, offerId, scope]);
 
-  const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
-
-  const audience = getOfferByIdQuery.data?.audience;
-
+  const audienceField = watch('audience.audienceType');
   const { hasRecentLocations } = useRecentLocations();
 
-  useEffect(() => {
-    if (audience?.audienceType) {
-      setAudienceType(audience.audienceType);
-    }
+  const { field } = useController({ name: 'location', control });
 
-    if (!locationStreetAndNumber && !locationOnlineUrl) return;
+  const { isOnline, country } = field?.value as OfferFormData['location'];
+
+  const isPhysicalLocation = !!country && !isOnline;
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity = getEntityByIdQuery.data as Event;
+
+  const locationId = parseOfferId((entity as Event)?.location?.['@id'] ?? '');
+
+  const entityId = parseOfferId(entity?.['@id'] ?? '');
+
+  const regions = useGetCultuurkuurRegions();
+  const labelsPickerProps = useCultuurkuurLabelsPickerProps(
+    { scope, offerId, setValue, watch },
+    regions,
+  );
+
+  const isNewEventWithoutLabels =
+    error?.message.includes(CULTUURKUUR_LOCATION_LABELS_ERROR) &&
+    !labelsPickerProps.hasLocationLabels &&
+    !isPhysicalLocation &&
+    !isOnline;
+
+  const isExistingEventWithoutLabels =
+    offerId &&
+    !labelsPickerProps.hasLocationLabels &&
+    CULTUURKUUR_LOCATION_ID === locationId;
+
+  const isLocationLabelErrorVisible =
+    isNewEventWithoutLabels || isExistingEventWithoutLabels;
+
+  (useEffect(() => {
+    if (audienceField !== AudienceTypes.EDUCATION && !location?.country) {
+      field.onChange({
+        country: 'BE',
+        municipality: undefined,
+        place: undefined,
+        isOnline: false,
+      });
+    }
+  }),
+    [audienceField, location?.country, setValue]);
+
+  useEffect(() => {
+    if (!locationStreetAndNumber && !locationOnlineUrl) {
+      setIsBlankStreetToggleVisible(false);
+      return;
+    }
 
     if (locationStreetAndNumber) {
       setStreetAndNumber(locationStreetAndNumber);
     }
 
+    if (hasStreetAndNumber) {
+      setIsBlankStreetToggleVisible(true);
+    }
+
+    if (locationStreetAndNumber === BLANK_STREET_NUMBER) {
+      setStreetAndNumber('');
+    }
+
     if (locationOnlineUrl) {
       setOnlineUrl(locationOnlineUrl);
     }
-  }, [locationStreetAndNumber, locationOnlineUrl, audience]);
+  }, [locationStreetAndNumber, locationOnlineUrl, hasStreetAndNumber]);
 
   const handleChangeStreetAndNumber = (e: ChangeEvent<HTMLInputElement>) => {
     const shouldShowNextStepInCreate =
@@ -375,6 +473,27 @@ const LocationStep = ({
 
     setStreetAndNumber(e.target.value);
   };
+
+  const useGetPlacesQuery = useGetPlacesByQuery({
+    terms: [],
+    zip: location?.municipality?.zip,
+    addressLocality: location?.municipality?.name,
+    addressCountry: country,
+    searchTerm: streetAndNumber,
+  });
+
+  const existingPlaces = useMemo<Place[]>(
+    () => useGetPlacesQuery.data?.member ?? [],
+    [useGetPlacesQuery.data?.member],
+  );
+
+  const { recentLocations } = useRecentLocations();
+
+  const errorBody = error?.body as DuplicatePlaceErrorBody;
+
+  const duplicatePlaceId = errorBody?.duplicatePlaceUri
+    ? parseOfferId(errorBody.duplicatePlaceUri)
+    : undefined;
 
   return (
     <Stack
@@ -392,6 +511,11 @@ const LocationStep = ({
             field?.value as OfferFormData['location'];
 
           const isDefaultZip = municipality?.zip === '0000';
+          const isBrusselsZip =
+            municipality?.zip &&
+            Number(municipality.zip) >= 1000 &&
+            Number(municipality.zip) <= 1210;
+
           const isPhysicalLocation = !!country && !isOnline && !isDefaultZip;
 
           const onFieldChange = (updatedValue) => {
@@ -412,7 +536,12 @@ const LocationStep = ({
               {scope === OfferTypes.EVENTS && OnlineToggle}
               <Inline spacing={5}>
                 {showRecentLocations && hasRecentLocations && (
-                  <RecentLocations flex={1} onFieldChange={onFieldChange} />
+                  <LocationSuggestions
+                    flex={1}
+                    locations={recentLocations}
+                    title={t('create.location.recent_locations.title')}
+                    onFieldChange={onFieldChange}
+                  />
                 )}
                 <Stack
                   minHeight={showRecentLocations ? '450px' : 'none'}
@@ -425,6 +554,25 @@ const LocationStep = ({
                         ? t('create.location.recent_locations.other')
                         : t('create.location.recent_locations.pick')}
                     </Text>
+                  )}
+                  {isBrusselsZip && (
+                    <Alert variant="primary">
+                      <Trans
+                        i18nKey={'create.location.is_brussels_alert.message'}
+                        components={{
+                          link1: (
+                            <Link
+                              href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
+                              rel="noopener noreferrer"
+                              display="inline-block"
+                              fontWeight="bold"
+                              textDecoration="underline"
+                              padding={0}
+                            />
+                          ),
+                        }}
+                      />
+                    </Alert>
                   )}
                   {children}
                 </Stack>
@@ -445,14 +593,15 @@ const LocationStep = ({
                     {...getInlineProps(props)}
                   >
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: false,
                           municipality: undefined,
                           place: undefined,
                           country: Countries.BE,
-                        })
-                      }
+                        });
+                        labelsPickerProps.onConfirm([], 'location');
+                      }}
                       active={isPhysicalLocation}
                       icon={
                         <CustomIcon
@@ -465,12 +614,13 @@ const LocationStep = ({
                       minHeight={parseSpacing(7)}
                     />
                     <ToggleBox
-                      onClick={() =>
+                      onClick={() => {
                         onFieldChange({
                           isOnline: true,
                           municipality: undefined,
-                        })
-                      }
+                        });
+                        labelsPickerProps.onConfirm([], 'location');
+                      }}
                       active={isOnline}
                       icon={
                         <CustomIcon
@@ -482,15 +632,15 @@ const LocationStep = ({
                       width="30%"
                       minHeight={parseSpacing(7)}
                     />
-                    {isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent && (
+                    {isCultuurkuurEvent && (
                       <ToggleBox
-                        onClick={() =>
+                        onClick={() => {
                           onFieldChange({
                             country: undefined,
                             municipality: undefined,
                             isOnline: false,
-                          })
-                        }
+                          });
+                        }}
                         active={!isPhysicalLocation && !isOnline}
                         icon={
                           <CustomIcon
@@ -567,29 +717,25 @@ const LocationStep = ({
           if (!country || municipality?.zip === '0000') {
             return renderFieldWithRecentLocations(
               <>
-                <Inline alignItems="center" spacing={3} marginBottom={3}>
-                  <Icon
-                    name={Icons.CHECK_CIRCLE}
-                    color={getGlobalValue('successColor')}
+                <Text fontWeight="bold" marginBottom={3}>
+                  {t('create.location.is_cultuurkuur.title')}
+                </Text>
+
+                {isCultuurkuurEvent && !regions.isLoading && (
+                  <CultuurkuurLabelsPicker
+                    labelsKey="location"
+                    {...labelsPickerProps}
                   />
-                  <Text>{t('create.location.country.location_school')}</Text>
-                  <Button
-                    variant={ButtonVariants.LINK}
-                    onClick={() => {
-                      onFieldChange({
-                        country: Countries.BE,
-                        municipality: undefined,
-                      });
-                      setAudienceType(AudienceTypes.EVERYONE);
-                    }}
+                )}
+
+                {isCultuurkuurEvent && (
+                  <Text
+                    variant={TextVariants.MUTED}
+                    maxWidth={parseSpacing(9)}
+                    marginTop={3}
                   >
-                    {t('create.location.country.change_location')}
-                  </Button>
-                </Inline>
-                {!isCultuurkuurFeatureFlagEnabled && (
-                  <Alert maxWidth="53rem">
-                    {t('create.location.country.location_school_info')}
-                  </Alert>
+                    {t('create.location.is_cultuurkuur.info')}
+                  </Text>
                 )}
               </>,
             );
@@ -604,7 +750,7 @@ const LocationStep = ({
                       name="city-picker-location-step"
                       country={country}
                       offerId={offerId}
-                      value={field.value?.municipality}
+                      value={field.value?.municipality || null}
                       onChange={(value) => {
                         onFieldChange({
                           municipality: value,
@@ -659,7 +805,6 @@ const LocationStep = ({
                       municipality: undefined,
                       streetAndNumber: undefined,
                     });
-                    setStreetAndNumber('');
                   }}
                 >
                   {t(
@@ -701,7 +846,6 @@ const LocationStep = ({
                           onFieldChange({
                             streetAndNumber: undefined,
                           });
-                          setStreetAndNumber('');
                         }}
                       >
                         {t(`create.location.street_and_number.change`)}
@@ -738,8 +882,16 @@ const LocationStep = ({
                         Component={
                           <Input
                             value={streetAndNumber}
-                            disabled={streetAndNumber === BLANK_STREET_NUMBER}
-                            onBlur={() => onFieldChange({ streetAndNumber })}
+                            onBlur={() => {
+                              onFieldChange({ streetAndNumber });
+                              hasStreetAndNumber
+                                ? setIsBlankStreetToggleVisible(true)
+                                : setIsBlankStreetToggleVisible(false);
+                              setIsExistingPlacesVisible(true);
+                            }}
+                            onFocus={() => {
+                              setIsExistingPlacesVisible(false);
+                            }}
                             onChange={handleChangeStreetAndNumber}
                           />
                         }
@@ -750,27 +902,60 @@ const LocationStep = ({
                           formState.errors.location?.streetAndNumber &&
                           t('location.add_modal.errors.streetAndNumber')
                         }
-                        info={
-                          scope === ScopeTypes.ORGANIZERS && (
-                            <BlankStreetToggle
-                              onChange={(streetAndNumber) =>
-                                onFieldChange({
-                                  streetAndNumber,
-                                  location: { streetAndNumber },
-                                })
-                              }
-                            />
-                          )
-                        }
                       />
                     </Stack>
                   )}
                 </Stack>
               )}
+              {scope === ScopeTypes.PLACES &&
+                existingPlaces.length > 0 &&
+                isExistingPlacesVisible &&
+                !entityId && (
+                  <Stack marginTop={5}>
+                    <LocationSuggestions
+                      locations={existingPlaces}
+                      title={t('create.location.existing_locations.title')}
+                      onFieldChange={onFieldChange}
+                      alertVisible={false}
+                      isRecentLocations={false}
+                    />
+                  </Stack>
+                )}
+              <Stack marginTop={5}>
+                <AlertDuplicatePlace
+                  variant={AlertVariants.DANGER}
+                  placeId={duplicatePlaceId}
+                  offerId={offerId}
+                  labelKey={
+                    offerId
+                      ? 'location.add_modal.errors.duplicate_place_edit_page'
+                      : 'create.name_and_age.name.duplicate_place'
+                  }
+                />
+              </Stack>
+              <Stack marginTop={3}>
+                {scope === ScopeTypes.ORGANIZERS &&
+                  isBlankStreetToggleVisible && (
+                    <BlankStreetToggle
+                      onChange={(streetAndNumber) => {
+                        setIsBlankStreetToggleVisible(false);
+                        onFieldChange({
+                          streetAndNumber,
+                          location: { streetAndNumber },
+                        });
+                      }}
+                    />
+                  )}
+              </Stack>
             </>,
           );
         }}
       />
+      {isLocationLabelErrorVisible && (
+        <Text variant={TextVariants.ERROR}>
+          {t('cultuurkuur_modal.overview.error_locations')}
+        </Text>
+      )}
     </Stack>
   );
 };
@@ -852,8 +1037,6 @@ const locationStepConfiguration: StepsConfiguration<'location'> = {
     });
   }),
 };
-
-LocationStep.defaultProps = {};
 
 export {
   DUTCH_ZIP_REGEX,

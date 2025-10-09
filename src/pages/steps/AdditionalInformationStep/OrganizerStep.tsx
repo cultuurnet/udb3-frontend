@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -18,6 +18,7 @@ import {
   useGetCardSystemForEventQuery,
   useGetCardSystemsForOrganizerQuery,
 } from '@/hooks/api/uitpas';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { Event } from '@/types/Event';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -52,6 +53,7 @@ const OrganizerStep = ({
 }: Props) => {
   const { t, i18n } = useTranslation();
   const { ...router } = useRouter();
+  const { uitpasLabels } = useUitpasLabels();
   const queryClient = useQueryClient();
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
@@ -61,19 +63,25 @@ const OrganizerStep = ({
 
   const organizer = offer?.organizer?.name ? offer?.organizer : undefined;
   const hasPriceInfo = (offer?.priceInfo ?? []).length > 0;
-  const hasUitpasLabel = organizer ? isUitpasOrganizer(organizer) : false;
+  const hasUitpasLabel = organizer
+    ? isUitpasOrganizer(organizer, uitpasLabels)
+    : false;
   const [hasUitpasTicketSales, setHasUitpasTicketSales] = useState(false);
 
-  const getCardSystemForEventQuery = useGetCardSystemForEventQuery(
-    {
-      scope,
-      eventId: offerId,
-      isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
-    },
-    {
-      onSuccess: (data) => setSelectedCardSystems(Object.values(data)),
-    },
-  );
+  const getCardSystemForEventQuery = useGetCardSystemForEventQuery({
+    scope,
+    eventId: offerId,
+    isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
+  });
+
+  useEffect(() => {
+    if (
+      getCardSystemForEventQuery.isSuccess &&
+      getCardSystemForEventQuery.data
+    ) {
+      setSelectedCardSystems(Object.values(getCardSystemForEventQuery.data));
+    }
+  }, [getCardSystemForEventQuery.isSuccess, getCardSystemForEventQuery.data]);
 
   const uitpasAlertData = useMemo(() => {
     if (!hasUitpasLabel) {
@@ -162,7 +170,7 @@ const OrganizerStep = ({
   const addCardSystemToEventMutation = useAddCardSystemToEventMutation({
     onSuccess: (data) => {
       onSuccessfulChange(data);
-      queryClient.invalidateQueries('uitpas_events');
+      queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
     },
     onError: handleUitpasTicketSalesError,
   });
@@ -171,7 +179,7 @@ const OrganizerStep = ({
     useDeleteCardSystemFromEventMutation({
       onSuccess: (data) => {
         onSuccessfulChange(data);
-        queryClient.invalidateQueries('uitpas_events');
+        queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
       },
       onError: handleUitpasTicketSalesError,
     });
@@ -208,8 +216,8 @@ const OrganizerStep = ({
   const changeDistributionKey = useChangeDistributionKeyMutation({
     onSuccess: (data) => {
       onSuccessfulChange(data);
-      queryClient.invalidateQueries([scope, { id: offerId }]);
-      queryClient.invalidateQueries('uitpas_events');
+      queryClient.invalidateQueries({ queryKey: [scope, { id: offerId }] });
+      queryClient.invalidateQueries({ queryKey: ['uitpas_events'] });
     },
   });
 
@@ -393,7 +401,7 @@ const OrganizerStep = ({
             <Inline key={cardSystem.id} spacing={5}>
               <CheckboxWithLabel
                 className="cardsystem-checkbox"
-                id={cardSystem.id}
+                id={String(cardSystem.id)}
                 name={cardSystem.name}
                 checked={selectedCardSystems.some(
                   ({ id }) => cardSystem.id === id,

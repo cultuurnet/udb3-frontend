@@ -12,16 +12,16 @@ type PaginationProps = InlineProps & {
   currentPage: number;
   totalItems: number;
   perPage: number;
-  limitPages: number;
+  limitPages?: number;
   onChangePage?: (newValue: number) => void;
 };
 
 const Pagination = ({
   className,
-  currentPage,
-  totalItems,
-  perPage,
-  limitPages,
+  currentPage = 1,
+  totalItems = 1,
+  perPage = 10,
+  limitPages = 5,
   onChangePage,
   ...props
 }: PaginationProps) => {
@@ -76,10 +76,10 @@ const Pagination = ({
 
         .page-link {
           color: ${getValue('color')};
-          border-color: ${getValue('borderColor')};
+          border: 1px solid ${getValue('borderColor')};
           padding: ${getValue('paddingY')} ${getValue('paddingX')};
           border-radius: ${getGlobalBorderRadius};
-          margin: 0.2rem;
+          margin: 0.4rem;
 
           &:hover {
             background-color: ${getValue('hoverBackgroundColor')};
@@ -142,13 +142,13 @@ const Pagination = ({
         </BootstrapPagination.Prev>
       )}
       {currentRange.map((page, index) => {
-        // show ellipsis if there are more items to the left or right that are not visible
-        if (
-          (index === 0 && currentRange[0] !== pages[0]) ||
-          (index === currentRange.length - 1 &&
-            currentRange[index] !== pages[pages.length - 1])
+        if (index === 0 && currentRange[0] !== pages[0]) {
+          return <BootstrapPagination.Ellipsis key="ellipsis-left" />;
+        } else if (
+          index === currentRange.length - 1 &&
+          currentRange[index] !== pages[pages.length - 1]
         ) {
-          return <BootstrapPagination.Ellipsis key="ellipsis" />;
+          return <BootstrapPagination.Ellipsis key="ellipsis-right" />;
         }
 
         return (
@@ -178,13 +178,6 @@ const Pagination = ({
       )}
     </Inline>
   );
-};
-
-Pagination.defaultProps = {
-  currentPage: 1,
-  totalItems: 1,
-  perPage: 10,
-  limitPages: 5,
 };
 
 export { Pagination };

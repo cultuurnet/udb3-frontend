@@ -1,21 +1,26 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { groupBy, sortBy } from 'lodash';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
+import { Controller, useController, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 
 import { AudienceTypes } from '@/constants/AudienceType';
+import {
+  CULTUURKUUR_THEME_ERROR,
+  CULTUURKUUR_TYPE_ERROR,
+} from '@/constants/Cultuurkuur';
 import { cultuurkuurTypes, EventTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
   useChangeOfferTypeMutation,
 } from '@/hooks/api/offers';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { EventType } from '@/hooks/api/terms';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Event } from '@/types/Event';
 import { Term } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
@@ -207,6 +212,7 @@ const EventTypeAndThemeStep = ({
   control,
   scope,
   name,
+  error,
   setValue,
   watch,
   onChange,
@@ -217,21 +223,19 @@ const EventTypeAndThemeStep = ({
   const [, hash] = asPath.split('#');
   const eventTypeAndThemeContainer = useRef(null);
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
   const selectedTypeId = watch('typeAndTheme.type.id');
+  const selectedThemeId = watch('typeAndTheme.theme.id');
+
+  const isExistingEventWithoutType = offerId && !selectedTypeId;
+  const isNewEventWithoutType =
+    error?.message?.includes(CULTUURKUUR_TYPE_ERROR) && !selectedTypeId;
 
   const isCultuurkuurAlertVisible =
-    offerId &&
-    isCultuurkuurEvent &&
-    isCultuurkuurFeatureFlagEnabled &&
-    !selectedTypeId;
+    isCultuurkuurEvent && (isExistingEventWithoutType || isNewEventWithoutType);
 
   const typeAndTheme = useWatch({
     control,
@@ -267,6 +271,22 @@ const EventTypeAndThemeStep = ({
   const isTypeMatchingAudience =
     !selectedTypeId || types.some((type) => type.id === selectedTypeId);
 
+  const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
+  const entity = getEntityByIdQuery.data as Event;
+
+  const isExistingCultuurkuurEventWithoutTheme =
+    themes?.length > 0 && entity?.terms?.length < 2;
+
+  const isNewCultuurkuurEventWithoutTheme =
+    error?.message?.includes(CULTUURKUUR_THEME_ERROR) && !selectedThemeId;
+
+  const isCultuurkuurThemeErrorVisible =
+    themes.length > 0 &&
+    isCultuurkuurEvent &&
+    !!selectedTypeId &&
+    (isNewCultuurkuurEventWithoutTheme ||
+      isExistingCultuurkuurEventWithoutTheme);
+
   const shouldGroupThemes = [
     '0.3.1.0.1', // Cursus met open sessies
     '0.3.1.0.0', // Lessenreeks
@@ -299,13 +319,18 @@ const EventTypeAndThemeStep = ({
     }
   }, [hash]);
 
+  const { field } = useController({ name: 'typeAndTheme', control });
+
   useEffect(() => {
     if (selectedTypeId === EventTypes.Film) return;
 
-    if (!isTypeMatchingAudience) {
-      setValue('typeAndTheme.type', undefined, { shouldDirty: true });
+    if (isCultuurkuurEvent && !isTypeMatchingAudience) {
+      field.onChange({
+        ...field.value,
+        type: undefined,
+      });
     }
-  }, [selectedTypeId, isTypeMatchingAudience, setValue]);
+  }, [isCultuurkuurEvent, isTypeMatchingAudience, field, selectedTypeId]);
 
   return (
     <Controller
@@ -496,6 +521,11 @@ const EventTypeAndThemeStep = ({
               <Alert variant={AlertVariants.WARNING}>
                 {t('create.type_and_theme.cultuurkuur.warning')}
               </Alert>
+            )}
+            {isCultuurkuurThemeErrorVisible && (
+              <Text variant={TextVariants.ERROR}>
+                {t('create.type_and_theme.cultuurkuur.error')}
+              </Text>
             )}
           </Stack>
         );

@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
@@ -12,7 +12,7 @@ import {
   useAddOfferPriceInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import {
   TabContentProps,
@@ -50,7 +50,7 @@ const getValue = getValueFromTheme('priceInformation');
 
 const isNotUitpas = (value: any) =>
   value[i18n.language] &&
-  !value[i18n.language].toLowerCase().startsWith('uitpas');
+  !value[i18n.language].toLowerCase().includes('uitpas');
 
 const shouldHaveAName = (value: any) => !!value[i18n.language];
 
@@ -162,6 +162,8 @@ const PriceInformation = ({
     { refetchOnWindowFocus: false },
   );
 
+  const { uitpasLabels } = useUitpasLabels();
+
   const offer: Offer | undefined = getOfferByIdQuery.data;
 
   const {
@@ -186,14 +188,8 @@ const PriceInformation = ({
     control,
   });
 
-  const [isCultuurkuurFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.CULTUURKUUR,
-  );
-
   const isCultuurkuurEvent =
-    offer?.audience?.audienceType === AudienceTypes.EDUCATION &&
-    isCultuurkuurFeatureFlagEnabled;
-
+    offer?.audience?.audienceType === AudienceTypes.EDUCATION;
   const rates = watch('rates');
   const ratesRef = useRef(rates);
 
@@ -211,7 +207,9 @@ const PriceInformation = ({
   const addPriceInfoMutation = useAddOfferPriceInfoMutation({
     onSuccess: async () => {
       setTimeout(() => onSuccessfulChange(), 1000);
-      await queryClient.invalidateQueries([scope, { id: offerId }]);
+      await queryClient.invalidateQueries({
+        queryKey: [scope, { id: offerId }],
+      });
     },
     useErrorBoundary: false,
   });
@@ -246,13 +244,14 @@ const PriceInformation = ({
   const isCultuurkuurAlertVisible =
     isCultuurkuurEvent && (!hasBasePriceInfo || hasMultiplePrices);
 
+  const hasUitpasLabel = useMemo(() => {
+    return offer?.organizer && scope === OfferTypes.EVENTS
+      ? isUitpasOrganizer(offer?.organizer, uitpasLabels)
+      : false;
+  }, [offer?.organizer, scope, uitpasLabels]);
+
   useEffect(() => {
     const priceInfo = offer?.priceInfo ?? ([] as FormData['rates']);
-
-    const hasUitpasLabel =
-      offer?.organizer && scope === OfferTypes.EVENTS
-        ? isUitpasOrganizer(offer?.organizer)
-        : false;
 
     if (priceInfo.length === 0) {
       return onValidationChange(
@@ -264,7 +263,12 @@ const PriceInformation = ({
     }
 
     replace(
-      reconcileRates(ratesRef.current, priceInfo, offer) as FormData['rates'],
+      reconcileRates(
+        ratesRef.current,
+        priceInfo,
+        uitpasLabels,
+        offer,
+      ) as FormData['rates'],
     );
     reset({}, { keepValues: true });
 
@@ -283,6 +287,7 @@ const PriceInformation = ({
     onValidationChange,
     replace,
     reset,
+    hasUitpasLabel,
   ]);
 
   return (
@@ -399,7 +404,6 @@ const PriceInformation = ({
                                   });
                                   onSubmit();
                                 }}
-                                width="8rem"
                               >
                                 {groupPriceOptions.map((option) => (
                                   <option
@@ -455,7 +459,7 @@ const PriceInformation = ({
             );
           })}
           <Inline marginTop={3}>
-            {!(isCultuurkuurFeatureFlagEnabled && isCultuurkuurEvent) && (
+            {!isCultuurkuurEvent && (
               <Button
                 onClick={() => {
                   append(

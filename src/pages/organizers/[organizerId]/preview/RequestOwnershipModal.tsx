@@ -1,10 +1,9 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { useRequestOwnershipMutation } from '@/hooks/api/ownerships';
-import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -12,6 +11,7 @@ import { Box } from '@/ui/Box';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 type Props = {
   organizer: Organizer;
@@ -31,9 +31,12 @@ const RequestOwnershipModal = ({
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const organizerId = router.query.organizerId as string;
+  const organizerId =
+    (router.query.organizerId as string) ??
+    parseOfferId(organizer?.['@id'] ?? '');
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const organizerName: string = getLanguageObjectOrFallback(
     organizer?.name,
@@ -41,18 +44,22 @@ const RequestOwnershipModal = ({
     organizer?.mainLanguage as SupportedLanguage,
   );
 
-  const getUserQuery = useGetUserQuery() as UseQueryResult<User, FetchError>;
-
-  const userId = getUserQuery.data?.sub;
-
   const requestOwnershipMutation = useRequestOwnershipMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries('ownership-requests');
+      await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
       onClose();
       setIsSuccessAlertVisible(true);
       if (onSuccess) onSuccess();
     },
-    onError: () => {
+    onError: (err: FetchError) => {
+      err.status === 409
+        ? setErrorMessage(
+            t('organizers.ownerships.request.confirm_modal.error.409'),
+          )
+        : setErrorMessage(
+            t('organizers.ownerships.request.confirm_modal.error.general'),
+          );
+
       onClose();
       setIsErrorAlertVisible(true);
       if (onError) onError();
@@ -73,7 +80,6 @@ const RequestOwnershipModal = ({
         onConfirm={() => {
           requestOwnershipMutation.mutate({
             itemId: organizerId,
-            ownerId: userId,
           });
         }}
         size={ModalSizes.MD}
@@ -106,7 +112,7 @@ const RequestOwnershipModal = ({
           closable
           onClose={() => setIsErrorAlertVisible(false)}
         >
-          {t('organizers.ownerships.request.confirm_modal.error')}
+          {errorMessage}
         </Alert>
       )}
     </>

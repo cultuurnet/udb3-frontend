@@ -30,6 +30,4 @@ const ProgressBar = ({ progress, variant, ...props }: Props) => {
   );
 };
 
-ProgressBar.defaultProps = {};
-
 export { ProgressBar, ProgressBarVariants };

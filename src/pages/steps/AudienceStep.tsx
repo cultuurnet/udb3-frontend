@@ -78,31 +78,33 @@ const AudienceStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
-        {Object.values(AudienceTypes).map((type, index) => {
-          return (
-            <Fragment key={index}>
-              <FormElement
-                id={`audience-${type}`}
-                Component={
-                  <RadioButtonWithLabel
-                    {...register(`audienceType`)}
-                    label={t(`create.additionalInformation.audience.${type}`)}
-                    checked={watchedAudienceType === type}
-                    onChange={() => handleOnChangeAudience(type)}
-                  />
-                }
-              />
-              {watchedAudienceType === type &&
-                watchedAudienceType !== AudienceTypes.EVERYONE && (
-                  <Text variant="muted" maxWidth="30%">
-                    {t(
-                      `create.additionalInformation.audience.help.${watchedAudienceType}`,
-                    )}
-                  </Text>
-                )}
-            </Fragment>
-          );
-        })}
+        {Object.values(AudienceTypes)
+          .filter((type) => type !== AudienceTypes.EDUCATION)
+          .map((type, index) => {
+            return (
+              <Fragment key={index}>
+                <FormElement
+                  id={`audience-${type}`}
+                  Component={
+                    <RadioButtonWithLabel
+                      {...register(`audienceType`)}
+                      label={t(`create.additionalInformation.audience.${type}`)}
+                      checked={watchedAudienceType === type}
+                      onChange={() => handleOnChangeAudience(type)}
+                    />
+                  }
+                />
+                {watchedAudienceType === type &&
+                  watchedAudienceType !== AudienceTypes.EVERYONE && (
+                    <Text variant="muted" maxWidth="30%">
+                      {t(
+                        `create.additionalInformation.audience.help.${watchedAudienceType}`,
+                      )}
+                    </Text>
+                  )}
+              </Fragment>
+            );
+          })}
       </Stack>
     </Stack>
   );

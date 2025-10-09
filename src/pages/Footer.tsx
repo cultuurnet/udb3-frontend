@@ -71,7 +71,6 @@ type FooterLinkProps = {
 const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
   <Link
     {...props}
-    as="span"
     css={`
       text-decoration: underline;
       color: ${footerVariant === FooterVariants.LOGIN
@@ -85,7 +84,7 @@ const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
 );
 
 type Props = {
-  isProfileLinkVisible: boolean;
+  isProfileLinkVisible?: boolean;
   variant?: Values<typeof FooterVariants>;
   wrapper?: ElementType;
   onChangeLanguage?: (
@@ -94,9 +93,11 @@ type Props = {
 };
 
 const Footer = ({
-  wrapper: Wrapper,
+  wrapper: Wrapper = (props) => (
+    <Inline width="100%" justifyContent="space-between" {...props} />
+  ),
   onChangeLanguage,
-  isProfileLinkVisible,
+  isProfileLinkVisible = true,
   variant = FooterVariants.DEFAULT,
   ...props
 }: Props) => {
@@ -110,49 +111,40 @@ const Footer = ({
 
   const handleChangeLanguage = onChangeLanguage ?? defaultHandleChangeLanguage;
 
+  const footerLinks = [
+    {
+      label: 'footer.contact',
+      href: 'https://helpdesk.publiq.be/hc/nl/categories/360001783039-UiTdatabank',
+    },
+    {
+      label: 'footer.about',
+      href: 'http://www.publiq.be/nl/project/uitdatabank',
+    },
+    {
+      label: 'footer.dev',
+      href: 'https://docs.publiq.be/',
+    },
+    {
+      label: 'footer.legal',
+      href: `http://www.publiq.be/${i18n.language}/${t('footer.legal_path')}`,
+    },
+    {
+      label: 'footer.privacy',
+      href: 'http://www.publiq.be/nl/privacy-uitdatabank',
+    },
+  ];
+
   return (
     <Wrapper {...props}>
       <Stack alignItems="flex-start">
         <List alignItems={{ xs: 'center' }}>
-          <List.Item>
-            <FooterLink
-              footerVariant={variant}
-              href="https://helpdesk.publiq.be/hc/nl/categories/360001783039-UiTdatabank"
-            >
-              {t('footer.contact')}
-            </FooterLink>
-          </List.Item>
-          <List.Item>
-            <FooterLink
-              footerVariant={variant}
-              href="http://www.publiq.be/nl/project/uitdatabank"
-            >
-              {t('footer.about')}
-            </FooterLink>
-          </List.Item>
-          <List.Item>
-            <FooterLink footerVariant={variant} href="https://docs.publiq.be/">
-              {t('footer.dev')}
-            </FooterLink>
-          </List.Item>
-          <List.Item>
-            <Inline spacing={3}>
-              <FooterLink
-                footerVariant={variant}
-                href={`http://www.publiq.be/${i18n.language}/${t(
-                  'footer.legal_path',
-                )}`}
-              >
-                {t('footer.legal')}
+          {footerLinks.map((link) => (
+            <List.Item key={link.label}>
+              <FooterLink footerVariant={variant} href={link.href}>
+                {t(link.label)}
               </FooterLink>
-              <FooterLink
-                footerVariant={variant}
-                href="http://www.publiq.be/nl/privacy-uitdatabank"
-              >
-                {t('footer.privacy')}
-              </FooterLink>
-            </Inline>
-          </List.Item>
+            </List.Item>
+          ))}
           {isProfileLinkVisible && (
             <List.Item>
               <FooterLink
@@ -202,15 +194,6 @@ const Footer = ({
       </Stack>
     </Wrapper>
   );
-};
-
-const Wrapper = (props) => (
-  <Inline width="100%" justifyContent="space-between" {...props} />
-);
-
-Footer.defaultProps = {
-  isProfileLinkVisible: true,
-  wrapper: Wrapper,
 };
 
 export { Footer, FooterVariants };
