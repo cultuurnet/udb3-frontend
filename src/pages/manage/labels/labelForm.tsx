@@ -14,13 +14,13 @@ import * as yup from 'yup';
 
 import {
   useCreateLabelMutation,
-  useGetLabelByIdQuery,
   useIsLabelNameUnique,
   useUpdateLabelPrivacyMutation,
   useUpdateLabelVisibilityMutation,
 } from '@/hooks/api/labels';
 import { useHeaders } from '@/hooks/api/useHeaders';
 import {
+  Label,
   LabelPrivacyOptions,
   LabelValidationInformation,
   LabelVisibilityOptions,
@@ -41,22 +41,20 @@ type FormData = {
   isPrivate: boolean;
 };
 
-const LabelForm = () => {
+type LabelFormProps = {
+  label?: Label;
+};
+
+const LabelForm = ({ label }: LabelFormProps = {}) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const labelId = router.query.labelId as string | undefined;
   const success = router.query.success as string | undefined;
   const successName = router.query.name as string | undefined;
 
   const headers = useHeaders();
 
-  const isEditMode = !!labelId;
-
-  const { data: label } = useGetLabelByIdQuery(
-    { id: labelId! },
-    { enabled: isEditMode },
-  );
+  const isEditMode = !!label;
 
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -92,9 +90,13 @@ const LabelForm = () => {
     useForm<FormData>({
       resolver: yupResolver(createValidationSchema()),
       defaultValues: {
-        name: '',
-        isVisible: true,
-        isPrivate: false,
+        name: label?.name || '',
+        isVisible: label
+          ? label.visibility !== LabelVisibilityOptions.INVISIBLE
+          : true,
+        isPrivate: label
+          ? label.privacy === LabelPrivacyOptions.PRIVATE
+          : false,
       },
       mode: 'onChange',
     });
@@ -105,35 +107,18 @@ const LabelForm = () => {
     currentName: label?.name,
   });
 
-  // After creation of a label, show a success message and clean up the URL.
   useEffect(() => {
-    if (success === 'created' && successName && labelId) {
+    if (success === 'created' && successName && label.uuid) {
       setSuccessMessage(
         t('labels.overview.success_created', {
           name: successName,
         }),
       );
-      router.replace(`/manage/labels/${labelId}/edit`, undefined, {
+      router.replace(`/manage/labels/${label.uuid}/edit`, undefined, {
         shallow: true,
       });
     }
-  }, [success, successName, labelId, router, t]);
-
-  useEffect(() => {
-    if (isEditMode && label) {
-      reset({
-        name: label.name || '',
-        isVisible: label.visibility !== LabelVisibilityOptions.INVISIBLE,
-        isPrivate: label.privacy === LabelPrivacyOptions.PRIVATE,
-      });
-    } else if (!isEditMode) {
-      reset({
-        name: '',
-        isVisible: true,
-        isPrivate: false,
-      });
-    }
-  }, [isEditMode, label, reset]);
+  }, [success, successName, label, router, t]);
 
   const nameChanged =
     isEditMode && label?.name && watchedName.trim() !== label.name;
@@ -176,7 +161,7 @@ const LabelForm = () => {
           name: data.name.trim(),
           isVisible: data.isVisible,
           isPrivate: data.isPrivate,
-          parentId: labelId,
+          parentId: label.uuid,
         });
 
         if (response.uuid) {
@@ -202,14 +187,14 @@ const LabelForm = () => {
       if (visibilityChanged) {
         await updateVisibilityMutation.mutateAsync({
           headers,
-          id: labelId,
+          id: label.uuid,
           makeVisible: data.isVisible,
         });
       }
       if (privacyChanged) {
         await updatePrivacyMutation.mutateAsync({
           headers,
-          id: labelId,
+          id: label.uuid,
           makePrivate: data.isPrivate,
         });
       }
@@ -260,7 +245,6 @@ const LabelForm = () => {
   );
 };
 
-// Form fields component (internal)
 type LabelFormFieldsProps = {
   mode: 'create' | 'edit';
   control: Control<FormData>;
@@ -296,7 +280,6 @@ const LabelFormFields = ({
 }: LabelFormFieldsProps) => {
   const { t } = useTranslation();
 
-  // Calculate if form should be disabled
   const isFormDisabled =
     mode === 'edit'
       ? (nameChanged && (!isUnique || !!formState.errors.name)) || isSubmitting
@@ -311,7 +294,7 @@ const LabelFormFields = ({
 
   const nameError =
     formState.errors.name?.message ||
-    (nameChanged && !isUnique && t('labels.form.errors.name_unique'));
+    (!isUnique && t('labels.form.errors.name_unique'));
 
   return (
     <Stack
@@ -324,12 +307,18 @@ const LabelFormFields = ({
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
-      <FormElement
-        id="label-name"
-        label={t('labels.form.fields.name')}
-        error={nameError}
-        maxLength={LabelValidationInformation.MAX_LENGTH}
-        Component={<Input {...register('name')} />}
+      <Controller
+        name="name"
+        control={control}
+        render={({ field }) => (
+          <FormElement
+            id="label-name"
+            label={t('labels.form.fields.name')}
+            error={nameError}
+            maxLength={LabelValidationInformation.MAX_LENGTH}
+            Component={<Input {...field} />}
+          />
+        )}
       />
       <Controller
         name="isVisible"
@@ -375,5 +364,4 @@ const LabelFormFields = ({
   );
 };
 
-export default LabelFormFields;
 export { type FormData, LabelForm };

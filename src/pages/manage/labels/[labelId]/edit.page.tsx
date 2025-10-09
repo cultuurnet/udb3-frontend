@@ -1,12 +1,31 @@
 import { dehydrate } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
-import { prefetchGetLabelByIdQuery } from '@/hooks/api/labels';
+import {
+  prefetchGetLabelByIdQuery,
+  useGetLabelByIdQuery,
+} from '@/hooks/api/labels';
+import { Label } from '@/types/Offer';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { LabelForm } from '../labelForm';
 
 const LabelEditPage = () => {
-  return <LabelForm />;
+  const router = useRouter();
+  const labelId = router.query.labelId as string | undefined;
+
+  const labelQuery = useGetLabelByIdQuery(
+    { id: labelId! },
+    { enabled: !!labelId },
+  );
+
+  const label: Label | undefined = useMemo(
+    () => labelQuery.data ?? undefined,
+    [labelQuery.data],
+  );
+
+  return <LabelForm label={label} />;
 };
 
 export const getServerSideProps = getApplicationServerSideProps(

@@ -134,7 +134,7 @@ const getLabelById = async ({
 
 const createGetLabelByIdQueryOptions = ({ id }: { id: string }) =>
   queryOptions({
-    queryKey: ['labels'],
+    queryKey: ['labels', { id: id }],
     queryFn: getLabelById,
     queryArguments: { id },
     enabled: !!id,
