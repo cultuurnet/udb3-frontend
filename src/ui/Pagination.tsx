@@ -142,13 +142,13 @@ const Pagination = ({
         </BootstrapPagination.Prev>
       )}
       {currentRange.map((page, index) => {
-        // show ellipsis if there are more items to the left or right that are not visible
-        if (
-          (index === 0 && currentRange[0] !== pages[0]) ||
-          (index === currentRange.length - 1 &&
-            currentRange[index] !== pages[pages.length - 1])
+        if (index === 0 && currentRange[0] !== pages[0]) {
+          return <BootstrapPagination.Ellipsis key="ellipsis-left" />;
+        } else if (
+          index === currentRange.length - 1 &&
+          currentRange[index] !== pages[pages.length - 1]
         ) {
-          return <BootstrapPagination.Ellipsis key="ellipsis" />;
+          return <BootstrapPagination.Ellipsis key="ellipsis-right" />;
         }
 
         return (
