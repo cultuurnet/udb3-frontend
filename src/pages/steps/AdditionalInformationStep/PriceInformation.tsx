@@ -526,7 +526,10 @@ const PriceInformation = ({
               {!isCultuurkuurEvent && (
                 <Button
                   onClick={() => {
-                    if (isBasePriceInfoEmpty && errors?.rates?.length > 0) {
+                    if (
+                      isBasePriceInfoEmpty ||
+                      (isBasePriceInfoEmpty && errors?.rates?.length > 0)
+                    ) {
                       setError('rates', {
                         type: 'basic_rate',
                       });
