@@ -92,7 +92,15 @@ const schema = yup
           category: yup
             .mixed<PriceCategory>()
             .oneOf(Object.values(PriceCategory)),
-          price: yup.string().matches(PRICE_REGEX).required(),
+          price: yup
+            .string()
+            .test('decimal', (value) => {
+              const parts = value.split(',');
+              if (parts[1] && parts[1].length > 2) return false;
+              return true;
+            })
+            .matches(PRICE_REGEX)
+            .required(),
           priceCurrency: yup.string(),
           groupPrice: yup.boolean().optional(),
         }),
