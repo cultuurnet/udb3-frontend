@@ -83,6 +83,10 @@ const schema = yup
                     'should not be uitpas',
                     isNotUitpas,
                   )
+                  .test('name_max_length', (value) => {
+                    const currentLanguage = i18n.language as SupportedLanguage;
+                    return value?.[currentLanguage].length < 90;
+                  })
                   .required(),
             }),
           category: yup
