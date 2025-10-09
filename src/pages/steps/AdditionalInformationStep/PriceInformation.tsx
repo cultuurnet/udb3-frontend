@@ -186,6 +186,8 @@ const PriceInformation = ({
     handleSubmit,
     watch,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -250,6 +252,9 @@ const PriceInformation = ({
   const hasBasePriceInfo = !!offer?.priceInfo?.find(
     (price) => price.category === PriceCategory.BASE,
   );
+
+  const isBasePriceInfoEmpty =
+    rates.find((price) => price.category === PriceCategory.BASE).price === '';
 
   const hasMultiplePrices = offer?.priceInfo?.length > 1;
 
@@ -494,6 +499,13 @@ const PriceInformation = ({
               </Button>
             )}
           </Inline>
+                    if (isBasePriceInfoEmpty && errors?.rates?.length > 0) {
+                      setError('rates', {
+                        type: 'basic_rate',
+                      });
+                      return;
+                    }
+                    clearErrors('rates');
         </Stack>
       </Inline>
       <Stack spacing={4}>
