@@ -1,6 +1,6 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import {
   GetOrganizerByIdResponse,
@@ -150,7 +150,7 @@ export const useOwnershipActions = () => {
     });
     setActionType(undefined);
     setSelectedRequest(undefined);
-    await queryClient.invalidateQueries('ownership-requests');
+    await queryClient.invalidateQueries({ queryKey: ['ownership-requests'] });
   };
 
   const approveOwnershipRequestMutation = useApproveOwnershipRequestMutation({
@@ -166,9 +166,9 @@ export const useOwnershipActions = () => {
   });
 
   const isLoading =
-    approveOwnershipRequestMutation.isLoading ||
-    rejectOwnershipRequestMutation.isLoading ||
-    deleteOwnershipRequestMutation.isLoading;
+    approveOwnershipRequestMutation.isPending ||
+    rejectOwnershipRequestMutation.isPending ||
+    deleteOwnershipRequestMutation.isPending;
 
   const handleConfirm = () => {
     if (actionType === ActionType.APPROVE) {

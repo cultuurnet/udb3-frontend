@@ -1,10 +1,10 @@
 import Hotjar from '@hotjar/browser';
+import { useQueryClient } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import type { ChangeEvent, ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
@@ -55,7 +55,7 @@ import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 const { publicRuntimeConfig } = getConfig();
 
 const shouldShowBetaVersion =
-  publicRuntimeConfig.shouldShowBetaVersion === 'true';
+  publicRuntimeConfig?.shouldShowBetaVersion === 'true';
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
@@ -102,6 +102,11 @@ const MenuItem = memo(
           position: relative;
 
           color: ${isActive ? getValueForMenuItem('active.color') : 'inherit'};
+
+          :hover {
+            background-color: ${getValueForMenuItem('hover.backgroundColor')};
+            border-radius: 8px;
+          }
 
           :before {
             content: '';
@@ -287,7 +292,7 @@ const NotificationMenu = memo(
         children: t('menu.logout'),
         onClick: async () => {
           removeAuthenticationCookies();
-          await queryClient.invalidateQueries('user');
+          await queryClient.invalidateQueries({ queryKey: ['user'] });
 
           window.location.assign('/api/auth/logout');
         },
@@ -357,7 +362,7 @@ const Sidebar = () => {
     FeatureFlags.REACT_CREATE,
   );
 
-  const sidebarComponent = useRef();
+  const sidebarComponent = useRef<HTMLElement>(null);
 
   const [announcementModalContext, setAnnouncementModalContext] =
     useAnnouncementModalContext();
@@ -460,7 +465,7 @@ const Sidebar = () => {
 
   useHandleWindowMessage({
     [WindowMessageTypes.OFFER_MODERATED]: () =>
-      queryClient.invalidateQueries(['events']),
+      queryClient.invalidateQueries({ queryKey: ['events'] }),
     [WindowMessageTypes.OPEN_ANNOUNCEMENT_MODAL]: ({ id }) => {
       setAnnouncementModalContext((prevModalContext) => ({
         ...prevModalContext,
@@ -612,6 +617,8 @@ const Sidebar = () => {
     >
       <Link
         alignSelf="center"
+        display="flex"
+        justifyContent="center"
         href="/dashboard"
         title={t('menu.home')}
         customChildren

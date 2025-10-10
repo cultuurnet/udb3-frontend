@@ -1,5 +1,5 @@
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { useQueryClient, UseQueryResult } from 'react-query';
 
 import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Cultuurkuur';
 import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
@@ -91,7 +91,7 @@ const useCultuurkuurLabelsPickerProps = (
     scope: scope,
   });
 
-  const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
+  const entity = getEntityByIdQuery.data;
   const formLabels = watch?.('labels');
   const labels = useMemo(
     () => (entity ? getUniqueLabels(entity) : formLabels) ?? [],
@@ -116,7 +116,8 @@ const useCultuurkuurLabelsPickerProps = (
 
   const queryClient = useQueryClient();
   const updateLabels = useBulkUpdateOfferLabelsMutation({
-    onSuccess: async () => await queryClient.invalidateQueries(scope),
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({ queryKey: [scope] }),
   });
 
   const handleCultuurkuurLabelsChange = (

@@ -10,7 +10,7 @@ import { Stack } from '@/ui/Stack';
 const BookingAvailabilityModal = ({
   visible,
   loading,
-  className,
+  className = '',
   onClose,
   onConfirm,
 }) => {

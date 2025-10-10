@@ -1,8 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import {
   CULTUURKUUR_ON_SITE_LABEL,
@@ -148,7 +148,9 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
       },
       {
         onSuccess: async () => {
-          await queryClient.invalidateQueries([scope, { id: offerId }]);
+          await queryClient.invalidateQueries({
+            queryKey: [scope, { id: offerId }],
+          });
         },
       },
     );
