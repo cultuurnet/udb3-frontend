@@ -42,16 +42,7 @@ export const middleware = async (request: NextRequest) => {
   }
 
   if (request.nextUrl.pathname.startsWith('/event')) {
-    const shouldHideBetaVersion =
-      process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION !== 'true';
-
-    const hasSeenConversionPage =
-      request.cookies.get('has_seen_beta_conversion_page')?.value === 'true';
-
-    if (shouldHideBetaVersion || hasSeenConversionPage) return;
-
-    const url = new URL('/beta-version', baseUrl);
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL('/create?scope=events', baseUrl));
   }
 };
 

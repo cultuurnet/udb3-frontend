@@ -28,7 +28,6 @@ const moduleExports = {
     newsletterEmailListId: process.env.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID,
     globalAlertMessage: process.env.NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE,
     globalAlertVariant: process.env.NEXT_PUBLIC_GLOBAL_ALERT_VARIANT,
-    shouldShowBetaVersion: process.env.NEXT_PUBLIC_SHOULD_SHOW_BETA_VERSION,
     hotjarEventName: process.env.NEXT_PUBLIC_HOTJAR_EVENT_NAME,
     hotjarMissingFieldName: process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME,
     ownershipEnabled: process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED,
