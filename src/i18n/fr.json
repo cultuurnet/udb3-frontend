@@ -4,6 +4,11 @@
     "sub_title": "Vous avez cliqué sur un lien vers une page que nous ne trouvons malheureusement pas dans l'UiTdatabank.",
     "title": "Désolé, cette page n'existe plus"
   },
+  "unauthorized": {
+    "title": "Accès refusé",
+    "sub_title": "Vous n'avez pas accès à cette page. Vérifiez que vous disposez des droits appropriés.",
+    "redirect": "Retournez à la page d'accueil"
+  },
   "announcements": {
     "new_features": "Nouveau dans UiTdatabank",
     "no_features": "Il n'y a actuellement aucune nouveauté."

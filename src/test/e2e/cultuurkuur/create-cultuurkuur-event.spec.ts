@@ -76,9 +76,10 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
   await page.waitForLoadState('networkidle');
-  await page.waitForLoadState('domcontentloaded');
 
-  await expect(page.getByText('Zorg dat je publiek geen')).toBeVisible();
+  await page
+    .getByText('Zorg dat je publiek geen')
+    .waitFor({ state: 'visible' });
 
   await page
     .getByRole('textbox', { name: 'rdw-editor' })
