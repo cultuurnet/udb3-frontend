@@ -8,8 +8,8 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
 Sentry.init({
-  dsn: publicRuntimeConfig.sentryDsn,
-  environment: publicRuntimeConfig.environment,
+  dsn: publicRuntimeConfig?.sentryDsn,
+  environment: publicRuntimeConfig?.environment,
 
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,
