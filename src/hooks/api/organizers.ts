@@ -291,12 +291,32 @@ const createGetOrganizersByCreatorQueryOptions = ({
     organizerIds.length > 0
       ? `${organizerIds.map((id) => `id:${id}`).join(' OR ')}`
       : '';
+
+  const constructQueryArguments = (creator, organizerIdsArg) => {
+    const parts = [];
+
+    if (creator?.sub) {
+      parts.push(`creator:(${creator.sub}`);
+    }
+
+    if (creator?.['https://publiq.be/uitidv1id']) {
+      parts.push(`${creator['https://publiq.be/uitidv1id']}`);
+    }
+
+    if (creator?.email) {
+      parts.push(`${creator.email})`);
+      parts.push(`OR contributors:${creator.email}`);
+    }
+
+    if (organizerIdsArg.length > 0) {
+      parts.push(`OR ${organizerIdsArg}`);
+    }
+
+    return parts.join(' ');
+  };
+
   const queryArguments = {
-    q: `creator:(${creator?.sub} OR ${
-      creator?.['https://publiq.be/uitidv1id']
-        ? `${creator?.['https://publiq.be/uitidv1id']} OR`
-        : ''
-    } ${creator?.email}) OR contributors:${creator?.email} ${organizerIdsArg.length > 0 ? `OR ${organizerIdsArg}` : ''}`,
+    q: constructQueryArguments(creator, organizerIdsArg),
     limit: `${paginationOptions.limit}`,
     start: `${paginationOptions.start}`,
     embed: 'true',
