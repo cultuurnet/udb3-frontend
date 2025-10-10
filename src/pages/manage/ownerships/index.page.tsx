@@ -1,24 +1,17 @@
-import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import capitalize from 'lodash/capitalize';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import {
   GetOrganizerByIdResponse,
-  GetOrganizersByQueryResponse,
   useGetOrganizerByIdQuery,
-  useGetOrganizersByQueryQuery,
 } from '@/hooks/api/organizers';
 import {
   GetOwnershipRequestsResponse,
-  OwnershipRequest,
   OwnershipState,
-  useApproveOwnershipRequestMutation,
-  useDeleteOwnershipRequestMutation,
   useGetOwnershipRequestsQuery,
-  useRejectOwnershipRequestMutation,
 } from '@/hooks/api/ownerships';
 import { useOwnershipActions } from '@/hooks/ownerships/useOwnershipActions';
 import { useShallowRouter } from '@/hooks/useShallowRouter';
@@ -26,19 +19,14 @@ import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
 import { Organizer } from '@/types/Organizer';
 import { parseSpacing } from '@/ui/Box';
-import { Inline } from '@/ui/Inline';
-import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Panel } from '@/ui/Panel';
 import { Select } from '@/ui/Select';
 import { Spinner } from '@/ui/Spinner';
-import { Text } from '@/ui/Text';
-import { isNewEntry, Typeahead } from '@/ui/Typeahead';
 import type { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
-import { valueToArray } from '@/utils/valueToArray';
 
 const itemsPerPage = 14;
 

@@ -1,4 +1,3 @@
-import Hotjar from '@hotjar/browser';
 import { useQueryClient } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
@@ -24,10 +23,9 @@ import {
 } from '@/hooks/useHandleWindowMessage';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
-import { QuestionCircleIcon } from '@/pages/NewFeatureTooltip';
 import type { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
-import { Button, ButtonVariants } from '@/ui/Button';
+import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';

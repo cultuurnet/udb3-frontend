@@ -1,4 +1,4 @@
-import { useInterpret, useSelector } from '@xstate/react';
+import { useInterpret } from '@xstate/react';
 import {
   getDate,
   getMonth,

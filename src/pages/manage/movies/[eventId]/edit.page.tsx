@@ -2,7 +2,6 @@ import { dehydrate } from '@tanstack/react-query';
 
 import {
   prefetchGetEventByIdQuery,
-  useGetEventByIdQuery,
 } from '@/hooks/api/events';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
