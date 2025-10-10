@@ -627,12 +627,9 @@ const Dashboard = (): any => {
 
   const ownedOrganizerIds = useMemo(() => {
     return (
-      ownedOrganizers?.member
-        ?.filter(
-          (organizer: OwnershipRequest) =>
-            organizer.state === OwnershipState.APPROVED,
-        )
-        ?.map((organizer: OwnershipRequest) => organizer.itemId) || []
+      ownedOrganizers?.member?.map(
+        (organizer: OwnershipRequest) => organizer.itemId,
+      ) || []
     );
   }, [ownedOrganizers]);
 
