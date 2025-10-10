@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { expect,test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 const dummyLabel = {
   name: 'e2e ' + faker.lorem.words(2),
