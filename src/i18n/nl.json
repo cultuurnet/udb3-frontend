@@ -1049,7 +1049,7 @@
       "no_productions": "Geen producties gevonden.",
       "production": "Productie",
       "search": {
-        "label": "Zoeken op productienaam:",
+        "label": "Zoeken op productienaam",
         "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
       },
       "title": "Producties"
@@ -1261,7 +1261,7 @@
       "title": "Labels",
       "create": "Toevoegen",
       "search": {
-        "label": "Zoeken op labelnaam:",
+        "label": "Zoeken op labelnaam",
         "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
       },
       "no_results": "Geen labels gevonden.",
