@@ -23,6 +23,6 @@ test('can click edit label link', async ({ baseURL, page }) => {
   const editLink = page.getByRole('link', { name: /bewerken/i }).first();
   if (await editLink.isVisible()) {
     await editLink.click();
-    await expect(page).toHaveURL(/\/manage\/labels\/[^/]+/);
+    await expect(page).toHaveURL(/\/manage\/labels\/[^/]+\/edit/);
   }
 });
