@@ -1004,7 +1004,7 @@
       "no_productions": "Aucune production trouvée.",
       "production": "Production",
       "search": {
-        "label": "Recherche par nom de production :",
+        "label": "Recherche par nom de production",
         "placeholder": "Écrivez une recherche d'au moins 3 caractères."
       },
       "title": "Productions"
@@ -1212,7 +1212,7 @@
       "title": "Étiquettes",
       "create": "Ajouter",
       "search": {
-        "label": "Rechercher par nom d'étiquette:",
+        "label": "Rechercher par nom d'étiquette",
         "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
       },
       "no_results": "Aucun étiquettes trouvé.",
