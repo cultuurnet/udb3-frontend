@@ -92,6 +92,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           text-decoration: underline;
           &:hover {
             text-decoration: underline;
+            text-decoration-color: ${getValue('hoverColor')};
           }
         `}
         {...getInlineProps(props)}

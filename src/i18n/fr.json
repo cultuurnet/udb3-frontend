@@ -218,7 +218,7 @@
         "label": "Dans un lieu physique"
       },
       "is_brussels_alert": {
-        "message": "Pour vos activités à Bruxelles, UiTdatabank collabore avec visit.brussels. Saisissez vos activités bruxelloises sur agenda.brussels et elles apparaîtront automatiquement dans UiTdatabank et UiTinvlaanderen. Vous prévoyez un voyage à Bruxelles avec votre association membre ? Ou vous organisez une activité scolaire ? Vous pouvez ensuite continuer à saisir vos informations sur UiTdatabank. <link1>Plus d'informations</link1>"
+        "message": "Pour vos activités à Bruxelles, UiTdatabank collabore avec <link1>visit.brussels</link1>. Saisissez vos activités bruxelloises sur agenda.brussels et elles apparaîtront automatiquement dans UiTdatabank et UiTinvlaanderen. Vous prévoyez un voyage à Bruxelles avec votre association membre ? Ou vous organisez une activité scolaire ? Vous pouvez ensuite continuer à saisir vos informations sur UiTdatabank. <link2>Plus d'informations</link2>"
       },
       "municipality": {
         "change_be": "Changer de commune",

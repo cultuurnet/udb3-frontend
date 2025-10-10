@@ -562,6 +562,15 @@ const LocationStep = ({
                         components={{
                           link1: (
                             <Link
+                              href="https://agenda.brussels"
+                              rel="noopener noreferrer"
+                              display="inline-block"
+                            >
+                              visit.brussels
+                            </Link>
+                          ),
+                          link2: (
+                            <Link
                               href="https://helpdesk.publiq.be/hc/nl/articles/360008702979-Hoe-voeg-ik-Brusselse-activiteiten-in"
                               rel="noopener noreferrer"
                               display="inline-block"
