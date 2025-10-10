@@ -1,4 +1,3 @@
-
 const DaysOfWeek = [
   'monday',
   'tuesday',
