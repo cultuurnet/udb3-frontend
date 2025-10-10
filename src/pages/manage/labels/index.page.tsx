@@ -214,6 +214,7 @@ const LabelsOverviewPage = () => {
                   min-width: 27em;
                 }
               `}
+              className="table-responsive"
             >
               <Table
                 striped
