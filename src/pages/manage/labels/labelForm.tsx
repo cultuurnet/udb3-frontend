@@ -351,13 +351,16 @@ const LabelFormFields = ({
 
       <Inline spacing={3}>
         <Button
+          title="submit"
           variant={ButtonVariants.PRIMARY}
           disabled={isFormDisabled}
           onClick={handleSubmit(onSubmit)}
         >
           {buttonText}
         </Button>
-        <Button onClick={onCancel}>{t('labels.form.actions.cancel')}</Button>
+        <Button title="cancel" onClick={onCancel}>
+          {t('labels.form.actions.cancel')}
+        </Button>
       </Inline>
       {footer}
     </Stack>
