@@ -1,4 +1,4 @@
-import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
 import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
@@ -7,7 +7,6 @@ import React, { ComponentType, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
-import { CalendarType } from '@/constants/CalendarType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
@@ -22,6 +21,12 @@ import {
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
 } from '@/hooks/api/organizers';
+import {
+  OwnershipRequest,
+  OwnershipState,
+  prefetchGetOwnershipRequestsQuery,
+  useGetOwnershipRequestsQuery,
+} from '@/hooks/api/ownerships';
 import {
   prefetchGetPlacesByCreatorQuery,
   useDeletePlaceByIdMutation,
@@ -611,6 +616,23 @@ const Dashboard = (): any => {
     },
   );
 
+  const { data: ownedOrganizers } = useGetOwnershipRequestsQuery(
+    {
+      ownerId: user?.sub,
+      itemType: 'organizer',
+      state: OwnershipState.APPROVED,
+    },
+    { enabled: !!user?.sub },
+  );
+
+  const ownedOrganizerIds = useMemo(() => {
+    return (
+      ownedOrganizers?.member?.map(
+        (organizer: OwnershipRequest) => organizer.itemId,
+      ) || []
+    );
+  }, [ownedOrganizers]);
+
   const getItemsByCreatorQuery = useGetItemsByCreator({
     creator: user,
     sortOptions: { field: sortingField, order: sortingOrder },
@@ -618,6 +640,7 @@ const Dashboard = (): any => {
       start: (page - 1) * itemsPerPage,
       limit: itemsPerPage,
     },
+    ...(tab === 'organizers' && { organizerIds: ownedOrganizerIds }),
   });
 
   const deleteItemByIdMutation = useDeleteItemById({
@@ -851,6 +874,28 @@ const getServerSideProps = getApplicationServerSideProps(
       cookies: cookies.getAll(),
     });
 
+    await prefetchGetOwnershipRequestsQuery({
+      req,
+      queryClient,
+      ownerId: user?.sub,
+      itemType: 'organizer',
+      state: OwnershipState.APPROVED,
+    });
+
+    const ownedOrganizers =
+      queryClient.getQueryData([
+        'ownership-requests',
+        {
+          ownerId: user?.sub,
+          itemType: 'organizer',
+          state: OwnershipState.APPROVED,
+        },
+      ]) || {};
+
+    const ownedOrganizerIds = ownedOrganizers?.member?.map(
+      (organizer: OwnershipRequest) => organizer.itemId,
+    );
+
     await Promise.all(
       Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {
         const page =
@@ -863,6 +908,9 @@ const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           creator: user,
+          ...(key === 'organizers' && {
+            organizerIds: ownedOrganizerIds,
+          }),
           ...(!(
             key === 'organizers' && sortingField.startsWith('availableTo')
           ) && {
