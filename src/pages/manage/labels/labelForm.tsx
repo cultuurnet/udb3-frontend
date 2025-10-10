@@ -283,7 +283,7 @@ const LabelFormFields = ({
   const isFormDisabled =
     mode === 'edit'
       ? (nameChanged && (!isUnique || !!formState.errors.name)) || isSubmitting
-      : !formState.isValid || isSubmitting;
+      : !formState.isValid || !isUnique || isSubmitting;
 
   const buttonText =
     mode === 'edit' && nameChanged
