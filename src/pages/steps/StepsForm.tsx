@@ -20,7 +20,7 @@ import {
   useEditLocation,
 } from '@/pages/steps/LocationStep';
 import { Event } from '@/types/Event';
-import { hasLegacyLocation, Offer } from '@/types/Offer';
+import { hasLegacyLocation } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
@@ -43,8 +43,6 @@ import { calendarStepConfiguration } from './CalendarStep';
 import { useAddOffer } from './hooks/useAddOffer';
 import { useEditField } from './hooks/useEditField';
 import { FooterStatus, useFooterStatus } from './hooks/useFooterStatus';
-import { useGetEvent } from './hooks/useGetEvent';
-import { useGetPlace } from './hooks/useGetPlace';
 import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -6,17 +6,15 @@ import {
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
-import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { Text, TextVariants } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
-import { formatDateToISO } from '@/utils/formatDateToISO';
 
 const getGlobalValue = getValueFromTheme('global');
 

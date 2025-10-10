@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 

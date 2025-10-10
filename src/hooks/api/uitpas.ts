@@ -1,5 +1,5 @@
 import { OfferTypes } from '@/constants/OfferType';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
   ExtendQueryOptions,

@@ -1,7 +1,6 @@
 import type { UseMutationOptions } from '@tanstack/react-query';
 
 import {
-  AuthenticatedQueryOptions,
   ExtendQueryOptions,
   PaginationOptions,
   prefetchAuthenticatedQuery,

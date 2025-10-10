@@ -3,7 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
-import { Component, ComponentType, useRef } from 'react';
+import { ComponentType, useRef } from 'react';
 import ReactDatePicker, {
   registerLocale,
   setDefaultLocale,

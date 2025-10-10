@@ -18,7 +18,6 @@ import {
 import { useHeaders } from '@/hooks/api/useHeaders';
 import { CultuurkuurLabelsPicker } from '@/pages/steps/CultuurkuurLabelsPicker';
 import { isLocationSet } from '@/pages/steps/LocationStep';
-import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Link } from '@/ui/Link';
