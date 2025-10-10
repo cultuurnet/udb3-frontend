@@ -121,10 +121,10 @@ test('create event with all possible fields filled in', async ({
 
   // // Prices
   await page.getByRole('tab', { name: 'Prijzen' }).click();
-  await page.getByPlaceholder('Prijs').click();
-  await page.getByPlaceholder('Prijs').fill('10');
+  await page.getByTestId('basic-rate').click();
+  await page.getByTestId('basic-rate').fill('10');
 
-  await page.getByText('BasistariefeuroGratisTarief toevoegen').click();
+  await page.getByRole('button', { name: 'Gratis' }).click();
   await expect(
     page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-circle-check'),
   ).toBeVisible();

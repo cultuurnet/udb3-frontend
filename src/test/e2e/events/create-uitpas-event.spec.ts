@@ -67,7 +67,7 @@ test('create an event with UiTPAS organizer and UiTPAS prices', async ({
 
   await page.getByRole('tab', { name: 'Prijzen' }).click();
 
-  await page.getByPlaceholder('Prijs').fill('15');
+  await page.getByTestId('basic-rate').fill('15');
 
   await page.locator('.tab-pane.active').click();
 

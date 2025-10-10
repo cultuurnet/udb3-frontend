@@ -492,19 +492,23 @@
         "duplicate_name_error": " Le tarif avec le nom \"{{priceName}}\" existe déjà, veuillez utiliser un autre nom.",
         "euro": "euro",
         "free": "Gratuit",
-        "global_info": "Assurez-vous que vos informations tarifaires sont toujours valables : <ul><li>Le nom de votre catégorie de prix peut contenir jusqu'à 90 caractères.</li><li>Écrivez les décimales avec une virgule.</li> <li>Ne laissez aucune ligne en blanc, saisissez toujours un groupe cible et un montant.</li><li>Donnez un maximum de deux décimales.</li></ul>",
+        "global_info": "Utilisez une virgule pour saisir les décimales.",
         "price": "Prix",
         "prices": "Prix",
         "save": "Sauver",
         "target": "Public cible",
         "title": "Prix",
+        "subtitle": "Quels sont les tarifs d'entrée ?",
         "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas les ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
           "unique_name": "Le nom spécifié est déjà utilisé.",
           "name_is_required": "Le nom est requis.",
-          "name_is_not_uitpas": "Le nom de votre tarif ne doit pas inclure \"UiTPAS\" ou \"Paspartoe\". Ces tarifs sont calculés automatiquement par UiTdatabank."
+          "name_is_not_uitpas": "Le nom de votre tarif ne doit pas inclure \"UiTPAS\" ou \"Paspartoe\". Ces tarifs sont calculés automatiquement par UiTdatabank.",
+          "name_max_length": "Le nom de votre catégorie de prix peut contenir max. 90 caractères.",
+          "basic_rate": "Indiquez d'abord le tarif de base.",
+          "decimal": "Saisissez maximum 2 chiffres après la virgule."
         }
       },
       "title": {
