@@ -1,6 +1,6 @@
 import { PaginatedData } from '@/types/PaginatedData';
 import { Production } from '@/types/Production';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
   ExtendQueryOptions,

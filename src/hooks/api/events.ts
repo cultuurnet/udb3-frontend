@@ -20,11 +20,10 @@ import type { Values } from '@/types/Values';
 import type { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
@@ -35,7 +34,6 @@ import {
 } from './authenticated-query';
 import {
   useAuthenticatedMutation,
-  useAuthenticatedQueries,
   useAuthenticatedQuery,
 } from './authenticated-query';
 import type { Headers } from './types/Headers';

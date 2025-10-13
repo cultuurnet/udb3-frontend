@@ -1,9 +1,8 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 
-import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,

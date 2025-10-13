@@ -13,34 +13,7 @@
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
   },
-  "beta_version": {
-    "title": "Möchten Sie die neueste Version der UiTdatabank ausprobieren?",
-    "intro1": "Wir arbeiten mit Hochdruck an einem neuen Eingabeformular in der UiTdatabank, damit Sie Ihre Aktivitäten noch reibungsloser eingeben können. Probieren Sie es schon aus? Wechseln Sie auf die neueste Version der UiTdatabank und testen Sie gleich alle neuen Funktionen.",
-    "intro2": "Was gibt es Neues?",
-    "improvements": [
-      {
-        "prefix": "Mehr Möglichkeiten:",
-        "text": "Sie können Online-Veranstaltungen hinzufügen, ein Video hochladen und vieles mehr. "
-      },
-      {
-        "prefix": "Weniger Arbeit:",
-        "text": "Wir bereiten den Namen Ihrer Organisation bereits für Sie vor, so dass Sie dieses Feld nicht jedes Mal ausfüllen müssen. Später machen wir das Gleiche mit anderen Informationen, die Sie zuvor eingegeben haben. "
-      },
-      {
-        "prefix": "Zusätzliche Hilfe:",
-        "text": "Über die Vollständigkeitsbewertung erhalten Sie sofortiges Feedback und Tipps, wie Sie Ihre Veranstaltung oder Ihren Veranstaltungsort so vollständig wie möglich eingeben können."
-      }
-    ],
-    "outro1": "Möchten Sie zu den ersten gehören, die das neue Anmeldeformular testen?",
-    "confirm": {
-      "title": "Ich probiere es aus",
-      "info": "Legen Sie gleich los <boldText>mit<boldText> der neuen Version der UiTdatabase."
-    },
-    "cancel": {
-      "title": "Ich werde eine Weile warten",
-      "info": "Sie können den Wechsel zu einem späteren Zeitpunkt vornehmen"
-    }
-  },
+
   "bookingAvailability": {
     "actions": {
       "cancel": "Abbrechen",
@@ -731,7 +704,6 @@
   "menu": {
     "add": "Eingeben",
     "announcements": "Ankündigungen",
-    "beta_version": "Betaversion",
     "home": "Startseite",
     "labels": "Labels",
     "logout": "Abmelden",
