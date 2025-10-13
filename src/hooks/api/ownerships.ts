@@ -9,6 +9,7 @@ import {
   prefetchAuthenticatedQuery,
   queryOptions,
   ServerSideQueryOptions,
+  SortOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from './authenticated-query';
@@ -29,6 +30,7 @@ export type OwnershipRequest = {
   ownerEmail: string;
   requesterId: string;
   state: OwnershipState;
+  created: string;
 } & ModificationInfo;
 
 export type OwnershipCreator = {
@@ -81,16 +83,25 @@ const getOwnershipRequests = async ({
   ownerId,
   state,
   paginationOptions,
+  sortOptions,
+  itemType,
 }: {
   headers: Headers;
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
-} & PaginationOptions) => {
+  itemType?: string;
+} & PaginationOptions &
+  SortOptions) => {
   const searchParams = new URLSearchParams();
   if (paginationOptions) {
     searchParams.set('limit', `${paginationOptions.limit}`);
-    searchParams.set('offset', `${paginationOptions.start}`);
+    searchParams.set('start', `${paginationOptions.start}`);
+  }
+
+  if (sortOptions) {
+    searchParams.set('field', `${sortOptions.field}`);
+    searchParams.set('order', `${sortOptions.order}`);
   }
   if (itemId) {
     searchParams.set('itemId', itemId);
@@ -100,6 +111,9 @@ const getOwnershipRequests = async ({
   }
   if (state) {
     searchParams.set('state', state);
+  }
+  if (itemType) {
+    searchParams.set('itemType', itemType);
   }
   const res = await fetchFromApi({
     path: '/ownerships/',
@@ -115,7 +129,9 @@ type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
-} & PaginationOptions;
+  itemType?: string;
+} & PaginationOptions &
+  SortOptions;
 
 export type GetOwnershipRequestsResponse = {
   '@context': string;
@@ -129,12 +145,21 @@ const createGetOwnershipRequestsQueryOptions = ({
   itemId,
   ownerId,
   state,
+  itemType,
   paginationOptions,
+  sortOptions,
 }: UseGetOwnershipRequestsArguments) =>
   queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { itemId, ownerId, state, paginationOptions },
+    queryArguments: {
+      itemId,
+      ownerId,
+      state,
+      paginationOptions,
+      sortOptions,
+      itemType,
+    },
     refetchOnWindowFocus: false,
   });
 
