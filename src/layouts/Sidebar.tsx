@@ -52,9 +52,6 @@ import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 
 const { publicRuntimeConfig } = getConfig();
 
-const shouldShowBetaVersion =
-  publicRuntimeConfig?.shouldShowBetaVersion === 'true';
-
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
 const getValueForMenu = getValueFromTheme('menu');
@@ -302,48 +299,6 @@ const NotificationMenu = memo(
 );
 
 NotificationMenu.displayName = 'NotificationMenu';
-
-type BetaVersionToggleProps = Omit<InlineProps, 'onChange'> & {
-  checked: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-};
-
-const BetaVersionToggle = ({
-  checked,
-  onChange,
-  ...props
-}: BetaVersionToggleProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <FormElement
-      id="beta-version-switch"
-      label={t('menu.beta_version')}
-      labelVariant={LabelVariants.NORMAL}
-      labelPosition={LabelPositions.LEFT}
-      css={`
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        label {
-          height: initial;
-        }
-      `}
-      fontSize={{ s: '9px' }}
-      spacing={{ default: 3, s: 1 }}
-      stackOn={Breakpoints.S}
-      Component={
-        <RadioButton
-          type={RadioButtonTypes.SWITCH}
-          checked={checked}
-          onChange={onChange}
-          {...getInlineProps(props)}
-        />
-      }
-    />
-  );
-};
 
 const Sidebar = () => {
   const { t, i18n } = useTranslation();
@@ -646,32 +601,6 @@ const Sidebar = () => {
             <Menu items={filteredManageMenu} title={t('menu.management')} />
           )}
           <Stack>
-            <Inline
-              display={shouldShowBetaVersion ? 'inherit' : 'none'}
-              flex={1}
-              paddingLeft={2}
-              alignItems="center"
-              justifyContent={{ default: 'space-between', s: 'center' }}
-              stackOn={Breakpoints.S}
-              padding={2}
-              width="100%"
-            >
-              <Inline
-                stackOn={Breakpoints.S}
-                spacing={{ default: 4, s: 1 }}
-                alignItems="center"
-                justifyContent={{ default: 'center', s: 'center' }}
-                width="100%"
-              >
-                <Icon name={Icons.EYE} />
-                <BetaVersionToggle
-                  checked={isNewCreateEnabled}
-                  onChange={() => {
-                    setIsNewCreateEnabled((prev) => !prev);
-                  }}
-                />
-              </Inline>
-            </Inline>
             <NotificationMenu
               countUnseenAnnouncements={countUnseenAnnouncements}
               jobLoggerState={jobLoggerState}

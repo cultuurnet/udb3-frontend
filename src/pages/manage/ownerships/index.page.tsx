@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SortField, SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {
   GetOrganizerByIdResponse,
   useGetOrganizerByIdQuery,
@@ -34,6 +35,7 @@ const OwnershipsOverviewPage = () => {
   const router = useRouter();
   const shallowRouter = useShallowRouter();
   const { t } = useTranslation();
+  const [sortOrder, setSortOrder] = useState<SortOrderType>(SortOrder.DESC);
 
   const state =
     (router.query.state as OwnershipState | undefined) ??
@@ -48,6 +50,10 @@ const OwnershipsOverviewPage = () => {
     paginationOptions: {
       start: (page - 1) * itemsPerPage,
       limit: itemsPerPage,
+    },
+    sortOptions: {
+      field: SortField.CREATED,
+      order: sortOrder,
     },
   }) as UseQueryResult<GetOwnershipRequestsResponse, FetchError>;
 
@@ -158,6 +164,7 @@ const OwnershipsOverviewPage = () => {
               onApprove={approveOwnership}
               onReject={rejectOwnership}
               onDelete={deleteOwnership}
+              onSort={(order) => setSortOrder(order)}
             />
           )}
 

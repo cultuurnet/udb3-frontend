@@ -1,13 +1,15 @@
-import { useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {
   OwnershipCreator,
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
+import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
@@ -22,6 +24,7 @@ type ActionHandlers = {
   onDelete?: (request: OwnershipRequest) => void;
   onApprove?: (request: OwnershipRequest) => void;
   onReject?: (request: OwnershipRequest) => void;
+  onSort?: (order: SortOrderType) => void;
 };
 
 type ActionProps = {
@@ -111,18 +114,21 @@ export const OwnershipsTable = ({
   onDelete,
   onApprove,
   onReject,
+  onSort,
   shouldShowItemId = false,
   shouldShowOwnerId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
+  const router = useRouter();
+  const [_, setSortOrder] = useState<SortOrderType>(SortOrder.DESC);
 
   const hasActions = useMemo(
     () =>
       requests.some(
-        (it) =>
-          it.state !== OwnershipState.DELETED &&
-          it.state !== OwnershipState.REJECTED,
+        (request) =>
+          request.state !== OwnershipState.DELETED &&
+          request.state !== OwnershipState.REJECTED,
       ),
     [requests],
   );
@@ -130,26 +136,41 @@ export const OwnershipsTable = ({
   const hasStatus = useMemo(
     () =>
       requests.some(
-        (it) =>
-          it.state === OwnershipState.APPROVED ||
-          it.state === OwnershipState.REJECTED,
+        (request) =>
+          request.state === OwnershipState.APPROVED ||
+          request.state === OwnershipState.REJECTED,
       ),
     [requests],
   );
 
-  const colsAmount = useMemo(() => {
-    let amount = 2;
+  const isOnManagePage = router.pathname.startsWith('/manage');
+
+  const hasDate =
+    isOnManagePage &&
+    requests.some((request) => request.state === OwnershipState.REQUESTED) &&
+    requests.some((request) => !!request.created);
+
+  const gridTemplateColumns = useMemo(() => {
+    const columns = ['2fr'];
 
     if (shouldShowItemId) {
-      amount += 1;
+      columns.push('1.5fr');
     }
 
     if (hasStatus) {
-      amount += 1;
+      columns.push('1fr');
     }
 
-    return amount;
-  }, [hasStatus, shouldShowItemId]);
+    if (hasDate) {
+      columns.push('1.5fr');
+    }
+
+    if (hasActions) {
+      columns.push('1.5fr');
+    }
+
+    return columns.join(' ');
+  }, [hasStatus, shouldShowItemId, hasDate, hasActions]);
 
   return (
     <Stack
@@ -166,17 +187,39 @@ export const OwnershipsTable = ({
     >
       <Inline
         paddingBottom={3}
+        display="grid"
+        alignItems="center"
         css={`
-          display: grid;
-          grid-template-columns: repeat(${colsAmount}, 1fr);
+          grid-template-columns: ${gridTemplateColumns};
+          gap: 1rem;
           border-bottom: 1px solid ${grey3};
         `}
       >
         <Title size={3}>{t('organizers.ownerships.table.user')}</Title>
         {shouldShowItemId && <Title size={3}>Item id</Title>}
         {hasStatus && <Title size={3}>Status</Title>}
+        {hasDate && (
+          <Inline spacing={2} alignItems="center">
+            <Title size={3}>Aanvraag Datum</Title>
+            <Button
+              onClick={() =>
+                setSortOrder((prevOrder) => {
+                  const order =
+                    prevOrder === SortOrder.ASC
+                      ? SortOrder.DESC
+                      : SortOrder.ASC;
+                  onSort?.(order);
+                  return order;
+                })
+              }
+              variant={ButtonVariants.UNSTYLED}
+            >
+              <Icon name={Icons.SORT} alignItems="center" />
+            </Button>
+          </Inline>
+        )}
         {hasActions && (
-          <Title size={3} justifyContent="flex-end">
+          <Title size={3} justifyContent="flex-start">
             {t('organizers.ownerships.table.actions.title')}
           </Title>
         )}
@@ -188,7 +231,10 @@ export const OwnershipsTable = ({
             alignItems="center"
             paddingY={3}
             minHeight="4rem"
+            display="grid"
             css={`
+              grid-template-columns: ${gridTemplateColumns};
+              gap: 1rem;
               &:not(:last-child) {
                 border-bottom: 1px solid ${grey3};
               }
@@ -197,56 +243,61 @@ export const OwnershipsTable = ({
             <List.Item>{creator.email}</List.Item>
           </Inline>
         )}
-        {requests.map((request) => {
-          return (
-            <Inline
-              key={request.id}
-              role="row"
-              alignItems="center"
-              paddingY={3}
-              display="grid"
-              minHeight="4rem"
-              css={`
-                grid-template-columns: repeat(${colsAmount}, 1fr);
-
-                &:not(:last-child) {
-                  border-bottom: 1px solid ${grey3};
-                }
-              `}
-            >
-              <List.Item>
+        {requests.map((request) => (
+          <Inline
+            key={request.id}
+            role="row"
+            alignItems="center"
+            paddingY={3}
+            minHeight="4rem"
+            display="grid"
+            css={`
+              grid-template-columns: ${gridTemplateColumns};
+              gap: 1rem;
+              &:not(:last-child) {
+                border-bottom: 1px solid ${grey3};
+              }
+            `}
+          >
+            <List.Item minWidth={0}>
+              <Stack>
+                {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
+                <Text>{request.ownerEmail}</Text>
+              </Stack>
+            </List.Item>
+            {shouldShowItemId && (
+              <List.Item minWidth={0}>
                 <Stack>
-                  {shouldShowOwnerId && <Text>{request.ownerId}</Text>}
-                  <Text>{request.ownerEmail}</Text>
+                  <Link href={`/organizers/${request.itemId}/preview`}>
+                    {request.itemId}
+                  </Link>
                 </Stack>
               </List.Item>
-              {shouldShowItemId && (
-                <List.Item>
-                  <Stack>
-                    <Link href={`/organizers/${request.itemId}/preview`}>
-                      {request.itemId}
-                    </Link>
-                  </Stack>
-                </List.Item>
-              )}
-              {hasStatus && (
-                <List.Item>
-                  <Status request={request} />
-                </List.Item>
-              )}
-              {hasActions && (
-                <List.Item justifyContent="flex-end">
-                  <Actions
-                    request={request}
-                    onDelete={onDelete}
-                    onApprove={onApprove}
-                    onReject={onReject}
-                  />
-                </List.Item>
-              )}
-            </Inline>
-          );
-        })}
+            )}
+            {hasStatus && (
+              <List.Item minWidth={0}>
+                <Status request={request} />
+              </List.Item>
+            )}
+            {hasDate && (
+              <List.Item minWidth={0}>{request.created || ''}</List.Item>
+            )}
+            {hasActions && (
+              <List.Item
+                minWidth={0}
+                display="flex"
+                justifyContent={isOnManagePage ? 'flex-end' : 'flex-start'}
+              >
+                <Actions
+                  request={request}
+                  onDelete={onDelete}
+                  onApprove={onApprove}
+                  onReject={onReject}
+                />
+              </List.Item>
+            )}
+          </Inline>
+        ))}
       </List>
     </Stack>
   );

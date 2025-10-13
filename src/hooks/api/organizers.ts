@@ -280,16 +280,42 @@ const createGetOrganizersByCreatorQueryOptions = ({
   creator,
   paginationOptions = { start: 0, limit: 50 },
   sortOptions = { field: 'modified', order: 'desc' },
+  organizerIds = [],
 }: PaginationOptions &
   SortOptions & {
     creator: User;
+    organizerIds?: string[];
   }) => {
+  const organizerIdsArg =
+    organizerIds.length > 0
+      ? `${organizerIds.map((id) => `id:${id}`).join(' OR ')}`
+      : '';
+
+  const constructQueryArguments = (creator, organizerIdsArg) => {
+    const parts = [];
+
+    if (creator?.sub) {
+      parts.push(`creator:(${creator.sub}`);
+    }
+
+    if (creator?.['https://publiq.be/uitidv1id']) {
+      parts.push(`${creator['https://publiq.be/uitidv1id']}`);
+    }
+
+    if (creator?.email) {
+      parts.push(`${creator.email})`);
+      parts.push(`OR contributors:${creator.email}`);
+    }
+
+    if (organizerIdsArg.length > 0) {
+      parts.push(`OR ${organizerIdsArg}`);
+    }
+
+    return parts.join(' ');
+  };
+
   const queryArguments = {
-    q: `creator:(${creator?.sub} OR ${
-      creator?.['https://publiq.be/uitidv1id']
-        ? `${creator?.['https://publiq.be/uitidv1id']} OR`
-        : ''
-    } ${creator?.email}) OR contributors:${creator?.email}`,
+    q: constructQueryArguments(creator, organizerIdsArg),
     limit: `${paginationOptions.limit}`,
     start: `${paginationOptions.start}`,
     embed: 'true',
@@ -312,9 +338,11 @@ const useGetOrganizersByCreatorQuery = (
     creator,
     paginationOptions,
     sortOptions,
+    organizerIds,
   }: PaginationOptions &
     SortOptions & {
       creator: User;
+      organizerIds?: string[];
     },
   configuration: ExtendQueryOptions<typeof getOrganizersByCreator> = {},
 ) => {
@@ -322,6 +350,7 @@ const useGetOrganizersByCreatorQuery = (
     creator,
     paginationOptions,
     sortOptions,
+    organizerIds,
   });
 
   return useAuthenticatedQuery({
@@ -335,12 +364,14 @@ export const prefetchGetOrganizersByCreatorQuery = ({
   req,
   queryClient,
   creator,
+  organizerIds,
   paginationOptions,
   sortOptions,
 }: ServerSideQueryOptions &
   PaginationOptions &
   SortOptions & {
     creator: User;
+    organizerIds?: string[];
   }) =>
   prefetchAuthenticatedQuery({
     req,
@@ -349,6 +380,7 @@ export const prefetchGetOrganizersByCreatorQuery = ({
       creator,
       paginationOptions,
       sortOptions,
+      organizerIds,
     }),
   });
 
