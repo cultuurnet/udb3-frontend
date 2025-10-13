@@ -40,10 +40,6 @@ export const middleware = async (request: NextRequest) => {
       return response;
     }
   }
-
-  if (request.nextUrl.pathname.startsWith('/event')) {
-    return NextResponse.redirect(new URL('/create?scope=events', baseUrl));
-  }
 };
 
 export const config = {
