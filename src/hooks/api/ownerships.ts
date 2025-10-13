@@ -152,7 +152,14 @@ const createGetOwnershipRequestsQueryOptions = ({
   queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { itemId, ownerId, state, paginationOptions, sortOptions, itemType },
+    queryArguments: {
+      itemId,
+      ownerId,
+      state,
+      paginationOptions,
+      sortOptions,
+      itemType,
+    },
     refetchOnWindowFocus: false,
   });
 
