@@ -8,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
+import { SortField, SortOrder } from '@/constants/SortOptions';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   prefetchGetEventsByCreatorQuery,
@@ -504,17 +505,6 @@ const TabContent = ({
   );
 };
 
-const SortingField = {
-  AVAILABLETO: 'availableTo',
-  CREATED: 'created',
-  COMPLETENESS: 'completeness',
-} as const;
-
-const SortingOrder = {
-  ASC: 'asc',
-  DESC: 'desc',
-} as const;
-
 const Dashboard = (): any => {
   const { t, i18n } = useTranslation();
   const { pathname, query, asPath, ...router } = useRouter();
@@ -537,11 +527,11 @@ const Dashboard = (): any => {
   );
 
   const sortingField = useMemo(() => {
-    return sort?.split('_')?.[0] ?? SortingField.CREATED;
+    return sort?.split('_')?.[0] ?? SortField.CREATED;
   }, [sort]);
 
   const sortingOrder = useMemo(() => {
-    return sort?.split('_')?.[1] ?? SortingOrder.DESC;
+    return sort?.split('_')?.[1] ?? SortOrder.DESC;
   }, [sort]);
 
   const useDeleteItemById = useMemo(
@@ -901,8 +891,8 @@ const getServerSideProps = getApplicationServerSideProps(
         const page =
           query.tab === key ? (query.page ? parseInt(query.page) : 1) : 1;
 
-        const sortingField = query?.sort?.split('_')[0] ?? SortingField.CREATED;
-        const sortingOrder = query?.sort?.split('_')[1] ?? SortingOrder.DESC;
+        const sortingField = query?.sort?.split('_')[0] ?? SortField.CREATED;
+        const sortingOrder = query?.sort?.split('_')[1] ?? SortOrder.DESC;
 
         return prefetch({
           req,

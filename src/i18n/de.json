@@ -4,6 +4,11 @@
     "sub_title": "Sie haben auf einen Link zu einer Seite geklickt, die wir leider nicht in der UiTdatabank finden.",
     "title": "Leider existiert diese Seite nicht mehr"
   },
+  "unauthorized": {
+    "title": "Zugriff verweigert",
+    "sub_title": "Sie haben keinen Zugriff auf diese Seite. Bitte überprüfen Sie, ob Sie die erforderlichen Berechtigungen haben.",
+    "redirect": "Zur Startseite zurückkehren"
+  },
   "announcements": {
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
