@@ -1,6 +1,6 @@
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useCookiesWithOptions } from './useCookiesWithOptions';
 import { useSearchParams } from './useSearchParams';

@@ -8,12 +8,11 @@ import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useCultuurkuurLabelsPickerProps,
-  useGetCultuurkuurRegions,
   useGetEducationLevelsQuery,
 } from '@/hooks/api/cultuurkuur';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
+import { parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';

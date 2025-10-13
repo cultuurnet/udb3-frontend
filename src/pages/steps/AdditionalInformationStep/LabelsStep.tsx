@@ -10,7 +10,7 @@ import {
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { useGetPermissionsQuery, useGetRolesQuery } from '@/hooks/api/user';
+import { useGetPermissionsQuery } from '@/hooks/api/user';
 import {
   TabContentProps,
   ValidationStatus,

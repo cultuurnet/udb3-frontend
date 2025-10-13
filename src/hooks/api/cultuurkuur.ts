@@ -5,8 +5,6 @@ import { CULTUURKUUR_ON_SITE_LABEL } from '@/constants/Cultuurkuur';
 import { useBulkUpdateOfferLabelsMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { StepProps } from '@/pages/steps/Steps';
-import { Offer } from '@/types/Offer';
-import { Organizer } from '@/types/Organizer';
 import {
   getEducationLabels,
   getLocationLabels,
