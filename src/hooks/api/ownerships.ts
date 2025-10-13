@@ -84,11 +84,13 @@ const getOwnershipRequests = async ({
   state,
   paginationOptions,
   sortOptions,
+  itemType,
 }: {
   headers: Headers;
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
+  itemType?: string;
 } & PaginationOptions &
   SortOptions) => {
   const searchParams = new URLSearchParams();
@@ -110,6 +112,9 @@ const getOwnershipRequests = async ({
   if (state) {
     searchParams.set('state', state);
   }
+  if (itemType) {
+    searchParams.set('itemType', itemType);
+  }
   const res = await fetchFromApi({
     path: '/ownerships/',
     searchParams,
@@ -124,6 +129,7 @@ type UseGetOwnershipRequestsArguments = {
   itemId?: string;
   ownerId?: string;
   state?: OwnershipState;
+  itemType?: string;
 } & PaginationOptions &
   SortOptions;
 
@@ -139,13 +145,21 @@ const createGetOwnershipRequestsQueryOptions = ({
   itemId,
   ownerId,
   state,
+  itemType,
   paginationOptions,
   sortOptions,
 }: UseGetOwnershipRequestsArguments) =>
   queryOptions({
     queryKey: ['ownership-requests'],
     queryFn: getOwnershipRequests,
-    queryArguments: { itemId, ownerId, state, paginationOptions, sortOptions },
+    queryArguments: {
+      itemId,
+      ownerId,
+      state,
+      paginationOptions,
+      sortOptions,
+      itemType,
+    },
     refetchOnWindowFocus: false,
   });
 
