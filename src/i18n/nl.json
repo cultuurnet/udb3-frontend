@@ -492,12 +492,13 @@
         "duplicate_name_error": "Tarief met de naam \"{{priceName}}\" bestaat al, gelieve een andere naam te gebruiken.",
         "euro": "euro",
         "free": "Gratis",
-        "global_info": "Zorg ervoor dat je prijsinformatie steeds geldig is: <ul><li>De naam van je prijscategorie mag maximaal 90 tekens bevatten.</li><li>Noteer decimalen met een komma.</li><li>Laat geen enkele rij leeg, vul steeds een doelgroep en een bedrag in.</li> <li>Geef maximum twee cijfers na de komma.</li></ul>",
+        "global_info": "Gebruik een komma wanneer je decimalen ingeeft",
         "price": "Prijs",
         "prices": "Prijzen",
         "save": "Bewaren",
         "target": "Doelgroep",
         "title": "Prijzen",
+        "subtitle": "Wat zijn de toegangsprijzen?",
         "uitpas_error": "De UiTPAS prijs wordt voor jou berekend door UiTdatabank. Je kan deze niet zelf toevoegen.",
         "uitpas_info": "Het UiTPAS kansentarief wordt automatisch berekend op basis van de basisprijs en de actieve kaartsystemen.",
         "cultuurkuur": {
@@ -512,7 +513,10 @@
           "matches": "De opgegeven prijs is ongeldig.",
           "unique_name": "De opgegeven naam in reeds gebruikt.",
           "name_is_required": "Naam is verplicht.",
-          "name_is_not_uitpas": "De naam voor je tarief mag niet \"UiTPAS\" of \"Paspartoe\" bevatten. Deze tarieven worden door UiTdatabank automatisch berekend."
+          "name_is_not_uitpas": "De naam voor je tarief mag niet \"UiTPAS\" of \"Paspartoe\" bevatten. Deze tarieven worden door UiTdatabank automatisch berekend.",
+          "name_max_length": "De naam van je prijscategorie mag max. 90 tekens bevatten.",
+          "basic_rate": "Vul eerst het basistarief in.",
+          "decimal": "Geef maximum 2 cijfers na de komma."
         }
       },
       "title": {
