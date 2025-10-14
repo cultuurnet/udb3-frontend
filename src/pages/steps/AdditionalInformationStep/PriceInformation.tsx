@@ -29,7 +29,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
@@ -83,24 +83,12 @@ const schema = yup
                     'should not be uitpas',
                     isNotUitpas,
                   )
-                  .test('name_max_length', (value) => {
-                    const currentLanguage = i18n.language as SupportedLanguage;
-                    return value?.[currentLanguage].length < 90;
-                  })
                   .required(),
             }),
           category: yup
             .mixed<PriceCategory>()
             .oneOf(Object.values(PriceCategory)),
-          price: yup
-            .string()
-            .test('decimal', (value) => {
-              const parts = value.split(',');
-              if (parts[1] && parts[1].length > 2) return false;
-              return true;
-            })
-            .matches(PRICE_REGEX)
-            .required(),
+          price: yup.string().matches(PRICE_REGEX).required(),
           priceCurrency: yup.string(),
           groupPrice: yup.boolean().optional(),
         }),
@@ -186,8 +174,6 @@ const PriceInformation = ({
     handleSubmit,
     watch,
     reset,
-    setError,
-    clearErrors,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -253,9 +239,6 @@ const PriceInformation = ({
     (price) => price.category === PriceCategory.BASE,
   );
 
-  const isBasePriceInfoEmpty =
-    rates.find((price) => price.category === PriceCategory.BASE).price === '';
-
   const hasMultiplePrices = offer?.priceInfo?.length > 1;
 
   const isCultuurkuurAlertVisible =
@@ -308,277 +291,219 @@ const PriceInformation = ({
   ]);
 
   return (
-    <Stack>
-      <Stack marginBottom={4}>
-        <Text fontWeight="bold">
-          {t('create.additionalInformation.price_info.prices')}
-        </Text>
-        <Text>{t('create.additionalInformation.price_info.subtitle')}</Text>
-      </Stack>
-      <Stack {...getStackProps(props)} padding={0} spacing={5}>
-        <Inline
-          stackOn={Breakpoints.M}
-          justifyContent="flex-end"
-          css={`
-            flex-direction: row-reverse;
-            gap: 2rem;
-          `}
-        >
-          <Alert variant={AlertVariants.PRIMARY}>
-            {t('create.additionalInformation.price_info.global_info')}
-          </Alert>
-          <Stack>
-            {controlledRates.map((rate, index) => {
-              const registerNameProps = register(
-                `rates.${index}.name.${i18n.language as SupportedLanguage}`,
-              );
+    <Stack {...getStackProps(props)} padding={0} spacing={5}>
+      <Inline spacing={4} stackOn={Breakpoints.M}>
+        <Stack flex="1 0 60%">
+          {controlledRates.map((rate, index) => {
+            const registerNameProps = register(
+              `rates.${index}.name.${i18n.language as SupportedLanguage}`,
+            );
 
-              const registerPriceProps = register(`rates.${index}.price`);
+            const registerPriceProps = register(`rates.${index}.price`);
 
-              const uniqueNameErrorFromResponse =
-                addPriceInfoMutation.error &&
-                addPriceInfoMutation.error instanceof FetchError &&
-                addPriceInfoMutation.error.body.schemaErrors?.[0]
-                  ?.jsonPointer === `/priceInfo/${index}/name/nl`
-                  ? UNIQUE_NAME_ERROR_TYPE
-                  : undefined;
+            const uniqueNameErrorFromResponse =
+              addPriceInfoMutation.error &&
+              addPriceInfoMutation.error instanceof FetchError &&
+              addPriceInfoMutation.error.body.schemaErrors?.[0]?.jsonPointer ===
+                `/priceInfo/${index}/name/nl`
+                ? UNIQUE_NAME_ERROR_TYPE
+                : undefined;
 
-              const validationErrorType =
-                errors.rates?.type ||
-                errors.rates?.[index]?.name?.type ||
-                errors.rates?.[index]?.price?.type ||
-                errors.rates?.[index]?.type ||
-                uniqueNameErrorFromResponse;
+            const validationErrorType =
+              errors.rates?.[index]?.name?.type ||
+              errors.rates?.[index]?.price?.type ||
+              errors.rates?.[index]?.type ||
+              uniqueNameErrorFromResponse;
 
-              return (
-                <Stack key={`rate_${rate.id}`}>
+            return (
+              <Stack key={`rate_${rate.id}`}>
+                <Inline
+                  maxWidth="50rem"
+                  css={`
+                    border-bottom: 1px solid ${getValue('borderColor')};
+                  `}
+                >
                   <Inline
-                    maxWidth="50rem"
-                    minWidth="30rem"
-                    css={`
-                      border-bottom: 1px solid ${getValue('borderColor')};
-                    `}
+                    width="100%"
+                    paddingY={3}
+                    alignItems="baseline"
+                    justifyContent="flex-start"
+                    spacing={3}
                   >
-                    <Inline
-                      width="100%"
-                      paddingY={3}
-                      alignItems="baseline"
-                      justifyContent="flex-start"
-                      spacing={3}
-                    >
-                      <Inline minWidth="55%">
-                        {rate.category === PriceCategory.BASE && (
-                          <Text minWidth="15rem">
-                            {rate.name[i18n.language]}
-                          </Text>
-                        )}
-                        {rate.category === PriceCategory.TARIFF && (
+                    <Inline minWidth="55%">
+                      {rate.category === PriceCategory.BASE && (
+                        <Text width="100%">{rate.name[i18n.language]}</Text>
+                      )}
+                      {rate.category === PriceCategory.TARIFF && (
+                        <FormElement
+                          id={`rate_name_${rate.id}`}
+                          Component={
+                            <Input
+                              {...registerNameProps}
+                              onBlur={async (e) => {
+                                await registerNameProps.onBlur(e);
+                                const isValid = await trigger();
+                                if (!isValid) {
+                                  return;
+                                }
+
+                                onSubmit();
+                              }}
+                              placeholder={t(
+                                'create.additionalInformation.price_info.target',
+                              )}
+                            />
+                          }
+                        />
+                      )}
+                      {rate.category === PriceCategory.UITPAS && (
+                        <Text>{rate.name[i18n.language]}</Text>
+                      )}
+                    </Inline>
+                    <Inline alignItems="center">
+                      {rate.category && (
+                        <FormElement
+                          id={`rate_price_${rate.id}`}
+                          Component={
+                            <Input
+                              width="6rem"
+                              {...registerPriceProps}
+                              onBlur={async (e) => {
+                                await registerPriceProps.onBlur(e);
+                                const isValid = await trigger();
+                                if (!isValid) {
+                                  return;
+                                }
+
+                                onSubmit();
+                              }}
+                              placeholder={t(
+                                'create.additionalInformation.price_info.price',
+                              )}
+                              disabled={rate.category === PriceCategory.UITPAS}
+                            />
+                          }
+                        />
+                      )}
+                    </Inline>
+                    <Inline alignItems="center" spacing={3}>
+                      <Text variant={TextVariants.MUTED}>
+                        {t('create.additionalInformation.price_info.euro')}
+                      </Text>
+                      {isCultuurkuurEvent &&
+                        rate.category === PriceCategory.BASE && (
                           <FormElement
                             id={`rate_groupPrice_${rate.id}`}
                             Component={
-                              <Input
-                                {...registerNameProps}
-                                onBlur={async (e) => {
-                                  await registerNameProps.onBlur(e);
-                                  const isValid = await trigger();
-                                  if (!isValid) {
-                                    return;
-                                  }
-
+                              <Select
+                                {...register(`rates.${index}.groupPrice`)}
+                                onChange={(e) => {
+                                  const value = e.target.value === 'true';
+                                  setValue(`rates.${index}.groupPrice`, value, {
+                                    shouldValidate: false,
+                                  });
                                   onSubmit();
                                 }}
-                                placeholder={t(
-                                  'create.additionalInformation.price_info.target',
-                                )}
-                              />
+                              >
+                                {groupPriceOptions.map((option) => (
+                                  <option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {t(option.label)}
+                                  </option>
+                                ))}
+                              </Select>
                             }
                           />
                         )}
-                        {rate.category === PriceCategory.UITPAS && (
-                          <Text minWidth="15rem">
-                            {rate.name[i18n.language]}
-                          </Text>
-                        )}
-                      </Inline>
-                      <Inline alignItems="center">
-                        {rate.category && (
-                          <FormElement
-                            id={`rate_price_${rate.id}`}
-                            Component={
-                              <Inline position="relative">
-                                <Input
-                                  width="6rem"
-                                  paddingLeft={4.5}
-                                  {...(rate.category === PriceCategory.BASE && {
-                                    'data-testid': 'basic-rate',
-                                  })}
-                                  {...registerPriceProps}
-                                  onBlur={async (e) => {
-                                    const trimmedValue = e.target.value.trim();
-                                    setValue(
-                                      `rates.${index}.price`,
-                                      trimmedValue,
-                                    );
-
-                                    await registerPriceProps.onBlur(e);
-                                    const isValid = await trigger();
-                                    if (!isValid) {
-                                      return;
-                                    }
-
-                                    onSubmit();
-                                  }}
-                                  disabled={
-                                    rate.category === PriceCategory.UITPAS
-                                  }
-                                />
-                                <span
-                                  css={{
-                                    position: 'absolute',
-                                    left: '0.5rem',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    color: '#666',
-                                    pointerEvents: 'none',
-                                  }}
-                                >
-                                  €
-                                </span>
-                              </Inline>
-                            }
-                          />
-                        )}
-                      </Inline>
-                      <Inline alignItems="center" spacing={3}>
-                        {isCultuurkuurEvent &&
-                          rate.category === PriceCategory.BASE && (
-                            <FormElement
-                              id={`rate_groupPrice_${rate.id}`}
-                              Component={
-                                <Select
-                                  {...register(`rates.${index}.groupPrice`)}
-                                  onChange={(e) => {
-                                    const value = e.target.value === 'true';
-                                    setValue(
-                                      `rates.${index}.groupPrice`,
-                                      value,
-                                      {
-                                        shouldValidate: false,
-                                      },
-                                    );
-                                    onSubmit();
-                                  }}
-                                >
-                                  {groupPriceOptions.map((option) => (
-                                    <option
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {t(option.label)}
-                                    </option>
-                                  ))}
-                                </Select>
-                              }
-                            />
-                          )}
-                        {!isPriceFree(rate.price) &&
-                          rate.category !== PriceCategory.UITPAS && (
-                            <Button
-                              variant={ButtonVariants.LINK}
-                              onClick={() => {
-                                setValue(`rates.${index}.price`, '0,00', {
-                                  shouldValidate: false,
-                                });
-                                onSubmit();
-                              }}
-                            >
-                              {t(
-                                'create.additionalInformation.price_info.free',
-                              )}
-                            </Button>
-                          )}
-                      </Inline>
-                      {index !== 0 &&
+                      {!isPriceFree(rate.price) &&
                         rate.category !== PriceCategory.UITPAS && (
                           <Button
-                            iconName={Icons.TRASH}
-                            variant={ButtonVariants.DANGER}
-                            size={ButtonSizes.SMALL}
-                            aria-label={t(
-                              'create.additionalInformation.price_info.delete',
-                            )}
+                            variant={ButtonVariants.LINK}
                             onClick={() => {
-                              remove(index);
+                              setValue(`rates.${index}.price`, '0,00', {
+                                shouldValidate: false,
+                              });
                               onSubmit();
                             }}
-                          />
+                          >
+                            {t('create.additionalInformation.price_info.free')}
+                          </Button>
                         )}
                     </Inline>
+                    {index !== 0 && rate.category !== PriceCategory.UITPAS && (
+                      <Button
+                        iconName={Icons.TRASH}
+                        variant={ButtonVariants.DANGER}
+                        size={ButtonSizes.SMALL}
+                        aria-label={t(
+                          'create.additionalInformation.price_info.delete',
+                        )}
+                        onClick={() => {
+                          remove(index);
+                          onSubmit();
+                        }}
+                      />
+                    )}
                   </Inline>
-                  {validationErrorType && (
-                    <Text color="red">
-                      {t(
-                        `create.additionalInformation.price_info.validation_messages.${validationErrorType}`,
-                      )}
-                    </Text>
-                  )}
-                </Stack>
-              );
-            })}
-            <Inline marginTop={3}>
-              {!isCultuurkuurEvent && (
-                <Button
-                  onClick={() => {
-                    if (
-                      isBasePriceInfoEmpty ||
-                      (isBasePriceInfoEmpty && errors?.rates?.length > 0)
-                    ) {
-                      setError('rates', {
-                        type: 'basic_rate',
-                      });
-                      return;
-                    }
-                    clearErrors('rates');
-                    append(
-                      {
-                        name: { [i18n.language as SupportedLanguage]: '' },
-                        price: '',
-                        category: PriceCategory.TARIFF,
-                        priceCurrency: PRICE_CURRENCY,
-                        groupPrice: undefined,
-                      },
-                      {
-                        focusName: `rates.${fields.length}.name`,
-                        shouldFocus: true,
-                      },
-                    );
-                  }}
-                  variant={ButtonVariants.SECONDARY}
-                >
-                  {t('create.additionalInformation.price_info.add')}
-                </Button>
-              )}
-            </Inline>
-          </Stack>
-        </Inline>
-        <Stack spacing={4}>
-          {isCultuurkuurAlertVisible && (
-            <Alert variant={AlertVariants.WARNING} marginBottom={3}>
-              {hasBasePriceInfo
-                ? t(
-                    'create.additionalInformation.price_info.cultuurkuur.warning.multiple_prices',
-                  )
-                : t(
-                    'create.additionalInformation.price_info.cultuurkuur.warning.no_price',
-                  )}
-            </Alert>
-          )}
-          {hasUitpasPrices && (
-            <Alert variant={AlertVariants.PRIMARY} marginBottom={3}>
-              {t('create.additionalInformation.price_info.uitpas_info')}
-            </Alert>
-          )}
+                </Inline>
+                {validationErrorType && (
+                  <Text color="red">
+                    {t(
+                      `create.additionalInformation.price_info.validation_messages.${validationErrorType}`,
+                    )}
+                  </Text>
+                )}
+              </Stack>
+            );
+          })}
+          <Inline marginTop={3}>
+            {!isCultuurkuurEvent && (
+              <Button
+                onClick={() => {
+                  append(
+                    {
+                      name: { [i18n.language as SupportedLanguage]: '' },
+                      price: '',
+                      category: PriceCategory.TARIFF,
+                      priceCurrency: PRICE_CURRENCY,
+                      groupPrice: undefined,
+                    },
+                    {
+                      focusName: `rates.${fields.length}.name`,
+                      shouldFocus: true,
+                    },
+                  );
+                }}
+                variant={ButtonVariants.SECONDARY}
+              >
+                {t('create.additionalInformation.price_info.add')}
+              </Button>
+            )}
+          </Inline>
         </Stack>
+      </Inline>
+      <Stack spacing={4}>
+        {isCultuurkuurAlertVisible && (
+          <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+            {hasBasePriceInfo
+              ? t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.multiple_prices',
+                )
+              : t(
+                  'create.additionalInformation.price_info.cultuurkuur.warning.no_price',
+                )}
+          </Alert>
+        )}
+        <Alert variant={AlertVariants.PRIMARY}>
+          {t('create.additionalInformation.price_info.global_info')}
+        </Alert>
+        {hasUitpasPrices && (
+          <Alert variant={AlertVariants.PRIMARY} marginBottom={3}>
+            {t('create.additionalInformation.price_info.uitpas_info')}
+          </Alert>
+        )}
       </Stack>
     </Stack>
   );

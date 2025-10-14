@@ -44,7 +44,7 @@ test('create a movie', async ({ baseURL, page }) => {
     .getByRole('textbox', { name: 'rdw-editor' })
     .fill(dummyMovie.description);
   await page.getByRole('tab', { name: 'Prijzen' }).click();
-  await page.getByTestId('basic-rate').fill('10');
+  await page.getByPlaceholder('Prijs').fill('10');
   await page.getByRole('tab', { name: 'Contact' }).click();
   await page.getByRole('button', { name: 'Contactgegevens toevoegen' }).click();
   const contactButton = await page.getByRole('button', {
