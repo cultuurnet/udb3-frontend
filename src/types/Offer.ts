@@ -154,15 +154,15 @@ type Label = {
   excluded: boolean;
 };
 
-enum LabelVisibilityOptions {
-  VISIBLE = 'visible',
-  INVISIBLE = 'invisible',
-}
+const LabelVisibilityOptions = {
+  VISIBLE: 'visible',
+  INVISIBLE: 'invisible',
+} as const;
 
-enum LabelPrivacyOptions {
-  PRIVATE = 'private',
-  PUBLIC = 'public',
-}
+const LabelPrivacyOptions = {
+  PRIVATE: 'private',
+  PUBLIC: 'public',
+} as const;
 
 const LabelValidationInformation = {
   MAX_LENGTH: 255,
