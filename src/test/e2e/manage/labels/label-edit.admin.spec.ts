@@ -19,32 +19,30 @@ test.describe('Label Editing - Admin', () => {
   });
 
   test('should display the label editing form', async ({ page }) => {
-    await expect(page.locator('input[name="name"]')).toBeVisible();
-    await expect(page.locator('input[name="name"]')).toHaveValue('e2e');
-    await expect(page.locator('input[name="isVisible"]')).toBeVisible();
-    await expect(page.locator('input[name="isVisible"]')).toBeChecked();
-    await expect(page.locator('input[name="isPrivate"]')).toBeVisible();
+    await expect(page.getByLabel('Naam')).toBeVisible();
+    await expect(page.getByLabel('Naam')).toHaveValue('e2e');
+    await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeVisible();
+    await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeChecked();
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByLabel('Voorbehouden aan specifieke gebruikersgroepen'),
     ).toBeVisible();
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeEnabled();
-    await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toContainText('Bewaren');
+      page.getByLabel('Voorbehouden aan specifieke gebruikersgroepen'),
+    ).not.toBeChecked();
+    await expect(page.getByRole('button', { name: 'Bewaren' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Bewaren' })).toBeEnabled();
   });
 
   test('should change submit button state when changing name', async ({
     page,
   }) => {
-    await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeEnabled();
+    await expect(page.getByRole('button', { name: 'Bewaren' })).toBeEnabled();
 
-    await page.fill('input[name="name"]', dummyLabel.name);
+    await page.getByLabel('Naam').fill(dummyLabel.name);
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toContainText('Toevoegen');
+      page.getByRole('button', { name: 'Bewaren' }),
+    ).not.toBeVisible();
+
+    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 });
