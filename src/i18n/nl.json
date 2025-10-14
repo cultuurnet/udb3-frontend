@@ -4,37 +4,14 @@
     "sub_title": "Je klikte op een link naar een pagina die we helaas niet vinden in de UiTdatabank.",
     "title": "Spijtig, deze pagina bestaat niet (meer)"
   },
+  "unauthorized": {
+    "title": "Geen toegang",
+    "sub_title": "Je hebt geen toegang tot deze pagina. Controleer of je de juiste rechten hebt.",
+    "redirect": "Ga terug naar de homepagina"
+  },
   "announcements": {
     "new_features": "Nieuw in UiTdatabank",
     "no_features": "Er zijn momenteel geen nieuwigheden."
-  },
-  "beta_version": {
-    "title": "Wil je de nieuwste versie van de UiTdatabank proberen?",
-    "intro1": "We werken hard aan een nieuw invoerformulier in de UiTdatabank, zodat je nog vlotter je activiteiten kan invoeren. Al eens proberen? Schakel over naar de  nieuwste versie van de UiTdatabank en test meteen alle nieuwigheden.",
-    "intro2": "Wat is er nieuw?",
-    "improvements": [
-      {
-        "prefix": "Nieuwe mogelijkheden:",
-        "text": "je kan online evenementen toevoegen, een video uploaden en heel wat meer. "
-      },
-      {
-        "prefix": "Minder werk:",
-        "text": "we zetten de naam van je organisatie al voor je klaar, zodat je dat veld niet telkens opnieuw moet invullen. Later doen we hetzelfde met andere informatie die je al eerder invoerde."
-      },
-      {
-        "prefix": "Extra hulp",
-        "text": "via de volledigheidsscore krijg je meteen feedback en tips om je evenement of locatie zo volledig mogelijk in te voeren. "
-      }
-    ],
-    "outro1": "Wil je als een van de eersten het nieuwe invoerformulier testen? ",
-    "confirm": {
-      "title": "Ik probeer het UiT",
-      "info": "Ga meteen aan de slag <boldText>met<boldText> de nieuwe versie van de UiTdatabank."
-    },
-    "cancel": {
-      "title": "Ik wacht nog even",
-      "info": "Je hebt nog ruim de tijd om over te schakelen naar de nieuwe versie."
-    }
   },
   "bookingAvailability": {
     "actions": {
@@ -228,7 +205,7 @@
         "info": "Voeg locaties toe naar waar je je wil verplaatsen. Zo vinden de juiste scholen jouw aanbod."
       },
       "is_brussels_alert": {
-        "message": "Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen. Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je wel verder invoeren op UiTdatabank. <link1>Meer info</link1>"
+        "message": "Voor activiteiten in Brussel werkt UiTdatabank samen met <link1>visit.brussels</link1>. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen. Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je wel verder invoeren op UiTdatabank. <link2>Meer info</link2>"
       },
       "online_url": {
         "label": "Deelnamelink",
@@ -515,12 +492,13 @@
         "duplicate_name_error": "Tarief met de naam \"{{priceName}}\" bestaat al, gelieve een andere naam te gebruiken.",
         "euro": "euro",
         "free": "Gratis",
-        "global_info": "Zorg ervoor dat je prijsinformatie steeds geldig is: <ul><li>De naam van je prijscategorie mag maximaal 90 tekens bevatten.</li><li>Noteer decimalen met een komma.</li><li>Laat geen enkele rij leeg, vul steeds een doelgroep en een bedrag in.</li> <li>Geef maximum twee cijfers na de komma.</li></ul>",
+        "global_info": "Gebruik een komma wanneer je decimalen ingeeft",
         "price": "Prijs",
         "prices": "Prijzen",
         "save": "Bewaren",
         "target": "Doelgroep",
         "title": "Prijzen",
+        "subtitle": "Wat zijn de toegangsprijzen?",
         "uitpas_error": "De UiTPAS prijs wordt voor jou berekend door UiTdatabank. Je kan deze niet zelf toevoegen.",
         "uitpas_info": "Het UiTPAS kansentarief wordt automatisch berekend op basis van de basisprijs en de actieve kaartsystemen.",
         "cultuurkuur": {
@@ -535,7 +513,10 @@
           "matches": "De opgegeven prijs is ongeldig.",
           "unique_name": "De opgegeven naam in reeds gebruikt.",
           "name_is_required": "Naam is verplicht.",
-          "name_is_not_uitpas": "De naam voor je tarief mag niet \"UiTPAS\" of \"Paspartoe\" bevatten. Deze tarieven worden door UiTdatabank automatisch berekend."
+          "name_is_not_uitpas": "De naam voor je tarief mag niet \"UiTPAS\" of \"Paspartoe\" bevatten. Deze tarieven worden door UiTdatabank automatisch berekend.",
+          "name_max_length": "De naam van je prijscategorie mag max. 90 tekens bevatten.",
+          "basic_rate": "Vul eerst het basistarief in.",
+          "decimal": "Geef maximum 2 cijfers na de komma."
         }
       },
       "title": {
@@ -753,7 +734,6 @@
   "menu": {
     "add": "Invoeren",
     "announcements": "Nieuwigheden",
-    "beta_version": "Beta versie",
     "home": "Home",
     "labels": "Labels",
     "logout": "Afmelden",

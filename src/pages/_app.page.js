@@ -148,4 +148,13 @@ App.propTypes = {
   children: PropTypes.node,
 };
 
+App.getInitialProps = async ({ ctx }) => {
+  const serverCookies = new Cookies(ctx?.req?.headers?.cookie);
+  const language = serverCookies.get('udb-language') || 'nl';
+
+  if (isServer()) await i18n.changeLanguage(language);
+
+  return { pageProps: { language } };
+};
+
 export default App;

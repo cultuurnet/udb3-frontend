@@ -134,6 +134,11 @@ const getRedirects = (
     destination: '/copyright',
     permanent: environment !== 'development',
   },
+  {
+    source: '/event',
+    destination: '/create?scope=events',
+    permanent: false,
+  },
   ...(language !== 'nl'
     ? [
         {

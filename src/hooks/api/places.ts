@@ -14,10 +14,9 @@ import type { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,

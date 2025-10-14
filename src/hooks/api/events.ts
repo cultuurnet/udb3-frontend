@@ -1,5 +1,6 @@
 import type { CalendarType } from '@/constants/CalendarType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { Video } from '@/pages/VideoUploadBox';
 import { ContactPoint } from '@/types/ContactPoint';
 import type { AttendanceMode, Event } from '@/types/Event';
@@ -19,11 +20,10 @@ import type { Values } from '@/types/Values';
 import type { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
-import { fetchFromApi, isErrorObject } from '@/utils/fetchFromApi';
+import { fetchFromApi } from '@/utils/fetchFromApi';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import {
-  AuthenticatedQueryOptions,
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
@@ -34,7 +34,6 @@ import {
 } from './authenticated-query';
 import {
   useAuthenticatedMutation,
-  useAuthenticatedQueries,
   useAuthenticatedQuery,
 } from './authenticated-query';
 import type { Headers } from './types/Headers';
@@ -510,6 +509,37 @@ const useGetCalendarSummaryQuery = (
     ...configuration,
   });
 
+const getEventPermissions = async ({ headers, eventId }) => {
+  const res = await fetchFromApi({
+    path: `/event/${eventId}/permissions`,
+    options: { headers },
+  });
+
+  return (await res.json()) as Values<typeof PermissionTypes>[];
+};
+
+const useGetEventPermissionsQuery = ({ eventId }, configuration = {}) =>
+  useAuthenticatedQuery({
+    queryKey: ['event-permissions'],
+    queryFn: getEventPermissions,
+    queryArguments: { eventId },
+    enabled: !!eventId,
+    ...configuration,
+  });
+
+export const prefetchGetEventPermissionsQuery = ({
+  req,
+  queryClient,
+  eventId,
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['event-permissions'],
+    queryFn: getEventPermissions,
+    queryArguments: { eventId },
+  });
+
 const changeLocation = async ({ headers, eventId, locationId }) => {
   return fetchFromApi({
     path: `/events/${eventId.toString()}/location/${locationId}`,
@@ -795,6 +825,7 @@ export {
   useDeleteOnlineUrlMutation,
   useGetCalendarSummaryQuery,
   useGetEventByIdQuery,
+  useGetEventPermissionsQuery,
   useGetEventsByCreatorQuery,
   useGetEventsByIdsQuery,
   useGetEventsToModerateQuery,

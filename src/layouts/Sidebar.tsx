@@ -1,8 +1,7 @@
-import Hotjar from '@hotjar/browser';
 import { useQueryClient } from '@tanstack/react-query';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,20 +23,16 @@ import {
 } from '@/hooks/useHandleWindowMessage';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
-import { QuestionCircleIcon } from '@/pages/NewFeatureTooltip';
 import type { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
-import { Button, ButtonVariants } from '@/ui/Button';
-import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Button } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
-import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
-import { LabelPositions, LabelVariants } from '@/ui/Label';
+import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import type { ListProps } from '@/ui/List';
 import { List } from '@/ui/List';
 import { Logo, LogoVariants } from '@/ui/Logo';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import {
@@ -53,9 +48,6 @@ import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 
 const { publicRuntimeConfig } = getConfig();
-
-const shouldShowBetaVersion =
-  publicRuntimeConfig?.shouldShowBetaVersion === 'true';
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
 const getValueForSidebar = getValueFromTheme('sidebar');
@@ -304,48 +296,6 @@ const NotificationMenu = memo(
 );
 
 NotificationMenu.displayName = 'NotificationMenu';
-
-type BetaVersionToggleProps = Omit<InlineProps, 'onChange'> & {
-  checked: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-};
-
-const BetaVersionToggle = ({
-  checked,
-  onChange,
-  ...props
-}: BetaVersionToggleProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <FormElement
-      id="beta-version-switch"
-      label={t('menu.beta_version')}
-      labelVariant={LabelVariants.NORMAL}
-      labelPosition={LabelPositions.LEFT}
-      css={`
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        label {
-          height: initial;
-        }
-      `}
-      fontSize={{ s: '9px' }}
-      spacing={{ default: 3, s: 1 }}
-      stackOn={Breakpoints.S}
-      Component={
-        <RadioButton
-          type={RadioButtonTypes.SWITCH}
-          checked={checked}
-          onChange={onChange}
-          {...getInlineProps(props)}
-        />
-      }
-    />
-  );
-};
 
 const Sidebar = () => {
   const { t, i18n } = useTranslation();
@@ -648,32 +598,6 @@ const Sidebar = () => {
             <Menu items={filteredManageMenu} title={t('menu.management')} />
           )}
           <Stack>
-            <Inline
-              display={shouldShowBetaVersion ? 'inherit' : 'none'}
-              flex={1}
-              paddingLeft={2}
-              alignItems="center"
-              justifyContent={{ default: 'space-between', s: 'center' }}
-              stackOn={Breakpoints.S}
-              padding={2}
-              width="100%"
-            >
-              <Inline
-                stackOn={Breakpoints.S}
-                spacing={{ default: 4, s: 1 }}
-                alignItems="center"
-                justifyContent={{ default: 'center', s: 'center' }}
-                width="100%"
-              >
-                <Icon name={Icons.EYE} />
-                <BetaVersionToggle
-                  checked={isNewCreateEnabled}
-                  onChange={() => {
-                    setIsNewCreateEnabled((prev) => !prev);
-                  }}
-                />
-              </Inline>
-            </Inline>
             <NotificationMenu
               countUnseenAnnouncements={countUnseenAnnouncements}
               jobLoggerState={jobLoggerState}

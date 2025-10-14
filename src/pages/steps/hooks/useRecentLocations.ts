@@ -2,7 +2,6 @@ import { uniqBy } from 'lodash';
 
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
 import { useGetUserQuery } from '@/hooks/api/user';
-import { Offer } from '@/types/Offer';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 
 const useRecentLocations = () => {

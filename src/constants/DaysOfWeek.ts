@@ -1,5 +1,3 @@
-import { Values } from '@/types/Values';
-
 const DaysOfWeek = [
   'monday',
   'tuesday',

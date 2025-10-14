@@ -4,38 +4,16 @@
     "sub_title": "Sie haben auf einen Link zu einer Seite geklickt, die wir leider nicht in der UiTdatabank finden.",
     "title": "Leider existiert diese Seite nicht mehr"
   },
+  "unauthorized": {
+    "title": "Zugriff verweigert",
+    "sub_title": "Sie haben keinen Zugriff auf diese Seite. Bitte überprüfen Sie, ob Sie die erforderlichen Berechtigungen haben.",
+    "redirect": "Zur Startseite zurückkehren"
+  },
   "announcements": {
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
   },
-  "beta_version": {
-    "title": "Möchten Sie die neueste Version der UiTdatabank ausprobieren?",
-    "intro1": "Wir arbeiten mit Hochdruck an einem neuen Eingabeformular in der UiTdatabank, damit Sie Ihre Aktivitäten noch reibungsloser eingeben können. Probieren Sie es schon aus? Wechseln Sie auf die neueste Version der UiTdatabank und testen Sie gleich alle neuen Funktionen.",
-    "intro2": "Was gibt es Neues?",
-    "improvements": [
-      {
-        "prefix": "Mehr Möglichkeiten:",
-        "text": "Sie können Online-Veranstaltungen hinzufügen, ein Video hochladen und vieles mehr. "
-      },
-      {
-        "prefix": "Weniger Arbeit:",
-        "text": "Wir bereiten den Namen Ihrer Organisation bereits für Sie vor, so dass Sie dieses Feld nicht jedes Mal ausfüllen müssen. Später machen wir das Gleiche mit anderen Informationen, die Sie zuvor eingegeben haben. "
-      },
-      {
-        "prefix": "Zusätzliche Hilfe:",
-        "text": "Über die Vollständigkeitsbewertung erhalten Sie sofortiges Feedback und Tipps, wie Sie Ihre Veranstaltung oder Ihren Veranstaltungsort so vollständig wie möglich eingeben können."
-      }
-    ],
-    "outro1": "Möchten Sie zu den ersten gehören, die das neue Anmeldeformular testen?",
-    "confirm": {
-      "title": "Ich probiere es aus",
-      "info": "Legen Sie gleich los <boldText>mit<boldText> der neuen Version der UiTdatabase."
-    },
-    "cancel": {
-      "title": "Ich werde eine Weile warten",
-      "info": "Sie können den Wechsel zu einem späteren Zeitpunkt vornehmen"
-    }
-  },
+
   "bookingAvailability": {
     "actions": {
       "cancel": "Abbrechen",
@@ -218,7 +196,7 @@
         "label": "An einem physischen Ort"
       },
       "is_brussels_alert": {
-        "message": "Für Aktivitäten in Brüssel arbeitet UiTdatabank mit visit.brussels zusammen. Tragen Sie Ihre Brüsseler Aktivitäten auf agenda.brussels ein, und sie erscheinen automatisch in UiTdatabank und UiTinvlaanderen. Planen Sie mit Ihrem Mitgliedsverband eine Reise nach Brüssel? Oder organisieren Sie eine Schulaktivität? Dann können Sie weiterhin Informationen in UiTdatabank eingeben. <link1>Weitere Informationen</link1>"
+        "message": "Für Aktivitäten in Brüssel arbeitet UiTdatabank mit <link1>visit.brussels</link1> zusammen. Tragen Sie Ihre Brüsseler Aktivitäten auf agenda.brussels ein, und sie erscheinen automatisch in UiTdatabank und UiTinvlaanderen. Planen Sie mit Ihrem Mitgliedsverband eine Reise nach Brüssel? Oder organisieren Sie eine Schulaktivität? Dann können Sie weiterhin Informationen in UiTdatabank eingeben. <link2>Weitere Informationen</link2>"
       },
       "online_url": {
         "label": "Teilnahmelink",
@@ -490,19 +468,23 @@
         "duplicate_name_error": "Tarif mit dem Namen \"Hallo\" existiert bereits, bitte verwenden Sie einen anderen Namen.",
         "euro": "euro",
         "free": "Kostenlos",
-        "global_info": "Vergewissern Sie sich, dass Ihre Preisinformationen immer gültig sind:<ul><li>Der Name deiner Preiskategorie darf maximal 90 Zeichen enthalten.</li><li>Schreiben Sie Dezimalzahlen mit einem Komma.</li><li>Lassen Sie keine Zeile leer, geben Sie immer eine Zielgruppe und einen Betrag an.</li><li>Geben Sie maximal zwei Dezimalstellen an.</li></ul>",
+        "global_info": "Verwenden Sie ein Komma, um Dezimalstellen einzugeben.",
         "price": "Preis",
         "prices": "Preise",
         "save": "Speichern",
         "target": "Zielgruppe",
         "title": "Preise",
+        "subtitle": "Wie hoch sind die Eintrittspreise?",
         "uitpas_error": "Der UiTPAS-Preis wird von UiTdatabank für Sie berechnet. Sie können diese nicht selbst hinzufügen.",
         "uitpas_info": "Der UiTPAS Opportunity-Tarif wird automatisch auf Basis des Basispreises und der aktiven Kartensysteme berechnet.",
         "validation_messages": {
           "matches": "Der angegebene Preis ist ungültig.",
           "unique_name": "Der angegebene Name wird bereits verwendet.",
           "name_is_required": "Name ist erforderlich.",
-          "name_is_not_uitpas": "Der Name Ihres Tarifs sollte nicht \"UiTPAS\" oder \"Paspartoe\" enthalten. Diese Tarife werden von der UiTdatabank automatisch berechnet."
+          "name_is_not_uitpas": "Der Name Ihres Tarifs sollte nicht \"UiTPAS\" oder \"Paspartoe\" enthalten. Diese Tarife werden von der UiTdatabank automatisch berechnet.",
+          "name_max_length": "Der Name Ihrer Preiskategorie darf max. 90 Zeichen enthalten.",
+          "basic_rate": "Geben Sie zuerst den Basispreis ein.",
+          "decimal": "Geben Sie höchstens 2 Stellen nach dem Komma ein."
         }
       },
       "title": {
@@ -722,7 +704,6 @@
   "menu": {
     "add": "Eingeben",
     "announcements": "Ankündigungen",
-    "beta_version": "Betaversion",
     "home": "Startseite",
     "labels": "Labels",
     "logout": "Abmelden",
