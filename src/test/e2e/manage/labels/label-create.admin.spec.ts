@@ -20,27 +20,29 @@ test.describe('Label Creation - Admin', () => {
   });
 
   test('should display the label creation form', async ({ page }) => {
-    await expect(page.locator('input[name="name"]')).toBeVisible();
-    await expect(page.locator('input[name="isVisible"]')).toBeVisible();
-    await expect(page.locator('input[name="isVisible"]')).toBeChecked();
-    await expect(page.locator('input[name="isPrivate"]')).toBeVisible();
+    await expect(page.getByLabel('Naam')).toBeVisible();
+    await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeVisible();
+    await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeChecked();
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByLabel('Voorbehouden aan specifieke gebruikersgroepen'),
     ).toBeVisible();
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeDisabled();
-
-    await page.fill('input[name="name"]', dummyLabel.name);
+      page.getByLabel('Voorbehouden aan specifieke gebruikersgroepen'),
+    ).not.toBeChecked();
+    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeVisible();
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeEnabled();
+      page.getByRole('button', { name: 'Toevoegen' }),
+    ).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Annuleren' })).toBeVisible();
+
+    await page.getByLabel('Naam').fill(dummyLabel.name);
+    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 
   // Skipped because this will create a ne label for each run.
   test.skip('should create a new label successfully', async ({ page }) => {
-    await page.fill('input[name="name"]', dummyLabel.name);
-    await page.click('button[title="submit"]');
+    await page.getByLabel('Naam').fill(dummyLabel.name);
+    await page.getByRole('button', { name: 'Toevoegen' }).click();
 
     await expect(page).toHaveURL(/\/manage\/labels/);
     await expect(page.locator(`text=${dummyLabel.name}`)).toBeVisible();
@@ -49,58 +51,54 @@ test.describe('Label Creation - Admin', () => {
   test('should show validation errors for wrong label name', async ({
     page,
   }) => {
-    await page.fill('input[name="name"]', 'b');
+    await page.getByLabel('Naam').fill('b');
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
     await expect(
       page.locator('span:below(input[name="name"])').first(),
     ).toContainText('2 tekens');
 
-    await page.fill('input[name="name"]', dummyLabel.longName);
-    await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeEnabled();
+    await page.getByLabel('Naam').fill(dummyLabel.longName);
+    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
     await expect(
       page.locator('span:above(input[name="name"])').first(),
     ).toContainText('255 / 255');
 
-    await page.fill('input[name="name"]', 'b;');
+    await page.getByLabel('Naam').fill('b;');
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
     await expect(
       page.locator('span:below(input[name="name"])').first(),
     ).toContainText('puntkomma');
 
-    await page.fill('input[name="name"]', '');
+    await page.getByLabel('Naam').fill('');
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
     await expect(
       page.locator('span:below(input[name="name"])').first(),
     ).toContainText('verplicht');
 
-    await page.fill('input[name="name"]', 'FakeNews');
+    await page.getByLabel('Naam').fill('FakeNews');
     await page.waitForLoadState('networkidle');
     await expect(
-      page.locator('main').locator('button[title="submit"]'),
+      page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
     await expect(
       page.locator('span:below(input[name="name"])').first(),
     ).toContainText('al gebruikt');
 
-    await page.fill('input[name="name"]', dummyLabel.name);
-    await expect(
-      page.locator('main').locator('button[title="submit"]'),
-    ).toBeEnabled();
+    await page.getByLabel('Naam').fill(dummyLabel.name);
+    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 
   test('should cancel label creation and return to labels list', async ({
     page,
   }) => {
-    await page.fill('input[name="name"]', dummyLabel.name);
-    await page.click('button[title="cancel"]');
+    await page.getByLabel('Naam').fill(dummyLabel.name);
+    await page.getByRole('button', { name: 'Annuleren' }).click();
 
     await expect(page).toHaveURL(/\/manage\/labels$/);
   });
