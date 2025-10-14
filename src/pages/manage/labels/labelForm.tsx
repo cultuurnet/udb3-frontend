@@ -209,8 +209,8 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
   };
 
   const pageTitle = isEditMode
-    ? t('labels.edit.title', 'Edit label')
-    : t('labels.create.title', 'Create label');
+    ? t('labels.edit.title')
+    : t('labels.create.title');
 
   return (
     <Page>
