@@ -140,74 +140,68 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
       return;
     }
 
-    try {
-      if (!isEditMode) {
-        await createLabelMutation.mutateAsync({
-          headers,
-          name: data.name.trim(),
-          isVisible: data.isVisible,
-          isPrivate: data.isPrivate,
-        });
-        router.push(
-          `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
-        );
-        return;
-      }
-
-      if (!label) return;
-
-      if (nameChanged) {
-        const response = await createLabelMutation.mutateAsync({
-          headers,
-          name: data.name.trim(),
-          isVisible: data.isVisible,
-          isPrivate: data.isPrivate,
-          parentId: label.uuid,
-        });
-
-        if (response.uuid) {
-          router.push(
-            `/manage/labels/${
-              response.uuid
-            }/edit?success=created&name=${encodeURIComponent(
-              data.name.trim(),
-            )}`,
-          );
-        } else {
-          router.push('/manage/labels');
-        }
-        return;
-      }
-
-      const visibilityChanged =
-        (label.visibility !== LabelVisibilityOptions.INVISIBLE) !==
-        data.isVisible;
-      const privacyChanged =
-        (label.privacy === LabelPrivacyOptions.PRIVATE) !== data.isPrivate;
-
-      if (visibilityChanged) {
-        await updateVisibilityMutation.mutateAsync({
-          headers,
-          id: label.uuid,
-          makeVisible: data.isVisible,
-        });
-      }
-      if (privacyChanged) {
-        await updatePrivacyMutation.mutateAsync({
-          headers,
-          id: label.uuid,
-          makePrivate: data.isPrivate,
-        });
-      }
-
-      setSuccessMessage(
-        t('labels.overview.success_updated', {
-          name: label.name,
-        }),
+    if (!isEditMode) {
+      await createLabelMutation.mutateAsync({
+        headers,
+        name: data.name.trim(),
+        isVisible: data.isVisible,
+        isPrivate: data.isPrivate,
+      });
+      router.push(
+        `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
       );
-    } catch (error) {
-      // Error handling is managed by the mutation hooks
+      return;
     }
+
+    if (!label) return;
+
+    if (nameChanged) {
+      const response = await createLabelMutation.mutateAsync({
+        headers,
+        name: data.name.trim(),
+        isVisible: data.isVisible,
+        isPrivate: data.isPrivate,
+        parentId: label.uuid,
+      });
+
+      if (response.uuid) {
+        router.push(
+          `/manage/labels/${
+            response.uuid
+          }/edit?success=created&name=${encodeURIComponent(data.name.trim())}`,
+        );
+      } else {
+        router.push('/manage/labels');
+      }
+      return;
+    }
+
+    const currentlyVisible =
+      label.visibility !== LabelVisibilityOptions.INVISIBLE;
+    const visibilityChanged = currentlyVisible !== data.isVisible;
+    if (visibilityChanged) {
+      await updateVisibilityMutation.mutateAsync({
+        headers,
+        id: label.uuid,
+        makeVisible: data.isVisible,
+      });
+    }
+
+    const currentlyPrivate = label.privacy === LabelPrivacyOptions.PRIVATE;
+    const privacyChanged = currentlyPrivate !== data.isPrivate;
+    if (privacyChanged) {
+      await updatePrivacyMutation.mutateAsync({
+        headers,
+        id: label.uuid,
+        makePrivate: data.isPrivate,
+      });
+    }
+
+    setSuccessMessage(
+      t('labels.overview.success_updated', {
+        name: label.name,
+      }),
+    );
   };
 
   const handleCancel = () => {
