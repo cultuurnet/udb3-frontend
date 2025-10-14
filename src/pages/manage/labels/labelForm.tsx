@@ -62,6 +62,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     return yup.object({
       name: yup
         .string()
+        .trim()
         .required(t('labels.form.errors.name_required'))
         .min(
           LabelValidationInformation.MIN_LENGTH,
