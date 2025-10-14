@@ -1188,7 +1188,7 @@
       "create": "Ajouter",
       "search": {
         "label": "Rechercher par nom d'étiquette",
-        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+        "placeholder": "Entrez une requête de recherche d'au moins 2 caractères."
       },
       "no_results": "Aucun étiquettes trouvé.",
       "success_created": "Étiquette '{{name}}' créée avec succès.",

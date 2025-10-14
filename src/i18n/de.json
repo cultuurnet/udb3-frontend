@@ -1189,7 +1189,7 @@
       "create": "Hinzufügen",
       "search": {
         "label": "Nach Labelnamen suchen",
-        "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
+        "placeholder": "Geben Sie eine Suchanfrage von mindestens 2 Zeichen ein."
       },
       "no_results": "Keine Labels gefunden.",
       "success_created": "Label '{{name}}' erfolgreich hinzugefügt.",

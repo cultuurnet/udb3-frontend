@@ -1242,7 +1242,7 @@
       "create": "Toevoegen",
       "search": {
         "label": "Zoeken op labelnaam",
-        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+        "placeholder": "Schrijf een zoekopdracht van minstens 2 karakters."
       },
       "no_results": "Geen labels gevonden.",
       "success_created": "Label '{{name}}' succesvol toegevoegd.",
