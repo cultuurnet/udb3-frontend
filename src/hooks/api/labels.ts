@@ -291,11 +291,11 @@ const useIsLabelNameUnique = ({
   });
   const isSameAsCurrent =
     currentName && currentName.toLowerCase() === trimmedName.toLowerCase();
-  const found = (data?.member ?? []).find(
+  const isLabelAlreadyUsed = (data?.member ?? []).find(
     (l: Label) => (l?.name ?? '').toLowerCase() === trimmedName.toLowerCase(),
   );
   return {
-    isUnique: isSameAsCurrent ? true : !found,
+    isUnique: isSameAsCurrent ? true : !isLabelAlreadyUsed,
     isLoading: enabled && isLoading,
   };
 };
