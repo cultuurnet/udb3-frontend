@@ -25,9 +25,17 @@ test.describe('Label Overview - Admin', () => {
 
   test('can search for labels', async ({ baseURL, page }) => {
     await page.goto(baseURL + '/manage/labels');
-    await page.getByPlaceholder(/zoek/i).fill('test');
+    await page.getByPlaceholder(/zoek/i).fill('e2e');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('test');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('e2e');
+
+    const rows = page.getByRole('row');
+
+    const addedOwner = rows.nth(1).filter({
+      hasText: 'e2e',
+    });
+
+    await expect(addedOwner).toBeVisible({ timeout: 8_000 });
   });
 
   test('can click create label button', async ({ baseURL, page }) => {
