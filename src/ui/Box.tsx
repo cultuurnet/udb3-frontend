@@ -12,7 +12,7 @@ import type {
 } from 'react';
 import { forwardRef } from 'react';
 import { UseAsyncProps } from 'react-bootstrap-typeahead';
-import { ReactDatePickerProps } from 'react-datepicker';
+import { DatePickerProps } from 'react-datepicker';
 import type { ExecutionContext, RuleSet } from 'styled-components';
 import styled, { css } from 'styled-components';
 
@@ -94,7 +94,10 @@ type InputProps = {
 };
 
 type SpecificComponentProps = InlineProps &
-  Omit<ReactDatePickerProps, 'onChange' | 'onSelect' | 'value' | 'selected'> &
+  Omit<
+    DatePickerProps,
+    'onChange' | 'onSelect' | 'value' | 'selected' | 'date'
+  > &
   TitleProps &
   ListProps &
   LinkProps &
