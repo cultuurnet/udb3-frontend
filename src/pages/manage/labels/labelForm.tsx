@@ -183,7 +183,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
       await updateVisibilityMutation.mutateAsync({
         headers,
         id: label.uuid,
-        makeVisible: data.isVisible,
+        isVisible: data.isVisible,
       });
     }
 
@@ -193,7 +193,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
       await updatePrivacyMutation.mutateAsync({
         headers,
         id: label.uuid,
-        makePrivate: data.isPrivate,
+        isPrivate: data.isPrivate,
       });
     }
 

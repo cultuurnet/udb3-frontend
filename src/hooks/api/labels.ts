@@ -227,16 +227,16 @@ const useUpdateLabelVisibilityMutation = (configuration = {}) =>
     mutationFn: ({
       headers,
       id,
-      makeVisible,
+      isVisible,
     }: {
       headers: Headers;
       id: string;
-      makeVisible: boolean;
+      isVisible: boolean;
     }) =>
       updateLabel({
         headers,
         id,
-        command: makeVisible ? 'MakeVisible' : 'MakeInvisible',
+        command: isVisible ? 'MakeVisible' : 'MakeInvisible',
       }),
     mutationKey: 'labels-update-visibility',
     ...configuration,
@@ -247,16 +247,16 @@ const useUpdateLabelPrivacyMutation = (configuration = {}) =>
     mutationFn: ({
       headers,
       id,
-      makePrivate,
+      isPrivate,
     }: {
       headers: Headers;
       id: string;
-      makePrivate: boolean;
+      isPrivate: boolean;
     }) =>
       updateLabel({
         headers,
         id,
-        command: makePrivate ? 'MakePrivate' : 'MakePublic',
+        command: isPrivate ? 'MakePrivate' : 'MakePublic',
       }),
     mutationKey: 'labels-update-privacy',
     ...configuration,
