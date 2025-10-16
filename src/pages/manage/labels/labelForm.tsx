@@ -311,6 +311,7 @@ const LabelFormFields = ({
             label={t('labels.form.fields.name')}
             error={nameError}
             maxLength={LabelValidationInformation.MAX_LENGTH}
+            marginBottom={5}
             Component={<Input {...field} />}
           />
         )}
@@ -344,7 +345,7 @@ const LabelFormFields = ({
         )}
       />
 
-      <Inline spacing={3}>
+      <Inline marginTop={5} spacing={3}>
         <Button
           title="submit"
           variant={ButtonVariants.PRIMARY}
