@@ -60,6 +60,8 @@ test.describe('Label Creation - Admin', () => {
     ).toContainText('2 tekens');
 
     await page.getByLabel('Naam').fill(dummyLabel.longName);
+    const value = await page.getByLabel('Naam').inputValue();
+    expect(value).toHaveLength(255);
     await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
     await expect(
       page.locator('span:above(input[name="name"])').first(),
