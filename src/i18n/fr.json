@@ -1188,9 +1188,11 @@
       "create": "Ajouter",
       "search": {
         "label": "Rechercher par nom d'étiquette",
-        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+        "placeholder": "Entrez une requête de recherche d'au moins 2 caractères."
       },
       "no_results": "Aucun étiquettes trouvé.",
+      "success_created": "Étiquette '{{name}}' créée avec succès.",
+      "success_updated": "Étiquette '{{name}}' mise à jour avec succès.",
       "something_wrong": "Une erreur s'est produite lors de la recherche:",
       "table": {
         "name": "Nom",
@@ -1200,6 +1202,31 @@
         "options": "Options",
         "edit": "Modifier"
       }
+    },
+    "form": {
+      "actions": {
+        "cancel": "Annuler",
+        "create": "Créer",
+        "save": "Enregistrer"
+      },
+      "errors": {
+        "semicolon": "Le nom de l'étiquette ne doit pas contenir de point-virgule (;).",
+        "name_required": "Le nom est un champ obligatoire.",
+        "name_unique": "Ce nom est déjà utilisé par une autre étiquette.",
+        "name_max": "Une étiquette ne peut contenir plus de 255 caractères.",
+        "name_min": "Une étiquette doit contenir au moins 2 caractères."
+      },
+      "fields": {
+        "name": "Nom",
+        "is_visible": "Afficher sur les canaux de publication",
+        "is_private": "Réservé à des groupes d'utilisateurs spécifiques"
+      }
+    },
+    "create": {
+      "title": "Créer une étiquette"
+    },
+    "edit": {
+      "title": "Modifier une étiquette"
     }
   }
 }

@@ -1,14 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 
 import {
+  ExtendQueryOptions,
   PaginationOptions,
   prefetchAuthenticatedQuery,
   queryOptions,
   ServerSideQueryOptions,
+  useAuthenticatedMutation,
   useAuthenticatedQuery,
 } from '@/hooks/api/authenticated-query';
 import type { Headers } from '@/hooks/api/types/Headers';
-import { Label } from '@/types/Offer';
+import {
+  Label,
+  LabelPrivacyOptions,
+  LabelValidationInformation,
+  LabelVisibilityOptions,
+} from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
@@ -111,9 +118,198 @@ const useGetUitpasLabelsQuery = () =>
     refetchOnReconnect: false,
   });
 
+const getLabelById = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/labels/${id}`,
+    options: { headers },
+  });
+  return (await res.json()) as Label;
+};
+
+const createGetLabelByIdQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['labels', { id: id }],
+    queryFn: getLabelById,
+    queryArguments: { id },
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+const useGetLabelByIdQuery = (
+  { id }: { id: string },
+  configuration?: ExtendQueryOptions<typeof getLabelById>,
+) => {
+  const options = createGetLabelByIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...(configuration || {}),
+    enabled: options.enabled !== false && configuration?.enabled !== false,
+  });
+};
+
+const prefetchGetLabelByIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetLabelByIdQueryOptions({ id }),
+  });
+
+type CreateLabelArgs = {
+  headers: Headers;
+  name: string;
+  isVisible: boolean;
+  isPrivate: boolean;
+  parentId?: string;
+};
+
+const createLabel = async ({
+  headers,
+  name,
+  isVisible,
+  isPrivate,
+  parentId,
+}: CreateLabelArgs) => {
+  const body = {
+    name: (name || '').trim(),
+    visibility: isVisible
+      ? LabelVisibilityOptions.VISIBLE
+      : LabelVisibilityOptions.INVISIBLE,
+    privacy: isPrivate
+      ? LabelPrivacyOptions.PRIVATE
+      : LabelPrivacyOptions.PUBLIC,
+    parentId: parentId || undefined,
+  };
+  return fetchFromApi({
+    path: '/labels',
+    options: {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    },
+  });
+};
+
+const useCreateLabelMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: createLabel,
+    mutationKey: 'labels-create',
+    ...configuration,
+  });
+
+type UpdateLabelFlagsArgs = {
+  headers: Headers;
+  id: string;
+  command: 'MakeVisible' | 'MakeInvisible' | 'MakePrivate' | 'MakePublic';
+};
+
+const updateLabel = async ({ headers, id, command }: UpdateLabelFlagsArgs) =>
+  fetchFromApi({
+    path: `/labels/${id}`,
+    options: {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ command }),
+    },
+  });
+
+const useUpdateLabelVisibilityMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: ({
+      headers,
+      id,
+      isVisible,
+    }: {
+      headers: Headers;
+      id: string;
+      isVisible: boolean;
+    }) =>
+      updateLabel({
+        headers,
+        id,
+        command: isVisible ? 'MakeVisible' : 'MakeInvisible',
+      }),
+    mutationKey: 'labels-update-visibility',
+    ...configuration,
+  });
+
+const useUpdateLabelPrivacyMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: ({
+      headers,
+      id,
+      isPrivate,
+    }: {
+      headers: Headers;
+      id: string;
+      isPrivate: boolean;
+    }) =>
+      updateLabel({
+        headers,
+        id,
+        command: isPrivate ? 'MakePrivate' : 'MakePublic',
+      }),
+    mutationKey: 'labels-update-privacy',
+    ...configuration,
+  });
+
+const deleteLabel = async ({ headers, id }: { headers: Headers; id: string }) =>
+  fetchFromApi({
+    path: `/labels/${id}`,
+    options: { method: 'DELETE', headers },
+  });
+
+const useDeleteLabelMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteLabel,
+    mutationKey: 'labels-delete',
+    ...configuration,
+  });
+
+const useIsLabelNameUnique = ({
+  name,
+  currentName,
+}: {
+  name: string;
+  currentName?: string;
+}) => {
+  const trimmedName = (name || '').trim();
+  const enabled = trimmedName.length >= LabelValidationInformation.MIN_LENGTH;
+  const { data, isLoading } = useGetLabelsByQuery({
+    name: trimmedName,
+    paginationOptions: { start: 0, limit: 1 },
+    onlySuggestions: true,
+  });
+  const isSameAsCurrent =
+    currentName && currentName.toLowerCase() === trimmedName.toLowerCase();
+  const isLabelAlreadyUsed = (data?.member ?? []).find(
+    (l: Label) => (l?.name ?? '').toLowerCase() === trimmedName.toLowerCase(),
+  );
+  return {
+    isUnique: isSameAsCurrent ? true : !isLabelAlreadyUsed,
+    isLoading: enabled && isLoading,
+  };
+};
+
 export {
   getUitpasLabelsQuery,
+  prefetchGetLabelByIdQuery,
   prefetchGetLabelsQuery,
+  useCreateLabelMutation,
+  useDeleteLabelMutation,
+  useGetLabelByIdQuery,
   useGetLabelsByQuery,
   useGetUitpasLabelsQuery,
+  useIsLabelNameUnique,
+  useUpdateLabelPrivacyMutation,
+  useUpdateLabelVisibilityMutation,
 };
