@@ -613,7 +613,6 @@ const Dashboard = (): any => {
     {
       ownerId: user?.sub,
       itemType: 'organizer',
-      state: OwnershipState.APPROVED,
     },
     { enabled: !!user?.sub },
   );
@@ -878,7 +877,6 @@ const getServerSideProps = getApplicationServerSideProps(
       queryClient,
       ownerId: user?.sub,
       itemType: 'organizer',
-      state: OwnershipState.APPROVED,
     });
 
     const ownedOrganizers =
@@ -887,7 +885,6 @@ const getServerSideProps = getApplicationServerSideProps(
         {
           ownerId: user?.sub,
           itemType: 'organizer',
-          state: OwnershipState.APPROVED,
         },
       ]) || {};
 
