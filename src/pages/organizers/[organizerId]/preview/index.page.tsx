@@ -50,8 +50,9 @@ const OrganizersPreview = () => {
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
 
-  const permissions = getOrganizerPermissionsQuery?.data?.permissions ?? [];
-  const canEdit = permissions.includes('Organisaties bewerken');
+  const organizerPermissions =
+    getOrganizerPermissionsQuery?.data?.permissions ?? [];
+  const canEdit = organizerPermissions.includes('Organisaties bewerken');
 
   const organizer: Organizer = getOrganizerByIdQuery?.data;
 
