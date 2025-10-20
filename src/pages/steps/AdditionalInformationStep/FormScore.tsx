@@ -287,6 +287,7 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
     return (
       <Link
         color={getValue('link')}
+        display="inline-flex"
         href={`#${hash}`}
         onClick={(e) => {
           e.preventDefault();
