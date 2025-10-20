@@ -687,6 +687,11 @@ const Dashboard = (): any => {
   const SuggestedOrganizerRow = useMemo(
     () =>
       function SuggestedOrganizerRow(props: OrganizerRowProps) {
+        const isOwnershipRequested = ownedOrganizers?.member?.some(
+          (organizer) =>
+            organizer.state === OwnershipState.REQUESTED &&
+            organizer.itemId === parseOfferId(props.item['@id']),
+        );
         return (
           <OrganizerRow
             {...props}
