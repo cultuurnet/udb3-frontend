@@ -1,5 +1,6 @@
 import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
@@ -20,8 +21,6 @@ import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 
 import { getInlineProps, Inline } from '../../ui/Inline';
-import { useTranslation } from 'react-i18next';
-import { color } from 'storybook/internal/theming';
 
 type DashboardRowProps = {
   title: string;

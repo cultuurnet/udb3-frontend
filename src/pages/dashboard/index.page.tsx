@@ -710,7 +710,7 @@ const Dashboard = (): any => {
           />
         );
       },
-    [t],
+    [t, ownedOrganizers],
   );
 
   return (
