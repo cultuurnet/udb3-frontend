@@ -189,6 +189,7 @@ const Link = ({
           {...getInlineProps(props)}
           target={target}
           rel={rel}
+          width="100%"
         >
           {content}
         </BaseLink>
