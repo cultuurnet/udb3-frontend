@@ -619,9 +619,9 @@ const Dashboard = (): any => {
 
   const ownedOrganizerIds = useMemo(() => {
     return (
-      ownedOrganizers?.member?.map(
-        (organizer: OwnershipRequest) => organizer.itemId,
-      ) || []
+      ownedOrganizers?.member
+        ?.filter((organizer) => organizer.state === OwnershipState.APPROVED)
+        .map((organizer: OwnershipRequest) => organizer.itemId) || []
     );
   }, [ownedOrganizers]);
 
@@ -888,9 +888,9 @@ const getServerSideProps = getApplicationServerSideProps(
         },
       ]) || {};
 
-    const ownedOrganizerIds = ownedOrganizers?.member?.map(
-      (organizer: OwnershipRequest) => organizer.itemId,
-    );
+    const ownedOrganizerIds = ownedOrganizers?.member
+      ?.filter((organizer) => organizer.state === OwnershipState.APPROVED)
+      .map((organizer: OwnershipRequest) => organizer.itemId);
 
     await Promise.all(
       Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {
