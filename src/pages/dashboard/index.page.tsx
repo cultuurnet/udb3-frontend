@@ -330,12 +330,14 @@ type OrganizerRowProps = InlineProps & {
   item: Organizer;
   onDelete: (item: Organizer) => void;
   actions?: React.ReactNode[];
+  isOwnershipRequested?: boolean;
 };
 
 const OrganizerRow = ({
   item: organizer,
   onDelete,
   actions,
+  isOwnershipRequested,
   ...props
 }: OrganizerRowProps) => {
   const { t, i18n } = useTranslation();
@@ -369,6 +371,7 @@ const OrganizerRow = ({
       scope={ScopeTypes.ORGANIZERS}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
+      isOwnershipRequested={isOwnershipRequested}
       actions={
         actions || [
           <Link
@@ -699,6 +702,7 @@ const Dashboard = (): any => {
                 {t('organizers.detail.actions.request')}
               </Button>,
             ]}
+            isOwnershipRequested={isOwnershipRequested}
           />
         );
       },
