@@ -29,10 +29,7 @@ const useFooterStatus = ({ offer, form }) => {
   const isMutating = queryClient.isMutating();
   const offerId = offer?.['@id'];
   const availableFrom = offer?.availableFrom;
-  const hasLocation = isLocationSet(
-    formValues.scope,
-    formValues.location,
-  );
+  const hasLocation = isLocationSet(formValues.scope, formValues.location);
 
   const isPlaceDirty =
     (dirtyFields.place || dirtyFields.location) && hasLocation;
