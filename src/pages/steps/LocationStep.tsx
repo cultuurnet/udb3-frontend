@@ -447,6 +447,7 @@ const LocationStep = ({
 
     if (hasStreetAndNumber) {
       setIsBlankStreetToggleVisible(true);
+      setIsExistingPlacesVisible(true);
     }
 
     if (locationStreetAndNumber === BLANK_STREET_NUMBER) {
