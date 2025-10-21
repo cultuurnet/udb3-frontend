@@ -1,7 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import Router, { useRouter } from 'next/router';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import Router from 'next/router';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
@@ -35,7 +35,6 @@ const getTableValue = getValueFromTheme('selectionTable');
 
 const RolesOverviewPage = () => {
   const { t } = useTranslation();
-  const router = useRouter();
   const [searchInput, setSearchInput] = useState('');
   const [currentPageRoles, setCurrentPageRoles] = useState(1);
   const [successMessage, setSuccessMessage] = useState('');
@@ -58,22 +57,10 @@ const RolesOverviewPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (router.query.success === 'created') {
-      const roleName = router.query.name as string;
-      setSuccessMessage(
-        t('roles.overview.success_created', { name: roleName }),
-      );
-      router.replace('/manage/roles', undefined, {
-        shallow: true,
-      });
-    }
-  }, [router, t]);
-
   const rolesToTableData = (roles: Role[]) =>
     roles.map((role) => ({
       name: role.name,
-      options: role.uuid,
+      options: role,
     }));
 
   const rolesQuery = useGetRolesByQuery({
@@ -108,8 +95,8 @@ const RolesOverviewPage = () => {
   };
 
   const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
     setRoleToDelete(null);
+    setShowDeleteModal(false);
     setDeleteError('');
   };
 
@@ -125,19 +112,16 @@ const RolesOverviewPage = () => {
       {
         Header: t('roles.overview.table.options'),
         accessor: 'options',
-        Cell: ({ cell }: { cell: { value: string } }) => {
-          const role = rolesQuery.data?.member?.find(
-            (r: Role) => r.uuid === cell.value,
-          );
+        Cell: ({ cell }: { cell: { value: Role } }) => {
           return (
             <Inline spacing={2}>
-              <Link marginTop={0.5} href={`/manage/roles/${cell.value}`}>
+              <Link marginTop={0.5} href={`/manage/roles/${cell.value.uuid}`}>
                 {t('roles.overview.table.edit')}
               </Link>
               <Text>&nbsp;|</Text>
               <Button
                 variant={ButtonVariants.LINK}
-                onClick={() => role && handleDeleteClick(role)}
+                onClick={() => handleDeleteClick(cell.value)}
               >
                 {t('roles.overview.table.delete')}
               </Button>
@@ -146,7 +130,7 @@ const RolesOverviewPage = () => {
         },
       },
     ],
-    [t, rolesQuery.data?.member],
+    [t],
   );
 
   const roles: Role[] = useMemo(
@@ -156,7 +140,7 @@ const RolesOverviewPage = () => {
 
   const handleInputSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const searchTerm: string = event.target.value.toString().trim();
+      const searchTerm: string = event.target.value.trim();
       if (searchTerm.length > 2 || searchTerm.length === 0) {
         setCurrentPageRoles(1);
         setSearchInput(searchTerm);
@@ -192,9 +176,7 @@ const RolesOverviewPage = () => {
           )}
           {rolesQuery.status === QueryStatus.ERROR && (
             <Alert variant={AlertVariants.WARNING} fullWidth={true}>
-              {t('roles.overview.something_wrong') +
-                ' ' +
-                rolesQuery.error?.message}
+              {`${t('roles.overview.something_wrong')} ${rolesQuery.error?.message}`}
             </Alert>
           )}
         </Stack>
