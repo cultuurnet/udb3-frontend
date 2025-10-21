@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import getConfig from 'next/config';
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
