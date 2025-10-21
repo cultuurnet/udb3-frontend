@@ -134,7 +134,7 @@ const LabelsOverviewPage = () => {
   const handleInputSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const searchTerm: string = event.target.value.toString().trim();
-      if (searchTerm.length > 1) {
+      if (searchTerm.length > 1 || searchTerm.length === 0) {
         setCurrentPageLabels(1);
         setSearchInput(searchTerm);
       }
