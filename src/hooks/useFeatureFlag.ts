@@ -16,6 +16,7 @@ const FeatureFlags = {
   ORGANIZER_CREATE: 'organizer_create',
   REACT_DUPLICATE: 'react_duplicate',
   REACT_LABELS_OVERVIEW: 'react_labels_overview',
+  REACT_ROLES_OVERVIEW: 'react_roles_overview',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;
