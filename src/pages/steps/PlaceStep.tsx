@@ -2,12 +2,17 @@ import { TFunction } from 'i18next';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
+import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
-import { useGetPlacesByQuery } from '@/hooks/api/places';
+import { OfferTypes } from '@/constants/OfferType';
+import {
+  useGetBPostAddressesQuery,
+  useGetPlacesByQuery,
+} from '@/hooks/api/places';
 import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
@@ -55,6 +60,7 @@ const PlaceStep = ({
   terms = [],
   municipality,
   country,
+  scope,
   chooseLabel,
   placeholderLabel,
   ...props
@@ -63,6 +69,7 @@ const PlaceStep = ({
   const [searchInput, setSearchInput] = useState('');
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
+  const [currentInputValue, setCurrentInputValue] = useState('');
 
   const { uitpasLabels } = useUitpasLabels();
 
@@ -76,12 +83,41 @@ const PlaceStep = ({
       addressLocality: municipality?.name,
       addressCountry: country,
     },
-    { enabled: !!searchInput },
+    { enabled: !!searchInput && scope !== OfferTypes.PLACES },
   );
 
-  const places = useMemo<Place[]>(
-    () => useGetPlacesQuery.data?.member ?? [],
-    [useGetPlacesQuery.data?.member],
+  const useGetBPostAddressQuery = useGetBPostAddressesQuery(
+    {
+      zip: municipality?.zip,
+      addressLocality: municipality?.name,
+      addressCountry: country,
+      streetAddress: searchInput,
+    },
+    { enabled: !!searchInput && scope === OfferTypes.PLACES },
+  );
+
+  const places = useMemo<Place[] | string[]>(() => {
+    if (scope === OfferTypes.PLACES) {
+      return useGetBPostAddressQuery.data ?? [];
+    } else {
+      return useGetPlacesQuery.data?.member ?? [];
+    }
+  }, [useGetPlacesQuery.data?.member, useGetBPostAddressQuery.data, scope]);
+
+  const filteredOptionsForPlaceScope = useMemo(() => {
+    const input = currentInputValue?.toLowerCase().trim();
+    return input &&
+      (places as string[]).some(
+        (place) =>
+          input.startsWith(place.toLowerCase()) && input.length > place.length,
+      )
+      ? []
+      : places;
+  }, [places, currentInputValue]);
+
+  const setDebouncedSearchInputForPlaceScope = useMemo(
+    () => debounce(setSearchInput, 275),
+    [],
   );
 
   const place = useWatch({ control, name: 'location.place' });
@@ -128,7 +164,73 @@ const PlaceStep = ({
         render={({ field }) => {
           const selectedPlace = place?.['@id'] ? place : null;
 
-          if (!selectedPlace) {
+          if (scope === OfferTypes.PLACES && !selectedPlace) {
+            return (
+              <FormElement
+                id="street-address-input"
+                label={t('location.add_modal.labels.streetAndNumber')}
+                Component={
+                  <Typeahead
+                    isLoading={useGetBPostAddressQuery.isLoading}
+                    options={filteredOptionsForPlaceScope as string[]}
+                    onInputChange={(value) => {
+                      setCurrentInputValue(value);
+                      setDebouncedSearchInputForPlaceScope(value);
+                    }}
+                    labelKey={(option: string) => option}
+                    renderMenu={(results, menuProps, { text }) => {
+                      if (!results || results.length === 0) return null;
+
+                      return (
+                        <TypeaheadMenu
+                          {...menuProps}
+                          options={results}
+                          labelKey={(option: string) => option}
+                          text={text}
+                        />
+                      );
+                    }}
+                    renderMenuItemChildren={(address: string, { text }) => (
+                      <Highlighter search={text}>{address}</Highlighter>
+                    )}
+                    selected={currentInputValue ? [currentInputValue] : []}
+                    maxWidth="28rem"
+                    onChange={(selected) => {
+                      const selectedAddress = selected[0] as string;
+                      if (selectedAddress) {
+                        setCurrentInputValue(selectedAddress);
+                        setSearchInput(selectedAddress);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const inputValue =
+                        e.target.value?.trim() || currentInputValue;
+                      if (inputValue) {
+                        const updatedValue = {
+                          ...field.value,
+                          streetAndNumber: inputValue,
+                        };
+                        field.onChange(updatedValue);
+                        onChange(updatedValue);
+                        setCurrentInputValue(inputValue);
+                      }
+                    }}
+                    minLength={1}
+                    placeholder={placeholderLabel(t)}
+                    allowNew={false}
+                    hideNewInputText
+                    inputRequired={false}
+                  />
+                }
+                error={
+                  errors?.location?.streetAndNumber &&
+                  t('location.add_modal.errors.streetAndNumber')
+                }
+              />
+            );
+          }
+
+          if (scope === OfferTypes.EVENTS && !selectedPlace) {
             return (
               <Stack>
                 <PlaceAddModal
@@ -158,7 +260,7 @@ const PlaceStep = ({
                   Component={
                     <Typeahead
                       isLoading={useGetPlacesQuery.isLoading}
-                      options={places}
+                      options={places as Place[]}
                       onInputChange={debounce(setSearchInput, 275)}
                       filterBy={filterByCallback}
                       labelKey={(place: Place) =>
