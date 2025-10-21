@@ -129,7 +129,6 @@ const LocationSuggestions = ({
           return (
             <ButtonCard
               key={location['@id']}
-              width={'auto'}
               marginBottom={0}
               href={isRecentLocations ? null : `/place/${locationId}/preview`}
               badge={
