@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
-import { OfferTypes } from '@/constants/OfferType';
+import { ScopeTypes } from '@/constants/OfferType';
 import {
   useGetBPostAddressesQuery,
   useGetPlacesByQuery,
@@ -83,7 +83,7 @@ const PlaceStep = ({
       addressLocality: municipality?.name,
       addressCountry: country,
     },
-    { enabled: !!searchInput && scope !== OfferTypes.PLACES },
+    { enabled: !!searchInput && scope === ScopeTypes.EVENTS },
   );
 
   const useGetBPostAddressQuery = useGetBPostAddressesQuery(
@@ -93,11 +93,11 @@ const PlaceStep = ({
       addressCountry: country,
       streetAddress: searchInput,
     },
-    { enabled: !!searchInput && scope === OfferTypes.PLACES },
+    { enabled: !!searchInput && scope !== ScopeTypes.EVENTS },
   );
 
   const places = useMemo<Place[] | string[]>(() => {
-    if (scope === OfferTypes.PLACES) {
+    if (scope !== ScopeTypes.EVENTS) {
       return useGetBPostAddressQuery.data ?? [];
     } else {
       return useGetPlacesQuery.data?.member ?? [];
@@ -164,7 +164,7 @@ const PlaceStep = ({
         render={({ field }) => {
           const selectedPlace = place?.['@id'] ? place : null;
 
-          if (scope === OfferTypes.PLACES && !selectedPlace) {
+          if (scope !== ScopeTypes.EVENTS && !selectedPlace) {
             return (
               <FormElement
                 id="street-address-input"
@@ -230,7 +230,7 @@ const PlaceStep = ({
             );
           }
 
-          if (scope === OfferTypes.EVENTS && !selectedPlace) {
+          if (scope === ScopeTypes.EVENTS && !selectedPlace) {
             return (
               <Stack>
                 <PlaceAddModal

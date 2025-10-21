@@ -888,7 +888,7 @@ const LocationStep = ({
                         country={country}
                         chooseLabel={chooseLabel}
                         placeholderLabel={placeholderLabel}
-                        scope={ScopeTypes.PLACES}
+                        scope={scope}
                         {...{
                           formState,
                           getValues,
