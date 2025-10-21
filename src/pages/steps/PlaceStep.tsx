@@ -45,6 +45,7 @@ type PlaceStepProps = StackProps &
     terms?: Array<Values<typeof EventTypes>>;
     municipality?: City;
     country?: Country;
+    defaultStreetAndNumber?: string;
     chooseLabel: (t: TFunction) => string;
     placeholderLabel: (t: TFunction) => string;
   };
@@ -61,16 +62,18 @@ const PlaceStep = ({
   municipality,
   country,
   scope,
+  defaultStreetAndNumber,
   chooseLabel,
   placeholderLabel,
   ...props
 }: PlaceStepProps) => {
   const { t, i18n } = useTranslation();
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(defaultStreetAndNumber);
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
-  const [currentInputValue, setCurrentInputValue] = useState('');
-
+  const [currentInputValue, setCurrentInputValue] = useState(
+    defaultStreetAndNumber,
+  );
   const { uitpasLabels } = useUitpasLabels();
 
   const isMovie = terms.includes(EventTypes.Bioscoop);
@@ -224,6 +227,7 @@ const PlaceStep = ({
                 }
                 error={
                   errors?.location?.streetAndNumber &&
+                  !currentInputValue &&
                   t('location.add_modal.errors.streetAndNumber')
                 }
               />

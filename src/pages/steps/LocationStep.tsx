@@ -373,6 +373,9 @@ const LocationStep = ({
   const [isBlankStreetToggleVisible, setIsBlankStreetToggleVisible] =
     useState(hasStreetAndNumber);
   const [isExistingPlacesVisible, setIsExistingPlacesVisible] = useState(false);
+  const [prevStreetAndNumber, setPrevStreetAndNumber] = useState<
+    string | undefined
+  >();
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -848,6 +851,11 @@ const LocationStep = ({
                       <Button
                         variant={ButtonVariants.LINK}
                         onClick={() => {
+                          setPrevStreetAndNumber(
+                            field.value.streetAndNumber !== BLANK_STREET_NUMBER
+                              ? field.value.streetAndNumber
+                              : undefined,
+                          );
                           onFieldChange({
                             streetAndNumber: undefined,
                           });
@@ -888,6 +896,7 @@ const LocationStep = ({
                         country={country}
                         chooseLabel={chooseLabel}
                         placeholderLabel={placeholderLabel}
+                        defaultStreetAndNumber={prevStreetAndNumber}
                         scope={scope}
                         {...{
                           formState,
