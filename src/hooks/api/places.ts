@@ -309,6 +309,57 @@ const useGetPlacesByQuery = (
     ...configuration,
   });
 
+type GetBPostAddressArguments = {
+  zip?: string;
+  addressLocality?: string;
+  addressCountry?: Country;
+  streetAddress?: string;
+};
+
+const getBPostAddressesQuery = async ({
+  headers,
+  zip,
+  addressLocality,
+  addressCountry,
+  streetAddress,
+}: { headers: Headers } & GetBPostAddressArguments) => {
+  const res = await fetchFromApi({
+    path: '/addresses/streets',
+    searchParams: {
+      country: addressCountry,
+      postalCode: zip,
+      query: streetAddress,
+      locality: addressLocality,
+    },
+    options: {
+      headers,
+    },
+  });
+  return (await res.json()) as string[];
+};
+
+const useGetBPostAddressesQuery = (
+  {
+    zip,
+    addressLocality,
+    addressCountry,
+    streetAddress,
+  }: GetBPostAddressArguments,
+  configuration: ExtendQueryOptions<typeof getBPostAddressesQuery> = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: ['bpost-addresses'],
+    queryFn: getBPostAddressesQuery,
+    queryArguments: {
+      zip,
+      addressCountry,
+      addressLocality,
+      streetAddress,
+    },
+    enabled: !!streetAddress,
+    ...configuration,
+  });
+
 const changeAddress = async ({ headers, id, address, language }) =>
   fetchFromApi({
     path: `/places/${id.toString()}/address/${language}`,
@@ -452,6 +503,7 @@ export {
   useChangeAddressMutation,
   useChangeStatusMutation,
   useDeletePlaceByIdMutation,
+  useGetBPostAddressesQuery,
   useGetPlaceByIdQuery,
   useGetPlacesByCreatorQuery,
   useGetPlacesByQuery,
