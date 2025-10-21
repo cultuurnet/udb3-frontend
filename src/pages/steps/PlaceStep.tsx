@@ -96,7 +96,12 @@ const PlaceStep = ({
       addressCountry: country,
       streetAddress: searchInput,
     },
-    { enabled: !!searchInput && scope !== ScopeTypes.EVENTS },
+    {
+      enabled:
+        !!searchInput &&
+        scope !== ScopeTypes.EVENTS &&
+        country === Countries.BE,
+    },
   );
 
   const places = useMemo<Place[] | string[]>(() => {
