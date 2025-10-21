@@ -32,7 +32,6 @@ const useFooterStatus = ({ offer, form }) => {
   const hasLocation = isLocationSet(
     formValues.scope,
     formValues.location,
-    form.formState,
   );
 
   const isPlaceDirty =

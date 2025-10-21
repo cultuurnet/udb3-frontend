@@ -218,11 +218,11 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
       name: yup.object().shape({}).required(),
       typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
     }),
-    shouldShowStep: ({ watch, formState }) => {
+    shouldShowStep: ({ watch }) => {
       const location = watch('location');
       const scope = watch('scope');
 
-      return isLocationSet(scope, location, formState);
+      return isLocationSet(scope, location);
     },
   };
 
