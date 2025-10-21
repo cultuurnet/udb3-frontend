@@ -20,11 +20,11 @@ test.describe('Label Overview - Admin', () => {
     await page.goto('/manage/labels');
   });
 
-  test('can navigate to labels overview page', async ({ baseURL, page }) => {
+  test('can navigate to labels overview page', async ({ page }) => {
     await expect(page.getByRole('heading')).toContainText('Labels');
   });
 
-  test('can search for labels', async ({ baseURL, page }) => {
+  test('can search for labels', async ({ page }) => {
     const initialRows = page.getByRole('row');
     const initialFirstRow = await initialRows.nth(1).textContent();
 
@@ -58,8 +58,9 @@ test.describe('Label Overview - Admin', () => {
     await expect(resetFirstRow).toHaveText(initialFirstRow);
   });
 
-  test('can paginate labels', async ({ baseURL, page }) => {
+  test('can paginate labels', async ({ page }) => {
     await page.getByPlaceholder(/zoek/i).fill('de');
+    await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
     const initialRows = page.getByRole('row');
@@ -84,12 +85,12 @@ test.describe('Label Overview - Admin', () => {
     expect(resetFirstRow).toEqual(initialFirstRow);
   });
 
-  test('can click create label button', async ({ baseURL, page }) => {
+  test('can click create label button', async ({ page }) => {
     await page.getByRole('button', { name: /toevoegen/i }).click();
     await expect(page).toHaveURL(/\/manage\/labels\/create/);
   });
 
-  test('can click edit label link', async ({ baseURL, page }) => {
+  test('can click edit label link', async ({ page }) => {
     const editLink = page.getByRole('link', { name: /bewerken/i }).first();
     if (await editLink.isVisible()) {
       await editLink.click();

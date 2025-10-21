@@ -1,0 +1,110 @@
+import { faker } from '@faker-js/faker';
+import { expect, test } from '@playwright/test';
+
+test.describe('Roles Overview - Admin', () => {
+  test.beforeEach(async ({ page, context }) => {
+    await context.addCookies([
+      {
+        name: 'ff_react_roles_overview',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
+    await page.goto('/manage/roles');
+  });
+
+  test('can navigate to roles overview page', async ({ page }) => {
+    await expect(page.getByRole('heading')).toContainText('Rollen');
+  });
+
+  test('can search for roles', async ({ page }) => {
+    const initialRows = page.getByRole('row');
+    const initialFirstRow = await initialRows.nth(1).textContent();
+
+    await page.getByPlaceholder(/zoek/i).fill('e2e');
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('e2e');
+    const e2eRows = page.getByRole('row');
+    const e2eResultRow = e2eRows.nth(1).filter({
+      hasText: 'e2e',
+    });
+    await expect(e2eResultRow).toBeVisible({ timeout: 8_000 });
+    // Search shouldn't happen when less than 3 characters are typed.
+    await page.getByPlaceholder(/zoek/i).fill('ie');
+
+    const stillE2eRows = page.getByRole('row');
+    const stillE2EResultRow = stillE2eRows.nth(1).filter({
+      hasText: 'e2e',
+    });
+    await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
+
+    await page.getByPlaceholder(/zoek/i).fill(faker.lorem.words(10));
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Geen rollen gevonden.')).toBeVisible();
+
+    await page.getByPlaceholder(/zoek/i).fill('');
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Geen labels gevonden.')).not.toBeVisible();
+    const resetRows = page.getByRole('row');
+    const resetFirstRow = resetRows.nth(1);
+    await expect(resetFirstRow).toHaveText(initialFirstRow);
+  });
+
+  test('can paginate roles', async ({ page }) => {
+    await page.getByPlaceholder(/zoek/i).fill('eer');
+    await page.waitForTimeout(300);
+    await page.waitForLoadState('networkidle');
+
+    const firstPageRows = page.getByRole('row');
+    const firstPageFirstRow = await firstPageRows.nth(1).textContent();
+
+    await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible;
+    await page.getByRole('button', { name: /^2$/ }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('eer');
+
+    const secondPageRows = page.getByRole('row');
+    const secondPageFirstRow = await secondPageRows.nth(1).textContent();
+    expect(secondPageFirstRow).not.toEqual(firstPageFirstRow);
+
+    await expect(page.getByRole('button', { name: /^1$/ })).toBeVisible();
+    await page.getByRole('button', { name: /^1$/ }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('eer');
+
+    const resetRows = page.getByRole('row');
+    const resetFirstRow = await resetRows.nth(1).textContent();
+    expect(resetFirstRow).toEqual(firstPageFirstRow);
+  });
+
+  test('can click create role button', async ({ page }) => {
+    await page.getByRole('button', { name: /toevoegen/i }).click();
+    await expect(page).toHaveURL(/\/manage\/roles\/create/);
+  });
+
+  test('can click edit role link', async ({ page }) => {
+    const editLink = page.getByRole('link', { name: /bewerken/i }).first();
+    if (await editLink.isVisible()) {
+      await editLink.click();
+      await expect(page).toHaveURL(/\/manage\/roles\/[^/]+/);
+    }
+  });
+
+  test('can open a modal to delete a role', async ({ page }) => {
+    const roleRows = page.getByRole('row');
+    const firstRoleRow = roleRows.nth(1);
+    const roleName = await firstRoleRow.textContent();
+
+    await firstRoleRow.getByRole('button', { name: /verwijderen/i }).click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.getByRole('button', { name: /annuleren/i }).click();
+    await page.waitForLoadState('networkidle');
+
+    const updatedRoleRows = page.getByRole('row');
+    const matchingRoleRow = updatedRoleRows.nth(1).filter({
+      hasText: roleName,
+    });
+    expect(await matchingRoleRow.count()).toBe(1);
+  });
+});
