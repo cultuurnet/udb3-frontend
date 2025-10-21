@@ -308,8 +308,7 @@ const isLocationSet = (
 
   return (
     isCultuurKuurLocation ||
-    (location?.municipality?.name &&
-      formState.touchedFields.location?.streetAndNumber)
+    (location?.municipality?.name && location?.streetAndNumber)
   );
 };
 
@@ -887,30 +886,21 @@ const LocationStep = ({
                           }
                         />
                       )}
-                      <FormElement
-                        Component={
-                          <Input
-                            value={streetAndNumber}
-                            onBlur={() => {
-                              onFieldChange({ streetAndNumber });
-                              hasStreetAndNumber
-                                ? setIsBlankStreetToggleVisible(true)
-                                : setIsBlankStreetToggleVisible(false);
-                              setIsExistingPlacesVisible(true);
-                            }}
-                            onFocus={() => {
-                              setIsExistingPlacesVisible(false);
-                            }}
-                            onChange={handleChangeStreetAndNumber}
-                          />
-                        }
-                        id="location-streetAndNumber"
-                        label={t('location.add_modal.labels.streetAndNumber')}
-                        maxWidth="28rem"
-                        error={
-                          formState.errors.location?.streetAndNumber &&
-                          t('location.add_modal.errors.streetAndNumber')
-                        }
+                      <PlaceStep
+                        municipality={municipality}
+                        country={country}
+                        chooseLabel={chooseLabel}
+                        placeholderLabel={placeholderLabel}
+                        scope={ScopeTypes.PLACES}
+                        {...{
+                          formState,
+                          getValues,
+                          reset,
+                          control,
+                          name,
+                        }}
+                        {...getStepProps(props)}
+                        onChange={onChange}
                       />
                     </Stack>
                   )}
