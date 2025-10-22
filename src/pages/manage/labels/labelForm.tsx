@@ -89,6 +89,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
 
   const { control, register, handleSubmit, formState, setValue, reset, watch } =
     useForm<FormData>({
+      criteriaMode: 'all',
       resolver: yupResolver(createValidationSchema()),
       defaultValues: {
         name: label?.name || '',
@@ -287,9 +288,31 @@ const LabelFormFields = ({
         ? t('labels.form.actions.save')
         : t('labels.form.actions.create');
 
-  const nameError =
-    formState.errors.name?.message ||
-    (!isUnique && t('labels.form.errors.name_unique'));
+  const nameError = (() => {
+    const errors = [];
+
+    if (formState.errors.name && formState.errors.name.types) {
+      Object.values(formState.errors.name.types).forEach((error) => {
+        if (typeof error === 'string') {
+          errors.push(error);
+        }
+      });
+    }
+
+    if (!isUnique) {
+      errors.push(t('labels.form.errors.name_unique'));
+    }
+
+    if (errors.length === 0) return undefined;
+
+    return (
+      <ul>
+        {errors.map((error, index) => (
+          <li key={index}>{error}</li>
+        ))}
+      </ul>
+    );
+  })();
 
   return (
     <Stack
