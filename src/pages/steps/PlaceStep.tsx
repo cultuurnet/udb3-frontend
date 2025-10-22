@@ -115,9 +115,9 @@ const PlaceStep = ({
   const places = useMemo<Place[] | string[]>(() => {
     if (scope !== ScopeTypes.EVENTS) {
       return useGetStreetAddressQuery.data ?? [];
-    } else {
-      return useGetPlacesQuery.data?.member ?? [];
     }
+
+    return useGetPlacesQuery.data?.member ?? [];
   }, [useGetPlacesQuery.data?.member, useGetStreetAddressQuery.data, scope]);
 
   const filteredStreetAddressesOptions = useMemo(() => {
