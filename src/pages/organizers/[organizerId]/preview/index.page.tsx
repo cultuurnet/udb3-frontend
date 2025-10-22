@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   GetOrganizerPermissionsResponse,
   prefetchGetOrganizerByIdQuery,
@@ -16,7 +17,11 @@ import {
   OwnershipState,
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
-import { useGetUserQuery, User } from '@/hooks/api/user';
+import {
+  useGetPermissionsQuery,
+  useGetUserQuery,
+  User,
+} from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 import { Organizer } from '@/types/Organizer';
@@ -50,8 +55,9 @@ const OrganizersPreview = () => {
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
 
-  const permissions = getOrganizerPermissionsQuery?.data?.permissions ?? [];
-  const canEdit = permissions.includes('Organisaties bewerken');
+  const organizerPermissions =
+    getOrganizerPermissionsQuery?.data?.permissions ?? [];
+  const canEdit = organizerPermissions.includes('Organisaties bewerken');
 
   const organizer: Organizer = getOrganizerByIdQuery?.data;
 
@@ -74,6 +80,10 @@ const OrganizersPreview = () => {
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
   );
+
+  const getPermissionsQuery = useGetPermissionsQuery();
+  const permissions = getPermissionsQuery.data;
+  const isGodUser = permissions?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
 
   return (
     <Page>
@@ -139,26 +149,30 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
-                <Link
-                  variant={LinkButtonVariants.BUTTON_SECONDARY}
-                  href={`/search?query=organizer.id:${encodeURIComponent(
-                    organizerId,
-                  )} AND _type:event`}
-                  iconName={Icons.CALENDAR_ALT}
-                  width="100%"
-                >
-                  {t('organizers.detail.actions.events')}
-                </Link>
-                <Link
-                  variant={LinkButtonVariants.BUTTON_SECONDARY}
-                  href={`/search?query=organizer.id:${encodeURIComponent(
-                    organizerId,
-                  )} AND _type:place`}
-                  iconName={Icons.BUILDING}
-                  width="100%"
-                >
-                  {t('organizers.detail.actions.places')}
-                </Link>
+                {isGodUser && (
+                  <Stack spacing={3.5}>
+                    <Link
+                      variant={LinkButtonVariants.BUTTON_SECONDARY}
+                      href={`/search?query=organizer.id:${encodeURIComponent(
+                        organizerId,
+                      )} AND _type:event`}
+                      iconName={Icons.CALENDAR_ALT}
+                      width="100%"
+                    >
+                      {t('organizers.detail.actions.events')}
+                    </Link>
+                    <Link
+                      variant={LinkButtonVariants.BUTTON_SECONDARY}
+                      href={`/search?query=organizer.id:${encodeURIComponent(
+                        organizerId,
+                      )} AND _type:place`}
+                      iconName={Icons.BUILDING}
+                      width="100%"
+                    >
+                      {t('organizers.detail.actions.places')}
+                    </Link>
+                  </Stack>
+                )}
               </Stack>
             </Inline>
           </Stack>
