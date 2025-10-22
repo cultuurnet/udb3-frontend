@@ -122,13 +122,15 @@ const PlaceStep = ({
 
   const filteredStreetAddressesOptions = useMemo(() => {
     const input = currentInputValue?.toLowerCase().trim();
-    return input &&
+
+    const shouldHideOptions =
+      input &&
       (places as string[]).some(
         (place) =>
           input.startsWith(place.toLowerCase()) && input.length > place.length,
-      )
-      ? []
-      : places;
+      );
+
+    return shouldHideOptions ? [] : places;
   }, [places, currentInputValue]);
 
   const setDebouncedSearchInputForPlaceScope = useMemo(
