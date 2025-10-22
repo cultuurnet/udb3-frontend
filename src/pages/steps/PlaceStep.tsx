@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { EventTypes } from '@/constants/EventTypes';
 import { ScopeTypes } from '@/constants/OfferType';
 import {
-  useGetBPostAddressesQuery,
+  useGetStreetAddressesQuery,
   useGetPlacesByQuery,
 } from '@/hooks/api/places';
 import { useUitpasLabels } from '@/hooks/useUitpasLabels';
@@ -89,7 +89,7 @@ const PlaceStep = ({
     { enabled: !!searchInput && scope === ScopeTypes.EVENTS },
   );
 
-  const useGetBPostAddressQuery = useGetBPostAddressesQuery(
+  const useGetStreetAddressQuery = useGetStreetAddressesQuery(
     {
       zip: municipality?.zip,
       addressLocality: municipality?.name,
@@ -106,11 +106,11 @@ const PlaceStep = ({
 
   const places = useMemo<Place[] | string[]>(() => {
     if (scope !== ScopeTypes.EVENTS) {
-      return useGetBPostAddressQuery.data ?? [];
+      return useGetStreetAddressQuery.data ?? [];
     } else {
       return useGetPlacesQuery.data?.member ?? [];
     }
-  }, [useGetPlacesQuery.data?.member, useGetBPostAddressQuery.data, scope]);
+  }, [useGetPlacesQuery.data?.member, useGetStreetAddressQuery.data, scope]);
 
   const filteredOptionsForPlaceScope = useMemo(() => {
     const input = currentInputValue?.toLowerCase().trim();
@@ -179,7 +179,7 @@ const PlaceStep = ({
                 label={t('location.add_modal.labels.streetAndNumber')}
                 Component={
                   <Typeahead
-                    isLoading={useGetBPostAddressQuery.isLoading}
+                    isLoading={useGetStreetAddressQuery.isLoading}
                     options={filteredOptionsForPlaceScope as string[]}
                     onInputChange={(value) => {
                       setCurrentInputValue(value);
