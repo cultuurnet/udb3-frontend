@@ -308,8 +308,7 @@ const isLocationSet = (
   return (
     isCultuurKuurLocation ||
     (!!location?.municipality?.name?.trim() &&
-      (!!location?.streetAndNumber?.trim() ||
-        formState.touchedFields.location?.streetAndNumber))
+      formState.touchedFields.location?.streetAndNumber)
   );
 };
 
@@ -891,6 +890,7 @@ const LocationStep = ({
                         {...{
                           formState,
                           getValues,
+                          setValue,
                           reset,
                           control,
                           name,

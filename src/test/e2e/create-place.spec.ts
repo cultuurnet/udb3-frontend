@@ -57,11 +57,6 @@ test('create a place', async ({ baseURL, page }) => {
     .getByLabel('Straat en nummer')
     .nth(0)
     .fill(dummyPlace.address.streetAndNumber);
-  await page
-    .locator('section')
-    .filter({ hasText: 'Gent, 9000' })
-    .first()
-    .click();
   // // 5. Name and Age
   await page.getByLabel('Naam van de locatie').click();
   await page.getByLabel('Naam van de locatie').fill(dummyPlace.name);

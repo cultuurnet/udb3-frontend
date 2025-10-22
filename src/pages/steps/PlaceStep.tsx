@@ -53,6 +53,7 @@ type PlaceStepProps = StackProps &
 const PlaceStep = ({
   formState: { errors },
   getValues,
+  setValue,
   reset,
   control,
   name,
@@ -184,6 +185,13 @@ const PlaceStep = ({
                     onInputChange={(value) => {
                       setCurrentInputValue(value);
                       setDebouncedSearchInputForPlaceScope(value);
+                      setValue(
+                        'location.streetAndNumber',
+                        getValues('location.streetAndNumber'),
+                        {
+                          shouldTouch: true,
+                        },
+                      );
                     }}
                     labelKey={(option: string) => option}
                     renderMenu={(results, menuProps, { text }) => {
