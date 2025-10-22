@@ -1060,6 +1060,7 @@
       },
       "pending": "Ausstehende Anfragen zur Verwaltung",
       "close": "Schließen",
+      "requested": "Verwaltung angefordert",
       "request_modal": {
         "title": "Verwalter zu {{name}} hinzufügen",
         "email": "E-Mail-Adresse",
