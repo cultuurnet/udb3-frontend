@@ -330,12 +330,14 @@ type OrganizerRowProps = InlineProps & {
   item: Organizer;
   onDelete: (item: Organizer) => void;
   actions?: React.ReactNode[];
+  isOwnershipRequested?: boolean;
 };
 
 const OrganizerRow = ({
   item: organizer,
   onDelete,
   actions,
+  isOwnershipRequested,
   ...props
 }: OrganizerRowProps) => {
   const { t, i18n } = useTranslation();
@@ -369,6 +371,7 @@ const OrganizerRow = ({
       scope={ScopeTypes.ORGANIZERS}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
+      isOwnershipRequested={isOwnershipRequested}
       actions={
         actions || [
           <Link
@@ -610,16 +613,15 @@ const Dashboard = (): any => {
     {
       ownerId: user?.sub,
       itemType: 'organizer',
-      state: OwnershipState.APPROVED,
     },
     { enabled: !!user?.sub },
   );
 
   const ownedOrganizerIds = useMemo(() => {
     return (
-      ownedOrganizers?.member?.map(
-        (organizer: OwnershipRequest) => organizer.itemId,
-      ) || []
+      ownedOrganizers?.member
+        ?.filter((organizer) => organizer.state === OwnershipState.APPROVED)
+        .map((organizer: OwnershipRequest) => organizer.itemId) || []
     );
   }, [ownedOrganizers]);
 
@@ -684,6 +686,11 @@ const Dashboard = (): any => {
   const SuggestedOrganizerRow = useMemo(
     () =>
       function SuggestedOrganizerRow(props: OrganizerRowProps) {
+        const isOwnershipRequested = ownedOrganizers?.member?.some(
+          (organizer) =>
+            organizer.state === OwnershipState.REQUESTED &&
+            organizer.itemId === parseOfferId(props.item['@id']),
+        );
         return (
           <OrganizerRow
             {...props}
@@ -699,10 +706,11 @@ const Dashboard = (): any => {
                 {t('organizers.detail.actions.request')}
               </Button>,
             ]}
+            isOwnershipRequested={isOwnershipRequested}
           />
         );
       },
-    [t],
+    [t, ownedOrganizers],
   );
 
   return (
@@ -869,7 +877,6 @@ const getServerSideProps = getApplicationServerSideProps(
       queryClient,
       ownerId: user?.sub,
       itemType: 'organizer',
-      state: OwnershipState.APPROVED,
     });
 
     const ownedOrganizers =
@@ -878,13 +885,12 @@ const getServerSideProps = getApplicationServerSideProps(
         {
           ownerId: user?.sub,
           itemType: 'organizer',
-          state: OwnershipState.APPROVED,
         },
       ]) || {};
 
-    const ownedOrganizerIds = ownedOrganizers?.member?.map(
-      (organizer: OwnershipRequest) => organizer.itemId,
-    );
+    const ownedOrganizerIds = ownedOrganizers?.member
+      ?.filter((organizer) => organizer.state === OwnershipState.APPROVED)
+      .map((organizer: OwnershipRequest) => organizer.itemId);
 
     await Promise.all(
       Object.entries(PrefetchGetItemsByCreatorMap).map(([key, prefetch]) => {
