@@ -123,6 +123,7 @@ const OrganizersPreview = () => {
                     spacing={3}
                     iconName={Icons.PENCIL}
                     href={`/organizer/${organizerId}/edit`}
+                    width="100%"
                   >
                     {t('organizers.detail.actions.edit')}
                   </Link>
@@ -133,6 +134,7 @@ const OrganizersPreview = () => {
                     spacing={3}
                     iconName={Icons.USERS}
                     href={`/organizer/${organizerId}/ownerships`}
+                    width="100%"
                   >
                     {t('organizers.detail.actions.manage')}
                   </Link>
@@ -143,6 +145,7 @@ const OrganizersPreview = () => {
                     organizerId,
                   )} AND _type:event`}
                   iconName={Icons.CALENDAR_ALT}
+                  width="100%"
                 >
                   {t('organizers.detail.actions.events')}
                 </Link>
@@ -152,6 +155,7 @@ const OrganizersPreview = () => {
                     organizerId,
                   )} AND _type:place`}
                   iconName={Icons.BUILDING}
+                  width="100%"
                 >
                   {t('organizers.detail.actions.places')}
                 </Link>
