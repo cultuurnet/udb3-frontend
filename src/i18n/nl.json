@@ -1111,6 +1111,7 @@
       },
       "pending": "Openstaande aanvragen tot beheer",
       "close": "Sluiten",
+      "requested": "Beheer aangevraagd",
       "request_modal": {
         "title": "Beheerder toevoegen aan {{name}}",
         "email": "E-mailadres",
@@ -1242,9 +1243,11 @@
       "create": "Toevoegen",
       "search": {
         "label": "Zoeken op labelnaam",
-        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+        "placeholder": "Schrijf een zoekopdracht van minstens 2 karakters."
       },
       "no_results": "Geen labels gevonden.",
+      "success_created": "Label '{{name}}' succesvol toegevoegd.",
+      "success_updated": "Label '{{name}}' succesvol gewijzigd.",
       "something_wrong": "Er ging iets mis tijdens het zoeken:",
       "table": {
         "name": "Naam",
@@ -1254,6 +1257,31 @@
         "options": "Opties",
         "edit": "Bewerken"
       }
+    },
+    "form": {
+      "actions": {
+        "cancel": "Annuleren",
+        "create": "Toevoegen",
+        "save": "Bewaren"
+      },
+      "errors": {
+        "semicolon": "De naam van het label mag geen puntkomma (;) bevatten.",
+        "name_required": "Naam is een verplicht veld.",
+        "name_unique": "Deze naam wordt al gebruikt door een ander label.",
+        "name_max": "Een label mag maximum 255 tekens bevatten.",
+        "name_min": "Een label moet uit minstens 2 tekens bestaan."
+      },
+      "fields": {
+        "name": "Naam",
+        "is_visible": "Tonen op publicatiekanalen",
+        "is_private": "Voorbehouden aan specifieke gebruikersgroepen"
+      }
+    },
+    "create": {
+      "title": "Label toevoegen"
+    },
+    "edit": {
+      "title": "Label bewerken"
     }
   }
 }

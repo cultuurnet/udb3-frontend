@@ -1,7 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import Router from 'next/router';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Label } from 'types/Offer';
 
@@ -10,6 +10,7 @@ import {
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -32,8 +33,25 @@ const getTableValue = getValueFromTheme('selectionTable');
 
 const LabelsOverviewPage = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [searchInput, setSearchInput] = useState('');
   const [currentPageLabels, setCurrentPageLabels] = useState(1);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isReactLabelsCreateEditFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_LABELS_CREATE_EDIT,
+  );
+
+  useEffect(() => {
+    if (router.query.success === 'created') {
+      const labelName = router.query.name as string;
+      setSuccessMessage(
+        t('labels.overview.success_created', { name: labelName }),
+      );
+      router.replace('/manage/labels', undefined, {
+        shallow: true,
+      });
+    }
+  }, [router, t]);
 
   const labelsToTableData = (labels: Label[]) =>
     labels.map((label) => ({
@@ -71,37 +89,42 @@ const LabelsOverviewPage = () => {
         Header: t('labels.overview.table.invisible'),
         accessor: 'invisible',
         Cell: ({ cell }) =>
-          cell.value === 'invisible' ? (
+          cell.value === 'invisible' && (
             <Text>{t('labels.overview.table.invisible')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.private'),
         accessor: 'private',
         Cell: ({ cell }) =>
-          cell.value === 'private' ? (
+          cell.value === 'private' && (
             <Text>{t('labels.overview.table.private')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.excluded'),
         accessor: 'excluded',
         Cell: ({ cell }) =>
-          cell.value === true ? (
+          cell.value === true && (
             <Text>{t('labels.overview.table.excluded')}</Text>
-          ) : null,
+          ),
       },
       {
         Header: t('labels.overview.table.options'),
         accessor: 'options',
-        Cell: ({ cell }) => (
-          <Link href={'/manage/labels/' + cell.value}>
-            {t('labels.overview.table.edit')}
-          </Link>
-        ),
+        Cell: ({ cell }) =>
+          isReactLabelsCreateEditFeatureFlagEnabled ? (
+            <Link href={`/manage/labels/${cell.value}/edit`}>
+              {t('labels.overview.table.edit')}
+            </Link>
+          ) : (
+            <Link href={`/manage/labels/${cell.value}`}>
+              {t('labels.overview.table.edit')}
+            </Link>
+          ),
       },
     ],
-    [t],
+    [t, isReactLabelsCreateEditFeatureFlagEnabled],
   );
   const labels: Label[] = useMemo(
     () => labelsQuery.data?.member ?? [],
@@ -111,8 +134,10 @@ const LabelsOverviewPage = () => {
   const handleInputSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const searchTerm: string = event.target.value.toString().trim();
-      setCurrentPageLabels(1);
-      setSearchInput(searchTerm);
+      if (searchTerm.length > 1 || searchTerm.length === 0) {
+        setCurrentPageLabels(1);
+        setSearchInput(searchTerm);
+      }
     },
     [],
   );
@@ -132,6 +157,11 @@ const LabelsOverviewPage = () => {
               />
             }
           />
+          {successMessage && (
+            <Alert variant={AlertVariants.SUCCESS} fullWidth={true}>
+              {successMessage}
+            </Alert>
+          )}
           {labelsQuery.status === QueryStatus.SUCCESS &&
             labels.length === 0 && (
               <Alert variant={AlertVariants.WARNING} fullWidth={true}>
@@ -186,6 +216,7 @@ const LabelsOverviewPage = () => {
                   min-width: 27em;
                 }
               `}
+              className="table-responsive"
             >
               <Table
                 striped
