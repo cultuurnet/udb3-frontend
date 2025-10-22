@@ -154,6 +154,22 @@ type Label = {
   excluded: boolean;
 };
 
+const LabelVisibilityOptions = {
+  VISIBLE: 'visible',
+  INVISIBLE: 'invisible',
+} as const;
+
+const LabelPrivacyOptions = {
+  PRIVATE: 'private',
+  PUBLIC: 'public',
+} as const;
+
+const LabelValidationInformation = {
+  MAX_LENGTH: 255,
+  MIN_LENGTH: 2,
+  SEMICOLON_REGEX: /;/,
+} as const;
+
 export const hasLegacyLocation = (offer: Offer) => {
   if (!offer) return false;
 
@@ -177,4 +193,10 @@ export type {
   StatusType,
   SubEvent,
   Term,
+};
+
+export {
+  LabelPrivacyOptions,
+  LabelValidationInformation,
+  LabelVisibilityOptions,
 };
