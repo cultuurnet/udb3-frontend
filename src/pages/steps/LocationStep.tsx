@@ -293,7 +293,11 @@ type PlaceStepProps = StackProps &
     placeholderLabel?: (t: TFunction) => string;
   } & { offerId?: string };
 
-const isLocationSet = (scope: Scope, location: FormDataUnion['location']) => {
+const isLocationSet = (
+  scope: Scope,
+  location: FormDataUnion['location'],
+  formState,
+) => {
   if (location?.isOnline || location?.place) {
     return true;
   }
@@ -304,7 +308,8 @@ const isLocationSet = (scope: Scope, location: FormDataUnion['location']) => {
   return (
     isCultuurKuurLocation ||
     (!!location?.municipality?.name?.trim() &&
-      !!location?.streetAndNumber?.trim())
+      (!!location?.streetAndNumber?.trim() ||
+        formState.touchedFields.location?.streetAndNumber))
   );
 };
 
@@ -383,8 +388,8 @@ const LocationStep = ({
   const shouldAddSpaceBelowTypeahead = useMemo(() => {
     if (offerId) return false;
 
-    return !isLocationSet(scope, location);
-  }, [location, offerId, scope]);
+    return !isLocationSet(scope, location, formState);
+  }, [formState, location, offerId, scope]);
 
   const audienceField = watch('audience.audienceType');
   const { hasRecentLocations } = useRecentLocations();
