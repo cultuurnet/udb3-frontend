@@ -90,10 +90,17 @@ const PlaceStep = ({
     { enabled: !!searchInput && scope === ScopeTypes.EVENTS },
   );
 
+  const formatMunicipalityName = (name: string) => {
+    if (typeof name !== 'string' || !name.includes('/')) return name;
+
+    const [firstPart] = name.split('/');
+    return firstPart.trim();
+  };
+
   const useGetStreetAddressQuery = useGetStreetAddressesQuery(
     {
       zip: municipality?.zip,
-      addressLocality: municipality?.name,
+      addressLocality: formatMunicipalityName(municipality?.name),
       addressCountry: country,
       streetAddress: searchInput,
     },
