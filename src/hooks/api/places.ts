@@ -503,9 +503,9 @@ export {
   useChangeAddressMutation,
   useChangeStatusMutation,
   useDeletePlaceByIdMutation,
-  useGetStreetAddressesQuery,
   useGetPlaceByIdQuery,
   useGetPlacesByCreatorQuery,
   useGetPlacesByQuery,
+  useGetStreetAddressesQuery,
   usePublishPlaceMutation,
 };

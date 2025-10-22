@@ -10,8 +10,8 @@ import * as yup from 'yup';
 import { EventTypes } from '@/constants/EventTypes';
 import { ScopeTypes } from '@/constants/OfferType';
 import {
-  useGetStreetAddressesQuery,
   useGetPlacesByQuery,
+  useGetStreetAddressesQuery,
 } from '@/hooks/api/places';
 import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
