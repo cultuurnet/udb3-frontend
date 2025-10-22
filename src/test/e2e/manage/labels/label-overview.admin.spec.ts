@@ -1,0 +1,99 @@
+import { faker } from '@faker-js/faker';
+import { expect, test } from '@playwright/test';
+
+test.describe('Label Overview - Admin', () => {
+  test.beforeEach(async ({ page, context }) => {
+    await context.addCookies([
+      {
+        name: 'ff_react_labels_create_edit',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+      {
+        name: 'ff_react_labels_overview',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
+    await page.goto('/manage/labels');
+  });
+
+  test('can navigate to labels overview page', async ({ baseURL, page }) => {
+    await expect(page.getByRole('heading')).toContainText('Labels');
+  });
+
+  test('can search for labels', async ({ baseURL, page }) => {
+    const initialRows = page.getByRole('row');
+    const initialFirstRow = await initialRows.nth(1).textContent();
+
+    await page.getByPlaceholder(/zoek/i).fill('e2e');
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('e2e');
+    const e2eRows = page.getByRole('row');
+    const e2eResultRow = e2eRows.nth(1).filter({
+      hasText: 'e2e',
+    });
+    await expect(e2eResultRow).toBeVisible({ timeout: 8_000 });
+
+    // Search shouldn't happen when less than 2 characters are typed.
+    await page.getByPlaceholder(/zoek/i).fill('i');
+
+    const stillE2eRows = page.getByRole('row');
+    const stillE2EResultRow = stillE2eRows.nth(1).filter({
+      hasText: 'e2e',
+    });
+    await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
+
+    await page.getByPlaceholder(/zoek/i).fill(faker.lorem.words(10));
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Geen labels gevonden.')).toBeVisible();
+
+    await page.getByPlaceholder(/zoek/i).fill('');
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Geen labels gevonden.')).not.toBeVisible();
+    const resetRows = page.getByRole('row');
+    const resetFirstRow = resetRows.nth(1);
+    await expect(resetFirstRow).toHaveText(initialFirstRow);
+  });
+
+  test('can paginate labels', async ({ baseURL, page }) => {
+    await page.getByPlaceholder(/zoek/i).fill('de');
+    await page.waitForLoadState('networkidle');
+
+    const initialRows = page.getByRole('row');
+    const initialFirstRow = await initialRows.nth(1).textContent();
+
+    await expect(page.getByRole('button', { name: '2' })).toBeVisible();
+    await page.getByRole('button', { name: '2' }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('de');
+
+    const page2Rows = page.getByRole('row');
+    const page2FirstRow = await page2Rows.nth(1).textContent();
+    expect(page2FirstRow).not.toEqual(initialFirstRow);
+
+    await expect(page.getByRole('button', { name: /^1$/ })).toBeVisible();
+    await page.getByRole('button', { name: /^1$/ }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('de');
+
+    const resetRows = page.getByRole('row');
+    const resetFirstRow = await resetRows.nth(1).textContent();
+    expect(resetFirstRow).toEqual(initialFirstRow);
+  });
+
+  test('can click create label button', async ({ baseURL, page }) => {
+    await page.getByRole('button', { name: /toevoegen/i }).click();
+    await expect(page).toHaveURL(/\/manage\/labels\/create/);
+  });
+
+  test('can click edit label link', async ({ baseURL, page }) => {
+    const editLink = page.getByRole('link', { name: /bewerken/i }).first();
+    if (await editLink.isVisible()) {
+      await editLink.click();
+      await expect(page).toHaveURL(/\/manage\/labels\/[^/]+\/edit/);
+    }
+  });
+});

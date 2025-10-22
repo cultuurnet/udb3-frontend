@@ -47,7 +47,8 @@ if (!isServer()) {
           ...acc,
           [`FeatureFlags.${constant}`]: {
             enabled:
-              cookies.get(createCookieName(featureFlagName)) === 'true'
+              cookies.get(createCookieName(featureFlagName)) === 'true' ||
+              cookies.get(createCookieName(featureFlagName)) === true
                 ? '✅'
                 : '🚫',
           },
