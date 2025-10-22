@@ -158,7 +158,7 @@ const OrganizersPreview = () => {
                       )} AND _type:event`}
                       iconName={Icons.CALENDAR_ALT}
                       width="100%"
-                >
+                    >
                       {t('organizers.detail.actions.events')}
                     </Link>
                     <Link
@@ -168,7 +168,7 @@ const OrganizersPreview = () => {
                       )} AND _type:place`}
                       iconName={Icons.BUILDING}
                       width="100%"
-                >
+                    >
                       {t('organizers.detail.actions.places')}
                     </Link>
                   </Stack>
