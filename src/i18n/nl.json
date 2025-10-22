@@ -1308,6 +1308,61 @@
         "cancel": "Annuleren",
         "error": "Er ging iets fout bij het verwijderen van de rol."
       }
+    },
+    "form": {
+      "create_title": "Nieuwe rol aanmaken",
+      "edit_title": "Rol bewerken",
+      "name_label": "Rolnaam",
+      "name_placeholder": "Voer een rolnaam in",
+      "name_edit": "Wijzigen",
+      "cancel": "Annuleren",
+      "create": "Aanmaken",
+      "save_changes": "Wijzigingen opslaan",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "errors": {
+        "name_not_unique": "Deze rolnaam bestaat al. Kies een andere naam.",
+        "name_required": "Rolnaam is verplicht",
+        "name_min_length": "Rolnaam moet minstens 3 karakters bevatten",
+        "name_max_length": "Rolnaam mag maximaal 255 karakters bevatten"
+      },
+      "constraints": {
+        "title": "Beperkingen",
+        "current": "Huidige beperking:",
+        "none": "Geen beperkingen",
+        "edit": "Bewerken",
+        "add": "Beperking toevoegen",
+        "remove": "Verwijderen",
+        "value_label": "Beperkingswaarde",
+        "placeholder": "Voer een beperkingswaarde in"
+      },
+      "permissions": {
+        "title": "Rechten",
+        "search_placeholder": "Zoek rechten...",
+        "selected": "geselecteerd"
+      },
+      "users": {
+        "title": "Gebruikers",
+        "placeholder_message": "Gebruikersbeheer wordt hier getoond"
+      },
+      "labels": {
+        "title": "Labels",
+        "placeholder_message": "Labelbeheer wordt hier getoond"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Aanbod bewerken",
+    "AANBOD_MODEREREN": "Aanbod modereren",
+    "AANBOD_VERWIJDEREN": "Aanbod verwijderen",
+    "AANBOD_HISTORIEK": "Historiek raadplegen",
+    "ORGANISATIES_BEWERKEN": "Organisaties bewerken",
+    "ORGANISATIES_BEHEREN": "Organisaties beheren",
+    "GEBRUIKERS_BEHEREN": "Gebruikers beheren",
+    "LABELS_BEHEREN": "Labels beheren",
+    "VOORZIENINGEN_BEWERKEN": "Voorzieningen bewerken",
+    "PRODUCTIES_AANMAKEN": "Producties aanmaken",
+    "FILMS_AANMAKEN": "Films aanmaken",
+    "MEDIA_UPLOADEN": "Media uploaden"
   }
 }

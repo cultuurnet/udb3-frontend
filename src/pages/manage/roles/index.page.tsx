@@ -115,7 +115,10 @@ const RolesOverviewPage = () => {
         Cell: ({ cell }: { cell: { value: Role } }) => {
           return (
             <Inline spacing={2}>
-              <Link marginTop={0.5} href={`/manage/roles/${cell.value.uuid}`}>
+              <Link
+                marginTop={0.5}
+                href={`/manage/roles/${cell.value.uuid}/edit`}
+              >
                 {t('roles.overview.table.edit')}
               </Link>
               <Text>&nbsp;|</Text>

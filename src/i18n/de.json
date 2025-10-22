@@ -1255,6 +1255,61 @@
         "cancel": "Abbrechen",
         "error": "Es ging etwas schief beim Löschen der Rolle."
       }
+    },
+    "form": {
+      "create_title": "Rolle erstellen",
+      "edit_title": "Rolle bearbeiten",
+      "name_label": "Rollenname",
+      "name_placeholder": "Geben Sie einen Rollennamen ein",
+      "name_edit": "Ändern",
+      "cancel": "Abbrechen",
+      "create": "Erstellen",
+      "save_changes": "Änderungen speichern",
+      "save": "Speichern",
+      "saving": "Speichern...",
+      "errors": {
+        "name_not_unique": "Dieser Rollenname existiert bereits. Wählen Sie einen anderen Namen.",
+        "name_required": "Rollenname ist erforderlich",
+        "name_min_length": "Rollenname muss mindestens 3 Zeichen enthalten",
+        "name_max_length": "Rollenname darf maximal 255 Zeichen enthalten"
+      },
+      "constraints": {
+        "title": "Einschränkungen",
+        "current": "Aktuelle Einschränkung:",
+        "none": "Keine Einschränkungen",
+        "edit": "Bearbeiten",
+        "add": "Einschränkung hinzufügen",
+        "remove": "Entfernen",
+        "value_label": "Einschränkungswert",
+        "placeholder": "Geben Sie einen Einschränkungswert ein"
+      },
+      "permissions": {
+        "title": "Rechte",
+        "search_placeholder": "Rechte suchen...",
+        "selected": "ausgewählt"
+      },
+      "users": {
+        "title": "Benutzer",
+        "placeholder_message": "Benutzerverwaltung wird hier angezeigt"
+      },
+      "labels": {
+        "title": "Labels",
+        "placeholder_message": "Labelverwaltung wird hier angezeigt"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Angebot bearbeiten",
+    "AANBOD_MODEREREN": "Angebot moderieren",
+    "AANBOD_VERWIJDEREN": "Angebot entfernen",
+    "AANBOD_HISTORIEK": "Historie einsehen",
+    "ORGANISATIES_BEWERKEN": "Organisationen bearbeiten",
+    "ORGANISATIES_BEHEREN": "Organisationen verwalten",
+    "GEBRUIKERS_BEHEREN": "Benutzer verwalten",
+    "LABELS_BEHEREN": "Labels verwalten",
+    "VOORZIENINGEN_BEWERKEN": "Einrichtungen bearbeiten",
+    "PRODUCTIES_AANMAKEN": "Produktionen erstellen",
+    "FILMS_AANMAKEN": "Filme erstellen",
+    "MEDIA_UPLOADEN": "Media hochladen"
   }
 }

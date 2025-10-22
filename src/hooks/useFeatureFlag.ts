@@ -18,6 +18,7 @@ const FeatureFlags = {
   REACT_LABELS_OVERVIEW: 'react_labels_overview',
   REACT_LABELS_CREATE_EDIT: 'react_labels_create_edit',
   REACT_ROLES_OVERVIEW: 'react_roles_overview',
+  REACT_ROLES_CREATE_EDIT: 'react_roles_create_edit',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

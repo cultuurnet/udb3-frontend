@@ -1254,6 +1254,61 @@
         "cancel": "Annuler",
         "error": "Une erreur s'est produite lors de la suppression du rôle."
       }
+    },
+    "form": {
+      "create_title": "Créer un rôle",
+      "edit_title": "Modifier un rôle",
+      "name_label": "Nom du rôle",
+      "name_placeholder": "Entrez un nom de rôle",
+      "name_edit": "Modifier",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "save_changes": "Enregistrer les modifications",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "errors": {
+        "name_not_unique": "Ce nom de rôle existe déjà. Choisissez un autre nom.",
+        "name_required": "Le nom du rôle est obligatoire",
+        "name_min_length": "Le nom du rôle doit contenir au moins 3 caractères",
+        "name_max_length": "Le nom du rôle ne peut pas dépasser 255 caractères"
+      },
+      "constraints": {
+        "title": "Restrictions",
+        "current": "Restriction actuelle:",
+        "none": "Aucune restriction",
+        "edit": "Modifier",
+        "add": "Ajouter une restriction",
+        "remove": "Supprimer",
+        "value_label": "Valeur de la restriction",
+        "placeholder": "Entrez une valeur de restriction"
+      },
+      "permissions": {
+        "title": "Permissions",
+        "search_placeholder": "Rechercher des permissions...",
+        "selected": "sélectionné"
+      },
+      "users": {
+        "title": "Utilisateurs",
+        "placeholder_message": "La gestion des utilisateurs est affichée ici"
+      },
+      "labels": {
+        "title": "Labels",
+        "placeholder_message": "La gestion des labels est affichée ici"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Modifier l'offre",
+    "AANBOD_MODEREREN": "Modérer l'offre",
+    "AANBOD_VERWIJDEREN": "Supprimer l'offre",
+    "AANBOD_HISTORIEK": "Consulter l'historique",
+    "ORGANISATIES_BEWERKEN": "Modifier les organisations",
+    "ORGANISATIES_BEHEREN": "Gérer les organisations",
+    "GEBRUIKERS_BEHEREN": "Gérer les utilisateurs",
+    "LABELS_BEHEREN": "Gérer les labels",
+    "VOORZIENINGEN_BEWERKEN": "Modifier les infrastructures",
+    "PRODUCTIES_AANMAKEN": "Créer des productions",
+    "FILMS_AANMAKEN": "Créer des films",
+    "MEDIA_UPLOADEN": "Télécharger des médias"
   }
 }
