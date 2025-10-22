@@ -112,7 +112,7 @@ const PlaceStep = ({
     }
   }, [useGetPlacesQuery.data?.member, useGetStreetAddressQuery.data, scope]);
 
-  const filteredOptionsForPlaceScope = useMemo(() => {
+  const filteredStreetAddressesOptions = useMemo(() => {
     const input = currentInputValue?.toLowerCase().trim();
     return input &&
       (places as string[]).some(
@@ -180,7 +180,7 @@ const PlaceStep = ({
                 Component={
                   <Typeahead
                     isLoading={useGetStreetAddressQuery.isLoading}
-                    options={filteredOptionsForPlaceScope as string[]}
+                    options={filteredStreetAddressesOptions as string[]}
                     onInputChange={(value) => {
                       setCurrentInputValue(value);
                       setDebouncedSearchInputForPlaceScope(value);
