@@ -308,7 +308,7 @@ const LabelFormFields = ({
     return (
       <ul>
         {errors.map((error, index) => (
-          <li key={index}>{error}</li>
+          <li key={`${error}-${index}`}>{error}</li>
         ))}
       </ul>
     );
