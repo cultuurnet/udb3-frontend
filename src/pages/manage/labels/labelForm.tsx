@@ -306,7 +306,7 @@ const LabelFormFields = ({
     if (errors.length === 0) return undefined;
 
     return (
-      <ul>
+      <ul className="name-errors">
         {errors.map((error, index) => (
           <li key={`${error}-${index}`}>{error}</li>
         ))}
