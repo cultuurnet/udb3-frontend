@@ -70,7 +70,6 @@ const RoleNameInput = ({
               <Input
                 {...field}
                 id="role-name"
-                placeholder={t('roles.form.name_placeholder')}
                 disabled={isSubmitting}
                 maxLength={RoleValidationInformation.MAX_LENGTH}
               />

@@ -1259,8 +1259,7 @@
     "form": {
       "create_title": "Créer un rôle",
       "edit_title": "Modifier un rôle",
-      "name_label": "Nom du rôle",
-      "name_placeholder": "Entrez un nom de rôle",
+      "name_label": "Nom",
       "name_edit": "Modifier",
       "cancel": "Annuler",
       "create": "Créer",
@@ -1268,10 +1267,10 @@
       "save": "Enregistrer",
       "saving": "Enregistrement...",
       "errors": {
-        "name_not_unique": "Ce nom de rôle existe déjà. Choisissez un autre nom.",
-        "name_required": "Le nom du rôle est obligatoire",
-        "name_min_length": "Le nom du rôle doit contenir au moins 3 caractères",
-        "name_max_length": "Le nom du rôle ne peut pas dépasser 255 caractères"
+        "name_not_unique": "Ce nom existe déjà. Choisissez un autre nom.",
+        "name_required": "Le nom est obligatoire",
+        "name_min_length": "Le nom doit contenir au moins 3 caractères",
+        "name_max_length": "Le nom ne peut pas dépasser 255 caractères"
       },
       "constraints": {
         "title": "Restrictions",

@@ -17,12 +17,12 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
-import { ConstraintsSection } from './ConstraintsSection';
-import { LabelsSection } from './LabelsSection';
-import { PermissionsSection } from './PermissionsSection';
-import { RoleNameField } from './RoleNameField';
+import { ConstraintsSection } from './constraintsSection';
+import { LabelsSection } from './labelsSection';
+import { PermissionsSection } from './permissionsSection';
+import { RoleNameField } from './roleNameField';
 import { createRoleSchema, RoleFormDataInferred } from './roleSchema';
-import { UsersSection } from './UsersSection';
+import { UsersSection } from './usersSection';
 
 type FormData = {
   name: string;

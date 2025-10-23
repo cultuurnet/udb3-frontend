@@ -9,7 +9,7 @@ import {
 import { Role } from '@/types/Role';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { RoleForm } from '../components/RoleForm';
+import { RoleForm } from '../components/roleForm';
 
 const RoleEditPage = () => {
   const router = useRouter();

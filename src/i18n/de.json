@@ -1260,19 +1260,18 @@
     "form": {
       "create_title": "Rolle erstellen",
       "edit_title": "Rolle bearbeiten",
-      "name_label": "Rollenname",
-      "name_placeholder": "Geben Sie einen Rollennamen ein",
+      "name_label": "Name",
       "name_edit": "Ändern",
       "cancel": "Abbrechen",
-      "create": "Erstellen",
+      "create": "Hinzufügen",
       "save_changes": "Änderungen speichern",
       "save": "Speichern",
       "saving": "Speichern...",
       "errors": {
-        "name_not_unique": "Dieser Rollenname existiert bereits. Wählen Sie einen anderen Namen.",
-        "name_required": "Rollenname ist erforderlich",
-        "name_min_length": "Rollenname muss mindestens 3 Zeichen enthalten",
-        "name_max_length": "Rollenname darf maximal 255 Zeichen enthalten"
+        "name_not_unique": "Dieser Name existiert bereits. Wählen Sie einen anderen Namen.",
+        "name_required": "Name ist erforderlich",
+        "name_min_length": "Name muss mindestens 3 Zeichen enthalten",
+        "name_max_length": "Name darf maximal 255 Zeichen enthalten"
       },
       "constraints": {
         "title": "Einschränkungen",
