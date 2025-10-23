@@ -9,8 +9,11 @@ import {
 } from '@/hooks/api/roles';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
+import { Text, TextVariants } from '@/ui/Text';
+import { Title } from '@/ui/Title';
 
 interface ConstraintsSectionProps {
   roleId: string;
@@ -67,52 +70,43 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
-      <h3 className="text-lg font-medium mb-4">
+    <Stack spacing={4}>
+      <Title marginTop={4} size={3}>
         {t('roles.form.constraints.title')}
-      </h3>
+      </Title>
 
       {!isEditing ? (
-        <Stack spacing={3}>
-          <div>
-            <p className="text-sm text-gray-700 mb-2">
-              {t('roles.form.constraints.current')}
-            </p>
-            <p className="font-mono text-sm bg-gray-100 p-2 rounded">
-              {currentConstraint || t('roles.form.constraints.none')}
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant={ButtonVariants.SECONDARY} onClick={handleEdit}>
-              {hasConstraint
-                ? t('roles.form.constraints.edit')
-                : t('roles.form.constraints.add')}
+        <Inline spacing={5}>
+          <Inline spacing={2}>
+            <Text variant={TextVariants.MUTED}>{currentConstraint}</Text>
+          </Inline>
+          <Inline spacing={2}>
+            <Button variant={ButtonVariants.LINK} onClick={handleEdit}>
+              {t('roles.form.constraints.edit')}
             </Button>
             {hasConstraint && (
               <Button
-                variant={ButtonVariants.DANGER}
+                variant={ButtonVariants.LINK}
                 onClick={handleRemove}
                 disabled={removeConstraintMutation.isPending}
               >
                 {t('roles.form.constraints.remove')}
               </Button>
             )}
-          </div>
-        </Stack>
+          </Inline>
+        </Inline>
       ) : (
         <Stack spacing={3}>
           <FormElement
-            label={t('roles.form.constraints.value_label')}
             id="constraint-value"
             Component={
               <Input
                 value={constraintValue}
                 onChange={(e) => setConstraintValue(e.target.value)}
-                placeholder={t('roles.form.constraints.placeholder')}
               />
             }
           />
-          <div className="flex space-x-2">
+          <Inline spacing={2}>
             <Button
               variant={ButtonVariants.PRIMARY}
               onClick={handleSave}
@@ -126,9 +120,9 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
             <Button variant={ButtonVariants.SECONDARY} onClick={handleCancel}>
               {t('roles.form.cancel')}
             </Button>
-          </div>
+          </Inline>
         </Stack>
       )}
-    </div>
+    </Stack>
   );
 };

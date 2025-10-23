@@ -8,8 +8,10 @@ import {
   useRemovePermissionFromRoleMutation,
 } from '@/hooks/api/roles';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 interface PermissionsSectionProps {
   roleId: string;
@@ -18,6 +20,7 @@ interface PermissionsSectionProps {
 export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
+  const getGlobalValue = getValueFromTheme('global');
 
   const { data: role } = useGetRoleByIdQuery(roleId);
   const addPermissionMutation = useAddPermissionToRoleMutation();
@@ -58,21 +61,26 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   };
 
   return (
-    <Stack spacing={4}>
-      <div className="flex items-center space-x-4">
-        <div className="flex-1">
+    <Stack
+      backgroundColor="white"
+      padding={4}
+      borderRadius={getGlobalBorderRadius}
+      css={`
+        box-shadow: ${getGlobalValue('boxShadow.medium')};
+        border-top-left-radius: 0;
+      `}
+    >
+      <Inline alignItems="center" spacing={4}>
+        <Stack flex={1}>
           <Input
             placeholder={t('roles.form.permissions.search_placeholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
-        <div className="text-sm text-gray-500">
-          {currentPermissions.length} {t('roles.form.permissions.selected')}
-        </div>
-      </div>
+        </Stack>
+      </Inline>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+      <Stack marginLeft={1} marginTop={3} spacing={2}>
         {filteredPermissions.map((permission) => {
           const isChecked = currentPermissions.includes(permission.key);
           return (
@@ -93,7 +101,7 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
             </CheckboxWithLabel>
           );
         })}
-      </div>
+      </Stack>
     </Stack>
   );
 };
