@@ -11,8 +11,11 @@ import {
 } from '@/hooks/api/roles';
 import { Role } from '@/types/Role';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { Inline } from '@/ui/Inline';
+import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 import { ConstraintsSection } from './ConstraintsSection';
 import { LabelsSection } from './LabelsSection';
@@ -56,6 +59,7 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     mode: 'onChange',
   });
 
+  const getGlobalValue = getValueFromTheme('global');
   const createRoleMutation = useCreateRoleMutation();
   const updateRoleNameMutation = useUpdateRoleNameMutation();
 
@@ -77,7 +81,7 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
           }
         }
       } catch (error) {
-        console.error('Role operation failed:', error);
+        // Handle error appropriately
       } finally {
         setIsSubmitting(false);
       }
@@ -92,68 +96,88 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     ],
   );
 
+  const handleCancel = () => {
+    router.push('/manage/roles');
+  };
+
+  const pageTitle = isEditMode
+    ? t('roles.form.edit_title')
+    : t('roles.form.create_title');
+
   return (
-    <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Stack spacing={6}>
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-medium mb-4">
-              {!isEditMode
-                ? t('roles.form.create_title')
-                : t('roles.form.edit_title')}
-            </h2>
-            <RoleNameField isEditMode={isEditMode} currentName={role?.name} />
-          </div>
-
-          {isEditMode && roleId && <ConstraintsSection roleId={roleId} />}
-
-          {isEditMode && roleId && (
-            <Tabs
-              activeKey={activeTab}
-              onSelect={(key) => setActiveTab(key as string)}
-              className="role-form-tabs"
+    <Page>
+      <Page.Title>{pageTitle}</Page.Title>
+      <Page.Content>
+        <FormProvider {...form}>
+          <form>
+            <Stack
+              spacing={3}
+              maxWidth="48rem"
+              backgroundColor="white"
+              padding={4}
+              borderRadius={getGlobalBorderRadius}
+              css={`
+                box-shadow: ${getGlobalValue('boxShadow.medium')};
+              `}
             >
-              <Tabs.Tab
-                eventKey="permissions"
-                title={t('roles.form.permissions.title')}
-              >
-                <div className="bg-white rounded-lg p-6">
-                  <PermissionsSection roleId={roleId} />
-                </div>
-              </Tabs.Tab>
-              <Tabs.Tab eventKey="users" title={t('roles.form.users.title')}>
-                <div className="bg-white rounded-lg p-6">
-                  <UsersSection roleId={roleId} />
-                </div>
-              </Tabs.Tab>
-              <Tabs.Tab eventKey="labels" title={t('roles.form.labels.title')}>
-                <div className="bg-white rounded-lg p-6">
-                  <LabelsSection roleId={roleId} />
-                </div>
-              </Tabs.Tab>
-            </Tabs>
-          )}
+              <RoleNameField isEditMode={isEditMode} currentName={role?.name} />
 
-          {!isEditMode && (
-            <div className="flex justify-end space-x-3">
-              <Button
-                type="button"
-                variant={ButtonVariants.SECONDARY}
-                onClick={() => router.push('/manage/roles')}
-              >
-                {t('roles.form.cancel')}
-              </Button>
-              <Button
-                type="submit"
-                variant={ButtonVariants.PRIMARY}
-                disabled={!form.formState.isValid || isSubmitting}
-              >
-                {isSubmitting ? t('roles.form.saving') : t('roles.form.create')}
-              </Button>
-            </div>
-          )}
-        </Stack>
-      </form>
-    </FormProvider>
+              {isEditMode && roleId && <ConstraintsSection roleId={roleId} />}
+
+              {isEditMode && roleId && (
+                <Tabs
+                  activeKey={activeTab}
+                  onSelect={(key) => setActiveTab(key as string)}
+                  className="role-form-tabs"
+                >
+                  <Tabs.Tab
+                    eventKey="permissions"
+                    title={t('roles.form.permissions.title')}
+                  >
+                    <div className="bg-white rounded-lg p-6">
+                      <PermissionsSection roleId={roleId} />
+                    </div>
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    eventKey="users"
+                    title={t('roles.form.users.title')}
+                  >
+                    <div className="bg-white rounded-lg p-6">
+                      <UsersSection roleId={roleId} />
+                    </div>
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    eventKey="labels"
+                    title={t('roles.form.labels.title')}
+                  >
+                    <div className="bg-white rounded-lg p-6">
+                      <LabelsSection roleId={roleId} />
+                    </div>
+                  </Tabs.Tab>
+                </Tabs>
+              )}
+
+              {!isEditMode && (
+                <Inline marginTop={5} spacing={3}>
+                  <Button
+                    title="submit"
+                    variant={ButtonVariants.PRIMARY}
+                    disabled={!form.formState.isValid || isSubmitting}
+                    onClick={form.handleSubmit(onSubmit)}
+                  >
+                    {isSubmitting
+                      ? t('roles.form.saving')
+                      : t('roles.form.create')}
+                  </Button>
+                  <Button title="cancel" onClick={handleCancel}>
+                    {t('roles.form.cancel')}
+                  </Button>
+                </Inline>
+              )}
+            </Stack>
+          </form>
+        </FormProvider>
+      </Page.Content>
+    </Page>
   );
 };
