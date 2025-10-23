@@ -12,6 +12,7 @@ interface UsersSectionProps {
 export const UsersSection = ({ roleId }: UsersSectionProps) => {
   const { t } = useTranslation();
   const getGlobalValue = getValueFromTheme('global');
+  const getTabsValue = getValueFromTheme('tabs');
 
   const { data: users } = useGetRoleUsersQuery(roleId);
 
@@ -29,6 +30,8 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
         border-top-left-radius: 0;
+        border: 1px solid ${getTabsValue('borderColor')};
+        margin-top: -1px;
       `}
     >
       <Text>

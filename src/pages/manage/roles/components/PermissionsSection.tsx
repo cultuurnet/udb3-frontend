@@ -21,6 +21,7 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const getGlobalValue = getValueFromTheme('global');
+  const getTabsValue = getValueFromTheme('tabs');
 
   const { data: role } = useGetRoleByIdQuery(roleId);
   const addPermissionMutation = useAddPermissionToRoleMutation();
@@ -68,6 +69,8 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
         border-top-left-radius: 0;
+        border: 1px solid ${getTabsValue('borderColor')};
+        margin-top: -1px;
       `}
     >
       <Inline alignItems="center" spacing={4}>
