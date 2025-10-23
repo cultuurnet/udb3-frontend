@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   GetOrganizerPermissionsResponse,
   prefetchGetOrganizerByIdQuery,
@@ -18,7 +17,6 @@ import {
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
 import {
-  useGetPermissionsQuery,
   useGetUserQuery,
   User,
 } from '@/hooks/api/user';
@@ -80,10 +78,6 @@ const OrganizersPreview = () => {
   const isOwnershipRequested = userRequests?.some(
     (request: OwnershipRequest) => request.state === OwnershipState.REQUESTED,
   );
-
-  const getPermissionsQuery = useGetPermissionsQuery();
-  const permissions = getPermissionsQuery.data;
-  const isGodUser = permissions?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
 
   return (
     <Page>
@@ -149,30 +143,28 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.manage')}
                   </Link>
                 )}
-                {isGodUser && (
-                  <Stack spacing={3.5}>
-                    <Link
-                      variant={LinkButtonVariants.BUTTON_SECONDARY}
-                      href={`/search?query=organizer.id:${encodeURIComponent(
-                        organizerId,
-                      )} AND _type:event`}
-                      iconName={Icons.CALENDAR_ALT}
-                      width="100%"
-                    >
-                      {t('organizers.detail.actions.events')}
-                    </Link>
-                    <Link
-                      variant={LinkButtonVariants.BUTTON_SECONDARY}
-                      href={`/search?query=organizer.id:${encodeURIComponent(
-                        organizerId,
-                      )} AND _type:place`}
-                      iconName={Icons.BUILDING}
-                      width="100%"
-                    >
-                      {t('organizers.detail.actions.places')}
-                    </Link>
-                  </Stack>
-                )}
+                <Stack spacing={3.5}>
+                  <Link
+                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    href={`/search?query=organizer.id:${encodeURIComponent(
+                      organizerId,
+                    )} AND _type:event`}
+                    iconName={Icons.CALENDAR_ALT}
+                    width="100%"
+                  >
+                    {t('organizers.detail.actions.events')}
+                  </Link>
+                  <Link
+                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    href={`/search?query=organizer.id:${encodeURIComponent(
+                      organizerId,
+                    )} AND _type:place`}
+                    iconName={Icons.BUILDING}
+                    width="100%"
+                  >
+                    {t('organizers.detail.actions.places')}
+                  </Link>
+                </Stack>
               </Stack>
             </Inline>
           </Stack>
