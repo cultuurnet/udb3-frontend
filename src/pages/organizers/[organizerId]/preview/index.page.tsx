@@ -16,10 +16,7 @@ import {
   OwnershipState,
   useGetOwnershipRequestsQuery,
 } from '@/hooks/api/ownerships';
-import {
-  useGetUserQuery,
-  User,
-} from '@/hooks/api/user';
+import { useGetUserQuery, User } from '@/hooks/api/user';
 import { SupportedLanguage } from '@/i18n/index';
 import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
 import { Organizer } from '@/types/Organizer';
