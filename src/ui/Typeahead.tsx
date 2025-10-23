@@ -48,6 +48,7 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
     inputRequired,
     options,
     labelKey,
+    renderMenu,
     renderMenuItemChildren,
     disabled = false,
     placeholder,
@@ -84,6 +85,7 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
       options={options}
       labelKey={labelKey}
       renderMenuItemChildren={renderMenuItemChildren}
+      renderMenu={renderMenu}
       isLoading={isLoading}
       disabled={disabled}
       className={className}

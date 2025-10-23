@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import getConfig from 'next/config';
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useController, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -129,7 +129,6 @@ const LocationSuggestions = ({
           return (
             <ButtonCard
               key={location['@id']}
-              width={'auto'}
               marginBottom={0}
               href={isRecentLocations ? null : `/place/${locationId}/preview`}
               badge={
@@ -308,7 +307,7 @@ const isLocationSet = (
 
   return (
     isCultuurKuurLocation ||
-    (location?.municipality?.name &&
+    (!!location?.municipality?.name?.trim() &&
       formState.touchedFields.location?.streetAndNumber)
   );
 };
@@ -377,6 +376,9 @@ const LocationStep = ({
   const [isBlankStreetToggleVisible, setIsBlankStreetToggleVisible] =
     useState(hasStreetAndNumber);
   const [isExistingPlacesVisible, setIsExistingPlacesVisible] = useState(false);
+  const [prevStreetAndNumber, setPrevStreetAndNumber] = useState<
+    string | undefined
+  >();
 
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
@@ -448,6 +450,7 @@ const LocationStep = ({
 
     if (hasStreetAndNumber) {
       setIsBlankStreetToggleVisible(true);
+      setIsExistingPlacesVisible(true);
     }
 
     if (locationStreetAndNumber === BLANK_STREET_NUMBER) {
@@ -458,21 +461,6 @@ const LocationStep = ({
       setOnlineUrl(locationOnlineUrl);
     }
   }, [locationStreetAndNumber, locationOnlineUrl, hasStreetAndNumber]);
-
-  const handleChangeStreetAndNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    const shouldShowNextStepInCreate =
-      !offerId &&
-      !formState.touchedFields.location?.streetAndNumber &&
-      e.target.value.trim().length >= 2;
-
-    if (shouldShowNextStepInCreate) {
-      setValue('location.streetAndNumber', undefined, {
-        shouldTouch: true,
-      });
-    }
-
-    setStreetAndNumber(e.target.value);
-  };
 
   const useGetPlacesQuery = useGetPlacesByQuery({
     terms: [],
@@ -827,13 +815,11 @@ const LocationStep = ({
                   country={country}
                   chooseLabel={chooseLabel}
                   placeholderLabel={placeholderLabel}
-                  {...{
-                    formState,
-                    getValues,
-                    reset,
-                    control,
-                    name,
-                  }}
+                  formState={formState}
+                  getValues={getValues}
+                  reset={reset}
+                  control={control}
+                  name={name}
                   {...getStepProps(props)}
                   onChange={onChange}
                 />
@@ -852,6 +838,11 @@ const LocationStep = ({
                       <Button
                         variant={ButtonVariants.LINK}
                         onClick={() => {
+                          setPrevStreetAndNumber(
+                            field.value.streetAndNumber !== BLANK_STREET_NUMBER
+                              ? field.value.streetAndNumber
+                              : undefined,
+                          );
                           onFieldChange({
                             streetAndNumber: undefined,
                           });
@@ -887,30 +878,21 @@ const LocationStep = ({
                           }
                         />
                       )}
-                      <FormElement
-                        Component={
-                          <Input
-                            value={streetAndNumber}
-                            onBlur={() => {
-                              onFieldChange({ streetAndNumber });
-                              hasStreetAndNumber
-                                ? setIsBlankStreetToggleVisible(true)
-                                : setIsBlankStreetToggleVisible(false);
-                              setIsExistingPlacesVisible(true);
-                            }}
-                            onFocus={() => {
-                              setIsExistingPlacesVisible(false);
-                            }}
-                            onChange={handleChangeStreetAndNumber}
-                          />
-                        }
-                        id="location-streetAndNumber"
-                        label={t('location.add_modal.labels.streetAndNumber')}
-                        maxWidth="28rem"
-                        error={
-                          formState.errors.location?.streetAndNumber &&
-                          t('location.add_modal.errors.streetAndNumber')
-                        }
+                      <PlaceStep
+                        municipality={municipality}
+                        country={country}
+                        chooseLabel={chooseLabel}
+                        placeholderLabel={placeholderLabel}
+                        defaultStreetAndNumber={prevStreetAndNumber}
+                        scope={scope}
+                        formState={formState}
+                        getValues={getValues}
+                        setValue={setValue}
+                        reset={reset}
+                        control={control}
+                        name={name}
+                        {...getStepProps(props)}
+                        onChange={onChange}
                       />
                     </Stack>
                   )}

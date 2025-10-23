@@ -318,15 +318,10 @@ const PriceInformation = ({
       <Stack {...getStackProps(props)} padding={0} spacing={5}>
         <Inline
           stackOn={Breakpoints.M}
-          justifyContent="flex-end"
           css={`
-            flex-direction: row-reverse;
             gap: 2rem;
           `}
         >
-          <Alert variant={AlertVariants.PRIMARY}>
-            {t('create.additionalInformation.price_info.global_info')}
-          </Alert>
           <Stack>
             {controlledRates.map((rate, index) => {
               const registerNameProps = register(
@@ -364,11 +359,11 @@ const PriceInformation = ({
                       paddingY={3}
                       alignItems="baseline"
                       justifyContent="flex-start"
-                      spacing={3}
+                      spacing={5}
                     >
-                      <Inline minWidth="55%">
+                      <Inline>
                         {rate.category === PriceCategory.BASE && (
-                          <Text minWidth="15rem">
+                          <Text minWidth="13rem">
                             {rate.name[i18n.language]}
                           </Text>
                         )}
@@ -378,6 +373,7 @@ const PriceInformation = ({
                             Component={
                               <Input
                                 {...registerNameProps}
+                                minWidth="13rem"
                                 onBlur={async (e) => {
                                   await registerNameProps.onBlur(e);
                                   const isValid = await trigger();
@@ -456,6 +452,7 @@ const PriceInformation = ({
                               id={`rate_groupPrice_${rate.id}`}
                               Component={
                                 <Select
+                                  minWidth="max-content"
                                   {...register(`rates.${index}.groupPrice`)}
                                   onChange={(e) => {
                                     const value = e.target.value === 'true';
@@ -560,6 +557,9 @@ const PriceInformation = ({
               )}
             </Inline>
           </Stack>
+          <Alert variant={AlertVariants.PRIMARY}>
+            {t('create.additionalInformation.price_info.global_info')}
+          </Alert>
         </Inline>
         <Stack spacing={4}>
           {isCultuurkuurAlertVisible && (

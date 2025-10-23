@@ -88,7 +88,7 @@ function ButtonCard({
         customChildren
         marginBottom={4}
         title={title}
-        width="20rem"
+        minWidth="20rem"
         target="_blank"
         rel="noopener"
         css={buttonCardStyling}

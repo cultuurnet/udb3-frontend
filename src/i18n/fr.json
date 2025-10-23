@@ -1059,6 +1059,7 @@
       },
       "pending": "Demandes de gestion en attente",
       "close": "Fermer",
+      "requested": "Gestion demandée",
       "request_modal": {
         "title": "Ajouter un gestionnaire à :organizer.name",
         "email": "Adresse e-mail",

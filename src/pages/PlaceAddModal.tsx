@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { CalendarType } from '@/constants/CalendarType';
+import { ScopeTypes } from '@/constants/OfferType';
 import { getPlaceById, useAddPlaceMutation } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
 import { useHeaders } from '@/hooks/api/useHeaders';
@@ -25,6 +26,8 @@ import { parseOfferId } from '@/utils/parseOfferId';
 
 import { AlertDuplicatePlace } from './AlertDuplicatePlace';
 import { City } from './CityPicker';
+import { PlaceStep } from './steps/PlaceStep';
+import { getStepProps } from './steps/Steps';
 
 const schema = yup
   .object({
@@ -188,13 +191,27 @@ const PlaceAddModal = ({
             />
           }
         />
-        <FormElement
-          Component={<Input {...register('streetAndNumber')} />}
-          id="location-street"
-          label={t('location.add_modal.labels.streetAndNumber')}
-          error={
-            formState.errors.streetAndNumber &&
-            t('location.add_modal.errors.streetAndNumber')
+
+        <PlaceStep
+          {...getStepProps({
+            formState,
+            control,
+            setValue,
+            watch,
+            trigger,
+            name: 'streetAndNumber',
+            onChange: (value) => {
+              setValue('streetAndNumber', value.streetAndNumber);
+              trigger('streetAndNumber');
+            },
+            error: formState.errors.streetAndNumber,
+          })}
+          municipality={municipality}
+          country={country}
+          scope={ScopeTypes.PLACES}
+          chooseLabel={(t) => t('location.add_modal.labels.streetAndNumber')}
+          placeholderLabel={(t) =>
+            t('location.add_modal.labels.streetAndNumber')
           }
         />
         <Inline spacing={5}>

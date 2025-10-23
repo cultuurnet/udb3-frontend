@@ -1,5 +1,6 @@
 import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
@@ -36,6 +37,7 @@ type DashboardRowProps = {
   finishedAt?: string;
   isFinished?: boolean;
   status?: Status;
+  isOwnershipRequested?: boolean;
   isImageUploading: boolean;
   onModalOpen: () => void;
   children: ReactNode;
@@ -56,11 +58,13 @@ export const DashboardRow = ({
   finishedAt,
   isFinished,
   status,
+  isOwnershipRequested,
   isImageUploading,
   onModalOpen,
   children,
   ...props
 }: DashboardRowProps) => {
+  const { t } = useTranslation();
   const getValue = getValueFromTheme('dashboardPage');
   const { publicRuntimeConfig } = getConfig();
   const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
@@ -227,19 +231,24 @@ export const DashboardRow = ({
             alignItems="center"
             data-testid="row-actions"
           >
-            {finishedAt ? (
+            {finishedAt && (
               <Text
                 color={getValue('listItem.passedEvent.color')}
                 textAlign="center"
               >
                 {finishedAt}
               </Text>
-            ) : (
-              actions.length > 0 && (
-                <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
-                  {actions}
-                </Dropdown>
-              )
+            )}
+            {!finishedAt && isOwnershipRequested && (
+              <Inline spacing={2} alignItems="center">
+                <Icon name={Icons.CHECK} color={colors.udbMainPositiveGreen} />
+                <Text>{t('organizers.ownerships.requested')}</Text>
+              </Inline>
+            )}
+            {!finishedAt && !isOwnershipRequested && actions.length > 0 && (
+              <Dropdown variant={DropDownVariants.SECONDARY} isSplit>
+                {actions}
+              </Dropdown>
             )}
           </Inline>
         </Inline>

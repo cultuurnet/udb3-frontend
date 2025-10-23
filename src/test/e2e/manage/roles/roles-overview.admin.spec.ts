@@ -45,7 +45,7 @@ test.describe('Roles Overview - Admin', () => {
 
     await page.getByPlaceholder(/zoek/i).fill('');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Geen labels gevonden.')).not.toBeVisible();
+    await expect(page.getByText('Geen rollen gevonden.')).not.toBeVisible();
     const resetRows = page.getByRole('row');
     const resetFirstRow = resetRows.nth(1);
     await expect(resetFirstRow).toHaveText(initialFirstRow);
@@ -59,7 +59,7 @@ test.describe('Roles Overview - Admin', () => {
     const firstPageRows = page.getByRole('row');
     const firstPageFirstRow = await firstPageRows.nth(1).textContent();
 
-    await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible;
+    await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible();
     await page.getByRole('button', { name: /^2$/ }).click();
     await page.waitForLoadState('networkidle');
     await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('eer');
