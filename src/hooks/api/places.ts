@@ -309,6 +309,57 @@ const useGetPlacesByQuery = (
     ...configuration,
   });
 
+type GetStreetAddressArguments = {
+  zip?: string;
+  addressLocality?: string;
+  addressCountry?: Country;
+  streetAddress?: string;
+};
+
+const getStreetAddressesQuery = async ({
+  headers,
+  zip,
+  addressLocality,
+  addressCountry,
+  streetAddress,
+}: { headers: Headers } & GetStreetAddressArguments) => {
+  const res = await fetchFromApi({
+    path: '/addresses/streets',
+    searchParams: {
+      country: addressCountry,
+      postalCode: zip,
+      query: streetAddress,
+      locality: addressLocality,
+    },
+    options: {
+      headers,
+    },
+  });
+  return (await res.json()) as string[];
+};
+
+const useGetStreetAddressesQuery = (
+  {
+    zip,
+    addressLocality,
+    addressCountry,
+    streetAddress,
+  }: GetStreetAddressArguments,
+  configuration: ExtendQueryOptions<typeof getStreetAddressesQuery> = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: ['street-addresses'],
+    queryFn: getStreetAddressesQuery,
+    queryArguments: {
+      zip,
+      addressCountry,
+      addressLocality,
+      streetAddress,
+    },
+    enabled: !!streetAddress,
+    ...configuration,
+  });
+
 const changeAddress = async ({ headers, id, address, language }) =>
   fetchFromApi({
     path: `/places/${id.toString()}/address/${language}`,
@@ -455,5 +506,6 @@ export {
   useGetPlaceByIdQuery,
   useGetPlacesByCreatorQuery,
   useGetPlacesByQuery,
+  useGetStreetAddressesQuery,
   usePublishPlaceMutation,
 };

@@ -2,12 +2,17 @@ import { TFunction } from 'i18next';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
+import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
-import { useGetPlacesByQuery } from '@/hooks/api/places';
+import { ScopeTypes } from '@/constants/OfferType';
+import {
+  useGetPlacesByQuery,
+  useGetStreetAddressesQuery,
+} from '@/hooks/api/places';
 import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
@@ -40,6 +45,7 @@ type PlaceStepProps = StackProps &
     terms?: Array<Values<typeof EventTypes>>;
     municipality?: City;
     country?: Country;
+    defaultStreetAndNumber?: string;
     chooseLabel: (t: TFunction) => string;
     placeholderLabel: (t: TFunction) => string;
   };
@@ -47,6 +53,7 @@ type PlaceStepProps = StackProps &
 const PlaceStep = ({
   formState: { errors },
   getValues,
+  setValue,
   reset,
   control,
   name,
@@ -55,15 +62,19 @@ const PlaceStep = ({
   terms = [],
   municipality,
   country,
+  scope,
+  defaultStreetAndNumber,
   chooseLabel,
   placeholderLabel,
   ...props
 }: PlaceStepProps) => {
   const { t, i18n } = useTranslation();
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(defaultStreetAndNumber);
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
-
+  const [currentInputValue, setCurrentInputValue] = useState(
+    defaultStreetAndNumber,
+  );
   const { uitpasLabels } = useUitpasLabels();
 
   const isMovie = terms.includes(EventTypes.Bioscoop);
@@ -76,12 +87,57 @@ const PlaceStep = ({
       addressLocality: municipality?.name,
       addressCountry: country,
     },
-    { enabled: !!searchInput },
+    { enabled: !!searchInput && scope === ScopeTypes.EVENTS },
   );
 
-  const places = useMemo<Place[]>(
-    () => useGetPlacesQuery.data?.member ?? [],
-    [useGetPlacesQuery.data?.member],
+  const formatMunicipalityName = (name: string) => {
+    if (typeof name !== 'string' || !name.includes('/')) return name;
+
+    const [firstPart] = name.split('/');
+    return firstPart.trim();
+  };
+
+  const useGetStreetAddressQuery = useGetStreetAddressesQuery(
+    {
+      zip: municipality?.zip,
+      addressLocality: formatMunicipalityName(municipality?.name),
+      addressCountry: country,
+      streetAddress: searchInput,
+    },
+    {
+      enabled:
+        !!searchInput &&
+        scope !== ScopeTypes.EVENTS &&
+        country === Countries.BE,
+    },
+  );
+
+  const places = useMemo(() => {
+    if (scope !== ScopeTypes.EVENTS) {
+      return useGetStreetAddressQuery.data ?? [];
+    }
+
+    return useGetPlacesQuery.data?.member ?? [];
+  }, [useGetPlacesQuery.data?.member, useGetStreetAddressQuery.data, scope]);
+
+  const filteredStreetAddressesOptions = useMemo(() => {
+    const input = currentInputValue?.toLowerCase().trim();
+
+    if (!input) return [];
+
+    const shouldHideOptions =
+      input &&
+      (places as string[]).some(
+        (place) =>
+          input.startsWith(place.toLowerCase()) && input.length > place.length,
+      );
+
+    return shouldHideOptions ? [] : places;
+  }, [places, currentInputValue]);
+
+  const setDebouncedSearchInputForPlaceScope = useMemo(
+    () => debounce(setSearchInput, 275),
+    [],
   );
 
   const place = useWatch({ control, name: 'location.place' });
@@ -128,7 +184,81 @@ const PlaceStep = ({
         render={({ field }) => {
           const selectedPlace = place?.['@id'] ? place : null;
 
-          if (!selectedPlace) {
+          if (scope !== ScopeTypes.EVENTS && !selectedPlace) {
+            return (
+              <FormElement
+                id="street-address-input"
+                label={t('location.add_modal.labels.streetAndNumber')}
+                Component={
+                  <Typeahead
+                    isLoading={useGetStreetAddressQuery.isLoading}
+                    options={filteredStreetAddressesOptions}
+                    onInputChange={(value) => {
+                      setCurrentInputValue(value);
+                      setDebouncedSearchInputForPlaceScope(value);
+                      setValue(
+                        'location.streetAndNumber',
+                        getValues('location.streetAndNumber'),
+                        {
+                          shouldTouch: true,
+                        },
+                      );
+                    }}
+                    labelKey={(option: string) => option}
+                    renderMenu={(results, menuProps, { text }) => {
+                      if (!results || results.length === 0) return null;
+
+                      return (
+                        <TypeaheadMenu
+                          {...menuProps}
+                          options={results}
+                          labelKey={(option: string) => option}
+                          text={text}
+                        />
+                      );
+                    }}
+                    renderMenuItemChildren={(address: string, { text }) => (
+                      <Highlighter search={text}>{address}</Highlighter>
+                    )}
+                    selected={currentInputValue ? [currentInputValue] : []}
+                    maxWidth="28rem"
+                    onChange={(selected) => {
+                      const selectedAddress = selected[0];
+                      if (selectedAddress) {
+                        setCurrentInputValue(selectedAddress);
+                        setSearchInput(selectedAddress);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const inputValue =
+                        e.target.value?.trim() || currentInputValue;
+                      if (inputValue) {
+                        const updatedValue = {
+                          ...field.value,
+                          streetAndNumber: inputValue,
+                        };
+                        field.onChange(updatedValue);
+                        onChange(updatedValue);
+                        setCurrentInputValue(inputValue);
+                      }
+                    }}
+                    minLength={1}
+                    placeholder={placeholderLabel(t)}
+                    allowNew={false}
+                    hideNewInputText
+                    inputRequired={false}
+                  />
+                }
+                error={
+                  errors?.location?.streetAndNumber &&
+                  !currentInputValue &&
+                  t('location.add_modal.errors.streetAndNumber')
+                }
+              />
+            );
+          }
+
+          if (scope === ScopeTypes.EVENTS && !selectedPlace) {
             return (
               <Stack>
                 <PlaceAddModal
