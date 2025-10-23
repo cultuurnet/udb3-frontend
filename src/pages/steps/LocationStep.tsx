@@ -815,13 +815,11 @@ const LocationStep = ({
                   country={country}
                   chooseLabel={chooseLabel}
                   placeholderLabel={placeholderLabel}
-                  {...{
-                    formState,
-                    getValues,
-                    reset,
-                    control,
-                    name,
-                  }}
+                  formState={formState}
+                  getValues={getValues}
+                  reset={reset}
+                  control={control}
+                  name={name}
                   {...getStepProps(props)}
                   onChange={onChange}
                 />
@@ -887,14 +885,12 @@ const LocationStep = ({
                         placeholderLabel={placeholderLabel}
                         defaultStreetAndNumber={prevStreetAndNumber}
                         scope={scope}
-                        {...{
-                          formState,
-                          getValues,
-                          setValue,
-                          reset,
-                          control,
-                          name,
-                        }}
+                        formState={formState}
+                        getValues={getValues}
+                        setValue={setValue}
+                        reset={reset}
+                        control={control}
+                        name={name}
                         {...getStepProps(props)}
                         onChange={onChange}
                       />
