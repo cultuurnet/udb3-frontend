@@ -78,7 +78,12 @@ test.describe('Label Creation - Admin', () => {
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(page.locator('ul.name-errors li')).toContainText('verplicht');
+    await expect(page.locator('ul.name-errors li').first()).toContainText(
+      'verplicht',
+    );
+    await expect(page.locator('ul.name-errors li').nth(1)).toContainText(
+      '2 tekens',
+    );
 
     await page.getByLabel('Naam').fill('FakeNews');
     await page.waitForLoadState('networkidle');
