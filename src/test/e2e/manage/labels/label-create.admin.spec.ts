@@ -55,9 +55,10 @@ test.describe('Label Creation - Admin', () => {
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(
-      page.locator('span:below(input[name="name"])').first(),
-    ).toContainText('2 tekens');
+    await expect(page.locator('ul.name-errors li')).toContainText('2 tekens');
+
+    await page.getByLabel('Naam').fill(';');
+    await expect(page.locator('ul.name-errors li')).toHaveCount(2);
 
     await page.getByLabel('Naam').fill(dummyLabel.longName);
     const value = await page.getByLabel('Naam').inputValue();
@@ -71,26 +72,27 @@ test.describe('Label Creation - Admin', () => {
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(
-      page.locator('span:below(input[name="name"])').first(),
-    ).toContainText('puntkomma');
+    await expect(page.locator('ul.name-errors li')).toContainText('puntkomma');
 
     await page.getByLabel('Naam').fill('');
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(
-      page.locator('span:below(input[name="name"])').first(),
-    ).toContainText('verplicht');
+    await expect(page.locator('ul.name-errors li').first()).toContainText(
+      'verplicht',
+    );
+    await expect(page.locator('ul.name-errors li').nth(1)).toContainText(
+      '2 tekens',
+    );
 
     await page.getByLabel('Naam').fill('FakeNews');
     await page.waitForLoadState('networkidle');
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(
-      page.locator('span:below(input[name="name"])').first(),
-    ).toContainText('al gebruikt');
+    await expect(page.locator('ul.name-errors li')).toContainText(
+      'al gebruikt',
+    );
 
     await page.getByLabel('Naam').fill(dummyLabel.name);
     await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
