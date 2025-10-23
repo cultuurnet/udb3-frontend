@@ -1327,23 +1327,17 @@
         "name_max_length": "Naam mag maximaal 255 karakters bevatten"
       },
       "constraints": {
-        "title": "Beperkingen",
-        "current": "Huidige beperking:",
-        "none": "Geen beperkingen",
-        "edit": "Bewerken",
-        "add": "Beperking toevoegen",
-        "remove": "Verwijderen",
-        "value_label": "Beperkingswaarde",
-        "placeholder": "Voer een beperkingswaarde in"
+        "title": "Bewerkrecht",
+        "edit": "Wijzigen",
+        "remove": "Verwijderen"
       },
       "permissions": {
-        "title": "Rechten",
-        "search_placeholder": "Zoek rechten...",
-        "selected": "geselecteerd"
+        "title": "Permissies",
+        "search_placeholder": "Zoeken op naam"
       },
       "users": {
-        "title": "Gebruikers",
-        "placeholder_message": "Gebruikersbeheer wordt hier getoond"
+        "title": "Leden",
+        "placeholder_message": "Ledenbeheer wordt hier getoond"
       },
       "labels": {
         "title": "Labels",

@@ -1273,23 +1273,17 @@
         "name_max_length": "Le nom ne peut pas dépasser 255 caractères"
       },
       "constraints": {
-        "title": "Restrictions",
-        "current": "Restriction actuelle:",
-        "none": "Aucune restriction",
+        "title": "Droits d'édition",
         "edit": "Modifier",
-        "add": "Ajouter une restriction",
-        "remove": "Supprimer",
-        "value_label": "Valeur de la restriction",
-        "placeholder": "Entrez une valeur de restriction"
+        "remove": "Supprimer"
       },
       "permissions": {
-        "title": "Permissions",
-        "search_placeholder": "Rechercher des permissions...",
-        "selected": "sélectionné"
+        "title": "Autorisations",
+        "search_placeholder": "Rechercher par nom"
       },
       "users": {
-        "title": "Utilisateurs",
-        "placeholder_message": "La gestion des utilisateurs est affichée ici"
+        "title": "Membres",
+        "placeholder_message": "La gestion des membres est affichée ici"
       },
       "labels": {
         "title": "Labels",

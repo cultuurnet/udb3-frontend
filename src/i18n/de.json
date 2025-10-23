@@ -1274,23 +1274,17 @@
         "name_max_length": "Name darf maximal 255 Zeichen enthalten"
       },
       "constraints": {
-        "title": "Einschränkungen",
-        "current": "Aktuelle Einschränkung:",
-        "none": "Keine Einschränkungen",
+        "title": "Bearbeitungsrechte",
         "edit": "Bearbeiten",
-        "add": "Einschränkung hinzufügen",
-        "remove": "Entfernen",
-        "value_label": "Einschränkungswert",
-        "placeholder": "Geben Sie einen Einschränkungswert ein"
+        "remove": "Entfernen"
       },
       "permissions": {
-        "title": "Rechte",
-        "search_placeholder": "Rechte suchen...",
-        "selected": "ausgewählt"
+        "title": "Berechtigungen",
+        "search_placeholder": "Suche nach Namen"
       },
       "users": {
-        "title": "Benutzer",
-        "placeholder_message": "Benutzerverwaltung wird hier angezeigt"
+        "title": "Mitglieder",
+        "placeholder_message": "Mitgliederverwaltung wird hier angezeigt"
       },
       "labels": {
         "title": "Labels",
