@@ -54,6 +54,7 @@ test.describe('Label Overview - Admin', () => {
 
   test('can paginate labels', async ({ baseURL, page }) => {
     await page.getByPlaceholder(/zoek/i).fill('de');
+    await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
     const initialRows = page.getByRole('row');
