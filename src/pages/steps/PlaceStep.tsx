@@ -123,6 +123,8 @@ const PlaceStep = ({
   const filteredStreetAddressesOptions = useMemo(() => {
     const input = currentInputValue?.toLowerCase().trim();
 
+    if (!input) return [];
+
     const shouldHideOptions =
       input &&
       (places as string[]).some(
