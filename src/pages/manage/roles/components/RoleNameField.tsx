@@ -1,14 +1,34 @@
 import { useEffect, useState } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  UseFormClearErrors,
+  UseFormSetError,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useIsRoleNameUnique } from '@/hooks/api/roles';
 import { RoleValidationInformation } from '@/types/Role';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 
 interface RoleNameFieldProps {
+  control: Control<any>;
+  formState: {
+    errors: FieldErrors<any>;
+    isSubmitting: boolean;
+  };
+  watch: UseFormWatch<any>;
+  setError: UseFormSetError<any>;
+  clearErrors: UseFormClearErrors<any>;
+  setValue: UseFormSetValue<any>;
   isEditMode?: boolean;
   currentName?: string;
 }
@@ -27,36 +47,35 @@ const RoleNameDisplay = ({
       label={t('roles.form.name_label')}
       id="role-name-display"
       Component={
-        <div className="flex items-center space-x-2">
-          <span className="text-gray-900">{name}</span>
-          <button
-            type="button"
-            onClick={onEdit}
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
+        <Inline spacing={2} alignItems="center">
+          <Text>{name}</Text>
+          <Button variant={ButtonVariants.LINK} onClick={onEdit}>
             {t('roles.form.name_edit')}
-          </button>
-        </div>
+          </Button>
+        </Inline>
       }
     />
   );
 };
 
 const RoleNameInput = ({
+  control,
+  formState: { errors, isSubmitting },
   showButtons = false,
   onCancel,
 }: {
+  control: Control<any>;
+  formState: {
+    errors: FieldErrors<any>;
+    isSubmitting: boolean;
+  };
   showButtons?: boolean;
   onCancel?: () => void;
 }) => {
   const { t } = useTranslation();
-  const {
-    control,
-    formState: { errors, isSubmitting },
-  } = useFormContext();
 
   return (
-    <div className="space-y-3">
+    <Stack spacing={3}>
       <Controller
         name="name"
         control={control}
@@ -79,7 +98,7 @@ const RoleNameInput = ({
       />
 
       {showButtons && (
-        <div className="flex space-x-2">
+        <Inline marginTop={4} spacing={2}>
           <Button
             type="submit"
             variant={ButtonVariants.PRIMARY}
@@ -95,24 +114,23 @@ const RoleNameInput = ({
           >
             {t('roles.form.cancel')}
           </Button>
-        </div>
+        </Inline>
       )}
-    </div>
+    </Stack>
   );
 };
 
 export const RoleNameField = ({
+  control,
+  formState: { errors },
+  watch,
+  setError,
+  clearErrors,
+  setValue,
   isEditMode = false,
   currentName,
 }: RoleNameFieldProps) => {
   const { t } = useTranslation();
-  const {
-    formState: { errors },
-    watch,
-    setError,
-    clearErrors,
-    setValue,
-  } = useFormContext();
 
   const [isEditing, setIsEditing] = useState(!isEditMode);
   const watchedName = watch('name');
@@ -156,11 +174,21 @@ export const RoleNameField = ({
   };
 
   if (!isEditMode) {
-    return <RoleNameInput />;
+    return (
+      <RoleNameInput
+        control={control}
+        formState={{ errors, isSubmitting: false }}
+      />
+    );
   }
 
   return isEditing ? (
-    <RoleNameInput showButtons onCancel={handleCancel} />
+    <RoleNameInput
+      control={control}
+      formState={{ errors, isSubmitting: false }}
+      showButtons
+      onCancel={handleCancel}
+    />
   ) : (
     <RoleNameDisplay name={watchedName} onEdit={() => setIsEditing(true)} />
   );

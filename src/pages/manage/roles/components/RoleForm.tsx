@@ -1,10 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import {
+  Control,
+  FieldErrors,
+  useForm,
+  UseFormClearErrors,
+  UseFormHandleSubmit,
+  UseFormSetError,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { PermissionType } from '@/constants/PermissionTypes';
 import {
   useCreateRoleMutation,
   useUpdateRoleNameMutation,
@@ -15,7 +23,6 @@ import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
-import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 import { ConstraintsSection } from './constraintsSection';
 import { LabelsSection } from './labelsSection';
@@ -23,16 +30,6 @@ import { PermissionsSection } from './permissionsSection';
 import { RoleNameField } from './roleNameField';
 import { createRoleSchema, RoleFormDataInferred } from './roleSchema';
 import { UsersSection } from './usersSection';
-
-type FormData = {
-  name: string;
-  permissions: PermissionType[];
-  users: any[];
-  labels: any[];
-  constraints?: {
-    v3?: string;
-  };
-};
 
 type RoleFormProps = {
   role?: Role;
@@ -59,7 +56,6 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     mode: 'onChange',
   });
 
-  const getGlobalValue = getValueFromTheme('global');
   const createRoleMutation = useCreateRoleMutation();
   const updateRoleNameMutation = useUpdateRoleNameMutation();
 
@@ -108,76 +104,128 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     <Page>
       <Page.Title>{pageTitle}</Page.Title>
       <Page.Content>
-        <FormProvider {...form}>
-          <form>
-            <Stack
-              spacing={3}
-              maxWidth="48rem"
-              backgroundColor="white"
-              padding={4}
-              borderRadius={getGlobalBorderRadius}
-              css={`
-                box-shadow: ${getGlobalValue('boxShadow.medium')};
-              `}
-            >
-              <RoleNameField isEditMode={isEditMode} currentName={role?.name} />
-
-              {isEditMode && roleId && <ConstraintsSection roleId={roleId} />}
-
-              {isEditMode && roleId && (
-                <Tabs
-                  activeKey={activeTab}
-                  onSelect={(key) => setActiveTab(key as string)}
-                  className="role-form-tabs"
-                >
-                  <Tabs.Tab
-                    eventKey="permissions"
-                    title={t('roles.form.permissions.title')}
-                  >
-                    <div className="bg-white rounded-lg p-6">
-                      <PermissionsSection roleId={roleId} />
-                    </div>
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    eventKey="users"
-                    title={t('roles.form.users.title')}
-                  >
-                    <div className="bg-white rounded-lg p-6">
-                      <UsersSection roleId={roleId} />
-                    </div>
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    eventKey="labels"
-                    title={t('roles.form.labels.title')}
-                  >
-                    <div className="bg-white rounded-lg p-6">
-                      <LabelsSection roleId={roleId} />
-                    </div>
-                  </Tabs.Tab>
-                </Tabs>
-              )}
-
-              {!isEditMode && (
-                <Inline marginTop={5} spacing={3}>
-                  <Button
-                    title="submit"
-                    variant={ButtonVariants.PRIMARY}
-                    disabled={!form.formState.isValid || isSubmitting}
-                    onClick={form.handleSubmit(onSubmit)}
-                  >
-                    {isSubmitting
-                      ? t('roles.form.saving')
-                      : t('roles.form.create')}
-                  </Button>
-                  <Button title="cancel" onClick={handleCancel}>
-                    {t('roles.form.cancel')}
-                  </Button>
-                </Inline>
-              )}
-            </Stack>
-          </form>
-        </FormProvider>
+        <RoleFormFields
+          mode={isEditMode ? 'edit' : 'create'}
+          control={form.control}
+          handleSubmit={form.handleSubmit}
+          formState={form.formState}
+          watch={form.watch}
+          setError={form.setError}
+          clearErrors={form.clearErrors}
+          setValue={form.setValue}
+          isSubmitting={isSubmitting}
+          onSubmit={onSubmit}
+          onCancel={handleCancel}
+          role={role}
+          roleId={roleId}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
       </Page.Content>
     </Page>
+  );
+};
+
+type RoleFormFieldsProps = {
+  mode: 'create' | 'edit';
+  control: Control<RoleFormDataInferred>;
+  handleSubmit: UseFormHandleSubmit<RoleFormDataInferred>;
+  formState: {
+    isValid: boolean;
+    isDirty: boolean;
+    errors: FieldErrors<RoleFormDataInferred>;
+    isSubmitting: boolean;
+  };
+  watch: UseFormWatch<RoleFormDataInferred>;
+  setError: UseFormSetError<RoleFormDataInferred>;
+  clearErrors: UseFormClearErrors<RoleFormDataInferred>;
+  setValue: UseFormSetValue<RoleFormDataInferred>;
+  isSubmitting: boolean;
+  onSubmit: (data: RoleFormDataInferred) => Promise<void>;
+  onCancel: () => void;
+  role?: Role;
+  roleId?: string;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+};
+
+const RoleFormFields = ({
+  mode,
+  control,
+  handleSubmit,
+  formState,
+  watch,
+  setError,
+  clearErrors,
+  setValue,
+  isSubmitting,
+  onSubmit,
+  onCancel,
+  role,
+  roleId,
+  activeTab,
+  onTabChange,
+}: RoleFormFieldsProps) => {
+  const { t } = useTranslation();
+  const isEditMode = mode === 'edit';
+
+  return (
+    <Stack spacing={3}>
+      <RoleNameField
+        control={control}
+        formState={formState}
+        watch={watch}
+        setError={setError}
+        clearErrors={clearErrors}
+        setValue={setValue}
+        isEditMode={isEditMode}
+        currentName={role?.name}
+      />
+
+      {isEditMode && roleId && <ConstraintsSection roleId={roleId} />}
+
+      {isEditMode && roleId && (
+        <Stack marginTop={3}>
+          <Tabs
+            activeKey={activeTab}
+            onSelect={(key) => onTabChange(key as string)}
+          >
+            <Tabs.Tab
+              eventKey="permissions"
+              title={t('roles.form.permissions.title')}
+            >
+              <PermissionsSection
+                css={`
+                  background-color: red;
+                `}
+                roleId={roleId}
+              />
+            </Tabs.Tab>
+            <Tabs.Tab eventKey="users" title={t('roles.form.users.title')}>
+              <UsersSection roleId={roleId} />
+            </Tabs.Tab>
+            <Tabs.Tab eventKey="labels" title={t('roles.form.labels.title')}>
+              <LabelsSection roleId={roleId} />
+            </Tabs.Tab>
+          </Tabs>
+        </Stack>
+      )}
+
+      {!isEditMode && (
+        <Inline spacing={3}>
+          <Button
+            title="submit"
+            variant={ButtonVariants.PRIMARY}
+            disabled={!formState.isValid || isSubmitting}
+            onClick={handleSubmit(onSubmit)}
+          >
+            {isSubmitting ? t('roles.form.saving') : t('roles.form.create')}
+          </Button>
+          <Button title="cancel" onClick={onCancel}>
+            {t('roles.form.cancel')}
+          </Button>
+        </Inline>
+      )}
+    </Stack>
   );
 };
