@@ -142,6 +142,7 @@ const RolesOverviewPage = () => {
     (event: ChangeEvent<HTMLInputElement>) => {
       const searchTerm: string = event.target.value.trim();
       if (searchTerm.length > 2 || searchTerm.length === 0) {
+        setSuccessMessage('');
         setCurrentPageRoles(1);
         setSearchInput(searchTerm);
       }
