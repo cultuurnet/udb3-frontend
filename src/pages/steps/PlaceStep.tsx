@@ -112,7 +112,7 @@ const PlaceStep = ({
     },
   );
 
-  const places = useMemo<Place[] | string[]>(() => {
+  const places = useMemo(() => {
     if (scope !== ScopeTypes.EVENTS) {
       return useGetStreetAddressQuery.data ?? [];
     }
@@ -122,6 +122,8 @@ const PlaceStep = ({
 
   const filteredStreetAddressesOptions = useMemo(() => {
     const input = currentInputValue?.toLowerCase().trim();
+
+    if (!input) return [];
 
     const shouldHideOptions =
       input &&
@@ -190,7 +192,7 @@ const PlaceStep = ({
                 Component={
                   <Typeahead
                     isLoading={useGetStreetAddressQuery.isLoading}
-                    options={filteredStreetAddressesOptions as string[]}
+                    options={filteredStreetAddressesOptions}
                     onInputChange={(value) => {
                       setCurrentInputValue(value);
                       setDebouncedSearchInputForPlaceScope(value);
@@ -221,7 +223,7 @@ const PlaceStep = ({
                     selected={currentInputValue ? [currentInputValue] : []}
                     maxWidth="28rem"
                     onChange={(selected) => {
-                      const selectedAddress = selected[0] as string;
+                      const selectedAddress = selected[0];
                       if (selectedAddress) {
                         setCurrentInputValue(selectedAddress);
                         setSearchInput(selectedAddress);
@@ -286,7 +288,7 @@ const PlaceStep = ({
                   Component={
                     <Typeahead
                       isLoading={useGetPlacesQuery.isLoading}
-                      options={places as Place[]}
+                      options={places}
                       onInputChange={debounce(setSearchInput, 275)}
                       filterBy={filterByCallback}
                       labelKey={(place: Place) =>
