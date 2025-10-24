@@ -35,7 +35,7 @@ test.describe('Roles Overview - Admin', () => {
     // Search shouldn't happen when less than 3 characters are typed.
     await page.getByLabel('Zoeken').fill('ie');
 
-    const stillE2eRows = page.getByRole('row');
+    const stillE2ERows = page.getByRole('row');
     const stillE2EResultRow = stillE2eRows.nth(1).filter({
       hasText: 'e2e',
     });
