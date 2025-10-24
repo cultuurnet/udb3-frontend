@@ -1311,7 +1311,7 @@
       }
     },
     "form": {
-      "create_title": "Nieuwe rol aanmaken",
+      "create_title": "Rol toevoegen",
       "edit_title": "Rol bewerken",
       "name_label": "Naam",
       "name_edit": "Wijzigen",
