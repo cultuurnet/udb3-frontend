@@ -1003,8 +1003,8 @@
         "manage": "Gestion des demandes",
         "request": "Demander gestion",
         "back": "Retour",
-        "events": "Gestion d'événements",
-        "places": "Gestion des lieux"
+        "events": "Voir les événements",
+        "places": "Voir les lieux"
       }
     },
     "create": {
