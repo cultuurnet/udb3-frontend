@@ -15,23 +15,25 @@ test.describe('Roles Overview - Admin', () => {
   });
 
   test('can navigate to roles overview page', async ({ page }) => {
-    await expect(page.getByRole('heading')).toContainText('Rollen');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(
+      'Rollen',
+    );
   });
 
   test('can search for roles', async ({ page }) => {
     const initialRows = page.getByRole('row');
     const initialFirstRow = await initialRows.nth(1).textContent();
 
-    await page.getByPlaceholder(/zoek/i).fill('e2e');
+    await page.getByLabel('Zoeken').fill('e2e');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('e2e');
+    await expect(page.getByLabel('Zoeken')).toHaveValue('e2e');
     const e2eRows = page.getByRole('row');
     const e2eResultRow = e2eRows.nth(1).filter({
       hasText: 'e2e',
     });
     await expect(e2eResultRow).toBeVisible({ timeout: 8_000 });
     // Search shouldn't happen when less than 3 characters are typed.
-    await page.getByPlaceholder(/zoek/i).fill('ie');
+    await page.getByLabel('Zoeken').fill('ie');
 
     const stillE2eRows = page.getByRole('row');
     const stillE2EResultRow = stillE2eRows.nth(1).filter({
@@ -39,11 +41,11 @@ test.describe('Roles Overview - Admin', () => {
     });
     await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
 
-    await page.getByPlaceholder(/zoek/i).fill(faker.lorem.words(10));
+    await page.getByLabel('Zoeken').fill(faker.lorem.words(10));
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Geen rollen gevonden.')).toBeVisible();
 
-    await page.getByPlaceholder(/zoek/i).fill('');
+    await page.getByLabel('Zoeken').fill('');
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Geen rollen gevonden.')).not.toBeVisible();
     const resetRows = page.getByRole('row');
@@ -52,7 +54,7 @@ test.describe('Roles Overview - Admin', () => {
   });
 
   test('can paginate roles', async ({ page }) => {
-    await page.getByPlaceholder(/zoek/i).fill('eer');
+    await page.getByLabel('Zoeken').fill('eer');
     await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
@@ -62,7 +64,7 @@ test.describe('Roles Overview - Admin', () => {
     await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible();
     await page.getByRole('button', { name: /^2$/ }).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('eer');
+    await expect(page.getByLabel('Zoeken')).toHaveValue('eer');
 
     const secondPageRows = page.getByRole('row');
     const secondPageFirstRow = await secondPageRows.nth(1).textContent();
@@ -71,7 +73,8 @@ test.describe('Roles Overview - Admin', () => {
     await expect(page.getByRole('button', { name: /^1$/ })).toBeVisible();
     await page.getByRole('button', { name: /^1$/ }).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByPlaceholder(/zoek/i)).toHaveValue('eer');
+    await page.waitForTimeout(300);
+    await expect(page.getByLabel('Zoeken')).toHaveValue('eer');
 
     const resetRows = page.getByRole('row');
     const resetFirstRow = await resetRows.nth(1).textContent();
