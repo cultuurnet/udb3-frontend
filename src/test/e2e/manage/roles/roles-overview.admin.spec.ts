@@ -24,16 +24,17 @@ test.describe('Roles Overview - Admin', () => {
     const initialRows = page.getByRole('row');
     const initialFirstRow = await initialRows.nth(1).textContent();
 
-    await page.getByLabel('Zoeken').fill('e2e');
+    const searchInput = page.getByLabel('Zoeken');
+    await searchInput.fill('e2e');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByLabel('Zoeken')).toHaveValue('e2e');
+    await expect(searchInput).toHaveValue('e2e');
     const e2eRows = page.getByRole('row');
     const e2eResultRow = e2eRows.nth(1).filter({
       hasText: 'e2e',
     });
     await expect(e2eResultRow).toBeVisible({ timeout: 8_000 });
     // Search shouldn't happen when less than 3 characters are typed.
-    await page.getByLabel('Zoeken').fill('ie');
+    await searchInput.fill('ie');
 
     const stillE2ERows = page.getByRole('row');
     const stillE2EResultRow = stillE2ERows.nth(1).filter({
@@ -41,11 +42,11 @@ test.describe('Roles Overview - Admin', () => {
     });
     await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
 
-    await page.getByLabel('Zoeken').fill(faker.lorem.words(10));
+    await searchInput.fill(faker.lorem.words(10));
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Geen rollen gevonden.')).toBeVisible();
 
-    await page.getByLabel('Zoeken').fill('');
+    await searchInput.fill('');
     await page.waitForLoadState('networkidle');
     await expect(page.getByText('Geen rollen gevonden.')).not.toBeVisible();
     const resetRows = page.getByRole('row');
@@ -54,7 +55,8 @@ test.describe('Roles Overview - Admin', () => {
   });
 
   test('can paginate roles', async ({ page }) => {
-    await page.getByLabel('Zoeken').fill('eer');
+    const searchInput = page.getByLabel('Zoeken');
+    await searchInput.fill('eer');
     await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
@@ -64,7 +66,7 @@ test.describe('Roles Overview - Admin', () => {
     await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible();
     await page.getByRole('button', { name: /^2$/ }).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByLabel('Zoeken')).toHaveValue('eer');
+    await expect(searchInput).toHaveValue('eer');
 
     const secondPageRows = page.getByRole('row');
     const secondPageFirstRow = await secondPageRows.nth(1).textContent();
@@ -74,7 +76,7 @@ test.describe('Roles Overview - Admin', () => {
     await page.getByRole('button', { name: /^1$/ }).click();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(300);
-    await expect(page.getByLabel('Zoeken')).toHaveValue('eer');
+    await expect(searchInput).toHaveValue('eer');
 
     const resetRows = page.getByRole('row');
     const resetFirstRow = await resetRows.nth(1).textContent();
