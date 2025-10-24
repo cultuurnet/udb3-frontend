@@ -36,7 +36,7 @@ test.describe('Roles Overview - Admin', () => {
     await page.getByLabel('Zoeken').fill('ie');
 
     const stillE2ERows = page.getByRole('row');
-    const stillE2EResultRow = stillE2eRows.nth(1).filter({
+    const stillE2EResultRow = stillE2ERows.nth(1).filter({
       hasText: 'e2e',
     });
     await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
