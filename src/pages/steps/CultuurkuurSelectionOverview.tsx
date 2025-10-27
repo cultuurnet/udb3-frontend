@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
@@ -6,7 +7,6 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
-import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
   selectedData: HierarchicalData[];
@@ -22,11 +22,10 @@ const CultuurkuurSelectionOverview = ({
   const { t } = useTranslation();
   const getGlobalValue = getValueFromTheme('global');
 
-  const selectedCount = (
-    labelsKey === 'location'
-      ? expandLevel1WithChildren(selectedData)
-      : selectedData
-  ).length;
+  const selectedCount = useMemo(() => {
+    return selectedData.filter((data) => !Object.hasOwn(data, 'children'))
+      .length;
+  }, [selectedData]);
 
   if (selectedCount === 0) return null;
 
