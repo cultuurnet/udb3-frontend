@@ -550,7 +550,7 @@ const LocationStep = ({
                         components={{
                           link1: (
                             <Link
-                              href="https://agenda.brussels"
+                              href="https://www.extranet.brussels/login"
                               rel="noopener noreferrer"
                               display="inline-block"
                             >
