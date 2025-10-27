@@ -544,7 +544,7 @@ const LocationStep = ({
                     </Text>
                   )}
                   {isBrusselsZip && (
-                    <Alert variant="primary">
+                    <Alert variant="warning">
                       <Trans
                         i18nKey={'create.location.is_brussels_alert.message'}
                         components={{
