@@ -193,6 +193,7 @@ const PriceInformation = ({
     resolver: yupResolver(schema),
     defaultValues: defaultPriceInfoValues,
     shouldFocusError: false,
+    criteriaMode: 'all',
   });
 
   const queryClient = useQueryClient();
@@ -338,12 +339,13 @@ const PriceInformation = ({
                   ? UNIQUE_NAME_ERROR_TYPE
                   : undefined;
 
-              const validationErrorType =
-                errors.rates?.type ||
-                errors.rates?.[index]?.name?.type ||
-                errors.rates?.[index]?.price?.type ||
-                errors.rates?.[index]?.type ||
-                uniqueNameErrorFromResponse;
+              const validationErrors = [
+                errors.rates?.type,
+                errors.rates?.[index]?.name?.type,
+                errors.rates?.[index]?.price?.type,
+                errors.rates?.[index]?.type,
+                uniqueNameErrorFromResponse,
+              ].filter(Boolean);
 
               return (
                 <Stack key={`rate_${rate.id}`}>
@@ -512,13 +514,13 @@ const PriceInformation = ({
                         )}
                     </Inline>
                   </Inline>
-                  {validationErrorType && (
-                    <Text color="red">
+                  {validationErrors.map((errorType, errorIndex) => (
+                    <Text color="red" key={`validation_error_${errorIndex}`}>
                       {t(
-                        `create.additionalInformation.price_info.validation_messages.${validationErrorType}`,
+                        `create.additionalInformation.price_info.validation_messages.${errorType}`,
                       )}
                     </Text>
-                  )}
+                  ))}
                 </Stack>
               );
             })}
