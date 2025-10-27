@@ -374,29 +374,6 @@ const OrganizerAddModal = ({
                 )}
               />
             </Stack>
-            <FormElement
-              Component={
-                <Input
-                  {...register('address.streetAndNumber')}
-                  disabled={watchedStreet === BLANK_STREET_NUMBER}
-                />
-              }
-              id="organizer-address-streetAndNumber"
-              label={t('organizer.add_modal.labels.address.streetAndNumber')}
-              error={
-                formState.errors.address?.streetAndNumber &&
-                t(
-                  'organizer.add_modal.validation_messages.address.streetAndNumber',
-                )
-              }
-              info={
-                <BlankStreetToggle
-                  onChange={(value) =>
-                    setValue('address.streetAndNumber', value)
-                  }
-                />
-              }
-            />
             <Inline spacing={4}>
               <Stack minWidth="20rem" maxWidth="25rem">
                 <Controller<OrganizerData>
@@ -437,6 +414,29 @@ const OrganizerAddModal = ({
                 />
               )}
             </Inline>
+            <FormElement
+              Component={
+                <Input
+                  {...register('address.streetAndNumber')}
+                  disabled={watchedStreet === BLANK_STREET_NUMBER}
+                />
+              }
+              id="organizer-address-streetAndNumber"
+              label={t('organizer.add_modal.labels.address.streetAndNumber')}
+              error={
+                formState.errors.address?.streetAndNumber &&
+                t(
+                  'organizer.add_modal.validation_messages.address.streetAndNumber',
+                )
+              }
+              info={
+                <BlankStreetToggle
+                  onChange={(value) =>
+                    setValue('address.streetAndNumber', value)
+                  }
+                />
+              }
+            />
           </Stack>
         </Stack>
         <Stack spacing={2}>
