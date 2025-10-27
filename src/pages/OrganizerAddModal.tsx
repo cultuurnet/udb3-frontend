@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Highlighter } from 'react-bootstrap-typeahead';
+import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -7,6 +9,7 @@ import * as yup from 'yup';
 import { ScopeTypes } from '@/constants/OfferType';
 import { useGetOrganizersByWebsiteQuery } from '@/hooks/api/organizers';
 import { useAutoFocus } from '@/hooks/useAutoFocus';
+import { useStreetAddressTypeahead } from '@/hooks/useStreetAddressTypeAhead';
 import { SupportedLanguage } from '@/i18n/index';
 import { OrganizerData } from '@/pages/OrganizerAddModal';
 import {
@@ -28,6 +31,7 @@ import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
+import { Typeahead } from '@/ui/Typeahead';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 import { City, CityPicker } from './CityPicker';
@@ -145,9 +149,9 @@ const OrganizerAddModal = ({
 
   const urlRegisterProps = register('url');
 
-  const [watchedUrl, watchedCountry, watchedStreet] = useWatch({
+  const [watchedUrl, watchedCountry, watchedStreet, watchedCity] = useWatch({
     control,
-    name: ['url', 'address.country', 'address.streetAndNumber'],
+    name: ['url', 'address.country', 'address.streetAndNumber', 'address.city'],
   });
 
   const getOrganizersByWebsiteQuery = useGetOrganizersByWebsiteQuery(
@@ -220,7 +224,11 @@ const OrganizerAddModal = ({
 
     setValue('contact', organizerContactInfo);
   };
-
+  const streetAddressTypeahead = useStreetAddressTypeahead({
+    city: watchedCity,
+    country: watchedCountry,
+    enabled: true, // or add your own conditions
+  });
   return (
     <Modal
       title={t('organizer.add_modal.title')}
@@ -416,9 +424,75 @@ const OrganizerAddModal = ({
             </Inline>
             <FormElement
               Component={
-                <Input
-                  {...register('address.streetAndNumber')}
-                  disabled={watchedStreet === BLANK_STREET_NUMBER}
+                <Controller
+                  control={control}
+                  name="address.streetAndNumber"
+                  render={({ field }) => (
+                    <Typeahead
+                      isLoading={streetAddressTypeahead.isLoading}
+                      options={streetAddressTypeahead.options}
+                      onInputChange={(value) => {
+                        streetAddressTypeahead.setCurrentInputValue(value);
+                        streetAddressTypeahead.setDebouncedSearchInput(value);
+                        // Update form value to trigger validation
+                        setValue('address.streetAndNumber', value, {
+                          shouldTouch: true,
+                          shouldValidate: true,
+                        });
+                      }}
+                      labelKey={(option: string) => option}
+                      renderMenu={(results, menuProps, { text }) => {
+                        if (!results || results.length === 0) return null;
+
+                        return (
+                          <TypeaheadMenu
+                            {...menuProps}
+                            options={results}
+                            labelKey={(option: string) => option}
+                            text={text}
+                          />
+                        );
+                      }}
+                      renderMenuItemChildren={(address: string, { text }) => (
+                        <Highlighter search={text}>{address}</Highlighter>
+                      )}
+                      selected={
+                        streetAddressTypeahead.currentInputValue
+                          ? [streetAddressTypeahead.currentInputValue]
+                          : []
+                      }
+                      maxWidth="28rem"
+                      onChange={(selected) => {
+                        const selectedAddress = selected[0];
+                        if (selectedAddress) {
+                          streetAddressTypeahead.setCurrentInputValue(
+                            selectedAddress,
+                          );
+                          // Update the form field
+                          field.onChange(selectedAddress);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const inputValue =
+                          e.target.value?.trim() ||
+                          streetAddressTypeahead.currentInputValue;
+                        if (inputValue) {
+                          field.onChange(inputValue);
+                          streetAddressTypeahead.setCurrentInputValue(
+                            inputValue,
+                          );
+                        }
+                      }}
+                      minLength={1}
+                      placeholder={t(
+                        'organizer.add_modal.labels.address.streetAndNumber',
+                      )}
+                      allowNew={false}
+                      hideNewInputText
+                      inputRequired={false}
+                      disabled={watchedStreet === BLANK_STREET_NUMBER}
+                    />
+                  )}
                 />
               }
               id="organizer-address-streetAndNumber"
