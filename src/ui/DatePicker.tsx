@@ -120,6 +120,11 @@ const DatePicker = ({
           z-index: ${getValue('zIndexInput')};
         }
 
+        .react-datepicker-wrapper input {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
         .react-datepicker__current-month {
           display: none;
         }
@@ -207,12 +212,7 @@ const DatePicker = ({
         }
         disabled={disabled}
         locale={i18n.language}
-        css={`
-          &.form-control {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-        `}
+        css=""
       />
       <Button
         variant={ButtonVariants.SECONDARY}
