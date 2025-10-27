@@ -70,9 +70,7 @@ const PlaceStep = ({
   const [searchInput, setSearchInput] = useState(defaultStreetAndNumber);
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
-  const [currentInputValue, setCurrentInputValue] = useState(
-    defaultStreetAndNumber,
-  );
+
   const { uitpasLabels } = useUitpasLabels();
 
   const isMovie = terms.includes(EventTypes.Bioscoop);
@@ -114,15 +112,11 @@ const PlaceStep = ({
 
   const places = useMemo(() => {
     if (scope !== ScopeTypes.EVENTS) {
-      return streetAddressTypeahead.options; // Use the hook's filtered options
+      return streetAddressTypeahead.options;
     }
 
     return useGetPlacesQuery.data?.member ?? [];
   }, [useGetPlacesQuery.data?.member, streetAddressTypeahead.options, scope]);
-  const setDebouncedSearchInputForPlaceScope = useMemo(
-    () => debounce(setSearchInput, 275),
-    [],
-  );
 
   const place = useWatch({ control, name: 'location.place' });
 

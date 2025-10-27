@@ -227,7 +227,7 @@ const OrganizerAddModal = ({
   const streetAddressTypeahead = useStreetAddressTypeahead({
     city: watchedCity,
     country: watchedCountry,
-    enabled: true, // or add your own conditions
+    enabled: true,
   });
   return (
     <Modal
@@ -434,7 +434,6 @@ const OrganizerAddModal = ({
                       onInputChange={(value) => {
                         streetAddressTypeahead.setCurrentInputValue(value);
                         streetAddressTypeahead.setDebouncedSearchInput(value);
-                        // Update form value to trigger validation
                         setValue('address.streetAndNumber', value, {
                           shouldTouch: true,
                           shouldValidate: true,
@@ -468,7 +467,6 @@ const OrganizerAddModal = ({
                           streetAddressTypeahead.setCurrentInputValue(
                             selectedAddress,
                           );
-                          // Update the form field
                           field.onChange(selectedAddress);
                         }
                       }}
