@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import debounce from 'lodash/debounce';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
 import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
@@ -9,10 +9,8 @@ import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
 import { ScopeTypes } from '@/constants/OfferType';
-import {
-  useGetPlacesByQuery,
-  useGetStreetAddressesQuery,
-} from '@/hooks/api/places';
+import { useGetPlacesByQuery } from '@/hooks/api/places';
+import { useStreetAddressTypeahead } from '@/hooks/useStreetAddressTypeAhead';
 import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
@@ -97,44 +95,30 @@ const PlaceStep = ({
     return firstPart.trim();
   };
 
-  const useGetStreetAddressQuery = useGetStreetAddressesQuery(
-    {
+  // Inside PlaceStep component, replace the existing street address logic with:
+  const streetAddressTypeahead = useStreetAddressTypeahead({
+    city: {
       zip: municipality?.zip,
-      addressLocality: formatMunicipalityName(municipality?.name),
-      addressCountry: country,
-      streetAddress: searchInput,
+      name: formatMunicipalityName(municipality?.name),
     },
-    {
-      enabled:
-        !!searchInput &&
-        scope !== ScopeTypes.EVENTS &&
-        country === Countries.BE,
-    },
-  );
+    country,
+    enabled: scope !== ScopeTypes.EVENTS && country === Countries.BE,
+  });
+
+  // Initialize the hook with the default value
+  useEffect(() => {
+    if (defaultStreetAndNumber) {
+      streetAddressTypeahead.setCurrentInputValue(defaultStreetAndNumber);
+    }
+  }, [defaultStreetAndNumber, streetAddressTypeahead]);
 
   const places = useMemo(() => {
     if (scope !== ScopeTypes.EVENTS) {
-      return useGetStreetAddressQuery.data ?? [];
+      return streetAddressTypeahead.options; // Use the hook's filtered options
     }
 
     return useGetPlacesQuery.data?.member ?? [];
-  }, [useGetPlacesQuery.data?.member, useGetStreetAddressQuery.data, scope]);
-
-  const filteredStreetAddressesOptions = useMemo(() => {
-    const input = currentInputValue?.toLowerCase().trim();
-
-    if (!input) return [];
-
-    const shouldHideOptions =
-      input &&
-      (places as string[]).some(
-        (place) =>
-          input.startsWith(place.toLowerCase()) && input.length > place.length,
-      );
-
-    return shouldHideOptions ? [] : places;
-  }, [places, currentInputValue]);
-
+  }, [useGetPlacesQuery.data?.member, streetAddressTypeahead.options, scope]);
   const setDebouncedSearchInputForPlaceScope = useMemo(
     () => debounce(setSearchInput, 275),
     [],
@@ -191,11 +175,11 @@ const PlaceStep = ({
                 label={t('location.add_modal.labels.streetAndNumber')}
                 Component={
                   <Typeahead
-                    isLoading={useGetStreetAddressQuery.isLoading}
-                    options={filteredStreetAddressesOptions}
+                    isLoading={streetAddressTypeahead.isLoading}
+                    options={streetAddressTypeahead.options}
                     onInputChange={(value) => {
-                      setCurrentInputValue(value);
-                      setDebouncedSearchInputForPlaceScope(value);
+                      streetAddressTypeahead.setCurrentInputValue(value);
+                      streetAddressTypeahead.setDebouncedSearchInput(value);
                       setValue(
                         'location.streetAndNumber',
                         getValues('location.streetAndNumber'),
@@ -220,18 +204,24 @@ const PlaceStep = ({
                     renderMenuItemChildren={(address: string, { text }) => (
                       <Highlighter search={text}>{address}</Highlighter>
                     )}
-                    selected={currentInputValue ? [currentInputValue] : []}
+                    selected={
+                      streetAddressTypeahead.currentInputValue
+                        ? [streetAddressTypeahead.currentInputValue]
+                        : []
+                    }
                     maxWidth="28rem"
                     onChange={(selected) => {
                       const selectedAddress = selected[0];
                       if (selectedAddress) {
-                        setCurrentInputValue(selectedAddress);
-                        setSearchInput(selectedAddress);
+                        streetAddressTypeahead.setCurrentInputValue(
+                          selectedAddress,
+                        );
                       }
                     }}
                     onBlur={(e) => {
                       const inputValue =
-                        e.target.value?.trim() || currentInputValue;
+                        e.target.value?.trim() ||
+                        streetAddressTypeahead.currentInputValue;
                       if (inputValue) {
                         const updatedValue = {
                           ...field.value,
@@ -239,7 +229,7 @@ const PlaceStep = ({
                         };
                         field.onChange(updatedValue);
                         onChange(updatedValue);
-                        setCurrentInputValue(inputValue);
+                        streetAddressTypeahead.setCurrentInputValue(inputValue);
                       }
                     }}
                     minLength={1}
@@ -251,7 +241,7 @@ const PlaceStep = ({
                 }
                 error={
                   errors?.location?.streetAndNumber &&
-                  !currentInputValue &&
+                  !streetAddressTypeahead.currentInputValue &&
                   t('location.add_modal.errors.streetAndNumber')
                 }
               />
