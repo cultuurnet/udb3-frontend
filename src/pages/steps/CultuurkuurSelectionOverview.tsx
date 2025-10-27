@@ -23,8 +23,7 @@ const CultuurkuurSelectionOverview = ({
   const getGlobalValue = getValueFromTheme('global');
 
   const selectedCount = useMemo(() => {
-    return selectedData.filter((data) => !Object.hasOwn(data, 'children'))
-      .length;
+    return selectedData.filter((data) => !data.children?.length).length;
   }, [selectedData]);
 
   if (selectedCount === 0) return null;
