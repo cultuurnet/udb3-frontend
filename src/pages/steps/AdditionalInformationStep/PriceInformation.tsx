@@ -514,8 +514,8 @@ const PriceInformation = ({
                         )}
                     </Inline>
                   </Inline>
-                  {validationErrors.map((errorType, errorIndex) => (
-                    <Text color="red" key={`validation_error_${errorIndex}`}>
+                  {validationErrors.map((errorType) => (
+                    <Text color="red" key={`validation_error_${errorType}`}>
                       {t(
                         `create.additionalInformation.price_info.validation_messages.${errorType}`,
                       )}
