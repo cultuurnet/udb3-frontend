@@ -47,6 +47,8 @@ import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
 
+const ROLES_LIMIT = 30;
+
 const { publicRuntimeConfig } = getConfig();
 
 const getValueForMenuItem = getValueFromTheme('menuItem');
@@ -406,7 +408,8 @@ const Sidebar = () => {
       ...new Set(
         getRolesQuery.data
           .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
-          .filter((constraint) => constraint !== null),
+          .filter((constraint) => constraint !== null)
+          .slice(0, ROLES_LIMIT),
       ),
     ].join(' OR ');
 
