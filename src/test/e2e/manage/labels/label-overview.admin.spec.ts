@@ -10,12 +10,6 @@ test.describe('Label Overview - Admin', () => {
         domain: 'localhost',
         path: '/',
       },
-      {
-        name: 'ff_react_labels_overview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
     ]);
     await page.goto('/manage/labels');
   });

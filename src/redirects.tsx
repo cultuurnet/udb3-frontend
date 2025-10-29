@@ -90,8 +90,7 @@ const getRedirects = (
   {
     source: '/manage/labels/overview',
     destination: '/manage/labels',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_LABELS_OVERVIEW,
+    permanent: environment !== 'development',
   },
   {
     source:

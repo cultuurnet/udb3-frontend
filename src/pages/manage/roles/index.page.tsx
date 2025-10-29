@@ -71,7 +71,7 @@ const RolesOverviewPage = () => {
     },
   });
 
-  const totalItemsRoles = rolesQuery.data?.totalItems ?? 0;
+  const totalRoles = rolesQuery.data?.totalItems ?? 0;
 
   const actions = [
     {
@@ -114,14 +114,15 @@ const RolesOverviewPage = () => {
         accessor: 'options',
         Cell: ({ cell }: { cell: { value: Role } }) => {
           return (
-            <Inline spacing={2}>
+            <Inline>
               <Link
                 marginTop={0.5}
+                paddingRight={2.5}
                 href={`/manage/roles/${cell.value.uuid}/edit`}
               >
                 {t('roles.overview.table.edit')}
               </Link>
-              <Text>&nbsp;|</Text>
+              <Text>|</Text>
               <Button
                 variant={ButtonVariants.LINK}
                 onClick={() => handleDeleteClick(cell.value)}
@@ -239,7 +240,7 @@ const RolesOverviewPage = () => {
 
         <Pagination
           currentPage={currentPageRoles}
-          totalItems={totalItemsRoles}
+          totalItems={totalRoles}
           perPage={rolesPerPage}
           onChangePage={setCurrentPageRoles}
         />
