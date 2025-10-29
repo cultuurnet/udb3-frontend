@@ -16,7 +16,6 @@ import {
   User,
 } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
@@ -263,7 +262,6 @@ const NotificationMenu = memo(
 
     const { removeAuthenticationCookies } = useCookiesWithOptions();
     const queryClient = useQueryClient();
-    const router = useRouter();
 
     const notificationMenu = [
       {
@@ -309,10 +307,6 @@ const Sidebar = () => {
 
   const [isJobLoggerVisible, setIsJobLoggerVisible] = useState(true);
   const [jobLoggerState, setJobLoggerState] = useState(JobLoggerStates.IDLE);
-
-  const [isNewCreateEnabled, setIsNewCreateEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_CREATE,
-  );
 
   const sidebarComponent = useRef<HTMLElement>(null);
 
