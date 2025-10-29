@@ -212,7 +212,7 @@ const RoleFormFields = ({
       )}
 
       {!isEditMode && (
-        <Inline spacing={3}>
+        <Inline marginTop={4} spacing={3}>
           <Button
             title="submit"
             variant={ButtonVariants.PRIMARY}

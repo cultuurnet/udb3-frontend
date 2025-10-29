@@ -141,7 +141,7 @@ const createRole = async ({
       body: JSON.stringify({ name }),
     },
   });
-  return (await res.json()) as { roleId: string };
+  return res;
 };
 
 const useCreateRoleMutation = (configuration = {}) =>
