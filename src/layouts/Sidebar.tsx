@@ -402,10 +402,11 @@ const Sidebar = () => {
       ...new Set(
         getRolesQuery.data
           .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
-          .filter((constraint) => constraint !== null)
-          .slice(0, ROLES_LIMIT),
+          .filter((constraint) => constraint !== null),
       ),
-    ].join(' OR ');
+    ]
+      .slice(0, ROLES_LIMIT)
+      .join(' OR ');
 
     setSearchQuery(validationQuery);
   }, [getRolesQuery.data]);
