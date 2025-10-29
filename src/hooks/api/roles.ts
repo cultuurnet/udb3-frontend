@@ -125,7 +125,6 @@ const useGetRoleByIdQuery = (id: string) => {
   });
 };
 
-// Create role
 const createRole = async ({
   headers,
   name,
@@ -151,7 +150,6 @@ const useCreateRoleMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Update role name
 const updateRoleName = async ({
   headers,
   roleId,
@@ -161,14 +159,18 @@ const updateRoleName = async ({
   roleId: string;
   name: string;
 }) => {
-  return fetchFromApi({
-    path: `/roles/${roleId}/name`,
+  headers['Content-Type'] = 'application/ld+json;domain-model=RenameRole';
+
+  const res = await fetchFromApi({
+    path: `/roles/${roleId}`,
     options: {
       headers,
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify({ name }),
     },
   });
+
+  return res;
 };
 
 const useUpdateRoleNameMutation = (configuration = {}) =>
@@ -178,7 +180,6 @@ const useUpdateRoleNameMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Role permissions
 const getRolePermissions = async ({
   headers,
   roleId,
@@ -243,7 +244,6 @@ const useRemovePermissionFromRoleMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Role users
 const getRoleUsers = async ({
   headers,
   roleId,
@@ -317,7 +317,6 @@ const useRemoveUserFromRoleMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Role labels
 const getRoleLabels = async ({
   headers,
   roleId,
@@ -401,14 +400,18 @@ const createRoleConstraint = async ({
   roleId: string;
   constraint: string;
 }) => {
-  return fetchFromApi({
-    path: `/roles/${roleId}/constraint`,
+  headers['Content-Type'] = 'application/ld+json;domain-model=addConstraint';
+
+  const res = await fetchFromApi({
+    path: `/roles/${roleId}/constraints`,
     options: {
       headers,
       method: 'POST',
-      body: JSON.stringify({ v3: constraint }),
+      body: JSON.stringify({ query: constraint }),
     },
   });
+
+  return res;
 };
 
 const updateRoleConstraint = async ({
@@ -420,14 +423,18 @@ const updateRoleConstraint = async ({
   roleId: string;
   constraint: string;
 }) => {
-  return fetchFromApi({
-    path: `/roles/${roleId}/constraint`,
+  headers['Content-Type'] = 'application/ld+json;domain-model=updateConstraint';
+
+  const res = await fetchFromApi({
+    path: `/roles/${roleId}/constraints`,
     options: {
       headers,
       method: 'PUT',
-      body: JSON.stringify({ v3: constraint }),
+      body: JSON.stringify({ query: constraint }),
     },
   });
+
+  return res;
 };
 
 const removeRoleConstraint = async ({
@@ -437,13 +444,16 @@ const removeRoleConstraint = async ({
   headers: Headers;
   roleId: string;
 }) => {
-  return fetchFromApi({
-    path: `/roles/${roleId}/constraint`,
+  headers['Content-Type'] = 'application/ld+json;domain-model=removeConstraint';
+
+  const res = await fetchFromApi({
+    path: `/roles/${roleId}/constraints`,
     options: {
       headers,
       method: 'DELETE',
     },
   });
+  return res;
 };
 
 const useCreateRoleConstraintMutation = (configuration = {}) =>

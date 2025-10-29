@@ -31,6 +31,7 @@ interface RoleNameFieldProps {
   setValue: UseFormSetValue<any>;
   isEditMode?: boolean;
   currentName?: string;
+  onSubmit: () => void;
 }
 
 const RoleNameDisplay = ({
@@ -63,6 +64,7 @@ const RoleNameInput = ({
   formState: { errors, isSubmitting },
   showButtons = false,
   onCancel,
+  onSubmit,
 }: {
   control: Control<any>;
   formState: {
@@ -71,6 +73,7 @@ const RoleNameInput = ({
   };
   showButtons?: boolean;
   onCancel?: () => void;
+  onSubmit?: () => void;
 }) => {
   const { t } = useTranslation();
 
@@ -102,6 +105,7 @@ const RoleNameInput = ({
           <Button
             type="submit"
             variant={ButtonVariants.PRIMARY}
+            onClick={onSubmit}
             disabled={!!errors.name || isSubmitting}
           >
             {isSubmitting ? t('roles.form.saving') : t('roles.form.save')}
@@ -129,6 +133,7 @@ export const RoleNameField = ({
   setValue,
   isEditMode = false,
   currentName,
+  onSubmit,
 }: RoleNameFieldProps) => {
   const { t } = useTranslation();
 
@@ -173,6 +178,13 @@ export const RoleNameField = ({
     setIsEditing(false);
   };
 
+  const handleSubmit = () => {
+    if (onSubmit) {
+      onSubmit();
+      setIsEditing(false);
+    }
+  };
+
   if (!isEditMode) {
     return (
       <RoleNameInput
@@ -188,6 +200,7 @@ export const RoleNameField = ({
       formState={{ errors, isSubmitting: false }}
       showButtons
       onCancel={handleCancel}
+      onSubmit={handleSubmit}
     />
   ) : (
     <RoleNameDisplay name={watchedName} onEdit={() => setIsEditing(true)} />

@@ -180,6 +180,7 @@ const RoleFormFields = ({
         setValue={setValue}
         isEditMode={isEditMode}
         currentName={role?.name}
+        onSubmit={handleSubmit(onSubmit)}
       />
 
       {isEditMode && roleId && <ConstraintsSection roleId={roleId} />}
