@@ -10,6 +10,7 @@ import {
   useDeleteRoleMutation,
   useGetRolesByQuery,
 } from '@/hooks/api/roles';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Role } from '@/types/Role';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
@@ -41,6 +42,9 @@ const RolesOverviewPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
   const [deleteError, setDeleteError] = useState('');
+  const [isReactRolesCreateEditFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_ROLES_CREATE_EDIT,
+  );
 
   const deleteRoleMutation = useDeleteRoleMutation({
     onSuccess: () => {
@@ -113,13 +117,13 @@ const RolesOverviewPage = () => {
         Header: t('roles.overview.table.options'),
         accessor: 'options',
         Cell: ({ cell }: { cell: { value: Role } }) => {
+          const editRoleUrl = isReactRolesCreateEditFeatureFlagEnabled
+            ? `/manage/roles/${cell.value.uuid}/edit`
+            : `/manage/roles/edit/${cell.value.uuid}`;
+
           return (
             <Inline>
-              <Link
-                marginTop={0.5}
-                paddingRight={2.5}
-                href={`/manage/roles/${cell.value.uuid}/edit`}
-              >
+              <Link marginTop={0.5} paddingRight={2.5} href={editRoleUrl}>
                 {t('roles.overview.table.edit')}
               </Link>
               <Text>|</Text>

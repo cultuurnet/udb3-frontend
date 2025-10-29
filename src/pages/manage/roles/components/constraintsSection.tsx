@@ -70,7 +70,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   };
 
   return (
-    <Stack spacing={4}>
+    <Stack marginBottom={4} spacing={4}>
       <Title marginTop={4} size={3}>
         {t('roles.form.constraints.title')}
       </Title>
@@ -106,7 +106,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
               />
             }
           />
-          <Inline spacing={2}>
+          <Inline marginTop={3} spacing={2}>
             <Button
               variant={ButtonVariants.PRIMARY}
               onClick={handleSave}
@@ -117,7 +117,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
             >
               {t('roles.form.save')}
             </Button>
-            <Button variant={ButtonVariants.SECONDARY} onClick={handleCancel}>
+            <Button variant={ButtonVariants.PRIMARY} onClick={handleCancel}>
               {t('roles.form.cancel')}
             </Button>
           </Inline>

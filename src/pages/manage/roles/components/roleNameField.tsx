@@ -108,7 +108,7 @@ const RoleNameInput = ({
           </Button>
           <Button
             type="button"
-            variant={ButtonVariants.SECONDARY}
+            variant={ButtonVariants.PRIMARY}
             onClick={onCancel}
             disabled={isSubmitting}
           >
