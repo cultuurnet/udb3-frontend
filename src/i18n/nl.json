@@ -1329,7 +1329,8 @@
       "constraints": {
         "title": "Bewerkrecht",
         "edit": "Wijzigen",
-        "remove": "Verwijderen"
+        "remove": "Verwijderen",
+        "add": "Toevoegen"
       },
       "permissions": {
         "title": "Permissies",

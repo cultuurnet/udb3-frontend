@@ -1275,7 +1275,8 @@
       "constraints": {
         "title": "Droits d'édition",
         "edit": "Modifier",
-        "remove": "Supprimer"
+        "remove": "Supprimer",
+        "add": "Ajouter"
       },
       "permissions": {
         "title": "Autorisations",

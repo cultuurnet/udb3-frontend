@@ -1276,7 +1276,8 @@
       "constraints": {
         "title": "Bearbeitungsrechte",
         "edit": "Bearbeiten",
-        "remove": "Entfernen"
+        "remove": "Entfernen",
+        "add": "Hinzufügen"
       },
       "permissions": {
         "title": "Berechtigungen",

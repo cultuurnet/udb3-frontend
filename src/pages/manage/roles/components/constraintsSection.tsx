@@ -24,13 +24,16 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [constraintValue, setConstraintValue] = useState('');
 
-  const { data: role } = useGetRoleByIdQuery(roleId);
+  const { data: role, refetch } = useGetRoleByIdQuery(roleId);
   const createConstraintMutation = useCreateRoleConstraintMutation();
   const updateConstraintMutation = useUpdateRoleConstraintMutation();
   const removeConstraintMutation = useRemoveRoleConstraintMutation();
 
   const currentConstraint = role?.constraints?.v3;
-  const hasConstraint = !!currentConstraint;
+  const displayValue = constraintValue || currentConstraint;
+  const hasConstraint = !!displayValue;
+  const hasServerConstraint = !!currentConstraint;
+  const isConstraintValueEmpty = !constraintValue.trim();
 
   const handleEdit = () => {
     setConstraintValue(currentConstraint || '');
@@ -39,7 +42,9 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
 
   const handleSave = async () => {
     try {
-      if (hasConstraint) {
+      setIsEditing(false);
+
+      if (hasServerConstraint) {
         await updateConstraintMutation.mutateAsync({
           roleId,
           constraint: constraintValue,
@@ -50,17 +55,21 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
           constraint: constraintValue,
         });
       }
-      setIsEditing(false);
+
+      await refetch();
     } catch (error) {
-      // Handle error
+      setConstraintValue(currentConstraint || '');
+      setIsEditing(true);
     }
   };
-
   const handleRemove = async () => {
     try {
       await removeConstraintMutation.mutateAsync({ roleId });
+
+      setConstraintValue('');
+      await refetch();
     } catch (error) {
-      // Handle error
+      setConstraintValue(currentConstraint || '');
     }
   };
 
@@ -77,20 +86,32 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
 
       {!isEditing ? (
         <Inline spacing={5}>
+          {displayValue && (
+            <Inline spacing={2}>
+              <Text variant={TextVariants.MUTED}>{displayValue}</Text>
+            </Inline>
+          )}
           <Inline spacing={2}>
-            <Text variant={TextVariants.MUTED}>{currentConstraint}</Text>
-          </Inline>
-          <Inline spacing={2}>
-            <Button variant={ButtonVariants.LINK} onClick={handleEdit}>
-              {t('roles.form.constraints.edit')}
-            </Button>
-            {hasConstraint && (
+            {hasConstraint ? (
+              <Inline>
+                <Button variant={ButtonVariants.LINK} onClick={handleEdit}>
+                  {t('roles.form.constraints.edit')}
+                </Button>
+                <Button
+                  variant={ButtonVariants.LINK}
+                  onClick={handleRemove}
+                  disabled={removeConstraintMutation.isPending}
+                >
+                  {t('roles.form.constraints.remove')}
+                </Button>
+              </Inline>
+            ) : (
               <Button
                 variant={ButtonVariants.LINK}
-                onClick={handleRemove}
+                onClick={handleEdit}
                 disabled={removeConstraintMutation.isPending}
               >
-                {t('roles.form.constraints.remove')}
+                {t('roles.form.constraints.add')}
               </Button>
             )}
           </Inline>
@@ -111,6 +132,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
               variant={ButtonVariants.PRIMARY}
               onClick={handleSave}
               disabled={
+                isConstraintValueEmpty ||
                 createConstraintMutation.isPending ||
                 updateConstraintMutation.isPending
               }
