@@ -29,6 +29,7 @@ const getOffersByCreator = async ({
   start,
   workflowStatus,
   addressCountry,
+  sortOptions,
 }: {
   headers: Headers;
   q: string;
@@ -38,6 +39,7 @@ const getOffersByCreator = async ({
   start: string;
   workflowStatus: string;
   addressCountry?: string;
+  sortOptions?: { field: string; order: string };
 }) => {
   const res = await fetchFromApi({
     path: '/offers/',
@@ -51,6 +53,7 @@ const getOffersByCreator = async ({
       ...(addressCountry && {
         addressCountry,
       }),
+      ...createSortingArgument(sortOptions),
     },
     options: {
       headers,
@@ -101,7 +104,7 @@ const useGetOffersByCreatorQuery = (
       start: `${paginationOptions.start}`,
       workflowStatus,
       addressCountry,
-      ...createSortingArgument(sortOptions),
+      sortOptions,
       ...(calendarSummaryFormats &&
         createEmbededCalendarSummaries(calendarSummaryFormats)),
     },
