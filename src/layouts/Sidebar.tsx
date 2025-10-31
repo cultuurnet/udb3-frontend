@@ -16,7 +16,6 @@ import {
   User,
 } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
@@ -46,6 +45,8 @@ import { Title } from '@/ui/Title';
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
 import { JobLoggerStateIndicator } from './joblogger/JobLoggerStateIndicator';
+
+const ROLES_LIMIT = 30;
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -261,7 +262,6 @@ const NotificationMenu = memo(
 
     const { removeAuthenticationCookies } = useCookiesWithOptions();
     const queryClient = useQueryClient();
-    const router = useRouter();
 
     const notificationMenu = [
       {
@@ -307,10 +307,6 @@ const Sidebar = () => {
 
   const [isJobLoggerVisible, setIsJobLoggerVisible] = useState(true);
   const [jobLoggerState, setJobLoggerState] = useState(JobLoggerStates.IDLE);
-
-  const [isNewCreateEnabled, setIsNewCreateEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_CREATE,
-  );
 
   const sidebarComponent = useRef<HTMLElement>(null);
 
@@ -408,7 +404,9 @@ const Sidebar = () => {
           .map((role) => (role.constraints?.v3 ? role.constraints.v3 : null))
           .filter((constraint) => constraint !== null),
       ),
-    ].join(' OR ');
+    ]
+      .slice(0, ROLES_LIMIT)
+      .join(' OR ');
 
     setSearchQuery(validationQuery);
   }, [getRolesQuery.data]);
