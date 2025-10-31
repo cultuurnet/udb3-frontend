@@ -104,8 +104,9 @@ test('create a place', async ({ baseURL, page }) => {
   await page.locator('#organizer-picker').fill(dummyPlace.organizer.name);
   await page.locator('.rbt-menu-custom-option').click();
   await page.locator('#organizer-url').fill(dummyPlace.organizer.url);
+
   await page
-    .getByLabel('Straat en nummer')
+    .getByPlaceholder('Straat en nummer')
     .nth(0)
     .fill(dummyPlace.organizer.streetAndNumber);
   await page.getByLabel('Gemeente').fill(dummyPlace.organizer.zip);

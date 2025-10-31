@@ -136,7 +136,7 @@ test('create event with all possible fields filled in', async ({
   await page.locator('.rbt-menu-custom-option').click();
   await page.locator('#organizer-url').fill(dummyEvent.organizer.url);
   await page
-    .getByLabel('Straat en nummer')
+    .getByPlaceholder('Straat en nummer')
     .nth(0)
     .fill(dummyEvent.organizer.streetAndNumber);
   await page.getByLabel('Gemeente').fill(dummyEvent.organizer.zip);
