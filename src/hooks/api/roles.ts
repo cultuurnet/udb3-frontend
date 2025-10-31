@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
+
 import { PermissionType } from '@/constants/PermissionTypes';
 import {
   PaginationOptions,
@@ -230,19 +232,31 @@ const removePermissionFromRole = async ({
   });
 };
 
-const useAddPermissionToRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useAddPermissionToRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: addPermissionToRole,
     mutationKey: 'roles-add-permission',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
-const useRemovePermissionFromRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useRemovePermissionFromRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: removePermissionFromRole,
     mutationKey: 'roles-remove-permission',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
 const getRoleUsers = async ({
   headers,
