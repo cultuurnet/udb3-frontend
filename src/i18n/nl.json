@@ -1338,7 +1338,20 @@
       },
       "users": {
         "title": "Leden",
-        "placeholder_message": "Ledenbeheer wordt hier getoond"
+        "placeholder_message": "Ledenbeheer wordt hier getoond",
+        "add_user_label": "Voeg lid toe",
+        "email_placeholder": "E-mailadres",
+        "add": "Toevoegen",
+        "table": {
+          "email": "E-mailadres",
+          "actions": "Verwijderen"
+        },
+        "remove_membership": "Lidmaatschap verwijderen",
+        "no_users_message": "Er hangen nog geen gebruikers aan deze rol. Voeg een gebruiker aan deze rol toe door zijn/haar e-mailadres hierboven in te geven.",
+        "loading": "Gebruikers laden...",
+        "user_not_found": "Gebruiker niet gevonden met dit e-mailadres.",
+        "user_already_in_role": "Deze gebruiker is al lid van deze rol.",
+        "add_user_error": "Er ging iets mis bij het toevoegen van de gebruiker."
       },
       "labels": {
         "title": "Labels",

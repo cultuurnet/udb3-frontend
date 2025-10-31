@@ -1284,7 +1284,20 @@
       },
       "users": {
         "title": "Membres",
-        "placeholder_message": "La gestion des membres est affichée ici"
+        "placeholder_message": "La gestion des membres est affichée ici",
+        "add_user_label": "Ajouter un membre",
+        "email_placeholder": "E-mail",
+        "add": "Ajouter",
+        "table": {
+          "email": "E-mail",
+          "actions": "Supprimer"
+        },
+        "remove_membership": "Supprimer le membre",
+        "no_users_message": "Aucun utilisateur n'est encore associé à ce rôle. Ajoutez un utilisateur à ce rôle en saisissant son adresse e-mail ci-dessus.",
+        "loading": "Chargement des utilisateurs...",
+        "user_not_found": "Utilisateur non trouvé avec cette adresse e-mail.",
+        "user_already_in_role": "Cet utilisateur est déjà membre de ce rôle.",
+        "add_user_error": "Une erreur s'est produite lors de l'ajout de l'utilisateur."
       },
       "labels": {
         "title": "Labels",

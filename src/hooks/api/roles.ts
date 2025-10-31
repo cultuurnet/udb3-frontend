@@ -317,19 +317,37 @@ const useGetRoleUsersQuery = (roleId: string) => {
   });
 };
 
-const useAddUserToRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useAddUserToRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: addUserToRole,
     mutationKey: 'roles-add-user',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['roles', variables.roleId, 'users'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
-const useRemoveUserFromRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useRemoveUserFromRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: removeUserFromRole,
     mutationKey: 'roles-remove-user',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['roles', variables.roleId, 'users'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
 const getRoleLabels = async ({
   headers,
@@ -404,7 +422,6 @@ const useRemoveLabelFromRoleMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Role constraints
 const createRoleConstraint = async ({
   headers,
   roleId,
@@ -491,7 +508,6 @@ const useRemoveRoleConstraintMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Check if role name is unique (based on existing label implementation)
 const useIsRoleNameUnique = ({
   name,
   currentName,
@@ -500,7 +516,7 @@ const useIsRoleNameUnique = ({
   currentName?: string;
 }) => {
   const trimmedName = (name || '').trim();
-  const enabled = trimmedName.length >= 3; // Minimum role name length
+  const enabled = trimmedName.length >= 3;
   const { data, isLoading } = useGetRolesByQuery({
     name: trimmedName,
     paginationOptions: { start: 0, limit: 1 },

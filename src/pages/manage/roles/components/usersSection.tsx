@@ -1,7 +1,23 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useCallback, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
-import { useGetRoleUsersQuery } from '@/hooks/api/roles';
+import {
+  useAddUserToRoleMutation,
+  useGetRoleUsersQuery,
+  useRemoveUserFromRoleMutation,
+} from '@/hooks/api/roles';
+import { useHeaders } from '@/hooks/api/useHeaders';
+import { getUserByEmail } from '@/hooks/api/user';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { FormElement } from '@/ui/FormElement';
+import { Inline } from '@/ui/Inline';
+import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
+import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
@@ -9,18 +25,120 @@ interface UsersSectionProps {
   roleId: string;
 }
 
+const addUserSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .required('E-mailadres is verplicht')
+    .email('Voer een geldig e-mailadres in'),
+});
+
+type AddUserFormData = yup.InferType<typeof addUserSchema>;
+
 export const UsersSection = ({ roleId }: UsersSectionProps) => {
   const { t } = useTranslation();
+  const headers = useHeaders();
   const getGlobalValue = getValueFromTheme('global');
   const getTabsValue = getValueFromTheme('tabs');
 
-  const { data: users } = useGetRoleUsersQuery(roleId);
+  const {
+    data: users = [],
+    refetch,
+    isLoading: loadingUsers,
+  } = useGetRoleUsersQuery(roleId);
+  const addUserMutation = useAddUserToRoleMutation();
+  const removeUserMutation = useRemoveUserFromRoleMutation();
 
-  console.table(users);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<AddUserFormData>({
+    resolver: yupResolver(addUserSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
 
-  // TODO: Implement user management logic
-  // This would use useGetRoleUsersQuery, useAddUserToRoleMutation, useRemoveUserFromRoleMutation
-  // and useGetUserByEmailQuery (to be implemented)
+  const onSubmit = async (data: AddUserFormData) => {
+    try {
+      const userToAdd = await getUserByEmail({
+        headers,
+        email: data.email,
+      });
+
+      const userAlreadyInRole = users.some(
+        (user) => user.uuid === userToAdd.uuid,
+      );
+      if (userAlreadyInRole) {
+        setError('email', {
+          type: 'manual',
+          message: t('roles.form.users.user_already_in_role'),
+        });
+        return;
+      }
+
+      await addUserMutation.mutateAsync({
+        roleId,
+        userId: userToAdd.uuid,
+      });
+
+      reset();
+      refetch();
+    } catch (error) {
+      if (error?.status === 404 || error?.message === 'Not Found') {
+        setError('email', {
+          type: 'manual',
+          message: t('roles.form.users.user_not_found'),
+        });
+      } else {
+        setError('email', {
+          type: 'manual',
+          message: t('roles.form.users.add_user_error'),
+        });
+      }
+    }
+  };
+
+  const handleRemoveUser = useCallback(
+    async (userId: string) => {
+      try {
+        await removeUserMutation.mutateAsync({
+          roleId,
+          userId,
+        });
+        refetch();
+      } catch (error) {
+        // Handle error silently or show toast
+      }
+    },
+    [removeUserMutation, roleId, refetch],
+  );
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('roles.form.users.table.email'),
+        accessor: 'email',
+      },
+      {
+        Header: t('roles.form.users.table.actions'),
+        accessor: 'actions',
+        Cell: ({ row }) => (
+          <Button
+            variant={ButtonVariants.LINK}
+            onClick={() => handleRemoveUser(row.original.uuid)}
+            disabled={removeUserMutation.isPending}
+          >
+            {t('roles.form.users.remove_membership')}
+          </Button>
+        ),
+      },
+    ],
+    [t, handleRemoveUser, removeUserMutation.isPending],
+  );
 
   return (
     <Stack
@@ -34,9 +152,47 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
         margin-top: -1px;
       `}
     >
-      <Text>
-        {t('roles.form.users.placeholder_message')} (Role ID: {roleId})
-      </Text>
+      <Inline spacing={2}>
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <FormElement
+              id="add-user-email"
+              label={t('roles.form.users.add_user_label')}
+              labelPosition="left"
+              error={errors.email?.message}
+              Component={
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder={t('roles.form.users.email_placeholder')}
+                />
+              }
+            />
+          )}
+        />
+        <Button
+          marginLeft={3}
+          variant={ButtonVariants.PRIMARY}
+          onClick={handleSubmit(onSubmit)}
+          disabled={addUserMutation.isPending}
+        >
+          {t('roles.form.users.add')}
+        </Button>
+      </Inline>
+
+      {loadingUsers && <Text>{t('roles.form.users.loading')}</Text>}
+
+      {!loadingUsers && users.length > 0 && (
+        <Table striped columns={columns} data={users} />
+      )}
+
+      {!loadingUsers && users.length === 0 && (
+        <Alert variant={AlertVariants.PRIMARY} marginTop={4}>
+          {t('roles.form.users.no_users_message')}
+        </Alert>
+      )}
     </Stack>
   );
 };

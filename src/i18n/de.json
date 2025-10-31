@@ -1284,8 +1284,21 @@
         "search_placeholder": "Suche nach Namen"
       },
       "users": {
-        "title": "Mitglieder",
-        "placeholder_message": "Mitgliederverwaltung wird hier angezeigt"
+        "title": "Benutzer",
+        "placeholder_message": "Benutzerverwaltung wird hier angezeigt",
+        "add_user_label": "Benutzer hinzufügen",
+        "email_placeholder": "E-Mail-Adresse",
+        "add": "Hinzufügen",
+        "table": {
+          "email": "E-Mail-Adresse",
+          "actions": "Entfernen"
+        },
+        "remove_membership": "Benutzer entfernen",
+        "no_users_message": "Es sind noch keine Benutzer in dieser Rolle. Fügen Sie einen Benutzer zu dieser Rolle hinzu, indem Sie seine E-Mail-Adresse oben eingeben.",
+        "loading": "Benutzer laden...",
+        "user_not_found": "Benutzer mit dieser E-Mail-Adresse wurde nicht gefunden.",
+        "user_already_in_role": "Dieser Benutzer ist bereits Mitglied dieser Rolle.",
+        "add_user_error": "Es ging etwas schief beim Hinzufügen des Benutzers."
       },
       "labels": {
         "title": "Labels",
