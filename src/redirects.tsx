@@ -82,6 +82,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_DUPLICATE,
   },
   {
+    source: '/manage/roles/overview',
+    destination: '/manage/roles',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
+  },
+  {
     source: '/manage/labels/overview',
     destination: '/manage/labels',
     permanent: environment !== 'development',
