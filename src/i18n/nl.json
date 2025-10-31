@@ -205,7 +205,7 @@
         "info": "Voeg locaties toe naar waar je je wil verplaatsen. Zo vinden de juiste scholen jouw aanbod."
       },
       "is_brussels_alert": {
-        "message": "Voor activiteiten in Brussel werkt UiTdatabank samen met <link1>visit.brussels</link1>. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen. Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je wel verder invoeren op UiTdatabank. <link2>Meer info</link2>"
+        "message": "Voer je Brusselse activiteiten in op <link1>visit.brussels</link1>. Ze verschijnen dan ook automatisch in de UiTdatabank en UiTinvlaanderen.<br/><br/>Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je hier wel verder invoeren.<br><br><link2>Meer info</link2>"
       },
       "online_url": {
         "label": "Deelnamelink",
