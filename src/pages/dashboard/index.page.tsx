@@ -872,12 +872,14 @@ const getServerSideProps = getApplicationServerSideProps(
       cookies: cookies.getAll(),
     });
 
-    await prefetchGetOwnershipRequestsQuery({
-      req,
-      queryClient,
-      ownerId: user?.sub,
-      itemType: 'organizer',
-    });
+    try {
+      await prefetchGetOwnershipRequestsQuery({
+        req,
+        queryClient,
+        ownerId: user?.sub,
+        itemType: 'organizer',
+      });
+    } catch (error) {}
 
     const ownedOrganizers =
       queryClient.getQueryData([
