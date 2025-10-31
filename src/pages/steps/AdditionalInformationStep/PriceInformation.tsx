@@ -338,7 +338,7 @@ const PriceInformation = ({
                   ? UNIQUE_NAME_ERROR_TYPE
                   : undefined;
 
-              const validationErrorType =
+              let validationErrorType =
                 errors.rates?.type ||
                 errors.rates?.[index]?.name?.type ||
                 errors.rates?.[index]?.price?.type ||
@@ -375,6 +375,15 @@ const PriceInformation = ({
                                 {...registerNameProps}
                                 minWidth="13rem"
                                 onBlur={async (e) => {
+                                  if (e.target.value.trim() === '') {
+                                    validationErrorType = 'name_is_required';
+                                    return;
+                                  }
+
+                                  // if value of price is empty, don't proceed
+                                  const currentPriceValue = rates[index].price;
+                                  if (!currentPriceValue) return;
+
                                   await registerNameProps.onBlur(e);
                                   const isValid = await trigger();
                                   if (!isValid) {
@@ -525,7 +534,7 @@ const PriceInformation = ({
             <Inline marginTop={3}>
               {!isCultuurkuurEvent && (
                 <Button
-                  onClick={() => {
+                  onClick={async () => {
                     if (
                       isBasePriceInfoEmpty ||
                       (isBasePriceInfoEmpty && errors?.rates?.length > 0)
@@ -536,6 +545,7 @@ const PriceInformation = ({
                       return;
                     }
                     clearErrors('rates');
+                    await trigger();
                     append(
                       {
                         name: { [i18n.language as SupportedLanguage]: '' },
