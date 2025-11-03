@@ -101,6 +101,7 @@ const PlaceStep = ({
     },
     country,
     enabled: scope !== ScopeTypes.EVENTS && country === Countries.BE,
+    defaultValue: defaultStreetAndNumber,
   });
 
   const places = useMemo(() => {
