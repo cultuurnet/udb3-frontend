@@ -208,6 +208,7 @@ const DatePicker = ({
           <Input
             id={id}
             value={selected ? selected.toLocaleDateString() : ''}
+            maxWidth="150px"
           />
         }
         disabled={disabled}
