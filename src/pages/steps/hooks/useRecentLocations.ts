@@ -20,10 +20,10 @@ const useRecentLocations = () => {
 
   const offers = getOffersQuery?.data?.member ?? [];
 
-  const hasRecentLocations = offers?.length > 0;
-
   const recentLocations = uniqBy(
-    offers?.map((offer) => ('location' in offer ? offer.location : undefined)),
+    (offers ?? []).map((offer) =>
+      'location' in offer ? offer.location : undefined,
+    ),
     '@id',
   )
     .filter(
@@ -35,6 +35,8 @@ const useRecentLocations = () => {
         !('duplicateOf' in location),
     )
     .slice(0, 4);
+
+  const hasRecentLocations = recentLocations?.length > 0;
 
   return { recentLocations, hasRecentLocations };
 };
