@@ -212,6 +212,7 @@ const DatePicker = ({
         }
         disabled={disabled}
         locale={i18n.language}
+        // Empty css prop is necessary here
         css=""
       />
       <Button
