@@ -365,9 +365,7 @@ const PriceInformation = ({
                     >
                       <Inline>
                         {rate.category === PriceCategory.BASE && (
-                          <Text minWidth="13rem">
-                            {rate.name[i18n.language]}
-                          </Text>
+                          <Text width="13rem">{rate.name[i18n.language]}</Text>
                         )}
                         {rate.category === PriceCategory.TARIFF && (
                           <FormElement
@@ -375,7 +373,7 @@ const PriceInformation = ({
                             Component={
                               <Input
                                 {...registerNameProps}
-                                minWidth="13rem"
+                                width="13rem"
                                 onBlur={async (e) => {
                                   await registerNameProps.onBlur(e);
                                   const isValid = await trigger();
@@ -393,9 +391,7 @@ const PriceInformation = ({
                           />
                         )}
                         {rate.category === PriceCategory.UITPAS && (
-                          <Text minWidth="15rem">
-                            {rate.name[i18n.language]}
-                          </Text>
+                          <Text width="15rem">{rate.name[i18n.language]}</Text>
                         )}
                       </Inline>
                       <Inline alignItems="center">
@@ -447,7 +443,11 @@ const PriceInformation = ({
                           />
                         )}
                       </Inline>
-                      <Inline alignItems="center" spacing={3}>
+                      <Inline
+                        alignItems="center"
+                        spacing={3}
+                        width={isCultuurkuurEvent ? '12rem' : 'auto'}
+                      >
                         {isCultuurkuurEvent &&
                           rate.category === PriceCategory.BASE && (
                             <FormElement
@@ -480,22 +480,24 @@ const PriceInformation = ({
                               }
                             />
                           )}
-                        {!isPriceFree(rate.price) &&
-                          rate.category !== PriceCategory.UITPAS && (
-                            <Button
-                              variant={ButtonVariants.LINK}
-                              onClick={() => {
-                                setValue(`rates.${index}.price`, '0,00', {
-                                  shouldValidate: false,
-                                });
-                                onSubmit();
-                              }}
-                            >
-                              {t(
-                                'create.additionalInformation.price_info.free',
-                              )}
-                            </Button>
-                          )}
+                        <Inline width="3rem">
+                          {!isPriceFree(rate.price) &&
+                            rate.category !== PriceCategory.UITPAS && (
+                              <Button
+                                variant={ButtonVariants.LINK}
+                                onClick={() => {
+                                  setValue(`rates.${index}.price`, '0,00', {
+                                    shouldValidate: false,
+                                  });
+                                  onSubmit();
+                                }}
+                              >
+                                {t(
+                                  'create.additionalInformation.price_info.free',
+                                )}
+                              </Button>
+                            )}
+                        </Inline>
                       </Inline>
                       {index !== 0 &&
                         rate.category !== PriceCategory.UITPAS && (
