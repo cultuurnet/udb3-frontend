@@ -70,7 +70,7 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
     .getByRole('dialog')
     .getByRole('button', { name: 'Opslaan' })
     .click();
-  await expect(page.getByText('5 onderwijsniveaus')).toBeVisible();
+  await expect(page.getByText('2 onderwijsniveaus')).toBeVisible();
 
   // Save event
   await page.getByRole('button', { name: 'Opslaan' }).click();
