@@ -163,7 +163,7 @@ const Alert = ({
         }
       `}
     >
-      <Inline spacing={3} flex={1} alignItems="center">
+      <Inline spacing={3} flex={1}>
         <Stack>{AlertVariantIconsMap[variant]}</Stack>
         {typeof children !== 'string' ? (
           <Text>{children}</Text>

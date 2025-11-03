@@ -193,6 +193,7 @@ const PriceInformation = ({
     resolver: yupResolver(schema),
     defaultValues: defaultPriceInfoValues,
     shouldFocusError: false,
+    criteriaMode: 'all',
   });
 
   const queryClient = useQueryClient();
@@ -338,12 +339,13 @@ const PriceInformation = ({
                   ? UNIQUE_NAME_ERROR_TYPE
                   : undefined;
 
-              const validationErrorType =
-                errors.rates?.type ||
-                errors.rates?.[index]?.name?.type ||
-                errors.rates?.[index]?.price?.type ||
-                errors.rates?.[index]?.type ||
-                uniqueNameErrorFromResponse;
+              const validationErrors = [
+                errors.rates?.type,
+                errors.rates?.[index]?.name?.type,
+                errors.rates?.[index]?.price?.type,
+                errors.rates?.[index]?.type,
+                uniqueNameErrorFromResponse,
+              ].filter(Boolean);
 
               return (
                 <Stack key={`rate_${rate.id}`}>
@@ -363,9 +365,7 @@ const PriceInformation = ({
                     >
                       <Inline>
                         {rate.category === PriceCategory.BASE && (
-                          <Text minWidth="13rem">
-                            {rate.name[i18n.language]}
-                          </Text>
+                          <Text width="13rem">{rate.name[i18n.language]}</Text>
                         )}
                         {rate.category === PriceCategory.TARIFF && (
                           <FormElement
@@ -373,8 +373,17 @@ const PriceInformation = ({
                             Component={
                               <Input
                                 {...registerNameProps}
-                                minWidth="13rem"
+                                width="13rem"
                                 onBlur={async (e) => {
+                                  if (e.target.value.trim() === '') {
+                                    validationErrors.push('name_is_required');
+                                    return;
+                                  }
+
+                                  // if value of price is empty, don't proceed
+                                  const currentPriceValue = rates[index].price;
+                                  if (!currentPriceValue) return;
+
                                   await registerNameProps.onBlur(e);
                                   const isValid = await trigger();
                                   if (!isValid) {
@@ -391,9 +400,7 @@ const PriceInformation = ({
                           />
                         )}
                         {rate.category === PriceCategory.UITPAS && (
-                          <Text minWidth="15rem">
-                            {rate.name[i18n.language]}
-                          </Text>
+                          <Text width="15rem">{rate.name[i18n.language]}</Text>
                         )}
                       </Inline>
                       <Inline alignItems="center">
@@ -445,7 +452,11 @@ const PriceInformation = ({
                           />
                         )}
                       </Inline>
-                      <Inline alignItems="center" spacing={3}>
+                      <Inline
+                        alignItems="center"
+                        spacing={3}
+                        width={isCultuurkuurEvent ? '12rem' : 'auto'}
+                      >
                         {isCultuurkuurEvent &&
                           rate.category === PriceCategory.BASE && (
                             <FormElement
@@ -478,22 +489,24 @@ const PriceInformation = ({
                               }
                             />
                           )}
-                        {!isPriceFree(rate.price) &&
-                          rate.category !== PriceCategory.UITPAS && (
-                            <Button
-                              variant={ButtonVariants.LINK}
-                              onClick={() => {
-                                setValue(`rates.${index}.price`, '0,00', {
-                                  shouldValidate: false,
-                                });
-                                onSubmit();
-                              }}
-                            >
-                              {t(
-                                'create.additionalInformation.price_info.free',
-                              )}
-                            </Button>
-                          )}
+                        <Inline width="3rem">
+                          {!isPriceFree(rate.price) &&
+                            rate.category !== PriceCategory.UITPAS && (
+                              <Button
+                                variant={ButtonVariants.LINK}
+                                onClick={() => {
+                                  setValue(`rates.${index}.price`, '0,00', {
+                                    shouldValidate: false,
+                                  });
+                                  onSubmit();
+                                }}
+                              >
+                                {t(
+                                  'create.additionalInformation.price_info.free',
+                                )}
+                              </Button>
+                            )}
+                        </Inline>
                       </Inline>
                       {index !== 0 &&
                         rate.category !== PriceCategory.UITPAS && (
@@ -512,20 +525,20 @@ const PriceInformation = ({
                         )}
                     </Inline>
                   </Inline>
-                  {validationErrorType && (
-                    <Text color="red">
+                  {validationErrors.map((errorType) => (
+                    <Text color="red" key={`validation_error_${errorType}`}>
                       {t(
-                        `create.additionalInformation.price_info.validation_messages.${validationErrorType}`,
+                        `create.additionalInformation.price_info.validation_messages.${errorType}`,
                       )}
                     </Text>
-                  )}
+                  ))}
                 </Stack>
               );
             })}
             <Inline marginTop={3}>
               {!isCultuurkuurEvent && (
                 <Button
-                  onClick={() => {
+                  onClick={async () => {
                     if (
                       isBasePriceInfoEmpty ||
                       (isBasePriceInfoEmpty && errors?.rates?.length > 0)
@@ -536,6 +549,7 @@ const PriceInformation = ({
                       return;
                     }
                     clearErrors('rates');
+                    await trigger();
                     append(
                       {
                         name: { [i18n.language as SupportedLanguage]: '' },
