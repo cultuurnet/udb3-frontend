@@ -193,8 +193,8 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             formState={formState}
             isSubmitting={isSubmitting}
             onSubmit={onSubmit}
-            onCancel={handleCancel}
             isUnique={isUnique}
+            watchedName={watchedName}
           />
           <Button
             width="fit-content"
@@ -229,8 +229,8 @@ type LabelFormFieldsProps = {
   };
   isSubmitting?: boolean;
   onSubmit: (data: FormData) => Promise<void> | void;
-  onCancel: () => void;
   isUnique: boolean;
+  watchedName?: string;
   footer?: ReactNode;
 };
 const getGlobalValue = getValueFromTheme('global');
@@ -243,8 +243,8 @@ const LabelFormFields = ({
   formState,
   isSubmitting = false,
   onSubmit,
-  onCancel,
   isUnique,
+  watchedName,
   footer,
 }: LabelFormFieldsProps) => {
   const { t } = useTranslation();
@@ -302,9 +302,7 @@ const LabelFormFields = ({
           id="label-name-display"
           Component={
             <Inline spacing={2}>
-              <Text variant={TextVariants.MUTED}>
-                {control._formValues.name}
-              </Text>
+              <Text variant={TextVariants.MUTED}>{watchedName}</Text>
             </Inline>
           }
         />
