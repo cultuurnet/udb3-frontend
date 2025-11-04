@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   Control,
   Controller,
@@ -49,9 +49,6 @@ type LabelFormProps = {
 const LabelForm = ({ label }: LabelFormProps = {}) => {
   const { t } = useTranslation();
   const router = useRouter();
-
-  const success = router.query.success as string | undefined;
-  const successName = router.query.name as string | undefined;
 
   const headers = useHeaders();
 
@@ -110,22 +107,6 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     currentName: label?.name,
   });
 
-  useEffect(() => {
-    if (success === 'created' && successName && label.uuid) {
-      setSuccessMessage(
-        t('labels.overview.success_created', {
-          name: successName,
-        }),
-      );
-      router.replace(`/manage/labels/${label.uuid}/edit`, undefined, {
-        shallow: true,
-      });
-    }
-  }, [success, successName, label, router, t]);
-
-  const nameChanged =
-    isEditMode && label?.name && watchedName.trim() !== label.name;
-
   const updateVisibilityMutation = useUpdateLabelVisibilityMutation();
   const updatePrivacyMutation = useUpdateLabelPrivacyMutation();
   const createLabelMutation = useCreateLabelMutation();
@@ -138,7 +119,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
   const onSubmit = async (data: FormData) => {
     setSuccessMessage('');
 
-    if (!isUnique && (!isEditMode || nameChanged)) {
+    if (!isUnique && !isEditMode) {
       return;
     }
 
@@ -156,27 +137,6 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     }
 
     if (!label) return;
-
-    if (nameChanged) {
-      const response = await createLabelMutation.mutateAsync({
-        headers,
-        name: data.name.trim(),
-        isVisible: data.isVisible,
-        isPrivate: data.isPrivate,
-        parentId: label.uuid,
-      });
-
-      if (response.uuid) {
-        router.push(
-          `/manage/labels/${
-            response.uuid
-          }/edit?success=created&name=${encodeURIComponent(data.name.trim())}`,
-        );
-      } else {
-        router.push('/manage/labels');
-      }
-      return;
-    }
 
     const currentlyVisible =
       label.visibility !== LabelVisibilityOptions.INVISIBLE;
@@ -231,7 +191,6 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             handleSubmit={handleSubmit}
             formState={formState}
             isSubmitting={isSubmitting}
-            nameChanged={nameChanged}
             onSubmit={onSubmit}
             onCancel={handleCancel}
             isUnique={isUnique}
@@ -254,7 +213,6 @@ type LabelFormFieldsProps = {
     isSubmitting: boolean;
   };
   isSubmitting?: boolean;
-  nameChanged?: boolean;
   onSubmit: (data: FormData) => Promise<void> | void;
   onCancel: () => void;
   isUnique: boolean;
@@ -269,7 +227,6 @@ const LabelFormFields = ({
   handleSubmit,
   formState,
   isSubmitting = false,
-  nameChanged = false,
   onSubmit,
   onCancel,
   isUnique,
@@ -279,15 +236,13 @@ const LabelFormFields = ({
 
   const isFormDisabled =
     mode === 'edit'
-      ? (nameChanged && (!isUnique || !!formState.errors.name)) || isSubmitting
+      ? isSubmitting
       : !formState.isValid || !isUnique || isSubmitting;
 
   const buttonText =
-    mode === 'edit' && nameChanged
-      ? t('labels.form.actions.create')
-      : mode === 'edit'
-        ? t('labels.form.actions.save')
-        : t('labels.form.actions.create');
+    mode === 'edit'
+      ? t('labels.form.actions.save')
+      : t('labels.form.actions.create');
 
   const nameError = (() => {
     const errors = [];
@@ -300,7 +255,7 @@ const LabelFormFields = ({
       });
     }
 
-    if (!isUnique) {
+    if (!isUnique && mode === 'create') {
       errors.push(t('labels.form.errors.name_unique'));
     }
 
