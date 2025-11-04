@@ -1242,7 +1242,7 @@
       "no_results": "Keine Rollen gefunden.",
       "success_created": "Rolle '{{name}}' erfolgreich erstellt.",
       "success_deleted": "Rolle '{{name}}' erfolgreich gelöscht.",
-      "something_wrong": "Es ging etwas schief bei der Suche:",
+      "something_wrong": "Es ging etwas schief bei der Suche: {{error}}",
       "table": {
         "name": "Name",
         "options": "Optionen",

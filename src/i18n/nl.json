@@ -1295,7 +1295,7 @@
       "no_results": "Geen rollen gevonden.",
       "success_created": "Rol '{{name}}' succesvol aangemaakt.",
       "success_deleted": "Rol '{{name}}' succesvol verwijderd.",
-      "something_wrong": "Er ging iets mis tijdens het zoeken:",
+      "something_wrong": "Er ging iets mis tijdens het zoeken: {{error}}",
       "table": {
         "name": "Naam",
         "options": "Opties",
