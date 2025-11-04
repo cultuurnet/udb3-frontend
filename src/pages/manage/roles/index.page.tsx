@@ -185,7 +185,9 @@ const RolesOverviewPage = () => {
           )}
           {rolesQuery.status === QueryStatus.ERROR && (
             <Alert variant={AlertVariants.WARNING} fullWidth={true}>
-              {`${t('roles.overview.something_wrong')} ${rolesQuery.error?.message}`}
+              {t('roles.overview.something_wrong', {
+                error: rolesQuery.error?.message,
+              })}
             </Alert>
           )}
         </Stack>

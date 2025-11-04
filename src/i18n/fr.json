@@ -1241,7 +1241,7 @@
       "no_results": "Aucun rôle trouvé.",
       "success_created": "Rôle '{{name}}' créé avec succès.",
       "success_deleted": "Rôle '{{name}}' supprimé avec succès.",
-      "something_wrong": "Une erreur s'est produite lors de la recherche:",
+      "something_wrong": "Une erreur s'est produite lors de la recherche: {{error}}",
       "table": {
         "name": "Nom",
         "options": "Options",
