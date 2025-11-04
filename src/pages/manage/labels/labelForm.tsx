@@ -29,6 +29,7 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
+import { Icon } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
@@ -195,6 +196,20 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             onCancel={handleCancel}
             isUnique={isUnique}
           />
+          <Button
+            width="fit-content"
+            marginTop={4}
+            variant="secondary"
+            onClick={handleCancel}
+          >
+            <Icon
+              name="arrowLeft"
+              display="inline"
+              height={15}
+              marginRight={4}
+            />
+            {t('labels.form.actions.cancel')}
+          </Button>
         </Stack>
       </Page.Content>
     </Page>
@@ -345,9 +360,6 @@ const LabelFormFields = ({
           onClick={handleSubmit(onSubmit)}
         >
           {buttonText}
-        </Button>
-        <Button title="cancel" onClick={onCancel}>
-          {t('labels.form.actions.cancel')}
         </Button>
       </Inline>
       {footer}
