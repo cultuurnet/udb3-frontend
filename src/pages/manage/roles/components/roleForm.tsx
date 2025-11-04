@@ -19,6 +19,7 @@ import {
 } from '@/hooks/api/roles';
 import { Role } from '@/types/Role';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { Icon } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -222,11 +223,18 @@ const RoleFormFields = ({
           >
             {isSubmitting ? t('roles.form.saving') : t('roles.form.create')}
           </Button>
-          <Button title="cancel" onClick={onCancel}>
-            {t('roles.form.cancel')}
-          </Button>
         </Inline>
       )}
+      <Button
+        width="fit-content"
+        marginTop={4}
+        variant={ButtonVariants.SECONDARY}
+        title="cancel"
+        onClick={onCancel}
+      >
+        <Icon name="arrowLeft" display="inline" height={15} marginRight={4} />
+        {t('roles.form.cancel')}
+      </Button>
     </Stack>
   );
 };
