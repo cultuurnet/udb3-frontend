@@ -33,6 +33,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 type FormData = {
@@ -325,20 +326,34 @@ const LabelFormFields = ({
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <FormElement
-            id="label-name"
-            label={t('labels.form.fields.name')}
-            error={nameError}
-            maxLength={LabelValidationInformation.MAX_LENGTH}
-            marginBottom={5}
-            Component={<Input {...field} />}
-          />
-        )}
-      />
+      {mode === 'edit' ? (
+        <FormElement
+          label={t('labels.form.fields.name')}
+          id="label-name-display"
+          Component={
+            <Inline spacing={2}>
+              <Text variant={TextVariants.MUTED}>
+                {control._formValues.name}
+              </Text>
+            </Inline>
+          }
+        />
+      ) : (
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <FormElement
+              id="label-name"
+              label={t('labels.form.fields.name')}
+              error={nameError}
+              maxLength={LabelValidationInformation.MAX_LENGTH}
+              marginBottom={5}
+              Component={<Input {...field} />}
+            />
+          )}
+        />
+      )}
       <Controller
         name="isVisible"
         control={control}
@@ -367,7 +382,6 @@ const LabelFormFields = ({
           </CheckboxWithLabel>
         )}
       />
-
       <Inline marginTop={5} spacing={3}>
         <Button
           title="submit"
