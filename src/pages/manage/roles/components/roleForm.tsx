@@ -233,7 +233,7 @@ const RoleFormFields = ({
         onClick={onCancel}
       >
         <Icon name="arrowLeft" display="inline" height={15} marginRight={4} />
-        {t('roles.form.cancel')}
+        {t('roles.form.back_to_list')}
       </Button>
     </Stack>
   );
