@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import debounce from 'lodash/debounce';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Highlighter } from 'react-bootstrap-typeahead';
 import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
@@ -101,14 +101,8 @@ const PlaceStep = ({
     },
     country,
     enabled: scope !== ScopeTypes.EVENTS && country === Countries.BE,
+    defaultValue: defaultStreetAndNumber,
   });
-
-  // Initialize the hook with the default value
-  useEffect(() => {
-    if (defaultStreetAndNumber) {
-      streetAddressTypeahead.setCurrentInputValue(defaultStreetAndNumber);
-    }
-  }, [defaultStreetAndNumber, streetAddressTypeahead]);
 
   const places = useMemo(() => {
     if (scope !== ScopeTypes.EVENTS) {

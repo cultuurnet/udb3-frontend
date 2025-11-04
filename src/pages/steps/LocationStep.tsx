@@ -544,17 +544,17 @@ const LocationStep = ({
                     </Text>
                   )}
                   {isBrusselsZip && (
-                    <Alert variant="primary">
+                    <Alert variant="warning">
                       <Trans
                         i18nKey={'create.location.is_brussels_alert.message'}
                         components={{
                           link1: (
                             <Link
-                              href="https://agenda.brussels"
+                              href="https://www.extranet.brussels/login"
                               rel="noopener noreferrer"
                               display="inline-block"
                             >
-                              visit.brussels
+                              extranet.brussels
                             </Link>
                           ),
                           link2: (

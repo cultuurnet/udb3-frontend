@@ -9,6 +9,7 @@ interface UseStreetAddressTypeaheadOptions {
   country?: Country;
   enabled?: boolean;
   debounceMs?: number;
+  defaultValue?: string;
 }
 
 export const useStreetAddressTypeahead = ({
@@ -16,9 +17,10 @@ export const useStreetAddressTypeahead = ({
   country,
   enabled = true,
   debounceMs = 275,
+  defaultValue = '',
 }: UseStreetAddressTypeaheadOptions = {}) => {
   const [searchInput, setSearchInput] = useState('');
-  const [currentInputValue, setCurrentInputValue] = useState('');
+  const [currentInputValue, setCurrentInputValue] = useState(defaultValue);
 
   const setDebouncedSearchInput = useMemo(
     () => debounce(setSearchInput, debounceMs),

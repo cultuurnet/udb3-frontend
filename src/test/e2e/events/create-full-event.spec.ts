@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
-const brusselsMessage =
-  'Voor activiteiten in Brussel werkt UiTdatabank samen met visit.brussels. Brusselse activiteiten voer je in op agenda.brussels en verschijnen automatisch in UiTdatabank en UiTinvlaanderen.';
+const brusselsMessage = 'Voer je Brusselse activiteiten in op';
 
 const dummyEvent = {
   name: 'E2E test event with all possible fields filled in',
