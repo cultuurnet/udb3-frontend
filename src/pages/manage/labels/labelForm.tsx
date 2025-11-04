@@ -105,7 +105,6 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
   const watchedName = watch('name');
   const { isUnique } = useIsLabelNameUnique({
     name: watchedName,
-    currentName: label?.name,
   });
 
   const updateVisibilityMutation = useUpdateLabelVisibilityMutation();
