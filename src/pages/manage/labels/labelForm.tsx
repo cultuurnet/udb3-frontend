@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   Control,
   Controller,
@@ -56,6 +56,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
   const isEditMode = !!label;
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [hasNameConflictError, setHasNameConflictError] = useState(false);
 
   const createValidationSchema = () => {
     return yup.object({
@@ -103,6 +104,16 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     });
 
   const watchedName = watch('name');
+
+  // Reset name conflict error when user starts typing
+  const [nameWhenErrorOccurred, setNameWhenErrorOccurred] = useState('');
+
+  useEffect(() => {
+    if (hasNameConflictError && watchedName !== nameWhenErrorOccurred) {
+      setHasNameConflictError(false);
+    }
+  }, [watchedName, hasNameConflictError, nameWhenErrorOccurred]);
+
   const { isUnique } = useIsLabelNameUnique({
     name: watchedName,
   });
@@ -118,22 +129,29 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
 
   const onSubmit = async (data: FormData) => {
     setSuccessMessage('');
+    setHasNameConflictError(false);
 
     if (!isUnique && !isEditMode) {
       return;
     }
 
     if (!isEditMode) {
-      await createLabelMutation.mutateAsync({
-        headers,
-        name: data.name.trim(),
-        isVisible: data.isVisible,
-        isPrivate: data.isPrivate,
-      });
-      router.push(
-        `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
-      );
-      return;
+      try {
+        await createLabelMutation.mutateAsync({
+          headers,
+          name: data.name.trim(),
+          isVisible: data.isVisible,
+          isPrivate: data.isPrivate,
+        });
+        router.push(
+          `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
+        );
+        return;
+      } catch (error) {
+        setHasNameConflictError(true);
+        setNameWhenErrorOccurred(data.name.trim());
+        return;
+      }
     }
 
     if (!label) return;
@@ -193,6 +211,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             isSubmitting={isSubmitting}
             onSubmit={onSubmit}
             isUnique={isUnique}
+            hasNameConflictError={hasNameConflictError}
             watchedName={watchedName}
           />
           <Button
@@ -229,6 +248,7 @@ type LabelFormFieldsProps = {
   isSubmitting?: boolean;
   onSubmit: (data: FormData) => Promise<void> | void;
   isUnique: boolean;
+  hasNameConflictError: boolean;
   watchedName?: string;
   footer?: ReactNode;
 };
@@ -243,6 +263,7 @@ const LabelFormFields = ({
   isSubmitting = false,
   onSubmit,
   isUnique,
+  hasNameConflictError,
   watchedName,
   footer,
 }: LabelFormFieldsProps) => {
@@ -251,7 +272,7 @@ const LabelFormFields = ({
   const isFormDisabled =
     mode === 'edit'
       ? isSubmitting
-      : !formState.isValid || !isUnique || isSubmitting;
+      : !formState.isValid || !isUnique || hasNameConflictError || isSubmitting;
 
   const buttonText =
     mode === 'edit'
@@ -269,7 +290,7 @@ const LabelFormFields = ({
       });
     }
 
-    if (!isUnique && mode === 'create') {
+    if ((!isUnique || hasNameConflictError) && mode === 'create') {
       errors.push(t('labels.form.errors.name_unique'));
     }
 
