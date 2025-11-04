@@ -455,7 +455,7 @@ const StepsForm = ({
             {footerStatus === FooterStatus.AUTO_SAVE && (
               <Inline spacing={3} alignItems="center">
                 <Link
-                  href={`/event/${offerId}/preview`}
+                  href={`/event/${offerId}/preview?edited=true`}
                   variant={LinkVariants.BUTTON_SUCCESS}
                 >
                   <Text>{t('create.footer.done_editing')}</Text>
