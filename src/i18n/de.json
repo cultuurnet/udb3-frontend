@@ -1303,7 +1303,7 @@
       },
       "labels": {
         "title": "Labels",
-        "placeholder_message": "Labelverwaltung wird hier angezeigt"
+        "label": "Label hinzufügen"
       }
     }
   },

@@ -1356,7 +1356,7 @@
       },
       "labels": {
         "title": "Labels",
-        "placeholder_message": "Labelbeheer wordt hier getoond"
+        "label": "Voeg een label toe"
       }
     }
   },

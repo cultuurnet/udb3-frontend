@@ -408,19 +408,37 @@ const useGetRoleLabelsQuery = (roleId: string) => {
   });
 };
 
-const useAddLabelToRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useAddLabelToRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: addLabelToRole,
     mutationKey: 'roles-add-label',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['roles', variables.roleId, 'labels'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
-const useRemoveLabelFromRoleMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useRemoveLabelFromRoleMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: removeLabelFromRole,
     mutationKey: 'roles-remove-label',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['roles', variables.roleId, 'labels'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
+    },
     ...configuration,
   });
+};
 
 const createRoleConstraint = async ({
   headers,

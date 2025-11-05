@@ -211,6 +211,8 @@ const isDuplicateMutation = (
     'request-ownership',
     'offers-add-label',
     'offers-remove-label',
+    'roles-add-label',
+    'roles-remove-label',
   ];
 
   if (disabledMutations.includes(mutationKey)) {

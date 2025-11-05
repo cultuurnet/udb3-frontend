@@ -1301,8 +1301,8 @@
         "add_user_error": "Une erreur s'est produite lors de l'ajout de l'utilisateur."
       },
       "labels": {
-        "title": "Labels",
-        "placeholder_message": "La gestion des labels est affichée ici"
+        "title": "Étiquettes",
+        "label": "Ajouter une étiquette"
       }
     }
   },
