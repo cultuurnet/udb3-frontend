@@ -13,7 +13,6 @@ import type { Headers } from '@/hooks/api/types/Headers';
 import {
   Label,
   LabelPrivacyOptions,
-  LabelValidationInformation,
   LabelVisibilityOptions,
 } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
@@ -275,28 +274,20 @@ const useDeleteLabelMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const useIsLabelNameUnique = ({
-  name,
-  currentName,
-}: {
-  name: string;
-  currentName?: string;
-}) => {
+const useIsLabelNameUnique = ({ name }: { name: string }) => {
   const trimmedName = (name || '').trim();
-  const enabled = trimmedName.length >= LabelValidationInformation.MIN_LENGTH;
-  const { data, isLoading } = useGetLabelsByQuery({
+
+  const { data } = useGetLabelsByQuery({
     name: trimmedName,
     paginationOptions: { start: 0, limit: 1 },
-    onlySuggestions: true,
   });
-  const isSameAsCurrent =
-    currentName && currentName.toLowerCase() === trimmedName.toLowerCase();
+
   const isLabelAlreadyUsed = (data?.member ?? []).find(
     (l: Label) => (l?.name ?? '').toLowerCase() === trimmedName.toLowerCase(),
   );
+
   return {
-    isUnique: isSameAsCurrent ? true : !isLabelAlreadyUsed,
-    isLoading: enabled && isLoading,
+    isUnique: !isLabelAlreadyUsed,
   };
 };
 

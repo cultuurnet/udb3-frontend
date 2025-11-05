@@ -1206,7 +1206,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuler",
+        "cancel": "Retour à la liste",
         "create": "Créer",
         "save": "Enregistrer"
       },
