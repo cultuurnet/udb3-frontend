@@ -138,7 +138,7 @@ const RolesOverviewPage = () => {
         },
       },
     ],
-    [t],
+    [isReactRolesCreateEditFeatureFlagEnabled, t],
   );
 
   const roles: Role[] = useMemo(
