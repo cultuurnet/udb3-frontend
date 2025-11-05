@@ -333,6 +333,7 @@
         "reservation_period": {
           "cta": "Reservatieperiode toevoegen",
           "title": "Reservatie periode",
+          "info_text": "Binnen welke periode kunnen mensen een plek reserveren of ticket kopen?",
           "delete": "Reservatieperiode verwijderen",
           "startHour": "Startuur",
           "endHour": "Einduur",
