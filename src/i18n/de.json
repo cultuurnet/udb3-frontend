@@ -1207,7 +1207,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Abbrechen",
+        "cancel": "Zurück zur Liste",
         "create": "Hinzufügen",
         "save": "Speichern"
       },
