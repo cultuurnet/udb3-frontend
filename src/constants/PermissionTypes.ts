@@ -13,7 +13,10 @@ const PermissionTypes = {
   MEDIA_UPLOADEN: 'MEDIA_UPLOADEN',
 } as const;
 
+// Destructure to exclude MEDIA_UPLOADEN
+const { MEDIA_UPLOADEN, ...CorePermissionTypes } = PermissionTypes;
+
 export type PermissionType =
   (typeof PermissionTypes)[keyof typeof PermissionTypes];
 
-export { PermissionTypes };
+export { CorePermissionTypes, PermissionTypes };
