@@ -334,6 +334,8 @@
           "cta": "Reservatieperiode toevoegen",
           "title": "Reservatie periode",
           "delete": "Reservatieperiode verwijderen",
+          "startHour": "Startuur",
+          "endHour": "Einduur",
           "error": {
             "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen."
           }
