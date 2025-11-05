@@ -19,6 +19,7 @@ import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 import { Title } from '@/ui/Title';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
@@ -114,8 +115,15 @@ const ReservationPeriod = ({
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [startTime, setStartTime] = useState('00:00');
+  const [endTime, setEndTime] = useState('23:59');
+
   const prevStartDateRef = useRef(new Date());
   const prevEndDateRef = useRef(new Date());
+
+  const prevStartTimeRef = useRef('00:00');
+  const prevEndTimeRef = useRef('23:59');
+
   const [isPeriodInitialized, setIsPeriodInitialized] = useState(false);
 
   useEffect(() => {
@@ -126,8 +134,16 @@ const ReservationPeriod = ({
     if (isPeriodInitialized) return;
 
     setIsDatePickerVisible(true);
-    setStartDate(new Date(availabilityStarts));
-    setEndDate(new Date(availabilityEnds));
+
+    const startDateTime = new Date(availabilityStarts);
+    const endDateTime = new Date(availabilityEnds);
+
+    setStartDate(startDateTime);
+    setEndDate(endDateTime);
+
+    setStartTime(startDateTime.toTimeString().slice(0, 5));
+    setEndTime(endDateTime.toTimeString().slice(0, 5));
+
     setIsPeriodInitialized(true);
   }, [
     availabilityEnds,
@@ -137,10 +153,32 @@ const ReservationPeriod = ({
   ]);
 
   const handleNewBookingPeriod = useCallback(
-    (startDate: Date, endDate: Date): void => {
-      handlePeriodChange(endDate, startDate);
+    (
+      startDate: Date,
+      endDate: Date,
+      startTime: string,
+      endTime: string,
+    ): void => {
+      // Combine date and time into complete DateTime objects
+      const startDateTime = new Date(startDate);
+      const [startHours, startMinutes] = startTime.split(':');
+      startDateTime.setHours(
+        parseInt(startHours),
+        parseInt(startMinutes),
+        0,
+        0,
+      );
+
+      const endDateTime = new Date(endDate);
+      const [endHours, endMinutes] = endTime.split(':');
+      endDateTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
+
+      handlePeriodChange(endDateTime, startDateTime);
+
       prevStartDateRef.current = startDate;
       prevEndDateRef.current = endDate;
+      prevStartTimeRef.current = startTime;
+      prevEndTimeRef.current = endTime;
     },
     [handlePeriodChange],
   );
@@ -150,13 +188,23 @@ const ReservationPeriod = ({
     if (!endDate || !startDate) return;
     if (endDate < startDate) return;
 
+    // Check if any date or time has changed
     if (
       prevStartDateRef.current !== startDate ||
-      prevEndDateRef.current !== endDate
+      prevEndDateRef.current !== endDate ||
+      prevStartTimeRef.current !== startTime ||
+      prevEndTimeRef.current !== endTime
     ) {
-      handleNewBookingPeriod(startDate, endDate);
+      handleNewBookingPeriod(startDate, endDate, startTime, endTime);
     }
-  }, [startDate, endDate, isDatePickerVisible, handleNewBookingPeriod]);
+  }, [
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    isDatePickerVisible,
+    handleNewBookingPeriod,
+  ]);
 
   return (
     <Stack>
@@ -209,12 +257,13 @@ const ReservationPeriod = ({
                 right: 0;
                 top: 0;
               `}
-            ></Button>
+            />
             <Title size={3}>
               {t(
                 'create.additionalInformation.booking_info.reservation_period.title',
               )}
             </Title>
+
             <DatePeriodPicker
               id="reservation-date-picker"
               dateStart={startDate}
@@ -222,6 +271,22 @@ const ReservationPeriod = ({
               minDate={new Date()}
               onDateStartChange={setStartDate}
               onDateEndChange={setEndDate}
+            />
+
+            <TimeSpanPicker
+              id="reservation-time-picker"
+              startTime={startTime}
+              endTime={endTime}
+              startTimeLabel={t(
+                'create.additionalInformation.booking_info.reservation_period.startHour',
+              )}
+              endTimeLabel={t(
+                'create.additionalInformation.booking_info.reservation_period.endHour',
+              )}
+              onChangeStartTime={setStartTime}
+              onChangeEndTime={setEndTime}
+              minWidth="120px"
+              width="100%"
             />
           </Stack>
         </Stack>
