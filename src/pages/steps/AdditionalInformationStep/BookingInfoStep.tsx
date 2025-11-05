@@ -196,7 +196,10 @@ const ReservationPeriod = ({
               )}
             </Text>
             <Button
-              onClick={() => setIsDatePickerVisible(true)}
+              onClick={() => {
+                setIsDatePickerVisible(true);
+                setUserHasInteracted(true);
+              }}
               variant={ButtonVariants.SECONDARY}
             >
               {t(
