@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PermissionType, PermissionTypes } from '@/constants/PermissionTypes';
+import {
+  CorePermissionTypes,
+  PermissionType,
+} from '@/constants/PermissionTypes';
 import {
   useAddPermissionToRoleMutation,
   useGetRoleByIdQuery,
@@ -20,6 +23,9 @@ interface PermissionsSectionProps {
 export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
+  const [pendingPermissions, setPendingPermissions] = useState<{
+    [key: string]: boolean;
+  }>({});
   const getGlobalValue = getValueFromTheme('global');
   const getTabsValue = getValueFromTheme('tabs');
 
@@ -27,14 +33,17 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const addPermissionMutation = useAddPermissionToRoleMutation();
   const removePermissionMutation = useRemovePermissionFromRoleMutation();
 
-  const availablePermissions = Object.values(PermissionTypes).map(
+  const availablePermissions = Object.values(CorePermissionTypes).map(
     (permission) => ({
       key: permission,
       name: t(`permissions.${permission}`),
     }),
   );
 
-  const currentPermissions = role?.permissions || [];
+  const serverPermissions = useMemo(
+    () => role?.permissions || [],
+    [role?.permissions],
+  );
 
   const filteredPermissions = availablePermissions.filter((permission) =>
     permission.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -44,6 +53,11 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
     permission: PermissionType,
     isChecked: boolean,
   ) => {
+    setPendingPermissions((prev) => ({
+      ...prev,
+      [permission]: isChecked,
+    }));
+
     try {
       if (isChecked) {
         await addPermissionMutation.mutateAsync({
@@ -57,9 +71,34 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
         });
       }
     } catch (error) {
-      // Handle error
+      setPendingPermissions((prev) => {
+        const newState = { ...prev };
+        delete newState[permission];
+        return newState;
+      });
     }
   };
+
+  useEffect(() => {
+    setPendingPermissions((prev) => {
+      const newState = { ...prev };
+      let hasChanges = false;
+
+      Object.keys(prev).forEach((permission) => {
+        const pendingValue = prev[permission];
+        const serverHasPermission = serverPermissions.includes(
+          permission as PermissionType,
+        );
+
+        if (pendingValue === serverHasPermission) {
+          delete newState[permission];
+          hasChanges = true;
+        }
+      });
+
+      return hasChanges ? newState : prev;
+    });
+  }, [serverPermissions]);
 
   return (
     <Stack
@@ -85,7 +124,11 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
 
       <Stack marginLeft={1} marginTop={3} spacing={2}>
         {filteredPermissions.map((permission) => {
-          const isChecked = currentPermissions.includes(permission.key);
+          const isChecked =
+            permission.key in pendingPermissions
+              ? pendingPermissions[permission.key]
+              : serverPermissions.includes(permission.key);
+
           return (
             <CheckboxWithLabel
               key={permission.key}
@@ -94,10 +137,6 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
               checked={isChecked}
               onToggle={() =>
                 handlePermissionChange(permission.key, !isChecked)
-              }
-              disabled={
-                addPermissionMutation.isPending ||
-                removePermissionMutation.isPending
               }
             >
               {permission.name}
