@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import {
   useAddOfferBookingInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { Alert } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
@@ -118,13 +119,10 @@ const ReservationPeriod = ({
   const [startTime, setStartTime] = useState('00:00');
   const [endTime, setEndTime] = useState('23:59');
 
-  const prevStartDateRef = useRef(new Date());
-  const prevEndDateRef = useRef(new Date());
-
-  const prevStartTimeRef = useRef('00:00');
-  const prevEndTimeRef = useRef('23:59');
-
   const [isPeriodInitialized, setIsPeriodInitialized] = useState(false);
+  const [userHasInteracted, setUserHasInteracted] = useState(false);
+
+  const [hasTimeError, setHasTimeError] = useState(false);
 
   useEffect(() => {
     if (!availabilityEnds || !availabilityStarts) {
@@ -152,58 +150,39 @@ const ReservationPeriod = ({
     setIsDatePickerVisible,
   ]);
 
-  const handleNewBookingPeriod = useCallback(
-    (
-      startDate: Date,
-      endDate: Date,
-      startTime: string,
-      endTime: string,
-    ): void => {
-      // Combine date and time into complete DateTime objects
-      const startDateTime = new Date(startDate);
-      const [startHours, startMinutes] = startTime.split(':');
-      startDateTime.setHours(
-        parseInt(startHours),
-        parseInt(startMinutes),
-        0,
-        0,
-      );
-
-      const endDateTime = new Date(endDate);
-      const [endHours, endMinutes] = endTime.split(':');
-      endDateTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
-
-      handlePeriodChange(endDateTime, startDateTime);
-
-      prevStartDateRef.current = startDate;
-      prevEndDateRef.current = endDate;
-      prevStartTimeRef.current = startTime;
-      prevEndTimeRef.current = endTime;
-    },
-    [handlePeriodChange],
-  );
-
   useEffect(() => {
-    if (!isDatePickerVisible) return;
-    if (!endDate || !startDate) return;
+    if (!userHasInteracted) return; // Only run after user has interacted
+    if (!isDatePickerVisible || !startDate || !endDate) return;
     if (endDate < startDate) return;
 
-    // Check if any date or time has changed
-    if (
-      prevStartDateRef.current !== startDate ||
-      prevEndDateRef.current !== endDate ||
-      prevStartTimeRef.current !== startTime ||
-      prevEndTimeRef.current !== endTime
-    ) {
-      handleNewBookingPeriod(startDate, endDate, startTime, endTime);
+    const startDateTime = new Date(startDate);
+    const [startHours, startMinutes] = startTime.split(':');
+    startDateTime.setHours(parseInt(startHours), parseInt(startMinutes), 0, 0);
+
+    const endDateTime = new Date(endDate);
+    const [endHours, endMinutes] = endTime.split(':');
+    endDateTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
+
+    // Prevent enDateTime before startDateTime
+    if (endDateTime < startDateTime) {
+      setHasTimeError(true);
+      setUserHasInteracted(false);
+      return;
+    } else {
+      setHasTimeError(false);
     }
+
+    handlePeriodChange(endDateTime, startDateTime);
+
+    setUserHasInteracted(false);
   }, [
     startDate,
     endDate,
     startTime,
     endTime,
+    userHasInteracted,
     isDatePickerVisible,
-    handleNewBookingPeriod,
+    handlePeriodChange,
   ]);
 
   return (
@@ -264,14 +243,34 @@ const ReservationPeriod = ({
               )}
             </Title>
 
+            <Text>
+              {t(
+                'create.additionalInformation.booking_info.reservation_period.info_text',
+              )}
+            </Text>
+
             <DatePeriodPicker
               id="reservation-date-picker"
               dateStart={startDate}
               dateEnd={endDate}
               minDate={new Date()}
-              onDateStartChange={setStartDate}
-              onDateEndChange={setEndDate}
+              onDateStartChange={(date) => {
+                setStartDate(date);
+                setUserHasInteracted(true);
+              }}
+              onDateEndChange={(date) => {
+                setEndDate(date);
+                setUserHasInteracted(true);
+              }}
             />
+
+            {hasTimeError && (
+              <Alert variant="danger">
+                {t(
+                  'create.additionalInformation.booking_info.reservation_period.error.endDateTime_before_startDateTime',
+                )}
+              </Alert>
+            )}
 
             <TimeSpanPicker
               id="reservation-time-picker"
@@ -283,8 +282,14 @@ const ReservationPeriod = ({
               endTimeLabel={t(
                 'create.additionalInformation.booking_info.reservation_period.endHour',
               )}
-              onChangeStartTime={setStartTime}
-              onChangeEndTime={setEndTime}
+              onChangeStartTime={(time) => {
+                setStartTime(time);
+                setUserHasInteracted(true);
+              }}
+              onChangeEndTime={(time) => {
+                setEndTime(time);
+                setUserHasInteracted(true);
+              }}
               minWidth="120px"
               width="100%"
             />

@@ -87,7 +87,7 @@ const TimeSpanPicker = ({
 
   return (
     <Inline as="div" spacing={5} {...getInlineProps(props)}>
-      <Stack spacing={2} as="div" minWidth={minWidth}>
+      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
           {startTimeLabel ?? t('time_span_picker.start')}
         </Label>
@@ -109,7 +109,7 @@ const TimeSpanPicker = ({
           css={dropDownCss}
         />
       </Stack>
-      <Stack spacing={2} as="div" minWidth={minWidth}>
+      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
           {endTimeLabel ?? t('time_span_picker.end')}
         </Label>
