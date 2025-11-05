@@ -338,7 +338,8 @@
           "startHour": "Startuur",
           "endHour": "Einduur",
           "error": {
-            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen."
+            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen.",
+            "endDateTime_before_startDateTime": "De gekozen einddatum en -uur moeten na de startdatum en -uur vallen."
           }
         }
       },
