@@ -1260,7 +1260,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuleren",
+        "cancel": "Terug naar de lijst",
         "create": "Toevoegen",
         "save": "Bewaren"
       },
