@@ -11,14 +11,18 @@ class ConsoleDebugger {
     this.isDevelopment = process.env.NODE_ENV === 'development';
   }
 
-  private getCookies() {
+  private getCookies(): Record<string, string | boolean> {
     if (typeof document === 'undefined') return {};
 
-    return document.cookie.split('; ').reduce((cookies, cookie) => {
-      const [name, value] = cookie.split('=');
-      cookies[name] = value === 'true' ? true : value;
-      return cookies;
-    }, {} as any);
+    return document.cookie.split('; ').reduce(
+      (cookies, cookie) => {
+        if (!cookie) return cookies;
+        const [name, value] = cookie.split('=');
+        cookies[name] = value === 'true' ? true : value;
+        return cookies;
+      },
+      {} as Record<string, string | boolean>,
+    );
   }
 
   private shouldLog(): boolean {
@@ -33,25 +37,25 @@ class ConsoleDebugger {
     return this.isDevelopment || showDebugging;
   }
 
-  log(...args: any[]): void {
+  log(...args: unknown[]): void {
     if (this.shouldLog()) {
       console.log(...args);
     }
   }
 
-  info(...args: any[]): void {
+  info(...args: unknown[]): void {
     if (this.shouldLog()) {
       console.info(...args);
     }
   }
 
-  debug(...args: any[]): void {
+  debug(...args: unknown[]): void {
     if (this.shouldLog()) {
       console.debug(...args);
     }
   }
 
-  error(...args: any[]): void {
+  error(...args: unknown[]): void {
     if (this.shouldLog()) {
       console.error(...args);
     }
