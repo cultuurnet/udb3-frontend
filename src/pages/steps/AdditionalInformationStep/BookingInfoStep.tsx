@@ -151,7 +151,7 @@ const ReservationPeriod = ({
   ]);
 
   useEffect(() => {
-    if (!userHasInteracted) return; // Only run after user has interacted
+    if (!userHasInteracted) return;
     if (!isDatePickerVisible || !startDate || !endDate) return;
     if (endDate < startDate) return;
 
@@ -163,7 +163,6 @@ const ReservationPeriod = ({
     const [endHours, endMinutes] = endTime.split(':');
     endDateTime.setHours(parseInt(endHours), parseInt(endMinutes), 0, 0);
 
-    // Prevent enDateTime before startDateTime
     if (endDateTime < startDateTime) {
       setHasTimeError(true);
       setUserHasInteracted(false);
