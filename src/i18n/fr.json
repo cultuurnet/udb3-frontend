@@ -1229,5 +1229,32 @@
     "edit": {
       "title": "Modifier une étiquette"
     }
+  },
+  "roles": {
+    "overview": {
+      "title": "Rôles",
+      "create": "Ajouter",
+      "search": {
+        "label": "Recherche par nom de rôle",
+        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+      },
+      "no_results": "Aucun rôle trouvé.",
+      "success_created": "Rôle '{{name}}' créé avec succès.",
+      "success_deleted": "Rôle '{{name}}' supprimé avec succès.",
+      "something_wrong": "Une erreur s'est produite lors de la recherche: {{error}}",
+      "table": {
+        "name": "Nom",
+        "options": "Options",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "delete": {
+        "title": "Supprimer le rôle",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action ne peut pas être annulée.",
+        "confirm": "Supprimer définitivement",
+        "cancel": "Annuler",
+        "error": "Une erreur s'est produite lors de la suppression du rôle."
+      }
+    }
   }
 }
