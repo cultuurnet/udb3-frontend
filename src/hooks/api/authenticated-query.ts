@@ -18,8 +18,8 @@ import { useCallback } from 'react';
 import Cookies from 'universal-cookie';
 
 import type { Headers } from '@/hooks/api/types/Headers';
+import { useConsoleDebugger } from '@/hooks/useConsoleDebugger';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-import consoleDebugger from '@/utils/consoleDebugger';
 import type { CalendarSummaryFormat } from '@/utils/createEmbededCalendarSummaries';
 import type { ErrorObject, FetchError } from '@/utils/fetchFromApi';
 import { isErrorObject } from '@/utils/fetchFromApi';
@@ -242,6 +242,7 @@ const isDuplicateMutation = (
 const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
   const headers = useHeaders();
   const queryClient = useQueryClient();
+  const consoleDebugger = useConsoleDebugger();
 
   const { removeAuthenticationCookies } = useCookiesWithOptions();
 
@@ -286,6 +287,7 @@ const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
       mutationFn,
       queryClient,
       removeAuthenticationCookies,
+      consoleDebugger,
     ],
   );
 
