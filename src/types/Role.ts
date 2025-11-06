@@ -1,6 +1,6 @@
 import { PermissionType } from '@/constants/PermissionTypes';
 
-export interface Role {
+interface Role {
   uuid: string;
   name: string;
   permissions?: PermissionType[];
@@ -10,24 +10,24 @@ export interface Role {
   };
 }
 
-export interface RoleUser {
+interface RoleUser {
   uuid: string;
   email: string;
   username?: string;
 }
 
-export interface RoleLabel {
+interface RoleLabel {
   uuid: string;
   name: string;
   privacy?: 'public' | 'private';
 }
 
-export interface TranslatedPermission {
+interface TranslatedPermission {
   key: PermissionType;
   name: string;
 }
 
-export interface RoleFormData {
+interface RoleFormData {
   name: string;
   permissions: PermissionType[];
   users: RoleUser[];
@@ -41,5 +41,7 @@ const RoleValidationInformation = {
   MAX_LENGTH: 255,
   MIN_LENGTH: 3,
 } as const;
+
+export type { Role, RoleFormData, RoleLabel, RoleUser, TranslatedPermission };
 
 export { RoleValidationInformation };
