@@ -19,6 +19,7 @@ import Cookies from 'universal-cookie';
 
 import type { Headers } from '@/hooks/api/types/Headers';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
+import consoleDebugger from '@/utils/consoleDebugger';
 import type { CalendarSummaryFormat } from '@/utils/createEmbededCalendarSummaries';
 import type { ErrorObject, FetchError } from '@/utils/fetchFromApi';
 import { isErrorObject } from '@/utils/fetchFromApi';
@@ -211,6 +212,8 @@ const isDuplicateMutation = (
     'request-ownership',
     'offers-add-label',
     'offers-remove-label',
+    'labels-update-visibility',
+    'labels-update-privacy',
   ];
 
   if (disabledMutations.includes(mutationKey)) {
@@ -251,7 +254,14 @@ const useAuthenticatedMutation = ({ mutationFn, ...configuration }) => {
         configuration.mutationKey,
       );
 
-      if (isDuplicate) return;
+      if (isDuplicate) {
+        consoleDebugger.info(
+          `Repeated mutation blocked: ${configuration.mutationKey || mutationFn.name}`,
+          'Variables:',
+          variables,
+        );
+        return;
+      }
 
       const response = await mutationFn({ ...variables, headers });
 
