@@ -1305,6 +1305,10 @@
       "labels": {
         "title": "Labels",
         "label": "Label hinzufügen"
+      },
+      "toast": {
+        "permission_added": "Berechtigung erfolgreich hinzugefügt",
+        "permission_removed": "Berechtigung erfolgreich entfernt"
       }
     }
   },

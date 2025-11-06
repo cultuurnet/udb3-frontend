@@ -1304,6 +1304,10 @@
       "labels": {
         "title": "Étiquettes",
         "label": "Ajouter une étiquette"
+      },
+      "toast": {
+        "permission_added": "Permission ajoutée avec succès",
+        "permission_removed": "Permission supprimée avec succès"
       }
     }
   },

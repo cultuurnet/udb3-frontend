@@ -1361,6 +1361,10 @@
       "labels": {
         "title": "Labels",
         "label": "Voeg een label toe"
+      },
+      "toast": {
+        "permission_added": "Permissie succesvol toegevoegd",
+        "permission_removed": "Permissie succesvol verwijderd"
       }
     }
   },

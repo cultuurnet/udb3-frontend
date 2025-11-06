@@ -10,11 +10,13 @@ import {
   useGetRoleByIdQuery,
   useRemovePermissionFromRoleMutation,
 } from '@/hooks/api/roles';
+import { useToast } from '@/pages/manage/movies/useToast';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { Toast } from '@/ui/Toast';
 
 interface PermissionsSectionProps {
   roleId: string;
@@ -28,6 +30,13 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   }>({});
   const getGlobalValue = getValueFromTheme('global');
   const getTabsValue = getValueFromTheme('tabs');
+
+  const toast = useToast({
+    messages: {
+      permission_added: t('roles.form.toast.permission_added'),
+      permission_removed: t('roles.form.toast.permission_removed'),
+    },
+  });
 
   const { data: role } = useGetRoleByIdQuery(roleId);
   const addPermissionMutation = useAddPermissionToRoleMutation();
@@ -64,11 +73,13 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
           roleId,
           permission,
         });
+        toast.trigger('permission_added');
       } else {
         await removePermissionMutation.mutateAsync({
           roleId,
           permission,
         });
+        toast.trigger('permission_removed');
       }
     } catch (error) {
       setPendingPermissions((prev) => {
@@ -144,6 +155,13 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
           );
         })}
       </Stack>
+
+      <Toast
+        variant="success"
+        body={toast.message}
+        visible={!!toast.message}
+        onClose={() => toast.clear()}
+      />
     </Stack>
   );
 };
