@@ -1230,5 +1230,32 @@
     "edit": {
       "title": "Label bearbeiten"
     }
+  },
+  "roles": {
+    "overview": {
+      "title": "Rollen",
+      "create": "Hinzufügen",
+      "search": {
+        "label": "Suche nach Rollennamen",
+        "placeholder": "Geben Sie eine Suchanfrage von mindestens 3 Zeichen ein."
+      },
+      "no_results": "Keine Rollen gefunden.",
+      "success_created": "Rolle '{{name}}' erfolgreich erstellt.",
+      "success_deleted": "Rolle '{{name}}' erfolgreich gelöscht.",
+      "something_wrong": "Es ging etwas schief bei der Suche: {{error}}",
+      "table": {
+        "name": "Name",
+        "options": "Optionen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      },
+      "delete": {
+        "title": "Rolle löschen",
+        "message": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "confirm": "Definitiv löschen",
+        "cancel": "Abbrechen",
+        "error": "Es ging etwas schief beim Löschen der Rolle."
+      }
+    }
   }
 }
