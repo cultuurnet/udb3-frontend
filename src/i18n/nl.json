@@ -1287,5 +1287,32 @@
     "edit": {
       "title": "Label bewerken"
     }
+  },
+  "roles": {
+    "overview": {
+      "title": "Rollen",
+      "create": "Toevoegen",
+      "search": {
+        "label": "Zoeken op rolnaam",
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+      },
+      "no_results": "Geen rollen gevonden.",
+      "success_created": "Rol '{{name}}' succesvol aangemaakt.",
+      "success_deleted": "Rol '{{name}}' succesvol verwijderd.",
+      "something_wrong": "Er ging iets mis tijdens het zoeken: {{error}}",
+      "table": {
+        "name": "Naam",
+        "options": "Opties",
+        "edit": "Bewerken",
+        "delete": "Verwijderen"
+      },
+      "delete": {
+        "title": "Rol verwijderen",
+        "message": "Ben je zeker dat je \"{{name}}\" wil verwijderen? Deze actie kan niet ongedaan worden.",
+        "confirm": "Definitief verwijderen",
+        "cancel": "Annuleren",
+        "error": "Er ging iets fout bij het verwijderen van de rol."
+      }
+    }
   }
 }
