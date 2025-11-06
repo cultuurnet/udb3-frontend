@@ -1,4 +1,6 @@
-export interface Role {
+type Role = {
   uuid: string;
   name: string;
-}
+};
+
+export type { Role };
