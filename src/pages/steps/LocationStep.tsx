@@ -554,7 +554,7 @@ const LocationStep = ({
                               rel="noopener noreferrer"
                               display="inline-block"
                             >
-                              visit.brussels
+                              extranet.brussels
                             </Link>
                           ),
                           link2: (

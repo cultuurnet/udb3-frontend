@@ -195,7 +195,7 @@
         "label": "Dans un lieu physique"
       },
       "is_brussels_alert": {
-        "message": "Saisissez vos activités bruxelloises sur <link1>visit.brussels</link1>. Elles apparaîtront alors automatiquement dans la banque de données UiT et UiTinvlaanderen.<br/><br/>Vous partez en voyage à Bruxelles avec votre association membre ? Ou vous organisez une activité scolaire ? Vous pouvez saisir plus d'informations ici.<br><br><link2>Plus d'infos</link2>"
+        "message": "Saisissez vos activités bruxelloises sur <link1>extranet.brussels</link1>. Elles apparaîtront alors automatiquement dans la banque de données UiT et UiTinvlaanderen.<br/>Vous partez en voyage à Bruxelles avec votre association membre ? Ou vous organisez une activité scolaire ? Vous pouvez saisir plus d'informations ici.<br/><link2>Plus d'infos</link2>"
       },
       "municipality": {
         "change_be": "Changer de commune",
@@ -314,7 +314,8 @@
           "title": "Période de réservation",
           "delete": "Supprimer la période de réservation",
           "error": {
-            "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début."
+            "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début.",
+            "endDateTime_before_startDateTime": "La date et l'heure de fin choisies doivent être postérieures à la date et l'heure de début."
           }
         }
       },
@@ -1206,7 +1207,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuler",
+        "cancel": "Retour à la liste",
         "create": "Créer",
         "save": "Enregistrer"
       },
@@ -1228,6 +1229,33 @@
     },
     "edit": {
       "title": "Modifier une étiquette"
+    }
+  },
+  "roles": {
+    "overview": {
+      "title": "Rôles",
+      "create": "Ajouter",
+      "search": {
+        "label": "Recherche par nom de rôle",
+        "placeholder": "Entrez une requête de recherche d'au moins 3 caractères."
+      },
+      "no_results": "Aucun rôle trouvé.",
+      "success_created": "Rôle '{{name}}' créé avec succès.",
+      "success_deleted": "Rôle '{{name}}' supprimé avec succès.",
+      "something_wrong": "Une erreur s'est produite lors de la recherche: {{error}}",
+      "table": {
+        "name": "Nom",
+        "options": "Options",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "delete": {
+        "title": "Supprimer le rôle",
+        "message": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action ne peut pas être annulée.",
+        "confirm": "Supprimer définitivement",
+        "cancel": "Annuler",
+        "error": "Une erreur s'est produite lors de la suppression du rôle."
+      }
     }
   }
 }

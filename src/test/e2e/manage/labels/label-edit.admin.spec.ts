@@ -1,9 +1,4 @@
-import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
-
-const dummyLabel = {
-  name: 'e2e ' + faker.lorem.words(2),
-};
 
 test.describe('Label Editing - Admin', () => {
   test.beforeEach(async ({ page, context }) => {
@@ -19,8 +14,8 @@ test.describe('Label Editing - Admin', () => {
   });
 
   test('should display the label editing form', async ({ page }) => {
-    await expect(page.getByLabel('Naam')).toBeVisible();
-    await expect(page.getByLabel('Naam')).toHaveValue('e2e');
+    await expect(page.getByLabel('Naam')).not.toBeVisible();
+    await expect(page.getByRole('main')).toContainText('e2e');
     await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeVisible();
     await expect(page.getByLabel('Tonen op publicatiekanalen')).toBeChecked();
     await expect(
@@ -31,18 +26,5 @@ test.describe('Label Editing - Admin', () => {
     ).not.toBeChecked();
     await expect(page.getByRole('button', { name: 'Bewaren' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Bewaren' })).toBeEnabled();
-  });
-
-  test('should change submit button state when changing name', async ({
-    page,
-  }) => {
-    await expect(page.getByRole('button', { name: 'Bewaren' })).toBeEnabled();
-
-    await page.getByLabel('Naam').fill(dummyLabel.name);
-    await expect(
-      page.getByRole('button', { name: 'Bewaren' }),
-    ).not.toBeVisible();
-
-    await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 });

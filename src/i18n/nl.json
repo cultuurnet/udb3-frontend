@@ -205,7 +205,7 @@
         "info": "Voeg locaties toe naar waar je je wil verplaatsen. Zo vinden de juiste scholen jouw aanbod."
       },
       "is_brussels_alert": {
-        "message": "Voer je Brusselse activiteiten in op <link1>visit.brussels</link1>. Ze verschijnen dan ook automatisch in de UiTdatabank en UiTinvlaanderen.<br/><br/>Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je hier wel verder invoeren.<br><br><link2>Meer info</link2>"
+        "message": "Voer je Brusselse activiteiten in op <link1>extranet.brussels</link1>. Ze verschijnen dan ook automatisch in de UiTdatabank en UiTinvlaanderen.<br/>Met je ledenvereniging op uitstap naar Brussel? Of organiseer je een activiteit voor scholen? Dan kan je hier wel verder invoeren.<br/><link2>Meer info</link2>"
       },
       "online_url": {
         "label": "Deelnamelink",
@@ -333,9 +333,13 @@
         "reservation_period": {
           "cta": "Reservatieperiode toevoegen",
           "title": "Reservatie periode",
+          "info_text": "Binnen welke periode kunnen mensen een plek reserveren of ticket kopen?",
           "delete": "Reservatieperiode verwijderen",
+          "startHour": "Startuur",
+          "endHour": "Einduur",
           "error": {
-            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen."
+            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen.",
+            "endDateTime_before_startDateTime": "De gekozen einddatum en -uur moeten na de startdatum en -uur vallen."
           }
         }
       },
@@ -1260,7 +1264,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuleren",
+        "cancel": "Terug naar de lijst",
         "create": "Toevoegen",
         "save": "Bewaren"
       },
@@ -1282,6 +1286,33 @@
     },
     "edit": {
       "title": "Label bewerken"
+    }
+  },
+  "roles": {
+    "overview": {
+      "title": "Rollen",
+      "create": "Toevoegen",
+      "search": {
+        "label": "Zoeken op rolnaam",
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+      },
+      "no_results": "Geen rollen gevonden.",
+      "success_created": "Rol '{{name}}' succesvol aangemaakt.",
+      "success_deleted": "Rol '{{name}}' succesvol verwijderd.",
+      "something_wrong": "Er ging iets mis tijdens het zoeken: {{error}}",
+      "table": {
+        "name": "Naam",
+        "options": "Opties",
+        "edit": "Bewerken",
+        "delete": "Verwijderen"
+      },
+      "delete": {
+        "title": "Rol verwijderen",
+        "message": "Ben je zeker dat je \"{{name}}\" wil verwijderen? Deze actie kan niet ongedaan worden.",
+        "confirm": "Definitief verwijderen",
+        "cancel": "Annuleren",
+        "error": "Er ging iets fout bij het verwijderen van de rol."
+      }
     }
   }
 }
