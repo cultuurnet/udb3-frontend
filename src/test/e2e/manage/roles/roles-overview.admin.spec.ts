@@ -32,7 +32,8 @@ test.describe('Roles Overview - Admin', () => {
     const e2eResultRow = e2eRows.nth(1).filter({
       hasText: 'e2e',
     });
-    await expect(e2eResultRow).toBeVisible({ timeout: 8_000 });
+    await page.waitForLoadState('networkidle');
+    await expect(e2eResultRow).toBeVisible();
     // Search shouldn't happen when less than 3 characters are typed.
     await searchInput.fill('ie');
 
@@ -40,7 +41,8 @@ test.describe('Roles Overview - Admin', () => {
     const stillE2EResultRow = stillE2ERows.nth(1).filter({
       hasText: 'e2e',
     });
-    await expect(stillE2EResultRow).toBeVisible({ timeout: 8_000 });
+    await page.waitForLoadState('networkidle');
+    await expect(stillE2EResultRow).toBeVisible();
 
     await searchInput.fill(faker.lorem.words(10));
     await page.waitForLoadState('networkidle');
@@ -63,8 +65,9 @@ test.describe('Roles Overview - Admin', () => {
     const firstPageRows = page.getByRole('row');
     const firstPageFirstRow = await firstPageRows.nth(1).textContent();
 
-    await expect(page.getByRole('button', { name: /^2$/ })).toBeVisible();
-    await page.getByRole('button', { name: /^2$/ }).click();
+    const page2Button = page.getByRole('button', { name: /^2$/ });
+    await expect(page2Button).toBeVisible();
+    await page2Button.click();
     await page.waitForLoadState('networkidle');
     await expect(searchInput).toHaveValue('eer');
 
@@ -72,8 +75,9 @@ test.describe('Roles Overview - Admin', () => {
     const secondPageFirstRow = await secondPageRows.nth(1).textContent();
     expect(secondPageFirstRow).not.toEqual(firstPageFirstRow);
 
-    await expect(page.getByRole('button', { name: /^1$/ })).toBeVisible();
-    await page.getByRole('button', { name: /^1$/ }).click();
+    const page1Button = page.getByRole('button', { name: /^1$/ });
+    await expect(page1Button).toBeVisible();
+    await page1Button.click();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(300);
     await expect(searchInput).toHaveValue('eer');
@@ -84,12 +88,12 @@ test.describe('Roles Overview - Admin', () => {
   });
 
   test('can click create role button', async ({ page }) => {
-    await page.getByRole('button', { name: /toevoegen/i }).click();
+    await page.getByRole('button', { name: 'toevoegen' }).click();
     await expect(page).toHaveURL(/\/manage\/roles\/create/);
   });
 
   test('can click edit role link', async ({ page }) => {
-    const editLink = page.getByRole('link', { name: /bewerken/i }).first();
+    const editLink = page.getByRole('link', { name: 'Bewerken' }).first();
     if (await editLink.isVisible()) {
       await editLink.click();
       await expect(page).toHaveURL(/\/manage\/roles\/[^/]+/);
@@ -101,9 +105,9 @@ test.describe('Roles Overview - Admin', () => {
     const firstRoleRow = roleRows.nth(1);
     const roleName = await firstRoleRow.textContent();
 
-    await firstRoleRow.getByRole('button', { name: /verwijderen/i }).click();
+    await firstRoleRow.getByRole('button', { name: 'Verwijderen' }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByRole('button', { name: /annuleren/i }).click();
+    await page.getByRole('button', { name: 'annuleren' }).click();
     await page.waitForLoadState('networkidle');
 
     const updatedRoleRows = page.getByRole('row');

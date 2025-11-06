@@ -333,9 +333,13 @@
         "reservation_period": {
           "cta": "Reservatieperiode toevoegen",
           "title": "Reservatie periode",
+          "info_text": "Binnen welke periode kunnen mensen een plek reserveren of ticket kopen?",
           "delete": "Reservatieperiode verwijderen",
+          "startHour": "Startuur",
+          "endHour": "Einduur",
           "error": {
-            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen."
+            "enddate_before_startdate": "De gekozen einddatum moet na de startdatum vallen.",
+            "endDateTime_before_startDateTime": "De gekozen einddatum en -uur moeten na de startdatum en -uur vallen."
           }
         }
       },
@@ -1260,7 +1264,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuleren",
+        "cancel": "Terug naar de lijst",
         "create": "Toevoegen",
         "save": "Bewaren"
       },

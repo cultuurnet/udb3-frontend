@@ -313,7 +313,8 @@
           "title": "Reservierungszeitraum",
           "delete": "Reservierungszeitraum löschen",
           "error": {
-            "enddate_before_startdate": "Das gewählte Enddatum muss nach dem Startdatum liegen."
+            "enddate_before_startdate": "Das gewählte Enddatum muss nach dem Startdatum liegen.",
+            "endDateTime_before_startDateTime": "Die gewählte Enddatum und -uhrzeit müssen nach der Startdatum und -uhrzeit liegen."
           }
         }
       },
@@ -1207,7 +1208,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Abbrechen",
+        "cancel": "Zurück zur Liste",
         "create": "Hinzufügen",
         "save": "Speichern"
       },

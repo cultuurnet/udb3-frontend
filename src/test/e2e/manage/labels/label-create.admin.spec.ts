@@ -33,7 +33,9 @@ test.describe('Label Creation - Admin', () => {
     await expect(
       page.getByRole('button', { name: 'Toevoegen' }),
     ).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Annuleren' })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Terug naar de lijst' }),
+    ).toBeVisible();
 
     await page.getByLabel('Naam').fill(dummyLabel.name);
     await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
@@ -102,7 +104,7 @@ test.describe('Label Creation - Admin', () => {
     page,
   }) => {
     await page.getByLabel('Naam').fill(dummyLabel.name);
-    await page.getByRole('button', { name: 'Annuleren' }).click();
+    await page.getByRole('button', { name: 'Terug naar de lijst' }).click();
 
     await expect(page).toHaveURL(/\/manage\/labels$/);
   });

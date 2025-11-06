@@ -314,7 +314,8 @@
           "title": "Période de réservation",
           "delete": "Supprimer la période de réservation",
           "error": {
-            "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début."
+            "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début.",
+            "endDateTime_before_startDateTime": "La date et l'heure de fin choisies doivent être postérieures à la date et l'heure de début."
           }
         }
       },
@@ -1206,7 +1207,7 @@
     },
     "form": {
       "actions": {
-        "cancel": "Annuler",
+        "cancel": "Retour à la liste",
         "create": "Créer",
         "save": "Enregistrer"
       },

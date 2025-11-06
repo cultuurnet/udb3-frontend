@@ -29,10 +29,12 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
+import { Icon } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
 type FormData = {
@@ -49,14 +51,12 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const success = router.query.success as string | undefined;
-  const successName = router.query.name as string | undefined;
-
   const headers = useHeaders();
 
   const isEditMode = !!label;
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [hasNameConflictError, setHasNameConflictError] = useState(false);
 
   const createValidationSchema = () => {
     return yup.object({
@@ -104,26 +104,19 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     });
 
   const watchedName = watch('name');
-  const { isUnique } = useIsLabelNameUnique({
-    name: watchedName,
-    currentName: label?.name,
-  });
+
+  // Reset name conflict error when user starts typing
+  const [nameWhenErrorOccurred, setNameWhenErrorOccurred] = useState('');
 
   useEffect(() => {
-    if (success === 'created' && successName && label.uuid) {
-      setSuccessMessage(
-        t('labels.overview.success_created', {
-          name: successName,
-        }),
-      );
-      router.replace(`/manage/labels/${label.uuid}/edit`, undefined, {
-        shallow: true,
-      });
+    if (hasNameConflictError && watchedName !== nameWhenErrorOccurred) {
+      setHasNameConflictError(false);
     }
-  }, [success, successName, label, router, t]);
+  }, [watchedName, hasNameConflictError, nameWhenErrorOccurred]);
 
-  const nameChanged =
-    isEditMode && label?.name && watchedName.trim() !== label.name;
+  const { isUnique } = useIsLabelNameUnique({
+    name: watchedName,
+  });
 
   const updateVisibilityMutation = useUpdateLabelVisibilityMutation();
   const updatePrivacyMutation = useUpdateLabelPrivacyMutation();
@@ -136,46 +129,32 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
 
   const onSubmit = async (data: FormData) => {
     setSuccessMessage('');
+    setHasNameConflictError(false);
 
-    if (!isUnique && (!isEditMode || nameChanged)) {
+    if (!isUnique && !isEditMode) {
       return;
     }
 
     if (!isEditMode) {
-      await createLabelMutation.mutateAsync({
-        headers,
-        name: data.name.trim(),
-        isVisible: data.isVisible,
-        isPrivate: data.isPrivate,
-      });
-      router.push(
-        `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
-      );
-      return;
+      try {
+        await createLabelMutation.mutateAsync({
+          headers,
+          name: data.name.trim(),
+          isVisible: data.isVisible,
+          isPrivate: data.isPrivate,
+        });
+        router.push(
+          `/manage/labels?success=created&name=${encodeURIComponent(data.name.trim())}`,
+        );
+        return;
+      } catch (error) {
+        setHasNameConflictError(true);
+        setNameWhenErrorOccurred(data.name.trim());
+        return;
+      }
     }
 
     if (!label) return;
-
-    if (nameChanged) {
-      const response = await createLabelMutation.mutateAsync({
-        headers,
-        name: data.name.trim(),
-        isVisible: data.isVisible,
-        isPrivate: data.isPrivate,
-        parentId: label.uuid,
-      });
-
-      if (response.uuid) {
-        router.push(
-          `/manage/labels/${
-            response.uuid
-          }/edit?success=created&name=${encodeURIComponent(data.name.trim())}`,
-        );
-      } else {
-        router.push('/manage/labels');
-      }
-      return;
-    }
 
     const currentlyVisible =
       label.visibility !== LabelVisibilityOptions.INVISIBLE;
@@ -230,11 +209,25 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             handleSubmit={handleSubmit}
             formState={formState}
             isSubmitting={isSubmitting}
-            nameChanged={nameChanged}
             onSubmit={onSubmit}
-            onCancel={handleCancel}
             isUnique={isUnique}
+            hasNameConflictError={hasNameConflictError}
+            watchedName={watchedName}
           />
+          <Button
+            width="fit-content"
+            marginTop={4}
+            variant="secondary"
+            onClick={handleCancel}
+          >
+            <Icon
+              name="arrowLeft"
+              display="inline"
+              height={15}
+              marginRight={4}
+            />
+            {t('labels.form.actions.cancel')}
+          </Button>
         </Stack>
       </Page.Content>
     </Page>
@@ -253,10 +246,10 @@ type LabelFormFieldsProps = {
     isSubmitting: boolean;
   };
   isSubmitting?: boolean;
-  nameChanged?: boolean;
   onSubmit: (data: FormData) => Promise<void> | void;
-  onCancel: () => void;
   isUnique: boolean;
+  hasNameConflictError: boolean;
+  watchedName?: string;
   footer?: ReactNode;
 };
 const getGlobalValue = getValueFromTheme('global');
@@ -268,25 +261,23 @@ const LabelFormFields = ({
   handleSubmit,
   formState,
   isSubmitting = false,
-  nameChanged = false,
   onSubmit,
-  onCancel,
   isUnique,
+  hasNameConflictError,
+  watchedName,
   footer,
 }: LabelFormFieldsProps) => {
   const { t } = useTranslation();
 
   const isFormDisabled =
     mode === 'edit'
-      ? (nameChanged && (!isUnique || !!formState.errors.name)) || isSubmitting
-      : !formState.isValid || !isUnique || isSubmitting;
+      ? isSubmitting
+      : !formState.isValid || !isUnique || hasNameConflictError || isSubmitting;
 
   const buttonText =
-    mode === 'edit' && nameChanged
-      ? t('labels.form.actions.create')
-      : mode === 'edit'
-        ? t('labels.form.actions.save')
-        : t('labels.form.actions.create');
+    mode === 'edit'
+      ? t('labels.form.actions.save')
+      : t('labels.form.actions.create');
 
   const nameError = (() => {
     const errors = [];
@@ -299,7 +290,7 @@ const LabelFormFields = ({
       });
     }
 
-    if (!isUnique) {
+    if ((!isUnique || hasNameConflictError) && mode === 'create') {
       errors.push(t('labels.form.errors.name_unique'));
     }
 
@@ -325,20 +316,32 @@ const LabelFormFields = ({
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
     >
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <FormElement
-            id="label-name"
-            label={t('labels.form.fields.name')}
-            error={nameError}
-            maxLength={LabelValidationInformation.MAX_LENGTH}
-            marginBottom={5}
-            Component={<Input {...field} />}
-          />
-        )}
-      />
+      {mode === 'edit' ? (
+        <FormElement
+          label={t('labels.form.fields.name')}
+          id="label-name-display"
+          Component={
+            <Inline spacing={2}>
+              <Text variant={TextVariants.MUTED}>{watchedName}</Text>
+            </Inline>
+          }
+        />
+      ) : (
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <FormElement
+              id="label-name"
+              label={t('labels.form.fields.name')}
+              error={nameError}
+              maxLength={LabelValidationInformation.MAX_LENGTH}
+              marginBottom={5}
+              Component={<Input {...field} />}
+            />
+          )}
+        />
+      )}
       <Controller
         name="isVisible"
         control={control}
@@ -367,7 +370,6 @@ const LabelFormFields = ({
           </CheckboxWithLabel>
         )}
       />
-
       <Inline marginTop={5} spacing={3}>
         <Button
           title="submit"
@@ -376,9 +378,6 @@ const LabelFormFields = ({
           onClick={handleSubmit(onSubmit)}
         >
           {buttonText}
-        </Button>
-        <Button title="cancel" onClick={onCancel}>
-          {t('labels.form.actions.cancel')}
         </Button>
       </Inline>
       {footer}
