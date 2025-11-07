@@ -1160,6 +1160,9 @@
     "prompt_text": "Tipp deine Suche einfach...",
     "search_text": "Wird gesucht..."
   },
+  "common": {
+    "back_to_overview": "Zurück zur Liste"
+  },
   "videos": {
     "add_button": "Videolink hinzufügen",
     "delete": "Löschen",
@@ -1208,7 +1211,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Zurück zur Liste",
         "create": "Hinzufügen",
         "save": "Speichern"
       },
@@ -1264,7 +1266,6 @@
       "name_label": "Name",
       "name_edit": "Ändern",
       "cancel": "Abbrechen",
-      "back_to_list": "Zurück zur Liste",
       "create": "Hinzufügen",
       "save_changes": "Änderungen speichern",
       "save": "Speichern",

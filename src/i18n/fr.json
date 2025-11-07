@@ -1159,6 +1159,9 @@
     "prompt_text": "Entrez pour rechercher...",
     "search_text": "En train de chercher..."
   },
+  "common": {
+    "back_to_overview": "Retour à la liste"
+  },
   "videos": {
     "add_button": "Ajouter un lien vidéo",
     "delete": "Supprimer",
@@ -1207,7 +1210,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Retour à la liste",
         "create": "Créer",
         "save": "Enregistrer"
       },
@@ -1263,7 +1265,6 @@
       "name_label": "Nom",
       "name_edit": "Modifier",
       "cancel": "Annuler",
-      "back_to_list": "Retour à la liste",
       "create": "Créer",
       "save_changes": "Enregistrer les modifications",
       "save": "Enregistrer",

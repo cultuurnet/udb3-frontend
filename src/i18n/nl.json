@@ -1216,6 +1216,9 @@
     "prompt_text": "Typ om te zoeken...",
     "search_text": "Aan het zoeken..."
   },
+  "common": {
+    "back_to_overview": "Terug naar de lijst"
+  },
   "videos": {
     "add_button": "Videolink toevoegen",
     "delete": "Verwijderen",
@@ -1264,7 +1267,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Terug naar de lijst",
         "create": "Toevoegen",
         "save": "Bewaren"
       },
@@ -1320,7 +1322,6 @@
       "name_label": "Naam",
       "name_edit": "Wijzigen",
       "cancel": "Annuleren",
-      "back_to_list": "Terug naar de lijst",
       "create": "Toevoegen",
       "save_changes": "Wijzigingen bewaren",
       "save": "Bewaren",
