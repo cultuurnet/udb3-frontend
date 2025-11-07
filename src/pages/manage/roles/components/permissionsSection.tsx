@@ -12,8 +12,6 @@ import {
 } from '@/hooks/api/roles';
 import { useToast } from '@/pages/manage/movies/useToast';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
-import { Inline } from '@/ui/Inline';
-import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Toast } from '@/ui/Toast';
@@ -24,7 +22,6 @@ interface PermissionsSectionProps {
 
 export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const { t } = useTranslation();
-  const [searchTerm, setSearchTerm] = useState('');
   const [pendingPermissions, setPendingPermissions] = useState<{
     [key: string]: boolean;
   }>({});
@@ -52,10 +49,6 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const serverPermissions = useMemo(
     () => role?.permissions || [],
     [role?.permissions],
-  );
-
-  const filteredPermissions = availablePermissions.filter((permission) =>
-    permission.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handlePermissionChange = async (
@@ -123,18 +116,8 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
         margin-top: -1px;
       `}
     >
-      <Inline alignItems="center" spacing={4}>
-        <Stack flex={1}>
-          <Input
-            placeholder={t('roles.form.permissions.search_placeholder')}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </Stack>
-      </Inline>
-
       <Stack marginLeft={1} marginTop={3} spacing={2}>
-        {filteredPermissions.map((permission) => {
+        {availablePermissions.map((permission) => {
           const isChecked =
             permission.key in pendingPermissions
               ? pendingPermissions[permission.key]

@@ -1338,8 +1338,7 @@
         "add": "Toevoegen"
       },
       "permissions": {
-        "title": "Permissies",
-        "search_placeholder": "Zoeken op naam"
+        "title": "Permissies"
       },
       "users": {
         "title": "Leden",

@@ -1281,8 +1281,7 @@
         "add": "Ajouter"
       },
       "permissions": {
-        "title": "Autorisations",
-        "search_placeholder": "Rechercher par nom"
+        "title": "Autorisations"
       },
       "users": {
         "title": "Membres",

@@ -1282,8 +1282,7 @@
         "add": "Hinzufügen"
       },
       "permissions": {
-        "title": "Berechtigungen",
-        "search_placeholder": "Suche nach Namen"
+        "title": "Berechtigungen"
       },
       "users": {
         "title": "Benutzer",
