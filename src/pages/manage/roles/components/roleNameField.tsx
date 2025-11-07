@@ -78,7 +78,7 @@ const RoleNameInput = ({
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} className="role-name-input">
       <Controller
         name="name"
         control={control}

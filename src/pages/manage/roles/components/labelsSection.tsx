@@ -89,6 +89,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
 
   return (
     <Stack
+      className="role-labels-section"
       backgroundColor="white"
       padding={4}
       borderRadius={getGlobalBorderRadius}

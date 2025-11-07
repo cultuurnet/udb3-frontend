@@ -79,7 +79,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   };
 
   return (
-    <Stack marginBottom={4} spacing={4}>
+    <Stack marginBottom={4} spacing={4} className="role-constraints-section">
       <Title marginTop={4} size={3}>
         {t('roles.form.constraints.title')}
       </Title>

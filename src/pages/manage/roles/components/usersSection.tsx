@@ -142,6 +142,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
 
   return (
     <Stack
+      className="role-users-section"
       backgroundColor="white"
       padding={4}
       borderRadius={getGlobalBorderRadius}

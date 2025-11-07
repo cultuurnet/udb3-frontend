@@ -106,6 +106,7 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
 
   return (
     <Stack
+      className="role-permissions-section"
       backgroundColor="white"
       padding={4}
       borderRadius={getGlobalBorderRadius}
