@@ -18,8 +18,8 @@ import {
   useUpdateRoleNameMutation,
 } from '@/hooks/api/roles';
 import { Role } from '@/types/Role';
+import { BackButton } from '@/ui/BackButton';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -225,16 +225,7 @@ const RoleFormFields = ({
           </Button>
         </Inline>
       )}
-      <Button
-        width="fit-content"
-        marginTop={4}
-        variant={ButtonVariants.SECONDARY}
-        title="cancel"
-        onClick={onCancel}
-      >
-        <Icon name="arrowLeft" display="inline" height={15} marginRight={4} />
-        {t('roles.form.back_to_list')}
-      </Button>
+      <BackButton onClick={onCancel} />
     </Stack>
   );
 };
