@@ -1296,7 +1296,7 @@
       "create": "Toevoegen",
       "search": {
         "label": "Zoeken op rolnaam",
-        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 tekens."
       },
       "no_results": "Geen rollen gevonden.",
       "success_created": "Rol '{{name}}' succesvol aangemaakt.",
@@ -1329,8 +1329,8 @@
       "errors": {
         "name_not_unique": "Deze naam bestaat al. Kies een andere naam.",
         "name_required": "Naam is verplicht",
-        "name_min_length": "Naam moet minstens 3 karakters bevatten",
-        "name_max_length": "Naam mag maximaal 255 karakters bevatten"
+        "name_min_length": "Naam moet minstens 3 tekens bevatten",
+        "name_max_length": "Naam mag maximaal 255 tekens bevatten"
       },
       "constraints": {
         "title": "Bewerkrecht",
