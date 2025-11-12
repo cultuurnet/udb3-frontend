@@ -5,22 +5,16 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
-import {
-  prefetchGetRolesQuery,
-  useDeleteRoleMutation,
-  useGetRolesByQuery,
-} from '@/hooks/api/roles';
+import { prefetchGetRolesQuery, useGetRolesByQuery } from '@/hooks/api/roles';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Role } from '@/types/Role';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
-import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Spinner } from '@/ui/Spinner';
@@ -29,6 +23,8 @@ import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+
+import { DeleteRoleModal } from './components/deleteRoleModal';
 
 const rolesPerPage = 10;
 const getGlobalValue = getValueFromTheme('global');
@@ -39,27 +35,18 @@ const RolesOverviewPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [currentPageRoles, setCurrentPageRoles] = useState(1);
   const [successMessage, setSuccessMessage] = useState('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
-  const [deleteError, setDeleteError] = useState('');
   const [isReactRolesCreateEditFeatureFlagEnabled] = useFeatureFlag(
     FeatureFlags.REACT_ROLES_CREATE_EDIT,
   );
 
-  const deleteRoleMutation = useDeleteRoleMutation({
-    onSuccess: () => {
-      setSuccessMessage(
-        t('roles.overview.success_deleted', { name: roleToDelete?.name }),
-      );
-      setShowDeleteModal(false);
-      setRoleToDelete(null);
-      setDeleteError('');
-      rolesQuery.refetch();
-    },
-    onError: () => {
-      setDeleteError(t('roles.overview.delete.error'));
-    },
-  });
+  const handleDeleteClick = useCallback((role: Role) => {
+    setRoleToDelete(role);
+  }, []);
+
+  const handleDeleteModalClose = useCallback(() => {
+    setRoleToDelete(null);
+  }, []);
 
   const rolesToTableData = (roles: Role[]) =>
     roles.map((role) => ({
@@ -75,6 +62,16 @@ const RolesOverviewPage = () => {
     },
   });
 
+  const handleRoleDeleted = useCallback(
+    (roleName: string) => {
+      setSuccessMessage(
+        t('roles.overview.success_deleted', { name: roleName }),
+      );
+      rolesQuery.refetch();
+    },
+    [t, rolesQuery],
+  );
+
   const totalRoles = rolesQuery.data?.totalItems ?? 0;
 
   const actions = [
@@ -85,24 +82,6 @@ const RolesOverviewPage = () => {
       disabled: false,
     },
   ];
-
-  const handleDeleteClick = (role: Role) => {
-    setRoleToDelete(role);
-    setShowDeleteModal(true);
-    setDeleteError('');
-  };
-
-  const handleDeleteConfirm = () => {
-    if (roleToDelete) {
-      deleteRoleMutation.mutate({ id: roleToDelete.uuid });
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setRoleToDelete(null);
-    setShowDeleteModal(false);
-    setDeleteError('');
-  };
 
   const columns = useMemo(
     () => [
@@ -138,7 +117,7 @@ const RolesOverviewPage = () => {
         },
       },
     ],
-    [isReactRolesCreateEditFeatureFlagEnabled, t],
+    [isReactRolesCreateEditFeatureFlagEnabled, t, handleDeleteClick],
   );
 
   const roles: Role[] = useMemo(
@@ -251,32 +230,11 @@ const RolesOverviewPage = () => {
           onChangePage={setCurrentPageRoles}
         />
 
-        <Modal
-          variant={ModalVariants.QUESTION}
-          visible={showDeleteModal}
-          title={t('roles.overview.delete.title')}
-          onClose={handleDeleteCancel}
-          onConfirm={handleDeleteConfirm}
-          confirmTitle={t('roles.overview.delete.confirm')}
-          cancelTitle={t('roles.overview.delete.cancel')}
-          confirmLoading={deleteRoleMutation.isPending}
-          size={ModalSizes.MD}
-        >
-          <Box padding={4}>
-            <Stack spacing={4}>
-              <Text>
-                {t('roles.overview.delete.message', {
-                  name: roleToDelete?.name,
-                })}
-              </Text>
-              {deleteError && (
-                <Alert variant={AlertVariants.DANGER} fullWidth={true}>
-                  {deleteError}
-                </Alert>
-              )}
-            </Stack>
-          </Box>
-        </Modal>
+        <DeleteRoleModal
+          role={roleToDelete}
+          onClose={handleDeleteModalClose}
+          onDeleted={handleRoleDeleted}
+        />
       </Page.Content>
     </Page>
   );

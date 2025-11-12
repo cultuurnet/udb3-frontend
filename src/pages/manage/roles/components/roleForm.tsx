@@ -20,12 +20,15 @@ import {
 import { Role } from '@/types/Role';
 import { BackButton } from '@/ui/BackButton';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
+import { getValueFromTheme } from '@/ui/theme';
 
 import { ConstraintsSection } from './constraintsSection';
+import { DeleteRoleModal } from './deleteRoleModal';
 import { LabelsSection } from './labelsSection';
 import { PermissionsSection } from './permissionsSection';
 import { RoleNameField } from './roleNameField';
@@ -59,6 +62,8 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
 
   const createRoleMutation = useCreateRoleMutation();
   const updateRoleNameMutation = useUpdateRoleNameMutation();
+
+  const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
 
   const onSubmit = useCallback(
     async (data: RoleFormDataInferred) => {
@@ -97,6 +102,20 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     router.push('/manage/roles');
   };
 
+  const handleDelete = () => {
+    if (role) {
+      setRoleToDelete(role);
+    }
+  };
+
+  const handleDeleteModalClose = () => {
+    setRoleToDelete(null);
+  };
+
+  const handleRoleDeleted = (roleName: string) => {
+    router.push('/manage/roles');
+  };
+
   const pageTitle = isEditMode
     ? t('roles.form.edit_title')
     : t('roles.form.create_title');
@@ -117,10 +136,17 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
           isSubmitting={isSubmitting}
           onSubmit={onSubmit}
           onCancel={handleCancel}
+          onDelete={handleDelete}
           role={role}
           roleId={roleId}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+        />
+
+        <DeleteRoleModal
+          role={roleToDelete}
+          onClose={handleDeleteModalClose}
+          onDeleted={handleRoleDeleted}
         />
       </Page.Content>
     </Page>
@@ -144,6 +170,7 @@ type RoleFormFieldsProps = {
   isSubmitting: boolean;
   onSubmit: (data: RoleFormDataInferred) => Promise<void>;
   onCancel: () => void;
+  onDelete: () => void;
   role?: Role;
   roleId?: string;
   activeTab: string;
@@ -162,6 +189,7 @@ const RoleFormFields = ({
   isSubmitting,
   onSubmit,
   onCancel,
+  onDelete,
   role,
   roleId,
   activeTab,
@@ -169,6 +197,7 @@ const RoleFormFields = ({
 }: RoleFormFieldsProps) => {
   const { t } = useTranslation();
   const isEditMode = mode === 'edit';
+  const getButtonsValue = getValueFromTheme('button');
 
   return (
     <Stack spacing={3}>
@@ -225,7 +254,33 @@ const RoleFormFields = ({
           </Button>
         </Inline>
       )}
-      <BackButton onClick={onCancel} />
+
+      <Inline marginTop={4} spacing={3}>
+        <BackButton marginTop={0} onClick={onCancel} />
+        {isEditMode && (
+          <Button
+            marginLeft={5}
+            variant={ButtonVariants.SECONDARY}
+            onClick={onDelete}
+            iconName={Icons.TRASH}
+            css={`
+              color: ${getButtonsValue('danger.backgroundColor')} !important;
+              border-color: ${getButtonsValue(
+                'danger.backgroundColor',
+              )} !important;
+
+              .svg-inline--fa {
+                width: 18px;
+                height: 15px;
+                margin-right: 1rem;
+                color: inherit;
+              }
+            `}
+          >
+            {t('roles.form.delete')}
+          </Button>
+        )}
+      </Inline>
     </Stack>
   );
 };
