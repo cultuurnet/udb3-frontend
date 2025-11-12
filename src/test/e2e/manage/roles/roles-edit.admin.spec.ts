@@ -185,6 +185,23 @@ test.describe('Role Editing - Admin', () => {
     for (const checkbox of checkboxes) {
       await expect(checkbox).not.toBeChecked();
     }
+
+    await checkboxes[0].check();
+    await expect(checkboxes[0]).toBeChecked();
+    await page.waitForTimeout(100);
+    const toast = page.locator('.toast');
+    expect(toast).toBeVisible();
+    expect(toast).toContainText('toegevoegd');
+
+    page.goto(createdRoleUrl);
+    await checkboxes[0].waitFor();
+    await expect(checkboxes[0]).toBeChecked();
+
+    await checkboxes[0].uncheck();
+    await expect(checkboxes[0]).not.toBeChecked();
+    await page.waitForTimeout(100);
+    expect(toast).toBeVisible();
+    expect(toast).toContainText('verwijderd');
   });
 
   test('can add and remove role users', async ({ page }) => {
