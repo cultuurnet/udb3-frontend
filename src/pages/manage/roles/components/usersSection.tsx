@@ -57,6 +57,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
     formState: { errors, isSubmitting },
   } = useForm<AddUserFormData>({
     resolver: yupResolver(addUserSchema),
+    mode: 'onChange',
     defaultValues: {
       email: '',
     },
@@ -162,10 +163,12 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
               id="add-user-email"
               label={t('roles.form.users.add_user_label')}
               labelPosition="left"
+              alignItems={'start'}
               error={errors.email?.message}
               Component={
                 <Input
                   {...field}
+                  minWidth={'22rem'}
                   type="email"
                   placeholder={t('roles.form.users.email_placeholder')}
                 />
@@ -175,6 +178,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
         />
         <Button
           marginLeft={3}
+          maxHeight={'fit-content'}
           variant={ButtonVariants.PRIMARY}
           onClick={handleSubmit(onSubmit)}
           disabled={addUserMutation.isPending}
