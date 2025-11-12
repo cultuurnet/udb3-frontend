@@ -134,7 +134,12 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
               </Text>
             }
           />
-          <Inline marginTop={4} spacing={3} flexWrap="wrap">
+          <Inline
+            className={'picked-labels'}
+            marginTop={4}
+            spacing={3}
+            flexWrap="wrap"
+          >
             {labelsToShow.map((label) => (
               <Inline
                 key={label}
