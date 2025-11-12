@@ -1326,6 +1326,7 @@
       "save_changes": "Wijzigingen bewaren",
       "save": "Bewaren",
       "saving": "Opslaan...",
+      "delete": "Rol verwijderen",
       "errors": {
         "name_not_unique": "Deze naam bestaat al. Kies een andere naam.",
         "name_required": "Naam is verplicht",

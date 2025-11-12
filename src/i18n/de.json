@@ -1270,6 +1270,7 @@
       "save_changes": "Änderungen speichern",
       "save": "Speichern",
       "saving": "Speichern...",
+      "delete": "Rolle löschen",
       "errors": {
         "name_not_unique": "Dieser Name existiert bereits. Wählen Sie einen anderen Namen.",
         "name_required": "Name ist erforderlich",

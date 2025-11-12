@@ -1269,6 +1269,7 @@
       "save_changes": "Enregistrer les modifications",
       "save": "Enregistrer",
       "saving": "Enregistrement...",
+      "delete": "Supprimer le rôle",
       "errors": {
         "name_not_unique": "Ce nom existe déjà. Choisissez un autre nom.",
         "name_required": "Le nom est obligatoire",
