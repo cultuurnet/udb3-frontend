@@ -5,6 +5,9 @@ const dummyRole = {
   name: 'e2e-test ' + faker.lorem.words(2),
   longName: 'e2e-test ' + faker.string.alphanumeric(300),
   constraint: faker.lorem.words(3),
+  nonExistingEmail: faker.internet.email(),
+  existingEmail: process.env.E2E_TEST_ADMIN_EMAIL,
+  labelName: 'e2e',
 };
 let createdRoleUrl: string;
 
@@ -205,10 +208,100 @@ test.describe('Role Editing - Admin', () => {
   });
 
   test('can add and remove role users', async ({ page }) => {
+    await expect(page).toHaveURL(createdRoleUrl);
+
+    await page.getByRole('tab', { name: 'Leden' }).click();
     const usersSection = page.locator('.role-users-section');
+    expect(usersSection).toBeVisible();
+    await expect(usersSection).toContainText('nog geen gebruikers');
+
+    await usersSection.getByLabel('Voeg lid toe').fill('b');
+    await expect(
+      usersSection.locator('span:below(input[name="email"])').first(),
+    ).toContainText('geldig');
+
+    await usersSection.getByLabel('Voeg lid toe').fill('');
+    await expect(
+      usersSection.locator('span:below(input[name="email"])').first(),
+    ).toContainText('verplicht');
+
+    await usersSection
+      .getByLabel('Voeg lid toe')
+      .fill(dummyRole.nonExistingEmail);
+    const addUserButton = usersSection.getByRole('button', {
+      name: 'Toevoegen',
+    });
+    await expect(addUserButton).toBeEnabled();
+    await addUserButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(
+      usersSection.locator('span:below(input[name="email"])').first(),
+    ).toContainText('niet gevonden');
+
+    await usersSection.getByLabel('Voeg lid toe').fill(dummyRole.existingEmail);
+    await expect(addUserButton).toBeEnabled();
+    await addUserButton.click();
+    await page.waitForLoadState('networkidle');
+
+    await expect(usersSection.locator('table')).toBeVisible();
+    const userRow = usersSection
+      .locator('table')
+      .getByRole('row')
+      .filter({ hasText: dummyRole.existingEmail });
+    await expect(userRow).toBeVisible();
+
+    const removeUserButton = userRow.getByRole('button', {
+      name: 'Lidmaatschap verwijderen',
+    });
+    await expect(removeUserButton).toBeVisible();
+    await removeUserButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(usersSection).toContainText('nog geen gebruikers');
   });
 
   test('can add and remove role labels', async ({ page }) => {
+    await expect(page).toHaveURL(createdRoleUrl);
+
+    await page.getByRole('tab', { name: 'Labels' }).click();
+
     const labelsSection = page.locator('.role-labels-section');
+    expect(labelsSection).toBeVisible();
+
+    await labelsSection
+      .getByLabel('Voeg een label toe')
+      .fill(dummyRole.labelName);
+
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+    const labelsPicker = labelsSection.locator('div#labels-picker');
+    await expect(labelsPicker).toBeVisible();
+    const labelOption = labelsPicker.getByRole('option').first();
+    await expect(labelOption).toBeVisible();
+    await labelOption.click();
+    await page.waitForLoadState('networkidle');
+
+    await expect(labelsSection.locator('.picked-labels')).toBeVisible();
+    await expect(labelsSection.locator('.picked-labels')).toContainText(
+      dummyRole.labelName,
+    );
+
+    await labelsSection
+      .locator('.picked-labels')
+      .first()
+      .locator('svg')
+      .click();
+    await page.waitForLoadState('networkidle');
+    await expect(labelsSection.locator('.picked-labels')).not.toContainText(
+      dummyRole.labelName,
+    );
+
+    await labelsSection
+      .getByLabel('Voeg een label toe')
+      .fill(dummyRole.longName);
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    await expect(labelOption).toBeVisible();
+    await expect(labelOption).toContainText('Geen label gevonden?');
   });
 });
