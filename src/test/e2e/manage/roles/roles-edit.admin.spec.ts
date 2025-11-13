@@ -29,16 +29,15 @@ test.describe('Role Editing - Admin', () => {
   });
 
   test.afterEach(async ({ page }) => {
-    await page.goto('/manage/roles');
-    await page.getByLabel('Zoeken').fill(dummyRole.name);
-    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(createdRoleUrl);
+    await page.getByRole('button', { name: 'Rol verwijderen' }).click();
     await page
-      .getByRole('row')
-      .filter({ hasText: dummyRole.name })
-      .getByRole('button', { name: 'Verwijderen' })
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Definitief verwijderen' })
       .click();
-    await page.getByRole('button', { name: 'Definitief verwijderen' }).click();
     await page.waitForLoadState('networkidle');
+
+    await expect(page).toHaveURL('/manage/roles');
   });
 
   test('has freshly created role to edit', async ({ page }) => {
@@ -303,5 +302,28 @@ test.describe('Role Editing - Admin', () => {
 
     await expect(labelOption).toBeVisible();
     await expect(labelOption).toContainText('Geen label gevonden?');
+  });
+
+  test('can delete role with confirmation modal', async ({ page }) => {
+    await expect(page).toHaveURL(createdRoleUrl);
+    const deleteButton = page.getByRole('button', { name: 'Rol verwijderen' });
+    await expect(deleteButton).toBeVisible();
+    await expect(deleteButton).toBeEnabled();
+    await deleteButton.click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText('Ben je zeker dat je');
+    await expect(
+      dialog.getByRole('button', { name: 'Definitief verwijderen' }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole('button', { name: 'Annuleren' }),
+    ).toBeVisible();
+
+    await dialog.getByRole('button', { name: 'Annuleren' }).click();
+    await page.waitForLoadState('networkidle');
+
+    await expect(page).toHaveURL(createdRoleUrl);
   });
 });
