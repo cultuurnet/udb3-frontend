@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { PermissionType, PermissionTypes } from '@/constants/PermissionTypes';
 import { RoleValidationInformation } from '@/types/Role';
 
-export const createRoleSchema = (t: (key: string) => string) =>
+const createRoleSchema = (t: (key: string) => string) =>
   yup.object({
     name: yup
       .string()
@@ -54,6 +54,7 @@ export const createRoleSchema = (t: (key: string) => string) =>
       .optional(),
   });
 
-export type RoleFormDataInferred = yup.InferType<
-  ReturnType<typeof createRoleSchema>
->;
+type RoleFormDataInferred = yup.InferType<ReturnType<typeof createRoleSchema>>;
+
+export { createRoleSchema };
+export type { RoleFormDataInferred };
