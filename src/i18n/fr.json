@@ -1280,7 +1280,12 @@
         "title": "Droits d'édition",
         "edit": "Modifier",
         "remove": "Supprimer",
-        "add": "Ajouter"
+        "add": "Ajouter",
+        "remove_modal": {
+          "title": "Supprimer les droits d'édition",
+          "message": "Êtes-vous sûr de vouloir supprimer les droits d'édition avec valeur <br /><code>{{constraint}}</code><br />",
+          "error": "Une erreur s'est produite lors de la suppression des droits d'édition."
+        }
       },
       "permissions": {
         "title": "Autorisations"

@@ -1264,7 +1264,7 @@
       "create_title": "Rolle erstellen",
       "edit_title": "Rolle bearbeiten",
       "name_label": "Name",
-      "name_edit": "Ändern",
+      "name_edit": "Bearbeiten",
       "cancel": "Abbrechen",
       "create": "Hinzufügen",
       "save_changes": "Änderungen speichern",
@@ -1281,7 +1281,12 @@
         "title": "Bearbeitungsrechte",
         "edit": "Bearbeiten",
         "remove": "Entfernen",
-        "add": "Hinzufügen"
+        "add": "Hinzufügen",
+        "remove_modal": {
+          "title": "Bearbeitungsrechte entfernen",
+          "message": "Möchten Sie die Bearbeitungsrechte für den Wert <br /><code>{{constraint}}</code><br /> wirklich entfernen?",
+          "error": "Beim Entfernen der Bearbeitungsrechte ist ein Fehler aufgetreten."
+        }
       },
       "permissions": {
         "title": "Berechtigungen"

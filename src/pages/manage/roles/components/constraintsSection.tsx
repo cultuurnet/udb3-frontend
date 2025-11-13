@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import {
   useCreateRoleConstraintMutation,
@@ -7,10 +7,13 @@ import {
   useRemoveRoleConstraintMutation,
   useUpdateRoleConstraintMutation,
 } from '@/hooks/api/roles';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Title } from '@/ui/Title';
@@ -23,6 +26,8 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [constraintValue, setConstraintValue] = useState('');
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [removeError, setRemoveError] = useState('');
 
   const { data: role, refetch } = useGetRoleByIdQuery(roleId);
   const createConstraintMutation = useCreateRoleConstraintMutation();
@@ -62,15 +67,27 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
       setIsEditing(true);
     }
   };
-  const handleRemove = async () => {
-    try {
-      await removeConstraintMutation.mutateAsync({ roleId });
 
+  const handleRemoveClick = () => {
+    setShowRemoveModal(true);
+  };
+
+  const handleRemoveConfirm = async () => {
+    try {
+      setRemoveError('');
+      await removeConstraintMutation.mutateAsync({ roleId });
       setConstraintValue('');
+      setShowRemoveModal(false);
       await refetch();
     } catch (error) {
+      setRemoveError(t('roles.form.constraints.remove_modal.error'));
       setConstraintValue(currentConstraint || '');
     }
+  };
+
+  const handleRemoveCancel = () => {
+    setRemoveError('');
+    setShowRemoveModal(false);
   };
 
   const handleCancel = () => {
@@ -99,7 +116,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
                 </Button>
                 <Button
                   variant={ButtonVariants.LINK}
-                  onClick={handleRemove}
+                  onClick={handleRemoveClick}
                   disabled={removeConstraintMutation.isPending}
                 >
                   {t('roles.form.constraints.remove')}
@@ -145,6 +162,35 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
           </Inline>
         </Stack>
       )}
+
+      <Modal
+        variant={ModalVariants.QUESTION}
+        visible={showRemoveModal}
+        title={t('roles.form.constraints.remove_modal.title')}
+        onClose={handleRemoveCancel}
+        onConfirm={handleRemoveConfirm}
+        confirmTitle={t('roles.form.constraints.remove')}
+        cancelTitle={t('roles.form.cancel')}
+        confirmLoading={removeConstraintMutation.isPending}
+        size={ModalSizes.MD}
+      >
+        <Box padding={4}>
+          <Stack spacing={4}>
+            <Text>
+              <Trans
+                i18nKey="roles.form.constraints.remove_modal.message"
+                values={{ constraint: currentConstraint }}
+                components={{ br: <br />, code: <code /> }}
+              />
+            </Text>
+            {removeError && (
+              <Alert variant={AlertVariants.DANGER} fullWidth={true}>
+                {removeError}
+              </Alert>
+            )}
+          </Stack>
+        </Box>
+      </Modal>
     </Stack>
   );
 };
