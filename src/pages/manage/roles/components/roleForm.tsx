@@ -24,7 +24,6 @@ import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
-import { getValueFromTheme } from '@/ui/theme';
 
 import { ConstraintsSection } from './constraintsSection';
 import { DeleteRoleModal } from './deleteRoleModal';
