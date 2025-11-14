@@ -103,6 +103,8 @@ test.describe('Label Creation - Admin', () => {
   test('should cancel label creation and return to labels list', async ({
     page,
   }) => {
+    await page.goto('/manage/labels');
+    await page.goto('/manage/labels/create');
     await page.getByLabel('Naam').fill(dummyLabel.name);
     await page.getByRole('button', { name: 'Terug naar de lijst' }).click();
 
