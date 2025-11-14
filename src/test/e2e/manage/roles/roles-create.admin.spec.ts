@@ -1,12 +1,16 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
-const dummyRole = {
-  name: 'e2e ' + faker.lorem.words(2),
-  longName: 'e2e ' + faker.string.alphanumeric(300),
-};
+let dummyRole: any;
 
 test.describe('Role Creation - Admin', () => {
+  test.beforeAll(async () => {
+    dummyRole = {
+      name: 'e2e ' + faker.lorem.words(2),
+      longName: 'e2e ' + faker.string.alphanumeric(300),
+    };
+  });
+
   test.beforeEach(async ({ page, context }) => {
     await context.addCookies([
       {
