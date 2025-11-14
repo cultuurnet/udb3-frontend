@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   ExtendQueryOptions,
@@ -221,8 +221,10 @@ const updateLabel = async ({ headers, id, command }: UpdateLabelFlagsArgs) =>
     },
   });
 
-const useUpdateLabelVisibilityMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useUpdateLabelVisibilityMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: ({
       headers,
       id,
@@ -238,11 +240,23 @@ const useUpdateLabelVisibilityMutation = (configuration = {}) =>
         command: isVisible ? 'MakeVisible' : 'MakeInvisible',
       }),
     mutationKey: 'labels-update-visibility',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['labels', { id: variables.id }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['labels'],
+        exact: false,
+      });
+    },
     ...configuration,
   });
+};
 
-const useUpdateLabelPrivacyMutation = (configuration = {}) =>
-  useAuthenticatedMutation({
+const useUpdateLabelPrivacyMutation = (configuration = {}) => {
+  const queryClient = useQueryClient();
+
+  return useAuthenticatedMutation({
     mutationFn: ({
       headers,
       id,
@@ -258,8 +272,18 @@ const useUpdateLabelPrivacyMutation = (configuration = {}) =>
         command: isPrivate ? 'MakePrivate' : 'MakePublic',
       }),
     mutationKey: 'labels-update-privacy',
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['labels', { id: variables.id }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['labels'],
+        exact: false,
+      });
+    },
     ...configuration,
   });
+};
 
 const deleteLabel = async ({ headers, id }: { headers: Headers; id: string }) =>
   fetchFromApi({
