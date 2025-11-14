@@ -81,7 +81,6 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
           }
         }
       } catch (error) {
-        // Handle error appropriately
       } finally {
         setIsSubmitting(false);
       }

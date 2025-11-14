@@ -111,9 +111,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
           userId,
         });
         refetch();
-      } catch (error) {
-        // Handle error silently or show toast
-      }
+      } catch (error) {}
     },
     [removeUserMutation, roleId, refetch],
   );
