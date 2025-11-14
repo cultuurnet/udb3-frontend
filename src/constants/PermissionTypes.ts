@@ -2,6 +2,7 @@ const PermissionTypes = {
   AANBOD_BEWERKEN: 'AANBOD_BEWERKEN',
   AANBOD_MODEREREN: 'AANBOD_MODEREREN',
   AANBOD_VERWIJDEREN: 'AANBOD_VERWIJDEREN',
+  AANBOD_HISTORIEK: 'AANBOD_HISTORIEK',
   ORGANISATIES_BEWERKEN: 'ORGANISATIES_BEWERKEN',
   ORGANISATIES_BEHEREN: 'ORGANISATIES_BEHEREN',
   GEBRUIKERS_BEHEREN: 'GEBRUIKERS_BEHEREN',
@@ -12,4 +13,10 @@ const PermissionTypes = {
   MEDIA_UPLOADEN: 'MEDIA_UPLOADEN',
 } as const;
 
-export { PermissionTypes };
+// Destructure to exclude MEDIA_UPLOADEN
+const { MEDIA_UPLOADEN, ...CorePermissionTypes } = PermissionTypes;
+
+export type PermissionType =
+  (typeof PermissionTypes)[keyof typeof PermissionTypes];
+
+export { CorePermissionTypes, PermissionTypes };

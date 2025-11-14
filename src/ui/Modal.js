@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 
+import { ButtonVariants } from './Button';
 import { ContentModal } from './Modal/ContentModal';
 import { QuestionModal } from './Modal/QuestionModal';
 
@@ -40,6 +41,7 @@ Modal.propTypes = {
   cancelTitle: PropTypes.string,
   onConfirm: PropTypes.func,
   confirmButtonDisabled: PropTypes.bool,
+  confirmButtonVariant: PropTypes.oneOf(Object.values(ButtonVariants)),
 };
 
 export { Modal, ModalSizes, ModalVariants };

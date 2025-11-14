@@ -1,6 +1,8 @@
 import jwt_decode from 'jwt-decode';
 
+import type { Headers } from '@/hooks/api/types/Headers';
 import { PermissionTypes } from '@/layouts/Sidebar';
+import { RoleUser } from '@/types/Role';
 import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi } from '@/utils/fetchFromApi';
 
@@ -149,10 +151,42 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
+const getUserByEmail = async ({
+  headers,
+  email,
+}: {
+  headers: Headers;
+  email: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/users/emails/${encodeURIComponent(email)}`,
+    options: { headers },
+  });
+  return (await res.json()) as RoleUser;
+};
+
+const useGetUserByEmailQuery = (email: string) => {
+  const trimmedEmail = (email || '').trim();
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+
+  return useAuthenticatedQuery({
+    queryKey: ['users', 'email', trimmedEmail],
+    queryFn: (context) =>
+      getUserByEmail({
+        headers: context.headers,
+        email: context.email,
+      }),
+    queryArguments: { email: trimmedEmail },
+    enabled: !!trimmedEmail && isValidEmail,
+  });
+};
+
 export {
+  getUserByEmail,
   prefetchGetPermissionsQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,
+  useGetUserByEmailQuery,
   useGetUserQuery,
 };
 export type { User };
