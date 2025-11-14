@@ -228,12 +228,7 @@ const RoleFormFields = ({
               eventKey="permissions"
               title={t('roles.form.permissions.title')}
             >
-              <PermissionsSection
-                css={`
-                  background-color: red;
-                `}
-                roleId={roleId}
-              />
+              <PermissionsSection roleId={roleId} />
             </Tabs.Tab>
             <Tabs.Tab eventKey="users" title={t('roles.form.users.title')}>
               <UsersSection roleId={roleId} />

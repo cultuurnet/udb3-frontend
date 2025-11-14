@@ -54,7 +54,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
     handleSubmit,
     reset,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AddUserFormData>({
     resolver: yupResolver(addUserSchema),
     mode: 'onChange',

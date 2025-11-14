@@ -75,7 +75,6 @@ test.describe('Role Editing - Admin', () => {
     await page.waitForLoadState('networkidle');
     await page.getByLabel('Zoeken').fill(uniqueRoleName);
     await page.waitForLoadState('networkidle');
-    await page.pause();
     await page
       .getByRole('row')
       .filter({ hasText: uniqueRoleName })
