@@ -256,6 +256,7 @@ type ButtonProps = Omit<InlineProps, 'size'> & {
   disabled?: boolean;
   customChildren?: boolean;
   shouldHideText?: boolean;
+  onMouseDown?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size?: Values<typeof ButtonSizes>;
   variant?: Values<typeof ButtonVariants>;
   type?: 'button' | 'submit' | 'reset';
@@ -274,6 +275,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       customChildren = false,
       shouldHideText = false,
       onClick,
+      onMouseDown,
       className,
       title,
       size,
@@ -307,6 +309,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...bootstrapProps,
       disabled,
       onClick,
+      onMouseDown,
       className,
       title,
       size,
