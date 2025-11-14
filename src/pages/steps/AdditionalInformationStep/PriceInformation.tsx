@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -177,6 +177,8 @@ const PriceInformation = ({
   const { uitpasLabels } = useUitpasLabels();
 
   const offer: Offer | undefined = getOfferByIdQuery.data;
+
+  const [preventBlurSubmit, setPreventBlurSubmit] = useState(false);
 
   const {
     register,
@@ -390,7 +392,10 @@ const PriceInformation = ({
                                     return;
                                   }
 
-                                  onSubmit();
+                                  if (!preventBlurSubmit) {
+                                    onSubmit();
+                                  }
+                                  setPreventBlurSubmit(false);
                                 }}
                                 placeholder={t(
                                   'create.additionalInformation.price_info.target',
@@ -429,7 +434,11 @@ const PriceInformation = ({
                                       return;
                                     }
 
-                                    onSubmit();
+                                    if (!preventBlurSubmit) {
+                                      onSubmit();
+                                    }
+
+                                    setPreventBlurSubmit(false);
                                   }}
                                   disabled={
                                     rate.category === PriceCategory.UITPAS
@@ -538,7 +547,12 @@ const PriceInformation = ({
             <Inline marginTop={3}>
               {!isCultuurkuurEvent && (
                 <Button
-                  onClick={async () => {
+                  onMouseDown={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    setPreventBlurSubmit(true);
+
                     if (
                       isBasePriceInfoEmpty ||
                       (isBasePriceInfoEmpty && errors?.rates?.length > 0)
@@ -548,6 +562,7 @@ const PriceInformation = ({
                       });
                       return;
                     }
+
                     clearErrors('rates');
                     await trigger();
                     append(
@@ -563,6 +578,11 @@ const PriceInformation = ({
                         shouldFocus: true,
                       },
                     );
+
+                    setTimeout(() => setPreventBlurSubmit(false), 100);
+                  }}
+                  onClick={async (e) => {
+                    e.preventDefault();
                   }}
                   variant={ButtonVariants.SECONDARY}
                 >
