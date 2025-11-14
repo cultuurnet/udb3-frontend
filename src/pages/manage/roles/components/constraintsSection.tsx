@@ -173,6 +173,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
         cancelTitle={t('roles.form.cancel')}
         confirmLoading={removeConstraintMutation.isPending}
         size={ModalSizes.MD}
+        confirmButtonVariant={ButtonVariants.DANGER}
       >
         <Box padding={4}>
           <Stack spacing={4}>

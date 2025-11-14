@@ -20,7 +20,6 @@ import {
 import { Role } from '@/types/Role';
 import { BackButton } from '@/ui/BackButton';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -123,6 +122,13 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
   return (
     <Page>
       <Page.Title>{pageTitle}</Page.Title>
+      <Page.Actions>
+        {isEditMode && (
+          <Button variant={ButtonVariants.LINK} onClick={handleDelete}>
+            {t('roles.form.delete')}
+          </Button>
+        )}
+      </Page.Actions>
       <Page.Content>
         <RoleFormFields
           mode={isEditMode ? 'edit' : 'create'}
@@ -197,7 +203,6 @@ const RoleFormFields = ({
 }: RoleFormFieldsProps) => {
   const { t } = useTranslation();
   const isEditMode = mode === 'edit';
-  const getButtonsValue = getValueFromTheme('button');
 
   return (
     <Stack spacing={3}>
@@ -257,29 +262,6 @@ const RoleFormFields = ({
 
       <Inline marginTop={4} spacing={3}>
         <BackButton marginTop={0} onClick={onCancel} />
-        {isEditMode && (
-          <Button
-            marginLeft={5}
-            variant={ButtonVariants.SECONDARY}
-            onClick={onDelete}
-            iconName={Icons.TRASH}
-            css={`
-              color: ${getButtonsValue('danger.backgroundColor')} !important;
-              border-color: ${getButtonsValue(
-                'danger.backgroundColor',
-              )} !important;
-
-              .svg-inline--fa {
-                width: 18px;
-                height: 15px;
-                margin-right: 1rem;
-                color: inherit;
-              }
-            `}
-          >
-            {t('roles.form.delete')}
-          </Button>
-        )}
       </Inline>
     </Stack>
   );
