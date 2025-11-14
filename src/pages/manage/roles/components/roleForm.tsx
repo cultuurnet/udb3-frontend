@@ -110,7 +110,7 @@ export const RoleForm = ({ role }: RoleFormProps = {}) => {
     setRoleToDelete(null);
   };
 
-  const handleRoleDeleted = (roleName: string) => {
+  const handleRoleDeleted = () => {
     router.push('/manage/roles');
   };
 
