@@ -182,20 +182,6 @@ const useUpdateRoleNameMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const getRolePermissions = async ({
-  headers,
-  roleId,
-}: {
-  headers: Headers;
-  roleId: string;
-}) => {
-  const res = await fetchFromApi({
-    path: `/roles/${roleId}/permissions/`,
-    options: { headers },
-  });
-  return (await res.json()) as PermissionType[];
-};
-
 const addPermissionToRole = async ({
   headers,
   roleId,
