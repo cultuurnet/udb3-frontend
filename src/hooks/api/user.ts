@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 
+import type { Headers } from '@/hooks/api/types/Headers';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { RoleUser } from '@/types/Role';
 import { Values } from '@/types/Values';
@@ -154,7 +155,7 @@ const getUserByEmail = async ({
   headers,
   email,
 }: {
-  headers: any;
+  headers: Headers;
   email: string;
 }) => {
   const res = await fetchFromApi({
@@ -170,7 +171,11 @@ const useGetUserByEmailQuery = (email: string) => {
 
   return useAuthenticatedQuery({
     queryKey: ['users', 'email', trimmedEmail],
-    queryFn: getUserByEmail,
+    queryFn: (context) =>
+      getUserByEmail({
+        headers: context.headers,
+        email: context.email,
+      }),
     queryArguments: { email: trimmedEmail },
     enabled: !!trimmedEmail && isValidEmail,
   });
