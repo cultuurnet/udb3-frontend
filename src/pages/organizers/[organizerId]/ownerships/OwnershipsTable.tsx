@@ -261,7 +261,11 @@ export const OwnershipsTable = ({
               </List.Item>
             )}
             {hasDate && (
-              <List.Item minWidth={0}>{request.created || ''}</List.Item>
+              <List.Item minWidth={0}>
+                <Text fontSize="small">
+                  {new Date(request.created).toLocaleDateString('nl-BE')}
+                </Text>
+              </List.Item>
             )}
             {hasActions && (
               <List.Item
