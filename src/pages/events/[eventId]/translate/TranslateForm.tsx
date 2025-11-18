@@ -22,7 +22,13 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
+
+const languageOptions = [...Object.values(SupportedLanguages), 'en'];
+const getGlobalValue = getValueFromTheme('global');
 
 const TranslateForm = () => {
   const { t } = useTranslation();
@@ -53,6 +59,10 @@ const TranslateForm = () => {
     const mainLanguage = event?.mainLanguage || 'nl';
     return event?.name ? event.name[mainLanguage] || '' : '';
   }, [event?.name, event?.mainLanguage]);
+
+  const originalLanguage = useMemo(() => {
+    return event?.mainLanguage || 'nl';
+  }, [event?.mainLanguage]);
 
   useEffect(() => {
     if (event?.name) {
@@ -184,52 +194,98 @@ const TranslateForm = () => {
           visible={!!toast.message}
           onClose={() => toast.clear()}
         />
-        <Stack backgroundColor="white" padding={4} spacing={5}>
-          <Inline spacing={5}>
-            {Object.entries(SupportedLanguages).map(([_, langValue]) => (
-              <FormElement
-                key={langValue}
-                id={`translate-title-${langValue}`}
-                label={`Titel in ${langValue}`}
-                Component={
-                  <Input
-                    placeholder={`Voer titel in ${langValue} in`}
-                    value={titleValues[langValue] || ''}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleTitleChange(langValue, e.target.value)
+        <Stack
+          backgroundColor="white"
+          padding={4}
+          spacing={5}
+          borderRadius={getGlobalBorderRadius}
+          css={`
+            box-shadow: ${getGlobalValue('boxShadow.medium')};
+          `}
+        >
+          <Stack
+            display="grid"
+            css={`
+              grid-template-columns: 150px 1fr;
+              gap: 28px;
+            `}
+          >
+            <Title>Titel</Title>
+            <Stack spacing={4}>
+              {languageOptions.map((language) => (
+                <Stack
+                  key={language}
+                  display="grid"
+                  alignItems="center"
+                  css={`
+                    grid-template-columns: 120px 1fr;
+                    gap: 28px;
+                  `}
+                >
+                  <Text variant="muted">
+                    {originalLanguage === language
+                      ? `Origineel ${language}`
+                      : `Vertaling ${language}`}
+                  </Text>
+                  <FormElement
+                    id={`translate-title-${language}`}
+                    Component={
+                      <Input
+                        maxWidth={300}
+                        placeholder={`Voer titel in ${language} in`}
+                        value={titleValues[language] || ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleTitleChange(language, e.target.value)
+                        }
+                        onBlur={(e) =>
+                          handleTitleBlur(language, e.target.value)
+                        }
+                      />
                     }
-                    onBlur={(e) => handleTitleBlur(langValue, e.target.value)}
                   />
-                }
-              />
-            ))}
-          </Inline>
+                </Stack>
+              ))}
+            </Stack>
 
-          <Stack spacing={5}>
-            {Object.entries(SupportedLanguages).map(([_, langValue]) => (
-              <FormElement
-                key={langValue}
-                id={`create-description-${langValue}`}
-                label={`Beschrijving in ${langValue}`}
-                Component={
-                  <RichTextEditor
-                    editorState={
-                      descriptionEditorStates[langValue] ||
-                      EditorState.createEmpty()
+            <Title>Beschrijving</Title>
+            <Stack spacing={4}>
+              {languageOptions.map((language) => (
+                <Stack
+                  key={language}
+                  display="grid"
+                  css={`
+                    grid-template-columns: 120px 1fr;
+                    gap: 28px;
+                  `}
+                >
+                  <Text variant="muted">
+                    {originalLanguage === language
+                      ? `Origineel ${language}`
+                      : `Vertaling ${language}`}
+                  </Text>
+                  <FormElement
+                    id={`create-description-${language}`}
+                    Component={
+                      <RichTextEditor
+                        editorState={
+                          descriptionEditorStates[language] ||
+                          EditorState.createEmpty()
+                        }
+                        onEditorStateChange={(editorState) =>
+                          handleDescriptionChange(language, editorState)
+                        }
+                        onBlur={() => {
+                          const editorState = descriptionEditorStates[language];
+                          if (editorState) {
+                            handleDescriptionBlur(language, editorState);
+                          }
+                        }}
+                      />
                     }
-                    onEditorStateChange={(editorState) =>
-                      handleDescriptionChange(langValue, editorState)
-                    }
-                    onBlur={() => {
-                      const editorState = descriptionEditorStates[langValue];
-                      if (editorState) {
-                        handleDescriptionBlur(langValue, editorState);
-                      }
-                    }}
                   />
-                }
-              />
-            ))}
+                </Stack>
+              ))}
+            </Stack>
           </Stack>
         </Stack>
 
