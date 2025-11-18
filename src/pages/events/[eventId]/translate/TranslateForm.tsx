@@ -1,6 +1,11 @@
-import { EditorState } from 'draft-js';
+import {
+  ContentState,
+  convertFromRaw,
+  convertToRaw,
+  EditorState,
+} from 'draft-js';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -23,9 +28,12 @@ const TranslateForm = () => {
   const { t } = useTranslation();
   const toastConfiguration = {
     messages: {
-      translation_nl: 'Titel succesvol bijgewerkt (Nederlands).',
-      translation_fr: 'Titre mis à jour avec succès (Français).',
-      translation_de: 'Titel erfolgreich aktualisiert (Deutsch).',
+      title_nl: 'Titel succesvol bijgewerkt (Nederlands).',
+      title_fr: 'Titre mis à jour avec succès (Français).',
+      title_de: 'Titel erfolgreich aktualisiert (Deutsch).',
+      description_nl: 'Beschrijving succesvol bijgewerkt (Nederlands).',
+      description_fr: 'Description mise à jour avec succès (Français).',
+      description_de: 'Beschreibung erfolgreich aktualisiert (Deutsch).',
     },
   };
   const toast = useToast(toastConfiguration);
@@ -34,11 +42,9 @@ const TranslateForm = () => {
 
   const [titleValues, setTitleValues] = useState<Record<string, string>>({});
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const plainTextDescription = useMemo(
-    () => editorState.getCurrentContent().getPlainText(),
-    [editorState],
-  );
+  const [descriptionEditorStates, setDescriptionEditorStates] = useState<
+    Record<string, EditorState>
+  >({});
 
   const getEventByIdQuery = useGetEventByIdQuery({ id: eventId as string });
   const event = getEventByIdQuery.data;
@@ -47,15 +53,40 @@ const TranslateForm = () => {
     if (event?.name) {
       setTitleValues(event.name);
     }
-  }, [event?.name]);
+
+    if (event?.description) {
+      const newEditorStates: Record<string, EditorState> = {};
+
+      Object.entries(SupportedLanguages).forEach(([langKey, langValue]) => {
+        const description = event.description?.[langValue];
+
+        if (description) {
+          try {
+            const contentState = convertFromRaw(JSON.parse(description));
+            newEditorStates[langValue] =
+              EditorState.createWithContent(contentState);
+          } catch {
+            const contentState = ContentState.createFromText(description);
+            newEditorStates[langValue] =
+              EditorState.createWithContent(contentState);
+          }
+        } else {
+          newEditorStates[langValue] = EditorState.createEmpty();
+        }
+      });
+
+      setDescriptionEditorStates(newEditorStates);
+    }
+  }, [event?.name, event?.description]);
 
   const onNameSuccess = (_, variables: { lang: string }) => {
     const language = variables.lang;
-    toast.trigger(`translation_${language}`);
+    toast.trigger(`title_${language}`);
   };
 
-  const onDescriptionSuccess = () => {
-    console.log('Description changed successfully');
+  const onDescriptionSuccess = (_, variables: { language: string }) => {
+    const language = variables.language;
+    toast.trigger(`description_${language}`);
   };
 
   const changeNameMutation = useChangeNameMutation({
@@ -74,7 +105,6 @@ const TranslateForm = () => {
   };
 
   const handleTitleBlur = async (language: string, value: string) => {
-    // Check if the value actually changed
     const originalValue = event?.name?.[language] || '';
     if (value === originalValue) {
       return;
@@ -84,6 +114,57 @@ const TranslateForm = () => {
       id: eventId as string,
       lang: language,
       name: value,
+      scope: 'event',
+    });
+  };
+
+  const handleDescriptionChange = (
+    language: string,
+    editorState: EditorState,
+  ) => {
+    setDescriptionEditorStates((prev) => ({
+      ...prev,
+      [language]: editorState,
+    }));
+  };
+
+  const handleDescriptionBlur = async (
+    language: string,
+    editorState: EditorState,
+  ) => {
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const newDescription = JSON.stringify(rawContent);
+
+    const originalDescription = event?.description?.[language];
+
+    let originalDescriptionFormatted = '';
+    if (originalDescription) {
+      try {
+        JSON.parse(originalDescription);
+        originalDescriptionFormatted = originalDescription;
+      } catch {
+        const originalContentState =
+          ContentState.createFromText(originalDescription);
+        originalDescriptionFormatted = JSON.stringify(
+          convertToRaw(originalContentState),
+        );
+      }
+    }
+
+    if (newDescription === originalDescriptionFormatted) {
+      return;
+    }
+
+    const plainText = contentState.getPlainText().trim();
+    if (!plainText) {
+      return;
+    }
+
+    changeDescriptionMutation.mutateAsync({
+      id: eventId as string,
+      language,
+      description: newDescription,
       scope: 'event',
     });
   };
@@ -105,8 +186,8 @@ const TranslateForm = () => {
             </p>
           </Inline>
 
-          {Object.entries(SupportedLanguages).map(([langKey, langValue]) => (
-            <Inline key={langKey}>
+          {Object.entries(SupportedLanguages).map(([_, langValue]) => (
+            <Inline key={langValue}>
               <FormElement
                 id={`translate-title-${langValue}`}
                 label={`Titel in ${langValue}`}
@@ -128,17 +209,26 @@ const TranslateForm = () => {
             <p>Omschrijving</p>
           </Inline>
 
-          {Object.entries(SupportedLanguages).map(([lang]) => (
-            <Inline key={lang}>
+          {Object.entries(SupportedLanguages).map(([_, langValue]) => (
+            <Inline key={langValue}>
               <FormElement
-                flex="1 0 50%"
-                id={`create-description-${lang}`}
-                label={`Beschrijving in ${lang}`}
+                id={`create-description-${langValue}`}
+                label={`Beschrijving in ${langValue}`}
                 Component={
                   <RichTextEditor
-                    editorState={editorState}
-                    onEditorStateChange={setEditorState}
-                    onBlur={() => {}}
+                    editorState={
+                      descriptionEditorStates[langValue] ||
+                      EditorState.createEmpty()
+                    }
+                    onEditorStateChange={(editorState) =>
+                      handleDescriptionChange(langValue, editorState)
+                    }
+                    onBlur={() => {
+                      const editorState = descriptionEditorStates[langValue];
+                      if (editorState) {
+                        handleDescriptionBlur(langValue, editorState);
+                      }
+                    }}
                   />
                 }
               />
