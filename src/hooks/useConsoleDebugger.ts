@@ -7,10 +7,8 @@ const useConsoleDebugger = () => {
   /* eslint-disable no-console */
   const [showDebugging] = useFeatureFlag(FeatureFlags.SHOW_CONSOLE_DEBUGGING);
 
-  const isDevelopment = useMemo(() => {
-    const { publicRuntimeConfig } = getConfig() || {};
-    return publicRuntimeConfig?.environment === 'development';
-  }, []);
+  const { publicRuntimeConfig } = getConfig() || {};
+  const isDevelopment = publicRuntimeConfig?.environment === 'development';
 
   const shouldLog = useMemo(() => {
     return isDevelopment || showDebugging;
