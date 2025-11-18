@@ -88,6 +88,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
   },
   {
+    source: '/manage/users/overview',
+    destination: '/manage/users',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_USERS_SEARCH,
+  },
+  {
     source: '/manage/labels/overview',
     destination: '/manage/labels',
     permanent: environment !== 'development',
