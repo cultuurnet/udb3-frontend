@@ -106,6 +106,7 @@ const ButtonGroup = () => (
 - **API Hooks**: `src/hooks/api/` with pattern `entities.ts` (roles.ts, events.ts)
 - **UI Components**: `src/ui/` with corresponding `.stories.tsx` for Storybook
 - **Types**: Domain types in `src/types/`, constants in `src/constants/`
+- **Translations**: All user-facing strings in `src/i18n/` (nl.json, fr.json, de.json)
 
 ### Type Patterns
 
@@ -270,8 +271,74 @@ const debouncedSearchTerm = useDebounce(searchTerm, 300);
 - **Client-Side Rendering**: `useIsClient()` for SSR compatibility, `useMatchBreakpoint()` for responsive behavior
 - **State Management**: React Query for server state, custom hooks for UI state, `useCookiesWithOptions()` for persistence
 - **Window Communication**: `useHandleWindowMessage()` for legacy AngularJS iframe integration
-- **i18n**: React-i18next with language files in `src/i18n/`
+- **i18n**: React-i18next with language files in `src/i18n/` - **ALL user-facing strings must be translatable**
 - **Error Handling**: Sentry integration, custom `FetchError` class, global error boundaries
 - **Testing**: Jest + React Testing Library for unit tests, Playwright for e2e
+
+## Internationalization Requirements
+
+**CRITICAL**: All user-facing strings must be translatable and stored in `src/i18n/` language files.
+
+### Translation Implementation
+
+- **Supported Languages**: Dutch (nl), French (fr), German (de) - fallback to Dutch
+- **Hook Usage**: Import `useTranslation` from `react-i18next`, use `t('translation.key')`
+- **Translation Keys**: Nested JSON structure with descriptive keys (e.g., `form.name`, `actions.save`)
+- **Complete Coverage**: Every new string requires translation in ALL three language files
+- **Placeholders**: Use `{{placeholder}}` syntax for dynamic values in translations
+
+````typescript
+import { useTranslation } from 'react-i18next';
+
+const MyComponent = ({ userName, count }) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack spacing={3}>
+      <Text>{t('form.title')}</Text>
+      <Button>{t('actions.save')}</Button>
+      <Text>{t('validation.required')}</Text>
+      <Text>{t('welcome.message', { userName })}</Text>
+      <Text>{t('items.count', { count })}</Text>
+      <Text
+        dangerouslySetInnerHTML={{
+          __html: t('content.with_html'),
+        }}
+      />
+    </Stack>
+  );
+};
+```### Translation File Structure
+
+Add to `src/i18n/nl.json`, `src/i18n/fr.json`, `src/i18n/de.json`:
+
+```json
+{
+  "form": {
+    "title": "Formulier titel",
+    "name": "Naam",
+    "submit": "Verzenden"
+  },
+  "actions": {
+    "save": "Bewaren",
+    "cancel": "Annuleren",
+    "edit": "Bewerken"
+  },
+  "validation": {
+    "required": "Dit veld is verplicht",
+    "invalid_email": "Ongeldig e-mailadres"
+  },
+  "welcome": {
+    "message": "Welkom, {{userName}}!"
+  },
+  "items": {
+    "count": "Je hebt {{count}} item",
+    "count_plural": "Je hebt {{count}} items"
+  },
+  "content": {
+    "with_html": "Dit is <strong>belangrijke</strong> tekst met <a href='#'>een link</a>"
+  }
+}
+````
 
 Always check existing patterns in similar files before creating new API hooks, UI components, or pages.
