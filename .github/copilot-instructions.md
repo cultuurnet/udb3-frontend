@@ -51,9 +51,30 @@ export { useGetRolesQuery, useCreateRoleMutation, prefetchGetRolesQuery };
 
 ### Feature Flag Implementation
 
+#### For Migrating Existing AngularJS Routes to React:
+
 1. Add flag to `FeatureFlags` object in `src/hooks/useFeatureFlag.ts`
 2. Add conditional redirect in `src/redirects.tsx` with `featureFlag` property
-3. Use fallback pattern: `if (!featureFlagEnabled) return <Fallback />;`
+3. Use fallback pattern for progressive migration:
+
+```typescript
+import Fallback from '@/pages/[...params].page';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+
+const MyMigratedPage = () => {
+  const [isFeatureFlagEnabled] = useFeatureFlag(FeatureFlags.MY_FEATURE);
+
+  if (!isFeatureFlagEnabled) return <Fallback />;
+
+  return <MyReactComponent />;
+};
+```
+
+#### For New React-Only Routes:
+
+- **DO NOT use feature flags or `<Fallback>`** for completely new routes
+- New routes that don't exist in AngularJS should render React components directly
+- Only use fallback pattern when migrating existing AngularJS functionality
 
 ### UI Component Creation (Custom UI Components First)
 
@@ -138,26 +159,15 @@ type BaseOffer = {
 ## Build & Development Commands
 
 ```bash
-# Development with hot reload
 yarn dev
-
-# For Vagrant environment (with SSL certs)
 yarn dev:vagrant
-
-# Build for production and launch server
 yarn build
 yarn start
-
-# Testing
-yarn test:unit          # Jest unit tests
-yarn test:e2e          # Playwright e2e tests
-
-# Code quality
-yarn ci                # Types + lint + format check
-yarn lint              # ESLint with auto-fix
-yarn format            # Prettier formatting
-
-# Storybook for UI components
+yarn test:unit
+yarn test:e2e
+yarn ci
+yarn lint
+yarn format
 yarn storybook
 yarn storybook:build
 ```
@@ -169,17 +179,91 @@ yarn storybook:build
 - **Auth Flow**: Auth0 integration with middleware handling token management in `src/middleware.api.ts`
 - **Legacy Integration**: Routes not in React fall back to AngularJS iframe via `[...params].page.js`
 
-### Form Patterns (React Hook Form + Custom Components)
+### Form Patterns (React Hook Form + Yup Validation)
+
+#### Standard Form Setup with Yup Schema
 
 ```typescript
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+  name: yup.string().required(),
+  isVisible: yup.boolean().default(true),
+});
+
+type FormData = yup.InferType<typeof schema>;
+
+const MyForm = () => {
+  const { t } = useTranslation();
+
+  const { control, register, handleSubmit, formState, watch } =
+    useForm<FormData>({
+      resolver: yupResolver(schema),
+      defaultValues: { email: '', name: '', isVisible: true },
+      mode: 'onChange',
+    });
+
+  const onSubmit = async (data: FormData) => {
+    await createMutation.mutateAsync({ headers, ...data });
+  };
+};
+```
+
+#### Advanced Yup Validation Patterns
+
+```typescript
+const schema = yup.object({
+  address: yup.object({
+    streetAndNumber: yup.string(),
+    city: yup.object({
+      name: yup.string(),
+      zip: yup.string(),
+    }).when('country', {
+      is: 'BE',
+      then: yup.object({
+        zip: yup.string().matches(/^\d{4}$/),
+      }),
+    }),
+  }),
+
+  name: yup.string()
+    .required(t('form.errors.name_required'))
+    .min(2, t('form.errors.name_min', { count: 2 }))
+    .test('no-semicolon', t('form.errors.semicolon'),
+      (value) => !value || !/;/.test(value)
+    ),
+
+  contact: yup.array(yup.object({
+    type: yup.string(),
+    value: yup.string()
+  })),
+});
+
+const createValidationSchema = () => {
+  const { t } = useTranslation();
+  return yup.object({
+    name: yup.string()
+      .required(t('labels.form.errors.name_required'))
+      .min(MIN_LENGTH, t('labels.form.errors.name_min', { count: MIN_LENGTH }))
+      .max(MAX_LENGTH, t('labels.form.errors.name_max', { count: MAX_LENGTH })),
+  });
+};
+
+const createValidationSchema = () => {
+```
+
+#### Form Components Integration
+
+```typescript
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Button } from '@/ui/Button';
-
-const { control, handleSubmit, formState, watch } = useForm({
+const { control, register, handleSubmit, formState, watch } = useForm({
   resolver: yupResolver(validationSchema),
   defaultValues: { name: '', isVisible: true },
   mode: 'onChange',
@@ -189,42 +273,69 @@ const onSubmit = async (data) => {
   await createMutation.mutateAsync({ headers, ...data });
 };
 
-<Stack spacing={3}>
-  <Controller
-    name="name"
-    control={control}
-    render={({ field }) => (
-      <FormElement
-        id="name"
-        label={t('form.name')}
-        error={formState.errors.name?.message}
-        Component={<Input {...field} />}
+<FormElement
+  id="email"
+  label={t('form.email.label')}
+  Component={
+    <Input
+      {...register('email')}
+      placeholder={t('form.email.placeholder')}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && formState.isValid) {
+          handleSubmit(onSubmit)();
+        }
+      }}
+    />
+  }
+  error={formState.errors.email?.message}
+/>
+
+<Controller
+  name="name"
+  control={control}
+  render={({ field }) => (
+    <FormElement
+      id="name"
+      label={t('form.name')}
+      error={formState.errors.name?.message}
+      Component={<Input {...field} />
       />
     )}
   />
 
-  <Controller
-    name="isVisible"
-    control={control}
-    render={({ field }) => (
-      <CheckboxWithLabel
-        id="visible"
-        checked={field.value}
-        onToggle={(e) => field.onChange(e.currentTarget.checked)}
-      >
-        {t('form.visible')}
-      </CheckboxWithLabel>
-    )}
-  />
+<Controller
+  name="isVisible"
+  control={control}
+  render={({ field }) => (
+    <CheckboxWithLabel
+      id="visible"
+      checked={field.value}
+      onToggle={(e) => field.onChange(e.currentTarget.checked)}
+    >
+      {t('form.visible')}
+    </CheckboxWithLabel>
+  )}
+/>
 
-  <Button
-    disabled={!formState.isValid}
-    onClick={handleSubmit(onSubmit)}
-  >
-    {t('form.submit')}
-  </Button>
-</Stack>
+<Button
+  disabled={!formState.isValid || !formState.isDirty}
+  onClick={handleSubmit(onSubmit)}
+>
+  {t('form.submit')}
+</Button>
 ```
+
+#### Form Validation Best Practices
+
+- **Always use yup schemas**: Never rely on HTML validation alone
+- **Type inference**: Use `yup.InferType<typeof schema>` for FormData types
+- **Translation integration**: Create schema functions that use `useTranslation()` for dynamic error messages
+- **Real-time validation**: Set `mode: 'onChange'` for immediate feedback
+- **Prefer register()**: Use `register()` for simple inputs, `Controller` for complex components
+- **Event handlers**: Prefer `onClick` for buttons and `onChange` for inputs over `onKeyDown`
+- **Validation states**: Use `formState.isValid`, `formState.isDirty` for button states
+- **No `<form>` tags**: Use `handleSubmit(onSubmit)` on Button `onClick` instead of form submission
+- **No comments**: Code should be self-explanatory without inline comments
 
 ### Custom Hooks Architecture
 
