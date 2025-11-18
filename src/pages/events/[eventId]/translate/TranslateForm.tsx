@@ -5,7 +5,7 @@ import {
   EditorState,
 } from 'draft-js';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -48,6 +48,11 @@ const TranslateForm = () => {
 
   const getEventByIdQuery = useGetEventByIdQuery({ id: eventId as string });
   const event = getEventByIdQuery.data;
+
+  const originalTitle = useMemo(() => {
+    const mainLanguage = event?.mainLanguage || 'nl';
+    return event?.name ? event.name[mainLanguage] || '' : '';
+  }, [event?.name, event?.mainLanguage]);
 
   useEffect(() => {
     if (event?.name) {
@@ -171,7 +176,7 @@ const TranslateForm = () => {
 
   return (
     <Page>
-      <Page.Title>Vertaal</Page.Title>
+      <Page.Title>{originalTitle + ' vertalen'}</Page.Title>
       <Page.Content>
         <Toast
           variant="success"
@@ -179,16 +184,11 @@ const TranslateForm = () => {
           visible={!!toast.message}
           onClose={() => toast.clear()}
         />
-        <Stack backgroundColor="white" padding={4} spacing={4}>
-          <Inline>
-            <p>
-              <strong>Titel:</strong>
-            </p>
-          </Inline>
-
-          {Object.entries(SupportedLanguages).map(([_, langValue]) => (
-            <Inline key={langValue}>
+        <Stack backgroundColor="white" padding={4} spacing={5}>
+          <Inline spacing={5}>
+            {Object.entries(SupportedLanguages).map(([_, langValue]) => (
               <FormElement
+                key={langValue}
                 id={`translate-title-${langValue}`}
                 label={`Titel in ${langValue}`}
                 Component={
@@ -202,16 +202,13 @@ const TranslateForm = () => {
                   />
                 }
               />
-            </Inline>
-          ))}
-
-          <Inline>
-            <p>Omschrijving</p>
+            ))}
           </Inline>
 
-          {Object.entries(SupportedLanguages).map(([_, langValue]) => (
-            <Inline key={langValue}>
+          <Stack spacing={5}>
+            {Object.entries(SupportedLanguages).map(([_, langValue]) => (
               <FormElement
+                key={langValue}
                 id={`create-description-${langValue}`}
                 label={`Beschrijving in ${langValue}`}
                 Component={
@@ -232,8 +229,8 @@ const TranslateForm = () => {
                   />
                 }
               />
-            </Inline>
-          ))}
+            ))}
+          </Stack>
         </Stack>
 
         <Inline>
