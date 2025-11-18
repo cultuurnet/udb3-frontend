@@ -330,7 +330,7 @@ const LabelFormFields = ({
           id="label-name-display"
           Component={
             <Inline spacing={2}>
-              <Text fontWeight={'bold'}>{watchedName}</Text>
+              <Text fontWeight="bold">{watchedName}</Text>
             </Inline>
           }
         />
