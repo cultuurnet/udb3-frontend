@@ -12,6 +12,7 @@ import { useChangeDescriptionMutation } from '@/hooks/api/offers';
 import { SupportedLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
@@ -49,6 +50,9 @@ const TranslateForm = () => {
   const router = useRouter();
   const { eventId } = router.query;
 
+  const [isEditingOriginalTitle, setIsEditingOriginalTitle] = useState(false);
+  const [isEditingOriginalDescription, setIsEditingOriginalDescription] =
+    useState(false);
   const [titleValues, setTitleValues] = useState<Record<string, string>>({});
 
   const [descriptionEditorStates, setDescriptionEditorStates] = useState<
@@ -186,6 +190,15 @@ const TranslateForm = () => {
       scope: 'event',
     });
   };
+
+  const toggleEditOriginalTitle = () => {
+    setIsEditingOriginalTitle(true);
+  };
+
+  const toggleEditOriginalDescription = () => {
+    setIsEditingOriginalDescription(true);
+  };
+
   return (
     <Page>
       <Page.Title>{originalTitle + ' ' + t('translate.title')}</Page.Title>
@@ -229,24 +242,36 @@ const TranslateForm = () => {
                       ? t('translate.original_label', { language })
                       : t('translate.translation_label', { language })}
                   </Text>
-                  <FormElement
-                    id={`translate-title-${language}`}
-                    Component={
-                      <Input
-                        maxWidth={300}
-                        placeholder={t('translate.placeholder_title', {
-                          language,
-                        })}
-                        value={titleValues[language] || ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleTitleChange(language, e.target.value)
-                        }
-                        onBlur={(e) =>
-                          handleTitleBlur(language, e.target.value)
-                        }
-                      />
-                    }
-                  />
+                  {originalLanguage === language && !isEditingOriginalTitle ? (
+                    <Inline spacing={3}>
+                      <Text variant="muted">{titleValues[language] || ''}</Text>
+                      <Button
+                        onClick={toggleEditOriginalTitle}
+                        variant={ButtonVariants.LINK}
+                      >
+                        Wijzigen
+                      </Button>
+                    </Inline>
+                  ) : (
+                    <FormElement
+                      id={`translate-title-${language}`}
+                      Component={
+                        <Input
+                          maxWidth={300}
+                          placeholder={t('translate.placeholder_title', {
+                            language,
+                          })}
+                          value={titleValues[language] || ''}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleTitleChange(language, e.target.value)
+                          }
+                          onBlur={(e) =>
+                            handleTitleBlur(language, e.target.value)
+                          }
+                        />
+                      }
+                    />
+                  )}
                 </Stack>
               ))}
             </Stack>
@@ -267,26 +292,46 @@ const TranslateForm = () => {
                       ? t('translate.original_label', { language })
                       : t('translate.translation_label', { language })}
                   </Text>
-                  <FormElement
-                    id={`create-description-${language}`}
-                    Component={
-                      <RichTextEditor
-                        editorState={
-                          descriptionEditorStates[language] ||
-                          EditorState.createEmpty()
-                        }
-                        onEditorStateChange={(editorState) =>
-                          handleDescriptionChange(language, editorState)
-                        }
-                        onBlur={() => {
-                          const editorState = descriptionEditorStates[language];
-                          if (editorState) {
-                            handleDescriptionBlur(language, editorState);
+                  {originalLanguage === language &&
+                  !isEditingOriginalDescription ? (
+                    <Inline>
+                      <Text variant="muted">
+                        {descriptionEditorStates[language]
+                          ? descriptionEditorStates[language]
+                              .getCurrentContent()
+                              .getPlainText()
+                          : ''}
+                      </Text>
+                      <Button
+                        variant={ButtonVariants.LINK}
+                        onClick={toggleEditOriginalDescription}
+                      >
+                        Wijzigen
+                      </Button>
+                    </Inline>
+                  ) : (
+                    <FormElement
+                      id={`create-description-${language}`}
+                      Component={
+                        <RichTextEditor
+                          editorState={
+                            descriptionEditorStates[language] ||
+                            EditorState.createEmpty()
                           }
-                        }}
-                      />
-                    }
-                  />
+                          onEditorStateChange={(editorState) =>
+                            handleDescriptionChange(language, editorState)
+                          }
+                          onBlur={() => {
+                            const editorState =
+                              descriptionEditorStates[language];
+                            if (editorState) {
+                              handleDescriptionBlur(language, editorState);
+                            }
+                          }}
+                        />
+                      }
+                    />
+                  )}
                 </Stack>
               ))}
             </Stack>
