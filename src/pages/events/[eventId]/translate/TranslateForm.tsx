@@ -310,27 +310,29 @@ const TranslateForm = () => {
                       </Button>
                     </Inline>
                   ) : (
-                    <FormElement
-                      id={`create-description-${language}`}
-                      Component={
-                        <RichTextEditor
-                          editorState={
-                            descriptionEditorStates[language] ||
-                            EditorState.createEmpty()
-                          }
-                          onEditorStateChange={(editorState) =>
-                            handleDescriptionChange(language, editorState)
-                          }
-                          onBlur={() => {
-                            const editorState =
-                              descriptionEditorStates[language];
-                            if (editorState) {
-                              handleDescriptionBlur(language, editorState);
+                    <div id={`description-editor-container-${language}`}>
+                      <FormElement
+                        id={`create-description-${language}`}
+                        Component={
+                          <RichTextEditor
+                            editorState={
+                              descriptionEditorStates[language] ||
+                              EditorState.createEmpty()
                             }
-                          }}
-                        />
-                      }
-                    />
+                            onEditorStateChange={(editorState) =>
+                              handleDescriptionChange(language, editorState)
+                            }
+                            onBlur={() => {
+                              const editorState =
+                                descriptionEditorStates[language];
+                              if (editorState) {
+                                handleDescriptionBlur(language, editorState);
+                              }
+                            }}
+                          />
+                        }
+                      />
+                    </div>
                   )}
                 </Stack>
               ))}
