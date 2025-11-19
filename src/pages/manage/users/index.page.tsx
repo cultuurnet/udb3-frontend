@@ -12,6 +12,7 @@ import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { ErrorBody } from '@/utils/fetchFromApi';
+import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -132,5 +133,15 @@ const UsersOverviewPage = () => {
     </Page>
   );
 };
+
+export const getServerSideProps = getApplicationServerSideProps(
+  async ({ cookies }) => {
+    return {
+      props: {
+        cookies,
+      },
+    };
+  },
+);
 
 export default UsersOverviewPage;
