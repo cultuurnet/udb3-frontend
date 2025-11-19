@@ -1,9 +1,5 @@
-import {
-  ContentState,
-  convertFromRaw,
-  convertToRaw,
-  EditorState,
-} from 'draft-js';
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +22,9 @@ import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
+
+const htmlToDraft =
+  typeof window === 'object' && require('html-to-draftjs').default;
 
 const languageOptions = [...Object.values(SupportedLanguages), 'en'];
 const getGlobalValue = getValueFromTheme('global');
@@ -72,19 +71,17 @@ const TranslateForm = () => {
     if (event?.description) {
       const newEditorStates: Record<string, EditorState> = {};
 
-      Object.entries(SupportedLanguages).forEach(([langKey, langValue]) => {
+      languageOptions.forEach((langValue) => {
         const description = event.description?.[langValue];
 
         if (description) {
-          try {
-            const contentState = convertFromRaw(JSON.parse(description));
-            newEditorStates[langValue] =
-              EditorState.createWithContent(contentState);
-          } catch {
-            const contentState = ContentState.createFromText(description);
-            newEditorStates[langValue] =
-              EditorState.createWithContent(contentState);
-          }
+          const draftState = htmlToDraft(description);
+          const contentState = ContentState.createFromBlockArray(
+            draftState.contentBlocks,
+            draftState.entityMap,
+          );
+          newEditorStates[langValue] =
+            EditorState.createWithContent(contentState);
         } else {
           newEditorStates[langValue] = EditorState.createEmpty();
         }
@@ -93,7 +90,6 @@ const TranslateForm = () => {
       setDescriptionEditorStates(newEditorStates);
     }
   }, [event?.name, event?.description]);
-
   const onNameSuccess = (_, variables: { lang: string }) => {
     const language = variables.lang;
     toast.trigger(`title_${language}`);
@@ -148,42 +144,44 @@ const TranslateForm = () => {
     editorState: EditorState,
   ) => {
     const contentState = editorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState);
-    const newDescription = JSON.stringify(rawContent);
+    const plainText = contentState.getPlainText().trim();
 
     const originalDescription = event?.description?.[language];
+    let originalPlainText = '';
 
-    let originalDescriptionFormatted = '';
     if (originalDescription) {
-      try {
-        JSON.parse(originalDescription);
-        originalDescriptionFormatted = originalDescription;
-      } catch {
-        const originalContentState =
-          ContentState.createFromText(originalDescription);
-        originalDescriptionFormatted = JSON.stringify(
-          convertToRaw(originalContentState),
-        );
-      }
+      const originalDraftState = htmlToDraft(originalDescription);
+      const originalContentState = ContentState.createFromBlockArray(
+        originalDraftState.contentBlocks,
+        originalDraftState.entityMap,
+      );
+      originalPlainText = originalContentState.getPlainText().trim();
     }
 
-    if (newDescription === originalDescriptionFormatted) {
+    if (plainText === originalPlainText) {
       return;
     }
 
-    const plainText = contentState.getPlainText().trim();
-    if (!plainText) {
+    if (!editorState.getLastChangeType()) {
+      return;
+    }
+
+    const htmlDescription =
+      plainText.length > 0
+        ? draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        : '';
+
+    if (htmlDescription.length === 0) {
       return;
     }
 
     changeDescriptionMutation.mutateAsync({
       id: eventId as string,
       language,
-      description: newDescription,
+      description: htmlDescription,
       scope: 'event',
     });
   };
-
   return (
     <Page>
       <Page.Title>{originalTitle + ' vertalen'}</Page.Title>
