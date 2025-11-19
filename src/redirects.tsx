@@ -82,6 +82,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_DUPLICATE,
   },
   {
+    source: '/event/:eventId/translate',
+    destination: '/events/:eventId/translate',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_TRANSLATE,
+  },
+  {
     source: '/manage/roles/overview',
     destination: '/manage/roles',
     permanent: false,
