@@ -1216,6 +1216,23 @@
     "prompt_text": "Typ om te zoeken...",
     "search_text": "Aan het zoeken..."
   },
+  "users": {
+    "search": {
+      "title": "Gebruikers",
+      "email": {
+        "label": "Zoeken op email",
+        "placeholder": "Voer een geldig e-mailadres in"
+      },
+      "submit": "Zoeken",
+      "searching": "Zoeken...",
+      "info": "Schrijf een geldig email-adres in het veld hierboven en druk op enter om gebruikers te zoeken.",
+      "not_found": "Geen gebruiker gevonden voor het opgegeven e-mail adres.",
+      "error": {
+        "message": "Er ging iets mis tijdens het zoeken: {{error}}",
+        "unknown": "Er is een onbekende fout opgetreden"
+      }
+    }
+  },
   "videos": {
     "add_button": "Videolink toevoegen",
     "delete": "Verwijderen",
