@@ -758,6 +758,11 @@
     },
     "organizer_picker": {
       "label": "Organisatie"
+    },
+    "requests": "aanvragen",
+    "sorting": {
+      "requested_asc": "Aanvraagdatum (oud - nieuw)",
+      "requested_desc": "Aanvraagdatum (nieuw - oud)"
     }
   },
   "movies": {
