@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 
+import type { Headers } from '@/hooks/api/types/Headers';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Values } from '@/types/Values';
 import { FetchError, fetchFromApi } from '@/utils/fetchFromApi';
@@ -149,10 +150,46 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
+type SearchUser = {
+  uuid: string;
+  email: string;
+  username: string;
+};
+
+const findUserWithEmail = async ({
+  headers,
+  email,
+}: {
+  headers: Headers;
+  email: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/users/emails/${encodeURIComponent(email)}`,
+    options: {
+      headers,
+    },
+  });
+  return (await res.json()) as SearchUser;
+};
+
+const createFindUserWithEmailQueryOptions = (email: string) =>
+  queryOptions({
+    queryKey: ['users', 'findByEmail', email],
+    queryFn: findUserWithEmail,
+    queryArguments: { email },
+  });
+
+const useFindUserWithEmailQuery = (email: string, configuration = {}) =>
+  useAuthenticatedQuery({
+    ...createFindUserWithEmailQueryOptions(email),
+    ...configuration,
+  });
+
 export {
   prefetchGetPermissionsQuery,
+  useFindUserWithEmailQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,
   useGetUserQuery,
 };
-export type { User };
+export type { SearchUser, User };
