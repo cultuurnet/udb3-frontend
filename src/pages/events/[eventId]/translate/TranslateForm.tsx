@@ -12,10 +12,10 @@ import { useChangeDescriptionMutation } from '@/hooks/api/offers';
 import { SupportedLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
-import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -31,15 +31,19 @@ const getGlobalValue = getValueFromTheme('global');
 
 const TranslateForm = () => {
   const { t } = useTranslation();
+  const successMessages = Object.fromEntries([
+    ...languageOptions.map((lang) => [
+      `title_${lang}`,
+      t('translate.success.title', { language: lang }),
+    ]),
+    ...languageOptions.map((lang) => [
+      `description_${lang}`,
+      t('translate.success.description', { language: lang }),
+    ]),
+  ]);
+
   const toastConfiguration = {
-    messages: {
-      title_nl: 'Titel succesvol bijgewerkt (Nederlands).',
-      title_fr: 'Titre mis à jour avec succès (Français).',
-      title_de: 'Titel erfolgreich aktualisiert (Deutsch).',
-      description_nl: 'Beschrijving succesvol bijgewerkt (Nederlands).',
-      description_fr: 'Description mise à jour avec succès (Français).',
-      description_de: 'Beschreibung erfolgreich aktualisiert (Deutsch).',
-    },
+    messages: successMessages,
   };
   const toast = useToast(toastConfiguration);
   const router = useRouter();
@@ -184,7 +188,7 @@ const TranslateForm = () => {
   };
   return (
     <Page>
-      <Page.Title>{originalTitle + ' vertalen'}</Page.Title>
+      <Page.Title>{originalTitle + ' ' + t('translate.title')}</Page.Title>
       <Page.Content>
         <Toast
           variant="success"
@@ -208,11 +212,11 @@ const TranslateForm = () => {
               gap: 28px;
             `}
           >
-            <Title>Titel</Title>
+            <Title>{t('translate.title_label')}</Title>
             <Stack spacing={4}>
               {languageOptions.map((language) => (
                 <Stack
-                  key={language}
+                  key={`translate-title-${language}`}
                   display="grid"
                   alignItems="center"
                   css={`
@@ -222,15 +226,17 @@ const TranslateForm = () => {
                 >
                   <Text variant="muted">
                     {originalLanguage === language
-                      ? `Origineel ${language}`
-                      : `Vertaling ${language}`}
+                      ? t('translate.original_label', { language })
+                      : t('translate.translation_label', { language })}
                   </Text>
                   <FormElement
                     id={`translate-title-${language}`}
                     Component={
                       <Input
                         maxWidth={300}
-                        placeholder={`Voer titel in ${language} in`}
+                        placeholder={t('translate.placeholder_title', {
+                          language,
+                        })}
                         value={titleValues[language] || ''}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           handleTitleChange(language, e.target.value)
@@ -245,11 +251,11 @@ const TranslateForm = () => {
               ))}
             </Stack>
 
-            <Title>Beschrijving</Title>
+            <Title>{t('translate.description_label')}</Title>
             <Stack spacing={4}>
               {languageOptions.map((language) => (
                 <Stack
-                  key={language}
+                  key={`translate-description-${language}`}
                   display="grid"
                   css={`
                     grid-template-columns: 120px 1fr;
@@ -258,8 +264,8 @@ const TranslateForm = () => {
                 >
                   <Text variant="muted">
                     {originalLanguage === language
-                      ? `Origineel ${language}`
-                      : `Vertaling ${language}`}
+                      ? t('translate.original_label', { language })
+                      : t('translate.translation_label', { language })}
                   </Text>
                   <FormElement
                     id={`create-description-${language}`}
@@ -288,7 +294,12 @@ const TranslateForm = () => {
         </Stack>
 
         <Inline>
-          <Button variant="success">Klaar met vertalen</Button>
+          <Link
+            href={`/event/${eventId}/preview`}
+            variant={LinkVariants.BUTTON_SUCCESS}
+          >
+            <Text>{t('translate.done')}</Text>
+          </Link>
         </Inline>
       </Page.Content>
     </Page>

@@ -1203,6 +1203,19 @@
     "end": "Einde",
     "start": "Start"
   },
+  "translate": {
+    "title": "vertalen",
+    "title_label": "Titel",
+    "description_label": "Beschrijving",
+    "placeholder_title": "Vertaal titel in {{language}}",
+    "original_label": "Origineel {{language}}",
+    "translation_label": "Vertaling {{language}}",
+    "done": "Klaar met vertalen",
+    "success": {
+      "title": "Titel ({{language}}) succesvol bijgewerkt",
+      "description": "Beschrijving ({{language}}) succesvol bijgewerkt"
+    }
+  },
   "date_period_picker": {
     "end": "Einde",
     "start": "Start"

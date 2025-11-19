@@ -1151,6 +1151,19 @@
     "end": "Ende",
     "start": "Start"
   },
+  "translate": {
+    "title": "übersetzen",
+    "title_label": "Titel",
+    "description_label": "Beschreibung",
+    "placeholder_title": "Übersetze den Titel in {{language}}",
+    "original_label": "Original {{language}}",
+    "translation_label": "Übersetzung {{language}}",
+    "done": "Fertig mit Übersetzen",
+    "success": {
+      "title": "Titel ({{language}}) erfolgreich aktualisiert",
+      "description": "Beschreibung ({{language}}) erfolgreich aktualisiert"
+    }
+  },
   "date_period_picker": {
     "end": "Ende",
     "start": "Start"
