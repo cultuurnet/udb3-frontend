@@ -19,6 +19,7 @@ const FeatureFlags = {
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   REACT_ROLES_OVERVIEW: 'react_roles_overview',
   REACT_USERS_SEARCH: 'react_users_search',
+  REACT_USERS_EDIT: 'react_users_edit',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

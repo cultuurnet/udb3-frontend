@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useFindUserWithEmailQuery } from '@/hooks/api/user';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
@@ -27,6 +28,9 @@ const UsersOverviewPage = () => {
     'idle' | 'loading' | 'notFound' | 'problem'
   >('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isReactUsersEditFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_USERS_EDIT,
+  );
 
   const [searchEmail, setSearchEmail] = useState('');
 
@@ -45,7 +49,12 @@ const UsersOverviewPage = () => {
 
   useEffect(() => {
     if (findUserQuery.isSuccess && findUserQuery.data) {
-      router.push(`/manage/users/${findUserQuery.data.email}`);
+      console.log('User found:', findUserQuery.data);
+      if (isReactUsersEditFeatureFlagEnabled) {
+        router.push(`/manage/users/${findUserQuery.data.uuid}/edit`);
+      } else {
+        router.push(`/manage/users/${findUserQuery.data.email}`);
+      }
     } else if (findUserQuery.isError && findUserQuery.error) {
       setSearchEmail('');
       if (findUserQuery.error.status === 404) {
