@@ -134,7 +134,7 @@ const TranslateForm = () => {
       return;
     }
 
-    changeNameMutation.mutateAsync({
+    await changeNameMutation.mutateAsync({
       id: eventId as string,
       lang: language,
       name: value,
@@ -183,16 +183,11 @@ const TranslateForm = () => {
       return;
     }
 
-    const htmlDescription =
-      plainText.length > 0
-        ? draftToHtml(convertToRaw(editorState.getCurrentContent()))
-        : '';
+    const htmlDescription = draftToHtml(
+      convertToRaw(editorState.getCurrentContent()),
+    );
 
-    if (htmlDescription.length === 0) {
-      return;
-    }
-
-    changeDescriptionMutation.mutateAsync({
+    await changeDescriptionMutation.mutateAsync({
       id: eventId as string,
       language,
       description: htmlDescription,
@@ -210,7 +205,7 @@ const TranslateForm = () => {
 
   return (
     <Page>
-      <Page.Title>{originalTitle + ' ' + t('translate.title')}</Page.Title>
+      <Page.Title>{`${originalTitle} ${t('translate.title')}`}</Page.Title>
       <Page.Content>
         <Toast
           variant="success"

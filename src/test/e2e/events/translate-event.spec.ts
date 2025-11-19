@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
-test.describe('Event translation', async () => {
-  test.beforeEach(async ({ page, context }) => {
+test.describe('Event translation', () => {
+  test.beforeEach(async ({ context }) => {
     await context.addCookies([
       {
         name: 'ff_react_translate',
