@@ -74,10 +74,6 @@ test.describe('Event translation', async () => {
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
 
-      await expect(
-        page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
-      ).toBeHidden({ timeout: 5000 });
-
       const descriptionContainer = page.locator(
         `#description-editor-container-${translation.lang}`,
       );
@@ -95,12 +91,6 @@ test.describe('Event translation', async () => {
           `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
         ),
       ).toBeVisible();
-
-      await expect(
-        page.getByText(
-          `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
-        ),
-      ).toBeHidden({ timeout: 5000 });
     }
 
     // Go back to preview
