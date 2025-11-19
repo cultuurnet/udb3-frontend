@@ -125,6 +125,11 @@ const TranslateForm = () => {
 
   const handleTitleBlur = async (language: string, value: string) => {
     const originalValue = event?.name?.[language] || '';
+
+    if (value === '') {
+      return;
+    }
+
     if (value === originalValue) {
       return;
     }
@@ -164,6 +169,10 @@ const TranslateForm = () => {
         originalDraftState.entityMap,
       );
       originalPlainText = originalContentState.getPlainText().trim();
+    }
+
+    if (plainText.length === 0) {
+      return;
     }
 
     if (plainText === originalPlainText) {
