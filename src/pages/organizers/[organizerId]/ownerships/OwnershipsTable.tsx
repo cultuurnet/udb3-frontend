@@ -1,15 +1,14 @@
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SortOrder, SortOrderType } from '@/constants/SortOptions';
 import {
   OwnershipCreator,
   OwnershipRequest,
   OwnershipState,
 } from '@/hooks/api/ownerships';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
@@ -24,7 +23,6 @@ type ActionHandlers = {
   onDelete?: (request: OwnershipRequest) => void;
   onApprove?: (request: OwnershipRequest) => void;
   onReject?: (request: OwnershipRequest) => void;
-  onSort?: (order: SortOrderType) => void;
 };
 
 type ActionProps = {
@@ -114,14 +112,12 @@ export const OwnershipsTable = ({
   onDelete,
   onApprove,
   onReject,
-  onSort,
   shouldShowItemId = false,
   shouldShowOwnerId = false,
 }: Props) => {
   const { grey3 } = colors;
   const { t } = useTranslation();
   const router = useRouter();
-  const [_, setSortOrder] = useState<SortOrderType>(SortOrder.DESC);
 
   const hasActions = useMemo(
     () =>
@@ -201,21 +197,6 @@ export const OwnershipsTable = ({
         {hasDate && (
           <Inline spacing={2} alignItems="center">
             <Title size={3}>Aanvraag Datum</Title>
-            <Button
-              onClick={() =>
-                setSortOrder((prevOrder) => {
-                  const order =
-                    prevOrder === SortOrder.ASC
-                      ? SortOrder.DESC
-                      : SortOrder.ASC;
-                  onSort?.(order);
-                  return order;
-                })
-              }
-              variant={ButtonVariants.UNSTYLED}
-            >
-              <Icon name={Icons.SORT} alignItems="center" />
-            </Button>
           </Inline>
         )}
         {hasActions && (
@@ -280,7 +261,11 @@ export const OwnershipsTable = ({
               </List.Item>
             )}
             {hasDate && (
-              <List.Item minWidth={0}>{request.created || ''}</List.Item>
+              <List.Item minWidth={0}>
+                <Text fontSize="small">
+                  {new Date(request.created).toLocaleDateString('nl-BE')}
+                </Text>
+              </List.Item>
             )}
             {hasActions && (
               <List.Item

@@ -725,6 +725,11 @@
     },
     "organizer_picker": {
       "label": "Organisation"
+    },
+    "requests": "Anfragen",
+    "sorting": {
+      "requested_asc": "Anfragedatum (alt - neu)",
+      "requested_desc": "Anfragedatum (neu - alt)"
     }
   },
   "movies": {
