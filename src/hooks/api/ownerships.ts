@@ -1,5 +1,6 @@
 import { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 
+import { SortOrder } from '@/constants/SortOptions';
 import { Values } from '@/types/Values';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
@@ -100,8 +101,10 @@ const getOwnershipRequests = async ({
   }
 
   if (sortOptions) {
-    searchParams.set('field', `${sortOptions.field}`);
-    searchParams.set('order', `${sortOptions.order}`);
+    searchParams.set(
+      `sort`,
+      `${sortOptions.order === SortOrder.ASC ? '' : '-'}${sortOptions.field}`,
+    );
   }
   if (itemId) {
     searchParams.set('itemId', itemId);
