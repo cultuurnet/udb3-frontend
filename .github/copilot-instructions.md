@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-This is a **Next.js React TypeScript application** for UiTdatabank (cultural event management) built with **React Bootstrap components** and a sophisticated feature flag system for progressive migration from AngularJS.
+This is a **Next.js React TypeScript application** for UiTdatabank (cultural event management) built with **React Bootstrap components** and a feature flag system for progressive migration from AngularJS.
 
 ### Key Architectural Patterns
 
