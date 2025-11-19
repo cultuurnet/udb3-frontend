@@ -1154,6 +1154,7 @@
   "translate": {
     "title": "übersetzen",
     "title_label": "Titel",
+    "change": "Ändern",
     "description_label": "Beschreibung",
     "placeholder_title": "Übersetze den Titel in {{language}}",
     "original_label": "Original {{language}}",

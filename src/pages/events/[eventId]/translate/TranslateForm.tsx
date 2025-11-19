@@ -249,7 +249,7 @@ const TranslateForm = () => {
                         onClick={toggleEditOriginalTitle}
                         variant={ButtonVariants.LINK}
                       >
-                        Wijzigen
+                        {t('translate.change')}
                       </Button>
                     </Inline>
                   ) : (
@@ -306,7 +306,7 @@ const TranslateForm = () => {
                         variant={ButtonVariants.LINK}
                         onClick={toggleEditOriginalDescription}
                       >
-                        Wijzigen
+                        {t('translate.change')}
                       </Button>
                     </Inline>
                   ) : (

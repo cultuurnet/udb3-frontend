@@ -1206,6 +1206,7 @@
   "translate": {
     "title": "vertalen",
     "title_label": "Titel",
+    "change": "Wijzigen",
     "description_label": "Beschrijving",
     "placeholder_title": "Vertaal titel in {{language}}",
     "original_label": "Origineel {{language}}",
