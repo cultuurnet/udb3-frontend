@@ -156,6 +156,15 @@ type BaseOffer = {
 - Disabled for specific operations: `'offers-add-price-info'`, `'places-add'`, etc.
 - Query invalidation on success: `queryClient.invalidateQueries({ queryKey: ['entities'] })`
 
+## Package Management
+
+**IMPORTANT**: This project uses **Yarn** as the package manager. Always use `yarn` commands instead of `npm`:
+
+- Use `yarn install` instead of `npm install`
+- Use `yarn add <package>` instead of `npm install <package>`
+- Use `yarn dev` instead of `npm run dev`
+- Use `yarn build` instead of `npm run build`
+
 ## Build & Development Commands
 
 ```bash
