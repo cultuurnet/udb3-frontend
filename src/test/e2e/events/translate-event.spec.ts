@@ -11,7 +11,6 @@ test.describe('Event translation', async () => {
         path: '/',
       },
     ]);
-    await page.goto('/manage/labels/create');
   });
 
   test('Go to dashboard and select event to translate', async ({
