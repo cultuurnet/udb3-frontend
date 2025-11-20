@@ -1,6 +1,6 @@
 import { PermissionType } from '@/constants/PermissionTypes';
 
-interface Role {
+type Role = {
   uuid: string;
   name: string;
   permissions?: PermissionType[];
@@ -8,26 +8,26 @@ interface Role {
   constraints?: {
     v3?: string;
   };
-}
+};
 
-interface RoleUser {
+type RoleUser = {
   uuid: string;
   email: string;
   username?: string;
-}
+};
 
-interface RoleLabel {
+type RoleLabel = {
   uuid: string;
   name: string;
   privacy?: 'public' | 'private';
-}
+};
 
-interface TranslatedPermission {
+type TranslatedPermission = {
   key: PermissionType;
   name: string;
-}
+};
 
-interface RoleFormData {
+type RoleFormData = {
   name: string;
   permissions: PermissionType[];
   users: RoleUser[];
@@ -35,7 +35,7 @@ interface RoleFormData {
   constraints?: {
     v3?: string;
   };
-}
+};
 
 const RoleValidationInformation = {
   MAX_LENGTH: 255,

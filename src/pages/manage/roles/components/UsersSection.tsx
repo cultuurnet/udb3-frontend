@@ -21,9 +21,9 @@ import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
-interface UsersSectionProps {
+type UsersSectionProps = {
   roleId: string;
-}
+};
 
 const addUserSchema = yup.object({
   email: yup
