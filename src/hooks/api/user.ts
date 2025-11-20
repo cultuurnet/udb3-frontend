@@ -156,6 +156,59 @@ type SearchUser = {
   username: string;
 };
 
+type UserById = {
+  uuid: string;
+  email: string;
+  username: string;
+  // Add other fields as needed
+};
+
+const getUserById = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/users/${id}`,
+    options: { headers },
+  });
+  return (await res.json()) as UserById;
+};
+
+const createGetUserByIdQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['users', { id }],
+    queryFn: getUserById,
+    queryArguments: { id },
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+const useGetUserByIdQuery = (
+  { id }: { id: string },
+  configuration?: ExtendQueryOptions<typeof getUserById>,
+) => {
+  const options = createGetUserByIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...(configuration || {}),
+    enabled: options.enabled !== false && configuration?.enabled !== false,
+  });
+};
+
+const prefetchGetUserByIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetUserByIdQueryOptions({ id }),
+  });
+
 const findUserWithEmail = async ({
   headers,
   email,
@@ -187,9 +240,11 @@ const useFindUserWithEmailQuery = (email: string, configuration = {}) =>
 
 export {
   prefetchGetPermissionsQuery,
+  prefetchGetUserByIdQuery,
   useFindUserWithEmailQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,
+  useGetUserByIdQuery,
   useGetUserQuery,
 };
-export type { SearchUser, User };
+export type { SearchUser, User, UserById };
