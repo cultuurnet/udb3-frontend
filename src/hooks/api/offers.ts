@@ -313,7 +313,7 @@ const changeDescription = async ({
     },
   });
 
-const useChangeDescriptionMutation = (configuration = {}) =>
+const useChangeOfferDescriptionMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: changeDescription,
     mutationKey: 'offers-change-description',
@@ -562,8 +562,8 @@ export {
   useAddOfferPriceInfoMutation,
   useAddOfferVideoMutation,
   useBulkUpdateOfferLabelsMutation,
-  useChangeDescriptionMutation,
   useChangeOfferCalendarMutation,
+  useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,
   useChangeOfferThemeMutation,
   useChangeOfferTypeMutation,

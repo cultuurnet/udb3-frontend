@@ -4,10 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
-import {
-  useChangeDescriptionMutation,
-  useDeleteDescriptionMutation,
-} from '@/hooks/api/offers';
+import { useDeleteDescriptionMutation } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
@@ -151,7 +148,7 @@ const DescriptionStep = ({
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
   }, [entity?.terms]);
 
-  const changeDescriptionMutation = useChangeDescriptionMutation({
+  const changeDescriptionMutation = useChangeOfferDescriptionMutation({
     onSuccess: onSuccessfulChange,
   });
 
