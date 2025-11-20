@@ -1136,6 +1136,20 @@
     "end": "Fin",
     "start": "Début"
   },
+  "translate": {
+    "title": "traduire",
+    "title_label": "Titre",
+    "change": "Modifier",
+    "description_label": "Description",
+    "placeholder_title": "Traduire le titre en {{language}}",
+    "original_label": "Original {{language}}",
+    "translation_label": "Traduction {{language}}",
+    "done": "Terminé la traduction",
+    "success": {
+      "title": "Titre ({{language}}) mis à jour avec succès",
+      "description": "Description ({{language}}) mise à jour avec succès"
+    }
+  },
   "date_period_picker": {
     "end": "Fin",
     "start": "Début"
