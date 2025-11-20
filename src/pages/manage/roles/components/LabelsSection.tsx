@@ -26,7 +26,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
   const { t } = useTranslation();
   const getGlobalValue = getValueFromTheme('global');
   const getTabsValue = getValueFromTheme('tabs');
-  const ref = useRef<TypeaheadElement<Label>>(null);
+  const typeaheadElement = useRef<TypeaheadElement<Label>>(null);
 
   const [name, setName] = useState('');
   const [isInvalid, setIsInvalid] = useState(false);
@@ -69,7 +69,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
         labelId,
       });
 
-      ref.current?.clear();
+      typeaheadElement.current?.clear();
     },
     [addLabelMutation, options, roleId],
   );
@@ -113,7 +113,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
             }
             Component={
               <Typeahead
-                ref={ref}
+                ref={typeaheadElement}
                 name="labels"
                 isInvalid={isInvalid}
                 isLoading={labelsQuery.isLoading || addLabelMutation.isPending}
