@@ -103,8 +103,8 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
       <Inline flex={1} spacing={5}>
         <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={2}>
           <FormElement
-            id={'labels-picker'}
-            width={'50%'}
+            id="labels-picker"
+            width="50%"
             label={t('roles.form.labels.label')}
             error={
               isInvalid
@@ -114,11 +114,11 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
             Component={
               <Typeahead
                 ref={ref}
-                name={'labels'}
+                name="labels"
                 isInvalid={isInvalid}
                 isLoading={labelsQuery.isLoading || addLabelMutation.isPending}
                 options={options}
-                labelKey={'name'}
+                labelKey="name"
                 allowNew
                 newSelectionPrefix={t(
                   'create.additionalInformation.labels.add_new_label',
@@ -127,7 +127,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
                 onChange={onLabelSelect}
               />
             }
-            maxWidth={'100%'}
+            maxWidth="100%"
             info={
               <Text variant={TextVariants.MUTED}>
                 {t('create.additionalInformation.labels.info')}
@@ -135,7 +135,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
             }
           />
           <Inline
-            className={'picked-labels'}
+            className="picked-labels"
             marginTop={4}
             spacing={3}
             flexWrap="wrap"
@@ -144,8 +144,8 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
               <Inline
                 key={label}
                 borderRadius={getGlobalBorderRadius}
-                cursor={'pointer'}
-                display={'flex'}
+                cursor="pointer"
+                display="flex"
                 marginBottom={3}
                 paddingY={3}
                 paddingX={3}
