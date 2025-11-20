@@ -123,7 +123,7 @@ const ButtonGroup = () => (
 
 ### File Organization
 
-- **Pages**: `src/pages/` with `.page.js` extension for Next.js routing
+- **Pages**: `src/pages/` with `.page.tsx` extension for Next.js routing
 - **API Hooks**: `src/hooks/api/` with pattern `entities.ts` (roles.ts, events.ts)
 - **UI Components**: `src/ui/` with corresponding `.stories.tsx` for Storybook
 - **Types**: Domain types in `src/types/`, constants in `src/constants/`
@@ -407,7 +407,7 @@ const debouncedSearchTerm = useDebounce(searchTerm, 300);
 - **Complete Coverage**: Every new string requires translation in ALL three language files
 - **Placeholders**: Use `{{placeholder}}` syntax for dynamic values in translations
 
-````typescript
+```typescript
 import { useTranslation } from 'react-i18next';
 
 const MyComponent = ({ userName, count }) => {
@@ -425,10 +425,15 @@ const MyComponent = ({ userName, count }) => {
           __html: t('content.with_html'),
         }}
       />
+      <!--
+      Only use 'dangerouslySetInnerHTML' with content that is guaranteed safe (e.g., static translations), never with user input or untrusted data.
+      -->
     </Stack>
   );
 };
-```### Translation File Structure
+```
+
+### Translation File Structure
 
 Add to `src/i18n/nl.json`, `src/i18n/fr.json`, `src/i18n/de.json`:
 
@@ -459,6 +464,6 @@ Add to `src/i18n/nl.json`, `src/i18n/fr.json`, `src/i18n/de.json`:
     "with_html": "Dit is <strong>belangrijke</strong> tekst met <a href='#'>een link</a>"
   }
 }
-````
+```
 
 Always check existing patterns in similar files before creating new API hooks, UI components, or pages.
