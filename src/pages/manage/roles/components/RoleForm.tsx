@@ -12,11 +12,14 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
+import { PermissionType, PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useCreateRoleMutation,
   useUpdateRoleNameMutation,
 } from '@/hooks/api/roles';
+import { RoleValidationInformation } from '@/types/Role';
 import { Role } from '@/types/Role';
 import { BackButton } from '@/ui/BackButton';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -25,13 +28,65 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 
-import { ConstraintsSection } from './constraintsSection';
-import { DeleteRoleModal } from './deleteRoleModal';
-import { LabelsSection } from './labelsSection';
-import { PermissionsSection } from './permissionsSection';
-import { RoleNameField } from './roleNameField';
-import { createRoleSchema, RoleFormDataInferred } from './roleSchema';
-import { UsersSection } from './usersSection';
+import { ConstraintsSection } from './ConstraintsSection';
+import { DeleteRoleModal } from './DeleteRoleModal';
+import { LabelsSection } from './LabelsSection';
+import { PermissionsSection } from './PermissionsSection';
+import { RoleNameField } from './RoleNameField';
+import { UsersSection } from './UsersSection';
+
+const createRoleSchema = (t: (key: string) => string) =>
+  yup.object({
+    name: yup
+      .string()
+      .trim()
+      .required(t('roles.form.errors.name_required'))
+      .min(
+        RoleValidationInformation.MIN_LENGTH,
+        t('roles.form.errors.name_min_length'),
+      )
+      .max(
+        RoleValidationInformation.MAX_LENGTH,
+        t('roles.form.errors.name_max_length'),
+      ),
+
+    permissions: yup
+      .array()
+      .of(yup.mixed<PermissionType>().oneOf(Object.values(PermissionTypes)))
+      .default([]),
+    users: yup
+      .array()
+      .of(
+        yup.object({
+          uuid: yup.string().required(),
+          email: yup.string().email().required(),
+          username: yup.string().optional(),
+        }),
+      )
+      .default([]),
+
+    labels: yup
+      .array()
+      .of(
+        yup.object({
+          uuid: yup.string().required(),
+          name: yup.string().required(),
+          privacy: yup
+            .mixed<'public' | 'private'>()
+            .oneOf(['public', 'private'])
+            .optional(),
+        }),
+      )
+      .default([]),
+
+    constraints: yup
+      .object({
+        v3: yup.string().optional(),
+      })
+      .optional(),
+  });
+
+type RoleFormDataInferred = yup.InferType<ReturnType<typeof createRoleSchema>>;
 
 type RoleFormProps = {
   role?: Role;

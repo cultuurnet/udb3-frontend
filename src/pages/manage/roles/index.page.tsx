@@ -24,7 +24,7 @@ import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { DeleteRoleModal } from './components/deleteRoleModal';
+import { DeleteRoleModal } from './components/DeleteRoleModal';
 
 const rolesPerPage = 10;
 const getGlobalValue = getValueFromTheme('global');

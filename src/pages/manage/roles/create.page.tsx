@@ -4,7 +4,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import Fallback from '@/pages/[...params].page';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { RoleForm } from './components/roleForm';
+import { RoleForm } from './components/RoleForm';
 
 const CreateRolePage = () => {
   const [isReactRolesCreateEditFeatureFlagEnabled] = useFeatureFlag(
