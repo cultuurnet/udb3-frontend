@@ -301,11 +301,19 @@ const LabelFormFields = ({
     >
       {mode === 'edit' ? (
         <FormElement
-          label={t('labels.form.fields.name')}
+          label={
+            <Text
+              fontSize="0.8rem"
+              fontWeight="normal"
+              variant={TextVariants.MUTED}
+            >
+              {t('labels.form.fields.name')}
+            </Text>
+          }
           id="label-name-display"
           Component={
             <Inline spacing={2}>
-              <Text variant={TextVariants.MUTED}>{watchedName}</Text>
+              <Text fontWeight="bold">{watchedName}</Text>
             </Inline>
           }
         />

@@ -20,11 +20,15 @@ import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
 import { Organizer } from '@/types/Organizer';
 import { parseSpacing } from '@/ui/Box';
+import { Inline } from '@/ui/Inline';
+import { LabelPositions } from '@/ui/Label';
 import { Page } from '@/ui/Page';
 import { Pagination } from '@/ui/Pagination';
 import { Panel } from '@/ui/Panel';
 import { Select } from '@/ui/Select';
+import { SelectWithLabel } from '@/ui/SelectWithLabel';
 import { Spinner } from '@/ui/Spinner';
+import { Text } from '@/ui/Text';
 import type { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -115,6 +119,11 @@ const OwnershipsOverviewPage = () => {
   const { deleteOwnership, approveOwnership, rejectOwnership, Modal, Alert } =
     useOwnershipActions();
 
+  const handleSelectSorting = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSortOrder = event.target.value as SortOrderType;
+    setSortOrder(selectedSortOrder);
+  };
+
   return (
     <Page>
       <Page.Title>{t('ownerships.overview.title')}</Page.Title>
@@ -142,30 +151,55 @@ const OwnershipsOverviewPage = () => {
               </option>
             ))}
           </Select>
-
-          <OrganizerPicker
-            marginBottom={4}
-            selected={organizer}
-            onChange={async ([value]) => {
-              setOrganizer(value);
-              await handleChangeItemId(
-                value ? parseOfferId(value['@id']) : undefined,
-              );
-            }}
-          />
+          <Inline justifyContent="space-between" alignItems="flex-end">
+            <OrganizerPicker
+              selected={organizer}
+              onChange={async ([value]) => {
+                setOrganizer(value);
+                await handleChangeItemId(
+                  value ? parseOfferId(value['@id']) : undefined,
+                );
+              }}
+            />
+            {!getOwnershipRequestsQuery.isFetching && (
+              <Inline alignItems="center" spacing={4}>
+                <Text>
+                  <Text fontWeight="bold">{requests.length}</Text>{' '}
+                  {t('ownerships.requests')}
+                </Text>
+                <SelectWithLabel
+                  key="select"
+                  id="sorting"
+                  label={`${t('dashboard.sorting.label')}:`}
+                  value={sortOrder}
+                  onChange={handleSelectSorting}
+                  width="auto"
+                  labelPosition={LabelPositions.LEFT}
+                >
+                  <option value="desc">
+                    {t('ownerships.sorting.requested_desc')}
+                  </option>
+                  <option value="asc">
+                    {t('ownerships.sorting.requested_asc')}
+                  </option>
+                </SelectWithLabel>
+              </Inline>
+            )}
+          </Inline>
 
           {getOwnershipRequestsQuery.isLoading ? (
             <Spinner />
           ) : (
-            <OwnershipsTable
-              requests={requests}
-              shouldShowItemId
-              shouldShowOwnerId
-              onApprove={approveOwnership}
-              onReject={rejectOwnership}
-              onDelete={deleteOwnership}
-              onSort={(order) => setSortOrder(order)}
-            />
+            <>
+              <OwnershipsTable
+                requests={requests}
+                shouldShowItemId
+                shouldShowOwnerId
+                onApprove={approveOwnership}
+                onReject={rejectOwnership}
+                onDelete={deleteOwnership}
+              />
+            </>
           )}
 
           {hasMoreThanOnePage && (
