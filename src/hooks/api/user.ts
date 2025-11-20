@@ -166,18 +166,15 @@ const getUserByEmail = async ({
 };
 
 const useGetUserByEmailQuery = (email: string) => {
-  const trimmedEmail = (email || '').trim();
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
-
   return useAuthenticatedQuery({
-    queryKey: ['users', 'email', trimmedEmail],
+    queryKey: ['users', 'email', email],
     queryFn: (context) =>
       getUserByEmail({
         headers: context.headers,
         email: context.email,
       }),
-    queryArguments: { email: trimmedEmail },
-    enabled: !!trimmedEmail && isValidEmail,
+    queryArguments: { email },
+    enabled: !!email,
   });
 };
 
