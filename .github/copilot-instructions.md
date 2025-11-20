@@ -129,6 +129,17 @@ const ButtonGroup = () => (
 - **Types**: Domain types in `src/types/`, constants in `src/constants/`
 - **Translations**: All user-facing strings in `src/i18n/` (nl.json, fr.json, de.json)
 
+### E2E Testing
+
+- All e2e tests are located in `src/test/e2e/`, grouped by domain and feature.
+- Use Playwright for writing e2e tests (`.spec.ts` files).
+- Place shared setup logic in `src/test/e2e/setup/`.
+- Name test files using kebab-case, reflecting the tested feature or flow.
+- Organize tests in subfolders by domain (e.g., `events/`, `manage/labels/`).
+- Prefer descriptive test names and clear separation of admin/non-admin flows.
+- Use environment variables and fixtures for test data setup.
+- Run all e2e tests with `yarn test:e2e`.
+
 ### Type Patterns
 
 ```typescript
