@@ -4,11 +4,12 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OfferTypes } from '@/constants/OfferType';
 import {
-  useChangeNameMutation,
-  useGetEventByIdQuery,
-} from '@/hooks/api/events';
-import { useChangeDescriptionMutation } from '@/hooks/api/offers';
+  useChangeOfferDescriptionMutation,
+  useChangeOfferNameMutation,
+  useGetOfferByIdQuery,
+} from '@/hooks/api/offers';
 import { SupportedLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
@@ -32,6 +33,7 @@ const getGlobalValue = getValueFromTheme('global');
 
 const TranslateForm = () => {
   const { t } = useTranslation();
+
   const successMessages = Object.fromEntries([
     ...languageOptions.map((lang) => [
       `title_${lang}`,
@@ -48,7 +50,10 @@ const TranslateForm = () => {
   };
   const toast = useToast(toastConfiguration);
   const router = useRouter();
-  const { eventId } = router.query;
+  const { eventId, placeId } = router.query;
+
+  const scope = eventId ? OfferTypes.EVENTS : OfferTypes.PLACES;
+  const id = scope === OfferTypes.EVENTS ? eventId : placeId;
 
   const [isEditingOriginalTitle, setIsEditingOriginalTitle] = useState(false);
   const [isEditingOriginalDescription, setIsEditingOriginalDescription] =
@@ -59,28 +64,32 @@ const TranslateForm = () => {
     Record<string, EditorState>
   >({});
 
-  const getEventByIdQuery = useGetEventByIdQuery({ id: eventId as string });
-  const event = getEventByIdQuery.data;
+  const getOfferByIdQuery = useGetOfferByIdQuery({
+    id: id as string,
+    scope,
+  });
+
+  const offer = getOfferByIdQuery.data;
 
   const originalTitle = useMemo(() => {
-    const mainLanguage = event?.mainLanguage || 'nl';
-    return event?.name ? event.name[mainLanguage] || '' : '';
-  }, [event?.name, event?.mainLanguage]);
+    const mainLanguage = offer?.mainLanguage || 'nl';
+    return offer?.name ? offer.name[mainLanguage] || '' : '';
+  }, [offer?.name, offer?.mainLanguage]);
 
   const originalLanguage = useMemo(() => {
-    return event?.mainLanguage || 'nl';
-  }, [event?.mainLanguage]);
+    return offer?.mainLanguage || 'nl';
+  }, [offer?.mainLanguage]);
 
   useEffect(() => {
-    if (event?.name) {
-      setTitleValues(event.name);
+    if (offer?.name) {
+      setTitleValues(offer.name);
     }
 
-    if (event?.description) {
+    if (offer?.description) {
       const newEditorStates: Record<string, EditorState> = {};
 
       languageOptions.forEach((langValue) => {
-        const description = event.description?.[langValue];
+        const description = offer.description?.[langValue];
 
         if (description) {
           const draftState = htmlToDraft(description);
@@ -97,7 +106,7 @@ const TranslateForm = () => {
 
       setDescriptionEditorStates(newEditorStates);
     }
-  }, [event?.name, event?.description]);
+  }, [offer?.name, offer?.description]);
   const onNameSuccess = (_, variables: { lang: string }) => {
     const language = variables.lang;
     toast.trigger(`title_${language}`);
@@ -108,11 +117,11 @@ const TranslateForm = () => {
     toast.trigger(`description_${language}`);
   };
 
-  const changeNameMutation = useChangeNameMutation({
+  const changeNameMutation = useChangeOfferNameMutation({
     onSuccess: onNameSuccess,
   });
 
-  const changeDescriptionMutation = useChangeDescriptionMutation({
+  const changeDescriptionMutation = useChangeOfferDescriptionMutation({
     onSuccess: onDescriptionSuccess,
   });
 
@@ -124,7 +133,7 @@ const TranslateForm = () => {
   };
 
   const handleTitleBlur = async (language: string, value: string) => {
-    const originalValue = event?.name?.[language] || '';
+    const originalValue = offer?.name?.[language] || '';
 
     if (value === '') {
       return;
@@ -135,10 +144,10 @@ const TranslateForm = () => {
     }
 
     await changeNameMutation.mutateAsync({
-      id: eventId as string,
+      id,
       lang: language,
       name: value,
-      scope: 'event',
+      scope,
     });
   };
 
@@ -159,7 +168,7 @@ const TranslateForm = () => {
     const contentState = editorState.getCurrentContent();
     const plainText = contentState.getPlainText().trim();
 
-    const originalDescription = event?.description?.[language];
+    const originalDescription = offer?.description?.[language];
     let originalPlainText = '';
 
     if (originalDescription) {
@@ -188,10 +197,10 @@ const TranslateForm = () => {
     );
 
     await changeDescriptionMutation.mutateAsync({
-      id: eventId as string,
+      id,
       language,
       description: htmlDescription,
-      scope: 'event',
+      scope,
     });
   };
 
@@ -346,7 +355,11 @@ const TranslateForm = () => {
 
         <Inline>
           <Link
-            href={`/event/${eventId}/preview`}
+            href={
+              scope === OfferTypes.EVENTS
+                ? `/event/${id}/preview`
+                : `/place/${id}/preview`
+            }
             variant={LinkVariants.BUTTON_SUCCESS}
           >
             <Text>{t('translate.done')}</Text>
