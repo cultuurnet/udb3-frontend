@@ -1,20 +1,20 @@
 import { dehydrate } from '@tanstack/react-query';
 
-import { prefetchGetEventByIdQuery } from '@/hooks/api/events';
+import { prefetchGetOfferByIdQuery } from '@/hooks/api/offers';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { TranslateForm } from './TranslateForm';
+import { TranslateForm } from '../../../TranslateForm';
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    await prefetchGetEventByIdQuery({
+    await prefetchGetOfferByIdQuery({
       id: eventId,
+      scope: 'events',
       req,
       queryClient,
     });
-
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
