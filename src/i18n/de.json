@@ -1289,7 +1289,7 @@
         "add": "Hinzufügen",
         "remove_modal": {
           "title": "Bearbeitungsrechte entfernen",
-          "message": "Möchten Sie die Bearbeitungsrechte für den Wert <br /><code>{{constraint}}</code><br /> wirklich entfernen?",
+          "message": "Möchten Sie die Bearbeitungsrechte für den Wert <code>{{constraint}}</code> wirklich entfernen?",
           "error": "Beim Entfernen der Bearbeitungsrechte ist ein Fehler aufgetreten."
         }
       },

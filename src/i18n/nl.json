@@ -1345,7 +1345,7 @@
         "add": "Toevoegen",
         "remove_modal": {
           "title": "Bewerkrecht verwijderen",
-          "message": "Ben je zeker dat je het bewerkrecht met waarde<br /><code>{{constraint}}</code><br /> wil verwijderen?",
+          "message": "Ben je zeker dat je het bewerkrecht met waarde <code>{{constraint}}</code> wil verwijderen?",
           "error": "Er ging iets mis bij het verwijderen van het bewerkrecht."
         }
       },
