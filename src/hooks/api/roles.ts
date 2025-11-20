@@ -96,7 +96,6 @@ const useDeleteRoleMutation = (configuration = {}) =>
     ...configuration,
   });
 
-// Get single role
 const prefetchGetRoleByIdQuery = ({
   req,
   queryClient,
@@ -224,7 +223,7 @@ const useAddPermissionToRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: addPermissionToRole,
     mutationKey: 'roles-add-permission',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
     },
     ...configuration,
@@ -237,7 +236,7 @@ const useRemovePermissionFromRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: removePermissionFromRole,
     mutationKey: 'roles-remove-permission',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({ queryKey: ['roles', variables.roleId] });
     },
     ...configuration,
@@ -309,7 +308,7 @@ const useAddUserToRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: addUserToRole,
     mutationKey: 'roles-add-user',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({
         queryKey: ['roles', variables.roleId, 'users'],
       });
@@ -325,7 +324,7 @@ const useRemoveUserFromRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: removeUserFromRole,
     mutationKey: 'roles-remove-user',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({
         queryKey: ['roles', variables.roleId, 'users'],
       });
@@ -400,7 +399,7 @@ const useAddLabelToRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: addLabelToRole,
     mutationKey: 'roles-add-label',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({
         queryKey: ['roles', variables.roleId, 'labels'],
       });
@@ -416,7 +415,7 @@ const useRemoveLabelFromRoleMutation = (configuration = {}) => {
   return useAuthenticatedMutation({
     mutationFn: removeLabelFromRole,
     mutationKey: 'roles-remove-label',
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: { roleId: string }) => {
       queryClient.invalidateQueries({
         queryKey: ['roles', variables.roleId, 'labels'],
       });
