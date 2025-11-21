@@ -73,6 +73,27 @@ test.describe('Role Creation - Admin', () => {
     await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 
+  test('should re-set validation error when role name is changed', async ({
+    page,
+  }) => {
+    await page.getByLabel('Naam').fill('Fake Cakes');
+    await page.waitForLoadState('networkidle');
+    await expect(
+      page.locator('span:below(input[name="name"])').first(),
+    ).toContainText('bestaat al');
+
+    await page.getByLabel('Naam').fill('Another Fake Cake');
+    await expect(
+      page.locator('span:below(input[name="name"])').first(),
+    ).not.toContainText('bestaat al');
+
+    await page.getByLabel('Naam').fill('Fake Cakes');
+    await page.waitForLoadState('networkidle');
+    await expect(
+      page.locator('span:below(input[name="name"])').first(),
+    ).toContainText('bestaat al');
+  });
+
   test('should cancel role creation and return to roles list', async ({
     page,
   }) => {
