@@ -139,13 +139,19 @@ export const RoleNameField = ({
 
   const [isEditing, setIsEditing] = useState(!isEditMode);
   const watchedName = watch('name');
+  const [stateName, setStateName] = useState(watchedName);
+
+  useEffect(() => {
+    setStateName(watchedName);
+  }, [watchedName]);
+
   const { isUnique, isLoading } = useIsRoleNameUnique({
-    name: watchedName,
+    name: stateName,
     currentName: currentName,
   });
 
   useEffect(() => {
-    if (watchedName && watchedName.trim().length >= 3) {
+    if (stateName && stateName.trim().length >= 3) {
       if (!isLoading && !isUnique) {
         setError('name', {
           type: 'unique',
@@ -155,21 +161,13 @@ export const RoleNameField = ({
         clearErrors('name');
       }
     } else if (
-      watchedName &&
-      watchedName.trim().length < 3 &&
+      stateName &&
+      stateName.trim().length < 3 &&
       errors.name?.type === 'unique'
     ) {
       clearErrors('name');
     }
-  }, [
-    watchedName,
-    isUnique,
-    isLoading,
-    setError,
-    clearErrors,
-    t,
-    errors.name?.type,
-  ]);
+  }, [stateName, isUnique, isLoading, setError, clearErrors, t, errors]);
 
   const handleCancel = () => {
     if (currentName) {

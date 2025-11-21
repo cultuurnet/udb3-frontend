@@ -60,7 +60,7 @@ const createGetRolesQueryOptions = ({
   paginationOptions = { start: 0, limit: 10 },
 }: PaginationOptions & { name?: string }) =>
   queryOptions({
-    queryKey: ['roles'],
+    queryKey: ['roles', name],
     queryFn: getRoles,
     queryArguments: {
       name,
