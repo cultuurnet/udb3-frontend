@@ -1171,13 +1171,13 @@
         "label": "Rechercher par e-mail",
         "placeholder": "Saisissez une adresse e-mail valide"
       },
-      "submit": "Rechercher",
-      "searching": "Recherche...",
       "info": "Écrivez une adresse e-mail valide dans le champ ci-dessus et appuyez sur entrée pour rechercher des utilisateurs.",
       "not_found": "Aucun utilisateur trouvé pour l'adresse e-mail spécifiée.",
       "error": {
         "message": "Une erreur s'est produite lors de la recherche: {{error}}",
-        "unknown": "Une erreur inconnue s'est produite"
+        "unknown": "Une erreur inconnue s'est produite",
+        "email_invalid": "Adresse e-mail non valide",
+        "email_required": "L'adresse e-mail est un champ obligatoire."
       }
     }
   },

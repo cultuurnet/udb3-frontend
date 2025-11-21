@@ -14,14 +14,16 @@ import { Stack } from '@/ui/Stack';
 import { ErrorBody } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-const schema = yup.object({
-  email: yup.string().email().required(),
-});
-
-type FormData = yup.InferType<typeof schema>;
-
 const UsersOverviewPage = () => {
   const { t } = useTranslation();
+  const schema = yup.object({
+    email: yup
+      .string()
+      .email(t('users.search.error.email_invalid'))
+      .required(t('users.search.error.email_required')),
+  });
+
+  type FormData = yup.InferType<typeof schema>;
   const router = useRouter();
   const [searchStatus, setSearchStatus] = useState<
     'idle' | 'loading' | 'notFound' | 'problem'
