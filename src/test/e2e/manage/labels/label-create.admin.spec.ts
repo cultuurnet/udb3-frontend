@@ -41,7 +41,7 @@ test.describe('Label Creation - Admin', () => {
     await expect(page.getByRole('button', { name: 'Toevoegen' })).toBeEnabled();
   });
 
-  // Skipped because this will create a ne label for each run.
+  // Skipped because this will create a new label for each run.
   test.skip('should create a new label successfully', async ({ page }) => {
     await page.getByLabel('Naam').fill(dummyLabel.name);
     await page.getByRole('button', { name: 'Toevoegen' }).click();

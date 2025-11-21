@@ -140,6 +140,11 @@ const ButtonGroup = () => (
 - Use environment variables and fixtures for test data setup.
 - Run all e2e tests with `yarn test:e2e`.
 
+### TypeScript Patterns and Preferences
+
+- **Prefer `const` over `enum`**: Use `const` objects with `as const` for constant values instead of TypeScript `enum`.
+- **Prefer `type` over `interface`**: Use `type` for type definitions unless extending or implementing classes is required.
+
 ### Type Patterns
 
 ```typescript

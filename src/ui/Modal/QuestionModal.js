@@ -20,6 +20,7 @@ const QuestionModal = ({
   size = 'sm',
   confirmButtonDisabled = false,
   confirmLoading,
+  confirmButtonVariant = ButtonVariants.PRIMARY,
 }) => (
   <BootstrapModal
     className={className}
@@ -63,7 +64,7 @@ const QuestionModal = ({
       </Button>
       <Button
         loading={confirmLoading}
-        variant={ButtonVariants.PRIMARY}
+        variant={confirmButtonVariant}
         onClick={onConfirm}
         disabled={confirmButtonDisabled || confirmLoading}
       >
@@ -86,6 +87,7 @@ QuestionModal.propTypes = {
   children: PropTypes.node,
   size: PropTypes.string,
   confirmButtonDisabled: PropTypes.bool,
+  confirmButtonVariant: PropTypes.oneOf(Object.values(ButtonVariants)),
 };
 
 export { QuestionModal };
