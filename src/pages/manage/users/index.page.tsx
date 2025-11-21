@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { useFindUserWithEmailQuery } from '@/hooks/api/user';
+import { useGetUserByEmailQuery } from '@/hooks/api/user';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
@@ -38,7 +38,7 @@ const UsersOverviewPage = () => {
 
   const email = watch('email');
 
-  const findUserQuery = useFindUserWithEmailQuery(searchEmail, {
+  const findUserQuery = useGetUserByEmailQuery(searchEmail, {
     enabled: !!searchEmail && searchEmail.includes('@'),
     retry: false,
   });
