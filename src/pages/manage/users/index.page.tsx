@@ -41,6 +41,8 @@ const UsersOverviewPage = () => {
     mode: 'onChange',
   });
 
+  const email = watch('email');
+
   const findUserQuery = useGetUserByEmailQuery(searchEmail, {
     enabled: !!searchEmail,
     retry: false,
@@ -72,13 +74,6 @@ const UsersOverviewPage = () => {
     setSearchEmail(data.email.trim());
   };
 
-  const handleInputChange = () => {
-    if (searchStatus === 'problem' || searchStatus === 'notFound') {
-      setSearchStatus('idle');
-      setErrorMessage('');
-    }
-  };
-
   return (
     <Page>
       <Page.Title>{t('users.search.title')}</Page.Title>
@@ -93,16 +88,12 @@ const UsersOverviewPage = () => {
               Component={
                 <Input
                   {...register('email')}
-                  placeholder={t('users.search.email.placeholder')}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    register('email').onChange(e);
-                    handleInputChange();
-                  }}
                   onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (e.key === 'Enter' && formState.isValid) {
+                    if (e.key === 'Enter') {
                       handleSubmit(onSubmit)();
                     }
                   }}
+                  placeholder={t('users.search.email.placeholder')}
                   disabled={findUserQuery.isLoading}
                 />
               }
