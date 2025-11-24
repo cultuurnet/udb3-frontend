@@ -1238,6 +1238,23 @@
   "common": {
     "back_to_overview": "Terug naar de lijst"
   },
+  "users": {
+    "search": {
+      "title": "Gebruikers",
+      "email": {
+        "label": "Zoeken op email",
+        "placeholder": "Voer een geldig e-mailadres in"
+      },
+      "info": "Schrijf een geldig e-mailadres in het veld hierboven en druk op enter om gebruikers te zoeken.",
+      "not_found": "Geen gebruiker gevonden voor het opgegeven e-mailadres.",
+      "error": {
+        "message": "Er ging iets mis tijdens het zoeken: {{error}}",
+        "unknown": "Er is een onbekende fout opgetreden",
+        "email_invalid": "Geen geldig e-mailadres",
+        "email_required": "E-mailadres is een verplicht veld."
+      }
+    }
+  },
   "videos": {
     "add_button": "Videolink toevoegen",
     "delete": "Verwijderen",
