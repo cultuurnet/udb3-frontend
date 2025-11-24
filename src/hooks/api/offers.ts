@@ -1,8 +1,14 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 
-import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
-import { useGetEventByIdQuery } from '@/hooks/api/events';
-import { useGetPlaceByIdQuery } from '@/hooks/api/places';
+import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
+import {
+  prefetchGetEventByIdQuery,
+  useGetEventByIdQuery,
+} from '@/hooks/api/events';
+import {
+  prefetchGetPlaceByIdQuery,
+  useGetPlaceByIdQuery,
+} from '@/hooks/api/places';
 import type { Headers } from '@/hooks/api/types/Headers';
 import { Offer } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
@@ -118,6 +124,39 @@ const useGetOfferByIdQuery = ({ scope, id }, configuration = {}) => {
     scope === OfferTypes.EVENTS ? useGetEventByIdQuery : useGetPlaceByIdQuery;
 
   return query({ id, scope }, configuration);
+};
+
+const prefetchGetOfferByIdQuery = async ({
+  id,
+  scope,
+  req,
+  queryClient,
+}: {
+  id: string;
+  scope: Scope;
+  req: any;
+  queryClient: any;
+}) => {
+  if (scope === OfferTypes.EVENTS) {
+    return prefetchGetEventByIdQuery({
+      id,
+      req,
+      queryClient,
+    });
+  }
+
+  if (scope === OfferTypes.PLACES) {
+    return prefetchGetPlaceByIdQuery({
+      id,
+      req,
+      scope: scope,
+      queryClient,
+    });
+  }
+
+  throw new Error(
+    `Unsupported scope: ${scope}. Expected '${OfferTypes.EVENTS}' or '${OfferTypes.PLACES}'`,
+  );
 };
 
 const changeOfferName = async ({ headers, id, lang, name, scope }) => {
@@ -313,7 +352,7 @@ const changeDescription = async ({
     },
   });
 
-const useChangeDescriptionMutation = (configuration = {}) =>
+const useChangeOfferDescriptionMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: changeDescription,
     mutationKey: 'offers-change-description',
@@ -553,6 +592,7 @@ const useBulkUpdateOfferLabelsMutation = (configuration = {}) =>
   });
 
 export {
+  prefetchGetOfferByIdQuery,
   useAddContactPointMutation,
   useAddOfferBookingInfoMutation,
   useAddOfferImageMutation,
@@ -562,8 +602,8 @@ export {
   useAddOfferPriceInfoMutation,
   useAddOfferVideoMutation,
   useBulkUpdateOfferLabelsMutation,
-  useChangeDescriptionMutation,
   useChangeOfferCalendarMutation,
+  useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,
   useChangeOfferThemeMutation,
   useChangeOfferTypeMutation,
