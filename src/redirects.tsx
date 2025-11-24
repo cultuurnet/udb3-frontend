@@ -100,7 +100,8 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
   },
   {
-    source: '/manage/roles/:roleId',
+    source:
+      '/manage/roles/:roleId([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
     destination: '/manage/roles/:roleId/edit',
     permanent: false,
     featureFlag: FeatureFlags.REACT_ROLES_CREATE_EDIT,
