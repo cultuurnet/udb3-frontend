@@ -1,6 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 
-import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   prefetchGetEventByIdQuery,
   useGetEventByIdQuery,
@@ -133,7 +133,7 @@ const prefetchGetOfferByIdQuery = async ({
   queryClient,
 }: {
   id: string;
-  scope: string;
+  scope: Scope;
   req: any;
   queryClient: any;
 }) => {
