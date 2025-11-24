@@ -58,7 +58,14 @@ export const Question: Story = {
   },
   parameters: {
     controls: {
-      include: ['cancelTitle', 'confirmTitle', 'size', 'title', 'children'],
+      include: [
+        'cancelTitle',
+        'confirmTitle',
+        'size',
+        'title',
+        'children',
+        'confirmButtonVariant',
+      ],
     },
   },
   render: function RenderComponent(args) {

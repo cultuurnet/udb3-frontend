@@ -186,6 +186,7 @@ const useGetUserByEmailQuery = (email: string, configuration = {}) =>
   });
 
 export {
+  getUserByEmail,
   prefetchGetPermissionsQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,

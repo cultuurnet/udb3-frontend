@@ -1178,6 +1178,9 @@
     "prompt_text": "Entrez pour rechercher...",
     "search_text": "En train de chercher..."
   },
+  "common": {
+    "back_to_overview": "Retour à la liste"
+  },
   "users": {
     "search": {
       "title": "Utilisateurs",
@@ -1243,7 +1246,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Retour à la liste",
         "create": "Créer",
         "save": "Enregistrer"
       },
@@ -1292,6 +1294,77 @@
         "cancel": "Annuler",
         "error": "Une erreur s'est produite lors de la suppression du rôle."
       }
+    },
+    "form": {
+      "create_title": "Créer un rôle",
+      "edit_title": "Modifier un rôle",
+      "name_label": "Nom",
+      "name_edit": "Modifier",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "save_changes": "Enregistrer les modifications",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "delete": "Supprimer le rôle",
+      "errors": {
+        "name_not_unique": "Ce nom existe déjà. Choisissez un autre nom.",
+        "name_required": "Le nom est obligatoire",
+        "name_min_length": "Le nom doit contenir au moins 3 caractères",
+        "name_max_length": "Le nom ne peut pas dépasser 255 caractères"
+      },
+      "constraints": {
+        "title": "Droits d'édition",
+        "edit": "Modifier",
+        "remove": "Supprimer",
+        "add": "Ajouter",
+        "remove_modal": {
+          "title": "Supprimer les droits d'édition",
+          "message": "Êtes-vous sûr de vouloir supprimer les droits d'édition avec valeur <code>{{constraint}}</code> ?",
+          "error": "Une erreur s'est produite lors de la suppression des droits d'édition."
+        }
+      },
+      "permissions": {
+        "title": "Autorisations"
+      },
+      "users": {
+        "title": "Membres",
+        "placeholder_message": "La gestion des membres est affichée ici",
+        "add_user_label": "Ajouter un membre",
+        "email_placeholder": "E-mail",
+        "add": "Ajouter",
+        "table": {
+          "email": "E-mail",
+          "actions": "Supprimer"
+        },
+        "remove_membership": "Supprimer le membre",
+        "no_users_message": "Aucun utilisateur n'est encore associé à ce rôle. Ajoutez un utilisateur à ce rôle en saisissant son adresse e-mail ci-dessus.",
+        "loading": "Chargement des utilisateurs...",
+        "user_not_found": "Utilisateur non trouvé avec cette adresse e-mail.",
+        "user_already_in_role": "Cet utilisateur est déjà membre de ce rôle.",
+        "add_user_error": "Une erreur s'est produite lors de l'ajout de l'utilisateur."
+      },
+      "labels": {
+        "title": "Étiquettes",
+        "label": "Ajouter une étiquette"
+      },
+      "toast": {
+        "permission_added": "Permission ajoutée avec succès",
+        "permission_removed": "Permission supprimée avec succès"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Modifier l'offre",
+    "AANBOD_MODEREREN": "Modérer l'offre",
+    "AANBOD_VERWIJDEREN": "Supprimer l'offre",
+    "AANBOD_HISTORIEK": "Consulter l'historique",
+    "ORGANISATIES_BEWERKEN": "Modifier les organisations",
+    "ORGANISATIES_BEHEREN": "Gérer les organisations",
+    "GEBRUIKERS_BEHEREN": "Gérer les utilisateurs",
+    "LABELS_BEHEREN": "Gérer les labels",
+    "VOORZIENINGEN_BEWERKEN": "Modifier les infrastructures",
+    "PRODUCTIES_AANMAKEN": "Créer des productions",
+    "FILMS_AANMAKEN": "Créer des films",
+    "MEDIA_UPLOADEN": "Télécharger des médias"
   }
 }

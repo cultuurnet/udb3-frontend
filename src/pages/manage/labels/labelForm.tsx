@@ -26,10 +26,10 @@ import {
   LabelVisibilityOptions,
 } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
+import { BackButton } from '@/ui/BackButton';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
-import { Icon } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
@@ -184,10 +184,6 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
     );
   };
 
-  const handleCancel = () => {
-    router.push('/manage/labels');
-  };
-
   const pageTitle = isEditMode
     ? t('labels.edit.title')
     : t('labels.create.title');
@@ -214,20 +210,7 @@ const LabelForm = ({ label }: LabelFormProps = {}) => {
             hasNameConflictError={hasNameConflictError}
             watchedName={watchedName}
           />
-          <Button
-            width="fit-content"
-            marginTop={4}
-            variant="secondary"
-            onClick={handleCancel}
-          >
-            <Icon
-              name="arrowLeft"
-              display="inline"
-              height={15}
-              marginRight={4}
-            />
-            {t('labels.form.actions.cancel')}
-          </Button>
+          <BackButton />
         </Stack>
       </Page.Content>
     </Page>
