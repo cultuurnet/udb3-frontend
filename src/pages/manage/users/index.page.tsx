@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useGetUserByEmailQuery } from '@/hooks/api/user';
@@ -14,16 +14,19 @@ import { Stack } from '@/ui/Stack';
 import { ErrorBody } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-const UsersOverviewPage = () => {
-  const { t } = useTranslation();
-  const schema = yup.object({
+const createValidationSchema = (t: TFunction) =>
+  yup.object({
     email: yup
       .string()
       .email(t('users.search.error.email_invalid'))
       .required(t('users.search.error.email_required')),
   });
 
-  type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<ReturnType<typeof createValidationSchema>>;
+
+const UsersOverviewPage = () => {
+  const { t } = useTranslation();
+
   const router = useRouter();
   const [searchStatus, setSearchStatus] = useState<
     'idle' | 'loading' | 'notFound' | 'problem'
@@ -33,7 +36,7 @@ const UsersOverviewPage = () => {
   const [searchEmail, setSearchEmail] = useState('');
 
   const { register, handleSubmit, formState, watch } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(createValidationSchema(t)),
     defaultValues: { email: '' },
     mode: 'onChange',
   });
