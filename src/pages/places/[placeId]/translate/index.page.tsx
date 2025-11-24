@@ -7,14 +7,15 @@ import { TranslateForm } from '../../../TranslateForm';
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
-    const { eventId } = query;
+    const { placeId } = query;
 
     await prefetchGetOfferByIdQuery({
-      id: eventId,
-      scope: 'events',
+      id: placeId,
+      scope: 'places',
       req,
       queryClient,
     });
+
     return {
       props: {
         dehydratedState: dehydrate(queryClient),
