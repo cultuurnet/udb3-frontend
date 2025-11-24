@@ -5,7 +5,7 @@ test.describe('Event translation', () => {
   test.beforeEach(async ({ context }) => {
     await context.addCookies([
       {
-        name: 'ff_react_translate',
+        name: 'ff_react_translate_events',
         value: 'true',
         domain: 'localhost',
         path: '/',
