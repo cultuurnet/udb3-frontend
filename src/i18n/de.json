@@ -1179,6 +1179,23 @@
     "prompt_text": "Tipp deine Suche einfach...",
     "search_text": "Wird gesucht..."
   },
+  "users": {
+    "search": {
+      "title": "Benutzer",
+      "email": {
+        "label": "Nach E-Mail suchen",
+        "placeholder": "Geben Sie eine gültige E-Mail-Adresse ein"
+      },
+      "info": "Schreiben Sie eine gültige E-Mail-Adresse in das Feld oben und drücken Sie die Eingabetaste, um nach Benutzern zu suchen.",
+      "not_found": "Kein Benutzer für die angegebene E-Mail-Adresse gefunden.",
+      "error": {
+        "message": "Beim Suchen ist etwas schief gelaufen: {{error}}",
+        "unknown": "Ein unbekannter Fehler ist aufgetreten",
+        "email_invalid": "Keine gültige E-Mail-Adresse",
+        "email_required": "E-Mail-Adresse ist ein Pflichtfeld."
+      }
+    }
+  },
   "videos": {
     "add_button": "Videolink hinzufügen",
     "delete": "Löschen",

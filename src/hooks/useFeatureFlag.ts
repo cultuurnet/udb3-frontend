@@ -18,6 +18,7 @@ const FeatureFlags = {
   REACT_LABELS_CREATE_EDIT: 'react_labels_create_edit',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   REACT_ROLES_OVERVIEW: 'react_roles_overview',
+  REACT_USERS_SEARCH: 'react_users_search',
   REACT_TRANSLATE_PLACES: 'react_translate_places',
   REACT_TRANSLATE: 'react_translate_events',
 } as const;
