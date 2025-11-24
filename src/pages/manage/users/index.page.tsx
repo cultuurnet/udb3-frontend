@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -96,16 +96,12 @@ const UsersOverviewPage = () => {
                 <Input
                   {...register('email')}
                   placeholder={t('users.search.email.placeholder')}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     register('email').onChange(e);
                     handleInputChange();
                   }}
-                  onKeyDown={(e) => {
-                    if (
-                      e.key === 'Enter' &&
-                      email.trim() &&
-                      email.includes('@')
-                    ) {
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === 'Enter' && formState.isValid) {
                       handleSubmit(onSubmit)();
                     }
                   }}
