@@ -42,7 +42,7 @@ const UsersOverviewPage = () => {
   });
 
   const findUserQuery = useGetUserByEmailQuery(searchEmail, {
-    enabled: !!searchEmail && searchEmail.includes('@'),
+    enabled: !!searchEmail,
     retry: false,
   });
 
