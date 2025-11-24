@@ -41,8 +41,6 @@ const UsersOverviewPage = () => {
     mode: 'onChange',
   });
 
-  const email = watch('email');
-
   const findUserQuery = useGetUserByEmailQuery(searchEmail, {
     enabled: !!searchEmail && searchEmail.includes('@'),
     retry: false,
