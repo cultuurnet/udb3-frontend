@@ -43,10 +43,9 @@ test.describe('Users Search - Admin', () => {
     await searchInput.fill(process.env.E2E_TEST_ADMIN_EMAIL);
     await searchInput.press('Enter');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1000);
 
     // @todo change the expected url when the user edit page is ready
-    expect(page.url()).toContain(
+    await expect(page).toHaveURL(
       '/manage/users/' + process.env.E2E_TEST_ADMIN_EMAIL,
     );
   });
