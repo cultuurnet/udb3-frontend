@@ -62,6 +62,12 @@ const AgeRangeStep = ({
       if (!field.value?.typicalAgeRange) return;
       const typicalAgeRange = field.value.typicalAgeRange;
 
+      if (typicalAgeRange === '0-') {
+        setIsCustomAgeRange(false);
+        resetCustomAgeRange();
+        return;
+      }
+
       if (isCustomAgeRangeSelected(typicalAgeRange)) {
         const [min, max] = field.value.typicalAgeRange.split('-');
 
@@ -82,7 +88,7 @@ const AgeRangeStep = ({
       );
     });
 
-    if (isCustomAgeRange && typicalAgeRange === '0-') {
+    if (typicalAgeRange === '0-') {
       return 'ALL';
     }
 

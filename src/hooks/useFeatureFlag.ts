@@ -19,6 +19,8 @@ const FeatureFlags = {
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   REACT_ROLES_OVERVIEW: 'react_roles_overview',
   REACT_ROLES_CREATE_EDIT: 'react_roles_create_edit',
+  REACT_TRANSLATE_PLACES: 'react_translate_places',
+  REACT_TRANSLATE: 'react_translate_events',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

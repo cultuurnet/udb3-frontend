@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
-  useChangeDescriptionMutation,
+  useChangeOfferDescriptionMutation,
   useDeleteDescriptionMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
@@ -151,7 +151,7 @@ const DescriptionStep = ({
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
   }, [entity?.terms]);
 
-  const changeDescriptionMutation = useChangeDescriptionMutation({
+  const changeDescriptionMutation = useChangeOfferDescriptionMutation({
     onSuccess: onSuccessfulChange,
   });
 
