@@ -37,7 +37,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   const currentConstraint = role?.constraints?.v3;
   const displayValue = constraintValue || currentConstraint;
   const hasConstraint = !!displayValue;
-  const hasServerConstraint = !!currentConstraint;
+  const hasExistingConstraint = !!currentConstraint;
   const isConstraintValueEmpty = !constraintValue.trim();
 
   const handleEdit = () => {
@@ -49,7 +49,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
     try {
       setIsEditing(false);
 
-      if (hasServerConstraint) {
+      if (hasExistingConstraint) {
         await updateConstraintMutation.mutateAsync({
           roleId,
           constraint: constraintValue,
