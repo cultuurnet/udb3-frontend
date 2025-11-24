@@ -18,9 +18,9 @@ import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Title } from '@/ui/Title';
 
-interface ConstraintsSectionProps {
+type ConstraintsSectionProps = {
   roleId: string;
-}
+};
 
 export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
   const { t } = useTranslation();

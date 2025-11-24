@@ -19,7 +19,7 @@ import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 
-interface RoleNameFieldProps {
+type RoleNameFieldProps = {
   control: Control<any>;
   formState: {
     errors: FieldErrors<any>;
@@ -32,7 +32,7 @@ interface RoleNameFieldProps {
   isEditMode?: boolean;
   currentName?: string;
   onSubmit: () => void;
-}
+};
 
 const RoleNameDisplay = ({
   name,

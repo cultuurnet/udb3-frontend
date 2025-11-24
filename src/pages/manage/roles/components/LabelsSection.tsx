@@ -18,9 +18,9 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 
-interface LabelsSectionProps {
+type LabelsSectionProps = {
   roleId: string;
-}
+};
 
 export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
   const { t } = useTranslation();

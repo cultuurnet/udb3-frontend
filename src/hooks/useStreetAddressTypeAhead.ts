@@ -4,13 +4,13 @@ import { useMemo, useState } from 'react';
 import { useGetStreetAddressesQuery } from '@/hooks/api/places';
 import { Countries, Country } from '@/types/Country';
 
-interface UseStreetAddressTypeaheadOptions {
+type UseStreetAddressTypeaheadOptions = {
   city?: { zip?: string; name?: string };
   country?: Country;
   enabled?: boolean;
   debounceMs?: number;
   defaultValue?: string;
-}
+};
 
 export const useStreetAddressTypeahead = ({
   city,

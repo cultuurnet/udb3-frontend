@@ -16,9 +16,9 @@ import { Stack } from '@/ui/Stack';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Toast } from '@/ui/Toast';
 
-interface PermissionsSectionProps {
+type PermissionsSectionProps = {
   roleId: string;
-}
+};
 
 export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
   const { t } = useTranslation();
