@@ -30,6 +30,7 @@ import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
+import { Toast } from '@/ui/Toast';
 import { Typeahead } from '@/ui/Typeahead';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -45,6 +46,8 @@ const UserEditpage = () => {
   const [removeError, setRemoveError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [typeaheadKey, setTypeaheadKey] = useState(0);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const addUserToRoleMutation = useAddUserToRoleMutation();
   const removeUserFromRoleMutation = useRemoveUserFromRoleMutation();
@@ -91,6 +94,11 @@ const UserEditpage = () => {
     setShowRemoveModal(true);
   };
 
+  const showSuccessToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+  };
+
   const handleRemoveConfirm = async () => {
     try {
       setRemoveError('');
@@ -99,10 +107,36 @@ const UserEditpage = () => {
         userId: user!.uuid,
       });
       await userRolesQuery.refetch();
+      showSuccessToast(
+        t('users.edit.success.role_deleted', {
+          roleName: selectedRole?.name,
+        }),
+      );
       setShowRemoveModal(false);
       setSelectedRole(null);
     } catch (error) {
       setRemoveError(t('users.edit.roles.remove_modal.error'));
+    }
+  };
+
+  const handleAddRole = async (role: Role) => {
+    if (!user || !role) return;
+
+    try {
+      await addUserToRoleMutation.mutateAsync({
+        roleId: role.uuid,
+        userId: user!.uuid,
+      });
+      await userRolesQuery.refetch();
+      showSuccessToast(
+        t('users.edit.success.role_added', {
+          roleName: role?.name,
+        }),
+      );
+      setSearchTerm('');
+      setTypeaheadKey((prev) => prev + 1);
+    } catch (error) {
+      console.error('Failed to add role:', error);
     }
   };
 
@@ -143,26 +177,16 @@ const UserEditpage = () => {
     [t],
   );
 
-  const handleRoleSelect = async (role: Role) => {
-    if (!user || !role) return;
-
-    try {
-      await addUserToRoleMutation.mutateAsync({
-        roleId: role.uuid,
-        userId: user!.uuid,
-      });
-      await userRolesQuery.refetch();
-      setSearchTerm('');
-      setTypeaheadKey((prev) => prev + 1);
-    } catch (error) {
-      console.error('Failed to add role:', error);
-    }
-  };
-
   return (
     <Page>
       <Page.Title>{t('users.edit.title')}</Page.Title>
       <Page.Content>
+        <Toast
+          variant="success"
+          body={toastMessage}
+          visible={showToast}
+          onClose={() => setShowToast(false)}
+        />
         <Modal
           variant={ModalVariants.QUESTION}
           visible={showRemoveModal}
@@ -227,7 +251,7 @@ const UserEditpage = () => {
                       if (roles.length === 0) {
                         return;
                       }
-                      handleRoleSelect(roles[0]);
+                      handleAddRole(roles[0]);
                     }}
                     // emptyMessage={t('users.edit.roles.no_roles_found')}
                     // disabled={addRoleToUserMutation.isPending || rolesQuery.isLoading}
