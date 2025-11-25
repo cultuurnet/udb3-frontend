@@ -82,10 +82,29 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_DUPLICATE,
   },
   {
+    source: '/event/:eventId/translate',
+    destination: '/events/:eventId/translate',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_TRANSLATE,
+  },
+  {
+    source: '/place/:placeId/translate',
+    destination: '/places/:placeId/translate',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_TRANSLATE_PLACES,
+  },
+  {
     source: '/manage/roles/overview',
     destination: '/manage/roles',
     permanent: false,
     featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
+  },
+  {
+    source:
+      '/manage/roles/:roleId([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
+    destination: '/manage/roles/:roleId/edit',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_ROLES_CREATE_EDIT,
   },
   {
     source: '/manage/users/overview',

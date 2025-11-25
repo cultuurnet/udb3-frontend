@@ -1208,6 +1208,20 @@
     "end": "Einde",
     "start": "Start"
   },
+  "translate": {
+    "title": "vertalen",
+    "title_label": "Titel",
+    "change": "Wijzigen",
+    "description_label": "Beschrijving",
+    "placeholder_title": "Vertaal titel in {{language}}",
+    "original_label": "Origineel {{language}}",
+    "translation_label": "Vertaling {{language}}",
+    "done": "Klaar met vertalen",
+    "success": {
+      "title": "Titel ({{language}}) succesvol bijgewerkt",
+      "description": "Beschrijving ({{language}}) succesvol bijgewerkt"
+    }
+  },
   "date_period_picker": {
     "end": "Einde",
     "start": "Start"
@@ -1221,6 +1235,9 @@
     "prompt_text": "Typ om te zoeken...",
     "search_text": "Aan het zoeken..."
   },
+  "common": {
+    "back_to_overview": "Terug naar de lijst"
+  },
   "users": {
     "search": {
       "title": "Gebruikers",
@@ -1228,13 +1245,13 @@
         "label": "Zoeken op email",
         "placeholder": "Voer een geldig e-mailadres in"
       },
-      "submit": "Zoeken",
-      "searching": "Zoeken...",
-      "info": "Schrijf een geldig email-adres in het veld hierboven en druk op enter om gebruikers te zoeken.",
-      "not_found": "Geen gebruiker gevonden voor het opgegeven e-mail adres.",
+      "info": "Schrijf een geldig e-mailadres in het veld hierboven en druk op enter om gebruikers te zoeken.",
+      "not_found": "Geen gebruiker gevonden voor het opgegeven e-mailadres.",
       "error": {
         "message": "Er ging iets mis tijdens het zoeken: {{error}}",
-        "unknown": "Er is een onbekende fout opgetreden"
+        "unknown": "Er is een onbekende fout opgetreden",
+        "email_invalid": "Geen geldig e-mailadres",
+        "email_required": "E-mailadres is een verplicht veld."
       }
     }
   },
@@ -1286,7 +1303,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Terug naar de lijst",
         "create": "Toevoegen",
         "save": "Bewaren"
       },
@@ -1316,7 +1332,7 @@
       "create": "Toevoegen",
       "search": {
         "label": "Zoeken op rolnaam",
-        "placeholder": "Schrijf een zoekopdracht van minstens 3 karakters."
+        "placeholder": "Schrijf een zoekopdracht van minstens 3 tekens."
       },
       "no_results": "Geen rollen gevonden.",
       "success_created": "Rol '{{name}}' succesvol aangemaakt.",
@@ -1335,6 +1351,77 @@
         "cancel": "Annuleren",
         "error": "Er ging iets fout bij het verwijderen van de rol."
       }
+    },
+    "form": {
+      "create_title": "Rol toevoegen",
+      "edit_title": "Rol bewerken",
+      "name_label": "Naam",
+      "name_edit": "Wijzigen",
+      "cancel": "Annuleren",
+      "create": "Toevoegen",
+      "save_changes": "Wijzigingen bewaren",
+      "save": "Bewaren",
+      "saving": "Opslaan...",
+      "delete": "Rol verwijderen",
+      "errors": {
+        "name_not_unique": "Deze naam bestaat al. Kies een andere naam.",
+        "name_required": "Naam is verplicht",
+        "name_min_length": "Naam moet minstens 3 tekens bevatten",
+        "name_max_length": "Naam mag maximaal 255 tekens bevatten"
+      },
+      "constraints": {
+        "title": "Bewerkrecht",
+        "edit": "Wijzigen",
+        "remove": "Verwijderen",
+        "add": "Toevoegen",
+        "remove_modal": {
+          "title": "Bewerkrecht verwijderen",
+          "message": "Ben je zeker dat je het bewerkrecht met waarde <code>{{constraint}}</code> wil verwijderen?",
+          "error": "Er ging iets mis bij het verwijderen van het bewerkrecht."
+        }
+      },
+      "permissions": {
+        "title": "Permissies"
+      },
+      "users": {
+        "title": "Leden",
+        "placeholder_message": "Ledenbeheer wordt hier getoond",
+        "add_user_label": "Voeg lid toe",
+        "email_placeholder": "E-mailadres",
+        "add": "Toevoegen",
+        "table": {
+          "email": "E-mailadres",
+          "actions": "Verwijderen"
+        },
+        "remove_membership": "Lidmaatschap verwijderen",
+        "no_users_message": "Er hangen nog geen gebruikers aan deze rol. Voeg een gebruiker aan deze rol toe door zijn/haar e-mailadres hierboven in te geven.",
+        "loading": "Gebruikers laden...",
+        "user_not_found": "Gebruiker niet gevonden met dit e-mailadres.",
+        "user_already_in_role": "Deze gebruiker is al lid van deze rol.",
+        "add_user_error": "Er ging iets mis bij het toevoegen van de gebruiker."
+      },
+      "labels": {
+        "title": "Labels",
+        "label": "Voeg een label toe"
+      },
+      "toast": {
+        "permission_added": "Permissie succesvol toegevoegd",
+        "permission_removed": "Permissie succesvol verwijderd"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Aanbod bewerken",
+    "AANBOD_MODEREREN": "Aanbod modereren",
+    "AANBOD_VERWIJDEREN": "Aanbod verwijderen",
+    "AANBOD_HISTORIEK": "Historiek raadplegen",
+    "ORGANISATIES_BEWERKEN": "Organisaties bewerken",
+    "ORGANISATIES_BEHEREN": "Organisaties beheren",
+    "GEBRUIKERS_BEHEREN": "Gebruikers beheren",
+    "LABELS_BEHEREN": "Labels beheren",
+    "VOORZIENINGEN_BEWERKEN": "Voorzieningen bewerken",
+    "PRODUCTIES_AANMAKEN": "Producties aanmaken",
+    "FILMS_AANMAKEN": "Films aanmaken",
+    "MEDIA_UPLOADEN": "Media uploaden"
   }
 }

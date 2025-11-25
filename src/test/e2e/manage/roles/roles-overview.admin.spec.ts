@@ -89,6 +89,7 @@ test.describe('Roles Overview - Admin', () => {
 
   test('can click create role button', async ({ page }) => {
     await page.getByRole('button', { name: 'toevoegen' }).click();
+    await page.waitForLoadState('networkidle');
     await expect(page).toHaveURL(/\/manage\/roles\/create/);
   });
 

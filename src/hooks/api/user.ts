@@ -209,7 +209,7 @@ const prefetchGetUserByIdQuery = ({
     ...createGetUserByIdQueryOptions({ id }),
   });
 
-const findUserWithEmail = async ({
+const getUserByEmail = async ({
   headers,
   email,
 }: {
@@ -225,25 +225,26 @@ const findUserWithEmail = async ({
   return (await res.json()) as SearchUser;
 };
 
-const createFindUserWithEmailQueryOptions = (email: string) =>
+const createGetUserByEmailQueryOptions = (email: string) =>
   queryOptions({
-    queryKey: ['users', 'findByEmail', email],
-    queryFn: findUserWithEmail,
+    queryKey: ['users', 'getByEmail', email],
+    queryFn: getUserByEmail,
     queryArguments: { email },
   });
 
-const useFindUserWithEmailQuery = (email: string, configuration = {}) =>
+const useGetUserByEmailQuery = (email: string, configuration = {}) =>
   useAuthenticatedQuery({
-    ...createFindUserWithEmailQueryOptions(email),
+    ...createGetUserByEmailQueryOptions(email),
     ...configuration,
   });
 
 export {
+  getUserByEmail,
   prefetchGetPermissionsQuery,
   prefetchGetUserByIdQuery,
-  useFindUserWithEmailQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,
+  useGetUserByEmailQuery,
   useGetUserByIdQuery,
   useGetUserQuery,
 };

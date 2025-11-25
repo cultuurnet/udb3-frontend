@@ -1156,6 +1156,20 @@
     "end": "Ende",
     "start": "Start"
   },
+  "translate": {
+    "title": "übersetzen",
+    "title_label": "Titel",
+    "change": "Ändern",
+    "description_label": "Beschreibung",
+    "placeholder_title": "Übersetze den Titel in {{language}}",
+    "original_label": "Original {{language}}",
+    "translation_label": "Übersetzung {{language}}",
+    "done": "Fertig mit Übersetzen",
+    "success": {
+      "title": "Titel ({{language}}) erfolgreich aktualisiert",
+      "description": "Beschreibung ({{language}}) erfolgreich aktualisiert"
+    }
+  },
   "date_period_picker": {
     "end": "Ende",
     "start": "Start"
@@ -1165,6 +1179,9 @@
     "prompt_text": "Tipp deine Suche einfach...",
     "search_text": "Wird gesucht..."
   },
+  "common": {
+    "back_to_overview": "Zurück zur Liste"
+  },
   "users": {
     "search": {
       "title": "Benutzer",
@@ -1172,13 +1189,13 @@
         "label": "Nach E-Mail suchen",
         "placeholder": "Geben Sie eine gültige E-Mail-Adresse ein"
       },
-      "submit": "Suchen",
-      "searching": "Suchen...",
       "info": "Schreiben Sie eine gültige E-Mail-Adresse in das Feld oben und drücken Sie die Eingabetaste, um nach Benutzern zu suchen.",
       "not_found": "Kein Benutzer für die angegebene E-Mail-Adresse gefunden.",
       "error": {
         "message": "Beim Suchen ist etwas schief gelaufen: {{error}}",
-        "unknown": "Ein unbekannter Fehler ist aufgetreten"
+        "unknown": "Ein unbekannter Fehler ist aufgetreten",
+        "email_invalid": "Keine gültige E-Mail-Adresse",
+        "email_required": "E-Mail-Adresse ist ein Pflichtfeld."
       }
     }
   },
@@ -1230,7 +1247,6 @@
     },
     "form": {
       "actions": {
-        "cancel": "Zurück zur Liste",
         "create": "Hinzufügen",
         "save": "Speichern"
       },
@@ -1279,6 +1295,77 @@
         "cancel": "Abbrechen",
         "error": "Es ging etwas schief beim Löschen der Rolle."
       }
+    },
+    "form": {
+      "create_title": "Rolle erstellen",
+      "edit_title": "Rolle bearbeiten",
+      "name_label": "Name",
+      "name_edit": "Bearbeiten",
+      "cancel": "Abbrechen",
+      "create": "Hinzufügen",
+      "save_changes": "Änderungen speichern",
+      "save": "Speichern",
+      "saving": "Speichern...",
+      "delete": "Rolle löschen",
+      "errors": {
+        "name_not_unique": "Dieser Name existiert bereits. Wählen Sie einen anderen Namen.",
+        "name_required": "Name ist erforderlich",
+        "name_min_length": "Name muss mindestens 3 Zeichen enthalten",
+        "name_max_length": "Name darf maximal 255 Zeichen enthalten"
+      },
+      "constraints": {
+        "title": "Bearbeitungsrechte",
+        "edit": "Bearbeiten",
+        "remove": "Entfernen",
+        "add": "Hinzufügen",
+        "remove_modal": {
+          "title": "Bearbeitungsrechte entfernen",
+          "message": "Möchten Sie die Bearbeitungsrechte für den Wert <code>{{constraint}}</code> wirklich entfernen?",
+          "error": "Beim Entfernen der Bearbeitungsrechte ist ein Fehler aufgetreten."
+        }
+      },
+      "permissions": {
+        "title": "Berechtigungen"
+      },
+      "users": {
+        "title": "Benutzer",
+        "placeholder_message": "Benutzerverwaltung wird hier angezeigt",
+        "add_user_label": "Benutzer hinzufügen",
+        "email_placeholder": "E-Mail-Adresse",
+        "add": "Hinzufügen",
+        "table": {
+          "email": "E-Mail-Adresse",
+          "actions": "Entfernen"
+        },
+        "remove_membership": "Benutzer entfernen",
+        "no_users_message": "Es sind noch keine Benutzer in dieser Rolle. Fügen Sie einen Benutzer zu dieser Rolle hinzu, indem Sie seine E-Mail-Adresse oben eingeben.",
+        "loading": "Benutzer laden...",
+        "user_not_found": "Benutzer mit dieser E-Mail-Adresse wurde nicht gefunden.",
+        "user_already_in_role": "Dieser Benutzer ist bereits Mitglied dieser Rolle.",
+        "add_user_error": "Es ging etwas schief beim Hinzufügen des Benutzers."
+      },
+      "labels": {
+        "title": "Labels",
+        "label": "Label hinzufügen"
+      },
+      "toast": {
+        "permission_added": "Berechtigung erfolgreich hinzugefügt",
+        "permission_removed": "Berechtigung erfolgreich entfernt"
+      }
     }
+  },
+  "permissions": {
+    "AANBOD_BEWERKEN": "Angebot bearbeiten",
+    "AANBOD_MODEREREN": "Angebot moderieren",
+    "AANBOD_VERWIJDEREN": "Angebot entfernen",
+    "AANBOD_HISTORIEK": "Historie einsehen",
+    "ORGANISATIES_BEWERKEN": "Organisationen bearbeiten",
+    "ORGANISATIES_BEHEREN": "Organisationen verwalten",
+    "GEBRUIKERS_BEHEREN": "Benutzer verwalten",
+    "LABELS_BEHEREN": "Labels verwalten",
+    "VOORZIENINGEN_BEWERKEN": "Einrichtungen bearbeiten",
+    "PRODUCTIES_AANMAKEN": "Produktionen erstellen",
+    "FILMS_AANMAKEN": "Filme erstellen",
+    "MEDIA_UPLOADEN": "Media hochladen"
   }
 }

@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { TFunction, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { useFindUserWithEmailQuery } from '@/hooks/api/user';
+import { useGetUserByEmailQuery } from '@/hooks/api/user';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
@@ -15,14 +15,19 @@ import { Stack } from '@/ui/Stack';
 import { ErrorBody } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-const schema = yup.object({
-  email: yup.string().email().required(),
-});
+const createValidationSchema = (t: TFunction) =>
+  yup.object({
+    email: yup
+      .string()
+      .email(t('users.search.error.email_invalid'))
+      .required(t('users.search.error.email_required')),
+  });
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<ReturnType<typeof createValidationSchema>>;
 
 const UsersOverviewPage = () => {
   const { t } = useTranslation();
+
   const router = useRouter();
   const [searchStatus, setSearchStatus] = useState<
     'idle' | 'loading' | 'notFound' | 'problem'
@@ -35,15 +40,15 @@ const UsersOverviewPage = () => {
   const [searchEmail, setSearchEmail] = useState('');
 
   const { register, handleSubmit, formState, watch } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(createValidationSchema(t)),
     defaultValues: { email: '' },
     mode: 'onChange',
   });
 
   const email = watch('email');
 
-  const findUserQuery = useFindUserWithEmailQuery(searchEmail, {
-    enabled: !!searchEmail && searchEmail.includes('@'),
+  const findUserQuery = useGetUserByEmailQuery(searchEmail, {
+    enabled: !!searchEmail,
     retry: false,
   });
 
@@ -78,13 +83,6 @@ const UsersOverviewPage = () => {
     setSearchEmail(data.email.trim());
   };
 
-  const handleInputChange = () => {
-    if (searchStatus === 'problem' || searchStatus === 'notFound') {
-      setSearchStatus('idle');
-      setErrorMessage('');
-    }
-  };
-
   return (
     <Page>
       <Page.Title>{t('users.search.title')}</Page.Title>
@@ -95,24 +93,16 @@ const UsersOverviewPage = () => {
               id="user-search-input"
               label={t('users.search.email.label')}
               labelPosition="left"
-              alignItems={'start'}
+              alignItems="start"
               Component={
                 <Input
                   {...register('email')}
-                  placeholder={t('users.search.email.placeholder')}
-                  onChange={(e) => {
-                    register('email').onChange(e);
-                    handleInputChange();
-                  }}
-                  onKeyDown={(e) => {
-                    if (
-                      e.key === 'Enter' &&
-                      email.trim() &&
-                      email.includes('@')
-                    ) {
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === 'Enter') {
                       handleSubmit(onSubmit)();
                     }
                   }}
+                  placeholder={t('users.search.email.placeholder')}
                   disabled={findUserQuery.isLoading}
                 />
               }
