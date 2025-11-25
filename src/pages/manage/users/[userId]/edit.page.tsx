@@ -28,9 +28,12 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
+import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Typeahead } from '@/ui/Typeahead';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
+
+const getGlobalValue = getValueFromTheme('global');
 
 const UserEditpage = () => {
   const { t } = useTranslation();
@@ -187,59 +190,74 @@ const UserEditpage = () => {
             </Stack>
           </Box>
         </Modal>
-        <Stack backgroundColor="white" padding={5} marginBottom={5}>
-          <Inline>
-            <Text>E-mailadres: {user?.email}</Text>
-          </Inline>
-          <Inline>
-            <Text>Gebruikersnaam: {user?.username}</Text>
-          </Inline>
-        </Stack>
-        <Stack>
-          <Inline marginBottom={5}>
-            <FormElement
-              id="role-typeahead-form-input"
-              label="Rol toevoegen"
-              width="40%"
-              Component={
-                <Typeahead
-                  id="role-typeahead"
-                  placeholder="Zoek op rolnaam..."
-                  onInputChange={setSearchTerm}
-                  options={availableRoles}
-                  labelKey={'name'}
-                  onChange={(roles: Role[]) => {
-                    if (roles.length === 0) {
-                      return;
-                    }
-                    handleRoleSelect(roles[0]);
-                  }}
-                  // emptyMessage={t('users.edit.roles.no_roles_found')}
-                  // disabled={addRoleToUserMutation.isPending || rolesQuery.isLoading}
-                  isLoading={rolesQuery.isLoading}
-                />
-              }
-            />
-          </Inline>
-          <Title marginBottom={4}>Rollen</Title>
-
-          <Inline
-            spacing={5}
-            css={`
-              & table th:first-child {
-                min-width: 27em;
-              }
-            `}
-            className="table-responsive"
+        <Stack spacing={5}>
+          <Stack
+            backgroundColor="white"
+            padding={4}
+            borderRadius={getGlobalBorderRadius}
           >
-            <Table
-              striped
-              bordered
-              hover
-              columns={columns}
-              data={rolesToTableData(userRoles)}
-            />
-          </Inline>
+            <Inline>
+              <Text>E-mailadres: {user?.email}</Text>
+            </Inline>
+            <Inline>
+              <Text>Gebruikersnaam: {user?.username}</Text>
+            </Inline>
+          </Stack>
+          <Stack>
+            <Inline marginBottom={5}>
+              <FormElement
+                id="role-typeahead-form-input"
+                label="Rol toevoegen"
+                width="40%"
+                Component={
+                  <Typeahead
+                    id="role-typeahead"
+                    placeholder="Zoek op rolnaam..."
+                    onInputChange={setSearchTerm}
+                    options={availableRoles}
+                    labelKey={'name'}
+                    onChange={(roles: Role[]) => {
+                      if (roles.length === 0) {
+                        return;
+                      }
+                      handleRoleSelect(roles[0]);
+                    }}
+                    // emptyMessage={t('users.edit.roles.no_roles_found')}
+                    // disabled={addRoleToUserMutation.isPending || rolesQuery.isLoading}
+                    isLoading={rolesQuery.isLoading}
+                  />
+                }
+              />
+            </Inline>
+            <Stack
+              backgroundColor="white"
+              padding={4}
+              borderRadius={getGlobalBorderRadius}
+              css={`
+                box-shadow: ${getGlobalValue('boxShadow.medium')};
+              `}
+            >
+              <Title marginBottom={2}>Rollen</Title>
+
+              <Inline
+                spacing={5}
+                css={`
+                  & table th:first-child {
+                    min-width: 27em;
+                  }
+                `}
+                className="table-responsive"
+              >
+                <Table
+                  striped
+                  bordered
+                  hover
+                  columns={columns}
+                  data={rolesToTableData(userRoles)}
+                />
+              </Inline>
+            </Stack>
+          </Stack>
         </Stack>
       </Page.Content>
     </Page>
