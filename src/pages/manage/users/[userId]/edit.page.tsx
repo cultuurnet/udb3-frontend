@@ -44,6 +44,7 @@ const UserEditpage = () => {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [removeError, setRemoveError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [typeaheadKey, setTypeaheadKey] = useState(0);
 
   const addUserToRoleMutation = useAddUserToRoleMutation();
   const removeUserFromRoleMutation = useRemoveUserFromRoleMutation();
@@ -152,6 +153,7 @@ const UserEditpage = () => {
       });
       await userRolesQuery.refetch();
       setSearchTerm('');
+      setTypeaheadKey((prev) => prev + 1);
     } catch (error) {
       console.error('Failed to add role:', error);
     }
@@ -211,6 +213,7 @@ const UserEditpage = () => {
                 width="40%"
                 Component={
                   <Typeahead
+                    key={typeaheadKey}
                     id="role-typeahead"
                     placeholder="Zoek op rolnaam..."
                     onInputChange={setSearchTerm}
