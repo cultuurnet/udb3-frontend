@@ -214,6 +214,8 @@ const isDuplicateMutation = (
     'offers-remove-label',
     'roles-add-label',
     'roles-remove-label',
+    'roles-add-user',
+    'roles-remove-user',
     'labels-update-visibility',
     'labels-update-privacy',
   ];
