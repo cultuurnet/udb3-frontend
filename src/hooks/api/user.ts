@@ -150,6 +150,14 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
+const prefetchGetRolesQuery = ({ req, queryClient }: ServerSideQueryOptions) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['user', 'roles'],
+    queryFn: getRoles,
+  });
+
 type SearchUser = {
   uuid: string;
   email: string;
@@ -241,6 +249,7 @@ const useGetUserByEmailQuery = (email: string, configuration = {}) =>
 export {
   getUserByEmail,
   prefetchGetPermissionsQuery,
+  prefetchGetRolesQuery,
   prefetchGetUserByIdQuery,
   useGetPermissionsQuery,
   useGetRolesQuery,

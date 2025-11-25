@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import {
+  prefetchGetRolesQuery as prefetchGetUserRolesQuery,
   prefetchGetUserByIdQuery,
   useGetUserByIdQuery,
   User,
@@ -33,10 +34,12 @@ export const getServerSideProps = getApplicationServerSideProps(
     const { userId } = query as { userId: string };
 
     await prefetchGetUserByIdQuery({ req, queryClient, id: userId });
+    await prefetchGetUserRolesQuery({ req, queryClient });
 
     return {
       props: {
         cookies,
+        dehydratedState: dehydrate(queryClient),
       },
     };
   },
