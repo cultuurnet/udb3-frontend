@@ -199,23 +199,27 @@ const UserEditpage = () => {
             borderRadius={getGlobalBorderRadius}
           >
             <Inline>
-              <Text>E-mailadres: {user?.email}</Text>
+              <Text>
+                {t('users.edit.email_label')}: {user?.email}
+              </Text>
             </Inline>
             <Inline>
-              <Text>Gebruikersnaam: {user?.username}</Text>
+              <Text>
+                {t('users.edit.name_label')}: {user?.username}
+              </Text>
             </Inline>
           </Stack>
           <Stack>
             <Inline marginBottom={5}>
               <FormElement
                 id="role-typeahead-form-input"
-                label="Rol toevoegen"
+                label={t('users.edit.add_role')}
                 width="40%"
                 Component={
                   <Typeahead
                     key={typeaheadKey}
                     id="role-typeahead"
-                    placeholder="Zoek op rolnaam..."
+                    placeholder={t('users.edit.search_placeholder')}
                     onInputChange={setSearchTerm}
                     options={availableRoles}
                     labelKey={'name'}
@@ -240,7 +244,7 @@ const UserEditpage = () => {
                 box-shadow: ${getGlobalValue('boxShadow.medium')};
               `}
             >
-              <Title marginBottom={2}>Rollen</Title>
+              <Title marginBottom={2}>{t('users.edit.table.title')}</Title>
 
               <Inline
                 spacing={5}
