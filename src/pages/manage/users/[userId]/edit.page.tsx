@@ -253,8 +253,6 @@ const UserEditpage = () => {
                       }
                       handleAddRole(roles[0]);
                     }}
-                    // emptyMessage={t('users.edit.roles.no_roles_found')}
-                    // disabled={addRoleToUserMutation.isPending || rolesQuery.isLoading}
                     isLoading={rolesQuery.isLoading}
                   />
                 }
