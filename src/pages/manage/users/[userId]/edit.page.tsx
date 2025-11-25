@@ -190,23 +190,20 @@ const UserEditpage = () => {
         <Modal
           variant={ModalVariants.QUESTION}
           visible={showRemoveModal}
-          title={'Zeker dat je deze rol wilt verwijderen?'}
+          title={t('users.edit.modal_confirm_delete.title')}
           onClose={handleRemoveCancel}
           onConfirm={handleRemoveConfirm}
-          confirmTitle={'ja ik ben zeker'}
-          cancelTitle={'neen annuleer'}
+          confirmTitle={t('users.edit.modal_confirm_delete.confirm')}
+          cancelTitle={t('users.edit.modal_confirm_delete.cancel')}
           size={ModalSizes.MD}
           confirmButtonVariant={ButtonVariants.DANGER}
         >
           <Box padding={4}>
             <Stack spacing={4}>
               <Text>
-                {/* <Trans
-                i18nKey="users.edit.roles.remove_modal.message"
-                values={{ roleName: selectedRole?.name }}
-                components={{ br: <br />, strong: <strong /> }}
-              /> */}
-                Verwijder rol met naam: <strong>{selectedRole?.name}</strong>
+                {t('users.edit.modal_confirm_delete.body', {
+                  roleName: selectedRole?.name,
+                })}{' '}
               </Text>
               {removeError && (
                 <Alert variant={AlertVariants.DANGER} fullWidth>

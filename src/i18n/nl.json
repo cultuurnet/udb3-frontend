@@ -1268,6 +1268,12 @@
       "actions": {
         "delete": "Verwijderen"
       },
+      "modal_confirm_delete": {
+        "title": "Rol verwijderen",
+        "body": "Ben je zeker dat je de rol '{{roleName}}' wil verwijderen van deze gebruiker?",
+        "cancel": "Annuleren",
+        "confirm": "Verwijderen"
+      },
       "success": {
         "role_added": "Rol '{{roleName}}' succesvol toegevoegd aan gebruiker.",
         "role_deleted": "Rol '{{roleName}}' succesvol verwijderd van gebruiker."
