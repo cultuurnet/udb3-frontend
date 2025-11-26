@@ -167,6 +167,7 @@ const UserEditpage = () => {
           return (
             <Inline>
               <Button
+                id={`delete-role-button-${row.original.options.uuid}`}
                 variant={ButtonVariants.LINK}
                 onClick={() => handleDeleteClick(row.original.options)}
               >
