@@ -22,7 +22,6 @@ test.describe('User Edit - Admin', () => {
     await page.goto(`/manage/users/${E2E_ADMIN_USER_ID}/edit`);
 
     await page.waitForLoadState('networkidle');
-    await page.waitForLoadState('domcontentloaded');
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
       'Gebruiker bewerken',
