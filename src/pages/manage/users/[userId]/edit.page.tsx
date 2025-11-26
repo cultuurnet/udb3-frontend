@@ -1,4 +1,4 @@
-import { dehydrate } from '@tanstack/react-query';
+import { dehydrate, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 const getGlobalValue = getValueFromTheme('global');
 
 const UserEditPage = () => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const router = useRouter();
   const userId = router.query.userId as string | undefined;
@@ -50,8 +51,20 @@ const UserEditPage = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
 
-  const addUserToRoleMutation = useAddUserToRoleMutation();
-  const removeUserFromRoleMutation = useRemoveUserFromRoleMutation();
+  const addUserToRoleMutation = useAddUserToRoleMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users', 'roles', { id: userId }],
+      });
+    },
+  });
+  const removeUserFromRoleMutation = useRemoveUserFromRoleMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users', 'roles', { id: userId }],
+      });
+    },
+  });
 
   const userQuery = useGetUserByIdQuery(
     { id: userId as string },
@@ -110,7 +123,6 @@ const UserEditPage = () => {
         roleId: selectedRole!.uuid,
         userId: user!.uuid,
       });
-      await userRolesQuery.refetch();
       showSuccessToast(
         t('users.edit.success.role_deleted', {
           roleName: selectedRole?.name,
@@ -131,7 +143,6 @@ const UserEditPage = () => {
         roleId: role.uuid,
         userId: user!.uuid,
       });
-      await userRolesQuery.refetch();
       showSuccessToast(
         t('users.edit.success.role_added', {
           roleName: role?.name,
