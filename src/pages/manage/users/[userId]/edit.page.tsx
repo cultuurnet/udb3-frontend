@@ -37,7 +37,7 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 
 const getGlobalValue = getValueFromTheme('global');
 
-const UserEditpage = () => {
+const UserEditPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const userId = router.query.userId as string | undefined;
@@ -333,4 +333,4 @@ export const getServerSideProps = getApplicationServerSideProps(
   },
 );
 
-export default UserEditpage;
+export default UserEditPage;
