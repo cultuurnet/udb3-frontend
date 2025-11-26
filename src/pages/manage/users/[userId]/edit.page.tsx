@@ -71,7 +71,7 @@ const UserEditPage = () => {
     { enabled: !!userId },
   );
 
-  const user: User | UserById | undefined = useMemo(
+  const user: UserById | undefined = useMemo(
     () => userQuery.data ?? undefined,
     [userQuery.data],
   );
