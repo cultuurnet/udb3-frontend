@@ -1196,6 +1196,31 @@
         "email_invalid": "Adresse e-mail non valide",
         "email_required": "L'adresse e-mail est un champ obligatoire."
       }
+    },
+    "edit": {
+      "title": "Modifier l'utilisateur",
+      "email_label": "Adresse e-mail",
+      "name_label": "Nom d'utilisateur",
+      "add_role": "Ajouter un rôle",
+      "search_placeholder": "Rechercher par nom de rôle",
+      "table": {
+        "title": "Rôles",
+        "name": "Nom",
+        "options": "Options"
+      },
+      "actions": {
+        "delete": "Supprimer"
+      },
+      "modal_confirm_delete": {
+        "title": "Supprimer le rôle",
+        "body": "Êtes-vous sûr de vouloir supprimer le rôle '{{roleName}}' de cet utilisateur ?",
+        "cancel": "Annuler",
+        "confirm": "Supprimer"
+      },
+      "success": {
+        "role_added": "Rôle '{{roleName}}' ajouté avec succès à l'utilisateur.",
+        "role_deleted": "Rôle '{{roleName}}' supprimé avec succès de l'utilisateur."
+      }
     }
   },
   "videos": {
