@@ -1272,7 +1272,8 @@
         "title": "Rol verwijderen",
         "body": "Ben je zeker dat je de rol '{{roleName}}' wil verwijderen van deze gebruiker?",
         "cancel": "Annuleren",
-        "confirm": "Verwijderen"
+        "confirm": "Verwijderen",
+        "error": "Er ging iets fout bij het verwijderen van de rol voor deze gebruiker."
       },
       "success": {
         "role_added": "Rol '{{roleName}}' succesvol toegevoegd aan gebruiker.",

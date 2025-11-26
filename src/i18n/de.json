@@ -1216,7 +1216,8 @@
         "title": "Rolle löschen",
         "body": "Sind Sie sicher, dass Sie die Rolle '{{roleName}}' von diesem Benutzer entfernen möchten?",
         "cancel": "Abbrechen",
-        "confirm": "Löschen"
+        "confirm": "Löschen",
+        "error": "Beim Löschen der Rolle für diesen Benutzer ist ein Fehler aufgetreten."
       },
       "success": {
         "role_added": "Rolle '{{roleName}}' erfolgreich zum Benutzer hinzugefügt.",

@@ -119,7 +119,7 @@ const UserEditpage = () => {
       setShowRemoveModal(false);
       setSelectedRole(null);
     } catch (error) {
-      setRemoveError(t('users.edit.roles.remove_modal.error'));
+      setRemoveError(t('users.edit.modal_confirm_delete.error'));
     }
   };
 
