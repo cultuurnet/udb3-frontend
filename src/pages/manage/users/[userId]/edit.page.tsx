@@ -32,6 +32,7 @@ import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
 import { Typeahead } from '@/ui/Typeahead';
+import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const getGlobalValue = getValueFromTheme('global');
@@ -298,15 +299,37 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { userId } = query as { userId: string };
 
-    await prefetchGetUserByIdQuery({ req, queryClient, id: userId });
-    await prefetchGetRolesForUserQuery({ req, queryClient, id: userId });
+    try {
+      await prefetchGetUserByIdQuery({ req, queryClient, id: userId });
+      await prefetchGetRolesForUserQuery({ req, queryClient, id: userId });
 
-    return {
-      props: {
-        cookies,
-        dehydratedState: dehydrate(queryClient),
-      },
-    };
+      return {
+        props: {
+          cookies,
+          dehydratedState: dehydrate(queryClient),
+        },
+      };
+    } catch (error) {
+      if (error instanceof FetchError && error.status === 403) {
+        return {
+          redirect: {
+            destination: '/dashboard',
+            permanent: false,
+          },
+        };
+      }
+
+      if (error instanceof FetchError && error.status === 404) {
+        return {
+          redirect: {
+            destination: '/manage/users',
+            permanent: false,
+          },
+        };
+      }
+
+      throw error;
+    }
   },
 );
 
