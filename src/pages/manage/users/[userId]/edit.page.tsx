@@ -9,9 +9,9 @@ import {
   useRemoveUserFromRoleMutation,
 } from '@/hooks/api/roles';
 import {
-  prefetchGetRolesQuery as prefetchGetUserRolesQuery,
+  prefetchGetRolesForUserQuery,
   prefetchGetUserByIdQuery,
-  useGetRolesQuery,
+  useGetRolesForUserQuery,
   useGetUserByIdQuery,
   User,
   UserById,
@@ -62,7 +62,10 @@ const UserEditpage = () => {
     [userQuery.data],
   );
 
-  const userRolesQuery = useGetRolesQuery();
+  const userRolesQuery = useGetRolesForUserQuery(
+    { id: userId as string },
+    { enabled: !!userId },
+  );
 
   const userRoles = useMemo(() => {
     if (!user || !userRolesQuery.data) return [];
@@ -295,7 +298,7 @@ export const getServerSideProps = getApplicationServerSideProps(
     const { userId } = query as { userId: string };
 
     await prefetchGetUserByIdQuery({ req, queryClient, id: userId });
-    await prefetchGetUserRolesQuery({ req, queryClient });
+    await prefetchGetRolesForUserQuery({ req, queryClient, id: userId });
 
     return {
       props: {
