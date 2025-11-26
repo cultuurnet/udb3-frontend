@@ -13,7 +13,6 @@ import {
   prefetchGetUserByIdQuery,
   useGetRolesForUserQuery,
   useGetUserByIdQuery,
-  User,
   UserById,
 } from '@/hooks/api/user';
 import { Role } from '@/types/Role';
