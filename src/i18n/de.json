@@ -1197,6 +1197,32 @@
         "email_invalid": "Keine gültige E-Mail-Adresse",
         "email_required": "E-Mail-Adresse ist ein Pflichtfeld."
       }
+    },
+    "edit": {
+      "title": "Benutzer bearbeiten",
+      "email_label": "E-Mail-Adresse",
+      "name_label": "Benutzername",
+      "add_role": "Rolle hinzufügen",
+      "search_placeholder": "Nach Rollenname suchen",
+      "table": {
+        "title": "Rollen",
+        "name": "Name",
+        "options": "Optionen"
+      },
+      "actions": {
+        "delete": "Löschen"
+      },
+      "modal_confirm_delete": {
+        "title": "Rolle löschen",
+        "body": "Sind Sie sicher, dass Sie die Rolle '{{roleName}}' von diesem Benutzer entfernen möchten?",
+        "cancel": "Abbrechen",
+        "confirm": "Löschen",
+        "error": "Beim Löschen der Rolle für diesen Benutzer ist ein Fehler aufgetreten."
+      },
+      "success": {
+        "role_added": "Rolle '{{roleName}}' erfolgreich zum Benutzer hinzugefügt.",
+        "role_deleted": "Rolle '{{roleName}}' erfolgreich vom Benutzer entfernt."
+      }
     }
   },
   "videos": {
