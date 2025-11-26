@@ -117,11 +117,13 @@ const UserEditPage = () => {
   };
 
   const handleRemoveConfirm = async () => {
+    if (!user || !selectedRole) return;
+
     try {
       setRemoveError('');
       await removeUserFromRoleMutation.mutateAsync({
         roleId: selectedRole!.uuid,
-        userId: user!.uuid,
+        userId: user.uuid,
       });
       showSuccessToast(
         t('users.edit.success.role_deleted', {
@@ -141,7 +143,7 @@ const UserEditPage = () => {
     try {
       await addUserToRoleMutation.mutateAsync({
         roleId: role.uuid,
-        userId: user!.uuid,
+        userId: user.uuid,
       });
       showSuccessToast(
         t('users.edit.success.role_added', {
