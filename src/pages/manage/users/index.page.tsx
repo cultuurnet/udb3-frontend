@@ -54,7 +54,6 @@ const UsersOverviewPage = () => {
 
   useEffect(() => {
     if (findUserQuery.isSuccess && findUserQuery.data) {
-      console.log('User found:', findUserQuery.data);
       if (isReactUsersEditFeatureFlagEnabled) {
         router.push(`/manage/users/${findUserQuery.data.uuid}/edit`);
       } else {
