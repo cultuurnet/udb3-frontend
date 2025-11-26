@@ -168,7 +168,6 @@ type UserById = {
   uuid: string;
   email: string;
   username: string;
-  // Add other fields as needed
 };
 
 const getUserById = async ({
