@@ -150,11 +150,117 @@ const useGetRolesQuery = (
     ...configuration,
   });
 
+const prefetchGetRolesQuery = ({ req, queryClient }: ServerSideQueryOptions) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['user', 'roles'],
+    queryFn: getRoles,
+  });
+
 type SearchUser = {
   uuid: string;
   email: string;
   username: string;
 };
+
+type UserById = {
+  uuid: string;
+  email: string;
+  username: string;
+};
+
+const getUserById = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/users/${id}`,
+    options: { headers },
+  });
+  return (await res.json()) as UserById;
+};
+
+const createGetUserByIdQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['users', { id }],
+    queryFn: getUserById,
+    queryArguments: { id },
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+const useGetUserByIdQuery = (
+  { id }: { id: string },
+  configuration?: ExtendQueryOptions<typeof getUserById>,
+) => {
+  const options = createGetUserByIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...(configuration || {}),
+    enabled: options.enabled !== false && configuration?.enabled !== false,
+  });
+};
+
+const prefetchGetUserByIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetUserByIdQueryOptions({ id }),
+  });
+
+const getRolesForUser = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/users/${id}/roles`,
+    options: { headers },
+  });
+  return (await res.json()) as Role[];
+};
+
+const createGetRolesForUserQueryOptions = ({ id }: { id: string }) =>
+  queryOptions({
+    queryKey: ['users', 'roles', { id }],
+    queryFn: getRolesForUser,
+    queryArguments: { id },
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+const useGetRolesForUserQuery = (
+  { id }: { id: string },
+  configuration?: ExtendQueryOptions<typeof getRolesForUser>,
+) => {
+  const options = createGetRolesForUserQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...(configuration || {}),
+    enabled: options.enabled !== false && configuration?.enabled !== false,
+  });
+};
+
+const prefetchGetRolesForUserQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetRolesForUserQueryOptions({ id }),
+  });
 
 const getUserByEmail = async ({
   headers,
@@ -188,9 +294,14 @@ const useGetUserByEmailQuery = (email: string, configuration = {}) =>
 export {
   getUserByEmail,
   prefetchGetPermissionsQuery,
+  prefetchGetRolesForUserQuery,
+  prefetchGetRolesQuery,
+  prefetchGetUserByIdQuery,
   useGetPermissionsQuery,
+  useGetRolesForUserQuery,
   useGetRolesQuery,
   useGetUserByEmailQuery,
+  useGetUserByIdQuery,
   useGetUserQuery,
 };
-export type { SearchUser, User };
+export type { SearchUser, User, UserById };

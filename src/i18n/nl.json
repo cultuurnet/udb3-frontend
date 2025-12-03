@@ -1253,6 +1253,32 @@
         "email_invalid": "Geen geldig e-mailadres",
         "email_required": "E-mailadres is een verplicht veld."
       }
+    },
+    "edit": {
+      "title": "Gebruiker bewerken",
+      "email_label": "E-mailadres",
+      "name_label": "Gebruikersnaam",
+      "add_role": "Rol toevoegen",
+      "search_placeholder": "Zoeken op rolnaam",
+      "table": {
+        "title": "Rollen",
+        "name": "Naam",
+        "options": "Opties"
+      },
+      "actions": {
+        "delete": "Verwijderen"
+      },
+      "modal_confirm_delete": {
+        "title": "Rol verwijderen",
+        "body": "Ben je zeker dat je de rol '{{roleName}}' wil verwijderen van deze gebruiker?",
+        "cancel": "Annuleren",
+        "confirm": "Verwijderen",
+        "error": "Er ging iets fout bij het verwijderen van de rol voor deze gebruiker."
+      },
+      "success": {
+        "role_added": "Rol '{{roleName}}' succesvol toegevoegd aan gebruiker.",
+        "role_deleted": "Rol '{{roleName}}' succesvol verwijderd van gebruiker."
+      }
     }
   },
   "videos": {
