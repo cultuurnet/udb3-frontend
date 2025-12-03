@@ -17,7 +17,6 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -212,6 +211,16 @@ const TranslateForm = () => {
     setIsEditingOriginalDescription(true);
   };
 
+  const handleDoneClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    router.push(
+      scope === OfferTypes.EVENTS
+        ? `/event/${id}/preview`
+        : `/place/${id}/preview`,
+    );
+  };
+
   return (
     <Page>
       <Page.Title>{`${originalTitle} ${t('translate.title')}`}</Page.Title>
@@ -354,16 +363,9 @@ const TranslateForm = () => {
         </Stack>
 
         <Inline>
-          <Link
-            href={
-              scope === OfferTypes.EVENTS
-                ? `/event/${id}/preview`
-                : `/place/${id}/preview`
-            }
-            variant={LinkVariants.BUTTON_SUCCESS}
-          >
-            <Text>{t('translate.done')}</Text>
-          </Link>
+          <Button variant={ButtonVariants.SUCCESS} onClick={handleDoneClick}>
+            {t('translate.done')}
+          </Button>
         </Inline>
       </Page.Content>
     </Page>
