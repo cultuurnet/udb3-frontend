@@ -61,7 +61,7 @@
     "react-bootstrap-typeahead": "^6.3.2",
     "react-cookie": "^8.0.1",
     "react-datepicker": "^8.7.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.1.2",
     "react-draft-wysiwyg": "^1.15.0",
     "react-gauge-component": "^1.2.0",
     "react-hook-form": "^7.53.0",
