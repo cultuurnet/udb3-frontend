@@ -66,12 +66,22 @@ const getUser = async (cookies: Cookies) => {
 
   return userInfo;
 };
+const createGetUserQueryOptions = (cookies: Cookies) => {
+  try {
+    if (cookies.idToken) {
+      const decodedToken = jwt_decode<User>(cookies.idToken);
+      const userId = decodedToken.sub;
+    }
+  } catch (error) {
+    // Token is invalid, userId will be undefined
+  }
 
-const createGetUserQueryOptions = (cookies: Cookies) =>
-  queryOptions({
-    queryKey: ['user'],
+  return queryOptions({
+    queryKey: ['user', { userId }], // Include user ID in query key
     queryFn: () => getUser(cookies),
+    enabled: !!userId, // Only enable query if we have a valid user ID
   });
+};
 
 const useGetUserQuery = () => {
   const { cookies } = useCookiesWithOptions(['idToken']);
