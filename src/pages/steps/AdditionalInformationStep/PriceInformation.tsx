@@ -377,6 +377,13 @@ const PriceInformation = ({
                                 {...registerNameProps}
                                 width="13rem"
                                 onBlur={async (e) => {
+                                  const trimmedValue = e.target.value.trim();
+
+                                  setValue(
+                                    `rates.${index}.name.${i18n.language as SupportedLanguage}`,
+                                    trimmedValue,
+                                  );
+
                                   if (e.target.value.trim() === '') {
                                     validationErrors.push('name_is_required');
                                     return;
