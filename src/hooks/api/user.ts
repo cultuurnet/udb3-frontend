@@ -83,7 +83,7 @@ const createGetUserQueryOptions = (cookies: Cookies) => {
 };
 
 const useGetUserQuery = () => {
-  const { cookies } = useCookiesWithOptions(['idToken']);
+  const { cookies } = useCookiesWithOptions(['idToken', 'token']);
 
   return useAuthenticatedQuery(createGetUserQueryOptions(cookies));
 };
