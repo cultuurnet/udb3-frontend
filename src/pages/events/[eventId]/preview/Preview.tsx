@@ -33,6 +33,9 @@ const Preview = () => {
   });
 
   const offer = getOfferByIdQuery.data;
+
+  console.log({ offer });
+
   const calendarSummary = getCalendarSummaryQuery.data;
 
   const { mainLanguage, name, terms } = offer;
@@ -69,7 +72,7 @@ const Preview = () => {
   ];
 
   const WherePreview = () => {
-    if (isPlace(offer)) return;
+    if (isPlace(offer)) return null;
 
     const location = offer.location;
 
@@ -105,6 +108,23 @@ const Preview = () => {
     }
   };
 
+  const OrganizerPreview = () => {
+    const organizer = offer.organizer;
+    if (!organizer) return null;
+
+    const organizerName = getLanguageObjectOrFallback<string>(
+      organizer.name,
+      i18n.language as SupportedLanguage,
+      mainLanguage,
+    );
+
+    const organizerId = parseOfferId(organizer['@id']);
+
+    return (
+      <Link href={`/organizers/${organizerId}/preview`}>{organizerName}</Link>
+    );
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -119,6 +139,7 @@ const Preview = () => {
       value: <WherePreview />,
     },
     { field: 'Wanneer', value: calendarSummary },
+    { field: 'Organisatie', value: <OrganizerPreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
