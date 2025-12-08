@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import i18n from '@/i18n/index';
 import { Page } from '@/ui/Page';
 
 const Preview = () => {
@@ -13,7 +14,12 @@ const Preview = () => {
     scope: OfferTypes.EVENTS,
   });
 
-  const title = getOfferByIdQuery.data?.name.nl;
+  const offer = getOfferByIdQuery.data;
+
+  const title =
+    offer?.name?.[i18n.language] ??
+    offer?.name?.[offer.mainLanguage] ??
+    offer?.name;
 
   return (
     <Page>
