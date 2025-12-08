@@ -6,6 +6,7 @@ import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AddressInternal } from '@/types/Address';
 import { isPlace } from '@/types/Place';
+import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -185,42 +186,49 @@ const Preview = () => {
     <Page>
       <Page.Title>{title}</Page.Title>
       <Page.Content>
-        <Tabs
-          activeKey={activeTab}
-          onSelect={(key) => onTabChange(key as string)}
-        >
-          {tabOptions.map((tab) => (
-            <Tabs.Tab eventKey={tab} title={'Gegevens'}>
-              <Stack
-                marginTop={4}
-                backgroundColor="white"
-                padding={4}
-                borderRadius={getGlobalBorderRadius}
-                css={`
-                  box-shadow: ${getGlobalValue('boxShadow.medium')};
-                `}
-              >
-                <Table
-                  bordered
-                  showHeader={false}
-                  columns={columns}
-                  data={tableData}
-                  css={`
-                    td strong,
-                    td b {
-                      font-weight: 700 !important;
-                    }
+        <Inline>
+          <Stack flex={3}>
+            <Tabs
+              activeKey={activeTab}
+              onSelect={(key) => onTabChange(key as string)}
+            >
+              {tabOptions.map((tab) => (
+                <Tabs.Tab eventKey={tab} title={'Gegevens'}>
+                  <Stack
+                    marginTop={4}
+                    backgroundColor="white"
+                    padding={4}
+                    borderRadius={getGlobalBorderRadius}
+                    css={`
+                      box-shadow: ${getGlobalValue('boxShadow.medium')};
+                    `}
+                  >
+                    <Table
+                      bordered
+                      showHeader={false}
+                      columns={columns}
+                      data={tableData}
+                      css={`
+                        td strong,
+                        td b {
+                          font-weight: 700 !important;
+                        }
 
-                    td em,
-                    td i {
-                      font-style: italic !important;
-                    }
-                  `}
-                />
-              </Stack>
-            </Tabs.Tab>
-          ))}
-        </Tabs>
+                        td em,
+                        td i {
+                          font-style: italic !important;
+                        }
+                      `}
+                    />
+                  </Stack>
+                </Tabs.Tab>
+              ))}
+            </Tabs>
+          </Stack>
+          <Stack spacing={3.5} flex={1}>
+            {/* <OfferPreviewSidebar offer={offer} /> */}
+          </Stack>
+        </Inline>
       </Page.Content>
     </Page>
   );
