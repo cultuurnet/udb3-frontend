@@ -53,6 +53,9 @@ const Preview = () => {
     { field: 'Type', value: typeTerm.label },
   ];
 
+  // TODO empty rows seem to have a different background color
+  // e.g. when the event has no description, the row has a grey background
+
   return (
     <Page>
       <Page.Title>{title}</Page.Title>
