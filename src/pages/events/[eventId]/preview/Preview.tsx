@@ -1,8 +1,11 @@
 import { useRouter } from 'next/router';
 
 import { OfferTypes } from '@/constants/OfferType';
+import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { AddressInternal } from '@/types/Address';
+import { isPlace } from '@/types/Place';
 import { Link } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -23,11 +26,16 @@ const Preview = () => {
     scope: OfferTypes.EVENTS,
   });
 
+  const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
+    id: eventId as string,
+    locale: i18n.language,
+    format: 'lg',
+  });
+
   const offer = getOfferByIdQuery.data;
+  const calendarSummary = getCalendarSummaryQuery.data;
 
-  console.log({ offer });
-
-  const { mainLanguage, name, terms, isOnline, location } = offer;
+  const { mainLanguage, name, terms } = offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -43,7 +51,7 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const isPhysicalLocation = !isOnline;
+  const isPhysicalLocation = true;
 
   console.log({ isPhysicalLocation });
 
@@ -61,6 +69,10 @@ const Preview = () => {
   ];
 
   const WherePreview = () => {
+    if (isPlace(offer)) return;
+
+    const location = offer.location;
+
     const locationId = parseOfferId(location['@id']);
 
     const locationName = getLanguageObjectOrFallback<string>(
@@ -106,6 +118,7 @@ const Preview = () => {
       // Todo what for online events?
       value: <WherePreview />,
     },
+    { field: 'Wanneer', value: calendarSummary },
   ];
 
   // TODO empty rows seem to have a different background color
