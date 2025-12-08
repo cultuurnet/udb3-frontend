@@ -125,6 +125,41 @@ const Preview = () => {
     );
   };
 
+  const PriceInfo = () => {
+    if (!offer.priceInfo || offer.priceInfo.length === 0) {
+      return null;
+    }
+
+    return (
+      <table
+        css={`
+          background-color: #f0f0f0;
+          width: 100%;
+
+          td {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+        `}
+      >
+        <tbody>
+          {offer.priceInfo.map((price, index) => (
+            <tr key={index}>
+              <td>
+                {getLanguageObjectOrFallback<string>(
+                  price.name,
+                  i18n.language as SupportedLanguage,
+                  mainLanguage,
+                )}
+              </td>
+              <td>{price.price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -140,6 +175,7 @@ const Preview = () => {
     },
     { field: 'Wanneer', value: calendarSummary },
     { field: 'Organisatie', value: <OrganizerPreview /> },
+    { field: 'Prijsinfo', value: <PriceInfo /> },
   ];
 
   // TODO empty rows seem to have a different background color
