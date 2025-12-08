@@ -35,6 +35,12 @@ const Preview = () => {
 
   const typeTerm = terms.find((term) => term.domain === 'eventtype');
 
+  const description = getLanguageObjectOrFallback<string>(
+    offer.description,
+    i18n.language as SupportedLanguage,
+    mainLanguage,
+  );
+
   const tabOptions = ['details'];
 
   const activeTab = 'details';
@@ -51,6 +57,11 @@ const Preview = () => {
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
+    {
+      field: 'Beschrijving',
+      // TODO sanitize html with dompurify which tags are allowed?
+      value: <div dangerouslySetInnerHTML={{ __html: description }} />,
+    },
   ];
 
   // TODO empty rows seem to have a different background color
@@ -80,6 +91,17 @@ const Preview = () => {
                   showHeader={false}
                   columns={columns}
                   data={tableData}
+                  css={`
+                    td strong,
+                    td b {
+                      font-weight: 700 !important;
+                    }
+
+                    td em,
+                    td i {
+                      font-style: italic !important;
+                    }
+                  `}
                 />
               </Stack>
             </Tabs.Tab>
