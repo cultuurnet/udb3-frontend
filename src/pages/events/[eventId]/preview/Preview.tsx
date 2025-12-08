@@ -3,12 +3,14 @@ import { useRouter } from 'next/router';
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { Link } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
 import { Tabs } from '@/ui/Tabs';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -25,7 +27,7 @@ const Preview = () => {
 
   console.log({ offer });
 
-  const { mainLanguage, name, terms } = offer;
+  const { mainLanguage, name, terms, isOnline, location } = offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -41,6 +43,10 @@ const Preview = () => {
     mainLanguage,
   );
 
+  const isPhysicalLocation = !isOnline;
+
+  console.log({ isPhysicalLocation });
+
   const tabOptions = ['details'];
 
   const activeTab = 'details';
@@ -54,6 +60,39 @@ const Preview = () => {
     { Header: 'Value', accessor: 'value' },
   ];
 
+  const WherePreview = () => {
+    const locationId = parseOfferId(location['@id']);
+
+    const locationName = getLanguageObjectOrFallback<string>(
+      location.name,
+      i18n.language as SupportedLanguage,
+      mainLanguage,
+    );
+
+    const addressForLang = getLanguageObjectOrFallback<AddressInternal>(
+      location.address,
+      i18n.language as SupportedLanguage,
+      mainLanguage,
+    );
+
+    const locationParts = [
+      locationName,
+      ...(location.terms.length > 0
+        ? [location.terms.find((term) => term.domain === 'eventtype')?.label]
+        : []),
+      addressForLang?.streetAddress,
+      addressForLang?.addressLocality,
+    ];
+
+    if (isPhysicalLocation) {
+      return (
+        <Link href={`/place/${locationId}/preview`}>
+          {locationParts.join(', ')}
+        </Link>
+      );
+    }
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -61,6 +100,11 @@ const Preview = () => {
       field: 'Beschrijving',
       // TODO sanitize html with dompurify which tags are allowed?
       value: <div dangerouslySetInnerHTML={{ __html: description }} />,
+    },
+    {
+      field: 'Waar',
+      // Todo what for online events?
+      value: <WherePreview />,
     },
   ];
 
