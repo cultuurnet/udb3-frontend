@@ -23,13 +23,17 @@ const Preview = () => {
 
   const offer = getOfferByIdQuery.data;
 
-  const { mainLanguage } = offer;
+  console.log({ offer });
+
+  const { mainLanguage, name, terms } = offer;
 
   const title = getLanguageObjectOrFallback<string>(
-    offer?.name,
+    name,
     i18n.language as SupportedLanguage,
     mainLanguage,
   );
+
+  const typeTerm = terms.find((term) => term.domain === 'eventtype');
 
   const tabOptions = ['details'];
 
@@ -44,7 +48,10 @@ const Preview = () => {
     { Header: 'Value', accessor: 'value' },
   ];
 
-  const tableData = [{ field: 'Titel', value: title }];
+  const tableData = [
+    { field: 'Titel', value: title },
+    { field: 'Type', value: typeTerm.label },
+  ];
 
   return (
     <Page>
