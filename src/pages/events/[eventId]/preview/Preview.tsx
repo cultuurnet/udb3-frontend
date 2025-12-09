@@ -268,6 +268,25 @@ const Preview = () => {
     });
   };
 
+  const VideoPreview = () => {
+    // TODO check with Sarah if we need real previews here?
+    const hasVideos = (offer.videos ?? []).length > 0;
+
+    if (!hasVideos) return <div>Geen video's</div>;
+
+    return (
+      <ul>
+        {offer.videos?.map((video) => (
+          <li key={video['@id']}>
+            <Link href={video.url} target="_blank">
+              {video.url}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -290,6 +309,7 @@ const Preview = () => {
     { field: 'Contactgegevens', value: <ContactPreview /> },
     { field: 'Geschikt voor', value: <AgePreview /> },
     { field: 'Afbeeldingen', value: <ImagePreview /> },
+    { field: "Video's", value: <VideoPreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
