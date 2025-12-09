@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
@@ -194,6 +195,24 @@ const Preview = () => {
   const ContactPreview = () => {
     return <div>Contact info hier</div>;
   };
+
+  const AgePreview = () => {
+    const hasAgeInfo = !!offer.typicalAgeRange;
+
+    if (!hasAgeInfo) return null;
+
+    if (offer.typicalAgeRange === '-' || offer.typicalAgeRange === '0-') {
+      return <div>Alle leeftijden</div>;
+    }
+
+    const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
+      const ageRange = AgeRanges[key];
+      return ageRange.apiLabel === offer.typicalAgeRange;
+    });
+
+    return <div>{AgeRanges[ageRangeLabelKey]?.label}</div>;
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -213,6 +232,8 @@ const Preview = () => {
     { field: 'Tickets & plaatsen', value: <BookingPreview /> },
     { field: 'Publicatie', value: <PublicationPreview /> },
     { field: 'Reservatie', value: <BookingInfoPreview /> },
+    { field: 'Contactgegevens', value: <ContactPreview /> },
+    { field: 'Geschikt voor', value: <AgePreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
