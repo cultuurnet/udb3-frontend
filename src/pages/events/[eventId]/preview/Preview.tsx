@@ -190,6 +190,10 @@ const Preview = () => {
     // TODO show booking info details
     return <div>Reservatie info hier</div>;
   };
+
+  const ContactPreview = () => {
+    return <div>Contact info hier</div>;
+  };
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
