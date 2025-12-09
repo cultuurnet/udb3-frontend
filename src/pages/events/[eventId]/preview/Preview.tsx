@@ -7,7 +7,6 @@ import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
-import { AddressInternal } from '@/types/Address';
 import { BookingAvailability } from '@/types/Event';
 import { isPlace } from '@/types/Place';
 import { Image } from '@/ui/Image';
@@ -24,6 +23,7 @@ import { parseOfferId } from '@/utils/parseOfferId';
 
 import { BookingInfoPreview } from './BookingInfoPreview';
 import { ContactInfoPreview } from './ContactInfoPreview';
+import { LocationPreview } from './LocationPreview';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -83,43 +83,6 @@ const Preview = () => {
     { Header: 'Field', accessor: 'field' },
     { Header: 'Value', accessor: 'value' },
   ];
-
-  const WherePreview = () => {
-    if (isPlace(offer)) return null;
-
-    const location = offer.location;
-
-    const locationId = parseOfferId(location['@id']);
-
-    const locationName = getLanguageObjectOrFallback<string>(
-      location.name,
-      i18n.language as SupportedLanguage,
-      mainLanguage,
-    );
-
-    const addressForLang = getLanguageObjectOrFallback<AddressInternal>(
-      location.address,
-      i18n.language as SupportedLanguage,
-      mainLanguage,
-    );
-
-    const locationParts = [
-      locationName,
-      ...(location.terms.length > 0
-        ? [location.terms.find((term) => term.domain === 'eventtype')?.label]
-        : []),
-      addressForLang?.streetAddress,
-      addressForLang?.addressLocality,
-    ];
-
-    if (isPhysicalLocation) {
-      return (
-        <Link href={`/place/${locationId}/preview`}>
-          {locationParts.join(', ')}
-        </Link>
-      );
-    }
-  };
 
   const OrganizerPreview = () => {
     const organizer = offer.organizer;
@@ -301,7 +264,7 @@ const Preview = () => {
     {
       field: 'Waar',
       // Todo what for online events?
-      value: <WherePreview />,
+      value: <LocationPreview offer={offer} />,
     },
     { field: 'Wanneer', value: calendarSummary },
     { field: 'Organisatie', value: <OrganizerPreview /> },
