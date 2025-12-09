@@ -184,6 +184,12 @@ const Preview = () => {
     return <div>{t(`workflowStatus.${workflowStatus}`)}</div>;
   };
 
+  const BookingInfoPreview = () => {
+    if (isPlace(offer)) return null;
+
+    // TODO show booking info details
+    return <div>Reservatie info hier</div>;
+  };
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -202,6 +208,7 @@ const Preview = () => {
     { field: 'Prijsinfo', value: <PriceInfo /> },
     { field: 'Tickets & plaatsen', value: <BookingPreview /> },
     { field: 'Publicatie', value: <PublicationPreview /> },
+    { field: 'Reservatie', value: <BookingInfoPreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
