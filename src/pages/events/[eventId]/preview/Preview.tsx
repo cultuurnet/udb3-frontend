@@ -22,6 +22,8 @@ import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
+import { BookingInfoPreview } from './BookingInfoPreview';
+
 const getGlobalValue = getValueFromTheme('global');
 
 const { udbMainDarkGrey, udbMainLightGrey } = colors;
@@ -190,13 +192,6 @@ const Preview = () => {
     return <div>{t(`workflowStatus.${workflowStatus}`)}</div>;
   };
 
-  const BookingInfoPreview = () => {
-    if (isPlace(offer)) return null;
-
-    // TODO show booking info details
-    return <div>Reservatie info hier</div>;
-  };
-
   const ContactPreview = () => {
     return <div>Contact info hier</div>;
   };
@@ -316,7 +311,15 @@ const Preview = () => {
     { field: 'Prijsinfo', value: <PriceInfo /> },
     { field: 'Tickets & plaatsen', value: <BookingPreview /> },
     { field: 'Publicatie', value: <PublicationPreview /> },
-    { field: 'Reservatie', value: <BookingInfoPreview /> },
+    {
+      field: 'Reservatie',
+      value: (
+        <BookingInfoPreview
+          bookingInfo={offer.bookingInfo}
+          mainLanguage={offer.mainLanguage}
+        />
+      ),
+    },
     { field: 'Contactgegevens', value: <ContactPreview /> },
     { field: 'Geschikt voor', value: <AgePreview /> },
     { field: 'Afbeeldingen', value: <ImagePreview /> },
