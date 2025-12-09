@@ -5,6 +5,7 @@ import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AddressInternal } from '@/types/Address';
+import { BookingAvailability } from '@/types/Event';
 import { isPlace } from '@/types/Place';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
@@ -161,6 +162,18 @@ const Preview = () => {
     );
   };
 
+  const BookingPreview = () => {
+    if (isPlace(offer)) return null;
+
+    return (
+      <div>
+        {offer.bookingAvailability.type === BookingAvailability.AVAILABLE
+          ? 'Beschikbaar'
+          : 'Niet beschikbaar'}
+      </div>
+    );
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -177,6 +190,7 @@ const Preview = () => {
     { field: 'Wanneer', value: calendarSummary },
     { field: 'Organisatie', value: <OrganizerPreview /> },
     { field: 'Prijsinfo', value: <PriceInfo /> },
+    { field: 'Tickets & plaatsen', value: <BookingPreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
