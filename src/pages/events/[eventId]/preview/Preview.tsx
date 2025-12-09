@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
@@ -21,6 +22,7 @@ const getGlobalValue = getValueFromTheme('global');
 
 const Preview = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const { eventId } = router.query;
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
@@ -174,6 +176,14 @@ const Preview = () => {
     );
   };
 
+  const PublicationPreview = () => {
+    const workflowStatus = offer.workflowStatus;
+
+    // TODO check the 'Online vanaf status' in detail
+    // Need to fill in the date?
+    return <div>{t(`workflowStatus.${workflowStatus}`)}</div>;
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -191,6 +201,7 @@ const Preview = () => {
     { field: 'Organisatie', value: <OrganizerPreview /> },
     { field: 'Prijsinfo', value: <PriceInfo /> },
     { field: 'Tickets & plaatsen', value: <BookingPreview /> },
+    { field: 'Publicatie', value: <PublicationPreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
