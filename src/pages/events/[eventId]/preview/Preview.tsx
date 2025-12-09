@@ -263,9 +263,9 @@ const Preview = () => {
     },
     {
       field: 'Waar',
-      // Todo what for online events?
       value: <LocationPreview offer={offer} />,
     },
+    // TODO add row for online url if online event
     { field: 'Wanneer', value: calendarSummary },
     { field: 'Organisatie', value: <OrganizerPreview /> },
     { field: 'Prijsinfo', value: <PriceInfo /> },
