@@ -2,10 +2,11 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { LabelsForm } from '@/pages/LabelsForm';
 import { AddressInternal } from '@/types/Address';
 import { BookingAvailability } from '@/types/Event';
 import { isPlace } from '@/types/Place';
@@ -290,6 +291,16 @@ const Preview = () => {
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
+    {
+      field: 'Labels',
+      value: (
+        <LabelsForm
+          scope={ScopeTypes.EVENTS}
+          id={eventId as string}
+          entity={offer}
+        />
+      ),
+    },
     {
       field: 'Beschrijving',
       // TODO sanitize html with dompurify which tags are allowed?
