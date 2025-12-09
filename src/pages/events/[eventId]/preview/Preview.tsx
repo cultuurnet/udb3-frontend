@@ -23,6 +23,7 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { BookingInfoPreview } from './BookingInfoPreview';
+import { ContactInfoPreview } from './ContactInfoPreview';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -192,10 +193,6 @@ const Preview = () => {
     return <div>{t(`workflowStatus.${workflowStatus}`)}</div>;
   };
 
-  const ContactPreview = () => {
-    return <div>Contact info hier</div>;
-  };
-
   const AgePreview = () => {
     const hasAgeInfo = !!offer.typicalAgeRange;
 
@@ -320,7 +317,7 @@ const Preview = () => {
         />
       ),
     },
-    { field: 'Contactgegevens', value: <ContactPreview /> },
+    { field: 'Contactgegevens', value: <ContactInfoPreview /> },
     { field: 'Geschikt voor', value: <AgePreview /> },
     { field: 'Afbeeldingen', value: <ImagePreview /> },
     { field: "Video's", value: <VideoPreview /> },
