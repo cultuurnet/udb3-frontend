@@ -9,17 +9,21 @@ import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AddressInternal } from '@/types/Address';
 import { BookingAvailability } from '@/types/Event';
 import { isPlace } from '@/types/Place';
+import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
 import { Tabs } from '@/ui/Tabs';
-import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
+import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 const getGlobalValue = getValueFromTheme('global');
+
+const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
 const Preview = () => {
   const router = useRouter();
@@ -213,6 +217,57 @@ const Preview = () => {
     return <div>{AgeRanges[ageRangeLabelKey]?.label}</div>;
   };
 
+  const ImagePreview = () => {
+    const HEIGHT = 100;
+    const hasImages = (offer.mediaObject ?? []).length > 0;
+
+    if (!hasImages) return <div>Geen afbeeldingen</div>;
+
+    return offer.mediaObject?.map((media, index) => {
+      const isLastImage = index === offer.mediaObject!.length - 1;
+      return (
+        <Inline
+          spacing={4}
+          key={media['@id']}
+          alignItems="center"
+          paddingBottom={3}
+          marginBottom={4}
+          css={`
+            border-bottom: ${isLastImage
+              ? 'none'
+              : `1px solid ${udbMainLightGrey}`};
+          `}
+        >
+          <Link href={media.contentUrl} target="_blank">
+            <Image
+              src={`${media.thumbnailUrl}?height=${HEIGHT}`}
+              alt={media.description}
+              width="auto"
+            />
+          </Link>
+          <Stack spacing={1}>
+            {index === 0 && (
+              <Text
+                backgroundColor={udbMainDarkGrey}
+                color="white"
+                alignSelf="flex-start"
+                borderRadius="3px"
+                paddingRight={3}
+                paddingLeft={3}
+                fontSize="0.8rem"
+                fontWeight="bold"
+              >
+                Hoofdafbeelding
+              </Text>
+            )}
+            <Text>{media.description}</Text>
+            <Text variant={TextVariants.MUTED}>© {media.copyrightHolder}</Text>
+          </Stack>
+        </Inline>
+      );
+    });
+  };
+
   const tableData = [
     { field: 'Titel', value: title },
     { field: 'Type', value: typeTerm.label },
@@ -234,6 +289,7 @@ const Preview = () => {
     { field: 'Reservatie', value: <BookingInfoPreview /> },
     { field: 'Contactgegevens', value: <ContactPreview /> },
     { field: 'Geschikt voor', value: <AgePreview /> },
+    { field: 'Afbeeldingen', value: <ImagePreview /> },
   ];
 
   // TODO empty rows seem to have a different background color
