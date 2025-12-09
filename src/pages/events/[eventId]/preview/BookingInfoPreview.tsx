@@ -2,9 +2,8 @@ import { useTranslation } from 'react-i18next';
 
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { BookingInfo, Offer } from '@/types/Offer';
-import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
-import { Link } from '@/ui/Link';
+import { Link, LinkVariants } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { formatPeriod } from '@/utils/formatPeriod';
@@ -29,8 +28,8 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
     <Stack spacing={3}>
       {bookingInfo.url && (
         <Inline>
-          <Button
-            variant={ButtonVariants.PRIMARY}
+          <Link
+            variant={LinkVariants.BUTTON_PRIMARY}
             target="_blank"
             href={bookingInfo.url}
           >
@@ -39,7 +38,7 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
               i18n.language as SupportedLanguage,
               mainLanguage,
             )}
-          </Button>
+          </Link>
         </Inline>
       )}
       {bookingInfo.phone && <Text>{bookingInfo.phone}</Text>}
