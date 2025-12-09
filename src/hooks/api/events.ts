@@ -509,6 +509,21 @@ const useGetCalendarSummaryQuery = (
     ...configuration,
   });
 
+export const prefetchGetCalendarSummaryQuery = ({
+  req,
+  queryClient,
+  id,
+  locale,
+  format,
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['events'],
+    queryFn: getCalendarSummary,
+    queryArguments: { id, locale, format },
+  });
+
 const getEventPermissions = async ({ headers, eventId }) => {
   const res = await fetchFromApi({
     path: `/event/${eventId}/permissions`,

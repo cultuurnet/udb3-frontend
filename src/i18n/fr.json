@@ -1216,7 +1216,7 @@
         "body": "Êtes-vous sûr de vouloir supprimer le rôle '{{roleName}}' de cet utilisateur ?",
         "cancel": "Annuler",
         "confirm": "Supprimer",
-        "error": "Er ging iets fout bij het verwijderen van de rol voor deze gebruiker."
+        "error": "Une erreur s'est produite lors de la suppression du rôle pour cet utilisateur."
       },
       "success": {
         "role_added": "Rôle '{{roleName}}' ajouté avec succès à l'utilisateur.",
@@ -1392,5 +1392,12 @@
     "PRODUCTIES_AANMAKEN": "Créer des productions",
     "FILMS_AANMAKEN": "Créer des films",
     "MEDIA_UPLOADEN": "Télécharger des médias"
+  },
+  "workflowStatus": {
+    "DRAFT": "Pas publié",
+    "READY_FOR_VALIDATION": "Prêt à être publié",
+    "APPROVED": "Publié le",
+    "REJECTED": "Publication rejetée",
+    "DELETED": "Supprimé"
   }
 }

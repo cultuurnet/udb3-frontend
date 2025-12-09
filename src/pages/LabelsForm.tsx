@@ -1,17 +1,15 @@
 import { uniq } from 'lodash';
-import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ScopeTypes } from '@/constants/OfferType';
+import { Scope } from '@/constants/OfferType';
 import { useGetLabelsByQuery } from '@/hooks/api/labels';
 import {
   useAddOfferLabelMutation,
   useRemoveOfferLabelMutation,
 } from '@/hooks/api/offers';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
-import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
-import { Label } from '@/types/Offer';
+import { Label, Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
@@ -24,27 +22,26 @@ import { Typeahead, TypeaheadElement } from '@/ui/Typeahead';
 import { displayCultuurkuurLabels } from '@/utils/displayCultuurkuurLabels';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
-type OrganizerLabelProps = {
-  organizer: Organizer;
+import { LABEL_PATTERN } from './steps/AdditionalInformationStep/LabelsStep';
+
+type Props = {
+  scope: Scope;
+  id: string;
+  entity?: Organizer | Offer;
 };
 
-export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
+const LabelsForm = ({ scope, id, entity }: Props) => {
   const { t } = useTranslation();
+
   const ref = useRef<TypeaheadElement<Label>>(null);
-  const router = useRouter();
   const [name, setName] = useState('');
   const labelsQuery = useGetLabelsByQuery({
     name,
     onlySuggestions: true,
   });
 
-  const scope = ScopeTypes.ORGANIZERS;
-  const organizerId = router.query.organizerId as string;
-
   const options = labelsQuery.data?.member ?? [];
-  const [labels, setLabels] = useState<string[]>(
-    getUniqueLabels(organizer) ?? [],
-  );
+  const [labels, setLabels] = useState<string[]>(getUniqueLabels(entity) ?? []);
 
   const getPermissionsQuery = useGetPermissionsQuery();
   const permissions = getPermissionsQuery.data;
@@ -59,7 +56,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
 
   return (
     <Inline flex={1} spacing={5}>
-      <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={2}>
+      <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={4}>
         <FormElement
           id={'labels-picker'}
           label={
@@ -98,7 +95,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
 
                 setIsInvalid(false);
                 await addLabelMutation.mutateAsync({
-                  id: organizerId,
+                  id,
                   scope,
                   label,
                 });
@@ -136,7 +133,7 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
                 marginLeft={1}
                 onClick={async () => {
                   await removeLabelMutation.mutateAsync({
-                    id: organizerId,
+                    id,
                     scope,
                     label,
                   });
@@ -156,3 +153,5 @@ export const OrganizerLabelsForm = ({ organizer }: OrganizerLabelProps) => {
     </Inline>
   );
 };
+
+export { LabelsForm };

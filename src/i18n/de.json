@@ -1393,5 +1393,12 @@
     "PRODUCTIES_AANMAKEN": "Produktionen erstellen",
     "FILMS_AANMAKEN": "Filme erstellen",
     "MEDIA_UPLOADEN": "Media hochladen"
+  },
+  "workflowStatus": {
+    "DRAFT": "Nicht veröffentlicht",
+    "READY_FOR_VALIDATION": "Veröffentlicht",
+    "APPROVED": "Online ab",
+    "REJECTED": "Veröffentlichung abgelehnt",
+    "DELETED": "Gelöscht"
   }
 }
