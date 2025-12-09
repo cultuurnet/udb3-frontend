@@ -153,7 +153,7 @@ const Preview = () => {
                   mainLanguage,
                 )}
               </td>
-              <td>{price.price}</td>
+              <td>{price.price.toString().replace('.', ',')} euro</td>
             </tr>
           ))}
         </tbody>
