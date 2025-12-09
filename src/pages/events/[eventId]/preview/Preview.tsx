@@ -317,7 +317,10 @@ const Preview = () => {
         />
       ),
     },
-    { field: 'Contactgegevens', value: <ContactInfoPreview /> },
+    {
+      field: 'Contactgegevens',
+      value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
+    },
     { field: 'Geschikt voor', value: <AgePreview /> },
     { field: 'Afbeeldingen', value: <ImagePreview /> },
     { field: "Video's", value: <VideoPreview /> },
