@@ -1450,6 +1450,9 @@
     "FILMS_AANMAKEN": "Films aanmaken",
     "MEDIA_UPLOADEN": "Media uploaden"
   },
+  "preview": {
+    "online_label": "Online"
+  },
   "workflowStatus": {
     "DRAFT": "Niet gepubliceerd",
     "READY_FOR_VALIDATION": "Gepubliceerd",
