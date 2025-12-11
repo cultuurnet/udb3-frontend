@@ -384,7 +384,7 @@ const PriceInformation = ({
                                     trimmedValue,
                                   );
 
-                                  if (e.target.value.trim() === '') {
+                                  if (trimmedValue === '') {
                                     validationErrors.push('name_is_required');
                                     return;
                                   }
