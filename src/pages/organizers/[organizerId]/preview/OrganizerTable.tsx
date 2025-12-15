@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
 import { SupportedLanguage } from '@/i18n/index';
@@ -187,6 +187,8 @@ const OrganizerLabels = ({
 };
 
 const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
+  const { t } = useTranslation();
+
   const baseUrl = 'https://www.verenigingsloket.be';
 
   const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
@@ -200,22 +202,20 @@ const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
       `}
     >
       <Text minWidth="15rem" color={udbMainDarkGrey}>
-        Verenigingsloket
+        {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
         <Link href={detailUrl}>{previewUrl}</Link>
         {isOwner && (
           <Text variant="muted">
-            Dankzij deze koppeling verschijnen je activiteiten automatisch ook
-            op je publieke profiel in het verenigingsloket.{' '}
-            {/* TODO add link to helpdesk page */}
-            <Link href={'#'}>Lees meer</Link>
+            <Trans i18nKey="organizers.detail.verenigingsloket.description_owner">
+              <Link href={'#'}></Link>
+            </Trans>
           </Text>
         )}
         {!isOwner && (
           <Text variant="muted">
-            In het verenigingsloket kan je meer info vinden over deze
-            organisatie.
+            {t('organizers.detail.verenigingsloket.description')}
           </Text>
         )}
       </Stack>
