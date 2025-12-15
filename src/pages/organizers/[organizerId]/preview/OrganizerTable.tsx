@@ -194,6 +194,9 @@ const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
   const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
   const previewUrl = detailUrl.replace('https://www.', '');
 
+  const helpdeskUrl =
+    'https://helpdesk.publiq.be/hc/nl/articles/31862043316114-Waarom-zie-ik-een-link-met-het-Verenigingsloket-op-mijn-organisatiepagina';
+
   return (
     <Inline
       padding={3}
@@ -209,7 +212,7 @@ const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
         {isOwner && (
           <Text variant="muted">
             <Trans i18nKey="organizers.detail.verenigingsloket.description_owner">
-              <Link href={'#'}></Link>
+              <Link href={helpdeskUrl}></Link>
             </Trans>
           </Text>
         )}
