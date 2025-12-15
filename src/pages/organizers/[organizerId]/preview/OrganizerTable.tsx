@@ -4,6 +4,8 @@ import sanitizeHtml from 'sanitize-html';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
@@ -224,6 +226,18 @@ const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
           <Text variant="muted">
             {t('organizers.detail.verenigingsloket.description')}
           </Text>
+        )}
+        {isOwner && (
+          <Inline>
+            <Button
+              iconName={Icons.TRASH}
+              spacing={3}
+              variant={ButtonVariants.DANGER}
+              size="sm"
+            >
+              Verwijder deze koppeling
+            </Button>
+          </Inline>
         )}
       </Stack>
     </Inline>
