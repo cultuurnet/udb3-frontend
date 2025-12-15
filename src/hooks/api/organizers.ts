@@ -165,7 +165,7 @@ const getVerenigingsloketByOrganizerId = async ({
   id,
 }: GetVerenigingsloketByIdArguments) => {
   const res = await fetchFromApi({
-    path: `/organizers/${id.toString()}/vereniginsloket`,
+    path: `/organizers/${id.toString()}/verenigingsloket`,
     options: {
       headers,
     },
