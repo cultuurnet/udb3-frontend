@@ -19,6 +19,7 @@ import { OrganizerLabelsForm } from './OrganizerLabels';
 
 type VerenigingsloketProps = {
   vcode?: string;
+  isOwner: boolean;
 };
 
 type Props = { organizer: Organizer } & VerenigingsloketProps;
@@ -185,7 +186,7 @@ const OrganizerLabels = ({
   );
 };
 
-const Verenigingsloket = ({ vcode }: VerenigingsloketProps) => {
+const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
   const baseUrl = 'https://www.verenigingsloket.be';
 
   const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
@@ -214,7 +215,7 @@ const Verenigingsloket = ({ vcode }: VerenigingsloketProps) => {
   );
 };
 
-export const OrganizerTable = ({ organizer, vcode }: Props) => {
+export const OrganizerTable = ({ organizer, vcode, isOwner }: Props) => {
   const { i18n } = useTranslation();
 
   const formattedName: string = getLanguageObjectOrFallback(
@@ -299,7 +300,7 @@ export const OrganizerTable = ({ organizer, vcode }: Props) => {
         organizer={organizer}
         images={organizer?.images}
       />
-      {vcode && <Verenigingsloket vcode={vcode} />}
+      {vcode && <Verenigingsloket vcode={vcode} isOwner={isOwner} />}
     </Stack>
   );
 };
