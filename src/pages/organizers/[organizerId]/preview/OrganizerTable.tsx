@@ -188,6 +188,9 @@ const OrganizerLabels = ({
 const Verenigingsloket = ({ vcode }: VerenigingsloketProps) => {
   const baseUrl = 'https://www.verenigingsloket.be';
 
+  const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
+  const previewUrl = detailUrl.replace('https://www.', '');
+
   return (
     <Inline
       padding={3}
@@ -198,8 +201,14 @@ const Verenigingsloket = ({ vcode }: VerenigingsloketProps) => {
       <Text minWidth="15rem" color={udbMainDarkGrey}>
         Verenigingsloket
       </Text>
-      <Stack>
-        <Text>Verenigingsloket info hier</Text>
+      <Stack spacing={3}>
+        <Link href={detailUrl}>{previewUrl}</Link>
+        <Text variant="muted">
+          Dankzij deze koppeling verschijnen je activiteiten automatisch ook op
+          je publieke profiel in het verenigingsloket.{' '}
+          {/* TODO add link to helpdesk page */}
+          <Link href={'#'}>Lees meer</Link>
+        </Text>
       </Stack>
     </Inline>
   );
