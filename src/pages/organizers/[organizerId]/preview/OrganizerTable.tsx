@@ -1,6 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Image } from '@/ui/Image';
@@ -188,6 +189,9 @@ const OrganizerLabels = ({
 
 const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
   const { t } = useTranslation();
+  const [showVerenigingsloket] = useFeatureFlag(FeatureFlags.VERENIGINGSLOKET);
+
+  if (!showVerenigingsloket) return null;
 
   const baseUrl = 'https://www.verenigingsloket.be';
 
