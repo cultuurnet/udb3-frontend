@@ -204,12 +204,20 @@ const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
       </Text>
       <Stack spacing={3}>
         <Link href={detailUrl}>{previewUrl}</Link>
-        <Text variant="muted">
-          Dankzij deze koppeling verschijnen je activiteiten automatisch ook op
-          je publieke profiel in het verenigingsloket.{' '}
-          {/* TODO add link to helpdesk page */}
-          <Link href={'#'}>Lees meer</Link>
-        </Text>
+        {isOwner && (
+          <Text variant="muted">
+            Dankzij deze koppeling verschijnen je activiteiten automatisch ook
+            op je publieke profiel in het verenigingsloket.{' '}
+            {/* TODO add link to helpdesk page */}
+            <Link href={'#'}>Lees meer</Link>
+          </Text>
+        )}
+        {!isOwner && (
+          <Text variant="muted">
+            In het verenigingsloket kan je meer info vinden over deze
+            organisatie.
+          </Text>
+        )}
       </Stack>
     </Inline>
   );
