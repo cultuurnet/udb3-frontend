@@ -58,8 +58,6 @@ const OrganizersPreview = () => {
 
   const verenigingsloket = getVereningingsloketQuery?.data;
 
-  console.log('verenigingsloket', verenigingsloket);
-
   const organizerPermissions =
     getOrganizerPermissionsQuery?.data?.permissions ?? [];
   const canEdit = organizerPermissions.includes('Organisaties bewerken');
