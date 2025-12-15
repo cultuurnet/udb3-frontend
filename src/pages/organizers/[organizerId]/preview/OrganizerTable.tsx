@@ -181,6 +181,26 @@ const OrganizerLabels = ({
   );
 };
 
+const Verenigingsloket = () => {
+  const baseUrl = 'https://www.verenigingsloket.be';
+
+  return (
+    <Inline
+      padding={3}
+      css={`
+        border-top: 1px solid ${grey2};
+      `}
+    >
+      <Text minWidth="15rem" color={udbMainDarkGrey}>
+        Verenigingsloket
+      </Text>
+      <Stack>
+        <Text>Verenigingsloket info hier</Text>
+      </Stack>
+    </Inline>
+  );
+};
+
 export const OrganizerTable = ({ organizer }: Props) => {
   const { i18n } = useTranslation();
 
@@ -266,6 +286,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
         organizer={organizer}
         images={organizer?.images}
       />
+      <Verenigingsloket />
     </Stack>
   );
 };
