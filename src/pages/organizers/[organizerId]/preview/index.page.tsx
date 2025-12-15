@@ -8,8 +8,10 @@ import {
   GetOrganizerPermissionsResponse,
   prefetchGetOrganizerByIdQuery,
   prefetchGetOrganizerPermissionsQuery,
+  prefetchGetVerenigingsloketByOrganizerIdQuery,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
+  useGetVerenigingsloketByOrganizerIdQuery,
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -49,6 +51,14 @@ const OrganizersPreview = () => {
   const getOrganizerPermissionsQuery = useGetOrganizerPermissionsQuery({
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
+
+  const getVereningingsloketQuery = useGetVerenigingsloketByOrganizerIdQuery({
+    id: organizerId,
+  });
+
+  const verenigingsloket = getVereningingsloketQuery?.data;
+
+  console.log('verenigingsloket', verenigingsloket);
 
   const organizerPermissions =
     getOrganizerPermissionsQuery?.data?.permissions ?? [];
@@ -184,6 +194,11 @@ export const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           organizerId: query.organizerId,
+        }),
+        prefetchGetVerenigingsloketByOrganizerIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
         }),
       ]);
     } catch (error) {
