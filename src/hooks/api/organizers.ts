@@ -200,6 +200,19 @@ const useGetVerenigingsloketByOrganizerIdQuery = (
   });
 };
 
+const deleteVerenigingsloketByOrganizerId = async ({ headers, id }) =>
+  fetchFromApi({
+    path: `/organizers/${id}/verenigingsloket`,
+    options: { headers, method: 'DELETE' },
+  });
+
+const useDeleteVerenigingsloketByOrganizerIdMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteVerenigingsloketByOrganizerId,
+    mutationKey: 'organizers-verenigingsloket-delete-by-id',
+    ...configuration,
+  });
+
 export const prefetchGetVerenigingsloketByOrganizerIdQuery = ({
   req,
   queryClient,
@@ -602,6 +615,7 @@ export {
   useCreateOrganizerMutation,
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
+  useDeleteVerenigingsloketByOrganizerIdMutation,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
   useGetOrganizersByCreatorQuery,
