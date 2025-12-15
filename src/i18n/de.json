@@ -1012,6 +1012,11 @@
         "back": "Zurück",
         "events": "Veranstaltungen ansehen",
         "places": "Orte ansehen"
+      },
+      "verenigingsloket": {
+        "title": "Verenigingsloket",
+        "description": "Weitere Informationen zu dieser Organisation finden Sie im Verenigingsloket.",
+        "description_owner": "Durch diese Verknüpfung erscheinen Ihre Aktivitäten automatisch auch in Ihrem öffentlichen Profil im Verenigingsloket. <0>Mehr erfahren</0>"
       }
     },
     "create": {
