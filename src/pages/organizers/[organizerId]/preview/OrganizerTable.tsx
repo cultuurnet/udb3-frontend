@@ -17,7 +17,11 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 
 import { OrganizerLabelsForm } from './OrganizerLabels';
 
-type Props = { organizer: Organizer };
+type VerenigingsloketProps = {
+  vcode?: string;
+};
+
+type Props = { organizer: Organizer } & VerenigingsloketProps;
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -181,7 +185,7 @@ const OrganizerLabels = ({
   );
 };
 
-const Verenigingsloket = () => {
+const Verenigingsloket = ({ vcode }: VerenigingsloketProps) => {
   const baseUrl = 'https://www.verenigingsloket.be';
 
   return (
@@ -201,7 +205,7 @@ const Verenigingsloket = () => {
   );
 };
 
-export const OrganizerTable = ({ organizer }: Props) => {
+export const OrganizerTable = ({ organizer, vcode }: Props) => {
   const { i18n } = useTranslation();
 
   const formattedName: string = getLanguageObjectOrFallback(
@@ -286,7 +290,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
         organizer={organizer}
         images={organizer?.images}
       />
-      <Verenigingsloket />
+      {vcode && <Verenigingsloket vcode={vcode} />}
     </Stack>
   );
 };

@@ -115,7 +115,10 @@ const OrganizersPreview = () => {
             )}
             <Inline spacing={5}>
               <Stack flex={3}>
-                <OrganizerTable organizer={organizer} />
+                <OrganizerTable
+                  organizer={organizer}
+                  vcode={verenigingsloket?.vcode}
+                />
               </Stack>
               <Stack spacing={3.5} flex={1}>
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
