@@ -198,11 +198,12 @@ type VerenigingsloketProps = {
   isOwner: boolean;
   organizerId: string;
   organizerName: string;
-} & Pick<Verenigingsloket, 'vcode' | 'status'>;
+} & Verenigingsloket;
 
 const VerenigingsloketPreview = ({
   vcode,
   status,
+  url,
   isOwner,
   organizerId,
   organizerName,
@@ -297,8 +298,13 @@ const VerenigingsloketPreview = ({
                 <Link href={helpdeskUrl}></Link>
               </Trans>
             )}
-            {status === 'cancelled' &&
-              'Wil je een nieuwe koppeling maken? Dat kan via het verenigingsloket https://www.verenigingsloket.be/nl'}
+            {status === 'cancelled' && (
+              <Trans i18nKey="organizers.detail.verenigingsloket.description_add_new">
+                <Link href="https://www.verenigingsloket.be/nl">
+                  https://www.verenigingsloket.be/nl
+                </Link>
+              </Trans>
+            )}
           </Text>
         )}
         {!isOwner && (
@@ -315,7 +321,7 @@ const VerenigingsloketPreview = ({
               size="sm"
               onClick={() => setIsDeleteModalVisible(true)}
             >
-              Verwijder deze koppeling
+              {t('organizers.detail.verenigingsloket.delete_cta')}
             </Button>
           </Inline>
         )}

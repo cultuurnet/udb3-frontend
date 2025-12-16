@@ -1060,8 +1060,9 @@
       "verenigingsloket": {
         "title": "Verenigingsloket",
         "description": "In het verenigingsloket kan je meer info vinden over deze organisatie.",
-        "description_add_new": "",
+        "description_add_new": "Wil je een nieuwe koppeling maken? Dat kan via het verenigingsloket <0>https://www.verenigingsloket.be/nl</0>",
         "description_owner": "Dankzij deze koppeling verschijnen je activiteiten automatisch ook op je publieke profiel in het verenigingsloket. <0>Lees meer</0>",
+        "delete_cta": "Verwijder deze koppeling",
         "delete_modal": {
           "title": "Koppeling verwijderen",
           "intro": "Ben je zeker dat je de koppeling van <0>{{organizerName}}</0> met het verenigingsloket wil verwijderen?",
