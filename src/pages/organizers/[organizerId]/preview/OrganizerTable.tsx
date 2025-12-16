@@ -1,6 +1,7 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Image } from '@/ui/Image';
@@ -17,7 +18,12 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 
 import { OrganizerLabelsForm } from './OrganizerLabels';
 
-type Props = { organizer: Organizer };
+type VerenigingsloketProps = {
+  vcode?: string;
+  isOwner: boolean;
+};
+
+type Props = { organizer: Organizer } & VerenigingsloketProps;
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -181,7 +187,50 @@ const OrganizerLabels = ({
   );
 };
 
-export const OrganizerTable = ({ organizer }: Props) => {
+const Verenigingsloket = ({ vcode, isOwner }: VerenigingsloketProps) => {
+  const { t } = useTranslation();
+  const [showVerenigingsloket] = useFeatureFlag(FeatureFlags.VERENIGINGSLOKET);
+
+  if (!showVerenigingsloket) return null;
+
+  const baseUrl = 'https://www.verenigingsloket.be';
+
+  const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
+  const previewUrl = detailUrl.replace('https://www.', '');
+
+  const helpdeskUrl =
+    'https://helpdesk.publiq.be/hc/nl/articles/31862043316114-Waarom-zie-ik-een-link-met-het-Verenigingsloket-op-mijn-organisatiepagina';
+
+  return (
+    <Inline
+      padding={3}
+      css={`
+        border-top: 1px solid ${grey2};
+      `}
+    >
+      <Text minWidth="15rem" color={udbMainDarkGrey}>
+        {t('organizers.detail.verenigingsloket.title')}
+      </Text>
+      <Stack spacing={3}>
+        <Link href={detailUrl}>{previewUrl}</Link>
+        {isOwner && (
+          <Text variant="muted">
+            <Trans i18nKey="organizers.detail.verenigingsloket.description_owner">
+              <Link href={helpdeskUrl}></Link>
+            </Trans>
+          </Text>
+        )}
+        {!isOwner && (
+          <Text variant="muted">
+            {t('organizers.detail.verenigingsloket.description')}
+          </Text>
+        )}
+      </Stack>
+    </Inline>
+  );
+};
+
+export const OrganizerTable = ({ organizer, vcode, isOwner }: Props) => {
   const { i18n } = useTranslation();
 
   const formattedName: string = getLanguageObjectOrFallback(
@@ -266,6 +315,7 @@ export const OrganizerTable = ({ organizer }: Props) => {
         organizer={organizer}
         images={organizer?.images}
       />
+      {vcode && <Verenigingsloket vcode={vcode} isOwner={isOwner} />}
     </Stack>
   );
 };

@@ -1057,6 +1057,11 @@
       "images": "Afbeeldingen",
       "no_images": "Geen afbeeldingen",
       "mainImage": "Hoofdafbeelding",
+      "verenigingsloket": {
+        "title": "Verenigingsloket",
+        "description": "In het verenigingsloket kan je meer info vinden over deze organisatie.",
+        "description_owner": "Dankzij deze koppeling verschijnen je activiteiten automatisch ook op je publieke profiel in het verenigingsloket. <0>Lees meer</0>"
+      },
       "actions": {
         "edit": "Bewerken",
         "manage": "Beheerders aanpassen",

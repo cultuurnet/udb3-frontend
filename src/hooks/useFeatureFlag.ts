@@ -23,6 +23,7 @@ const FeatureFlags = {
   REACT_USERS_EDIT: 'react_users_edit',
   REACT_TRANSLATE_PLACES: 'react_translate_places',
   REACT_TRANSLATE: 'react_translate_events',
+  VERENIGINGSLOKET: 'react_verenigingsloket',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

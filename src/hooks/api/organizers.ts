@@ -149,6 +149,68 @@ export const prefetchGetOrganizerByIdQuery = ({
     ...createGetOrganizerByIdQueryOptions({ id }),
   });
 
+type GetVerenigingsloketByIdArguments = {
+  headers: Headers;
+  id: string;
+};
+
+type VerenigingsloketResponse = {
+  vcode: string;
+  url: string;
+  status: 'confirmed' | 'pending' | 'rejected';
+};
+
+const getVerenigingsloketByOrganizerId = async ({
+  headers,
+  id,
+}: GetVerenigingsloketByIdArguments) => {
+  const res = await fetchFromApi({
+    path: `/organizers/${id.toString()}/verenigingsloket`,
+    options: {
+      headers,
+    },
+  });
+  return (await res.json()) as VerenigingsloketResponse;
+};
+
+const createGetVerenigingsloketByOrganizerIdQueryOptions = ({
+  id,
+}: {
+  id: string;
+}) =>
+  queryOptions({
+    queryKey: ['organizers-verenigingsloket', id],
+    queryFn: getVerenigingsloketByOrganizerId,
+    queryArguments: { id },
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+
+const useGetVerenigingsloketByOrganizerIdQuery = (
+  { id }: { id: string },
+  configuration: ExtendQueryOptions<
+    typeof getVerenigingsloketByOrganizerId
+  > = {},
+) => {
+  const options = createGetVerenigingsloketByOrganizerIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+export const prefetchGetVerenigingsloketByOrganizerIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetVerenigingsloketByOrganizerIdQueryOptions({ id }),
+  });
+
 type GetOrganizersByCreator = { headers: Headers } & {
   q: string;
   limit: string;
@@ -546,6 +608,7 @@ export {
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
   useGetSuggestedOrganizersQuery,
+  useGetVerenigingsloketByOrganizerIdQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
 };

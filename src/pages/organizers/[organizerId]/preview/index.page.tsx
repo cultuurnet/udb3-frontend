@@ -8,8 +8,10 @@ import {
   GetOrganizerPermissionsResponse,
   prefetchGetOrganizerByIdQuery,
   prefetchGetOrganizerPermissionsQuery,
+  prefetchGetVerenigingsloketByOrganizerIdQuery,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
+  useGetVerenigingsloketByOrganizerIdQuery,
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -49,6 +51,12 @@ const OrganizersPreview = () => {
   const getOrganizerPermissionsQuery = useGetOrganizerPermissionsQuery({
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
+
+  const getVereningingsloketQuery = useGetVerenigingsloketByOrganizerIdQuery({
+    id: organizerId,
+  });
+
+  const verenigingsloket = getVereningingsloketQuery?.data;
 
   const organizerPermissions =
     getOrganizerPermissionsQuery?.data?.permissions ?? [];
@@ -105,7 +113,11 @@ const OrganizersPreview = () => {
             )}
             <Inline spacing={5}>
               <Stack flex={3}>
-                <OrganizerTable organizer={organizer} />
+                <OrganizerTable
+                  organizer={organizer}
+                  vcode={verenigingsloket?.vcode}
+                  isOwner={canEdit}
+                />
               </Stack>
               <Stack spacing={3.5} flex={1}>
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
@@ -184,6 +196,11 @@ export const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           organizerId: query.organizerId,
+        }),
+        prefetchGetVerenigingsloketByOrganizerIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
         }),
       ]);
     } catch (error) {
