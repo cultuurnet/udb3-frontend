@@ -215,6 +215,7 @@ const VerenigingsloketPreview = ({
   const deleteVerenigingsloketMutation =
     useDeleteVerenigingsloketByOrganizerIdMutation({
       onSuccess: () => {
+        setIsDeleteModalVisible(false);
         queryClient.invalidateQueries({
           queryKey: ['organizers-verenigingsloket', organizerId],
         });
@@ -233,12 +234,9 @@ const VerenigingsloketPreview = ({
     'https://helpdesk.publiq.be/hc/nl/articles/31862043316114-Waarom-zie-ik-een-link-met-het-Verenigingsloket-op-mijn-organisatiepagina';
 
   const handleDelete = async () => {
-    try {
-      await deleteVerenigingsloketMutation.mutateAsync({
-        id: organizerId,
-      });
-      setIsDeleteModalVisible(false);
-    } catch (error) {}
+    await deleteVerenigingsloketMutation.mutateAsync({
+      id: organizerId,
+    });
   };
 
   return (
