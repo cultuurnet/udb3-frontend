@@ -33,6 +33,7 @@ import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
+import { Verenigingsloket } from '../../../../types/Verenigingsloket';
 import { OrganizerTable } from './OrganizerTable';
 
 const OrganizersPreview = () => {
@@ -56,7 +57,9 @@ const OrganizersPreview = () => {
     id: organizerId,
   });
 
-  const verenigingsloket = getVereningingsloketQuery?.data;
+  const verenigingsloket = getVereningingsloketQuery?.data as
+    | Verenigingsloket
+    | undefined;
 
   const organizerPermissions =
     getOrganizerPermissionsQuery?.data?.permissions ?? [];
@@ -115,7 +118,7 @@ const OrganizersPreview = () => {
               <Stack flex={3}>
                 <OrganizerTable
                   organizer={organizer}
-                  vcode={verenigingsloket?.vcode}
+                  verenigingsloket={verenigingsloket}
                   isOwner={canEdit}
                 />
               </Stack>
