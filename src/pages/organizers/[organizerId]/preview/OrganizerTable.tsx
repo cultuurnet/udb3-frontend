@@ -286,7 +286,7 @@ const VerenigingsloketPreview = ({
         {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
-        <Link href={detailUrl}>{previewUrl}</Link>
+        {status === 'confirmed' && <Link href={detailUrl}>{previewUrl}</Link>}
         {isOwner && (
           <Text variant="muted">
             {status === 'confirmed' && (
@@ -294,6 +294,8 @@ const VerenigingsloketPreview = ({
                 <Link href={helpdeskUrl}></Link>
               </Trans>
             )}
+            {status === 'cancelled' &&
+              'Wil je een nieuwe koppeling maken? Dat kan via het verenigingsloket https://www.verenigingsloket.be/nl'}
           </Text>
         )}
         {!isOwner && (
@@ -301,7 +303,7 @@ const VerenigingsloketPreview = ({
             {t('organizers.detail.verenigingsloket.description')}
           </Text>
         )}
-        {isOwner && (
+        {isOwner && status === 'confirmed' && (
           <Inline>
             <Button
               iconName={Icons.TRASH}
@@ -409,7 +411,7 @@ export const OrganizerTable = ({
         organizer={organizer}
         images={organizer?.images}
       />
-      {vcode && (
+      {verenigingsloket?.vcode && (
         <VerenigingsloketPreview
           vcode={verenigingsloket.vcode}
           status={verenigingsloket.status}
