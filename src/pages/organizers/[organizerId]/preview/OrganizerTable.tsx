@@ -319,7 +319,11 @@ const VerenigingsloketPreview = ({
   );
 };
 
-export const OrganizerTable = ({ organizer, vcode, isOwner }: Props) => {
+export const OrganizerTable = ({
+  organizer,
+  verenigingsloket,
+  isOwner,
+}: Props) => {
   const { i18n } = useTranslation();
   const organizerId = parseOfferId(organizer['@id']);
 
@@ -407,7 +411,8 @@ export const OrganizerTable = ({ organizer, vcode, isOwner }: Props) => {
       />
       {vcode && (
         <VerenigingsloketPreview
-          vcode={vcode}
+          vcode={verenigingsloket.vcode}
+          status={verenigingsloket.status}
           isOwner={isOwner}
           organizerId={organizerId}
           organizerName={formattedName}
