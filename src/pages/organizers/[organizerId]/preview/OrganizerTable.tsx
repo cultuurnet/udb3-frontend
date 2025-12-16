@@ -327,7 +327,7 @@ export const OrganizerTable = ({
   isOwner,
 }: Props) => {
   const { i18n } = useTranslation();
-  const organizerId = parseOfferId(organizer['@id']);
+  const organizerId = parseOfferId(organizer?.['@id']);
 
   const formattedName: string = getLanguageObjectOrFallback(
     organizer?.name,
