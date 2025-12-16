@@ -1015,7 +1015,18 @@
       "verenigingsloket": {
         "title": "Verenigingsloket",
         "description": "Vous trouverez plus d'informations sur cette organisation dans le Verenigingsloket.",
-        "description_owner": "Grâce à cette connexion, vos activités apparaissent automatiquement sur votre profil public dans le Verenigingsloket. <0>En savoir plus</0>."
+        "description_add_new": "Vous souhaitez créer une nouvelle connexion ? C'est possible via le Verenigingsloket : <0>https://www.verenigingsloket.be/nl</0>",
+        "description_owner": "Grâce à cette connexion, vos activités apparaissent automatiquement sur votre profil public dans le Verenigingsloket. <0>En savoir plus</0>.",
+        "delete_cta": "Supprimer cette connexion",
+        "delete_modal": {
+          "title": "Supprimer la connexion",
+          "intro": "Êtes-vous sûr·e de vouloir supprimer la connexion entre <0>{{organizerName}}</0> et le Verenigingsloket?",
+          "text": "Vos activités disparaîtront alors également de votre profil dans le Verenigingsloket.",
+          "actions": {
+            "cancel": "Annuler",
+            "confirm": "Supprimer la connexion"
+          }
+        }
       }
     },
     "create": {
