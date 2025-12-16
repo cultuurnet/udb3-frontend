@@ -1018,7 +1018,7 @@
         "description": "Weitere Informationen zu dieser Organisation finden Sie im Verenigingsloket.",
         "description_add_new": "Möchten Sie eine neue Verknüpfung erstellen? Das ist über das Verenigingsloket möglich <0>https://www.verenigingsloket.be/nl</0>",
         "description_owner": "Durch diese Verknüpfung erscheinen Ihre Aktivitäten automatisch auch in Ihrem öffentlichen Profil im Verenigingsloket. <0>Mehr erfahren</0>",
-        "delete_cta": "Supprimer cette connexion",
+        "delete_cta": "Verknüpfung entfernen",
         "delete_modal": {
           "title": "Verknüpfung entfernen",
           "intro": "Möchten Sie die Verknüpfung zwischen <0>{{organizerName}}</0> und dem Verenigingsloket wirklich entfernen?",
