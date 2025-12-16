@@ -227,10 +227,7 @@ const VerenigingsloketPreview = ({
 
   if (!showVerenigingsloket) return null;
 
-  const baseUrl = 'https://www.verenigingsloket.be';
-
-  const detailUrl = `${baseUrl}/nl/verenigingen/${vcode}`;
-  const previewUrl = detailUrl.replace('https://www.', '');
+  const previewUrl = url.replace('https://www.', '');
 
   const helpdeskUrl =
     'https://helpdesk.publiq.be/hc/nl/articles/31862043316114-Waarom-zie-ik-een-link-met-het-Verenigingsloket-op-mijn-organisatiepagina';
@@ -284,7 +281,7 @@ const VerenigingsloketPreview = ({
         {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
-        {status === 'confirmed' && <Link href={detailUrl}>{previewUrl}</Link>}
+        {status === 'confirmed' && <Link href={url}>{previewUrl}</Link>}
         {isOwner && (
           <Text variant="muted">
             {status === 'confirmed' && (
@@ -418,6 +415,7 @@ export const OrganizerTable = ({
         <VerenigingsloketPreview
           vcode={verenigingsloket.vcode}
           status={verenigingsloket.status}
+          url={verenigingsloket.url}
           isOwner={isOwner}
           organizerId={organizerId}
           organizerName={formattedName}
