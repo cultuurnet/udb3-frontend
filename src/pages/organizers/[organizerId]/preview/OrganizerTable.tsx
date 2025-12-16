@@ -220,9 +220,7 @@ const VerenigingsloketPreview = ({
         });
       },
       onError: (error) => {
-        // Silent error handling - just log it
         console.warn('Failed to delete verenigingsloket:', error);
-        // Optionally still close the modal to avoid confusing the user
         setIsDeleteModalVisible(false);
       },
     });
