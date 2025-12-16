@@ -195,7 +195,13 @@ const useGetVerenigingsloketByOrganizerIdQuery = (
   });
 };
 
-const deleteVerenigingsloketByOrganizerId = async ({ headers, id }) =>
+const deleteVerenigingsloketByOrganizerId = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) =>
   fetchFromApi({
     path: `/organizers/${id}/verenigingsloket`,
     options: { headers, method: 'DELETE' },
