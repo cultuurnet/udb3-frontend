@@ -257,28 +257,31 @@ const VerenigingsloketPreview = ({
       `}
     >
       <Modal
-        title={'Koppeling verwijderen'}
-        confirmTitle={'Verwijder de koppeling'}
-        cancelTitle={'Annuleren'}
+        title={t('organizers.detail.verenigingsloket.delete_modal.title')}
+        confirmTitle={t(
+          'organizers.detail.verenigingsloket.delete_modal.actions.confirm',
+        )}
+        cancelTitle={t(
+          'organizers.detail.verenigingsloket.delete_modal.actions.cancel',
+        )}
         visible={isDeleteModalVisible}
         variant={ModalVariants.QUESTION}
-        onConfirm={() => {
-          handleDelete();
-          console.log('confirm');
-        }}
+        onConfirm={handleDelete}
         onClose={() => setIsDeleteModalVisible(false)}
         size={ModalSizes.MD}
         confirmButtonVariant={ButtonVariants.DANGER}
       >
         <Stack padding={4} spacing={4}>
           <Text>
-            Ben je zeker dat je de koppeling van{' '}
-            <span style={{ fontWeight: 'bold' }}>{organizerName}</span> met het
-            verenigingsloket wil verwijderen?
+            <Trans
+              i18nKey="organizers.detail.verenigingsloket.delete_modal.intro"
+              values={{ organizerName }}
+            >
+              <span style={{ fontWeight: 'bold' }}>{organizerName}</span>
+            </Trans>
           </Text>
           <Text fontWeight="bold">
-            Dat wil zeggen dat je activiteiten ook verdwijnen van je profiel in
-            het verenigingsloket.
+            {t('organizers.detail.verenigingsloket.delete_modal.text')}
           </Text>
         </Stack>
       </Modal>
