@@ -215,8 +215,6 @@ const VerenigingsloketPreview = ({
   const deleteVerenigingsloketMutation =
     useDeleteVerenigingsloketByOrganizerIdMutation({
       onSuccess: () => {
-        console.log('on success');
-        // Invalidate queries on success
         queryClient.invalidateQueries({
           queryKey: ['organizers-verenigingsloket', organizerId],
         });
@@ -230,8 +228,6 @@ const VerenigingsloketPreview = ({
     });
 
   if (!showVerenigingsloket) return null;
-
-  console.log({ organizerId });
 
   const baseUrl = 'https://www.verenigingsloket.be';
 
