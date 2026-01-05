@@ -17,6 +17,7 @@ import { PaginatedData } from '@/types/PaginatedData';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
+import { Verenigingsloket } from '../../types/Verenigingsloket';
 import type { Headers } from './types/Headers';
 import type { User } from './user';
 
@@ -154,12 +155,6 @@ type GetVerenigingsloketByIdArguments = {
   id: string;
 };
 
-type VerenigingsloketResponse = {
-  vcode: string;
-  url: string;
-  status: 'confirmed' | 'pending' | 'rejected';
-};
-
 const getVerenigingsloketByOrganizerId = async ({
   headers,
   id,
@@ -170,7 +165,7 @@ const getVerenigingsloketByOrganizerId = async ({
       headers,
     },
   });
-  return (await res.json()) as VerenigingsloketResponse;
+  return (await res.json()) as Verenigingsloket;
 };
 
 const createGetVerenigingsloketByOrganizerIdQueryOptions = ({
@@ -199,6 +194,25 @@ const useGetVerenigingsloketByOrganizerIdQuery = (
     enabled: options.enabled !== false && configuration.enabled !== false,
   });
 };
+
+const deleteVerenigingsloketByOrganizerId = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) =>
+  fetchFromApi({
+    path: `/organizers/${id}/verenigingsloket`,
+    options: { headers, method: 'DELETE' },
+  });
+
+const useDeleteVerenigingsloketByOrganizerIdMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteVerenigingsloketByOrganizerId,
+    mutationKey: 'organizers-verenigingsloket-delete-by-id',
+    ...configuration,
+  });
 
 export const prefetchGetVerenigingsloketByOrganizerIdQuery = ({
   req,
@@ -602,6 +616,7 @@ export {
   useCreateOrganizerMutation,
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
+  useDeleteVerenigingsloketByOrganizerIdMutation,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
   useGetOrganizersByCreatorQuery,
