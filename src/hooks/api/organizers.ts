@@ -223,6 +223,7 @@ export const prefetchGetVerenigingsloketByOrganizerIdQuery = ({
     req,
     queryClient,
     ...createGetVerenigingsloketByOrganizerIdQueryOptions({ id }),
+    staleTime: 0, // Always fetch fresh data on server-side
   });
 
 type GetOrganizersByCreator = { headers: Headers } & {
