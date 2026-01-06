@@ -18,10 +18,12 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
   const { t } = useTranslation();
 
   const hasBookingInfo =
-    bookingInfo.url || bookingInfo.phone || bookingInfo.email;
+    bookingInfo && (bookingInfo.url || bookingInfo.phone || bookingInfo.email);
 
   if (!hasBookingInfo) {
-    return null;
+    return (
+      <Text className="empty-value">{t('preview.empty_value.booking')}</Text>
+    );
   }
 
   return (

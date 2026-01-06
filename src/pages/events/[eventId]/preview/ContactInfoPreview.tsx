@@ -1,12 +1,28 @@
+import { useTranslation } from 'react-i18next';
+
 import { ContactPoint } from '@/types/ContactPoint';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
 
 type Props = {
   contactPoint: ContactPoint;
 };
 
 const ContactInfoPreview = ({ contactPoint }: Props) => {
+  const { t } = useTranslation();
+  const hasContactInfo =
+    contactPoint &&
+    (contactPoint.url.length ||
+      contactPoint.phone.length ||
+      contactPoint.email.length);
+
+  if (!hasContactInfo) {
+    return (
+      <Text className="empty-value">{t('preview.empty_value.contact')}</Text>
+    );
+  }
+
   return (
     <Stack>
       {contactPoint.url && (

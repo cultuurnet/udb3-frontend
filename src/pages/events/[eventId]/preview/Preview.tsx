@@ -84,9 +84,14 @@ const Preview = () => {
     { Header: 'Value', accessor: 'value' },
   ];
 
+  const EmptyValue = ({ children }) => {
+    return <Text className="empty-value">{children}</Text>;
+  };
+
   const OrganizerPreview = () => {
     const organizer = offer.organizer;
-    if (!organizer) return null;
+    if (!organizer)
+      return <EmptyValue>{t('preview.empty_value.organiser')}</EmptyValue>;
 
     const organizerName = getLanguageObjectOrFallback<string>(
       organizer.name,
@@ -177,7 +182,8 @@ const Preview = () => {
     const HEIGHT = 100;
     const hasImages = (offer.mediaObject ?? []).length > 0;
 
-    if (!hasImages) return <div>Geen afbeeldingen</div>;
+    if (!hasImages)
+      return <EmptyValue>{t('preview.empty_value.images')}</EmptyValue>;
 
     return offer.mediaObject?.map((media, index) => {
       const isLastImage = index === offer.mediaObject!.length - 1;
@@ -228,7 +234,8 @@ const Preview = () => {
     // TODO check with Sarah if we need real previews here?
     const hasVideos = (offer.videos ?? []).length > 0;
 
-    if (!hasVideos) return <div>Geen video's</div>;
+    if (!hasVideos)
+      return <EmptyValue>{t('preview.empty_value.videos')}</EmptyValue>;
 
     return (
       <ul>
@@ -259,7 +266,11 @@ const Preview = () => {
     {
       field: 'Beschrijving',
       // TODO sanitize html with dompurify which tags are allowed?
-      value: <div dangerouslySetInnerHTML={{ __html: description }} />,
+      value: description ? (
+        <div dangerouslySetInnerHTML={{ __html: description }} />
+      ) : (
+        <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
+      ),
     },
     {
       field: 'Waar',
@@ -288,9 +299,6 @@ const Preview = () => {
     { field: 'Afbeeldingen', value: <ImagePreview /> },
     { field: "Video's", value: <VideoPreview /> },
   ];
-
-  // TODO empty rows seem to have a different background color
-  // e.g. when the event has no description, the row has a grey background
 
   return (
     <Page>
@@ -327,6 +335,12 @@ const Preview = () => {
                         td em,
                         td i {
                           font-style: italic !important;
+                        }
+                        tr:has(td:nth-child(2) .empty-value) td {
+                          background-color: ${colors.grey4};
+                        }
+                        tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
+                          color: ${colors.grey5};
                         }
                       `}
                     />
