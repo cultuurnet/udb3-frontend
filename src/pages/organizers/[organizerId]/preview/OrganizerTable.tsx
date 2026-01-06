@@ -201,7 +201,6 @@ type VerenigingsloketProps = {
 } & Verenigingsloket;
 
 const VerenigingsloketPreview = ({
-  vcode,
   status,
   url,
   isOwner,
