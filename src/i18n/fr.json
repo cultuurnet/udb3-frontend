@@ -1393,6 +1393,17 @@
     "FILMS_AANMAKEN": "Créer des films",
     "MEDIA_UPLOADEN": "Télécharger des médias"
   },
+  "preview": {
+    "online_label": "En ligne",
+    "empty_value": {
+      "description": "Aucune description",
+      "organiser": "Aucune information sur l'organisation",
+      "booking": "Aucune information sur la réservatie",
+      "contact": "Aucune information de contact",
+      "images": "Aucune image",
+      "videos": "Aucune vidéo"
+    }
+  },
   "workflowStatus": {
     "DRAFT": "Pas publié",
     "READY_FOR_VALIDATION": "Prêt à être publié",

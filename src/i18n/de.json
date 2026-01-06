@@ -1394,6 +1394,17 @@
     "FILMS_AANMAKEN": "Filme erstellen",
     "MEDIA_UPLOADEN": "Media hochladen"
   },
+  "preview": {
+    "online_label": "Online",
+    "empty_value": {
+      "description": "Keine Beschreibung",
+      "organiser": "Keine Organisationsinformationen",
+      "booking": "Keine Reservierungsinformationen",
+      "contact": "Keine Kontaktinformationen",
+      "images": "Keine Abbildungen",
+      "videos": "Keine videos"
+    }
+  },
   "workflowStatus": {
     "DRAFT": "Nicht veröffentlicht",
     "READY_FOR_VALIDATION": "Veröffentlicht",

@@ -1451,7 +1451,15 @@
     "MEDIA_UPLOADEN": "Media uploaden"
   },
   "preview": {
-    "online_label": "Online"
+    "online_label": "Online",
+    "empty_value": {
+      "description": "Geen beschrijving",
+      "organiser": "Geen organisatie-informatie",
+      "booking": "Geen reservatie-informatie",
+      "contact": "Geen contact-informatie",
+      "images": "Geen afbeeldingen",
+      "videos": "Geen video's"
+    }
   },
   "workflowStatus": {
     "DRAFT": "Niet gepubliceerd",
