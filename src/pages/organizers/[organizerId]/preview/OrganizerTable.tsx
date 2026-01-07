@@ -217,8 +217,7 @@ const VerenigingsloketPreview = ({
           queryKey: ['organizers-verenigingsloket', organizerId],
         });
       },
-      onError: (error) => {
-        console.warn('Failed to delete verenigingsloket:', error);
+      onError: () => {
         setIsDeleteModalVisible(false);
       },
     });
