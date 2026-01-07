@@ -4,7 +4,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
 import { useDeleteVerenigingsloketByOrganizerIdMutation } from '@/hooks/api/organizers';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguage } from '@/i18n/index';
 import { Organizer } from '@/types/Organizer';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -209,7 +208,6 @@ const VerenigingsloketPreview = ({
 }: VerenigingsloketProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [showVerenigingsloket] = useFeatureFlag(FeatureFlags.VERENIGINGSLOKET);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const deleteVerenigingsloketMutation =
     useDeleteVerenigingsloketByOrganizerIdMutation({
@@ -219,13 +217,10 @@ const VerenigingsloketPreview = ({
           queryKey: ['organizers-verenigingsloket', organizerId],
         });
       },
-      onError: (error) => {
-        console.warn('Failed to delete verenigingsloket:', error);
+      onError: () => {
         setIsDeleteModalVisible(false);
       },
     });
-
-  if (!showVerenigingsloket) return null;
 
   const previewUrl = url.replace('https://www.', '');
 
