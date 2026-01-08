@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
@@ -34,6 +35,13 @@ const Preview = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const { eventId } = router.query;
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      return hash || 'details';
+    }
+    return 'details';
+  });
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
     id: eventId as string,
@@ -68,16 +76,11 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const isPhysicalLocation = true;
-
-  console.log({ isPhysicalLocation });
-
-  const tabOptions = ['details'];
-
-  const activeTab = 'details';
+  const tabOptions = ['details']; //['details', 'history', 'publication'];
 
   const onTabChange = (key: string) => {
-    console.log('tab changed to:', key);
+    setActiveTab(key);
+    window.location.hash = key;
   };
 
   const columns = [
@@ -308,6 +311,42 @@ const Preview = () => {
     { field: t('preview.labels.video'), value: <VideoPreview /> },
   ];
 
+  const DetailsTabContent = () => {
+    return (
+      <Table
+        bordered
+        showHeader={false}
+        columns={columns}
+        data={tableData}
+        css={`
+          td strong,
+          td b {
+            font-weight: 700 !important;
+          }
+
+          td em,
+          td i {
+            font-style: italic !important;
+          }
+          tr:has(td:nth-child(2) .empty-value) td {
+            background-color: ${colors.grey4};
+          }
+          tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
+            color: ${colors.grey5};
+          }
+        `}
+      />
+    );
+  };
+
+  const HistoryTabContent = () => {
+    return <Text>{t('preview.tabs.history_content')}</Text>;
+  };
+
+  const PublicationTabContent = () => {
+    return <Text>{t('preview.tabs.publication_content')}</Text>;
+  };
+
   return (
     <Page>
       <Page.Title>{title}</Page.Title>
@@ -329,29 +368,9 @@ const Preview = () => {
                       box-shadow: ${getGlobalValue('boxShadow.medium')};
                     `}
                   >
-                    <Table
-                      bordered
-                      showHeader={false}
-                      columns={columns}
-                      data={tableData}
-                      css={`
-                        td strong,
-                        td b {
-                          font-weight: 700 !important;
-                        }
-
-                        td em,
-                        td i {
-                          font-style: italic !important;
-                        }
-                        tr:has(td:nth-child(2) .empty-value) td {
-                          background-color: ${colors.grey4};
-                        }
-                        tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
-                          color: ${colors.grey5};
-                        }
-                      `}
-                    />
+                    {tab === 'details' && <DetailsTabContent />}
+                    {tab === 'history' && <HistoryTabContent />}
+                    {tab === 'publication' && <PublicationTabContent />}
                   </Stack>
                 </Tabs.Tab>
               ))}
