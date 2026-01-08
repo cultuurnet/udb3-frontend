@@ -1,8 +1,10 @@
 import { AudienceType } from '@/constants/AudienceType';
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import type { CalendarType } from '@/constants/CalendarType';
+import { ONLINE_LOCATION_ID } from '@/constants/Location';
 import type { OfferStatus } from '@/constants/OfferStatus';
 import { PriceCategory } from '@/pages/steps/AdditionalInformationStep/PriceInformation';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import type { SupportedLanguages } from '../i18n';
 import type { ContactPoint } from './ContactPoint';
@@ -180,6 +182,17 @@ export const hasLegacyLocation = (offer: Offer) => {
   return offer.location && !offer.location?.['@id'];
 };
 
+const hasOnlineLocation = (offer: Offer) => {
+  if (isPlace(offer)) {
+    return false;
+  }
+  const { location, mainLanguage } = offer;
+
+  const locationId = parseOfferId(location['@id']);
+
+  return locationId === ONLINE_LOCATION_ID;
+};
+
 export type {
   BaseOffer,
   BookingAvailability,
@@ -196,6 +209,7 @@ export type {
 };
 
 export {
+  hasOnlineLocation,
   LabelPrivacyOptions,
   LabelValidationInformation,
   LabelVisibilityOptions,
