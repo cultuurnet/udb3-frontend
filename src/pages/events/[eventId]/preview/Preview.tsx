@@ -7,7 +7,8 @@ import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
-import { BookingAvailability } from '@/types/Event';
+import { BookingAvailability, isEvent } from '@/types/Event';
+import { hasOnlineLocation } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
@@ -108,7 +109,7 @@ const Preview = () => {
 
   const PriceInfo = () => {
     if (!offer.priceInfo || offer.priceInfo.length === 0) {
-      return null;
+      return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
 
     return (
@@ -145,11 +146,11 @@ const Preview = () => {
     if (isPlace(offer)) return null;
 
     return (
-      <div>
+      <Text>
         {offer.bookingAvailability.type === BookingAvailability.AVAILABLE
-          ? 'Beschikbaar'
-          : 'Niet beschikbaar'}
-      </div>
+          ? t('bookingAvailability.available')
+          : t('bookingAvailability.unavailable')}
+      </Text>
     );
   };
 
@@ -158,7 +159,7 @@ const Preview = () => {
 
     // TODO check the 'Online vanaf status' in detail
     // Need to fill in the date?
-    return <div>{t(`workflowStatus.${workflowStatus}`)}</div>;
+    return <Text>{t(`workflowStatus.${workflowStatus}`)}</Text>;
   };
 
   const AgePreview = () => {
@@ -167,7 +168,7 @@ const Preview = () => {
     if (!hasAgeInfo) return null;
 
     if (offer.typicalAgeRange === '-' || offer.typicalAgeRange === '0-') {
-      return <div>Alle leeftijden</div>;
+      return <Text>{t('create.name_and_age.age.all')}</Text>;
     }
 
     const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
@@ -175,7 +176,7 @@ const Preview = () => {
       return ageRange.apiLabel === offer.typicalAgeRange;
     });
 
-    return <div>{AgeRanges[ageRangeLabelKey]?.label}</div>;
+    return <Text>{AgeRanges[ageRangeLabelKey]?.label}</Text>;
   };
 
   const ImagePreview = () => {
@@ -251,10 +252,10 @@ const Preview = () => {
   };
 
   const tableData = [
-    { field: 'Titel', value: title },
-    { field: 'Type', value: typeTerm.label },
+    { field: t('preview.labels.title'), value: title },
+    { field: t('preview.labels.type'), value: typeTerm.label },
     {
-      field: 'Labels',
+      field: t('preview.labels.labels'),
       value: (
         <LabelsForm
           scope={ScopeTypes.EVENTS}
@@ -264,26 +265,33 @@ const Preview = () => {
       ),
     },
     {
-      field: 'Beschrijving',
+      field: t('preview.labels.description'),
       // TODO sanitize html with dompurify which tags are allowed?
       value: description ? (
-        <div dangerouslySetInnerHTML={{ __html: description }} />
+        <Text dangerouslySetInnerHTML={{ __html: description }} />
       ) : (
         <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
       ),
     },
     {
-      field: 'Waar',
+      field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
-    // TODO add row for online url if online event
-    { field: 'Wanneer', value: calendarSummary },
-    { field: 'Organisatie', value: <OrganizerPreview /> },
-    { field: 'Prijsinfo', value: <PriceInfo /> },
-    { field: 'Tickets & plaatsen', value: <BookingPreview /> },
-    { field: 'Publicatie', value: <PublicationPreview /> },
+    ...(isEvent(offer) && hasOnlineLocation(offer) && offer.onlineUrl
+      ? [
+          {
+            field: t('preview.labels.online_location'),
+            value: <Link href={offer.onlineUrl}>{offer.onlineUrl}</Link>,
+          },
+        ]
+      : []),
+    { field: t('preview.labels.calendar'), value: calendarSummary },
+    { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
+    { field: t('preview.labels.price'), value: <PriceInfo /> },
+    { field: t('preview.labels.booking'), value: <BookingPreview /> },
+    { field: t('preview.labels.publication'), value: <PublicationPreview /> },
     {
-      field: 'Reservatie',
+      field: t('preview.labels.booking_info'),
       value: (
         <BookingInfoPreview
           bookingInfo={offer.bookingInfo}
@@ -292,12 +300,12 @@ const Preview = () => {
       ),
     },
     {
-      field: 'Contactgegevens',
+      field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
     },
-    { field: 'Geschikt voor', value: <AgePreview /> },
-    { field: 'Afbeeldingen', value: <ImagePreview /> },
-    { field: "Video's", value: <VideoPreview /> },
+    { field: t('preview.labels.age'), value: <AgePreview /> },
+    { field: t('preview.labels.image'), value: <ImagePreview /> },
+    { field: t('preview.labels.video'), value: <VideoPreview /> },
   ];
 
   return (
@@ -311,7 +319,7 @@ const Preview = () => {
               onSelect={(key) => onTabChange(key as string)}
             >
               {tabOptions.map((tab) => (
-                <Tabs.Tab eventKey={tab} title={'Gegevens'}>
+                <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
                   <Stack
                     marginTop={4}
                     backgroundColor="white"
