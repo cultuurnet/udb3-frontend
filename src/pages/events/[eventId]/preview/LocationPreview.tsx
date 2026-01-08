@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { ONLINE_LOCATION_ID } from '@/constants/Location';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AddressInternal } from '@/types/Address';
-import { Offer } from '@/types/Offer';
+import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
@@ -23,9 +22,7 @@ const LocationPreview = ({ offer }: Props) => {
 
   const locationId = parseOfferId(location['@id']);
 
-  const isOnlineLocation = locationId === ONLINE_LOCATION_ID;
-
-  if (isOnlineLocation) {
+  if (hasOnlineLocation(offer)) {
     return <Text>{t('preview.online_label')}</Text>;
   }
 
