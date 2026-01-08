@@ -75,6 +75,7 @@ const MyMigratedPage = () => {
 ```
 
 **For new React-only routes:**
+
 - **DO NOT** use feature flags or `<Fallback>` for completely new routes that don't exist in AngularJS
 
 **Testing feature flags:**
@@ -86,7 +87,10 @@ All API calls use **authenticated React Query hooks** that automatically handle 
 
 ```typescript
 // Standard pattern for API hooks (src/hooks/api/entities.ts)
-import { useAuthenticatedQuery, useAuthenticatedMutation } from '@/hooks/api/authenticated-query';
+import {
+  useAuthenticatedQuery,
+  useAuthenticatedMutation,
+} from '@/hooks/api/authenticated-query';
 import { queryOptions } from '@tanstack/react-query';
 
 const createGetRolesQueryOptions = ({ name, paginationOptions }) =>
@@ -115,6 +119,7 @@ const prefetchGetRolesQuery = ({ req, queryClient, ...args }) =>
 ```
 
 **Mutation caching strategy:**
+
 - Include `mutationKey` for duplicate prevention
 - Invalidate queries on success: `queryClient.invalidateQueries({ queryKey: ['entities'] })`
 
@@ -220,34 +225,42 @@ const MyForm = () => {
 const schema = yup.object({
   address: yup.object({
     streetAndNumber: yup.string(),
-    city: yup.object({
-      name: yup.string(),
-      zip: yup.string(),
-    }).when('country', {
-      is: 'BE',
-      then: yup.object({
-        zip: yup.string().matches(/^\d{4}$/),
+    city: yup
+      .object({
+        name: yup.string(),
+        zip: yup.string(),
+      })
+      .when('country', {
+        is: 'BE',
+        then: yup.object({
+          zip: yup.string().matches(/^\d{4}$/),
+        }),
       }),
-    }),
   }),
 
-  name: yup.string()
+  name: yup
+    .string()
     .required(t('form.errors.name_required'))
     .min(2, t('form.errors.name_min', { count: 2 }))
-    .test('no-semicolon', t('form.errors.semicolon'),
-      (value) => !value || !/;/.test(value)
+    .test(
+      'no-semicolon',
+      t('form.errors.semicolon'),
+      (value) => !value || !/;/.test(value),
     ),
 
-  contact: yup.array(yup.object({
-    type: yup.string(),
-    value: yup.string()
-  })),
+  contact: yup.array(
+    yup.object({
+      type: yup.string(),
+      value: yup.string(),
+    }),
+  ),
 });
 
 const createValidationSchema = () => {
   const { t } = useTranslation();
   return yup.object({
-    name: yup.string()
+    name: yup
+      .string()
       .required(t('labels.form.errors.name_required'))
       .min(MIN_LENGTH, t('labels.form.errors.name_min', { count: MIN_LENGTH }))
       .max(MAX_LENGTH, t('labels.form.errors.name_max', { count: MAX_LENGTH })),
@@ -340,6 +353,7 @@ const onSubmit = async (data) => {
 ### Internationalization (CRITICAL)
 
 **All user-facing strings MUST be translatable** - stored in `src/i18n/`:
+
 - **Supported languages**: Dutch (nl), French (fr), German (de)
 - **Every new string requires translation in ALL three language files**
 
@@ -360,6 +374,7 @@ const MyComponent = ({ userName, count }) => {
 ```
 
 Translation file structure in `src/i18n/nl.json` (and fr.json, de.json):
+
 ```json
 {
   "form": {
@@ -381,7 +396,8 @@ Translation file structure in `src/i18n/nl.json` (and fr.json, de.json):
 const MyConstants = { VALUE_A: 'a', VALUE_B: 'b' } as const;
 type MyConstantType = Values<typeof MyConstants>;
 
-type Address = AddressInternal
+type Address =
+  | AddressInternal
   | Partial<Record<Values<typeof SupportedLanguages>, AddressInternal>>;
 ```
 
@@ -406,6 +422,7 @@ src/
 ## Testing
 
 ### E2E Testing (Playwright)
+
 - Location: `src/test/e2e/`
 - Organized by domain (events/, manage/labels/, etc.)
 - Separate setup for admin vs regular users (auth.setup.ts, auth-admin.setup.ts)
@@ -413,6 +430,7 @@ src/
 - Run: `yarn test:e2e`
 
 ### Unit Testing (Jest)
+
 - Uses Jest with React Testing Library
 - SSR compatibility: Use `useIsClient()` hook for client-only code
 - Run: `yarn test:unit`
