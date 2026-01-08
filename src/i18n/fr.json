@@ -1394,11 +1394,35 @@
     "MEDIA_UPLOADEN": "Télécharger des médias"
   },
   "preview": {
+    "tabs": {
+      "details": "Données",
+      "history": "Historique",
+      "publication": "Publication"
+    },
     "online_label": "En ligne",
+    "labels": {
+      "title": "Titre",
+      "type": "Type",
+      "labels": "Étiquettes",
+      "description": "Description",
+      "location": "Où",
+      "online_location": "Participation en ligne",
+      "calendar": "Quand",
+      "organizer": "Organisation",
+      "price": "Prix",
+      "booking": "Billets & places",
+      "publication": "État de publication",
+      "booking_info": "Reservation",
+      "contact": "Contact",
+      "age": "Adapté à",
+      "image": "Images",
+      "video": "Videos"
+    },
     "empty_value": {
       "description": "Aucune description",
       "organiser": "Aucune information sur l'organisation",
-      "booking": "Aucune information sur la réservatie",
+      "price": "Pas d'information du prix",
+      "booking": "Aucune information sur la réservation",
       "contact": "Aucune information de contact",
       "images": "Aucune image",
       "videos": "Aucune vidéo"

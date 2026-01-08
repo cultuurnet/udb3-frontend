@@ -1451,10 +1451,34 @@
     "MEDIA_UPLOADEN": "Media uploaden"
   },
   "preview": {
+    "tabs": {
+      "details": "Gegevens",
+      "history": "Geschiedenis",
+      "publication": "Publicatie"
+    },
     "online_label": "Online",
+    "labels": {
+      "title": "Titel",
+      "type": "Type",
+      "labels": "Labels",
+      "description": "Beschrijving",
+      "location": "Waar",
+      "online_location": "Online deelname",
+      "calendar": "Wanneer",
+      "organizer": "Organisatie",
+      "price": "Prijsinfo",
+      "booking": "Tickets & plaatsen",
+      "publication": "Publicatie",
+      "booking_info": "Reservatie",
+      "contact": "Contactgegevens",
+      "age": "Geschikt voor",
+      "image": "Afbeeldingen",
+      "video": "Video's"
+    },
     "empty_value": {
       "description": "Geen beschrijving",
       "organiser": "Geen organisatie-informatie",
+      "price": "Geen prijsinformatie",
       "booking": "Geen reservatie-informatie",
       "contact": "Geen contact-informatie",
       "images": "Geen afbeeldingen",
