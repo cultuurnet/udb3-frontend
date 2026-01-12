@@ -437,7 +437,7 @@ src/
 
 ## Key Integration Points
 
-- **Authentication**: Auth0 with JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware
+- **Authentication**:  JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware
 - **State Management**: React Query for server state, custom hooks for UI state, `useCookiesWithOptions()` for persistence
 - **Window Communication**: `useHandleWindowMessage()` for AngularJS iframe integration
 - **Client-Side Rendering**: `useIsClient()` for SSR compatibility, `useMatchBreakpoint()` for responsive behavior
