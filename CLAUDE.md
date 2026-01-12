@@ -16,7 +16,6 @@ yarn install
 
 # Development server (localhost:3000)
 yarn dev
-yarn dev:vagrant  # For Vagrant environments with custom CA certs
 
 # Production build
 yarn build
