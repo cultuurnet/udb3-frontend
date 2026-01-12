@@ -186,7 +186,7 @@ const hasOnlineLocation = (offer: Offer) => {
   if (isPlace(offer)) {
     return false;
   }
-  const { location, mainLanguage } = offer;
+  const { location } = offer;
 
   const locationId = parseOfferId(location['@id']);
 
