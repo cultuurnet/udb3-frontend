@@ -17,6 +17,7 @@ import { PaginatedData } from '@/types/PaginatedData';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
+import { Verenigingsloket } from '../../types/Verenigingsloket';
 import type { Headers } from './types/Headers';
 import type { User } from './user';
 
@@ -147,6 +148,82 @@ export const prefetchGetOrganizerByIdQuery = ({
     req,
     queryClient,
     ...createGetOrganizerByIdQueryOptions({ id }),
+  });
+
+type GetVerenigingsloketByIdArguments = {
+  headers: Headers;
+  id: string;
+};
+
+const getVerenigingsloketByOrganizerId = async ({
+  headers,
+  id,
+}: GetVerenigingsloketByIdArguments) => {
+  const res = await fetchFromApi({
+    path: `/organizers/${id.toString()}/verenigingsloket`,
+    options: {
+      headers,
+    },
+  });
+  return (await res.json()) as Verenigingsloket;
+};
+
+const createGetVerenigingsloketByOrganizerIdQueryOptions = ({
+  id,
+}: {
+  id: string;
+}) =>
+  queryOptions({
+    queryKey: ['organizers-verenigingsloket', id],
+    queryFn: getVerenigingsloketByOrganizerId,
+    queryArguments: { id },
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+
+const useGetVerenigingsloketByOrganizerIdQuery = (
+  { id }: { id: string },
+  configuration: ExtendQueryOptions<
+    typeof getVerenigingsloketByOrganizerId
+  > = {},
+) => {
+  const options = createGetVerenigingsloketByOrganizerIdQueryOptions({ id });
+  return useAuthenticatedQuery({
+    ...options,
+    ...configuration,
+    enabled: options.enabled !== false && configuration.enabled !== false,
+  });
+};
+
+const deleteVerenigingsloketByOrganizerId = async ({
+  headers,
+  id,
+}: {
+  headers: Headers;
+  id: string;
+}) =>
+  fetchFromApi({
+    path: `/organizers/${id}/verenigingsloket`,
+    options: { headers, method: 'DELETE' },
+  });
+
+const useDeleteVerenigingsloketByOrganizerIdMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteVerenigingsloketByOrganizerId,
+    mutationKey: 'organizers-verenigingsloket-delete-by-id',
+    ...configuration,
+  });
+
+export const prefetchGetVerenigingsloketByOrganizerIdQuery = ({
+  req,
+  queryClient,
+  id,
+}: ServerSideQueryOptions & { id: string }) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    ...createGetVerenigingsloketByOrganizerIdQueryOptions({ id }),
+    staleTime: 0, // Always fetch fresh data on server-side
   });
 
 type GetOrganizersByCreator = { headers: Headers } & {
@@ -540,12 +617,14 @@ export {
   useCreateOrganizerMutation,
   useDeleteOrganizerByIdMutation,
   useDeleteOrganizerEducationalDescriptionMutation,
+  useDeleteVerenigingsloketByOrganizerIdMutation,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
   useGetOrganizersByCreatorQuery,
   useGetOrganizersByQueryQuery,
   useGetOrganizersByWebsiteQuery,
   useGetSuggestedOrganizersQuery,
+  useGetVerenigingsloketByOrganizerIdQuery,
   useUpdateOrganizerEducationalDescriptionMutation,
   useUpdateOrganizerMutation,
 };

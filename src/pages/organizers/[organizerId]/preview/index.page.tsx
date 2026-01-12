@@ -8,8 +8,10 @@ import {
   GetOrganizerPermissionsResponse,
   prefetchGetOrganizerByIdQuery,
   prefetchGetOrganizerPermissionsQuery,
+  prefetchGetVerenigingsloketByOrganizerIdQuery,
   useGetOrganizerByIdQuery,
   useGetOrganizerPermissionsQuery,
+  useGetVerenigingsloketByOrganizerIdQuery,
 } from '@/hooks/api/organizers';
 import {
   OwnershipRequest,
@@ -31,6 +33,7 @@ import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
+import { Verenigingsloket } from '../../../../types/Verenigingsloket';
 import { OrganizerTable } from './OrganizerTable';
 
 const OrganizersPreview = () => {
@@ -49,6 +52,14 @@ const OrganizersPreview = () => {
   const getOrganizerPermissionsQuery = useGetOrganizerPermissionsQuery({
     organizerId: organizerId,
   }) as UseQueryResult<GetOrganizerPermissionsResponse, FetchError>;
+
+  const getVereningingsloketQuery = useGetVerenigingsloketByOrganizerIdQuery({
+    id: organizerId,
+  });
+
+  const verenigingsloket = getVereningingsloketQuery?.data as
+    | Verenigingsloket
+    | undefined;
 
   const organizerPermissions =
     getOrganizerPermissionsQuery?.data?.permissions ?? [];
@@ -105,7 +116,11 @@ const OrganizersPreview = () => {
             )}
             <Inline spacing={5}>
               <Stack flex={3}>
-                <OrganizerTable organizer={organizer} />
+                <OrganizerTable
+                  organizer={organizer}
+                  verenigingsloket={verenigingsloket}
+                  isOwner={canEdit}
+                />
               </Stack>
               <Stack spacing={3.5} flex={1}>
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
@@ -184,6 +199,11 @@ export const getServerSideProps = getApplicationServerSideProps(
           req,
           queryClient,
           organizerId: query.organizerId,
+        }),
+        prefetchGetVerenigingsloketByOrganizerIdQuery({
+          req,
+          queryClient,
+          id: query.organizerId,
         }),
       ]);
     } catch (error) {

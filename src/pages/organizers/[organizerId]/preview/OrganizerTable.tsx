@@ -1,13 +1,19 @@
-import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
 import { ScopeTypes } from '@/constants/OfferType';
+import { useDeleteVerenigingsloketByOrganizerIdMutation } from '@/hooks/api/organizers';
 import { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { Organizer } from '@/types/Organizer';
+import { Button, ButtonVariants } from '@/ui/Button';
+import { Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
@@ -18,7 +24,13 @@ import {
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-type Props = { organizer: Organizer };
+import type { Verenigingsloket } from '../../../../types/Verenigingsloket';
+
+type Props = {
+  organizer: Organizer;
+  isOwner: boolean;
+  verenigingsloket?: Verenigingsloket;
+};
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -187,8 +199,133 @@ const OrganizerLabels = ({
   );
 };
 
-export const OrganizerTable = ({ organizer }: Props) => {
+type VerenigingsloketProps = {
+  isOwner: boolean;
+  organizerId: string;
+  organizerName: string;
+} & Verenigingsloket;
+
+const VerenigingsloketPreview = ({
+  status,
+  url,
+  isOwner,
+  organizerId,
+  organizerName,
+}: VerenigingsloketProps) => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const deleteVerenigingsloketMutation =
+    useDeleteVerenigingsloketByOrganizerIdMutation({
+      onSuccess: () => {
+        setIsDeleteModalVisible(false);
+        queryClient.invalidateQueries({
+          queryKey: ['organizers-verenigingsloket', organizerId],
+        });
+      },
+      onError: () => {
+        setIsDeleteModalVisible(false);
+      },
+    });
+
+  const previewUrl = url.replace('https://www.', '');
+
+  const helpdeskUrl =
+    'https://helpdesk.publiq.be/hc/nl/articles/31862043316114-Waarom-zie-ik-een-link-met-het-Verenigingsloket-op-mijn-organisatiepagina';
+
+  const handleDelete = async () => {
+    await deleteVerenigingsloketMutation.mutateAsync({
+      id: organizerId,
+    });
+  };
+
+  return (
+    <Inline
+      padding={3}
+      css={`
+        border-top: 1px solid ${grey2};
+      `}
+    >
+      <Modal
+        title={t('organizers.detail.verenigingsloket.delete_modal.title')}
+        confirmTitle={t(
+          'organizers.detail.verenigingsloket.delete_modal.actions.confirm',
+        )}
+        cancelTitle={t(
+          'organizers.detail.verenigingsloket.delete_modal.actions.cancel',
+        )}
+        visible={isDeleteModalVisible}
+        variant={ModalVariants.QUESTION}
+        onConfirm={handleDelete}
+        onClose={() => setIsDeleteModalVisible(false)}
+        size={ModalSizes.MD}
+        confirmButtonVariant={ButtonVariants.DANGER}
+      >
+        <Stack padding={4} spacing={4}>
+          <Text>
+            <Trans
+              i18nKey="organizers.detail.verenigingsloket.delete_modal.intro"
+              values={{ organizerName }}
+            >
+              <span style={{ fontWeight: 'bold' }}>{organizerName}</span>
+            </Trans>
+          </Text>
+          <Text fontWeight="bold">
+            {t('organizers.detail.verenigingsloket.delete_modal.text')}
+          </Text>
+        </Stack>
+      </Modal>
+      <Text minWidth="15rem" color={udbMainDarkGrey}>
+        {t('organizers.detail.verenigingsloket.title')}
+      </Text>
+      <Stack spacing={3}>
+        {status === 'confirmed' && <Link href={url}>{previewUrl}</Link>}
+        {isOwner && (
+          <Text variant="muted">
+            {status === 'confirmed' && (
+              <Trans i18nKey="organizers.detail.verenigingsloket.description_owner">
+                <Link href={helpdeskUrl}></Link>
+              </Trans>
+            )}
+            {status === 'cancelled' && (
+              <Trans i18nKey="organizers.detail.verenigingsloket.description_add_new">
+                <Link href="https://www.verenigingsloket.be/nl">
+                  https://www.verenigingsloket.be/nl
+                </Link>
+              </Trans>
+            )}
+          </Text>
+        )}
+        {!isOwner && (
+          <Text variant="muted">
+            {t('organizers.detail.verenigingsloket.description')}
+          </Text>
+        )}
+        {isOwner && status === 'confirmed' && (
+          <Inline>
+            <Button
+              iconName={Icons.TRASH}
+              spacing={3}
+              variant={ButtonVariants.DANGER}
+              size="sm"
+              onClick={() => setIsDeleteModalVisible(true)}
+            >
+              {t('organizers.detail.verenigingsloket.delete_cta')}
+            </Button>
+          </Inline>
+        )}
+      </Stack>
+    </Inline>
+  );
+};
+
+export const OrganizerTable = ({
+  organizer,
+  verenigingsloket,
+  isOwner,
+}: Props) => {
   const { i18n } = useTranslation();
+  const organizerId = parseOfferId(organizer?.['@id']);
 
   const formattedName: string = getLanguageObjectOrFallback(
     organizer?.name,
@@ -272,6 +409,16 @@ export const OrganizerTable = ({ organizer }: Props) => {
         organizer={organizer}
         images={organizer?.images}
       />
+      {verenigingsloket?.vcode && (
+        <VerenigingsloketPreview
+          vcode={verenigingsloket.vcode}
+          status={verenigingsloket.status}
+          url={verenigingsloket.url}
+          isOwner={isOwner}
+          organizerId={organizerId}
+          organizerName={formattedName}
+        />
+      )}
     </Stack>
   );
 };
