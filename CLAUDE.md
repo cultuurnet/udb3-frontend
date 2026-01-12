@@ -43,7 +43,7 @@ yarn storybook:build
 
 - Copy `.env.example` to `.env.local` and fill in required values
 - For Docker environments, see sample config in [appconfig repo](https://github.com/cultuurnet/appconfig/blob/main/files/uitdatabank/docker/udb3-frontend/env)
-- Node version: >= 22 (see `engines` in package.json)
+- Node version defined in .nvmrc
 
 ## Architecture Patterns
 
