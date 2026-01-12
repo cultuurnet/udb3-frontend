@@ -14,6 +14,7 @@ import { isPlace } from '@/types/Place';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
+import { List as UiList } from '@/ui/List';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
@@ -146,6 +147,8 @@ const Preview = () => {
   };
 
   const BookingPreview = () => {
+    // TODO shouldn't we check this at a higher level.
+    // Do we reuse this table between Events and Places?
     if (isPlace(offer)) return null;
 
     return (
@@ -242,15 +245,15 @@ const Preview = () => {
       return <EmptyValue>{t('preview.empty_value.videos')}</EmptyValue>;
 
     return (
-      <ul>
+      <UiList>
         {offer.videos?.map((video) => (
-          <li key={video['@id']}>
+          <UiList.Item key={video['@id']}>
             <Link href={video.url} target="_blank">
               {video.url}
             </Link>
-          </li>
+          </UiList.Item>
         ))}
-      </ul>
+      </UiList>
     );
   };
 
