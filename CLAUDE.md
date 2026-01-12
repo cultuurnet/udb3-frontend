@@ -41,7 +41,7 @@ yarn storybook:build
 ## Environment Setup
 
 - Copy `.env.example` to `.env.local` and fill in required values
-- For Docker environments, see sample config in [appconfig repo](https://github.com/cultuurnet/appconfig/blob/main/files/uitdatabank/docker/udb3-frontend/env)
+- See sample config in [appconfig repo](https://github.com/cultuurnet/appconfig/blob/main/files/uitdatabank/docker/udb3-frontend/env)
 - Node version defined in .nvmrc
 
 ## Architecture Patterns
@@ -436,7 +436,7 @@ src/
 
 ## Key Integration Points
 
-- **Authentication**:  JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware
+- **Authentication**: Auth0 with JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware
 - **State Management**: React Query for server state, custom hooks for UI state, `useCookiesWithOptions()` for persistence
 - **Window Communication**: `useHandleWindowMessage()` for AngularJS iframe integration
 - **Client-Side Rendering**: `useIsClient()` for SSR compatibility, `useMatchBreakpoint()` for responsive behavior
