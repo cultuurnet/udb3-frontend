@@ -36,6 +36,7 @@ const Preview = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const { eventId } = router.query;
+  const getLinkThemeValue = getValueFromTheme('link');
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
@@ -56,8 +57,6 @@ const Preview = () => {
   });
 
   const offer = getOfferByIdQuery.data;
-
-  console.log({ offer });
 
   const calendarSummary = getCalendarSummaryQuery.data;
 
@@ -274,7 +273,29 @@ const Preview = () => {
       field: t('preview.labels.description'),
       // TODO sanitize html with dompurify which tags are allowed?
       value: description ? (
-        <Text dangerouslySetInnerHTML={{ __html: description }} />
+        <Text
+          css={`
+            p {
+              margin: 7.5px 0;
+            }
+            a {
+              color: ${getLinkThemeValue('color')};
+              text-decoration: underline;
+              &:hover {
+                color: ${getLinkThemeValue('hoverColor')};
+              }
+            }
+            ul {
+              list-style-type: disc;
+              margin: 7.5px 0 7.5px 20px;
+            }
+            ol {
+              list-style-type: decimal;
+              margin: 7.5px 0 7.5px 20px;
+            }
+          `}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
       ) : (
         <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
       ),
@@ -291,7 +312,18 @@ const Preview = () => {
           },
         ]
       : []),
-    { field: t('preview.labels.calendar'), value: calendarSummary },
+    {
+      field: t('preview.labels.calendar'),
+      value: (
+        <Text
+          css={`
+            white-space: pre-wrap;
+          `}
+        >
+          {calendarSummary}
+        </Text>
+      ),
+    },
     { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
     { field: t('preview.labels.price'), value: <PriceInfo /> },
     { field: t('preview.labels.booking'), value: <BookingPreview /> },
