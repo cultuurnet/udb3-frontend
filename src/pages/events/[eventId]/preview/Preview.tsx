@@ -164,6 +164,7 @@ const Preview = () => {
 
     // TODO check the 'Online vanaf status' in detail
     // Need to fill in the date?
+    // @see src/pages/dashboard/index.page.tsx: rowStatus
     return <Text>{t(`workflowStatus.${workflowStatus}`)}</Text>;
   };
 
