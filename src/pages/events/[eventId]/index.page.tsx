@@ -6,7 +6,7 @@ import { prefetchGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n from '@/i18n/index';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { Preview } from './Preview';
+import { Preview } from './preview/Preview';
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ cookies, query, req, queryClient }) => {
