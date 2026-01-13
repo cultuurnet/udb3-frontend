@@ -245,9 +245,20 @@ const Preview = () => {
       return <EmptyValue>{t('preview.empty_value.videos')}</EmptyValue>;
 
     return (
-      <UiList>
+      <UiList
+        css={`
+          display: block;
+        `}
+      >
         {offer.videos?.map((video) => (
-          <UiList.Item key={video['@id']}>
+          <UiList.Item
+            key={video['@id']}
+            css={`
+              display: list-item;
+              list-style-type: disc;
+              margin-left: 20px;
+            `}
+          >
             <Link href={video.url} target="_blank">
               {video.url}
             </Link>
