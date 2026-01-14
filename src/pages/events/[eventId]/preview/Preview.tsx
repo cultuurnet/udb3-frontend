@@ -118,11 +118,11 @@ const Preview = () => {
     return (
       <table
         css={`
-          background-color: #f0f0f0;
+          background-color: ${colors.grey1};
           width: 100%;
 
           td {
-            border: 1px solid #ddd;
+            border: 1px solid ${colors.grey3};
             padding: 8px;
           }
         `}
@@ -218,7 +218,7 @@ const Preview = () => {
             {index === 0 && (
               <Text
                 backgroundColor={udbMainDarkGrey}
-                color="white"
+                color={colors.white}
                 alignSelf="flex-start"
                 borderRadius="3px"
                 paddingRight={3}
