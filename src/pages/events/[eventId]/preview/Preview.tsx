@@ -1,3 +1,4 @@
+import DOMPurify from 'isomorphic-dompurify';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -283,7 +284,6 @@ const Preview = () => {
     },
     {
       field: t('preview.labels.description'),
-      // TODO sanitize html with dompurify which tags are allowed?
       value: description ? (
         <Text
           css={`
@@ -306,7 +306,21 @@ const Preview = () => {
               margin: 7.5px 0 7.5px 20px;
             }
           `}
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(description, {
+              ALLOWED_TAGS: [
+                'ul',
+                'ol',
+                'li',
+                'span',
+                'p',
+                'em',
+                'strong',
+                'a',
+              ],
+              ALLOWED_ATTR: ['style', 'href'],
+            }),
+          }}
         />
       ) : (
         <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
