@@ -320,12 +320,12 @@
         }
       },
       "labels": {
-        "title": "Libellés",
-        "label": "Affiner avec des libellés",
-        "info": "Avec les libellés, ajoutez des mots-clés courts et spécifiques",
-        "add_new_label": "Aucun libellé trouvée ? Ajouter un nouveau libellé : ",
-        "error": "Pas une libellé valide",
-        "tips": "Ce label ne semble pas valable. Un label<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
+        "title": "Étiquettes",
+        "label": "Affiner avec des étiquettes",
+        "info": "Avec les étiquettes, ajoutez des mots-clés courts et spécifiques",
+        "add_new_label": "Aucune étiquette trouvée ? Ajouter une nouvelle étiquette : ",
+        "error": "Pas une étiquette valide",
+        "tips": "Cette étiquette ne semble pas valable. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
       },
       "description": {
         "clear": "Vider",
@@ -1000,7 +1000,7 @@
       "no_address": "Aucune adresse",
       "contact": "Contact",
       "no_contact": "Aucune information de contact",
-      "labels": "Labels",
+      "labels": "Étiquettes",
       "images": "Images",
       "no_images": "Aucune image",
       "mainImage": "Image principale",
@@ -1403,7 +1403,7 @@
     "ORGANISATIES_BEWERKEN": "Modifier les organisations",
     "ORGANISATIES_BEHEREN": "Gérer les organisations",
     "GEBRUIKERS_BEHEREN": "Gérer les utilisateurs",
-    "LABELS_BEHEREN": "Gérer les labels",
+    "LABELS_BEHEREN": "Gérer les étiquettes",
     "VOORZIENINGEN_BEWERKEN": "Modifier les infrastructures",
     "PRODUCTIES_AANMAKEN": "Créer des productions",
     "FILMS_AANMAKEN": "Créer des films",
