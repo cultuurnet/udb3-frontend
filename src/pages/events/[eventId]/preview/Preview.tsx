@@ -227,7 +227,7 @@ const Preview = () => {
                 fontSize="0.8rem"
                 fontWeight="bold"
               >
-                Hoofdafbeelding
+                {t('preview.main_image')}
               </Text>
             )}
             <Text>{media.description}</Text>
