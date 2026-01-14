@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 const dummyEvent = {
   name: 'E2E test event with calendarType multiple',
@@ -62,6 +62,62 @@ test('create an event with calendarType multiple', async ({
   await page.getByRole('button', { name: 'Jongeren' }).click();
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
-  // Publish
+  // 6. Publish
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+
+  // 7. Validate created event details
+  await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
+  const url = page.url();
+  const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1];
+  // Navigate to a different path using the captured UUID
+  await page.goto(`/events/${eventId}`);
+  await page.waitForLoadState('networkidle');
+
+  // Validate table first column values
+  const expectedLabels = [
+    'Titel',
+    'Type',
+    'Labels',
+    'Beschrijving',
+    'Waar',
+    'Wanneer',
+    'Organisatie',
+    'Prijsinfo',
+    'Tickets & plaatsen',
+    'Publicatie',
+    'Reservatie',
+    'Contactgegevens',
+    'Geschikt voor',
+    'Afbeeldingen',
+    "Video's",
+  ];
+
+  const firstColumnCells = await page
+    .locator('table.table > tbody > tr > td:first-child')
+    .allTextContents();
+
+  for (const label of expectedLabels) {
+    expect(firstColumnCells).toContain(label);
+  }
+
+  // Validate that some rows have "Geen" when empty
+  const tableRows = await page.locator('table.table > tbody > tr').count();
+
+  const rowsWithGeenValue = [3, 6, 7, 10, 11, 13, 14];
+
+  const secondColumnCells = await page
+    .locator('table.table > tbody > tr > td:nth-child(2)')
+    .allTextContents();
+
+  for (let i = 0; i < tableRows; i++) {
+    const secondColumnValue = await page
+      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`)
+      .textContent();
+
+    if (rowsWithGeenValue.includes(i)) {
+      expect(secondColumnValue).toContain('Geen');
+    } else {
+      expect(secondColumnValue?.trim()).not.toBe('');
+    }
+  }
 });
