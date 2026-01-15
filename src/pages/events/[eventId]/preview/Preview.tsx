@@ -1,4 +1,3 @@
-import DOMPurify from 'isomorphic-dompurify';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +26,7 @@ import { parseOfferId } from '@/utils/parseOfferId';
 
 import { BookingInfoPreview } from './BookingInfoPreview';
 import { ContactInfoPreview } from './ContactInfoPreview';
+import { DescriptionPreview } from './DescriptionPreview';
 import { LocationPreview } from './LocationPreview';
 
 const getGlobalValue = getValueFromTheme('global');
@@ -37,7 +37,6 @@ const Preview = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const { eventId } = router.query;
-  const getLinkThemeValue = getValueFromTheme('link');
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
@@ -285,43 +284,7 @@ const Preview = () => {
     {
       field: t('preview.labels.description'),
       value: description ? (
-        <Text
-          css={`
-            p {
-              margin: 7.5px 0;
-            }
-            a {
-              color: ${getLinkThemeValue('color')};
-              text-decoration: underline;
-              &:hover {
-                color: ${getLinkThemeValue('hoverColor')};
-              }
-            }
-            ul {
-              list-style-type: disc;
-              margin: 7.5px 0 7.5px 20px;
-            }
-            ol {
-              list-style-type: decimal;
-              margin: 7.5px 0 7.5px 20px;
-            }
-          `}
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(description, {
-              ALLOWED_TAGS: [
-                'ul',
-                'ol',
-                'li',
-                'span',
-                'p',
-                'em',
-                'strong',
-                'a',
-              ],
-              ALLOWED_ATTR: ['style', 'href'],
-            }),
-          }}
-        />
+        <DescriptionPreview description={description} />
       ) : (
         <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
       ),

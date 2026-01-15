@@ -20,6 +20,7 @@ import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints } from '@/ui/theme';
+import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
 
@@ -122,9 +123,13 @@ const DescriptionStep = ({
 
   useEffect(() => {
     const newDescription = entity?.description?.[i18n.language];
-    if (!newDescription) return;
+    const sanitizedDescription = sanitizeDom(
+      newDescription,
+      sanitizationPresets.EVENT_DESCRIPTION,
+    );
+    if (!sanitizedDescription) return;
 
-    const draftState = htmlToDraft(newDescription);
+    const draftState = htmlToDraft(sanitizedDescription);
     const contentState = ContentState.createFromBlockArray(
       draftState.contentBlocks,
       draftState.entityMap,
