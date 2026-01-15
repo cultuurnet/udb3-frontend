@@ -28,13 +28,15 @@ const DescriptionPreview = ({ description }: Props) => {
         strong {
           font-weight: bold;
         }
+        ul,
+        ol {
+          margin: 7.5px 0 7.5px 20px;
+        }
         ul {
           list-style-type: disc;
-          margin: 7.5px 0 7.5px 20px;
         }
         ol {
           list-style-type: decimal;
-          margin: 7.5px 0 7.5px 20px;
         }
       `}
       dangerouslySetInnerHTML={{
