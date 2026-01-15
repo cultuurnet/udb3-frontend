@@ -546,7 +546,7 @@ const Sidebar = () => {
       key="sidebar"
       forwardedAs="nav"
       height="100%"
-      overflow="scroll"
+      overflow="auto"
       width={{ default: '240px', s: '65px' }}
       backgroundColor={getValueForSidebar('backgroundColor')}
       color={getValueForSidebar('color')}
