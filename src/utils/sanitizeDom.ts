@@ -1,6 +1,8 @@
 import DOMPurify from 'isomorphic-dompurify';
 
-const sanitizationPresets = { EVENT_DESCRIPTION: 'eventDescription' };
+const sanitizationPresets = {
+  EVENT_DESCRIPTION: 'eventDescription',
+} as const;
 
 const sanitizationOptions = {
   [sanitizationPresets.EVENT_DESCRIPTION]: {
@@ -9,9 +11,12 @@ const sanitizationOptions = {
   },
 };
 
+type SanitizationPreset =
+  (typeof sanitizationPresets)[keyof typeof sanitizationPresets];
+
 const sanitizeDom = (
   html: string,
-  preset: string = sanitizationPresets.EVENT_DESCRIPTION,
+  preset: SanitizationPreset = sanitizationPresets.EVENT_DESCRIPTION,
 ): string => {
   return DOMPurify.sanitize(html, sanitizationOptions[preset]);
 };
