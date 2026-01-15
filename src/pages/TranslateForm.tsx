@@ -18,17 +18,24 @@ import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
+import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
 
+import {
+  DescriptionPreview,
+  dompurifySanitizeEventDescription,
+} from './events/[eventId]/preview/DescriptionPreview';
+
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
 
 const languageOptions = [...Object.values(SupportedLanguages), 'en'];
 const getGlobalValue = getValueFromTheme('global');
+const getTextValue = getValueFromTheme('text');
 
 const TranslateForm = () => {
   const { t } = useTranslation();
@@ -88,7 +95,9 @@ const TranslateForm = () => {
       const newEditorStates: Record<string, EditorState> = {};
 
       languageOptions.forEach((langValue) => {
-        const description = offer.description?.[langValue];
+        const description = dompurifySanitizeEventDescription(
+          offer.description?.[langValue],
+        );
 
         if (description) {
           const draftState = htmlToDraft(description);
@@ -316,21 +325,30 @@ const TranslateForm = () => {
                   </Text>
                   {originalLanguage === language &&
                   !isEditingOriginalDescription ? (
-                    <Inline>
-                      <Text variant="muted">
-                        {descriptionEditorStates[language]
-                          ? descriptionEditorStates[language]
-                              .getCurrentContent()
-                              .getPlainText()
-                          : ''}
-                      </Text>
+                    <Stack spacing={3}>
+                      <Panel padding={3} color={getTextValue('muted.color')}>
+                        <DescriptionPreview
+                          description={
+                            descriptionEditorStates[language]
+                              ? draftToHtml(
+                                  convertToRaw(
+                                    descriptionEditorStates[
+                                      language
+                                    ].getCurrentContent(),
+                                  ),
+                                )
+                              : ''
+                          }
+                        />
+                      </Panel>
+
                       <Button
                         variant={ButtonVariants.LINK}
                         onClick={toggleEditOriginalDescription}
                       >
                         {t('translate.change')}
                       </Button>
-                    </Inline>
+                    </Stack>
                   ) : (
                     <div id={`description-editor-container-${language}`}>
                       <FormElement

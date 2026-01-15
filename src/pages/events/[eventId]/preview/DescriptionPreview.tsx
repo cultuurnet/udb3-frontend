@@ -30,6 +30,12 @@ const DescriptionPreview = ({ description }: Props) => {
             color: ${getLinkThemeValue('hoverColor')};
           }
         }
+        em {
+          font-style: italic;
+        }
+        strong {
+          font-weight: bold;
+        }
         ul {
           list-style-type: disc;
           margin: 7.5px 0 7.5px 20px;
