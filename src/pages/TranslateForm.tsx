@@ -24,11 +24,9 @@ import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
+import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
-import {
-  DescriptionPreview,
-  dompurifySanitizeEventDescription,
-} from './events/[eventId]/preview/DescriptionPreview';
+import { DescriptionPreview } from './events/[eventId]/preview/DescriptionPreview';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
@@ -95,8 +93,9 @@ const TranslateForm = () => {
       const newEditorStates: Record<string, EditorState> = {};
 
       languageOptions.forEach((langValue) => {
-        const description = dompurifySanitizeEventDescription(
+        const description = sanitizeDom(
           offer.description?.[langValue],
+          sanitizationPresets.EVENT_DESCRIPTION,
         );
 
         if (description) {

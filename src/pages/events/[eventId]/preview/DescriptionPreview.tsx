@@ -1,17 +1,9 @@
-import DOMPurify from 'isomorphic-dompurify';
-
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
+import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 type Props = {
   description: string;
-};
-
-const dompurifySanitizeEventDescription = (html: string): string => {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['ul', 'ol', 'li', 'span', 'p', 'em', 'strong', 'a'],
-    ALLOWED_ATTR: ['style', 'href'],
-  });
 };
 
 const DescriptionPreview = ({ description }: Props) => {
@@ -46,10 +38,10 @@ const DescriptionPreview = ({ description }: Props) => {
         }
       `}
       dangerouslySetInnerHTML={{
-        __html: dompurifySanitizeEventDescription(description),
+        __html: sanitizeDom(description, sanitizationPresets.EVENT_DESCRIPTION),
       }}
     />
   );
 };
 
-export { DescriptionPreview, dompurifySanitizeEventDescription };
+export { DescriptionPreview };

@@ -9,7 +9,6 @@ import {
   useDeleteDescriptionMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
-import { dompurifySanitizeEventDescription } from '@/pages/events/[eventId]/preview/DescriptionPreview';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Organizer } from '@/types/Organizer';
@@ -21,6 +20,7 @@ import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints } from '@/ui/theme';
+import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
 
@@ -123,8 +123,10 @@ const DescriptionStep = ({
 
   useEffect(() => {
     const newDescription = entity?.description?.[i18n.language];
-    const sanitizedDescription =
-      dompurifySanitizeEventDescription(newDescription);
+    const sanitizedDescription = sanitizeDom(
+      newDescription,
+      sanitizationPresets.EVENT_DESCRIPTION,
+    );
     if (!sanitizedDescription) return;
 
     const draftState = htmlToDraft(sanitizedDescription);
