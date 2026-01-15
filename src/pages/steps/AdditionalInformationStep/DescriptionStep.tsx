@@ -9,6 +9,7 @@ import {
   useDeleteDescriptionMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { dompurifySanitizeEventDescription } from '@/pages/events/[eventId]/preview/DescriptionPreview';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Organizer } from '@/types/Organizer';
@@ -122,9 +123,11 @@ const DescriptionStep = ({
 
   useEffect(() => {
     const newDescription = entity?.description?.[i18n.language];
-    if (!newDescription) return;
+    const sanitizedDescription =
+      dompurifySanitizeEventDescription(newDescription);
+    if (!sanitizedDescription) return;
 
-    const draftState = htmlToDraft(newDescription);
+    const draftState = htmlToDraft(sanitizedDescription);
     const contentState = ContentState.createFromBlockArray(
       draftState.contentBlocks,
       draftState.entityMap,
