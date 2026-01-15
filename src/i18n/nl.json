@@ -1465,5 +1465,48 @@
     "PRODUCTIES_AANMAKEN": "Producties aanmaken",
     "FILMS_AANMAKEN": "Films aanmaken",
     "MEDIA_UPLOADEN": "Media uploaden"
+  },
+  "preview": {
+    "tabs": {
+      "details": "Gegevens",
+      "history": "Historiek",
+      "publication": "Publicatie"
+    },
+    "online_label": "Online",
+    "main_image": "Hoofdafbeelding",
+    "labels": {
+      "title": "Titel",
+      "type": "Type",
+      "labels": "Labels",
+      "description": "Beschrijving",
+      "location": "Waar",
+      "online_location": "Online deelname",
+      "calendar": "Wanneer",
+      "organizer": "Organisatie",
+      "price": "Prijsinfo",
+      "booking": "Tickets & plaatsen",
+      "publication": "Publicatie",
+      "booking_info": "Reservatie",
+      "contact": "Contactgegevens",
+      "age": "Geschikt voor",
+      "image": "Afbeeldingen",
+      "video": "Video's"
+    },
+    "empty_value": {
+      "description": "Geen beschrijving",
+      "organiser": "Geen organisatie-informatie",
+      "price": "Geen prijsinformatie",
+      "booking": "Geen reservatie-informatie",
+      "contact": "Geen contact-informatie",
+      "images": "Geen afbeeldingen",
+      "videos": "Geen video's"
+    }
+  },
+  "workflowStatus": {
+    "DRAFT": "Niet gepubliceerd",
+    "READY_FOR_VALIDATION": "Gepubliceerd",
+    "APPROVED": "Online vanaf",
+    "REJECTED": "Publicatie afgewezen",
+    "DELETED": "Verwijderd"
   }
 }

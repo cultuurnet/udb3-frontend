@@ -320,12 +320,12 @@
         }
       },
       "labels": {
-        "title": "Libellés",
-        "label": "Affiner avec des libellés",
-        "info": "Avec les libellés, ajoutez des mots-clés courts et spécifiques",
-        "add_new_label": "Aucun libellé trouvée ? Ajouter un nouveau libellé : ",
-        "error": "Pas une libellé valide",
-        "tips": "Ce label ne semble pas valable. Un label<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
+        "title": "Étiquettes",
+        "label": "Affiner avec des étiquettes",
+        "info": "Avec les étiquettes, ajoutez des mots-clés courts et spécifiques",
+        "add_new_label": "Aucune étiquette trouvée ? Ajouter une nouvelle étiquette : ",
+        "error": "Pas une étiquette valide",
+        "tips": "Cette étiquette ne semble pas valable. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
       },
       "description": {
         "clear": "Vider",
@@ -1000,7 +1000,7 @@
       "no_address": "Aucune adresse",
       "contact": "Contact",
       "no_contact": "Aucune information de contact",
-      "labels": "Labels",
+      "labels": "Étiquettes",
       "images": "Images",
       "no_images": "Aucune image",
       "mainImage": "Image principale",
@@ -1232,7 +1232,7 @@
         "body": "Êtes-vous sûr de vouloir supprimer le rôle '{{roleName}}' de cet utilisateur ?",
         "cancel": "Annuler",
         "confirm": "Supprimer",
-        "error": "Er ging iets fout bij het verwijderen van de rol voor deze gebruiker."
+        "error": "Une erreur s'est produite lors de la suppression du rôle pour cet utilisateur."
       },
       "success": {
         "role_added": "Rôle '{{roleName}}' ajouté avec succès à l'utilisateur.",
@@ -1403,10 +1403,53 @@
     "ORGANISATIES_BEWERKEN": "Modifier les organisations",
     "ORGANISATIES_BEHEREN": "Gérer les organisations",
     "GEBRUIKERS_BEHEREN": "Gérer les utilisateurs",
-    "LABELS_BEHEREN": "Gérer les labels",
+    "LABELS_BEHEREN": "Gérer les étiquettes",
     "VOORZIENINGEN_BEWERKEN": "Modifier les infrastructures",
     "PRODUCTIES_AANMAKEN": "Créer des productions",
     "FILMS_AANMAKEN": "Créer des films",
     "MEDIA_UPLOADEN": "Télécharger des médias"
+  },
+  "preview": {
+    "tabs": {
+      "details": "Données",
+      "history": "Historique",
+      "publication": "Publication"
+    },
+    "online_label": "En ligne",
+    "main_image": "Image principale",
+    "labels": {
+      "title": "Titre",
+      "type": "Type",
+      "labels": "Étiquettes",
+      "description": "Description",
+      "location": "Où",
+      "online_location": "Participation en ligne",
+      "calendar": "Quand",
+      "organizer": "Organisation",
+      "price": "Prix",
+      "booking": "Billets & places",
+      "publication": "État de publication",
+      "booking_info": "Réservation",
+      "contact": "Contact",
+      "age": "Adapté à",
+      "image": "Images",
+      "video": "Videos"
+    },
+    "empty_value": {
+      "description": "Aucune description",
+      "organiser": "Aucune information sur l'organisation",
+      "price": "Pas d'information du prix",
+      "booking": "Aucune information sur la réservation",
+      "contact": "Aucune information de contact",
+      "images": "Aucune image",
+      "videos": "Aucune vidéo"
+    }
+  },
+  "workflowStatus": {
+    "DRAFT": "Pas publié",
+    "READY_FOR_VALIDATION": "Prêt à être publié",
+    "APPROVED": "Publié le",
+    "REJECTED": "Publication rejetée",
+    "DELETED": "Supprimé"
   }
 }

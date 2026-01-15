@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { ONLINE_LOCATION_ID } from '@/constants/Location';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import {
@@ -70,8 +71,6 @@ type FormData = {
     audienceType: AudienceType;
   };
 };
-
-const ONLINE_LOCATION_ID = '00000000-0000-0000-0000-000000000000';
 
 const getTerms = (typeAndTheme: FormDataUnion['typeAndTheme']) => {
   const { type, theme } = typeAndTheme;

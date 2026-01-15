@@ -16,12 +16,18 @@ const AttendanceMode = {
   MIXED: 'mixed',
 } as const;
 
+const BookingAvailability = {
+  AVAILABLE: 'Available',
+  UNAVAILABLE: 'Unavailable',
+} as const;
+
 type Event = BaseOffer & {
   '@context': '/contexts/event';
   location: Place;
   onlineUrl?: string;
   production?: ProductionOnEvent;
   attendanceMode: Values<typeof AttendanceMode>;
+  bookingAvailability: { type: Values<typeof BookingAvailability> };
 };
 
 const isEvent = (value: unknown): value is Event => {
@@ -34,5 +40,5 @@ const areEvents = (value: unknown): value is Event[] => {
   return value.every(isEvent);
 };
 
-export { areEvents, AttendanceMode, isEvent };
+export { areEvents, AttendanceMode, BookingAvailability, isEvent };
 export type { Event, EventId };

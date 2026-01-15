@@ -208,4 +208,49 @@ test('create event with all possible fields filled in', async ({
 
   // 5. Publish
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+
+  // 6. Validate created event details
+  await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
+  const url = page.url();
+  const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1];
+  // Navigate to React path using the captured UUID
+  await page.goto(`/events/${eventId}`);
+  await page.waitForLoadState('networkidle');
+
+  // Validate table first column values
+  const expectedLabels = [
+    'Titel',
+    'Type',
+    'Labels',
+    'Beschrijving',
+    'Waar',
+    'Wanneer',
+    'Organisatie',
+    'Prijsinfo',
+    'Tickets & plaatsen',
+    'Publicatie',
+    'Reservatie',
+    'Contactgegevens',
+    'Geschikt voor',
+    'Afbeeldingen',
+    "Video's",
+  ];
+
+  const firstColumnCells = await page
+    .locator('table.table > tbody > tr > td:first-child')
+    .allTextContents();
+
+  for (const label of expectedLabels) {
+    expect(firstColumnCells).toContain(label);
+  }
+
+  // Validate that every row has a non-empty value in the second column
+  const tableRows = await page.locator('table.table > tbody > tr').count();
+  for (let i = 0; i < tableRows; i++) {
+    const secondColumnValue = await page
+      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`)
+      .textContent();
+
+    expect(secondColumnValue?.trim()).not.toBe('');
+  }
 });

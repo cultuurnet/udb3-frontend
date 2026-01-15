@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import sanitizeHtml from 'sanitize-html';
 
+import { ScopeTypes } from '@/constants/OfferType';
 import { useDeleteVerenigingsloketByOrganizerIdMutation } from '@/hooks/api/organizers';
 import { SupportedLanguage } from '@/i18n/index';
+import { LabelsForm } from '@/pages/LabelsForm';
 import { Organizer } from '@/types/Organizer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
@@ -23,7 +25,6 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import type { Verenigingsloket } from '../../../../types/Verenigingsloket';
-import { OrganizerLabelsForm } from './OrganizerLabels';
 
 type Props = {
   organizer: Organizer;
@@ -178,6 +179,7 @@ const OrganizerLabels = ({
   organizer: Organizer;
 }) => {
   const { t } = useTranslation();
+  const organizerId = parseOfferId(organizer['@id']);
   return (
     <Inline
       padding={3}
@@ -188,7 +190,11 @@ const OrganizerLabels = ({
       <Text minWidth="15rem" color={udbMainDarkGrey}>
         {t(title)}
       </Text>
-      <OrganizerLabelsForm organizer={organizer} />
+      <LabelsForm
+        scope={ScopeTypes.ORGANIZERS}
+        id={organizerId}
+        entity={organizer}
+      />
     </Inline>
   );
 };

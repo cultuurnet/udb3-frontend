@@ -14,6 +14,7 @@ const Table = ({
   tableHooks = [],
   tableOptions = {},
   onTableReady = null,
+  showHeader = true,
   ...props
 }) => {
   const tableInstance = useTable(
@@ -50,27 +51,28 @@ const Table = ({
       {...getBoxProps(props)}
     >
       <thead>
-        {headerGroups.map((headerGroup, indexHeaderGroup) => {
-          const { key, ...headerGroupProps } =
-            headerGroup.getHeaderGroupProps();
-          return (
-            <tr key={key || indexHeaderGroup} {...headerGroupProps}>
-              {headerGroup.headers.map((column, indexHeader) => {
-                const { key, ...headerProps } = column.getHeaderProps();
-                return (
-                  <Box
-                    as="th"
-                    key={key || indexHeader}
-                    {...headerProps}
-                    color={getValue('color')}
-                  >
-                    {column.render('Header')}
-                  </Box>
-                );
-              })}
-            </tr>
-          );
-        })}
+        {showHeader &&
+          headerGroups.map((headerGroup, indexHeaderGroup) => {
+            const { key, ...headerGroupProps } =
+              headerGroup.getHeaderGroupProps();
+            return (
+              <tr key={key || indexHeaderGroup} {...headerGroupProps}>
+                {headerGroup.headers.map((column, indexHeader) => {
+                  const { key, ...headerProps } = column.getHeaderProps();
+                  return (
+                    <Box
+                      as="th"
+                      key={key || indexHeader}
+                      {...headerProps}
+                      color={getValue('color')}
+                    >
+                      {column.render('Header')}
+                    </Box>
+                  );
+                })}
+              </tr>
+            );
+          })}
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row, indexRow) => {

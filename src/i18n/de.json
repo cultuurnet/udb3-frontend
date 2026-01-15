@@ -1409,5 +1409,48 @@
     "PRODUCTIES_AANMAKEN": "Produktionen erstellen",
     "FILMS_AANMAKEN": "Filme erstellen",
     "MEDIA_UPLOADEN": "Media hochladen"
+  },
+  "preview": {
+    "tabs": {
+      "details": "Angaben",
+      "history": "Verlauf",
+      "publication": "Veröffentlichung"
+    },
+    "online_label": "Online",
+    "main_image": "Hauptbild",
+    "labels": {
+      "title": "Titel",
+      "type": "Typ",
+      "labels": "Labels",
+      "description": "Beschreibung",
+      "location": "Wo",
+      "online_location": "Online-Teilnahme",
+      "calendar": "Wann",
+      "organizer": "Organisation",
+      "price": "Preis",
+      "booking": "Tickets & Plätze",
+      "publication": "Publikationsstatus",
+      "booking_info": "Reservierung",
+      "contact": "Kontakt",
+      "age": "Geeignet für",
+      "image": "Abbildungen",
+      "video": "Videos"
+    },
+    "empty_value": {
+      "description": "Keine Beschreibung",
+      "organiser": "Keine Organisationsinformationen",
+      "price": "Keine Preisinformation",
+      "booking": "Keine Reservierungsinformationen",
+      "contact": "Keine Kontaktinformationen",
+      "images": "Keine Abbildungen",
+      "videos": "Keine videos"
+    }
+  },
+  "workflowStatus": {
+    "DRAFT": "Nicht veröffentlicht",
+    "READY_FOR_VALIDATION": "Veröffentlicht",
+    "APPROVED": "Online ab",
+    "REJECTED": "Veröffentlichung abgelehnt",
+    "DELETED": "Gelöscht"
   }
 }
