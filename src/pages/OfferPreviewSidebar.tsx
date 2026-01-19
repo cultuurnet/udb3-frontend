@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { Offer } from '@/types/Offer';
+import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Stack } from '@/ui/Stack';
@@ -22,31 +23,31 @@ const OfferPreviewSidebar = ({ offer, onDelete }: Props) => {
       iconName: Icons.PENCIL,
       title: t('preview.actions.edit'),
       onClick: () => router.push(`/events/${offerId}/edit`),
-      disabled: false,
+      disabled: offer.workflowStatus === WorkflowStatus.DELETED,
     },
     {
       iconName: Icons.GLOBE,
       title: t('preview.actions.translate'),
       onClick: () => router.push(`/events/${offerId}/translate`),
-      disabled: false,
+      disabled: offer.workflowStatus === WorkflowStatus.DELETED,
     },
     {
       iconName: Icons.COPY,
       title: t('preview.actions.duplicate'),
       onClick: () => router.push(`/events/${offerId}/duplicate`),
-      disabled: false,
+      disabled: offer.workflowStatus === WorkflowStatus.DELETED,
     },
     {
       iconName: Icons.CALENDAR_CHECK,
       title: t('preview.actions.change_availability'),
       onClick: () => router.push(`/events/${offerId}/availability`),
-      disabled: false,
+      disabled: offer.workflowStatus === WorkflowStatus.DELETED,
     },
     {
       iconName: Icons.TRASH,
       title: t('preview.actions.delete'),
       onClick: () => onDelete(offer),
-      disabled: false,
+      disabled: offer.workflowStatus === WorkflowStatus.DELETED,
     },
   ];
 
