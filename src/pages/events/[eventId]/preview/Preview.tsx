@@ -8,6 +8,7 @@ import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
+import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isEvent } from '@/types/Event';
 import { hasOnlineLocation } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
@@ -44,6 +45,7 @@ const Preview = () => {
     }
     return 'details';
   });
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
     id: eventId as string,
@@ -371,6 +373,9 @@ const Preview = () => {
     return <Text>{t('preview.tabs.publication_content')}</Text>;
   };
 
+  const onDeleteClick = (offer: Offer) => {
+    setIsModalVisible(true);
+  };
   return (
     <Page>
       <Page.Title>{title}</Page.Title>
@@ -401,7 +406,7 @@ const Preview = () => {
             </Tabs>
           </Stack>
           <Stack spacing={3.5} flex={1}>
-            {/* <OfferPreviewSidebar offer={offer} /> */}
+            {<OfferPreviewSidebar offer={offer} onDelete={onDeleteClick} />}
           </Stack>
         </Inline>
       </Page.Content>
