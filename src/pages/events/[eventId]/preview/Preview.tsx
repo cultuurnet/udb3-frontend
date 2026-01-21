@@ -100,7 +100,19 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const tabOptions = ['details']; //['details', 'history', 'publication'];
+  const tabOptions = ['details'];
+  const isGodUser = userPermissions?.includes(
+    PermissionTypes.GEBRUIKERS_BEHEREN,
+  );
+  const canSeeHistory = userPermissions?.includes(
+    PermissionTypes.AANBOD_HISTORIEK,
+  );
+  /* TODO enable history tab when functionality is ready
+  if (canSeeHistory || isGodUser) {
+    tabOptions.push('history');
+  }
+  tabOptions.push('publication');
+  //*/
 
   const onTabChange = (key: string) => {
     setActiveTab(key);
@@ -263,6 +275,7 @@ const Preview = () => {
 
   const VideoPreview = () => {
     // TODO check with Sarah if we need real previews here?
+    // @see https://jira.publiq.be/browse/III-6951
     const hasVideos = (offer.videos ?? []).length > 0;
 
     if (!hasVideos)
