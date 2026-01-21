@@ -5,11 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
+  useGetEventPermissionsQuery,
 } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import { useGetPermissionsQuery } from '@/hooks/api/user';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
@@ -66,7 +69,18 @@ const Preview = () => {
     format: 'lg',
   });
 
+  const userPermissionsQuery = useGetPermissionsQuery();
+  const userPermissions = userPermissionsQuery?.data ?? [];
+
+  const eventpermissionQuery = useGetEventPermissionsQuery({
+    eventId: eventId,
+  });
+
   const offer = getOfferByIdQuery.data;
+
+  const eventPermissions: string[] =
+    (eventpermissionQuery?.data as { permissions?: string[] } | undefined)
+      ?.permissions ?? [];
 
   const calendarSummary = getCalendarSummaryQuery.data;
 
@@ -422,7 +436,14 @@ const Preview = () => {
             </Tabs>
           </Stack>
           <Stack spacing={3.5} flex={1}>
-            {<OfferPreviewSidebar offer={offer} onDelete={onDeleteClick} />}
+            {
+              <OfferPreviewSidebar
+                offer={offer}
+                onDelete={onDeleteClick}
+                userPermissions={userPermissions}
+                eventPermissions={eventPermissions}
+              />
+            }
           </Stack>
         </Inline>
         <Modal
