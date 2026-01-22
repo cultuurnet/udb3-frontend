@@ -212,7 +212,7 @@ const isDeletable = (offer: Offer): boolean => {
 
 const hasMovieLabel = (offer: Offer): boolean => {
   const FILMINVOER_LABEL = 'udb-filminvoer';
-  return offer.labels?.includes(FILMINVOER_LABEL) ?? false;
+  return offer.hiddenLabels?.includes(FILMINVOER_LABEL) ?? false;
 };
 
 export type {
