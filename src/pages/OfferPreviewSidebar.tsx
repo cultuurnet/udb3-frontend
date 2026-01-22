@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PermissionTypes } from '@/constants/PermissionTypes';
@@ -9,6 +10,7 @@ import {
   isExpired,
   Offer,
 } from '@/types/Offer';
+import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Stack } from '@/ui/Stack';
@@ -28,7 +30,7 @@ const OfferPreviewSidebar = ({
   userPermissions,
   eventPermissions,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const offerId = parseOfferId(offer['@id']);
   const router = useRouter();
 
@@ -64,7 +66,27 @@ const OfferPreviewSidebar = ({
 
   const canDuplicate = hasPermissions;
 
-  const actions = [];
+  // Check if the offer's main language differs from the current UI language
+  const shouldShowLanguageBadge = offer.mainLanguage !== i18n.language;
+
+  // Helper function to create language badge if needed
+  const getLanguageBadge = () => {
+    if (!shouldShowLanguageBadge) return undefined;
+
+    return (
+      <Badge variant={BadgeVariants.SECONDARY}>
+        {offer.mainLanguage}
+      </Badge>
+    );
+  };
+
+  const actions: Array<{
+    iconName: Icons;
+    title: string;
+    onClick: () => void;
+    disabled: boolean;
+    suffix?: ReactNode;
+  }> = [];
 
   if (canEdit) {
     actions.push({
@@ -72,6 +94,7 @@ const OfferPreviewSidebar = ({
       title: t('preview.actions.edit'),
       onClick: () => router.push(`/events/${offerId}/edit`),
       disabled: !isEditable(offer),
+      suffix: getLanguageBadge(),
     });
   }
 
@@ -81,6 +104,7 @@ const OfferPreviewSidebar = ({
       title: t('preview.actions.edit_as_movie'),
       onClick: () => router.push(`/events/${offerId}/edit-movie`),
       disabled: !isEditable(offer),
+      suffix: getLanguageBadge(),
     });
   }
 
@@ -131,7 +155,7 @@ const OfferPreviewSidebar = ({
 
   return (
     <Stack spacing={3.5} paddingX={4}>
-      {actions.map(({ iconName, title, onClick, disabled }) => (
+      {actions.map(({ iconName, title, onClick, disabled, suffix }) => (
         <Button
           key={title}
           variant={ButtonVariants.SECONDARY}
@@ -139,6 +163,7 @@ const OfferPreviewSidebar = ({
           disabled={disabled}
           iconName={iconName}
           spacing={3}
+          suffix={suffix}
         >
           {title}
         </Button>
