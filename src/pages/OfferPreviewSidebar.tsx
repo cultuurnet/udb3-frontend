@@ -10,6 +10,7 @@ import {
   isExpired,
   Offer,
 } from '@/types/Offer';
+import { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
@@ -66,22 +67,18 @@ const OfferPreviewSidebar = ({
 
   const canDuplicate = hasPermissions;
 
-  // Check if the offer's main language differs from the current UI language
   const shouldShowLanguageBadge = offer.mainLanguage !== i18n.language;
 
-  // Helper function to create language badge if needed
   const getLanguageBadge = () => {
     if (!shouldShowLanguageBadge) return undefined;
 
     return (
-      <Badge variant={BadgeVariants.SECONDARY}>
-        {offer.mainLanguage}
-      </Badge>
+      <Badge variant={BadgeVariants.SECONDARY}>{offer.mainLanguage}</Badge>
     );
   };
 
   const actions: Array<{
-    iconName: Icons;
+    iconName: Values<typeof Icons>;
     title: string;
     onClick: () => void;
     disabled: boolean;
