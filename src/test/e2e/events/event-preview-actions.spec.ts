@@ -129,4 +129,43 @@ test.describe('Event Preview Sidebar Actions', () => {
       .click();
     await page.waitForURL(`**/events/${eventId}/availability`);
   });
+
+  test('should only show duplicate button for expired event', async ({
+    page,
+    eventId,
+  }) => {
+    const editButton = page.getByRole('button', { name: 'Bewerken' });
+    await editButton.click();
+    await page.waitForURL(`**/events/${eventId}/edit`);
+
+    const pastDate = new Date(Date.now() - 86400000 * 30);
+    await page
+      .locator('#calendar-step-day-day-2date-period-picker-start')
+      .fill(pastDate.toLocaleDateString('nl-BE'));
+    await page
+      .locator('#calendar-step-day-day-2date-period-picker-end')
+      .fill(pastDate.toLocaleDateString('nl-BE'));
+
+    await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
+    await page.waitForLoadState('networkidle');
+
+    await page.goto(`/events/${eventId}`);
+    await page.waitForLoadState('networkidle');
+
+    await expect(
+      page.getByRole('button', { name: 'Bewerken' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Vertalen' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Kopiëren en aanpassen' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Beschikbaarheid wijzigen' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Verwijderen' }),
+    ).not.toBeVisible();
+  });
 });
