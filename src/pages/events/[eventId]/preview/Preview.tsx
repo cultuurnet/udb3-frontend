@@ -62,12 +62,14 @@ const Preview = () => {
     id: eventId as string,
     scope: OfferTypes.EVENTS,
   });
+  const offer = getOfferByIdQuery.data;
 
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
     locale: i18n.language,
     format: 'lg',
   });
+  const calendarSummary = getCalendarSummaryQuery.data;
 
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
@@ -76,13 +78,9 @@ const Preview = () => {
     eventId: eventId,
   });
 
-  const offer = getOfferByIdQuery.data;
-
   const eventPermissions: string[] =
     (eventpermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
-
-  const calendarSummary = getCalendarSummaryQuery.data;
 
   const { mainLanguage, name, terms } = offer;
 
