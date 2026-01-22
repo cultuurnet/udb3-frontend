@@ -1447,8 +1447,10 @@
     },
     "actions": {
       "edit": "Bearbeiten",
+      "edit_as_movie": "Bearbeiten als Film",
       "translate": "Übersetzen",
-      "duplicate": "Kopieren und anpassen",
+      "duplicate": "Kopieren und bearbeiten",
+      "duplicate_as_movie": "Kopieren und bearbeiten als Film",
       "change_availability": "Verfügbarkeit ändern",
       "delete": "Löschen",
       "delete_modal": {

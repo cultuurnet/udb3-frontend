@@ -1446,8 +1446,10 @@
     },
     "actions": {
       "edit": "Modifier",
+      "edit_as_movie": "Modifier comme film",
       "translate": "Traduire",
       "duplicate": "Copier et modifier",
+      "duplicate_as_movie": "Copier et modifier comme film",
       "change_availability": "Modifier la disponibilité",
       "delete": "Supprimer",
       "delete_modal": {

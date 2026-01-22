@@ -78,7 +78,7 @@ const OfferPreviewSidebar = ({
   if (canModerate && canEditMovies) {
     actions.push({
       iconName: Icons.VIDEO,
-      title: t('preview.actions.edit_movie'),
+      title: t('preview.actions.edit_as_movie'),
       onClick: () => router.push(`/events/${offerId}/edit-movie`),
       disabled: !isEditable(offer),
     });

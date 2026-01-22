@@ -1503,8 +1503,10 @@
     },
     "actions": {
       "edit": "Bewerken",
+      "edit_as_movie": "Bewerken als film",
       "translate": "Vertalen",
       "duplicate": "Kopiëren en aanpassen",
+      "duplicate_as_movie": "Kopiëren en aanpassen als film",
       "change_availability": "Beschikbaarheid wijzigen",
       "delete": "Verwijderen",
       "delete_modal": {
