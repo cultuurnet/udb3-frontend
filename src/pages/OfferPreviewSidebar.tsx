@@ -6,6 +6,7 @@ import { OfferTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useDuplicateEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
+import { useConsoleDebugger } from '@/hooks/useConsoleDebugger';
 import {
   FILMINVOER_LABEL,
   hasMovieLabel,
@@ -40,6 +41,7 @@ const OfferPreviewSidebar = ({
   const router = useRouter();
   const duplicateEventMutation = useDuplicateEventMutation();
   const addLabelMutation = useAddOfferLabelMutation();
+  const { error: logError } = useConsoleDebugger();
 
   const handleDuplicateAsMovie = async () => {
     try {
@@ -57,7 +59,7 @@ const OfferPreviewSidebar = ({
 
       router.push(`/manage/movies/${result.eventId}/edit`);
     } catch (error) {
-      console.error('Failed to duplicate as movie:', error);
+      logError('Failed to duplicate as movie:', error);
     }
   };
 
