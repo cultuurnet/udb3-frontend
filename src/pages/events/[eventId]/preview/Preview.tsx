@@ -69,6 +69,7 @@ const Preview = () => {
   );
 
   const typeTerm = terms.find((term) => term.domain === 'eventtype');
+  const themeTerm = terms.find((term) => term.domain === 'theme');
 
   const description = getLanguageObjectOrFallback<string>(
     offer.description,
@@ -271,6 +272,14 @@ const Preview = () => {
   const tableData = [
     { field: t('preview.labels.title'), value: title },
     { field: t('preview.labels.type'), value: typeTerm.label },
+    {
+      field: t('preview.labels.theme'),
+      value: themeTerm ? (
+        themeTerm.label
+      ) : (
+        <EmptyValue>{t('preview.empty_value.theme')}</EmptyValue>
+      ),
+    },
     {
       field: t('preview.labels.labels'),
       value: (
