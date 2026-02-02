@@ -103,7 +103,7 @@ test('create an event with calendarType multiple', async ({
   // Validate that some rows have "Geen" when empty
   const tableRows = await page.locator('table.table > tbody > tr').count();
 
-  const rowsWithGeenValue = [3, 6, 7, 10, 11, 13, 14];
+  const rowsWithGeenValue = [2, 4, 7, 8, 11, 12, 14, 15];
 
   const secondColumnCells = await page
     .locator('table.table > tbody > tr > td:nth-child(2)')
