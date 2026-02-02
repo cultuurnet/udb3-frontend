@@ -154,14 +154,21 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/duplicate`);
   });
 
-  test('should navigate to duplicate-movie page when Duplicate as Movie button is clicked', async ({
+  test('should duplicate as movie and navigate to new event edit page with same title', async ({
     page,
     movieEventId,
   }) => {
     await page
       .getByRole('button', { name: 'Kopiëren en aanpassen als film' })
       .click();
-    await page.waitForURL(`**/events/${movieEventId}/duplicate-movie`);
+
+    await page.waitForURL(/\/manage\/movies\/[a-f0-9-]+\/edit/);
+
+    const newUrl = page.url();
+    const newEventId = newUrl.match(
+      /\/manage\/movies\/([a-f0-9-]+)\/edit/,
+    )?.[1];
+    expect(newEventId).not.toBe(movieEventId);
   });
 
   test('should navigate to availability page when Change Availability button is clicked', async ({
