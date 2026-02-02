@@ -133,7 +133,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     movieEventId,
   }) => {
     await page.getByRole('button', { name: 'Bewerken als film' }).click();
-    await page.waitForURL(`**/events/${movieEventId}/edit-movie`);
+    await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
   });
 
   test('should navigate to translate page when Translate button is clicked', async ({

@@ -210,8 +210,9 @@ const isDeletable = (offer: Offer): boolean => {
   return offer.workflowStatus !== 'DELETED';
 };
 
+const FILMINVOER_LABEL = 'udb-filminvoer';
+
 const hasMovieLabel = (offer: Offer): boolean => {
-  const FILMINVOER_LABEL = 'udb-filminvoer';
   return offer.hiddenLabels?.includes(FILMINVOER_LABEL) ?? false;
 };
 
@@ -231,6 +232,7 @@ export type {
 };
 
 export {
+  FILMINVOER_LABEL,
   hasMovieLabel,
   hasOnlineLocation,
   isDeletable,

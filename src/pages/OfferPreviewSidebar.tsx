@@ -2,8 +2,12 @@ import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OfferTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
+import { useDuplicateEventMutation } from '@/hooks/api/events';
+import { useAddOfferLabelMutation } from '@/hooks/api/offers';
 import {
+  FILMINVOER_LABEL,
   hasMovieLabel,
   isDeletable,
   isEditable,
@@ -34,6 +38,28 @@ const OfferPreviewSidebar = ({
   const { t, i18n } = useTranslation();
   const offerId = parseOfferId(offer['@id']);
   const router = useRouter();
+  const duplicateEventMutation = useDuplicateEventMutation();
+  const addLabelMutation = useAddOfferLabelMutation();
+
+  const handleDuplicateAsMovie = async () => {
+    try {
+      const result = await duplicateEventMutation.mutateAsync({
+        eventId: offerId,
+        calendarType: offer.calendarType,
+        subEvent: offer.subEvent || [],
+      });
+
+      await addLabelMutation.mutateAsync({
+        id: result.eventId,
+        label: FILMINVOER_LABEL,
+        scope: OfferTypes.EVENTS,
+      });
+
+      router.push(`/manage/movies/${result.eventId}/edit`);
+    } catch (error) {
+      console.error('Failed to duplicate as movie:', error);
+    }
+  };
 
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
@@ -99,7 +125,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.VIDEO,
       title: t('preview.actions.edit_as_movie'),
-      onClick: () => router.push(`/events/${offerId}/edit-movie`),
+      onClick: () => router.push(`/manage/movies/${offerId}/edit`),
       disabled: !isEditable(offer),
       suffix: getLanguageBadge(),
     });
@@ -127,7 +153,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.VIDEO,
       title: t('preview.actions.duplicate_as_movie'),
-      onClick: () => router.push(`/events/${offerId}/duplicate-movie`),
+      onClick: handleDuplicateAsMovie,
       disabled: !isEditable(offer),
     });
   }
