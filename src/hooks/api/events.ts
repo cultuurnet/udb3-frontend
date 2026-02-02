@@ -825,6 +825,46 @@ const useDeleteOnlineUrlMutation = (configuration = {}) =>
     mutationKey: 'events-delete-online-url',
     ...configuration,
   });
+
+type DuplicateEventArguments = {
+  headers: Headers;
+  eventId: string;
+  calendarType: string;
+  subEvent: SubEvent[];
+};
+
+const duplicateEvent = async ({
+  headers,
+  eventId,
+  calendarType,
+  subEvent,
+}: DuplicateEventArguments) => {
+  const resetSubEvents = subEvent.map((event) => ({
+    ...event,
+    status: { type: 'Available' },
+    bookingAvailability: { type: 'Available' },
+  }));
+
+  return fetchFromApi({
+    path: `/events/${eventId}/copies/`,
+    options: {
+      headers,
+      method: 'POST',
+      body: JSON.stringify({
+        calendarType,
+        subEvent: resetSubEvents,
+      }),
+    },
+  });
+};
+
+const useDuplicateEventMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: duplicateEvent,
+    mutationKey: 'events-duplicate',
+    ...configuration,
+  });
+
 export {
   useAddEventMutation,
   useChangeAttendanceModeMutation,
@@ -838,6 +878,7 @@ export {
   useChangeStatusSubEventsMutation,
   useDeleteEventByIdMutation,
   useDeleteOnlineUrlMutation,
+  useDuplicateEventMutation,
   useGetCalendarSummaryQuery,
   useGetEventByIdQuery,
   useGetEventPermissionsQuery,
