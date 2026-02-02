@@ -188,6 +188,7 @@ export const prefetchGetOwnershipRequestsQuery = ({
     req,
     queryClient,
     ...createGetOwnershipRequestsQueryOptions(args),
+    staleTime: 0, // always fetch fresh data on server
   });
 
 type ApproveOwnershipArguments = { ownershipId: string };
