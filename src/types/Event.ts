@@ -1,3 +1,5 @@
+import { AudienceTypes } from '@/constants/AudienceType';
+
 import type { BaseOffer } from './Offer';
 import type { Place } from './Place';
 import { Values } from './Values';
@@ -40,5 +42,17 @@ const areEvents = (value: unknown): value is Event[] => {
   return value.every(isEvent);
 };
 
-export { areEvents, AttendanceMode, BookingAvailability, isEvent };
+const isCultuurkuur = (value: Event): boolean => {
+  return (
+    value.audience && value.audience.audienceType === AudienceTypes.EDUCATION
+  );
+};
+
+export {
+  areEvents,
+  AttendanceMode,
+  BookingAvailability,
+  isCultuurkuur,
+  isEvent,
+};
 export type { Event, EventId };
