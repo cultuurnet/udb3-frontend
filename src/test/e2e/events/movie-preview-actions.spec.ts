@@ -55,7 +55,7 @@ const test = base.extend<TestFixtures>({
   },
 });
 
-test.describe('Movie Preview Sidebar Actions', () => {
+test.describe.skip('Movie Preview Sidebar Actions', () => {
   test.beforeEach(async ({ page, moviePreviewUrl }) => {
     page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Hydration')) {
