@@ -16,7 +16,7 @@ import { useGetPermissionsQuery } from '@/hooks/api/user';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
-import { BookingAvailability, isEvent } from '@/types/Event';
+import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { Box } from '@/ui/Box';
@@ -148,6 +148,7 @@ const Preview = () => {
     if (!offer.priceInfo || offer.priceInfo.length === 0) {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
+    const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
     return (
       <table
@@ -171,7 +172,14 @@ const Preview = () => {
                   mainLanguage,
                 )}
               </td>
-              <td>{price.price.toString().replace('.', ',')} euro</td>
+              <td>
+                {price.price.toString().replace('.', ',')} euro
+                {isCultuurkuurEvent
+                  ? (price.groupPrice &&
+                      ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
+                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
+                  : ''}
+              </td>
             </tr>
           ))}
         </tbody>
