@@ -8,7 +8,7 @@ import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
-import { BookingAvailability, isEvent } from '@/types/Event';
+import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { Image } from '@/ui/Image';
@@ -114,6 +114,7 @@ const Preview = () => {
     if (!offer.priceInfo || offer.priceInfo.length === 0) {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
+    const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
     return (
       <table
@@ -137,7 +138,14 @@ const Preview = () => {
                   mainLanguage,
                 )}
               </td>
-              <td>{price.price.toString().replace('.', ',')} euro</td>
+              <td>
+                {price.price.toString().replace('.', ',')} euro
+                {isCultuurkuurEvent
+                  ? (price.groupPrice &&
+                      ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
+                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
+                  : ''}
+              </td>
             </tr>
           ))}
         </tbody>
