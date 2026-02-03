@@ -378,6 +378,9 @@ const Preview = () => {
         columns={columns}
         data={tableData}
         css={`
+          tbody tr td:nth-child(1) {
+            font-weight: 600;
+          }
           td strong,
           td b {
             font-weight: 700 !important;
