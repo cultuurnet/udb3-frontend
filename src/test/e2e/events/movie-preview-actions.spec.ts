@@ -56,7 +56,15 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Movie Preview Sidebar Actions', () => {
-  test.beforeEach(async ({ page, moviePreviewUrl }) => {
+  test.beforeEach(async ({ page, moviePreviewUrl, context }) => {
+    await context.addCookies([
+      {
+        name: 'ff_react_event_preview',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
     page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Hydration')) {
         return;

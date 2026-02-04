@@ -52,7 +52,15 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Event Preview Sidebar Actions', () => {
-  test.beforeEach(async ({ page, eventPreviewUrl }) => {
+  test.beforeEach(async ({ page, eventPreviewUrl, context }) => {
+    await context.addCookies([
+      {
+        name: 'ff_react_event_preview',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
     page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Hydration')) {
         return;
