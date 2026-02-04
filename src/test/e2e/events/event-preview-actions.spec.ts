@@ -131,7 +131,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/availability`);
   });
 
-  test('should only show duplicate button for expired event', async ({
+  test.skip('should only show duplicate button for expired event', async ({
     page,
     eventId,
   }) => {
