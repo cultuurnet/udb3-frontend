@@ -64,7 +64,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     });
 
     await page.goto(moviePreviewUrl);
-    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Bewerken', exact: true }).waitFor();
   });
 
   test('should display all movie action buttons and be enabled', async ({
@@ -181,7 +181,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/availability`);
   });
 
-  test.skip('should only show two duplicate buttons for expired movie event', async ({
+  test('should only show two duplicate buttons for expired movie event', async ({
     page,
     movieEventId,
   }) => {
@@ -201,10 +201,12 @@ test.describe('Movie Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(`**/events/${movieEventId}`);
 
     await page.goto(`/events/${movieEventId}`);
-    await page.waitForLoadState('networkidle');
+    await page
+      .getByRole('button', { name: 'Kopiëren en aanpassen', exact: true })
+      .waitFor();
 
     await expect(
       page.getByRole('button', { name: 'Bewerken', exact: true }),

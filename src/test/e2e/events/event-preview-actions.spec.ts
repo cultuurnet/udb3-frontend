@@ -60,7 +60,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     });
 
     await page.goto(eventPreviewUrl);
-    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Bewerken' }).waitFor();
   });
 
   test('should display all action buttons and be enabled', async ({ page }) => {
@@ -89,7 +89,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await expect(deleteButton).not.toBeDisabled();
   });
 
-  test.skip('should navigate to edit page when Edit button is clicked', async ({
+  test('should navigate to edit page when Edit button is clicked', async ({
     page,
     eventId,
   }) => {
@@ -97,7 +97,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/edit`);
   });
 
-  test.skip('should navigate to translate page when Translate button is clicked', async ({
+  test('should navigate to translate page when Translate button is clicked', async ({
     page,
     eventId,
   }) => {
@@ -123,7 +123,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/availability`);
   });
 
-  test.skip('should only show duplicate button for expired event', async ({
+  test('should only show duplicate button for expired event', async ({
     page,
     eventId,
   }) => {
@@ -140,10 +140,10 @@ test.describe('Event Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(`**/events/${eventId}`);
 
     await page.goto(`/events/${eventId}`);
-    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).waitFor();
 
     await expect(
       page.getByRole('button', { name: 'Bewerken' }),
