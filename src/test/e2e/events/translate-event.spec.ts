@@ -41,7 +41,7 @@ test.describe('Event translation', () => {
     await page.goto(`${baseURL}/dashboard`);
 
     // Select first link with /preview in href
-    const firstEventLink = page.locator('a[href*="/preview"]').first();
+    const firstEventLink = page.locator('a[href*="/preview"]').nth(2);
     await firstEventLink.click();
 
     await page.waitForLoadState('networkidle');
