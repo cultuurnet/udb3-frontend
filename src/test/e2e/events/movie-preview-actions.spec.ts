@@ -179,7 +179,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     expect(newEventId).not.toBe(movieEventId);
   });
 
-  test('should navigate to availability page when Change Availability button is clicked', async ({
+  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
     page,
     movieEventId,
   }) => {

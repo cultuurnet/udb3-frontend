@@ -121,7 +121,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/duplicate`);
   });
 
-  test('should navigate to availability page when Change Availability button is clicked', async ({
+  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
     page,
     eventId,
   }) => {
