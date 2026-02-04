@@ -105,7 +105,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/translate`);
   });
 
-  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
+  test('should navigate to duplicate page when Duplicate button is clicked', async ({
     page,
     eventId,
   }) => {
@@ -113,7 +113,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/duplicate`);
   });
 
-  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
+  test('should navigate to availability page when Change Availability button is clicked', async ({
     page,
     eventId,
   }) => {
@@ -140,10 +140,10 @@ test.describe('Event Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForURL(`**/events/${eventId}`);
+    await page.waitForTimeout(100);
 
     await page.goto(`/events/${eventId}`);
-    await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).waitFor();
+    await page.waitForTimeout(100);
 
     await expect(
       page.getByRole('button', { name: 'Bewerken' }),

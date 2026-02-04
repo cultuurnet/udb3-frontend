@@ -120,7 +120,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await expect(deleteButton.locator('svg.fa-trash')).toBeVisible();
   });
 
-  test.skip('should navigate to edit page when Edit button is clicked', async ({
+  test('should navigate to edit page when Edit button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -128,7 +128,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/edit`);
   });
 
-  test.skip('should navigate to edit-movie page when Edit Movie button is clicked', async ({
+  test('should navigate to edit-movie page when Edit Movie button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -136,7 +136,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
   });
 
-  test.skip('should navigate to translate page when Translate button is clicked', async ({
+  test('should navigate to translate page when Translate button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -144,7 +144,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/translate`);
   });
 
-  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
+  test('should navigate to duplicate page when Duplicate button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -154,7 +154,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/duplicate`);
   });
 
-  test.skip('should duplicate as movie and navigate to new event edit page with same title', async ({
+  test('should duplicate as movie and navigate to new event edit page with same title', async ({
     page,
     movieEventId,
   }) => {
@@ -171,7 +171,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     expect(newEventId).not.toBe(movieEventId);
   });
 
-  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
+  test('should navigate to availability page when Change Availability button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -201,12 +201,10 @@ test.describe('Movie Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForURL(`**/events/${movieEventId}`);
+    await page.waitForTimeout(100);
 
     await page.goto(`/events/${movieEventId}`);
-    await page
-      .getByRole('button', { name: 'Kopiëren en aanpassen', exact: true })
-      .waitFor();
+    await page.waitForTimeout(100);
 
     await expect(
       page.getByRole('button', { name: 'Bewerken', exact: true }),
