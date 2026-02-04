@@ -189,7 +189,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/availability`);
   });
 
-  test.skip('should only show two duplicate buttons for expired movie event', async ({
+  test('should only show two duplicate buttons for expired movie event', async ({
     page,
     movieEventId,
   }) => {
