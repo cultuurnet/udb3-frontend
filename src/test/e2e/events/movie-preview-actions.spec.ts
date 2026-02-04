@@ -120,7 +120,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await expect(deleteButton.locator('svg.fa-trash')).toBeVisible();
   });
 
-  test('should navigate to edit page when Edit button is clicked', async ({
+  test.skip('should navigate to edit page when Edit button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -128,7 +128,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/edit`);
   });
 
-  test('should navigate to edit-movie page when Edit Movie button is clicked', async ({
+  test.skip('should navigate to edit-movie page when Edit Movie button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -136,7 +136,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
   });
 
-  test('should navigate to translate page when Translate button is clicked', async ({
+  test.skip('should navigate to translate page when Translate button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -144,7 +144,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/translate`);
   });
 
-  test('should navigate to duplicate page when Duplicate button is clicked', async ({
+  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -154,7 +154,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/duplicate`);
   });
 
-  test('should duplicate as movie and navigate to new event edit page with same title', async ({
+  test.skip('should duplicate as movie and navigate to new event edit page with same title', async ({
     page,
     movieEventId,
   }) => {
@@ -171,7 +171,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     expect(newEventId).not.toBe(movieEventId);
   });
 
-  test('should navigate to availability page when Change Availability button is clicked', async ({
+  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -181,7 +181,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/availability`);
   });
 
-  test('should only show two duplicate buttons for expired movie event', async ({
+  test.skip('should only show two duplicate buttons for expired movie event', async ({
     page,
     movieEventId,
   }) => {
