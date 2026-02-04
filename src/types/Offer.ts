@@ -12,7 +12,7 @@ import { Event } from './Event';
 import type { Organizer } from './Organizer';
 import { isPlace, Place } from './Place';
 import type { Values } from './Values';
-import type { WorkflowStatus } from './WorkflowStatus';
+import { WorkflowStatus } from './WorkflowStatus';
 
 type DayOfWeek =
   | 'monday'
@@ -202,12 +202,13 @@ const isExpired = (offer: Offer): boolean => {
 
 const isEditable = (offer: Offer): boolean => {
   return (
-    offer.workflowStatus !== 'DELETED' && offer.workflowStatus !== 'REJECTED'
+    offer.workflowStatus !== WorkflowStatus.DELETED &&
+    offer.workflowStatus !== WorkflowStatus.REJECTED
   );
 };
 
 const isDeletable = (offer: Offer): boolean => {
-  return offer.workflowStatus !== 'DELETED';
+  return offer.workflowStatus !== WorkflowStatus.DELETED;
 };
 
 const FILMINVOER_LABEL = 'udb-filminvoer';
