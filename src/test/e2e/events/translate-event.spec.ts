@@ -40,8 +40,13 @@ test.describe('Event translation', () => {
 
     await page.goto(`${baseURL}/dashboard`);
 
+    // Sort events by availableTo descending to get an event that is likely not yet past.
+    const sorting_select = page.locator('select#sorting');
+    await sorting_select.selectOption('availableTo_desc');
+    await page.waitForLoadState('networkidle');
+
     // Select first link with /preview in href
-    const firstEventLink = page.locator('a[href*="/preview"]').nth(2);
+    const firstEventLink = page.locator('a[href*="/preview"]').first();
     await firstEventLink.click();
 
     await page.waitForLoadState('networkidle');
