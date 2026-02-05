@@ -130,6 +130,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await editButton.click();
     await page.waitForURL(`**/events/${eventId}/edit`);
 
+    // Edit the event to change the date to the past.
     const pastDate = new Date(Date.now() - 86400000 * 30);
     await page
       .locator('#calendar-step-day-day-2date-period-picker-start')
