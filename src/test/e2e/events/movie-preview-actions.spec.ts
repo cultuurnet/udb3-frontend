@@ -131,12 +131,33 @@ test.describe('Movie Preview Sidebar Actions', () => {
   test('should navigate to edit page when Edit button is clicked', async ({
     page,
     movieEventId,
+    moviePreviewUrl,
   }) => {
     await page.getByRole('button', { name: 'Bewerken', exact: true }).click();
     await page.waitForURL(`**/events/${movieEventId}/edit`);
+
+    await page.goto(moviePreviewUrl);
+    await page.getByRole('button', { name: 'Bewerken als film' }).click();
+    await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
+
+    await page.goto(moviePreviewUrl);
+    await page.getByRole('button', { name: 'Vertalen' }).click();
+    await page.waitForURL(`**/events/${movieEventId}/translate`);
+
+    await page.goto(moviePreviewUrl);
+    await page
+      .getByRole('button', { name: 'Kopiëren en aanpassen', exact: true })
+      .click();
+    await page.waitForURL(`**/events/${movieEventId}/duplicate`);
+
+    await page.goto(moviePreviewUrl);
+    await page
+      .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
+      .click();
+    await page.waitForURL(`**/events/${movieEventId}/availability`);
   });
 
-  test('should navigate to edit-movie page when Edit Movie button is clicked', async ({
+  test.skip('should navigate to edit-movie page when Edit Movie button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -144,7 +165,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
   });
 
-  test('should navigate to translate page when Translate button is clicked', async ({
+  test.skip('should navigate to translate page when Translate button is clicked', async ({
     page,
     movieEventId,
   }) => {
@@ -152,7 +173,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${movieEventId}/translate`);
   });
 
-  test('should navigate to duplicate page when Duplicate button is clicked', async ({
+  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
     page,
     movieEventId,
   }) => {

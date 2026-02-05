@@ -100,12 +100,27 @@ test.describe('Event Preview Sidebar Actions', () => {
   test('should navigate to edit page when Edit button is clicked', async ({
     page,
     eventId,
+    eventPreviewUrl,
   }) => {
     await page.getByRole('button', { name: 'Bewerken' }).click();
     await page.waitForURL(`**/events/${eventId}/edit`);
+
+    await page.goto(eventPreviewUrl);
+    await page.getByRole('button', { name: 'Vertalen' }).click();
+    await page.waitForURL(`**/events/${eventId}/translate`);
+
+    await page.goto(eventPreviewUrl);
+    await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).click();
+    await page.waitForURL(`**/events/${eventId}/duplicate`);
+
+    await page.goto(eventPreviewUrl);
+    await page
+      .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
+      .click();
+    await page.waitForURL(`**/events/${eventId}/availability`);
   });
 
-  test('should navigate to translate page when Translate button is clicked', async ({
+  test.skip('should navigate to translate page when Translate button is clicked', async ({
     page,
     eventId,
   }) => {
@@ -113,7 +128,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/translate`);
   });
 
-  test('should navigate to duplicate page when Duplicate button is clicked', async ({
+  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
     page,
     eventId,
   }) => {
