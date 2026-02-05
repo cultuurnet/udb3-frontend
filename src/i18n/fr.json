@@ -1417,6 +1417,7 @@
     },
     "online_label": "En ligne",
     "main_image": "Image principale",
+    "publication_alert": "Vos modifications ont été enregistrées et seront visibles <b>dans l'heure</b> sur {{siteName}}.",
     "labels": {
       "title": "Titre",
       "type": "Type",

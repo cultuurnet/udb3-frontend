@@ -1418,6 +1418,7 @@
     },
     "online_label": "Online",
     "main_image": "Hauptbild",
+    "publication_alert": "Ihre Änderungen wurden gespeichert und sind <b>innerhalb von 1 Stunde</b> auf {{siteName}} sichtbar.",
     "labels": {
       "title": "Titel",
       "type": "Typ",

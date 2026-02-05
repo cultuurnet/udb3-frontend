@@ -1474,6 +1474,7 @@
     },
     "online_label": "Online",
     "main_image": "Hoofdafbeelding",
+    "publication_alert": "Je aanpassingen zijn opgeslagen en zijn <b>binnen 1 uur</b> zichtbaar op {{siteName}}.",
     "labels": {
       "title": "Titel",
       "type": "Type",
