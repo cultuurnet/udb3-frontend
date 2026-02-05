@@ -77,6 +77,7 @@ test('create an event with calendarType multiple', async ({
   const expectedLabels = [
     'Titel',
     'Type',
+    'Thema',
     'Labels',
     'Beschrijving',
     'Waar',
@@ -103,18 +104,27 @@ test('create an event with calendarType multiple', async ({
   // Validate that some rows have "Geen" when empty
   const tableRows = await page.locator('table.table > tbody > tr').count();
 
-  const rowsWithGeenValue = [3, 6, 7, 10, 11, 13, 14];
-
-  const secondColumnCells = await page
-    .locator('table.table > tbody > tr > td:nth-child(2)')
-    .allTextContents();
+  const expectedEmptyFields = [
+    'Thema',
+    'Beschrijving',
+    'Organisatie',
+    'Prijsinfo',
+    'Reservatie',
+    'Contactgegevens',
+    'Afbeeldingen',
+    "Video's",
+  ];
 
   for (let i = 0; i < tableRows; i++) {
+    const firstColumnValue = await page
+      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(1)`)
+      .textContent();
+
     const secondColumnValue = await page
       .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`)
       .textContent();
 
-    if (rowsWithGeenValue.includes(i)) {
+    if (expectedEmptyFields.includes(firstColumnValue?.trim() ?? '')) {
       expect(secondColumnValue).toContain('Geen');
     } else {
       expect(secondColumnValue?.trim()).not.toBe('');
