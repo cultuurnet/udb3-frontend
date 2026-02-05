@@ -1,3 +1,5 @@
+import { isPast } from 'date-fns';
+
 import { AudienceType } from '@/constants/AudienceType';
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
@@ -196,7 +198,7 @@ const hasOnlineLocation = (offer: Offer) => {
 const isExpired = (offer: Offer): boolean => {
   return (
     offer.calendarType !== CalendarType.PERMANENT &&
-    new Date(offer.endDate) < new Date()
+    isPast(new Date(offer.endDate))
   );
 };
 
