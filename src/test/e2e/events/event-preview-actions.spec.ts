@@ -97,7 +97,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     await expect(deleteButton).not.toBeDisabled();
   });
 
-  test('should navigate to edit page when Edit button is clicked', async ({
+  test('should navigate to pages when buttons are clicked', async ({
     page,
     eventId,
     eventPreviewUrl,
@@ -114,32 +114,6 @@ test.describe('Event Preview Sidebar Actions', () => {
     await page.waitForURL(`**/events/${eventId}/duplicate`);
 
     await page.goto(eventPreviewUrl);
-    await page
-      .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
-      .click();
-    await page.waitForURL(`**/events/${eventId}/availability`);
-  });
-
-  test.skip('should navigate to translate page when Translate button is clicked', async ({
-    page,
-    eventId,
-  }) => {
-    await page.getByRole('button', { name: 'Vertalen' }).click();
-    await page.waitForURL(`**/events/${eventId}/translate`);
-  });
-
-  test.skip('should navigate to duplicate page when Duplicate button is clicked', async ({
-    page,
-    eventId,
-  }) => {
-    await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).click();
-    await page.waitForURL(`**/events/${eventId}/duplicate`);
-  });
-
-  test.skip('should navigate to availability page when Change Availability button is clicked', async ({
-    page,
-    eventId,
-  }) => {
     await page
       .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
       .click();
