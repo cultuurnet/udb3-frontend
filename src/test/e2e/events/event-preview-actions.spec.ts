@@ -7,6 +7,7 @@ type TestFixtures = {
 
 const test = base.extend<TestFixtures>({
   eventId: async ({ page, baseURL }, applyFixture) => {
+    // todo: remove when the styled components hydration errors are fixed.
     page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Hydration')) {
         return;
@@ -61,6 +62,7 @@ test.describe('Event Preview Sidebar Actions', () => {
         path: '/',
       },
     ]);
+    // todo: remove when the styled components hydration errors are fixed.
     page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Hydration')) {
         return;
