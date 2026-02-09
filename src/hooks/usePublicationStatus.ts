@@ -50,28 +50,12 @@ export const usePublicationStatus = (offer: Offer): OfferPublicationStatus => {
 
     const color = PublicationStatusToColor[publicationStatus];
 
-    let label: string;
-    if (publicationStatus === PublicationStatus.REJECTED) {
-      label = t('dashboard.row_status.rejected');
-    }
-
-    if (publicationStatus === PublicationStatus.PUBLISHED) {
-      label = t('dashboard.row_status.published');
-    }
-
-    if (publicationStatus === PublicationStatus.PLANNED) {
-      label = t('dashboard.row_status.published_from', {
-        date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
-      });
-    }
-
-    if (publicationStatus === PublicationStatus.DELETED) {
-      label = t('dashboard.row_status.deleted');
-    }
-
-    if (!label) {
-      label = t('dashboard.row_status.draft');
-    }
+    const label =
+      publicationStatus === PublicationStatus.PLANNED
+        ? t(`dashboard.row_status.${publicationStatus}`, {
+            date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
+          })
+        : t(`dashboard.row_status.${publicationStatus}`);
 
     const userId = user?.sub;
     const userIdv1 = user?.['https://publiq.be/uitidv1id'];

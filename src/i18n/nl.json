@@ -607,10 +607,12 @@
       "places": "Geen locaties gevonden"
     },
     "row_status": {
-      "draft": "Kladversie",
-      "rejected": "Publicatie afgewezen",
-      "published": "Gepubliceerd",
-      "published_from": "Publicatie vanaf {{date}}"
+      "PLANNED": "Publicatie vanaf {{date}}",
+      "PUBLISHED": "Gepubliceerd",
+      "DRAFT": "Kladversie",
+      "APPROVED": "Gepubliceerd",
+      "REJECTED": "Publicatie afgewezen",
+      "DELETED": "Verwijderd"
     },
     "external_creator": "Aangemaakt via een externe applicatie",
     "not_published": "Niet gepubliceerd",
@@ -1503,12 +1505,5 @@
       "images": "Geen afbeeldingen",
       "videos": "Geen video's"
     }
-  },
-  "workflowStatus": {
-    "DRAFT": "Niet gepubliceerd",
-    "READY_FOR_VALIDATION": "Gepubliceerd",
-    "APPROVED": "Online vanaf",
-    "REJECTED": "Publicatie afgewezen",
-    "DELETED": "Verwijderd"
   }
 }

@@ -17,7 +17,7 @@ import type {
 import { Organizer } from '@/types/Organizer';
 import { PaginatedData } from '@/types/PaginatedData';
 import type { Values } from '@/types/Values';
-import type { WorkflowStatus } from '@/types/WorkflowStatus';
+import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
 import { fetchFromApi } from '@/utils/fetchFromApi';
@@ -185,7 +185,7 @@ const useGetEventsToModerateQuery = (
       availableTo: '*',
       limit: '1',
       start: '0',
-      workflowStatus: 'READY_FOR_VALIDATION',
+      workflowStatus: WorkflowStatus.READY_FOR_VALIDATION,
     },
     enabled: !!searchQuery,
     ...configuration,

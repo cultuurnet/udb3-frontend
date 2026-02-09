@@ -3,7 +3,7 @@ import { ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
-import { Status, StatusIndicator } from '@/pages/dashboard/index.page';
+import type { PublicationStatusInfo } from '@/hooks/usePublicationStatus';
 import { ImageIcon } from '@/pages/PictureUploadBox';
 import {
   DynamicBarometerIcon,
@@ -17,6 +17,7 @@ import { Image } from '@/ui/Image';
 import { Link } from '@/ui/Link';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
+import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 
@@ -36,7 +37,7 @@ type DashboardRowProps = {
   url: string;
   finishedAt?: string;
   isFinished?: boolean;
-  status?: Status;
+  status?: PublicationStatusInfo;
   isOwnershipRequested?: boolean;
   isImageUploading: boolean;
   onModalOpen: () => void;
