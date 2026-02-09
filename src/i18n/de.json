@@ -1423,6 +1423,7 @@
     "labels": {
       "title": "Titel",
       "type": "Typ",
+      "theme": "Thema",
       "labels": "Labels",
       "description": "Beschreibung",
       "location": "Wo",
@@ -1440,6 +1441,7 @@
     },
     "empty_value": {
       "description": "Keine Beschreibung",
+      "theme": "Kein Thema",
       "organiser": "Keine Organisationsinformationen",
       "price": "Keine Preisinformation",
       "booking": "Keine Reservierungsinformationen",
