@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { TabContent } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
@@ -28,6 +29,7 @@ const Search = () => {
   const isClientSide = useIsClient();
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
+  const [showBorder] = useFeatureFlag(FeatureFlags.SHOW_IFRAME_BORDER);
 
   const handleSelectTab = async (tabKey: Scope) =>
     router.push(
@@ -54,6 +56,7 @@ const Search = () => {
           width="100%"
           css={`
             overflow-y: auto;
+            ${showBorder ? 'border: 2px solid red;' : ''}
           `}
         >
           {isOwnershipEnabled && (
