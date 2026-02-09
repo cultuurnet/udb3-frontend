@@ -404,7 +404,7 @@ const Preview = () => {
                     values={{
                       siteName: isCultuurkuurEvent
                         ? 'Cultuurkuur'
-                        : "de UiTagenda's",
+                        : t('preview.uit_agendas'),
                     }}
                     components={{ b: <b></b> }}
                   />

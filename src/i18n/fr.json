@@ -1417,7 +1417,8 @@
     },
     "online_label": "En ligne",
     "main_image": "Image principale",
-    "publication_alert": "Vos modifications ont été enregistrées et seront visibles <b>dans l'heure</b> sur {{siteName}}.",
+    "publication_alert": "Vos modifications ont été enregistrées et seront visibles sur {{siteName}} <b>dans un délai d'une heure</b>.",
+    "uit_agendas": "les UiTagendas",
     "labels": {
       "title": "Titre",
       "type": "Type",
