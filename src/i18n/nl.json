@@ -1478,6 +1478,7 @@
     "labels": {
       "title": "Titel",
       "type": "Type",
+      "theme": "Thema",
       "labels": "Labels",
       "description": "Beschrijving",
       "location": "Waar",
@@ -1495,6 +1496,7 @@
     },
     "empty_value": {
       "description": "Geen beschrijving",
+      "theme": "Geen thema",
       "organiser": "Geen organisatie-informatie",
       "price": "Geen prijsinformatie",
       "booking": "Geen reservatie-informatie",
