@@ -1474,6 +1474,10 @@
     },
     "online_label": "Online",
     "main_image": "Hoofdafbeelding",
+    "publication_alert": "Je aanpassingen zijn opgeslagen en zijn <b>binnen {{timeFrame}}</b> zichtbaar op {{siteName}}.",
+    "publication_alert_cultuurkuur_timeframe": "een dag",
+    "publication_alert_uitagendas_timeframe": "1 uur",
+    "uit_agendas": "de UiTagenda's",
     "labels": {
       "title": "Titel",
       "type": "Type",

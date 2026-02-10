@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
@@ -11,6 +11,7 @@ import { LabelsForm } from '@/pages/LabelsForm';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
+import { Alert } from '@/ui/Alert';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
@@ -57,6 +58,8 @@ const Preview = () => {
   });
 
   const offer = getOfferByIdQuery.data;
+  const isEdited = router.query.edited === 'true';
+  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
   const calendarSummary = getCalendarSummaryQuery.data;
 
@@ -115,7 +118,6 @@ const Preview = () => {
     if (!offer.priceInfo || offer.priceInfo.length === 0) {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
-    const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
     return (
       <table
@@ -397,6 +399,30 @@ const Preview = () => {
       <Page.Content>
         <Inline>
           <Stack flex={3}>
+            {isEdited && (
+              <Alert width="100%" marginBottom={4}>
+                <Text
+                  css={`
+                    b {
+                      font-weight: 600;
+                    }
+                  `}
+                >
+                  <Trans
+                    i18nKey="preview.publication_alert"
+                    values={{
+                      timeFrame: isCultuurkuurEvent
+                        ? t('preview.publication_alert_cultuurkuur_timeframe')
+                        : t('preview.publication_alert_uitagendas_timeframe'),
+                      siteName: isCultuurkuurEvent
+                        ? 'Cultuurkuur'
+                        : t('preview.uit_agendas'),
+                    }}
+                    components={{ b: <b></b> }}
+                  />
+                </Text>
+              </Alert>
+            )}
             <Tabs
               activeKey={activeTab}
               onSelect={(key) => onTabChange(key as string)}
