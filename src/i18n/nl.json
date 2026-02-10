@@ -1488,13 +1488,16 @@
       "organizer": "Organisatie",
       "price": "Prijsinfo",
       "booking": "Tickets & plaatsen",
-      "publication": "Publicatie",
+      "publication": "Publicatiestatus",
       "booking_info": "Reservatie",
       "contact": "Contactgegevens",
       "age": "Geschikt voor",
       "image": "Afbeeldingen",
-      "video": "Video's"
+      "video": "Video's",
+      "event_id": "ID"
     },
+    "public_url": "Bekijk op {{publicationBrand}}",
+    "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",
     "empty_value": {
       "description": "Geen beschrijving",
       "theme": "Geen thema",

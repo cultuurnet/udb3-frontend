@@ -1,22 +1,25 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
+import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
-import { Link } from '@/ui/Link';
+import { Link, LinkVariants } from '@/ui/Link';
 import { List as UiList } from '@/ui/List';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
+import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Table } from '@/ui/Table';
 import { Tabs } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
@@ -59,6 +62,7 @@ const Preview = () => {
   const offer = getOfferByIdQuery.data;
 
   const calendarSummary = getCalendarSummaryQuery.data;
+  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
   const { mainLanguage, name, terms } = offer;
 
@@ -77,7 +81,7 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const tabOptions = ['details']; //['details', 'history', 'publication'];
+  const tabOptions = ['details']; //['details', 'history'];
 
   const onTabChange = (key: string) => {
     setActiveTab(key);
@@ -169,12 +173,101 @@ const Preview = () => {
   };
 
   const PublicationPreview = () => {
-    const workflowStatus = offer.workflowStatus;
+    const status = usePublicationStatus(offer);
+    const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
+    const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
+    const showEventId = !isRejected && !isDeleted;
 
-    // TODO check the 'Online vanaf status' in detail
-    // Need to fill in the date?
-    // @see src/pages/dashboard/index.page.tsx: rowStatus
-    return <Text>{t(`workflowStatus.${workflowStatus}`)}</Text>;
+    const publicationBrand = isCultuurkuurEvent
+      ? 'Cultuurkuur'
+      : 'UiTinVlaanderen';
+    const publicUrl = isCultuurkuurEvent
+      ? `https://cultuurkuur.be/event/${parseOfferId(offer['@id'])}`
+      : `https://www.uitinvlaanderen.be/agenda/e/${parseOfferId(offer['@id'])}`;
+
+    const publicationRulesUrl =
+      'https://www.publiq.be/nl/publicatieregels-uitdatabank';
+
+    const renderStatusCell = () => {
+      if (isRejected) {
+        return (
+          <Stack>
+            <StatusIndicator label={status.label} color={status.color} />
+            <Text>
+              <Trans
+                i18nKey="preview.rejected_explanation"
+                components={{
+                  publication_rules_link: (
+                    <Link href={publicationRulesUrl} target="_blank" />
+                  ),
+                }}
+              />
+            </Text>
+          </Stack>
+        );
+      }
+
+      return <StatusIndicator label={status.label} color={status.color} />;
+    };
+
+    const data = [
+      {
+        field: t('preview.labels.publication'),
+        value: renderStatusCell(),
+      },
+    ];
+
+    if (showEventId) {
+      data.push({
+        field: t('preview.labels.event_id'),
+        value: (
+          <UiList>
+            <UiList.Item>{parseOfferId(offer['@id'])}</UiList.Item>
+            <UiList.Item>
+              <Link
+                href={publicUrl}
+                target="_blank"
+                variant={LinkVariants.BUTTON_PRIMARY}
+              >
+                {t('preview.public_url', { publicationBrand })}
+              </Link>
+            </UiList.Item>
+            {offer.sameAs
+              ?.filter((sameAsUrl) => !sameAsUrl.includes('uitinvlaanderen'))
+              .map((sameAsUrl) => (
+                <UiList.Item key={sameAsUrl}>{sameAsUrl}</UiList.Item>
+              ))}
+          </UiList>
+        ),
+      });
+    }
+
+    return (
+      <Stack
+        marginTop={4}
+        backgroundColor="white"
+        padding={4}
+        borderRadius={getGlobalBorderRadius}
+        css={`
+          box-shadow: ${getGlobalValue('boxShadow.medium')};
+        `}
+      >
+        <Table
+          columns={columns}
+          data={data}
+          showHeader={false}
+          css={`
+            tbody tr td:nth-child(1) {
+              font-weight: 600;
+              width: 25%;
+            }
+            tbody tr:first-child td {
+              border-top: none;
+            }
+          `}
+        />
+      </Stack>
+    );
   };
 
   const AgePreview = () => {
@@ -333,7 +426,6 @@ const Preview = () => {
     { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
     { field: t('preview.labels.price'), value: <PriceInfo /> },
     { field: t('preview.labels.booking'), value: <BookingPreview /> },
-    { field: t('preview.labels.publication'), value: <PublicationPreview /> },
     {
       field: t('preview.labels.booking_info'),
       value: (
@@ -354,41 +446,63 @@ const Preview = () => {
 
   const DetailsTabContent = () => {
     return (
-      <Table
-        bordered
-        showHeader={false}
-        columns={columns}
-        data={tableData}
+      <Stack
+        marginTop={4}
+        backgroundColor="white"
+        padding={4}
+        borderRadius={getGlobalBorderRadius}
         css={`
-          tbody tr td:nth-child(1) {
-            font-weight: 600;
-          }
-          td strong,
-          td b {
-            font-weight: 700 !important;
-          }
-
-          td em,
-          td i {
-            font-style: italic !important;
-          }
-          tr:has(td:nth-child(2) .empty-value) td {
-            background-color: ${colors.grey4};
-          }
-          tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
-            color: ${colors.grey5};
-          }
+          box-shadow: ${getGlobalValue('boxShadow.medium')};
         `}
-      />
+      >
+        <Table
+          bordered
+          showHeader={false}
+          columns={columns}
+          data={tableData}
+          css={`
+            tbody tr td:nth-child(1) {
+              font-weight: 600;
+              width: 25%;
+            }
+            tbody tr:first-child td {
+              border-top: none;
+            }
+            td strong,
+            td b {
+              font-weight: 700 !important;
+            }
+
+            td em,
+            td i {
+              font-style: italic !important;
+            }
+            tr:has(td:nth-child(2) .empty-value) td {
+              background-color: ${colors.grey4};
+            }
+            tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
+              color: ${colors.grey5};
+            }
+          `}
+        />
+      </Stack>
     );
   };
 
   const HistoryTabContent = () => {
-    return <Text>{t('preview.tabs.history_content')}</Text>;
-  };
-
-  const PublicationTabContent = () => {
-    return <Text>{t('preview.tabs.publication_content')}</Text>;
+    return (
+      <Stack
+        marginTop={4}
+        backgroundColor="white"
+        padding={4}
+        borderRadius={getGlobalBorderRadius}
+        css={`
+          box-shadow: ${getGlobalValue('boxShadow.medium')};
+        `}
+      >
+        <Text>{t('preview.tabs.history_content')}</Text>
+      </Stack>
+    );
   };
 
   return (
@@ -403,19 +517,13 @@ const Preview = () => {
             >
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
-                  <Stack
-                    marginTop={4}
-                    backgroundColor="white"
-                    padding={4}
-                    borderRadius={getGlobalBorderRadius}
-                    css={`
-                      box-shadow: ${getGlobalValue('boxShadow.medium')};
-                    `}
-                  >
-                    {tab === 'details' && <DetailsTabContent />}
-                    {tab === 'history' && <HistoryTabContent />}
-                    {tab === 'publication' && <PublicationTabContent />}
-                  </Stack>
+                  {tab === 'details' && (
+                    <Stack>
+                      <PublicationPreview />
+                      <DetailsTabContent />
+                    </Stack>
+                  )}
+                  {tab === 'history' && <HistoryTabContent />}
                 </Tabs.Tab>
               ))}
             </Tabs>

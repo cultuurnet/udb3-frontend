@@ -1436,8 +1436,11 @@
       "contact": "Contact",
       "age": "Adapté à",
       "image": "Images",
-      "video": "Videos"
+      "video": "Videos",
+      "event_id": "ID"
     },
+    "public_url": "Voir sur {{publicationBrand}}",
+    "rejected_explanation": "Cet événement a été rejeté pour publication sur UiTinVlaanderen. Pour plus d'informations sur les raisons du rejet, vous pouvez <publication_rules_link>consulter les règles de publication</publication_rules_link>.",
     "empty_value": {
       "description": "Aucune description",
       "theme": "Aucun thème",

@@ -1437,8 +1437,11 @@
       "contact": "Kontakt",
       "age": "Geeignet für",
       "image": "Abbildungen",
-      "video": "Videos"
+      "video": "Videos",
+      "event_id": "ID"
     },
+    "public_url": "Ansicht auf {{publicationBrand}}",
+    "rejected_explanation": "Diese Veranstaltung wurde für die Veröffentlichung auf UiTinVlaanderen abgelehnt. Für weitere Informationen über die Gründe der Ablehnung können Sie <publication_rules_link>die Veröffentlichungsregeln einsehen</publication_rules_link>.",
     "empty_value": {
       "description": "Keine Beschreibung",
       "theme": "Kein Thema",
