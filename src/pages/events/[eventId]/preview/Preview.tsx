@@ -411,6 +411,9 @@ const Preview = () => {
                   <Trans
                     i18nKey="preview.publication_alert"
                     values={{
+                      timeFrame: isCultuurkuurEvent
+                        ? t('preview.publication_alert_cultuurkuur_timeframe')
+                        : t('preview.publication_alert_uitagendas_timeframe'),
                       siteName: isCultuurkuurEvent
                         ? 'Cultuurkuur'
                         : t('preview.uit_agendas'),
