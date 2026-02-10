@@ -460,6 +460,7 @@ const Preview = () => {
           showHeader={false}
           columns={columns}
           data={tableData}
+          className="details-table"
           css={`
             tbody tr td:nth-child(1) {
               font-weight: 600;
