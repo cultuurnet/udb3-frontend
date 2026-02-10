@@ -20,12 +20,16 @@ export async function checkDuplicatePlace({
   location,
   name,
 }: Props) {
+  const postalCode = ['NL', 'DE'].includes(location.country)
+    ? location.postalCode
+    : location.municipality.zip;
+
   const address: Address = {
     [i18n.language]: {
       streetAddress: location.streetAndNumber,
       addressCountry: location.country,
       addressLocality: location.municipality.name,
-      postalCode: location.postalCode,
+      postalCode,
     },
   };
 
