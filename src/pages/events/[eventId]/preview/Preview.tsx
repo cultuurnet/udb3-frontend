@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
@@ -19,6 +19,7 @@ import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
+import { Alert } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
@@ -63,12 +64,15 @@ const Preview = () => {
     scope: OfferTypes.EVENTS,
   });
   const offer = getOfferByIdQuery.data;
+  const isEdited = router.query.edited === 'true';
+  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
     locale: i18n.language,
     format: 'lg',
   });
+
   const calendarSummary = getCalendarSummaryQuery.data;
 
   const userPermissionsQuery = useGetPermissionsQuery();
@@ -149,7 +153,6 @@ const Preview = () => {
     if (!offer.priceInfo || offer.priceInfo.length === 0) {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
-    const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
     return (
       <table
@@ -443,6 +446,30 @@ const Preview = () => {
       <Page.Content>
         <Inline>
           <Stack flex={3}>
+            {isEdited && (
+              <Alert width="100%" marginBottom={4}>
+                <Text
+                  css={`
+                    b {
+                      font-weight: 600;
+                    }
+                  `}
+                >
+                  <Trans
+                    i18nKey="preview.publication_alert"
+                    values={{
+                      timeFrame: isCultuurkuurEvent
+                        ? t('preview.publication_alert_cultuurkuur_timeframe')
+                        : t('preview.publication_alert_uitagendas_timeframe'),
+                      siteName: isCultuurkuurEvent
+                        ? 'Cultuurkuur'
+                        : t('preview.uit_agendas'),
+                    }}
+                    components={{ b: <b></b> }}
+                  />
+                </Text>
+              </Alert>
+            )}
             <Tabs
               activeKey={activeTab}
               onSelect={(key) => onTabChange(key as string)}

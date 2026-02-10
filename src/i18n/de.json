@@ -1418,6 +1418,10 @@
     },
     "online_label": "Online",
     "main_image": "Hauptbild",
+    "publication_alert": "Ihre Änderungen wurden gespeichert und sind <b>innerhalb von {{timeFrame}}</b> auf {{siteName}} sichtbar.",
+    "publication_alert_cultuurkuur_timeframe": "1 Tag",
+    "publication_alert_uitagendas_timeframe": "1 Stunde",
+    "uit_agendas": "der UiTagendas",
     "labels": {
       "title": "Titel",
       "type": "Typ",

@@ -15,6 +15,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   locationStepConfiguration,
   useEditLocation,
@@ -186,6 +187,13 @@ const StepsForm = ({
     await editLocation(data);
     reload();
   };
+  const [isReactEventPreviewFeatureFlagEnabled] = useFeatureFlag(
+    FeatureFlags.REACT_EVENT_PREVIEW,
+  );
+
+  const doneEditingLink = isReactEventPreviewFeatureFlagEnabled
+    ? `/events/${offerId}?edited=true`
+    : `/event/${offerId}/preview?edited=true`;
 
   const footerStatus = useFooterStatus({ offer, form });
 
@@ -455,7 +463,7 @@ const StepsForm = ({
             {footerStatus === FooterStatus.AUTO_SAVE && (
               <Inline spacing={3} alignItems="center">
                 <Link
-                  href={`/event/${offerId}/preview?edited=true`}
+                  href={doneEditingLink}
                   variant={LinkVariants.BUTTON_SUCCESS}
                 >
                   <Text>{t('create.footer.done_editing')}</Text>
