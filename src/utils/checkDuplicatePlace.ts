@@ -39,6 +39,7 @@ export async function checkDuplicatePlace({
     streetAddress: address[i18n.language].streetAddress,
     addressLocality: address[i18n.language].addressLocality,
     addressCountry: address[i18n.language].addressCountry,
+    excludeId: offerId,
   });
 
   const placeId = parseOfferId(places?.member?.[0]?.['@id'] ?? '');
