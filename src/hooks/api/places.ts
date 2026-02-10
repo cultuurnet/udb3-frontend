@@ -235,6 +235,7 @@ type GetPlacesByQueryArguments = {
   addressLocality?: string;
   addressCountry?: Country;
   streetAddress?: string;
+  excludeId?: string;
 };
 
 const getPlacesByQuery = async ({
@@ -246,6 +247,7 @@ const getPlacesByQuery = async ({
   addressCountry,
   streetAddress,
   searchTerm,
+  excludeId,
 }: { headers: Headers } & GetPlacesByQueryArguments) => {
   const termsString = terms.reduce(
     (acc, currentTerm) => `${acc}terms.id:${currentTerm}`,
@@ -257,6 +259,7 @@ const getPlacesByQuery = async ({
     zip && addressCountry === 'BE' ? `address.\\*.postalCode:"${zip}"` : '',
     addressLocality ? `address.\\*.addressLocality:${addressLocality}` : '',
     streetAddress ? `address.\\*.streetAddress:"${streetAddress}"` : '',
+    excludeId ? `NOT _id:"${excludeId}"` : '',
   ].filter((argument) => !!argument);
 
   const res = await fetchFromApi({
@@ -290,6 +293,7 @@ const useGetPlacesByQuery = (
     addressCountry,
     streetAddress,
     searchTerm,
+    excludeId,
   }: GetPlacesByQueryArguments,
   configuration: ExtendQueryOptions<typeof getPlacesByQuery> = {},
 ) =>
@@ -304,6 +308,7 @@ const useGetPlacesByQuery = (
       addressLocality,
       streetAddress,
       searchTerm,
+      excludeId,
     },
     enabled: (!!name && !!streetAddress && !!zip) || !!searchTerm,
     ...configuration,
