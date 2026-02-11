@@ -183,10 +183,10 @@ test.describe('Movie Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForTimeout(100);
+    page.waitForLoadState('domcontentloaded');
 
     await page.goto(`/events/${movieEventId}`);
-    await page.waitForTimeout(100);
+    page.waitForLoadState('domcontentloaded');
 
     await expect(
       page.getByRole('button', { name: 'Bewerken', exact: true }),

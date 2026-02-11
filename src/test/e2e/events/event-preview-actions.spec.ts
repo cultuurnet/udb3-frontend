@@ -135,10 +135,10 @@ test.describe('Event Preview Sidebar Actions', () => {
       .fill(pastDate.toLocaleDateString('nl-BE'));
 
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
-    await page.waitForTimeout(100);
+    page.waitForLoadState('domcontentloaded');
 
     await page.goto(`/events/${eventId}`);
-    await page.waitForTimeout(100);
+    page.waitForLoadState('domcontentloaded');
 
     await expect(
       page.getByRole('button', { name: 'Bewerken' }),
