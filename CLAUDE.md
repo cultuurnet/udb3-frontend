@@ -428,6 +428,51 @@ src/
 - Admin tests: `*.admin.spec.ts` files
 - Run: `yarn test:e2e`
 
+#### Playwright Fixtures Pattern
+
+**Use fixtures for expensive test setup** (creating entities, API calls) to avoid timeouts:
+
+```typescript
+import { expect, test as base } from '@playwright/test';
+
+type TestFixtures = {
+  eventId: string;
+  eventPreviewUrl: string;
+};
+
+const test = base.extend<TestFixtures>({
+  eventId: async ({ page, baseURL }, applyFixture) => {
+    // Expensive setup: create event once
+    await page.goto(`${baseURL}/create`);
+    // ... event creation steps ...
+    const eventId = extractedId;
+    await applyFixture(eventId);
+  },
+
+  eventPreviewUrl: async ({ eventId }, applyFixture) => {
+    // Derived fixture using eventId
+    await applyFixture(`/events/${eventId}`);
+  },
+});
+
+test.describe('My Tests', () => {
+  test.beforeEach(async ({ page, eventPreviewUrl }) => {
+    // Fast: just navigate using fixture
+    await page.goto(eventPreviewUrl);
+  });
+
+  test('my test', async ({ eventId }) => {
+    // Use fixtures in tests
+  });
+});
+```
+
+**Benefits:**
+
+- Fixtures run once per test file (not per test)
+- Prevents timeout issues from repeated setup
+- See examples: `src/test/e2e/manage/roles/roles-edit.admin.spec.ts`, `src/test/e2e/events/event-preview-actions.spec.ts`
+
 ### Unit Testing (Jest)
 
 - Uses Jest with React Testing Library

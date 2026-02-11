@@ -1450,6 +1450,21 @@
       "contact": "Keine Kontaktinformationen",
       "images": "Keine Abbildungen",
       "videos": "Keine videos"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "edit_as_movie": "Bearbeiten als Film",
+      "translate": "Übersetzen",
+      "duplicate": "Kopieren und bearbeiten",
+      "duplicate_as_movie": "Kopieren und bearbeiten als Film",
+      "change_availability": "Verfügbarkeit ändern",
+      "delete": "Löschen",
+      "delete_modal": {
+        "title": "Aktivität löschen",
+        "body": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "cancel": "Abbrechen",
+        "confirm": "Definitiv löschen"
+      }
     }
   },
   "workflowStatus": {

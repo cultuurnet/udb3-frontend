@@ -1,0 +1,188 @@
+import { expect, test as base } from '@playwright/test';
+import { addDays, subDays } from 'date-fns';
+
+import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+
+type TestFixtures = {
+  eventPreviewUrl: string;
+  eventId: string;
+};
+
+const test = base.extend<TestFixtures>({
+  eventId: async ({ page, baseURL }, applyFixture) => {
+    // todo: remove when the styled components hydration errors are fixed.
+    suppressHydrationErrors(page);
+    await page.goto(`${baseURL}/create`);
+
+    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Concert' }).click();
+    await page
+      .locator('#calendar-step-day-day-1date-period-picker-start')
+      .fill(new Date(addDays(new Date(), 1)).toLocaleDateString('nl-BE'));
+
+    await page.getByLabel('Gemeente').click();
+    await page.getByLabel('Gemeente').fill('9000');
+    await page.getByRole('option', { name: '9000 Gent' }).click();
+    await page.getByLabel('Kies een locatie').click();
+    await page.getByLabel('Kies een locatie').fill('S.M');
+    await page
+      .getByRole('option', { name: 'S.M.A.K.', exact: true })
+      .first()
+      .click();
+
+    await page.getByLabel('Naam van het evenement').click();
+    await page
+      .getByLabel('Naam van het evenement')
+      .fill(`E2E Sidebar Actions Test ${Date.now()}`);
+    await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
+    await page.getByRole('button', { name: 'Opslaan' }).click();
+
+    await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+
+    await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
+    const url = page.url();
+    const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1] ?? '';
+
+    await applyFixture(eventId);
+  },
+
+  eventPreviewUrl: async ({ eventId }, applyFixture) => {
+    await applyFixture(`/events/${eventId}`);
+  },
+});
+
+test.describe('Event Preview Sidebar Actions', () => {
+  test.beforeEach(async ({ page, eventPreviewUrl, context }) => {
+    await context.addCookies([
+      {
+        name: 'ff_react_event_preview',
+        value: 'true',
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
+    // todo: remove when the styled components hydration errors are fixed.
+    suppressHydrationErrors(page);
+
+    await page.goto(eventPreviewUrl);
+    await page.getByRole('button', { name: 'Bewerken' }).waitFor();
+  });
+
+  test('should display all action buttons and be enabled', async ({ page }) => {
+    const editButton = page.getByRole('button', { name: 'Bewerken' });
+    await expect(editButton).toBeVisible();
+    await expect(editButton).not.toBeDisabled();
+
+    const translateButton = page.getByRole('button', { name: 'Vertalen' });
+    await expect(translateButton).toBeVisible();
+    await expect(translateButton).not.toBeDisabled();
+
+    const duplicateButton = page.getByRole('button', {
+      name: 'Kopiëren en aanpassen',
+    });
+    await expect(duplicateButton).toBeVisible();
+    await expect(duplicateButton).not.toBeDisabled();
+
+    const availabilityButton = page.getByRole('button', {
+      name: 'Beschikbaarheid wijzigen',
+    });
+    await expect(availabilityButton).toBeVisible();
+    await expect(availabilityButton).not.toBeDisabled();
+
+    const deleteButton = page.getByRole('button', { name: 'Verwijderen' });
+    await expect(deleteButton).toBeVisible();
+    await expect(deleteButton).not.toBeDisabled();
+  });
+
+  test('should have correct href attributes on action links', async ({
+    page,
+    eventId,
+  }) => {
+    const editLink = page.getByRole('link', { name: 'Bewerken' });
+    await expect(editLink).toHaveAttribute('href', `/events/${eventId}/edit`);
+
+    const translateLink = page.getByRole('link', { name: 'Vertalen' });
+    await expect(translateLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/translate`,
+    );
+
+    const duplicateLink = page.getByRole('link', {
+      name: 'Kopiëren en aanpassen',
+    });
+    await expect(duplicateLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/duplicate`,
+    );
+
+    const availabilityLink = page.getByRole('link', {
+      name: 'Beschikbaarheid wijzigen',
+    });
+    await expect(availabilityLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/availability`,
+    );
+  });
+
+  test('should open delete confirmation modal when delete button is clicked', async ({
+    page,
+  }) => {
+    const deleteButton = page.getByRole('button', { name: 'Verwijderen' });
+    await deleteButton.click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    const modalTitle = modal.getByText('Evenement verwijderen');
+    await expect(modalTitle).toBeVisible();
+
+    const confirmButton = modal.getByRole('button', { name: 'Verwijderen' });
+    await expect(confirmButton).toBeVisible();
+
+    const cancelButton = modal.getByRole('button', { name: 'Annuleren' });
+    await expect(cancelButton).toBeVisible();
+
+    await cancelButton.click();
+    await expect(modal).not.toBeVisible();
+  });
+
+  test('should only show duplicate button for expired event', async ({
+    page,
+    eventId,
+  }) => {
+    const editButton = page.getByRole('button', { name: 'Bewerken' });
+    await editButton.click();
+    await page.waitForURL(`**/events/${eventId}/edit`);
+
+    // Edit the event to change the date to 30 days in the past.
+    const pastDate = subDays(new Date(), 30);
+    await page
+      .locator('#calendar-step-day-day-2date-period-picker-start')
+      .fill(pastDate.toLocaleDateString('nl-BE'));
+    await page
+      .locator('#calendar-step-day-day-2date-period-picker-end')
+      .fill(pastDate.toLocaleDateString('nl-BE'));
+
+    await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
+    page.waitForLoadState('domcontentloaded');
+
+    await page.goto(`/events/${eventId}`);
+    page.waitForLoadState('domcontentloaded');
+
+    await expect(
+      page.getByRole('button', { name: 'Bewerken' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Vertalen' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Kopiëren en aanpassen' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Beschikbaarheid wijzigen' }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Verwijderen' }),
+    ).not.toBeVisible();
+  });
+});

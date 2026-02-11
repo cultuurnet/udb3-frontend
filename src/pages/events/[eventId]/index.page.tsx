@@ -1,8 +1,12 @@
 import { dehydrate } from '@tanstack/react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
-import { prefetchGetCalendarSummaryQuery } from '@/hooks/api/events';
+import {
+  prefetchGetCalendarSummaryQuery,
+  prefetchGetEventPermissionsQuery,
+} from '@/hooks/api/events';
 import { prefetchGetOfferByIdQuery } from '@/hooks/api/offers';
+import { prefetchGetPermissionsQuery } from '@/hooks/api/user';
 import i18n from '@/i18n/index';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
@@ -25,6 +29,17 @@ export const getServerSideProps = getApplicationServerSideProps(
       id: eventId as string,
       locale: i18n.language,
       format: 'lg',
+    });
+
+    await prefetchGetPermissionsQuery({
+      req,
+      queryClient,
+    });
+
+    await prefetchGetEventPermissionsQuery({
+      req,
+      queryClient,
+      eventId: eventId,
     });
 
     return {
