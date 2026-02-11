@@ -1,6 +1,8 @@
 import { expect, test as base } from '@playwright/test';
 import { addDays, subDays } from 'date-fns';
 
+import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+
 type TestFixtures = {
   eventPreviewUrl: string;
   eventId: string;
@@ -9,11 +11,7 @@ type TestFixtures = {
 const test = base.extend<TestFixtures>({
   eventId: async ({ page, baseURL }, applyFixture) => {
     // todo: remove when the styled components hydration errors are fixed.
-    page.on('console', (msg) => {
-      if (msg.type() === 'error' && msg.text().includes('Hydration')) {
-        return;
-      }
-    });
+    suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
     await page.getByRole('button', { name: 'Evenement' }).click();
@@ -64,11 +62,7 @@ test.describe('Event Preview Sidebar Actions', () => {
       },
     ]);
     // todo: remove when the styled components hydration errors are fixed.
-    page.on('console', (msg) => {
-      if (msg.type() === 'error' && msg.text().includes('Hydration')) {
-        return;
-      }
-    });
+    suppressHydrationErrors(page);
 
     await page.goto(eventPreviewUrl);
     await page.getByRole('button', { name: 'Bewerken' }).waitFor();

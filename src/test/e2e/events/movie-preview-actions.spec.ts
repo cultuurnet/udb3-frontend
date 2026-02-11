@@ -1,6 +1,8 @@
 import { expect, test as base } from '@playwright/test';
 import { addDays, subDays } from 'date-fns';
 
+import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+
 type TestFixtures = {
   moviePreviewUrl: string;
   movieEventId: string;
@@ -9,11 +11,7 @@ type TestFixtures = {
 const test = base.extend<TestFixtures>({
   movieEventId: async ({ page, baseURL }, applyFixture) => {
     // todo: remove when the styled components hydration errors are fixed.
-    page.on('console', (msg) => {
-      if (msg.type() === 'error' && msg.text().includes('Hydration')) {
-        return;
-      }
-    });
+    suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
     await page.getByRole('button', { name: 'Evenement' }).click();
@@ -68,11 +66,7 @@ test.describe('Movie Preview Sidebar Actions', () => {
       },
     ]);
     // todo: remove when the styled components hydration errors are fixed.
-    page.on('console', (msg) => {
-      if (msg.type() === 'error' && msg.text().includes('Hydration')) {
-        return;
-      }
-    });
+    suppressHydrationErrors(page);
 
     await page.goto(moviePreviewUrl);
     await page.getByRole('button', { name: 'Bewerken', exact: true }).waitFor();
