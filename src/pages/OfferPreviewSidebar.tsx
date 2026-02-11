@@ -19,6 +19,7 @@ import { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
+import { Link, LinkVariants } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { formatPermission } from '@/utils/formatPermission';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -105,19 +106,23 @@ const OfferPreviewSidebar = ({
     );
   };
 
-  const actions: Array<{
+  type Action = {
     iconName: Values<typeof Icons>;
     title: string;
-    onClick: () => void;
     disabled: boolean;
     suffix?: ReactNode;
-  }> = [];
+  } & (
+    | { onClick: () => void; href?: never }
+    | { href: string; onClick?: never }
+  );
+
+  const actions: Action[] = [];
 
   if (canEdit) {
     actions.push({
       iconName: Icons.PENCIL,
       title: t('preview.actions.edit'),
-      onClick: () => router.push(`/events/${offerId}/edit`),
+      href: `/events/${offerId}/edit`,
       disabled: !isEditable(offer),
       suffix: getLanguageBadge(),
     });
@@ -127,7 +132,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.VIDEO,
       title: t('preview.actions.edit_as_movie'),
-      onClick: () => router.push(`/manage/movies/${offerId}/edit`),
+      href: `/manage/movies/${offerId}/edit`,
       disabled: !isEditable(offer),
       suffix: getLanguageBadge(),
     });
@@ -137,7 +142,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.GLOBE,
       title: t('preview.actions.translate'),
-      onClick: () => router.push(`/events/${offerId}/translate`),
+      href: `/events/${offerId}/translate`,
       disabled: !isEditable(offer),
     });
   }
@@ -146,7 +151,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.COPY,
       title: t('preview.actions.duplicate'),
-      onClick: () => router.push(`/events/${offerId}/duplicate`),
+      href: `/events/${offerId}/duplicate`,
       disabled: !isEditable(offer),
     });
   }
@@ -164,7 +169,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.CALENDAR_CHECK,
       title: t('preview.actions.change_availability'),
-      onClick: () => router.push(`/events/${offerId}/availability`),
+      href: `/events/${offerId}/availability`,
       disabled: !isEditable(offer),
     });
   }
@@ -180,19 +185,56 @@ const OfferPreviewSidebar = ({
 
   return (
     <Stack spacing={3.5} paddingX={4}>
-      {actions.map(({ iconName, title, onClick, disabled, suffix }) => (
-        <Button
-          key={title}
-          variant={ButtonVariants.SECONDARY}
-          onClick={onClick}
-          disabled={disabled}
-          iconName={iconName}
-          spacing={3}
-          suffix={suffix}
-        >
-          {title}
-        </Button>
-      ))}
+      {actions.map(({ iconName, title, onClick, href, disabled, suffix }) => {
+        if (onClick) {
+          return (
+            <Button
+              key={title}
+              variant={ButtonVariants.SECONDARY}
+              onClick={onClick}
+              disabled={disabled}
+              iconName={iconName}
+              spacing={3}
+              suffix={suffix}
+            >
+              {title}
+            </Button>
+          );
+        }
+
+        if (href && disabled) {
+          return (
+            <Button
+              key={title}
+              variant={ButtonVariants.SECONDARY}
+              disabled={disabled}
+              iconName={iconName}
+              spacing={3}
+              suffix={suffix}
+            >
+              {title}
+            </Button>
+          );
+        }
+
+        if (href) {
+          return (
+            <Link
+              key={title}
+              variant={LinkVariants.BUTTON_SECONDARY}
+              href={href}
+              iconName={iconName}
+              spacing={3}
+              suffix={suffix}
+              width="100%"
+            >
+              {title}
+            </Link>
+          );
+        }
+
+        return null;
+      })}
       {/* Moderation component can be added here */}
     </Stack>
   );
