@@ -1,4 +1,5 @@
 import { expect, test as base } from '@playwright/test';
+import { addDays, subDays } from 'date-fns';
 
 type TestFixtures = {
   moviePreviewUrl: string;
@@ -19,7 +20,7 @@ const test = base.extend<TestFixtures>({
     await page.getByRole('button', { name: 'Film' }).click();
     await page
       .locator('#calendar-step-day-day-1date-period-picker-start')
-      .fill(new Date(Date.now() + 86400000).toLocaleDateString('nl-BE'));
+      .fill(new Date(addDays(new Date(), 1)).toLocaleDateString('nl-BE'));
 
     await page.getByLabel('Gemeente').click();
     await page.getByLabel('Gemeente').fill('9000');
@@ -178,8 +179,8 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await editButton.click();
     await page.waitForURL(`**/events/${movieEventId}/edit`);
 
-    // Edit the event to change the date to the past.
-    const pastDate = new Date(Date.now() - 86400000 * 30);
+    // Edit the event to change the date to 30 days in the past.
+    const pastDate = subDays(new Date(), 30);
     await page
       .locator('#calendar-step-day-day-2date-period-picker-start')
       .fill(pastDate.toLocaleDateString('nl-BE'));
