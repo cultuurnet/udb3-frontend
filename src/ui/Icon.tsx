@@ -8,6 +8,7 @@ import {
   faBinoculars,
   faBuilding,
   faCalendarAlt,
+  faCalendarCheck,
   faCheck,
   faCheckCircle,
   faChevronDown,
@@ -20,6 +21,7 @@ import {
   faEyeSlash,
   faFlag,
   faGift,
+  faGlobe,
   faHome,
   faImage,
   faInfoCircle,
@@ -66,6 +68,7 @@ const Icons = {
   EYE_SLASH: 'eyeSlash',
   SIGN_OUT: 'signOutAlt',
   CALENDAR_ALT: 'calendarAlt',
+  CALENDAR_CHECK: 'calendarCheck',
   CHECK: 'check',
   CHECK_CIRCLE: 'checkCircle',
   CHECK_NOTCH: 'circleNotch',
@@ -89,6 +92,7 @@ const Icons = {
   ANGLE_RIGHT: 'angleRight',
   ARROW_LEFT: 'arrowLeft',
   SORT: 'sort',
+  GLOBE: 'globe',
 } as const;
 
 const IconsMap = {
@@ -108,6 +112,7 @@ const IconsMap = {
   [Icons.EYE_SLASH]: faEyeSlash,
   [Icons.SIGN_OUT]: faSignOutAlt,
   [Icons.CALENDAR_ALT]: faCalendarAlt,
+  [Icons.CALENDAR_CHECK]: faCalendarCheck,
   [Icons.CHECK]: faCheck,
   [Icons.CHECK_CIRCLE]: faCheckCircle,
   [Icons.CHECK_NOTCH]: faCircleNotch,
@@ -132,6 +137,7 @@ const IconsMap = {
   [Icons.TIMES_CIRCLE]: faTimesCircle,
   [Icons.ARROW_LEFT]: faArrowLeft,
   [Icons.SORT]: faSort,
+  [Icons.GLOBE]: faGlobe,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {

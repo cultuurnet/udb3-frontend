@@ -1511,6 +1511,21 @@
       "contact": "Geen contact-informatie",
       "images": "Geen afbeeldingen",
       "videos": "Geen video's"
+    },
+    "actions": {
+      "edit": "Bewerken",
+      "edit_as_movie": "Bewerken als film",
+      "translate": "Vertalen",
+      "duplicate": "Kopiëren en aanpassen",
+      "duplicate_as_movie": "Kopiëren en aanpassen als film",
+      "change_availability": "Beschikbaarheid wijzigen",
+      "delete": "Verwijderen",
+      "delete_modal": {
+        "title": "Evenement verwijderen",
+        "body": "Ben je zeker dat je \"{{title}}\" wil verwijderen? Deze actie kan niet ongedaan worden.",
+        "cancel": "Annuleren",
+        "confirm": "Definitief verwijderen"
+      }
     }
   }
 }

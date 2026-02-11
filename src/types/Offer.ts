@@ -1,6 +1,8 @@
+import { isPast } from 'date-fns';
+
 import { AudienceType } from '@/constants/AudienceType';
 import type { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
-import type { CalendarType } from '@/constants/CalendarType';
+import { CalendarType } from '@/constants/CalendarType';
 import { ONLINE_LOCATION_ID } from '@/constants/Location';
 import type { OfferStatus } from '@/constants/OfferStatus';
 import { PriceCategory } from '@/pages/steps/AdditionalInformationStep/PriceInformation';
@@ -12,7 +14,7 @@ import { Event } from './Event';
 import type { Organizer } from './Organizer';
 import { isPlace, Place } from './Place';
 import type { Values } from './Values';
-import type { WorkflowStatus } from './WorkflowStatus';
+import { WorkflowStatus } from './WorkflowStatus';
 
 type DayOfWeek =
   | 'monday'
@@ -193,6 +195,30 @@ const hasOnlineLocation = (offer: Offer) => {
   return locationId === ONLINE_LOCATION_ID;
 };
 
+const isExpired = (offer: Offer): boolean => {
+  return (
+    offer.calendarType !== CalendarType.PERMANENT &&
+    isPast(new Date(offer.endDate))
+  );
+};
+
+const isEditable = (offer: Offer): boolean => {
+  return (
+    offer.workflowStatus !== WorkflowStatus.DELETED &&
+    offer.workflowStatus !== WorkflowStatus.REJECTED
+  );
+};
+
+const isDeletable = (offer: Offer): boolean => {
+  return offer.workflowStatus !== WorkflowStatus.DELETED;
+};
+
+const FILMINVOER_LABEL = 'udb-filminvoer';
+
+const hasMovieLabel = (offer: Offer): boolean => {
+  return offer.hiddenLabels?.includes(FILMINVOER_LABEL) ?? false;
+};
+
 export type {
   BaseOffer,
   BookingAvailability,
@@ -209,7 +235,12 @@ export type {
 };
 
 export {
+  FILMINVOER_LABEL,
+  hasMovieLabel,
   hasOnlineLocation,
+  isDeletable,
+  isEditable,
+  isExpired,
   LabelPrivacyOptions,
   LabelValidationInformation,
   LabelVisibilityOptions,

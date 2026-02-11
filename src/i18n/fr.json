@@ -1454,6 +1454,21 @@
       "contact": "Aucune information de contact",
       "images": "Aucune image",
       "videos": "Aucune vidéo"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "edit_as_movie": "Modifier comme film",
+      "translate": "Traduire",
+      "duplicate": "Copier et modifier",
+      "duplicate_as_movie": "Copier et modifier comme film",
+      "change_availability": "Modifier la disponibilité",
+      "delete": "Supprimer",
+      "delete_modal": {
+        "title": "Supprimer l'événement",
+        "body": "Êtes-vous sûr de vouloir supprimer \"{{title}}\" ? Cette action ne peut pas être annulée.",
+        "cancel": "Annuler",
+        "confirm": "Supprimer définitivement"
+      }
     }
   }
 }

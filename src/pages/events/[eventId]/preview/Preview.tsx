@@ -1,23 +1,33 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
-import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
+import { PermissionTypes } from '@/constants/PermissionTypes';
+import {
+  useDeleteEventByIdMutation,
+  useGetCalendarSummaryQuery,
+  useGetEventPermissionsQuery,
+} from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
+import { useGetPermissionsQuery } from '@/hooks/api/user';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
+import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
-import { hasOnlineLocation } from '@/types/Offer';
+import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import { List as UiList } from '@/ui/List';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
@@ -39,8 +49,10 @@ const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
 const Preview = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { eventId } = router.query;
+
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
@@ -48,11 +60,15 @@ const Preview = () => {
     }
     return 'details';
   });
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
     id: eventId as string,
     scope: OfferTypes.EVENTS,
   });
+  const offer = getOfferByIdQuery.data;
+  const isEdited = router.query.edited === 'true';
+  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
@@ -60,11 +76,18 @@ const Preview = () => {
     format: 'lg',
   });
 
-  const offer = getOfferByIdQuery.data;
-  const isEdited = router.query.edited === 'true';
-  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
-
   const calendarSummary = getCalendarSummaryQuery.data;
+
+  const userPermissionsQuery = useGetPermissionsQuery();
+  const userPermissions = userPermissionsQuery?.data ?? [];
+
+  const eventpermissionQuery = useGetEventPermissionsQuery({
+    eventId: eventId,
+  });
+
+  const eventPermissions: string[] =
+    (eventpermissionQuery?.data as { permissions?: string[] } | undefined)
+      ?.permissions ?? [];
 
   const { mainLanguage, name, terms } = offer;
 
@@ -84,6 +107,19 @@ const Preview = () => {
   );
 
   const tabOptions = ['details']; //['details', 'history'];
+  const tabOptions = ['details'];
+  const isGodUser = userPermissions?.includes(
+    PermissionTypes.GEBRUIKERS_BEHEREN,
+  );
+  const canSeeHistory = userPermissions?.includes(
+    PermissionTypes.AANBOD_HISTORIEK,
+  );
+  /* TODO enable history tab when functionality is ready
+  if (canSeeHistory || isGodUser) {
+    tabOptions.push('history');
+  }
+  tabOptions.push('publication');
+  //*/
 
   const onTabChange = (key: string) => {
     setActiveTab(key);
@@ -342,6 +378,7 @@ const Preview = () => {
 
   const VideoPreview = () => {
     // TODO check with Sarah if we need real previews here?
+    // @see https://jira.publiq.be/browse/III-6951
     const hasVideos = (offer.videos ?? []).length > 0;
 
     if (!hasVideos)
@@ -507,6 +544,17 @@ const Preview = () => {
     );
   };
 
+  const onDeleteClick = (offer: Offer) => {
+    setIsModalVisible(true);
+  };
+
+  const deleteItemByIdMutation = useDeleteEventByIdMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['events'] });
+      router.push('/dashboard');
+    },
+  });
+
   return (
     <Page>
       <Page.Title>{title}</Page.Title>
@@ -555,9 +603,38 @@ const Preview = () => {
             </Tabs>
           </Stack>
           <Stack spacing={3.5} flex={1}>
-            {/* <OfferPreviewSidebar offer={offer} /> */}
+            {
+              <OfferPreviewSidebar
+                offer={offer}
+                onDelete={onDeleteClick}
+                userPermissions={userPermissions}
+                eventPermissions={eventPermissions}
+              />
+            }
           </Stack>
         </Inline>
+        <Modal
+          variant={ModalVariants.QUESTION}
+          visible={isModalVisible}
+          onConfirm={async () => {
+            deleteItemByIdMutation.mutate({
+              id: parseOfferId(offer['@id']),
+            });
+          }}
+          onClose={() => setIsModalVisible(false)}
+          title={t('preview.actions.delete_modal.title')}
+          confirmTitle={t('preview.actions.delete_modal.confirm')}
+          cancelTitle={t('preview.actions.delete_modal.cancel')}
+          size={ModalSizes.LG}
+        >
+          <Box
+            padding={4}
+            backgroundColor="white"
+            borderRadius={getGlobalBorderRadius}
+          >
+            {t('preview.actions.delete_modal.body', { title: title })}
+          </Box>
+        </Modal>
       </Page.Content>
     </Page>
   );

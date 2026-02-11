@@ -38,11 +38,10 @@ test.describe('Event translation', () => {
       },
     ];
 
-    await page.goto(`${baseURL}/dashboard`);
-
-    // Select first link with /preview in href
-    const firstEventLink = page.locator('a[href*="/preview"]').first();
-    await firstEventLink.click();
+    // Go to a permanent event preview page.
+    await page.goto(
+      `${baseURL}/event/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b/preview`,
+    );
 
     await page.waitForLoadState('networkidle');
 
