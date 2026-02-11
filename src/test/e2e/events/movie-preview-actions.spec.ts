@@ -116,33 +116,49 @@ test.describe('Movie Preview Sidebar Actions', () => {
     await expect(deleteButton).not.toBeDisabled();
   });
 
-  test('should navigate to pages when buttons are clicked', async ({
+  test('should have correct href attributes on action links', async ({
     page,
     movieEventId,
-    moviePreviewUrl,
   }) => {
-    await page.getByRole('button', { name: 'Bewerken', exact: true }).click();
-    await page.waitForURL(`**/events/${movieEventId}/edit`);
+    const editLink = page.getByRole('link', {
+      name: 'Bewerken',
+      exact: true,
+    });
+    await expect(editLink).toHaveAttribute(
+      'href',
+      `/events/${movieEventId}/edit`,
+    );
 
-    await page.goto(moviePreviewUrl);
-    await page.getByRole('button', { name: 'Bewerken als film' }).click();
-    await page.waitForURL(`**/manage/movies/${movieEventId}/edit`);
+    const editMovieLink = page.getByRole('link', {
+      name: 'Bewerken als film',
+    });
+    await expect(editMovieLink).toHaveAttribute(
+      'href',
+      `/manage/movies/${movieEventId}/edit`,
+    );
 
-    await page.goto(moviePreviewUrl);
-    await page.getByRole('button', { name: 'Vertalen' }).click();
-    await page.waitForURL(`**/events/${movieEventId}/translate`);
+    const translateLink = page.getByRole('link', { name: 'Vertalen' });
+    await expect(translateLink).toHaveAttribute(
+      'href',
+      `/events/${movieEventId}/translate`,
+    );
 
-    await page.goto(moviePreviewUrl);
-    await page
-      .getByRole('button', { name: 'Kopiëren en aanpassen', exact: true })
-      .click();
-    await page.waitForURL(`**/events/${movieEventId}/duplicate`);
+    const duplicateLink = page.getByRole('link', {
+      name: 'Kopiëren en aanpassen',
+      exact: true,
+    });
+    await expect(duplicateLink).toHaveAttribute(
+      'href',
+      `/events/${movieEventId}/duplicate`,
+    );
 
-    await page.goto(moviePreviewUrl);
-    await page
-      .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
-      .click();
-    await page.waitForURL(`**/events/${movieEventId}/availability`);
+    const availabilityLink = page.getByRole('link', {
+      name: 'Beschikbaarheid wijzigen',
+    });
+    await expect(availabilityLink).toHaveAttribute(
+      'href',
+      `/events/${movieEventId}/availability`,
+    );
   });
 
   test('should duplicate as movie and navigate to new event edit page with same title', async ({

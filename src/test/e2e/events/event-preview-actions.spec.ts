@@ -94,27 +94,56 @@ test.describe('Event Preview Sidebar Actions', () => {
     await expect(deleteButton).not.toBeDisabled();
   });
 
-  test('should navigate to pages when buttons are clicked', async ({
+  test('should have correct href attributes on action links', async ({
     page,
     eventId,
-    eventPreviewUrl,
   }) => {
-    await page.getByRole('button', { name: 'Bewerken' }).click();
-    await page.waitForURL(`**/events/${eventId}/edit`);
+    const editLink = page.getByRole('link', { name: 'Bewerken' });
+    await expect(editLink).toHaveAttribute('href', `/events/${eventId}/edit`);
 
-    await page.goto(eventPreviewUrl);
-    await page.getByRole('button', { name: 'Vertalen' }).click();
-    await page.waitForURL(`**/events/${eventId}/translate`);
+    const translateLink = page.getByRole('link', { name: 'Vertalen' });
+    await expect(translateLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/translate`,
+    );
 
-    await page.goto(eventPreviewUrl);
-    await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).click();
-    await page.waitForURL(`**/events/${eventId}/duplicate`);
+    const duplicateLink = page.getByRole('link', {
+      name: 'Kopiëren en aanpassen',
+    });
+    await expect(duplicateLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/duplicate`,
+    );
 
-    await page.goto(eventPreviewUrl);
-    await page
-      .getByRole('button', { name: 'Beschikbaarheid wijzigen' })
-      .click();
-    await page.waitForURL(`**/events/${eventId}/availability`);
+    const availabilityLink = page.getByRole('link', {
+      name: 'Beschikbaarheid wijzigen',
+    });
+    await expect(availabilityLink).toHaveAttribute(
+      'href',
+      `/events/${eventId}/availability`,
+    );
+  });
+
+  test('should open delete confirmation modal when delete button is clicked', async ({
+    page,
+  }) => {
+    const deleteButton = page.getByRole('button', { name: 'Verwijderen' });
+    await deleteButton.click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    const modalTitle = modal.getByText('Evenement verwijderen');
+    await expect(modalTitle).toBeVisible();
+
+    const confirmButton = modal.getByRole('button', { name: 'Verwijderen' });
+    await expect(confirmButton).toBeVisible();
+
+    const cancelButton = modal.getByRole('button', { name: 'Annuleren' });
+    await expect(cancelButton).toBeVisible();
+
+    await cancelButton.click();
+    await expect(modal).not.toBeVisible();
   });
 
   test('should only show duplicate button for expired event', async ({
