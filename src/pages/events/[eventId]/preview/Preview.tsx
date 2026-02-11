@@ -5,15 +5,14 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
-import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
   useGetEventPermissionsQuery,
 } from '@/hooks/api/events';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
+import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
@@ -106,19 +105,19 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const tabOptions = ['details']; //['details', 'history'];
   const tabOptions = ['details'];
+
+  /* TODO enable history tab when functionality is ready
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
   const canSeeHistory = userPermissions?.includes(
     PermissionTypes.AANBOD_HISTORIEK,
   );
-  /* TODO enable history tab when functionality is ready
+  
   if (canSeeHistory || isGodUser) {
     tabOptions.push('history');
   }
-  tabOptions.push('publication');
   //*/
 
   const onTabChange = (key: string) => {
