@@ -268,11 +268,6 @@ const Preview = () => {
                 {t('preview.public_url', { publicationBrand })}
               </Link>
             </UiList.Item>
-            {offer.sameAs
-              ?.filter((sameAsUrl) => !sameAsUrl.includes('uitinvlaanderen'))
-              .map((sameAsUrl) => (
-                <UiList.Item key={sameAsUrl}>{sameAsUrl}</UiList.Item>
-              ))}
           </UiList>
         ),
       });
