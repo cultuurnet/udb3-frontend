@@ -413,6 +413,19 @@ const Preview = () => {
         <EmptyValue>{t('preview.empty_value.theme')}</EmptyValue>
       ),
     },
+    ...(isCultuurkuurEvent
+      ? [
+          {
+            field: t('preview.labels.access'),
+            value: (
+              <Stack>
+                <Text>{t('preview.educational')}</Text>
+                <Alert>{t('preview.educational_info')}</Alert>
+              </Stack>
+            ),
+          },
+        ]
+      : []),
     {
       field: t('preview.labels.labels'),
       value: (
