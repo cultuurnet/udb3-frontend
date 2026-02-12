@@ -134,4 +134,16 @@ test.describe('Cultuurkuur Event - Publication Status Display', () => {
     const alert = page.getByText(/binnen een dag.*zichtbaar op.*Cultuurkuur/);
     await expect(alert).toBeVisible();
   });
+
+  test('should show access information row', async ({
+    page,
+    cultuurkuurEventUrl,
+  }) => {
+    await page.goto(cultuurkuurEventUrl);
+    const accessInfoRow = page.getByRole('row', { name: 'Toegang' });
+    await expect(accessInfoRow).toBeVisible();
+    const accessInfoCell = accessInfoRow.getByRole('alert');
+    await expect(accessInfoCell).toBeVisible();
+    await expect(accessInfoCell).toContainText(/evenement specifiek op scholen gericht/);
+  });
 });
