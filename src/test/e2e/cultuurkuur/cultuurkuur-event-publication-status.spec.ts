@@ -144,6 +144,8 @@ test.describe('Cultuurkuur Event - Publication Status Display', () => {
     await expect(accessInfoRow).toBeVisible();
     const accessInfoCell = accessInfoRow.getByRole('alert');
     await expect(accessInfoCell).toBeVisible();
-    await expect(accessInfoCell).toContainText(/evenement specifiek op scholen gericht/);
+    await expect(accessInfoCell).toContainText(
+      /evenement specifiek op scholen gericht/,
+    );
   });
 });
