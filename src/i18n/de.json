@@ -28,6 +28,8 @@
   },
   "brand": "UiTdatabank",
   "brand_uitpas": "UiTPAS",
+  "brand_cultuurkuur": "Cultuurkuur",
+  "brand_uitinvlaanderen": "UiTinVlaanderen",
   "calendarSummary": {
     "at": "um",
     "from": "Von",
