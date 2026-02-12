@@ -215,14 +215,14 @@ const Preview = () => {
     const showEventId = !isRejected && !isDeleted;
 
     const publicationBrand = isCultuurkuurEvent
-      ? 'Cultuurkuur'
-      : 'UiTinVlaanderen';
+      ? t('brand_cultuurkuur')
+      : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
-      ? `https://cultuurkuur.be/event/${parseOfferId(offer['@id'])}`
-      : `https://www.uitinvlaanderen.be/agenda/e/${parseOfferId(offer['@id'])}`;
+      ? `${process.env.NEXT_PUBLIC_CK_URL}/event/${parseOfferId(offer['@id'])}`
+      : `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/${parseOfferId(offer['@id'])}`;
 
     const publicationRulesUrl =
-      'https://www.publiq.be/nl/publicatieregels-uitdatabank';
+      process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL;
 
     const renderStatusCell = () => {
       if (isRejected) {
