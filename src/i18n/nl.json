@@ -1482,10 +1482,13 @@
     "publication_alert_cultuurkuur_timeframe": "een dag",
     "publication_alert_uitagendas_timeframe": "1 uur",
     "uit_agendas": "de UiTagenda's",
+    "educational": "Specifiek voor scholen",
+    "educational_info": "Omdat dit evenement specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
     "labels": {
       "title": "Titel",
       "type": "Type",
       "theme": "Thema",
+      "access": "Toegang",
       "labels": "Labels",
       "description": "Beschrijving",
       "location": "Waar",

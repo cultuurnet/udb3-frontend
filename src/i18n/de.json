@@ -1426,10 +1426,13 @@
     "publication_alert_cultuurkuur_timeframe": "1 Tag",
     "publication_alert_uitagendas_timeframe": "1 Stunde",
     "uit_agendas": "der UiTagendas",
+    "educational": "Nur für Schulen",
+    "educational_info": "Da diese Angebot nur für Schulen konzipiert ist, wird sie nur auf Cultuurkuur.be, der Plattform für Bildung und Kultur, veröffentlicht.",
     "labels": {
       "title": "Titel",
       "type": "Typ",
       "theme": "Thema",
+      "access": "Zugang",
       "labels": "Labels",
       "description": "Beschreibung",
       "location": "Wo",

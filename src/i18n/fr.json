@@ -1425,10 +1425,13 @@
     "publication_alert_cultuurkuur_timeframe": "un jour",
     "publication_alert_uitagendas_timeframe": "1 heure",
     "uit_agendas": "les UiTagendas",
+    "educational": "Spécifiquement pour des écoles",
+    "educational_info": "Cet événement étant spécifiquement destiné aux écoles, il sera uniquement publié sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
     "labels": {
       "title": "Titre",
       "type": "Type",
       "theme": "Thème",
+      "access": "Accès",
       "labels": "Étiquettes",
       "description": "Description",
       "location": "Où",
