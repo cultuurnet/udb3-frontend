@@ -1421,6 +1421,8 @@
     "publication_alert_cultuurkuur_timeframe": "à partir de demain",
     "publication_alert_uitagendas_timeframe": "dans un délai de 1 heure",
     "uit_agendas": "les UiTagendas",
+    "info_lesson_series": "Votre série de cours apparaît dans les agendas UiT jusqu'au premier moment de la cours.",
+    "info_holiday_camp": "Votre camp de vacances apparaîtront dans des calendriers en ligne jusqu'au jour du début.",
     "labels": {
       "title": "Titre",
       "type": "Type",
