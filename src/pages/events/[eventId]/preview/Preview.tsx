@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
+import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
@@ -96,6 +97,9 @@ const Preview = () => {
 
   const typeTerm = terms.find((term) => term.domain === 'eventtype');
   const themeTerm = terms.find((term) => term.domain === 'theme');
+
+  const isLessonSeries = typeTerm?.id === EventTypes.Lessenreeks;
+  const isHolidayCamp = typeTerm?.id === EventTypes['Kamp of vakantie'];
 
   const description = getLanguageObjectOrFallback<string>(
     offer.description,
@@ -359,13 +363,25 @@ const Preview = () => {
     {
       field: t('preview.labels.calendar'),
       value: (
-        <Text
-          css={`
-            white-space: pre-wrap;
-          `}
-        >
-          {calendarSummary}
-        </Text>
+        <Stack>
+          <Text
+            css={`
+              white-space: pre-wrap;
+            `}
+          >
+            {calendarSummary}
+          </Text>
+          {isLessonSeries && (
+            <Alert width="100%" marginTop={4} marginBottom={2}>
+              <Text>{t('preview.info_lesson_series')}</Text>
+            </Alert>
+          )}
+          {isHolidayCamp && (
+            <Alert width="100%" marginTop={4} marginBottom={2}>
+              <Text>{t('preview.info_holiday_camp')}</Text>
+            </Alert>
+          )}
+        </Stack>
       ),
     },
     { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
