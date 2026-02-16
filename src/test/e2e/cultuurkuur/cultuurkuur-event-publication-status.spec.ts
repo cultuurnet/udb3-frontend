@@ -130,8 +130,11 @@ test.describe('Cultuurkuur Event - Publication Status Display', () => {
     await page.getByRole('button', { name: 'Klaar met bewerken' }).click();
 
     await page.waitForURL(/\/events\/[a-f0-9-]+\?edited=true/);
+    await page.screenshot({
+      path: 'screenshots/cultuurkuur-publication-alert.png',
+    });
 
-    const alert = page.getByText(/binnen een dag.*zichtbaar op.*Cultuurkuur/);
+    const alert = page.getByText(/vanaf morgen.*zichtbaar op.*Cultuurkuur/);
     await expect(alert).toBeVisible();
   });
 
