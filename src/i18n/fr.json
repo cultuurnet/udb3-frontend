@@ -1423,6 +1423,7 @@
     "uit_agendas": "les UiTagendas",
     "info_lesson_series": "Votre série de cours apparaît dans les agendas UiT jusqu'au premier moment de la cours.",
     "info_holiday_camp": "Votre camp de vacances apparaîtront dans des calendriers en ligne jusqu'au jour du début.",
+    "ages": "Ages: {{ages}}",
     "labels": {
       "title": "Titre",
       "type": "Type",

@@ -1480,6 +1480,7 @@
     "uit_agendas": "de UiTagenda's",
     "info_lesson_series": "Je lessenreeks verschijnt in UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt in UiTagenda's tot aan de startdag.",
+    "ages": "Leeftijden: {{ages}}",
     "labels": {
       "title": "Titel",
       "type": "Type",
