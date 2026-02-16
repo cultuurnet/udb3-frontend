@@ -1478,6 +1478,8 @@
     "publication_alert_cultuurkuur_timeframe": "vanaf morgen",
     "publication_alert_uitagendas_timeframe": "binnen 1 uur",
     "uit_agendas": "de UiTagenda's",
+    "booking_data": "Reservatiegegevens",
+    "booking_period": "Reservatieperiode",
     "labels": {
       "title": "Titel",
       "type": "Type",

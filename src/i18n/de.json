@@ -1422,6 +1422,8 @@
     "publication_alert_cultuurkuur_timeframe": "ab morgen",
     "publication_alert_uitagendas_timeframe": "innerhalb 1 Stunde",
     "uit_agendas": "der UiTagendas",
+    "booking_data": "Reservierungsdetails",
+    "booking_period": "Reservierungszeitraum",
     "labels": {
       "title": "Titel",
       "type": "Typ",
