@@ -218,6 +218,14 @@ const Preview = () => {
     return <Text>{t(`workflowStatus.${workflowStatus}`)}</Text>;
   };
 
+  const formatCustomAgeRange = (ageRange: string) => {
+    const [min, max] = ageRange.split('-');
+    if (min && !max) {
+      return `${min}+`;
+    }
+    return ageRange;
+  };
+
   const AgePreview = () => {
     const hasAgeInfo = !!offer.typicalAgeRange;
 
@@ -232,7 +240,11 @@ const Preview = () => {
       return ageRange.apiLabel === offer.typicalAgeRange;
     });
 
-    return <Text>{AgeRanges[ageRangeLabelKey]?.label}</Text>;
+    const ageText = AgeRanges[ageRangeLabelKey]
+      ? AgeRanges[ageRangeLabelKey].label
+      : formatCustomAgeRange(offer.typicalAgeRange);
+
+    return <Text>{t('preview.ages', { ages: ageText })}</Text>;
   };
 
   const ImagePreview = () => {
