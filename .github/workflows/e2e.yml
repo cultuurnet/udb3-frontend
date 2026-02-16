@@ -49,6 +49,20 @@ jobs:
       - name: Run Playwright tests
         timeout-minutes: 8
         env:
+          NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
+          NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_LEGACY_APP_URL: ${{ secrets.NEXT_PUBLIC_LEGACY_APP_URL }}
+          NEXT_PUBLIC_AUTH_URL: ${{ secrets.NEXT_PUBLIC_AUTH_URL }}
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          NEXT_PUBLIC_SOCKET_URL: ${{ secrets.NEXT_PUBLIC_SOCKET_URL }}
+          NEXT_PUBLIC_NEW_ANNOUNCEMENTS_URL: ${{ secrets.NEXT_PUBLIC_NEW_ANNOUNCEMENTS_URL }}
+          NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID: ${{ secrets.NEXT_PUBLIC_NEWSLETTER_EMAIL_LIST_ID }}
+          NEXT_PUBLIC_TAXONOMY_URL: ${{ secrets.NEXT_PUBLIC_TAXONOMY_URL }}
+          NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID: ${{ secrets.NEXT_PUBLIC_CULTUURKUUR_LOCATION_ID }}
+          NEXT_PUBLIC_UIV_URL: ${{ secrets.NEXT_PUBLIC_UIV_URL }}
+          NEXT_PUBLIC_CK_URL: ${{ secrets.NEXT_PUBLIC_CK_URL }}
+          NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL: ${{ secrets.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL }}
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_ADMIN_EMAIL: ${{ secrets.E2E_TEST_ADMIN_EMAIL }}
@@ -58,6 +72,7 @@ jobs:
           AUTH_ISSUER_BASE_URL: ${{ secrets.AUTH_ISSUER_BASE_URL }}
           AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
           AUTH_CLIENT_SECRET: ${{ secrets.AUTH_CLIENT_SECRET }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: npx playwright test --reporter=list,github,json
 
       - name: Upload test results
