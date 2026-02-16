@@ -47,7 +47,9 @@ jobs:
           AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
           AUTH_CLIENT_SECRET: ${{ secrets.AUTH_CLIENT_SECRET }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
+          NEXT_PUBLIC_UIV_URL: ${{ secrets.NEXT_PUBLIC_UIV_URL }}
+          NEXT_PUBLIC_CK_URL: ${{ secrets.NEXT_PUBLIC_CK_URL }}
+          NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL: ${{ secrets.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL }}
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
