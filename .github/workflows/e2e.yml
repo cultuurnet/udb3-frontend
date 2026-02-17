@@ -19,15 +19,12 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        timeout-minutes: 3
         run: yarn install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        timeout-minutes: 2
         run: npx playwright install chromium --with-deps
 
       - name: Build Next.js application
-        timeout-minutes: 5
         env:
           NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
@@ -47,7 +44,6 @@ jobs:
         run: yarn build
 
       - name: Run Playwright tests
-        timeout-minutes: 8
         env:
           NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
