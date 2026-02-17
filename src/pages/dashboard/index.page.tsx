@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
-import { format, isAfter, isFuture } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { ComponentType, useMemo, useState } from 'react';
@@ -39,6 +38,7 @@ import {
   useGetUserQuery,
   User,
 } from '@/hooks/api/user';
+import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
@@ -47,7 +47,6 @@ import type { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Organizer } from '@/types/Organizer';
 import type { Place } from '@/types/Place';
-import { Values } from '@/types/Values';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
@@ -66,7 +65,7 @@ import { SelectWithLabel } from '@/ui/SelectWithLabel';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
-import { Text, TextVariants } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -123,71 +122,6 @@ const CreateMap = {
   organizers: '/organizers/create',
 };
 
-const RowStatus = {
-  APPROVED: 'APPROVED',
-  DRAFT: 'DRAFT',
-  REJECTED: 'REJECTED',
-  PUBLISHED: 'PUBLISHED',
-  PLANNED: 'PLANNED',
-} as const;
-
-type RowStatus = Values<typeof RowStatus>;
-
-const RowStatusToColor: Record<RowStatus, string> = {
-  DRAFT: colors.warning,
-  REJECTED: colors.danger,
-  APPROVED: colors.udbMainPositiveGreen,
-  PUBLISHED: colors.udbMainPositiveGreen,
-  PLANNED: 'blue',
-};
-
-export type Status = {
-  color?: string;
-  label?: string;
-  isExternalCreator?: boolean;
-};
-
-type StatusIndicatorProps = InlineProps & Status;
-
-export const StatusIndicator = ({
-  color,
-  label,
-  isExternalCreator,
-  ...props
-}: StatusIndicatorProps) => {
-  const { t } = useTranslation();
-  return (
-    <Stack>
-      <Inline
-        marginBottom={1}
-        spacing={3}
-        alignItems="center"
-        {...getInlineProps(props)}
-      >
-        {color &&
-          label && [
-            <Box
-              key="status-indicator-box"
-              width="0.90rem"
-              height="0.90rem"
-              backgroundColor={color}
-              borderRadius="50%"
-              flexShrink={0}
-            />,
-            <Text key="status-indicator-label" variant={TextVariants.MUTED}>
-              {label}
-            </Text>,
-          ]}
-      </Inline>
-      {isExternalCreator && (
-        <Text variant={TextVariants.MUTED}>
-          {t('dashboard.external_creator')}
-        </Text>
-      )}
-    </Stack>
-  );
-};
-
 type ExistingOffer = Omit<Offer, 'workflowStatus'> & {
   workflowStatus: Exclude<WorkflowStatus, 'DELETED'>;
 };
@@ -200,18 +134,9 @@ type OfferRowProps = InlineProps & {
 const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const { t, i18n } = useTranslation();
 
-  const getUserQuery = useGetUserQuery();
-  const userId = getUserQuery.data?.sub;
-  const userIdv1 = getUserQuery.data?.['https://publiq.be/uitidv1id'];
-  const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
+  const status = usePublicationStatus(offer as Offer);
 
   const offerType = parseOfferType(offer['@context']);
-
-  const isFinished = isAfter(new Date(), new Date(offer.availableTo));
-  const isPublished = ['APPROVED', 'READY_FOR_VALIDATION'].includes(
-    offer.workflowStatus,
-  );
-  const isPlanned = isPublished && isFuture(new Date(offer.availableFrom));
 
   const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
@@ -229,44 +154,6 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
     ? t(`eventTypes*${typeId}`, { keySeparator: '*' })
     : undefined;
 
-  const rowStatus = useMemo<RowStatus>(() => {
-    if (isPlanned) {
-      return 'PLANNED';
-    }
-
-    if (isPublished) {
-      return 'PUBLISHED';
-    }
-
-    if (offer.workflowStatus === WorkflowStatus.READY_FOR_VALIDATION) {
-      return WorkflowStatus.DRAFT;
-    }
-
-    return offer.workflowStatus;
-  }, [offer.workflowStatus, isPlanned, isPublished]);
-
-  const statusColor = useMemo(() => {
-    return RowStatusToColor[rowStatus];
-  }, [rowStatus]);
-
-  const statusLabel = useMemo(() => {
-    if (rowStatus === 'REJECTED') {
-      return t('dashboard.row_status.rejected');
-    }
-
-    if (rowStatus === 'PUBLISHED') {
-      return t('dashboard.row_status.published');
-    }
-
-    if (rowStatus === 'PLANNED') {
-      return t('dashboard.row_status.published_from', {
-        date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
-      });
-    }
-
-    return t('dashboard.row_status.draft');
-  }, [offer.availableFrom, rowStatus, t]);
-
   const [isPictureUploadModalVisible, setIsPictureUploadModalVisible] =
     useState(false);
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -281,7 +168,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
       eventId={eventId}
       scope={scope}
       url={previewUrl}
-      isFinished={isFinished}
+      isFinished={status.isFinished}
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
@@ -303,14 +190,10 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
         </Dropdown.Item>,
       ]}
       finishedAt={
-        isFinished &&
+        status.isFinished &&
         t('dashboard.passed', { type: t(`dashboard.${offerType}`) })
       }
-      status={{
-        color: statusColor,
-        label: statusLabel,
-        isExternalCreator,
-      }}
+      status={status}
       {...getInlineProps(props)}
     >
       <DashboardPictureUploadModal

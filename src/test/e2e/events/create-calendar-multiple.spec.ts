@@ -85,7 +85,6 @@ test('create an event with calendarType multiple', async ({
     'Organisatie',
     'Prijsinfo',
     'Tickets & plaatsen',
-    'Publicatie',
     'Reservatie',
     'Contactgegevens',
     'Geschikt voor',
@@ -94,7 +93,7 @@ test('create an event with calendarType multiple', async ({
   ];
 
   const firstColumnCells = await page
-    .locator('table.table > tbody > tr > td:first-child')
+    .locator('table.details-table > tbody > tr > td:first-child')
     .allTextContents();
 
   for (const label of expectedLabels) {
@@ -102,7 +101,9 @@ test('create an event with calendarType multiple', async ({
   }
 
   // Validate that some rows have "Geen" when empty
-  const tableRows = await page.locator('table.table > tbody > tr').count();
+  const tableRows = await page
+    .locator('table.details-table > tbody > tr')
+    .count();
 
   const expectedEmptyFields = [
     'Thema',
@@ -117,11 +118,15 @@ test('create an event with calendarType multiple', async ({
 
   for (let i = 0; i < tableRows; i++) {
     const firstColumnValue = await page
-      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(1)`)
+      .locator(
+        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(1)`,
+      )
       .textContent();
 
     const secondColumnValue = await page
-      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`)
+      .locator(
+        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`,
+      )
       .textContent();
 
     if (expectedEmptyFields.includes(firstColumnValue?.trim() ?? '')) {
