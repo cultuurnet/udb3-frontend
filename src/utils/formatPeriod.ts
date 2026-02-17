@@ -1,4 +1,5 @@
 import { differenceInDays, format } from 'date-fns';
+import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl-BE';
 import capitalize from 'lodash/capitalize';
@@ -7,6 +8,7 @@ import type { TFunction } from 'react-i18next';
 const locales = {
   nl,
   fr,
+  de,
 };
 
 const formatPeriod = (

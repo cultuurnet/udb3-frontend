@@ -1431,6 +1431,7 @@
     "educational_info": "Cet événement étant spécifiquement destiné aux écoles, il sera uniquement publié sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
     "info_lesson_series": "Votre série de cours apparaît dans les agendas UiT jusqu'au premier moment de la cours.",
     "info_holiday_camp": "Votre camp de vacances apparaîtront dans des calendriers en ligne jusqu'au jour du début.",
+    "ages": "Ages: {{ages}}",
     "labels": {
       "title": "Titre",
       "type": "Type",

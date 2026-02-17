@@ -8,6 +8,7 @@ type Place = BaseOffer & {
     latitude: number;
     longitude: number;
   };
+  isDummyPlaceForEducationEvents?: boolean;
 };
 
 const isPlace = (value: unknown): value is Place => {
