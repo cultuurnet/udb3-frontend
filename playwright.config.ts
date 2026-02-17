@@ -23,9 +23,24 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.CI
+    ? [
+        ['list'], // Shows each test as it runs
+        ['github'], // GitHub Actions annotations
+        ['html'], // Generates HTML report
+        [
+          'json',
+          {
+            outputFile: 'playwright-report/test-results.json',
+          },
+        ],
+      ]
+    : [
+        ['list'], // Shows each test as it runs
+        ['html'], // Generates HTML report
+      ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
@@ -35,6 +50,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    /* Capture screenshot on failure */
+    screenshot: 'only-on-failure',
   },
 
   /* Configure projects for major browsers */
@@ -77,9 +94,9 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     reuseExistingServer: !process.env.CI,
-    command: 'yarn build && yarn start',
+    command: process.env.CI ? 'yarn start' : 'yarn build && yarn start',
     port: 3000,
-    timeout: 240 * 1000,
+    timeout: process.env.CI ? 60 * 1000 : 240 * 1000,
     env: {
       NEXT_PUBLIC_ENVIRONMENT: 'e2e',
     },

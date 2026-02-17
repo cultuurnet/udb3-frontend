@@ -27,6 +27,8 @@
   },
   "brand": "UiTdatabank",
   "brand_uitpas": "UiTPAS",
+  "brand_cultuurkuur": "Cultuurkuur",
+  "brand_uitinvlaanderen": "UiTinVlaanderen",
   "calendarSummary": {
     "at": "om",
     "from": "Van",
@@ -607,10 +609,12 @@
       "places": "Geen locaties gevonden"
     },
     "row_status": {
-      "draft": "Kladversie",
-      "rejected": "Publicatie afgewezen",
-      "published": "Gepubliceerd",
-      "published_from": "Publicatie vanaf {{date}}"
+      "PLANNED": "Publicatie vanaf {{date}}",
+      "PUBLISHED": "Gepubliceerd",
+      "DRAFT": "Kladversie",
+      "APPROVED": "Gepubliceerd",
+      "REJECTED": "Publicatie afgewezen",
+      "DELETED": "Verwijderd"
     },
     "external_creator": "Aangemaakt via een externe applicatie",
     "not_published": "Niet gepubliceerd",
@@ -1478,6 +1482,10 @@
     "publication_alert_cultuurkuur_timeframe": "vanaf morgen",
     "publication_alert_uitagendas_timeframe": "binnen 1 uur",
     "uit_agendas": "de UiTagenda's",
+    "booking_data": "Reservatiegegevens",
+    "booking_period": "Reservatieperiode",
+    "educational": "Specifiek voor scholen",
+    "educational_info": "Omdat dit evenement specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
     "info_lesson_series": "Je lessenreeks verschijnt in UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt in UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
@@ -1485,6 +1493,7 @@
       "title": "Titel",
       "type": "Type",
       "theme": "Thema",
+      "access": "Toegang",
       "labels": "Labels",
       "description": "Beschrijving",
       "location": "Waar",
@@ -1493,13 +1502,16 @@
       "organizer": "Organisatie",
       "price": "Prijsinfo",
       "booking": "Tickets & plaatsen",
-      "publication": "Publicatie",
+      "publication": "Publicatiestatus",
       "booking_info": "Reservatie",
       "contact": "Contactgegevens",
       "age": "Geschikt voor",
       "image": "Afbeeldingen",
-      "video": "Video's"
+      "video": "Video's",
+      "event_id": "ID"
     },
+    "public_url": "Bekijk op {{publicationBrand}}",
+    "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",
     "empty_value": {
       "description": "Geen beschrijving",
       "theme": "Geen thema",
@@ -1525,12 +1537,5 @@
         "confirm": "Definitief verwijderen"
       }
     }
-  },
-  "workflowStatus": {
-    "DRAFT": "Niet gepubliceerd",
-    "READY_FOR_VALIDATION": "Gepubliceerd",
-    "APPROVED": "Online vanaf",
-    "REJECTED": "Publicatie afgewezen",
-    "DELETED": "Verwijderd"
   }
 }
