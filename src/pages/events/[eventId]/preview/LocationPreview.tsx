@@ -32,6 +32,10 @@ const LocationPreview = ({ offer }: Props) => {
     mainLanguage,
   );
 
+  if (location.isDummyPlaceForEducationEvents) {
+    return <Text>{locationName}</Text>;
+  }
+
   const addressForLang = getLanguageObjectOrFallback<AddressInternal>(
     location.address,
     i18n.language as SupportedLanguage,
