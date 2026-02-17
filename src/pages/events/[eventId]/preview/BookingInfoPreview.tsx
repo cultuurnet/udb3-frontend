@@ -29,9 +29,9 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
   return (
     <Stack spacing={3}>
       <Stack marginBottom={4}>
-        {bookingInfo.url || bookingInfo.phone || bookingInfo.email ? (
+        {hasBookingInfo && (
           <Text fontWeight="600">{t('preview.booking_data')}</Text>
-        ) : null}
+        )}
         {bookingInfo.url && (
           <Inline>
             <Link
