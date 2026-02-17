@@ -28,34 +28,42 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
 
   return (
     <Stack spacing={3}>
-      {bookingInfo.url && (
-        <Inline>
-          <Link
-            variant={LinkVariants.BUTTON_PRIMARY}
-            target="_blank"
-            href={bookingInfo.url}
-          >
-            {getLanguageObjectOrFallback(
-              bookingInfo.urlLabel,
-              i18n.language as SupportedLanguage,
-              mainLanguage,
-            )}
-          </Link>
-        </Inline>
-      )}
-      {bookingInfo.phone && <Text>{bookingInfo.phone}</Text>}
-      {bookingInfo.email && (
-        <Link href={`mailto:${bookingInfo.email}`}>{bookingInfo.email}</Link>
-      )}
+      <Stack marginBottom={4}>
+        {hasBookingInfo && (
+          <Text fontWeight="600">{t('preview.booking_data')}</Text>
+        )}
+        {bookingInfo.url && (
+          <Inline>
+            <Link
+              variant={LinkVariants.BUTTON_PRIMARY}
+              target="_blank"
+              href={bookingInfo.url}
+            >
+              {getLanguageObjectOrFallback(
+                bookingInfo.urlLabel,
+                i18n.language as SupportedLanguage,
+                mainLanguage,
+              )}
+            </Link>
+          </Inline>
+        )}
+        {bookingInfo.phone && <Text>{bookingInfo.phone}</Text>}
+        {bookingInfo.email && (
+          <Link href={`mailto:${bookingInfo.email}`}>{bookingInfo.email}</Link>
+        )}
+      </Stack>
       {bookingInfo.availabilityStarts && bookingInfo.availabilityEnds && (
-        <Text>
-          {formatPeriod(
-            bookingInfo.availabilityStarts,
-            bookingInfo.availabilityEnds,
-            i18n.language,
-            t,
-          )}
-        </Text>
+        <Stack spacing={1}>
+          <Text fontWeight="600">{t('preview.booking_period')}</Text>
+          <Text>
+            {formatPeriod(
+              bookingInfo.availabilityStarts,
+              bookingInfo.availabilityEnds,
+              i18n.language,
+              t,
+            )}
+          </Text>
+        </Stack>
       )}
     </Stack>
   );
