@@ -1428,6 +1428,8 @@
     "uit_agendas": "der UiTagendas",
     "educational": "Nur für Schulen",
     "educational_info": "Da diese Angebot nur für Schulen konzipiert ist, wird sie nur auf Cultuurkuur.be, der Plattform für Bildung und Kultur, veröffentlicht.",
+    "info_lesson_series": "Ihre Unterrichtsreihe erscheint bis zum ersten Unterrichtszeitpunkt in UiT-Agenden.",
+    "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttag in online Agendas angezeigt.",
     "labels": {
       "title": "Titel",
       "type": "Typ",
