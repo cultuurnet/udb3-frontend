@@ -228,7 +228,6 @@ test('create event with all possible fields filled in', async ({
     'Organisatie',
     'Prijsinfo',
     'Tickets & plaatsen',
-    'Publicatie',
     'Reservatie',
     'Contactgegevens',
     'Geschikt voor',
@@ -237,7 +236,7 @@ test('create event with all possible fields filled in', async ({
   ];
 
   const firstColumnCells = await page
-    .locator('table.table > tbody > tr > td:first-child')
+    .locator('table.details-table > tbody > tr > td:first-child')
     .allTextContents();
 
   for (const label of expectedLabels) {
@@ -245,10 +244,14 @@ test('create event with all possible fields filled in', async ({
   }
 
   // Validate that every row has a non-empty value in the second column
-  const tableRows = await page.locator('table.table > tbody > tr').count();
+  const tableRows = await page
+    .locator('table.details-table > tbody > tr')
+    .count();
   for (let i = 0; i < tableRows; i++) {
     const secondColumnValue = await page
-      .locator(`table.table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`)
+      .locator(
+        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`,
+      )
       .textContent();
 
     expect(secondColumnValue?.trim()).not.toBe('');

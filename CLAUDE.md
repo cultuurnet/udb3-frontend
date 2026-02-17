@@ -427,6 +427,8 @@ src/
 - Separate setup for admin vs regular users (auth.setup.ts, auth-admin.setup.ts)
 - Admin tests: `*.admin.spec.ts` files
 - Run: `yarn test:e2e`
+- Never test styling or spacing
+- Never test different languages
 
 #### Playwright Fixtures Pattern
 
@@ -495,3 +497,4 @@ test.describe('My Tests', () => {
 - Remove unused code completely (no backwards-compatibility hacks)
 - Avoid over-engineering: make only necessary changes
 - Prefer simple solutions over abstractions
+- Never create documentation that duplicates what code already expresses

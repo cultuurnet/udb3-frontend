@@ -28,6 +28,8 @@
   },
   "brand": "UiTdatabank",
   "brand_uitpas": "UiTPAS",
+  "brand_cultuurkuur": "Cultuurkuur",
+  "brand_uitinvlaanderen": "UiTinVlaanderen",
   "calendarSummary": {
     "at": "um",
     "from": "Von",
@@ -574,10 +576,12 @@
       "places": "Keine Orte gefunden"
     },
     "row_status": {
-      "draft": "Entwurfsversion",
-      "rejected": "Veröffentlichung abgelehnt",
-      "published": "Veröffentlicht",
-      "published_from": "Veröffentlichung aus {{date}}"
+      "PLANNED": "Veröffentlichung aus {{date}}",
+      "PUBLISHED": "Veröffentlicht",
+      "DRAFT": "Entwurfsversion",
+      "APPROVED": "Veröffentlicht",
+      "REJECTED": "Veröffentlichung abgelehnt",
+      "DELETED": "Gelöscht"
     },
     "external_creator": "Erstellt durch eine externe Anwendung",
     "not_published": "Nicht veröffentlicht",
@@ -1422,12 +1426,15 @@
     "publication_alert_cultuurkuur_timeframe": "ab morgen",
     "publication_alert_uitagendas_timeframe": "innerhalb 1 Stunde",
     "uit_agendas": "der UiTagendas",
+    "educational": "Nur für Schulen",
+    "educational_info": "Da diese Angebot nur für Schulen konzipiert ist, wird sie nur auf Cultuurkuur.be, der Plattform für Bildung und Kultur, veröffentlicht.",
     "info_lesson_series": "Ihre Unterrichtsreihe erscheint bis zum ersten Unterrichtszeitpunkt in UiT-Agenden.",
     "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttag in online Agendas angezeigt.",
     "labels": {
       "title": "Titel",
       "type": "Typ",
       "theme": "Thema",
+      "access": "Zugang",
       "labels": "Labels",
       "description": "Beschreibung",
       "location": "Wo",
@@ -1441,8 +1448,11 @@
       "contact": "Kontakt",
       "age": "Geeignet für",
       "image": "Abbildungen",
-      "video": "Videos"
+      "video": "Videos",
+      "event_id": "ID"
     },
+    "public_url": "Ansicht auf {{publicationBrand}}",
+    "rejected_explanation": "Diese Veranstaltung wurde für die Veröffentlichung auf UiTinVlaanderen abgelehnt. Für weitere Informationen über die Gründe der Ablehnung können Sie <publication_rules_link>die Veröffentlichungsregeln einsehen</publication_rules_link>.",
     "empty_value": {
       "description": "Keine Beschreibung",
       "theme": "Kein Thema",
@@ -1468,12 +1478,5 @@
         "confirm": "Definitiv löschen"
       }
     }
-  },
-  "workflowStatus": {
-    "DRAFT": "Nicht veröffentlicht",
-    "READY_FOR_VALIDATION": "Veröffentlicht",
-    "APPROVED": "Online ab",
-    "REJECTED": "Veröffentlichung abgelehnt",
-    "DELETED": "Gelöscht"
   }
 }

@@ -27,6 +27,8 @@
   },
   "brand": "UiTdatabank",
   "brand_uitpas": "UiTPAS",
+  "brand_cultuurkuur": "Cultuurkuur",
+  "brand_uitinvlaanderen": "UiTinVlaanderen",
   "calendarSummary": {
     "at": "à",
     "from": "Du",
@@ -573,10 +575,12 @@
       "places": "Aucun lieu trouvé."
     },
     "row_status": {
-      "draft": "Version préliminaire",
-      "rejected": "Publication rejetée",
-      "published": "Publié",
-      "published_from": "Publication à partir de {{date}}"
+      "PLANNED": "Publication à partir de {{date}}",
+      "PUBLISHED": "Publié",
+      "DRAFT": "Version préliminaire",
+      "APPROVED": "Publié",
+      "REJECTED": "Publication rejetée",
+      "DELETED": "Supprimé"
     },
     "external_creator": "Créé par une application externe",
     "not_published": "Pas publié",
@@ -1421,12 +1425,15 @@
     "publication_alert_cultuurkuur_timeframe": "à partir de demain",
     "publication_alert_uitagendas_timeframe": "dans un délai de 1 heure",
     "uit_agendas": "les UiTagendas",
+    "educational": "Spécifiquement pour des écoles",
+    "educational_info": "Cet événement étant spécifiquement destiné aux écoles, il sera uniquement publié sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
     "info_lesson_series": "Votre série de cours apparaît dans les agendas UiT jusqu'au premier moment de la cours.",
     "info_holiday_camp": "Votre camp de vacances apparaîtront dans des calendriers en ligne jusqu'au jour du début.",
     "labels": {
       "title": "Titre",
       "type": "Type",
       "theme": "Thème",
+      "access": "Accès",
       "labels": "Étiquettes",
       "description": "Description",
       "location": "Où",
@@ -1440,8 +1447,11 @@
       "contact": "Contact",
       "age": "Adapté à",
       "image": "Images",
-      "video": "Videos"
+      "video": "Videos",
+      "event_id": "ID"
     },
+    "public_url": "Voir sur {{publicationBrand}}",
+    "rejected_explanation": "Cet événement a été rejeté pour publication sur UiTinVlaanderen. Pour plus d'informations sur les raisons du rejet, vous pouvez <publication_rules_link>consulter les règles de publication</publication_rules_link>.",
     "empty_value": {
       "description": "Aucune description",
       "theme": "Aucun thème",
@@ -1467,12 +1477,5 @@
         "confirm": "Supprimer définitivement"
       }
     }
-  },
-  "workflowStatus": {
-    "DRAFT": "Pas publié",
-    "READY_FOR_VALIDATION": "Prêt à être publié",
-    "APPROVED": "Publié le",
-    "REJECTED": "Publication rejetée",
-    "DELETED": "Supprimé"
   }
 }
