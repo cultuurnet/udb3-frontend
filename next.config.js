@@ -32,6 +32,9 @@ const moduleExports = {
     hotjarMissingFieldName: process.env.NEXT_PUBLIC_HOTJAR_MISSING_FIELD_NAME,
     ownershipEnabled: process.env.NEXT_PUBLIC_OWNERSHIP_ENABLED,
     imgixUrl: process.env.NEXT_PUBLIC_IMGIX_URL,
+    uitInVlaanderenUrl: process.env.NEXT_PUBLIC_UIV_URL,
+    cultuurKuurUrl: process.env.NEXT_PUBLIC_CK_URL,
+    udbPublicationRulesUrl: process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
   eslint: {
