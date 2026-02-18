@@ -1487,8 +1487,8 @@
     "booking_url": "Reservatielink",
     "educational": "Specifiek voor scholen",
     "educational_info": "Omdat dit evenement specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
-    "info_lesson_series": "Je lessenreeks verschijnt in UiTagenda's tot aan het eerste lesmoment.",
-    "info_holiday_camp": "Je kamp of vakantie verschijnt in UiTagenda's tot aan de startdag.",
+    "info_lesson_series": "Je lessenreeks verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan het eerste lesmoment.",
+    "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
     "labels": {
       "title": "Titel",
