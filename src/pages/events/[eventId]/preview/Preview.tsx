@@ -111,6 +111,9 @@ const Preview = () => {
   );
 
   const tabOptions = ['details'];
+  const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
+  const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
+  const showEventId = !isRejected && !isDeleted;
 
   /* TODO enable history tab when functionality is ready
   const isGodUser = userPermissions?.includes(
@@ -215,9 +218,6 @@ const Preview = () => {
 
   const PublicationPreview = () => {
     const status = usePublicationStatus(offer);
-    const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
-    const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
-    const showEventId = !isRejected && !isDeleted;
     const { publicRuntimeConfig } = getConfig();
 
     const publicationBrand = isCultuurkuurEvent
@@ -268,11 +268,12 @@ const Preview = () => {
     return (
       <Stack
         marginTop={4}
-        backgroundColor="white"
+        backgroundColor={showEventId ? colors.white : colors.pink1}
         padding={4}
         borderRadius={getGlobalBorderRadius}
         css={`
           box-shadow: ${getGlobalValue('boxShadow.medium')};
+          border: ${showEventId ? `none` : `2px solid ${colors.red3}`};
         `}
       >
         <Table
@@ -280,6 +281,8 @@ const Preview = () => {
           data={data}
           showHeader={false}
           css={`
+            --bs-table-bg: transparent;
+
             tbody tr td:nth-child(1) {
               font-weight: 600;
               width: 25%;
@@ -554,6 +557,9 @@ const Preview = () => {
             }
             tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
               color: ${colors.grey5};
+            }
+            tbody {
+              opacity: ${showEventId ? 1 : 0.4};
             }
           `}
         />
