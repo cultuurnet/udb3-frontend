@@ -224,7 +224,7 @@ const Preview = () => {
       ? t('brand_cultuurkuur')
       : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
-      ? `${publicRuntimeConfig.cultuurKuurUrl}/event/${parseOfferId(offer['@id'])}`
+      ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer['@id'])}`
       : `${publicRuntimeConfig.uivUrl}/agenda/e/${parseOfferId(offer['@id'])}`;
 
     const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
