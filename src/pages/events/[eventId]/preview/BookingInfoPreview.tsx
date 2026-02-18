@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { BookingInfo, Offer } from '@/types/Offer';
-import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -28,12 +27,30 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
 
   return (
     <Stack spacing={3}>
-      <Stack marginBottom={4}>
-        {hasBookingInfo && (
-          <Text fontWeight="600">{t('preview.booking_data')}</Text>
-        )}
+      <Stack marginBottom={4} flexDirection="row" alignItems="stretch">
+        <Stack width="50%">
+          {hasBookingInfo && (
+            <Text fontWeight="600" marginBottom={3}>
+              {t('preview.booking_data')}
+            </Text>
+          )}
+          {bookingInfo.email && (
+            <Link href={`mailto:${bookingInfo.email}`}>
+              {bookingInfo.email}
+            </Link>
+          )}
+          {bookingInfo.phone && <Text>{bookingInfo.phone}</Text>}
+          {bookingInfo.url && (
+            <Link target="_blank" href={bookingInfo.url}>
+              {bookingInfo.url}
+            </Link>
+          )}
+        </Stack>
         {bookingInfo.url && (
-          <Inline>
+          <Stack>
+            <Text fontWeight="600" marginBottom={3}>
+              {t('preview.booking_url')}
+            </Text>
             <Link
               variant={LinkVariants.BUTTON_PRIMARY}
               target="_blank"
@@ -45,16 +62,14 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
                 mainLanguage,
               )}
             </Link>
-          </Inline>
-        )}
-        {bookingInfo.phone && <Text>{bookingInfo.phone}</Text>}
-        {bookingInfo.email && (
-          <Link href={`mailto:${bookingInfo.email}`}>{bookingInfo.email}</Link>
+          </Stack>
         )}
       </Stack>
       {bookingInfo.availabilityStarts && bookingInfo.availabilityEnds && (
-        <Stack spacing={1}>
-          <Text fontWeight="600">{t('preview.booking_period')}</Text>
+        <Stack>
+          <Text fontWeight="600" marginBottom={3}>
+            {t('preview.booking_period')}
+          </Text>
           <Text>
             {formatPeriod(
               bookingInfo.availabilityStarts,
