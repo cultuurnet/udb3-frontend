@@ -482,12 +482,12 @@ const Preview = () => {
             {calendarSummary}
           </Text>
           {isLessonSeries && (
-            <Alert width="100%" marginTop={4} marginBottom={2}>
+            <Alert width="100%" marginTop={5} marginBottom={4}>
               <Text>{t('preview.info_lesson_series')}</Text>
             </Alert>
           )}
           {isHolidayCamp && (
-            <Alert width="100%" marginTop={4} marginBottom={2}>
+            <Alert width="100%" marginTop={5} marginBottom={4}>
               <Text>{t('preview.info_holiday_camp')}</Text>
             </Alert>
           )}
@@ -610,7 +610,7 @@ const Preview = () => {
                         ? t('preview.publication_alert_cultuurkuur_timeframe')
                         : t('preview.publication_alert_uitagendas_timeframe'),
                       siteName: isCultuurkuurEvent
-                        ? 'Cultuurkuur'
+                        ? t('brand_cultuurkuur')
                         : t('preview.uit_agendas'),
                     }}
                     components={{ b: <b></b> }}
