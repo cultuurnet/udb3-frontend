@@ -434,7 +434,7 @@ const Preview = () => {
             value: (
               <Stack>
                 <Text>{t('preview.educational')}</Text>
-                <Alert>{t('preview.educational_info')}</Alert>
+                <Alert marginY={4}>{t('preview.educational_info')}</Alert>
               </Stack>
             ),
           },
