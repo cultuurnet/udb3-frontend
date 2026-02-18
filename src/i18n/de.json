@@ -1431,8 +1431,8 @@
     "booking_url": "Reservierungslink",
     "educational": "Nur für Schulen",
     "educational_info": "Da diese Angebot nur für Schulen konzipiert ist, wird sie nur auf Cultuurkuur.be, der Plattform für Bildung und Kultur, veröffentlicht.",
-    "info_lesson_series": "Ihre Unterrichtsreihe erscheint bis zum ersten Unterrichtszeitpunkt in UiT-Agenden.",
-    "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttag in online Agendas angezeigt.",
+    "info_lesson_series": "Ihre Unterrichtsreihe wird bis zum Beginn der ersten Stunde auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
+    "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttermin auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "ages": "Alters: {{ages}}",
     "labels": {
       "title": "Titel",

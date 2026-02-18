@@ -1430,8 +1430,8 @@
     "booking_url": "URL de réservation",
     "educational": "Spécifiquement pour des écoles",
     "educational_info": "Cet événement étant spécifiquement destiné aux écoles, il sera uniquement publié sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
-    "info_lesson_series": "Votre série de cours apparaît dans les agendas UiT jusqu'au premier moment de la cours.",
-    "info_holiday_camp": "Votre camp de vacances apparaîtront dans des calendriers en ligne jusqu'au jour du début.",
+    "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
+    "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'événements jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
     "labels": {
       "title": "Titre",
