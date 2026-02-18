@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -217,16 +218,16 @@ const Preview = () => {
     const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
     const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
     const showEventId = !isRejected && !isDeleted;
+    const { publicRuntimeConfig } = getConfig();
 
     const publicationBrand = isCultuurkuurEvent
       ? t('brand_cultuurkuur')
       : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
-      ? `${process.env.NEXT_PUBLIC_CK_URL}/event/${parseOfferId(offer['@id'])}`
-      : `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/${parseOfferId(offer['@id'])}`;
+      ? `${publicRuntimeConfig.cultuurKuurUrl}/event/${parseOfferId(offer['@id'])}`
+      : `${publicRuntimeConfig.uitInVlaanderenUrl}/agenda/e/${parseOfferId(offer['@id'])}`;
 
-    const publicationRulesUrl =
-      process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL;
+    const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
 
     const renderStatusCell = () => {
       if (isRejected) {
