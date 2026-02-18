@@ -261,20 +261,7 @@ const Preview = () => {
     if (showEventId) {
       data.push({
         field: t('preview.labels.event_id'),
-        value: (
-          <UiList>
-            <UiList.Item>{parseOfferId(offer['@id'])}</UiList.Item>
-            <UiList.Item>
-              <Link
-                href={publicUrl}
-                target="_blank"
-                variant={LinkVariants.BUTTON_PRIMARY}
-              >
-                {t('preview.public_url', { publicationBrand })}
-              </Link>
-            </UiList.Item>
-          </UiList>
-        ),
+        value: <Text>{parseOfferId(offer['@id'])}</Text>,
       });
     }
 
@@ -302,6 +289,16 @@ const Preview = () => {
             }
           `}
         />
+        {showEventId && (
+          <Link
+            href={publicUrl}
+            target="_blank"
+            variant={LinkVariants.BUTTON_PRIMARY}
+            width="fit-content"
+          >
+            {t('preview.public_url', { publicationBrand })}
+          </Link>
+        )}
       </Stack>
     );
   };
