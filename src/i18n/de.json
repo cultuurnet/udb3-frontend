@@ -1425,7 +1425,7 @@
     "publication_alert": "Ihre Änderungen wurden gespeichert und sind <b>{{timeFrame}}</b> auf {{siteName}} sichtbar.",
     "publication_alert_cultuurkuur_timeframe": "ab morgen",
     "publication_alert_uitagendas_timeframe": "innerhalb 1 Stunde",
-    "uit_agendas": "der UiTagendas",
+    "uit_agendas": "UiTinVlaanderen und anderen UiTagendas",
     "booking_data": "Reservierungsdetails",
     "booking_period": "Reservierungszeitraum",
     "booking_url": "Reservierungslink",
@@ -1456,7 +1456,7 @@
       "event_id": "ID"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
-    "rejected_explanation": "Diese Veranstaltung wurde für die Veröffentlichung auf UiTinVlaanderen abgelehnt. Für weitere Informationen über die Gründe der Ablehnung können Sie <publication_rules_link>die Veröffentlichungsregeln einsehen</publication_rules_link>.",
+    "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",
     "empty_value": {
       "description": "Keine Beschreibung",
       "theme": "Kein Thema",

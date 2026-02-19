@@ -1424,7 +1424,7 @@
     "publication_alert": "Vos modifications ont été enregistrées et seront visibles sur {{siteName}} <b>{{timeFrame}}</b>.",
     "publication_alert_cultuurkuur_timeframe": "à partir de demain",
     "publication_alert_uitagendas_timeframe": "dans un délai de 1 heure",
-    "uit_agendas": "les UiTagendas",
+    "uit_agendas": "UiTinVlaanderen et les autres UiTagendas",
     "booking_data": "Données de réservation",
     "booking_period": "Période de réservation",
     "booking_url": "URL de réservation",
@@ -1455,7 +1455,7 @@
       "event_id": "ID"
     },
     "public_url": "Voir sur {{publicationBrand}}",
-    "rejected_explanation": "Cet événement a été rejeté pour publication sur UiTinVlaanderen. Pour plus d'informations sur les raisons du rejet, vous pouvez <publication_rules_link>consulter les règles de publication</publication_rules_link>.",
+    "rejected_explanation": "Cet article a été refusé pour publication. <publication_rules_link>Consultez les instructions</publication_rules_link>",
     "empty_value": {
       "description": "Aucune description",
       "theme": "Aucun thème",
