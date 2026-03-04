@@ -412,11 +412,14 @@ const Index = () => {
       >
         <Footer
           isProfileLinkVisible={false}
+          isNewsletterSignupFormVisible={false}
+          isZendeskWidgetVisible={false}
           onChangeLanguage={handleChangeLanguage}
           variant={FooterVariants.LOGIN}
           wrapper={(props) => (
             <ResponsiveContainer
               justifyContent={{ default: 'space-between', xs: 'flex-start' }}
+              alignSelf="center"
               alignItems={{ xs: 'center' }}
               stackOn={Breakpoints.XS}
               spacing={5}
