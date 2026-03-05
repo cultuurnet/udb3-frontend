@@ -51,45 +51,38 @@ const Tabs = <T,>({
     return true;
   });
 
-  const { udbMainDarkBlue, grey1 } = colors;
+  const { udbMainDarkBlue, grey1, textColor } = colors;
   const TabStyles = {
     default: css`
       border-bottom: none;
 
-      .nav-link:last-child {
-        border-right: 1px solid ${getValue('borderColor')};
-      }
-
       .nav-item .nav-link {
         background-color: white;
         color: ${getValue('color')};
-        border-radius: ${getValue('borderRadius')};
+        border: 1px solid ${getValue('borderColor')};
+        border-bottom: 1px solid ${getValue('borderColor')};
+        border-radius: ${getValue('borderRadius')} ${getValue('borderRadius')} 0
+          0;
+      }
+
+      /* remove double borders between tabs */
+      .nav-item:not(:first-child) .nav-link {
+        margin-left: -1px;
+      }
+
+      .nav-item .nav-link:hover {
+        color: ${getValue('hoverColor')};
+        background-color: ${getValue('hoverTabBackgroundColor')};
+      }
+
+      .nav-item .nav-link.active {
+        background-color: ${activeBackgroundColor};
+        color: ${textColor};
         border-color: ${getValue('borderColor')};
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-
-      .nav-item:not(:last-child) .nav-link {
-        border-right: none;
-      }
-
-      .nav-item:last-child .nav-link {
-        border-right: 1px solid ${getValue('borderColor')};
-      }
-
-      .nav-item .nav-link {
-        &.active {
-          background-color: ${activeBackgroundColor};
-          border-bottom-color: ${getValue('activeTabBackgroundColor')};
-          cursor: default;
-          border-bottom: transparent;
-        }
-
-        &:hover {
-          color: ${getValue('hoverColor')};
-          border-color: transparent;
-          background-color: ${getValue('hoverTabBackgroundColor')};
-        }
+        border-bottom-color: transparent;
+        cursor: default;
+        position: relative;
+        z-index: 2;
       }
     `,
     outlined: css`
