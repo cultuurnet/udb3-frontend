@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AgeRanges } from '@/constants/AgeRange';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
@@ -41,14 +43,12 @@ import { Text, TextVariants } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
+import { parseOfferType } from '@/utils/parseOfferType';
 
 import { BookingInfoPreview } from './BookingInfoPreview';
 import { ContactInfoPreview } from './ContactInfoPreview';
 import { DescriptionPreview } from './DescriptionPreview';
 import { LocationPreview } from './LocationPreview';
-import { PermissionTypes } from '@/constants/PermissionTypes';
-import { parseOfferType } from '@/utils/parseOfferType';
-import { format } from 'date-fns';
 
 const getGlobalValue = getValueFromTheme('global');
 
