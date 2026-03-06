@@ -351,6 +351,7 @@ const TabContent = ({
 
   return (
     <Panel
+      marginTop={4}
       css={`
         border: none !important;
         box-shadow: unset !important;
