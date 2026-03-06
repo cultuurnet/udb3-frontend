@@ -1537,6 +1537,11 @@
         "cancel": "Annuleren",
         "confirm": "Definitief verwijderen"
       }
+    },
+    "history_tab": {
+      "api": "API: {{api}}",
+      "client_id": "Client id: {{clientId}}",
+      "client_name": "Client name: {{clientName}}"
     }
   }
 }

@@ -64,7 +64,7 @@ import { Panel } from '@/ui/Panel';
 import { SelectWithLabel } from '@/ui/SelectWithLabel';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
-import { Tabs } from '@/ui/Tabs';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
@@ -351,6 +351,7 @@ const TabContent = ({
 
   return (
     <Panel
+      marginTop={4}
       css={`
         border: none !important;
         box-shadow: unset !important;
@@ -654,24 +655,7 @@ const Dashboard = (): any => {
             activeKey={tab}
             onSelect={handleSelectTab}
             activeBackgroundColor="white"
-            css={`
-              .nav-link,
-              .nav-item {
-                color: ${textColor} !important;
-                padding: 0 !important;
-                margin-right: 1rem;
-                margin-top: 0.5rem;
-                border: none !important;
-
-                &.active {
-                  border-bottom: 3px solid ${udbMainDarkBlue} !important;
-                }
-
-                &:hover {
-                  background-color: transparent !important;
-                }
-              }
-            `}
+            variant={TabsVariants.FLOATING}
           >
             <Tabs.Tab eventKey="events" title={t('dashboard.tabs.events')}>
               {tab === 'events' && (
