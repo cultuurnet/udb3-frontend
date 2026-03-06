@@ -579,7 +579,7 @@ const Preview = () => {
 
     return (
       <Stack
-        marginTop={5}
+        marginTop={4}
         backgroundColor="white"
         padding={4}
         borderRadius={getGlobalBorderRadius}
@@ -703,7 +703,7 @@ const Preview = () => {
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
                   {tab === 'details' && (
-                    <Stack marginTop={4}>
+                    <Stack>
                       <PublicationPreview />
                       <DetailsTabContent />
                     </Stack>
