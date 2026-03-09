@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-export function ZendeskWidget() {
+const ZendeskWidget = () => {
   const { publicRuntimeConfig } = getConfig();
   const zendeskWidgetUrl = publicRuntimeConfig.zendeskWidgetUrl;
   return (
@@ -24,7 +24,7 @@ export function ZendeskWidget() {
       }}
     />
   );
-}
+};
 
 export function showZendeskWidget() {
   window.zE?.('webWidget', 'show');
@@ -33,3 +33,5 @@ export function showZendeskWidget() {
 export function openZendeskWidget() {
   window.zE?.('webWidget', 'open');
 }
+
+export { ZendeskWidget };
