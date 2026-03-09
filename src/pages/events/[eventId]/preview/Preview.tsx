@@ -118,9 +118,7 @@ const HistoryTabContent = ({ offerHistory }: HistoryTabContentProps) => {
             {history.author && <Text>{history.author}</Text>}
             <Text>{history.description}</Text>
             {history.api && (
-              <Text>
-                {t('preview.history_tab.api', { api: history.api })}
-              </Text>
+              <Text>{t('preview.history_tab.api', { api: history.api })}</Text>
             )}
             {history.apiKey && <Text>{history.apiKey}</Text>}
             {history.clientId && (
