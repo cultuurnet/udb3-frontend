@@ -54,6 +54,8 @@ const getGlobalValue = getValueFromTheme('global');
 
 const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
+const formatDate = (date: string) => format(new Date(date), 'dd/MM/yyyy HH:mm');
+
 const Preview = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -574,8 +576,6 @@ const Preview = () => {
       offerType,
     );
     const offerHistory = getOfferHistoryQuery?.data ?? [];
-    const formatDate = (date: string) =>
-      format(new Date(date), 'dd/MM/yyyy HH:mm');
 
     return (
       <Stack
