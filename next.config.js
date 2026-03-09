@@ -36,6 +36,7 @@ const moduleExports = {
     uivUrl: process.env.NEXT_PUBLIC_UIV_URL,
     ckUrl: process.env.NEXT_PUBLIC_CK_URL,
     udbPublicationRulesUrl: process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL,
+    uitidProfileUrl: process.env.NEXT_PUBLIC_UITID_PROFILE_URL,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
   eslint: {

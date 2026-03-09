@@ -18,6 +18,7 @@ import {
 
 import { SupportedLanguages } from '../i18n';
 import { NewsletterSignupForm } from './dashboard/NewsletterSingupForm';
+import getConfig from 'next/config';
 
 const getValueForPage = getValueFromTheme('loginPage');
 
@@ -113,6 +114,7 @@ const Footer = ({
 }: Props) => {
   const { t, i18n } = useTranslation();
   const { setCookie } = useCookiesWithOptions(['udb-language']);
+  const { publicRuntimeConfig } = getConfig();
 
   const defaultHandleChangeLanguage =
     (language: Values<typeof SupportedLanguages>) => () => {
@@ -187,7 +189,7 @@ const Footer = ({
               <List.Item>
                 <FooterLink
                   footerVariant={variant}
-                  href={`https://profile.uitid.be/${i18n.language}/profile`}
+                  href={`${publicRuntimeConfig.uitidProfileUrl}/${i18n.language}/profile`}
                 >
                   {t('footer.profile')}
                 </FooterLink>
