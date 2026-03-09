@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import type { ElementType } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -18,7 +19,6 @@ import {
 
 import { SupportedLanguages } from '../i18n';
 import { NewsletterSignupForm } from './dashboard/NewsletterSingupForm';
-import getConfig from 'next/config';
 
 const getValueForPage = getValueFromTheme('loginPage');
 

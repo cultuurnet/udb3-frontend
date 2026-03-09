@@ -5,6 +5,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import groupBy from 'lodash/groupBy';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -47,7 +48,6 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { OwnershipsTable } from './OwnershipsTable';
-import getConfig from 'next/config';
 
 const NON_EXISTING_USER_ERROR_REGEX = /No user with email .+ was found/;
 
