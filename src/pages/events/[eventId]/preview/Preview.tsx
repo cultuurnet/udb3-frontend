@@ -24,7 +24,7 @@ import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
-import { hasOnlineLocation, Offer } from '@/types/Offer';
+import { hasOnlineLocation, Offer, OfferHistory } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert } from '@/ui/Alert';
@@ -55,6 +55,94 @@ const getGlobalValue = getValueFromTheme('global');
 const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
 const formatDate = (date: string) => format(new Date(date), 'dd/MM/yyyy HH:mm');
+
+type HistoryTabContentProps = {
+  offerHistory: OfferHistory[];
+};
+
+const HistoryTabContent = ({ offerHistory }: HistoryTabContentProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack
+      marginTop={5}
+      backgroundColor="white"
+      padding={4}
+      borderRadius={getGlobalBorderRadius}
+      css={`
+        box-shadow: ${getGlobalValue('boxShadow.medium')};
+
+        ul {
+          position: relative;
+          padding-left: 40px;
+        }
+
+        ul:before {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 20px;
+          width: 2px;
+          content: '';
+          background-color: ${udbMainLightGrey};
+          z-index: 100;
+        }
+
+        li {
+          position: relative;
+        }
+
+        li:before {
+          position: absolute;
+          left: -24px;
+          top: 9px;
+          display: block;
+          border: 1px solid ${colors.white};
+          background-color: ${udbMainLightGrey};
+          border-radius: 50%;
+          width: 9px;
+          height: 9px;
+          z-index: 99;
+          content: '';
+        }
+      `}
+    >
+      <UiList spacing={3}>
+        {offerHistory.map((history, index) => (
+          <UiList.Item
+            key={index}
+            flexDirection="column"
+            alignItems="flex-start"
+          >
+            <Text fontWeight="bold">{formatDate(history.date)}</Text>
+            {history.author && <Text>{history.author}</Text>}
+            <Text>{history.description}</Text>
+            {history.api && (
+              <Text>
+                {t('preview.history_tab.api', { api: history.api })}
+              </Text>
+            )}
+            {history.apiKey && <Text>{history.apiKey}</Text>}
+            {history.clientId && (
+              <Text>
+                {t('preview.history_tab.client_id', {
+                  clientId: history.clientId,
+                })}
+              </Text>
+            )}
+            {history.clientName && (
+              <Text>
+                {t('preview.history_tab.client_name', {
+                  clientName: history.clientName,
+                })}
+              </Text>
+            )}
+          </UiList.Item>
+        ))}
+      </UiList>
+    </Stack>
+  );
+};
 
 const Preview = () => {
   const router = useRouter();
@@ -112,6 +200,13 @@ const Preview = () => {
     i18n.language as SupportedLanguage,
     mainLanguage,
   );
+
+  const offerType = parseOfferType(offer['@context']);
+  const getOfferHistoryQuery = useGetOfferHistoryQuery(
+    eventId as string,
+    offerType,
+  );
+  const offerHistory = getOfferHistoryQuery?.data ?? [];
 
   const tabOptions = ['details'];
   const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
@@ -569,95 +664,6 @@ const Preview = () => {
     );
   };
 
-  const HistoryTabContent = () => {
-    const offerType = parseOfferType(offer['@context']);
-    const getOfferHistoryQuery = useGetOfferHistoryQuery(
-      eventId as string,
-      offerType,
-    );
-    const offerHistory = getOfferHistoryQuery?.data ?? [];
-
-    return (
-      <Stack
-        marginTop={5}
-        backgroundColor="white"
-        padding={4}
-        borderRadius={getGlobalBorderRadius}
-        css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
-
-          ul {
-            position: relative;
-            padding-left: 40px;
-          }
-
-          ul:before {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 20px;
-            width: 2px;
-            content: '';
-            background-color: ${udbMainLightGrey};
-            z-index: 100;
-          }
-
-          li {
-            position: relative;
-          }
-
-          li:before {
-            position: absolute;
-            left: -24px;
-            top: 9px;
-            display: block;
-            border: 1px solid ${colors.white};
-            background-color: ${udbMainLightGrey};
-            border-radius: 50%;
-            width: 9px;
-            height: 9px;
-            z-index: 99;
-            content: '';
-          }
-        `}
-      >
-        <UiList spacing={3}>
-          {offerHistory.map((history, index) => (
-            <UiList.Item
-              key={index}
-              flexDirection="column"
-              alignItems="flex-start"
-            >
-              <Text fontWeight="bold">{formatDate(history.date)}</Text>
-              {history.author && <Text>{history.author}</Text>}
-              <Text>{history.description}</Text>
-              {history.api && (
-                <Text>
-                  {t('preview.history_tab.api', { api: history.api })}
-                </Text>
-              )}
-              {history.apiKey && <Text>{history.apiKey}</Text>}
-              {history.clientId && (
-                <Text>
-                  {t('preview.history_tab.client_id', {
-                    clientId: history.clientId,
-                  })}
-                </Text>
-              )}
-              {history.clientName && (
-                <Text>
-                  {t('preview.history_tab.client_name', {
-                    clientName: history.clientName,
-                  })}
-                </Text>
-              )}
-            </UiList.Item>
-          ))}
-        </UiList>
-      </Stack>
-    );
-  };
-
   const onDeleteClick = (offer: Offer) => {
     setIsModalVisible(true);
   };
@@ -708,7 +714,9 @@ const Preview = () => {
                       <DetailsTabContent />
                     </Stack>
                   )}
-                  {tab === 'history' && <HistoryTabContent />}
+                  {tab === 'history' && (
+                    <HistoryTabContent offerHistory={offerHistory} />
+                  )}
                 </Tabs.Tab>
               ))}
             </Tabs>
