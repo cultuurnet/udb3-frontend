@@ -713,7 +713,7 @@ const Dashboard = (): any => {
             </Tabs.Tab>
           </Tabs>
         </Stack>
-        <Footer isZendeskWidgetVisible={false} />
+        <Footer isNewsletterSignupFormVisible isProfileLinkVisible />
         <Modal
           variant={ModalVariants.QUESTION}
           visible={isModalVisible}

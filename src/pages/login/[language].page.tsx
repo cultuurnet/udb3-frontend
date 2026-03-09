@@ -411,9 +411,6 @@ const Index = () => {
         justifyContent="center"
       >
         <Footer
-          isProfileLinkVisible={false}
-          isNewsletterSignupFormVisible={false}
-          isZendeskWidgetVisible={false}
           onChangeLanguage={handleChangeLanguage}
           variant={FooterVariants.LOGIN}
           wrapper={(props) => (

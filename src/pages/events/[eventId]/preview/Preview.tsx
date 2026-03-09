@@ -675,7 +675,11 @@ const Preview = () => {
             {t('preview.actions.delete_modal.body', { title: title })}
           </Box>
         </Modal>
-        <Footer />
+        <Footer
+          isZendeskWidgetVisible
+          isNewsletterSignupFormVisible
+          isProfileLinkVisible
+        />
       </Page.Content>
     </Page>
   );

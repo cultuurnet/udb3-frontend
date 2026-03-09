@@ -105,9 +105,9 @@ const Footer = ({
     <Inline width="100%" justifyContent="space-between" {...props} />
   ),
   onChangeLanguage,
-  isProfileLinkVisible = true,
-  isNewsletterSignupFormVisible = true,
-  isZendeskWidgetVisible = true,
+  isProfileLinkVisible = false,
+  isNewsletterSignupFormVisible = false,
+  isZendeskWidgetVisible = false,
   variant = FooterVariants.DEFAULT,
   ...props
 }: Props) => {
