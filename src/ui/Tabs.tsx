@@ -140,7 +140,7 @@ const Tabs = <T,>({
       }
 
       .nav-link {
-        color: ${udbMainDarkBlue};
+        color: #006A96;
         padding: 0.6rem 2rem;
         border: none !important;
         border-bottom: 3px solid transparent !important;
@@ -148,8 +148,8 @@ const Tabs = <T,>({
 
         &.active {
           font-weight: 700;
-          border-bottom: 2px solid ${udbMainDarkBlue} !important;
-          color: ${udbMainDarkBlue} !important;
+          border-bottom: 2px solid #006A96 !important;
+          color: #006A96 !important;
         }
       }
     `,
