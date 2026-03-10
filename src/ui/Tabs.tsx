@@ -140,7 +140,7 @@ const Tabs = <T,>({
       }
 
       .nav-link {
-        color: #006A96;
+        color: #006a96;
         padding: 0.6rem 2rem;
         border: none !important;
         border-bottom: 3px solid transparent !important;
@@ -148,8 +148,8 @@ const Tabs = <T,>({
 
         &.active {
           font-weight: 700;
-          border-bottom: 2px solid #006A96 !important;
-          color: #006A96 !important;
+          border-bottom: 2px solid #006a96 !important;
+          color: #006a96 !important;
         }
       }
     `,
