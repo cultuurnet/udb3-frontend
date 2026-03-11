@@ -3,20 +3,50 @@ import { useTranslation } from 'react-i18next';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AddressInternal } from '@/types/Address';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
-import { isPlace } from '@/types/Place';
+import { isPlace, Place } from '@/types/Place';
 import { Link } from '@/ui/Link';
+import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
+
+import { getAddress } from '../create/OfferForm';
 
 type Props = {
   offer: Offer;
 };
 
+const parseAddress = (
+  offer: Place,
+  language: SupportedLanguage,
+  mainLanguage: SupportedLanguage,
+) => {
+  const { addressLocality, postalCode, streetAddress, addressCountry } =
+    getAddress(offer.address, language, mainLanguage);
+
+  return (
+    <Stack>
+      <span>{streetAddress}</span>
+      <span>
+        {postalCode} {addressLocality}
+      </span>
+      <span>{addressCountry}</span>
+    </Stack>
+  );
+};
+
 const LocationPreview = ({ offer }: Props) => {
   const { t } = useTranslation();
 
-  if (isPlace(offer)) return null;
+  if (isPlace(offer)) {
+    const { mainLanguage } = offer;
+    const placeAddress = parseAddress(
+      offer,
+      i18n.language as SupportedLanguage,
+      mainLanguage,
+    );
+    return placeAddress;
+  }
 
   const { location, mainLanguage } = offer;
 
@@ -51,11 +81,7 @@ const LocationPreview = ({ offer }: Props) => {
     addressForLang?.addressLocality,
   ];
 
-  return (
-    <Link href={`/place/${locationId}/preview`}>
-      {locationParts.join(', ')}
-    </Link>
-  );
+  return <Link href={`/place/${locationId}`}>{locationParts.join(', ')}</Link>;
 };
 
 export { LocationPreview };
