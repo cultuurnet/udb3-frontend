@@ -1542,6 +1542,11 @@
       "api": "API: {{api}}",
       "client_id": "Client id: {{clientId}}",
       "client_name": "Client name: {{clientName}}"
+    },
+    "duplicate_place": {
+      "alert": {
+        "description": "Deze locatie bestaat al in UiTdatabank. Alle bijhorende evenementen vind je bij <placeLink>{{placeName}}</placeLink>"
+      }
     }
   }
 }
