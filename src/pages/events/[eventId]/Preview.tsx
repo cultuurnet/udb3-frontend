@@ -1,18 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AgeRanges } from '@/constants/AgeRange';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
-  useGetEventPermissionsQuery,
+  useGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
 import {
   useGetOfferByIdQuery,
@@ -23,124 +21,40 @@ import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
+import { AgePreview } from '@/pages/preview/AgePreview';
+import { BookingInfoPreview } from '@/pages/preview/BookingInfoPreview';
+import { ContactInfoPreview } from '@/pages/preview/ContactInfoPreview';
+import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
+import { EmptyValue } from '@/pages/preview/EmptyValue';
+import { ImagePreview } from '@/pages/preview/ImagePreview';
+import { LocationPreview } from '@/pages/preview/LocationPreview';
+import {
+  columns,
+  DetailsTabContent,
+} from '@/pages/preview/Tabs/DetailsTabContent';
+import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
+import { VideoPreview } from '@/pages/preview/VideoPreview';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
-import { hasOnlineLocation, Offer, OfferHistory } from '@/types/Offer';
+import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
-import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
-import { List as UiList } from '@/ui/List';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Table } from '@/ui/Table';
 import { Tabs } from '@/ui/Tabs';
-import { Text, TextVariants } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
-import { BookingInfoPreview } from './BookingInfoPreview';
-import { ContactInfoPreview } from './ContactInfoPreview';
-import { DescriptionPreview } from './DescriptionPreview';
-import { LocationPreview } from './LocationPreview';
-
 const getGlobalValue = getValueFromTheme('global');
-
-const { udbMainDarkGrey, udbMainLightGrey } = colors;
-
-const formatDate = (date: string) => format(new Date(date), 'dd/MM/yyyy HH:mm');
-
-type HistoryTabContentProps = {
-  offerHistory: OfferHistory[];
-};
-
-const HistoryTabContent = ({ offerHistory }: HistoryTabContentProps) => {
-  const { t } = useTranslation();
-
-  return (
-    <Stack
-      marginTop={5}
-      backgroundColor="white"
-      padding={4}
-      borderRadius={getGlobalBorderRadius}
-      css={`
-        box-shadow: ${getGlobalValue('boxShadow.medium')};
-
-        ul {
-          position: relative;
-          padding-left: 40px;
-        }
-
-        ul:before {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 20px;
-          width: 2px;
-          content: '';
-          background-color: ${udbMainLightGrey};
-          z-index: 100;
-        }
-
-        li {
-          position: relative;
-        }
-
-        li:before {
-          position: absolute;
-          left: -24px;
-          top: 9px;
-          display: block;
-          border: 1px solid ${colors.white};
-          background-color: ${udbMainLightGrey};
-          border-radius: 50%;
-          width: 9px;
-          height: 9px;
-          z-index: 99;
-          content: '';
-        }
-      `}
-    >
-      <UiList spacing={3}>
-        {offerHistory.map((history, index) => (
-          <UiList.Item
-            key={index}
-            flexDirection="column"
-            alignItems="flex-start"
-          >
-            <Text fontWeight="bold">{formatDate(history.date)}</Text>
-            {history.author && <Text>{history.author}</Text>}
-            <Text>{history.description}</Text>
-            {history.api && (
-              <Text>{t('preview.history_tab.api', { api: history.api })}</Text>
-            )}
-            {history.apiKey && <Text>{history.apiKey}</Text>}
-            {history.clientId && (
-              <Text>
-                {t('preview.history_tab.client_id', {
-                  clientId: history.clientId,
-                })}
-              </Text>
-            )}
-            {history.clientName && (
-              <Text>
-                {t('preview.history_tab.client_name', {
-                  clientName: history.clientName,
-                })}
-              </Text>
-            )}
-          </UiList.Item>
-        ))}
-      </UiList>
-    </Stack>
-  );
-};
 
 const Preview = () => {
   const router = useRouter();
@@ -157,6 +71,8 @@ const Preview = () => {
     scope: OfferTypes.EVENTS,
   });
   const offer = getOfferByIdQuery.data;
+  const offerType = parseOfferType(offer['@context']);
+
   const isEdited = router.query.edited === 'true';
   const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
@@ -171,15 +87,17 @@ const Preview = () => {
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
 
-  const eventpermissionQuery = useGetEventPermissionsQuery({
-    eventId: eventId,
+  const offerPermissionQuery = useGetOfferPermissionsQuery({
+    offerId: eventId,
+    offerType: offerType,
   });
 
   const eventPermissions: string[] =
-    (eventpermissionQuery?.data as { permissions?: string[] } | undefined)
+    (offerPermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const { mainLanguage, name, terms } = offer;
+  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
+    offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -199,7 +117,6 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const offerType = parseOfferType(offer['@context']);
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     eventId as string,
     offerType,
@@ -226,15 +143,6 @@ const Preview = () => {
     router.push({ query: { ...router.query, tab } }, undefined, {
       shallow: true,
     });
-  };
-
-  const columns = [
-    { Header: 'Field', accessor: 'field' },
-    { Header: 'Value', accessor: 'value' },
-  ];
-
-  const EmptyValue = ({ children }) => {
-    return <Text className="empty-value">{children}</Text>;
   };
 
   const OrganizerPreview = () => {
@@ -320,7 +228,7 @@ const Preview = () => {
       : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
       ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer['@id'])}`
-      : `${publicRuntimeConfig.uivUrl}/agenda/e/${parseOfferId(offer['@id'])}`;
+      : `${publicRuntimeConfig.uivUrl}/agenda/e/x/${parseOfferId(offer['@id'])}`;
 
     const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
 
@@ -398,119 +306,6 @@ const Preview = () => {
           </Link>
         )}
       </Stack>
-    );
-  };
-
-  const formatCustomAgeRange = (ageRange: string) => {
-    const [min, max] = ageRange.split('-');
-    if (min && !max) {
-      return `${min}+`;
-    }
-    return ageRange;
-  };
-
-  const AgePreview = () => {
-    const hasAgeInfo = !!offer.typicalAgeRange;
-
-    if (!hasAgeInfo) return null;
-
-    if (offer.typicalAgeRange === '-' || offer.typicalAgeRange === '0-') {
-      return <Text>{t('create.name_and_age.age.all')}</Text>;
-    }
-
-    const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
-      const ageRange = AgeRanges[key];
-      return ageRange.apiLabel === offer.typicalAgeRange;
-    });
-
-    const ageText = AgeRanges[ageRangeLabelKey]
-      ? AgeRanges[ageRangeLabelKey].label
-      : formatCustomAgeRange(offer.typicalAgeRange);
-
-    return <Text>{t('preview.ages', { ages: ageText })}</Text>;
-  };
-
-  const ImagePreview = () => {
-    const HEIGHT = 100;
-    const hasImages = (offer.mediaObject ?? []).length > 0;
-
-    if (!hasImages)
-      return <EmptyValue>{t('preview.empty_value.images')}</EmptyValue>;
-
-    return offer.mediaObject?.map((media, index) => {
-      const isLastImage = index === offer.mediaObject!.length - 1;
-      return (
-        <Inline
-          spacing={4}
-          key={media['@id']}
-          alignItems="center"
-          paddingBottom={3}
-          marginBottom={4}
-          css={`
-            border-bottom: ${isLastImage
-              ? 'none'
-              : `1px solid ${udbMainLightGrey}`};
-          `}
-        >
-          <Link href={media.contentUrl} target="_blank">
-            <Image
-              src={`${media.thumbnailUrl}?height=${HEIGHT}`}
-              alt={media.description}
-              width="auto"
-            />
-          </Link>
-          <Stack spacing={1}>
-            {index === 0 && (
-              <Text
-                backgroundColor={udbMainDarkGrey}
-                color={colors.white}
-                alignSelf="flex-start"
-                borderRadius="3px"
-                paddingRight={3}
-                paddingLeft={3}
-                fontSize="0.8rem"
-                fontWeight="bold"
-              >
-                {t('preview.main_image')}
-              </Text>
-            )}
-            <Text>{media.description}</Text>
-            <Text variant={TextVariants.MUTED}>© {media.copyrightHolder}</Text>
-          </Stack>
-        </Inline>
-      );
-    });
-  };
-
-  const VideoPreview = () => {
-    // TODO check with Sarah if we need real previews here?
-    // @see https://jira.publiq.be/browse/III-6951
-    const hasVideos = (offer.videos ?? []).length > 0;
-
-    if (!hasVideos)
-      return <EmptyValue>{t('preview.empty_value.videos')}</EmptyValue>;
-
-    return (
-      <UiList
-        css={`
-          display: block;
-        `}
-      >
-        {offer.videos?.map((video) => (
-          <UiList.Item
-            key={video['@id']}
-            css={`
-              display: list-item;
-              list-style-type: disc;
-              margin-left: 20px;
-            `}
-          >
-            <Link href={video.url} target="_blank">
-              {video.url}
-            </Link>
-          </UiList.Item>
-        ))}
-      </UiList>
     );
   };
 
@@ -608,59 +403,19 @@ const Preview = () => {
       field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
     },
-    { field: t('preview.labels.age'), value: <AgePreview /> },
-    { field: t('preview.labels.image'), value: <ImagePreview /> },
-    { field: t('preview.labels.video'), value: <VideoPreview /> },
+    {
+      field: t('preview.labels.age'),
+      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
+    },
+    {
+      field: t('preview.labels.image'),
+      value: <ImagePreview mediaObject={mediaObject} />,
+    },
+    {
+      field: t('preview.labels.video'),
+      value: <VideoPreview videos={videos} />,
+    },
   ];
-
-  const DetailsTabContent = () => {
-    return (
-      <Stack
-        marginTop={4}
-        backgroundColor="white"
-        padding={4}
-        borderRadius={getGlobalBorderRadius}
-        css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
-        `}
-      >
-        <Table
-          bordered
-          showHeader={false}
-          columns={columns}
-          data={tableData}
-          className="details-table"
-          css={`
-            tbody tr td:nth-child(1) {
-              font-weight: 600;
-              width: 25%;
-            }
-            tbody tr:first-child td {
-              border-top: none;
-            }
-            td strong,
-            td b {
-              font-weight: 700 !important;
-            }
-
-            td em,
-            td i {
-              font-style: italic !important;
-            }
-            tr:has(td:nth-child(2) .empty-value) td {
-              background-color: ${colors.grey4};
-            }
-            tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
-              color: ${colors.grey5};
-            }
-            tbody {
-              opacity: ${showEventId ? 1 : 0.4};
-            }
-          `}
-        />
-      </Stack>
-    );
-  };
 
   const onDeleteClick = (offer: Offer) => {
     setIsModalVisible(true);
@@ -709,7 +464,10 @@ const Preview = () => {
                   {tab === 'details' && (
                     <Stack marginTop={4}>
                       <PublicationPreview />
-                      <DetailsTabContent />
+                      <DetailsTabContent
+                        tableData={tableData}
+                        showEventId={showEventId}
+                      />
                     </Stack>
                   )}
                   {tab === 'history' && (
@@ -725,7 +483,7 @@ const Preview = () => {
                 offer={offer}
                 onDelete={onDeleteClick}
                 userPermissions={userPermissions}
-                eventPermissions={eventPermissions}
+                offerPermissions={eventPermissions}
               />
             }
           </Stack>
