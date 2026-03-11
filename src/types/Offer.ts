@@ -54,7 +54,7 @@ type MediaObject = {
   inLanguage: string;
 };
 
-type VideoObject = {
+export type VideoObject = {
   id: string;
   embedUrl: string;
   language: string;
