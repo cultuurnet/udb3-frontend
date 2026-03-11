@@ -1,9 +1,9 @@
 import { dehydrate } from '@tanstack/react-query';
 
-import { OfferTypes } from '@/constants/OfferType';
+import { OfferContexts, OfferTypes } from '@/constants/OfferType';
 import {
   prefetchGetCalendarSummaryQuery,
-  prefetchGetEventPermissionsQuery,
+  prefetchGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
 import {
   prefetchGetOfferByIdQuery,
@@ -13,7 +13,7 @@ import { prefetchGetPermissionsQuery } from '@/hooks/api/user';
 import i18n from '@/i18n/index';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
-import { Preview } from './preview/Preview';
+import { Preview } from './Preview';
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ cookies, query, req, queryClient }) => {
@@ -39,10 +39,11 @@ export const getServerSideProps = getApplicationServerSideProps(
       queryClient,
     });
 
-    await prefetchGetEventPermissionsQuery({
+    await prefetchGetOfferPermissionsQuery({
       req,
       queryClient,
-      eventId: eventId,
+      offerId: eventId,
+      offerType: OfferContexts.EVENT,
     });
 
     if (query.tab === 'history') {

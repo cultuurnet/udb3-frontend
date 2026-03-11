@@ -1,9 +1,10 @@
 import { dehydrate } from '@tanstack/react-query';
 
+import { OfferContexts } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetEventByIdQuery,
-  prefetchGetEventPermissionsQuery,
+  prefetchGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
 import { formatPermission } from '@/utils/formatPermission';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -14,10 +15,11 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    await prefetchGetEventPermissionsQuery({
+    await prefetchGetOfferPermissionsQuery({
       req,
       queryClient,
-      eventId: eventId,
+      offerId: eventId,
+      offerType: OfferContexts.EVENT,
     });
 
     const { permissions } = queryClient.getQueryData([
