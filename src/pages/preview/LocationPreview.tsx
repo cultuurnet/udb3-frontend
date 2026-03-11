@@ -81,7 +81,7 @@ const LocationPreview = ({ offer }: Props) => {
     addressForLang?.addressLocality,
   ];
 
-  return <Link href={`/place/${locationId}`}>{locationParts.join(', ')}</Link>;
+  return <Link href={`/places/${locationId}`}>{locationParts.join(', ')}</Link>;
 };
 
 export { LocationPreview };
