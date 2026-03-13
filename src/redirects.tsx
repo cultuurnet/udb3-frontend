@@ -102,8 +102,7 @@ const getRedirects = (
   {
     source: '/manage/roles/overview',
     destination: '/manage/roles',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
+    permanent: environment !== 'development',
   },
   {
     source:
