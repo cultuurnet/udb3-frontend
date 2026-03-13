@@ -312,6 +312,10 @@ const Preview = () => {
     },
   });
 
+  if (!offer) {
+    return null;
+  }
+
   return (
     <Page>
       <Page.Title>{title}</Page.Title>
