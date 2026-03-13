@@ -98,8 +98,14 @@ const Preview = () => {
     offerType,
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
-  const { mainLanguage, name, terms = [], typicalAgeRange, mediaObject, videos } =
-    offer ?? {};
+  const {
+    mainLanguage,
+    name,
+    terms = [],
+    typicalAgeRange,
+    mediaObject,
+    videos,
+  } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -229,7 +235,10 @@ const Preview = () => {
 
   const tableData = [
     { field: t('preview.labels.title'), value: title },
-    { field: t('preview.labels.type'), value: typeTerm.label },
+    {
+      field: t('preview.labels.type'),
+      value: typeTerm?.label ?? '',
+    },
     ...(isCultuurkuurEvent
       ? [
           {
@@ -260,7 +269,9 @@ const Preview = () => {
       ? [
           {
             field: t('preview.labels.online_location'),
-            value: <Link href={offer?.onlineUrl || ''}>{offer?.onlineUrl}</Link>,
+            value: (
+              <Link href={offer?.onlineUrl || ''}>{offer?.onlineUrl}</Link>
+            ),
           },
         ]
       : []),
