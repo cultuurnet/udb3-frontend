@@ -23,8 +23,8 @@ export const getServerSideProps = getApplicationServerSideProps(
     });
 
     const { permissions } = queryClient.getQueryData([
-      'event-permissions',
-      { eventId },
+      'offer-permissions',
+      { eventId, offerType: OfferContexts.EVENT },
     ]);
 
     if (
