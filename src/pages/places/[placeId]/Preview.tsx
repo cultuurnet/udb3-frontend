@@ -75,7 +75,7 @@ const Preview = () => {
 
   const duplicateOfId =
     isPlace(offer) && offer?.duplicateOf
-      ? parseOfferId(offer.duplicateOf)
+      ? parseOfferId(offer?.duplicateOf)
       : undefined;
 
   const isEdited = router.query.edited === 'true';
@@ -98,8 +98,8 @@ const Preview = () => {
     offerType,
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
-  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
-    offer;
+  const { mainLanguage, name, terms = [], typicalAgeRange, mediaObject, videos } =
+    offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -110,14 +110,14 @@ const Preview = () => {
   const typeTerm = terms.find((term) => term.domain === 'eventtype');
 
   const description = getLanguageObjectOrFallback<string>(
-    offer.description,
+    offer?.description,
     i18n.language as SupportedLanguage,
     mainLanguage,
   );
 
   const tabOptions = ['details'];
-  const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
-  const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
+  const isRejected = offer?.workflowStatus === WorkflowStatus.REJECTED;
+  const isDeleted = offer?.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
   const isGodUser = userPermissions?.includes(
@@ -145,8 +145,8 @@ const Preview = () => {
       ? t('brand_cultuurkuur')
       : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
-      ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer['@id'])}`
-      : `${publicRuntimeConfig.uivUrl}/agenda/l/x/${parseOfferId(offer['@id'])}`;
+      ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer?.['@id'] || '')}`
+      : `${publicRuntimeConfig.uivUrl}/agenda/l/x/${parseOfferId(offer?.['@id'] || '')}`;
 
     const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
 
@@ -182,7 +182,7 @@ const Preview = () => {
     if (showEventId) {
       data.push({
         field: t('preview.labels.event_id'),
-        value: <Text>{parseOfferId(offer['@id'])}</Text>,
+        value: <Text>{parseOfferId(offer?.['@id'] || '')}</Text>,
       });
     }
 
@@ -256,11 +256,11 @@ const Preview = () => {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
-    ...(isEvent(offer) && hasOnlineLocation(offer) && offer.onlineUrl
+    ...(isEvent(offer) && hasOnlineLocation(offer) && offer?.onlineUrl
       ? [
           {
             field: t('preview.labels.online_location'),
-            value: <Link href={offer.onlineUrl}>{offer.onlineUrl}</Link>,
+            value: <Link href={offer?.onlineUrl || ''}>{offer?.onlineUrl}</Link>,
           },
         ]
       : []),
@@ -268,14 +268,14 @@ const Preview = () => {
       field: t('preview.labels.booking_info'),
       value: (
         <BookingInfoPreview
-          bookingInfo={offer.bookingInfo}
-          mainLanguage={offer.mainLanguage}
+          bookingInfo={offer?.bookingInfo}
+          mainLanguage={offer?.mainLanguage}
         />
       ),
     },
     {
       field: t('preview.labels.contact'),
-      value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
+      value: <ContactInfoPreview contactPoint={offer?.contactPoint} />,
     },
     {
       field: t('preview.labels.labels'),
@@ -389,7 +389,7 @@ const Preview = () => {
           visible={isModalVisible}
           onConfirm={async () => {
             deleteItemByIdMutation.mutate({
-              id: parseOfferId(offer['@id']),
+              id: parseOfferId(offer?.['@id'] || ''),
             });
           }}
           onClose={() => setIsModalVisible(false)}
