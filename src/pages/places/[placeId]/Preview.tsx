@@ -71,9 +71,7 @@ const Preview = () => {
 
   const offer = getOfferByIdQuery.data;
 
-  if (!offer) return;
-
-  const offerType = parseOfferType(offer['@context']);
+  const offerType = offer ? parseOfferType(offer['@context']) : undefined;
 
   const duplicateOfId =
     isPlace(offer) && offer?.duplicateOf
