@@ -12,14 +12,6 @@ test.describe('Role Creation - Admin', () => {
   });
 
   test.beforeEach(async ({ page, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_roles_create_edit',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
     await page.goto('/manage/roles/create');
   });
 
