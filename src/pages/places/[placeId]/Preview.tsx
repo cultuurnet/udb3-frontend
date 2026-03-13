@@ -392,7 +392,7 @@ const Preview = () => {
             });
           }}
           onClose={() => setIsModalVisible(false)}
-          title={t('preview.actions.delete_modal.title')}
+          title={t('preview.actions.delete_modal.title_location')}
           confirmTitle={t('preview.actions.delete_modal.confirm')}
           cancelTitle={t('preview.actions.delete_modal.cancel')}
           size={ModalSizes.LG}

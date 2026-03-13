@@ -1532,7 +1532,8 @@
       "change_availability": "Beschikbaarheid wijzigen",
       "delete": "Verwijderen",
       "delete_modal": {
-        "title": "Evenement verwijderen",
+        "title_event": "Evenement verwijderen",
+        "title_location": "Locatie verwijderen",
         "body": "Ben je zeker dat je \"{{title}}\" wil verwijderen? Deze actie kan niet ongedaan worden.",
         "cancel": "Annuleren",
         "confirm": "Definitief verwijderen"
