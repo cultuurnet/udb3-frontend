@@ -70,6 +70,9 @@ const Preview = () => {
   });
 
   const offer = getOfferByIdQuery.data;
+
+  if (!offer) return;
+
   const offerType = parseOfferType(offer['@context']);
 
   const duplicateOfId =
