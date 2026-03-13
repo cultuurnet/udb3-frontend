@@ -22,13 +22,15 @@ export const getServerSideProps = getApplicationServerSideProps(
       offerType: OfferContexts.EVENT,
     });
 
-    const { permissions } = queryClient.getQueryData([
+    const permissionsData = queryClient.getQueryData([
       'offer-permissions',
-      { eventId, offerType: OfferContexts.EVENT },
+      { offerId: eventId, offerType: OfferContexts.EVENT },
     ]);
 
+    const permissions = permissionsData?.permissions ?? [];
+
     if (
-      permissions?.length === 0 ||
+      permissions.length === 0 ||
       !permissions.includes(formatPermission(PermissionTypes.AANBOD_BEWERKEN))
     ) {
       return {
