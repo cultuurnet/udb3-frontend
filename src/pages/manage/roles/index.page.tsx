@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import { prefetchGetRolesQuery, useGetRolesByQuery } from '@/hooks/api/roles';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Role } from '@/types/Role';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -36,9 +35,6 @@ const RolesOverviewPage = () => {
   const [currentPageRoles, setCurrentPageRoles] = useState(1);
   const [successMessage, setSuccessMessage] = useState('');
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
-  const [isReactRolesCreateEditFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_ROLES_CREATE_EDIT,
-  );
 
   const handleDeleteClick = useCallback((role: Role) => {
     setRoleToDelete(role);
@@ -96,9 +92,7 @@ const RolesOverviewPage = () => {
         Header: t('roles.overview.table.options'),
         accessor: 'options',
         Cell: ({ cell }: { cell: { value: Role } }) => {
-          const editRoleUrl = isReactRolesCreateEditFeatureFlagEnabled
-            ? `/manage/roles/${cell.value.uuid}/edit`
-            : `/manage/roles/edit/${cell.value.uuid}`;
+          const editRoleUrl = `/manage/roles/${cell.value.uuid}/edit`;
 
           return (
             <Inline>
@@ -117,7 +111,7 @@ const RolesOverviewPage = () => {
         },
       },
     ],
-    [isReactRolesCreateEditFeatureFlagEnabled, t, handleDeleteClick],
+    [t, handleDeleteClick],
   );
 
   const roles: Role[] = useMemo(
