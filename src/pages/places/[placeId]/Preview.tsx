@@ -31,7 +31,7 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
-import { isCultuurkuur, isEvent } from '@/types/Event';
+import { isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
@@ -79,7 +79,6 @@ const Preview = () => {
       : undefined;
 
   const isEdited = router.query.edited === 'true';
-  const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
@@ -147,12 +146,8 @@ const Preview = () => {
     const status = usePublicationStatus(offer);
     const { publicRuntimeConfig } = getConfig();
 
-    const publicationBrand = isCultuurkuurEvent
-      ? t('brand_cultuurkuur')
-      : t('brand_uitinvlaanderen');
-    const publicUrl = isCultuurkuurEvent
-      ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer?.['@id'] || '')}`
-      : `${publicRuntimeConfig.uivUrl}/agenda/l/x/${parseOfferId(offer?.['@id'] || '')}`;
+    const publicationBrand = t('brand_uitinvlaanderen');
+    const publicUrl = `${publicRuntimeConfig.uivUrl}/agenda/l/x/${parseOfferId(offer?.['@id'] || '')}`;
 
     const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
 
@@ -239,20 +234,6 @@ const Preview = () => {
       field: t('preview.labels.type'),
       value: typeTerm?.label ?? '',
     },
-    ...(isCultuurkuurEvent
-      ? [
-          {
-            field: t('preview.labels.access'),
-            value: (
-              <Stack>
-                <Text>{t('preview.educational')}</Text>
-                <Alert marginY={4}>{t('preview.educational_info')}</Alert>
-              </Stack>
-            ),
-          },
-        ]
-      : []),
-
     {
       field: t('preview.labels.description'),
       value: description ? (
@@ -353,12 +334,10 @@ const Preview = () => {
                   <Trans
                     i18nKey="preview.publication_alert"
                     values={{
-                      timeFrame: isCultuurkuurEvent
-                        ? t('preview.publication_alert_cultuurkuur_timeframe')
-                        : t('preview.publication_alert_uitagendas_timeframe'),
-                      siteName: isCultuurkuurEvent
-                        ? t('brand_cultuurkuur')
-                        : t('preview.uit_agendas'),
+                      timeFrame: t(
+                        'preview.publication_alert_uitagendas_timeframe',
+                      ),
+                      siteName: t('preview.uit_agendas'),
                     }}
                     components={{ b: <b></b> }}
                   />
