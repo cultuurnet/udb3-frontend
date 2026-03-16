@@ -18,6 +18,7 @@ const getValue = getValueFromTheme(`tabs`);
 export const TabsVariants = {
   DEFAULT: 'default',
   OUTLINED: 'outlined',
+  FLOATING: 'floating',
 } as const;
 
 type Props<T> = BoxProps &
@@ -125,6 +126,31 @@ const Tabs = <T,>({
 
       .nav-item:first-child .nav-link.active {
         border-right: none;
+      }
+    `,
+    floating: css`
+      border-bottom: none;
+
+      .nav-item {
+        &:hover {
+          background-color: #0083b81a;
+          border-radius: ${getValue('borderRadius')} ${getValue('borderRadius')}
+            0 0;
+        }
+      }
+
+      .nav-link {
+        color: #006a96;
+        padding: 0.6rem 2rem;
+        border: none !important;
+        border-bottom: 3px solid transparent !important;
+        background-color: transparent !important;
+
+        &.active {
+          font-weight: 700;
+          border-bottom: 2px solid #006a96 !important;
+          color: #006a96 !important;
+        }
       }
     `,
   };

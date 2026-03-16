@@ -39,7 +39,7 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Table } from '@/ui/Table';
-import { Tabs } from '@/ui/Tabs';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
@@ -704,7 +704,11 @@ const Preview = () => {
                 </Text>
               </Alert>
             )}
-            <Tabs activeKey={tab} onSelect={(key) => handleSelectTab(key)}>
+            <Tabs
+              activeKey={tab}
+              onSelect={(key) => handleSelectTab(key)}
+              variant={TabsVariants.FLOATING}
+            >
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
                   {tab === 'details' && (
