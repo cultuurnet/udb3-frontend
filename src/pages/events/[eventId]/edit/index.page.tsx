@@ -1,9 +1,10 @@
 import { dehydrate } from '@tanstack/react-query';
 
+import { OfferTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetEventByIdQuery,
-  prefetchGetEventPermissionsQuery,
+  prefetchGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
 import { formatPermission } from '@/utils/formatPermission';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -14,19 +15,24 @@ export const getServerSideProps = getApplicationServerSideProps(
   async ({ req, query, queryClient, cookies }) => {
     const { eventId } = query;
 
-    await prefetchGetEventPermissionsQuery({
+    await prefetchGetOfferPermissionsQuery({
       req,
       queryClient,
-      eventId: eventId,
+      offerId: eventId,
+      scope: OfferTypes.EVENTS,
     });
 
-    const { permissions } = queryClient.getQueryData([
-      'event-permissions',
-      { eventId },
+    const permissionsData = queryClient.getQueryData([
+      'offer-permissions',
+      eventId,
+      OfferTypes.EVENTS,
+      { offerId: eventId, scope: OfferTypes.EVENTS },
     ]);
 
+    const permissions = permissionsData?.permissions ?? [];
+
     if (
-      permissions?.length === 0 ||
+      permissions.length === 0 ||
       !permissions.includes(formatPermission(PermissionTypes.AANBOD_BEWERKEN))
     ) {
       return {

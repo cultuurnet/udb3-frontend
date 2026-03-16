@@ -4,12 +4,13 @@ import { OfferTypes } from '@/constants/OfferType';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
+import { InlineProps } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 
 import { SupportedLanguage } from '../i18n';
 
-type Props = {
+type Props = InlineProps & {
   variant: Values<typeof AlertVariants>;
   placeId?: string;
   query?: string;
@@ -23,6 +24,7 @@ const AlertDuplicatePlace = ({
   query,
   offerId,
   labelKey,
+  ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
 
@@ -33,7 +35,7 @@ const AlertDuplicatePlace = ({
 
   if (query) {
     return (
-      <Alert variant={variant}>
+      <Alert variant={variant} {...props}>
         {t('location.add_modal.errors.duplicate_place_generic')}
       </Alert>
     );
@@ -54,7 +56,7 @@ const AlertDuplicatePlace = ({
     : undefined;
 
   return (
-    <Alert variant={variant} maxWidth="50rem">
+    <Alert variant={variant} maxWidth="50rem" {...props}>
       <Trans
         i18nKey={labelKey}
         values={offerId ? undefined : { placeName: duplicatePlaceName }}

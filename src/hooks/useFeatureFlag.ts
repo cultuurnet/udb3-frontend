@@ -24,6 +24,7 @@ const FeatureFlags = {
   REACT_TRANSLATE_PLACES: 'react_translate_places',
   REACT_TRANSLATE: 'react_translate_events',
   REACT_EVENT_PREVIEW: 'react_event_preview',
+  REACT_PLACE_PREVIEW: 'react_place_preview',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

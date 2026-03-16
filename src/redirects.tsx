@@ -94,6 +94,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_EVENT_PREVIEW,
   },
   {
+    source: '/place/:placeId/preview',
+    destination: '/places/:placeId',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_PLACE_PREVIEW,
+  },
+  {
     source: '/place/:placeId/translate',
     destination: '/places/:placeId/translate',
     permanent: false,

@@ -9,6 +9,7 @@ type Place = BaseOffer & {
     longitude: number;
   };
   isDummyPlaceForEducationEvents?: boolean;
+  duplicateOf?: string;
 };
 
 const isPlace = (value: unknown): value is Place => {
