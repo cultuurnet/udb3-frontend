@@ -17,7 +17,6 @@ const FeatureFlags = {
   REACT_DUPLICATE: 'react_duplicate',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
-  REACT_ROLES_OVERVIEW: 'react_roles_overview',
   REACT_ROLES_CREATE_EDIT: 'react_roles_create_edit',
   REACT_USERS_SEARCH: 'react_users_search',
   REACT_USERS_EDIT: 'react_users_edit',
