@@ -133,8 +133,7 @@ const getRedirects = (
     source:
       '/manage/labels/:labelId([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
     destination: '/manage/labels/:labelId/edit',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_LABELS_CREATE_EDIT,
+    permanent: environment !== 'development',
   },
   {
     source: '/place/:placeId/edit',

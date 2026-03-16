@@ -15,7 +15,6 @@ const FeatureFlags = {
   REACT_CREATE: 'react_create',
   ORGANIZER_CREATE: 'organizer_create',
   REACT_DUPLICATE: 'react_duplicate',
-  REACT_LABELS_CREATE_EDIT: 'react_labels_create_edit',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
   REACT_ROLES_OVERVIEW: 'react_roles_overview',
