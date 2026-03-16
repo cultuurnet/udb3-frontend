@@ -10,7 +10,7 @@ import {
   useGetPlaceByIdQuery,
 } from '@/hooks/api/places';
 import type { Headers } from '@/hooks/api/types/Headers';
-import { Offer } from '@/types/Offer';
+import { Offer, OfferHistory } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
@@ -20,6 +20,8 @@ import {
   CalendarSummaryFormats,
   ExtendQueryOptions,
   PaginationOptions,
+  prefetchAuthenticatedQuery,
+  ServerSideQueryOptions,
   SortOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -131,11 +133,9 @@ const prefetchGetOfferByIdQuery = async ({
   scope,
   req,
   queryClient,
-}: {
+}: ServerSideQueryOptions & {
   id: string;
   scope: Scope;
-  req: any;
-  queryClient: any;
 }) => {
   if (scope === OfferTypes.EVENTS) {
     return prefetchGetEventByIdQuery({
@@ -158,6 +158,61 @@ const prefetchGetOfferByIdQuery = async ({
     `Unsupported scope: ${scope}. Expected '${OfferTypes.EVENTS}' or '${OfferTypes.PLACES}'`,
   );
 };
+
+const getOfferHistory = async ({
+  headers,
+  id,
+  scope,
+}: {
+  headers: Headers;
+  id: string;
+  scope: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/${scope}/${id}/history`,
+    options: {
+      headers,
+    },
+  });
+
+  return (await res.json()) as OfferHistory[];
+};
+
+export const useGetOfferHistoryQuery = (
+  id: string,
+  scope: string,
+  configuration: ExtendQueryOptions<typeof getOfferHistory> = {},
+) => {
+  return useAuthenticatedQuery({
+    queryKey: ['offerHistory', scope, id],
+    queryFn: getOfferHistory,
+    queryArguments: {
+      id,
+      scope,
+    },
+    enabled: !!id && !!scope,
+    ...configuration,
+  });
+};
+
+export const prefetchOfferHistoryQuery = async ({
+  req,
+  queryClient,
+  id,
+  scope,
+}: {
+  req: any;
+  queryClient: any;
+  id: string;
+  scope: Scope;
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: ['offerHistory', scope, id],
+    queryFn: getOfferHistory,
+    queryArguments: { id, scope },
+  });
 
 const changeOfferName = async ({ headers, id, lang, name, scope }) => {
   return fetchFromApi({
