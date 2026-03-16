@@ -24,6 +24,8 @@ export const getServerSideProps = getApplicationServerSideProps(
 
     const permissionsData = queryClient.getQueryData([
       'offer-permissions',
+      eventId,
+      OfferTypes.EVENTS,
       { offerId: eventId, scope: OfferTypes.EVENTS },
     ]);
 
