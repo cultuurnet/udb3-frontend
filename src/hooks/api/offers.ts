@@ -21,6 +21,7 @@ import {
   ExtendQueryOptions,
   PaginationOptions,
   prefetchAuthenticatedQuery,
+  ServerSideQueryOptions,
   SortOptions,
   useAuthenticatedMutation,
   useAuthenticatedQuery,
@@ -132,11 +133,9 @@ const prefetchGetOfferByIdQuery = async ({
   scope,
   req,
   queryClient,
-}: {
+}: ServerSideQueryOptions & {
   id: string;
   scope: Scope;
-  req: any;
-  queryClient: any;
 }) => {
   if (scope === OfferTypes.EVENTS) {
     return prefetchGetEventByIdQuery({
