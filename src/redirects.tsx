@@ -119,8 +119,7 @@ const getRedirects = (
   {
     source: '/manage/users/overview',
     destination: '/manage/users',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_USERS_SEARCH,
+    permanent: environment !== 'development',
   },
   {
     source: '/manage/labels/overview',
