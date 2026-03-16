@@ -561,7 +561,7 @@
       "invalid": "Entrez une adresse e-mail valide.",
       "logo": "newsletter-logo.svg",
       "logo_alt": "logo de la newsletter",
-      "questions_or_feedback": "Questions ou remarques ?",
+      "questions_or_feedback": "Questions ou remarques ? <0>Contactez-nous</0>",
       "subscribe": "s'inscrire",
       "success": {
         "content": "Vous êtes abonné à notre newsletter et recevez des conseils pratiques pour entrer vos activités dans la base de données UiT !",

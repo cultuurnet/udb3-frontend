@@ -5,6 +5,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import groupBy from 'lodash/groupBy';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,6 +54,7 @@ const NON_EXISTING_USER_ERROR_REGEX = /No user with email .+ was found/;
 const Ownership = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const { publicRuntimeConfig } = getConfig();
   const queryClient = useQueryClient();
   const [actionType, setActionType] = useState<ActionType>();
   const [isOpen, setIsOpen] = useState(false);
@@ -324,7 +326,7 @@ const Ownership = () => {
                     components={[
                       <Link
                         key="link"
-                        href={`https://profile.uitid.be/${i18n.language}`}
+                        href={`${publicRuntimeConfig.uitidProfileUrl}/${i18n.language}`}
                       >
                         Will be replaced
                       </Link>,

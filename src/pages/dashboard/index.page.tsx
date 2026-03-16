@@ -75,7 +75,6 @@ import { parseOfferType } from '@/utils/parseOfferType';
 
 import { DashboardPictureUploadModal } from './DashboardPictureUploadModal';
 import { DashboardRow } from './DashboardRow';
-import { NewsletterSignupForm } from './NewsletterSingupForm';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -714,8 +713,7 @@ const Dashboard = (): any => {
             </Tabs.Tab>
           </Tabs>
         </Stack>
-        {i18n.language === 'nl' && <NewsletterSignupForm />}
-        <Footer />
+        <Footer isNewsletterSignupFormVisible isProfileLinkVisible />
         <Modal
           variant={ModalVariants.QUESTION}
           visible={isModalVisible}
