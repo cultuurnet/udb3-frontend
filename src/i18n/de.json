@@ -562,7 +562,7 @@
       "invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "logo": "newsletter-logo.svg",
       "logo_alt": "Newsletter Logo",
-      "questions_or_feedback": "Haben Sie Fragen oder Feedback?",
+      "questions_or_feedback": "Haben Sie Fragen oder Feedback? <0>Kontaktieren Sie uns</0>",
       "subscribe": "Anmelden",
       "success": {
         "content": "Sie haben sich für unseren Newsletter angemeldet und erhalten nun praktische Tipps zum Eingeben Ihrer Aktivitäten in die UiTdatabank!",
@@ -1482,6 +1482,11 @@
         "cancel": "Abbrechen",
         "confirm": "Definitiv löschen"
       }
+    },
+    "history_tab": {
+      "api": "API: {{api}}",
+      "client_id": "Client-ID: {{clientId}}",
+      "client_name": "Clientname: {{clientName}}"
     }
   }
 }
