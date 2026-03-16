@@ -86,7 +86,7 @@ const Preview = () => {
 
   const placePermissionQuery = useGetOfferPermissionsQuery({
     offerId: placeId,
-    offerType: offerType,
+    scope: OfferTypes.PLACES,
   });
 
   const placePermissions: string[] =

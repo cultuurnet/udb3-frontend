@@ -89,7 +89,7 @@ const Preview = () => {
 
   const offerPermissionQuery = useGetOfferPermissionsQuery({
     offerId: eventId,
-    offerType: offerType,
+    scope: OfferTypes.EVENTS,
   });
 
   const eventPermissions: string[] =

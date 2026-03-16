@@ -1,6 +1,6 @@
 import { dehydrate } from '@tanstack/react-query';
 
-import { OfferContexts } from '@/constants/OfferType';
+import { OfferTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetEventByIdQuery,
@@ -19,12 +19,12 @@ export const getServerSideProps = getApplicationServerSideProps(
       req,
       queryClient,
       offerId: eventId,
-      offerType: OfferContexts.EVENT,
+      scope: OfferTypes.EVENTS,
     });
 
     const permissionsData = queryClient.getQueryData([
       'offer-permissions',
-      { offerId: eventId, offerType: OfferContexts.EVENT },
+      { offerId: eventId, scope: OfferTypes.EVENTS },
     ]);
 
     const permissions = permissionsData?.permissions ?? [];

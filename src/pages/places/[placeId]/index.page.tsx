@@ -1,6 +1,6 @@
 import { dehydrate } from '@tanstack/react-query';
 
-import { OfferContexts, OfferTypes } from '@/constants/OfferType';
+import { OfferTypes } from '@/constants/OfferType';
 import { prefetchGetOfferPermissionsQuery } from '@/hooks/api/events';
 import {
   prefetchGetOfferByIdQuery,
@@ -31,7 +31,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       req,
       queryClient,
       offerId: placeId,
-      offerType: OfferContexts.PLACES,
+      scope: OfferTypes.PLACES,
     });
 
     if (query.tab === 'history') {

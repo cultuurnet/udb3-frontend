@@ -524,23 +524,20 @@ export const prefetchGetCalendarSummaryQuery = ({
     queryArguments: { id, locale, format },
   });
 
-const getOfferPermissions = async ({ headers, offerId, offerType }) => {
+const getOfferPermissions = async ({ headers, offerId, scope }) => {
   const res = await fetchFromApi({
-    path: `/${offerType}/${offerId}/permissions`,
+    path: `/${scope}/${offerId}/permissions`,
     options: { headers },
   });
 
   return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
-const useGetOfferPermissionsQuery = (
-  { offerId, offerType },
-  configuration = {},
-) =>
+const useGetOfferPermissionsQuery = ({ offerId, scope }, configuration = {}) =>
   useAuthenticatedQuery({
-    queryKey: ['offer-permissions'],
+    queryKey: ['offer-permissions', offerId, scope],
     queryFn: getOfferPermissions,
-    queryArguments: { offerId, offerType },
+    queryArguments: { offerId, scope },
     enabled: !!offerId,
     ...configuration,
   });
@@ -549,14 +546,14 @@ export const prefetchGetOfferPermissionsQuery = ({
   req,
   queryClient,
   offerId,
-  offerType,
+  scope,
 }) =>
   prefetchAuthenticatedQuery({
     req,
     queryClient,
-    queryKey: ['offer-permissions'],
+    queryKey: ['offer-permissions', offerId, scope],
     queryFn: getOfferPermissions,
-    queryArguments: { offerId, offerType },
+    queryArguments: { offerId, scope },
   });
 
 const changeLocation = async ({ headers, eventId, locationId }) => {
