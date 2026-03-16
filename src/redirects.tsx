@@ -113,6 +113,11 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_ROLES_CREATE_EDIT,
   },
   {
+    source: '/manage/users/overview',
+    destination: '/manage/users',
+    permanent: environment !== 'development',
+  },
+  {
     source: '/manage/labels/overview',
     destination: '/manage/labels',
     permanent: environment !== 'development',
