@@ -9,16 +9,7 @@ type TestFixtures = {
 };
 
 const test = base.extend<TestFixtures>({
-  uniqueRoleUrl: async ({ page, context, uniqueRoleName }, applyFixture) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_roles_create_edit',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
-
+  uniqueRoleUrl: async ({ page, uniqueRoleName }, applyFixture) => {
     await page.goto('/manage/roles/create');
     await page.getByLabel('Naam').fill(uniqueRoleName);
     await page.getByRole('button', { name: 'Toevoegen' }).click();
