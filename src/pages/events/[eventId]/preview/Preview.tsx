@@ -21,6 +21,7 @@ import {
 import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
@@ -752,6 +753,11 @@ const Preview = () => {
             {t('preview.actions.delete_modal.body', { title: title })}
           </Box>
         </Modal>
+        <Footer
+          isZendeskWidgetVisible
+          isNewsletterSignupFormVisible
+          isProfileLinkVisible
+        />
       </Page.Content>
     </Page>
   );
