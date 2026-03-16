@@ -31,8 +31,6 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
-import { isEvent } from '@/types/Event';
-import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -246,16 +244,6 @@ const Preview = () => {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
-    ...(isEvent(offer) && hasOnlineLocation(offer) && offer?.onlineUrl
-      ? [
-          {
-            field: t('preview.labels.online_location'),
-            value: (
-              <Link href={offer?.onlineUrl || ''}>{offer?.onlineUrl}</Link>
-            ),
-          },
-        ]
-      : []),
     {
       field: t('preview.labels.booking_info'),
       value: (
