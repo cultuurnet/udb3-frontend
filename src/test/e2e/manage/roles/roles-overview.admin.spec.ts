@@ -2,15 +2,7 @@ import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 test.describe('Roles Overview - Admin', () => {
-  test.beforeEach(async ({ page, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_roles_overview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page }) => {
     await page.goto('/manage/roles');
   });
 

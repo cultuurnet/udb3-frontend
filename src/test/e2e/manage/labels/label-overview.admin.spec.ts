@@ -3,14 +3,6 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Label Overview - Admin', () => {
   test.beforeEach(async ({ page, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_labels_create_edit',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
     await page.goto('/manage/labels');
   });
 

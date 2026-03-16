@@ -94,6 +94,12 @@ const getRedirects = (
     featureFlag: FeatureFlags.REACT_EVENT_PREVIEW,
   },
   {
+    source: '/place/:placeId/preview',
+    destination: '/places/:placeId',
+    permanent: false,
+    featureFlag: FeatureFlags.REACT_PLACE_PREVIEW,
+  },
+  {
     source: '/place/:placeId/translate',
     destination: '/places/:placeId/translate',
     permanent: false,
@@ -102,8 +108,7 @@ const getRedirects = (
   {
     source: '/manage/roles/overview',
     destination: '/manage/roles',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_ROLES_OVERVIEW,
+    permanent: environment !== 'development',
   },
   {
     source:
@@ -126,8 +131,7 @@ const getRedirects = (
     source:
       '/manage/labels/:labelId([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
     destination: '/manage/labels/:labelId/edit',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_LABELS_CREATE_EDIT,
+    permanent: environment !== 'development',
   },
   {
     source: '/place/:placeId/edit',

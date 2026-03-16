@@ -524,35 +524,36 @@ export const prefetchGetCalendarSummaryQuery = ({
     queryArguments: { id, locale, format },
   });
 
-const getEventPermissions = async ({ headers, eventId }) => {
+const getOfferPermissions = async ({ headers, offerId, scope }) => {
   const res = await fetchFromApi({
-    path: `/event/${eventId}/permissions`,
+    path: `/${scope}/${offerId}/permissions`,
     options: { headers },
   });
 
   return (await res.json()) as Values<typeof PermissionTypes>[];
 };
 
-const useGetEventPermissionsQuery = ({ eventId }, configuration = {}) =>
+const useGetOfferPermissionsQuery = ({ offerId, scope }, configuration = {}) =>
   useAuthenticatedQuery({
-    queryKey: ['event-permissions'],
-    queryFn: getEventPermissions,
-    queryArguments: { eventId },
-    enabled: !!eventId,
+    queryKey: ['offer-permissions', offerId, scope],
+    queryFn: getOfferPermissions,
+    queryArguments: { offerId, scope },
+    enabled: !!offerId,
     ...configuration,
   });
 
-export const prefetchGetEventPermissionsQuery = ({
+export const prefetchGetOfferPermissionsQuery = ({
   req,
   queryClient,
-  eventId,
+  offerId,
+  scope,
 }) =>
   prefetchAuthenticatedQuery({
     req,
     queryClient,
-    queryKey: ['event-permissions'],
-    queryFn: getEventPermissions,
-    queryArguments: { eventId },
+    queryKey: ['offer-permissions', offerId, scope],
+    queryFn: getOfferPermissions,
+    queryArguments: { offerId, scope },
   });
 
 const changeLocation = async ({ headers, eventId, locationId }) => {
@@ -881,9 +882,9 @@ export {
   useDuplicateEventMutation,
   useGetCalendarSummaryQuery,
   useGetEventByIdQuery,
-  useGetEventPermissionsQuery,
   useGetEventsByCreatorQuery,
   useGetEventsByIdsQuery,
   useGetEventsToModerateQuery,
+  useGetOfferPermissionsQuery,
   usePublishEventMutation,
 };
