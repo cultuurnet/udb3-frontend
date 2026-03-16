@@ -1476,7 +1476,8 @@
       "change_availability": "Verfügbarkeit ändern",
       "delete": "Löschen",
       "delete_modal": {
-        "title": "Aktivität löschen",
+        "title_event": "Aktivität löschen",
+        "title_location": "Ort löschen",
         "body": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
         "confirm": "Definitiv löschen"
