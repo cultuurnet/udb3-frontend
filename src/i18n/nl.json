@@ -595,7 +595,7 @@
       "invalid": "Geef een geldig email adres in.",
       "logo": "newsletter-logo.svg",
       "logo_alt": "nieuwsbrief logo",
-      "questions_or_feedback": "Vragen of feedback?",
+      "questions_or_feedback": "Vragen of feedback? <0>Contacteer ons</0>",
       "subscribe": "Inschrijven",
       "success": {
         "content": "Je bent ingeschreven op onze nieuwsbrief en ontvangt praktische tips voor het invoeren van jouw activiteiten in de UiTdatabank!",
@@ -1537,6 +1537,11 @@
         "cancel": "Annuleren",
         "confirm": "Definitief verwijderen"
       }
+    },
+    "history_tab": {
+      "api": "API: {{api}}",
+      "client_id": "Client id: {{clientId}}",
+      "client_name": "Client name: {{clientName}}"
     }
   }
 }

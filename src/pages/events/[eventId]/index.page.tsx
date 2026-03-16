@@ -5,7 +5,10 @@ import {
   prefetchGetCalendarSummaryQuery,
   prefetchGetEventPermissionsQuery,
 } from '@/hooks/api/events';
-import { prefetchGetOfferByIdQuery } from '@/hooks/api/offers';
+import {
+  prefetchGetOfferByIdQuery,
+  prefetchOfferHistoryQuery,
+} from '@/hooks/api/offers';
 import { prefetchGetPermissionsQuery } from '@/hooks/api/user';
 import i18n from '@/i18n/index';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -41,6 +44,15 @@ export const getServerSideProps = getApplicationServerSideProps(
       queryClient,
       eventId: eventId,
     });
+
+    if (query.tab === 'history') {
+      await prefetchOfferHistoryQuery({
+        req,
+        queryClient,
+        id: eventId as string,
+        scope: OfferTypes.EVENTS,
+      });
+    }
 
     return {
       props: {

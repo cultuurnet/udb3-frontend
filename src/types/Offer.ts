@@ -158,6 +158,16 @@ type Label = {
   excluded: boolean;
 };
 
+export type OfferHistory = {
+  date: string;
+  description: string;
+  author?: string;
+  api?: string;
+  apiKey?: string;
+  clientId?: string;
+  clientName?: string;
+};
+
 const LabelVisibilityOptions = {
   VISIBLE: 'visible',
   INVISIBLE: 'invisible',
