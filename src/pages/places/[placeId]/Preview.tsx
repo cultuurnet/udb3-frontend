@@ -31,6 +31,7 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
+import { Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
