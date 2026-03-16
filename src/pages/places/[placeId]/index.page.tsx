@@ -1,37 +1,25 @@
 import { dehydrate } from '@tanstack/react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
-import {
-  prefetchGetCalendarSummaryQuery,
-  prefetchGetOfferPermissionsQuery,
-} from '@/hooks/api/events';
+import { prefetchGetOfferPermissionsQuery } from '@/hooks/api/events';
 import {
   prefetchGetOfferByIdQuery,
   prefetchOfferHistoryQuery,
 } from '@/hooks/api/offers';
 import { prefetchGetPermissionsQuery } from '@/hooks/api/user';
-import i18n from '@/i18n/index';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 import { Preview } from './Preview';
 
 export const getServerSideProps = getApplicationServerSideProps(
   async ({ cookies, query, req, queryClient }) => {
-    const { eventId } = query;
+    const { placeId } = query;
 
     await prefetchGetOfferByIdQuery({
       req,
       queryClient,
-      id: eventId as string,
-      scope: OfferTypes.EVENTS,
-    });
-
-    await prefetchGetCalendarSummaryQuery({
-      req,
-      queryClient,
-      id: eventId as string,
-      locale: i18n.language,
-      format: 'lg',
+      id: placeId as string,
+      scope: OfferTypes.PLACES,
     });
 
     await prefetchGetPermissionsQuery({
@@ -42,16 +30,16 @@ export const getServerSideProps = getApplicationServerSideProps(
     await prefetchGetOfferPermissionsQuery({
       req,
       queryClient,
-      offerId: eventId,
-      scope: OfferTypes.EVENTS,
+      offerId: placeId,
+      scope: OfferTypes.PLACES,
     });
 
     if (query.tab === 'history') {
       await prefetchOfferHistoryQuery({
         req,
         queryClient,
-        id: eventId as string,
-        scope: OfferTypes.EVENTS,
+        id: placeId as string,
+        scope: OfferTypes.PLACES,
       });
     }
 

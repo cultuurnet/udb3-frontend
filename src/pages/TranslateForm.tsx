@@ -26,7 +26,7 @@ import { Title } from '@/ui/Title';
 import { Toast } from '@/ui/Toast';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
-import { DescriptionPreview } from './events/[eventId]/preview/DescriptionPreview';
+import { DescriptionPreview } from './preview/DescriptionPreview';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;

@@ -54,7 +54,7 @@ type MediaObject = {
   inLanguage: string;
 };
 
-type VideoObject = {
+export type VideoObject = {
   id: string;
   embedUrl: string;
   language: string;
@@ -156,6 +156,16 @@ type Label = {
   visibility: string;
   privacy: string;
   excluded: boolean;
+};
+
+export type OfferHistory = {
+  date: string;
+  description: string;
+  author?: string;
+  api?: string;
+  apiKey?: string;
+  clientId?: string;
+  clientName?: string;
 };
 
 const LabelVisibilityOptions = {

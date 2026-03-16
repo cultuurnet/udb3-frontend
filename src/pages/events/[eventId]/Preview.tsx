@@ -4,49 +4,58 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AgeRanges } from '@/constants/AgeRange';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
-  useGetEventPermissionsQuery,
+  useGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import {
+  useGetOfferByIdQuery,
+  useGetOfferHistoryQuery,
+} from '@/hooks/api/offers';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
+import { AgePreview } from '@/pages/preview/AgePreview';
+import { BookingInfoPreview } from '@/pages/preview/BookingInfoPreview';
+import { ContactInfoPreview } from '@/pages/preview/ContactInfoPreview';
+import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
+import { EmptyValue } from '@/pages/preview/EmptyValue';
+import { ImagePreview } from '@/pages/preview/ImagePreview';
+import { LocationPreview } from '@/pages/preview/LocationPreview';
+import {
+  columns,
+  DetailsTabContent,
+} from '@/pages/preview/Tabs/DetailsTabContent';
+import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
+import { VideoPreview } from '@/pages/preview/VideoPreview';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
-import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
-import { List as UiList } from '@/ui/List';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Table } from '@/ui/Table';
-import { Tabs } from '@/ui/Tabs';
-import { Text, TextVariants } from '@/ui/Text';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
+import { Text } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
-
-import { BookingInfoPreview } from './BookingInfoPreview';
-import { ContactInfoPreview } from './ContactInfoPreview';
-import { DescriptionPreview } from './DescriptionPreview';
-import { LocationPreview } from './LocationPreview';
+import { parseOfferType } from '@/utils/parseOfferType';
 
 const getGlobalValue = getValueFromTheme('global');
-
-const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
 const Preview = () => {
   const router = useRouter();
@@ -54,13 +63,8 @@ const Preview = () => {
   const { t } = useTranslation();
   const { eventId } = router.query;
 
-  const [activeTab, setActiveTab] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '');
-      return hash || 'details';
-    }
-    return 'details';
-  });
+  const tab = (router.query?.tab as string) ?? 'details';
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
@@ -68,6 +72,8 @@ const Preview = () => {
     scope: OfferTypes.EVENTS,
   });
   const offer = getOfferByIdQuery.data;
+  const offerType = parseOfferType(offer['@context']);
+
   const isEdited = router.query.edited === 'true';
   const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
@@ -82,15 +88,17 @@ const Preview = () => {
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
 
-  const eventpermissionQuery = useGetEventPermissionsQuery({
-    eventId: eventId,
+  const offerPermissionQuery = useGetOfferPermissionsQuery({
+    offerId: eventId,
+    scope: OfferTypes.EVENTS,
   });
 
   const eventPermissions: string[] =
-    (eventpermissionQuery?.data as { permissions?: string[] } | undefined)
+    (offerPermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const { mainLanguage, name, terms } = offer;
+  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
+    offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -110,36 +118,32 @@ const Preview = () => {
     mainLanguage,
   );
 
+  const getOfferHistoryQuery = useGetOfferHistoryQuery(
+    eventId as string,
+    offerType,
+  );
+  const offerHistory = getOfferHistoryQuery?.data ?? [];
+
   const tabOptions = ['details'];
   const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  /* TODO enable history tab when functionality is ready
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
   const canSeeHistory = userPermissions?.includes(
     PermissionTypes.AANBOD_HISTORIEK,
   );
-  
+
   if (canSeeHistory || isGodUser) {
     tabOptions.push('history');
   }
-  //*/
 
-  const onTabChange = (key: string) => {
-    setActiveTab(key);
-    window.location.hash = key;
-  };
-
-  const columns = [
-    { Header: 'Field', accessor: 'field' },
-    { Header: 'Value', accessor: 'value' },
-  ];
-
-  const EmptyValue = ({ children }) => {
-    return <Text className="empty-value">{children}</Text>;
+  const handleSelectTab = (tab: string) => {
+    router.push({ query: { ...router.query, tab } }, undefined, {
+      shallow: true,
+    });
   };
 
   const OrganizerPreview = () => {
@@ -225,7 +229,7 @@ const Preview = () => {
       : t('brand_uitinvlaanderen');
     const publicUrl = isCultuurkuurEvent
       ? `${publicRuntimeConfig.ckUrl}/event/${parseOfferId(offer['@id'])}`
-      : `${publicRuntimeConfig.uivUrl}/agenda/e/${parseOfferId(offer['@id'])}`;
+      : `${publicRuntimeConfig.uivUrl}/agenda/e/x/${parseOfferId(offer['@id'])}`;
 
     const publicationRulesUrl = publicRuntimeConfig.udbPublicationRulesUrl;
 
@@ -303,119 +307,6 @@ const Preview = () => {
           </Link>
         )}
       </Stack>
-    );
-  };
-
-  const formatCustomAgeRange = (ageRange: string) => {
-    const [min, max] = ageRange.split('-');
-    if (min && !max) {
-      return `${min}+`;
-    }
-    return ageRange;
-  };
-
-  const AgePreview = () => {
-    const hasAgeInfo = !!offer.typicalAgeRange;
-
-    if (!hasAgeInfo) return null;
-
-    if (offer.typicalAgeRange === '-' || offer.typicalAgeRange === '0-') {
-      return <Text>{t('create.name_and_age.age.all')}</Text>;
-    }
-
-    const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
-      const ageRange = AgeRanges[key];
-      return ageRange.apiLabel === offer.typicalAgeRange;
-    });
-
-    const ageText = AgeRanges[ageRangeLabelKey]
-      ? AgeRanges[ageRangeLabelKey].label
-      : formatCustomAgeRange(offer.typicalAgeRange);
-
-    return <Text>{t('preview.ages', { ages: ageText })}</Text>;
-  };
-
-  const ImagePreview = () => {
-    const HEIGHT = 100;
-    const hasImages = (offer.mediaObject ?? []).length > 0;
-
-    if (!hasImages)
-      return <EmptyValue>{t('preview.empty_value.images')}</EmptyValue>;
-
-    return offer.mediaObject?.map((media, index) => {
-      const isLastImage = index === offer.mediaObject!.length - 1;
-      return (
-        <Inline
-          spacing={4}
-          key={media['@id']}
-          alignItems="center"
-          paddingBottom={3}
-          marginBottom={4}
-          css={`
-            border-bottom: ${isLastImage
-              ? 'none'
-              : `1px solid ${udbMainLightGrey}`};
-          `}
-        >
-          <Link href={media.contentUrl} target="_blank">
-            <Image
-              src={`${media.thumbnailUrl}?height=${HEIGHT}`}
-              alt={media.description}
-              width="auto"
-            />
-          </Link>
-          <Stack spacing={1}>
-            {index === 0 && (
-              <Text
-                backgroundColor={udbMainDarkGrey}
-                color={colors.white}
-                alignSelf="flex-start"
-                borderRadius="3px"
-                paddingRight={3}
-                paddingLeft={3}
-                fontSize="0.8rem"
-                fontWeight="bold"
-              >
-                {t('preview.main_image')}
-              </Text>
-            )}
-            <Text>{media.description}</Text>
-            <Text variant={TextVariants.MUTED}>© {media.copyrightHolder}</Text>
-          </Stack>
-        </Inline>
-      );
-    });
-  };
-
-  const VideoPreview = () => {
-    // TODO check with Sarah if we need real previews here?
-    // @see https://jira.publiq.be/browse/III-6951
-    const hasVideos = (offer.videos ?? []).length > 0;
-
-    if (!hasVideos)
-      return <EmptyValue>{t('preview.empty_value.videos')}</EmptyValue>;
-
-    return (
-      <UiList
-        css={`
-          display: block;
-        `}
-      >
-        {offer.videos?.map((video) => (
-          <UiList.Item
-            key={video['@id']}
-            css={`
-              display: list-item;
-              list-style-type: disc;
-              margin-left: 20px;
-            `}
-          >
-            <Link href={video.url} target="_blank">
-              {video.url}
-            </Link>
-          </UiList.Item>
-        ))}
-      </UiList>
     );
   };
 
@@ -513,75 +404,19 @@ const Preview = () => {
       field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
     },
-    { field: t('preview.labels.age'), value: <AgePreview /> },
-    { field: t('preview.labels.image'), value: <ImagePreview /> },
-    { field: t('preview.labels.video'), value: <VideoPreview /> },
+    {
+      field: t('preview.labels.age'),
+      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
+    },
+    {
+      field: t('preview.labels.image'),
+      value: <ImagePreview mediaObject={mediaObject} />,
+    },
+    {
+      field: t('preview.labels.video'),
+      value: <VideoPreview videos={videos} />,
+    },
   ];
-
-  const DetailsTabContent = () => {
-    return (
-      <Stack
-        marginTop={4}
-        backgroundColor="white"
-        padding={4}
-        borderRadius={getGlobalBorderRadius}
-        css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
-        `}
-      >
-        <Table
-          bordered
-          showHeader={false}
-          columns={columns}
-          data={tableData}
-          className="details-table"
-          css={`
-            tbody tr td:nth-child(1) {
-              font-weight: 600;
-              width: 25%;
-            }
-            tbody tr:first-child td {
-              border-top: none;
-            }
-            td strong,
-            td b {
-              font-weight: 700 !important;
-            }
-
-            td em,
-            td i {
-              font-style: italic !important;
-            }
-            tr:has(td:nth-child(2) .empty-value) td {
-              background-color: ${colors.grey4};
-            }
-            tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
-              color: ${colors.grey5};
-            }
-            tbody {
-              opacity: ${showEventId ? 1 : 0.4};
-            }
-          `}
-        />
-      </Stack>
-    );
-  };
-
-  const HistoryTabContent = () => {
-    return (
-      <Stack
-        marginTop={4}
-        backgroundColor="white"
-        padding={4}
-        borderRadius={getGlobalBorderRadius}
-        css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
-        `}
-      >
-        <Text>{t('preview.tabs.history_content')}</Text>
-      </Stack>
-    );
-  };
 
   const onDeleteClick = (offer: Offer) => {
     setIsModalVisible(true);
@@ -625,18 +460,24 @@ const Preview = () => {
               </Alert>
             )}
             <Tabs
-              activeKey={activeTab}
-              onSelect={(key) => onTabChange(key as string)}
+              activeKey={tab}
+              onSelect={(key) => handleSelectTab(key)}
+              variant={TabsVariants.FLOATING}
             >
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
                   {tab === 'details' && (
-                    <Stack>
+                    <Stack marginTop={4}>
                       <PublicationPreview />
-                      <DetailsTabContent />
+                      <DetailsTabContent
+                        tableData={tableData}
+                        showEventId={showEventId}
+                      />
                     </Stack>
                   )}
-                  {tab === 'history' && <HistoryTabContent />}
+                  {tab === 'history' && (
+                    <HistoryTabContent offerHistory={offerHistory} />
+                  )}
                 </Tabs.Tab>
               ))}
             </Tabs>
@@ -647,7 +488,7 @@ const Preview = () => {
                 offer={offer}
                 onDelete={onDeleteClick}
                 userPermissions={userPermissions}
-                eventPermissions={eventPermissions}
+                offerPermissions={eventPermissions}
               />
             }
           </Stack>
@@ -661,7 +502,7 @@ const Preview = () => {
             });
           }}
           onClose={() => setIsModalVisible(false)}
-          title={t('preview.actions.delete_modal.title')}
+          title={t('preview.actions.delete_modal.title_event')}
           confirmTitle={t('preview.actions.delete_modal.confirm')}
           cancelTitle={t('preview.actions.delete_modal.cancel')}
           size={ModalSizes.LG}
@@ -674,6 +515,11 @@ const Preview = () => {
             {t('preview.actions.delete_modal.body', { title: title })}
           </Box>
         </Modal>
+        <Footer
+          isZendeskWidgetVisible
+          isNewsletterSignupFormVisible
+          isProfileLinkVisible
+        />
       </Page.Content>
     </Page>
   );

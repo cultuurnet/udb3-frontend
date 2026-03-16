@@ -10,7 +10,6 @@ import {
   prefetchGetLabelsQuery,
   useGetLabelsByQuery,
 } from '@/hooks/api/labels';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -37,9 +36,6 @@ const LabelsOverviewPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [currentPageLabels, setCurrentPageLabels] = useState(1);
   const [successMessage, setSuccessMessage] = useState('');
-  const [isReactLabelsCreateEditFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_LABELS_CREATE_EDIT,
-  );
 
   useEffect(() => {
     if (router.query.success === 'created') {
@@ -112,19 +108,14 @@ const LabelsOverviewPage = () => {
       {
         Header: t('labels.overview.table.options'),
         accessor: 'options',
-        Cell: ({ cell }) =>
-          isReactLabelsCreateEditFeatureFlagEnabled ? (
-            <Link href={`/manage/labels/${cell.value}/edit`}>
-              {t('labels.overview.table.edit')}
-            </Link>
-          ) : (
-            <Link href={`/manage/labels/${cell.value}`}>
-              {t('labels.overview.table.edit')}
-            </Link>
-          ),
+        Cell: ({ cell }) => (
+          <Link href={`/manage/labels/${cell.value}/edit`}>
+            {t('labels.overview.table.edit')}
+          </Link>
+        ),
       },
     ],
-    [t, isReactLabelsCreateEditFeatureFlagEnabled],
+    [t],
   );
   const labels: Label[] = useMemo(
     () => labelsQuery.data?.member ?? [],
