@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -7,19 +8,24 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AgeRanges } from '@/constants/AgeRange';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
   useGetCalendarSummaryQuery,
   useGetEventPermissionsQuery,
 } from '@/hooks/api/events';
-import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import {
+  useGetOfferByIdQuery,
+  useGetOfferHistoryQuery,
+} from '@/hooks/api/offers';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
+import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
-import { hasOnlineLocation, Offer } from '@/types/Offer';
+import { hasOnlineLocation, Offer, OfferHistory } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert } from '@/ui/Alert';
@@ -33,11 +39,12 @@ import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
 import { Table } from '@/ui/Table';
-import { Tabs } from '@/ui/Tabs';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
+import { parseOfferType } from '@/utils/parseOfferType';
 
 import { BookingInfoPreview } from './BookingInfoPreview';
 import { ContactInfoPreview } from './ContactInfoPreview';
@@ -48,19 +55,102 @@ const getGlobalValue = getValueFromTheme('global');
 
 const { udbMainDarkGrey, udbMainLightGrey } = colors;
 
+const formatDate = (date: string) => format(new Date(date), 'dd/MM/yyyy HH:mm');
+
+type HistoryTabContentProps = {
+  offerHistory: OfferHistory[];
+};
+
+const HistoryTabContent = ({ offerHistory }: HistoryTabContentProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack
+      marginTop={5}
+      backgroundColor="white"
+      padding={4}
+      borderRadius={getGlobalBorderRadius}
+      css={`
+        box-shadow: ${getGlobalValue('boxShadow.medium')};
+
+        ul {
+          position: relative;
+          padding-left: 40px;
+        }
+
+        ul:before {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 20px;
+          width: 2px;
+          content: '';
+          background-color: ${udbMainLightGrey};
+          z-index: 100;
+        }
+
+        li {
+          position: relative;
+        }
+
+        li:before {
+          position: absolute;
+          left: -24px;
+          top: 9px;
+          display: block;
+          border: 1px solid ${colors.white};
+          background-color: ${udbMainLightGrey};
+          border-radius: 50%;
+          width: 9px;
+          height: 9px;
+          z-index: 99;
+          content: '';
+        }
+      `}
+    >
+      <UiList spacing={3}>
+        {offerHistory.map((history, index) => (
+          <UiList.Item
+            key={index}
+            flexDirection="column"
+            alignItems="flex-start"
+          >
+            <Text fontWeight="bold">{formatDate(history.date)}</Text>
+            {history.author && <Text>{history.author}</Text>}
+            <Text>{history.description}</Text>
+            {history.api && (
+              <Text>{t('preview.history_tab.api', { api: history.api })}</Text>
+            )}
+            {history.apiKey && <Text>{history.apiKey}</Text>}
+            {history.clientId && (
+              <Text>
+                {t('preview.history_tab.client_id', {
+                  clientId: history.clientId,
+                })}
+              </Text>
+            )}
+            {history.clientName && (
+              <Text>
+                {t('preview.history_tab.client_name', {
+                  clientName: history.clientName,
+                })}
+              </Text>
+            )}
+          </UiList.Item>
+        ))}
+      </UiList>
+    </Stack>
+  );
+};
+
 const Preview = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { eventId } = router.query;
 
-  const [activeTab, setActiveTab] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '');
-      return hash || 'details';
-    }
-    return 'details';
-  });
+  const tab = (router.query?.tab as string) ?? 'details';
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getOfferByIdQuery = useGetOfferByIdQuery({
@@ -110,27 +200,33 @@ const Preview = () => {
     mainLanguage,
   );
 
+  const offerType = parseOfferType(offer['@context']);
+  const getOfferHistoryQuery = useGetOfferHistoryQuery(
+    eventId as string,
+    offerType,
+  );
+  const offerHistory = getOfferHistoryQuery?.data ?? [];
+
   const tabOptions = ['details'];
   const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  /* TODO enable history tab when functionality is ready
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
   const canSeeHistory = userPermissions?.includes(
     PermissionTypes.AANBOD_HISTORIEK,
   );
-  
+
   if (canSeeHistory || isGodUser) {
     tabOptions.push('history');
   }
-  //*/
 
-  const onTabChange = (key: string) => {
-    setActiveTab(key);
-    window.location.hash = key;
+  const handleSelectTab = (tab: string) => {
+    router.push({ query: { ...router.query, tab } }, undefined, {
+      shallow: true,
+    });
   };
 
   const columns = [
@@ -567,22 +663,6 @@ const Preview = () => {
     );
   };
 
-  const HistoryTabContent = () => {
-    return (
-      <Stack
-        marginTop={4}
-        backgroundColor="white"
-        padding={4}
-        borderRadius={getGlobalBorderRadius}
-        css={`
-          box-shadow: ${getGlobalValue('boxShadow.medium')};
-        `}
-      >
-        <Text>{t('preview.tabs.history_content')}</Text>
-      </Stack>
-    );
-  };
-
   const onDeleteClick = (offer: Offer) => {
     setIsModalVisible(true);
   };
@@ -625,18 +705,21 @@ const Preview = () => {
               </Alert>
             )}
             <Tabs
-              activeKey={activeTab}
-              onSelect={(key) => onTabChange(key as string)}
+              activeKey={tab}
+              onSelect={(key) => handleSelectTab(key)}
+              variant={TabsVariants.FLOATING}
             >
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
                   {tab === 'details' && (
-                    <Stack>
+                    <Stack marginTop={4}>
                       <PublicationPreview />
                       <DetailsTabContent />
                     </Stack>
                   )}
-                  {tab === 'history' && <HistoryTabContent />}
+                  {tab === 'history' && (
+                    <HistoryTabContent offerHistory={offerHistory} />
+                  )}
                 </Tabs.Tab>
               ))}
             </Tabs>
@@ -674,6 +757,11 @@ const Preview = () => {
             {t('preview.actions.delete_modal.body', { title: title })}
           </Box>
         </Modal>
+        <Footer
+          isZendeskWidgetVisible
+          isNewsletterSignupFormVisible
+          isProfileLinkVisible
+        />
       </Page.Content>
     </Page>
   );

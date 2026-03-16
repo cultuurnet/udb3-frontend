@@ -1,5 +1,6 @@
+import getConfig from 'next/config';
 import type { ElementType } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
 import type { Values } from '@/types/Values';
@@ -10,8 +11,14 @@ import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import {
+  openZendeskWidget,
+  showZendeskWidget,
+  ZendeskWidget,
+} from '@/ui/ZendeskWidget';
 
 import { SupportedLanguages } from '../i18n';
+import { NewsletterSignupForm } from './dashboard/NewsletterSingupForm';
 
 const getValueForPage = getValueFromTheme('loginPage');
 
@@ -85,6 +92,8 @@ const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
 
 type Props = {
   isProfileLinkVisible?: boolean;
+  isNewsletterSignupFormVisible?: boolean;
+  isZendeskWidgetVisible?: boolean;
   variant?: Values<typeof FooterVariants>;
   wrapper?: ElementType;
   onChangeLanguage?: (
@@ -97,12 +106,15 @@ const Footer = ({
     <Inline width="100%" justifyContent="space-between" {...props} />
   ),
   onChangeLanguage,
-  isProfileLinkVisible = true,
+  isProfileLinkVisible = false,
+  isNewsletterSignupFormVisible = false,
+  isZendeskWidgetVisible = false,
   variant = FooterVariants.DEFAULT,
   ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
   const { setCookie } = useCookiesWithOptions(['udb-language']);
+  const { publicRuntimeConfig } = getConfig();
 
   const defaultHandleChangeLanguage =
     (language: Values<typeof SupportedLanguages>) => () => {
@@ -135,64 +147,94 @@ const Footer = ({
   ];
 
   return (
-    <Wrapper {...props}>
-      <Stack alignItems="flex-start">
-        <List alignItems={{ xs: 'center' }}>
-          {footerLinks.map((link) => (
-            <List.Item key={link.label}>
-              <FooterLink footerVariant={variant} href={link.href}>
-                {t(link.label)}
-              </FooterLink>
-            </List.Item>
-          ))}
-          {isProfileLinkVisible && (
-            <List.Item>
-              <FooterLink
-                footerVariant={variant}
-                href={`https://profile.uitid.be/${i18n.language}/profile`}
-              >
-                {t('footer.profile')}
-              </FooterLink>
-            </List.Item>
-          )}
-        </List>
-      </Stack>
+    <Stack spacing={5} width="100%">
+      {isZendeskWidgetVisible && (
+        <Inline
+          spacing={4}
+          fontSize="1.2rem"
+          paddingTop={5}
+          alignItems="center"
+        >
+          <ZendeskWidget />
+          <Trans i18nKey="dashboard.newsletter.questions_or_feedback">
+            {i18n.language === 'nl' ? (
+              <Button
+                variant={ButtonVariants.LINK}
+                onClick={() => {
+                  openZendeskWidget();
+                  showZendeskWidget();
+                }}
+              />
+            ) : (
+              <Link paddingX={2.5} href={`mailto:${t('error.email')}`}></Link>
+            )}
+          </Trans>
+        </Inline>
+      )}
+      {isNewsletterSignupFormVisible && i18n.language === 'nl' && (
+        <NewsletterSignupForm />
+      )}
 
-      <Stack
-        spacing={3}
-        alignItems={{ default: 'flex-end', xs: 'center' }}
-        justifyContent="flex-start"
-      >
-        <Inline as="p" spacing={2}>
-          <Text
-            css={`
-              color: ${variant === FooterVariants.LOGIN
-                ? getValueForPage('footer.linkColor')
-                : 'inherit'};
-            `}
-          >
-            {t('footer.by')}
-          </Text>
-          <FooterLink footerVariant={variant} href="http://www.publiq.be">
-            publiq vzw
-          </FooterLink>
-        </Inline>
-        <FlandersLogo color={colors.udbMainDarkestGrey} width="150" />
-        <Inline>
-          {Object.values(SupportedLanguages).map((supportedLanguage, index) => {
-            return (
-              <LanguageSwitcherButton
-                key={index}
-                onClick={handleChangeLanguage(supportedLanguage)}
-                footerVariant={variant}
-              >
-                {t(`footer.${supportedLanguage}`)}
-              </LanguageSwitcherButton>
-            );
-          })}
-        </Inline>
-      </Stack>
-    </Wrapper>
+      <Wrapper>
+        <Stack alignItems="flex-start">
+          <List alignItems={{ xs: 'center' }}>
+            {footerLinks.map((link) => (
+              <List.Item key={link.label}>
+                <FooterLink footerVariant={variant} href={link.href}>
+                  {t(link.label)}
+                </FooterLink>
+              </List.Item>
+            ))}
+            {isProfileLinkVisible && (
+              <List.Item>
+                <FooterLink
+                  footerVariant={variant}
+                  href={`${publicRuntimeConfig.uitidProfileUrl}/${i18n.language}/profile`}
+                >
+                  {t('footer.profile')}
+                </FooterLink>
+              </List.Item>
+            )}
+          </List>
+        </Stack>
+        <Stack
+          spacing={3}
+          alignItems={{ default: 'flex-end', xs: 'center' }}
+          justifyContent="flex-start"
+        >
+          <Inline as="p" spacing={2}>
+            <Text
+              css={`
+                color: ${variant === FooterVariants.LOGIN
+                  ? getValueForPage('footer.linkColor')
+                  : 'inherit'};
+              `}
+            >
+              {t('footer.by')}
+            </Text>
+            <FooterLink footerVariant={variant} href="http://www.publiq.be">
+              publiq vzw
+            </FooterLink>
+          </Inline>
+          <FlandersLogo color={colors.udbMainDarkestGrey} width="150" />
+          <Inline>
+            {Object.values(SupportedLanguages).map(
+              (supportedLanguage, index) => {
+                return (
+                  <LanguageSwitcherButton
+                    key={index}
+                    onClick={handleChangeLanguage(supportedLanguage)}
+                    footerVariant={variant}
+                  >
+                    {t(`footer.${supportedLanguage}`)}
+                  </LanguageSwitcherButton>
+                );
+              },
+            )}
+          </Inline>
+        </Stack>
+      </Wrapper>
+    </Stack>
   );
 };
 
