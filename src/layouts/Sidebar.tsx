@@ -493,13 +493,13 @@ const Sidebar = () => {
       },
       {
         permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-        href: '/manage/users/overview',
+        href: '/manage/users',
         iconName: Icons.USER,
         children: t('menu.users'),
       },
       {
         permission: PermissionTypes.GEBRUIKERS_BEHEREN,
-        href: '/manage/roles/overview',
+        href: '/manage/roles',
         iconName: Icons.USERS,
         children: t('menu.roles'),
       },
