@@ -15,6 +15,7 @@ import {
   isExpired,
   Offer,
 } from '@/types/Offer';
+import { isPlace } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -28,14 +29,14 @@ type Props = {
   offer: Offer;
   onDelete: (offer: Offer) => void;
   userPermissions: string[];
-  eventPermissions: string[];
+  offerPermissions: string[];
 };
 
 const OfferPreviewSidebar = ({
   offer,
   onDelete,
   userPermissions,
-  eventPermissions,
+  offerPermissions,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const offerId = parseOfferId(offer['@id']);
@@ -43,6 +44,9 @@ const OfferPreviewSidebar = ({
   const duplicateEventMutation = useDuplicateEventMutation();
   const addLabelMutation = useAddOfferLabelMutation();
   const { error: logError } = useConsoleDebugger();
+
+  const isPlaceOffer = isPlace(offer);
+  const scope = isPlaceOffer ? OfferTypes.PLACES : OfferTypes.EVENTS;
 
   const handleDuplicateAsMovie = async () => {
     try {
@@ -72,24 +76,24 @@ const OfferPreviewSidebar = ({
     PermissionTypes.FILMS_AANMAKEN,
   );
 
-  const hasPermissions = eventPermissions?.length > 0;
+  const hasPermissions = offerPermissions?.length > 0;
 
   const canEditMovies = hasEditMoviesPermission && hasMovieLabel(offer);
 
   const canEdit =
-    eventPermissions?.includes(
+    offerPermissions?.includes(
       formatPermission(PermissionTypes.AANBOD_BEWERKEN),
     ) &&
     (!isExpired(offer) || isGodUser);
 
   const canModerate =
-    eventPermissions?.includes(
+    offerPermissions?.includes(
       formatPermission(PermissionTypes.AANBOD_MODEREREN),
     ) &&
     (!isExpired(offer) || isGodUser);
 
   const canDelete =
-    eventPermissions?.includes(
+    offerPermissions?.includes(
       formatPermission(PermissionTypes.AANBOD_VERWIJDEREN),
     ) &&
     (!isExpired(offer) || isGodUser);
@@ -122,7 +126,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.PENCIL,
       title: t('preview.actions.edit'),
-      href: `/events/${offerId}/edit`,
+      href: `/${scope}/${offerId}/edit`,
       disabled: !isEditable(offer),
       suffix: getLanguageBadge(),
     });
@@ -142,12 +146,12 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.GLOBE,
       title: t('preview.actions.translate'),
-      href: `/events/${offerId}/translate`,
+      href: `/${scope}/${offerId}/translate`,
       disabled: !isEditable(offer),
     });
   }
 
-  if (canDuplicate) {
+  if (canDuplicate && scope !== OfferTypes.PLACES) {
     actions.push({
       iconName: Icons.COPY,
       title: t('preview.actions.duplicate'),
@@ -169,7 +173,7 @@ const OfferPreviewSidebar = ({
     actions.push({
       iconName: Icons.CALENDAR_CHECK,
       title: t('preview.actions.change_availability'),
-      href: `/events/${offerId}/availability`,
+      href: `/${scope}/${offerId}/availability`,
       disabled: !isEditable(offer),
     });
   }

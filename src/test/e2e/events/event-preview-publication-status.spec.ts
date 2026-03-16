@@ -146,7 +146,7 @@ test.describe('Event Preview - Publication Status Display', () => {
 
     await expect(publicUrlLink).toHaveAttribute(
       'href',
-      `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/${publishedEventId}`,
+      `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/x/${publishedEventId}`,
     );
 
     await expect(publicUrlLink).toHaveAttribute('target', '_blank');
