@@ -152,6 +152,7 @@ const UserEditPage = () => {
       setSearchTerm('');
       setTypeaheadKey((prev) => prev + 1);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to add role:', error);
     }
   };
