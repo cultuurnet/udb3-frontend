@@ -13,7 +13,6 @@ import { useCookiesWithOptions } from './useCookiesWithOptions';
 
 const FeatureFlags = {
   REACT_CREATE: 'react_create',
-  ORGANIZER_CREATE: 'organizer_create',
   REACT_DUPLICATE: 'react_duplicate',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
