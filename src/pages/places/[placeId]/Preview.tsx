@@ -16,6 +16,7 @@ import { useGetPermissionsQuery } from '@/hooks/api/user';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AlertDuplicatePlace } from '@/pages/AlertDuplicatePlace';
+import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
 import { AgePreview } from '@/pages/preview/AgePreview';
@@ -49,7 +50,6 @@ import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
-import { Footer } from '@/pages/Footer';
 
 const getGlobalValue = getValueFromTheme('global');
 
