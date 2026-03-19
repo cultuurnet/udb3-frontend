@@ -49,6 +49,7 @@ import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
+import { Footer } from '@/pages/Footer';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -389,6 +390,11 @@ const Preview = () => {
             {t('preview.actions.delete_modal.body', { title: title })}
           </Box>
         </Modal>
+        <Footer
+          isZendeskWidgetVisible
+          isNewsletterSignupFormVisible
+          isProfileLinkVisible
+        />
       </Page.Content>
     </Page>
   );
