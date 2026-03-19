@@ -63,6 +63,7 @@ jobs:
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_ADMIN_EMAIL: ${{ secrets.E2E_TEST_ADMIN_EMAIL }}
           E2E_TEST_ADMIN_PASSWORD: ${{ secrets.E2E_TEST_ADMIN_PASSWORD }}
+          E2E_TEST_ADMIN_ID: ${{ secrets.E2E_TEST_ADMIN_ID }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_BASE_URL: ${{ secrets.AUTH_BASE_URL }}
           AUTH_ISSUER_BASE_URL: ${{ secrets.AUTH_ISSUER_BASE_URL }}
