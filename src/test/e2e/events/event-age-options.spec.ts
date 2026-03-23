@@ -14,7 +14,7 @@ const test = base.extend<TestFixtures>({
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
     await page.getByRole('button', { name: 'Concert' }).click();
 
     await page
@@ -31,9 +31,9 @@ const test = base.extend<TestFixtures>({
       .first()
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Age Options Test ${Date.now()}`);
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: 'Opslaan' }).click();
