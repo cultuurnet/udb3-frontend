@@ -6,15 +6,7 @@ const TEST_ROLE = 'E2E test rol';
 const TEST_ROLE_UUID = '8c61bab7-8e22-45a8-82f8-b7d4e6c0a43c';
 
 test.describe('User Edit - Admin', () => {
-  test.beforeEach(async ({ page, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_users_edit',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page }) => {
     await page.goto('/manage/users');
   });
 
