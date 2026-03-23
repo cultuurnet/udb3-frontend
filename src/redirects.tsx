@@ -101,8 +101,7 @@ const getRedirects = (
   {
     source: '/place/:placeId/translate',
     destination: '/places/:placeId/translate',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_TRANSLATE_PLACES,
+    permanent: environment !== 'development',
   },
   {
     source: '/manage/roles/overview',

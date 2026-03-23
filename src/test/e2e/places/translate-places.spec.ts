@@ -2,17 +2,6 @@ import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 test.describe('Places translation', () => {
-  test.beforeEach(async ({ context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_translate_places',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
-  });
-
   test('Go to dashboard and select place to translate', async ({
     baseURL,
     page,
