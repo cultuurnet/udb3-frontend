@@ -337,7 +337,7 @@ const Preview = () => {
             <Tabs
               activeKey={tab}
               onSelect={(key) => handleSelectTab(key)}
-              variant={TabsVariants.DEFAULT}
+              variant={TabsVariants.FLOATING}
             >
               {tabOptions.map((tab) => (
                 <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
