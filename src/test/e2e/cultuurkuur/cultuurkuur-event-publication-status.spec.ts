@@ -12,13 +12,13 @@ const test = base.extend<TestFixtures>({
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
 
-    await page.getByText('Dit is een evenement voor scholen').click();
+    await page.getByText('Dit is een activiteit voor scholen').click();
 
     await expect(
       page.getByText(
-        'Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur',
+        'Je activiteit zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur',
       ),
     ).toBeVisible();
 
@@ -33,9 +33,9 @@ const test = base.extend<TestFixtures>({
       .getByRole('button', { name: 'Op een locatie in overleg met de school' })
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Cultuurkuur Publication Test ${Date.now()}`);
 
     await page.getByRole('button', { name: 'Opslaan' }).click();
@@ -145,7 +145,7 @@ test.describe('Cultuurkuur Event - Publication Status Display', () => {
     const accessInfoCell = accessInfoRow.getByRole('alert');
     await expect(accessInfoCell).toBeVisible();
     await expect(accessInfoCell).toContainText(
-      /evenement specifiek op scholen gericht/,
+      /activiteit specifiek op scholen gericht/,
     );
   });
 });
