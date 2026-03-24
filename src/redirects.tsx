@@ -84,8 +84,7 @@ const getRedirects = (
   {
     source: '/event/:eventId/translate',
     destination: '/events/:eventId/translate',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_TRANSLATE,
+    permanent: environment !== 'development',
   },
   {
     source: '/event/:eventId/preview',
@@ -102,8 +101,7 @@ const getRedirects = (
   {
     source: '/place/:placeId/translate',
     destination: '/places/:placeId/translate',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_TRANSLATE_PLACES,
+    permanent: environment !== 'development',
   },
   {
     source: '/manage/roles/overview',
