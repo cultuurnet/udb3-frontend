@@ -84,8 +84,7 @@ const getRedirects = (
   {
     source: '/event/:eventId/translate',
     destination: '/events/:eventId/translate',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_TRANSLATE,
+    permanent: environment !== 'development',
   },
   {
     source: '/event/:eventId/preview',
