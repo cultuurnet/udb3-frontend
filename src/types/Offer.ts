@@ -78,6 +78,13 @@ export type BookingInfo = {
   };
 };
 
+export type FaqItem = {
+  [language: string]: {
+    question: string;
+    answer: string;
+  };
+};
+
 export type PriceInfo = {
   category: PriceCategory;
   name: { nl?: string; en?: string; de?: string };
@@ -146,6 +153,7 @@ type BaseOffer = {
   bookingInfo?: BookingInfo;
   priceInfo?: PriceInfo[];
   regions: string[];
+  faqs?: FaqItem[];
 };
 
 type Offer = Place | Event;
