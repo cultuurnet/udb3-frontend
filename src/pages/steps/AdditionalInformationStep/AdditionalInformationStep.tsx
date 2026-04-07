@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
@@ -243,10 +242,6 @@ const AdditionalInformationStep = ({
 }: Props) => {
   const { asPath, ...router } = useRouter();
   const containerRef = useRef(null);
-  const entry = useIntersectionObserver(containerRef, {
-    freezeOnceVisible: true,
-  });
-  const isVisible = !!entry?.isIntersecting;
 
   const queryClient = useQueryClient();
 
@@ -279,29 +274,22 @@ const AdditionalInformationStep = ({
 
   const [, hash] = asPath.split('#');
 
-  const handleScroll = useCallback(() => {
-    if (!containerRef.current) return;
-
-    // no scroll to when it's already visible on the screen
-    if (isVisible) {
-      return;
-    }
-
-    containerRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
-  }, [isVisible]);
-
   useEffect(() => {
-    if (isOrganizer) {
-      handleScroll();
-    }
-
     if (!hash || !Object.values(Fields).some((field) => hash === field)) return;
     setTab(hash);
-    handleScroll();
-  }, [hash, isOrganizer, handleScroll]);
+  }, [hash]);
+
+  useEffect(() => {
+    if (!offerId) return;
+    if (!containerRef.current) return;
+
+    requestAnimationFrame(() => {
+      containerRef.current.parentElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  }, [offerId]);
 
   const handleSelectTab = (tab: string) => {
     router.push({ hash: tab }, undefined, { shallow: true });
