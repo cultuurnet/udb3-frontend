@@ -540,6 +540,23 @@ const useDeleteOfferImageMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const updateOfferFaq = async ({ headers, id, scope, faq }) =>
+  fetchFromApi({
+    path: `/${scope}/${id}/faqs`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(faq),
+    },
+  });
+
+const useUpdateOfferFaqMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: updateOfferFaq,
+    mutationKey: 'offers-update-faqs',
+    ...configuration,
+  });
+
 const deleteDescription = ({ headers, id, scope, language }) =>
   fetchFromApi({
     path: `/${scope}/${id}/description/${language}`,
@@ -670,5 +687,6 @@ export {
   useGetOfferByIdQuery,
   useGetOffersByCreatorQuery,
   useRemoveOfferLabelMutation,
+  useUpdateOfferFaqMutation,
   useUpdateOfferImageMutation,
 };
