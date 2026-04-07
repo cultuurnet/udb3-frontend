@@ -382,6 +382,25 @@
         },
         "title": "Beschreibung"
       },
+      "faq": {
+        "label": "Ergänzen Sie Ihre Beschreibung mit häufig gestellten Fragen zu Ihrer Aktivität",
+        "add_button": "Häufige Frage hinzufügen",
+        "add_another_button": "Weitere häufige Frage hinzufügen",
+        "modal": {
+          "title": "Neue Frage hinzufügen",
+          "save": "Speichern",
+          "cancel": "Abbrechen",
+          "question": "Frage",
+          "question_placeholder": "Wählen Sie eine Frage aus oder schreiben Sie Ihre eigene.",
+          "answer": "Antwort",
+          "suggestions": [
+            "Heb ik voorkennis nodig?",
+            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
+            "Hoe kan ik de locatie van de activiteit bereiken?"
+          ]
+        },
+        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+      },
       "event_score": {
         "tip": {
           "theme": {
