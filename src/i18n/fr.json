@@ -383,6 +383,25 @@
         },
         "title": "Description"
       },
+      "faq": {
+        "label": "Complétez votre description avec quelques questions fréquentes sur votre activité",
+        "add_button": "Ajouter une question fréquente",
+        "add_another_button": "Ajouter une autre question fréquente",
+        "modal": {
+          "title": "Ajouter une nouvelle question",
+          "save": "Enregistrer",
+          "cancel": "Annuler",
+          "question": "Question",
+          "question_placeholder": "Sélectionnez une question ou rédigez la vôtre.",
+          "answer": "Réponse",
+          "suggestions": [
+            "Heb ik voorkennis nodig?",
+            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
+            "Hoe kan ik de locatie van de activiteit bereiken?"
+          ]
+        },
+        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+      },
       "event_score": {
         "tip": {
           "theme": {
