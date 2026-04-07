@@ -407,6 +407,25 @@
         },
         "title": "Beschrijving"
       },
+      "faq": {
+        "label": "Vul je beschrijving aan met een paar veelgestelde vragen over je activiteit",
+        "add_button": "Voeg een veelgestelde vraag toe",
+        "add_another_button": "Voeg nog een veelgestelde vraag toe",
+        "modal": {
+          "title": "Nieuwe vraag toevoegen",
+          "save": "Opslaan",
+          "cancel": "Annuleren",
+          "question": "Vraag",
+          "question_placeholder": "Selecteer een vraag of schrijf er zelf één.",
+          "answer": "Antwoord",
+          "suggestions": [
+            "Heb ik voorkennis nodig?",
+            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
+            "Hoe kan ik de locatie van de activiteit bereiken?"
+          ]
+        },
+        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+      },
       "event_score": {
         "tip": {
           "theme": {
