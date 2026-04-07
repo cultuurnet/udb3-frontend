@@ -18,6 +18,7 @@ const FeatureFlags = {
   SHOW_IFRAME_BORDER: 'show_iframe_border',
   REACT_EVENT_PREVIEW: 'react_event_preview',
   REACT_PLACE_PREVIEW: 'react_place_preview',
+  BOA: 'boa',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;
