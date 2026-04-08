@@ -281,10 +281,10 @@ const AdditionalInformationStep = ({
 
   useEffect(() => {
     if (!offerId) return;
-    if (!containerRef.current.parentElement) return;
+    if (!containerRef.current?.parentElement) return;
 
     requestAnimationFrame(() => {
-      containerRef.current.parentElement.scrollIntoView({
+      containerRef.current?.parentElement?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
