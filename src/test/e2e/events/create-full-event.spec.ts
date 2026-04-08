@@ -243,11 +243,11 @@ test('create event with all possible fields filled in', async ({
     expect(firstColumnCells).toContain(label);
   }
 
-  // Validate that the Prijsinfo row has a nested table in the second column
-  const prijsinfoRow = detailsTable
+  // Validate that the Price info row has a nested table in the second column
+  const priceInfoRow = detailsTable
     .locator('> tbody > tr')
     .filter({ has: page.locator('td:first-child', { hasText: 'Prijsinfo' }) });
-  await expect(prijsinfoRow.locator('td:nth-child(2) table')).toBeVisible();
+  await expect(priceInfoRow.locator('td:nth-child(2) table')).toBeVisible();
 
   // Validate that every other row has a non-empty value in the second column
   const tableRows = await detailsTable.locator('> tbody > tr').count();
