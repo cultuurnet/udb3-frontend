@@ -66,7 +66,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
     organizer: `/organizer/${offerId}/preview`,
   };
   const editUrlByOfferType = {
-    event: `/event/${offerId}/edit`,
+    event: `/events/${offerId}/edit`,
     place: `/places/${offerId}/edit`,
     organizer: `/organizer/${offerId}/edit`,
   };
