@@ -257,7 +257,9 @@ test('create event with all possible fields filled in', async ({
 
     if (firstColumnText?.trim() === 'Prijsinfo') continue;
 
-    const secondColumnValue = await row.locator('> td:nth-child(2)').textContent();
+    const secondColumnValue = await row
+      .locator('> td:nth-child(2)')
+      .textContent();
     expect(secondColumnValue?.trim()).not.toBe('');
   }
 });
