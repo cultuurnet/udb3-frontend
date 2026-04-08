@@ -31,13 +31,10 @@ test.describe('Event translation', () => {
     await page.goto(`${baseURL}/events/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b`);
 
     await page.waitForLoadState('networkidle');
-
-    const iframe = page.frameLocator('iframe');
-
     // get title of event
-    const eventTitle = await iframe.locator('h1').first().innerText();
+    const eventTitle = await page.locator('h1').first().innerText();
 
-    await iframe.getByRole('button', { name: 'Vertalen' }).click();
+    await page.getByRole('button', { name: 'Vertalen' }).click();
 
     await page.waitForURL(/\/events\/.*\/translate/, {
       waitUntil: 'domcontentloaded',
