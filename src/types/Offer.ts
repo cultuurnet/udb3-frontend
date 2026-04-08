@@ -8,7 +8,7 @@ import type { OfferStatus } from '@/constants/OfferStatus';
 import { PriceCategory } from '@/pages/steps/AdditionalInformationStep/PriceInformation';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-import type { SupportedLanguages } from '../i18n';
+import { SupportedLanguages } from '../i18n';
 import type { ContactPoint } from './ContactPoint';
 import { Event } from './Event';
 import type { Organizer } from './Organizer';
@@ -79,7 +79,7 @@ export type BookingInfo = {
 };
 
 export type FaqItem = {
-  [language: string]: {
+  [language in Values<typeof SupportedLanguages>]?: {
     question: string;
     answer: string;
   };
