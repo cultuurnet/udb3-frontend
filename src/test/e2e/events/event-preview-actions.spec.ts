@@ -52,7 +52,7 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Event Preview Sidebar Actions', () => {
-  test.beforeEach(async ({ page, eventPreviewUrl}) => {
+  test.beforeEach(async ({ page, eventPreviewUrl }) => {
     // todo: remove when the styled components hydration errors are fixed.
     suppressHydrationErrors(page);
 

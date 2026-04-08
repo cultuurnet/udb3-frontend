@@ -28,9 +28,7 @@ test.describe('Event translation', () => {
     ];
 
     // Go to a permanent event preview page.
-    await page.goto(
-      `${baseURL}/events/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b`,
-    );
+    await page.goto(`${baseURL}/events/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b`);
 
     await page.waitForLoadState('networkidle');
 
