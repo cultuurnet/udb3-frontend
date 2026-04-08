@@ -93,11 +93,12 @@ const FaqModal = ({
               placeholder={t(
                 'create.additionalInformation.faq.modal.question_placeholder',
               )}
-              suggestions={
-                t('create.additionalInformation.faq.modal.suggestions', {
+              suggestions={t(
+                'create.additionalInformation.faq.modal.suggestions',
+                {
                   returnObjects: true,
-                }) as string[]
-              }
+                },
+              )}
             />
           }
         />
