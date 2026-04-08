@@ -15,7 +15,6 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   locationStepConfiguration,
   useEditLocation,
