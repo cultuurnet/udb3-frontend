@@ -52,15 +52,7 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Event Preview Sidebar Actions', () => {
-  test.beforeEach(async ({ page, eventPreviewUrl, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_event_preview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page, eventPreviewUrl}) => {
     // todo: remove when the styled components hydration errors are fixed.
     suppressHydrationErrors(page);
 
