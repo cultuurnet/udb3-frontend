@@ -94,8 +94,8 @@ const getRedirects = (
   {
     source: '/place/:placeId/preview',
     destination: '/places/:placeId',
-    permanent: false,
-    featureFlag: FeatureFlags.REACT_PLACE_PREVIEW,
+
+    permanent: environment !== 'development',
   },
   {
     source: '/place/:placeId/translate',
