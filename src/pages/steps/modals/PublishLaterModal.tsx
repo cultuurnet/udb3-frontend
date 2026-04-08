@@ -34,7 +34,7 @@ const PublishLaterModal = ({
     if (scope === OfferTypes.EVENTS) {
       push(`/events/${offerId}`);
     } else {
-      push(`/place/${offerId}/preview`);
+      push(`/places/${offerId}`);
     }
   };
 

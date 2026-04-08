@@ -172,7 +172,7 @@ const StepsForm = ({
       if (scope === OfferTypes.EVENTS) {
         push(`/events/${offerId}?${searchParams.toString()}`);
       } else {
-        push(`/place/${offerId}/preview?${searchParams.toString()}`);
+        push(`/places/${offerId}?${searchParams.toString()}`);
       }
     },
   });
