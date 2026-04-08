@@ -28,18 +28,13 @@ test.describe('Event translation', () => {
     ];
 
     // Go to a permanent event preview page.
-    await page.goto(
-      `${baseURL}/event/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b/preview`,
-    );
+    await page.goto(`${baseURL}/events/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b`);
 
     await page.waitForLoadState('networkidle');
-
-    const iframe = page.frameLocator('iframe');
-
     // get title of event
-    const eventTitle = await iframe.locator('h1').first().innerText();
+    const eventTitle = await page.locator('h1').first().innerText();
 
-    await iframe.getByRole('button', { name: 'Vertalen' }).click();
+    await page.getByRole('button', { name: 'Vertalen' }).click();
 
     await page.waitForURL(/\/events\/.*\/translate/, {
       waitUntil: 'domcontentloaded',
@@ -82,7 +77,7 @@ test.describe('Event translation', () => {
 
     // Go back to preview
     await page.getByRole('button', { name: 'Klaar met vertalen' }).click();
-    await page.waitForURL(/\/event\/.*\/preview/, {
+    await page.waitForURL(/\/events\/.*/, {
       waitUntil: 'domcontentloaded',
     });
   });

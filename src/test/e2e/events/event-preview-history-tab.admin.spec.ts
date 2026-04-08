@@ -5,15 +5,7 @@ import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 const eventId = '351915e1-b839-47f2-b20a-df874b556e84';
 
 test.describe('Event Preview - History Tab', () => {
-  test.beforeEach(async ({ context, page }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_event_preview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page }) => {
     suppressHydrationErrors(page);
     await page.goto(`/events/${eventId}`);
   });
