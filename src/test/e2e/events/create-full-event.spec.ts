@@ -217,6 +217,7 @@ test('create event with all possible fields filled in', async ({
   const expectedLabels = [
     'Titel',
     'Type',
+    'Thema',
     'Labels',
     'Beschrijving',
     'Waar',
@@ -231,25 +232,32 @@ test('create event with all possible fields filled in', async ({
     "Video's",
   ];
 
-  const firstColumnCells = await page
-    .locator('table.details-table > tbody > tr > td:first-child')
+  const detailsTable = page.locator('section table.details-table').first();
+  await detailsTable.waitFor();
+
+  const firstColumnCells = await detailsTable
+    .locator('tbody tr td:first-child')
     .allTextContents();
 
   for (const label of expectedLabels) {
     expect(firstColumnCells).toContain(label);
   }
 
-  // Validate that every row has a non-empty value in the second column
-  const tableRows = await page
-    .locator('table.details-table > tbody > tr')
-    .count();
-  for (let i = 0; i < tableRows; i++) {
-    const secondColumnValue = await page
-      .locator(
-        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`,
-      )
-      .textContent();
+  // Validate that the Prijsinfo row has a nested table in the second column
+  const prijsinfoRow = detailsTable
+    .locator('> tbody > tr')
+    .filter({ has: page.locator('td:first-child', { hasText: 'Prijsinfo' }) });
+  await expect(prijsinfoRow.locator('td:nth-child(2) table')).toBeVisible();
 
+  // Validate that every other row has a non-empty value in the second column
+  const tableRows = await detailsTable.locator('> tbody > tr').count();
+  for (let i = 0; i < tableRows; i++) {
+    const row = detailsTable.locator(`> tbody > tr:nth-child(${i + 1})`);
+    const firstColumnText = await row.locator('> td:first-child').textContent();
+
+    if (firstColumnText?.trim() === 'Prijsinfo') continue;
+
+    const secondColumnValue = await row.locator('> td:nth-child(2)').textContent();
     expect(secondColumnValue?.trim()).not.toBe('');
   }
 });
