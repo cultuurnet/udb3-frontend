@@ -139,14 +139,15 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
 
   const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const offerId = parseOfferId(offer['@id']);
-  const editUrl = `/${offerType}/${offerId}/edit`;
-  const previewUrlByOfferType = {
+  const offerPathByOfferType = {
     event: `/events/${offerId}`,
     place: `/places/${offerId}`,
-    organizer: `/organizer/${offerId}/preview`,
+    organizer: `/organizer/${offerId}`,
   };
-  const previewUrl = previewUrlByOfferType[offerType];
-  const duplicateUrl = `/${offerType}/${offerId}/duplicate`;
+  const offerPath = offerPathByOfferType[offerType];
+  const editUrl = `${offerPath}/edit`;
+  const previewUrl = offerType === 'organizer' ? `${offerPath}/preview` : offerPath;
+  const duplicateUrl = `${offerPath}/duplicate`;
 
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;
   const imageUrl = offer.image;
