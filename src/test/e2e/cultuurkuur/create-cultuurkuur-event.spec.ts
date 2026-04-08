@@ -99,7 +99,7 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
 
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
-  await page.waitForURL(/\/event\/.*\/preview/, {
+  await page.waitForURL(/\/events\/.*/, {
     waitUntil: 'domcontentloaded',
   });
 

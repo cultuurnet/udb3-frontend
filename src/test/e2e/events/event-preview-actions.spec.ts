@@ -39,9 +39,9 @@ const test = base.extend<TestFixtures>({
 
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
-    await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
+    await page.waitForURL(/\/events\/[a-f0-9-]+/);
     const url = page.url();
-    const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1] ?? '';
+    const eventId = url.match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
 
     await applyFixture(eventId);
   },

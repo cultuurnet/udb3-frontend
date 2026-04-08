@@ -60,7 +60,10 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
     setReasonInCurrentLanguage(newReasonInCurrentLanguage);
   }, [rawStatusReason, i18n.language]);
 
-  const handleSuccess = () => router.push(`/${offerType}/${offerId}/preview`);
+  const handleSuccess = () =>
+    offerType === 'event'
+      ? router.push(`/events/${offerId}`)
+      : router.push(`/${offerType}/${offerId}/preview`);
 
   const changeStatusMutation = useChangeStatusMutation({
     onSuccess: handleSuccess,

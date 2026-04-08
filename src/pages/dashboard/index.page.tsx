@@ -139,7 +139,10 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
 
   const date = offer.calendarSummary?.[i18n.language]?.text?.['xs'];
   const editUrl = `/${offerType}/${parseOfferId(offer['@id'])}/edit`;
-  const previewUrl = `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
+  const previewUrl =
+    offerType === 'event'
+      ? `/events/${parseOfferId(offer['@id'])}`
+      : `/${offerType}/${parseOfferId(offer['@id'])}/preview`;
   const duplicateUrl = `/${offerType}/${parseOfferId(offer['@id'])}/duplicate`;
 
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;

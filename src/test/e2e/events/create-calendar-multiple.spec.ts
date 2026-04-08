@@ -66,11 +66,7 @@ test('create an event with calendarType multiple', async ({
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
   // 7. Validate created event details
-  await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
-  const url = page.url();
-  const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1];
-  // Navigate to a different path using the captured UUID
-  await page.goto(`/events/${eventId}`);
+  await page.waitForURL(/\/events\/[a-f0-9-]+/);
   await page.waitForLoadState('networkidle');
 
   // Validate table first column values

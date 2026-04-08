@@ -210,11 +210,7 @@ test('create event with all possible fields filled in', async ({
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
   // 6. Validate created event details
-  await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
-  const url = page.url();
-  const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1];
-  // Navigate to React path using the captured UUID
-  await page.goto(`/events/${eventId}`);
+  await page.waitForURL(/\/events\/[a-f0-9-]+/);
   await page.waitForLoadState('networkidle');
 
   // Validate table first column values

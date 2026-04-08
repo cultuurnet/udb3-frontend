@@ -163,8 +163,6 @@ const StepsForm = ({
     scope,
     id: offerId,
     onSuccess: () => {
-      const scopePath = scope === OfferTypes.EVENTS ? 'event' : 'place';
-
       const params =
         eventName && missingFieldName && !offer?.[`${missingFieldName}`]
           ? { hj: eventName }
@@ -172,7 +170,11 @@ const StepsForm = ({
 
       const searchParams = new URLSearchParams(params);
 
-      push(`/${scopePath}/${offerId}/preview?${searchParams.toString()}`);
+      if (scope === OfferTypes.EVENTS) {
+        push(`/events/${offerId}?${searchParams.toString()}`);
+      } else {
+        push(`/place/${offerId}/preview?${searchParams.toString()}`);
+      }
     },
   });
 
@@ -187,13 +189,8 @@ const StepsForm = ({
     await editLocation(data);
     reload();
   };
-  const [isReactEventPreviewFeatureFlagEnabled] = useFeatureFlag(
-    FeatureFlags.REACT_EVENT_PREVIEW,
-  );
 
-  const doneEditingLink = isReactEventPreviewFeatureFlagEnabled
-    ? `/events/${offerId}?edited=true`
-    : `/event/${offerId}/preview?edited=true`;
+  const doneEditingLink = `/events/${offerId}?edited=true`;
 
   const footerStatus = useFooterStatus({ offer, form });
 

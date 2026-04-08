@@ -224,7 +224,7 @@ const TranslateForm = () => {
 
     router.push(
       scope === OfferTypes.EVENTS
-        ? `/event/${id}/preview`
+        ? `/events/${id}`
         : `/place/${id}/preview`,
     );
   };
