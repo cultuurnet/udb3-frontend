@@ -146,7 +146,8 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   };
   const offerPath = offerPathByOfferType[offerType];
   const editUrl = `${offerPath}/edit`;
-  const previewUrl = offerType === 'organizer' ? `${offerPath}/preview` : offerPath;
+  const previewUrl =
+    offerType === 'organizer' ? `${offerPath}/preview` : offerPath;
   const duplicateUrl = `${offerPath}/duplicate`;
 
   const typeId = offer.terms.find((term) => term.domain === 'eventtype')?.id;
