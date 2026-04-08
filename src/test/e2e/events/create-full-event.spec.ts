@@ -40,7 +40,7 @@ test('create event with all possible fields filled in', async ({
 }) => {
   await page.goto(`${baseURL}/create`);
   // 1. Select location
-  await page.getByRole('button', { name: 'Evenement' }).click();
+  await page.getByRole('button', { name: 'Activiteit' }).click();
   // // 2. Type and theme
   await page.getByRole('button', { name: 'Concert' }).click();
   await page.getByRole('button', { name: 'Dance muziek' }).click();
@@ -80,8 +80,8 @@ test('create event with all possible fields filled in', async ({
     .click();
 
   // // 5. Name and Age
-  await page.getByLabel('Naam van het evenement').click();
-  await page.getByLabel('Naam van het evenement').fill(dummyEvent.name);
+  await page.getByLabel('Naam van de activiteit').click();
+  await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
 
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
   await page.getByRole('button', { name: 'Opslaan' }).click();

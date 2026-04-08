@@ -3,12 +3,12 @@ import { expect, test } from '@playwright/test';
 
 test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.goto(`${baseURL}/create`);
-  await page.getByRole('button', { name: 'Evenement' }).click();
-  await page.getByText('Dit is een evenement voor scholen').click();
+  await page.getByRole('button', { name: 'Activiteit' }).click();
+  await page.getByText('Dit is een activiteit voor scholen').click();
 
   await expect(
     page.getByText(
-      'Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur',
+      'Je activiteit zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur',
     ),
   ).toBeVisible();
 
@@ -23,8 +23,8 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
     .getByRole('button', { name: 'Op een locatie in overleg met de school' })
     .click();
 
-  await page.getByLabel('Naam van het evenement').click();
-  await page.getByLabel('Naam van het evenement').fill('E2E Cultuurkuur Event');
+  await page.getByLabel('Naam van de activiteit').click();
+  await page.getByLabel('Naam van de activiteit').fill('E2E Cultuurkuur Event');
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
 

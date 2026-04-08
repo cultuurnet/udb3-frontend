@@ -120,7 +120,7 @@
     },
     "calendar": {
       "title": {
-        "events": "Wann findet diese Veranstaltung oder Aktivität statt?",
+        "events": "Wann findet diese Aktivität statt?",
         "places": "Wann ist dieser Ort oder Standort geöffnet?"
       },
       "types": {
@@ -177,7 +177,7 @@
     },
     "location": {
       "title": {
-        "events": "Wo findet diese Veranstaltung oder Aktivität statt?",
+        "events": "Wo findet diese Aktivität statt?",
         "places": "Wo ist dieser Ort oder Ort?"
       },
       "recent_locations": {
@@ -203,7 +203,7 @@
       "online_url": {
         "label": "Teilnahmelink",
         "placeholder": "https://",
-        "info": "Fügen Sie einen Link hinzu, damit die Leute wissen, wie sie an Ihrer Veranstaltung teilnehmen können. Sie möchten den Link zur Teilnahme nicht öffentlich freigeben? Dann können Sie diesen Schritt überspringen und die Teilnahmeanweisungen in Schritt 6 Ihrer Beschreibung hinzufügen."
+        "info": "Fügen Sie einen Link hinzu, damit die Leute wissen, wie sie an Ihrer Aktivität teilnehmen können. Sie möchten den Link zur Teilnahme nicht öffentlich freigeben? Dann können Sie diesen Schritt überspringen und die Teilnahmeanweisungen in Schritt 6 Ihrer Beschreibung hinzufügen."
       },
       "municipality": {
         "change_be": "Gemeinde wechseln",
@@ -217,7 +217,7 @@
       "country": {
         "change_location": "Den Ort wechseln",
         "location_school": "Ort in Absprache mit der Schule",
-        "location_school_info": "Veranstaltungen, deren Ort in Absprache festgelegt wird, werden nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht. Ihre Veranstaltung erscheint auf cultuurkuur.be"
+        "location_school_info": "Aktivitäten, deren Ort in Absprache festgelegt wird, werden nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht. Ihre Aktivität erscheint auf cultuurkuur.be"
       },
       "street_and_number": {
         "change": "Straße und Hausnummer wechseln"
@@ -235,7 +235,7 @@
         }
       },
       "name": {
-        "title_events": "Name der Veranstaltung",
+        "title_events": "Name der Aktivität",
         "title_places": "Bezeichnung des Ortes",
         "tip_events": "Verwenden Sie einen <strong>aussagekräftigen Titel</strong>, zB. \"Radtour entlang von Kapellen\", \"Die Sage vom Einhorn\".",
         "tip_places": "Verwenden Sie die <strong>offizielle Bezeichnung</strong>, zB. \"Gravensteen\", \"Abdijsite Herkenrode\", \"Cultuurcentrum De Werf\".",
@@ -260,7 +260,7 @@
       }
     },
     "type_and_theme": {
-      "title_events": "Welche Art von Veranstaltung möchten Sie hinzufügen?",
+      "title_events": "Welche Art von Aktivität möchten Sie hinzufügen?",
       "title_places": "Welche Art von Standort möchten Sie hinzufügen?",
       "change_theme": "Ändert den thema",
       "theme_groups": {
@@ -369,7 +369,7 @@
           "eBwaUAAhw0ur0Z02i5ttnw": "Geben Sie eine begeisterte Beschreibung des Sportzentrums. <ul> <li> Welche <strong>Sportmöglichkeiten</strong> bietet das Sportzentrum? </li> <li> Welche <strong>Sportarten</strong> können Sie dort ausüben? </li> </ul>",
           "VRC6HX0Wa063sq98G5ciqw": "Geben Sie eine begeisterte Beschreibung des Ladens. <ul> <li> <strong>Was kann man</strong> in diesem Geschäft <strong>kaufen</strong>? </li> <li> Geben Sie an, ob es sich um einen <b>Pop-up-, Räumungs- oder Dauerladen</b> handelt. </li> </ul>",
           "GnPFp9uvOUyqhOckIFMKmg": "Geben Sie eine begeisterte Beschreibung des Museums oder der Galerie. <ul> <li> Woraus besteht die <strong>ständige Sammlung</strong>? </li> <li> Auf welche <strong>Themen, Kunst, historische Epoche</strong> oder <strong>Wissenschaft</strong> konzentriert sich das Museum? </li> </ul>",
-          "JCjA0i5COUmdjMwcyjNAFA": "Geben Sie eine begeisterte Beschreibung des Jugendhauses oder Jugendzentrums. <ul> <li> Geben Sie die <strong>Zielgruppe</strong> des Jugendhauses oder Jugendzentrums an. </li> <li> Geben Sie an, ob der Veranstaltungsort an einen <strong>Jugendclub</strong> angeschlossen ist. </li> </ul>",
+          "JCjA0i5COUmdjMwcyjNAFA": "Geben Sie eine begeisterte Beschreibung des Jugendhauses oder Jugendzentrums. <ul> <li> Geben Sie die <strong>Zielgruppe</strong> des Jugendhauses oder Jugendzentrums an. </li> <li> Geben Sie an, ob der Aktivitätsort an einen <strong>Jugendclub</strong> angeschlossen ist. </li> </ul>",
           "Yf4aZBfsUEu2NsQqsprngw": "Geben Sie eine begeisterte Beschreibung des Kultur- oder Begegnungszentrums. <ul> <li> An welche <strong>Zielgruppe</strong> richtet sich das Zentrum? </li> <li> <b>Welche Aktivitäten oder Aufführungen</b> (z. B. Konzerte) werden in dem Zentrum organisiert? </li> </ul>",
           "YVBc8KVdrU6XfTNvhMYUpg": "Geben Sie eine begeisterte Beschreibung der Disco. <ul> <li> Für welche Art von <strong>Partys</strong> kann man in die Disco gehen? </li> <li> Liegt der Schwerpunkt des Clubs auf <strong>Live-Musik, DJ-Sets</strong>,...? </li> </ul>",
           "kI7uAyn2uUu9VV6Z3uWZTA": "Geben Sie eine begeisterte Beschreibung der Bibliothek oder des Dokumentationszentrums. <ul> <li> Aus welcher Art von Büchern, wissenschaftlichen Arbeiten oder Dokumenten besteht die <strong>Sammlung</strong>? </li> </ul>",
@@ -378,7 +378,7 @@
           "wwjRVmExI0w6xfQwT1KWpx": "Geben Sie eine begeisterte Beschreibung des Spielplatzes. <ul> <li> <strong>Welche</strong> <strong>Spielgeräte</strong> findest du auf dem Spielplatz? </li> <li> Ist der Spielplatz <strong>drinnen</strong> oder <strong>draußen</strong>? </li> <li> Gibt es in der Nähe des Spielplatzes eine <strong>Verpflegungsmöglichkeit</strong>? </li> <li> Welche <strong>anderen Einrichtungen</strong> (Toilette, Windelecke usw.) finden Sie auf dem Spielplatz? </li> </ul>",
           "OyaPaf64AEmEAYXHeLMAtA": "Geben Sie eine begeisterte Beschreibung der Halle oder des Ausstellungsraums. <ul> <li> <strong>Welche Aktivitäten</strong> oder Darbietungen werden in der Halle oder in der Ausstellungshalle organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann die Halle auch gebucht werden? </li> </ul>",
           "0.8.0.0.0": "Geben Sie eine enthusiastische Beschreibung des öffentlichen Raums. <ul> <li> <strong>Beschreiben</strong> Sie den öffentlichen <strong>Raum genau</strong>. </li> <li> <strong>Was</strong> können Si<strong>e hier tun</strong>? </li> </ul>",
-          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Veranstaltungsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
+          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
         },
         "title": "Beschreibung"
       },
@@ -421,7 +421,7 @@
             "link": "Adresseinformationen"
           },
           "completed": {
-            "offers": "Alle Punkte! Mit dieser Veranstaltung werden Sie punkten!",
+            "offers": "Alle Punkte! Mit dieser Aktivität werden Sie punkten!",
             "organizers": "Mit dieser Organisation wirst du punkten!"
           }
         }
@@ -432,16 +432,16 @@
         "change": "Ändern Organisator",
         "title": "Organisator",
         "select_recent_used_organizer": "Eine Organisation wiederverwenden",
-        "select_recent_used_organizer_info": "Dies sind die Organisationen, für die Sie kürzlich Veranstaltungen eingetragen haben. Fügen Sie diese mit einem Klick hinzu. Administratoren der ausgewählten Organisation können die Veranstaltung auch später bearbeiten.",
+        "select_recent_used_organizer_info": "Dies sind die Organisationen, für die Sie kürzlich Aktivitäten eingetragen haben. Fügen Sie diese mit einem Klick hinzu. Administratoren der ausgewählten Organisation können die Aktivität auch später bearbeiten.",
         "or_choose_other_organizer": "Fügen Sie eine Organisation hinzu",
         "choose_other_organizer": "Wählen Sie eine Organisation aus",
         "uitpas_cardsystems": "UiTPAS Kartensysteme",
         "uitpas_select_distribution_key": "Wählen Sie einen Verteilungsschlüssel aus",
         "uitpas_alert": {
           "success": "Ihre Aktivität ist jetzt als UitPAS-Aktivität registriert.",
-          "no_price": "Dies ist ein UiTPAS-Organisator. Fügen Sie einen <link1>Preis</link1> hinzu, um Ihre Veranstaltung als UiTPAS-Aktivität zu veröffentlichen.",
+          "no_price": "Dies ist ein UiTPAS-Organisator. Fügen Sie einen <link1>Preis</link1> hinzu, um Ihre Aktivität als UiTPAS-Aktivität zu veröffentlichen.",
           "already_has_ticketsales": "Für diese Aktivität wurden bereits Tickets verkauft. Sie können die Organisations- und Kartensysteme nicht mehr ändern.",
-          "not_found": "Diese Veranstaltung ist dem UiTPAS noch nicht bekannt.",
+          "not_found": "Diese Aktivität ist dem UiTPAS noch nicht bekannt.",
           "not_found_cta": "Als UiTPAS-Aktivität registrieren"
         }
       },
@@ -513,7 +513,7 @@
     },
     "duplicate": {
       "title": "Kopieren und ändern",
-      "alert": "Sie sind dabei, eine Veranstaltung zu kopieren. Wählen Sie einen Zeitpunkt für diese Veranstaltung."
+      "alert": "Sie sind dabei, eine Aktivität zu kopieren. Wählen Sie einen Zeitpunkt für diese Aktivität."
     },
     "migration": {
       "alert": "<boldText>Diese Aktivität wurde in der vorherigen Version von UiTdatabank eingegeben.</boldText><br/>Um sie zu bearbeiten, müssen Sie den zuvor ausgewählten Ort und die Adresse erneut auswählen oder einmal eingeben.",
@@ -542,16 +542,16 @@
       "duplicate": "Duplikat"
     },
     "create": {
-      "events": "Veranstaltung hinzufügen",
+      "events": "Aktivität hinzufügen",
       "organizers": "Organisatio hinzufügen",
       "places": "Ort hinzufügen"
     },
-    "event": "Veranstaltung",
+    "event": "Aktivität",
     "modal": {
       "question": "Sind Sie sicher, dass Sie '{{name}}' löschen möchten?",
       "title": "{{type}} löschen",
       "types": {
-        "events": "Veranstaltungen",
+        "events": "Aktivitäten",
         "organizers": "Organisatoren",
         "places": "Orte"
       }
@@ -562,7 +562,7 @@
       "invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "logo": "newsletter-logo.svg",
       "logo_alt": "Newsletter Logo",
-      "questions_or_feedback": "Haben Sie Fragen oder Feedback?",
+      "questions_or_feedback": "Haben Sie Fragen oder Feedback? <0>Kontaktieren Sie uns</0>",
       "subscribe": "Anmelden",
       "success": {
         "content": "Sie haben sich für unseren Newsletter angemeldet und erhalten nun praktische Tipps zum Eingeben Ihrer Aktivitäten in die UiTdatabank!",
@@ -571,7 +571,7 @@
       "title": "Praktische Eingabetipps in Ihrem Postfach"
     },
     "no_items": {
-      "events": "Keine Veranstaltungen gefunden",
+      "events": "Keine Aktivitäten gefunden",
       "organizers": "Du verwaltest derzeit keine Organisationen.",
       "places": "Keine Orte gefunden"
     },
@@ -590,16 +590,16 @@
     "passed": "Abgelaufen {{type}}",
     "place": "Ort",
     "sorting": {
-      "availableTo_asc": "Veranstaltungsdatum (alt - neu)",
-      "availableTo_desc": "Veranstaltungsdatum (neu - alt)",
+      "availableTo_asc": "Aktivitätsdatum (alt - neu)",
+      "availableTo_desc": "Aktivitätsdatum (neu - alt)",
       "created_asc": "Erstellungsdatum (alt - neu)",
       "created_desc": "Erstellungsdatum (neu - alt)",
       "completeness_asc": "Vollständigkeit (niedrig - hoch)",
       "completeness_desc": "Vollständigkeit (hoch - niedrig) ",
       "label": "Sortiere nach",
       "results": {
-        "events": "<0>{{count}}</0> veranstaltung",
-        "events_plural": "<0>{{count}}</0> veranstaltungen",
+        "events": "<0>{{count}}</0> aktivität",
+        "events_plural": "<0>{{count}}</0> aktivitäten",
         "organizers": "<0>{{count}}</0> organisator",
         "organizers_plural": "<0>{{count}}</0> organisatoren",
         "places": "<0>{{count}}</0> orte",
@@ -607,13 +607,13 @@
       }
     },
     "tabs": {
-      "events": "Meine Veranstaltungen",
+      "events": "Meine Aktivitäten",
       "organizers": "Meine Organisationen",
       "places": "Meine Orte"
     },
     "suggestions": {
       "title": "Organisationen, für die Sie sich zuvor angemeldet haben",
-      "description": "Sie haben bereits Veranstaltungen für diese Organisationen eingetragen, sind aber noch kein Administrator dieser Organisationen. Sind Sie an der Verwaltung dieser Organisationen beteiligt und möchten die Organisationsseite und ihre Veranstaltungen verwalten? Starten Sie Ihre Bewerbung um Administrator zu werden, klicken Sie hier. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, wird Ihnen der Zugriff gewährt und Sie erhalten eine Bestätigungs-E-Mail."
+      "description": "Sie haben bereits Aktivitäten für diese Organisationen eingetragen, sind aber noch kein Administrator dieser Organisationen. Sind Sie an der Verwaltung dieser Organisationen beteiligt und möchten die Organisationsseite und ihre Aktivitäten verwalten? Starten Sie Ihre Bewerbung um Administrator zu werden, klicken Sie hier. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, wird Ihnen der Zugriff gewährt und Sie erhalten eine Bestätigungs-E-Mail."
     },
     "welcome": "Willkommen"
   },
@@ -813,9 +813,9 @@
       "events": {
         "available": "Findet statt",
         "temporarilyUnavailable": "Verlegt",
-        "temporarilyUnavailableInfo": "Ihre Veranstaltung wurde auf einen späteren, noch unbekannten Zeitpunkt verlegt.",
+        "temporarilyUnavailableInfo": "Ihre Aktivität wurde auf einen späteren, noch unbekannten Zeitpunkt verlegt.",
         "unavailable": "Abgesagt",
-        "unavailableInfo": "Ihre Veranstaltung findet nicht mehr zum vorgesehenen Zeitpunkt und auch zu keinem späteren Zeitpunkt statt."
+        "unavailableInfo": "Ihre Aktivität findet nicht mehr zum vorgesehenen Zeitpunkt und auch zu keinem späteren Zeitpunkt statt."
       },
       "places": {
         "available": "Offen",
@@ -955,14 +955,14 @@
       "link": "Linken",
       "new_production": "Neue Produktion: ",
       "no_productions": "Keine Produktionen gefunden.",
-      "no_suggested_events_found": "Keine Veranstaltungen gefunden, um an eine Produktion zu linken. Probieren Sie es später noch einmal.",
+      "no_suggested_events_found": "Keine Aktivitäten gefunden, um an eine Produktion zu linken. Probieren Sie es später noch einmal.",
       "production_name": "Produktionsname",
       "skip": "Überspringen",
-      "suggested_events": "Vereinbarung für vorgestellte Veranstaltungen:",
+      "suggested_events": "Vereinbarung für vorgestellte Aktivitäten:",
       "title": "Produktionen hinzufügen"
     },
     "delete": {
-      "title": "Veranstaltungen(en) von Produktion entfernen"
+      "title": "Aktivitäten(en) von Produktion entfernen"
     },
     "event": {
       "part_of_production": "Teil der Produktion",
@@ -973,7 +973,7 @@
     },
     "overview": {
       "aria": {
-        "events": "Veranstaltungen",
+        "events": "Aktivitäten",
         "productions": "Produktionen"
       },
       "cancel": "Abbrechen",
@@ -981,12 +981,12 @@
       "confirm": "Bestätigen",
       "create": "Hinzufügen",
       "delete": "Löschen",
-      "delete_question_event": "Sind Sie sicher, dass Sie die ausgewählte Veranstaltung aus der Produktion '{{productionName}}' entfernen möchten?",
-      "delete_question_events": "Sind Sie sicher, dass Sie die ausgewählten {{eventCount}} Veranstaltungen aus der Produktion '{{productionName}}' entfernen möchten?",
+      "delete_question_event": "Sind Sie sicher, dass Sie die ausgewählte Aktivität aus der Produktion '{{productionName}}' entfernen möchten?",
+      "delete_question_events": "Sind Sie sicher, dass Sie die ausgewählten {{eventCount}} Aktivitäten aus der Produktion '{{productionName}}' entfernen möchten?",
       "details": "Details",
-      "events_in_production": "Veranstaltungen in {{productionName}}",
+      "events_in_production": "Aktivitäten in {{productionName}}",
       "loading": "Laden",
-      "no_events": "Keine Veranstaltungen unter dieser Produktion.",
+      "no_events": "Keine Aktivitäten unter dieser Produktion.",
       "no_productions": "Keine Produktionen gefunden.",
       "production": "Produktion",
       "search": {
@@ -1014,7 +1014,7 @@
         "manage": "Anforderungsmanagement",
         "request": "Verwaltung anfordern",
         "back": "Zurück",
-        "events": "Veranstaltungen ansehen",
+        "events": "Aktivitäten ansehen",
         "places": "Orte ansehen"
       },
       "verenigingsloket": {
@@ -1062,7 +1062,7 @@
     },
     "ownerships": {
       "title": "Verwalter von {{name}}",
-      "info": "Verwalter können die Organisationsseite und die Veranstaltungen der Organisation in der UiTdatabank bearbeiten und löschen.",
+      "info": "Verwalter können die Organisationsseite und die Aktivitäten der Organisation in der UiTdatabank bearbeiten und löschen.",
       "actions": {
         "add": "Neuen Verwalter hinzufügen",
         "back": "Zurück zur Organisationsseite"
@@ -1092,7 +1092,7 @@
         "email": "E-Mail-Adresse",
         "email_error": "Not a valid email address",
         "email_not_known_error": "Mit dieser E-Mail-Adresse ist keine UiTID verknüpft. <0>Erstellen Sie eins</0>",
-        "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}} und kann ab sofort die Organisationsseite und Veranstaltungen von {{organizerName}} bearbeiten.",
+        "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}} und kann ab sofort die Organisationsseite und Aktivitäten von {{organizerName}} bearbeiten.",
         "actions": {
           "confirm": "Verwalter hinzufügen",
           "cancel": "Abbrechen"
@@ -1100,7 +1100,7 @@
       },
       "approve_modal": {
         "title": "Verwaltungsantrag genehmigen",
-        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Veranstaltungen von {{organizerName}} bearbeiten.",
+        "body": "Sind Sie sicher, dass Sie den Antrag von {{ownerEmail}} genehmigen möchten? Sobald Sie den Antrag genehmigen, kann {{ownerEmail}} die Organisationsseite und die Aktivitäten von {{organizerName}} bearbeiten.",
         "cancel": "Abbrechen",
         "confirm": "Antrag genehmigen",
         "success": "{{ownerEmail}} ist jetzt Verwalter von {{organizerName}}"
@@ -1121,7 +1121,7 @@
       "request": {
         "confirm_modal": {
           "title": "Verwaltungsanfrage für {{organizerName}}",
-          "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Veranstaltungen verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
+          "body": "Sind Sie im Vorstand von {{organizerName}} und möchten Sie die Organisationsseite und Aktivitäten verwalten? Starten Sie hier Ihre Anfrage, um Administrator zu werden. Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
           "cancel": "Abbrechen",
           "confirm": "Verwaltungsanfrage",
           "error": {
@@ -1130,13 +1130,13 @@
           }
         },
         "pending": "Ihre Anfrage zur Verwaltung von {{organizerName}} wird bearbeitet.<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt hat, erhalten Sie Zugriff und eine Bestätigung per E-Mail.",
-        "success": "Ihre Anfrage zur Verwaltung der Seite von {{organizerName}} und ihrer Veranstaltungen wurde erfolgreich gesendet!<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail."
+        "success": "Ihre Anfrage zur Verwaltung der Seite von {{organizerName}} und ihrer Aktivitäten wurde erfolgreich gesendet!<br/>Sobald ein aktueller Administrator Ihre Anfrage genehmigt, erhalten Sie Zugriff und eine Bestätigung per E-Mail."
       }
     }
   },
   "search": {
     "title": "Suchen",
-    "events_places": "Veranstaltungen und Orte",
+    "events_places": "Aktivitäten und Orte",
     "organizers": "Organisationen"
   },
   "selectionTable": {
@@ -1146,11 +1146,11 @@
   "steps": {
     "offerTypeStep": {
       "types": {
-        "event": "Veranstaltung",
+        "event": "Aktivität",
         "place": "Ort"
       },
-      "cultuurkuur_event": "Es ist eine Veranstaltung für Schulen",
-      "cultuurkuur_info": "Ihre Veranstaltung wird auf cultuurkuur.be angezeigt, der Plattform für Bildung und Kultur. Bitte beachten Sie: Ihre Veranstaltung wird nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht."
+      "cultuurkuur_event": "Es ist eine Aktivität für Schulen",
+      "cultuurkuur_info": "Ihre Aktivität wird auf cultuurkuur.be angezeigt, der Plattform für Bildung und Kultur. Bitte beachten Sie: Ihre Aktivität wird nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht."
     }
   },
   "themes": {
@@ -1476,11 +1476,17 @@
       "change_availability": "Verfügbarkeit ändern",
       "delete": "Löschen",
       "delete_modal": {
-        "title": "Aktivität löschen",
+        "title_event": "Aktivität löschen",
+        "title_location": "Ort löschen",
         "body": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
         "confirm": "Definitiv löschen"
       }
+    },
+    "history_tab": {
+      "api": "API: {{api}}",
+      "client_id": "Client-ID: {{clientId}}",
+      "client_name": "Clientname: {{clientName}}"
     }
   }
 }

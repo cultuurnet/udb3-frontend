@@ -119,7 +119,7 @@
     },
     "calendar": {
       "title": {
-        "events": "Wanneer vindt dit evenement of deze activiteit plaats?",
+        "events": "Wanneer vindt deze activiteit plaats?",
         "places": "Wanneer is deze plaats of locatie open?"
       },
       "types": {
@@ -178,7 +178,7 @@
     },
     "location": {
       "title": {
-        "events": "Waar vindt dit evenement of deze activiteit plaats?",
+        "events": "Waar vindt deze activiteit plaats?",
         "places": "Waar is deze plaats of locatie?"
       },
       "recent_locations": {
@@ -212,7 +212,7 @@
       "online_url": {
         "label": "Deelnamelink",
         "placeholder": "https://",
-        "info": "Voeg een link toe zodat mensen weten hoe ze aan je evenement kunnen deelnemen. Wil je de deelnamelink niet publiek delen? Dan kan je deze stap overslaan en deelname-instructies toevoegen aan je beschrijving in stap 6."
+        "info": "Voeg een link toe zodat mensen weten hoe ze aan je activiteit kunnen deelnemen. Wil je de deelnamelink niet publiek delen? Dan kan je deze stap overslaan en deelname-instructies toevoegen aan je beschrijving in stap 6."
       },
       "municipality": {
         "change_be": "Wijzig gemeente",
@@ -226,7 +226,7 @@
       "country": {
         "change_location": "Wijzig locatie",
         "location_school": "Locatie in overleg met de school",
-        "location_school_info": "Evenementen waarvan de locatie in overleg wordt bepaald, verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: ze verschijnen niet op UiTinVlaanderen of andere publiekskanalen."
+        "location_school_info": "Activiteiten waarvan de locatie in overleg wordt bepaald, verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: ze verschijnen niet op UiTinVlaanderen of andere publiekskanalen."
       },
       "street_and_number": {
         "change": "Wijzig straat en nummer"
@@ -244,7 +244,7 @@
         }
       },
       "name": {
-        "title_events": "Naam van het evenement",
+        "title_events": "Naam van de activiteit",
         "title_places": "Naam van de locatie",
         "tip_events": "Gebruik een <strong>sprekende titel</strong>, bv. \"Fietsen langs kapelletjes\", \"De Sage van de Eenhoorn\". Een <strong>uitgebreide beschrijving</strong> kan je in stap 6 toevoegen.",
         "tip_places": "Gebruik de <strong>officiële benaming</strong>, bv. \"Gravensteen\", \"Abdijsite Herkenrode\", \"Cultuurcentrum De Werf\".",
@@ -273,7 +273,7 @@
       }
     },
     "type_and_theme": {
-      "title_events": "Wat voor soort evenement wil je toevoegen?",
+      "title_events": "Wat voor soort activiteit wil je toevoegen?",
       "title_places": "Wat voor soort locatie wil je toevoegen?",
       "change_theme": "Wijzig thema",
       "theme_groups": {
@@ -286,12 +286,12 @@
       "change_type": "Wijzig type",
       "refine": "Verfijn",
       "cultuurkuur": {
-        "warning": "Pas het type evenement aan, kies tussen onderstaande mogelijkheden.",
+        "warning": "Pas het type activiteit aan, kies tussen onderstaande mogelijkheden.",
         "error": "Kies een thema"
       }
     },
     "additionalInformation": {
-      "title_events": "Laat dit evenement extra opvallen",
+      "title_events": "Laat deze activiteit extra opvallen",
       "title_places": "Laat deze locatie extra opvallen",
       "audience": {
         "title": "Toegang",
@@ -446,7 +446,7 @@
             "link": "adresgegevens"
           },
           "completed": {
-            "offers": "Alle punten! Met dit evenement ga je scoren!",
+            "offers": "Alle punten! Met deze activiteit ga je scoren!",
             "organizers": "Met deze organisatie ga je scoren!"
           }
         }
@@ -457,14 +457,14 @@
         "change": "Wijzig organisatie",
         "title": "Organisatie",
         "select_recent_used_organizer": "Een organisatie hergebruiken",
-        "select_recent_used_organizer_info": "Dit zijn de organisaties waarvoor je onlangs evenementen invoerde. Voeg ze met één klik toe. Beheerders van de geselecteerde organisatie kunnen het evenement later ook bewerken.",
+        "select_recent_used_organizer_info": "Dit zijn de organisaties waarvoor je onlangs activiteiten invoerde. Voeg ze met één klik toe. Beheerders van de geselecteerde organisatie kunnen de activiteit later ook bewerken.",
         "or_choose_other_organizer": "Of een nieuwe organisatie toevoegen",
         "choose_other_organizer": "Een nieuwe organisatie toevoegen",
         "uitpas_cardsystems": "UiTPAS Kaartsystemen",
         "uitpas_select_distribution_key": "Selecteer een verdeelsleutel",
         "uitpas_alert": {
           "success": "Je activiteit is nu geregistreerd als UiTPAS activiteit.",
-          "no_price": "Dit is een UiTPAS organisator. Voeg een <link1>prijs</link1> toe om je evenement te publiceren als UiTPAS activiteit.",
+          "no_price": "Dit is een UiTPAS organisator. Voeg een <link1>prijs</link1> toe om je activiteit te publiceren als UiTPAS activiteit.",
           "already_has_ticketsales": "Er zijn al tickets verkocht voor deze activiteit. Je kan de organisatie en de kaartsystemen niet meer wijzigen.",
           "not_found": "Deze activiteit is nog niet gekend bij UiTPAS.",
           "not_found_cta": "Registreer in UiTPAS"
@@ -546,7 +546,7 @@
     },
     "duplicate": {
       "title": "Kopiëren en aanpassen",
-      "alert": "Je staat op het punt een evenement te kopiëren. Kies een tijdstip voor dit evenement."
+      "alert": "Je staat op het punt een activiteit te kopiëren. Kies een tijdstip voor deze activiteit."
     },
     "migration": {
       "alert": "<boldText>Deze activiteit werd ingevoerd in de vorige versie van UiTdatabank.</boldText><br/>Om deze te kunnen bewerken, is het nodig om de eerder gekozen locatie en adres éénmalig opnieuw te selecteren of in te voeren.",
@@ -575,16 +575,16 @@
       "duplicate": "Dupliceren"
     },
     "create": {
-      "events": "Evenement toevoegen",
+      "events": "Activiteit toevoegen",
       "organizers": "Organisatie toevoegen",
       "places": "Locatie toevoegen"
     },
-    "event": "evenement",
+    "event": "activiteit",
     "modal": {
       "question": "Ben je zeker dat je '{{name}}' wil verwijderen?",
       "title": "{{type}} verwijderen",
       "types": {
-        "events": "Evenementen",
+        "events": "Activiteiten",
         "organizers": "Organisatoren",
         "places": "Plaatsen"
       }
@@ -595,7 +595,7 @@
       "invalid": "Geef een geldig email adres in.",
       "logo": "newsletter-logo.svg",
       "logo_alt": "nieuwsbrief logo",
-      "questions_or_feedback": "Vragen of feedback?",
+      "questions_or_feedback": "Vragen of feedback? <0>Contacteer ons</0>",
       "subscribe": "Inschrijven",
       "success": {
         "content": "Je bent ingeschreven op onze nieuwsbrief en ontvangt praktische tips voor het invoeren van jouw activiteiten in de UiTdatabank!",
@@ -604,7 +604,7 @@
       "title": "Praktische invoertips in je mailbox"
     },
     "no_items": {
-      "events": "Geen evenementen gevonden",
+      "events": "Geen activiteiten gevonden",
       "organizers": "Je beheert op dit moment geen organisaties.",
       "places": "Geen locaties gevonden"
     },
@@ -623,16 +623,16 @@
     "passed": "Afgelopen {{type}}",
     "place": "locatie",
     "sorting": {
-      "availableTo_asc": "eventdatum (oud - nieuw)",
-      "availableTo_desc": "eventdatum (nieuw - oud)",
+      "availableTo_asc": "activiteitsdatum (oud - nieuw)",
+      "availableTo_desc": "activiteitsdatum (nieuw - oud)",
       "created_asc": "creatiedatum (oud - nieuw)",
       "created_desc": "creatiedatum (nieuw - oud)",
       "completeness_asc": "volledigheid (laag - hoog)",
       "completeness_desc": "volledigheid (hoog - laag)",
       "label": "Sorteren op",
       "results": {
-        "events": "<0>{{count}}</0> evenement",
-        "events_plural": "<0>{{count}}</0> evenementen",
+        "events": "<0>{{count}}</0> activiteit",
+        "events_plural": "<0>{{count}}</0> activiteiten",
         "organizers": "<0>{{count}}</0> organisatie",
         "organizers_plural": "<0>{{count}}</0> organisaties",
         "places": "<0>{{count}}</0> locatie",
@@ -640,13 +640,13 @@
       }
     },
     "tabs": {
-      "events": "Mijn evenementen",
+      "events": "Mijn activiteiten",
       "organizers": "Mijn organisaties",
       "places": "Mijn locaties"
     },
     "suggestions": {
       "title": "Organisaties waarvoor je eerder al invoerde",
-      "description": "Voor deze organisaties voerde je eerder al evenementen in, maar je bent nog geen beheerder van deze organisaties. Ben je betrokken bij het bestuur van deze organisaties en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail."
+      "description": "Voor deze organisaties voerde je eerder al activiteiten in, maar je bent nog geen beheerder van deze organisaties. Ben je betrokken bij het bestuur van deze organisaties en wil je de organisatiepagina en activiteiten ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail."
     },
     "welcome": "Welkom"
   },
@@ -846,9 +846,9 @@
       "events": {
         "available": "Gaat door",
         "temporarilyUnavailable": "Uitgesteld",
-        "temporarilyUnavailableInfo": "Je evenement is uitgesteld naar een later, nog te bepalen tijdstip.",
+        "temporarilyUnavailableInfo": "Je activiteit is uitgesteld naar een later, nog te bepalen tijdstip.",
         "unavailable": "Geannuleerd",
-        "unavailableInfo": "Je evenement gaat niet meer door op het voorziene tijdstip en ook niet op een later tijdstip."
+        "unavailableInfo": "Je activiteit gaat niet meer door op het voorziene tijdstip en ook niet op een later tijdstip."
       },
       "places": {
         "available": "Open",
@@ -1007,14 +1007,14 @@
       "link": "Linken",
       "new_production": "Nieuwe productie: ",
       "no_productions": "Geen producties gevonden.",
-      "no_suggested_events_found": "Geen evenementen gevonden om te linken aan een productie. Probeer het later opnieuw.",
+      "no_suggested_events_found": "Geen activiteiten gevonden om te linken aan een productie. Probeer het later opnieuw.",
       "production_name": "Productienaam",
       "skip": "Overslaan",
-      "suggested_events": "Overeenkomst voorgestelde evenementen:",
+      "suggested_events": "Overeenkomst voorgestelde activiteiten:",
       "title": "Producties toevoegen"
     },
     "delete": {
-      "title": "Evenement(en) verwijderen van productie"
+      "title": "Activiteit(en) verwijderen van productie"
     },
     "event": {
       "part_of_production": "Onderdeel van de productie",
@@ -1025,7 +1025,7 @@
     },
     "overview": {
       "aria": {
-        "events": "Evenementen",
+        "events": "Activiteiten",
         "productions": "Producties"
       },
       "cancel": "Annuleren",
@@ -1033,12 +1033,12 @@
       "confirm": "Bevestigen",
       "create": "Toevoegen",
       "delete": "Verwijderen",
-      "delete_question_event": "Ben je zeker dat je het geselecteerde event wilt verwijderen uit productie '{{productionName}}'?",
-      "delete_question_events": "Ben je zeker dat je de geselecteerde {{eventCount}} events wilt verwijderen uit productie '{{productionName}}'?",
+      "delete_question_event": "Ben je zeker dat je de geselecteerde activiteit wilt verwijderen uit productie '{{productionName}}'?",
+      "delete_question_events": "Ben je zeker dat je de geselecteerde {{eventCount}} activiteiten wilt verwijderen uit productie '{{productionName}}'?",
       "details": "Details",
-      "events_in_production": "Evenementen in {{productionName}}",
+      "events_in_production": "Activiteiten in {{productionName}}",
       "loading": "Laden",
-      "no_events": "Geen evenementen onder deze productie.",
+      "no_events": "Geen activiteiten onder deze productie.",
       "no_productions": "Geen producties gevonden.",
       "production": "Productie",
       "search": {
@@ -1082,7 +1082,7 @@
         "manage": "Beheerders aanpassen",
         "request": "Beheer aanvragen",
         "back": "Ga terug",
-        "events": "Bekijk evenementen",
+        "events": "Bekijk activiteiten",
         "places": "Bekijk locaties"
       }
     },
@@ -1116,7 +1116,7 @@
     },
     "ownerships": {
       "title": "Beheerders van {{name}}",
-      "info": "Beheerders kunnen de organisatiepagina en de evenementen van de organisatie in UiTdatabank bewerken en verwijderen.",
+      "info": "Beheerders kunnen de organisatiepagina en de activiteiten van de organisatie in UiTdatabank bewerken en verwijderen.",
       "actions": {
         "add": "Nieuwe beheerder toevoegen",
         "back": "Terug naar organisatiepagina"
@@ -1146,7 +1146,7 @@
         "email": "E-mailadres",
         "email_error": "Geen geldig e-mailadres",
         "email_not_known_error": "Er is geen UiTID gelinkt aan dit e-mailadres. <0>Maak er eentje aan</0>",
-        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en evenementen van {{organizerName}} bewerken.",
+        "success": "{{ownerEmail}} is nu beheerder van {{organizerName}} en kan voortaan de organisatiepagina en activiteiten van {{organizerName}} bewerken.",
         "actions": {
           "confirm": "Beheerder toevoegen",
           "cancel": "Annuleren"
@@ -1154,7 +1154,7 @@
       },
       "approve_modal": {
         "title": "Aanvraag tot beheer goedkeuren",
-        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de evenementen van {{organizerName}} kunnen bewerken.",
+        "body": "Ben je zeker dat je de aanvraag van {{ownerEmail}} wilt goedkeuren? Van zodra je de aanvraag goedkeurt zal {{ownerEmail}} de organisatiepagina en de activiteiten van {{organizerName}} kunnen bewerken.",
         "cancel": "Annuleren",
         "confirm": "Aanvraag goedkeuren",
         "success": "{{ownerEmail}} is nu beheerder van {{organizerName}}"
@@ -1176,7 +1176,7 @@
       "request": {
         "confirm_modal": {
           "title": "Beheer aanvragen voor {{organizerName}}",
-          "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en evenementen ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
+          "body": "Ben je betrokken bij het bestuur van {{organizerName}} en wil je de organisatiepagina en activiteiten ervan beheren? Start hier je aanvraag om beheerder te worden. Zodra een huidige beheerder je aanvraag goedkeurt, krijg je toegang en ontvang je een bevestiging via e-mail.",
           "cancel": "Annuleren",
           "confirm": "Beheer aanvragen",
           "error": {
@@ -1191,7 +1191,7 @@
   },
   "search": {
     "title": "Zoeken",
-    "events_places": "Evenementen en locaties",
+    "events_places": "Activiteiten en locaties",
     "organizers": "Organisaties"
   },
   "selectionTable": {
@@ -1201,12 +1201,12 @@
   "steps": {
     "offerTypeStep": {
       "types": {
-        "event": "Evenement",
+        "event": "Activiteit",
         "place": "Locatie"
       },
-      "cultuurkuur_event": "Dit is een evenement voor scholen",
-      "cultuurkuur_info": "Je evenement zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je evenement wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
-      "cultuurkuur_tooltip": "Deze knop maakt van je evenement een evenement voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
+      "cultuurkuur_event": "Dit is een activiteit voor scholen",
+      "cultuurkuur_info": "Je activiteit zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je activiteit wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
+      "cultuurkuur_tooltip": "Deze knop maakt van je activiteit een activiteit voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
     }
   },
   "themes": {
@@ -1486,7 +1486,7 @@
     "booking_period": "Reservatieperiode",
     "booking_url": "Reservatielink",
     "educational": "Specifiek voor scholen",
-    "educational_info": "Omdat dit evenement specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
+    "educational_info": "Omdat deze activiteit specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
     "info_lesson_series": "Je lessenreeks verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
@@ -1532,10 +1532,21 @@
       "change_availability": "Beschikbaarheid wijzigen",
       "delete": "Verwijderen",
       "delete_modal": {
-        "title": "Evenement verwijderen",
+        "title_event": "Activiteit verwijderen",
+        "title_location": "Locatie verwijderen",
         "body": "Ben je zeker dat je \"{{title}}\" wil verwijderen? Deze actie kan niet ongedaan worden.",
         "cancel": "Annuleren",
         "confirm": "Definitief verwijderen"
+      }
+    },
+    "history_tab": {
+      "api": "API: {{api}}",
+      "client_id": "Client id: {{clientId}}",
+      "client_name": "Client name: {{clientName}}"
+    },
+    "duplicate_place": {
+      "alert": {
+        "description": "Deze locatie bestaat al in UiTdatabank. Alle bijhorende activiteiten vind je bij <placeLink>{{placeName}}</placeLink>"
       }
     }
   }

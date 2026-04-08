@@ -14,7 +14,7 @@ const test = base.extend<TestFixtures>({
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
     await page.getByRole('button', { name: 'Concert' }).click();
     await page
       .locator('#calendar-step-day-day-1date-period-picker-start')
@@ -30,9 +30,9 @@ const test = base.extend<TestFixtures>({
       .first()
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Sidebar Actions Test ${Date.now()}`);
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: 'Opslaan' }).click();
@@ -133,7 +133,7 @@ test.describe('Event Preview Sidebar Actions', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    const modalTitle = modal.getByText('Evenement verwijderen');
+    const modalTitle = modal.getByText('Activiteit verwijderen');
     await expect(modalTitle).toBeVisible();
 
     const confirmButton = modal.getByRole('button', { name: 'Verwijderen' });

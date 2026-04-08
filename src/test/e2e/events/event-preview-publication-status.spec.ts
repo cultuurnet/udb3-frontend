@@ -15,7 +15,7 @@ const test = base.extend<TestFixtures>({
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
     await page.getByRole('button', { name: 'Concert' }).click();
 
     await page
@@ -32,9 +32,9 @@ const test = base.extend<TestFixtures>({
       .first()
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Publication Status Test ${Date.now()}`);
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: 'Opslaan' }).click();
@@ -56,7 +56,7 @@ const test = base.extend<TestFixtures>({
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
     await page.getByRole('button', { name: 'Concert' }).click();
 
     // Set date to 30 days in the future
@@ -75,9 +75,9 @@ const test = base.extend<TestFixtures>({
       .first()
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Planned Event ${Date.now()}`);
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: 'Opslaan' }).click();
@@ -146,7 +146,7 @@ test.describe('Event Preview - Publication Status Display', () => {
 
     await expect(publicUrlLink).toHaveAttribute(
       'href',
-      `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/${publishedEventId}`,
+      `${process.env.NEXT_PUBLIC_UIV_URL}/agenda/e/x/${publishedEventId}`,
     );
 
     await expect(publicUrlLink).toHaveAttribute('target', '_blank');
@@ -183,7 +183,7 @@ test.describe('Event Preview - Publication Status Display', () => {
     suppressHydrationErrors(page);
     await page.goto(`${baseURL}/create`);
 
-    await page.getByRole('button', { name: 'Evenement' }).click();
+    await page.getByRole('button', { name: 'Activiteit' }).click();
     await page.getByRole('button', { name: 'Concert' }).click();
 
     await page
@@ -200,9 +200,9 @@ test.describe('Event Preview - Publication Status Display', () => {
       .first()
       .click();
 
-    await page.getByLabel('Naam van het evenement').click();
+    await page.getByLabel('Naam van de activiteit').click();
     await page
-      .getByLabel('Naam van het evenement')
+      .getByLabel('Naam van de activiteit')
       .fill(`E2E Draft Event ${Date.now()}`);
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: 'Opslaan' }).click();

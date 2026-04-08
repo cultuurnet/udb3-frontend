@@ -23,8 +23,8 @@ test('duplicate an event', async ({ baseURL, page }) => {
 
   await page.getByRole('button', { name: 'Kopiëren en aanpassen' }).click();
 
-  await page.getByLabel('Naam van het evenement').click();
-  await page.getByLabel('Naam van het evenement').fill('E2E duplicated event');
+  await page.getByLabel('Naam van de activiteit').click();
+  await page.getByLabel('Naam van de activiteit').fill('E2E duplicated event');
 
   await page.getByRole('textbox', { name: 'rdw-editor' }).fill(DESCRIPTION);
 

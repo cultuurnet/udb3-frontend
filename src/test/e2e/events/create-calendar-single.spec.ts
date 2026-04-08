@@ -12,7 +12,7 @@ const dummyEvent = {
 test('create an event with calendarType single', async ({ baseURL, page }) => {
   await page.goto(`${baseURL}/create`);
   // 1. Select event
-  await page.getByRole('button', { name: 'Evenement' }).click();
+  await page.getByRole('button', { name: 'Activiteit' }).click();
   // 2. Type
   await page.getByRole('button', { name: 'Concert' }).click();
   // 3. Date
@@ -36,8 +36,8 @@ test('create an event with calendarType single', async ({ baseURL, page }) => {
     .click();
 
   // 5. Name and Age
-  await page.getByLabel('Naam van het evenement').click();
-  await page.getByLabel('Naam van het evenement').fill(dummyEvent.name);
+  await page.getByLabel('Naam van de activiteit').click();
+  await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
