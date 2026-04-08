@@ -153,6 +153,6 @@ test('I can cancel', async () => {
   );
 
   expect(page.router.push).toBeCalledWith(
-    `/event/${page.router.query.eventId}/edit`,
+    `/events/${page.router.query.eventId}/edit`,
   );
 });
