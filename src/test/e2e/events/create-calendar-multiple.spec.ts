@@ -115,8 +115,12 @@ test('create an event with calendarType multiple', async ({
 
   for (let i = 0; i < tableRows; i++) {
     const row = detailsTable.locator(`> tbody > tr:nth-child(${i + 1})`);
-    const firstColumnValue = await row.locator('> td:first-child').textContent();
-    const secondColumnValue = await row.locator('> td:nth-child(2)').textContent();
+    const firstColumnValue = await row
+      .locator('> td:first-child')
+      .textContent();
+    const secondColumnValue = await row
+      .locator('> td:nth-child(2)')
+      .textContent();
 
     if (expectedEmptyFields.includes(firstColumnValue?.trim() ?? '')) {
       expect(secondColumnValue).toContain('Geen');
