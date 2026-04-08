@@ -29,18 +29,16 @@ test.describe('Places translation', () => {
 
     await page.goto(`${baseURL}/dashboard?tab=places`);
 
-    // Select first link with /preview in href
-    const firstPlaceLink = page.locator('a[href*="/preview"]').first();
+    // Select first place link
+    const firstPlaceLink = page.locator('a[href*="/places/"]').first();
     await firstPlaceLink.click();
 
     await page.waitForLoadState('networkidle');
 
-    const iframe = page.frameLocator('iframe');
-
     // get title of place
-    const placeTitle = await iframe.locator('h1').first().innerText();
+    const placeTitle = await page.getByRole('heading').first().innerText();
 
-    await iframe.getByRole('button', { name: 'Vertalen' }).click();
+    await page.getByRole('button', { name: 'Vertalen' }).click();
 
     await page.waitForURL(/\/places\/.*\/translate/, {
       waitUntil: 'domcontentloaded',
@@ -83,7 +81,7 @@ test.describe('Places translation', () => {
 
     // Go back to preview
     await page.getByRole('button', { name: 'Klaar met vertalen' }).click();
-    await page.waitForURL(/\/place\/.*\/preview/, {
+    await page.waitForURL(/\/places\/[^/]+/, {
       waitUntil: 'domcontentloaded',
     });
   });
