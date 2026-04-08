@@ -99,18 +99,14 @@ test('Create a cultuurkuur event', async ({ baseURL, page }) => {
 
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
-  await page.waitForURL(/\/event\/.*\/preview/, {
+  await page.waitForURL(/\/events\/.*/, {
     waitUntil: 'domcontentloaded',
   });
 
-  const iframe = page.frameLocator('iframe');
-  await expect(iframe.getByText('Specifiek voor scholen')).toBeVisible();
-  await expect(
-    iframe.getByText('Locatie in overleg met de school.'),
-  ).toBeVisible();
+  await expect(page.getByText('Specifiek voor scholen')).toBeVisible();
 
   // Edit mode
-  await iframe.getByRole('button', { name: 'Bewerken' }).click();
+  await page.getByRole('button', { name: 'Bewerken' }).click();
 
   await page.waitForURL(/\/events\/.*\/edit/, {
     waitUntil: 'domcontentloaded',

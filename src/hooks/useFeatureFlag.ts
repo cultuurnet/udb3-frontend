@@ -16,8 +16,6 @@ const FeatureFlags = {
   REACT_DUPLICATE: 'react_duplicate',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
-  REACT_EVENT_PREVIEW: 'react_event_preview',
-  REACT_PLACE_PREVIEW: 'react_place_preview',
   BOA: 'boa',
 } as const;
 

@@ -130,7 +130,7 @@ const LocationSuggestions = ({
             <ButtonCard
               key={location['@id']}
               marginBottom={0}
-              href={isRecentLocations ? null : `/place/${locationId}/preview`}
+              href={isRecentLocations ? null : `/places/${locationId}`}
               badge={
                 <Inline>
                   {isUitpasLocation(location, uitpasLabels) && (

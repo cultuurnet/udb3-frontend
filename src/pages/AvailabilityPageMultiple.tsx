@@ -180,10 +180,7 @@ const AvailabilityPageMultiple = ({ event, refetchEvent }) => {
           />
         </Stack>
 
-        <Link
-          href={`/event/${eventId}/preview`}
-          variant={LinkVariants.BUTTON_SUCCESS}
-        >
+        <Link href={`/events/${eventId}`} variant={LinkVariants.BUTTON_SUCCESS}>
           {t('offerStatus.modificationReady')}
         </Link>
       </Page.Content>

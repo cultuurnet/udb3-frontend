@@ -66,11 +66,7 @@ test('create an event with calendarType multiple', async ({
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
   // 7. Validate created event details
-  await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
-  const url = page.url();
-  const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1];
-  // Navigate to a different path using the captured UUID
-  await page.goto(`/events/${eventId}`);
+  await page.waitForURL(/\/events\/[a-f0-9-]+/);
   await page.waitForLoadState('networkidle');
 
   // Validate table first column values
@@ -92,8 +88,11 @@ test('create an event with calendarType multiple', async ({
     "Video's",
   ];
 
-  const firstColumnCells = await page
-    .locator('table.details-table > tbody > tr > td:first-child')
+  const detailsTable = page.locator('section table.details-table').first();
+  await detailsTable.waitFor();
+
+  const firstColumnCells = await detailsTable
+    .locator('> tbody > tr > td:first-child')
     .allTextContents();
 
   for (const label of expectedLabels) {
@@ -101,9 +100,7 @@ test('create an event with calendarType multiple', async ({
   }
 
   // Validate that some rows have "Geen" when empty
-  const tableRows = await page
-    .locator('table.details-table > tbody > tr')
-    .count();
+  const tableRows = await detailsTable.locator('> tbody > tr').count();
 
   const expectedEmptyFields = [
     'Thema',
@@ -117,16 +114,12 @@ test('create an event with calendarType multiple', async ({
   ];
 
   for (let i = 0; i < tableRows; i++) {
-    const firstColumnValue = await page
-      .locator(
-        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(1)`,
-      )
+    const row = detailsTable.locator(`> tbody > tr:nth-child(${i + 1})`);
+    const firstColumnValue = await row
+      .locator('> td:first-child')
       .textContent();
-
-    const secondColumnValue = await page
-      .locator(
-        `table.details-table > tbody > tr:nth-child(${i + 1}) > td:nth-child(2)`,
-      )
+    const secondColumnValue = await row
+      .locator('> td:nth-child(2)')
       .textContent();
 
     if (expectedEmptyFields.includes(firstColumnValue?.trim() ?? '')) {
