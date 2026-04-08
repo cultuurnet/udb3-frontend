@@ -81,7 +81,7 @@ test.describe('Places translation', () => {
 
     // Go back to preview
     await page.getByRole('button', { name: 'Klaar met vertalen' }).click();
-    await page.waitForURL(/\/places\/[^/]+/, {
+    await page.waitForURL(/\/places\/[a-f0-9-]+/, {
       waitUntil: 'domcontentloaded',
     });
   });
