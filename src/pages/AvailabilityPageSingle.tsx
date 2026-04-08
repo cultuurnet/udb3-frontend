@@ -60,10 +60,17 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
     setReasonInCurrentLanguage(newReasonInCurrentLanguage);
   }, [rawStatusReason, i18n.language]);
 
-  const handleSuccess = () =>
-    offerType === 'event'
-      ? router.push(`/events/${offerId}`)
-      : router.push(`/${offerType}/${offerId}/preview`);
+  const successUrlByOfferType = {
+    event: `/events/${offerId}`,
+    place: `/places/${offerId}`,
+    organizer: `/organizer/${offerId}/preview`,
+  };
+  const editUrlByOfferType = {
+    event: `/event/${offerId}/edit`,
+    place: `/places/${offerId}/edit`,
+    organizer: `/organizer/${offerId}/edit`,
+  };
+  const handleSuccess = () => router.push(successUrlByOfferType[offerType]);
 
   const changeStatusMutation = useChangeStatusMutation({
     onSuccess: handleSuccess,
@@ -170,7 +177,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
               </Button>
               <Button
                 variant={ButtonVariants.SECONDARY}
-                onClick={() => router.push(`/${offerType}/${offerId}/edit`)}
+                onClick={() => router.push(editUrlByOfferType[offerType])}
               >
                 {t('offerStatus.actions.cancel')}
               </Button>
