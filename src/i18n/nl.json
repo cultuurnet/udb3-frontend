@@ -412,6 +412,15 @@
         "label": "Vul je beschrijving aan met een paar veelgestelde vragen over je activiteit",
         "add_button": "Voeg een veelgestelde vraag toe",
         "add_another_button": "Voeg nog een veelgestelde vraag toe",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "delete_modal": {
+          "title": "Vraag verwijderen",
+          "body": "Ben je zeker dat je deze vraag wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+          "confirm": "Definitief verwijderen",
+          "cancel": "Annuleren"
+        },
+        "max_items_error": "Je kan maximum 30 veelgestelde vragen toevoegen.",
         "modal": {
           "title": "Nieuwe vraag toevoegen",
           "save": "Opslaan",

@@ -387,6 +387,15 @@
         "label": "Ergänzen Sie Ihre Beschreibung mit häufig gestellten Fragen zu Ihrer Aktivität",
         "add_button": "Häufige Frage hinzufügen",
         "add_another_button": "Weitere häufige Frage hinzufügen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "delete_modal": {
+          "title": "Frage löschen",
+          "body": "Sind Sie sicher, dass Sie diese Frage löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+          "confirm": "Endgültig löschen",
+          "cancel": "Abbrechen"
+        },
+        "max_items_error": "Sie können maximal 30 häufige Fragen hinzufügen.",
         "modal": {
           "title": "Neue Frage hinzufügen",
           "save": "Speichern",
