@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
@@ -168,10 +169,14 @@ const TabTitle = ({
   ...props
 }: TabTitleProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
-  const title = titleKey
-    ? t(titleKey)
-    : t(`create.additionalInformation.${field}.title`);
+  const defaultTitleKey =
+    isBoaEnabled && scope === ScopeTypes.EVENTS && field === Fields.DESCRIPTION
+      ? 'create.additionalInformation.description.title_with_faq'
+      : `create.additionalInformation.${field}.title`;
+
+  const title = titleKey ? t(titleKey) : t(defaultTitleKey);
 
   return (
     <Inline spacing={3} {...getInlineProps(props)}>
