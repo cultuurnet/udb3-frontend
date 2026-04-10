@@ -110,7 +110,10 @@ const DescriptionTips = ({
   );
 };
 
-type DescriptionStepProps = StackProps & TabContentProps;
+type DescriptionStepProps = StackProps &
+  TabContentProps & {
+    onFaqSuccessfulChange?: () => void;
+  };
 
 const DescriptionStep = ({
   scope,
@@ -118,6 +121,7 @@ const DescriptionStep = ({
   offerId,
   onSuccessfulChange,
   onValidationChange,
+  onFaqSuccessfulChange = onSuccessfulChange,
   ...props
 }: DescriptionStepProps) => {
   const { t, i18n } = useTranslation();
@@ -280,7 +284,7 @@ const DescriptionStep = ({
             scope={scope}
             language={i18n.language}
             initialFaqItems={entity?.faqs}
-            onSuccessfulChange={onSuccessfulChange}
+            onSuccessfulChange={onFaqSuccessfulChange}
           />
         </>
       )}

@@ -43,6 +43,7 @@ const AdditionalInformationStepVariant = {
 
 const Fields = {
   DESCRIPTION: 'description',
+  FAQ: 'faq',
   ORGANIZER: 'organizer',
   CONTACT_INFO: 'contact_info',
   BOOKING_INFO: 'booking_info',
@@ -380,6 +381,11 @@ const AdditionalInformationStep = ({
                   onValidationChange={handleValidationChange}
                   onSuccessfulChange={() =>
                     invalidateOfferQuery(field, shouldInvalidate)
+                  }
+                  onFaqSuccessfulChange={
+                    field === Fields.DESCRIPTION
+                      ? () => invalidateOfferQuery(Fields.FAQ, true)
+                      : undefined
                   }
                   {...props}
                   {...stepProps}
