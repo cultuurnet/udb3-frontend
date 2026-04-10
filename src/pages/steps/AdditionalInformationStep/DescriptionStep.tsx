@@ -7,12 +7,15 @@ import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useChangeOfferDescriptionMutation,
   useDeleteDescriptionMutation,
+  useUpdateOfferFaqMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { SupportedLanguages } from '@/i18n/index';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Organizer } from '@/types/Organizer';
+import { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -21,16 +24,18 @@ import { Inline } from '@/ui/Inline';
 import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { Breakpoints } from '@/ui/theme';
+import { Breakpoints, colors } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
+import { FaqList } from './FaqList';
 import { FaqModal } from './FaqModal';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
 
 const IDEAL_DESCRIPTION_LENGTH = 200;
+const FAQ_MAX_ITEMS = 30;
 
 type DescriptionInfoProps = StackProps & {
   description: string;
@@ -80,7 +85,7 @@ const DescriptionInfo = ({
 const FaqTips = () => {
   const { t } = useTranslation();
   return (
-    <Alert marginTop={4.8} minWidth="40rem">
+    <Alert marginTop={4.8} maxWidth="30rem">
       {t('create.additionalInformation.faq.tips')}
     </Alert>
   );
@@ -101,7 +106,7 @@ const DescriptionTips = ({
 
   return (
     (eventTypeId || scope === ScopeTypes.ORGANIZERS) && (
-      <Alert marginTop={4.8} maxWidth="40rem">
+      <Alert marginTop={4.8} maxWidth="30rem">
         {t(translationKey, {
           keySeparator: '*',
         })}
@@ -129,6 +134,8 @@ const DescriptionStep = ({
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [isFaqModalVisible, setIsFaqModalVisible] = useState(false);
+  const [editingFaqIndex, setEditingFaqIndex] = useState(undefined);
+  const [showFaqMaxError, setShowFaqMaxError] = useState(false);
   const plainTextDescription = useMemo(
     () => editorState.getCurrentContent().getPlainText(),
     [editorState],
@@ -181,6 +188,16 @@ const DescriptionStep = ({
   const deleteDescriptionMutation = useDeleteDescriptionMutation({
     onSuccess: onSuccessfulChange,
   });
+
+  const updateFaqMutation = useUpdateOfferFaqMutation({
+    onSuccess: onFaqSuccessfulChange,
+  });
+
+  const handleDeleteFaq = (index: number) => {
+    const updatedFaqs = (entity?.faqs ?? []).filter((_, i) => i !== index);
+    updateFaqMutation.mutate({ id: offerId, scope, faq: updatedFaqs });
+    setShowFaqMaxError(false);
+  };
 
   const updateDescription = (description = '') => {
     const args = {
@@ -262,28 +279,70 @@ const DescriptionStep = ({
               <Text fontWeight="bold">
                 {t('create.additionalInformation.faq.label')}
               </Text>
-              <Button
-                variant={ButtonVariants.SECONDARY}
-                iconName={Icons.PLUS}
-                onClick={() => setIsFaqModalVisible(true)}
-                spacing={2}
-              >
-                {t(
-                  entity?.faqs?.length
-                    ? 'create.additionalInformation.faq.add_another_button'
-                    : 'create.additionalInformation.faq.add_button',
-                )}
-              </Button>
+              {!!entity?.faqs?.length ? (
+                <FaqList
+                  faqs={entity.faqs}
+                  language={i18n.language as Values<typeof SupportedLanguages>}
+                  onEdit={(index) => {
+                    setEditingFaqIndex(index);
+                    setIsFaqModalVisible(true);
+                  }}
+                  onDelete={handleDeleteFaq}
+                  action={
+                    <Stack spacing={2} alignItems="flex-start">
+                      <Button
+                        variant={ButtonVariants.SECONDARY}
+                        iconName={Icons.PLUS}
+                        onClick={() => {
+                          if ((entity.faqs?.length ?? 0) >= FAQ_MAX_ITEMS) {
+                            setShowFaqMaxError(true);
+                            return;
+                          }
+                          setShowFaqMaxError(false);
+                          setEditingFaqIndex(undefined);
+                          setIsFaqModalVisible(true);
+                        }}
+                        spacing={2}
+                      >
+                        {t(
+                          'create.additionalInformation.faq.add_another_button',
+                        )}
+                      </Button>
+                      {showFaqMaxError && (
+                        <Text color={colors.danger}>
+                          {t(
+                            'create.additionalInformation.faq.max_items_error',
+                          )}
+                        </Text>
+                      )}
+                    </Stack>
+                  }
+                />
+              ) : (
+                <Button
+                  variant={ButtonVariants.SECONDARY}
+                  iconName={Icons.PLUS}
+                  onClick={() => setIsFaqModalVisible(true)}
+                  spacing={2}
+                >
+                  {t('create.additionalInformation.faq.add_button')}
+                </Button>
+              )}
             </Stack>
             <FaqTips />
           </Inline>
           <FaqModal
+            key={`${isFaqModalVisible}-${editingFaqIndex}`}
             visible={isFaqModalVisible}
-            onClose={() => setIsFaqModalVisible(false)}
+            onClose={() => {
+              setIsFaqModalVisible(false);
+              setEditingFaqIndex(undefined);
+            }}
             offerId={offerId}
             scope={scope}
-            language={i18n.language}
+            language={i18n.language as Values<typeof SupportedLanguages>}
             initialFaqItems={entity?.faqs}
+            editIndex={editingFaqIndex}
             onSuccessfulChange={onFaqSuccessfulChange}
           />
         </>
