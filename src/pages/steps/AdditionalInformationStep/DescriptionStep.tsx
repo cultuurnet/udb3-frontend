@@ -246,7 +246,7 @@ const DescriptionStep = ({
         />
         <DescriptionTips scope={scope} eventTypeId={eventTypeId} />
       </Inline>
-      {isBoaEnabled && (
+      {isBoaEnabled && scope === ScopeTypes.EVENTS && (
         <>
           <Inline
             stackOn={Breakpoints.L}
