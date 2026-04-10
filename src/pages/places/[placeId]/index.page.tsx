@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import { prefetchGetOfferPermissionsQuery } from '@/hooks/api/events';
 import {
   prefetchGetOfferByIdQuery,
@@ -22,7 +23,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       scope: OfferTypes.PLACES,
     });
 
-    await prefetchGetPermissionsQuery({
+    const permissions = await prefetchGetPermissionsQuery({
       req,
       queryClient,
     });
@@ -34,7 +35,12 @@ export const getServerSideProps = getApplicationServerSideProps(
       scope: OfferTypes.PLACES,
     });
 
-    if (query.tab === 'history') {
+    const canSeeHistory = permissions?.includes(
+      PermissionTypes.AANBOD_HISTORIEK,
+    );
+    const isGodUser = permissions?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
+
+    if (query.tab === 'history' && (canSeeHistory || isGodUser)) {
       await prefetchOfferHistoryQuery({
         req,
         queryClient,
