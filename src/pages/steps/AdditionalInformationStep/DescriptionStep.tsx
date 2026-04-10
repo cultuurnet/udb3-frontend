@@ -12,13 +12,16 @@ import {
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SupportedLanguages } from '@/i18n/index';
+import { Option } from '@/pages/CustomRichTextEditorLink';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Organizer } from '@/types/Organizer';
 import { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Icon } from '@/ui/Icon';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
@@ -40,13 +43,11 @@ const FAQ_MAX_ITEMS = 30;
 type DescriptionInfoProps = StackProps & {
   description: string;
   eventTypeId: string;
-  onClear: () => void;
 };
 
 const DescriptionInfo = ({
   description,
   eventTypeId,
-  onClear,
   ...props
 }: DescriptionInfoProps) => {
   const { t } = useTranslation();
@@ -75,10 +76,21 @@ const DescriptionInfo = ({
           },
         )}
       </Text>
-      <Button variant={ButtonVariants.LINK} onClick={onClear}>
-        {t('create.additionalInformation.description.clear')}
-      </Button>
     </Stack>
+  );
+};
+
+const ClearButton = ({ onClear }: { onClear: () => void }) => {
+  const { t } = useTranslation();
+  return (
+    <Box css="margin-left: auto;">
+      <Option
+        onClick={onClear}
+        aria-label={t('create.additionalInformation.description.clear')}
+      >
+        <Icon name={Icons.TRASH} width={15} height={15} />
+      </Option>
+    </Box>
   );
 };
 
@@ -255,12 +267,12 @@ const DescriptionStep = ({
               editorState={editorState}
               onEditorStateChange={setEditorState}
               onBlur={handleBlur}
+              toolbarCustomButtons={[<ClearButton onClear={handleClear} />]}
             />
           }
           info={
             <DescriptionInfo
               description={plainTextDescription}
-              onClear={handleClear}
               eventTypeId={eventTypeId}
             />
           }
