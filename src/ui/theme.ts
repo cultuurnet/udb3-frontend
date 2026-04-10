@@ -42,6 +42,7 @@ const colors = {
   textColor: '#222',
   warning: '#E69336',
   danger: '#DD5242',
+  dangerDark: '#A93226',
 } as const;
 
 const Breakpoints = {
