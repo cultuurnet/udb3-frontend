@@ -43,6 +43,7 @@ const colors = {
   warning: '#E69336',
   danger: '#DD5242',
   dangerDark: '#A93226',
+  dangerBright: '#FF4444',
 } as const;
 
 const Breakpoints = {
