@@ -206,9 +206,9 @@ const theme = {
       danger: {
         color: colors.white,
         borderColor: colors.red3,
-        hoverBackgroundColor: '#9A2700',
+        hoverBackgroundColor: colors.dangerDark,
         hoverBorderColor: colors.red4,
-        backgroundColor: '#DD5242',
+        backgroundColor: colors.dangerBright,
       },
       icon: {
         hoverBackgroundColor: colors.grey4,

@@ -119,16 +119,6 @@ const FaqList = ({
           }
         }}
         confirmButtonVariant={ButtonVariants.DANGER}
-        css={`
-          .modal-footer .btn-danger {
-            background-color: ${colors.dangerBright};
-            border-color: ${colors.dangerBright};
-          }
-          .modal-footer .btn-danger:hover {
-            background-color: ${colors.dangerDark};
-            border-color: ${colors.dangerDark};
-          }
-        `}
       >
         <Box padding={4}>
           <Text>{t('create.additionalInformation.faq.delete_modal.body')}</Text>
