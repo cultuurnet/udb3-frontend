@@ -86,7 +86,9 @@ const FaqList = ({
               color={colors.grey5}
               css={`
                 line-height: 1.5;
-                max-height: 6em;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
                 overflow: hidden;
               `}
               dangerouslySetInnerHTML={{
