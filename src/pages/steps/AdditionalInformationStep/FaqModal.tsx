@@ -1,4 +1,4 @@
-import { convertToRaw, EditorState } from 'draft-js';
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,9 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
 import { TypeaheadInput } from '@/ui/TypeaheadInput';
 
+const htmlToDraft =
+  typeof window === 'object' && require('html-to-draftjs').default;
+
 type FaqModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -19,6 +22,7 @@ type FaqModalProps = {
   scope: Scope;
   language: string;
   initialFaqItems?: FaqItem[];
+  editIndex?: number;
   onSuccessfulChange?: () => void;
 };
 
@@ -29,33 +33,37 @@ const FaqModal = ({
   scope,
   language,
   initialFaqItems = [],
+  editIndex,
   onSuccessfulChange,
 }: FaqModalProps) => {
   const { t } = useTranslation();
-  const [question, setQuestion] = useState('');
-  const [answerEditorState, setAnswerEditorState] = useState(
-    EditorState.createEmpty(),
-  );
 
-  const handleReset = () => {
-    setQuestion('');
-    setAnswerEditorState(EditorState.createEmpty());
-  };
+  const editItem =
+    editIndex !== undefined
+      ? initialFaqItems[editIndex]?.[language]
+      : undefined;
 
-  const handleClose = () => {
-    handleReset();
-    onClose();
-  };
+  const [question, setQuestion] = useState(editItem?.question ?? '');
+  const [answerEditorState, setAnswerEditorState] = useState(() => {
+    if (editItem?.answer && htmlToDraft) {
+      const draftState = htmlToDraft(editItem.answer);
+      const contentState = ContentState.createFromBlockArray(
+        draftState.contentBlocks,
+        draftState.entityMap,
+      );
+      return EditorState.createWithContent(contentState);
+    }
+    return EditorState.createEmpty();
+  });
 
   const updateFaqMutation = useUpdateOfferFaqMutation({
     onSuccess: () => {
-      handleReset();
       onSuccessfulChange?.();
     },
   });
 
   const handleSave = () => {
-    const newItem: FaqItem = {
+    const updatedItem: FaqItem = {
       [language]: {
         question,
         answer: answerEditorState.getCurrentContent().hasText()
@@ -63,10 +71,18 @@ const FaqModal = ({
           : '',
       },
     };
+
+    const updatedFaqs = [...initialFaqItems];
+    if (editIndex !== undefined) {
+      updatedFaqs[editIndex] = updatedItem;
+    } else {
+      updatedFaqs.push(updatedItem);
+    }
+
     updateFaqMutation.mutate({
       id: offerId,
       scope,
-      faq: [...initialFaqItems, newItem],
+      faq: updatedFaqs,
     });
     onClose();
   };
@@ -75,7 +91,7 @@ const FaqModal = ({
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onClose={handleClose}
+      onClose={onClose}
       onConfirm={handleSave}
       title={t('create.additionalInformation.faq.modal.title')}
       confirmTitle={t('create.additionalInformation.faq.modal.save')}

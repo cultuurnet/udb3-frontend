@@ -198,6 +198,7 @@ const customCSS = css`
 
     &:hover {
       background-color: ${getValue('danger.hoverBackgroundColor')};
+      border-color: ${getValue('danger.hoverBackgroundColor')};
     }
   }
 

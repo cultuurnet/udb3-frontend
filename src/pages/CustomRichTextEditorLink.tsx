@@ -202,4 +202,4 @@ type CustomRichTextEditorLinkProps = {
   translations?: object;
 };
 
-export { CustomRichTextEditorLink };
+export { CustomRichTextEditorLink, Option };

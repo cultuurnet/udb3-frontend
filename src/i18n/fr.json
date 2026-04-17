@@ -388,6 +388,15 @@
         "label": "Complétez votre description avec quelques questions fréquentes sur votre activité",
         "add_button": "Ajouter une question fréquente",
         "add_another_button": "Ajouter une autre question fréquente",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "delete_modal": {
+          "title": "Supprimer la question",
+          "body": "Êtes-vous sûr de vouloir supprimer cette question ? Cette action est irréversible.",
+          "confirm": "Supprimer définitivement",
+          "cancel": "Annuler"
+        },
+        "max_items_error": "Vous pouvez ajouter au maximum 30 questions fréquentes.",
         "modal": {
           "title": "Ajouter une nouvelle question",
           "save": "Enregistrer",
