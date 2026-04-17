@@ -56,10 +56,6 @@ const FaqModal = ({
     return EditorState.createEmpty();
   });
 
-  const handleClose = () => {
-    onClose();
-  };
-
   const updateFaqMutation = useUpdateOfferFaqMutation({
     onSuccess: () => {
       onSuccessfulChange?.();
@@ -95,7 +91,7 @@ const FaqModal = ({
     <Modal
       variant={ModalVariants.QUESTION}
       visible={visible}
-      onClose={handleClose}
+      onClose={onClose}
       onConfirm={handleSave}
       title={t('create.additionalInformation.faq.modal.title')}
       confirmTitle={t('create.additionalInformation.faq.modal.save')}
