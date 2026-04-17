@@ -9,14 +9,14 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Panel } from '@/ui/Panel';
-import { Stack, StackProps } from '@/ui/Stack';
+import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 const getPanelValue = getValueFromTheme('panel');
 
-type FaqListProps = StackProps & {
+type FaqListProps = {
   faqs: FaqItem[];
   language: Values<typeof SupportedLanguages>;
   onEdit: (index: number) => void;
