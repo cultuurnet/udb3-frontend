@@ -13,9 +13,9 @@ const ContactInfoPreview = ({ contactPoint }: Props) => {
   const { t } = useTranslation();
   const hasContactInfo =
     contactPoint &&
-    (contactPoint.url.length ||
-      contactPoint.phone.length ||
-      contactPoint.email.length);
+    (contactPoint.url?.length ||
+      contactPoint.phone?.length ||
+      contactPoint.email?.length);
 
   if (!hasContactInfo) {
     return (

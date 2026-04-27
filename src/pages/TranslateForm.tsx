@@ -223,9 +223,7 @@ const TranslateForm = () => {
     e.preventDefault();
 
     router.push(
-      scope === OfferTypes.EVENTS
-        ? `/event/${id}/preview`
-        : `/place/${id}/preview`,
+      scope === OfferTypes.EVENTS ? `/events/${id}` : `/places/${id}`,
     );
   };
 

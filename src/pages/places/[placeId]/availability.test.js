@@ -56,7 +56,7 @@ test('I can save a status', async () => {
   );
 
   expect(page.router.push).toBeCalledWith(
-    `/place/${page.router.query.placeId}/preview`,
+    `/places/${page.router.query.placeId}`,
   );
 });
 
@@ -97,7 +97,7 @@ test('I can save a status with a reason', async () => {
   );
 
   expect(page.router.push).toBeCalledWith(
-    `/place/${page.router.query.placeId}/preview`,
+    `/places/${page.router.query.placeId}`,
   );
 });
 
@@ -140,6 +140,6 @@ test('I can cancel', async () => {
   );
 
   expect(page.router.push).toBeCalledWith(
-    `/place/${page.router.query.placeId}/edit`,
+    `/places/${page.router.query.placeId}/edit`,
   );
 });

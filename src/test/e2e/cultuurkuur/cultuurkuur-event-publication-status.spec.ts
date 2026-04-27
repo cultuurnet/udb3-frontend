@@ -86,15 +86,7 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Cultuurkuur Event - Publication Status Display', () => {
-  test.beforeEach(async ({ context, page }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_event_preview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page }) => {
     suppressHydrationErrors(page);
   });
 

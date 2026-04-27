@@ -118,9 +118,17 @@ const Preview = () => {
     mainLanguage,
   );
 
+  const isGodUser = userPermissions?.includes(
+    PermissionTypes.GEBRUIKERS_BEHEREN,
+  );
+  const canSeeHistory = userPermissions?.includes(
+    PermissionTypes.AANBOD_HISTORIEK,
+  );
+
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     eventId as string,
     offerType,
+    { enabled: canSeeHistory || isGodUser },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
 
@@ -128,13 +136,6 @@ const Preview = () => {
   const isRejected = offer.workflowStatus === WorkflowStatus.REJECTED;
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
-
-  const isGodUser = userPermissions?.includes(
-    PermissionTypes.GEBRUIKERS_BEHEREN,
-  );
-  const canSeeHistory = userPermissions?.includes(
-    PermissionTypes.AANBOD_HISTORIEK,
-  );
 
   if (canSeeHistory || isGodUser) {
     tabOptions.push('history');

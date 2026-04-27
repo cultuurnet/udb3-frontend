@@ -63,7 +63,7 @@ const AlertDuplicatePlace = ({
         components={{
           placeLink: (
             <Link
-              href={`/place/${placeId}/preview`}
+              href={`/places/${placeId}`}
               display="inline-block"
               fontWeight="bold"
               textDecoration="underline"

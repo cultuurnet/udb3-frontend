@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 
 import { OfferTypes } from '@/constants/OfferType';
+import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   prefetchGetCalendarSummaryQuery,
   prefetchGetOfferPermissionsQuery,
@@ -34,7 +35,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       format: 'lg',
     });
 
-    await prefetchGetPermissionsQuery({
+    const permissions = await prefetchGetPermissionsQuery({
       req,
       queryClient,
     });
@@ -46,7 +47,12 @@ export const getServerSideProps = getApplicationServerSideProps(
       scope: OfferTypes.EVENTS,
     });
 
-    if (query.tab === 'history') {
+    const canSeeHistory = permissions?.includes(
+      PermissionTypes.AANBOD_HISTORIEK,
+    );
+    const isGodUser = permissions?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
+
+    if (query.tab === 'history' && (canSeeHistory || isGodUser)) {
       await prefetchOfferHistoryQuery({
         req,
         queryClient,

@@ -39,9 +39,9 @@ const test = base.extend<TestFixtures>({
 
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
-    await page.waitForURL(/\/event\/[a-f0-9-]+\/preview/);
+    await page.waitForURL(/\/events\/[a-f0-9-]+/);
     const url = page.url();
-    const eventId = url.match(/\/event\/([a-f0-9-]+)\/preview/)?.[1] ?? '';
+    const eventId = url.match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
 
     await applyFixture(eventId);
   },
@@ -52,15 +52,7 @@ const test = base.extend<TestFixtures>({
 });
 
 test.describe('Event Preview Sidebar Actions', () => {
-  test.beforeEach(async ({ page, eventPreviewUrl, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_event_preview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
+  test.beforeEach(async ({ page, eventPreviewUrl }) => {
     // todo: remove when the styled components hydration errors are fixed.
     suppressHydrationErrors(page);
 

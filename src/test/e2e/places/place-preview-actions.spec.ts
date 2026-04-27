@@ -47,14 +47,6 @@ const test = base.extend<TestFixtures>({
 
 test.describe('Place Preview Sidebar Actions', () => {
   test.beforeEach(async ({ page, placePreviewUrl, context }) => {
-    await context.addCookies([
-      {
-        name: 'ff_react_place_preview',
-        value: 'true',
-        domain: 'localhost',
-        path: '/',
-      },
-    ]);
     // todo: remove when the styled components hydration errors are fixed.
     suppressHydrationErrors(page);
 

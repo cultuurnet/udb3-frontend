@@ -31,8 +31,11 @@ const PublishLaterModal = ({
 
   const changeAvailableFrom = useChangeAvailableFromMutation();
   const onSuccess = () => {
-    const scopePath = scope === OfferTypes.EVENTS ? 'event' : 'place';
-    push(`/${scopePath}/${offerId}/preview`);
+    if (scope === OfferTypes.EVENTS) {
+      push(`/events/${offerId}`);
+    } else {
+      push(`/places/${offerId}`);
+    }
   };
 
   const publishOffer = usePublishOffer({
