@@ -239,6 +239,7 @@ const initialValidatedFields: Record<Field, ValidationStatus> = {
   price_info: ValidationStatus.NONE,
   booking_info: ValidationStatus.NONE,
   contact_point: ValidationStatus.NONE,
+  accessibility: ValidationStatus.NONE,
 };
 
 const AdditionalInformationStep = ({

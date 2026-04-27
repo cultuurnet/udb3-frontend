@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useChangeDeparturePlacesMutation } from '@/hooks/api/events';
@@ -46,6 +46,26 @@ const createEmptyDepartureLocation = (): DepartureLocation => ({
   place: undefined,
 });
 
+type CollapsedSelectionProps = {
+  label: ReactNode;
+  onClear: () => void;
+  clearLabel: string;
+};
+
+const CollapsedSelection = ({
+  label,
+  onClear,
+  clearLabel,
+}: CollapsedSelectionProps) => (
+  <Inline alignItems="center" spacing={3}>
+    <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+    <Text>{label}</Text>
+    <Button variant={ButtonVariants.LINK} onClick={onClear}>
+      {clearLabel}
+    </Button>
+  </Inline>
+);
+
 const AccessibilityStep = ({
   offerId,
   scope,
@@ -87,12 +107,16 @@ const AccessibilityStep = ({
     if (!entity?.departurePlaces?.length) return;
     hasInitialized.current = true;
 
+    let cancelled = false;
+
     (async () => {
       const places = await Promise.all(
         entity.departurePlaces!.map((uri) =>
           getPlaceById({ headers, id: parseOfferId(uri) }),
         ),
       );
+
+      if (cancelled) return;
 
       const loaded: DepartureLocation[] = places
         .filter((place): place is Place => !!place)
@@ -117,6 +141,10 @@ const AccessibilityStep = ({
 
       if (loaded.length > 0) setDepartureLocations(loaded);
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [entity, headers, i18n.language]);
 
   const setAndPersist = (next: DepartureLocation[]) => {
@@ -148,9 +176,7 @@ const AccessibilityStep = ({
 
   const handleDeleteDepartureLocation = (index: number) => {
     const next = departureLocations.filter((_, i) => i !== index);
-    setAndPersist(
-      next.length > 0 ? next : [createEmptyDepartureLocation()],
-    );
+    setAndPersist(next.length > 0 ? next : [createEmptyDepartureLocation()]);
   };
 
   return (
@@ -209,29 +235,20 @@ const AccessibilityStep = ({
                   />
                 </Inline>
               ) : (
-                <Inline alignItems="center" spacing={3}>
-                  <Icon
-                    name={Icons.CHECK_CIRCLE}
-                    color={getGlobalValue('successColor')}
-                  />
-                  <Text>
-                    {location.city.name}
-                    {location.city.zip ? `, ${location.city.zip}` : ''}
-                  </Text>
-                  <Button
-                    variant={ButtonVariants.LINK}
-                    onClick={() =>
+                <Stack spacing={3}>
+                  <CollapsedSelection
+                    label={`${location.city.name}${location.city.zip ? `, ${location.city.zip}` : ''}`}
+                    clearLabel={t(
+                      `create.location.municipality.change_${location.country.toLowerCase()}`,
+                    )}
+                    onClear={() =>
                       updateDepartureLocation(index, {
                         city: undefined,
                         place: undefined,
                       })
                     }
-                  >
-                    {t(
-                      `create.location.municipality.change_${location.country.toLowerCase()}`,
-                    )}
-                  </Button>
-                </Inline>
+                  />
+                </Stack>
               )}
 
               {location.city &&
@@ -256,27 +273,17 @@ const AccessibilityStep = ({
                     }
                   />
                 ) : (
-                  <Inline alignItems="center" spacing={3}>
-                    <Icon
-                      name={Icons.CHECK_CIRCLE}
-                      color={getGlobalValue('successColor')}
-                    />
-                    <Text>
-                      {getLanguageObjectOrFallback(
-                        location.place.name,
-                        i18n.language as SupportedLanguage,
-                        location.place.mainLanguage ?? 'nl',
-                      )}
-                    </Text>
-                    <Button
-                      variant={ButtonVariants.LINK}
-                      onClick={() =>
-                        updateDepartureLocation(index, { place: undefined })
-                      }
-                    >
-                      {t('create.location.country.change_location')}
-                    </Button>
-                  </Inline>
+                  <CollapsedSelection
+                    label={getLanguageObjectOrFallback(
+                      location.place.name,
+                      i18n.language as SupportedLanguage,
+                      location.place.mainLanguage ?? 'nl',
+                    )}
+                    clearLabel={t('create.location.country.change_location')}
+                    onClear={() =>
+                      updateDepartureLocation(index, { place: undefined })
+                    }
+                  />
                 ))}
             </Stack>
           </Panel>
