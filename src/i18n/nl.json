@@ -405,7 +405,7 @@
           "0.8.0.0.0": "Geef een enthousiaste omschrijving van de openbare ruimte. <ul> <li> <strong>Omschrijf</strong> de openbare ruimte <strong>nauwkeurig</strong>. </li> <li> <strong>Wat</strong> kan je hier <strong>doen</strong>? </li> </ul>",
           "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>"
         },
-        "title": "Beschrijving",
+        "title": "Geef een enthousiaste beschrijving van je activiteit",
         "title_with_faq": "Beschrijving & FAQ"
       },
       "faq": {
