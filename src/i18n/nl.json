@@ -431,8 +431,8 @@
           "errors": {
             "no_question": "Schrijf eerst een vraag.",
             "no_answer": "De vraag kan niet opgeslagen worden zonder antwoord.",
-            "question_too_long": "De vraag mag maximum 255 tekens bevatten.",
-            "answer_too_long": "Het antwoord mag maximum 5000 tekens bevatten."
+            "question_too_long": "De vraag mag maximum {{ maxNumber }} tekens bevatten.",
+            "answer_too_long": "Het antwoord mag maximum {{ maxNumber }} tekens bevatten."
           },
           "suggestions": [
             "Heb ik voorkennis nodig?",

@@ -407,8 +407,8 @@
           "errors": {
             "no_question": "Rédigez d'abord une question.",
             "no_answer": "La question ne peut pas être enregistrée sans réponse.",
-            "question_too_long": "La question ne peut pas dépasser 255 caractères.",
-            "answer_too_long": "La réponse ne peut pas dépasser 5 000 caractères."
+            "question_too_long": "La question ne peut pas dépasser {{ maxNumber }} caractères.",
+            "answer_too_long": "La réponse ne peut pas dépasser {{ maxNumber }} caractères."
           },
           "suggestions": [
             "Heb ik voorkennis nodig?",

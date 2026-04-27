@@ -26,6 +26,9 @@ type FaqModalProps = {
   onSuccessfulChange?: () => void;
 };
 
+const QUESTION_MAX_CHARS = 255;
+const ANSWER_MAX_CHARS = 5000;
+
 const FaqModal = ({
   visible,
   onClose,
@@ -60,17 +63,21 @@ const FaqModal = ({
   const answerPlainText = answerEditorState.getCurrentContent().getPlainText();
 
   const questionError = (() => {
-    if (question.length > 255)
+    if (question.length > QUESTION_MAX_CHARS)
       return t(
         'create.additionalInformation.faq.modal.errors.question_too_long',
+        { maxNumber: QUESTION_MAX_CHARS },
       );
     if (hasAttemptedSave && !question)
       return t('create.additionalInformation.faq.modal.errors.no_question');
   })();
 
   const answerError = (() => {
-    if (answerPlainText.length > 5000)
-      return t('create.additionalInformation.faq.modal.errors.answer_too_long');
+    if (answerPlainText.length > ANSWER_MAX_CHARS)
+      return t(
+        'create.additionalInformation.faq.modal.errors.answer_too_long',
+        { maxNumber: ANSWER_MAX_CHARS },
+      );
     if (hasAttemptedSave && !answerEditorState.getCurrentContent().hasText())
       return t('create.additionalInformation.faq.modal.errors.no_answer');
   })();
@@ -86,8 +93,8 @@ const FaqModal = ({
     if (
       !question ||
       !answerEditorState.getCurrentContent().hasText() ||
-      question.length > 255 ||
-      answerPlainText.length > 5000
+      question.length > QUESTION_MAX_CHARS ||
+      answerPlainText.length > ANSWER_MAX_CHARS
     )
       return;
 
