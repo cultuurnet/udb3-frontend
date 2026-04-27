@@ -305,6 +305,7 @@ const OfferForm = () => {
           contact_info: t('create.toast.success.contact_info'),
           description: t('create.toast.success.description'),
           audience: t('create.toast.success.audience'),
+          accessibility: t('create.toast.success.accessibility'),
           price_info: t('create.toast.success.price_info'),
           organizer: t('create.toast.success.organizer'),
         },

@@ -6,7 +6,10 @@ import { getPlaceById } from '@/hooks/api/places';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { useHeaders } from '@/hooks/api/useHeaders';
 import { SupportedLanguage } from '@/i18n/index';
-import type { TabContentProps } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
+import {
+  TabContentProps,
+  ValidationStatus,
+} from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import type { Event } from '@/types/Event';
@@ -46,7 +49,9 @@ const createEmptyDepartureLocation = (): DepartureLocation => ({
 const AccessibilityStep = ({
   offerId,
   scope,
+  field,
   onSuccessfulChange,
+  onValidationChange,
 }: TabContentProps) => {
   const { t, i18n } = useTranslation();
   const headers = useHeaders();
@@ -66,6 +71,16 @@ const AccessibilityStep = ({
     scope,
   });
   const entity = getEntityByIdQuery.data as Event | undefined;
+
+  useEffect(() => {
+    if (!field) return;
+    onValidationChange?.(
+      entity?.departurePlaces?.length
+        ? ValidationStatus.SUCCESS
+        : ValidationStatus.NONE,
+      field,
+    );
+  }, [entity?.departurePlaces, field, onValidationChange]);
 
   useEffect(() => {
     if (hasInitialized.current) return;
