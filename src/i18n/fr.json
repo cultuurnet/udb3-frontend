@@ -412,96 +412,204 @@
           },
           "suggestions": {
             "0.7.0.0.0": [
-              "Que dois-je emporter ou quels vêtements dois-je prévoir ?",
-              "La visite est-elle organisée en continu ou à des horaires précis ?"
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              },
+              {
+                "question": "La visite est-elle organisée en continu ou à des horaires précis ?"
+              }
             ],
             "0.6.0.0.0": [
-              "Puis-je manger ou boire sur place ?",
-              "Comment accéder au lieu ?"
+              {
+                "question": "Puis-je manger ou boire sur place ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
             ],
             "0.50.4.0.0": [
-              "Quel album ou œuvre est présenté(e) ?",
-              "Comment accéder au lieu ?",
-              "Y a-t-il une pause prévue pendant le concert ?"
+              {
+                "question": "Quel album ou œuvre est présenté(e) ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le concert ?"
+              }
             ],
             "0.3.1.0.1": [
-              "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?",
-              "Recevrai-je un diplôme ou un certificat à l'issue du cours ?",
-              "Comment accéder au lieu ?",
-              "Puis-je participer à la dernière minute, sans inscription ?"
+              {
+                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?"
+              },
+              {
+                "question": "Recevrai-je un diplôme ou un certificat à l'issue du cours ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Puis-je participer à la dernière minute, sans inscription ?"
+              }
             ],
             "0.54.0.0.0": [
-              "Y a-t-il des vestiaires ou des casiers ?",
-              "Y a-t-il une pause prévue pendant le spectacle ?"
+              {
+                "question": "Y a-t-il des vestiaires ou des casiers ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le spectacle ?"
+              }
             ],
             "1.50.0.0.0": [
-              "Y a-t-il des animations (en marge) prévues ?",
-              "Comment accéder au lieu ?"
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
             ],
             "0.5.0.0.0": [
-              "Y a-t-il des animations (en marge) prévues ?",
-              "Comment accéder au lieu ?",
-              "Puis-je manger ou boire quelque chose sur place ?"
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Puis-je manger ou boire quelque chose sur place ?"
+              }
             ],
-            "0.28.0.0.0": ["Y a-t-il des activités (annexes) ?"],
+            "0.28.0.0.0": [
+              {
+                "question": "Y a-t-il des activités (annexes) ?"
+              }
+            ],
             "0.17.0.0.0": [
-              "Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?",
-              "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              {
+                "question": "Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?"
+              },
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              }
             ],
             "0.50.6.0.0": [
-              "Le film a-t-il remporté des prix ?",
-              "Comment accéder au lieu ?",
-              "Y a-t-il une pause prévue pendant le film ?",
-              "À qui ce film est-il destiné ?"
+              {
+                "question": "Le film a-t-il remporté des prix ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le film ?"
+              },
+              {
+                "question": "À qui ce film est-il destiné ?"
+              }
             ],
             "0.57.0.0.0": [
-              "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?",
-              "Les repas sont-ils inclus et comment puis-je signaler des allergies ?",
-              "Que doit apporter ou porter mon enfant ?",
-              "Qui encadre les enfants ?",
-              "Quelles assurances sont prévues ?",
-              "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?",
-              "Recevrai-je une attestation fiscale pour cet accueil/ce camp ?"
+              {
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?"
+              },
+              {
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+              },
+              {
+                "question": "Que doit apporter ou porter mon enfant ?"
+              },
+              {
+                "question": "Qui encadre les enfants ?"
+              },
+              {
+                "question": "Quelles assurances sont prévues ?"
+              },
+              {
+                "question": "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?"
+              },
+              {
+                "question": "Recevrai-je une attestation fiscale pour cet accueil/ce camp ?"
+              }
             ],
             "0.3.1.0.0": [
-              "Ai-je besoin de connaissances préalables pour participer ?",
-              "Recevrai-je un diplôme ou un certificat à la fin ?"
+              {
+                "question": "Ai-je besoin de connaissances préalables pour participer ?"
+              },
+              {
+                "question": "Recevrai-je un diplôme ou un certificat à la fin ?"
+              }
             ],
             "0.3.2.0.0": [
-              "Les repas sont-ils inclus et comment puis-je signaler des allergies ?",
-              "Comment accéder au lieu ?"
+              {
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
             ],
             "0.37.0.0.0": [
-              "Y a-t-il des animations (en marge) prévues ?",
-              "Comment puis-je m'inscrire comme exposant ?",
-              "L'événement a-t-il lieu en cas de pluie ?"
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment puis-je m'inscrire comme exposant ?"
+              },
+              {
+                "question": "L'événement a-t-il lieu en cas de pluie ?"
+              }
             ],
             "0.12.0.0.0": [
-              "Comment accéder au lieu ?",
-              "Des visites guidées sont-elles prévues ? À quels moments ?"
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Des visites guidées sont-elles prévues ? À quels moments ?"
+              }
             ],
-            "0.49.0.0.0": ["Comment accéder au lieu ?"],
+            "0.49.0.0.0": [
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
             "0.19.0.0.0": [
-              "La retransmission est-elle en plein air ou dans un lieu couvert ?"
+              {
+                "question": "La retransmission est-elle en plein air ou dans un lieu couvert ?"
+              }
             ],
             "0.50.21.0.0": [
-              "Que puis-je gagner ?",
-              "Combien de personnes une équipe peut-elle compter au maximum ?"
+              {
+                "question": "Que puis-je gagner ?"
+              },
+              {
+                "question": "Combien de personnes une équipe peut-elle compter au maximum ?"
+              }
             ],
             "0.59.0.0.0": [
-              "Que dois-je emporter ou quels vêtements dois-je prévoir ?",
-              "Comment accéder au lieu ?"
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
             ],
             "0.0.0.0.0": [
-              "Un guide (audio) ou une brochure est-il disponible ?",
-              "Y a-t-il des vestiaires ou des casiers ?"
+              {
+                "question": "Un guide (audio) ou une brochure est-il disponible ?"
+              },
+              {
+                "question": "Y a-t-il des vestiaires ou des casiers ?"
+              }
             ],
             "0.55.0.0.0": [
-              "Comment accéder au lieu ?",
-              "Y a-t-il une pause prévue pendant le spectacle ?"
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le spectacle ?"
+              }
             ],
             "cultuurkuur": [
-              "Du matériel pédagogique est-il disponible ? Lequel et où ?"
+              {
+                "question": "Du matériel pédagogique est-il disponible ? Lequel et où ?"
+              }
             ]
           }
         },

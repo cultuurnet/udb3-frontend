@@ -13,7 +13,6 @@
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
   },
-
   "bookingAvailability": {
     "actions": {
       "cancel": "Abbrechen",
@@ -411,92 +410,200 @@
           },
           "suggestions": {
             "0.7.0.0.0": [
-              "Was muss ich mitbringen oder anziehen?",
-              "Wird die Führung fortlaufend oder zu bestimmten Zeiten angeboten?"
+              {
+                "question": "Was muss ich mitbringen oder anziehen?"
+              },
+              {
+                "question": "Wird die Führung fortlaufend oder zu bestimmten Zeiten angeboten?"
+              }
             ],
             "0.6.0.0.0": [
-              "Kann ich vor Ort etwas essen oder trinken?",
-              "Wie erreiche ich den Veranstaltungsort?"
+              {
+                "question": "Kann ich vor Ort etwas essen oder trinken?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              }
             ],
             "0.50.4.0.0": [
-              "Welches Album oder Werk wird vorgestellt?",
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Ist eine Pause während des Konzerts vorgesehen?"
+              {
+                "question": "Welches Album oder Werk wird vorgestellt?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Ist eine Pause während des Konzerts vorgesehen?"
+              }
             ],
             "0.3.1.0.1": [
-              "Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?",
-              "Erhalte ich nach Abschluss ein Diplom oder Zertifikat?",
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?"
+              {
+                "question": "Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?"
+              },
+              {
+                "question": "Erhalte ich nach Abschluss ein Diplom oder Zertifikat?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?"
+              }
             ],
             "0.54.0.0.0": [
-              "Gibt es Schließfächer oder eine Garderobe?",
-              "Ist eine Pause während der Vorstellung vorgesehen?"
+              {
+                "question": "Gibt es Schließfächer oder eine Garderobe?"
+              },
+              {
+                "question": "Ist eine Pause während der Vorstellung vorgesehen?"
+              }
             ],
             "1.50.0.0.0": [
-              "Ist auch ein Rahmenprogramm vorgesehen?",
-              "Wie erreiche ich den Veranstaltungsort?"
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              }
             ],
             "0.5.0.0.0": [
-              "Ist auch ein Rahmenprogramm vorgesehen?",
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Kann ich vor Ort etwas essen oder trinken?"
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Kann ich vor Ort etwas essen oder trinken?"
+              }
             ],
-            "0.28.0.0.0": ["Gibt es (Rand-)Aktivitäten?"],
+            "0.28.0.0.0": [
+              {
+                "question": "Gibt es (Rand-)Aktivitäten?"
+              }
+            ],
             "0.17.0.0.0": [
-              "Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?",
-              "Was muss ich mitbringen oder anziehen?"
+              {
+                "question": "Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?"
+              },
+              {
+                "question": "Was muss ich mitbringen oder anziehen?"
+              }
             ],
             "0.50.6.0.0": [
-              "Hat der Film Preise gewonnen?",
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Ist eine Pause während des Films vorgesehen?",
-              "Für wen ist dieser Film geeignet?"
+              {
+                "question": "Hat der Film Preise gewonnen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Ist eine Pause während des Films vorgesehen?"
+              },
+              {
+                "question": "Für wen ist dieser Film geeignet?"
+              }
             ],
             "0.57.0.0.0": [
-              "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
-              "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
-              "Was muss mein Kind mitbringen oder anziehen?",
-              "Von wem werden die Kinder betreut?",
-              "Welche Versicherungen gibt es?",
-              "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?",
-              "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?"
+              {
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?"
+              },
+              {
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?"
+              },
+              {
+                "question": "Was muss mein Kind mitbringen oder anziehen?"
+              },
+              {
+                "question": "Von wem werden die Kinder betreut?"
+              },
+              {
+                "question": "Welche Versicherungen gibt es?"
+              },
+              {
+                "question": "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?"
+              },
+              {
+                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?"
+              }
             ],
             "0.3.1.0.0": [
-              "Benötige ich Vorkenntnisse zur Teilnahme?",
-              "Erhalte ich am Ende ein Diplom oder Zertifikat?"
+              {
+                "question": "Benötige ich Vorkenntnisse zur Teilnahme?"
+              },
+              {
+                "question": "Erhalte ich am Ende ein Diplom oder Zertifikat?"
+              }
             ],
             "0.3.2.0.0": [
-              "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
-              "Wie erreiche ich den Veranstaltungsort?"
+              {
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              }
             ],
             "0.37.0.0.0": [
-              "Ist auch ein Rahmenprogramm vorgesehen?",
-              "Wie kann ich mich als Standinhaber anmelden?",
-              "Findet die Veranstaltung bei Regen statt?"
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+              },
+              {
+                "question": "Wie kann ich mich als Standinhaber anmelden?"
+              },
+              {
+                "question": "Findet die Veranstaltung bei Regen statt?"
+              }
             ],
             "0.12.0.0.0": [
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?"
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?"
+              }
             ],
-            "0.49.0.0.0": ["Wie erreiche ich den Veranstaltungsort?"],
+            "0.49.0.0.0": [
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              }
+            ],
             "0.50.21.0.0": [
-              "Was kann ich gewinnen?",
-              "Aus wie vielen Personen darf ein Team maximal bestehen?"
+              {
+                "question": "Was kann ich gewinnen?"
+              },
+              {
+                "question": "Aus wie vielen Personen darf ein Team maximal bestehen?"
+              }
             ],
             "0.59.0.0.0": [
-              "Was muss ich mitbringen oder anziehen?",
-              "Wie erreiche ich den Veranstaltungsort?"
+              {
+                "question": "Was muss ich mitbringen oder anziehen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              }
             ],
             "0.0.0.0.0": [
-              "Ist ein (Audio-)Guide oder eine Broschüre verfügbar?",
-              "Gibt es Schließfächer oder eine Garderobe?"
+              {
+                "question": "Ist ein (Audio-)Guide oder eine Broschüre verfügbar?"
+              },
+              {
+                "question": "Gibt es Schließfächer oder eine Garderobe?"
+              }
             ],
             "0.55.0.0.0": [
-              "Wie erreiche ich den Veranstaltungsort?",
-              "Ist eine Pause während der Vorstellung vorgesehen?"
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?"
+              },
+              {
+                "question": "Ist eine Pause während der Vorstellung vorgesehen?"
+              }
             ],
-            "cultuurkuur": ["Ist Lernmaterial verfügbar? Was und wo?"]
+            "cultuurkuur": [
+              {
+                "question": "Ist Lernmaterial verfügbar? Was und wo?"
+              }
+            ]
           }
         },
         "tips": {

@@ -436,93 +436,231 @@
           },
           "suggestions": {
             "0.7.0.0.0": [
-              "Wat moet ik meebrengen of aandoen?",
-              "Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?"
+              {
+                "question": "Wat moet ik meebrengen of aandoen?"
+              },
+              {
+                "question": "Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?"
+              }
             ],
             "0.6.0.0.0": [
-              "Kan ik ter plaatse iets eten of drinken?",
-              "Hoe bereik ik de locatie?"
+              {
+                "question": "Kan ik ter plaatse iets eten of drinken?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
             ],
             "0.50.4.0.0": [
-              "Welk album of werk wordt voorgesteld?",
-              "Hoe bereik ik de locatie?",
-              "Is er een pauze voorzien tijdens het concert?"
+              {
+                "question": "Welk album of werk wordt voorgesteld?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens het concert?"
+              }
             ],
             "0.3.1.0.1": [
-              "Heb ik voorkennis of ervaring nodig om deel te nemen?",
-              "Ontvang ik na afloop een diploma of certificaat?",
-              "Hoe bereik ik de locatie?",
-              "Kan ik last-minute nog deelnemen, zonder inschrijven?"
+              {
+                "question": "Heb ik voorkennis of ervaring nodig om deel te nemen?",
+                "answer": "Wees specifiek over het vereiste niveau (bijv. absolute beginners of gevorderden)."
+              },
+              {
+                "question": "Ontvang ik na afloop een diploma of certificaat?",
+                "answer": "Vermeld duidelijk of het om een officieel erkend diploma gaat."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Kan ik last-minute nog deelnemen, zonder inschrijven?"
+              }
             ],
             "0.54.0.0.0": [
-              "Zijn er lockers of een vestiaire?",
-              "Is er een pauze voorzien tijdens de voorstelling?"
+              {
+                "question": "Zijn er lockers of een vestiaire?",
+                "answer": "Vermeld of deze gratis of betalend zijn, en of er grote voorwerpen (zoals rugzakken) in passen."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de voorstelling?"
+              }
             ],
             "1.50.0.0.0": [
-              "Is er ook (rand)animatie voorzien?",
-              "Hoe bereik ik de locatie?"
+              {
+                "question": "Is er ook (rand)animatie voorzien?",
+                "answer": "Vermeld of er kinderanimatie voorzien is."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
             ],
             "0.5.0.0.0": [
-              "Is er ook (rand)animatie voorzien?",
-              "Hoe bereik ik de locatie?",
-              "Kan ik ter plaatse iets eten of drinken?"
+              {
+                "question": "Is er ook (rand)animatie voorzien?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Kan ik ter plaatse iets eten of drinken?"
+              }
             ],
-            "0.28.0.0.0": ["Zijn er (rand)activiteiten?"],
+            "0.28.0.0.0": [
+              {
+                "question": "Zijn er (rand)activiteiten?",
+                "answer": "Denk aan een quiz, concerten, foodtrucks, een marktje..."
+              }
+            ],
             "0.17.0.0.0": [
-              "Is de route begeleid, met een gids, brochure of wegwijzers?",
-              "Wat moet ik meebrengen of aantrekken?"
+              {
+                "question": "Is de route begeleid, met een gids, brochure of wegwijzers?",
+                "answer": "Vermeld of er een gids meeloopt, of dat deelnemers een brochure, wegbeschrijving of GPX-bestand krijgen."
+              },
+              {
+                "question": "Wat moet ik meebrengen of aantrekken?"
+              }
             ],
             "0.50.6.0.0": [
-              "Heeft de film prijzen gewonnen?",
-              "Hoe bereik ik de locatie?",
-              "Is er een pauze voorzien tijdens de film?",
-              "Voor wie is deze film geschikt?"
+              {
+                "question": "Heeft de film prijzen gewonnen?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de film?"
+              },
+              {
+                "question": "Voor wie is deze film geschikt?",
+                "answer": "Vermeld of deze film ook geschikt is voor kinderen."
+              }
             ],
             "0.57.0.0.0": [
-              "Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?",
-              "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
-              "Wat moet mijn kind meebrengen of aandoen?",
-              "Door wie worden de kinderen begeleid?",
-              "Welke verzekeringen zijn er?",
-              "Zit mijn kind samen met een vriendje, broer of zus in de groep?",
-              "Krijg ik een fiscaal attest voor deze opvang/dit kamp?"
+              {
+                "question": "Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?",
+                "answer": "Ga in dialoog: Geef contactgegevens mee om de mogelijkheden persoonlijk af te stemmen.<br>Licht jullie aanpak toe: Vermeld hulpmiddelen zoals een 'speelfiche' of extra monitor.<br>Wees transparant: Geef de groepsgrootte en het aantal begeleiders mee."
+              },
+              {
+                "question": "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+                "answer": "Verduidelijk of kinderen een eigen lunchpakket en/of tussendoortjes moeten meebrengen, of dat jullie warm eten voorzien."
+              },
+              {
+                "question": "Wat moet mijn kind meebrengen of aandoen?",
+                "answer": "Denk aan specifieke kledij (speelkleren, regenjas) of praktische zaken zoals zonnecrème en een drinkbus."
+              },
+              {
+                "question": "Door wie worden de kinderen begeleid?",
+                "answer": "Geef aan of het gaat om (gecertificeerde) animatoren, leerkrachten of vaste begeleiders van de opvang."
+              },
+              {
+                "question": "Welke verzekeringen zijn er?"
+              },
+              {
+                "question": "Zit mijn kind samen met een vriendje, broer of zus in de groep?",
+                "answer": "Leg uit of de groepen strikt op leeftijd worden ingedeeld en of hier flexibiliteit in is."
+              },
+              {
+                "question": "Krijg ik een fiscaal attest voor deze opvang/dit kamp?",
+                "answer": "Vermeld of je aanbod fiscaal aftrekbaar is en of ouders dit attest automatisch ontvangen of zelf moeten aanvragen."
+              }
             ],
             "0.3.1.0.0": [
-              "Heb ik voorkennis nodig om deel te nemen?",
-              "Ontvang ik een diploma of certificaat aan het einde?",
-              "Hoe bereik ik de locatie?"
+              {
+                "question": "Heb ik voorkennis nodig om deel te nemen?"
+              },
+              {
+                "question": "Ontvang ik een diploma of certificaat aan het einde?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
             ],
             "0.3.2.0.0": [
-              "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
-              "Hoe bereik ik de locatie?"
+              {
+                "question": "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+                "answer": "Verduidelijk of kinderen een eigen lunchpakket en/of tussendoortjes moeten meebrengen, of dat jullie warm eten voorzien."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
             ],
             "0.37.0.0.0": [
-              "Is er ook (rand)animatie voorzien?",
-              "Hoe kan ik mij aanmelden als standhouder?",
-              "Gaat het door bij regenweer?"
+              {
+                "question": "Is er ook (rand)animatie voorzien?"
+              },
+              {
+                "question": "Hoe kan ik mij aanmelden als standhouder?"
+              },
+              {
+                "question": "Gaat het door bij regenweer?"
+              }
             ],
             "0.12.0.0.0": [
-              "Hoe bereik ik de locatie?",
-              "Zijn er rondleidingen voorzien? Op welke momenten gaan die door?"
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Zijn er rondleidingen voorzien? Op welke momenten gaan die door?"
+              }
             ],
-            "0.49.0.0.0": ["Hoe bereik ik de locatie?"],
+            "0.49.0.0.0": [
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
             "0.50.21.0.0": [
-              "Wat kan ik winnen?",
-              "Uit hoeveel personen mag een team maximaal bestaan?"
+              {
+                "question": "Wat kan ik winnen?"
+              },
+              {
+                "question": "Uit hoeveel personen mag een team maximaal bestaan?",
+                "answer": "Geef de limieten per team mee en vermeld of mensen zich ook individueel kunnen inschrijven."
+              }
             ],
             "0.59.0.0.0": [
-              "Wat moet ik meebrengen of aandoen?",
-              "Hoe bereik ik de locatie?"
+              {
+                "question": "Wat moet ik meebrengen of aandoen?",
+                "answer": "Tip: beschrijf welk materiaal je voorziet en wat de deelnemers zelf moeten meebrengen."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
             ],
             "0.0.0.0.0": [
-              "Is er een (audio)gids of brochure beschikbaar?",
-              "Zijn er lockers of een vestiaire?"
+              {
+                "question": "Is er een (audio)gids of brochure beschikbaar?"
+              },
+              {
+                "question": "Zijn er lockers of een vestiaire?"
+              }
             ],
             "0.55.0.0.0": [
-              "Hoe bereik ik de locatie?",
-              "Is er een pauze voorzien tijdens de voorstelling?"
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de voorstelling?"
+              }
             ],
-            "cultuurkuur": ["Is er lesmateriaal beschikbaar? Wat en waar?"]
+            "cultuurkuur": [
+              {
+                "question": "Is er lesmateriaal beschikbaar? Wat en waar?"
+              }
+            ]
           }
         },
         "tips": {
