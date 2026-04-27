@@ -100,9 +100,7 @@ const PlaceTypeahead = ({
       options={places}
       onInputChange={debounce(setSearchInput, 275)}
       filterBy={filterByCallback}
-      labelKey={(place: Place) =>
-        getPlaceName(place.name, place.mainLanguage)
-      }
+      labelKey={(place: Place) => getPlaceName(place.name, place.mainLanguage)}
       renderMenuItemChildren={(place: Place, { text }) => {
         const { mainLanguage, name, address } = place;
         const placeName = getPlaceName(name, mainLanguage);
@@ -149,9 +147,7 @@ const PlaceTypeahead = ({
       }}
       minLength={3}
       placeholder={placeholder}
-      newSelectionPrefix={t(
-        'create.additionalInformation.place.add_new_label',
-      )}
+      newSelectionPrefix={t('create.additionalInformation.place.add_new_label')}
       hideNewInputText
       allowNew={onAddNewPlace ? () => !isMovie : false}
     />
