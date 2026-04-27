@@ -283,16 +283,24 @@ const AccessibilityStep = ({
         ))}
       </Stack>
 
-      <Button
-        iconName={Icons.PLUS}
-        variant={ButtonVariants.SECONDARY}
-        onClick={handleAddDepartureLocation}
-        disabled={departureLocations.length >= MAX_DEPARTURE_LOCATIONS}
-        width="auto"
-        alignSelf="flex-start"
-      >
-        {t('create.additionalInformation.accessibility.departure.add')}
-      </Button>
+      <Stack spacing={2} alignItems="flex-start">
+        <Button
+          iconName={Icons.PLUS}
+          variant={ButtonVariants.SECONDARY}
+          onClick={handleAddDepartureLocation}
+          disabled={departureLocations.length >= MAX_DEPARTURE_LOCATIONS}
+          width="auto"
+        >
+          {t('create.additionalInformation.accessibility.departure.add')}
+        </Button>
+        {departureLocations.length >= MAX_DEPARTURE_LOCATIONS && (
+          <Text color="red">
+            {t(
+              'create.additionalInformation.accessibility.departure.max_reached',
+            )}
+          </Text>
+        )}
+      </Stack>
     </Stack>
   );
 };
