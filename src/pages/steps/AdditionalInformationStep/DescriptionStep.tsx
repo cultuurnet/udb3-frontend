@@ -388,6 +388,8 @@ const DescriptionStep = ({
             initialFaqItems={entity?.faqs}
             editIndex={editingFaqIndex}
             onSuccessfulChange={onFaqSuccessfulChange}
+            eventTypeId={eventTypeId}
+            isCultuurkuur={isCultuurkuur}
           />
         </>
       )}

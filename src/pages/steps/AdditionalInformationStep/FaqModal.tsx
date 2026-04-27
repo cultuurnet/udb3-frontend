@@ -24,6 +24,8 @@ type FaqModalProps = {
   initialFaqItems?: FaqItem[];
   editIndex?: number;
   onSuccessfulChange?: () => void;
+  eventTypeId?: string;
+  isCultuurkuur?: boolean;
 };
 
 const FaqModal = ({
@@ -35,8 +37,10 @@ const FaqModal = ({
   initialFaqItems = [],
   editIndex,
   onSuccessfulChange,
+  eventTypeId,
+  isCultuurkuur,
 }: FaqModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const editItem =
     editIndex !== undefined
@@ -58,6 +62,13 @@ const FaqModal = ({
   });
 
   const answerPlainText = answerEditorState.getCurrentContent().getPlainText();
+
+  const eventType = isCultuurkuur ? 'cultuurkuur' : eventTypeId;
+  const i18nKey = `create*additionalInformation*faq*modal*suggestions*${eventType}`;
+  const suggestions =
+    eventType && i18n.exists(i18nKey, { keySeparator: '*' })
+      ? (t(i18nKey, { returnObjects: true, keySeparator: '*' }) as string[])
+      : [];
 
   const questionError = (() => {
     if (question.length > 255)
@@ -138,12 +149,7 @@ const FaqModal = ({
               placeholder={t(
                 'create.additionalInformation.faq.modal.question_placeholder',
               )}
-              suggestions={t(
-                'create.additionalInformation.faq.modal.suggestions',
-                {
-                  returnObjects: true,
-                },
-              )}
+              suggestions={suggestions}
             />
           }
         />
