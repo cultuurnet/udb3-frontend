@@ -382,7 +382,8 @@
           "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>"
         },
         "title": "Description",
-        "title_with_faq": "Description & FAQ"
+        "title_with_faq": "Description & FAQ",
+        "label": "Donnez une description enthousiaste de votre activité"
       },
       "faq": {
         "label": "Complétez votre description avec quelques questions fréquentes sur votre activité",

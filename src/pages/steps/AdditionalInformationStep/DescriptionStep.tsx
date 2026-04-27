@@ -287,7 +287,7 @@ const DescriptionStep = ({
       >
         <FormElement
           id="create-description"
-          label={t('create.additionalInformation.description.title')}
+          label={t('create.additionalInformation.description.label')}
           flex={1}
           Component={
             <RichTextEditor

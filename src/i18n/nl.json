@@ -406,7 +406,8 @@
           "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>"
         },
         "title": "Beschrijving",
-        "title_with_faq": "Beschrijving & FAQ"
+        "title_with_faq": "Beschrijving & FAQ",
+        "label": "Geef een enthousiaste beschrijving van je activiteit"
       },
       "faq": {
         "label": "Vul je beschrijving aan met een paar veelgestelde vragen over je activiteit",

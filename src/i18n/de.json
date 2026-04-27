@@ -380,7 +380,8 @@
           "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
         },
         "title": "Beschreibung",
-        "title_with_faq": "Beschreibung & FAQ"
+        "title_with_faq": "Beschreibung & FAQ",
+        "label": "Geben Sie eine begeisterte Beschreibung Ihrer Aktivität"
       },
       "faq": {
         "label": "Ergänzen Sie Ihre Beschreibung mit häufig gestellten Fragen zu Ihrer Aktivität",
