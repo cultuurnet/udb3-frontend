@@ -22,6 +22,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
+import { AccessibilityStep } from '../AccessibilityStep';
 import { AudienceStep } from '../AudienceStep';
 import { StepsConfiguration } from '../Steps';
 import { BookingInfoStep } from './BookingInfoStep';
@@ -52,6 +53,7 @@ const Fields = {
   LABELS: 'labels',
   LOCATION: 'location',
   CULTUURKUUR: 'cultuurkuur',
+  ACCESSIBILITY: 'accessibility',
 };
 
 type Field = Values<typeof Fields>;
@@ -147,6 +149,12 @@ const tabConfigurations: TabConfig[] = [
     ],
   },
   {
+    field: Fields.ACCESSIBILITY,
+    TabContent: AccessibilityStep,
+    shouldInvalidate: true,
+    shouldShowOn: [AdditionalInformationStepVariant.EVENT],
+  },
+  {
     field: Fields.CULTUURKUUR,
     TabContent: CultuurKuurStep,
     shouldInvalidate: true,
@@ -231,6 +239,7 @@ const initialValidatedFields: Record<Field, ValidationStatus> = {
   price_info: ValidationStatus.NONE,
   booking_info: ValidationStatus.NONE,
   contact_point: ValidationStatus.NONE,
+  accessibility: ValidationStatus.NONE,
 };
 
 const AdditionalInformationStep = ({
@@ -276,6 +285,9 @@ const AdditionalInformationStep = ({
 
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+
+  const isChildrenOnly = true;
+  // const isChildrenOnly = offer?.audience?.audienceType === 'childrenOnly'
 
   const [, hash] = asPath.split('#');
 
@@ -365,6 +377,8 @@ const AdditionalInformationStep = ({
             if (!shouldShowTab) return null;
 
             if (field === 'audience' && isCultuurkuurEvent) return null;
+
+            if (field === 'accessibility' && !isChildrenOnly) return null;
 
             return (
               <Tabs.Tab

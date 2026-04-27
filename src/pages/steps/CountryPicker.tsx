@@ -6,7 +6,7 @@ import { Button } from '@/ui/Button';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
 import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { getGlobalFormInputHeight } from '@/ui/theme';
 
 import { FlagIcon } from '../../ui/FlagIcon';
 
@@ -15,8 +15,6 @@ type Props = BoxProps & {
   onChange: (value: Country) => void;
   showSchoolLocation?: boolean;
 };
-
-const getGlobalValue = getValueFromTheme('global');
 
 const countries = [Countries.BE, Countries.NL, Countries.DE];
 
@@ -39,12 +37,13 @@ const CountryPicker = ({
           box-shadow: none;
         }
 
-        & button {
-          height: 2.4rem;
+        & button.btn {
+          box-shadow: none;
         }
 
-        .btn-outline-secondary {
-          box-shadow: ${getGlobalValue('boxShadow.heavy')};
+        & button.btn.dropdown-toggle {
+          height: ${getGlobalFormInputHeight};
+          border: var(--bs-border-width) solid var(--bs-border-color);
         }
       `}
       {...getBoxProps(props)}
@@ -64,8 +63,6 @@ const CountryPicker = ({
           </Inline>
         </Dropdown.Item>
       ))}
-
-      <Dropdown.Divider />
     </Dropdown>
   );
 };
