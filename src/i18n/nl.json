@@ -440,7 +440,29 @@
             "Hoe kan ik de locatie van de activiteit bereiken?"
           ]
         },
-        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+        "tips": {
+          "0.7.0.0.0": "<strong>Vragen die wij vaak horen bij een begeleide uitstap of rondleiding</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?</li></ul>",
+          "0.6.0.0.0": "<strong>Vragen die wij vaak horen bij een beurs</strong><ul><li>Kan ik ter plaatse iets eten of drinken?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.50.4.0.0": "<strong>Vragen die wij vaak horen bij een concert</strong><ul><li>Welk album of werk wordt voorgesteld?</li><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens het concert?</li></ul>",
+          "0.3.1.0.1": "<strong>Vragen die wij vaak horen bij een cursus met open sessies</strong><ul><li>Heb ik voorkennis of ervaring nodig om deel te nemen?</li><li>Ontvang ik na afloop een diploma of certificaat?</li><li>Hoe bereik ik de locatie?</li><li>Kan ik last-minute nog deelnemen, zonder inschrijven?</li></ul>",
+          "0.54.0.0.0": "<strong>Vragen die wij vaak horen bij een dansvoorstelling</strong><ul><li>Zijn er lockers of een vestiaire?</li><li>Is er een pauze voorzien tijdens de voorstelling?</li></ul>",
+          "1.50.0.0.0": "<strong>Vragen die wij vaak horen bij een eet- of drankfestijn</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.5.0.0.0": "<strong>Vragen die wij vaak horen bij een festival</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe bereik ik de locatie?</li><li>Kan ik ter plaatse iets eten of drinken?</li></ul>",
+          "0.28.0.0.0": "<strong>Vragen die wij vaak horen bij een festiviteit</strong><ul><li>Zijn er (rand)activiteiten?</li></ul>",
+          "0.17.0.0.0": "<strong>Vragen die wij vaak horen bij een fiets- of wandelroute</strong><ul><li>Is de route begeleid, met een gids, brochure of wegwijzers?</li><li>Wat moet ik meebrengen of aantrekken?</li></ul>",
+          "0.50.6.0.0": "<strong>Vragen die wij vaak horen bij een film</strong><ul><li>Heeft de film prijzen gewonnen?</li><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens de film?</li><li>Voor wie is deze film geschikt?</li></ul>",
+          "0.57.0.0.0": "<strong>Vragen die wij vaak horen bij een kamp of vakantie</strong><ul><li>Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?</li><li>Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?</li><li>Wat moet mijn kind meebrengen of aandoen?</li><li>Door wie worden de kinderen begeleid?</li><li>Welke verzekeringen zijn er?</li><li>Zit mijn kind samen met een vriendje, broer of zus in de groep?</li><li>Krijg ik een fiscaal attest voor deze opvang/dit kamp?</li></ul>",
+          "0.3.1.0.0": "<strong>Vragen die wij vaak horen bij een lessenreeks</strong><ul><li>Heb ik voorkennis nodig om deel te nemen?</li><li>Ontvang ik een diploma of certificaat aan het einde?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.3.2.0.0": "<strong>Vragen die wij vaak horen bij een lezing of congres</strong><ul><li>Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.37.0.0.0": "<strong>Vragen die wij vaak horen bij een markt, braderie of kermis</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe kan ik mij aanmelden als standhouder?</li><li>Gaat het door bij regenweer?</li></ul>",
+          "0.12.0.0.0": "<strong>Vragen die wij vaak horen bij een opendeurdag</strong><ul><li>Hoe bereik ik de locatie?</li><li>Zijn er rondleidingen voorzien? Op welke momenten gaan die door?</li></ul>",
+          "0.49.0.0.0": "<strong>Vragen die wij vaak horen bij een party of fuif</strong><ul><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.50.21.0.0": "<strong>Vragen die wij vaak horen bij een spel of quiz</strong><ul><li>Wat kan ik winnen?</li><li>Uit hoeveel personen mag een team maximaal bestaan?</li></ul>",
+          "0.59.0.0.0": "<strong>Vragen die wij vaak horen bij een sportactiviteit</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.0.0.0.0": "<strong>Vragen die wij vaak horen bij een tentoonstelling</strong><ul><li>Is er een (audio)gids of brochure beschikbaar?</li><li>Zijn er lockers of een vestiaire?</li></ul>",
+          "0.55.0.0.0": "<strong>Vragen die wij vaak horen bij een theatervoorstelling</strong><ul><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens de voorstelling?</li></ul>",
+          "cultuurkuur": "<strong>Vragen die wij vaak horen bij een cultuurkuur-activiteit</strong><ul><li>Is er lesmateriaal beschikbaar? Wat en waar?</li></ul>"
+        }
       },
       "event_score": {
         "tip": {

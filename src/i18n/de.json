@@ -415,7 +415,29 @@
             "Hoe kan ik de locatie van de activiteit bereiken?"
           ]
         },
-        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+        "tips": {
+          "0.7.0.0.0": "<strong>Fragen, die wir bei einem geführten Ausflug oder einer Führung oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wird die Führung fortlaufend oder zu bestimmten Zeiten angeboten?</li></ul>",
+          "0.6.0.0.0": "<strong>Fragen, die wir bei einer Messe oder Ausstellung oft hören</strong><ul><li>Kann ich vor Ort etwas essen oder trinken?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.50.4.0.0": "<strong>Fragen, die wir bei einem Konzert oft hören</strong><ul><li>Welches Album oder Werk wird vorgestellt?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während des Konzerts vorgesehen?</li></ul>",
+          "0.3.1.0.1": "<strong>Fragen, die wir bei einem Kurs mit offenen Sitzungen oft hören</strong><ul><li>Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?</li><li>Erhalte ich nach Abschluss ein Diplom oder Zertifikat?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?</li></ul>",
+          "0.54.0.0.0": "<strong>Fragen, die wir bei einer Tanzvorstellung oft hören</strong><ul><li>Gibt es Schließfächer oder eine Garderobe?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
+          "1.50.0.0.0": "<strong>Fragen, die wir bei einem Ess- oder Trinkfest oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.5.0.0.0": "<strong>Fragen, die wir bei einem Festival oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Kann ich vor Ort etwas essen oder trinken?</li></ul>",
+          "0.28.0.0.0": "<strong>Fragen, die wir bei einer Festlichkeit oft hören</strong><ul><li>Gibt es (Rand-)Aktivitäten?</li></ul>",
+          "0.17.0.0.0": "<strong>Fragen, die wir bei einer Rad- oder Wanderroute oft hören</strong><ul><li>Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?</li><li>Was muss ich mitbringen oder anziehen?</li></ul>",
+          "0.50.6.0.0": "<strong>Fragen, die wir bei einer Filmvorführung oft hören</strong><ul><li>Hat der Film Preise gewonnen?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während des Films vorgesehen?</li><li>Für wen ist dieser Film geeignet?</li></ul>",
+          "0.57.0.0.0": "<strong>Fragen, die wir bei einem Ferienlager oder Urlaub oft hören</strong><ul><li>Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?</li><li>Sind Mahlzeiten inbegriffen und wie melde ich Allergien?</li><li>Was muss mein Kind mitbringen oder anziehen?</li><li>Von wem werden die Kinder betreut?</li><li>Welche Versicherungen gibt es?</li><li>Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?</li><li>Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?</li></ul>",
+          "0.3.1.0.0": "<strong>Fragen, die wir bei einer Kursreihe oft hören</strong><ul><li>Benötige ich Vorkenntnisse zur Teilnahme?</li><li>Erhalte ich am Ende ein Diplom oder Zertifikat?</li></ul>",
+          "0.3.2.0.0": "<strong>Fragen, die wir bei einem Vortrag oder Kongress oft hören</strong><ul><li>Sind Mahlzeiten inbegriffen und wie melde ich Allergien?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.37.0.0.0": "<strong>Fragen, die wir bei einem Markt, Flohmarkt oder einer Kirmes oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie kann ich mich als Standinhaber anmelden?</li><li>Findet die Veranstaltung bei Regen statt?</li></ul>",
+          "0.12.0.0.0": "<strong>Fragen, die wir bei einem Tag der offenen Tür oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?</li></ul>",
+          "0.49.0.0.0": "<strong>Fragen, die wir bei einer Party oder einem Fest oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.50.21.0.0": "<strong>Fragen, die wir bei einem Spiel oder Quiz oft hören</strong><ul><li>Was kann ich gewinnen?</li><li>Aus wie vielen Personen darf ein Team maximal bestehen?</li></ul>",
+          "0.59.0.0.0": "<strong>Fragen, die wir bei einer Sportaktivität oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.0.0.0.0": "<strong>Fragen, die wir bei einer Ausstellung oft hören</strong><ul><li>Ist ein (Audio-)Guide oder eine Broschüre verfügbar?</li><li>Gibt es Schließfächer oder eine Garderobe?</li></ul>",
+          "0.55.0.0.0": "<strong>Fragen, die wir bei einer Theatervorstellung oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
+          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>"
+        }
       },
       "event_score": {
         "tip": {
