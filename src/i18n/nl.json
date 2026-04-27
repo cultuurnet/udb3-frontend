@@ -293,6 +293,9 @@
     "additionalInformation": {
       "title_events": "Laat deze activiteit extra opvallen",
       "title_places": "Laat deze locatie extra opvallen",
+      "accessibility": {
+        "title": "Bereikbaarheid"
+      },
       "audience": {
         "title": "Toegang",
         "education": "Specifiek voor scholen",
