@@ -43,6 +43,7 @@ const FaqModal = ({
       ? initialFaqItems[editIndex]?.[language]
       : undefined;
 
+  const [hasAttemptedSave, setHasAttemptedSave] = useState(false);
   const [question, setQuestion] = useState(editItem?.question ?? '');
   const [answerEditorState, setAnswerEditorState] = useState(() => {
     if (editItem?.answer && htmlToDraft) {
@@ -56,6 +57,24 @@ const FaqModal = ({
     return EditorState.createEmpty();
   });
 
+  const answerPlainText = answerEditorState.getCurrentContent().getPlainText();
+
+  const questionError = (() => {
+    if (question.length > 255)
+      return t(
+        'create.additionalInformation.faq.modal.errors.question_too_long',
+      );
+    if (hasAttemptedSave && !question)
+      return t('create.additionalInformation.faq.modal.errors.no_question');
+  })();
+
+  const answerError = (() => {
+    if (answerPlainText.length > 5000)
+      return t('create.additionalInformation.faq.modal.errors.answer_too_long');
+    if (hasAttemptedSave && !answerEditorState.getCurrentContent().hasText())
+      return t('create.additionalInformation.faq.modal.errors.no_answer');
+  })();
+
   const updateFaqMutation = useUpdateOfferFaqMutation({
     onSuccess: () => {
       onSuccessfulChange?.();
@@ -63,6 +82,15 @@ const FaqModal = ({
   });
 
   const handleSave = () => {
+    setHasAttemptedSave(true);
+    if (
+      !question ||
+      !answerEditorState.getCurrentContent().hasText() ||
+      question.length > 255 ||
+      answerPlainText.length > 5000
+    )
+      return;
+
     const updatedItem: FaqItem = {
       [language]: {
         question,
@@ -102,6 +130,7 @@ const FaqModal = ({
         <FormElement
           id="faq-question"
           label={t('create.additionalInformation.faq.modal.question')}
+          error={questionError}
           Component={
             <TypeaheadInput
               value={question}
@@ -121,6 +150,7 @@ const FaqModal = ({
         <FormElement
           id="faq-answer"
           label={t('create.additionalInformation.faq.modal.answer')}
+          error={answerError}
           Component={
             <RichTextEditor
               editorState={answerEditorState}
