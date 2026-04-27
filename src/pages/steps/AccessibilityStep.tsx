@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useChangeDeparturePlacesMutation } from '@/hooks/api/events';
+import { getPlaceById } from '@/hooks/api/places';
+import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { useHeaders } from '@/hooks/api/useHeaders';
 import { SupportedLanguage } from '@/i18n/index';
+import type { TabContentProps } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
+import { AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
+import type { Event } from '@/types/Event';
 import type { Place } from '@/types/Place';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -14,6 +21,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
+import { parseOfferId } from '@/utils/parseOfferId';
 
 import { City, CityPicker } from '../CityPicker';
 import { CountryPicker } from './CountryPicker';
@@ -35,22 +43,91 @@ const createEmptyDepartureLocation = (): DepartureLocation => ({
   place: undefined,
 });
 
-const AccessibilityStep = () => {
+const AccessibilityStep = ({
+  offerId,
+  scope,
+  onSuccessfulChange,
+}: TabContentProps) => {
   const { t, i18n } = useTranslation();
+  const headers = useHeaders();
 
   const [departureLocations, setDepartureLocations] = useState<
     DepartureLocation[]
   >([createEmptyDepartureLocation()]);
 
+  const hasInitialized = useRef(false);
+
+  const changeDeparturePlacesMutation = useChangeDeparturePlacesMutation({
+    onSuccess: onSuccessfulChange,
+  });
+
+  const getEntityByIdQuery = useGetEntityByIdAndScope({
+    id: offerId,
+    scope,
+  });
+  const entity = getEntityByIdQuery.data as Event | undefined;
+
+  useEffect(() => {
+    if (hasInitialized.current) return;
+    if (!entity?.departurePlaces?.length) return;
+    hasInitialized.current = true;
+
+    (async () => {
+      const places = await Promise.all(
+        entity.departurePlaces!.map((uri) =>
+          getPlaceById({ headers, id: parseOfferId(uri) }),
+        ),
+      );
+
+      const loaded: DepartureLocation[] = places
+        .filter((place): place is Place => !!place)
+        .map((place) => {
+          const localized = getLanguageObjectOrFallback<AddressInternal>(
+            place.address,
+            i18n.language as SupportedLanguage,
+            place.mainLanguage,
+          );
+          return {
+            place,
+            country: (localized?.addressCountry as Country) ?? Countries.BE,
+            city: localized
+              ? {
+                  name: localized.addressLocality,
+                  zip: localized.postalCode,
+                  label: `${localized.addressLocality} ${localized.postalCode}`,
+                }
+              : undefined,
+          };
+        });
+
+      if (loaded.length > 0) setDepartureLocations(loaded);
+    })();
+  }, [entity, headers, i18n.language]);
+
+  const getPlaceUris = (locations: DepartureLocation[]) =>
+    locations.flatMap((location) =>
+      location.place ? [location.place['@id']] : [],
+    );
+
   const updateDepartureLocation = (
     index: number,
     update: Partial<DepartureLocation>,
   ) => {
-    setDepartureLocations((prev) =>
-      prev.map((location, i) =>
-        i === index ? { ...location, ...update } : location,
-      ),
+    const next = departureLocations.map((location, i) =>
+      i === index ? { ...location, ...update } : location,
     );
+    setDepartureLocations(next);
+
+    if (!offerId) return;
+
+    const prevUris = getPlaceUris(departureLocations);
+    const nextUris = getPlaceUris(next);
+    if (prevUris.join(',') === nextUris.join(',')) return;
+
+    changeDeparturePlacesMutation.mutate({
+      eventId: offerId,
+      departurePlaces: nextUris,
+    });
   };
 
   const handleAddDepartureLocation = () => {
