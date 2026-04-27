@@ -404,6 +404,12 @@
           "question": "Question",
           "question_placeholder": "Sélectionnez une question ou rédigez la vôtre.",
           "answer": "Réponse",
+          "errors": {
+            "no_question": "Rédigez d'abord une question.",
+            "no_answer": "La question ne peut pas être enregistrée sans réponse.",
+            "question_too_long": "La question ne peut pas dépasser 255 caractères.",
+            "answer_too_long": "La réponse ne peut pas dépasser 5 000 caractères."
+          },
           "suggestions": [
             "Heb ik voorkennis nodig?",
             "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
