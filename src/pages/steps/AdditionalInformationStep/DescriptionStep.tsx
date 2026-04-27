@@ -3,6 +3,7 @@ import draftToHtml from 'draftjs-to-html';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useChangeOfferDescriptionMutation,
@@ -94,11 +95,27 @@ const ClearButton = ({ onClear }: { onClear: () => void }) => {
   );
 };
 
-const FaqTips = () => {
-  const { t } = useTranslation();
+const FaqTips = ({
+  eventTypeId,
+  isCultuurkuur,
+}: {
+  eventTypeId: string;
+  isCultuurkuur: boolean;
+}) => {
+  const { t, i18n } = useTranslation();
+  const eventTypeKey = `create*additionalInformation*faq*tips*${eventTypeId}`;
+  const cultuurkuurKey = 'create*additionalInformation*faq*tips*cultuurkuur';
+
+  const showEventTip =
+    !!eventTypeId && i18n.exists(eventTypeKey, { keySeparator: '*' });
+
+  if (!showEventTip && !isCultuurkuur) return null;
+
   return (
     <Alert marginTop={4.8} maxWidth="30rem">
-      {t('create.additionalInformation.faq.tips')}
+      {isCultuurkuur
+        ? t(cultuurkuurKey, { keySeparator: '*' })
+        : t(eventTypeKey, { keySeparator: '*' })}
     </Alert>
   );
 };
@@ -192,6 +209,16 @@ const DescriptionStep = ({
   const eventTypeId = useMemo(() => {
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
   }, [entity?.terms]);
+
+  const isCultuurkuur =
+    entity?.audience?.audienceType === AudienceTypes.EDUCATION;
+
+  const isFaqTipVisible =
+    isCultuurkuur ||
+    (!!eventTypeId &&
+      i18n.exists(`create*additionalInformation*faq*tips*${eventTypeId}`, {
+        keySeparator: '*',
+      }));
 
   const changeDescriptionMutation = useChangeOfferDescriptionMutation({
     onSuccess: onSuccessfulChange,
@@ -287,7 +314,12 @@ const DescriptionStep = ({
               gap: 2rem;
             `}
           >
-            <Stack spacing={3} flex={1} alignItems="flex-start">
+            <Stack
+              spacing={3}
+              flex={1}
+              alignItems="flex-start"
+              maxWidth={isFaqTipVisible ? undefined : '60%'}
+            >
               <Text fontWeight="bold">
                 {t('create.additionalInformation.faq.label')}
               </Text>
@@ -341,7 +373,7 @@ const DescriptionStep = ({
                 </Button>
               )}
             </Stack>
-            <FaqTips />
+            <FaqTips eventTypeId={eventTypeId} isCultuurkuur={isCultuurkuur} />
           </Inline>
           <FaqModal
             key={`${isFaqModalVisible}-${editingFaqIndex}`}
