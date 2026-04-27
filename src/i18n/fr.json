@@ -381,7 +381,7 @@
           "0.8.0.0.0": "Donnez une description enthousiaste de l'espace public. <ul> <li> <strong>Décrivez</strong> <strong>avec précision</strong> l'espace public. </li> <li> <strong>Que</strong> pouvez-vous <strong>faire ici</strong> ? </li> </ul>",
           "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>"
         },
-        "title": "Donnez une description enthousiaste de votre activité",
+        "title": "Description",
         "title_with_faq": "Description & FAQ"
       },
       "faq": {
