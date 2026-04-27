@@ -16,6 +16,7 @@ const FeatureFlags = {
   REACT_DUPLICATE: 'react_duplicate',
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
+  BOA: 'boa',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

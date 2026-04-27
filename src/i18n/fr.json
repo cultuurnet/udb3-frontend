@@ -381,7 +381,27 @@
           "0.8.0.0.0": "Donnez une description enthousiaste de l'espace public. <ul> <li> <strong>Décrivez</strong> <strong>avec précision</strong> l'espace public. </li> <li> <strong>Que</strong> pouvez-vous <strong>faire ici</strong> ? </li> </ul>",
           "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>"
         },
-        "title": "Description"
+        "title": "Description",
+        "title_with_faq": "Description & FAQ"
+      },
+      "faq": {
+        "label": "Complétez votre description avec quelques questions fréquentes sur votre activité",
+        "add_button": "Ajouter une question fréquente",
+        "add_another_button": "Ajouter une autre question fréquente",
+        "modal": {
+          "title": "Ajouter une nouvelle question",
+          "save": "Enregistrer",
+          "cancel": "Annuler",
+          "question": "Question",
+          "question_placeholder": "Sélectionnez une question ou rédigez la vôtre.",
+          "answer": "Réponse",
+          "suggestions": [
+            "Heb ik voorkennis nodig?",
+            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
+            "Hoe kan ik de locatie van de activiteit bereiken?"
+          ]
+        },
+        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
       },
       "event_score": {
         "tip": {
@@ -523,6 +543,7 @@
         "basic_info": "Les données de base ont été modifiées avec succès",
         "calendar": "Le calendrier a été modifiées avec succès",
         "description": "La description a été modifiée avec succès",
+        "faq": "La FAQ a été modifiée avec succès",
         "organizer": "L'organisation a modifiée avec succès",
         "price_info": "Les prix ont été modifiées avec succès",
         "contact_info": "Les coordonnées ont été modifiées avec succès",

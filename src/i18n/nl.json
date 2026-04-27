@@ -405,7 +405,27 @@
           "0.8.0.0.0": "Geef een enthousiaste omschrijving van de openbare ruimte. <ul> <li> <strong>Omschrijf</strong> de openbare ruimte <strong>nauwkeurig</strong>. </li> <li> <strong>Wat</strong> kan je hier <strong>doen</strong>? </li> </ul>",
           "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>"
         },
-        "title": "Beschrijving"
+        "title": "Beschrijving",
+        "title_with_faq": "Beschrijving & FAQ"
+      },
+      "faq": {
+        "label": "Vul je beschrijving aan met een paar veelgestelde vragen over je activiteit",
+        "add_button": "Voeg een veelgestelde vraag toe",
+        "add_another_button": "Voeg nog een veelgestelde vraag toe",
+        "modal": {
+          "title": "Nieuwe vraag toevoegen",
+          "save": "Opslaan",
+          "cancel": "Annuleren",
+          "question": "Vraag",
+          "question_placeholder": "Selecteer een vraag of schrijf er zelf één.",
+          "answer": "Antwoord",
+          "suggestions": [
+            "Heb ik voorkennis nodig?",
+            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
+            "Hoe kan ik de locatie van de activiteit bereiken?"
+          ]
+        },
+        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
       },
       "event_score": {
         "tip": {
@@ -557,6 +577,7 @@
         "basic_info": "Basisgegevens zijn succesvol gewijzigd",
         "calendar": "Kalender is succesvol gewijzigd",
         "description": "Beschrijving is succesvol gewijzigd",
+        "faq": "FAQ is succesvol gewijzigd",
         "organizer": "Organisatie is succesvol gewijzigd",
         "price_info": "Prijsinformatie is succesvol gewijzigd",
         "contact_info": "Contactinfo is succesvol gewijzigd",

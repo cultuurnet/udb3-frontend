@@ -331,16 +331,6 @@ const StepsForm = ({
   const [isPublishLaterModalVisible, setIsPublishLaterModalVisible] =
     useState(false);
 
-  // scroll effect
-  useEffect(() => {
-    if (footerStatus === FooterStatus.HIDDEN) {
-      return;
-    }
-
-    const main = document.querySelector('main');
-    main.scroll({ left: 0, top: main.scrollHeight, behavior: 'smooth' });
-  }, [footerStatus]);
-
   const publishLaterButton = (
     <Button
       variant={ButtonVariants.SECONDARY}
