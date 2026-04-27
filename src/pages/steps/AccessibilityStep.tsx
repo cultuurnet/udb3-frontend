@@ -100,11 +100,6 @@ const AccessibilityStep = () => {
                         place: undefined,
                       })
                     }
-                    css={`
-                      & button {
-                        margin-bottom: 0.3rem;
-                      }
-                    `}
                   />
                 </Inline>
               ) : (
