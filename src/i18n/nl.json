@@ -294,7 +294,15 @@
       "title_events": "Laat deze activiteit extra opvallen",
       "title_places": "Laat deze locatie extra opvallen",
       "accessibility": {
-        "title": "Bereikbaarheid"
+        "title": "Bereikbaarheid",
+        "departure": {
+          "title": "Vanuit welke school of andere locatie is er vervoer voorzien dat kinderen tot bij jouw activiteit brengt?",
+          "info": "Dat kan bijvoorbeeld een wandelslang, een bus of een fietstaxi zijn die kinderen vanuit een school of opvang naar de locatie van je activiteit brengt.",
+          "location_title": "Vertreklocatie {{number}}",
+          "place_label": "Kies een locatie",
+          "place_placeholder": "",
+          "add": "Voeg nog een locatie toe"
+        }
       },
       "audience": {
         "title": "Toegang",
