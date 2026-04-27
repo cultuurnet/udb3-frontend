@@ -403,6 +403,13 @@
           "question": "Frage",
           "question_placeholder": "Wählen Sie eine Frage aus oder schreiben Sie Ihre eigene.",
           "answer": "Antwort",
+          "errors": {
+            "no_question": "Schreiben Sie zuerst eine Frage.",
+            "no_answer": "Die Frage kann nicht ohne Antwort gespeichert werden.",
+            "question_too_long": "Die Frage darf maximal 255 Zeichen enthalten.",
+            "question_too_long": "Die Frage darf maximal {{ maxNumber }} Zeichen enthalten.",
+            "answer_too_long": "Die Antwort darf maximal {{ maxNumber }} Zeichen enthalten."
+          },
           "suggestions": [
             "Heb ik voorkennis nodig?",
             "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",

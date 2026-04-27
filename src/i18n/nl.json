@@ -428,6 +428,12 @@
           "question": "Vraag",
           "question_placeholder": "Selecteer een vraag of schrijf er zelf één.",
           "answer": "Antwoord",
+          "errors": {
+            "no_question": "Schrijf eerst een vraag.",
+            "no_answer": "De vraag kan niet opgeslagen worden zonder antwoord.",
+            "question_too_long": "De vraag mag maximum {{ maxNumber }} tekens bevatten.",
+            "answer_too_long": "Het antwoord mag maximum {{ maxNumber }} tekens bevatten."
+          },
           "suggestions": [
             "Heb ik voorkennis nodig?",
             "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",

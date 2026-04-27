@@ -26,6 +26,9 @@ type FaqModalProps = {
   onSuccessfulChange?: () => void;
 };
 
+const QUESTION_MAX_CHARS = 255;
+const ANSWER_MAX_CHARS = 5000;
+
 const FaqModal = ({
   visible,
   onClose,
@@ -43,6 +46,7 @@ const FaqModal = ({
       ? initialFaqItems[editIndex]?.[language]
       : undefined;
 
+  const [hasAttemptedSave, setHasAttemptedSave] = useState(false);
   const [question, setQuestion] = useState(editItem?.question ?? '');
   const [answerEditorState, setAnswerEditorState] = useState(() => {
     if (editItem?.answer && htmlToDraft) {
@@ -56,6 +60,28 @@ const FaqModal = ({
     return EditorState.createEmpty();
   });
 
+  const answerPlainText = answerEditorState.getCurrentContent().getPlainText();
+
+  const questionError = (() => {
+    if (question.length > QUESTION_MAX_CHARS)
+      return t(
+        'create.additionalInformation.faq.modal.errors.question_too_long',
+        { maxNumber: QUESTION_MAX_CHARS },
+      );
+    if (hasAttemptedSave && !question)
+      return t('create.additionalInformation.faq.modal.errors.no_question');
+  })();
+
+  const answerError = (() => {
+    if (answerPlainText.length > ANSWER_MAX_CHARS)
+      return t(
+        'create.additionalInformation.faq.modal.errors.answer_too_long',
+        { maxNumber: ANSWER_MAX_CHARS },
+      );
+    if (hasAttemptedSave && !answerEditorState.getCurrentContent().hasText())
+      return t('create.additionalInformation.faq.modal.errors.no_answer');
+  })();
+
   const updateFaqMutation = useUpdateOfferFaqMutation({
     onSuccess: () => {
       onSuccessfulChange?.();
@@ -63,6 +89,15 @@ const FaqModal = ({
   });
 
   const handleSave = () => {
+    setHasAttemptedSave(true);
+    if (
+      !question ||
+      !answerEditorState.getCurrentContent().hasText() ||
+      question.length > QUESTION_MAX_CHARS ||
+      answerPlainText.length > ANSWER_MAX_CHARS
+    )
+      return;
+
     const updatedItem: FaqItem = {
       [language]: {
         question,
@@ -102,6 +137,7 @@ const FaqModal = ({
         <FormElement
           id="faq-question"
           label={t('create.additionalInformation.faq.modal.question')}
+          error={questionError}
           Component={
             <TypeaheadInput
               value={question}
@@ -121,6 +157,7 @@ const FaqModal = ({
         <FormElement
           id="faq-answer"
           label={t('create.additionalInformation.faq.modal.answer')}
+          error={answerError}
           Component={
             <RichTextEditor
               editorState={answerEditorState}
