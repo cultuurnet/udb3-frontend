@@ -14,7 +14,7 @@ import { AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import type { Event } from '@/types/Event';
 import type { Place } from '@/types/Place';
-import { Button, ButtonVariants } from '@/ui/Button';
+import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -119,35 +119,38 @@ const AccessibilityStep = ({
     })();
   }, [entity, headers, i18n.language]);
 
-  const getPlaceUris = (locations: DepartureLocation[]) =>
-    locations.flatMap((location) =>
-      location.place ? [location.place['@id']] : [],
-    );
+  const setAndPersist = (next: DepartureLocation[]) => {
+    setDepartureLocations(next);
+    if (!offerId) return;
+    changeDeparturePlacesMutation.mutate({
+      eventId: offerId,
+      departurePlaces: next.flatMap((location) =>
+        location.place ? [location.place['@id']] : [],
+      ),
+    });
+  };
 
   const updateDepartureLocation = (
     index: number,
     update: Partial<DepartureLocation>,
   ) => {
-    const next = departureLocations.map((location, i) =>
-      i === index ? { ...location, ...update } : location,
+    setAndPersist(
+      departureLocations.map((location, i) =>
+        i === index ? { ...location, ...update } : location,
+      ),
     );
-    setDepartureLocations(next);
-
-    if (!offerId) return;
-
-    const prevUris = getPlaceUris(departureLocations);
-    const nextUris = getPlaceUris(next);
-    if (prevUris.join(',') === nextUris.join(',')) return;
-
-    changeDeparturePlacesMutation.mutate({
-      eventId: offerId,
-      departurePlaces: nextUris,
-    });
   };
 
   const handleAddDepartureLocation = () => {
     if (departureLocations.length >= MAX_DEPARTURE_LOCATIONS) return;
     setDepartureLocations((prev) => [...prev, createEmptyDepartureLocation()]);
+  };
+
+  const handleDeleteDepartureLocation = (index: number) => {
+    const next = departureLocations.filter((_, i) => i !== index);
+    setAndPersist(
+      next.length > 0 ? next : [createEmptyDepartureLocation()],
+    );
   };
 
   return (
@@ -165,12 +168,23 @@ const AccessibilityStep = ({
         {departureLocations.map((location, index) => (
           <Panel key={index} padding={4} maxWidth="40rem">
             <Stack spacing={4}>
-              <Title size={3} color="primary">
-                {t(
-                  'create.additionalInformation.accessibility.departure.location_title',
-                  { number: index + 1 },
-                )}
-              </Title>
+              <Inline justifyContent="space-between" alignItems="center">
+                <Title size={3} color="primary">
+                  {t(
+                    'create.additionalInformation.accessibility.departure.location_title',
+                    { number: index + 1 },
+                  )}
+                </Title>
+                <Button
+                  iconName={Icons.TRASH}
+                  variant={ButtonVariants.DANGER}
+                  size={ButtonSizes.SMALL}
+                  aria-label={t(
+                    'create.additionalInformation.accessibility.departure.delete',
+                  )}
+                  onClick={() => handleDeleteDepartureLocation(index)}
+                />
+              </Inline>
 
               {!location.city ? (
                 <Inline spacing={1} alignItems="center">

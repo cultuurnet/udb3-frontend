@@ -301,7 +301,8 @@
           "location_title": "Vertreklocatie {{number}}",
           "place_label": "Kies een locatie",
           "place_placeholder": "",
-          "add": "Voeg nog een locatie toe"
+          "add": "Voeg nog een locatie toe",
+          "delete": "Verwijder vertreklocatie"
         }
       },
       "audience": {
