@@ -434,11 +434,96 @@
             "question_too_long": "De vraag mag maximum 255 tekens bevatten.",
             "answer_too_long": "Het antwoord mag maximum 5000 tekens bevatten."
           },
-          "suggestions": [
-            "Heb ik voorkennis nodig?",
-            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
-            "Hoe kan ik de locatie van de activiteit bereiken?"
-          ]
+          "suggestions": {
+            "0.7.0.0.0": [
+              "Wat moet ik meebrengen of aandoen?",
+              "Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?"
+            ],
+            "0.6.0.0.0": [
+              "Kan ik ter plaatse iets eten of drinken?",
+              "Hoe bereik ik de locatie?"
+            ],
+            "0.50.4.0.0": [
+              "Welk album of werk wordt voorgesteld?",
+              "Hoe bereik ik de locatie?",
+              "Is er een pauze voorzien tijdens het concert?"
+            ],
+            "0.3.1.0.1": [
+              "Heb ik voorkennis of ervaring nodig om deel te nemen?",
+              "Ontvang ik na afloop een diploma of certificaat?",
+              "Hoe bereik ik de locatie?",
+              "Kan ik last-minute nog deelnemen, zonder inschrijven?"
+            ],
+            "0.54.0.0.0": [
+              "Zijn er lockers of een vestiaire?",
+              "Is er een pauze voorzien tijdens de voorstelling?"
+            ],
+            "1.50.0.0.0": [
+              "Is er ook (rand)animatie voorzien?",
+              "Hoe bereik ik de locatie?"
+            ],
+            "0.5.0.0.0": [
+              "Is er ook (rand)animatie voorzien?",
+              "Hoe bereik ik de locatie?",
+              "Kan ik ter plaatse iets eten of drinken?"
+            ],
+            "0.28.0.0.0": ["Zijn er (rand)activiteiten?"],
+            "0.17.0.0.0": [
+              "Is de route begeleid, met een gids, brochure of wegwijzers?",
+              "Wat moet ik meebrengen of aantrekken?"
+            ],
+            "0.50.6.0.0": [
+              "Heeft de film prijzen gewonnen?",
+              "Hoe bereik ik de locatie?",
+              "Is er een pauze voorzien tijdens de film?",
+              "Voor wie is deze film geschikt?"
+            ],
+            "0.57.0.0.0": [
+              "Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?",
+              "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+              "Wat moet mijn kind meebrengen of aandoen?",
+              "Door wie worden de kinderen begeleid?",
+              "Welke verzekeringen zijn er?",
+              "Zit mijn kind samen met een vriendje, broer of zus in de groep?",
+              "Krijg ik een fiscaal attest voor deze opvang/dit kamp?"
+            ],
+            "0.3.1.0.0": [
+              "Heb ik voorkennis nodig om deel te nemen?",
+              "Ontvang ik een diploma of certificaat aan het einde?",
+              "Hoe bereik ik de locatie?"
+            ],
+            "0.3.2.0.0": [
+              "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+              "Hoe bereik ik de locatie?"
+            ],
+            "0.37.0.0.0": [
+              "Is er ook (rand)animatie voorzien?",
+              "Hoe kan ik mij aanmelden als standhouder?",
+              "Gaat het door bij regenweer?"
+            ],
+            "0.12.0.0.0": [
+              "Hoe bereik ik de locatie?",
+              "Zijn er rondleidingen voorzien? Op welke momenten gaan die door?"
+            ],
+            "0.49.0.0.0": ["Hoe bereik ik de locatie?"],
+            "0.50.21.0.0": [
+              "Wat kan ik winnen?",
+              "Uit hoeveel personen mag een team maximaal bestaan?"
+            ],
+            "0.59.0.0.0": [
+              "Wat moet ik meebrengen of aandoen?",
+              "Hoe bereik ik de locatie?"
+            ],
+            "0.0.0.0.0": [
+              "Is er een (audio)gids of brochure beschikbaar?",
+              "Zijn er lockers of een vestiaire?"
+            ],
+            "0.55.0.0.0": [
+              "Hoe bereik ik de locatie?",
+              "Is er een pauze voorzien tijdens de voorstelling?"
+            ],
+            "cultuurkuur": ["Is er lesmateriaal beschikbaar? Wat en waar?"]
+          }
         },
         "tips": {
           "0.7.0.0.0": "<strong>Vragen die wij vaak horen bij een begeleide uitstap of rondleiding</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?</li></ul>",
