@@ -364,27 +364,27 @@
           "link_target": "Link adres"
         },
         "tips": {
-          "0.0.0.0.0": "Geef een enthousiaste omschrijving van de tentoonstelling. <ul> <li>Welke <strong>kunstenaars</strong> stellen tentoon?</li> <li>Welke<strong> collecties</strong> kan je bekijken? </li> <li>Is er een <strong>(audio)gids</strong> of <strong>brochure</strong> beschikbaar?</li></ul>",
-          "0.12.0.0.0": "Geef een enthousiaste omschrijving van de opendeurdag. Wat kan je <strong>bekijken </strong>of <strong>beleven?</strong>",
-          "0.17.0.0.0": "Geef een enthousiaste omschrijving van de route. <ul> <li>Leg je de route af <strong>te voet, per fiets, per boot </strong>…? </li> <li>Welke mogelijke <strong>tussenstops</strong> zijn er? </li> <li>Wat is de <strong>afstand</strong> of <strong>duur</strong> van de route?</li> <li>Is de route <strong>begeleid</strong>, met een gids, brochure of wegwijzers?</li> </ul>",
-          "0.19.0.0.0": "Geef een enthousiaste omschrijving van de sportwedstrijd. <ul> <li>Welke <strong>ploegen of deelnemers</strong> spelen er mee? </li> <li>In welke<strong> competitie</strong> kadert de wedstrijd?</li></ul>",
-          "0.28.0.0.0": "Geef een enthousiaste omschrijving van de kermis. <ul> <li>Welke <strong>attracties</strong> zijn er? </li> <li>Zijn er<strong> (rand)activiteiten</strong> (quiz, concerten, foodtrucks, marktje ...)?</li> </ul>",
-          "0.3.1.0.0": "Geef een enthousiaste omschrijving van de lessenreeks. <ul> <li>Wat leer je er precies? </li> <li>Is er <strong>voorkennis</strong> nodig om deel te nemen? </li> <li>Wat is het <strong>niveau</strong> van de lessen? </li><li>Krijg je op het einde een <strong>diploma</strong> of certificaat?</li></ul>",
-          "0.3.1.0.1": "Geef een enthousiaste omschrijving van de workshop of cursus met open sessies.  <ul> <li>Wat leer je er precies? </li> <li>Is er <strong>voorkennis</strong> nodig om deel te nemen? </li> <li>Wat is het <strong>niveau</strong> van de lessen? </li> <li>Krijg je op het einde een <strong>diploma</strong> of certificaat?</li> </ul>",
-          "0.3.2.0.0": "Geef een enthousiaste omschrijving van de lezing of het congres. <ul> <li>Welke<strong> thema’s</strong> komen aan bod? </li><li>Welke <strong>sprekers </strong>nemen het woord?</li></ul>",
-          "0.37.0.0.0": "Geef een enthousiaste omschrijving van de markt of braderie. <ul> <li>In <strong>welke straten</strong> vindt ze plaats? </li> <li>Welke <strong>kramen of standjes</strong> zullen er zijn? </li><li>Is er <strong>(rand)animatie</strong>?</li></ul>",
-          "0.49.0.0.0": "Geef een enthousiaste omschrijving van de party of fuif. Welke <strong>dj’s</strong> of <strong>bands</strong> treden er op?",
-          "0.5.0.0.0": "Geef een enthousiaste omschrijving van het festival. <ul> <li>Wie of wat staat er op het <strong>programma?</strong> </li> <li>Welke <strong>(rand)animatie</strong> is er?</li> </ul>",
-          "0.50.21.0.0": "Geef een enthousiaste omschrijving van de quiz of het spel. <ul> <li>Over welke <strong>onderwerpen</strong> gaat de quiz?</li> <li>Heeft het spel een <strong>thema</strong>?</li> <li>Valt er iets te <strong>winnen</strong>?</li> <li>Is er een <strong>maximaal</strong> aantal <strong>deelnemers</strong>?</li> </ul>",
-          "0.50.4.0.0": "Geef een enthousiaste omschrijving van het concert. <ul><li>Welk(e)<strong> artiest(en)</strong> treden op? </li><li>Welk <strong>genre</strong> is het?</li><li>Welk<strong> album</strong> <strong>of werk </strong>wordt voorgesteld? </li></ul>",
-          "0.50.6.0.0": "Geef een enthousiaste omschrijving van de film. <ul> <li>Schets kort het <strong>verhaal</strong>. </li> <li>Wie is de <strong>regisseur?</strong> </li> <li>Wie zijn de  <strong>hoofdrolspelers?</strong> </li> <li>Heeft de film <strong>prijzen</strong> gewonnen? </li></ul>",
-          "0.54.0.0.0": "Geef een enthousiaste omschrijving van de dansvoorstelling.<ul><li>Wie is de <strong>choreograaf</strong>?</li><li>Wie zijn de<strong> dansers</strong>?</li><li>In welke <strong>stijl</strong> dansen ze?</li><li>Over welk <strong>thema of onderwerp</strong> gaat de voorstelling?</li></ul>",
-          "0.55.0.0.0": "Geef een enthousiaste omschrijving van de voorstelling.  <ul> <li>Schets kort het <strong>verhaal</strong> of het <strong>thema</strong>. </li> <li>Welk <strong>theatergezelschap</strong> brengt het stuk? </li> <li>Welke <strong>acteurs</strong> spelen mee?</li></ul>",
-          "0.57.0.0.0": "Geef een enthousiaste omschrijving van het kamp of de vakantie.  <ul> <li>Welke <strong>activiteiten</strong> kan je er doen? </li> <li>Is er een <strong>thema</strong>? </li> <li>Is het kamp <strong>met of zonder overnachtingen</strong>? </li> <li>Wat is het <strong>start en einduur</strong> voor dagkampen en is er vooraf en nadien <strong>opvang</strong> voorzien?</li> </ul>",
-          "0.59.0.0.0": "Geef een enthousiaste omschrijving van de sportactiviteit. <ul> <li>Welke <strong>sport</strong>(en) kan je beoefenen? </li> <li>Welk <strong>materiaal</strong> wordt (niet) voorzien?</li> </ul>",
-          "0.6.0.0.0": "Geef een enthousiaste omschrijving van de beurs. Wat kan je kan <strong>bekijken</strong>, <strong>beleven</strong> of <strong>kopen</strong>?",
-          "0.7.0.0.0": "Geef een enthousiaste omschrijving van de rondleiding. <ul> <li>Wat valt er langs de route te <strong>bekijken of beleven</strong>? </li> <li>Is er een maximaal <strong>aantal deelnemers</strong>? </li> <li>Wordt de rondleiding doorlopend of op <strong>bepaalde tijdstippen</strong> georganiseerd? </li> <li>Zijn er <strong>speciale aandachtspunten</strong> (bv. laarzen aangewezen)?</li> </ul>",
-          "1.50.0.0.0": "Geef een enthousiaste omschrijving van het eet -of drankfestijn. <ul> <li>Wat staat er op het <strong>menu?</strong> </li> <li>Gaat de opbrengst naar een<strong> goed doel</strong>? </li> <li>Is er <strong>(rand)animatie</strong>?</li> </ul>",
+          "0.0.0.0.0": "<strong>Tips voor de beschrijving van een tentoonstelling</strong><br>Beschrijf welke kunstenaars tentoonstellen of welke collecties/objecten te bekijken zijn.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.12.0.0.0": "<strong>Tips voor de beschrijving van een opendeurdag</strong><br>Wat kan je bekijken of beleven?<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.17.0.0.0": "<strong>Tips voor de beschrijving van een fiets- of wandelroute</strong><br>Vertel wat je langs de route kan bekijken of beleven. Vermeld de exacte afstand of duur.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.19.0.0.0": "<strong>Tips voor de beschrijving van een sportwedstrijd</strong><br>Beschrijf welke ploegen of deelnemers tegen elkaar gaan spelen en in welke competitie de wedstrijd kadert.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.28.0.0.0": "<strong>Tips voor de beschrijving van een festiviteit</strong><br>Beschrijf wat je kan bekijken, beleven of kopen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.3.1.0.0": "<strong>Tips voor de beschrijving van een lessenreeks</strong><br>Leg uit wat je precies leert of doet tijdens de de sessies.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.3.1.0.1": "<strong>Tips voor de beschrijving van een cursus met open sessies</strong><br>Leg uit wat je precies leert of doet tijdens de de sessies.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.3.2.0.0": "<strong>Tips voor de beschrijving van een lezing of congres</strong><br>Licht de belangrijkste thema's toe en vermeld welke sprekers het woord nemen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.37.0.0.0": "<strong>Tips voor de beschrijving van een markt, braderie of kermis</strong><br>Vertel in welke straten de markt, braderie of kermis plaatsvindt en welke kramen of standjes er zullen zijn.",
+          "0.49.0.0.0": "<strong>Tips voor de beschrijving van een party of fuif</strong><br>Beschrijf welke dj's of bands optreden en om welk muziekgenre het gaat.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.5.0.0.0": "<strong>Tips voor de beschrijving van een festival</strong><br>Beschrijf wat er op het programma staat.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.50.21.0.0": "<strong>Tips voor de beschrijving van een spel of quiz</strong><br>Licht het thema van de quiz of van het spel toe.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.50.4.0.0": "<strong>Tips voor de beschrijving van een concert</strong><br>Beschrijf welke artiest(en) optreden en om welk muziekgenre het gaat.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.50.6.0.0": "<strong>Tips voor de beschrijving van een film</strong><br>Schets kort het verhaal of het thema, en vermeld de belangrijkste makers (regisseur, acteurs).<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.54.0.0.0": "<strong>Tips voor de beschrijving van een dansvoorstelling</strong><br>Schets kort het verhaal of het thema, en vermeld de belangrijkste makers (choreograaf, dansers).<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.55.0.0.0": "<strong>Tips voor de beschrijving van een theatervoorstelling</strong><br>Schets kort het verhaal of het thema, en vermeld de belangrijkste makers (regisseur, acteurs).<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.57.0.0.0": "<strong>Tips voor de beschrijving van een kamp of vakantie</strong><br>Omschrijf de algemene sfeer, het thema en de belangrijkste activiteiten die je met de kinderen gaat doen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.59.0.0.0": "<strong>Tips voor de beschrijving van een sportactiviteit</strong><br>Beschrijf welke sport(en) aan bod komen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.6.0.0.0": "<strong>Tips voor de beschrijving van een beurs</strong><br>Beschrijf wat je kan bekijken, beleven of kopen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "0.7.0.0.0": "<strong>Tips voor de beschrijving van een begeleide uitstap of rondleiding</strong><br>Vertel wat je langs de route kan bekijken of beleven. Vermeld de exacte afstand of duur.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
+          "1.50.0.0.0": "<strong>Tips voor de beschrijving van een eet- of drankfestijn</strong><br>Vertel wat er op het menu staat en of de opbrengst naar een goed doel gaat.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
           "0.15.0.0.0": "Geef een enthousiaste omschrijving van het natuurgebied of park. <ul> <li> <strong>Wat</strong> valt er in het natuurgebied of park <strong>te</strong> <strong>beleven</strong>? </li> <li> <strong>Welke recreatiemogelijkheden</strong> zijn er aanwezig? </li> </ul>",
           "0.14.0.0.0": "Geef een enthousiaste omschrijving van het monument. <ul> <li> <strong>Welke gebeurtenis of persoon</strong> wordt met het monument <strong>herinnerd</strong>? </li> <li> Schets kort de <strong>geschiedkundige context</strong>. </li> </ul>",
           "0.53.0.0.0": "Geef een enthousiaste omschrijving van het recreatiedomein of centrum. <ul> <li> <strong>Wat</strong> valt er in het recreatiedomein of centrum <strong>te</strong> <strong>beleven</strong>? </li> <li> <strong>Welke recreatiemogelijkheden</strong> zijn er aanwezig? </li> <li> Welke <strong>andere voorzieningen</strong> (toilet, eetgelegenheden, luierhoek, etc.) vind je op het domein? </li> </ul>",
@@ -406,12 +406,22 @@
           "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>"
         },
         "title": "Beschrijving",
-        "title_with_faq": "Beschrijving & FAQ"
+        "title_with_faq": "Beschrijving & FAQ",
+        "label": "Geef een enthousiaste beschrijving van je activiteit"
       },
       "faq": {
         "label": "Vul je beschrijving aan met een paar veelgestelde vragen over je activiteit",
         "add_button": "Voeg een veelgestelde vraag toe",
         "add_another_button": "Voeg nog een veelgestelde vraag toe",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "delete_modal": {
+          "title": "Vraag verwijderen",
+          "body": "Ben je zeker dat je deze vraag wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+          "confirm": "Definitief verwijderen",
+          "cancel": "Annuleren"
+        },
+        "max_items_error": "Je kan maximum 30 veelgestelde vragen toevoegen.",
         "modal": {
           "title": "Nieuwe vraag toevoegen",
           "save": "Opslaan",
@@ -419,13 +429,264 @@
           "question": "Vraag",
           "question_placeholder": "Selecteer een vraag of schrijf er zelf één.",
           "answer": "Antwoord",
-          "suggestions": [
-            "Heb ik voorkennis nodig?",
-            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
-            "Hoe kan ik de locatie van de activiteit bereiken?"
-          ]
+          "errors": {
+            "no_question": "Schrijf eerst een vraag.",
+            "no_answer": "De vraag kan niet opgeslagen worden zonder antwoord.",
+            "question_too_long": "De vraag mag maximum {{ maxNumber }} tekens bevatten.",
+            "answer_too_long": "Het antwoord mag maximum {{ maxNumber }} tekens bevatten."
+          },
+          "suggestions": {
+            "0.7.0.0.0": [
+              {
+                "question": "Wat moet ik meebrengen of aandoen?"
+              },
+              {
+                "question": "Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?"
+              }
+            ],
+            "0.6.0.0.0": [
+              {
+                "question": "Kan ik ter plaatse iets eten of drinken?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.50.4.0.0": [
+              {
+                "question": "Welk album of werk wordt voorgesteld?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens het concert?"
+              }
+            ],
+            "0.3.1.0.1": [
+              {
+                "question": "Heb ik voorkennis of ervaring nodig om deel te nemen?",
+                "answer": "Wees specifiek over het vereiste niveau (bijv. absolute beginners of gevorderden)."
+              },
+              {
+                "question": "Ontvang ik na afloop een diploma of certificaat?",
+                "answer": "Vermeld duidelijk of het om een officieel erkend diploma gaat."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Kan ik last-minute nog deelnemen, zonder inschrijven?"
+              }
+            ],
+            "0.54.0.0.0": [
+              {
+                "question": "Zijn er lockers of een vestiaire?",
+                "answer": "Vermeld of deze gratis of betalend zijn, en of er grote voorwerpen (zoals rugzakken) in passen."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de voorstelling?"
+              }
+            ],
+            "1.50.0.0.0": [
+              {
+                "question": "Is er ook (rand)animatie voorzien?",
+                "answer": "Vermeld of er kinderanimatie voorzien is."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.5.0.0.0": [
+              {
+                "question": "Is er ook (rand)animatie voorzien?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Kan ik ter plaatse iets eten of drinken?"
+              }
+            ],
+            "0.28.0.0.0": [
+              {
+                "question": "Zijn er (rand)activiteiten?",
+                "answer": "Denk aan een quiz, concerten, foodtrucks, een marktje..."
+              }
+            ],
+            "0.17.0.0.0": [
+              {
+                "question": "Is de route begeleid, met een gids, brochure of wegwijzers?",
+                "answer": "Vermeld of er een gids meeloopt, of dat deelnemers een brochure, wegbeschrijving of GPX-bestand krijgen."
+              },
+              {
+                "question": "Wat moet ik meebrengen of aantrekken?"
+              }
+            ],
+            "0.50.6.0.0": [
+              {
+                "question": "Heeft de film prijzen gewonnen?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de film?"
+              },
+              {
+                "question": "Voor wie is deze film geschikt?",
+                "answer": "Vermeld of deze film ook geschikt is voor kinderen."
+              }
+            ],
+            "0.57.0.0.0": [
+              {
+                "question": "Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?",
+                "answer": "Ga in dialoog: Geef contactgegevens mee om de mogelijkheden persoonlijk af te stemmen.<br>Licht jullie aanpak toe: Vermeld hulpmiddelen zoals een 'speelfiche' of extra monitor.<br>Wees transparant: Geef de groepsgrootte en het aantal begeleiders mee."
+              },
+              {
+                "question": "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+                "answer": "Verduidelijk of kinderen een eigen lunchpakket en/of tussendoortjes moeten meebrengen, of dat jullie warm eten voorzien."
+              },
+              {
+                "question": "Wat moet mijn kind meebrengen of aandoen?",
+                "answer": "Denk aan specifieke kledij (speelkleren, regenjas) of praktische zaken zoals zonnecrème en een drinkbus."
+              },
+              {
+                "question": "Door wie worden de kinderen begeleid?",
+                "answer": "Geef aan of het gaat om (gecertificeerde) animatoren, leerkrachten of vaste begeleiders van de opvang."
+              },
+              {
+                "question": "Welke verzekeringen zijn er?"
+              },
+              {
+                "question": "Zit mijn kind samen met een vriendje, broer of zus in de groep?",
+                "answer": "Leg uit of de groepen strikt op leeftijd worden ingedeeld en of hier flexibiliteit in is."
+              },
+              {
+                "question": "Krijg ik een fiscaal attest voor deze opvang/dit kamp?",
+                "answer": "Vermeld of je aanbod fiscaal aftrekbaar is en of ouders dit attest automatisch ontvangen of zelf moeten aanvragen."
+              }
+            ],
+            "0.3.1.0.0": [
+              {
+                "question": "Heb ik voorkennis nodig om deel te nemen?"
+              },
+              {
+                "question": "Ontvang ik een diploma of certificaat aan het einde?"
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.3.2.0.0": [
+              {
+                "question": "Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?",
+                "answer": "Verduidelijk of kinderen een eigen lunchpakket en/of tussendoortjes moeten meebrengen, of dat jullie warm eten voorzien."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.37.0.0.0": [
+              {
+                "question": "Is er ook (rand)animatie voorzien?"
+              },
+              {
+                "question": "Hoe kan ik mij aanmelden als standhouder?"
+              },
+              {
+                "question": "Gaat het door bij regenweer?"
+              }
+            ],
+            "0.12.0.0.0": [
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Zijn er rondleidingen voorzien? Op welke momenten gaan die door?"
+              }
+            ],
+            "0.49.0.0.0": [
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.50.21.0.0": [
+              {
+                "question": "Wat kan ik winnen?"
+              },
+              {
+                "question": "Uit hoeveel personen mag een team maximaal bestaan?",
+                "answer": "Geef de limieten per team mee en vermeld of mensen zich ook individueel kunnen inschrijven."
+              }
+            ],
+            "0.59.0.0.0": [
+              {
+                "question": "Wat moet ik meebrengen of aandoen?",
+                "answer": "Tip: beschrijf welk materiaal je voorziet en wat de deelnemers zelf moeten meebrengen."
+              },
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              }
+            ],
+            "0.0.0.0.0": [
+              {
+                "question": "Is er een (audio)gids of brochure beschikbaar?"
+              },
+              {
+                "question": "Zijn er lockers of een vestiaire?"
+              }
+            ],
+            "0.55.0.0.0": [
+              {
+                "question": "Hoe bereik ik de locatie?",
+                "answer": "Vermeld de mogelijkheden voor openbaar vervoer, fietsenstallingen en parkeergelegenheid in de buurt."
+              },
+              {
+                "question": "Is er een pauze voorzien tijdens de voorstelling?"
+              }
+            ],
+            "cultuurkuur": [
+              {
+                "question": "Is er lesmateriaal beschikbaar? Wat en waar?"
+              }
+            ]
+          }
         },
-        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+        "tips": {
+          "0.7.0.0.0": "<strong>Vragen die wij vaak horen bij een begeleide uitstap of rondleiding</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Wordt de rondleiding doorlopend of op bepaalde tijdstippen georganiseerd?</li></ul>",
+          "0.6.0.0.0": "<strong>Vragen die wij vaak horen bij een beurs</strong><ul><li>Kan ik ter plaatse iets eten of drinken?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.50.4.0.0": "<strong>Vragen die wij vaak horen bij een concert</strong><ul><li>Welk album of werk wordt voorgesteld?</li><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens het concert?</li></ul>",
+          "0.3.1.0.1": "<strong>Vragen die wij vaak horen bij een cursus met open sessies</strong><ul><li>Heb ik voorkennis of ervaring nodig om deel te nemen?</li><li>Ontvang ik na afloop een diploma of certificaat?</li><li>Hoe bereik ik de locatie?</li><li>Kan ik last-minute nog deelnemen, zonder inschrijven?</li></ul>",
+          "0.54.0.0.0": "<strong>Vragen die wij vaak horen bij een dansvoorstelling</strong><ul><li>Zijn er lockers of een vestiaire?</li><li>Is er een pauze voorzien tijdens de voorstelling?</li></ul>",
+          "1.50.0.0.0": "<strong>Vragen die wij vaak horen bij een eet- of drankfestijn</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.5.0.0.0": "<strong>Vragen die wij vaak horen bij een festival</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe bereik ik de locatie?</li><li>Kan ik ter plaatse iets eten of drinken?</li></ul>",
+          "0.28.0.0.0": "<strong>Vragen die wij vaak horen bij een festiviteit</strong><ul><li>Zijn er (rand)activiteiten?</li></ul>",
+          "0.17.0.0.0": "<strong>Vragen die wij vaak horen bij een fiets- of wandelroute</strong><ul><li>Is de route begeleid, met een gids, brochure of wegwijzers?</li><li>Wat moet ik meebrengen of aantrekken?</li></ul>",
+          "0.50.6.0.0": "<strong>Vragen die wij vaak horen bij een film</strong><ul><li>Heeft de film prijzen gewonnen?</li><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens de film?</li><li>Voor wie is deze film geschikt?</li></ul>",
+          "0.57.0.0.0": "<strong>Vragen die wij vaak horen bij een kamp of vakantie</strong><ul><li>Hoe kan dit aanbod mijn kind met een specifieke ondersteuningsnood begeleiden?</li><li>Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?</li><li>Wat moet mijn kind meebrengen of aandoen?</li><li>Door wie worden de kinderen begeleid?</li><li>Welke verzekeringen zijn er?</li><li>Zit mijn kind samen met een vriendje, broer of zus in de groep?</li><li>Krijg ik een fiscaal attest voor deze opvang/dit kamp?</li></ul>",
+          "0.3.1.0.0": "<strong>Vragen die wij vaak horen bij een lessenreeks</strong><ul><li>Heb ik voorkennis nodig om deel te nemen?</li><li>Ontvang ik een diploma of certificaat aan het einde?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.3.2.0.0": "<strong>Vragen die wij vaak horen bij een lezing of congres</strong><ul><li>Zijn er maaltijden inbegrepen en hoe geef ik allergieën door?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.37.0.0.0": "<strong>Vragen die wij vaak horen bij een markt, braderie of kermis</strong><ul><li>Is er ook (rand)animatie voorzien?</li><li>Hoe kan ik mij aanmelden als standhouder?</li><li>Gaat het door bij regenweer?</li></ul>",
+          "0.12.0.0.0": "<strong>Vragen die wij vaak horen bij een opendeurdag</strong><ul><li>Hoe bereik ik de locatie?</li><li>Zijn er rondleidingen voorzien? Op welke momenten gaan die door?</li></ul>",
+          "0.49.0.0.0": "<strong>Vragen die wij vaak horen bij een party of fuif</strong><ul><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.50.21.0.0": "<strong>Vragen die wij vaak horen bij een spel of quiz</strong><ul><li>Wat kan ik winnen?</li><li>Uit hoeveel personen mag een team maximaal bestaan?</li></ul>",
+          "0.59.0.0.0": "<strong>Vragen die wij vaak horen bij een sportactiviteit</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Hoe bereik ik de locatie?</li></ul>",
+          "0.0.0.0.0": "<strong>Vragen die wij vaak horen bij een tentoonstelling</strong><ul><li>Is er een (audio)gids of brochure beschikbaar?</li><li>Zijn er lockers of een vestiaire?</li></ul>",
+          "0.55.0.0.0": "<strong>Vragen die wij vaak horen bij een theatervoorstelling</strong><ul><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens de voorstelling?</li></ul>",
+          "cultuurkuur": "<strong>Vragen die wij vaak horen bij een cultuurkuur-activiteit</strong><ul><li>Is er lesmateriaal beschikbaar? Wat en waar?</li></ul>"
+        }
       },
       "event_score": {
         "tip": {

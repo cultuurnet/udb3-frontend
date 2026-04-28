@@ -340,27 +340,27 @@
           "link_target": "Cible du lien"
         },
         "tips": {
-          "0.0.0.0.0": "Donnez une description enthousiaste de l'exposition. <ul><li>Quels sont les <strong>artistes</strong> qui exposent ?</li><li>Quelles <strong>collections</strong> peuvent être vues ?</li><li>Existe-t-il un <strong>guide (audio)</strong> ou une <strong>brochure</strong> ?</li></ul>",
-          "0.12.0.0.0": "Donnez une description enthousiaste de la journée portes ouvertes. Que pouvez-vous <strong>voir</strong> ou <strong>vivre</strong> ?",
-          "0.17.0.0.0": "Donnez une description enthousiaste de l'itinéraire. <ul><li>Faites-vous le <strong>trajet à pied, en vélo, en bateau</strong>,.. ?</li><li>Quels sont les <strong>arrêts possibles</strong> ?</li><li>Quelle est la <strong>distance</strong> ou la <strong>durée</strong> de l'itinéraire ?</li><li>L'itinéraire est-il <strong>accompagné</strong>, avec un guide, une brochure ou des panneaux indicateurs ?</li></ul>",
-          "0.19.0.0.0": "Donnez une description enthousiaste de la compétition sportive. <ul><li>Quelles <strong>équipes</strong> ou <strong>quels participants </strong>jouent ?</li><li>Dans quelle <strong>compétition</strong> se déroule la compétition ?</li></ul>",
-          "0.28.0.0.0": "Donnez une description enthousiaste de la festivité <ul><li>Quelles sont les <strong>attractions</strong> ?</li><li>Y a-t-il des <strong>activités (périphériques)</strong>: quiz, concerts, food trucks, marché,... ?</li></ul>",
-          "0.3.1.0.0": "Donnez une description enthousiaste de la série de cours. <ul> <li>Qu'y apprenez-vous exactement ?</li> <li>Des <strong>connaissances préalables</strong> sont-elles nécessaires pour participer ?</li> <li>Quel est le <strong>niveau</strong> des cours ?</li> <li>Recevez-vous un <strong>diplôme</strong> ou un certificat à la fin ?</li> </ul>",
-          "0.3.1.0.1": "Donnez une description enthousiaste du cours avec sessions ouvertes ou workshop. <ul><li>Qu'y apprenez-vous exactement ?</li><li>Des <strong>connaissances préalables</strong> sont-elles nécessaires pour participer ?</li><li>Quel est le <strong>niveau</strong> des cours ?</li><li>Recevez-vous un <strong>diplôme</strong> ou un certificat à la fin ?</li> </ul>",
-          "0.3.2.0.0": "Donnez une description enthousiaste de la conférence où congrès <ul><li>Quels <strong>thèmes</strong> sont couverts ?</li><li>Quels <strong>orateurs</strong> prennent la parole ?</li></ul>",
-          "0.37.0.0.0": "Donnez une description enthousiaste du marché, foire ou fête foraine <ul><li>Dans <strong>quelles rues </strong>a-t-il lieu ?</li><li>Quels seront les <strong>stands</strong> ou les <strong>stands de vente</strong> ?</li><li>Y a-t-il une <strong>animation</strong> (de bord) ?</li></ul>",
-          "0.49.0.0.0": "Donnez une description enthousiaste de la soirée. Quels <strong>deejays</strong> ou <strong>groupes</strong> se produisent ?",
-          "0.5.0.0.0": "Donnez une description enthousiaste du festival. <ul><li>Qui ou quoi est au <strong>programme</strong> ?</li><li>Quelle est l'<strong>animation</strong> (périphérique) ?</li></ul>",
-          "0.50.21.0.0": "Donnez une description enthousiaste du quiz ou du jeu. <ul><li>Sur quels <strong>sujets</strong> porte le quiz ?</li><li>Le jeu a-t-il un <strong>thème</strong> ?</li><li>Y a-t-il quelque chose à <strong>gagner</strong> ?</li><li>Y a-t-il un <strong>nombre maximum de participants</strong> ?</li></ul>",
-          "0.50.4.0.0": "Donnez une description enthousiaste du concert. <ul><li>Quel(s) <strong>artiste(s)</strong> se produisent ?</li><li>De quel <strong>genre</strong> s'agit-il ?</li><li>Quel <strong>album ou œuvre</strong> sera présenté ?</li></ul>",
-          "0.50.6.0.0": "Donnez une description enthousiaste du cinéma. <ul><li>Faites une brève description de <strong>l'histoire</strong>.</li><li>Qui est le <strong>réalisateur</strong> ?</li><li>Qui sont les <strong>protagonistes</strong> ?</li><li>Le film a-t-il remporté des <strong>prix</strong> ?</li></ul>",
-          "0.54.0.0.0": "Donnez une description enthousiaste du spectacle de danse. <ul> <li>Qui est le <strong>chorégraphe</strong> ?</li> <li>Qui sont les <strong>danseurs</strong> ?</li> <li>Dans quel <strong>style</strong> dansent-ils ?</li> <li>Quel est le <strong>thème ou le sujet</strong> de la représentation ?</li> </ul>",
-          "0.55.0.0.0": "Donnez une description enthousiaste du théâtre. <ul><li>Esquissez brièvement <strong>l'histoire</strong> ou le <strong>thème</strong>.</li><li>Quelle<strong> compagnie de théâtre</strong> jouera la pièce ?</li><li>Quels sont les <strong>acteurs</strong> qui jouent ?</li></ul>",
-          "0.57.0.0.0": "Donnez une description enthousiaste du camp de vacances <ul><li>Quelles <strong>activités</strong> pouvez-vous y faire ?</li><li>Y a-t-il un <strong>thème</strong> ?</li><li>Est-il <strong>avec ou sans nuitées</strong> ?</li><li>Quelle est <strong>l'heure de début</strong> <strong>et de fin</strong> des camps de jour et les soins sont-ils <strong>fournis</strong> avant et après ?</li></ul>",
-          "0.59.0.0.0": "Donnez une description enthousiaste de l'activité sportive. <ul><li>Quel(s) <strong>sport(s)</strong> pouvez-vous pratiquer ?</li><li>Quel <strong>matériel</strong> est (non) fourni ?</li></ul>",
-          "0.6.0.0.0": "Donnez une description enthousiaste de la foire. Que pouvez-vous <strong>voir</strong>, <strong>vivre</strong> ou <strong>acheter</strong> ?",
-          "0.7.0.0.0": "Donnez une description enthousiaste de la visite guidée. <ul><li>Qu'y a-t-il à <strong>voir</strong> ou à <strong>vivre</strong> le long du parcours ?</li><li>Y a-t-il un <strong>nombre</strong> maximum de <strong>participants</strong> ?</li><li>La visite guidée est-elle organisée en continu ou à des moments précis ?</li><li>Y a-t-il des <strong>points d'attention</strong> particuliers (par exemple, des bottes indiquées) ?</li></ul>",
-          "1.50.0.0.0": "Donnez une description enthousiaste du festin de nourriture ou de boisson. <ul> <li>Qu'y a-t-il au <strong>menu</strong> ?</li> <li>Les <strong>recettes</strong> seront-elles versées à une <strong>organisation caritative</strong> ?</li> <li>Y a-t-il une <strong>animation (périphérique)</strong> ?</li> </ul>",
+          "0.0.0.0.0": "<strong>Conseils pour la description d'une exposition</strong><br>Décrivez quels artistes exposent ou quelles collections/quels objets sont à voir.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.12.0.0.0": "<strong>Conseils pour la description d'une journée portes ouvertes</strong><br>Que peut-on voir ou vivre ?<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.17.0.0.0": "Décrivez les points d'intérêt et les expériences à vivre le long du parcours. Indiquez la distance exacte ou la durée.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.19.0.0.0": "<strong>Conseils pour la description d'un match sportif</strong><br>Décrivez quelles équipes ou participants s'affrontent et dans quelle compétition s'inscrit le match.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.28.0.0.0": "<strong>Conseils pour la description d'une festivité</strong><br>Décrivez ce que l'on peut voir, vivre ou acheter.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.3.1.0.0": "<strong>Conseils pour la description d'une série de cours</strong><br>Expliquez ce que l'on apprend ou fait précisément lors des séances.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.3.1.0.1": "<strong>Conseils pour la description d'un cours avec séances ouvertes</strong><br>Expliquez ce que l'on apprend ou fait précisément lors des séances.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.3.2.0.0": "<strong>Conseils pour la description d'une conférence ou d'un congrès</strong><br>Mettez en lumière les principaux thèmes et indiquez quels intervenants prendront la parole.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.37.0.0.0": "<strong>Conseils pour la description d'un marché, d'une brocante ou d'une kermesse</strong><br>Indiquez dans quelles rues se déroule le marché, la brocante ou la kermesse, et quels stands ou étals seront présents.",
+          "0.49.0.0.0": "<strong>Conseils pour la description d'une soirée ou d'une fête</strong><br>Décrivez quels DJ's ou groupes se produiront et de quel genre musical il s'agit.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.5.0.0.0": "<strong>Conseils pour la description d'un festival</strong><br>Précisez ce qui est au programme.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.50.21.0.0": "<strong>Conseils pour la description d'un jeu ou d'un quiz</strong><br>Présentez le thème du quiz ou du jeu.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.50.4.0.0": "<strong>Conseils pour la description d'un concert</strong><br>Décrivez quel(s) artiste(s) se produit(sent) et de quel genre musical il s'agit.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.50.6.0.0": "<strong>Conseils pour la description d'un film</strong><br>Esquissez brièvement l'histoire ou le thème, et mentionnez les principaux créateurs (réalisateur, acteurs).<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.54.0.0.0": "<strong>Conseils pour la description d'un spectacle de danse</strong><br>Esquissez brièvement l'histoire ou le thème, et mentionnez les principaux créateurs (chorégraphe, danseurs).<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.55.0.0.0": "<strong>Conseils pour la description d'un spectacle de théâtre</strong><br>Esquissez brièvement l'histoire ou le thème, et mentionnez les principaux créateurs (metteur en scène, acteurs).<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.57.0.0.0": "<strong>Conseils pour la description d'un camp ou séjour de vacances</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.59.0.0.0": "<strong>Conseils pour la description d'une activité sportive</strong><br>Décrivez quel(s) sport(s) est(sont) au programme.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.6.0.0.0": "<strong>Conseils pour la description d'une foire ou d'un salon</strong><br>Décrivez ce que l'on peut voir, faire ou acheter.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "0.7.0.0.0": "<strong>Conseils pour la description d'une excursion ou visite guidée.</strong><br>Décrivez les points d'intérêt et les expériences à vivre le long du parcours. Indiquez la distance exacte ou la durée.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "1.50.0.0.0": "<strong>Conseils pour la description d'un festin gastronomique ou bar festif</strong><br>Décrivez ce qui figure au menu et si les bénéfices sont destinés à une bonne cause.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
           "0.15.0.0.0": "Donnez une description enthousiaste de la réserve naturelle ou du parc. <ul> <li> <strong>Qu'y a-t-il à découvrir</strong> dans la réserve ou le parc naturel ? </li> <li> Quelles sont les <strong>activités de loisirs</strong> proposées ? </li> </ul>",
           "0.14.0.0.0": "Donnez une description enthousiaste du monument. <ul> <li> <strong>Quel activité ou quelle personne</strong> <strong>est commémoré</strong> par le monument ? </li> <li> Décrivez brièvement le <strong>contexte historique</strong>. </li> </ul>",
           "0.53.0.0.0": "Donnez une description enthousiaste du domaine ou du centre de loisirs. <ul> <li> <strong>Qu'y a-t-il à vivre</strong> dans le domaine ou le centre de loisirs ? </li> <li> Quelles sont les <strong>activités de loisirs</strong> ? </li> <li> Quelles sont les <strong>autres installations</strong> (toilettes, restaurants, coin des couches, etc.) que vous trouvez au domaine ? </li> </ul>",
@@ -382,12 +382,22 @@
           "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>"
         },
         "title": "Description",
-        "title_with_faq": "Description & FAQ"
+        "title_with_faq": "Description & FAQ",
+        "label": "Donnez une description enthousiaste de votre activité"
       },
       "faq": {
         "label": "Complétez votre description avec quelques questions fréquentes sur votre activité",
         "add_button": "Ajouter une question fréquente",
         "add_another_button": "Ajouter une autre question fréquente",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "delete_modal": {
+          "title": "Supprimer la question",
+          "body": "Êtes-vous sûr de vouloir supprimer cette question ? Cette action est irréversible.",
+          "confirm": "Supprimer définitivement",
+          "cancel": "Annuler"
+        },
+        "max_items_error": "Vous pouvez ajouter au maximum 30 questions fréquentes.",
         "modal": {
           "title": "Ajouter une nouvelle question",
           "save": "Enregistrer",
@@ -395,13 +405,239 @@
           "question": "Question",
           "question_placeholder": "Sélectionnez une question ou rédigez la vôtre.",
           "answer": "Réponse",
-          "suggestions": [
-            "Heb ik voorkennis nodig?",
-            "Ontvang ik een diploma of certificaat op het einde van de lessenreeks?",
-            "Hoe kan ik de locatie van de activiteit bereiken?"
-          ]
+          "errors": {
+            "no_question": "Rédigez d'abord une question.",
+            "no_answer": "La question ne peut pas être enregistrée sans réponse.",
+            "question_too_long": "La question ne peut pas dépasser {{ maxNumber }} caractères.",
+            "answer_too_long": "La réponse ne peut pas dépasser {{ maxNumber }} caractères."
+          },
+          "suggestions": {
+            "0.7.0.0.0": [
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              },
+              {
+                "question": "La visite est-elle organisée en continu ou à des horaires précis ?"
+              }
+            ],
+            "0.6.0.0.0": [
+              {
+                "question": "Puis-je manger ou boire sur place ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
+            "0.50.4.0.0": [
+              {
+                "question": "Quel album ou œuvre est présenté(e) ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le concert ?"
+              }
+            ],
+            "0.3.1.0.1": [
+              {
+                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?"
+              },
+              {
+                "question": "Recevrai-je un diplôme ou un certificat à l'issue du cours ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Puis-je participer à la dernière minute, sans inscription ?"
+              }
+            ],
+            "0.54.0.0.0": [
+              {
+                "question": "Y a-t-il des vestiaires ou des casiers ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le spectacle ?"
+              }
+            ],
+            "1.50.0.0.0": [
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
+            "0.5.0.0.0": [
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Puis-je manger ou boire quelque chose sur place ?"
+              }
+            ],
+            "0.28.0.0.0": [
+              {
+                "question": "Y a-t-il des activités (annexes) ?"
+              }
+            ],
+            "0.17.0.0.0": [
+              {
+                "question": "Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?"
+              },
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              }
+            ],
+            "0.50.6.0.0": [
+              {
+                "question": "Le film a-t-il remporté des prix ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le film ?"
+              },
+              {
+                "question": "À qui ce film est-il destiné ?"
+              }
+            ],
+            "0.57.0.0.0": [
+              {
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?"
+              },
+              {
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+              },
+              {
+                "question": "Que doit apporter ou porter mon enfant ?"
+              },
+              {
+                "question": "Qui encadre les enfants ?"
+              },
+              {
+                "question": "Quelles assurances sont prévues ?"
+              },
+              {
+                "question": "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?"
+              },
+              {
+                "question": "Recevrai-je une attestation fiscale pour cet accueil/ce camp ?"
+              }
+            ],
+            "0.3.1.0.0": [
+              {
+                "question": "Ai-je besoin de connaissances préalables pour participer ?"
+              },
+              {
+                "question": "Recevrai-je un diplôme ou un certificat à la fin ?"
+              }
+            ],
+            "0.3.2.0.0": [
+              {
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
+            "0.37.0.0.0": [
+              {
+                "question": "Y a-t-il des animations (en marge) prévues ?"
+              },
+              {
+                "question": "Comment puis-je m'inscrire comme exposant ?"
+              },
+              {
+                "question": "L'événement a-t-il lieu en cas de pluie ?"
+              }
+            ],
+            "0.12.0.0.0": [
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Des visites guidées sont-elles prévues ? À quels moments ?"
+              }
+            ],
+            "0.49.0.0.0": [
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
+            "0.19.0.0.0": [
+              {
+                "question": "La retransmission est-elle en plein air ou dans un lieu couvert ?"
+              }
+            ],
+            "0.50.21.0.0": [
+              {
+                "question": "Que puis-je gagner ?"
+              },
+              {
+                "question": "Combien de personnes une équipe peut-elle compter au maximum ?"
+              }
+            ],
+            "0.59.0.0.0": [
+              {
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+              },
+              {
+                "question": "Comment accéder au lieu ?"
+              }
+            ],
+            "0.0.0.0.0": [
+              {
+                "question": "Un guide (audio) ou une brochure est-il disponible ?"
+              },
+              {
+                "question": "Y a-t-il des vestiaires ou des casiers ?"
+              }
+            ],
+            "0.55.0.0.0": [
+              {
+                "question": "Comment accéder au lieu ?"
+              },
+              {
+                "question": "Y a-t-il une pause prévue pendant le spectacle ?"
+              }
+            ],
+            "cultuurkuur": [
+              {
+                "question": "Du matériel pédagogique est-il disponible ? Lequel et où ?"
+              }
+            ]
+          }
         },
-        "tips": "Vragen die wij vaak horen bij een lessenreeks:<ul><li>Heb ik voorkennis nodig?</li><li>Ontvang ik een diploma of certificaat op het einde van de lessenreeks?</li><li>Hoe kan ik de locatie van de activiteit bereiken?</li></ul>"
+        "tips": {
+          "0.7.0.0.0": "<strong>Questions fréquentes relatives aux excursions et visites guidées.</strong><ul><li>Que dois-je emporter ou quels vêtements dois-je prévoir ?</li><li>La visite est-elle organisée en continu ou à des horaires précis ?</li></ul>",
+          "0.6.0.0.0": "<strong>Questions fréquentes relatives aux foires ou salons</strong><ul><li>Puis-je manger ou boire sur place ?</li><li>Comment accéder au lieu ?</li></ul>",
+          "0.50.4.0.0": "<strong>Questions fréquentes relatives aux concerts</strong><ul><li>Quel album ou œuvre est présenté(e) ?</li><li>Comment accéder au lieu ?</li><li>Y a-t-il une pause prévue pendant le concert ?</li></ul>",
+          "0.3.1.0.1": "<strong>Questions fréquentes relatives aux cours avec séances ouvertes</strong><ul><li>Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?</li><li>Recevrai-je un diplôme ou un certificat à l'issue du cours ?</li><li>Comment accéder au lieu ?</li><li>Puis-je participer à la dernière minute, sans inscription ?</li></ul>",
+          "0.54.0.0.0": "<strong>Questions fréquentes relatives aux spectacles de danse</strong><ul><li>Y a-t-il des vestiaires ou des casiers ?</li><li>Y a-t-il une pause prévue pendant le spectacle ?</li></ul>",
+          "1.50.0.0.0": "<strong>Questions fréquentes relatives aux festins gastronomiques ou bars festifs</strong><ul><li>Y a-t-il des animations (en marge) prévues ?</li><li>Comment accéder au lieu ?</li></ul>",
+          "0.5.0.0.0": "<strong>Questions fréquentes relatives aux festivals</strong><ul><li>Y a-t-il des animations (en marge) prévues ?</li><li>Comment accéder au lieu ?</li><li>Puis-je manger ou boire quelque chose sur place ?</li></ul>",
+          "0.28.0.0.0": "<strong>Questions fréquentes relatives aux festivités</strong><ul><li>Y a-t-il des activités (annexes) ?</li></ul>",
+          "0.17.0.0.0": "<strong>Questions fréquentes relatives aux itinéraires vélo ou pédestre</strong><ul><li>Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?</li><li>Que dois-je emporter ou quels vêtements dois-je prévoir ?</li></ul>",
+          "0.50.6.0.0": "<strong>Questions fréquentes relatives aux projections de film</strong><ul><li>Le film a-t-il remporté des prix ?</li><li>Comment accéder au lieu ?</li><li>Y a-t-il une pause prévue pendant le film ?</li><li>À qui ce film est-il destiné ?</li></ul>",
+          "0.57.0.0.0": "<strong>Questions fréquentes relatives aux camps ou séjours de vacances</strong><ul><li>Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?</li><li>Les repas sont-ils inclus et comment puis-je signaler des allergies ?</li><li>Que doit apporter ou porter mon enfant ?</li><li>Qui encadre les enfants ?</li><li>Quelles assurances sont prévues ?</li><li>Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?</li><li>Recevrai-je une attestation fiscale pour cet accueil/ce camp ?</li></ul>",
+          "0.3.1.0.0": "<strong>Questions fréquentes relatives aux séries de cours</strong><ul><li>Ai-je besoin de connaissances préalables pour participer ?</li><li>Recevrai-je un diplôme ou un certificat à la fin ?</li></ul>",
+          "0.3.2.0.0": "<strong>Questions fréquentes relatives aux congrès</strong><ul><li>Les repas sont-ils inclus et comment puis-je signaler des allergies ?</li><li>Comment accéder au lieu ?</li></ul>",
+          "0.37.0.0.0": "<strong>Questions fréquentes relatives aux marchés, brocantes ou kermesses</strong><ul><li>Y a-t-il des animations (en marge) prévues ?</li><li>Comment puis-je m'inscrire comme exposant ?</li><li>L'événement a-t-il lieu en cas de pluie ?</li></ul>",
+          "0.12.0.0.0": "<strong>Questions fréquentes relatives aux journées portes ouvertes</strong><ul><li>Comment accéder au lieu ?</li><li>Des visites guidées sont-elles prévues ? À quels moments ?</li></ul>",
+          "0.49.0.0.0": "<strong>Questions fréquentes relatives aux soirées ou fêtes</strong><ul><li>Comment accéder au lieu ?</li></ul>",
+          "0.19.0.0.0": "<strong>Questions que nous entendons souvent lors d'un match sportif</strong><ul><li>La retransmission est-elle en plein air ou dans un lieu couvert?</li></ul>",
+          "0.50.21.0.0": "<strong>Questions fréquentes relatives aux jeux ou quiz</strong><ul><li>Que puis-je gagner ?</li><li>Combien de personnes une équipe peut-elle compter au maximum ?</li></ul>",
+          "0.59.0.0.0": "<strong>Questions fréquentes relatives aux activités sportives</strong><ul><li>Que dois-je emporter ou quels vêtements dois-je prévoir ?</li><li>Comment accéder au lieu ?</li></ul>",
+          "0.0.0.0.0": "<strong>Questions fréquentes relatives aux expositions</strong><ul><li>Un guide (audio) ou une brochure est-il disponible ?</li><li>Y a-t-il des vestiaires ou des casiers ?</li></ul>",
+          "0.55.0.0.0": "<strong>Questions fréquentes relatives aux spectacles de théâtre</strong><ul><li>Comment accéder au lieu ?</li><li>Y a-t-il une pause prévue pendant le spectacle ?</li></ul>",
+          "cultuurkuur": "<strong>Questions fréquentes relatives aux activités Cultuurkuur</strong><ul><li>Du matériel pédagogique est-il disponible ? Lequel et où ?</li></ul>"
+        }
       },
       "event_score": {
         "tip": {
