@@ -425,7 +425,8 @@
                 "question": "Puis-je manger ou boire sur place ?"
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               }
             ],
             "0.50.4.0.0": [
@@ -433,7 +434,8 @@
                 "question": "Quel album ou œuvre est présenté(e) ?"
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Y a-t-il une pause prévue pendant le concert ?"
@@ -441,13 +443,16 @@
             ],
             "0.3.1.0.1": [
               {
-                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?"
+                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?",
+                "answer": "Soyez précis sur le niveau requis (ex. grands débutants ou participants avancés)."
               },
               {
-                "question": "Recevrai-je un diplôme ou un certificat à l'issue du cours ?"
+                "question": "Recevrai-je un diplôme ou un certificat à l'issue du cours ?",
+                "answer": "Indiquez clairement s'il s'agit d'un diplôme officiellement reconnu."
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Puis-je participer à la dernière minute, sans inscription ?"
@@ -455,7 +460,8 @@
             ],
             "0.54.0.0.0": [
               {
-                "question": "Y a-t-il des vestiaires ou des casiers ?"
+                "question": "Y a-t-il des vestiaires ou des casiers ?",
+                "answer": "Indiquez s'ils sont gratuits ou payants, et si les grands objets (comme les sacs à dos) y tiennent."
               },
               {
                 "question": "Y a-t-il une pause prévue pendant le spectacle ?"
@@ -463,10 +469,12 @@
             ],
             "1.50.0.0.0": [
               {
-                "question": "Y a-t-il des animations (en marge) prévues ?"
+                "question": "Y a-t-il des animations (en marge) prévues ?",
+                "answer": "Indiquez si des animations pour enfants sont prévues."
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               }
             ],
             "0.5.0.0.0": [
@@ -474,7 +482,8 @@
                 "question": "Y a-t-il des animations (en marge) prévues ?"
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Puis-je manger ou boire quelque chose sur place ?"
@@ -482,12 +491,14 @@
             ],
             "0.28.0.0.0": [
               {
-                "question": "Y a-t-il des activités (annexes) ?"
+                "question": "Y a-t-il des activités (annexes) ?",
+                "answer": "Pensez à un quiz, des concerts, des food trucks, un marché..."
               }
             ],
             "0.17.0.0.0": [
               {
-                "question": "Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?"
+                "question": "Le parcours est-il guidé, avec un guide, une brochure ou des panneaux ?",
+                "answer": "Indiquez si un guide accompagne le groupe, ou si les participants reçoivent une brochure, un itinéraire ou un fichier GPX."
               },
               {
                 "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
@@ -498,36 +509,44 @@
                 "question": "Le film a-t-il remporté des prix ?"
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Y a-t-il une pause prévue pendant le film ?"
               },
               {
-                "question": "À qui ce film est-il destiné ?"
+                "question": "À qui ce film est-il destiné ?",
+                "answer": "Indiquez si ce film convient également aux enfants."
               }
             ],
             "0.57.0.0.0": [
               {
-                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?"
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?",
+                "answer": "- Partagez les coordonnées : indiquez avec qui les parents peuvent convenir des modalités.\n- Décrivez votre expérience : précisez si vous avez déjà accueilli des enfants ayant des besoins particuliers.\n- Indiquez la taille du groupe et le nombre d'encadrants"
               },
               {
-                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?",
+                "answer": "Précisez si les enfants doivent apporter leur propre lunch et/ou collations, ou si vous prévoyez des repas chauds."
               },
               {
-                "question": "Que doit apporter ou porter mon enfant ?"
+                "question": "Que doit apporter ou porter mon enfant ?",
+                "answer": "Pensez à des vêtements adaptés (tenue de jeu, imperméable) ou des objets pratiques comme la crème solaire et une gourde."
               },
               {
-                "question": "Qui encadre les enfants ?"
+                "question": "Qui encadre les enfants ?",
+                "answer": "Indiquez s'il s'agit d'animateurs (certifiés), d'enseignants ou d'encadrants permanents de la structure."
               },
               {
                 "question": "Quelles assurances sont prévues ?"
               },
               {
-                "question": "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?"
+                "question": "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?",
+                "answer": "Expliquez si les groupes sont strictement répartis par âge et s'il existe une certaine flexibilité."
               },
               {
-                "question": "Recevrai-je une attestation fiscale pour cet accueil/ce camp ?"
+                "question": "Recevrai-je une attestation fiscale pour cet accueil/ce camp ?",
+                "answer": "Indiquez si votre offre est fiscalement déductible et si les parents reçoivent cette attestation automatiquement ou doivent en faire la demande."
               }
             ],
             "0.3.1.0.0": [
@@ -540,10 +559,12 @@
             ],
             "0.3.2.0.0": [
               {
-                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?"
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?",
+                "answer": "Précisez si les participants doivent apporter leur propre lunch et/ou collations, ou si vous prévoyez des repas chauds."
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               }
             ],
             "0.37.0.0.0": [
@@ -559,7 +580,8 @@
             ],
             "0.12.0.0.0": [
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Des visites guidées sont-elles prévues ? À quels moments ?"
@@ -567,7 +589,8 @@
             ],
             "0.49.0.0.0": [
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               }
             ],
             "0.19.0.0.0": [
@@ -580,15 +603,18 @@
                 "question": "Que puis-je gagner ?"
               },
               {
-                "question": "Combien de personnes une équipe peut-elle compter au maximum ?"
+                "question": "Combien de personnes une équipe peut-elle compter au maximum ?",
+                "answer": "Indiquez les limites par équipe et précisez si les personnes peuvent également s'inscrire individuellement."
               }
             ],
             "0.59.0.0.0": [
               {
-                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?"
+                "question": "Que dois-je emporter ou quels vêtements dois-je prévoir ?",
+                "answer": "Conseil : décrivez le matériel que vous fournissez et ce que les participants doivent apporter eux-mêmes."
               },
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               }
             ],
             "0.0.0.0.0": [
@@ -601,7 +627,8 @@
             ],
             "0.55.0.0.0": [
               {
-                "question": "Comment accéder au lieu ?"
+                "question": "Comment accéder au lieu ?",
+                "answer": "Indiquez les possibilités de transport en commun, les abris vélos et les parkings à proximité."
               },
               {
                 "question": "Y a-t-il une pause prévue pendant le spectacle ?"
