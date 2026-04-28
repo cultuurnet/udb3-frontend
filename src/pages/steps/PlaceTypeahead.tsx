@@ -23,6 +23,7 @@ import { valueToArray } from '@/utils/valueToArray';
 import { City } from '../CityPicker';
 
 type Props = {
+  name?: string;
   value?: Place | null;
   onChange: (place: Place) => void;
   onAddNewPlace?: (name: string) => void;
@@ -34,6 +35,7 @@ type Props = {
 };
 
 const PlaceTypeahead = ({
+  name,
   value,
   onChange,
   onAddNewPlace,
@@ -96,6 +98,7 @@ const PlaceTypeahead = ({
 
   return (
     <Typeahead
+      name={name}
       isLoading={useGetPlacesQuery.isLoading}
       options={places}
       onInputChange={debounce(setSearchInput, 275)}

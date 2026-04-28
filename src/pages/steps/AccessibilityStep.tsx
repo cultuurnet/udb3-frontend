@@ -260,6 +260,7 @@ const AccessibilityStep = ({
                     )}
                     Component={
                       <PlaceTypeahead
+                        name={`departure-place-${index}`}
                         value={location.place}
                         municipality={location.city}
                         country={location.country}

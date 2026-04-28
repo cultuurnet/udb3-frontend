@@ -160,6 +160,7 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
       positionFixed={positionFixed}
       inputProps={{
         id,
+        name,
         type: inputType,
         required: inputRequired,
       }}
