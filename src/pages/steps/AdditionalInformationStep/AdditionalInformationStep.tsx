@@ -374,10 +374,7 @@ const AdditionalInformationStep = ({
 
             if (field === 'audience' && isCultuurkuurEvent) return null;
 
-            if (
-              field === 'accessibility' &&
-              (!isChildrenOnly || !isBoaEnabled)
-            )
+            if (field === 'accessibility' && (!isChildrenOnly || !isBoaEnabled))
               return null;
 
             return (
