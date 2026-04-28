@@ -145,7 +145,8 @@ const AccessibilityStep = ({
     return () => {
       cancelled = true;
     };
-  }, [entity, headers, i18n.language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entity?.departurePlaces]);
 
   const setAndPersist = (next: DepartureLocation[]) => {
     setDepartureLocations(next);
