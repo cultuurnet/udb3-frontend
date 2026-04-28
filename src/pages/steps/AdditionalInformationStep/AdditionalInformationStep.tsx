@@ -257,6 +257,7 @@ const AdditionalInformationStep = ({
 }: Props) => {
   const { asPath, ...router } = useRouter();
   const containerRef = useRef(null);
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const queryClient = useQueryClient();
 
@@ -287,8 +288,9 @@ const AdditionalInformationStep = ({
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
-  const isChildrenOnly = true;
-  // const isChildrenOnly = offer?.audience?.audienceType === 'childrenOnly'
+  // @ts-expect-error
+  // Remove ts error when the  childrenOnly audienceType has been added
+  const isChildrenOnly = offer?.audience?.audienceType === 'childrenOnly';
 
   const [, hash] = asPath.split('#');
 
@@ -372,7 +374,11 @@ const AdditionalInformationStep = ({
 
             if (field === 'audience' && isCultuurkuurEvent) return null;
 
-            if (field === 'accessibility' && !isChildrenOnly) return null;
+            if (
+              field === 'accessibility' &&
+              (!isChildrenOnly || !isBoaEnabled)
+            )
+              return null;
 
             return (
               <Tabs.Tab
