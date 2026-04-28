@@ -3,42 +3,52 @@ import draftToHtml from 'draftjs-to-html';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   useChangeOfferDescriptionMutation,
   useDeleteDescriptionMutation,
+  useUpdateOfferFaqMutation,
 } from '@/hooks/api/offers';
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { SupportedLanguages } from '@/i18n/index';
+import { Option } from '@/pages/CustomRichTextEditorLink';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Event } from '@/types/Event';
 import { Organizer } from '@/types/Organizer';
+import { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Icon } from '@/ui/Icon';
+import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { Breakpoints } from '@/ui/theme';
+import { Breakpoints, colors } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
+import { FaqList } from './FaqList';
+import { FaqModal } from './FaqModal';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
 
 const IDEAL_DESCRIPTION_LENGTH = 200;
+const FAQ_MAX_ITEMS = 30;
 
 type DescriptionInfoProps = StackProps & {
   description: string;
   eventTypeId: string;
-  onClear: () => void;
 };
 
 const DescriptionInfo = ({
   description,
   eventTypeId,
-  onClear,
   ...props
 }: DescriptionInfoProps) => {
   const { t } = useTranslation();
@@ -67,10 +77,46 @@ const DescriptionInfo = ({
           },
         )}
       </Text>
-      <Button variant={ButtonVariants.LINK} onClick={onClear}>
-        {t('create.additionalInformation.description.clear')}
-      </Button>
     </Stack>
+  );
+};
+
+const ClearButton = ({ onClear }: { onClear: () => void }) => {
+  const { t } = useTranslation();
+  return (
+    <Box css="margin-left: auto;">
+      <Option
+        onClick={onClear}
+        aria-label={t('create.additionalInformation.description.clear')}
+      >
+        <Icon name={Icons.TRASH} width={15} height={15} />
+      </Option>
+    </Box>
+  );
+};
+
+const FaqTips = ({
+  eventTypeId,
+  isCultuurkuur,
+}: {
+  eventTypeId: string;
+  isCultuurkuur: boolean;
+}) => {
+  const { t, i18n } = useTranslation();
+  const eventTypeKey = `create*additionalInformation*faq*tips*${eventTypeId}`;
+  const cultuurkuurKey = 'create*additionalInformation*faq*tips*cultuurkuur';
+
+  const showEventTip =
+    !!eventTypeId && i18n.exists(eventTypeKey, { keySeparator: '*' });
+
+  if (!showEventTip && !isCultuurkuur) return null;
+
+  return (
+    <Alert marginTop={4.8} maxWidth="30rem">
+      {isCultuurkuur
+        ? t(cultuurkuurKey, { keySeparator: '*' })
+        : t(eventTypeKey, { keySeparator: '*' })}
+    </Alert>
   );
 };
 
@@ -89,7 +135,7 @@ const DescriptionTips = ({
 
   return (
     (eventTypeId || scope === ScopeTypes.ORGANIZERS) && (
-      <Alert marginTop={4.8}>
+      <Alert marginTop={4.8} maxWidth="30rem">
         {t(translationKey, {
           keySeparator: '*',
         })}
@@ -98,7 +144,10 @@ const DescriptionTips = ({
   );
 };
 
-type DescriptionStepProps = StackProps & TabContentProps;
+type DescriptionStepProps = StackProps &
+  TabContentProps & {
+    onFaqSuccessfulChange?: () => void;
+  };
 
 const DescriptionStep = ({
   scope,
@@ -106,11 +155,16 @@ const DescriptionStep = ({
   offerId,
   onSuccessfulChange,
   onValidationChange,
+  onFaqSuccessfulChange = onSuccessfulChange,
   ...props
 }: DescriptionStepProps) => {
   const { t, i18n } = useTranslation();
 
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [isFaqModalVisible, setIsFaqModalVisible] = useState(false);
+  const [editingFaqIndex, setEditingFaqIndex] = useState(undefined);
+  const [showFaqMaxError, setShowFaqMaxError] = useState(false);
   const plainTextDescription = useMemo(
     () => editorState.getCurrentContent().getPlainText(),
     [editorState],
@@ -156,6 +210,16 @@ const DescriptionStep = ({
     return entity?.terms?.find((term) => term.domain === 'eventtype')?.id!;
   }, [entity?.terms]);
 
+  const isCultuurkuur =
+    entity?.audience?.audienceType === AudienceTypes.EDUCATION;
+
+  const isFaqTipVisible =
+    isCultuurkuur ||
+    (!!eventTypeId &&
+      i18n.exists(`create*additionalInformation*faq*tips*${eventTypeId}`, {
+        keySeparator: '*',
+      }));
+
   const changeDescriptionMutation = useChangeOfferDescriptionMutation({
     onSuccess: onSuccessfulChange,
   });
@@ -163,6 +227,16 @@ const DescriptionStep = ({
   const deleteDescriptionMutation = useDeleteDescriptionMutation({
     onSuccess: onSuccessfulChange,
   });
+
+  const updateFaqMutation = useUpdateOfferFaqMutation({
+    onSuccess: onFaqSuccessfulChange,
+  });
+
+  const handleDeleteFaq = (index: number) => {
+    const updatedFaqs = (entity?.faqs ?? []).filter((_, i) => i !== index);
+    updateFaqMutation.mutate({ id: offerId, scope, faq: updatedFaqs });
+    setShowFaqMaxError(false);
+  };
 
   const updateDescription = (description = '') => {
     const args = {
@@ -204,34 +278,122 @@ const DescriptionStep = ({
   };
 
   return (
-    <Inline
-      stackOn={Breakpoints.L}
-      css={`
-        gap: 2rem;
-      `}
-    >
-      <FormElement
-        flex="1 0 50%"
-        id="create-description"
-        label={t('create.additionalInformation.description.title')}
-        Component={
-          <RichTextEditor
-            editorState={editorState}
-            onEditorStateChange={setEditorState}
-            onBlur={handleBlur}
-          />
-        }
-        info={
-          <DescriptionInfo
-            description={plainTextDescription}
-            onClear={handleClear}
+    <Stack spacing={5} {...getStackProps(props)}>
+      <Inline
+        stackOn={Breakpoints.L}
+        css={`
+          gap: 2rem;
+        `}
+      >
+        <FormElement
+          id="create-description"
+          label={t('create.additionalInformation.description.label')}
+          flex={1}
+          Component={
+            <RichTextEditor
+              editorState={editorState}
+              onEditorStateChange={setEditorState}
+              onBlur={handleBlur}
+              toolbarCustomButtons={[<ClearButton onClear={handleClear} />]}
+            />
+          }
+          info={
+            <DescriptionInfo
+              description={plainTextDescription}
+              eventTypeId={eventTypeId}
+            />
+          }
+        />
+        <DescriptionTips scope={scope} eventTypeId={eventTypeId} />
+      </Inline>
+      {isBoaEnabled && scope === ScopeTypes.EVENTS && (
+        <>
+          <Inline
+            stackOn={Breakpoints.L}
+            css={`
+              gap: 2rem;
+            `}
+          >
+            <Stack
+              spacing={3}
+              flex={1}
+              alignItems="flex-start"
+              maxWidth={isFaqTipVisible ? undefined : '60%'}
+            >
+              <Text fontWeight="bold">
+                {t('create.additionalInformation.faq.label')}
+              </Text>
+              {!!entity?.faqs?.length ? (
+                <FaqList
+                  faqs={entity.faqs}
+                  language={i18n.language as Values<typeof SupportedLanguages>}
+                  onEdit={(index) => {
+                    setEditingFaqIndex(index);
+                    setIsFaqModalVisible(true);
+                  }}
+                  onDelete={handleDeleteFaq}
+                  action={
+                    <Stack spacing={2} alignItems="flex-start">
+                      <Button
+                        variant={ButtonVariants.SECONDARY}
+                        iconName={Icons.PLUS}
+                        onClick={() => {
+                          if ((entity.faqs?.length ?? 0) >= FAQ_MAX_ITEMS) {
+                            setShowFaqMaxError(true);
+                            return;
+                          }
+                          setShowFaqMaxError(false);
+                          setEditingFaqIndex(undefined);
+                          setIsFaqModalVisible(true);
+                        }}
+                        spacing={2}
+                      >
+                        {t(
+                          'create.additionalInformation.faq.add_another_button',
+                        )}
+                      </Button>
+                      {showFaqMaxError && (
+                        <Text color={colors.danger}>
+                          {t(
+                            'create.additionalInformation.faq.max_items_error',
+                          )}
+                        </Text>
+                      )}
+                    </Stack>
+                  }
+                />
+              ) : (
+                <Button
+                  variant={ButtonVariants.SECONDARY}
+                  iconName={Icons.PLUS}
+                  onClick={() => setIsFaqModalVisible(true)}
+                  spacing={2}
+                >
+                  {t('create.additionalInformation.faq.add_button')}
+                </Button>
+              )}
+            </Stack>
+            <FaqTips eventTypeId={eventTypeId} isCultuurkuur={isCultuurkuur} />
+          </Inline>
+          <FaqModal
+            key={`${isFaqModalVisible}-${editingFaqIndex}`}
+            visible={isFaqModalVisible}
+            onClose={() => {
+              setIsFaqModalVisible(false);
+              setEditingFaqIndex(undefined);
+            }}
+            offerId={offerId}
+            scope={scope}
+            language={i18n.language as Values<typeof SupportedLanguages>}
+            initialFaqItems={entity?.faqs}
+            editIndex={editingFaqIndex}
+            onSuccessfulChange={onFaqSuccessfulChange}
             eventTypeId={eventTypeId}
+            isCultuurkuur={isCultuurkuur}
           />
-        }
-        {...getStackProps(props)}
-      />
-      <DescriptionTips scope={scope} eventTypeId={eventTypeId} />
-    </Inline>
+        </>
+      )}
+    </Stack>
   );
 };
 
