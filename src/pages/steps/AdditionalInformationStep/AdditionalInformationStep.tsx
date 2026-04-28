@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
@@ -44,6 +44,7 @@ const AdditionalInformationStepVariant = {
 
 const Fields = {
   DESCRIPTION: 'description',
+  FAQ: 'faq',
   ORGANIZER: 'organizer',
   CONTACT_INFO: 'contact_info',
   BOOKING_INFO: 'booking_info',
@@ -177,10 +178,14 @@ const TabTitle = ({
   ...props
 }: TabTitleProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
-  const title = titleKey
-    ? t(titleKey)
-    : t(`create.additionalInformation.${field}.title`);
+  const defaultTitleKey =
+    isBoaEnabled && scope === ScopeTypes.EVENTS && field === Fields.DESCRIPTION
+      ? 'create.additionalInformation.description.title_with_faq'
+      : `create.additionalInformation.${field}.title`;
+
+  const title = titleKey ? t(titleKey) : t(defaultTitleKey);
 
   return (
     <Inline spacing={3} {...getInlineProps(props)}>
@@ -252,10 +257,6 @@ const AdditionalInformationStep = ({
 }: Props) => {
   const { asPath, ...router } = useRouter();
   const containerRef = useRef(null);
-  const entry = useIntersectionObserver(containerRef, {
-    freezeOnceVisible: true,
-  });
-  const isVisible = !!entry?.isIntersecting;
 
   const queryClient = useQueryClient();
 
@@ -291,29 +292,22 @@ const AdditionalInformationStep = ({
 
   const [, hash] = asPath.split('#');
 
-  const handleScroll = useCallback(() => {
-    if (!containerRef.current) return;
-
-    // no scroll to when it's already visible on the screen
-    if (isVisible) {
-      return;
-    }
-
-    containerRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
-  }, [isVisible]);
-
   useEffect(() => {
-    if (isOrganizer) {
-      handleScroll();
-    }
-
     if (!hash || !Object.values(Fields).some((field) => hash === field)) return;
     setTab(hash);
-    handleScroll();
-  }, [hash, isOrganizer, handleScroll]);
+  }, [hash]);
+
+  useEffect(() => {
+    if (!offerId) return;
+    if (!containerRef.current?.parentElement) return;
+
+    requestAnimationFrame(() => {
+      containerRef.current?.parentElement?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  }, [offerId]);
 
   const handleSelectTab = (tab: string) => {
     router.push({ hash: tab }, undefined, { shallow: true });
@@ -401,6 +395,11 @@ const AdditionalInformationStep = ({
                   onValidationChange={handleValidationChange}
                   onSuccessfulChange={() =>
                     invalidateOfferQuery(field, shouldInvalidate)
+                  }
+                  onFaqSuccessfulChange={
+                    field === Fields.DESCRIPTION
+                      ? () => invalidateOfferQuery(Fields.FAQ, true)
+                      : undefined
                   }
                   {...props}
                   {...stepProps}

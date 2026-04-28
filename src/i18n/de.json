@@ -13,7 +13,6 @@
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
   },
-
   "bookingAvailability": {
     "actions": {
       "cancel": "Abbrechen",
@@ -339,27 +338,27 @@
           "link_target": "Linkziel"
         },
         "tips": {
-          "0.0.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Ausstellung. <ul> <li>Welche <strong>Künstler</strong> stellen aus?</li> <li>Welche<strong> Kollektionen</strong> können betrachtet werden? </li> <li>Steht ein <strong>(Audio)Guide</strong> oder <strong>eine Broschüre</strong> zur Verfügung?</li></ul>",
-          "0.12.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung vom Tag der offenen Tür. Was kann man <strong>sehen </strong>oder <strong>erleben?</strong>",
-          "0.17.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Ausflugs. <ul> <li>Findet dieser <strong>zu Fuß, mit dem Rad, mit dem Boot </strong>…statt? </li> <li>Welche möglichen <strong>Zwischenstopps</strong> gibt es? </li> <li>Wie lang ist die <strong>Strecke</strong> oder <strong>Dauer</strong> dieses Ausflugs?</li> <li>Findet der Ausflug <strong>in Begleitung</strong>, mit einem Guide, einer Broschüre oder mit Wegweisern statt?</li> </ul>",
-          "0.19.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Sportwettkampfes. <ul> <li>Welche <strong>Mannschaften oder Teilnehmer</strong> treten an? </li> <li>In welcher<strong> Liga</strong> findet der Wettkampf statt?</li></ul>",
-          "0.28.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Jahrmarkts. <ul> <li>Welche <strong>Attraktionen</strong> gibt es? </li> <li>Gibt es<strong> (Neben)Aktivitäten</strong> (Quiz, Konzerte, Foodtrucks, Markt...)?</li></ul>",
-          "0.3.1.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Vorlesungsreihe. <ul><li>Was genau lernt man? </li><li>Benötigt man <strong>Vorkenntnisse</strong> um teilzunehmen? </li><li>Welches <strong>Niveau</strong> haben die Vorlesungen? </li><li>Erhält man am Ende ein <strong>Diplom</strong> oder Zertifikat?</li></ul>",
-          "0.3.1.0.1": "Schreiben Sie eine enthusiastische Umschreibung des Workshops oder Kurses mit öffentlichen Sitzungen. <ul><li>Was genau lernt man? </li><li>Benötigt man <strong>Vorkenntnisse</strong> um teilzunehmen? </li><li>Welches <strong>Niveau</strong> haben die Vorlesungen? </li><li>Erhält man am Ende ein <strong>Diplom</strong> oder Zertifikat?</li></ul>",
-          "0.3.2.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Lesung oder des Kongresses. <ul> <li>Welche<strong> Themas</strong> werden behandelt? </li><li>Welche <strong>Sprecher </strong>nehmen das Wort?</li></ul>",
-          "0.37.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Markts oder Straßenfests. <ul> <li>In <strong>welchen Straßen</strong> findet dieser statt? </li> <li>Welche <strong>Stände</strong> werden anwesend sein? </li><li>Gibt es <strong>(Neben)Aktivitäten</strong>?</li></ul>",
-          "0.49.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Party. Welche <strong>DJs</strong> oder <strong>Bands</strong> treten auf?",
-          "0.5.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Festivals. <ul> <li>Wer oder was steht auf dem <strong>Programm?</strong> </li> <li>Welche <strong>(Neben)Aktivitäten</strong> gibt es?</li> </ul>",
-          "0.50.21.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Quiz oder Spiels. <ul><li>Um welche <strong>Themen</strong> dreht sich das Quiz?</li><li>Hat das Spiel ein <strong>Thema</strong>?</li><li>Gibt es etwas zu <strong>gewinnen</strong>?</li><li>Gibt es eine <strong>maximale</strong> Anzahl <strong>Teilnehmer</strong>?</li></ul>",
-          "0.50.4.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Konzerts. <ul><li>Welche(r)<strong> Künstler(innen)</strong> treten auf? </li><li>Um welches <strong>Genre</strong> handelt es sich?</li><li>Welches<strong> Album</strong> <strong>oder Werk </strong>wird vorgestellt? </li></ul>",
-          "0.50.6.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Films. <ul> <li>Umreißen Sie kurz die <strong>Geschichte</strong>. </li> <li>Wer ist der <strong>Regisseur?</strong> </li> <li>Wer spielt die  <strong>Hauptrolle?</strong> </li> <li>Hat der Film <strong>Preise</strong> gewonnen? </li></ul>",
-          "0.54.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Tanzvorführung.<ul><li>Wer ist der <strong>Choreograph</strong>?</li><li>Wer sind die<strong> Tänzer</strong>?</li><li>Welchen <strong>Stil</strong> tanzen sie?</li><li>Um welches <strong>Thema oder Problem</strong> dreht sich die Vorstellung?</li></ul>",
-          "0.55.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Vorstellung.  <ul> <li>Umreißen Sie kurz die <strong>Geschichte</strong> oder das <strong>Thema</strong>. </li> <li>Welches <strong>Theaterensemble</strong> führt das Stück auf? </li> <li>Welche <strong>Darsteller</strong> spielen mit?</li></ul>",
-          "0.57.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Camps oder Ferienlagers.  <ul><li>Welche <strong>Aktivitäten</strong> gibt es? </li><li>Gibt es ein <strong>Thema</strong>? </li><li>Gibt es beim Camp <strong>Übernachtungsmöglichkeiten</strong>? </li><li>Wann <strong>beginnt und endet</strong> das Tagescamp und gibt es davor und danach <strong>Betreuungsmöglichkeiten</strong>?</li></ul>",
-          "0.59.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Sportaktivität. <ul> <li>Welche <strong>Sportart</strong>(en) können ausgeübt werden? </li><li>Welche <strong>Geräte</strong> werden (nicht) gestellt?</li></ul>",
-          "0.6.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung der Messe. Was kann man <strong>ansehen</strong>, <strong>erleben</strong> oder <strong>kaufen</strong>?",
-          "0.7.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Rundgangs. <ul> <li>Was kann man entlang der Strecke <strong>sehen oder erleben</strong>? </li><li>Gibt es eine maximale <strong>Anzahl Teilnehmer</strong>? </li><li>Wird der Rundgang durchgehen oder zu <strong>bestimmten Zeiten</strong> organisiert? </li><li>Gibt es <strong>Dinge zu beachten</strong> (zB. Stiefel notwendig)?</li></ul>",
-          "1.50.0.0.0": "Schreiben Sie eine enthusiastische Umschreibung des Spendenmahls. <ul><li>Was steht auf der <strong>Speisekarte?</strong> </li><li>Geht der Erlös an einen<strong> guten Zweck</strong>? </li><li>Gibt es <strong>(Neben)Aktivitäten</strong>?</li></ul>",
+          "0.0.0.0.0": "<strong>Tipps für die Beschreibung einer Ausstellung</strong><br>Beschreiben Sie, welche Künstler ausstellen oder welche Sammlungen/Objekte zu sehen sind.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.12.0.0.0": "<strong>Tipps für die Beschreibung eines Tags der offenen Tür</strong><br>Was kann man sehen oder erleben?<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.17.0.0.0": "<strong>Tipps für die Beschreibung einer Rad- oder Wanderroute</strong><br>Beschreiben Sie, was man entlang der Route sehen oder erleben kann. Geben Sie die genaue Strecke oder Dauer an.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.19.0.0.0": "<strong>Tipps für die Beschreibung eines Sportspiels</strong><br>Beschreiben Sie, welche Mannschaften oder Teilnehmer gegeneinander antreten und in welchem Wettbewerb das Spiel stattfindet.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.28.0.0.0": "<strong>Tipps für die Beschreibung einer Festlichkeit</strong><br>Beschreiben Sie, was man sehen, erleben oder kaufen kann.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.3.1.0.0": "<strong>Tipps für die Beschreibung einer Kursreihe</strong><br>Erklären Sie, was man während der Sitzungen genau lernt oder tut.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.3.1.0.1": "<strong>Tipps für die Beschreibung eines Kurses mit offenen Sitzungen</strong><br>Erklären Sie, was man während der Sitzungen genau lernt oder tut.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.3.2.0.0": "<strong>Tipps für die Beschreibung eines Vortrags oder Kongresses</strong><br>Erläutern Sie die wichtigsten Themen und nennen Sie die Redner, die das Wort ergreifen werden.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.37.0.0.0": "<strong>Tipps für die Beschreibung eines Markts, Flohmarkts oder einer Kirmes</strong><br>Beschreiben Sie, in welchen Straßen der Markt, der Flohmarkt oder die Kirmes stattfindet und welche Stände dort sein werden.",
+          "0.49.0.0.0": "<strong>Tipps für die Beschreibung einer Party oder eines Festes</strong><br>Beschreiben Sie, welche DJs oder Bands auftreten und um welches Musikgenre es sich handelt.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.5.0.0.0": "<strong>Tipps für die Beschreibung eines Festivals</strong><br>Beschreiben Sie, was auf dem Programm steht.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.50.21.0.0": "<strong>Tipps für die Beschreibung eines Spiels oder Quiz</strong><br>Erläutern Sie das Thema des Quiz oder des Spiels.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.50.4.0.0": "<strong>Tipps für die Beschreibung eines Konzerts</strong><br>Beschreiben Sie, welche Künstler auftreten und um welches Musikgenre es sich handelt.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.50.6.0.0": "<strong>Tipps für die Beschreibung eines Films</strong><br>Skizzieren Sie kurz die Handlung oder das Thema und nennen Sie die wichtigsten Mitwirkenden (Regisseur, Schauspieler).<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.54.0.0.0": "<strong>Tipps für die Beschreibung einer Tanzvorstellung</strong><br>Skizzieren Sie kurz die Geschichte oder das Thema und nennen Sie die wichtigsten Mitwirkenden (Choreograf, Tänzer).<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.55.0.0.0": "<strong>Tipps für die Beschreibung einer Theatervorstellung</strong><br>Skizzieren Sie kurz die Handlung oder das Thema und nennen Sie die wichtigsten Mitwirkenden (Regisseur, Schauspieler).<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.57.0.0.0": "<strong>Tipps für die Beschreibung eines Ferienlagers oder Urlaubs</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.59.0.0.0": "<strong>Tipps für die Beschreibung einer Sportaktivität</strong><br>Beschreiben Sie, welche Sportart(en) auf dem Programm stehen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.6.0.0.0": "<strong>Tipps für die Beschreibung einer Messe oder Ausstellung</strong><br>Beschreiben Sie, was man sehen, erleben oder kaufen kann.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "0.7.0.0.0": "<strong>Tipps für die Beschreibung eines geführten Ausflugs oder einer Führung</strong><br>Beschreiben Sie, was man entlang der Route sehen oder erleben kann. Geben Sie die genaue Strecke oder Dauer an.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "1.50.0.0.0": "<strong>Tipps für die Beschreibung eines Ess- oder Trinkfestes</strong><br>Beschreiben Sie, was auf der Speisekarte steht und ob der Erlös einem guten Zweck zugute kommt.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
           "0.15.0.0.0": "Geben Sie eine enthusiastische Beschreibung des Naturschutzgebiets oder Parks. <ul> <li> <strong>Was</strong> gibt es in dem Naturschutzgebiet oder Park <strong>zu erleben</strong>? </li> <li> <strong>Welche Erholungsmöglichkeiten</strong> gibt es? </li> </ul>",
           "0.14.0.0.0": "Geben Sie eine begeisterte Beschreibung des Denkmals. <ul> <li> An <b>welches Ereignis oder welche Person</b> wird mit dem Denkmal erinnert? </li> <li> Skizzieren Sie kurz den <strong>historischen Kontext</strong>. </li> </ul>",
           "0.53.0.0.0": "Geben Sie eine begeisterte Beschreibung des Erholungsgebietes oder -zentrums. <ul> <li> <strong>Was</strong> gibt es im Freizeitbereich oder -zentrum <strong>zu erleben</strong>? </li> <li> <strong>Welche Erholungsmöglichkeiten</strong> gibt es? </li> <li> <strong>Welche anderen Einrichtungen</strong> (Toiletten, Restaurants, Windelecke usw.) finden Sie in der Domäne vor? </li> </ul>",
@@ -380,7 +379,284 @@
           "0.8.0.0.0": "Geben Sie eine enthusiastische Beschreibung des öffentlichen Raums. <ul> <li> <strong>Beschreiben</strong> Sie den öffentlichen <strong>Raum genau</strong>. </li> <li> <strong>Was</strong> können Si<strong>e hier tun</strong>? </li> </ul>",
           "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
         },
-        "title": "Beschreibung"
+        "title": "Beschreibung",
+        "title_with_faq": "Beschreibung & FAQ",
+        "label": "Geben Sie eine begeisterte Beschreibung Ihrer Aktivität"
+      },
+      "faq": {
+        "label": "Ergänzen Sie Ihre Beschreibung mit häufig gestellten Fragen zu Ihrer Aktivität",
+        "add_button": "Häufige Frage hinzufügen",
+        "add_another_button": "Weitere häufige Frage hinzufügen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "delete_modal": {
+          "title": "Frage löschen",
+          "body": "Sind Sie sicher, dass Sie diese Frage löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+          "confirm": "Endgültig löschen",
+          "cancel": "Abbrechen"
+        },
+        "max_items_error": "Sie können maximal 30 häufige Fragen hinzufügen.",
+        "modal": {
+          "title": "Neue Frage hinzufügen",
+          "save": "Speichern",
+          "cancel": "Abbrechen",
+          "question": "Frage",
+          "question_placeholder": "Wählen Sie eine Frage aus oder schreiben Sie Ihre eigene.",
+          "answer": "Antwort",
+          "errors": {
+            "no_question": "Schreiben Sie zuerst eine Frage.",
+            "no_answer": "Die Frage kann nicht ohne Antwort gespeichert werden.",
+            "question_too_long": "Die Frage darf maximal {{ maxNumber }} Zeichen enthalten.",
+            "answer_too_long": "Die Antwort darf maximal {{ maxNumber }} Zeichen enthalten."
+          },
+          "suggestions": {
+            "0.7.0.0.0": [
+              {
+                "question": "Was muss ich mitbringen oder anziehen?"
+              },
+              {
+                "question": "Wird die Führung fortlaufend oder zu bestimmten Zeiten angeboten?"
+              }
+            ],
+            "0.6.0.0.0": [
+              {
+                "question": "Kann ich vor Ort etwas essen oder trinken?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              }
+            ],
+            "0.50.4.0.0": [
+              {
+                "question": "Welches Album oder Werk wird vorgestellt?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Ist eine Pause während des Konzerts vorgesehen?"
+              }
+            ],
+            "0.3.1.0.1": [
+              {
+                "question": "Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?",
+                "answer": "Geben Sie das erforderliche Niveau genau an (z. B. absolute Anfänger oder Fortgeschrittene)."
+              },
+              {
+                "question": "Erhalte ich nach Abschluss ein Diplom oder Zertifikat?",
+                "answer": "Geben Sie klar an, ob es sich um ein offiziell anerkanntes Diplom handelt."
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?"
+              }
+            ],
+            "0.54.0.0.0": [
+              {
+                "question": "Gibt es Schließfächer oder eine Garderobe?",
+                "answer": "Geben Sie an, ob diese kostenlos oder kostenpflichtig sind und ob große Gegenstände (wie Rucksäcke) hineinpassen."
+              },
+              {
+                "question": "Ist eine Pause während der Vorstellung vorgesehen?"
+              }
+            ],
+            "1.50.0.0.0": [
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?",
+                "answer": "Geben Sie an, ob ein Kinderprogramm vorgesehen ist."
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              }
+            ],
+            "0.5.0.0.0": [
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Kann ich vor Ort etwas essen oder trinken?"
+              }
+            ],
+            "0.28.0.0.0": [
+              {
+                "question": "Gibt es (Rand-)Aktivitäten?",
+                "answer": "Denken Sie an ein Quiz, Konzerte, Food Trucks, einen kleinen Markt ..."
+              }
+            ],
+            "0.17.0.0.0": [
+              {
+                "question": "Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?",
+                "answer": "Geben Sie an, ob ein Guide mitkommt oder ob die Teilnehmer eine Broschüre, Wegbeschreibung oder GPX-Datei erhalten."
+              },
+              {
+                "question": "Was muss ich mitbringen oder anziehen?"
+              }
+            ],
+            "0.50.6.0.0": [
+              {
+                "question": "Hat der Film Preise gewonnen?"
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Ist eine Pause während des Films vorgesehen?"
+              },
+              {
+                "question": "Für wen ist dieser Film geeignet?",
+                "answer": "Geben Sie an, ob dieser Film auch für Kinder geeignet ist."
+              }
+            ],
+            "0.57.0.0.0": [
+              {
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
+                "answer": "- Teilen Sie Kontaktdaten mit: Geben Sie an, mit wem Eltern die Möglichkeiten besprechen können.\n- Beschreiben Sie Ihre Erfahrung: Teilen Sie mit, ob Sie bereits Kinder mit besonderen Bedürfnissen betreut haben.\n- Geben Sie die Gruppengröße und die Anzahl der Betreuer an"
+              },
+              {
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
+                "answer": "Klären Sie, ob Kinder ihr eigenes Lunchpaket und/oder Snacks mitbringen müssen oder ob warmes Essen bereitgestellt wird."
+              },
+              {
+                "question": "Was muss mein Kind mitbringen oder anziehen?",
+                "answer": "Denken Sie an spezifische Kleidung (Spielkleidung, Regenmantel) oder praktische Dinge wie Sonnencreme und eine Trinkflasche."
+              },
+              {
+                "question": "Von wem werden die Kinder betreut?",
+                "answer": "Geben Sie an, ob es sich um (zertifizierte) Animateure, Lehrer oder feste Betreuer der Einrichtung handelt."
+              },
+              {
+                "question": "Welche Versicherungen gibt es?"
+              },
+              {
+                "question": "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?",
+                "answer": "Erklären Sie, ob die Gruppen strikt nach Alter eingeteilt werden und ob hier eine gewisse Flexibilität besteht."
+              },
+              {
+                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?",
+                "answer": "Geben Sie an, ob Ihr Angebot steuerlich absetzbar ist und ob Eltern diese Bescheinigung automatisch erhalten oder selbst beantragen müssen."
+              }
+            ],
+            "0.3.1.0.0": [
+              {
+                "question": "Benötige ich Vorkenntnisse zur Teilnahme?"
+              },
+              {
+                "question": "Erhalte ich am Ende ein Diplom oder Zertifikat?"
+              }
+            ],
+            "0.3.2.0.0": [
+              {
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
+                "answer": "Klären Sie, ob die Teilnehmer ihr eigenes Lunchpaket und/oder Snacks mitbringen müssen oder ob warmes Essen bereitgestellt wird."
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              }
+            ],
+            "0.37.0.0.0": [
+              {
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+              },
+              {
+                "question": "Wie kann ich mich als Standinhaber anmelden?"
+              },
+              {
+                "question": "Findet die Veranstaltung bei Regen statt?"
+              }
+            ],
+            "0.12.0.0.0": [
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?"
+              }
+            ],
+            "0.49.0.0.0": [
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              }
+            ],
+            "0.50.21.0.0": [
+              {
+                "question": "Was kann ich gewinnen?"
+              },
+              {
+                "question": "Aus wie vielen Personen darf ein Team maximal bestehen?",
+                "answer": "Geben Sie die Obergrenzen pro Team an und teilen Sie mit, ob man sich auch einzeln anmelden kann."
+              }
+            ],
+            "0.59.0.0.0": [
+              {
+                "question": "Was muss ich mitbringen oder anziehen?",
+                "answer": "Tipp: Beschreiben Sie, welches Material Sie bereitstellen und was die Teilnehmer selbst mitbringen müssen."
+              },
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              }
+            ],
+            "0.0.0.0.0": [
+              {
+                "question": "Ist ein (Audio-)Guide oder eine Broschüre verfügbar?"
+              },
+              {
+                "question": "Gibt es Schließfächer oder eine Garderobe?"
+              }
+            ],
+            "0.55.0.0.0": [
+              {
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
+              },
+              {
+                "question": "Ist eine Pause während der Vorstellung vorgesehen?"
+              }
+            ],
+            "cultuurkuur": [
+              {
+                "question": "Ist Lernmaterial verfügbar? Was und wo?"
+              }
+            ]
+          }
+        },
+        "tips": {
+          "0.7.0.0.0": "<strong>Fragen, die wir bei einem geführten Ausflug oder einer Führung oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wird die Führung fortlaufend oder zu bestimmten Zeiten angeboten?</li></ul>",
+          "0.6.0.0.0": "<strong>Fragen, die wir bei einer Messe oder Ausstellung oft hören</strong><ul><li>Kann ich vor Ort etwas essen oder trinken?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.50.4.0.0": "<strong>Fragen, die wir bei einem Konzert oft hören</strong><ul><li>Welches Album oder Werk wird vorgestellt?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während des Konzerts vorgesehen?</li></ul>",
+          "0.3.1.0.1": "<strong>Fragen, die wir bei einem Kurs mit offenen Sitzungen oft hören</strong><ul><li>Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?</li><li>Erhalte ich nach Abschluss ein Diplom oder Zertifikat?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?</li></ul>",
+          "0.54.0.0.0": "<strong>Fragen, die wir bei einer Tanzvorstellung oft hören</strong><ul><li>Gibt es Schließfächer oder eine Garderobe?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
+          "1.50.0.0.0": "<strong>Fragen, die wir bei einem Ess- oder Trinkfest oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.5.0.0.0": "<strong>Fragen, die wir bei einem Festival oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Kann ich vor Ort etwas essen oder trinken?</li></ul>",
+          "0.28.0.0.0": "<strong>Fragen, die wir bei einer Festlichkeit oft hören</strong><ul><li>Gibt es (Rand-)Aktivitäten?</li></ul>",
+          "0.17.0.0.0": "<strong>Fragen, die wir bei einer Rad- oder Wanderroute oft hören</strong><ul><li>Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?</li><li>Was muss ich mitbringen oder anziehen?</li></ul>",
+          "0.50.6.0.0": "<strong>Fragen, die wir bei einer Filmvorführung oft hören</strong><ul><li>Hat der Film Preise gewonnen?</li><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während des Films vorgesehen?</li><li>Für wen ist dieser Film geeignet?</li></ul>",
+          "0.57.0.0.0": "<strong>Fragen, die wir bei einem Ferienlager oder Urlaub oft hören</strong><ul><li>Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?</li><li>Sind Mahlzeiten inbegriffen und wie melde ich Allergien?</li><li>Was muss mein Kind mitbringen oder anziehen?</li><li>Von wem werden die Kinder betreut?</li><li>Welche Versicherungen gibt es?</li><li>Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?</li><li>Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?</li></ul>",
+          "0.3.1.0.0": "<strong>Fragen, die wir bei einer Kursreihe oft hören</strong><ul><li>Benötige ich Vorkenntnisse zur Teilnahme?</li><li>Erhalte ich am Ende ein Diplom oder Zertifikat?</li></ul>",
+          "0.3.2.0.0": "<strong>Fragen, die wir bei einem Vortrag oder Kongress oft hören</strong><ul><li>Sind Mahlzeiten inbegriffen und wie melde ich Allergien?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.37.0.0.0": "<strong>Fragen, die wir bei einem Markt, Flohmarkt oder einer Kirmes oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie kann ich mich als Standinhaber anmelden?</li><li>Findet die Veranstaltung bei Regen statt?</li></ul>",
+          "0.12.0.0.0": "<strong>Fragen, die wir bei einem Tag der offenen Tür oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?</li></ul>",
+          "0.49.0.0.0": "<strong>Fragen, die wir bei einer Party oder einem Fest oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.50.21.0.0": "<strong>Fragen, die wir bei einem Spiel oder Quiz oft hören</strong><ul><li>Was kann ich gewinnen?</li><li>Aus wie vielen Personen darf ein Team maximal bestehen?</li></ul>",
+          "0.59.0.0.0": "<strong>Fragen, die wir bei einer Sportaktivität oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.0.0.0.0": "<strong>Fragen, die wir bei einer Ausstellung oft hören</strong><ul><li>Ist ein (Audio-)Guide oder eine Broschüre verfügbar?</li><li>Gibt es Schließfächer oder eine Garderobe?</li></ul>",
+          "0.55.0.0.0": "<strong>Fragen, die wir bei einer Theatervorstellung oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
+          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>"
+        }
       },
       "event_score": {
         "tip": {
@@ -524,6 +800,7 @@
         "basic_info": "Grunddaten wurden erfolgreich geändert",
         "calendar": "Kalender wurde erfolgreich geändert",
         "description": "Die Beschreibung wurde erfolgreich geändert",
+        "faq": "FAQ wurde erfolgreich geändert",
         "organizer": "Organisation wurde erfolgreich geändert",
         "price_info": "Preisinformationen wurden erfolgreich geändert",
         "contact_info": "Kontaktdaten wurden erfolgreich geändert",
