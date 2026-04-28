@@ -106,7 +106,7 @@ test.describe('Cultuurkuur Event - Publication Status Display', () => {
 
     await expect(publicUrlLink).toHaveAttribute(
       'href',
-      `${process.env.NEXT_PUBLIC_CK_URL}/event/${cultuurkuurEventId}`,
+      `${process.env.NEXT_PUBLIC_CK_URL}/agenda/e/x/${cultuurkuurEventId}`,
     );
 
     await expect(publicUrlLink).toHaveAttribute('target', '_blank');
