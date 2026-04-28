@@ -7,6 +7,7 @@ import { Scope } from '@/constants/OfferType';
 import { useUpdateOfferFaqMutation } from '@/hooks/api/offers';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { FaqItem } from '@/types/Offer';
+import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
@@ -14,6 +15,8 @@ import { TypeaheadInput } from '@/ui/TypeaheadInput';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
+
+type SuggestionItem = { question: string; answer?: string };
 
 type FaqModalProps = {
   visible: boolean;
@@ -24,7 +27,12 @@ type FaqModalProps = {
   initialFaqItems?: FaqItem[];
   editIndex?: number;
   onSuccessfulChange?: () => void;
+  eventTypeId?: string;
+  isCultuurkuur?: boolean;
 };
+
+const QUESTION_MAX_CHARS = 255;
+const ANSWER_MAX_CHARS = 5000;
 
 const FaqModal = ({
   visible,
@@ -35,14 +43,17 @@ const FaqModal = ({
   initialFaqItems = [],
   editIndex,
   onSuccessfulChange,
+  eventTypeId,
+  isCultuurkuur,
 }: FaqModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const editItem =
     editIndex !== undefined
       ? initialFaqItems[editIndex]?.[language]
       : undefined;
 
+  const [hasAttemptedSave, setHasAttemptedSave] = useState(false);
   const [question, setQuestion] = useState(editItem?.question ?? '');
   const [answerEditorState, setAnswerEditorState] = useState(() => {
     if (editItem?.answer && htmlToDraft) {
@@ -56,6 +67,42 @@ const FaqModal = ({
     return EditorState.createEmpty();
   });
 
+  const answerPlainText = answerEditorState.getCurrentContent().getPlainText();
+
+  const eventType = isCultuurkuur ? 'cultuurkuur' : eventTypeId;
+  const i18nKey = `create*additionalInformation*faq*modal*suggestions*${eventType}`;
+  const suggestions: SuggestionItem[] =
+    eventType && i18n.exists(i18nKey, { keySeparator: '*' })
+      ? (t(i18nKey, {
+          returnObjects: true,
+          keySeparator: '*',
+        }) as SuggestionItem[])
+      : [];
+
+  const answerHint = suggestions.find(
+    (suggestion) => suggestion.question === question,
+  )?.answer;
+
+  const questionError = (() => {
+    if (question.length > QUESTION_MAX_CHARS)
+      return t(
+        'create.additionalInformation.faq.modal.errors.question_too_long',
+        { maxNumber: QUESTION_MAX_CHARS },
+      );
+    if (hasAttemptedSave && !question)
+      return t('create.additionalInformation.faq.modal.errors.no_question');
+  })();
+
+  const answerError = (() => {
+    if (answerPlainText.length > ANSWER_MAX_CHARS)
+      return t(
+        'create.additionalInformation.faq.modal.errors.answer_too_long',
+        { maxNumber: ANSWER_MAX_CHARS },
+      );
+    if (hasAttemptedSave && !answerEditorState.getCurrentContent().hasText())
+      return t('create.additionalInformation.faq.modal.errors.no_answer');
+  })();
+
   const updateFaqMutation = useUpdateOfferFaqMutation({
     onSuccess: () => {
       onSuccessfulChange?.();
@@ -63,6 +110,15 @@ const FaqModal = ({
   });
 
   const handleSave = () => {
+    setHasAttemptedSave(true);
+    if (
+      !question ||
+      !answerEditorState.getCurrentContent().hasText() ||
+      question.length > QUESTION_MAX_CHARS ||
+      answerPlainText.length > ANSWER_MAX_CHARS
+    )
+      return;
+
     const updatedItem: FaqItem = {
       [language]: {
         question,
@@ -102,6 +158,7 @@ const FaqModal = ({
         <FormElement
           id="faq-question"
           label={t('create.additionalInformation.faq.modal.question')}
+          error={questionError}
           Component={
             <TypeaheadInput
               value={question}
@@ -109,18 +166,14 @@ const FaqModal = ({
               placeholder={t(
                 'create.additionalInformation.faq.modal.question_placeholder',
               )}
-              suggestions={t(
-                'create.additionalInformation.faq.modal.suggestions',
-                {
-                  returnObjects: true,
-                },
-              )}
+              suggestions={suggestions.map((suggestion) => suggestion.question)}
             />
           }
         />
         <FormElement
           id="faq-answer"
           label={t('create.additionalInformation.faq.modal.answer')}
+          error={answerError}
           Component={
             <RichTextEditor
               editorState={answerEditorState}
@@ -128,6 +181,7 @@ const FaqModal = ({
             />
           }
         />
+        {answerHint && <Alert>{answerHint}</Alert>}
       </Stack>
     </Modal>
   );
