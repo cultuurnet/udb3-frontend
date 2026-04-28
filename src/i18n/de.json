@@ -423,7 +423,8 @@
                 "question": "Kann ich vor Ort etwas essen oder trinken?"
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               }
             ],
             "0.50.4.0.0": [
@@ -431,7 +432,8 @@
                 "question": "Welches Album oder Werk wird vorgestellt?"
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Ist eine Pause während des Konzerts vorgesehen?"
@@ -439,13 +441,16 @@
             ],
             "0.3.1.0.1": [
               {
-                "question": "Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?"
+                "question": "Benötige ich Vorkenntnisse oder Erfahrung zur Teilnahme?",
+                "answer": "Geben Sie das erforderliche Niveau genau an (z. B. absolute Anfänger oder Fortgeschrittene)."
               },
               {
-                "question": "Erhalte ich nach Abschluss ein Diplom oder Zertifikat?"
+                "question": "Erhalte ich nach Abschluss ein Diplom oder Zertifikat?",
+                "answer": "Geben Sie klar an, ob es sich um ein offiziell anerkanntes Diplom handelt."
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Kann ich in letzter Minute noch teilnehmen, ohne Anmeldung?"
@@ -453,7 +458,8 @@
             ],
             "0.54.0.0.0": [
               {
-                "question": "Gibt es Schließfächer oder eine Garderobe?"
+                "question": "Gibt es Schließfächer oder eine Garderobe?",
+                "answer": "Geben Sie an, ob diese kostenlos oder kostenpflichtig sind und ob große Gegenstände (wie Rucksäcke) hineinpassen."
               },
               {
                 "question": "Ist eine Pause während der Vorstellung vorgesehen?"
@@ -461,10 +467,12 @@
             ],
             "1.50.0.0.0": [
               {
-                "question": "Ist auch ein Rahmenprogramm vorgesehen?"
+                "question": "Ist auch ein Rahmenprogramm vorgesehen?",
+                "answer": "Geben Sie an, ob ein Kinderprogramm vorgesehen ist."
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               }
             ],
             "0.5.0.0.0": [
@@ -472,7 +480,8 @@
                 "question": "Ist auch ein Rahmenprogramm vorgesehen?"
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Kann ich vor Ort etwas essen oder trinken?"
@@ -480,12 +489,14 @@
             ],
             "0.28.0.0.0": [
               {
-                "question": "Gibt es (Rand-)Aktivitäten?"
+                "question": "Gibt es (Rand-)Aktivitäten?",
+                "answer": "Denken Sie an ein Quiz, Konzerte, Food Trucks, einen kleinen Markt ..."
               }
             ],
             "0.17.0.0.0": [
               {
-                "question": "Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?"
+                "question": "Wird die Route begleitet, mit einem Guide, Broschüre oder Wegweisern?",
+                "answer": "Geben Sie an, ob ein Guide mitkommt oder ob die Teilnehmer eine Broschüre, Wegbeschreibung oder GPX-Datei erhalten."
               },
               {
                 "question": "Was muss ich mitbringen oder anziehen?"
@@ -496,36 +507,44 @@
                 "question": "Hat der Film Preise gewonnen?"
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Ist eine Pause während des Films vorgesehen?"
               },
               {
-                "question": "Für wen ist dieser Film geeignet?"
+                "question": "Für wen ist dieser Film geeignet?",
+                "answer": "Geben Sie an, ob dieser Film auch für Kinder geeignet ist."
               }
             ],
             "0.57.0.0.0": [
               {
-                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?"
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
+                "answer": "- Teilen Sie Kontaktdaten mit: Geben Sie an, mit wem Eltern die Möglichkeiten besprechen können.\n- Beschreiben Sie Ihre Erfahrung: Teilen Sie mit, ob Sie bereits Kinder mit besonderen Bedürfnissen betreut haben.\n- Geben Sie die Gruppengröße und die Anzahl der Betreuer an"
               },
               {
-                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?"
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
+                "answer": "Klären Sie, ob Kinder ihr eigenes Lunchpaket und/oder Snacks mitbringen müssen oder ob warmes Essen bereitgestellt wird."
               },
               {
-                "question": "Was muss mein Kind mitbringen oder anziehen?"
+                "question": "Was muss mein Kind mitbringen oder anziehen?",
+                "answer": "Denken Sie an spezifische Kleidung (Spielkleidung, Regenmantel) oder praktische Dinge wie Sonnencreme und eine Trinkflasche."
               },
               {
-                "question": "Von wem werden die Kinder betreut?"
+                "question": "Von wem werden die Kinder betreut?",
+                "answer": "Geben Sie an, ob es sich um (zertifizierte) Animateure, Lehrer oder feste Betreuer der Einrichtung handelt."
               },
               {
                 "question": "Welche Versicherungen gibt es?"
               },
               {
-                "question": "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?"
+                "question": "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?",
+                "answer": "Erklären Sie, ob die Gruppen strikt nach Alter eingeteilt werden und ob hier eine gewisse Flexibilität besteht."
               },
               {
-                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?"
+                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung/dieses Lager?",
+                "answer": "Geben Sie an, ob Ihr Angebot steuerlich absetzbar ist und ob Eltern diese Bescheinigung automatisch erhalten oder selbst beantragen müssen."
               }
             ],
             "0.3.1.0.0": [
@@ -538,10 +557,12 @@
             ],
             "0.3.2.0.0": [
               {
-                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?"
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
+                "answer": "Klären Sie, ob die Teilnehmer ihr eigenes Lunchpaket und/oder Snacks mitbringen müssen oder ob warmes Essen bereitgestellt wird."
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               }
             ],
             "0.37.0.0.0": [
@@ -557,7 +578,8 @@
             ],
             "0.12.0.0.0": [
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?"
@@ -565,7 +587,8 @@
             ],
             "0.49.0.0.0": [
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               }
             ],
             "0.50.21.0.0": [
@@ -573,15 +596,18 @@
                 "question": "Was kann ich gewinnen?"
               },
               {
-                "question": "Aus wie vielen Personen darf ein Team maximal bestehen?"
+                "question": "Aus wie vielen Personen darf ein Team maximal bestehen?",
+                "answer": "Geben Sie die Obergrenzen pro Team an und teilen Sie mit, ob man sich auch einzeln anmelden kann."
               }
             ],
             "0.59.0.0.0": [
               {
-                "question": "Was muss ich mitbringen oder anziehen?"
+                "question": "Was muss ich mitbringen oder anziehen?",
+                "answer": "Tipp: Beschreiben Sie, welches Material Sie bereitstellen und was die Teilnehmer selbst mitbringen müssen."
               },
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               }
             ],
             "0.0.0.0.0": [
@@ -594,7 +620,8 @@
             ],
             "0.55.0.0.0": [
               {
-                "question": "Wie erreiche ich den Veranstaltungsort?"
+                "question": "Wie erreiche ich den Veranstaltungsort?",
+                "answer": "Geben Sie die Möglichkeiten für öffentliche Verkehrsmittel, Fahrradabstellplätze und Parkplätze in der Nähe an."
               },
               {
                 "question": "Ist eine Pause während der Vorstellung vorgesehen?"
