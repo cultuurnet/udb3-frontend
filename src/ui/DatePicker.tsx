@@ -314,7 +314,13 @@ const DatePicker = ({
         calendarContainer={
           calendarHeader
             ? ({ className, children }) => (
-                <Stack className={className}>
+                <Stack
+                  className={className}
+                  css={`
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                  `}
+                >
                   <Box className="custom-calendar-header">{calendarHeader}</Box>
                   {children}
                 </Stack>
