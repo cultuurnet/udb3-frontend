@@ -35,24 +35,29 @@ test.describe('Event Edit - Accessibility', () => {
       page.getByRole('heading', { name: 'Vertreklocatie 2' }),
     ).toBeVisible();
 
-    await page.locator('input[name="departure-city-1"]').fill('9000');
+    await page.getByTestId('departure-city-1').fill('9000');
     await page.getByRole('option', { name: '9000 Gent' }).click();
 
-    await page.locator('input[name="departure-place-1"]').fill('S.M');
+    await page.getByTestId('departure-place-1').fill('S.M');
     await page
       .getByRole('option', { name: 'S.M.A.K.', exact: true })
       .first()
       .click();
 
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
 
-    await page
-      .getByRole('button', { name: 'Verwijder vertreklocatie' })
-      .nth(1)
-      .click();
+    await page.locator('#departure-delete-1').click();
+
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
 
     await expect(
       page.getByRole('heading', { name: 'Vertreklocatie 2' }),
     ).toBeHidden();
+
+    await page
+      .getByRole('button', { name: 'Klaar met bewerken' })
+      .click({ force: true });
   });
 });

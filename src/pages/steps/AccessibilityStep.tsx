@@ -146,7 +146,7 @@ const AccessibilityStep = ({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entity?.departurePlaces]);
+  }, [entity?.departurePlaces?.length]);
 
   const setAndPersist = (next: DepartureLocation[]) => {
     setDepartureLocations(next);
@@ -203,6 +203,7 @@ const AccessibilityStep = ({
                   )}
                 </Title>
                 <Button
+                  id={`departure-delete-${index}`}
                   iconName={Icons.TRASH}
                   variant={ButtonVariants.DANGER}
                   size={ButtonSizes.SMALL}

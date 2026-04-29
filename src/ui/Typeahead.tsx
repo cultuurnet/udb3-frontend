@@ -79,7 +79,6 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
     <Box
       forwardedAs={BootstrapTypeahead}
       id={id}
-      name={name}
       allowNew={allowNew && !isLoading}
       newSelectionPrefix={newSelectionPrefix}
       options={options}
@@ -158,12 +157,15 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
       onBlur={onBlur}
       onFocus={onFocus}
       positionFixed={positionFixed}
-      inputProps={{
-        id,
-        name,
-        type: inputType,
-        required: inputRequired,
-      }}
+      inputProps={
+        {
+          id,
+          name,
+          type: inputType,
+          required: inputRequired,
+          'data-testid': name,
+        } as React.InputHTMLAttributes<HTMLInputElement>
+      }
       filterBy={filterBy ?? (() => true)}
       useCache={false}
       {...getBoxProps(props)}
