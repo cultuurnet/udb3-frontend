@@ -16,6 +16,7 @@ import { Button, ButtonVariants } from './Button';
 import { Icons } from './Icon';
 import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
+import { Stack } from './Stack';
 import { colors, getValueFromTheme } from './theme';
 
 setDefaultLocale('nl');
@@ -313,10 +314,10 @@ const DatePicker = ({
         calendarContainer={
           calendarHeader
             ? ({ className, children }) => (
-                <div className={className}>
-                  <div className="custom-calendar-header">{calendarHeader}</div>
+                <Stack className={className}>
+                  <Box className="custom-calendar-header">{calendarHeader}</Box>
                   {children}
-                </div>
+                </Stack>
               )
             : undefined
         }
