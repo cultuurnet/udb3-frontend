@@ -1757,6 +1757,7 @@
       "duplicate": "Copier et modifier",
       "duplicate_as_movie": "Copier et modifier comme film",
       "change_availability": "Modifier la disponibilité",
+      "linked_events": "Voir les activités liées",
       "delete": "Supprimer",
       "delete_modal": {
         "title_event": "Supprimer l'activité",

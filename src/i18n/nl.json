@@ -1812,6 +1812,7 @@
       "duplicate": "Kopiëren en aanpassen",
       "duplicate_as_movie": "Kopiëren en aanpassen als film",
       "change_availability": "Beschikbaarheid wijzigen",
+      "linked_events": "Bekijk gekoppelde activiteiten",
       "delete": "Verwijderen",
       "delete_modal": {
         "title_event": "Activiteit verwijderen",

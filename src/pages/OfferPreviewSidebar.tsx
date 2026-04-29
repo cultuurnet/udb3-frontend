@@ -190,7 +190,7 @@ const OfferPreviewSidebar = ({
   if (OfferTypes.PLACES) {
     actions.push({
       iconName: Icons.LINK,
-      title: 'Bekijk gekoppelde activiteiten',
+      title: t('preview.actions.linked_events'),
       // TODO add link to search page with search query on departurePlace
       // Can be picked up after https://jira.publiq.be/browse/III-7133 is implemented
       href: '/',
