@@ -283,7 +283,7 @@
           "place_placeholder": "",
           "add": "Weiteren Ort hinzufügen",
           "delete": "Abholort entfernen",
-          "max_reached": "Sie können maximal 20 Abholorte hinzufügen."
+          "max_reached": "Sie können maximal {{maxLocations}} Abholorte hinzufügen."
         }
       },
       "audience": {

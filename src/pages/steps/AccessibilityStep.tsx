@@ -307,6 +307,7 @@ const AccessibilityStep = ({
           <Text color="red">
             {t(
               'create.additionalInformation.accessibility.departure.max_reached',
+              { maxLocations: MAX_DEPARTURE_LOCATIONS },
             )}
           </Text>
         )}

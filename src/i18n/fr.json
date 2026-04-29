@@ -285,7 +285,7 @@
           "place_placeholder": "",
           "add": "Ajouter un lieu",
           "delete": "Supprimer le lieu de départ",
-          "max_reached": "Vous pouvez ajouter au maximum 20 lieux de départ."
+          "max_reached": "Vous pouvez ajouter au maximum {{maxLocations}} lieux de départ."
         }
       },
       "audience": {

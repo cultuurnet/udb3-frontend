@@ -303,7 +303,7 @@
           "place_placeholder": "",
           "add": "Voeg nog een locatie toe",
           "delete": "Verwijder vertreklocatie",
-          "max_reached": "Je kan maximum 20 vertreklocaties toevoegen."
+          "max_reached": "Je kan maximum {{maxLocations}} vertreklocaties toevoegen."
         }
       },
       "audience": {
