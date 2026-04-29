@@ -1456,6 +1456,13 @@
   },
   "date_period_picker": {
     "end": "Fin",
+    "region": {
+      "FR": "wallon",
+      "NL": "flamand"
+    },
+    "select_end_date": "Sélectionnez une date de fin",
+    "select_start_date": "Sélectionnez une date de début",
+    "show_holidays": "Afficher les vacances et jours fériés",
     "start": "Début"
   },
   "themes": {
