@@ -5,13 +5,18 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import {
+  DatePeriodPicker,
+  DatePeriodPickerVariants,
+} from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -113,8 +118,10 @@ const ReservationPeriod = ({
   setIsDatePickerVisible,
 }: ReservationPeriodProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const [startDate, setStartDate] = useState(new Date());
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
   const [endDate, setEndDate] = useState(new Date());
   const [startTime, setStartTime] = useState('00:00');
   const [endTime, setEndTime] = useState('23:59');
@@ -252,6 +259,11 @@ const ReservationPeriod = ({
             </Text>
 
             <DatePeriodPicker
+              variant={
+                isBoaEnabled
+                  ? DatePeriodPickerVariants.HOLIDAYS
+                  : DatePeriodPickerVariants.DEFAULT
+              }
               id="reservation-date-picker"
               dateStart={startDate}
               dateEnd={endDate}
@@ -264,6 +276,8 @@ const ReservationPeriod = ({
                 setEndDate(date);
                 setUserHasInteracted(true);
               }}
+              apiHolidays={apiHolidays}
+              onShowHolidaysChange={onShowHolidaysChange}
             />
 
             {hasTimeError && (

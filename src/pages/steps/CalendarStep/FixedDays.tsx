@@ -1,9 +1,14 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import {
+  DatePeriodPicker,
+  DatePeriodPickerVariants,
+} from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { List } from '@/ui/List';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
@@ -41,6 +46,7 @@ export const FixedDays = ({
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const options = [
     {
@@ -63,6 +69,8 @@ export const FixedDays = ({
 
   const startDate = useCalendarSelector((state) => state.context.startDate);
   const endDate = useCalendarSelector((state) => state.context.endDate);
+
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const openingHours = useCalendarSelector(
     (state) => state.context.openingHours,
@@ -103,12 +111,19 @@ export const FixedDays = ({
       {isPeriodic && (
         <DatePeriodPicker
           key="date-period-picker"
+          variant={
+            isBoaEnabled
+              ? DatePeriodPickerVariants.HOLIDAYS
+              : DatePeriodPickerVariants.DEFAULT
+          }
           spacing={3}
           id={`calendar-step-fixed`}
           dateStart={new Date(startDate)}
           dateEnd={new Date(endDate)}
           onDateStartChange={onChangeStartDate}
           onDateEndChange={onChangeEndDate}
+          apiHolidays={apiHolidays}
+          onShowHolidaysChange={onShowHolidaysChange}
         />
       )}
       {hasOpeningHours && (
