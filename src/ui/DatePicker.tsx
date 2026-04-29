@@ -3,7 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
-import { ComponentType, useRef } from 'react';
+import { ComponentType, ReactNode, useRef } from 'react';
 import ReactDatePicker, {
   registerLocale,
   setDefaultLocale,
@@ -16,7 +16,7 @@ import { Button, ButtonVariants } from './Button';
 import { Icons } from './Icon';
 import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
-import { getValueFromTheme } from './theme';
+import { colors, getValueFromTheme } from './theme';
 
 setDefaultLocale('nl');
 registerLocale('nl', nl);
@@ -31,16 +31,32 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   minDate?: Date;
   maxDate?: Date;
   onChange?: (value: Date) => void;
+  onCalendarClose?: () => void;
+  onMonthChange?: (date: Date) => void;
+  onYearChange?: (date: Date) => void;
+  highlightDates?: Date[];
+  calendarHeader?: ReactNode;
+  calendarContent?: ReactNode;
+  calendarWidth?: string;
+  withHolidays?: boolean;
 };
 
 const DatePicker = ({
   id,
   selected = new Date(),
   onChange,
+  onCalendarClose,
+  onMonthChange,
+  onYearChange,
   className,
   minDate,
   maxDate,
   disabled,
+  highlightDates,
+  calendarHeader,
+  calendarContent,
+  calendarWidth,
+  withHolidays = false,
   ...props
 }: Props) => {
   const { i18n } = useTranslation();
@@ -51,13 +67,10 @@ const DatePicker = ({
       {...getInlineProps(props)}
       css={`
         .react-datepicker__day--keyboard-selected {
-          background-color: ${({ theme }) => theme.colors.grey1};
-          color: #000;
-          font-weight: bold;
-
-          &:hover {
-            color: ${({ theme }) => theme.colors.white};
-          }
+          background-color: ${withHolidays ? 'transparent' : colors.grey1};
+          color: ${withHolidays ? 'inherit' : '#000'};
+          font-weight: ${withHolidays ? 'normal' : 'bold'};
+          ${!withHolidays ? `&:hover { color: ${colors.white}; }` : ''}
         }
 
         .react-datepicker {
@@ -79,25 +92,36 @@ const DatePicker = ({
           font-size: 1rem;
           border: none;
           box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+          ${calendarWidth ? `width: ${calendarWidth};` : ''}
         }
 
         .react-datepicker__header {
-          background: ${({ theme }) => theme.colors.grey1};
+          background: ${withHolidays ? colors.white : colors.grey1};
           color: #333;
           border: none;
         }
 
         .react-datepicker__day-names {
-          background-color: rgba(0, 0, 0, 0.05);
+          background-color: ${withHolidays
+            ? colors.white
+            : 'rgba(0, 0, 0, 0.05)'};
           display: flex;
           font-weight: bold;
           justify-content: center;
         }
 
+        ${withHolidays
+          ? `.react-datepicker__day-name {
+          text-transform: uppercase;
+          color: ${colors.udbMainDarkGrey};
+        }`
+          : ''}
+
         .react-datepicker__month-read-view,
         .react-datepicker__year-read-view--selected-year {
           color: #000;
           font-weight: bold;
+          ${withHolidays ? `background-color: ${colors.white};` : ''}
         }
 
         .react-datepicker-popper[data-placement^='bottom']
@@ -107,13 +131,29 @@ const DatePicker = ({
 
         .react-datepicker-popper[data-placement^='bottom']
           .react-datepicker__triangle::after {
-          border-bottom-color: ${({ theme }) => theme.colors.grey1};
+          border-bottom-color: ${colors.grey1};
         }
 
         .react-datepicker__month-read-view--down-arrow,
         .react-datepicker__year-read-view--down-arrow {
           top: 6px;
+          ${withHolidays ? `border-color: ${colors.textColor};` : ''}
         }
+
+        ${withHolidays
+          ? `.react-datepicker__month-read-view:hover
+            .react-datepicker__month-read-view--down-arrow,
+          .react-datepicker__year-read-view:hover
+            .react-datepicker__year-read-view--down-arrow {
+          border-top-color: ${colors.textColor};
+        }`
+          : ''}
+
+        ${withHolidays
+          ? `.react-datepicker__navigation-icon::before {
+          border-color: ${colors.textColor};
+        }`
+          : ''}
 
         .react-datepicker-wrapper {
           width: auto;
@@ -136,6 +176,7 @@ const DatePicker = ({
         .react-datepicker__year-read-view,
         .react-datepicker__month-read-view {
           visibility: visible !important;
+          ${withHolidays ? `background-color: ${colors.white};` : ''}
         }
 
         .react-datepicker__month-dropdown,
@@ -160,9 +201,21 @@ const DatePicker = ({
           margin-left: 0;
         }
 
+        .react-datepicker__day:hover {
+          background-color: ${colors.grey1};
+          color: inherit;
+        }
+
         .react-datepicker__day--selected {
-          background-color: ${({ theme }) => theme.colors.udbMainDarkBlue};
-          border-radius: 10px;
+          background-color: ${colors.udbMainDarkBlue};
+          ${withHolidays
+            ? `color: ${colors.white}; font-weight: bold;`
+            : 'border-radius: 10px;'}
+        }
+
+        .react-datepicker__day--selected:hover {
+          background-color: ${colors.udbMainDarkBlue};
+          ${withHolidays ? `color: ${colors.white};` : ''}
         }
 
         .react-datepicker__navigation {
@@ -190,6 +243,45 @@ const DatePicker = ({
         .react-datepicker__navigation--next {
           right: -0.5rem;
         }
+
+        ${withHolidays
+          ? `
+        .react-datepicker__day--highlighted {
+          background-color: ${colors.grey1};
+          color: #000;
+
+          &.react-datepicker__day--selected {
+            background-color: ${colors.udbMainDarkBlue};
+            color: ${colors.white};
+          }
+        }
+
+        .custom-calendar-header {
+          padding: 0.75rem;
+          background-color: ${colors.grey1};
+          border-bottom: 1px solid ${colors.grey3};
+          color: ${colors.udbMainDarkGrey};
+          font-weight: bold;
+          text-align: center;
+        }
+
+        .custom-calendar-header ~ .react-datepicker__navigation {
+          top: 3.2rem;
+        }
+
+        .react-datepicker__children-container {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+        }
+
+        .react-datepicker__month-container {
+          float: none;
+        }
+        `
+          : ''}
       `}
     >
       <Box
@@ -199,6 +291,9 @@ const DatePicker = ({
         id={id}
         selected={selected}
         onChange={onChange}
+        onCalendarClose={onCalendarClose}
+        onMonthChange={onMonthChange}
+        onYearChange={onYearChange}
         dateFormat="dd/MM/yyyy"
         showMonthDropdown
         showYearDropdown
@@ -214,8 +309,21 @@ const DatePicker = ({
         disabled={disabled}
         locale={i18n.language}
         // Empty css prop is necessary here
+        highlightDates={highlightDates}
+        calendarContainer={
+          calendarHeader
+            ? ({ className, children }) => (
+                <div className={className}>
+                  <div className="custom-calendar-header">{calendarHeader}</div>
+                  {children}
+                </div>
+              )
+            : undefined
+        }
         css=""
-      />
+      >
+        {calendarContent}
+      </Box>
       <Button
         variant={ButtonVariants.SECONDARY}
         iconName={Icons.CALENDAR_ALT}
