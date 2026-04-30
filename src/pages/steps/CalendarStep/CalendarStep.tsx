@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { eventTypesWithNoThemes } from '@/constants/EventTypes';
+import { eventTypesWithNoThemes, EventTypes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -358,6 +358,7 @@ const CalendarStep = ({
             onChangeChildcareStartTime={handleChangeChildcareStartTime}
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
             onToggleOvernightStay={handleToggleOvernightStay}
+            showOvernightStay={type?.id === EventTypes['Kamp of vakantie']}
             onAddDay={handleAddDay}
             errors={errors}
           />

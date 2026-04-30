@@ -18,6 +18,7 @@ type OneOrMoreDaysProps = {
   onChangeChildcareStartTime: (id: string, newTime: string) => void;
   onChangeChildcareEndTime: (id: string, newTime: string) => void;
   onToggleOvernightStay: (id: string, enabled: boolean) => void;
+  showOvernightStay?: boolean;
   errors: FieldErrors<FormDataUnion>;
 };
 export const OneOrMoreDays = ({
