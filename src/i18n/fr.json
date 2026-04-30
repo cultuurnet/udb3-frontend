@@ -160,7 +160,9 @@
           "invalid_hours": "L'heure de fin ne peut pas tomber avant l'heure de début."
         },
         "childcare": {
-          "label": "Garderie"
+          "label": "Garderie",
+          "from": "de",
+          "to": "à"
         }
       },
       "opening_hours_modal": {
