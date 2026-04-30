@@ -15,7 +15,10 @@ import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
-import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
+import {
+  TimeSpanPicker,
+  TimeSpanPickerLabelPositions,
+} from '@/ui/TimeSpanPicker';
 
 import {
   useCalendarSelector,
@@ -161,8 +164,10 @@ export const Days = ({
                     </Label>
                   </Inline>
                   <TimeSpanPicker
-                    spacing={3}
                     id={`calendar-step-day-${day.id}-childcare`}
+                    labelPosition={TimeSpanPickerLabelPositions.INLINE}
+                    startTimeLabel={t('create.calendar.days.childcare.from')}
+                    endTimeLabel={t('create.calendar.days.childcare.to')}
                     startTime={day.childcareStartTime ?? '00:00'}
                     endTime={day.childcareEndTime ?? '00:00'}
                     onChangeStartTime={(newTime) =>
@@ -172,7 +177,6 @@ export const Days = ({
                       onChangeChildcareEndTime?.(day.id, newTime)
                     }
                     disabled={isDisabled || !day.childcareEnabled}
-                    minWidth="120px"
                   />
                 </Stack>
               )}
