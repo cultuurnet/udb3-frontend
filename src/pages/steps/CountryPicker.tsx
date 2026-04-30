@@ -44,12 +44,15 @@ const CountryPicker = ({
         & button.btn.dropdown-toggle {
           height: ${getGlobalFormInputHeight};
           border: var(--bs-border-width) solid var(--bs-border-color);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
       `}
       {...getBoxProps(props)}
     >
       <Button customChildren>
-        <FlagIcon country={value} paddingRight={1} />
+        <FlagIcon country={value} />
       </Button>
 
       {countries.map((countryValue) => (
