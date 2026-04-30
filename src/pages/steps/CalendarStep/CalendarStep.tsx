@@ -88,6 +88,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     childcareEnabled: !!subEvent.childcare,
     childcareStartTime: subEvent.childcare?.start ?? '00:00',
     childcareEndTime: subEvent.childcare?.end ?? '23:59',
+    hasOvernightStay: false,
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -240,6 +241,7 @@ const CalendarStep = ({
     handleToggleChildcare,
     handleChangeChildcareStartTime,
     handleChangeChildcareEndTime,
+    handleToggleOvernightStay,
   } = useCalendarHandlers(handleChangeCalendarState);
 
   useEffect(() => {
@@ -321,7 +323,7 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
-      minWidth={{ l: 'auto', default: '70rem' }}
+      minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
     >
@@ -355,6 +357,7 @@ const CalendarStep = ({
             onToggleChildcare={handleToggleChildcare}
             onChangeChildcareStartTime={handleChangeChildcareStartTime}
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
+            onToggleOvernightStay={handleToggleOvernightStay}
             onAddDay={handleAddDay}
             errors={errors}
           />

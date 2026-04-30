@@ -82,6 +82,7 @@ const createInitialContext = () => ({
       childcareEnabled: false,
       childcareStartTime: '00:00',
       childcareEndTime: '23:59',
+      hasOvernightStay: false,
     },
   ],
   startDate: getStartDate(),
@@ -156,6 +157,11 @@ type CalendarEvents =
       type: 'CHANGE_CHILDCARE_END_HOUR';
       newTime: string;
       id: string;
+    }
+  | {
+      type: 'TOGGLE_OVERNIGHT_STAY';
+      id: string;
+      enabled: boolean;
     };
 
 const calendarSchema = {
@@ -215,6 +221,7 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
             childcareEnabled: false,
             childcareStartTime: '00:00',
             childcareEndTime: '23:59',
+            hasOvernightStay: false,
             ...day,
           })),
         };
@@ -234,6 +241,7 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               childcareEnabled: false,
               childcareStartTime: '00:00',
               childcareEndTime: '23:59',
+              hasOvernightStay: false,
             },
           ];
         },
@@ -376,6 +384,16 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           );
         },
       }),
+      toggleOvernightStay: assign({
+        days: (context, event) => {
+          if (event.type !== 'TOGGLE_OVERNIGHT_STAY') return context.days;
+          return context.days.map((day) =>
+            day.id === event.id
+              ? { ...day, hasOvernightStay: event.enabled }
+              : day,
+          );
+        },
+      }),
     },
     activities: undefined,
     services: undefined,
@@ -465,6 +483,9 @@ const calendarMachineConfig: MachineConfig<
         CHANGE_CHILDCARE_END_HOUR: {
           actions: ['changeChildcareEndHour'] as CalendarActions,
         },
+        TOGGLE_OVERNIGHT_STAY: {
+          actions: ['toggleOvernightStay'] as CalendarActions,
+        },
       },
     },
     multiple: {
@@ -512,6 +533,9 @@ const calendarMachineConfig: MachineConfig<
         },
         CHANGE_CHILDCARE_END_HOUR: {
           actions: ['changeChildcareEndHour'] as CalendarActions,
+        },
+        TOGGLE_OVERNIGHT_STAY: {
+          actions: ['toggleOvernightStay'] as CalendarActions,
         },
       },
     },

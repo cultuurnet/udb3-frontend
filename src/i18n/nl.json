@@ -170,6 +170,10 @@
             "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
             "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen."
           }
+        },
+        "overnight_stay": {
+          "label": "Overnachting",
+          "with": "Met overnachting"
         }
       },
       "opening_hours_modal": {
