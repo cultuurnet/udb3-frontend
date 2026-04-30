@@ -14,6 +14,7 @@ import { List } from '@/ui/List';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -133,27 +134,31 @@ export const Days = ({
               )}
               {isOneOrMoreDays && (
                 <Stack spacing={2}>
-                  <Inline spacing={3} alignItems="center">
+                  <Inline
+                    alignItems="center"
+                    css={`
+                      gap: 0.5rem;
+                      .form-switch {
+                        font-size: 0.85rem;
+                      }
+                    `}
+                  >
+                    <RadioButton
+                      id={`calendar-step-day-${day.id}-childcare-toggle`}
+                      type={RadioButtonTypes.SWITCH}
+                      color={colors.udbMainPositiveGreen}
+                      checked={!!day.childcareEnabled}
+                      disabled={isDisabled}
+                      onChange={(e) =>
+                        onToggleChildcare?.(day.id, e.target.checked)
+                      }
+                    />
                     <Label
                       variant={LabelVariants.BOLD}
                       htmlFor={`calendar-step-day-${day.id}-childcare-toggle`}
                     >
                       {t('create.calendar.days.childcare.label')}
                     </Label>
-                    <RadioButton
-                      id={`calendar-step-day-${day.id}-childcare-toggle`}
-                      type={RadioButtonTypes.SWITCH}
-                      checked={!!day.childcareEnabled}
-                      disabled={isDisabled}
-                      onChange={(e) => {
-                        console.log('[Days] childcare toggle', {
-                          id: day.id,
-                          checked: e.target.checked,
-                          currentChildcareEnabled: day.childcareEnabled,
-                        });
-                        onToggleChildcare?.(day.id, e.target.checked);
-                      }}
-                    />
                   </Inline>
                   <TimeSpanPicker
                     spacing={3}
