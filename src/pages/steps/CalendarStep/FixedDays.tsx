@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
-import { FormElement } from '@/ui/FormElement';
 import { List } from '@/ui/List';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 
 import {
   CalendarState,
@@ -37,21 +37,9 @@ export const FixedDays = ({
   onChoosePermanent,
   onChangeStartDate,
   onChangeEndDate,
-  onChangeOpeningHours,
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
-
-  const options = [
-    {
-      label: t('create.calendar.fixed_days.with_start_and_end_date'),
-      value: FixedDayOptions.PERIODIC,
-    },
-    {
-      label: t('create.calendar.fixed_days.permanent'),
-      value: FixedDayOptions.PERMANENT,
-    },
-  ];
 
   const [
     isCalendarOpeninghoursModalVisible,
@@ -87,83 +75,96 @@ export const FixedDays = ({
     return FixedDayOptions.PERIODIC;
   }, [isPermanent]);
 
-  return (
-    <Stack spacing={5} alignItems="flex-start">
-      <FormElement
-        Component={
-          <RadioButtonGroup
-            name="fixed-days-options"
-            items={options}
-            selected={selectedOption}
-            onChange={handleChangeOption}
-          />
-        }
-        id="fixed-days-options"
-      />
-      {isPeriodic && (
-        <DatePeriodPicker
-          key="date-period-picker"
-          spacing={3}
-          id={`calendar-step-fixed`}
-          dateStart={new Date(startDate)}
-          dateEnd={new Date(endDate)}
-          onDateStartChange={onChangeStartDate}
-          onDateEndChange={onChangeEndDate}
-        />
-      )}
-      {hasOpeningHours && (
-        <List width="75%">
-          <List.Item
-            alignItems="center"
-            paddingTop={3}
-            paddingBottom={3}
-            justifyContent="space-between"
-            spacing={5}
-          >
-            <Text fontWeight="bold">
-              {t('create.calendar.fixed_days.opening_hours')}
-            </Text>
-            <Button
-              key="date-change-openinghours-button"
-              variant={ButtonVariants.SECONDARY}
-              onClick={() => setIsCalendarOpeninghoursModalVisible(true)}
-            >
-              {t('create.calendar.fixed_days.button_change_opening_hours')}
-            </Button>
-          </List.Item>
-          {openingHours.map((openingHour, index) => (
-            <List.Item
-              paddingTop={2}
-              paddingBottom={2}
-              css={`
-                border-top: 1px solid lightgrey;
-              `}
-              justifyContent="space-between"
-              key={index}
-            >
-              <Text>
-                {openingHour.dayOfWeek
-                  .map((dayOfWeek) =>
-                    t(`create.calendar.days.full.${dayOfWeek}`),
-                  )
-                  .join(', ')}
-              </Text>
-              <Text>
-                {openingHour.opens} - {openingHour.closes}
-              </Text>
-            </List.Item>
-          ))}
-        </List>
-      )}
-      {!hasOpeningHours && (
+  const openingHoursContent = hasOpeningHours ? (
+    <List>
+      <List.Item
+        alignItems="center"
+        paddingTop={3}
+        paddingBottom={3}
+        justifyContent="space-between"
+        spacing={5}
+      >
+        <Text fontWeight="bold">
+          {t('create.calendar.fixed_days.opening_hours')}
+        </Text>
         <Button
-          key="date-add-openinghours-button"
           variant={ButtonVariants.SECONDARY}
           onClick={() => setIsCalendarOpeninghoursModalVisible(true)}
         >
-          {t('create.calendar.fixed_days.button_add_opening_hours')}
+          {t('create.calendar.fixed_days.button_change_opening_hours')}
         </Button>
-      )}
+      </List.Item>
+      {openingHours.map((openingHour, index) => (
+        <List.Item
+          paddingTop={2}
+          paddingBottom={2}
+          css={`
+            border-top: 1px solid lightgrey;
+          `}
+          justifyContent="space-between"
+          key={index}
+        >
+          <Text>
+            {openingHour.dayOfWeek
+              .map((dayOfWeek) => t(`create.calendar.days.full.${dayOfWeek}`))
+              .join(', ')}
+          </Text>
+          <Text>
+            {openingHour.opens} - {openingHour.closes}
+          </Text>
+        </List.Item>
+      ))}
+    </List>
+  ) : (
+    <Button
+      variant={ButtonVariants.SECONDARY}
+      onClick={() => setIsCalendarOpeninghoursModalVisible(true)}
+      alignSelf="flex-start"
+    >
+      {t('create.calendar.fixed_days.button_add_opening_hours')}
+    </Button>
+  );
+
+  return (
+    <Stack spacing={5} alignItems="flex-start">
+      <Stack spacing={4}>
+        <RadioButtonWithLabel
+          id={`fixed-days-radio-${FixedDayOptions.PERIODIC}`}
+          name="fixed-days-options"
+          value={FixedDayOptions.PERIODIC}
+          checked={selectedOption === FixedDayOptions.PERIODIC}
+          onChange={handleChangeOption}
+          label={t('create.calendar.fixed_days.with_start_and_end_date')}
+        />
+        {isPeriodic && (
+          <Stack
+            paddingBottom={4.5}
+            paddingX={4.5}
+            spacing={4}
+            css={`
+              border-bottom: 1px solid ${colors.grey1};
+            `}
+          >
+            <DatePeriodPicker
+              id="calendar-step-fixed"
+              dateStart={new Date(startDate)}
+              dateEnd={new Date(endDate)}
+              onDateStartChange={onChangeStartDate}
+              onDateEndChange={onChangeEndDate}
+            />
+            {openingHoursContent}
+          </Stack>
+        )}
+        <RadioButtonWithLabel
+          id={`fixed-days-radio-${FixedDayOptions.PERMANENT}`}
+          name="fixed-days-options"
+          value={FixedDayOptions.PERMANENT}
+          checked={selectedOption === FixedDayOptions.PERMANENT}
+          onChange={handleChangeOption}
+          label={t('create.calendar.fixed_days.permanent')}
+        />
+        {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
+      </Stack>
       <CalendarOpeninghoursModal
         visible={isCalendarOpeninghoursModalVisible}
         onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
