@@ -16,14 +16,15 @@ import { useTranslation } from 'react-i18next';
 import type { ApiHoliday } from '@/hooks/api/holidays';
 import type { Values } from '@/types/Values';
 
-import { Box } from './Box';
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
+import { RadioButtonTypes } from './RadioButton';
+import { RadioButtonWithLabel } from './RadioButtonWithLabel';
 import { Stack } from './Stack';
-import { SwitchButton } from './SwitchButton';
 import { Text, TextVariants } from './Text';
+import { colors } from './theme';
 
 const DatePeriodPickerVariants = {
   DEFAULT: 'default',
@@ -126,14 +127,19 @@ const DatePeriodPicker = ({
 
   const calendarContent = isHolidays ? (
     <Stack spacing={3}>
-      <Box>
-        <SwitchButton
-          label={t('date_period_picker.show_holidays')}
-          checked={isHighlighted}
-          onChange={handleToggleHolidays}
-          disabled={disabled}
-        />
-      </Box>
+      <RadioButtonWithLabel
+        id={`${idPrefix}-show-holidays`}
+        type={RadioButtonTypes.SWITCH}
+        label={
+          <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
+            {t('date_period_picker.show_holidays')}
+          </Text>
+        }
+        checked={isHighlighted}
+        onChange={(e) => handleToggleHolidays(e.target.checked)}
+        disabled={disabled}
+        color={colors.udbMainPositiveGreen}
+      />
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={1}>
           {formattedHolidaysForViewedMonth.map((label) => (
