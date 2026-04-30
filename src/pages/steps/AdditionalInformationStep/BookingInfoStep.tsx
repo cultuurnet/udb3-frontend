@@ -13,10 +13,7 @@ import {
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
-import {
-  DatePeriodPicker,
-  DatePeriodPickerVariants,
-} from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -259,11 +256,7 @@ const ReservationPeriod = ({
             </Text>
 
             <DatePeriodPicker
-              variant={
-                isBoaEnabled
-                  ? DatePeriodPickerVariants.HOLIDAYS
-                  : DatePeriodPickerVariants.DEFAULT
-              }
+              showHolidaysToggle={isBoaEnabled}
               id="reservation-date-picker"
               dateStart={startDate}
               dateEnd={endDate}

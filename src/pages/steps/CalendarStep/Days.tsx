@@ -8,10 +8,7 @@ import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
-import {
-  DatePeriodPicker,
-  DatePeriodPickerVariants,
-} from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
 import { List } from '@/ui/List';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -107,11 +104,7 @@ export const Days = ({
           <Stack spacing={4} key={`list-item-${day.id}`}>
             <List.Item alignItems="center" spacing={5}>
               <DatePeriodPicker
-                variant={
-                  isBoaEnabled
-                    ? DatePeriodPickerVariants.HOLIDAYS
-                    : DatePeriodPickerVariants.DEFAULT
-                }
+                showHolidaysToggle={isBoaEnabled}
                 spacing={3}
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}

@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
-import type { Values } from '@/types/Values';
 
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
@@ -25,13 +24,6 @@ import { RadioButtonWithLabel } from './RadioButtonWithLabel';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
-
-const DatePeriodPickerVariants = {
-  DEFAULT: 'default',
-  HOLIDAYS: 'holidays',
-} as const;
-
-type DatePeriodPickerVariant = Values<typeof DatePeriodPickerVariants>;
 
 type HolidayPeriod = {
   startDate: Date;
@@ -50,7 +42,7 @@ type Props = InlineProps & {
   onDateStartChange: (date: Date) => void;
   onDateEndChange: (date: Date) => void;
   disabled?: boolean;
-  variant?: DatePeriodPickerVariant;
+  showHolidaysToggle?: boolean;
   apiHolidays?: ApiHoliday[];
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
 };
@@ -64,7 +56,7 @@ const DatePeriodPicker = ({
   onDateStartChange,
   onDateEndChange,
   disabled,
-  variant = DatePeriodPickerVariants.DEFAULT,
+  showHolidaysToggle,
   apiHolidays,
   onShowHolidaysChange,
   ...props
@@ -72,8 +64,6 @@ const DatePeriodPicker = ({
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [viewedMonth, setViewedMonth] = useState(dateStart);
-
-  const isHolidays = variant === DatePeriodPickerVariants.HOLIDAYS;
 
   const handleToggleHolidays = (shown: boolean) => {
     setIsHighlighted(shown);
@@ -125,7 +115,7 @@ const DatePeriodPicker = ({
       return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
     });
 
-  const calendarContent = isHolidays ? (
+  const calendarContent = showHolidaysToggle ? (
     <Stack spacing={3}>
       <RadioButtonWithLabel
         id={`${idPrefix}-show-holidays`}
@@ -159,7 +149,7 @@ const DatePeriodPicker = ({
           {t('date_period_picker.start')}
         </Label>
         <DatePicker
-          withHolidays={isHolidays}
+          withHolidays={showHolidaysToggle}
           id={`${idPrefix}-start`}
           selected={dateStart}
           minDate={minDate}
@@ -170,17 +160,17 @@ const DatePeriodPicker = ({
             }
             onDateStartChange(startOfDay(newDateStart));
           }}
-          onMonthChange={isHolidays ? handleCalendarViewChange : undefined}
-          onYearChange={isHolidays ? handleCalendarViewChange : undefined}
-          calendarWidth={isHolidays ? '20rem' : undefined}
+          onMonthChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          onYearChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          calendarWidth={showHolidaysToggle ? '20rem' : undefined}
           calendarHeader={
-            isHolidays ? (
+            showHolidaysToggle ? (
               <Text>{t('date_period_picker.select_start_date')}</Text>
             ) : undefined
           }
           disabled={disabled}
           highlightDates={
-            isHolidays && isHighlighted ? highlightDates : undefined
+            showHolidaysToggle && isHighlighted ? highlightDates : undefined
           }
           calendarContent={calendarContent}
         />
@@ -190,7 +180,7 @@ const DatePeriodPicker = ({
           {t('date_period_picker.end')}
         </Label>
         <DatePicker
-          withHolidays={isHolidays}
+          withHolidays={showHolidaysToggle}
           id={`${idPrefix}-end`}
           selected={dateEnd}
           onChange={(newDateEnd) => {
@@ -199,11 +189,11 @@ const DatePeriodPicker = ({
             }
             onDateEndChange(endOfDay(newDateEnd));
           }}
-          onMonthChange={isHolidays ? handleCalendarViewChange : undefined}
-          onYearChange={isHolidays ? handleCalendarViewChange : undefined}
-          calendarWidth={isHolidays ? '20rem' : undefined}
+          onMonthChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          onYearChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          calendarWidth={showHolidaysToggle ? '20rem' : undefined}
           calendarHeader={
-            isHolidays ? (
+            showHolidaysToggle ? (
               <Text>{t('date_period_picker.select_end_date')}</Text>
             ) : undefined
           }
@@ -215,7 +205,7 @@ const DatePeriodPicker = ({
           maxDate={maxDate}
           disabled={disabled}
           highlightDates={
-            isHolidays && isHighlighted ? highlightDates : undefined
+            showHolidaysToggle && isHighlighted ? highlightDates : undefined
           }
           calendarContent={calendarContent}
         />
@@ -224,5 +214,4 @@ const DatePeriodPicker = ({
   );
 };
 
-export { DatePeriodPicker, DatePeriodPickerVariants };
-export type { DatePeriodPickerVariant };
+export { DatePeriodPicker };

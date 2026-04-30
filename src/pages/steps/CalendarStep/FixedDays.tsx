@@ -5,10 +5,7 @@ import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
-import {
-  DatePeriodPicker,
-  DatePeriodPickerVariants,
-} from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { List } from '@/ui/List';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
@@ -111,11 +108,7 @@ export const FixedDays = ({
       {isPeriodic && (
         <DatePeriodPicker
           key="date-period-picker"
-          variant={
-            isBoaEnabled
-              ? DatePeriodPickerVariants.HOLIDAYS
-              : DatePeriodPickerVariants.DEFAULT
-          }
+          showHolidaysToggle={isBoaEnabled}
           spacing={3}
           id={`calendar-step-fixed`}
           dateStart={new Date(startDate)}

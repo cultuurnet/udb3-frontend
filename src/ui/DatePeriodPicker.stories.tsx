@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
-import { DatePeriodPicker, DatePeriodPickerVariants } from './DatePeriodPicker';
+import { DatePeriodPicker } from './DatePeriodPicker';
 
 const meta: Meta<typeof DatePeriodPicker> = {
   title: 'Components/DatePeriodPicker',
@@ -11,13 +11,7 @@ const meta: Meta<typeof DatePeriodPicker> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['variant', 'disabled'],
-    },
-  },
-  argTypes: {
-    variant: {
-      control: { type: 'select' },
-      options: Object.values(DatePeriodPickerVariants),
+      include: ['showHolidaysToggle', 'disabled'],
     },
   },
 };
@@ -86,48 +80,35 @@ const commonArgs = {
   maxDate: new Date('2026-06-30'),
 };
 
+const render: Story['render'] = function RenderComponent(args) {
+  const [dateStart, setDateStart] = useState(args.dateStart);
+  const [dateEnd, setDateEnd] = useState(args.dateEnd);
+
+  return (
+    <DatePeriodPicker
+      {...args}
+      id="date-period-picker"
+      dateStart={dateStart}
+      dateEnd={dateEnd}
+      onDateStartChange={setDateStart}
+      onDateEndChange={setDateEnd}
+      onShowHolidaysChange={() => {}}
+    />
+  );
+};
+
 export const Default: Story = {
   args: {
     ...commonArgs,
-    variant: DatePeriodPickerVariants.DEFAULT,
   },
-  render: function RenderComponent(args) {
-    const [dateStart, setDateStart] = useState(args.dateStart);
-    const [dateEnd, setDateEnd] = useState(args.dateEnd);
-
-    return (
-      <DatePeriodPicker
-        {...args}
-        id="date-period-picker"
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        onDateStartChange={setDateStart}
-        onDateEndChange={setDateEnd}
-      />
-    );
-  },
+  render,
 };
 
-export const Holidays: Story = {
+export const WithHolidaysToggle: Story = {
   args: {
     ...commonArgs,
-    variant: DatePeriodPickerVariants.HOLIDAYS,
+    showHolidaysToggle: true,
     apiHolidays: mockHolidays,
   },
-  render: function RenderComponent(args) {
-    const [dateStart, setDateStart] = useState(args.dateStart);
-    const [dateEnd, setDateEnd] = useState(args.dateEnd);
-
-    return (
-      <DatePeriodPicker
-        {...args}
-        id="date-period-picker"
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        onDateStartChange={setDateStart}
-        onDateEndChange={setDateEnd}
-        onShowHolidaysChange={() => {}}
-      />
-    );
-  },
+  render,
 };
