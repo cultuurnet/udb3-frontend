@@ -216,9 +216,7 @@ export const Days = ({
             {childcareStartError && (
               <Text color="red">{childcareStartError}</Text>
             )}
-            {childcareEndError && (
-              <Text color="red">{childcareEndError}</Text>
-            )}
+            {childcareEndError && <Text color="red">{childcareEndError}</Text>}
             {isDisabled && (
               <Alert
                 variant={AlertVariants.PRIMARY}
