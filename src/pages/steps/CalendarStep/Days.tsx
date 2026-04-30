@@ -109,6 +109,23 @@ export const Days = ({
         const isBookingUnavailable =
           day.bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE;
 
+        const childcareStartError =
+          day.childcareEnabled &&
+          day.childcareStartTime !== undefined &&
+          day.childcareStartTime >= startTime
+            ? t(
+                'create.calendar.days.childcare.validation_messages.start_too_late',
+              )
+            : undefined;
+        const childcareEndError =
+          day.childcareEnabled &&
+          day.childcareEndTime !== undefined &&
+          day.childcareEndTime <= endTime
+            ? t(
+                'create.calendar.days.childcare.validation_messages.end_too_early',
+              )
+            : undefined;
+
         return (
           <Stack spacing={4} key={`list-item-${day.id}`}>
             <List.Item alignItems="center" spacing={5}>
@@ -169,7 +186,7 @@ export const Days = ({
                     startTimeLabel={t('create.calendar.days.childcare.from')}
                     endTimeLabel={t('create.calendar.days.childcare.to')}
                     startTime={day.childcareStartTime ?? '00:00'}
-                    endTime={day.childcareEndTime ?? '00:00'}
+                    endTime={day.childcareEndTime ?? '23:59'}
                     onChangeStartTime={(newTime) =>
                       onChangeChildcareStartTime?.(day.id, newTime)
                     }
@@ -195,6 +212,12 @@ export const Days = ({
               <Text color="red">
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
+            )}
+            {childcareStartError && (
+              <Text color="red">{childcareStartError}</Text>
+            )}
+            {childcareEndError && (
+              <Text color="red">{childcareEndError}</Text>
             )}
             {isDisabled && (
               <Alert

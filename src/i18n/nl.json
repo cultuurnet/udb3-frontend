@@ -165,7 +165,11 @@
         "childcare": {
           "label": "Kinderopvang",
           "from": "van",
-          "to": "tot"
+          "to": "tot",
+          "validation_messages": {
+            "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
+            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen."
+          }
         }
       },
       "opening_hours_modal": {
