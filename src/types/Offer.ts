@@ -99,6 +99,10 @@ type SubEvent = {
   endDate: string;
   status?: Status;
   bookingAvailability?: BookingAvailability;
+  childcare?: {
+    start: string;
+    end: string;
+  };
 };
 
 type OpeningHours = {
