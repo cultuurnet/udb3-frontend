@@ -62,11 +62,11 @@ const zIndexPaginationPageLink = above + base;
 
 const zIndexDatePickerInput = above + zIndexPaginationPageLink;
 const zIndexDatePickerButton = above + zIndexDatePickerInput;
-const zIndexDatePickerPopup = above + zIndexDatePickerButton;
 
-const zIndexSidebar = above + zIndexDatePickerPopup;
+const zIndexSidebar = above + zIndexDatePickerButton;
 const zIndexPageFooter = zIndexSidebar;
 
+const zIndexDatePickerPopup = above + zIndexSidebar;
 const zIndexJobLogger = above + zIndexSidebar;
 const zIndexToast = zIndexJobLogger;
 
