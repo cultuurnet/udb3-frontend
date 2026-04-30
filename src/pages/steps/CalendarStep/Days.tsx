@@ -60,6 +60,7 @@ type DaysProps = {
   onChangeChildcareStartTime?: (id: string, newTime: string) => void;
   onChangeChildcareEndTime?: (id: string, newTime: string) => void;
   onToggleOvernightStay?: (id: string, enabled: boolean) => void;
+  showOvernightStay?: boolean;
   errors: FieldErrors<FormDataUnion>;
 } & StackProps;
 
@@ -73,6 +74,7 @@ export const Days = ({
   onChangeChildcareStartTime,
   onChangeChildcareEndTime,
   onToggleOvernightStay,
+  showOvernightStay = false,
   errors,
   ...props
 }: DaysProps) => {
@@ -199,7 +201,7 @@ export const Days = ({
                   />
                 </Stack>
               )}
-              {isOneOrMoreDays && (
+              {isOneOrMoreDays && showOvernightStay && (
                 <Stack spacing={2}>
                   <Label
                     variant={LabelVariants.BOLD}
