@@ -85,6 +85,9 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     endDate: subEvent.endDate,
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
+    childcareEnabled: false,
+    childcareStartTime: '00:00',
+    childcareEndTime: '00:00',
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -228,6 +231,9 @@ const CalendarStep = ({
     handleChooseWithStartAndEndDate,
     handleChoosePermanent,
     handleChangeOpeningHours,
+    handleToggleChildcare,
+    handleChangeChildcareStartTime,
+    handleChangeChildcareEndTime,
   } = useCalendarHandlers(handleChangeCalendarState);
 
   useEffect(() => {
@@ -340,6 +346,9 @@ const CalendarStep = ({
             onChangeEndDate={handleChangeEndDateOfDay}
             onChangeStartTime={handleChangeStartTime}
             onChangeEndTime={handleChangeEndTime}
+            onToggleChildcare={handleToggleChildcare}
+            onChangeChildcareStartTime={handleChangeChildcareStartTime}
+            onChangeChildcareEndTime={handleChangeChildcareEndTime}
             onAddDay={handleAddDay}
             errors={errors}
           />

@@ -161,6 +161,9 @@
         },
         "validation_messages": {
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
+        },
+        "childcare": {
+          "label": "Kinderopvang"
         }
       },
       "opening_hours_modal": {
