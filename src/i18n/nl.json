@@ -1526,6 +1526,9 @@
   },
   "date_period_picker": {
     "end": "Einde",
+    "quick_links": {
+      "title": "Of selecteer alle:"
+    },
     "region": {
       "FR": "Waals",
       "NL": "Vlaams"

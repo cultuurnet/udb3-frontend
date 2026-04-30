@@ -1456,6 +1456,9 @@
   },
   "date_period_picker": {
     "end": "Fin",
+    "quick_links": {
+      "title": "Ou sélectionner tout :"
+    },
     "region": {
       "FR": "wallon",
       "NL": "flamand"
