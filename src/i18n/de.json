@@ -167,6 +167,10 @@
             "start_too_late": "Die Startzeit der Kinderbetreuung muss vor der Startzeit der Aktivität liegen.",
             "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen."
           }
+        },
+        "overnight_stay": {
+          "label": "Übernachtung",
+          "with": "Mit Übernachtung"
         }
       },
       "opening_hours_modal": {

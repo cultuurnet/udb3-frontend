@@ -59,6 +59,7 @@ type DaysProps = {
   onToggleChildcare?: (id: string, enabled: boolean) => void;
   onChangeChildcareStartTime?: (id: string, newTime: string) => void;
   onChangeChildcareEndTime?: (id: string, newTime: string) => void;
+  onToggleOvernightStay?: (id: string, enabled: boolean) => void;
   errors: FieldErrors<FormDataUnion>;
 } & StackProps;
 
@@ -71,6 +72,7 @@ export const Days = ({
   onToggleChildcare,
   onChangeChildcareStartTime,
   onChangeChildcareEndTime,
+  onToggleOvernightStay,
   errors,
   ...props
 }: DaysProps) => {
@@ -195,6 +197,44 @@ export const Days = ({
                     }
                     disabled={isDisabled || !day.childcareEnabled}
                   />
+                </Stack>
+              )}
+              {isOneOrMoreDays && (
+                <Stack spacing={2}>
+                  <Label
+                    variant={LabelVariants.BOLD}
+                    htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                  >
+                    {t('create.calendar.days.overnight_stay.label')}
+                  </Label>
+                  <Inline
+                    alignItems="center"
+                    css={`
+                      gap: 0.5rem;
+                      flex-wrap: nowrap;
+                      white-space: nowrap;
+                      .form-switch {
+                        font-size: 0.85rem;
+                      }
+                    `}
+                  >
+                    <RadioButton
+                      id={`calendar-step-day-${day.id}-overnight-toggle`}
+                      type={RadioButtonTypes.SWITCH}
+                      color={colors.udbMainPositiveGreen}
+                      checked={!!day.hasOvernightStay}
+                      disabled={isDisabled}
+                      onChange={(e) =>
+                        onToggleOvernightStay?.(day.id, e.target.checked)
+                      }
+                    />
+                    <Label
+                      variant={LabelVariants.NORMAL}
+                      htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                    >
+                      {t('create.calendar.days.overnight_stay.with')}
+                    </Label>
+                  </Inline>
                 </Stack>
               )}
               {days.length > 1 && (

@@ -167,6 +167,10 @@
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
             "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
           }
+        },
+        "overnight_stay": {
+          "label": "Nuitée",
+          "with": "Avec Nuitée"
         }
       },
       "opening_hours_modal": {

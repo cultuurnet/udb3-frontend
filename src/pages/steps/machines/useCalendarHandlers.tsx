@@ -156,6 +156,14 @@ export const useCalendarHandlers = (
     [handleOnChangeState, send],
   );
 
+  const handleToggleOvernightStay = useCallback(
+    (id: string, enabled: boolean) => {
+      const newState = send('TOGGLE_OVERNIGHT_STAY', { id, enabled });
+      handleOnChangeState(newState);
+    },
+    [handleOnChangeState, send],
+  );
+
   return {
     handleLoadInitialContext,
     handleAddDay,
@@ -174,5 +182,6 @@ export const useCalendarHandlers = (
     handleToggleChildcare,
     handleChangeChildcareStartTime,
     handleChangeChildcareEndTime,
+    handleToggleOvernightStay,
   };
 };
