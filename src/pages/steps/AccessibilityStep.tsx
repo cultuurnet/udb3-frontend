@@ -102,12 +102,18 @@ const AccessibilityStep = ({
     );
   }, [entity?.departurePlaces, field, onValidationChange]);
 
+  const isMountedRef = useRef(true);
+  useEffect(
+    () => () => {
+      isMountedRef.current = false;
+    },
+    [],
+  );
+
   useEffect(() => {
     if (hasInitialized.current) return;
     if (!entity?.departurePlaces?.length) return;
     hasInitialized.current = true;
-
-    let cancelled = false;
 
     (async () => {
       const places = await Promise.all(
@@ -116,7 +122,7 @@ const AccessibilityStep = ({
         ),
       );
 
-      if (cancelled) return;
+      if (!isMountedRef.current) return;
 
       const loaded: DepartureLocation[] = places
         .filter((place): place is Place => !!place)
@@ -141,12 +147,7 @@ const AccessibilityStep = ({
 
       if (loaded.length > 0) setDepartureLocations(loaded);
     })();
-
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entity?.departurePlaces?.length]);
+  }, [entity, headers, i18n.language]);
 
   const setAndPersist = (next: DepartureLocation[]) => {
     setDepartureLocations(next);
