@@ -158,6 +158,9 @@
         },
         "validation_messages": {
           "invalid_hours": "Die Endzeit darf nicht vor der Beginzeit liegen."
+        },
+        "childcare": {
+          "label": "Kinderbetreuung"
         }
       },
       "opening_hours_modal": {

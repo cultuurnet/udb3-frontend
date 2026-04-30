@@ -132,6 +132,30 @@ export const useCalendarHandlers = (
     [handleOnChangeState, send],
   );
 
+  const handleToggleChildcare = useCallback(
+    (id: string, enabled: boolean) => {
+      const newState = send('TOGGLE_CHILDCARE', { id, enabled });
+      handleOnChangeState(newState);
+    },
+    [handleOnChangeState, send],
+  );
+
+  const handleChangeChildcareStartTime = useCallback(
+    (id: string, newTime: string) => {
+      const newState = send('CHANGE_CHILDCARE_START_HOUR', { id, newTime });
+      handleOnChangeState(newState);
+    },
+    [handleOnChangeState, send],
+  );
+
+  const handleChangeChildcareEndTime = useCallback(
+    (id: string, newTime: string) => {
+      const newState = send('CHANGE_CHILDCARE_END_HOUR', { id, newTime });
+      handleOnChangeState(newState);
+    },
+    [handleOnChangeState, send],
+  );
+
   return {
     handleLoadInitialContext,
     handleAddDay,
@@ -147,5 +171,8 @@ export const useCalendarHandlers = (
     handleChooseWithStartAndEndDate,
     handleChoosePermanent,
     handleChangeOpeningHours,
+    handleToggleChildcare,
+    handleChangeChildcareStartTime,
+    handleChangeChildcareEndTime,
   };
 };

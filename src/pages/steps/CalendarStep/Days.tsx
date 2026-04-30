@@ -8,7 +8,10 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
+import { Inline } from '@/ui/Inline';
+import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
@@ -49,6 +52,9 @@ type DaysProps = {
   onChangeEndDate: (id: string, date: Date | null) => void;
   onChangeStartTime?: (id: string, hours: number, minutes: number) => void;
   onChangeEndTime?: (id: string, hours: number, minutes: number) => void;
+  onToggleChildcare?: (id: string, enabled: boolean) => void;
+  onChangeChildcareStartTime?: (id: string, newTime: string) => void;
+  onChangeChildcareEndTime?: (id: string, newTime: string) => void;
   errors: FieldErrors<FormDataUnion>;
 } & StackProps;
 
@@ -58,6 +64,9 @@ export const Days = ({
   onChangeEndDate,
   onChangeStartTime,
   onChangeEndTime,
+  onToggleChildcare,
+  onChangeChildcareStartTime,
+  onChangeChildcareEndTime,
   errors,
   ...props
 }: DaysProps) => {
@@ -121,6 +130,46 @@ export const Days = ({
                   disabled={isDisabled}
                   minWidth="120px"
                 />
+              )}
+              {isOneOrMoreDays && (
+                <Stack spacing={2}>
+                  <Inline spacing={3} alignItems="center">
+                    <Label
+                      variant={LabelVariants.BOLD}
+                      htmlFor={`calendar-step-day-${day.id}-childcare-toggle`}
+                    >
+                      {t('create.calendar.days.childcare.label')}
+                    </Label>
+                    <RadioButton
+                      id={`calendar-step-day-${day.id}-childcare-toggle`}
+                      type={RadioButtonTypes.SWITCH}
+                      checked={!!day.childcareEnabled}
+                      disabled={isDisabled}
+                      onChange={(e) => {
+                        console.log('[Days] childcare toggle', {
+                          id: day.id,
+                          checked: e.target.checked,
+                          currentChildcareEnabled: day.childcareEnabled,
+                        });
+                        onToggleChildcare?.(day.id, e.target.checked);
+                      }}
+                    />
+                  </Inline>
+                  <TimeSpanPicker
+                    spacing={3}
+                    id={`calendar-step-day-${day.id}-childcare`}
+                    startTime={day.childcareStartTime ?? '00:00'}
+                    endTime={day.childcareEndTime ?? '00:00'}
+                    onChangeStartTime={(newTime) =>
+                      onChangeChildcareStartTime?.(day.id, newTime)
+                    }
+                    onChangeEndTime={(newTime) =>
+                      onChangeChildcareEndTime?.(day.id, newTime)
+                    }
+                    disabled={isDisabled || !day.childcareEnabled}
+                    minWidth="120px"
+                  />
+                </Stack>
               )}
               {days.length > 1 && (
                 <Button
