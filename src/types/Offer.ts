@@ -103,6 +103,7 @@ type SubEvent = {
     start: string;
     end: string;
   };
+  overnight?: boolean;
 };
 
 type OpeningHours = {
