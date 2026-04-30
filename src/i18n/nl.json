@@ -163,7 +163,9 @@
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
         },
         "childcare": {
-          "label": "Kinderopvang"
+          "label": "Kinderopvang",
+          "from": "van",
+          "to": "tot"
         }
       },
       "opening_hours_modal": {
