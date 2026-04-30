@@ -32,12 +32,14 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   minDate?: Date;
   maxDate?: Date;
   onChange?: (value: Date) => void;
+  onCalendarOpen?: () => void;
   onCalendarClose?: () => void;
   onMonthChange?: (date: Date) => void;
   onYearChange?: (date: Date) => void;
   highlightDates?: Date[];
   calendarHeader?: ReactNode;
   calendarContent?: ReactNode;
+  calendarQuickLinks?: (onClose: () => void) => ReactNode;
   calendarWidth?: string;
   withHolidays?: boolean;
 };
@@ -46,6 +48,7 @@ const DatePicker = ({
   id,
   selected = new Date(),
   onChange,
+  onCalendarOpen,
   onCalendarClose,
   onMonthChange,
   onYearChange,
@@ -56,6 +59,7 @@ const DatePicker = ({
   highlightDates,
   calendarHeader,
   calendarContent,
+  calendarQuickLinks,
   calendarWidth,
   withHolidays = false,
   ...props
@@ -292,6 +296,7 @@ const DatePicker = ({
         id={id}
         selected={selected}
         onChange={onChange}
+        onCalendarOpen={onCalendarOpen}
         onCalendarClose={onCalendarClose}
         onMonthChange={onMonthChange}
         onYearChange={onYearChange}
@@ -309,22 +314,49 @@ const DatePicker = ({
         }
         disabled={disabled}
         locale={i18n.language}
+        popperProps={{ strategy: 'fixed' }}
         // Empty css prop is necessary here
         highlightDates={highlightDates}
         calendarContainer={
-          calendarHeader
-            ? ({ className, children }) => (
-                <Stack
-                  className={className}
-                  css={`
-                    border-radius: 0.5rem;
-                    overflow: hidden;
-                  `}
-                >
-                  <Box className="custom-calendar-header">{calendarHeader}</Box>
-                  {children}
-                </Stack>
-              )
+          calendarHeader || calendarQuickLinks
+            ? ({ className, children }) =>
+                calendarQuickLinks ? (
+                  <Inline
+                    backgroundColor={colors.white}
+                    css={`
+                      border-radius: 0.5rem;
+                      overflow: hidden;
+                      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+                    `}
+                  >
+                    <Box className={className}>
+                      {calendarHeader && (
+                        <Stack className="custom-calendar-header">
+                          {calendarHeader}
+                        </Stack>
+                      )}
+                      {children}
+                    </Box>
+                    <Stack>
+                      {calendarQuickLinks?.(() =>
+                        datePickerRef.current?.setOpen(false),
+                      )}
+                    </Stack>
+                  </Inline>
+                ) : (
+                  <Stack
+                    className={className}
+                    css={`
+                      border-radius: 0.5rem;
+                      overflow: hidden;
+                    `}
+                  >
+                    <Box className="custom-calendar-header">
+                      {calendarHeader}
+                    </Box>
+                    {children}
+                  </Stack>
+                )
             : undefined
         }
         css=""

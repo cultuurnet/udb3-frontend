@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
+import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
@@ -43,8 +44,10 @@ type Props = InlineProps & {
   onDateEndChange: (date: Date) => void;
   disabled?: boolean;
   showHolidaysToggle?: boolean;
+  showQuickLinks?: boolean;
   apiHolidays?: ApiHoliday[];
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
+  onCalendarOpen?: () => void;
 };
 
 const DatePeriodPicker = ({
@@ -57,13 +60,17 @@ const DatePeriodPicker = ({
   onDateEndChange,
   disabled,
   showHolidaysToggle,
+  showQuickLinks,
   apiHolidays,
   onShowHolidaysChange,
+  onCalendarOpen,
   ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [viewedMonth, setViewedMonth] = useState(dateStart);
+
+  const showHolidayFeatures = showHolidaysToggle || showQuickLinks;
 
   const handleToggleHolidays = (shown: boolean) => {
     setIsHighlighted(shown);
@@ -72,9 +79,7 @@ const DatePeriodPicker = ({
 
   const handleCalendarViewChange = (month: Date) => {
     setViewedMonth(month);
-    if (isHighlighted) {
-      onShowHolidaysChange?.(true, month.getFullYear());
-    }
+    onShowHolidaysChange?.(isHighlighted, month.getFullYear());
   };
 
   const idPrefix = `${id}date-period-picker`;
@@ -115,7 +120,89 @@ const DatePeriodPicker = ({
       return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
     });
 
-  const calendarContent = showHolidaysToggle ? (
+  const allSchoolHolidays = (apiHolidays ?? [])
+    .filter((holiday) => holiday.type === 'schoolHolidays')
+    .map((holiday) => {
+      const name =
+        holiday.name.find(
+          (name) => name.language === i18n.language.toUpperCase(),
+        )?.text ?? '';
+      const regionLabel = holiday.region
+        ? t(`date_period_picker.region.${holiday.region}`)
+        : undefined;
+      return {
+        label: regionLabel ? `${name} (${regionLabel})` : name,
+        startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
+        endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
+      };
+    })
+    .filter((link) => link.label !== '')
+    .filter(
+      (link, index, array) =>
+        array.findIndex((item) => item.label === link.label) === index,
+    );
+
+  const upcomingSchoolHolidays = allSchoolHolidays.filter(
+    (link) => link.endDate >= firstDayOfViewedMonth,
+  );
+
+  const firstUpcoming = upcomingSchoolHolidays[0];
+  const targetMonthStart = firstUpcoming
+    ? new Date(
+        firstUpcoming.startDate.getFullYear(),
+        firstUpcoming.startDate.getMonth(),
+        1,
+      )
+    : firstDayOfViewedMonth;
+  const targetMonthEnd = new Date(
+    targetMonthStart.getFullYear(),
+    targetMonthStart.getMonth() + 1,
+    0,
+  );
+
+  const quickLinks = upcomingSchoolHolidays.filter(
+    (link) =>
+      link.startDate <= targetMonthEnd && link.endDate >= targetMonthStart,
+  );
+
+  const calendarQuickLinks = showQuickLinks
+    ? (onClose: () => void) => (
+        <Stack
+          css={`
+            border-left: 1px solid ${colors.grey3};
+            height: 100%;
+            font-size: 1rem;
+          `}
+        >
+          <Stack
+            className="custom-calendar-header"
+            css={`
+              padding: 1.33rem !important;
+            `}
+          >
+            <Text>{t('date_period_picker.quick_links.title')}</Text>
+          </Stack>
+          <Stack spacing={2} paddingY={3} paddingX={4}>
+            {quickLinks.map(({ label, startDate, endDate }) => (
+              <Button
+                key={label}
+                variant={ButtonVariants.SECONDARY}
+                onClick={() => {
+                  onDateStartChange(startOfDay(startDate));
+                  onDateEndChange(endOfDay(endDate));
+                  onClose();
+                }}
+                disabled={disabled}
+              >
+                {label}
+              </Button>
+            ))}
+          </Stack>
+        </Stack>
+      )
+    : undefined;
+
+  const calendarContent = showHolidayFeatures ? (
     <Stack spacing={3}>
       <RadioButtonWithLabel
         id={`${idPrefix}-show-holidays`}
@@ -149,7 +236,7 @@ const DatePeriodPicker = ({
           {t('date_period_picker.start')}
         </Label>
         <DatePicker
-          withHolidays={showHolidaysToggle}
+          withHolidays={showHolidayFeatures}
           id={`${idPrefix}-start`}
           selected={dateStart}
           minDate={minDate}
@@ -160,23 +247,25 @@ const DatePeriodPicker = ({
             }
             onDateStartChange(startOfDay(newDateStart));
           }}
+          onCalendarOpen={showQuickLinks ? onCalendarOpen : undefined}
           onMonthChange={
-            showHolidaysToggle ? handleCalendarViewChange : undefined
+            showHolidayFeatures ? handleCalendarViewChange : undefined
           }
           onYearChange={
-            showHolidaysToggle ? handleCalendarViewChange : undefined
+            showHolidayFeatures ? handleCalendarViewChange : undefined
           }
-          calendarWidth={showHolidaysToggle ? '20rem' : undefined}
+          calendarWidth={showHolidayFeatures ? '20rem' : undefined}
           calendarHeader={
-            showHolidaysToggle ? (
+            showHolidayFeatures ? (
               <Text>{t('date_period_picker.select_start_date')}</Text>
             ) : undefined
           }
           disabled={disabled}
           highlightDates={
-            showHolidaysToggle && isHighlighted ? highlightDates : undefined
+            showHolidayFeatures && isHighlighted ? highlightDates : undefined
           }
           calendarContent={calendarContent}
+          calendarQuickLinks={calendarQuickLinks}
         />
       </Stack>
       <Stack spacing={2} as="div">
@@ -184,7 +273,7 @@ const DatePeriodPicker = ({
           {t('date_period_picker.end')}
         </Label>
         <DatePicker
-          withHolidays={showHolidaysToggle}
+          withHolidays={showHolidayFeatures}
           id={`${idPrefix}-end`}
           selected={dateEnd}
           onChange={(newDateEnd) => {
@@ -194,14 +283,14 @@ const DatePeriodPicker = ({
             onDateEndChange(endOfDay(newDateEnd));
           }}
           onMonthChange={
-            showHolidaysToggle ? handleCalendarViewChange : undefined
+            showHolidayFeatures ? handleCalendarViewChange : undefined
           }
           onYearChange={
-            showHolidaysToggle ? handleCalendarViewChange : undefined
+            showHolidayFeatures ? handleCalendarViewChange : undefined
           }
-          calendarWidth={showHolidaysToggle ? '20rem' : undefined}
+          calendarWidth={showHolidayFeatures ? '20rem' : undefined}
           calendarHeader={
-            showHolidaysToggle ? (
+            showHolidayFeatures ? (
               <Text>{t('date_period_picker.select_end_date')}</Text>
             ) : undefined
           }
@@ -213,7 +302,7 @@ const DatePeriodPicker = ({
           maxDate={maxDate}
           disabled={disabled}
           highlightDates={
-            showHolidaysToggle && isHighlighted ? highlightDates : undefined
+            showHolidayFeatures && isHighlighted ? highlightDates : undefined
           }
           calendarContent={calendarContent}
         />
