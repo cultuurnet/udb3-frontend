@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
+import { Text, TextVariants } from '@/ui/Text';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { Tooltip } from '@/ui/Tooltip';
 
@@ -59,7 +60,17 @@ export const CalendarOptionToggle = ({
         text={t('create.calendar.types.one_or_more_days')}
         minHeight={parseSpacing(7)}
         flex={1}
-      />
+      >
+        <Text
+          variant={TextVariants.MUTED}
+          fontSize="14px"
+          css={`
+            margin-top: -0.4rem;
+          `}
+        >
+          {t('create.calendar.types.one_or_more_days_example')}
+        </Text>
+      </ToggleBox>
 
       <ToggleBox
         onClick={onChooseFixedDays}
@@ -69,7 +80,17 @@ export const CalendarOptionToggle = ({
         minHeight={parseSpacing(7)}
         flex={1}
         disabled={disableChooseFixedDays}
-      />
+      >
+        <Text
+          variant={TextVariants.MUTED}
+          fontSize="14px"
+          css={`
+            margin-top: -0.4rem;
+          `}
+        >
+          {t('create.calendar.types.fixed_days_example')}
+        </Text>
+      </ToggleBox>
     </Inline>
   );
 };
