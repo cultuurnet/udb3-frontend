@@ -102,9 +102,10 @@ export const FixedDays = ({
             border-top: 1px solid lightgrey;
           `}
           justifyContent="space-between"
+          spacing={2}
           key={index}
         >
-          <Text>
+          <Text maxWidth="25rem">
             {openingHour.dayOfWeek
               .map((dayOfWeek) => t(`create.calendar.days.full.${dayOfWeek}`))
               .join(', ')}
