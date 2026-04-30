@@ -231,6 +231,9 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               id: createDayId(),
               status: { type: OfferStatus.AVAILABLE },
               bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
+              childcareEnabled: false,
+              childcareStartTime: '00:00',
+              childcareEndTime: '00:00',
             },
           ];
         },
