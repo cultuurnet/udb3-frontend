@@ -162,7 +162,11 @@
         "childcare": {
           "label": "Garderie",
           "from": "de",
-          "to": "à"
+          "to": "à",
+          "validation_messages": {
+            "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
+            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
+          }
         }
       },
       "opening_hours_modal": {

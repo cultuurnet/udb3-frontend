@@ -87,7 +87,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     bookingAvailability: subEvent.bookingAvailability,
     childcareEnabled: false,
     childcareStartTime: '00:00',
-    childcareEndTime: '00:00',
+    childcareEndTime: '23:59',
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -315,7 +315,7 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
-      minWidth={{ l: 'auto', default: '65rem' }}
+      minWidth={{ l: 'auto', default: '70rem' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
     >

@@ -81,7 +81,7 @@ const createInitialContext = () => ({
       } as BookingAvailability,
       childcareEnabled: false,
       childcareStartTime: '00:00',
-      childcareEndTime: '00:00',
+      childcareEndTime: '23:59',
     },
   ],
   startDate: getStartDate(),
@@ -214,7 +214,7 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           days: event.newContext.days.map((day) => ({
             childcareEnabled: false,
             childcareStartTime: '00:00',
-            childcareEndTime: '00:00',
+            childcareEndTime: '23:59',
             ...day,
           })),
         };
@@ -233,7 +233,7 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
               childcareEnabled: false,
               childcareStartTime: '00:00',
-              childcareEndTime: '00:00',
+              childcareEndTime: '23:59',
             },
           ];
         },
