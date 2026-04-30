@@ -4,8 +4,17 @@ import { css } from 'styled-components';
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
-import { getValueFromTheme } from './theme';
+import { Text, TextVariants } from './Text';
+import { getGlobalBorderRadius, getValueFromTheme } from './theme';
 import { Typeahead } from './Typeahead';
+
+const TimeSpanPickerLabelPositions = {
+  TOP: 'top',
+  INLINE: 'inline',
+} as const;
+
+type TimeSpanPickerLabelPosition =
+  (typeof TimeSpanPickerLabelPositions)[keyof typeof TimeSpanPickerLabelPositions];
 
 const getValueForTimePicker = getValueFromTheme('timePicker');
 
@@ -39,6 +48,7 @@ type Props = {
   onChangeStartTime: (newStartTime: string) => void;
   onChangeEndTime: (newEndTime: string) => void;
   disabled?: boolean;
+  labelPosition?: TimeSpanPickerLabelPosition;
 } & InlineProps;
 
 const isQuarterHour = (time: string) =>
@@ -78,12 +88,83 @@ const TimeSpanPicker = ({
   onChangeEndTime,
   disabled,
   minWidth,
+  labelPosition = TimeSpanPickerLabelPositions.TOP,
   ...props
 }: Props) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
 
   const timeSlots = (time: string) => time === '23:59' || isQuarterHour(time);
+
+  if (labelPosition === TimeSpanPickerLabelPositions.INLINE) {
+    const fields = [
+      {
+        key: 'start',
+        label: startTimeLabel ?? t('time_span_picker.start'),
+        value: startTime,
+        onChange: onChangeStartTime,
+      },
+      {
+        key: 'end',
+        label: endTimeLabel ?? t('time_span_picker.end'),
+        value: endTime,
+        onChange: onChangeEndTime,
+      },
+    ];
+
+    return (
+      <Inline
+        as="div"
+        css={`
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          gap: 0.5rem;
+        `}
+        {...getInlineProps(props)}
+      >
+        {fields.map(({ key, label, value, onChange }) => (
+          <Inline
+            key={key}
+            alignItems="center"
+            css={`
+              flex: 0 0 auto;
+              gap: 0.4rem;
+              border: var(--bs-border-width) solid var(--bs-border-color);
+              border-radius: ${getGlobalBorderRadius};
+              padding: 0.375rem 0.75rem;
+              background: white;
+              ${disabled ? 'opacity: 0.5;' : ''}
+              input {
+                border: none;
+                outline: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.95rem;
+                min-width: 4.5rem;
+              }
+              input::-webkit-calendar-picker-indicator {
+                display: none;
+              }
+              input:disabled {
+                cursor: not-allowed;
+              }
+            `}
+          >
+            <Text variant={TextVariants.MUTED} fontSize="0.85rem">
+              {label}
+            </Text>
+            <input
+              type="time"
+              value={value}
+              disabled={disabled}
+              onChange={(event) => onChange(event.target.value)}
+            />
+          </Inline>
+        ))}
+      </Inline>
+    );
+  }
 
   return (
     <Inline as="div" spacing={5} {...getInlineProps(props)}>
@@ -135,4 +216,4 @@ const TimeSpanPicker = ({
   );
 };
 
-export { TimeSpanPicker };
+export { TimeSpanPicker, TimeSpanPickerLabelPositions };
