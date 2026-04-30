@@ -112,3 +112,28 @@ export const WithHolidaysToggle: Story = {
   },
   render,
 };
+
+export const QuickLinks: Story = {
+  args: {
+    ...commonArgs,
+    showQuickLinks: true,
+    apiHolidays: mockHolidays,
+  },
+  render: function RenderComponent(args) {
+    const [dateStart, setDateStart] = useState(args.dateStart);
+    const [dateEnd, setDateEnd] = useState(args.dateEnd);
+
+    return (
+      <DatePeriodPicker
+        {...args}
+        id="date-period-picker"
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+        onDateStartChange={setDateStart}
+        onDateEndChange={setDateEnd}
+        onShowHolidaysChange={() => {}}
+        onCalendarOpen={() => {}}
+      />
+    );
+  },
+};
