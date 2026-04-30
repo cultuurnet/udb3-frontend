@@ -160,8 +160,12 @@ const DatePeriodPicker = ({
             }
             onDateStartChange(startOfDay(newDateStart));
           }}
-          onMonthChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
-          onYearChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          onMonthChange={
+            showHolidaysToggle ? handleCalendarViewChange : undefined
+          }
+          onYearChange={
+            showHolidaysToggle ? handleCalendarViewChange : undefined
+          }
           calendarWidth={showHolidaysToggle ? '20rem' : undefined}
           calendarHeader={
             showHolidaysToggle ? (
@@ -189,8 +193,12 @@ const DatePeriodPicker = ({
             }
             onDateEndChange(endOfDay(newDateEnd));
           }}
-          onMonthChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
-          onYearChange={showHolidaysToggle ? handleCalendarViewChange : undefined}
+          onMonthChange={
+            showHolidaysToggle ? handleCalendarViewChange : undefined
+          }
+          onYearChange={
+            showHolidaysToggle ? handleCalendarViewChange : undefined
+          }
           calendarWidth={showHolidaysToggle ? '20rem' : undefined}
           calendarHeader={
             showHolidaysToggle ? (
