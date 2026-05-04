@@ -44,6 +44,39 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   withHolidays?: boolean;
 };
 
+type CalendarWithQuickLinksProps = {
+  className: string;
+  calendarHeader?: ReactNode;
+  calendarQuickLinks: (onClose: () => void) => ReactNode;
+  onClose: () => void;
+  children: ReactNode;
+};
+
+const CalendarWithQuickLinks = ({
+  className,
+  calendarHeader,
+  calendarQuickLinks,
+  onClose,
+  children,
+}: CalendarWithQuickLinksProps) => (
+  <Inline
+    backgroundColor={colors.white}
+    css={`
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    `}
+  >
+    <Box className={className}>
+      {calendarHeader && (
+        <Stack className="custom-calendar-header">{calendarHeader}</Stack>
+      )}
+      {children}
+    </Box>
+    <Stack>{calendarQuickLinks(onClose)}</Stack>
+  </Inline>
+);
+
 const DatePicker = ({
   id,
   selected = new Date(),
@@ -321,28 +354,14 @@ const DatePicker = ({
           calendarHeader || calendarQuickLinks
             ? ({ className, children }) =>
                 calendarQuickLinks ? (
-                  <Inline
-                    backgroundColor={colors.white}
-                    css={`
-                      border-radius: 0.5rem;
-                      overflow: hidden;
-                      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-                    `}
+                  <CalendarWithQuickLinks
+                    className={className}
+                    calendarHeader={calendarHeader}
+                    calendarQuickLinks={calendarQuickLinks}
+                    onClose={() => datePickerRef.current?.setOpen(false)}
                   >
-                    <Box className={className}>
-                      {calendarHeader && (
-                        <Stack className="custom-calendar-header">
-                          {calendarHeader}
-                        </Stack>
-                      )}
-                      {children}
-                    </Box>
-                    <Stack>
-                      {calendarQuickLinks?.(() =>
-                        datePickerRef.current?.setOpen(false),
-                      )}
-                    </Stack>
-                  </Inline>
+                    {children}
+                  </CalendarWithQuickLinks>
                 ) : (
                   <Stack
                     className={className}
