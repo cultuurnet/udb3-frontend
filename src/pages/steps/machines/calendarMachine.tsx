@@ -149,12 +149,12 @@ type CalendarEvents =
       enabled: boolean;
     }
   | {
-      type: 'CHANGE_CHILDCARE_START_HOUR';
+      type: 'CHANGE_CHILDCARE_START_TIME';
       newTime: string;
       id: string;
     }
   | {
-      type: 'CHANGE_CHILDCARE_END_HOUR';
+      type: 'CHANGE_CHILDCARE_END_TIME';
       newTime: string;
       id: string;
     }
@@ -364,9 +364,9 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           );
         },
       }),
-      changeChildcareStartHour: assign({
+      changeChildcareStartTime: assign({
         days: (context, event) => {
-          if (event.type !== 'CHANGE_CHILDCARE_START_HOUR') return context.days;
+          if (event.type !== 'CHANGE_CHILDCARE_START_TIME') return context.days;
           return context.days.map((day) =>
             day.id === event.id
               ? { ...day, childcareStartTime: event.newTime }
@@ -374,9 +374,9 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           );
         },
       }),
-      changeChildcareEndHour: assign({
+      changeChildcareEndTime: assign({
         days: (context, event) => {
-          if (event.type !== 'CHANGE_CHILDCARE_END_HOUR') return context.days;
+          if (event.type !== 'CHANGE_CHILDCARE_END_TIME') return context.days;
           return context.days.map((day) =>
             day.id === event.id
               ? { ...day, childcareEndTime: event.newTime }
@@ -477,11 +477,11 @@ const calendarMachineConfig: MachineConfig<
         TOGGLE_CHILDCARE: {
           actions: ['toggleChildcare'] as CalendarActions,
         },
-        CHANGE_CHILDCARE_START_HOUR: {
-          actions: ['changeChildcareStartHour'] as CalendarActions,
+        CHANGE_CHILDCARE_START_TIME: {
+          actions: ['changeChildcareStartTime'] as CalendarActions,
         },
-        CHANGE_CHILDCARE_END_HOUR: {
-          actions: ['changeChildcareEndHour'] as CalendarActions,
+        CHANGE_CHILDCARE_END_TIME: {
+          actions: ['changeChildcareEndTime'] as CalendarActions,
         },
         TOGGLE_OVERNIGHT_STAY: {
           actions: ['toggleOvernightStay'] as CalendarActions,
@@ -528,11 +528,11 @@ const calendarMachineConfig: MachineConfig<
         TOGGLE_CHILDCARE: {
           actions: ['toggleChildcare'] as CalendarActions,
         },
-        CHANGE_CHILDCARE_START_HOUR: {
-          actions: ['changeChildcareStartHour'] as CalendarActions,
+        CHANGE_CHILDCARE_START_TIME: {
+          actions: ['changeChildcareStartTime'] as CalendarActions,
         },
-        CHANGE_CHILDCARE_END_HOUR: {
-          actions: ['changeChildcareEndHour'] as CalendarActions,
+        CHANGE_CHILDCARE_END_TIME: {
+          actions: ['changeChildcareEndTime'] as CalendarActions,
         },
         TOGGLE_OVERNIGHT_STAY: {
           actions: ['toggleOvernightStay'] as CalendarActions,
