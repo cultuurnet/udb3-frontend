@@ -88,7 +88,7 @@ export const CalendarOptionToggle = ({
             margin-top: -0.4rem;
           `}
         >
-          {t('create.calendar.types.fixed_days_example')}
+          {!isCultuurkuurEvent && t('create.calendar.types.fixed_days_example')}
         </Text>
       </ToggleBox>
     </Inline>
