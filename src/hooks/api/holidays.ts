@@ -89,16 +89,16 @@ const useHolidays = (year?: number, enabled?: boolean) => {
 
 const useHolidaysWithToggle = () => {
   const [showHolidays, setShowHolidays] = useState(false);
-  const [calendarOpened, setCalendarOpened] = useState(false);
+  const [isCalendarOpened, setIsCalendarOpened] = useState(false);
   const [viewedYear, setViewedYear] = useState(new Date().getFullYear());
-  const apiHolidays = useHolidays(viewedYear, showHolidays || calendarOpened);
+  const apiHolidays = useHolidays(viewedYear, showHolidays || isCalendarOpened);
 
   const onShowHolidaysChange = (shown: boolean, year: number) => {
     setShowHolidays(shown);
     setViewedYear(year);
   };
 
-  const onCalendarOpen = () => setCalendarOpened(true);
+  const onCalendarOpen = () => setIsCalendarOpened(true);
 
   return { apiHolidays, onShowHolidaysChange, onCalendarOpen };
 };
