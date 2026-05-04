@@ -394,6 +394,7 @@
           "0.8.0.0.0": "Donnez une description enthousiaste de l'espace public. <ul> <li> <strong>Décrivez</strong> <strong>avec précision</strong> l'espace public. </li> <li> <strong>Que</strong> pouvez-vous <strong>faire ici</strong> ? </li> </ul>",
           "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>",
           "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Conseils pour la description d'un accueil extrascolaire</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Conseils pour la description d'une activité d'un mouvement de jeunesse</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
         },
         "title": "Description",
         "title_with_faq": "Description & FAQ",
@@ -663,6 +664,16 @@
                 "answer": "Indiquez si votre offre est fiscalement déductible et si les parents reçoivent cette attestation automatiquement ou doivent en faire la demande."
               }
             ],
+            "8aRjN4dGsXuE6tBkM1pVwQ": [
+              {
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?",
+                "answer": "- Partagez les coordonnées : indiquez avec qui les parents peuvent convenir des modalités.<br>- Décrivez votre expérience : précisez si vous avez déjà accueilli des enfants ayant des besoins particuliers.<br>- Indiquez la taille du groupe et le nombre d'encadrants."
+              },
+              {
+                "question": "Que doit apporter ou porter mon enfant ?",
+                "answer": "Pensez à des vêtements adaptés (tenue de jeu, imperméable) ou des objets pratiques comme la crème solaire et une gourde."
+              }
+            ],
             ]
           }
         },
@@ -690,6 +701,7 @@
           "0.55.0.0.0": "<strong>Questions fréquentes relatives aux spectacles de théâtre</strong><ul><li>Comment accéder au lieu ?</li><li>Y a-t-il une pause prévue pendant le spectacle ?</li></ul>",
           "cultuurkuur": "<strong>Questions fréquentes relatives aux activités Cultuurkuur</strong><ul><li>Du matériel pédagogique est-il disponible ? Lequel et où ?</li></ul>",
           "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Questions fréquentes relatives aux accueils extrascolaires</strong><ul><li>Les jeunes enfants peuvent-ils faire une sieste pendant la journée ?</li><li>Recevrai-je une attestation fiscale pour cet accueil ?</li></ul>",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Questions fréquentes relatives aux activités d'un mouvement de jeunesse</strong><ul><li>Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?</li><li>Que doit apporter ou porter mon enfant ?</li></ul>",
         }
       },
       "event_score": {

@@ -392,6 +392,7 @@
           "0.8.0.0.0": "Geben Sie eine enthusiastische Beschreibung des öffentlichen Raums. <ul> <li> <strong>Beschreiben</strong> Sie den öffentlichen <strong>Raum genau</strong>. </li> <li> <strong>Was</strong> können Si<strong>e hier tun</strong>? </li> </ul>",
           "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>",
           "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Tipps für die Beschreibung einer Kinderbetreuung</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Tipps für die Beschreibung einer Aktivität einer Jugendbewegung</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
         },
         "title": "Beschreibung",
         "title_with_faq": "Beschreibung & FAQ",
@@ -656,6 +657,16 @@
                 "answer": "Geben Sie an, ob Ihr Angebot steuerlich absetzbar ist und ob Eltern diese Bescheinigung automatisch erhalten oder selbst beantragen müssen."
               }
             ],
+            "8aRjN4dGsXuE6tBkM1pVwQ": [
+              {
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
+                "answer": "- Teilen Sie Kontaktdaten mit: Geben Sie an, mit wem Eltern die Möglichkeiten besprechen können.<br>- Beschreiben Sie Ihre Erfahrung: Teilen Sie mit, ob Sie bereits Kinder mit besonderen Bedürfnissen betreut haben.<br>- Geben Sie die Gruppengröße und die Anzahl der Betreuer an."
+              },
+              {
+                "question": "Was muss mein Kind mitbringen oder anziehen?",
+                "answer": "Denken Sie an spezifische Kleidung (Spielkleidung, Regenmantel) oder praktische Dinge wie Sonnencreme und eine Trinkflasche."
+              }
+            ],
             ]
           }
         },
@@ -682,6 +693,7 @@
           "0.55.0.0.0": "<strong>Fragen, die wir bei einer Theatervorstellung oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
           "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>",
           "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Fragen, die wir bei einer Kinderbetreuung oft hören</strong><ul><li>Können junge Kleinkinder tagsüber ein Nickerchen machen?</li><li>Erhalte ich eine steuerliche Bescheinigung für diese Betreuung?</li></ul>",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Fragen, die wir bei einer Aktivität einer Jugendbewegung oft hören</strong><ul><li>Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?</li><li>Was muss mein Kind mitbringen oder anziehen?</li></ul>",
         }
       },
       "event_score": {
