@@ -1469,6 +1469,9 @@
   },
   "date_period_picker": {
     "end": "Ende",
+    "quick_links": {
+      "title": "Oder alles auswählen:"
+    },
     "region": {
       "FR": "wallonisch",
       "NL": "flämisch"
