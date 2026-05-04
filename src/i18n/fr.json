@@ -275,6 +275,19 @@
     "additionalInformation": {
       "title_events": "Faites ressortir cette activité",
       "title_places": "Faites en sorte que cet emplacement se démarque",
+      "accessibility": {
+        "title": "Accessibilité",
+        "departure": {
+          "title": "Depuis quelle école ou quel autre lieu un transport est-il prévu pour amener les enfants à votre activité ?",
+          "info": "Il peut s'agir par exemple d'une corde de promenade, d'un bus ou d'un vélo-taxi qui amène les enfants depuis une école ou une garderie jusqu'au lieu de votre activité.",
+          "location_title": "Lieu de départ {{number}}",
+          "place_label": "Choisir un lieu",
+          "place_placeholder": "",
+          "add": "Ajouter un lieu",
+          "delete": "Supprimer le lieu de départ",
+          "max_reached": "Vous pouvez ajouter au maximum {{maxLocations}} lieux de départ."
+        }
+      },
       "audience": {
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
@@ -812,7 +825,8 @@
         "contact_info": "Les coordonnées ont été modifiées avec succès",
         "booking_info": "Les informations de réservation ont été modifiées avec succès",
         "media": "Image/vidéo modifiée avec succès",
-        "audience": "Accès modifié avec succès"
+        "audience": "Accès modifié avec succès",
+        "accessibility": "L'accessibilité a été modifiée avec succès"
       }
     }
   },
