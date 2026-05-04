@@ -142,7 +142,7 @@ export const useCalendarHandlers = (
 
   const handleChangeChildcareStartTime = useCallback(
     (id: string, newTime: string) => {
-      const newState = send('CHANGE_CHILDCARE_START_HOUR', { id, newTime });
+      const newState = send('CHANGE_CHILDCARE_START_TIME', { id, newTime });
       handleOnChangeState(newState);
     },
     [handleOnChangeState, send],
@@ -150,7 +150,7 @@ export const useCalendarHandlers = (
 
   const handleChangeChildcareEndTime = useCallback(
     (id: string, newTime: string) => {
-      const newState = send('CHANGE_CHILDCARE_END_HOUR', { id, newTime });
+      const newState = send('CHANGE_CHILDCARE_END_TIME', { id, newTime });
       handleOnChangeState(newState);
     },
     [handleOnChangeState, send],
