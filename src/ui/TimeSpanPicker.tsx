@@ -155,6 +155,7 @@ const TimeSpanPicker = ({
               {label}
             </Text>
             <input
+              id={`${idPrefix}-${key}`}
               type="time"
               value={value}
               disabled={disabled}
