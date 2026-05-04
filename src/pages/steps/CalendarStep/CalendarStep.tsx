@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { eventTypesWithNoThemes, EventTypes } from '@/constants/EventTypes';
+import { EventTypes, eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { OfferTypes } from '@/constants/OfferType';
 import {
