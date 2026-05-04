@@ -390,7 +390,8 @@
           "wwjRVmExI0w6xfQwT1KWpx": "Geben Sie eine begeisterte Beschreibung des Spielplatzes. <ul> <li> <strong>Welche</strong> <strong>Spielgeräte</strong> findest du auf dem Spielplatz? </li> <li> Ist der Spielplatz <strong>drinnen</strong> oder <strong>draußen</strong>? </li> <li> Gibt es in der Nähe des Spielplatzes eine <strong>Verpflegungsmöglichkeit</strong>? </li> <li> Welche <strong>anderen Einrichtungen</strong> (Toilette, Windelecke usw.) finden Sie auf dem Spielplatz? </li> </ul>",
           "OyaPaf64AEmEAYXHeLMAtA": "Geben Sie eine begeisterte Beschreibung der Halle oder des Ausstellungsraums. <ul> <li> <strong>Welche Aktivitäten</strong> oder Darbietungen werden in der Halle oder in der Ausstellungshalle organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann die Halle auch gebucht werden? </li> </ul>",
           "0.8.0.0.0": "Geben Sie eine enthusiastische Beschreibung des öffentlichen Raums. <ul> <li> <strong>Beschreiben</strong> Sie den öffentlichen <strong>Raum genau</strong>. </li> <li> <strong>Was</strong> können Si<strong>e hier tun</strong>? </li> </ul>",
-          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
+          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Tipps für die Beschreibung einer Kinderbetreuung</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
         },
         "title": "Beschreibung",
         "title_with_faq": "Beschreibung & FAQ",
@@ -644,6 +645,17 @@
               {
                 "question": "Ist Lernmaterial verfügbar? Was und wo?"
               }
+            ],
+            "K7mPx3nQrT9bWfH2zL5cYv": [
+              {
+                "question": "Können junge Kleinkinder tagsüber ein Nickerchen machen?",
+                "answer": "Geben Sie an, ob ein Ruheraum vorhanden ist."
+              },
+              {
+                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung?",
+                "answer": "Geben Sie an, ob Ihr Angebot steuerlich absetzbar ist und ob Eltern diese Bescheinigung automatisch erhalten oder selbst beantragen müssen."
+              }
+            ],
             ]
           }
         },
@@ -668,7 +680,8 @@
           "0.59.0.0.0": "<strong>Fragen, die wir bei einer Sportaktivität oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
           "0.0.0.0.0": "<strong>Fragen, die wir bei einer Ausstellung oft hören</strong><ul><li>Ist ein (Audio-)Guide oder eine Broschüre verfügbar?</li><li>Gibt es Schließfächer oder eine Garderobe?</li></ul>",
           "0.55.0.0.0": "<strong>Fragen, die wir bei einer Theatervorstellung oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
-          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>"
+          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Fragen, die wir bei einer Kinderbetreuung oft hören</strong><ul><li>Können junge Kleinkinder tagsüber ein Nickerchen machen?</li><li>Erhalte ich eine steuerliche Bescheinigung für diese Betreuung?</li></ul>",
         }
       },
       "event_score": {

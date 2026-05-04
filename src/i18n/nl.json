@@ -416,7 +416,8 @@
           "wwjRVmExI0w6xfQwT1KWpx": "Geef een enthousiaste omschrijving van de speeltuin. <ul> <li> <strong>Welke speeltoestellen</strong> vind je op de speeltuin? </li> <li> Is de speeltuin <strong>binnen, overdekt of buiten</strong>? </li> <li> Is er <strong>horeca</strong> aanwezig in de buurt van de speeltuin? </li> <li> Welke <strong>andere voorzieningen</strong> (toilet, luierhoek, etc.) vind je op de speeltuin? </li> </ul> ",
           "OyaPaf64AEmEAYXHeLMAtA": "Geef een enthousiaste omschrijving van de zaal of expohal. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in de zaal of hal georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> </ul>",
           "0.8.0.0.0": "Geef een enthousiaste omschrijving van de openbare ruimte. <ul> <li> <strong>Omschrijf</strong> de openbare ruimte <strong>nauwkeurig</strong>. </li> <li> <strong>Wat</strong> kan je hier <strong>doen</strong>? </li> </ul>",
-          "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>"
+          "8.70.0.0.0": "Geef een enthousiaste omschrijving van het theater. <ul> <li> <strong>Welke activiteiten</strong> of <strong>voorstellingen</strong> worden in dit theater georganiseerd? </li> <li> Is er een <strong>eigen programmatie</strong> of kan de zaal ook geboekt worden? </li> <li> Specifieer het <strong>doelpubliek</strong>. </li> </ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Tips voor de beschrijving van een kinderopvang</strong><br>Omschrijf de algemene sfeer, het thema en de belangrijkste activiteiten die je met de kinderen gaat doen.<br><br>Vul daarna verder aan met extra informatie. Gebruik daarvoor ook de veelgestelde vragen.",
         },
         "title": "Beschrijving",
         "title_with_faq": "Beschrijving & FAQ",
@@ -674,6 +675,17 @@
               {
                 "question": "Is er lesmateriaal beschikbaar? Wat en waar?"
               }
+            ],
+            "K7mPx3nQrT9bWfH2zL5cYv": [
+              {
+                "question": "Kunnen jonge kleuters overdag een dutje doen?",
+                "answer": "Vermeld of er een slaapruimte voorzien is."
+              },
+              {
+                "question": "Krijg ik een fiscaal attest voor deze opvang?",
+                "answer": "Vermeld of je aanbod fiscaal aftrekbaar is en of ouders dit attest automatisch ontvangen of zelf moeten aanvragen."
+              }
+            ],
             ]
           }
         },
@@ -698,7 +710,8 @@
           "0.59.0.0.0": "<strong>Vragen die wij vaak horen bij een sportactiviteit</strong><ul><li>Wat moet ik meebrengen of aandoen?</li><li>Hoe bereik ik de locatie?</li></ul>",
           "0.0.0.0.0": "<strong>Vragen die wij vaak horen bij een tentoonstelling</strong><ul><li>Is er een (audio)gids of brochure beschikbaar?</li><li>Zijn er lockers of een vestiaire?</li></ul>",
           "0.55.0.0.0": "<strong>Vragen die wij vaak horen bij een theatervoorstelling</strong><ul><li>Hoe bereik ik de locatie?</li><li>Is er een pauze voorzien tijdens de voorstelling?</li></ul>",
-          "cultuurkuur": "<strong>Vragen die wij vaak horen bij een cultuurkuur-activiteit</strong><ul><li>Is er lesmateriaal beschikbaar? Wat en waar?</li></ul>"
+          "cultuurkuur": "<strong>Vragen die wij vaak horen bij een cultuurkuur-activiteit</strong><ul><li>Is er lesmateriaal beschikbaar? Wat en waar?</li></ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Vragen die wij vaak horen bij kinderopvang</strong><ul><li>Kunnen jonge kleuters overdag een dutje doen?</li><li>Krijg ik een fiscaal attest voor deze opvang?</li></ul>",
         }
       },
       "event_score": {
