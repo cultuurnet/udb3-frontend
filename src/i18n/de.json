@@ -125,7 +125,8 @@
       "types": {
         "one_or_more_days": "An bestimmten Daten",
         "one_or_more_days_example": "z. B. am 5. Juli von 12 bis 20 Uhr",
-        "fixed_days": "Feste Tage pro Woche"
+        "fixed_days": "Feste Tage pro Woche",
+        "fixed_days_example": "p. ex. chaque mercredi de 14h à 15h"
       },
       "one_or_more_days": {
         "button_add": "Tag hinzufügen"
