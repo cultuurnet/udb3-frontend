@@ -34,6 +34,19 @@ type HolidayPeriod = {
 
 const locales = { nl, fr, de };
 
+const getHolidayLabel = (
+  holiday: ApiHoliday,
+  language: string,
+  t: (key: string) => string,
+): string => {
+  const name =
+    holiday.name.find((n) => n.language === language.toUpperCase())?.text ?? '';
+  const regionLabel = holiday.region
+    ? t(`date_period_picker.region.${holiday.region}`)
+    : undefined;
+  return regionLabel ? `${name} (${regionLabel})` : name;
+};
+
 type Props = InlineProps & {
   id: string;
   dateStart: Date;
@@ -86,19 +99,13 @@ const DatePeriodPicker = ({
   const locale = locales[i18n.language] ?? nl;
   const year = viewedMonth.getFullYear();
 
-  const holidayPeriods: HolidayPeriod[] = (apiHolidays ?? []).map((holiday) => {
-    const name =
-      holiday.name.find((name) => name.language === i18n.language.toUpperCase())
-        ?.text ?? '';
-    const regionLabel = holiday.region
-      ? t(`date_period_picker.region.${holiday.region}`)
-      : undefined;
-    return {
+  const holidayPeriods: HolidayPeriod[] = (apiHolidays ?? []).map(
+    (holiday) => ({
       startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
       endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-      name: regionLabel ? `${name} (${regionLabel})` : name,
-    };
-  });
+      name: getHolidayLabel(holiday, i18n.language, t),
+    }),
+  );
 
   const highlightDates = holidayPeriods.flatMap(({ startDate, endDate }) =>
     eachDayOfInterval({ start: startDate, end: endDate }),
@@ -120,27 +127,19 @@ const DatePeriodPicker = ({
       return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
     });
 
-  const allSchoolHolidays = (apiHolidays ?? [])
+  const schoolHolidays = (apiHolidays ?? [])
     .filter((holiday) => holiday.type === 'schoolHolidays')
-    .map((holiday) => {
-      const name =
-        holiday.name.find(
-          (name) => name.language === i18n.language.toUpperCase(),
-        )?.text ?? '';
-      const regionLabel = holiday.region
-        ? t(`date_period_picker.region.${holiday.region}`)
-        : undefined;
-      return {
-        label: regionLabel ? `${name} (${regionLabel})` : name,
-        startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
-        endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-      };
-    })
-    .filter((link) => link.label !== '')
-    .filter(
-      (link, index, array) =>
-        array.findIndex((item) => item.label === link.label) === index,
-    );
+    .map((holiday) => ({
+      label: getHolidayLabel(holiday, i18n.language, t),
+      startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
+      endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
+    }));
+
+  const allSchoolHolidays = schoolHolidays.filter(
+    ({ label }, index) =>
+      label !== '' &&
+      schoolHolidays.findIndex((holiday) => holiday.label === label) === index,
+  );
 
   const upcomingSchoolHolidays = allSchoolHolidays.filter(
     (link) => link.endDate >= firstDayOfViewedMonth,
