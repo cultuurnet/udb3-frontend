@@ -111,7 +111,7 @@ const linkPropTypes = ['rel', 'target'];
 
 const getInlineProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
-    if (key.startsWith('aria-')) return true;
+    if (key.startsWith('aria-') || key.startsWith('data-')) return true;
     const propTypes: string[] = [
       ...boxPropTypes,
       ...inlinePropTypes,
