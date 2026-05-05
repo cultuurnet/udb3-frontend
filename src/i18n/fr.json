@@ -182,6 +182,7 @@
         "start_time": "De",
         "title": "Heures d 'ouverture",
         "days": "Jours",
+        "select_days": "Sélectionner jour(s)",
         "validation_messages": {
           "day_of_week": {
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
