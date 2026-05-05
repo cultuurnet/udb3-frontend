@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { OfferStatus } from '@/constants/OfferStatus';
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -62,8 +64,10 @@ export const Days = ({
   ...props
 }: DaysProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const days = useCalendarSelector((state) => state.context.days);
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const isOneOrMoreDays = useIsOneOrMoreDays();
 
@@ -100,6 +104,7 @@ export const Days = ({
           <Stack spacing={4} key={`list-item-${day.id}`}>
             <List.Item alignItems="center" spacing={5}>
               <DatePeriodPicker
+                showHolidaysToggle={isBoaEnabled}
                 spacing={3}
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}
@@ -109,6 +114,8 @@ export const Days = ({
                 }
                 onDateEndChange={(newDate) => onChangeEndDate(day.id, newDate)}
                 disabled={isDisabled}
+                apiHolidays={apiHolidays}
+                onShowHolidaysChange={onShowHolidaysChange}
               />
               {isOneOrMoreDays && (
                 <TimeSpanPicker

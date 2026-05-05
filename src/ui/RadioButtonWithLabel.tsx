@@ -27,6 +27,7 @@ const RadioButtonWithLabel = React.forwardRef(
       className,
       checked,
       type,
+      color,
       ...props
     }: Props,
     ref: Ref<HTMLElement>,
@@ -48,6 +49,7 @@ const RadioButtonWithLabel = React.forwardRef(
           value={value}
           name={name}
           checked={checked}
+          color={color}
         />
         <Stack>
           <Label cursor="pointer" htmlFor={id}>

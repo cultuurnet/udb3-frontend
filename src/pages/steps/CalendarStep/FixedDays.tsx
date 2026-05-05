@@ -1,6 +1,8 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -41,6 +43,7 @@ export const FixedDays = ({
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const options = [
     {
@@ -63,6 +66,8 @@ export const FixedDays = ({
 
   const startDate = useCalendarSelector((state) => state.context.startDate);
   const endDate = useCalendarSelector((state) => state.context.endDate);
+
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const openingHours = useCalendarSelector(
     (state) => state.context.openingHours,
@@ -103,12 +108,15 @@ export const FixedDays = ({
       {isPeriodic && (
         <DatePeriodPicker
           key="date-period-picker"
+          showHolidaysToggle={isBoaEnabled}
           spacing={3}
           id={`calendar-step-fixed`}
           dateStart={new Date(startDate)}
           dateEnd={new Date(endDate)}
           onDateStartChange={onChangeStartDate}
           onDateEndChange={onChangeEndDate}
+          apiHolidays={apiHolidays}
+          onShowHolidaysChange={onShowHolidaysChange}
         />
       )}
       {hasOpeningHours && (

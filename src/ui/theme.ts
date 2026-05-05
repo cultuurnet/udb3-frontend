@@ -6,7 +6,7 @@ import type { Values } from '@/types/Values';
 const colors = {
   udbRed: '#c0120c',
   udbMainBlue: '#009FDF',
-  udbMainDarkBlue: '#0083B8',
+  udbMainDarkBlue: '#0077a6',
   udbMainDarkestBlue: '#005C7C',
   udbMainMediumBlue: '#DFF8FF',
   udbMainLightBlue: '#F8FDFF',
