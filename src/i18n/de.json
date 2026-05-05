@@ -166,7 +166,8 @@
           "to": "bis",
           "validation_messages": {
             "start_too_late": "Die Startzeit der Kinderbetreuung muss vor der Startzeit der Aktivität liegen.",
-            "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen."
+            "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen.",
+            "set_times_required": "Bitte geben Sie die Start- und Endzeit der Kinderbetreuung an."
           }
         },
         "overnight_stay": {

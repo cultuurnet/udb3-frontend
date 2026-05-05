@@ -166,7 +166,8 @@
           "to": "à",
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
-            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
+            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
+            "set_times_required": "Veuillez indiquer les heures de début et de fin de la garderie."
           }
         },
         "overnight_stay": {

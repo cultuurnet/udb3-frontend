@@ -1,4 +1,5 @@
 import { camelCase } from 'lodash';
+import { useState } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -82,6 +83,13 @@ export const Days = ({
 
   const days = useCalendarSelector((state) => state.context.days);
 
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
+    {},
+  );
+
+  const markTouched = (key: string) =>
+    setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+
   const isOneOrMoreDays = useIsOneOrMoreDays();
 
   const subEventErrors = errors.calendar?.subEvent ?? [];
@@ -113,9 +121,18 @@ export const Days = ({
         const isBookingUnavailable =
           day.bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE;
 
+        const childcareStartTouched =
+          touchedFields[`${day.id}-start`] && !!day.childcareStartTime;
+        const childcareEndTouched =
+          touchedFields[`${day.id}-end`] && !!day.childcareEndTime;
+
+        const childcareTimesMissing =
+          day.childcareEnabled &&
+          (!day.childcareStartTime || !day.childcareEndTime);
+
         const childcareStartError =
           day.childcareEnabled &&
-          day.childcareStartTime !== undefined &&
+          childcareStartTouched &&
           day.childcareStartTime >= startTime
             ? t(
                 'create.calendar.days.childcare.validation_messages.start_too_late',
@@ -123,7 +140,7 @@ export const Days = ({
             : undefined;
         const childcareEndError =
           day.childcareEnabled &&
-          day.childcareEndTime !== undefined &&
+          childcareEndTouched &&
           day.childcareEndTime <= endTime
             ? t(
                 'create.calendar.days.childcare.validation_messages.end_too_early',
@@ -189,14 +206,16 @@ export const Days = ({
                     labelPosition={TimeSpanPickerLabelPositions.INLINE}
                     startTimeLabel={t('create.calendar.days.childcare.from')}
                     endTimeLabel={t('create.calendar.days.childcare.to')}
-                    startTime={day.childcareStartTime ?? '00:00'}
-                    endTime={day.childcareEndTime ?? '23:59'}
-                    onChangeStartTime={(newTime) =>
-                      onChangeChildcareStartTime?.(day.id, newTime)
-                    }
-                    onChangeEndTime={(newTime) =>
-                      onChangeChildcareEndTime?.(day.id, newTime)
-                    }
+                    startTime={day.childcareStartTime ?? ''}
+                    endTime={day.childcareEndTime ?? ''}
+                    onChangeStartTime={(newTime) => {
+                      markTouched(`${day.id}-start`);
+                      onChangeChildcareStartTime?.(day.id, newTime);
+                    }}
+                    onChangeEndTime={(newTime) => {
+                      markTouched(`${day.id}-end`);
+                      onChangeChildcareEndTime?.(day.id, newTime);
+                    }}
                     disabled={isDisabled || !day.childcareEnabled}
                   />
                 </Stack>
@@ -254,6 +273,17 @@ export const Days = ({
               <Text color="red">
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
+            )}
+            {childcareTimesMissing && (
+              <Alert
+                css={`
+                  width: 100%;
+                `}
+              >
+                {t(
+                  'create.calendar.days.childcare.validation_messages.set_times_required',
+                )}
+              </Alert>
             )}
             {childcareStartError && (
               <Text color="red">{childcareStartError}</Text>

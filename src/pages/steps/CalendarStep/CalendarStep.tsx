@@ -86,8 +86,8 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
     childcareEnabled: !!subEvent.childcare,
-    childcareStartTime: subEvent.childcare?.start ?? '00:00',
-    childcareEndTime: subEvent.childcare?.end ?? '23:59',
+    childcareStartTime: subEvent.childcare?.start ?? '',
+    childcareEndTime: subEvent.childcare?.end ?? '',
     hasOvernightStay: !!subEvent.overnight,
   }));
 
@@ -413,13 +413,32 @@ const calendarStepConfiguration: StepsConfiguration<'calendar'> = {
         },
       )
       .test(
+        'childcare-times-required',
+        'Childcare times must be set when childcare is enabled',
+        (subEvent: SubEvent[] | undefined, context) => {
+          if (!subEvent) return true;
+          const errors = subEvent
+            .map((sub, index) => {
+              if (!sub.childcare) return undefined;
+              if (!sub.childcare.start || !sub.childcare.end) {
+                return context.createError({
+                  path: `${context.path}.${index}`,
+                  message: 'Childcare times required',
+                });
+              }
+            })
+            .filter(Boolean);
+          return errors.length > 0 ? new yup.ValidationError(errors) : true;
+        },
+      )
+      .test(
         'invalid-childcare-start',
         'Childcare start must be before activity start',
         (subEvent: SubEvent[] | undefined, context) => {
           if (!subEvent) return true;
           const errors = subEvent
             .map((sub, index) => {
-              if (!sub.childcare) return undefined;
+              if (!sub.childcare?.start) return undefined;
               const startDate = new Date(sub.startDate);
               const startHHMM = `${startDate
                 .getHours()
@@ -446,7 +465,7 @@ const calendarStepConfiguration: StepsConfiguration<'calendar'> = {
           if (!subEvent) return true;
           const errors = subEvent
             .map((sub, index) => {
-              if (!sub.childcare) return undefined;
+              if (!sub.childcare?.end) return undefined;
               const endDate = new Date(sub.endDate);
               const endHHMM = `${endDate
                 .getHours()
