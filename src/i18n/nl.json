@@ -184,6 +184,7 @@
         "start_time": "Van",
         "title": "Openingsuren",
         "days": "Dagen",
+        "select_days": "Selecteer dag(en)",
         "validation_messages": {
           "day_of_week": {
             "min": "Je moet minstens 1 dag van de week aanduiden."
