@@ -289,6 +289,19 @@
       "refine": "Verfeinere"
     },
     "additionalInformation": {
+      "accessibility": {
+        "title": "Barrierefreiheit",
+        "departure": {
+          "title": "Von welcher Schule oder einem anderen Standort aus ist ein Transport zu Ihrer Aktivität für Kinder vorgesehen?",
+          "info": "Das kann zum Beispiel eine Laufschlange, ein Bus oder ein Fahrradtaxi sein, das Kinder von einer Schule oder Betreuungseinrichtung zu Ihrer Aktivität bringt.",
+          "location_title": "Abholort {{number}}",
+          "place_label": "Ort auswählen",
+          "place_placeholder": "",
+          "add": "Weiteren Ort hinzufügen",
+          "delete": "Abholort entfernen",
+          "max_reached": "Sie können maximal {{maxLocations}} Abholorte hinzufügen."
+        }
+      },
       "audience": {
         "education": "Nur für Schulen",
         "everyone": "Für alle",
@@ -822,7 +835,8 @@
         "contact_info": "Kontaktdaten wurden erfolgreich geändert",
         "booking_info": "Reservierungsinformationen wurden erfolgreich geändert",
         "media": "Medien erfolgreich gewechselt",
-        "audience": "Zugang wurde erfolgreich geändert"
+        "audience": "Zugang wurde erfolgreich geändert",
+        "accessibility": "Barrierefreiheit wurde erfolgreich geändert"
       }
     }
   },
