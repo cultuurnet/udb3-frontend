@@ -182,6 +182,7 @@
         "start_time": "Aus",
         "title": "Öffnungszeiten",
         "days": "Tage",
+        "select_days": "Tag(e) auswählen",
         "validation_messages": {
           "day_of_week": {
             "min": "Sie müssen mindestens 1 Wochentag angeben."
