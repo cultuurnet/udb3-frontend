@@ -57,6 +57,9 @@ const isQuarterHour = (time: string) =>
 const timeToNumeric = (time: string) => parseInt(time.replace(':', ''));
 
 const dropDownCss = css`
+  width: 6rem;
+  flex: 0 0 auto;
+
   input {
     text-align: center;
   }
@@ -141,7 +144,8 @@ const TimeSpanPicker = ({
                 background: transparent;
                 padding: 0;
                 font-size: 0.95rem;
-                min-width: 4.5rem;
+                min-width: 3.25rem;
+                width: 3.25rem;
               }
               input::-webkit-calendar-picker-indicator {
                 display: none;
@@ -168,8 +172,8 @@ const TimeSpanPicker = ({
   }
 
   return (
-    <Inline as="div" spacing={5} {...getInlineProps(props)}>
-      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
+    <Inline as="div" spacing={3} {...getInlineProps(props)}>
+      <Stack spacing={2} as="div">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
           {startTimeLabel ?? t('time_span_picker.start')}
         </Label>
@@ -191,7 +195,7 @@ const TimeSpanPicker = ({
           css={dropDownCss}
         />
       </Stack>
-      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
+      <Stack spacing={2} as="div">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
           {endTimeLabel ?? t('time_span_picker.end')}
         </Label>
