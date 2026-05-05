@@ -81,6 +81,57 @@ const dropDownCss = css`
   }
 `;
 
+const inlineDropDownCss = css`
+  flex: 1 1 auto;
+  width: 100%;
+  display: block;
+
+  .rbt,
+  .rbt-input,
+  .rbt-input-main,
+  .rbt-input-wrapper {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .form-control {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0 0 0 2.5rem;
+    height: auto;
+    text-align: center;
+    width: 100%;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+  }
+
+  input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+
+  .rbt-menu.dropdown-menu.show {
+    min-width: 7.5rem !important;
+    width: 7.5rem !important;
+    margin-top: 0.5rem;
+    margin-left: -0.75rem;
+    max-height: 300px !important;
+
+    z-index: ${getValueForTimePicker('zIndexPopup')};
+
+    .dropdown-item {
+      padding: 0.25rem 0;
+      text-align: center;
+    }
+  }
+
+  .rbt-input-hint {
+    display: none;
+  }
+`;
+
 const TimeSpanPicker = ({
   id,
   startTime,
@@ -131,39 +182,55 @@ const TimeSpanPicker = ({
             key={key}
             alignItems="center"
             css={`
+              position: relative;
               flex: 0 0 auto;
-              gap: 0.4rem;
+              width: 7.5rem;
               border: var(--bs-border-width) solid var(--bs-border-color);
               border-radius: ${getGlobalBorderRadius};
               padding: 0.375rem 0.75rem;
               background: white;
+              transition:
+                border-color 0.15s ease-in-out,
+                box-shadow 0.15s ease-in-out;
               ${disabled ? 'opacity: 0.5;' : ''}
-              input {
-                border: none;
-                outline: none;
-                background: transparent;
-                padding: 0;
-                font-size: 0.95rem;
-                min-width: 3.25rem;
-                width: 3.25rem;
-              }
-              input::-webkit-calendar-picker-indicator {
-                display: none;
-              }
-              input:disabled {
-                cursor: not-allowed;
+
+              &:focus-within {
+                border-color: #86b7fe;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                outline: 0;
               }
             `}
           >
-            <Text variant={TextVariants.MUTED} fontSize="0.85rem">
+            <Text
+              variant={TextVariants.MUTED}
+              fontSize="0.85rem"
+              css={`
+                position: absolute;
+                left: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: none;
+              `}
+            >
               {label}
             </Text>
-            <input
+            <Typeahead<string>
+              inputType="time"
+              inputRequired={true}
+              name={key === 'start' ? 'startTime' : 'endTime'}
               id={`${idPrefix}-${key}`}
-              type="time"
-              value={value}
+              filterBy={timeSlots}
+              defaultInputValue={value}
+              options={hourOptions}
+              minLength={0}
+              onBlur={(event) => onChange(event.target.value)}
+              onChange={([newValue]: string[]) => {
+                if (!newValue) return;
+                onChange(newValue);
+              }}
+              positionFixed
               disabled={disabled}
-              onChange={(event) => onChange(event.target.value)}
+              css={inlineDropDownCss}
             />
           </Inline>
         ))}
