@@ -123,8 +123,10 @@
         "places": "Wann ist dieser Ort oder Standort geöffnet?"
       },
       "types": {
-        "one_or_more_days": "Ein oder mehrere Tage",
-        "fixed_days": "Feste Tage pro Woche"
+        "one_or_more_days": "An bestimmten Daten",
+        "one_or_more_days_example": "z. B. am 5. Juli von 12 bis 20 Uhr",
+        "fixed_days": "Feste Tage pro Woche",
+        "fixed_days_example": "p. ex. chaque mercredi de 14h à 15h"
       },
       "one_or_more_days": {
         "button_add": "Tag hinzufügen"
@@ -157,6 +159,20 @@
         },
         "validation_messages": {
           "invalid_hours": "Die Endzeit darf nicht vor der Beginzeit liegen."
+        },
+        "childcare": {
+          "label": "Kinderbetreuung",
+          "from": "von",
+          "to": "bis",
+          "validation_messages": {
+            "start_too_late": "Die Startzeit der Kinderbetreuung muss vor der Startzeit der Aktivität liegen.",
+            "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen.",
+            "set_times_required": "Bitte geben Sie die Start- und Endzeit der Kinderbetreuung an."
+          }
+        },
+        "overnight_stay": {
+          "label": "Übernachtung",
+          "with": "Mit Übernachtung"
         }
       },
       "opening_hours_modal": {
