@@ -54,8 +54,6 @@ type Props = {
 const isQuarterHour = (time: string) =>
   quarterHours.some((quarterHour) => time.endsWith(quarterHour));
 
-const timeToNumeric = (time: string) => parseInt(time.replace(':', ''));
-
 const dropDownCss = css`
   width: 6rem;
   flex: 0 0 auto;
@@ -147,143 +145,103 @@ const TimeSpanPicker = ({
 }: Props) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
+  const isInline = labelPosition === TimeSpanPickerLabelPositions.INLINE;
 
   const timeSlots = (time: string) => time === '23:59' || isQuarterHour(time);
 
-  if (labelPosition === TimeSpanPickerLabelPositions.INLINE) {
-    const fields = [
-      {
-        key: 'start',
-        label: startTimeLabel ?? t('time_span_picker.start'),
-        value: startTime,
-        onChange: onChangeStartTime,
-      },
-      {
-        key: 'end',
-        label: endTimeLabel ?? t('time_span_picker.end'),
-        value: endTime,
-        onChange: onChangeEndTime,
-      },
-    ];
-
-    return (
-      <Inline
-        as="div"
-        css={`
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          gap: 0.5rem;
-        `}
-        {...getInlineProps(props)}
-      >
-        {fields.map(({ key, label, value, onChange }) => (
-          <Inline
-            key={key}
-            alignItems="center"
-            css={`
-              position: relative;
-              flex: 0 0 auto;
-              width: 7.5rem;
-              border: var(--bs-border-width) solid var(--bs-border-color);
-              border-radius: ${getGlobalBorderRadius};
-              padding: 0.375rem 0.75rem;
-              background: white;
-              transition:
-                border-color 0.15s ease-in-out,
-                box-shadow 0.15s ease-in-out;
-              ${disabled ? 'opacity: 0.5;' : ''}
-
-              &:focus-within {
-                border-color: #86b7fe;
-                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-                outline: 0;
-              }
-            `}
-          >
-            <Text
-              variant={TextVariants.MUTED}
-              fontSize="0.85rem"
-              css={`
-                position: absolute;
-                left: 0.75rem;
-                top: 50%;
-                transform: translateY(-50%);
-                pointer-events: none;
-              `}
-            >
-              {label}
-            </Text>
-            <Typeahead<string>
-              inputType="time"
-              inputRequired={true}
-              name={key === 'start' ? 'startTime' : 'endTime'}
-              id={`${idPrefix}-${key}`}
-              filterBy={timeSlots}
-              defaultInputValue={value}
-              options={hourOptions}
-              minLength={0}
-              onBlur={(event) => onChange(event.target.value)}
-              onChange={([newValue]: string[]) => {
-                if (!newValue) return;
-                onChange(newValue);
-              }}
-              positionFixed
-              disabled={disabled}
-              css={inlineDropDownCss}
-            />
-          </Inline>
-        ))}
-      </Inline>
-    );
-  }
+  const fields = [
+    {
+      key: 'start',
+      label: startTimeLabel ?? t('time_span_picker.start'),
+      value: startTime,
+      onChange: onChangeStartTime,
+      name: 'startTime',
+    },
+    {
+      key: 'end',
+      label: endTimeLabel ?? t('time_span_picker.end'),
+      value: endTime,
+      onChange: onChangeEndTime,
+      name: 'endTime',
+    },
+  ];
 
   return (
-    <Inline as="div" spacing={3} {...getInlineProps(props)}>
-      <Stack spacing={2} as="div">
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
-          {startTimeLabel ?? t('time_span_picker.start')}
-        </Label>
-        <Typeahead<string>
-          inputType="time"
-          inputRequired={true}
-          name="startTime"
-          id={`${idPrefix}-start`}
-          filterBy={timeSlots}
-          defaultInputValue={startTime}
-          options={hourOptions}
-          onBlur={(event) => onChangeStartTime(event.target.value)}
-          onChange={([newValue]: string[]) => {
-            if (!newValue) return;
-            onChangeStartTime(newValue);
-          }}
-          positionFixed
-          disabled={disabled}
-          css={dropDownCss}
-        />
-      </Stack>
-      <Stack spacing={2} as="div">
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
-          {endTimeLabel ?? t('time_span_picker.end')}
-        </Label>
-        <Typeahead<string>
-          inputType="time"
-          inputRequired={true}
-          name="endTime"
-          id={`${idPrefix}-end`}
-          filterBy={timeSlots}
-          defaultInputValue={endTime}
-          options={hourOptions}
-          onBlur={(event) => onChangeEndTime(event.target.value)}
-          onChange={([newValue]: string[]) => {
-            if (!newValue) return;
-            onChangeEndTime(newValue);
-          }}
-          css={dropDownCss}
-          positionFixed
-          disabled={disabled}
-        />
-      </Stack>
+    <Inline as="div" spacing={isInline ? 2 : 3} {...getInlineProps(props)}>
+      {fields.map(({ key, label, value, onChange, name }) => {
+        const typeahead = (
+          <Typeahead<string>
+            inputType="time"
+            inputRequired={true}
+            name={name}
+            id={`${idPrefix}-${key}`}
+            filterBy={timeSlots}
+            defaultInputValue={value}
+            options={hourOptions}
+            minLength={0}
+            onBlur={(event) => onChange(event.target.value)}
+            onChange={([newValue]: string[]) => {
+              if (!newValue) return;
+              onChange(newValue);
+            }}
+            positionFixed
+            disabled={disabled}
+            css={isInline ? inlineDropDownCss : dropDownCss}
+          />
+        );
+
+        if (isInline) {
+          return (
+            <Inline
+              key={key}
+              alignItems="center"
+              css={`
+                position: relative;
+                flex: 0 0 auto;
+                width: 7.5rem;
+                border: var(--bs-border-width) solid var(--bs-border-color);
+                border-radius: ${getGlobalBorderRadius};
+                padding: 0.375rem 0.75rem;
+                background: white;
+                transition:
+                  border-color 0.15s ease-in-out,
+                  box-shadow 0.15s ease-in-out;
+                ${disabled ? 'opacity: 0.5;' : ''}
+
+                &:focus-within {
+                  border-color: #86b7fe;
+                  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                  outline: 0;
+                }
+              `}
+            >
+              <Text
+                variant={TextVariants.MUTED}
+                fontSize="0.85rem"
+                css={`
+                  position: absolute;
+                  left: 0.75rem;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  pointer-events: none;
+                `}
+              >
+                {label}
+              </Text>
+              {typeahead}
+            </Inline>
+          );
+        }
+
+        return (
+          <Stack key={key} spacing={2} as="div">
+            <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
+              {label}
+            </Label>
+            {typeahead}
+          </Stack>
+        );
+      })}
     </Inline>
   );
 };
