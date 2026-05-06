@@ -50,12 +50,13 @@ test.describe('Event translation', () => {
       const langField = page.getByPlaceholder(translation.placeholder);
       await langField.fill(translation.newTitle);
       await langField.blur();
-      await page.waitForLoadState('networkidle');
 
       //   Check for success toast on title update
       await expect(
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
+
+      await page.getByRole('main').locator('svg').nth(1).click();
 
       const descriptionContainer = page.locator(
         `#description-editor-container-${translation.lang}`,
@@ -67,7 +68,6 @@ test.describe('Event translation', () => {
       await descriptionContainer
         .getByRole('textbox', { name: 'rdw-editor' })
         .blur();
-      await page.waitForLoadState('networkidle');
 
       // Check for success toast on description update
       await expect(
@@ -75,6 +75,8 @@ test.describe('Event translation', () => {
           `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
         ),
       ).toBeVisible();
+
+      await page.getByRole('main').locator('svg').nth(1).click();
     }
 
     // Go back to preview
