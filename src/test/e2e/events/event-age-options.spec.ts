@@ -91,7 +91,7 @@ test.describe('Event Preview - Age Display Options', () => {
     await page.waitForLoadState('networkidle');
 
     await page.goto(eventPreviewUrl);
-    await expect(page.getByText('Leeftijden: 6-12')).toBeVisible();
+    await expect(page.getByText('Leeftijden: 6+')).toBeVisible();
 
     // Case 4: Custom age from (25+)
     await page.goto(eventEditUrl);
