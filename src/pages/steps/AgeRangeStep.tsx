@@ -90,8 +90,12 @@ const AgeRangeStep = ({
     return foundAgeRange;
   };
 
-  const handleSubmitCustomAgeRange = (field: Field) => {
-    if (parseInt(customMinAgeRange) > parseInt(customMaxAgeRange)) {
+  const handleSubmitCustomAgeRange = (
+    field: Field,
+    min: string,
+    max: string,
+  ) => {
+    if (parseInt(min) > parseInt(max)) {
       setCustomAgeRangeError(
         t('create.name_and_age.age.error_max_lower_than_min'),
       );
@@ -100,10 +104,7 @@ const AgeRangeStep = ({
 
     setCustomAgeRangeError('');
 
-    const customAgeRange =
-      !customMinAgeRange && !customMaxAgeRange
-        ? ''
-        : `${customMinAgeRange}-${customMaxAgeRange}`;
+    const customAgeRange = !min && !max ? '' : `${min}-${max}`;
 
     field.onChange({
       ...field.value,
@@ -118,7 +119,7 @@ const AgeRangeStep = ({
 
   const handleMinAgeRangeChange = (field: Field, value: string) => {
     setCustomMinAgeRange(value);
-    handleSubmitCustomAgeRange(field);
+    handleSubmitCustomAgeRange(field, value, customMaxAgeRange);
   };
 
   const handleMaxAgeRangeChange = (field: Field, value: string) => {
@@ -129,7 +130,7 @@ const AgeRangeStep = ({
       return;
     }
 
-    handleSubmitCustomAgeRange(field);
+    handleSubmitCustomAgeRange(field, customMinAgeRange, value);
   };
 
   return (
