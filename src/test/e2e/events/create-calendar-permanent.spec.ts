@@ -24,7 +24,7 @@ test('create an event with calendarType permanent', async ({
 
   // 3. Date
   // Select fixed days
-  await page.getByRole('button', { name: 'Vaste dagen per week' }).click();
+  await page.getByRole('button', { name: 'Op vaste wekelijkse momenten of doorlopend' }).click();
 
   await page.getByRole('radio', { name: 'Permanent' }).click();
 
