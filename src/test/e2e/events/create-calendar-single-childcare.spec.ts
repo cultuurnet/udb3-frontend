@@ -56,12 +56,17 @@ test('create an event with calendarType single and childcare hours', async ({
   await page
     .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
     .fill(dummyEvent.hours.childcareEnd);
+  await page
+    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
+    .blur();
 
-  // 6. Address — clicking next field blurs end time; once both times are set the info alert disappears
-  await page.getByLabel('Gemeente').click();
+  // Once both times are set the info alert disappears
   await expect(
     page.getByText('Geef het start- en einduur van de kinderopvang in.'),
   ).toBeHidden();
+
+  // 6. Address
+  await page.getByLabel('Gemeente').click();
   await page.getByLabel('Gemeente').fill(dummyEvent.address.zip);
   await page
     .getByRole('option', { name: dummyEvent.address.municipality })
@@ -169,8 +174,8 @@ test('shows childcare validation errors when times overlap activity hours', asyn
     .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
     .fill('11:00');
   await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
-    .click();
+    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
+    .blur();
   await expect(
     page.getByText(
       'Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.',
@@ -188,8 +193,8 @@ test('shows childcare validation errors when times overlap activity hours', asyn
     .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
     .fill('15:00');
   await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
-    .click();
+    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
+    .blur();
   await expect(
     page.getByText(
       'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
