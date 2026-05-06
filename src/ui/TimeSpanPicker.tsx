@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
+import { Box } from './Box';
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { getValueFromTheme } from './theme';
 import { Typeahead } from './Typeahead';
 
 const TimeSpanPickerLabelPositions = {
@@ -79,54 +80,14 @@ const dropDownCss = css`
   }
 `;
 
-const inlineDropDownCss = css`
-  flex: 1 1 auto;
-  width: 100%;
-  display: block;
+const inlineLabelDropDownCss = css`
+  ${dropDownCss}
 
-  .rbt,
-  .rbt-input,
-  .rbt-input-main,
-  .rbt-input-wrapper {
-    width: 100% !important;
-    display: block !important;
-  }
+  width: 7rem;
 
-  .form-control {
-    border: none;
-    background: transparent;
-    box-shadow: none;
-    padding: 0 0 0 2.5rem;
-    height: auto;
-    text-align: center;
-    width: 100%;
-  }
-
-  .form-control:focus {
-    box-shadow: none;
-  }
-
-  input::-webkit-calendar-picker-indicator {
-    display: none;
-  }
-
-  .rbt-menu.dropdown-menu.show {
-    min-width: 7.5rem !important;
-    width: 7.5rem !important;
-    margin-top: 0.5rem;
-    margin-left: -0.75rem;
-    max-height: 300px !important;
-
-    z-index: ${getValueForTimePicker('zIndexPopup')};
-
-    .dropdown-item {
-      padding: 0.25rem 0;
-      text-align: center;
-    }
-  }
-
-  .rbt-input-hint {
-    display: none;
+  input {
+    padding-left: 2rem;
+    text-align: right;
   }
 `;
 
@@ -167,7 +128,7 @@ const TimeSpanPicker = ({
   ];
 
   return (
-    <Inline as="div" spacing={isInline ? 2 : 3} {...getInlineProps(props)}>
+    <Inline as="div" spacing={3} {...getInlineProps(props)}>
       {fields.map(({ key, label, value, onChange, name }) => {
         const typeahead = (
           <Typeahead<string>
@@ -186,35 +147,13 @@ const TimeSpanPicker = ({
             }}
             positionFixed
             disabled={disabled}
-            css={isInline ? inlineDropDownCss : dropDownCss}
+            css={isInline ? inlineLabelDropDownCss : dropDownCss}
           />
         );
 
         if (isInline) {
           return (
-            <Inline
-              key={key}
-              alignItems="center"
-              css={`
-                position: relative;
-                flex: 0 0 auto;
-                width: 7.5rem;
-                border: var(--bs-border-width) solid var(--bs-border-color);
-                border-radius: ${getGlobalBorderRadius};
-                padding: 0.375rem 0.75rem;
-                background: white;
-                transition:
-                  border-color 0.15s ease-in-out,
-                  box-shadow 0.15s ease-in-out;
-                ${disabled ? 'opacity: 0.5;' : ''}
-
-                &:focus-within {
-                  border-color: #86b7fe;
-                  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-                  outline: 0;
-                }
-              `}
-            >
+            <Box key={key} position="relative" display="inline-block">
               <Text
                 variant={TextVariants.MUTED}
                 fontSize="0.85rem"
@@ -224,12 +163,13 @@ const TimeSpanPicker = ({
                   top: 50%;
                   transform: translateY(-50%);
                   pointer-events: none;
+                  z-index: 1;
                 `}
               >
                 {label}
               </Text>
               {typeahead}
-            </Inline>
+            </Box>
           );
         }
 
