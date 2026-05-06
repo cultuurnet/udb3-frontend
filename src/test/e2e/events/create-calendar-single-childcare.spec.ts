@@ -57,13 +57,11 @@ test('create an event with calendarType single and childcare hours', async ({
     .locator('#calendar-step-day-day-1-childcare-time-span-picker-end')
     .fill(dummyEvent.hours.childcareEnd);
 
-  // Once both times are set the info alert disappears
+  // 6. Address — clicking next field blurs end time; once both times are set the info alert disappears
+  await page.getByLabel('Gemeente').click();
   await expect(
     page.getByText('Geef het start- en einduur van de kinderopvang in.'),
   ).toBeHidden();
-
-  // 6. Address
-  await page.getByLabel('Gemeente').click();
   await page.getByLabel('Gemeente').fill(dummyEvent.address.zip);
   await page
     .getByRole('option', { name: dummyEvent.address.municipality })
