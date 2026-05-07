@@ -378,7 +378,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             box-shadow: none;
 
             &:hover {
-              background-color: color-mix(in srgb, ${outlineColor ?? 'currentColor'} 12%, transparent);
+              background-color: color-mix(
+                in srgb,
+                ${outlineColor ?? 'currentColor'} 12%,
+                transparent
+              );
             }
 
             &:focus {

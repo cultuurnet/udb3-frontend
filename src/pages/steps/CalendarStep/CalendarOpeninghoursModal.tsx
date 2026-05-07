@@ -165,10 +165,7 @@ const CalendarOpeninghoursModal = ({
     );
   };
 
-  const handleToggleDaysOfWeek = (
-    newDays: string[],
-    idToChange: string,
-  ) => {
+  const handleToggleDaysOfWeek = (newDays: string[], idToChange: string) => {
     replace(
       openingHours.map((openingHour) =>
         openingHour.id === idToChange
@@ -220,15 +217,12 @@ const CalendarOpeninghoursModal = ({
   const hasChildcareErrors = openingHours.some((hours) => {
     if (!childcareEnabledMap[hours.id]) return false;
 
-    const timesMissing =
-      !hours.childcareStartTime || !hours.childcareEndTime;
+    const timesMissing = !hours.childcareStartTime || !hours.childcareEndTime;
 
     const startTooLate =
-      !!hours.childcareStartTime &&
-      hours.childcareStartTime >= hours.opens;
+      !!hours.childcareStartTime && hours.childcareStartTime >= hours.opens;
     const endTooEarly =
-      !!hours.childcareEndTime &&
-      hours.childcareEndTime <= hours.closes;
+      !!hours.childcareEndTime && hours.childcareEndTime <= hours.closes;
 
     return timesMissing || startTooLate || endTooEarly;
   });
