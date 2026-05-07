@@ -96,6 +96,8 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
+    childcareStartTime: openingHour.childcare?.start,
+    childcareEndTime: openingHour.childcare?.end,
   }));
 
   const newContext = {
@@ -149,6 +151,13 @@ const convertStateToFormData = (
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
+    ...(openingHour.childcareStartTime &&
+      openingHour.childcareEndTime && {
+        childcare: {
+          start: openingHour.childcareStartTime,
+          end: openingHour.childcareEndTime,
+        },
+      }),
   }));
 
   return {
