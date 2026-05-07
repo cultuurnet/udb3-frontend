@@ -1,12 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { expect, Page, test } from '@playwright/test';
 
+import { EventTypes } from '../../../constants/EventTypes';
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
-import { EventTypes } from '../../../constants/EventTypes';
 
 const { question: suggestionQuestion, answer: suggestionAnswer } =
-  nl.create.additionalInformation.faq.modal.suggestions[EventTypes.Concert].find(
+  nl.create.additionalInformation.faq.modal.suggestions[
+    EventTypes.Concert
+  ].find(
     (suggestion): suggestion is { question: string; answer: string } =>
       'answer' in suggestion,
   )!;
