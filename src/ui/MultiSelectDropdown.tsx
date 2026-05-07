@@ -43,11 +43,11 @@ const MultiSelectDropdown = ({
           display: flex;
           align-items: center;
           width: 175px;
-          background-color: white !important;
+          background-color: ${colors.white} !important;
           border: 1px solid ${colors.grey2} !important;
           border-radius: ${getGlobalBorderRadius} !important;
           height: ${getGlobalFormInputHeight};
-          color: #212529 !important;
+          color: ${colors.textColor} !important;
           font-size: 1rem;
           padding: 0 0.75rem !important;
           box-shadow: none !important;
@@ -56,9 +56,9 @@ const MultiSelectDropdown = ({
           &:hover,
           &:focus,
           &:active {
-            background-color: white !important;
+            background-color: ${colors.white} !important;
             border-color: ${colors.grey2} !important;
-            color: #212529 !important;
+            color: ${colors.textColor} !important;
           }
 
           &::after {
