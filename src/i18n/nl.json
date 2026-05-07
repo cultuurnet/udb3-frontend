@@ -123,8 +123,10 @@
         "places": "Wanneer is deze plaats of locatie open?"
       },
       "types": {
-        "one_or_more_days": "Een of meerdere dagen",
-        "fixed_days": "Vaste dagen per week",
+        "one_or_more_days": "Op specifieke data",
+        "one_or_more_days_example": "op 5 juli van 12u tot 20u",
+        "fixed_days": "Op vaste wekelijkse momenten of doorlopend",
+        "fixed_days_example": "iedere woensdag van 14u tot 15u",
         "cultuurkuur": "Tijdstip in overleg met de school",
         "cultuurkuur_tip": "Activiteiten waarvan het tijdstip niet vastligt. Scholen kunnen zelf kiezen of met jou afspreken."
       },
@@ -159,6 +161,20 @@
         },
         "validation_messages": {
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
+        },
+        "childcare": {
+          "label": "Kinderopvang",
+          "from": "van",
+          "to": "tot",
+          "validation_messages": {
+            "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
+            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.",
+            "set_times_required": "Geef het start- en einduur van de kinderopvang in."
+          }
+        },
+        "overnight_stay": {
+          "label": "Overnachting",
+          "with": "Met overnachting"
         }
       },
       "opening_hours_modal": {
