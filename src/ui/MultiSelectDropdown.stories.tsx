@@ -4,13 +4,10 @@ import { useState } from 'react';
 import { MultiSelectDropdown } from './MultiSelectDropdown';
 
 const options = [
-  { value: 'monday', label: 'Maandag' },
-  { value: 'tuesday', label: 'Dinsdag' },
-  { value: 'wednesday', label: 'Woensdag' },
-  { value: 'thursday', label: 'Donderdag' },
-  { value: 'friday', label: 'Vrijdag' },
-  { value: 'saturday', label: 'Zaterdag' },
-  { value: 'sunday', label: 'Zondag' },
+  { value: 'option-1', label: 'Option 1' },
+  { value: 'option-2', label: 'Option 2' },
+  { value: 'option-3', label: 'Option 3' },
+  { value: 'option-4', label: 'Option 4' },
 ];
 
 const meta: Meta<typeof MultiSelectDropdown> = {
@@ -32,7 +29,7 @@ export const Default: Story = {
     id: 'multi-select-dropdown',
     options,
     selectedValues: [],
-    placeholder: 'Selecteer dag(en)',
+    placeholder: 'Select option(s)',
   },
   render: function RenderComponent(args) {
     const [selectedValues, setSelectedValues] = useState(args.selectedValues);
