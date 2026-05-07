@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { TimeSpanPicker, TimeSpanPickerLabelPositions } from './TimeSpanPicker';
+import { TimeSpanPicker } from './TimeSpanPicker';
 
 const meta: Meta<typeof TimeSpanPicker> = {
   title: 'Components/TimeSpanPicker',
@@ -36,17 +36,5 @@ export const Default: Story = {
     id: 'test',
     startTime: '00:00',
     endTime: '23:59',
-  },
-};
-
-export const Inline: Story = {
-  render: TimeSpanPickerWithState,
-  args: {
-    id: 'test-inline',
-    startTime: '08:00',
-    endTime: '18:00',
-    labelPosition: TimeSpanPickerLabelPositions.INLINE,
-    startTimeLabel: 'van',
-    endTimeLabel: 'tot',
   },
 };

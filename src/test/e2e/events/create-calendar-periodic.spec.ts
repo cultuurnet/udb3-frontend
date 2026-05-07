@@ -26,9 +26,7 @@ test('create an event with calendarType permanent and openinghours', async ({
 
   // 3. Date
   // Select fixed days
-  await page
-    .getByRole('button', { name: 'Op vaste wekelijkse momenten of doorlopend' })
-    .click();
+  await page.getByRole('button', { name: 'Vaste dagen per week' }).click();
 
   await page
     .locator('#calendar-step-fixeddate-period-picker-start')

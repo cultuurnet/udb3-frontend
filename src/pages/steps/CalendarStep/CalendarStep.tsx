@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { EventTypes, eventTypesWithNoThemes } from '@/constants/EventTypes';
+import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -85,10 +85,6 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     endDate: subEvent.endDate,
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
-    childcareEnabled: !!subEvent.childcare,
-    childcareStartTime: subEvent.childcare?.start ?? '',
-    childcareEndTime: subEvent.childcare?.end ?? '',
-    hasOvernightStay: !!subEvent.overnight,
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -136,13 +132,6 @@ const convertStateToFormData = (
     endDate: formatDateToISO(day.endDate ? new Date(day.endDate) : new Date()),
     bookingAvailability: day.bookingAvailability,
     status: day.status,
-    ...(day.childcareEnabled && {
-      childcare: {
-        start: day.childcareStartTime,
-        end: day.childcareEndTime,
-      },
-    }),
-    ...(day.hasOvernightStay && { overnight: true }),
   }));
 
   const newOpeningHours = openingHours.map((openingHour) => ({
@@ -239,10 +228,6 @@ const CalendarStep = ({
     handleChooseWithStartAndEndDate,
     handleChoosePermanent,
     handleChangeOpeningHours,
-    handleToggleChildcare,
-    handleChangeChildcareStartTime,
-    handleChangeChildcareEndTime,
-    handleToggleOvernightStay,
   } = useCalendarHandlers(handleChangeCalendarState);
 
   useEffect(() => {
@@ -324,7 +309,7 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
-      minWidth={{ l: 'auto', default: '100%' }}
+      minWidth={{ l: 'auto', default: '60rem' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
     >
@@ -355,11 +340,6 @@ const CalendarStep = ({
             onChangeEndDate={handleChangeEndDateOfDay}
             onChangeStartTime={handleChangeStartTime}
             onChangeEndTime={handleChangeEndTime}
-            onToggleChildcare={handleToggleChildcare}
-            onChangeChildcareStartTime={handleChangeChildcareStartTime}
-            onChangeChildcareEndTime={handleChangeChildcareEndTime}
-            onToggleOvernightStay={handleToggleOvernightStay}
-            showOvernightStay={type?.id === EventTypes['Kamp of vakantie']}
             onAddDay={handleAddDay}
             errors={errors}
           />
@@ -409,79 +389,6 @@ const calendarStepConfiguration: StepsConfiguration<'calendar'> = {
             })
             .filter(Boolean);
 
-          return errors.length > 0 ? new yup.ValidationError(errors) : true;
-        },
-      )
-      .test(
-        'childcare-times-required',
-        'Childcare times must be set when childcare is enabled',
-        (subEvent: SubEvent[] | undefined, context) => {
-          if (!subEvent) return true;
-          const errors = subEvent
-            .map((sub, index) => {
-              if (!sub.childcare) return undefined;
-              if (!sub.childcare.start || !sub.childcare.end) {
-                return context.createError({
-                  path: `${context.path}.${index}`,
-                  message: 'Childcare times required',
-                });
-              }
-            })
-            .filter(Boolean);
-          return errors.length > 0 ? new yup.ValidationError(errors) : true;
-        },
-      )
-      .test(
-        'invalid-childcare-start',
-        'Childcare start must be before activity start',
-        (subEvent: SubEvent[] | undefined, context) => {
-          if (!subEvent) return true;
-          const errors = subEvent
-            .map((sub, index) => {
-              if (!sub.childcare?.start) return undefined;
-              const startDate = new Date(sub.startDate);
-              const startHHMM = `${startDate
-                .getHours()
-                .toString()
-                .padStart(2, '0')}:${startDate
-                .getMinutes()
-                .toString()
-                .padStart(2, '0')}`;
-              if (sub.childcare.start >= startHHMM) {
-                return context.createError({
-                  path: `${context.path}.${index}`,
-                  message: 'Childcare start too late',
-                });
-              }
-            })
-            .filter(Boolean);
-          return errors.length > 0 ? new yup.ValidationError(errors) : true;
-        },
-      )
-      .test(
-        'invalid-childcare-end',
-        'Childcare end must be after activity end',
-        (subEvent: SubEvent[] | undefined, context) => {
-          if (!subEvent) return true;
-          const errors = subEvent
-            .map((sub, index) => {
-              if (!sub.childcare?.end) return undefined;
-              const endDate = new Date(sub.endDate);
-              const endHHMM = `${endDate
-                .getHours()
-                .toString()
-                .padStart(2, '0')}:${endDate
-                .getMinutes()
-                .toString()
-                .padStart(2, '0')}`;
-              if (sub.childcare.end <= endHHMM) {
-                return context.createError({
-                  path: `${context.path}.${index}`,
-                  message: 'Childcare end too early',
-                });
-              }
-            })
-            .filter(Boolean);
           return errors.length > 0 ? new yup.ValidationError(errors) : true;
         },
       ),
