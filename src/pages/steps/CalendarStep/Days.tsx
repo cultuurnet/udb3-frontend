@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { OfferStatus } from '@/constants/OfferStatus';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -80,6 +81,8 @@ export const Days = ({
   ...props
 }: DaysProps) => {
   const { t } = useTranslation();
+
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const days = useCalendarSelector((state) => state.context.days);
 
@@ -173,7 +176,7 @@ export const Days = ({
                   minWidth="120px"
                 />
               )}
-              {isOneOrMoreDays && (
+              {isOneOrMoreDays && isBoaEnabled && (
                 <Stack spacing={2}>
                   <Inline
                     alignItems="center"
@@ -220,7 +223,7 @@ export const Days = ({
                   />
                 </Stack>
               )}
-              {isOneOrMoreDays && showOvernightStay && (
+              {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
                 <Stack spacing={2}>
                   <Label
                     variant={LabelVariants.BOLD}
