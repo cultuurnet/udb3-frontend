@@ -1,4 +1,5 @@
 import { camelCase } from 'lodash';
+import { useState } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -8,10 +9,17 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
+import { Inline } from '@/ui/Inline';
+import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
+import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
+import { colors } from '@/ui/theme';
+import {
+  TimeSpanPicker,
+  TimeSpanPickerLabelPositions,
+} from '@/ui/TimeSpanPicker';
 
 import {
   useCalendarSelector,
@@ -49,6 +57,11 @@ type DaysProps = {
   onChangeEndDate: (id: string, date: Date | null) => void;
   onChangeStartTime?: (id: string, hours: number, minutes: number) => void;
   onChangeEndTime?: (id: string, hours: number, minutes: number) => void;
+  onToggleChildcare?: (id: string, enabled: boolean) => void;
+  onChangeChildcareStartTime?: (id: string, newTime: string) => void;
+  onChangeChildcareEndTime?: (id: string, newTime: string) => void;
+  onToggleOvernightStay?: (id: string, enabled: boolean) => void;
+  showOvernightStay?: boolean;
   errors: FieldErrors<FormDataUnion>;
 } & StackProps;
 
@@ -58,12 +71,24 @@ export const Days = ({
   onChangeEndDate,
   onChangeStartTime,
   onChangeEndTime,
+  onToggleChildcare,
+  onChangeChildcareStartTime,
+  onChangeChildcareEndTime,
+  onToggleOvernightStay,
+  showOvernightStay = false,
   errors,
   ...props
 }: DaysProps) => {
   const { t } = useTranslation();
 
   const days = useCalendarSelector((state) => state.context.days);
+
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
+    {},
+  );
+
+  const markTouched = (key: string) =>
+    setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
 
   const isOneOrMoreDays = useIsOneOrMoreDays();
 
@@ -96,6 +121,32 @@ export const Days = ({
         const isBookingUnavailable =
           day.bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE;
 
+        const childcareStartTouched =
+          touchedFields[`${day.id}-start`] && !!day.childcareStartTime;
+        const childcareEndTouched =
+          touchedFields[`${day.id}-end`] && !!day.childcareEndTime;
+
+        const childcareTimesMissing =
+          day.childcareEnabled &&
+          (!day.childcareStartTime || !day.childcareEndTime);
+
+        const childcareStartError =
+          day.childcareEnabled &&
+          childcareStartTouched &&
+          day.childcareStartTime >= startTime
+            ? t(
+                'create.calendar.days.childcare.validation_messages.start_too_late',
+              )
+            : undefined;
+        const childcareEndError =
+          day.childcareEnabled &&
+          childcareEndTouched &&
+          day.childcareEndTime <= endTime
+            ? t(
+                'create.calendar.days.childcare.validation_messages.end_too_early',
+              )
+            : undefined;
+
         return (
           <Stack spacing={4} key={`list-item-${day.id}`}>
             <List.Item alignItems="center" spacing={5}>
@@ -122,6 +173,91 @@ export const Days = ({
                   minWidth="120px"
                 />
               )}
+              {isOneOrMoreDays && (
+                <Stack spacing={2}>
+                  <Inline
+                    alignItems="center"
+                    css={`
+                      gap: 0.5rem;
+                      .form-switch {
+                        font-size: 0.85rem;
+                      }
+                    `}
+                  >
+                    <RadioButton
+                      id={`calendar-step-day-${day.id}-childcare-toggle`}
+                      type={RadioButtonTypes.SWITCH}
+                      color={colors.udbMainPositiveGreen}
+                      checked={!!day.childcareEnabled}
+                      disabled={isDisabled}
+                      onChange={(e) =>
+                        onToggleChildcare?.(day.id, e.target.checked)
+                      }
+                    />
+                    <Label
+                      variant={LabelVariants.BOLD}
+                      htmlFor={`calendar-step-day-${day.id}-childcare-toggle`}
+                    >
+                      {t('create.calendar.days.childcare.label')}
+                    </Label>
+                  </Inline>
+                  <TimeSpanPicker
+                    id={`calendar-step-day-${day.id}-childcare`}
+                    labelPosition={TimeSpanPickerLabelPositions.INLINE}
+                    startTimeLabel={t('create.calendar.days.childcare.from')}
+                    endTimeLabel={t('create.calendar.days.childcare.to')}
+                    startTime={day.childcareStartTime ?? ''}
+                    endTime={day.childcareEndTime ?? ''}
+                    onChangeStartTime={(newTime) => {
+                      markTouched(`${day.id}-start`);
+                      onChangeChildcareStartTime?.(day.id, newTime);
+                    }}
+                    onChangeEndTime={(newTime) => {
+                      markTouched(`${day.id}-end`);
+                      onChangeChildcareEndTime?.(day.id, newTime);
+                    }}
+                    disabled={isDisabled || !day.childcareEnabled}
+                  />
+                </Stack>
+              )}
+              {isOneOrMoreDays && showOvernightStay && (
+                <Stack spacing={2}>
+                  <Label
+                    variant={LabelVariants.BOLD}
+                    htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                  >
+                    {t('create.calendar.days.overnight_stay.label')}
+                  </Label>
+                  <Inline
+                    alignItems="center"
+                    css={`
+                      gap: 0.5rem;
+                      flex-wrap: nowrap;
+                      white-space: nowrap;
+                      .form-switch {
+                        font-size: 0.85rem;
+                      }
+                    `}
+                  >
+                    <RadioButton
+                      id={`calendar-step-day-${day.id}-overnight-toggle`}
+                      type={RadioButtonTypes.SWITCH}
+                      color={colors.udbMainPositiveGreen}
+                      checked={!!day.hasOvernightStay}
+                      disabled={isDisabled}
+                      onChange={(e) =>
+                        onToggleOvernightStay?.(day.id, e.target.checked)
+                      }
+                    />
+                    <Label
+                      variant={LabelVariants.NORMAL}
+                      htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                    >
+                      {t('create.calendar.days.overnight_stay.with')}
+                    </Label>
+                  </Inline>
+                </Stack>
+              )}
               {days.length > 1 && (
                 <Button
                   alignSelf="flex-end"
@@ -138,6 +274,21 @@ export const Days = ({
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
+            {childcareTimesMissing && (
+              <Alert
+                css={`
+                  width: 100%;
+                `}
+              >
+                {t(
+                  'create.calendar.days.childcare.validation_messages.set_times_required',
+                )}
+              </Alert>
+            )}
+            {childcareStartError && (
+              <Text color="red">{childcareStartError}</Text>
+            )}
+            {childcareEndError && <Text color="red">{childcareEndError}</Text>}
             {isDisabled && (
               <Alert
                 variant={AlertVariants.PRIMARY}

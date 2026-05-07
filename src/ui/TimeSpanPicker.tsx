@@ -1,11 +1,21 @@
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
+import { Box } from './Box';
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
+import { Text, TextVariants } from './Text';
 import { getValueFromTheme } from './theme';
 import { Typeahead } from './Typeahead';
+
+const TimeSpanPickerLabelPositions = {
+  TOP: 'top',
+  INLINE: 'inline',
+} as const;
+
+type TimeSpanPickerLabelPosition =
+  (typeof TimeSpanPickerLabelPositions)[keyof typeof TimeSpanPickerLabelPositions];
 
 const getValueForTimePicker = getValueFromTheme('timePicker');
 
@@ -39,14 +49,16 @@ type Props = {
   onChangeStartTime: (newStartTime: string) => void;
   onChangeEndTime: (newEndTime: string) => void;
   disabled?: boolean;
+  labelPosition?: TimeSpanPickerLabelPosition;
 } & InlineProps;
 
 const isQuarterHour = (time: string) =>
   quarterHours.some((quarterHour) => time.endsWith(quarterHour));
 
-const timeToNumeric = (time: string) => parseInt(time.replace(':', ''));
-
 const dropDownCss = css`
+  width: 6rem;
+  flex: 0 0 auto;
+
   input {
     text-align: center;
   }
@@ -68,6 +80,17 @@ const dropDownCss = css`
   }
 `;
 
+const inlineLabelDropDownCss = css`
+  ${dropDownCss}
+
+  width: 7rem;
+
+  input {
+    padding-left: 2rem;
+    text-align: right;
+  }
+`;
+
 const TimeSpanPicker = ({
   id,
   startTime,
@@ -78,61 +101,89 @@ const TimeSpanPicker = ({
   onChangeEndTime,
   disabled,
   minWidth,
+  labelPosition = TimeSpanPickerLabelPositions.TOP,
   ...props
 }: Props) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
+  const isInline = labelPosition === TimeSpanPickerLabelPositions.INLINE;
 
   const timeSlots = (time: string) => time === '23:59' || isQuarterHour(time);
 
+  const fields = [
+    {
+      key: 'start',
+      label: startTimeLabel ?? t('time_span_picker.start'),
+      value: startTime,
+      onChange: onChangeStartTime,
+      name: 'startTime',
+    },
+    {
+      key: 'end',
+      label: endTimeLabel ?? t('time_span_picker.end'),
+      value: endTime,
+      onChange: onChangeEndTime,
+      name: 'endTime',
+    },
+  ];
+
   return (
-    <Inline as="div" spacing={5} {...getInlineProps(props)}>
-      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
-          {startTimeLabel ?? t('time_span_picker.start')}
-        </Label>
-        <Typeahead<string>
-          inputType="time"
-          inputRequired={true}
-          name="startTime"
-          id={`${idPrefix}-start`}
-          filterBy={timeSlots}
-          defaultInputValue={startTime}
-          options={hourOptions}
-          onBlur={(event) => onChangeStartTime(event.target.value)}
-          onChange={([newValue]: string[]) => {
-            if (!newValue) return;
-            onChangeStartTime(newValue);
-          }}
-          positionFixed
-          disabled={disabled}
-          css={dropDownCss}
-        />
-      </Stack>
-      <Stack spacing={2} as="div" minWidth={minWidth} flex={1}>
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
-          {endTimeLabel ?? t('time_span_picker.end')}
-        </Label>
-        <Typeahead<string>
-          inputType="time"
-          inputRequired={true}
-          name="endTime"
-          id={`${idPrefix}-end`}
-          filterBy={timeSlots}
-          defaultInputValue={endTime}
-          options={hourOptions}
-          onBlur={(event) => onChangeEndTime(event.target.value)}
-          onChange={([newValue]: string[]) => {
-            if (!newValue) return;
-            onChangeEndTime(newValue);
-          }}
-          css={dropDownCss}
-          positionFixed
-          disabled={disabled}
-        />
-      </Stack>
+    <Inline as="div" spacing={3} {...getInlineProps(props)}>
+      {fields.map(({ key, label, value, onChange, name }) => {
+        const typeahead = (
+          <Typeahead<string>
+            inputType="time"
+            inputRequired={true}
+            name={name}
+            id={`${idPrefix}-${key}`}
+            filterBy={timeSlots}
+            defaultInputValue={value}
+            options={hourOptions}
+            minLength={0}
+            onBlur={(event) => onChange(event.target.value)}
+            onChange={([newValue]: string[]) => {
+              if (!newValue) return;
+              onChange(newValue);
+            }}
+            positionFixed
+            disabled={disabled}
+            css={isInline ? inlineLabelDropDownCss : dropDownCss}
+          />
+        );
+
+        if (isInline) {
+          return (
+            <Box key={key} position="relative" display="inline-block">
+              <Text
+                variant={TextVariants.MUTED}
+                fontSize="0.85rem"
+                css={`
+                  position: absolute;
+                  left: 0.75rem;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  pointer-events: none;
+                  z-index: 1;
+                `}
+              >
+                {label}
+              </Text>
+              {typeahead}
+            </Box>
+          );
+        }
+
+        return (
+          <Stack key={key} spacing={2} as="div">
+            <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
+              {label}
+            </Label>
+            {typeahead}
+          </Stack>
+        );
+      })}
     </Inline>
   );
 };
 
-export { TimeSpanPicker };
+export { TimeSpanPicker, TimeSpanPickerLabelPositions };
