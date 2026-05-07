@@ -183,7 +183,7 @@ const AccessibilityStep = ({
 
   return (
     <Stack spacing={4}>
-      <Stack spacing={3}>
+      <Stack spacing={3} maxWidth="40rem">
         <Title size={3}>
           {t('create.additionalInformation.accessibility.departure.title')}
         </Title>
