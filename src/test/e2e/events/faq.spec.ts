@@ -3,9 +3,10 @@ import { expect, Page, test } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
+import { EventTypes } from '../../../constants/EventTypes';
 
 const { question: suggestionQuestion, answer: suggestionAnswer } =
-  nl.create.additionalInformation.faq.modal.suggestions['0.50.4.0.0'].find(
+  nl.create.additionalInformation.faq.modal.suggestions[EventTypes.Concert].find(
     (suggestion): suggestion is { question: string; answer: string } =>
       'answer' in suggestion,
   )!;
