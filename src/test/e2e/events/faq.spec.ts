@@ -1,7 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { expect, Page, test } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
+
+const { question: suggestionQuestion, answer: suggestionAnswer } =
+  nl.create.additionalInformation.faq.modal.suggestions['0.50.4.0.0'].find(
+    (suggestion): suggestion is { question: string; answer: string } =>
+      'answer' in suggestion,
+  )!;
 
 const faqData = {
   question: 'Wat zijn de openingsuren?',
@@ -83,6 +90,24 @@ test.describe('FAQ', () => {
 
     await expect(page.getByText(faqData.editedQuestion)).toBeVisible();
     await expect(page.getByText(faqData.question)).not.toBeVisible();
+  });
+
+  test('shows suggestion question and answer for Concert event type', async ({
+    page,
+  }) => {
+    await page
+      .getByRole('button', { name: 'Voeg een veelgestelde vraag toe' })
+      .click();
+
+    await page.locator('[role="dialog"]').getByRole('combobox').click();
+
+    await expect(
+      page.getByRole('option', { name: suggestionQuestion }),
+    ).toBeVisible();
+
+    await page.getByRole('option', { name: suggestionQuestion }).click();
+
+    await expect(page.getByText(suggestionAnswer)).toBeVisible();
   });
 
   test('can delete a FAQ item', async ({ page }) => {
