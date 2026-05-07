@@ -27,33 +27,39 @@ test.describe('Event Edit - Accessibility', () => {
     ).toBeVisible();
     await expect(page.getByText('E2E Place Preview Test')).toBeVisible();
 
+    const existingLocationCount = await page
+      .getByRole('heading', { name: /Vertreklocatie \d+/ })
+      .count();
+
+    // Add a new location
     await page
       .getByRole('button', { name: 'Voeg nog een locatie toe' })
       .click();
 
     await expect(
-      page.getByRole('heading', { name: 'Vertreklocatie 2' }),
+      page.getByRole('heading', {
+        name: `Vertreklocatie ${existingLocationCount}`,
+      }),
     ).toBeVisible();
-
-    await page.getByTestId('departure-city-1').fill('9000');
+    await page
+      .getByTestId(`departure-city-${existingLocationCount}`)
+      .fill('9000');
     await page.getByRole('option', { name: '9000 Gent' }).click();
 
-    await page.getByTestId('departure-place-1').fill('S.M');
+    await page
+      .getByTestId(`departure-place-${existingLocationCount}`)
+      .fill('S.M');
     await page
       .getByRole('option', { name: 'S.M.A.K.', exact: true })
       .first()
       .click();
 
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-
-    await page.locator('#departure-delete-1').click();
-
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-
+    // Delete the last location
+    await page.locator(`#departure-delete-${existingLocationCount}`).click();
     await expect(
-      page.getByRole('heading', { name: 'Vertreklocatie 2' }),
+      page.getByRole('heading', {
+        name: `Vertreklocatie ${existingLocationCount + 1}`,
+      }),
     ).toBeHidden();
 
     await page

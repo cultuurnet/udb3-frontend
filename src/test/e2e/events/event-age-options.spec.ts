@@ -86,6 +86,7 @@ test.describe('Event Preview - Age Display Options', () => {
     await page.goto(eventEditUrl);
     await page.getByRole('button', { name: /Andere/ }).click();
     await page.getByPlaceholder('Van').fill('6');
+    await page.getByPlaceholder('Van').blur();
     await page.getByPlaceholder('Tot').fill('12');
     await page.getByPlaceholder('Tot').blur();
     await page.waitForLoadState('networkidle');
