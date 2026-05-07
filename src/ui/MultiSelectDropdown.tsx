@@ -19,6 +19,7 @@ type MultiSelectDropdownProps = {
   selectedValues: string[];
   placeholder: string;
   onChange: (value: string, checked: boolean) => void;
+  width?: string;
 };
 
 const MultiSelectDropdown = ({
@@ -27,6 +28,7 @@ const MultiSelectDropdown = ({
   selectedValues,
   placeholder,
   onChange,
+  width = '175px',
 }: MultiSelectDropdownProps) => {
   const label =
     selectedValues.length === 0
@@ -42,7 +44,7 @@ const MultiSelectDropdown = ({
         css={`
           display: flex;
           align-items: center;
-          width: 175px;
+          width: ${width};
           background-color: ${colors.white} !important;
           border: 1px solid ${colors.grey2} !important;
           border-radius: ${getGlobalBorderRadius} !important;
@@ -82,7 +84,7 @@ const MultiSelectDropdown = ({
       </BootstrapDropdown.Toggle>
       <BootstrapDropdown.Menu
         css={`
-          min-width: 175px;
+          min-width: ${width};
           padding: 0.25rem 0;
         `}
       >
