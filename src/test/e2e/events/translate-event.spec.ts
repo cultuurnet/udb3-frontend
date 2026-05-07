@@ -56,7 +56,7 @@ test.describe('Event translation', () => {
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
 
-      await page.getByRole('main').locator('svg').nth(1).click();
+      await page.locator('.toast svg[data-icon="xmark"]').click();
 
       const descriptionContainer = page.locator(
         `#description-editor-container-${translation.lang}`,
@@ -76,7 +76,7 @@ test.describe('Event translation', () => {
         ),
       ).toBeVisible();
 
-      await page.getByRole('main').locator('svg').nth(1).click();
+      await page.locator('.toast svg[data-icon="xmark"]').click();
     }
 
     // Go back to preview
