@@ -34,17 +34,11 @@ export const Default: Story = {
   render: function RenderComponent(args) {
     const [selectedValues, setSelectedValues] = useState(args.selectedValues);
 
-    const handleChange = (value: string, checked: boolean) => {
-      setSelectedValues((prev) =>
-        checked ? [...prev, value] : prev.filter((v) => v !== value),
-      );
-    };
-
     return (
       <MultiSelectDropdown
         {...args}
         selectedValues={selectedValues}
-        onChange={handleChange}
+        onChange={setSelectedValues}
       />
     );
   },

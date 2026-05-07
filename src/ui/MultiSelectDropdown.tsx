@@ -18,7 +18,7 @@ type MultiSelectDropdownProps = {
   options: MultiSelectOption[];
   selectedValues: string[];
   placeholder: string;
-  onChange: (value: string, checked: boolean) => void;
+  onChange: (selectedValues: string[]) => void;
   width?: string;
 };
 
@@ -94,7 +94,13 @@ const MultiSelectDropdown = ({
               id={`${id}-${option.value}`}
               name={option.value}
               checked={selectedValues.includes(option.value)}
-              onToggle={(e) => onChange(option.value, e.target.checked)}
+              onToggle={(e) =>
+                onChange(
+                  e.target.checked
+                    ? [...selectedValues, option.value]
+                    : selectedValues.filter((value) => value !== option.value),
+                )
+              }
             >
               {option.label}
             </CheckboxWithLabel>
