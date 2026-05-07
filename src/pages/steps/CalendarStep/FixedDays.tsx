@@ -1,6 +1,7 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -17,6 +18,7 @@ import {
   useIsPermanent,
 } from '../machines/calendarMachine';
 import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
+import { CalendarOpeninghoursModalLegacy } from './CalendarOpeninghoursModalLegacy';
 
 const FixedDayOptions = {
   PERMANENT: 'permanent',
@@ -40,6 +42,18 @@ export const FixedDays = ({
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
+  const [isBOAEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
+  const options = [
+    {
+      label: t('create.calendar.fixed_days.with_start_and_end_date'),
+      value: FixedDayOptions.PERIODIC,
+    },
+    {
+      label: t('create.calendar.fixed_days.permanent'),
+      value: FixedDayOptions.PERMANENT,
+    },
+  ];
 
   const [
     isCalendarOpeninghoursModalVisible,
@@ -166,11 +180,19 @@ export const FixedDays = ({
         />
         {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
       </Stack>
-      <CalendarOpeninghoursModal
-        visible={isCalendarOpeninghoursModalVisible}
-        onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
-        onChangeCalendarState={onChangeCalendarState}
-      />
+      {isBOAEnabled ? (
+        <CalendarOpeninghoursModal
+          visible={isCalendarOpeninghoursModalVisible}
+          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
+          onChangeCalendarState={onChangeCalendarState}
+        />
+      ) : (
+        <CalendarOpeninghoursModalLegacy
+          visible={isCalendarOpeninghoursModalVisible}
+          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
+          onChangeCalendarState={onChangeCalendarState}
+        />
+      )}
     </Stack>
   );
 };
