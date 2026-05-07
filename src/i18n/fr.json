@@ -392,7 +392,10 @@
           "wwjRVmExI0w6xfQwT1KWpx": "Donnez une description enthousiaste de la cour de récréation. <ul> <li> Quels sont les <strong>équipements</strong> que tu trouves sur le terrain de jeu ? </li> <li> L'aire de jeux est-elle <strong>couverte, intérieure</strong> ou <strong>extérieure</strong> ? </li> <li> Y a-t-il un service de <strong>restauration</strong> à proximité de l'aire de jeux ? </li> <li> Quelles <strong>autres installations</strong> (toilettes, coin à couches, etc.) trouvez-vous sur l'aire de jeux ? </li> </ul>",
           "OyaPaf64AEmEAYXHeLMAtA": "Donnez une description enthousiaste du hall ou de la salle d'exposition. <ul> <li> <b>Quelles activités ou représentations</b> sont organisées dans le hall ou le hall d'exposition ? </li> <li> Y a-t-il <strong>une programmation</strong> propre ou la salle peut-elle également être réservée ? </li> </ul>",
           "0.8.0.0.0": "Donnez une description enthousiaste de l'espace public. <ul> <li> <strong>Décrivez</strong> <strong>avec précision</strong> l'espace public. </li> <li> <strong>Que</strong> pouvez-vous <strong>faire ici</strong> ? </li> </ul>",
-          "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>"
+          "8.70.0.0.0": "Donnez une description enthousiaste du théâtre. <ul> <li> <strong>Quelles activités</strong> ou <strong>représentations</strong> sont organisées dans ce théâtre ? </li> <li> Y a-t-il une <strong>programmation</strong> propre ou le lieu peut-il également être réservé ? </li> <li> Précisez le <strong>public cible</strong>. </li> </ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Conseils pour la description d'un accueil extrascolaire</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Conseils pour la description d'une activité d'un mouvement de jeunesse</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes.",
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "<strong>Conseils pour la description d'une plaine de jeux</strong><br>Décrivez l'ambiance générale, le thème et les principales activités prévues avec les enfants.<br><br>Complétez ensuite avec des informations supplémentaires. Utilisez également les questions fréquentes."
         },
         "title": "Description",
         "title_with_faq": "Description & FAQ",
@@ -651,6 +654,56 @@
               {
                 "question": "Du matériel pédagogique est-il disponible ? Lequel et où ?"
               }
+            ],
+            "K7mPx3nQrT9bWfH2zL5cYv": [
+              {
+                "question": "Les jeunes enfants peuvent-ils faire une sieste pendant la journée ?",
+                "answer": "Indiquez si une salle de repos est prévue."
+              },
+              {
+                "question": "Recevrai-je une attestation fiscale pour cet accueil ?",
+                "answer": "Indiquez si votre offre est fiscalement déductible et si les parents reçoivent cette attestation automatiquement ou doivent en faire la demande."
+              }
+            ],
+            "8aRjN4dGsXuE6tBkM1pVwQ": [
+              {
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?",
+                "answer": "- Partagez les coordonnées : indiquez avec qui les parents peuvent convenir des modalités.<br>- Décrivez votre expérience : précisez si vous avez déjà accueilli des enfants ayant des besoins particuliers.<br>- Indiquez la taille du groupe et le nombre d'encadrants."
+              },
+              {
+                "question": "Que doit apporter ou porter mon enfant ?",
+                "answer": "Pensez à des vêtements adaptés (tenue de jeu, imperméable) ou des objets pratiques comme la crème solaire et une gourde."
+              }
+            ],
+            "hZ5fCyL9nKqW3xDvTrJ2gP": [
+              {
+                "question": "Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?",
+                "answer": "- Partagez les coordonnées : indiquez avec qui les parents peuvent convenir des modalités.<br>- Décrivez votre expérience : précisez si vous avez déjà accueilli des enfants ayant des besoins particuliers.<br>- Indiquez la taille du groupe et le nombre d'encadrants."
+              },
+              {
+                "question": "Les repas sont-ils inclus et comment puis-je signaler des allergies ?",
+                "answer": "Précisez si les enfants doivent apporter leur propre lunch et/ou collations, ou si vous prévoyez des repas chauds."
+              },
+              {
+                "question": "Que doit apporter ou porter mon enfant ?",
+                "answer": "Pensez à des vêtements adaptés (tenue de jeu, imperméable) ou des objets pratiques comme la crème solaire et une gourde."
+              },
+              {
+                "question": "Qui encadre les enfants ?",
+                "answer": "Indiquez s'il s'agit d'animateurs (certifiés), d'enseignants ou d'encadrants permanents de la structure."
+              },
+              {
+                "question": "Mon enfant est-il assuré contre les accidents corporels ?",
+                "answer": "Indiquez clairement si l'assurance est incluse dans le prix."
+              },
+              {
+                "question": "Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?",
+                "answer": "Expliquez si les groupes sont strictement répartis par âge et s'il existe une certaine flexibilité."
+              },
+              {
+                "question": "L'activité se déroule-t-elle en plein air ou en intérieur ?",
+                "answer": "Expliquez où les enfants jouent et précisez ce qui se passe en cas de pluie."
+              }
             ]
           }
         },
@@ -676,7 +729,10 @@
           "0.59.0.0.0": "<strong>Questions fréquentes relatives aux activités sportives</strong><ul><li>Que dois-je emporter ou quels vêtements dois-je prévoir ?</li><li>Comment accéder au lieu ?</li></ul>",
           "0.0.0.0.0": "<strong>Questions fréquentes relatives aux expositions</strong><ul><li>Un guide (audio) ou une brochure est-il disponible ?</li><li>Y a-t-il des vestiaires ou des casiers ?</li></ul>",
           "0.55.0.0.0": "<strong>Questions fréquentes relatives aux spectacles de théâtre</strong><ul><li>Comment accéder au lieu ?</li><li>Y a-t-il une pause prévue pendant le spectacle ?</li></ul>",
-          "cultuurkuur": "<strong>Questions fréquentes relatives aux activités Cultuurkuur</strong><ul><li>Du matériel pédagogique est-il disponible ? Lequel et où ?</li></ul>"
+          "cultuurkuur": "<strong>Questions fréquentes relatives aux activités Cultuurkuur</strong><ul><li>Du matériel pédagogique est-il disponible ? Lequel et où ?</li></ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Questions fréquentes relatives aux accueils extrascolaires</strong><ul><li>Les jeunes enfants peuvent-ils faire une sieste pendant la journée ?</li><li>Recevrai-je une attestation fiscale pour cet accueil ?</li></ul>",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Questions fréquentes relatives aux activités d'un mouvement de jeunesse</strong><ul><li>Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?</li><li>Que doit apporter ou porter mon enfant ?</li></ul>",
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "<strong>Questions fréquentes relatives aux plaines de jeux</strong><ul><li>Comment cette offre peut-elle encadrer mon enfant ayant des besoins particuliers ?</li><li>Les repas sont-ils inclus et comment puis-je signaler des allergies ?</li><li>Que doit apporter ou porter mon enfant ?</li><li>Qui encadre les enfants ?</li><li>Mon enfant est-il assuré contre les accidents corporels ?</li><li>Mon enfant sera-t-il dans le même groupe qu'un(e) ami(e), frère ou sœur ?</li><li>L'activité se déroule-t-elle en plein air ou en intérieur ?</li></ul>"
         }
       },
       "event_score": {

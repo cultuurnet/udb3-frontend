@@ -390,7 +390,10 @@
           "wwjRVmExI0w6xfQwT1KWpx": "Geben Sie eine begeisterte Beschreibung des Spielplatzes. <ul> <li> <strong>Welche</strong> <strong>Spielgeräte</strong> findest du auf dem Spielplatz? </li> <li> Ist der Spielplatz <strong>drinnen</strong> oder <strong>draußen</strong>? </li> <li> Gibt es in der Nähe des Spielplatzes eine <strong>Verpflegungsmöglichkeit</strong>? </li> <li> Welche <strong>anderen Einrichtungen</strong> (Toilette, Windelecke usw.) finden Sie auf dem Spielplatz? </li> </ul>",
           "OyaPaf64AEmEAYXHeLMAtA": "Geben Sie eine begeisterte Beschreibung der Halle oder des Ausstellungsraums. <ul> <li> <strong>Welche Aktivitäten</strong> oder Darbietungen werden in der Halle oder in der Ausstellungshalle organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann die Halle auch gebucht werden? </li> </ul>",
           "0.8.0.0.0": "Geben Sie eine enthusiastische Beschreibung des öffentlichen Raums. <ul> <li> <strong>Beschreiben</strong> Sie den öffentlichen <strong>Raum genau</strong>. </li> <li> <strong>Was</strong> können Si<strong>e hier tun</strong>? </li> </ul>",
-          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>"
+          "8.70.0.0.0": "Geben Sie eine begeisterte Beschreibung des Theaters. <ul> <li> <strong>Welche Aktivitäten</strong> oder Aufführungen werden in diesem Theater organisiert? </li> <li> Gibt es ein <strong>eigenes Programm</strong> oder kann der Aktivitätsort mitgebucht werden? </li> <li> Geben Sie die <strong>Zielgruppe</strong> an. </li> </ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Tipps für die Beschreibung einer Kinderbetreuung</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Tipps für die Beschreibung einer Aktivität einer Jugendbewegung</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen.",
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "<strong>Tipps für die Beschreibung eines Spielplatzes</strong><br>Beschreiben Sie die allgemeine Atmosphäre, das Thema und die wichtigsten Aktivitäten, die Sie mit den Kindern planen.<br><br>Ergänzen Sie anschließend mit weiteren Informationen. Nutzen Sie dazu auch die häufig gestellten Fragen."
         },
         "title": "Beschreibung",
         "title_with_faq": "Beschreibung & FAQ",
@@ -644,6 +647,56 @@
               {
                 "question": "Ist Lernmaterial verfügbar? Was und wo?"
               }
+            ],
+            "K7mPx3nQrT9bWfH2zL5cYv": [
+              {
+                "question": "Können junge Kleinkinder tagsüber ein Nickerchen machen?",
+                "answer": "Geben Sie an, ob ein Ruheraum vorhanden ist."
+              },
+              {
+                "question": "Erhalte ich eine steuerliche Bescheinigung für diese Betreuung?",
+                "answer": "Geben Sie an, ob Ihr Angebot steuerlich absetzbar ist und ob Eltern diese Bescheinigung automatisch erhalten oder selbst beantragen müssen."
+              }
+            ],
+            "8aRjN4dGsXuE6tBkM1pVwQ": [
+              {
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
+                "answer": "- Teilen Sie Kontaktdaten mit: Geben Sie an, mit wem Eltern die Möglichkeiten besprechen können.<br>- Beschreiben Sie Ihre Erfahrung: Teilen Sie mit, ob Sie bereits Kinder mit besonderen Bedürfnissen betreut haben.<br>- Geben Sie die Gruppengröße und die Anzahl der Betreuer an."
+              },
+              {
+                "question": "Was muss mein Kind mitbringen oder anziehen?",
+                "answer": "Denken Sie an spezifische Kleidung (Spielkleidung, Regenmantel) oder praktische Dinge wie Sonnencreme und eine Trinkflasche."
+              }
+            ],
+            "hZ5fCyL9nKqW3xDvTrJ2gP": [
+              {
+                "question": "Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?",
+                "answer": "- Teilen Sie Kontaktdaten mit: Geben Sie an, mit wem Eltern die Möglichkeiten besprechen können.<br>- Beschreiben Sie Ihre Erfahrung: Teilen Sie mit, ob Sie bereits Kinder mit besonderen Bedürfnissen betreut haben.<br>- Geben Sie die Gruppengröße und die Anzahl der Betreuer an."
+              },
+              {
+                "question": "Sind Mahlzeiten inbegriffen und wie melde ich Allergien?",
+                "answer": "Klären Sie, ob Kinder ihr eigenes Lunchpaket und/oder Snacks mitbringen müssen oder ob warmes Essen bereitgestellt wird."
+              },
+              {
+                "question": "Was muss mein Kind mitbringen oder anziehen?",
+                "answer": "Denken Sie an spezifische Kleidung (Spielkleidung, Regenmantel) oder praktische Dinge wie Sonnencreme und eine Trinkflasche."
+              },
+              {
+                "question": "Von wem werden die Kinder betreut?",
+                "answer": "Geben Sie an, ob es sich um (zertifizierte) Animateure, Lehrer oder feste Betreuer der Einrichtung handelt."
+              },
+              {
+                "question": "Ist mein Kind gegen körperliche Unfälle versichert?",
+                "answer": "Geben Sie klar an, ob die Versicherung im Preis inbegriffen ist."
+              },
+              {
+                "question": "Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?",
+                "answer": "Erklären Sie, ob die Gruppen strikt nach Alter eingeteilt werden und ob hier eine gewisse Flexibilität besteht."
+              },
+              {
+                "question": "Findet die Aktivität draußen oder drinnen statt?",
+                "answer": "Erklären Sie, wo die Kinder spielen, und teilen Sie mit, was bei Regen unternommen wird."
+              }
             ]
           }
         },
@@ -664,11 +717,15 @@
           "0.37.0.0.0": "<strong>Fragen, die wir bei einem Markt, Flohmarkt oder einer Kirmes oft hören</strong><ul><li>Ist auch ein Rahmenprogramm vorgesehen?</li><li>Wie kann ich mich als Standinhaber anmelden?</li><li>Findet die Veranstaltung bei Regen statt?</li></ul>",
           "0.12.0.0.0": "<strong>Fragen, die wir bei einem Tag der offenen Tür oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Sind Führungen vorgesehen? Zu welchen Zeiten finden diese statt?</li></ul>",
           "0.49.0.0.0": "<strong>Fragen, die wir bei einer Party oder einem Fest oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
+          "0.19.0.0.0": "<strong>Fragen, die wir bei einem Sportwettkampf oft hören</strong><ul><li>Findet die Übertragung im Freien oder in einem überdachten Raum statt?</li></ul>",
           "0.50.21.0.0": "<strong>Fragen, die wir bei einem Spiel oder Quiz oft hören</strong><ul><li>Was kann ich gewinnen?</li><li>Aus wie vielen Personen darf ein Team maximal bestehen?</li></ul>",
           "0.59.0.0.0": "<strong>Fragen, die wir bei einer Sportaktivität oft hören</strong><ul><li>Was muss ich mitbringen oder anziehen?</li><li>Wie erreiche ich den Veranstaltungsort?</li></ul>",
           "0.0.0.0.0": "<strong>Fragen, die wir bei einer Ausstellung oft hören</strong><ul><li>Ist ein (Audio-)Guide oder eine Broschüre verfügbar?</li><li>Gibt es Schließfächer oder eine Garderobe?</li></ul>",
           "0.55.0.0.0": "<strong>Fragen, die wir bei einer Theatervorstellung oft hören</strong><ul><li>Wie erreiche ich den Veranstaltungsort?</li><li>Ist eine Pause während der Vorstellung vorgesehen?</li></ul>",
-          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>"
+          "cultuurkuur": "<strong>Fragen, die wir bei einer Cultuurkuur-Aktivität oft hören</strong><ul><li>Ist Lernmaterial verfügbar? Was und wo?</li></ul>",
+          "K7mPx3nQrT9bWfH2zL5cYv": "<strong>Fragen, die wir bei einer Kinderbetreuung oft hören</strong><ul><li>Können junge Kleinkinder tagsüber ein Nickerchen machen?</li><li>Erhalte ich eine steuerliche Bescheinigung für diese Betreuung?</li></ul>",
+          "8aRjN4dGsXuE6tBkM1pVwQ": "<strong>Fragen, die wir bei einer Aktivität einer Jugendbewegung oft hören</strong><ul><li>Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?</li><li>Was muss mein Kind mitbringen oder anziehen?</li></ul>",
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "<strong>Fragen, die wir bei einem Spielplatz oft hören</strong><ul><li>Wie kann dieses Angebot mein Kind mit besonderen Bedürfnissen unterstützen?</li><li>Sind Mahlzeiten inbegriffen und wie melde ich Allergien?</li><li>Was muss mein Kind mitbringen oder anziehen?</li><li>Von wem werden die Kinder betreut?</li><li>Ist mein Kind gegen körperliche Unfälle versichert?</li><li>Ist mein Kind in derselben Gruppe wie ein Freund, Bruder oder Schwester?</li><li>Findet die Aktivität draußen oder drinnen statt?</li></ul>"
         }
       },
       "event_score": {
