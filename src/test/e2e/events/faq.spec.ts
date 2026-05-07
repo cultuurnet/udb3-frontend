@@ -1,15 +1,20 @@
 import { faker } from '@faker-js/faker';
 import { expect, Page, test } from '@playwright/test';
 
+import { EventTypes } from '../../../constants/EventTypes';
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
-import { EventTypes } from '../../../constants/EventTypes';
 
-const { question: suggestionQuestion, answer: suggestionAnswer } =
+const concertSuggestionWithAnswer =
   nl.create.additionalInformation.faq.modal.suggestions[EventTypes.Concert].find(
     (suggestion): suggestion is { question: string; answer: string } =>
       'answer' in suggestion,
-  )!;
+  );
+if (!concertSuggestionWithAnswer) {
+  throw new Error('Expected at least one Concert FAQ suggestion with an answer in nl.json');
+}
+const { question: suggestionQuestion, answer: suggestionAnswer } =
+  concertSuggestionWithAnswer;
 
 const faqData = {
   question: 'Wat zijn de openingsuren?',
