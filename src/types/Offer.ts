@@ -110,6 +110,10 @@ type OpeningHours = {
   opens: string;
   closes: string;
   dayOfWeek: DayOfWeek[];
+  childcare?: {
+    start: string;
+    end: string;
+  };
 };
 
 type CalendarSummary = Record<
