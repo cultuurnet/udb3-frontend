@@ -177,12 +177,14 @@
       },
       "opening_hours_modal": {
         "button_add": "Ajouter plus d'heures d'ouverture",
+        "button_add_hours": "Ajouter plus d'heures",
         "button_cancel": "Annuler",
         "button_confirm": "Sauvegarder",
         "end_time": "Jusqu'à",
         "start_time": "De",
         "title": "Heures d 'ouverture",
         "days": "Jours",
+        "hours": "Heures",
         "select_days": "Sélectionner jour(s)",
         "validation_messages": {
           "day_of_week": {

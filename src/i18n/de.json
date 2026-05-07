@@ -177,12 +177,14 @@
       },
       "opening_hours_modal": {
         "button_add": "Fügen Sie weitere Öffnungszeiten hinzu",
+        "button_add_hours": "Weitere Stunden hinzufügen",
         "button_cancel": "Absagen",
         "button_confirm": "Speichern",
         "end_time": "Bis um",
         "start_time": "Aus",
         "title": "Öffnungszeiten",
         "days": "Tage",
+        "hours": "Stunden",
         "select_days": "Tag(e) auswählen",
         "validation_messages": {
           "day_of_week": {
