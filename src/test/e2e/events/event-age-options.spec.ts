@@ -1,6 +1,6 @@
 import { expect, test as base } from '@playwright/test';
-import { addDays } from 'date-fns';
 
+import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 type TestFixtures = {
@@ -12,32 +12,7 @@ type TestFixtures = {
 const test = base.extend<TestFixtures>({
   eventId: async ({ page, baseURL }, applyFixture) => {
     suppressHydrationErrors(page);
-    await page.goto(`${baseURL}/create`);
-
-    await page.getByRole('button', { name: 'Activiteit' }).click();
-    await page.getByRole('button', { name: 'Concert' }).click();
-
-    await page
-      .locator('#calendar-step-day-day-1date-period-picker-start')
-      .fill(new Date(addDays(new Date(), 1)).toLocaleDateString('nl-BE'));
-
-    await page.getByLabel('Gemeente').click();
-    await page.getByLabel('Gemeente').fill('9000');
-    await page.getByRole('option', { name: '9000 Gent' }).click();
-    await page.getByLabel('Kies een locatie').click();
-    await page.getByLabel('Kies een locatie').fill('S.M');
-    await page
-      .getByRole('option', { name: 'S.M.A.K.', exact: true })
-      .first()
-      .click();
-
-    await page.getByLabel('Naam van de activiteit').click();
-    await page
-      .getByLabel('Naam van de activiteit')
-      .fill(`E2E Age Options Test ${Date.now()}`);
-    await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
-    await page.getByRole('button', { name: 'Opslaan' }).click();
-
+    await createBasicEvent(page, baseURL, `E2E Age Options Test ${Date.now()}`);
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 
     await page.waitForURL(/\/events\/[a-f0-9-]+/);
