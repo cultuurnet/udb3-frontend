@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
+import { SupportedLanguages } from '../i18n';
+import type { Values } from '../types/Values';
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
@@ -83,8 +85,7 @@ const DatePeriodPicker = ({
 
   const holidayPeriods: HolidayPeriod[] = (apiHolidays ?? []).map((holiday) => {
     const name =
-      holiday.name.find((name) => name.language === i18n.language.toUpperCase())
-        ?.text ?? '';
+      holiday.name[i18n.language as Values<typeof SupportedLanguages>] ?? '';
     const regionLabel = holiday.region
       ? t(`date_period_picker.region.${holiday.region}`)
       : undefined;

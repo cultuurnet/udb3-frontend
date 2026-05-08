@@ -7,17 +7,15 @@ import {
 import type { Headers } from '@/hooks/api/types/Headers';
 import { fetchFromApi } from '@/utils/fetchFromApi';
 
-type HolidayName = {
-  language: string;
-  text: string;
-};
+import { SupportedLanguages } from '../../i18n';
+import { Values } from '../../types/Values';
 
 type ApiHoliday = {
   startDate: string;
   endDate: string;
   type: string;
   region?: string;
-  name: HolidayName[];
+  name: Partial<Record<Values<typeof SupportedLanguages>, string>>;
 };
 
 const getHolidays = async ({
