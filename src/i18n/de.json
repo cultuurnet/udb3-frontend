@@ -1541,6 +1541,12 @@
   },
   "date_period_picker": {
     "end": "Ende",
+    "quick_links": {
+      "flemish_school_holidays": "Flämische Schulferien",
+      "french_school_holidays": "Frankophone Schulferien",
+      "public_holidays": "Gesetzliche Feiertage",
+      "title": "Oder alles auswählen:"
+    },
     "region": {
       "DE": "Deutschsprachig",
       "FR": "Frankophon",

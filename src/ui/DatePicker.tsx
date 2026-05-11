@@ -38,9 +38,42 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   highlightDates?: Date[];
   calendarHeader?: ReactNode;
   calendarContent?: ReactNode;
+  calendarQuickLinks?: (onClose: () => void) => ReactNode;
   calendarWidth?: string;
   withHolidays?: boolean;
 };
+
+type CalendarWithQuickLinksProps = {
+  className: string;
+  calendarHeader?: ReactNode;
+  calendarQuickLinks: (onClose: () => void) => ReactNode;
+  onClose: () => void;
+  children: ReactNode;
+};
+
+const CalendarWithQuickLinks = ({
+  className,
+  calendarHeader,
+  calendarQuickLinks,
+  onClose,
+  children,
+}: CalendarWithQuickLinksProps) => (
+  <Inline
+    backgroundColor={colors.white}
+    css={`
+      border-radius: 0.5rem;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    `}
+  >
+    <Box className={className}>
+      {calendarHeader && (
+        <Stack className="custom-calendar-header">{calendarHeader}</Stack>
+      )}
+      {children}
+    </Box>
+    <Stack>{calendarQuickLinks(onClose)}</Stack>
+  </Inline>
+);
 
 const DatePicker = ({
   id,
@@ -56,6 +89,7 @@ const DatePicker = ({
   highlightDates,
   calendarHeader,
   calendarContent,
+  calendarQuickLinks,
   calendarWidth,
   withHolidays = false,
   ...props
@@ -309,22 +343,35 @@ const DatePicker = ({
         }
         disabled={disabled}
         locale={i18n.language}
+        popperProps={{ strategy: 'fixed' }}
         // Empty css prop is necessary here
         highlightDates={highlightDates}
         calendarContainer={
-          calendarHeader
-            ? ({ className, children }) => (
-                <Stack
-                  className={className}
-                  css={`
-                    border-radius: 0.5rem;
-                    overflow: hidden;
-                  `}
-                >
-                  <Box className="custom-calendar-header">{calendarHeader}</Box>
-                  {children}
-                </Stack>
-              )
+          calendarHeader || calendarQuickLinks
+            ? ({ className, children }) =>
+                calendarQuickLinks ? (
+                  <CalendarWithQuickLinks
+                    className={className}
+                    calendarHeader={calendarHeader}
+                    calendarQuickLinks={calendarQuickLinks}
+                    onClose={() => datePickerRef.current?.setOpen(false)}
+                  >
+                    {children}
+                  </CalendarWithQuickLinks>
+                ) : (
+                  <Stack
+                    className={className}
+                    css={`
+                      border-radius: 0.5rem;
+                      overflow: hidden;
+                    `}
+                  >
+                    <Box className="custom-calendar-header">
+                      {calendarHeader}
+                    </Box>
+                    {children}
+                  </Stack>
+                )
             : undefined
         }
         css=""

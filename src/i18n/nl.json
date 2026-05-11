@@ -1598,6 +1598,12 @@
   },
   "date_period_picker": {
     "end": "Einde",
+    "quick_links": {
+      "flemish_school_holidays": "Vlaamse schoolvakanties",
+      "french_school_holidays": "Franstalige schoolvakanties",
+      "public_holidays": "Wettelijke feestdagen",
+      "title": "Of selecteer alle:"
+    },
     "region": {
       "DE": "Duitstalig",
       "FR": "Franstalig",

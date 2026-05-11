@@ -108,3 +108,12 @@ export const WithHolidaysToggle: Story = {
   },
   render,
 };
+
+export const QuickLinks: Story = {
+  args: {
+    ...commonArgs,
+    showQuickLinks: true,
+    apiHolidays: mockHolidays,
+  },
+  render,
+};
