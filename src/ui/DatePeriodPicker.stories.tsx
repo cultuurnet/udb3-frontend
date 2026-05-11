@@ -128,7 +128,6 @@ export const QuickLinks: Story = {
         onDateStartChange={setDateStart}
         onDateEndChange={setDateEnd}
         onShowHolidaysChange={() => {}}
-        onCalendarOpen={() => {}}
       />
     );
   },

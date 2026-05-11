@@ -32,7 +32,6 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   minDate?: Date;
   maxDate?: Date;
   onChange?: (value: Date) => void;
-  onCalendarOpen?: () => void;
   onCalendarClose?: () => void;
   onMonthChange?: (date: Date) => void;
   onYearChange?: (date: Date) => void;
@@ -81,7 +80,6 @@ const DatePicker = ({
   id,
   selected = new Date(),
   onChange,
-  onCalendarOpen,
   onCalendarClose,
   onMonthChange,
   onYearChange,
@@ -329,7 +327,6 @@ const DatePicker = ({
         id={id}
         selected={selected}
         onChange={onChange}
-        onCalendarOpen={onCalendarOpen}
         onCalendarClose={onCalendarClose}
         onMonthChange={onMonthChange}
         onYearChange={onYearChange}
