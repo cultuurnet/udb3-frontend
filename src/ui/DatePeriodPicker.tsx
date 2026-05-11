@@ -29,12 +29,6 @@ import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
 
-type HolidayPeriod = {
-  startDate: Date;
-  endDate: Date;
-  name: string;
-};
-
 type HolidayPreset = {
   label: string;
   fetchStartDate: string;
@@ -60,6 +54,21 @@ const getHolidayLabel = (
     : undefined;
   return regionLabel ? `${name} (${regionLabel})` : name;
 };
+
+const parseHoliday = (
+  holiday: ApiHoliday,
+  language: string,
+  t: TFunction,
+  includesRegionLabel = false,
+) => ({
+  type: holiday.type,
+  region: holiday.region,
+  name: includesRegionLabel
+    ? getHolidayLabel(holiday, language, t)
+    : (holiday.name[language as Values<typeof SupportedLanguages>] ?? ''),
+  startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
+  endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
+});
 
 const getAcademicYearStart = (date: Date): number =>
   date.getMonth() >= 7 ? date.getFullYear() : date.getFullYear() - 1;
@@ -94,20 +103,14 @@ const filterHolidaysForPreset = (
   holidays: ApiHoliday[],
   preset: HolidayPreset,
   language: string,
+  t: TFunction,
 ) =>
   holidays
-    .map((holiday) => ({
-      type: holiday.type,
-      region: holiday.region,
-      name: holiday.name[language as Values<typeof SupportedLanguages>] ?? '',
-      startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
-      endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-    }))
+    .map((holiday) => parseHoliday(holiday, language, t))
     .filter(
       (holiday) =>
         holiday.endDate >= new Date() && preset.matchesHoliday(holiday),
-    )
-    .map(({ startDate, endDate, name }) => ({ startDate, endDate, name }));
+    );
 
 const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
   const year = today.getFullYear();
@@ -189,12 +192,8 @@ const DatePeriodPicker = ({
   const locale = locales[i18n.language] ?? nl;
   const year = viewedMonth.getFullYear();
 
-  const holidayPeriods: HolidayPeriod[] = (apiHolidays ?? []).map(
-    (holiday) => ({
-      startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
-      endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-      name: getHolidayLabel(holiday, i18n.language, t),
-    }),
+  const holidayPeriods = (apiHolidays ?? []).map((holiday) =>
+    parseHoliday(holiday, i18n.language, t, true),
   );
 
   const highlightDates = holidayPeriods.flatMap(({ startDate, endDate }) =>
@@ -254,6 +253,7 @@ const DatePeriodPicker = ({
                     holidays,
                     preset,
                     i18n.language,
+                    t,
                   );
                   onQuickLinkClick?.(periods);
                   onClose();
