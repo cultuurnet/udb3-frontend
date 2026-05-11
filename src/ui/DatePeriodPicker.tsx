@@ -193,14 +193,18 @@ const DatePeriodPicker = ({
   const year = viewedMonth.getFullYear();
 
   const holidayPeriods = useMemo(
-    () => (apiHolidays ?? []).map((holiday) => parseHoliday(holiday, i18n.language, t, true)),
+    () =>
+      (apiHolidays ?? []).map((holiday) =>
+        parseHoliday(holiday, i18n.language, t, true),
+      ),
     [apiHolidays, i18n.language, t],
   );
 
   const highlightDates = useMemo(
-    () => holidayPeriods.flatMap(({ startDate, endDate }) =>
-      eachDayOfInterval({ start: startDate, end: endDate }),
-    ),
+    () =>
+      holidayPeriods.flatMap(({ startDate, endDate }) =>
+        eachDayOfInterval({ start: startDate, end: endDate }),
+      ),
     [holidayPeriods],
   );
 
@@ -208,7 +212,9 @@ const DatePeriodPicker = ({
     const firstDay = new Date(year, viewedMonth.getMonth(), 1);
     const lastDay = new Date(year, viewedMonth.getMonth() + 1, 0);
     return holidayPeriods
-      .filter(({ startDate, endDate }) => startDate <= lastDay && endDate >= firstDay)
+      .filter(
+        ({ startDate, endDate }) => startDate <= lastDay && endDate >= firstDay,
+      )
       .map(({ startDate, endDate, name }) => {
         if (isSameDay(startDate, endDate))
           return `${format(startDate, 'd MMMM', { locale })}: ${name}`;
