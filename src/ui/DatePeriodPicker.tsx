@@ -252,6 +252,7 @@ const DatePeriodPicker = ({
                 key={preset.label}
                 variant={ButtonVariants.SECONDARY}
                 onClick={async () => {
+                  onClose();
                   const holidays =
                     (await fetchHolidays?.(
                       preset.fetchStartDate,
@@ -264,7 +265,6 @@ const DatePeriodPicker = ({
                     t,
                   );
                   onQuickLinkClick?.(periods);
-                  onClose();
                 }}
                 disabled={disabled}
               >
