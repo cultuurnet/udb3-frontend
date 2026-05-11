@@ -1,6 +1,8 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -40,6 +42,18 @@ export const FixedDays = ({
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
+  const options = [
+    {
+      label: t('create.calendar.fixed_days.with_start_and_end_date'),
+      value: FixedDayOptions.PERIODIC,
+    },
+    {
+      label: t('create.calendar.fixed_days.permanent'),
+      value: FixedDayOptions.PERMANENT,
+    },
+  ];
 
   const [
     isCalendarOpeninghoursModalVisible,
@@ -51,6 +65,8 @@ export const FixedDays = ({
 
   const startDate = useCalendarSelector((state) => state.context.startDate);
   const endDate = useCalendarSelector((state) => state.context.endDate);
+
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const openingHours = useCalendarSelector(
     (state) => state.context.openingHours,
@@ -152,6 +168,9 @@ export const FixedDays = ({
               dateEnd={new Date(endDate)}
               onDateStartChange={onChangeStartDate}
               onDateEndChange={onChangeEndDate}
+              showHolidaysToggle={isBoaEnabled}
+              apiHolidays={apiHolidays}
+              onShowHolidaysChange={onShowHolidaysChange}
             />
             {openingHoursContent}
           </Stack>
