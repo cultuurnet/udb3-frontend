@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 
 import {
   queryOptions,
@@ -9,6 +10,7 @@ import { fetchFromApi } from '@/utils/fetchFromApi';
 
 import { SupportedLanguages } from '../../i18n';
 import { Values } from '../../types/Values';
+import { useHeaders } from './useHeaders';
 
 type ApiHoliday = {
   startDate: string;
@@ -85,21 +87,33 @@ const useHolidays = (year?: number, enabled?: boolean) => {
   return data;
 };
 
+const useFetchHolidays = () => {
+  const headers = useHeaders();
+  const queryClient = useQueryClient();
+
+  return useCallback(
+    (startDate: string, endDate: string): Promise<ApiHoliday[]> =>
+      queryClient.fetchQuery({
+        queryKey: ['holidays', startDate, endDate],
+        queryFn: () => getHolidays({ headers, startDate, endDate }),
+      }),
+    [headers, queryClient],
+  );
+};
+
 const useHolidaysWithToggle = () => {
   const [showHolidays, setShowHolidays] = useState(false);
-  const [isCalendarOpened, setIsCalendarOpened] = useState(false);
   const [viewedYear, setViewedYear] = useState(new Date().getFullYear());
-  const apiHolidays = useHolidays(viewedYear, showHolidays || isCalendarOpened);
+  const apiHolidays = useHolidays(viewedYear, showHolidays);
+  const fetchHolidays = useFetchHolidays();
 
   const onShowHolidaysChange = (shown: boolean, year: number) => {
     setShowHolidays(shown);
     setViewedYear(year);
   };
 
-  const onCalendarOpen = () => setIsCalendarOpened(true);
-
-  return { apiHolidays, onShowHolidaysChange, onCalendarOpen };
+  return { apiHolidays, onShowHolidaysChange, fetchHolidays };
 };
 
-export { useGetHolidaysQuery, useHolidays, useHolidaysWithToggle };
+export { useFetchHolidays, useHolidays, useHolidaysWithToggle };
 export type { ApiHoliday };
