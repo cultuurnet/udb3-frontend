@@ -185,7 +185,7 @@ const DatePeriodPicker = ({
 
   const handleCalendarViewChange = (month: Date) => {
     setViewedMonth(month);
-    onShowHolidaysChange?.(isHighlighted, month.getFullYear());
+    if (isHighlighted) onShowHolidaysChange?.(true, month.getFullYear());
   };
 
   const idPrefix = `${id}date-period-picker`;
