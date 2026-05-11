@@ -208,14 +208,14 @@ const DatePicker = ({
         }
 
         .react-datepicker__day--selected {
-          background-color: ${colors.udbMainDarkBlue};
+          background-color: ${colors.udbMainPositiveGreen};
           ${withHolidays
             ? `color: ${colors.white}; font-weight: bold;`
             : 'border-radius: 10px;'}
         }
 
         .react-datepicker__day--selected:hover {
-          background-color: ${colors.udbMainDarkBlue};
+          background-color: ${colors.udbMainPositiveGreen};
           ${withHolidays ? `color: ${colors.white};` : ''}
         }
 
@@ -252,7 +252,7 @@ const DatePicker = ({
           color: #000;
 
           &.react-datepicker__day--selected {
-            background-color: ${colors.udbMainDarkBlue};
+            background-color: ${colors.udbMainPositiveGreen};
             color: ${colors.white};
           }
         }
