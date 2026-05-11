@@ -39,7 +39,11 @@ type HolidayPreset = {
   label: string;
   fetchStartDate: string;
   fetchEndDate: string;
-  matchesHoliday: (holiday: { type: string; region?: string; startDate: Date }) => boolean;
+  matchesHoliday: (holiday: {
+    type: string;
+    region?: string;
+    startDate: Date;
+  }) => boolean;
 };
 
 const locales = { nl, fr, de };
@@ -68,7 +72,8 @@ const publicHolidayPreset = (year: number, t: TFunction): HolidayPreset => ({
   fetchStartDate: `${year}-01-01`,
   fetchEndDate: `${year}-12-31`,
   matchesHoliday: (holiday) =>
-    holiday.type !== 'schoolHolidays' && holiday.startDate.getFullYear() === year,
+    holiday.type !== 'schoolHolidays' &&
+    holiday.startDate.getFullYear() === year,
 });
 
 const schoolHolidayPreset = (
@@ -98,7 +103,10 @@ const filterHolidaysForPreset = (
       startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
       endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
     }))
-    .filter((holiday) => holiday.endDate >= new Date() && preset.matchesHoliday(holiday))
+    .filter(
+      (holiday) =>
+        holiday.endDate >= new Date() && preset.matchesHoliday(holiday),
+    )
     .map(({ startDate, endDate, name }) => ({ startDate, endDate, name }));
 
 const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
@@ -216,49 +224,49 @@ const DatePeriodPicker = ({
 
   const calendarQuickLinks = showQuickLinks
     ? (onClose: () => void) => (
+        <Stack
+          css={`
+            border-left: 1px solid ${colors.grey3};
+            height: 100%;
+            font-size: 1rem;
+          `}
+        >
           <Stack
+            className="custom-calendar-header"
             css={`
-              border-left: 1px solid ${colors.grey3};
-              height: 100%;
-              font-size: 1rem;
+              padding: 1.33rem !important;
             `}
           >
-            <Stack
-              className="custom-calendar-header"
-              css={`
-                padding: 1.33rem !important;
-              `}
-            >
-              <Text>{t('date_period_picker.quick_links.title')}</Text>
-            </Stack>
-            <Stack spacing={2} paddingY={3} paddingX={4}>
-              {holidayPresets.map((preset) => (
-                <Button
-                  key={preset.label}
-                  variant={ButtonVariants.SECONDARY}
-                  onClick={async () => {
-                    const holidays =
-                      (await fetchHolidays?.(
-                        preset.fetchStartDate,
-                        preset.fetchEndDate,
-                      )) ?? [];
-                    const periods = filterHolidaysForPreset(
-                      holidays,
-                      preset,
-                      i18n.language,
-                    );
-                    onQuickLinkClick?.(periods);
-                    onClose();
-                  }}
-                  disabled={disabled}
-                >
-                  {preset.label}
-                </Button>
-              ))}
-            </Stack>
+            <Text>{t('date_period_picker.quick_links.title')}</Text>
           </Stack>
-        )
-      : undefined;
+          <Stack spacing={2} paddingY={3} paddingX={4}>
+            {holidayPresets.map((preset) => (
+              <Button
+                key={preset.label}
+                variant={ButtonVariants.SECONDARY}
+                onClick={async () => {
+                  const holidays =
+                    (await fetchHolidays?.(
+                      preset.fetchStartDate,
+                      preset.fetchEndDate,
+                    )) ?? [];
+                  const periods = filterHolidaysForPreset(
+                    holidays,
+                    preset,
+                    i18n.language,
+                  );
+                  onQuickLinkClick?.(periods);
+                  onClose();
+                }}
+                disabled={disabled}
+              >
+                {preset.label}
+              </Button>
+            ))}
+          </Stack>
+        </Stack>
+      )
+    : undefined;
 
   const calendarContent = showHolidayFeatures ? (
     <Stack spacing={3}>
