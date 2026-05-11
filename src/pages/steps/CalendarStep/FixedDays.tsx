@@ -1,6 +1,8 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -17,8 +19,6 @@ import {
   useIsPermanent,
 } from '../machines/calendarMachine';
 import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 
 const FixedDayOptions = {
   PERMANENT: 'permanent',
