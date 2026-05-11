@@ -12,6 +12,7 @@ import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
@@ -39,7 +40,7 @@ const locales = { nl, fr, de };
 const getHolidayLabel = (
   holiday: ApiHoliday,
   language: string,
-  t: (key: string) => string,
+  t: TFunction,
 ): string => {
   const name =
     holiday.name[language as Values<typeof SupportedLanguages>] ?? '';
