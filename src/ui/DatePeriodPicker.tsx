@@ -190,7 +190,6 @@ const DatePeriodPicker = ({
 
   const idPrefix = `${id}date-period-picker`;
   const locale = locales[i18n.language] ?? nl;
-  const year = viewedMonth.getFullYear();
 
   const holidayPeriods = useMemo(
     () =>
@@ -209,6 +208,7 @@ const DatePeriodPicker = ({
   );
 
   const formattedHolidaysForViewedMonth = useMemo(() => {
+    const year = viewedMonth.getFullYear();
     const firstDay = new Date(year, viewedMonth.getMonth(), 1);
     const lastDay = new Date(year, viewedMonth.getMonth() + 1, 0);
     return holidayPeriods
