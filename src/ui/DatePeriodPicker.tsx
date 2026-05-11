@@ -225,8 +225,8 @@ const DatePeriodPicker = ({
   }, [holidayPeriods, viewedMonth, locale]);
 
   const holidayPresets = useMemo(
-    () => (showQuickLinks ? computeHolidayPresets(new Date(), t) : []),
-    [showQuickLinks, t],
+    () => (showQuickLinks ? computeHolidayPresets(viewedMonth, t) : []),
+    [showQuickLinks, viewedMonth, t],
   );
 
   const calendarQuickLinks = showQuickLinks
@@ -327,6 +327,9 @@ const DatePeriodPicker = ({
           onYearChange={
             showHolidayFeatures ? handleCalendarViewChange : undefined
           }
+          onCalendarClose={
+            showQuickLinks ? () => setViewedMonth(dateStart) : undefined
+          }
           calendarWidth={showHolidayFeatures ? '20rem' : undefined}
           calendarHeader={
             showHolidayFeatures ? (
@@ -360,6 +363,9 @@ const DatePeriodPicker = ({
           }
           onYearChange={
             showHolidayFeatures ? handleCalendarViewChange : undefined
+          }
+          onCalendarClose={
+            showQuickLinks ? () => setViewedMonth(dateEnd) : undefined
           }
           calendarWidth={showHolidayFeatures ? '20rem' : undefined}
           calendarHeader={
