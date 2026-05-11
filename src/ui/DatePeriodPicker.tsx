@@ -35,6 +35,13 @@ type HolidayPeriod = {
   name: string;
 };
 
+type HolidayPreset = {
+  label: string;
+  fetchStartDate: string;
+  fetchEndDate: string;
+  matchesHoliday: (holiday: { type: string; region?: string; startDate: Date }) => boolean;
+};
+
 const locales = { nl, fr, de };
 
 const getHolidayLabel = (
@@ -50,25 +57,18 @@ const getHolidayLabel = (
   return regionLabel ? `${name} (${regionLabel})` : name;
 };
 
-type HolidayPreset = {
-  label: string;
-  fetchStartDate: string;
-  fetchEndDate: string;
-  filter: (h: { type: string; region?: string; startDate: Date }) => boolean;
-};
-
 const getAcademicYearStart = (date: Date): number =>
   date.getMonth() >= 7 ? date.getFullYear() : date.getFullYear() - 1;
 
-const academicYearLabel = (start: number) =>
+const formatAcademicYearLabel = (start: number) =>
   `'${String(start).slice(-2)}-'${String(start + 1).slice(-2)}`;
 
 const publicHolidayPreset = (year: number, t: TFunction): HolidayPreset => ({
   label: `${t('date_period_picker.quick_links.public_holidays')} ${year}`,
   fetchStartDate: `${year}-01-01`,
   fetchEndDate: `${year}-12-31`,
-  filter: (h) =>
-    h.type !== 'schoolHolidays' && h.startDate.getFullYear() === year,
+  matchesHoliday: (holiday) =>
+    holiday.type !== 'schoolHolidays' && holiday.startDate.getFullYear() === year,
 });
 
 const schoolHolidayPreset = (
@@ -76,29 +76,29 @@ const schoolHolidayPreset = (
   region: 'NL' | 'FR',
   label: string,
 ): HolidayPreset => ({
-  label: `${label} ${academicYearLabel(academicStart)}`,
+  label: `${label} ${formatAcademicYearLabel(academicStart)}`,
   fetchStartDate: `${academicStart}-08-01`,
   fetchEndDate: `${academicStart + 1}-07-31`,
-  filter: (h) =>
-    h.type === 'schoolHolidays' &&
-    h.region === region &&
-    getAcademicYearStart(h.startDate) === academicStart,
+  matchesHoliday: (holiday) =>
+    holiday.type === 'schoolHolidays' &&
+    holiday.region === region &&
+    getAcademicYearStart(holiday.startDate) === academicStart,
 });
 
-const filterPeriodsForPreset = (
+const filterHolidaysForPreset = (
   holidays: ApiHoliday[],
   preset: HolidayPreset,
   language: string,
 ) =>
   holidays
-    .map((h) => ({
-      type: h.type,
-      region: h.region,
-      name: h.name[language as Values<typeof SupportedLanguages>] ?? '',
-      startDate: parse(h.startDate, 'yyyy-MM-dd', new Date()),
-      endDate: parse(h.endDate, 'yyyy-MM-dd', new Date()),
+    .map((holiday) => ({
+      type: holiday.type,
+      region: holiday.region,
+      name: holiday.name[language as Values<typeof SupportedLanguages>] ?? '',
+      startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
+      endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
     }))
-    .filter((h) => h.endDate >= new Date() && preset.filter(h))
+    .filter((holiday) => holiday.endDate >= new Date() && preset.matchesHoliday(holiday))
     .map(({ startDate, endDate, name }) => ({ startDate, endDate, name }));
 
 const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
@@ -242,7 +242,7 @@ const DatePeriodPicker = ({
                         preset.fetchStartDate,
                         preset.fetchEndDate,
                       )) ?? [];
-                    const periods = filterPeriodsForPreset(
+                    const periods = filterHolidaysForPreset(
                       holidays,
                       preset,
                       i18n.language,
