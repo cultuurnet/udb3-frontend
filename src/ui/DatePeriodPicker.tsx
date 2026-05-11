@@ -241,7 +241,7 @@ const DatePeriodPicker = ({
           <Stack
             className="custom-calendar-header"
             css={`
-              padding: 1.33rem !important;
+              padding: 1.35rem !important;
             `}
           >
             <Text>{t('date_period_picker.quick_links.title')}</Text>
