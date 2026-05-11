@@ -216,10 +216,12 @@ const DatePeriodPicker = ({
         ({ startDate, endDate }) => startDate <= lastDay && endDate >= firstDay,
       )
       .map(({ startDate, endDate, name }) => {
-        if (isSameDay(startDate, endDate))
+        if (isSameDay(startDate, endDate)) {
           return `${format(startDate, 'd MMMM', { locale })}: ${name}`;
-        if (isSameMonth(startDate, endDate))
+        }
+        if (isSameMonth(startDate, endDate)) {
           return `${startDate.getDate()}-${endDate.getDate()} ${format(startDate, 'MMMM', { locale })}: ${name}`;
+        }
         return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
       });
   }, [holidayPeriods, viewedMonth, locale]);
