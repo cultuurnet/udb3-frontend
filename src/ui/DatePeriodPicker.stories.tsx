@@ -24,52 +24,48 @@ const mockHolidays: ApiHoliday[] = [
     startDate: '2026-04-06',
     endDate: '2026-04-06',
     type: 'holidays',
-    name: [
-      { language: 'NL', text: 'Paasmaandag' },
-      { language: 'FR', text: 'Lundi de Pâques' },
-      { language: 'DE', text: 'Ostermontag' },
-    ],
+    name: { nl: 'Paasmaandag', fr: 'Lundi de Pâques', de: 'Ostermontag' },
   },
   {
     startDate: '2026-04-27',
     endDate: '2026-05-10',
     type: 'schoolHolidays',
     region: 'NL',
-    name: [
-      { language: 'NL', text: 'Paasvakantie' },
-      { language: 'FR', text: 'Vacances de printemps' },
-      { language: 'DE', text: 'Frühjahrsferien' },
-    ],
+    name: {
+      nl: 'Paasvakantie',
+      fr: 'Vacances de printemps',
+      de: 'Frühjahrsferien',
+    },
   },
   {
     startDate: '2026-05-01',
     endDate: '2026-05-01',
     type: 'holidays',
-    name: [
-      { language: 'NL', text: 'Dag van de Arbeid' },
-      { language: 'FR', text: 'Fête du Travail' },
-      { language: 'DE', text: 'Tag der Arbeit' },
-    ],
+    name: {
+      nl: 'Dag van de Arbeid',
+      fr: 'Fête du Travail',
+      de: 'Tag der Arbeit',
+    },
   },
   {
     startDate: '2026-05-14',
     endDate: '2026-05-14',
     type: 'holidays',
-    name: [
-      { language: 'NL', text: 'O.L.H. Hemelvaart' },
-      { language: 'FR', text: 'Ascension' },
-      { language: 'DE', text: 'Christi Himmelfahrt' },
-    ],
+    name: {
+      nl: 'O.L.H. Hemelvaart',
+      fr: 'Ascension',
+      de: 'Christi Himmelfahrt',
+    },
   },
   {
     startDate: '2026-05-25',
     endDate: '2026-05-25',
     type: 'holidays',
-    name: [
-      { language: 'NL', text: 'Pinkstermaandag' },
-      { language: 'FR', text: 'Lundi de Pentecôte' },
-      { language: 'DE', text: 'Pfingstmontag' },
-    ],
+    name: {
+      nl: 'Pinkstermaandag',
+      fr: 'Lundi de Pentecôte',
+      de: 'Pfingstmontag',
+    },
   },
 ];
 

@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
+import { SupportedLanguages } from '../i18n';
+import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
@@ -40,7 +42,7 @@ const getHolidayLabel = (
   t: (key: string) => string,
 ): string => {
   const name =
-    holiday.name.find((n) => n.language === language.toUpperCase())?.text ?? '';
+    holiday.name[language as Values<typeof SupportedLanguages>] ?? '';
   const regionLabel = holiday.region
     ? t(`date_period_picker.region.${holiday.region}`)
     : undefined;
