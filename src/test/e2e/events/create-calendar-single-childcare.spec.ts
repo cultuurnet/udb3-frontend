@@ -1,5 +1,16 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: 'ff_boa',
+      value: 'true',
+      domain: 'localhost',
+      path: '/',
+    },
+  ]);
+});
+
 const dummyEvent = {
   name: 'E2E test event with childcare hours',
   address: {

@@ -6,7 +6,7 @@ import type { Values } from '@/types/Values';
 const colors = {
   udbRed: '#c0120c',
   udbMainBlue: '#009FDF',
-  udbMainDarkBlue: '#0083B8',
+  udbMainDarkBlue: '#0077a6',
   udbMainDarkestBlue: '#005C7C',
   udbMainMediumBlue: '#DFF8FF',
   udbMainLightBlue: '#F8FDFF',
@@ -23,7 +23,7 @@ const colors = {
   grey2: '#ccc',
   grey3: '#ddd',
   grey4: '#f5f5f5',
-  grey5: '#777777',
+  grey5: '#767676',
   grey6: '#999999',
   green1: '#5cb85c',
   green2: '#449d44',
@@ -62,11 +62,11 @@ const zIndexPaginationPageLink = above + base;
 
 const zIndexDatePickerInput = above + zIndexPaginationPageLink;
 const zIndexDatePickerButton = above + zIndexDatePickerInput;
-const zIndexDatePickerPopup = above + zIndexDatePickerButton;
 
-const zIndexSidebar = above + zIndexDatePickerPopup;
+const zIndexSidebar = above + zIndexDatePickerButton;
 const zIndexPageFooter = zIndexSidebar;
 
+const zIndexDatePickerPopup = above + zIndexSidebar;
 const zIndexJobLogger = above + zIndexSidebar;
 const zIndexToast = zIndexJobLogger;
 

@@ -1,6 +1,7 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -42,7 +43,7 @@ export const FixedDays = ({
   onChangeCalendarState,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
-  const [isBOAEnabled] = useFeatureFlag(FeatureFlags.BOA);
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const options = [
     {
@@ -65,6 +66,8 @@ export const FixedDays = ({
 
   const startDate = useCalendarSelector((state) => state.context.startDate);
   const endDate = useCalendarSelector((state) => state.context.endDate);
+
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const openingHours = useCalendarSelector(
     (state) => state.context.openingHours,
@@ -166,6 +169,9 @@ export const FixedDays = ({
               dateEnd={new Date(endDate)}
               onDateStartChange={onChangeStartDate}
               onDateEndChange={onChangeEndDate}
+              showHolidaysToggle={isBoaEnabled}
+              apiHolidays={apiHolidays}
+              onShowHolidaysChange={onShowHolidaysChange}
             />
             {openingHoursContent}
           </Stack>
@@ -180,7 +186,7 @@ export const FixedDays = ({
         />
         {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
       </Stack>
-      {isBOAEnabled ? (
+      {isBoaEnabled ? (
         <CalendarOpeninghoursModal
           visible={isCalendarOpeninghoursModalVisible}
           onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
