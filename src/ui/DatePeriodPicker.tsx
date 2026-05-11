@@ -11,7 +11,7 @@ import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
 import type { TFunction } from 'i18next';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
@@ -50,6 +50,81 @@ const getHolidayLabel = (
   return regionLabel ? `${name} (${regionLabel})` : name;
 };
 
+type HolidayPreset = {
+  label: string;
+  fetchStartDate: string;
+  fetchEndDate: string;
+  filter: (h: { type: string; region?: string; startDate: Date }) => boolean;
+};
+
+const getAcademicYearStart = (date: Date): number =>
+  date.getMonth() >= 7 ? date.getFullYear() : date.getFullYear() - 1;
+
+const academicYearLabel = (start: number) =>
+  `'${String(start).slice(-2)}-'${String(start + 1).slice(-2)}`;
+
+const publicHolidayPreset = (year: number, t: TFunction): HolidayPreset => ({
+  label: `${t('date_period_picker.quick_links.public_holidays')} ${year}`,
+  fetchStartDate: `${year}-01-01`,
+  fetchEndDate: `${year}-12-31`,
+  filter: (h) =>
+    h.type !== 'schoolHolidays' && h.startDate.getFullYear() === year,
+});
+
+const schoolHolidayPreset = (
+  academicStart: number,
+  region: 'NL' | 'FR',
+  label: string,
+): HolidayPreset => ({
+  label: `${label} ${academicYearLabel(academicStart)}`,
+  fetchStartDate: `${academicStart}-08-01`,
+  fetchEndDate: `${academicStart + 1}-07-31`,
+  filter: (h) =>
+    h.type === 'schoolHolidays' &&
+    h.region === region &&
+    getAcademicYearStart(h.startDate) === academicStart,
+});
+
+const filterPeriodsForPreset = (
+  holidays: ApiHoliday[],
+  preset: HolidayPreset,
+  language: string,
+) =>
+  holidays
+    .map((h) => ({
+      type: h.type,
+      region: h.region,
+      name: h.name[language as Values<typeof SupportedLanguages>] ?? '',
+      startDate: parse(h.startDate, 'yyyy-MM-dd', new Date()),
+      endDate: parse(h.endDate, 'yyyy-MM-dd', new Date()),
+    }))
+    .filter((h) => h.endDate >= new Date() && preset.filter(h))
+    .map(({ startDate, endDate, name }) => ({ startDate, endDate, name }));
+
+const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
+  const year = today.getFullYear();
+  const academicYear = getAcademicYearStart(today);
+  const schoolRegions = [
+    {
+      region: 'NL' as const,
+      label: t('date_period_picker.quick_links.flemish_school_holidays'),
+    },
+    {
+      region: 'FR' as const,
+      label: t('date_period_picker.quick_links.french_school_holidays'),
+    },
+  ];
+
+  return [
+    publicHolidayPreset(year, t),
+    publicHolidayPreset(year + 1, t),
+    ...schoolRegions.flatMap(({ region, label }) => [
+      schoolHolidayPreset(academicYear, region, label),
+      schoolHolidayPreset(academicYear + 1, region, label),
+    ]),
+  ];
+};
+
 type Props = InlineProps & {
   id: string;
   dateStart: Date;
@@ -62,8 +137,11 @@ type Props = InlineProps & {
   showHolidaysToggle?: boolean;
   showQuickLinks?: boolean;
   apiHolidays?: ApiHoliday[];
+  fetchHolidays?: (startDate: string, endDate: string) => Promise<ApiHoliday[]>;
+  onQuickLinkClick?: (
+    periods: { startDate: Date; endDate: Date; name: string }[],
+  ) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
-  onCalendarOpen?: () => void;
 };
 
 const DatePeriodPicker = ({
@@ -78,8 +156,9 @@ const DatePeriodPicker = ({
   showHolidaysToggle,
   showQuickLinks,
   apiHolidays,
+  fetchHolidays,
+  onQuickLinkClick,
   onShowHolidaysChange,
-  onCalendarOpen,
   ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
@@ -130,79 +209,56 @@ const DatePeriodPicker = ({
       return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
     });
 
-  const schoolHolidays = (apiHolidays ?? [])
-    .filter((holiday) => holiday.type === 'schoolHolidays')
-    .map((holiday) => ({
-      label: getHolidayLabel(holiday, i18n.language, t),
-      startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
-      endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-    }));
-
-  const allSchoolHolidays = schoolHolidays.filter(
-    ({ label }, index) =>
-      label !== '' &&
-      schoolHolidays.findIndex((holiday) => holiday.label === label) === index,
+  const holidayPresets = useMemo(
+    () => (showQuickLinks ? computeHolidayPresets(new Date(), t) : []),
+    [showQuickLinks, t],
   );
 
-  const upcomingSchoolHolidays = allSchoolHolidays.filter(
-    (link) => link.endDate >= firstDayOfViewedMonth,
-  );
-
-  const firstUpcoming = upcomingSchoolHolidays[0];
-  const targetMonthStart = firstUpcoming
-    ? new Date(
-        firstUpcoming.startDate.getFullYear(),
-        firstUpcoming.startDate.getMonth(),
-        1,
-      )
-    : firstDayOfViewedMonth;
-  const targetMonthEnd = new Date(
-    targetMonthStart.getFullYear(),
-    targetMonthStart.getMonth() + 1,
-    0,
-  );
-
-  const quickLinks = upcomingSchoolHolidays.filter(
-    (link) =>
-      link.startDate <= targetMonthEnd && link.endDate >= targetMonthStart,
-  );
-
-  const calendarQuickLinks = showQuickLinks
-    ? (onClose: () => void) => (
-        <Stack
-          css={`
-            border-left: 1px solid ${colors.grey3};
-            height: 100%;
-            font-size: 1rem;
-          `}
-        >
+  const calendarQuickLinks =
+    showQuickLinks && fetchHolidays
+      ? (onClose: () => void) => (
           <Stack
-            className="custom-calendar-header"
             css={`
-              padding: 1.33rem !important;
+              border-left: 1px solid ${colors.grey3};
+              height: 100%;
+              font-size: 1rem;
             `}
           >
-            <Text>{t('date_period_picker.quick_links.title')}</Text>
+            <Stack
+              className="custom-calendar-header"
+              css={`
+                padding: 1.33rem !important;
+              `}
+            >
+              <Text>{t('date_period_picker.quick_links.title')}</Text>
+            </Stack>
+            <Stack spacing={2} paddingY={3} paddingX={4}>
+              {holidayPresets.map((preset) => (
+                <Button
+                  key={preset.label}
+                  variant={ButtonVariants.SECONDARY}
+                  onClick={async () => {
+                    const holidays = await fetchHolidays(
+                      preset.fetchStartDate,
+                      preset.fetchEndDate,
+                    );
+                    const periods = filterPeriodsForPreset(
+                      holidays,
+                      preset,
+                      i18n.language,
+                    );
+                    onQuickLinkClick?.(periods);
+                    onClose();
+                  }}
+                  disabled={disabled}
+                >
+                  {preset.label}
+                </Button>
+              ))}
+            </Stack>
           </Stack>
-          <Stack spacing={2} paddingY={3} paddingX={4}>
-            {quickLinks.map(({ label, startDate, endDate }) => (
-              <Button
-                key={label}
-                variant={ButtonVariants.SECONDARY}
-                onClick={() => {
-                  onDateStartChange(startOfDay(startDate));
-                  onDateEndChange(endOfDay(endDate));
-                  onClose();
-                }}
-                disabled={disabled}
-              >
-                {label}
-              </Button>
-            ))}
-          </Stack>
-        </Stack>
-      )
-    : undefined;
+        )
+      : undefined;
 
   const calendarContent = showHolidayFeatures ? (
     <Stack spacing={3}>
@@ -249,7 +305,6 @@ const DatePeriodPicker = ({
             }
             onDateStartChange(startOfDay(newDateStart));
           }}
-          onCalendarOpen={showQuickLinks ? onCalendarOpen : undefined}
           onMonthChange={
             showHolidayFeatures ? handleCalendarViewChange : undefined
           }
