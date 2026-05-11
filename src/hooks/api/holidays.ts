@@ -105,14 +105,13 @@ const useHolidaysWithToggle = () => {
   const [showHolidays, setShowHolidays] = useState(false);
   const [viewedYear, setViewedYear] = useState(new Date().getFullYear());
   const apiHolidays = useHolidays(viewedYear, showHolidays);
-  const fetchHolidays = useFetchHolidays();
 
   const onShowHolidaysChange = (shown: boolean, year: number) => {
     setShowHolidays(shown);
     setViewedYear(year);
   };
 
-  return { apiHolidays, onShowHolidaysChange, fetchHolidays };
+  return { apiHolidays, onShowHolidaysChange };
 };
 
 export { useFetchHolidays, useHolidays, useHolidaysWithToggle };
