@@ -10,9 +10,9 @@ import {
 import de from 'date-fns/locale/de';
 import fr from 'date-fns/locale/fr';
 import nl from 'date-fns/locale/nl';
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
 
