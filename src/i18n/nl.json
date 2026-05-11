@@ -1599,7 +1599,8 @@
   "date_period_picker": {
     "end": "Einde",
     "region": {
-      "FR": "Waals",
+      "DE": "Duitstalig",
+      "FR": "Franstalig",
       "NL": "Vlaams"
     },
     "select_end_date": "Selecteer een einddatum",

@@ -1542,8 +1542,9 @@
   "date_period_picker": {
     "end": "Ende",
     "region": {
-      "FR": "wallonisch",
-      "NL": "flämisch"
+      "DE": "Deutschsprachig",
+      "FR": "Frankophon",
+      "NL": "Flämisch"
     },
     "select_end_date": "Enddatum auswählen",
     "select_start_date": "Startdatum auswählen",
