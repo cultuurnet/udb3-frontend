@@ -66,7 +66,7 @@ export const FixedDays = ({
   const startDate = useCalendarSelector((state) => state.context.startDate);
   const endDate = useCalendarSelector((state) => state.context.endDate);
 
-  const { apiHolidays, onShowHolidaysChange, onCalendarOpen } =
+  const { apiHolidays, onShowHolidaysChange, fetchHolidays } =
     useHolidaysWithToggle();
 
   const openingHours = useCalendarSelector(
@@ -171,7 +171,7 @@ export const FixedDays = ({
               onDateEndChange={onChangeEndDate}
               showHolidaysToggle={isBoaEnabled}
               apiHolidays={apiHolidays}
-              onCalendarOpen={onCalendarOpen}
+              fetchHolidays={fetchHolidays}
               showQuickLinks={true}
               onShowHolidaysChange={onShowHolidaysChange}
             />
