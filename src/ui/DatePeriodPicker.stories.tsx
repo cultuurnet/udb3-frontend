@@ -31,25 +31,41 @@ const mockHolidays: ApiHoliday[] = [
     endDate: '2026-05-10',
     type: 'schoolHolidays',
     region: 'NL',
-    name: { nl: 'Paasvakantie', fr: 'Vacances de printemps', de: 'Frühjahrsferien' },
+    name: {
+      nl: 'Paasvakantie',
+      fr: 'Vacances de printemps',
+      de: 'Frühjahrsferien',
+    },
   },
   {
     startDate: '2026-05-01',
     endDate: '2026-05-01',
     type: 'holidays',
-    name: { nl: 'Dag van de Arbeid', fr: 'Fête du Travail', de: 'Tag der Arbeit' },
+    name: {
+      nl: 'Dag van de Arbeid',
+      fr: 'Fête du Travail',
+      de: 'Tag der Arbeit',
+    },
   },
   {
     startDate: '2026-05-14',
     endDate: '2026-05-14',
     type: 'holidays',
-    name: { nl: 'O.L.H. Hemelvaart', fr: 'Ascension', de: 'Christi Himmelfahrt' },
+    name: {
+      nl: 'O.L.H. Hemelvaart',
+      fr: 'Ascension',
+      de: 'Christi Himmelfahrt',
+    },
   },
   {
     startDate: '2026-05-25',
     endDate: '2026-05-25',
     type: 'holidays',
-    name: { nl: 'Pinkstermaandag', fr: 'Lundi de Pentecôte', de: 'Pfingstmontag' },
+    name: {
+      nl: 'Pinkstermaandag',
+      fr: 'Lundi de Pentecôte',
+      de: 'Pfingstmontag',
+    },
   },
 ];
 
