@@ -218,6 +218,7 @@ const isDuplicateMutation = (
     'roles-remove-user',
     'labels-update-visibility',
     'labels-update-privacy',
+    'events-change-departure-places',
   ];
 
   if (disabledMutations.includes(mutationKey)) {

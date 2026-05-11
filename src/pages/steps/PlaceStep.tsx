@@ -1,20 +1,15 @@
 import { TFunction } from 'i18next';
-import debounce from 'lodash/debounce';
-import { useMemo, useState } from 'react';
-import { Highlighter } from 'react-bootstrap-typeahead';
-import { TypeaheadMenu } from 'react-bootstrap-typeahead';
+import { useState } from 'react';
+import { Highlighter, TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { EventTypes } from '@/constants/EventTypes';
 import { ScopeTypes } from '@/constants/OfferType';
-import { useGetPlacesByQuery } from '@/hooks/api/places';
 import { useStreetAddressTypeahead } from '@/hooks/useStreetAddressTypeAhead';
-import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { SupportedLanguage } from '@/i18n/index';
 import type { StepProps, StepsConfiguration } from '@/pages/steps/Steps';
-import { Address, AddressInternal } from '@/types/Address';
 import { Countries, Country } from '@/types/Country';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
@@ -27,14 +22,12 @@ import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { isOneTimeSlotValid } from '@/ui/TimeTable';
-import { isNewEntry, Typeahead } from '@/ui/Typeahead';
-import { UitpasIcon } from '@/ui/UitpasIcon';
+import { Typeahead } from '@/ui/Typeahead';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
-import { isUitpasLocation } from '@/utils/uitpas';
-import { valueToArray } from '@/utils/valueToArray';
 
 import { City } from '../CityPicker';
 import { PlaceAddModal } from '../PlaceAddModal';
+import { PlaceTypeahead } from './PlaceTypeahead';
 
 const getGlobalValue = getValueFromTheme('global');
 
@@ -67,24 +60,10 @@ const PlaceStep = ({
   ...props
 }: PlaceStepProps) => {
   const { t, i18n } = useTranslation();
-  const [searchInput, setSearchInput] = useState(defaultStreetAndNumber);
   const [prefillPlaceName, setPrefillPlaceName] = useState('');
   const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
 
-  const { uitpasLabels } = useUitpasLabels();
-
   const isMovie = terms.includes(EventTypes.Bioscoop);
-
-  const useGetPlacesQuery = useGetPlacesByQuery(
-    {
-      searchTerm: searchInput,
-      terms,
-      zip: municipality?.zip,
-      addressLocality: municipality?.name,
-      addressCountry: country,
-    },
-    { enabled: !!searchInput && scope === ScopeTypes.EVENTS },
-  );
 
   const formatMunicipalityName = (name: string) => {
     if (typeof name !== 'string' || !name.includes('/')) return name;
@@ -93,7 +72,6 @@ const PlaceStep = ({
     return firstPart.trim();
   };
 
-  // Inside PlaceStep component, replace the existing street address logic with:
   const streetAddressTypeahead = useStreetAddressTypeahead({
     city: {
       zip: municipality?.zip,
@@ -104,49 +82,7 @@ const PlaceStep = ({
     defaultValue: defaultStreetAndNumber,
   });
 
-  const places = useMemo(() => {
-    if (scope !== ScopeTypes.EVENTS) {
-      return streetAddressTypeahead.options;
-    }
-
-    return useGetPlacesQuery.data?.member ?? [];
-  }, [useGetPlacesQuery.data?.member, streetAddressTypeahead.options, scope]);
-
   const place = useWatch({ control, name: 'location.place' });
-
-  const getPlaceName = (
-    name: Place['name'],
-    mainLanguage: SupportedLanguage,
-  ): AddressInternal['streetAddress'] => {
-    return getLanguageObjectOrFallback(
-      name,
-      i18n.language as SupportedLanguage,
-      mainLanguage,
-    );
-  };
-
-  const getAddress = (
-    address: Address,
-    mainLanguage: SupportedLanguage,
-  ): AddressInternal => {
-    return getLanguageObjectOrFallback(
-      address,
-      i18n.language as SupportedLanguage,
-      mainLanguage,
-    );
-  };
-
-  const filterByCallback = (place: Place, props) => {
-    const name = getPlaceName(place.name, place.mainLanguage);
-    const address = getAddress(place.address, place.mainLanguage);
-
-    return (
-      address?.streetAddress
-        ?.toLowerCase()
-        .includes(props.text.toLowerCase()) ||
-      name?.toLowerCase().includes(props.text.toLowerCase())
-    );
-  };
 
   return (
     <Stack {...getStackProps(props)}>
@@ -264,79 +200,25 @@ const PlaceStep = ({
                       : undefined
                   }
                   Component={
-                    <Typeahead
-                      isLoading={useGetPlacesQuery.isLoading}
-                      options={places}
-                      onInputChange={debounce(setSearchInput, 275)}
-                      filterBy={filterByCallback}
-                      labelKey={(place: Place) =>
-                        getPlaceName(place.name, place.mainLanguage)
-                      }
-                      renderMenuItemChildren={(place: Place, { text }) => {
-                        const { mainLanguage, name, address } = place;
-                        const placeName = getPlaceName(name, mainLanguage);
-                        const { streetAddress } = getAddress(
-                          address,
-                          mainLanguage,
-                        );
-
-                        const isUitpas = isUitpasLocation(place, uitpasLabels);
-
-                        return (
-                          <Stack>
-                            <Inline justifyContent="space-between">
-                              <Text
-                                maxWidth={`calc(100% - ${
-                                  isUitpas ? '3rem' : '0rem'
-                                })`}
-                                css={`
-                                  overflow: hidden;
-                                  text-overflow: ellipsis;
-                                  white-space: nowrap;
-                                `}
-                              >
-                                <Highlighter search={text}>
-                                  {placeName}
-                                </Highlighter>
-                              </Text>
-                              {isUitpas && <UitpasIcon width="2rem" />}
-                            </Inline>
-                            <Text
-                              className={'address'}
-                              css={`
-                                color: ${({ theme }) => theme.colors.grey6};
-                              `}
-                            >
-                              <Highlighter search={text}>
-                                {streetAddress}
-                              </Highlighter>
-                            </Text>
-                          </Stack>
-                        );
-                      }}
-                      selected={valueToArray(selectedPlace as Place)}
-                      maxWidth="28rem"
-                      onChange={(places) => {
-                        const place = places[0];
-
-                        if (isNewEntry(place)) {
-                          setPrefillPlaceName(place.label);
-                          setIsPlaceAddModalVisible(true);
-                          return;
-                        }
-
+                    <PlaceTypeahead
+                      value={selectedPlace as Place}
+                      terms={terms}
+                      municipality={municipality}
+                      country={country}
+                      placeholder={placeholderLabel(t)}
+                      onChange={(place) => {
                         const updatedValue = { ...field.value, place };
-
                         field.onChange(updatedValue);
                         onChange(updatedValue);
                       }}
-                      minLength={3}
-                      placeholder={placeholderLabel(t)}
-                      newSelectionPrefix={t(
-                        'create.additionalInformation.place.add_new_label',
-                      )}
-                      hideNewInputText
-                      allowNew={() => !isMovie}
+                      onAddNewPlace={
+                        isMovie
+                          ? undefined
+                          : (name) => {
+                              setPrefillPlaceName(name);
+                              setIsPlaceAddModalVisible(true);
+                            }
+                      }
                     />
                   }
                 />
