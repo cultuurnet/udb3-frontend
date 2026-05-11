@@ -62,7 +62,6 @@ const CalendarWithQuickLinks = ({
     backgroundColor={colors.white}
     css={`
       border-radius: 0.5rem;
-      overflow: hidden;
       box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
     `}
   >
