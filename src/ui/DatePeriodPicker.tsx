@@ -214,9 +214,8 @@ const DatePeriodPicker = ({
     [showQuickLinks, t],
   );
 
-  const calendarQuickLinks =
-    showQuickLinks && fetchHolidays
-      ? (onClose: () => void) => (
+  const calendarQuickLinks = showQuickLinks
+    ? (onClose: () => void) => (
           <Stack
             css={`
               border-left: 1px solid ${colors.grey3};
@@ -238,10 +237,11 @@ const DatePeriodPicker = ({
                   key={preset.label}
                   variant={ButtonVariants.SECONDARY}
                   onClick={async () => {
-                    const holidays = await fetchHolidays(
-                      preset.fetchStartDate,
-                      preset.fetchEndDate,
-                    );
+                    const holidays =
+                      (await fetchHolidays?.(
+                        preset.fetchStartDate,
+                        preset.fetchEndDate,
+                      )) ?? [];
                     const periods = filterPeriodsForPreset(
                       holidays,
                       preset,
