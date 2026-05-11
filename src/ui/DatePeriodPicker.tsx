@@ -192,29 +192,31 @@ const DatePeriodPicker = ({
   const locale = locales[i18n.language] ?? nl;
   const year = viewedMonth.getFullYear();
 
-  const holidayPeriods = (apiHolidays ?? []).map((holiday) =>
-    parseHoliday(holiday, i18n.language, t, true),
+  const holidayPeriods = useMemo(
+    () => (apiHolidays ?? []).map((holiday) => parseHoliday(holiday, i18n.language, t, true)),
+    [apiHolidays, i18n.language, t],
   );
 
-  const highlightDates = holidayPeriods.flatMap(({ startDate, endDate }) =>
-    eachDayOfInterval({ start: startDate, end: endDate }),
+  const highlightDates = useMemo(
+    () => holidayPeriods.flatMap(({ startDate, endDate }) =>
+      eachDayOfInterval({ start: startDate, end: endDate }),
+    ),
+    [holidayPeriods],
   );
 
-  const firstDayOfViewedMonth = new Date(year, viewedMonth.getMonth(), 1);
-  const lastDayOfViewedMonth = new Date(year, viewedMonth.getMonth() + 1, 0);
-
-  const formattedHolidaysForViewedMonth = holidayPeriods
-    .filter(
-      ({ startDate, endDate }) =>
-        startDate <= lastDayOfViewedMonth && endDate >= firstDayOfViewedMonth,
-    )
-    .map(({ startDate, endDate, name }) => {
-      if (isSameDay(startDate, endDate))
-        return `${format(startDate, 'd MMMM', { locale })}: ${name}`;
-      if (isSameMonth(startDate, endDate))
-        return `${startDate.getDate()}-${endDate.getDate()} ${format(startDate, 'MMMM', { locale })}: ${name}`;
-      return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
-    });
+  const formattedHolidaysForViewedMonth = useMemo(() => {
+    const firstDay = new Date(year, viewedMonth.getMonth(), 1);
+    const lastDay = new Date(year, viewedMonth.getMonth() + 1, 0);
+    return holidayPeriods
+      .filter(({ startDate, endDate }) => startDate <= lastDay && endDate >= firstDay)
+      .map(({ startDate, endDate, name }) => {
+        if (isSameDay(startDate, endDate))
+          return `${format(startDate, 'd MMMM', { locale })}: ${name}`;
+        if (isSameMonth(startDate, endDate))
+          return `${startDate.getDate()}-${endDate.getDate()} ${format(startDate, 'MMMM', { locale })}: ${name}`;
+        return `${format(startDate, 'd MMMM', { locale })} - ${format(endDate, 'd MMMM', { locale })}: ${name}`;
+      });
+  }, [holidayPeriods, viewedMonth, locale]);
 
   const holidayPresets = useMemo(
     () => (showQuickLinks ? computeHolidayPresets(new Date(), t) : []),
