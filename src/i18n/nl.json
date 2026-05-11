@@ -1602,7 +1602,8 @@
       "title": "Of selecteer alle:"
     },
     "region": {
-      "FR": "Waals",
+      "DE": "Duitstalig",
+      "FR": "Franstalig",
       "NL": "Vlaams"
     },
     "select_end_date": "Selecteer een einddatum",

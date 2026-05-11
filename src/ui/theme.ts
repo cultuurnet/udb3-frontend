@@ -23,7 +23,7 @@ const colors = {
   grey2: '#ccc',
   grey3: '#ddd',
   grey4: '#f5f5f5',
-  grey5: '#777777',
+  grey5: '#767676',
   grey6: '#999999',
   green1: '#5cb85c',
   green2: '#449d44',

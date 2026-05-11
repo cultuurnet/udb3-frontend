@@ -1531,7 +1531,8 @@
       "title": "Ou sélectionner tout :"
     },
     "region": {
-      "FR": "wallon",
+      "DE": "germanophone",
+      "FR": "francophone",
       "NL": "flamand"
     },
     "select_end_date": "Sélectionnez une date de fin",

@@ -219,9 +219,9 @@ const DatePeriodPicker = ({
         color={colors.udbMainPositiveGreen}
       />
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
-        <Stack spacing={1}>
+        <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text key={label} variant={TextVariants.MUTED}>
+            <Text key={label} variant={TextVariants.MUTED} fontSize="0.85rem">
               {label}
             </Text>
           ))}
