@@ -827,6 +827,33 @@ const useDeleteOnlineUrlMutation = (configuration = {}) =>
     ...configuration,
   });
 
+type ChangeDeparturePlacesArguments = {
+  headers: Headers;
+  eventId: string;
+  departurePlaces: string[];
+};
+
+const changeDeparturePlaces = async ({
+  headers,
+  eventId,
+  departurePlaces,
+}: ChangeDeparturePlacesArguments) =>
+  fetchFromApi({
+    path: `/events/${eventId}/departurePlaces`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(departurePlaces),
+    },
+  });
+
+const useChangeDeparturePlacesMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeDeparturePlaces,
+    mutationKey: 'events-change-departure-places',
+    ...configuration,
+  });
+
 type DuplicateEventArguments = {
   headers: Headers;
   eventId: string;
@@ -872,6 +899,7 @@ export {
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
   useChangeCalendarMutation,
+  useChangeDeparturePlacesMutation,
   useChangeLocationMutation,
   useChangeNameMutation,
   useChangeOnlineUrlMutation,
