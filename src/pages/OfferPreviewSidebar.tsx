@@ -187,6 +187,15 @@ const OfferPreviewSidebar = ({
     });
   }
 
+  if (isPlaceOffer) {
+    actions.push({
+      iconName: Icons.LINK,
+      title: t('preview.actions.linked_events'),
+      href: `/search?query=${encodeURIComponent(`departurePlaces:${offerId}`)}`,
+      disabled: false,
+    });
+  }
+
   return (
     <Stack spacing={3.5} paddingX={4}>
       {actions.map(({ iconName, title, onClick, href, disabled, suffix }) => {
