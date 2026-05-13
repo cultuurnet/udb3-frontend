@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -15,7 +17,7 @@ import {
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { useToast } from '@/pages/manage/movies/useToast';
-import { Offer, SubEvent } from '@/types/Offer';
+import { Offer, OpeningHoursAdjustedDay, SubEvent } from '@/types/Offer';
 import { Values } from '@/types/Values';
 import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
@@ -23,6 +25,7 @@ import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import { UseEditArguments } from '../hooks/useEditField';
+import type { DeviatingPeriodData } from './DeviatingPeriod';
 import {
   CalendarContext,
   CalendarState,
@@ -171,6 +174,34 @@ const convertStateToFormData = (
   };
 };
 
+const convertAdjustedDays = (
+  adjustedDays: OpeningHoursAdjustedDay[],
+): DeviatingPeriodData[] =>
+  adjustedDays.map((day) => ({
+    id: uniqueId('deviating-period-'),
+    startDate: new Date(day.startDate),
+    endDate: new Date(day.endDate),
+    description: day.description?.nl ?? '',
+    openingHours: day.openingHours.map((openingHour) => ({
+      id: createOpeninghoursId(),
+      ...openingHour,
+    })),
+  }));
+
+const formatAdjustedDays = (adjustedDays: DeviatingPeriodData[]) =>
+  adjustedDays.map(({ openingHours, ...period }) => ({
+    startDate: format(period.startDate, 'yyyy-MM-dd'),
+    endDate: format(period.endDate, 'yyyy-MM-dd'),
+    ...(period.description && {
+      description: {
+        nl: period.description,
+        fr: period.description,
+        de: period.description,
+      },
+    }),
+    openingHours: openingHours.map(({ id: _id, ...openingHour }) => openingHour),
+  }));
+
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
 
 type CalendarStepProps = StepProps & { offerId?: string };
@@ -211,12 +242,20 @@ const CalendarStep = ({
     [days],
   );
 
+  const adjustedDaysRef = useRef<DeviatingPeriodData[]>([]);
+  const [adjustedDays, setAdjustedDays] = useState<DeviatingPeriodData[]>([]);
+
   const handleChangeCalendarState = (newState: CalendarState) => {
     const calendarType = Object.values(CalendarType).find((type) =>
       newState.matches(type),
     );
 
-    const formData = convertStateToFormData(newState.context, calendarType);
+    const formData = {
+      ...convertStateToFormData(newState.context, calendarType),
+      ...(adjustedDaysRef.current.length > 0 && {
+        openingHoursAdjustedDays: formatAdjustedDays(adjustedDaysRef.current),
+      }),
+    };
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -231,6 +270,11 @@ const CalendarStep = ({
     }
 
     onChange(formData);
+  };
+
+  const handleChangeAdjustedDays = (newAdjustedDays: DeviatingPeriodData[]) => {
+    adjustedDaysRef.current = newAdjustedDays;
+    setAdjustedDays(newAdjustedDays);
   };
 
   const {
@@ -291,6 +335,11 @@ const CalendarStep = ({
     }
     setIsCalendarInitialized(true);
     handleLoadInitialContext({ newContext, calendarType });
+    if (offer.openingHoursAdjustedDays?.length) {
+      const converted = convertAdjustedDays(offer.openingHoursAdjustedDays);
+      adjustedDaysRef.current = converted;
+      setAdjustedDays(converted);
+    }
   }, [handleLoadInitialContext, offer, router.pathname, isCalendarInitialized]);
 
   const toast = useToast({
@@ -355,6 +404,8 @@ const CalendarStep = ({
             onChangeEndDate={handleChangeEndDate}
             onChangeOpeningHours={handleChangeOpeningHours}
             onChangeCalendarState={handleChangeCalendarState}
+            onChangeAdjustedDays={handleChangeAdjustedDays}
+            initialAdjustedDays={adjustedDays}
           />
         )}
         {isOneOrMoreDays && (
