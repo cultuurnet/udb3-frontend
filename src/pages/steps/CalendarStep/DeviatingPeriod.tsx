@@ -2,10 +2,11 @@ import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFetchHolidays } from '@/hooks/api/holidays';
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
+import { useFetchHolidays } from '@/hooks/api/holidays';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
+import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
@@ -21,8 +22,6 @@ import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
-
-import { BoxProps } from '@/ui/Box';
 
 import { createOpeninghoursId } from '../machines/calendarMachine';
 
@@ -72,7 +71,10 @@ const DeviatingPeriod = ({
     Record<string, boolean>
   >(() =>
     Object.fromEntries(
-      period.openingHours.map((openingHour) => [openingHour.id, !!openingHour.childcare?.start]),
+      period.openingHours.map((openingHour) => [
+        openingHour.id,
+        !!openingHour.childcare?.start,
+      ]),
     ),
   );
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
@@ -86,7 +88,9 @@ const DeviatingPeriod = ({
     onChange({
       ...period,
       openingHours: period.openingHours.map((openingHour) =>
-        openingHour.id === idToChange ? { ...openingHour, ...patch } : openingHour,
+        openingHour.id === idToChange
+          ? { ...openingHour, ...patch }
+          : openingHour,
       ),
     });
 
@@ -95,14 +99,21 @@ const DeviatingPeriod = ({
       ...period,
       openingHours: [
         ...period.openingHours,
-        { id: createOpeninghoursId(), opens: '00:00', closes: '23:59', dayOfWeek: [] },
+        {
+          id: createOpeninghoursId(),
+          opens: '00:00',
+          closes: '23:59',
+          dayOfWeek: [],
+        },
       ],
     });
 
   const handleRemoveOpeningHour = (idToRemove: string) =>
     onChange({
       ...period,
-      openingHours: period.openingHours.filter((openingHour) => openingHour.id !== idToRemove),
+      openingHours: period.openingHours.filter(
+        (openingHour) => openingHour.id !== idToRemove,
+      ),
     });
 
   const handleToggleDaysOfWeek = (newDays: string[], idToChange: string) =>
@@ -229,12 +240,16 @@ const DeviatingPeriod = ({
         )}
         {eventStartDate && period.startDate < eventStartDate && (
           <Text color="red">
-            {t('create.calendar.opening_hours_modal.deviating.errors.start_before_event')}
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+            )}
           </Text>
         )}
         {eventEndDate && period.endDate > eventEndDate && (
           <Text color="red">
-            {t('create.calendar.opening_hours_modal.deviating.errors.end_after_event')}
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+            )}
           </Text>
         )}
       </Stack>
@@ -244,149 +259,152 @@ const DeviatingPeriod = ({
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>
-        {period.openingHours.map((openingHour) => {
-          const childcareEnabled = childcareEnabledMap[openingHour.id] ?? false;
-          const { timesMissing, startError, endError } = getChildcareRowState(
-            openingHour,
-            childcareEnabled,
-          );
+          {period.openingHours.map((openingHour) => {
+            const childcareEnabled =
+              childcareEnabledMap[openingHour.id] ?? false;
+            const { timesMissing, startError, endError } = getChildcareRowState(
+              openingHour,
+              childcareEnabled,
+            );
 
-          return (
-            <Stack key={openingHour.id} spacing={4}>
-              <Inline alignItems="flex-end" spacing={4.5}>
-                <Stack spacing={3}>
-                  <Text fontWeight="bold">
-                    {t('create.calendar.opening_hours_modal.days')}
-                  </Text>
-                  <MultiSelectDropdown
-                    id={`deviating-day-of-week-${openingHour.id}`}
-                    options={Object.values(DaysOfWeek).map((day) => ({
-                      value: day,
-                      label: t(`create.calendar.days.full.${day}`),
-                    }))}
-                    selectedValues={openingHour.dayOfWeek}
-                    placeholder={t(
-                      'create.calendar.opening_hours_modal.select_days',
-                    )}
-                    onChange={(newDays) =>
-                      handleToggleDaysOfWeek(newDays, openingHour.id)
-                    }
-                  />
-                </Stack>
-                <Stack spacing={3}>
-                  <Text fontWeight="bold">
-                    {t('create.calendar.opening_hours_modal.hours')}
-                  </Text>
-                  <TimeSpanPicker
-                    id={`deviating-timespan-${openingHour.id}`}
-                    startTime={openingHour.opens}
-                    endTime={openingHour.closes}
-                    startTimeLabel={t(
-                      'create.calendar.opening_hours_modal.start_time',
-                    )}
-                    endTimeLabel={t(
-                      'create.calendar.opening_hours_modal.end_time',
-                    )}
-                    onChangeStartTime={(newTime) =>
-                      updateOpeningHour(openingHour.id, { opens: newTime })
-                    }
-                    onChangeEndTime={(newTime) =>
-                      updateOpeningHour(openingHour.id, { closes: newTime })
-                    }
-                    labelPosition={TimeSpanPickerLabelPositions.INLINE}
-                  />
-                </Stack>
-                {showChildcare && (
+            return (
+              <Stack key={openingHour.id} spacing={4}>
+                <Inline alignItems="flex-end" spacing={4.5}>
                   <Stack spacing={3}>
-                    <Inline
-                      alignItems="center"
-                      css={`
-                        gap: 0.5rem;
-                        .form-switch {
-                          font-size: 0.85rem;
-                        }
-                      `}
-                    >
-                      <RadioButton
-                        id={`deviating-childcare-toggle-${openingHour.id}`}
-                        type={RadioButtonTypes.SWITCH}
-                        color={colors.udbMainPositiveGreen}
-                        checked={childcareEnabled}
-                        onChange={(e) =>
-                          handleToggleChildcare(
-                            openingHour.id,
-                            e.target.checked,
-                          )
-                        }
-                      />
-                      <Label
-                        variant={LabelVariants.BOLD}
-                        htmlFor={`deviating-childcare-toggle-${openingHour.id}`}
-                      >
-                        {t('create.calendar.days.childcare.label')}
-                      </Label>
-                    </Inline>
-                    <TimeSpanPicker
-                      id={`deviating-childcare-timespan-${openingHour.id}`}
-                      startTime={openingHour.childcare?.start ?? ''}
-                      endTime={openingHour.childcare?.end ?? ''}
-                      startTimeLabel={t('create.calendar.days.childcare.from')}
-                      endTimeLabel={t('create.calendar.days.childcare.to')}
-                      onChangeStartTime={(newTime) => {
-                        markTouched(`${openingHour.id}-start`);
-                        updateOpeningHour(openingHour.id, {
-                          childcare: {
-                            start: newTime,
-                            end: openingHour.childcare?.end ?? '',
-                          },
-                        });
-                      }}
-                      onChangeEndTime={(newTime) => {
-                        markTouched(`${openingHour.id}-end`);
-                        updateOpeningHour(openingHour.id, {
-                          childcare: {
-                            start: openingHour.childcare?.start ?? '',
-                            end: newTime,
-                          },
-                        });
-                      }}
-                      labelPosition={TimeSpanPickerLabelPositions.INLINE}
-                      disabled={!childcareEnabled}
+                    <Text fontWeight="bold">
+                      {t('create.calendar.opening_hours_modal.days')}
+                    </Text>
+                    <MultiSelectDropdown
+                      id={`deviating-day-of-week-${openingHour.id}`}
+                      options={Object.values(DaysOfWeek).map((day) => ({
+                        value: day,
+                        label: t(`create.calendar.days.full.${day}`),
+                      }))}
+                      selectedValues={openingHour.dayOfWeek}
+                      placeholder={t(
+                        'create.calendar.opening_hours_modal.select_days',
+                      )}
+                      onChange={(newDays) =>
+                        handleToggleDaysOfWeek(newDays, openingHour.id)
+                      }
                     />
                   </Stack>
-                )}
-                {period.openingHours.length > 1 && (
-                  <Button
-                    iconName={Icons.TRASH}
-                    variant={ButtonVariants.DANGER}
-                    onClick={() => handleRemoveOpeningHour(openingHour.id)}
-                  />
-                )}
-              </Inline>
-              {timesMissing && (
-                <Alert
-                  css={`
-                    width: 100%;
-                  `}
-                >
-                  {t(
-                    'create.calendar.days.childcare.validation_messages.set_times_required',
+                  <Stack spacing={3}>
+                    <Text fontWeight="bold">
+                      {t('create.calendar.opening_hours_modal.hours')}
+                    </Text>
+                    <TimeSpanPicker
+                      id={`deviating-timespan-${openingHour.id}`}
+                      startTime={openingHour.opens}
+                      endTime={openingHour.closes}
+                      startTimeLabel={t(
+                        'create.calendar.opening_hours_modal.start_time',
+                      )}
+                      endTimeLabel={t(
+                        'create.calendar.opening_hours_modal.end_time',
+                      )}
+                      onChangeStartTime={(newTime) =>
+                        updateOpeningHour(openingHour.id, { opens: newTime })
+                      }
+                      onChangeEndTime={(newTime) =>
+                        updateOpeningHour(openingHour.id, { closes: newTime })
+                      }
+                      labelPosition={TimeSpanPickerLabelPositions.INLINE}
+                    />
+                  </Stack>
+                  {showChildcare && (
+                    <Stack spacing={3}>
+                      <Inline
+                        alignItems="center"
+                        css={`
+                          gap: 0.5rem;
+                          .form-switch {
+                            font-size: 0.85rem;
+                          }
+                        `}
+                      >
+                        <RadioButton
+                          id={`deviating-childcare-toggle-${openingHour.id}`}
+                          type={RadioButtonTypes.SWITCH}
+                          color={colors.udbMainPositiveGreen}
+                          checked={childcareEnabled}
+                          onChange={(e) =>
+                            handleToggleChildcare(
+                              openingHour.id,
+                              e.target.checked,
+                            )
+                          }
+                        />
+                        <Label
+                          variant={LabelVariants.BOLD}
+                          htmlFor={`deviating-childcare-toggle-${openingHour.id}`}
+                        >
+                          {t('create.calendar.days.childcare.label')}
+                        </Label>
+                      </Inline>
+                      <TimeSpanPicker
+                        id={`deviating-childcare-timespan-${openingHour.id}`}
+                        startTime={openingHour.childcare?.start ?? ''}
+                        endTime={openingHour.childcare?.end ?? ''}
+                        startTimeLabel={t(
+                          'create.calendar.days.childcare.from',
+                        )}
+                        endTimeLabel={t('create.calendar.days.childcare.to')}
+                        onChangeStartTime={(newTime) => {
+                          markTouched(`${openingHour.id}-start`);
+                          updateOpeningHour(openingHour.id, {
+                            childcare: {
+                              start: newTime,
+                              end: openingHour.childcare?.end ?? '',
+                            },
+                          });
+                        }}
+                        onChangeEndTime={(newTime) => {
+                          markTouched(`${openingHour.id}-end`);
+                          updateOpeningHour(openingHour.id, {
+                            childcare: {
+                              start: openingHour.childcare?.start ?? '',
+                              end: newTime,
+                            },
+                          });
+                        }}
+                        labelPosition={TimeSpanPickerLabelPositions.INLINE}
+                        disabled={!childcareEnabled}
+                      />
+                    </Stack>
                   )}
-                </Alert>
-              )}
-              {startError && <Text color="red">{startError}</Text>}
-              {endError && <Text color="red">{endError}</Text>}
-            </Stack>
-          );
-        })}
-        <Button
-          iconName={Icons.PLUS}
-          variant={ButtonVariants.OUTLINED}
-          onClick={handleAddOpeningHour}
-          alignSelf="flex-start"
-        >
-          {t('create.calendar.opening_hours_modal.button_add_hours')}
-        </Button>
+                  {period.openingHours.length > 1 && (
+                    <Button
+                      iconName={Icons.TRASH}
+                      variant={ButtonVariants.DANGER}
+                      onClick={() => handleRemoveOpeningHour(openingHour.id)}
+                    />
+                  )}
+                </Inline>
+                {timesMissing && (
+                  <Alert
+                    css={`
+                      width: 100%;
+                    `}
+                  >
+                    {t(
+                      'create.calendar.days.childcare.validation_messages.set_times_required',
+                    )}
+                  </Alert>
+                )}
+                {startError && <Text color="red">{startError}</Text>}
+                {endError && <Text color="red">{endError}</Text>}
+              </Stack>
+            );
+          })}
+          <Button
+            iconName={Icons.PLUS}
+            variant={ButtonVariants.OUTLINED}
+            onClick={handleAddOpeningHour}
+            alignSelf="flex-start"
+          >
+            {t('create.calendar.opening_hours_modal.button_add_hours')}
+          </Button>
         </Stack>
       </Stack>
     </Stack>

@@ -92,12 +92,23 @@ const CalendarOpeninghoursModal = ({
     (state) => state.context.openingHours,
   );
   const isPeriodic = useIsPeriodic();
-  const eventStartDate = useCalendarSelector((state) => state.context.startDate);
+  const eventStartDate = useCalendarSelector(
+    (state) => state.context.startDate,
+  );
   const eventEndDate = useCalendarSelector((state) => state.context.endDate);
 
   const initialOpeningHours =
     savedOpeningHours.length === 0
-      ? [{ id: createOpeninghoursId(), opens: '00:00', closes: '23:59', dayOfWeek: [], childcareStartTime: '', childcareEndTime: '' }]
+      ? [
+          {
+            id: createOpeninghoursId(),
+            opens: '00:00',
+            closes: '23:59',
+            dayOfWeek: [],
+            childcareStartTime: '',
+            childcareEndTime: '',
+          },
+        ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
           childcareStartTime: hours.childcareStartTime ?? '',
@@ -117,15 +128,28 @@ const CalendarOpeninghoursModal = ({
   const { replace } = useFieldArray({ control, name: 'openingHours' });
   const openingHours = useWatch({ control, name: 'openingHours' });
 
-  const [childcareEnabledMap, setChildcareEnabledMap] = useState<Record<string, boolean>>(
-    () => Object.fromEntries(savedOpeningHours.map((openingHour) => [openingHour.id, !!openingHour.childcareStartTime])),
+  const [childcareEnabledMap, setChildcareEnabledMap] = useState<
+    Record<string, boolean>
+  >(() =>
+    Object.fromEntries(
+      savedOpeningHours.map((openingHour) => [
+        openingHour.id,
+        !!openingHour.childcareStartTime,
+      ]),
+    ),
   );
-  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
-  const [deviatingPeriods, setDeviatingPeriods] = useState<DeviatingPeriodData[]>(
-    initialDeviatingPeriods ?? [],
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
+    {},
   );
-  const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(null);
-  const [pendingDeletePeriodId, setPendingDeletePeriodId] = useState<string | null>(null);
+  const [deviatingPeriods, setDeviatingPeriods] = useState<
+    DeviatingPeriodData[]
+  >(initialDeviatingPeriods ?? []);
+  const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(
+    null,
+  );
+  const [pendingDeletePeriodId, setPendingDeletePeriodId] = useState<
+    string | null
+  >(null);
 
   const markTouched = (key: string) =>
     setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
@@ -133,11 +157,20 @@ const CalendarOpeninghoursModal = ({
   const handleAddOpeningHours = () =>
     replace([
       ...openingHours,
-      { id: createOpeninghoursId(), opens: '00:00', closes: '23:59', dayOfWeek: [], childcareStartTime: '', childcareEndTime: '' },
+      {
+        id: createOpeninghoursId(),
+        opens: '00:00',
+        closes: '23:59',
+        dayOfWeek: [],
+        childcareStartTime: '',
+        childcareEndTime: '',
+      },
     ]);
 
   const handleRemoveOpeningHours = (idToRemove: string) =>
-    replace(openingHours.filter((openingHour) => openingHour.id !== idToRemove));
+    replace(
+      openingHours.filter((openingHour) => openingHour.id !== idToRemove),
+    );
 
   const handleChangeField = (
     idToChange: string,
@@ -146,7 +179,9 @@ const CalendarOpeninghoursModal = ({
   ) =>
     replace(
       openingHours.map((openingHour) =>
-        openingHour.id === idToChange ? { ...openingHour, [field]: newTime } : openingHour,
+        openingHour.id === idToChange
+          ? { ...openingHour, [field]: newTime }
+          : openingHour,
       ),
     );
 
@@ -274,7 +309,9 @@ const CalendarOpeninghoursModal = ({
   });
 
   const hasMissingDaysError = deviatingPeriods.some((period) =>
-    period.openingHours.some((openingHour) => openingHour.dayOfWeek.length === 0),
+    period.openingHours.some(
+      (openingHour) => openingHour.dayOfWeek.length === 0,
+    ),
   );
 
   const hasDateRangeError = deviatingPeriods.some(

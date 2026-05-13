@@ -25,7 +25,6 @@ import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import { UseEditArguments } from '../hooks/useEditField';
-import type { DeviatingPeriodData } from './DeviatingPeriod';
 import {
   CalendarContext,
   CalendarState,
@@ -42,6 +41,7 @@ import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { FormDataUnion, StepProps, StepsConfiguration } from '../Steps';
 import { convertTimeTableToSubEvents } from '../TimeTableStep';
 import { CalendarOptionToggle } from './CalendarOptionToggle';
+import type { DeviatingPeriodData } from './DeviatingPeriod';
 import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
@@ -199,7 +199,9 @@ const formatAdjustedDays = (adjustedDays: DeviatingPeriodData[]) =>
         de: period.description,
       },
     }),
-    openingHours: openingHours.map(({ id: _id, ...openingHour }) => openingHour),
+    openingHours: openingHours.map(
+      ({ id: _id, ...openingHour }) => openingHour,
+    ),
   }));
 
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
