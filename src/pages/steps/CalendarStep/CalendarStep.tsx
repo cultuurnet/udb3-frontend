@@ -181,7 +181,7 @@ const convertAdjustedDays = (
     id: uniqueId('deviating-period-'),
     startDate: new Date(day.startDate),
     endDate: new Date(day.endDate),
-    description: day.description?.nl ?? '',
+    description: day.description ?? {},
     openingHours: day.openingHours.map((openingHour) => ({
       id: createOpeninghoursId(),
       ...openingHour,
@@ -192,12 +192,8 @@ const formatAdjustedDays = (adjustedDays: DeviatingPeriodData[]) =>
   adjustedDays.map(({ openingHours, ...period }) => ({
     startDate: format(period.startDate, 'yyyy-MM-dd'),
     endDate: format(period.endDate, 'yyyy-MM-dd'),
-    ...(period.description && {
-      description: {
-        nl: period.description,
-        fr: period.description,
-        de: period.description,
-      },
+    ...(Object.keys(period.description).length > 0 && {
+      description: period.description,
     }),
     openingHours: openingHours.map(
       ({ id: _id, ...openingHour }) => openingHour,

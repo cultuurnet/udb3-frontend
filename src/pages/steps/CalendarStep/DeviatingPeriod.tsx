@@ -2,6 +2,8 @@ import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { SupportedLanguage } from '@/i18n';
+
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { useFetchHolidays } from '@/hooks/api/holidays';
 import { DayOfWeek } from '@/types/Offer';
@@ -37,7 +39,7 @@ type DeviatingPeriodData = {
   id: string;
   startDate: Date;
   endDate: Date;
-  description: string;
+  description: Partial<Record<SupportedLanguage, string>>;
   openingHours: OpeningHour[];
 };
 
@@ -65,7 +67,8 @@ const DeviatingPeriod = ({
   hasOverlap = false,
   ...boxProps
 }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
   const [childcareEnabledMap, setChildcareEnabledMap] = useState<
     Record<string, boolean>
@@ -221,12 +224,15 @@ const DeviatingPeriod = ({
             }}
           />
           <Input
-            value={period.description}
+            value={period.description[lang] ?? ''}
             name={t(
               'create.calendar.opening_hours_modal.deviating.description_placeholder',
             )}
             onChange={(e) =>
-              onChange({ ...period, description: e.target.value })
+              onChange({
+                ...period,
+                description: { ...period.description, [lang]: e.target.value },
+              })
             }
             placeholder={t(
               'create.calendar.opening_hours_modal.deviating.description_placeholder',
