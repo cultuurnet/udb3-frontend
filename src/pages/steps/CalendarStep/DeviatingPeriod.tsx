@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { useFetchHolidays } from '@/hooks/api/holidays';
-import type { SupportedLanguage } from '../../../i18n';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
@@ -24,6 +23,7 @@ import {
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
 
+import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
 
 type OpeningHour = {
@@ -224,9 +224,6 @@ const DeviatingPeriod = ({
           />
           <Input
             value={period.description[lang] ?? ''}
-            name={t(
-              'create.calendar.opening_hours_modal.deviating.description_placeholder',
-            )}
             onChange={(e) =>
               onChange({
                 ...period,
