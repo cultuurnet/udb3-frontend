@@ -83,6 +83,8 @@ const MultiSelectDropdown = ({
         </span>
       </BootstrapDropdown.Toggle>
       <BootstrapDropdown.Menu
+        renderOnMount
+        popperConfig={{ strategy: 'fixed' }}
         css={`
           min-width: ${width};
           padding: 0.25rem 0;
