@@ -26,6 +26,7 @@ import {
   faImage,
   faInfoCircle,
   faLayerGroup,
+  faLink,
   faPencilAlt,
   faPlus,
   faPlusCircle,
@@ -93,6 +94,7 @@ const Icons = {
   ARROW_LEFT: 'arrowLeft',
   SORT: 'sort',
   GLOBE: 'globe',
+  LINK: 'link',
 } as const;
 
 const IconsMap = {
@@ -138,6 +140,7 @@ const IconsMap = {
   [Icons.ARROW_LEFT]: faArrowLeft,
   [Icons.SORT]: faSort,
   [Icons.GLOBE]: faGlobe,
+  [Icons.LINK]: faLink,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {

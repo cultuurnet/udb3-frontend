@@ -7,6 +7,7 @@ import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useDuplicateEventMutation } from '@/hooks/api/events';
 import { useAddOfferLabelMutation } from '@/hooks/api/offers';
 import { useConsoleDebugger } from '@/hooks/useConsoleDebugger';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   FILMINVOER_LABEL,
   hasMovieLabel,
@@ -44,6 +45,7 @@ const OfferPreviewSidebar = ({
   const duplicateEventMutation = useDuplicateEventMutation();
   const addLabelMutation = useAddOfferLabelMutation();
   const { error: logError } = useConsoleDebugger();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
   const isPlaceOffer = isPlace(offer);
   const scope = isPlaceOffer ? OfferTypes.PLACES : OfferTypes.EVENTS;
@@ -184,6 +186,15 @@ const OfferPreviewSidebar = ({
       title: t('preview.actions.delete'),
       onClick: () => onDelete(offer),
       disabled: !isDeletable(offer),
+    });
+  }
+
+  if (isPlaceOffer && isBoaEnabled) {
+    actions.push({
+      iconName: Icons.LINK,
+      title: t('preview.actions.linked_events'),
+      href: `/search?query=${encodeURIComponent(`departurePlaces:${offerId}`)}`,
+      disabled: false,
     });
   }
 

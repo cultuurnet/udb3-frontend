@@ -369,8 +369,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           spacing={2}
           css={`
             background: transparent;
-            border: 1px solid ${outlineColor ?? 'currentColor'};
-            color: ${outlineColor ?? 'currentColor'};
+            border: 1px solid ${outlineColor};
+            color: ${outlineColor};
             border-radius: ${getValue('borderRadius')};
             padding: ${getValue('paddingY')} ${getValue('paddingX')};
             min-height: ${getGlobalFormInputHeight};
@@ -380,13 +380,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             &:hover {
               background-color: color-mix(
                 in srgb,
-                ${outlineColor ?? 'currentColor'} 12%,
+                ${outlineColor} 12%,
                 transparent
               );
             }
 
             &:focus {
-              outline: solid black;
+              outline: solid ${outlineColor};
             }
 
             &:focus:not(:focus-visible) {
