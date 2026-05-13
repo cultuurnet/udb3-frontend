@@ -186,6 +186,25 @@
         "days": "Tage",
         "hours": "Stunden",
         "select_days": "Tag(e) auswählen",
+        "deviating": {
+          "title": "Abweichende Stunden hinzufügen",
+          "period_title": "Abweichende Periode {{index}}",
+          "remove_period": "Periode entfernen",
+          "select_period": "Zeitraum auswählen",
+          "fill_hours": "Stunden für diesen Zeitraum eingeben",
+          "add_period": "Abweichende Periode hinzufügen",
+          "description_placeholder": "Beschreibung",
+          "errors": {
+            "overlap": "Abweichende Perioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_before_event": "Die Periode mit abweichenden Stunden kann nicht vor dem Startdatum der Aktivität beginnen.",
+            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden."
+          },
+          "delete_modal": {
+            "title": "Abweichende Periode löschen",
+            "body": "Sind Sie sicher, dass Sie diese Periode mit abweichenden Stunden löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Endgültig löschen"
+          }
+        },
         "validation_messages": {
           "day_of_week": {
             "min": "Sie müssen mindestens 1 Wochentag angeben."
