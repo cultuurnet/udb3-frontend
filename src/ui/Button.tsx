@@ -386,7 +386,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             }
 
             &:focus {
-              outline: solid black;
+              outline: solid ${outlineColor};
             }
 
             &:focus:not(:focus-visible) {
