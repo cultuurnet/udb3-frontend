@@ -205,6 +205,24 @@
             "confirm": "Supprimer définitivement"
           }
         },
+        "closing": {
+          "title": "Ajouter des jours ou périodes de fermeture",
+          "period_title": "Période de fermeture {{index}}",
+          "remove_period": "Supprimer la période",
+          "select_period": "Sélectionner la période",
+          "add_period": "Ajouter une période de fermeture",
+          "description_placeholder": "Description",
+          "errors": {
+            "overlap": "Les périodes de fermeture ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_before_event": "La période de fermeture ne peut pas commencer avant la date de début de l'activité.",
+            "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité."
+          },
+          "delete_modal": {
+            "title": "Supprimer la période de fermeture",
+            "body": "Êtes-vous sûr de vouloir supprimer cette période de fermeture ? Cette action est irréversible.",
+            "confirm": "Supprimer définitivement"
+          }
+        },
         "validation_messages": {
           "day_of_week": {
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
