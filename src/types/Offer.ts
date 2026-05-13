@@ -116,6 +116,13 @@ type OpeningHours = {
   };
 };
 
+type OpeningHoursAdjustedDay = {
+  startDate: string;
+  endDate: string;
+  description: Partial<Record<Values<typeof SupportedLanguages>, string>>;
+  openingHours: OpeningHours[];
+};
+
 type CalendarSummary = Record<
   Values<typeof SupportedLanguages>,
   {
@@ -145,6 +152,7 @@ type BaseOffer = {
   startDate?: string;
   endDate?: string;
   openingHours: OpeningHours[];
+  openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
   subEvent: SubEvent[];
   performer: [{ performer: string }];
   sameAs: string[];
@@ -254,6 +262,7 @@ export type {
   MediaObject,
   Offer,
   OpeningHours,
+  OpeningHoursAdjustedDay,
   Status,
   StatusReason,
   StatusType,
