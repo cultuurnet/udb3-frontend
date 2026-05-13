@@ -2,10 +2,9 @@ import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { SupportedLanguage } from '@/i18n';
-
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { useFetchHolidays } from '@/hooks/api/holidays';
+import type { SupportedLanguage } from '../../../i18n';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
