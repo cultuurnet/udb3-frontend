@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
@@ -237,7 +238,7 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleAddDeviatingPeriod = () => {
-    const today = new Date();
+    const today = startOfDay(new Date());
     setDeviatingPeriods((prev) => [
       ...prev,
       {
