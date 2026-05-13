@@ -1,3 +1,4 @@
+import { format, isSameDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -209,16 +210,23 @@ const DeviatingPeriod = ({
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
               onQuickLinkExpand(
-                periods.map((p) => ({
-                  id: uniqueId('deviating-period-'),
-                  startDate: p.startDate,
-                  endDate: p.endDate,
-                  description: { [lang]: p.name },
-                  openingHours: period.openingHours.map((h) => ({
-                    ...h,
-                    id: createOpeninghoursId(),
-                  })),
-                })),
+                periods.map((p) => {
+                  const isSingleDay = isSameDay(p.startDate, p.endDate);
+                  const dayOfWeek = isSingleDay
+                    ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
+                    : null;
+                  return {
+                    id: uniqueId('deviating-period-'),
+                    startDate: p.startDate,
+                    endDate: p.endDate,
+                    description: { [lang]: p.name },
+                    openingHours: period.openingHours.map((openingHour) => ({
+                      ...openingHour,
+                      id: createOpeninghoursId(),
+                      dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
+                    })),
+                  };
+                }),
               );
             }}
           />
