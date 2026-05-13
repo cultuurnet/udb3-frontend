@@ -32,6 +32,7 @@ import {
   useIsPeriodic,
 } from '../machines/calendarMachine';
 import { useCalendarHandlers } from '../machines/useCalendarHandlers';
+import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
 
 const schema = yup
@@ -73,6 +74,8 @@ type CalendarOpeninghoursModalProps = {
   showChildcare?: boolean;
   onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
   initialDeviatingPeriods?: DeviatingPeriodData[];
+  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  initialClosingPeriods?: ClosingPeriodData[];
 };
 
 const CalendarOpeninghoursModal = ({
@@ -82,6 +85,8 @@ const CalendarOpeninghoursModal = ({
   showChildcare = true,
   onChangeAdjustedDays,
   initialDeviatingPeriods,
+  onChangeClosingPeriods,
+  initialClosingPeriods,
 }: CalendarOpeninghoursModalProps) => {
   const { t } = useTranslation();
 
@@ -148,7 +153,17 @@ const CalendarOpeninghoursModal = ({
   const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(
     null,
   );
-  const [pendingDeletePeriodId, setPendingDeletePeriodId] = useState<
+  const [pendingDeleteDeviatingId, setPendingDeleteDeviatingId] = useState<
+    string | null
+  >(null);
+
+  const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>(
+    initialClosingPeriods ?? [],
+  );
+  const [lastEditedClosingPeriodId, setLastEditedClosingPeriodId] = useState<
+    string | null
+  >(null);
+  const [pendingDeleteClosingId, setPendingDeleteClosingId] = useState<
     string | null
   >(null);
 
@@ -258,16 +273,36 @@ const CalendarOpeninghoursModal = ({
     ]);
   };
 
+  const handleAddClosingPeriod = () => {
+    const today = startOfDay(new Date());
+    setClosingPeriods((prev) => [
+      ...prev,
+      {
+        id: uniqueId('closing-period-'),
+        startDate: today,
+        endDate: today,
+        description: {},
+      },
+    ]);
+  };
+
   const handleConfirmDelete = () => {
-    if (!pendingDeletePeriodId) return;
-    setDeviatingPeriods((prev) =>
-      prev.filter((period) => period.id !== pendingDeletePeriodId),
-    );
-    setPendingDeletePeriodId(null);
+    if (pendingDeleteDeviatingId) {
+      setDeviatingPeriods((prev) =>
+        prev.filter((period) => period.id !== pendingDeleteDeviatingId),
+      );
+      setPendingDeleteDeviatingId(null);
+    } else if (pendingDeleteClosingId) {
+      setClosingPeriods((prev) =>
+        prev.filter((period) => period.id !== pendingDeleteClosingId),
+      );
+      setPendingDeleteClosingId(null);
+    }
   };
 
   const handleSave = handleSubmit((data) => {
     onChangeAdjustedDays?.(deviatingPeriods);
+    onChangeClosingPeriods?.(closingPeriods);
     handleChangeOpeningHours(
       data.openingHours.map((hour) => ({
         ...hour,
@@ -290,6 +325,14 @@ const CalendarOpeninghoursModal = ({
 
   const overlapsWithAnotherPeriod = (period: DeviatingPeriodData) =>
     deviatingPeriods.some(
+      (other) =>
+        other.id !== period.id &&
+        period.startDate <= other.endDate &&
+        period.endDate >= other.startDate,
+    );
+
+  const overlapsWithAnotherClosingPeriod = (period: ClosingPeriodData) =>
+    closingPeriods.some(
       (other) =>
         other.id !== period.id &&
         period.startDate <= other.endDate &&
@@ -323,15 +366,30 @@ const CalendarOpeninghoursModal = ({
 
   const hasOverlapError = deviatingPeriods.some(overlapsWithAnotherPeriod);
 
+  const hasClosingDateRangeError = closingPeriods.some(
+    (period) =>
+      (eventStart && period.startDate < eventStart) ||
+      (eventEnd && period.endDate > eventEnd),
+  );
+
+  const hasClosingOverlapError = closingPeriods.some(
+    overlapsWithAnotherClosingPeriod,
+  );
+
   // Modal state
-  const isDeleteConfirm = pendingDeletePeriodId !== null;
+  const isDeleteConfirm =
+    pendingDeleteDeviatingId !== null || pendingDeleteClosingId !== null;
 
   const modalTitle = isDeleteConfirm
-    ? t('create.calendar.opening_hours_modal.deviating.delete_modal.title')
+    ? pendingDeleteDeviatingId
+      ? t('create.calendar.opening_hours_modal.deviating.delete_modal.title')
+      : t('create.calendar.opening_hours_modal.closing.delete_modal.title')
     : t('create.calendar.opening_hours_modal.title');
 
   const modalConfirmTitle = isDeleteConfirm
-    ? t('create.calendar.opening_hours_modal.deviating.delete_modal.confirm')
+    ? pendingDeleteDeviatingId
+      ? t('create.calendar.opening_hours_modal.deviating.delete_modal.confirm')
+      : t('create.calendar.opening_hours_modal.closing.delete_modal.confirm')
     : t('create.calendar.opening_hours_modal.button_confirm');
 
   const modalConfirmVariant = isDeleteConfirm
@@ -343,11 +401,14 @@ const CalendarOpeninghoursModal = ({
     (hasChildcareErrors ||
       hasMissingDaysError ||
       hasDateRangeError ||
-      hasOverlapError);
+      hasOverlapError ||
+      hasClosingDateRangeError ||
+      hasClosingOverlapError);
 
   const handleModalClose = () => {
     if (isDeleteConfirm) {
-      setPendingDeletePeriodId(null);
+      setPendingDeleteDeviatingId(null);
+      setPendingDeleteClosingId(null);
     } else {
       clearErrors();
       onClose();
@@ -374,7 +435,13 @@ const CalendarOpeninghoursModal = ({
     >
       <Stack padding={4} display={isDeleteConfirm ? undefined : 'none'}>
         <Text>
-          {t('create.calendar.opening_hours_modal.deviating.delete_modal.body')}
+          {pendingDeleteDeviatingId
+            ? t(
+                'create.calendar.opening_hours_modal.deviating.delete_modal.body',
+              )
+            : t(
+                'create.calendar.opening_hours_modal.closing.delete_modal.body',
+              )}
         </Text>
       </Stack>
 
@@ -568,7 +635,7 @@ const CalendarOpeninghoursModal = ({
                         ),
                       );
                     }}
-                    onRemove={() => setPendingDeletePeriodId(period.id)}
+                    onRemove={() => setPendingDeleteDeviatingId(period.id)}
                     onQuickLinkExpand={(expanded) =>
                       setDeviatingPeriods((prev) =>
                         prev.flatMap((existing) =>
@@ -594,6 +661,75 @@ const CalendarOpeninghoursModal = ({
                   {t(
                     'create.calendar.opening_hours_modal.deviating.add_period',
                   )}
+                </Button>
+              </Stack>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+
+        <Accordion
+          css={`
+            width: 100%;
+            .accordion-item {
+              border: none;
+              border-bottom: 1px solid ${colors.grey3};
+            }
+            .accordion-button,
+            .accordion-body {
+              padding-left: 0;
+              padding-right: 0;
+            }
+            .accordion-button:not(.collapsed) {
+              background-color: transparent;
+              color: inherit;
+              box-shadow: none;
+            }
+          `}
+        >
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>
+              <Text fontWeight="bold">
+                {t('create.calendar.opening_hours_modal.closing.title')}
+              </Text>
+            </Accordion.Header>
+            <Accordion.Body>
+              <Stack spacing={4}>
+                {closingPeriods.map((period, index) => (
+                  <ClosingPeriod
+                    key={period.id}
+                    index={index}
+                    period={period}
+                    onChange={(updated: ClosingPeriodData) => {
+                      setLastEditedClosingPeriodId(updated.id);
+                      setClosingPeriods((prev) =>
+                        prev.map((existing) =>
+                          existing.id === updated.id ? updated : existing,
+                        ),
+                      );
+                    }}
+                    onRemove={() => setPendingDeleteClosingId(period.id)}
+                    onQuickLinkExpand={(expanded) =>
+                      setClosingPeriods((prev) =>
+                        prev.flatMap((existing) =>
+                          existing.id === period.id ? expanded : [existing],
+                        ),
+                      )
+                    }
+                    hasOverlap={
+                      period.id === lastEditedClosingPeriodId &&
+                      overlapsWithAnotherClosingPeriod(period)
+                    }
+                    eventStartDate={eventStart}
+                    eventEndDate={eventEnd}
+                  />
+                ))}
+                <Button
+                  iconName={Icons.PLUS}
+                  variant={ButtonVariants.OUTLINED}
+                  onClick={handleAddClosingPeriod}
+                  alignSelf="flex-start"
+                >
+                  {t('create.calendar.opening_hours_modal.closing.add_period')}
                 </Button>
               </Stack>
             </Accordion.Body>
