@@ -213,7 +213,7 @@ const DeviatingPeriod = ({
                   id: uniqueId('deviating-period-'),
                   startDate: p.startDate,
                   endDate: p.endDate,
-                  description: p.name,
+                  description: { [lang]: p.name },
                   openingHours: period.openingHours.map((h) => ({
                     ...h,
                     id: createOpeninghoursId(),
