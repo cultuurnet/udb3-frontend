@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
 
@@ -18,12 +18,14 @@ test.beforeEach(async ({ context }) => {
 
 const createPermanentEvent = async (page: Page, baseURL: string) => {
   await page.goto(`${baseURL}/create`);
-  await page.getByRole('button', { name: nl.steps.offerTypeStep.types.event }).click();
-  await page.getByRole('button', { name: 'Concert' }).click();
   await page
-    .getByRole('button', { name: calendar.types.fixed_days })
+    .getByRole('button', { name: nl.steps.offerTypeStep.types.event })
     .click();
-  await page.getByRole('radio', { name: calendar.fixed_days.permanent }).click();
+  await page.getByRole('button', { name: 'Concert' }).click();
+  await page.getByRole('button', { name: calendar.types.fixed_days }).click();
+  await page
+    .getByRole('radio', { name: calendar.fixed_days.permanent })
+    .click();
   await page.getByLabel(nl.city_picker.label_be).click();
   await page.getByLabel(nl.city_picker.label_be).fill('9000');
   await page.getByRole('option', { name: '9000 Gent' }).click();
@@ -61,7 +63,9 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
   await modal
     .getByRole('button', { name: calendar.opening_hours_modal.select_days })
     .click();
-  await modal.getByRole('checkbox', { name: calendar.days.full.monday }).click();
+  await modal
+    .getByRole('checkbox', { name: calendar.days.full.monday })
+    .click();
 
   await modal
     .locator('#openinghours-row-timespan-openinghours-2-time-span-picker-start')
@@ -72,7 +76,9 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
 
   await modal.getByLabel(calendar.days.childcare.label).click();
   await expect(
-    modal.getByText(calendar.days.childcare.validation_messages.set_times_required),
+    modal.getByText(
+      calendar.days.childcare.validation_messages.set_times_required,
+    ),
   ).toBeVisible();
   await modal
     .locator(
@@ -90,12 +96,16 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
     )
     .blur();
   await expect(
-    modal.getByText(calendar.days.childcare.validation_messages.set_times_required),
+    modal.getByText(
+      calendar.days.childcare.validation_messages.set_times_required,
+    ),
   ).toBeHidden();
   await modal.getByLabel(calendar.days.childcare.label).click();
 
   await modal
-    .getByRole('button', { name: calendar.opening_hours_modal.button_add_hours })
+    .getByRole('button', {
+      name: calendar.opening_hours_modal.button_add_hours,
+    })
     .click();
   await expect(
     modal.locator(
@@ -106,7 +116,9 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
   await modal
     .getByRole('button', { name: calendar.opening_hours_modal.select_days })
     .click();
-  await modal.getByRole('checkbox', { name: calendar.days.full.tuesday }).click();
+  await modal
+    .getByRole('checkbox', { name: calendar.days.full.tuesday })
+    .click();
 
   await modal
     .getByRole('button', { name: calendar.opening_hours_modal.button_confirm })
@@ -117,7 +129,9 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
   await page.waitForLoadState('networkidle');
 
   await expect(
-    page.getByRole('button', { name: calendar.fixed_days.button_change_opening_hours }),
+    page.getByRole('button', {
+      name: calendar.fixed_days.button_change_opening_hours,
+    }),
   ).toBeVisible();
   await expect(page.getByText(calendar.days.full.monday)).toBeVisible();
   await expect(page.getByText(calendar.days.full.tuesday)).toBeVisible();
