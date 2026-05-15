@@ -282,7 +282,6 @@ const CalendarOpeninghoursModal = ({
     onClose();
   });
 
-  // Validation
   const eventStart =
     isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
   const eventEnd =
@@ -323,7 +322,6 @@ const CalendarOpeninghoursModal = ({
 
   const hasOverlapError = deviatingPeriods.some(overlapsWithAnotherPeriod);
 
-  // Modal state
   const isDeleteConfirm = pendingDeletePeriodId !== null;
 
   const modalTitle = isDeleteConfirm
