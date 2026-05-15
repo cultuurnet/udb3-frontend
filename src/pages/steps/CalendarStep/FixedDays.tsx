@@ -185,9 +185,8 @@ export const FixedDays = ({
         />
         {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
       </Stack>
-      {isBoaEnabled ? (
+      {isBoaEnabled && isCalendarOpeninghoursModalVisible ? (
         <CalendarOpeninghoursModal
-          key={isCalendarOpeninghoursModalVisible ? 'open' : 'closed'}
           visible={isCalendarOpeninghoursModalVisible}
           onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
           onChangeCalendarState={onChangeCalendarState}

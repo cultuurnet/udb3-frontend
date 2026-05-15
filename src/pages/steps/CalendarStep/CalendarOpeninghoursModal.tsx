@@ -317,7 +317,6 @@ const CalendarOpeninghoursModal = ({
     onClose();
   });
 
-  // Validation
   const eventStart =
     isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
   const eventEnd =
@@ -654,7 +653,7 @@ const CalendarOpeninghoursModal = ({
                 ))}
                 <Button
                   iconName={Icons.PLUS}
-                  variant={ButtonVariants.OUTLINED}
+                  variant={ButtonVariants.SECONDARY}
                   onClick={handleAddDeviatingPeriod}
                   alignSelf="flex-start"
                 >
