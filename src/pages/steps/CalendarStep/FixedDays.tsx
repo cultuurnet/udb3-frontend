@@ -180,19 +180,20 @@ export const FixedDays = ({
         />
         {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
       </Stack>
-      {isBoaEnabled && isCalendarOpeninghoursModalVisible ? (
+      {!isBoaEnabled && (
+        <CalendarOpeninghoursModalLegacy
+          visible={isCalendarOpeninghoursModalVisible}
+          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
+          onChangeCalendarState={onChangeCalendarState}
+        />
+      )}
+      {isBoaEnabled && isCalendarOpeninghoursModalVisible && (
         <CalendarOpeninghoursModal
           visible={isCalendarOpeninghoursModalVisible}
           onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
           onChangeCalendarState={onChangeCalendarState}
           onChangeAdjustedDays={onChangeAdjustedDays}
           initialDeviatingPeriods={initialAdjustedDays}
-        />
-      ) : (
-        <CalendarOpeninghoursModalLegacy
-          visible={isCalendarOpeninghoursModalVisible}
-          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
-          onChangeCalendarState={onChangeCalendarState}
         />
       )}
     </Stack>
