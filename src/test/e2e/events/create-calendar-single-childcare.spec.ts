@@ -95,6 +95,11 @@ test('create an event with calendarType single and childcare hours', async ({
   await page.getByLabel('Naam van de activiteit').click();
   await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
+
+  await page.getByRole('button', { name: 'Opslaan' }).click();
+
+  // Publish
+  await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 });
 
 test('create a Kamp of vakantie event with overnight stay', async ({
@@ -129,10 +134,13 @@ test('create a Kamp of vakantie event with overnight stay', async ({
 
   // 5. Name and Age
   await page.getByLabel('Naam van de activiteit').click();
-  await page
-    .getByLabel('Naam van de activiteit')
-    .fill('E2E test event with overnight stay');
+  await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Kinderen 6-11' }).click();
+
+  await page.getByRole('button', { name: 'Opslaan' }).click();
+
+  // Publish
+  await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
 });
 
 test('does not show Overnachting column for a non-Kamp event type', async ({
