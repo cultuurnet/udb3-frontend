@@ -34,37 +34,67 @@ import {
 import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
 
-const schema = yup
-  .object({
-    openingHours: yup.array().of(
-      yup
-        .object({
-          closes: yup.string().required(),
-          opens: yup.string().required(),
-          dayOfWeek: yup
-            .array()
-            .of(yup.mixed<DayOfWeek>().oneOf(Object.values(DaysOfWeek)))
-            .min(1),
-          childcareStartTime: yup.string(),
-          childcareEndTime: yup.string(),
-        })
-        .required(),
-    ),
-  } as const)
-  .required();
+const createSchema = (t: (key: string) => string) =>
+  yup
+    .object({
+      openingHours: yup.array().of(
+        yup
+          .object({
+            id: yup.string().required(),
+            closes: yup.string().required(),
+            opens: yup.string().required(),
+            dayOfWeek: yup
+              .array()
+              .of(yup.mixed<DayOfWeek>().oneOf(Object.values(DaysOfWeek)))
+              .min(1),
+            childcareEnabled: yup.boolean().default(false),
+            childcareStartTime: yup.string().when('childcareEnabled', {
+              is: true,
+              then: (s) =>
+                s
+                  .required()
+                  .test(
+                    'start-before-opens',
+                    t(
+                      'create.calendar.days.childcare.validation_messages.start_too_late',
+                    ),
+                    function (value) {
+                      return (
+                        !value ||
+                        value <
+                          (this.parent as { opens: string; closes: string })
+                            .opens
+                      );
+                    },
+                  ),
+            }),
+            childcareEndTime: yup.string().when('childcareEnabled', {
+              is: true,
+              then: (s) =>
+                s
+                  .required()
+                  .test(
+                    'end-after-closes',
+                    t(
+                      'create.calendar.days.childcare.validation_messages.end_too_early',
+                    ),
+                    function (value) {
+                      return (
+                        !value ||
+                        value >
+                          (this.parent as { opens: string; closes: string })
+                            .closes
+                      );
+                    },
+                  ),
+            }),
+          })
+          .required(),
+      ),
+    } as const)
+    .required();
 
-type OpeningHoursRow = {
-  id: string;
-  opens: string;
-  closes: string;
-  dayOfWeek: DayOfWeek[];
-  childcareStartTime: string;
-  childcareEndTime: string;
-};
-
-type FormValues = {
-  openingHours: OpeningHoursRow[];
-};
+type FormData = yup.InferType<ReturnType<typeof createSchema>>;
 
 type CalendarOpeninghoursModalProps = {
   visible: boolean;
@@ -106,12 +136,14 @@ const CalendarOpeninghoursModal = ({
             opens: '00:00',
             closes: '23:59',
             dayOfWeek: [],
+            childcareEnabled: false,
             childcareStartTime: '',
             childcareEndTime: '',
           },
         ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
+          childcareEnabled: !!hours.childcareStartTime,
           childcareStartTime: hours.childcareStartTime ?? '',
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
@@ -121,27 +153,14 @@ const CalendarOpeninghoursModal = ({
     handleSubmit,
     control,
     clearErrors,
-  } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+  } = useForm<FormData>({
+    resolver: yupResolver(createSchema(t)),
     defaultValues: { openingHours: initialOpeningHours },
   });
 
   const { replace } = useFieldArray({ control, name: 'openingHours' });
   const openingHours = useWatch({ control, name: 'openingHours' });
 
-  const [childcareEnabledMap, setChildcareEnabledMap] = useState<
-    Record<string, boolean>
-  >(() =>
-    Object.fromEntries(
-      savedOpeningHours.map((openingHour) => [
-        openingHour.id,
-        !!openingHour.childcareStartTime,
-      ]),
-    ),
-  );
-  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
-    {},
-  );
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
   >(initialDeviatingPeriods ?? []);
@@ -152,9 +171,6 @@ const CalendarOpeninghoursModal = ({
     string | null
   >(null);
 
-  const markTouched = (key: string) =>
-    setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
-
   const handleAddOpeningHours = () =>
     replace([
       ...openingHours,
@@ -163,6 +179,7 @@ const CalendarOpeninghoursModal = ({
         opens: '00:00',
         closes: '23:59',
         dayOfWeek: [],
+        childcareEnabled: false,
         childcareStartTime: '',
         childcareEndTime: '',
       },
@@ -179,10 +196,8 @@ const CalendarOpeninghoursModal = ({
     newTime: string,
   ) =>
     replace(
-      openingHours.map((openingHour) =>
-        openingHour.id === idToChange
-          ? { ...openingHour, [field]: newTime }
-          : openingHour,
+      openingHours.map((hour) =>
+        hour.id === idToChange ? { ...hour, [field]: newTime } : hour,
       ),
     );
 
@@ -203,39 +218,11 @@ const CalendarOpeninghoursModal = ({
     );
 
   const handleToggleChildcare = (idToChange: string, enabled: boolean) =>
-    setChildcareEnabledMap((prev) => ({ ...prev, [idToChange]: enabled }));
-
-  const getChildcareRowState = (
-    openingHour: (typeof openingHours)[number],
-    childcareEnabled: boolean,
-  ) => {
-    const startTouched =
-      touchedFields[`${openingHour.id}-start`] &&
-      !!openingHour.childcareStartTime;
-    const endTouched =
-      touchedFields[`${openingHour.id}-end`] && !!openingHour.childcareEndTime;
-    return {
-      timesMissing:
-        childcareEnabled &&
-        (!openingHour.childcareStartTime || !openingHour.childcareEndTime),
-      startError:
-        childcareEnabled &&
-        startTouched &&
-        openingHour.childcareStartTime >= openingHour.opens
-          ? t(
-              'create.calendar.days.childcare.validation_messages.start_too_late',
-            )
-          : undefined,
-      endError:
-        childcareEnabled &&
-        endTouched &&
-        openingHour.childcareEndTime <= openingHour.closes
-          ? t(
-              'create.calendar.days.childcare.validation_messages.end_too_early',
-            )
-          : undefined,
-    };
-  };
+    replace(
+      openingHours.map((hour) =>
+        hour.id === idToChange ? { ...hour, childcareEnabled: enabled } : hour,
+      ),
+    );
 
   const handleAddDeviatingPeriod = () => {
     const today = startOfDay(new Date());
@@ -269,14 +256,12 @@ const CalendarOpeninghoursModal = ({
   const handleSave = handleSubmit((data) => {
     onChangeAdjustedDays?.(deviatingPeriods);
     handleChangeOpeningHours(
-      data.openingHours.map((hour) => ({
+      data.openingHours.map(({ childcareEnabled, ...hour }) => ({
         ...hour,
-        childcareStartTime: childcareEnabledMap[hour.id]
+        childcareStartTime: childcareEnabled
           ? hour.childcareStartTime
           : undefined,
-        childcareEndTime: childcareEnabledMap[hour.id]
-          ? hour.childcareEndTime
-          : undefined,
+        childcareEndTime: childcareEnabled ? hour.childcareEndTime : undefined,
       })),
     );
     onClose();
@@ -295,16 +280,13 @@ const CalendarOpeninghoursModal = ({
         period.endDate >= other.startDate,
     );
 
-  const hasChildcareErrors = openingHours.some((hours) => {
-    if (!childcareEnabledMap[hours.id]) return false;
-
-    const timesMissing = !hours.childcareStartTime || !hours.childcareEndTime;
-
+  const hasChildcareErrors = openingHours.some((hour) => {
+    if (!(hour.childcareEnabled ?? false)) return false;
+    const timesMissing = !hour.childcareStartTime || !hour.childcareEndTime;
     const startTooLate =
-      !!hours.childcareStartTime && hours.childcareStartTime >= hours.opens;
+      !!hour.childcareStartTime && hour.childcareStartTime >= hour.opens;
     const endTooEarly =
-      !!hours.childcareEndTime && hours.childcareEndTime <= hours.closes;
-
+      !!hour.childcareEndTime && hour.childcareEndTime <= hour.closes;
     return timesMissing || startTooLate || endTooEarly;
   });
 
@@ -383,11 +365,26 @@ const CalendarOpeninghoursModal = ({
         display={isDeleteConfirm ? 'none' : undefined}
       >
         {openingHours.map((openingHour, index) => {
-          const childcareEnabled = childcareEnabledMap[openingHour.id] ?? false;
-          const { timesMissing, startError, endError } = getChildcareRowState(
-            openingHour,
-            childcareEnabled,
-          );
+          const childcareEnabled = openingHour.childcareEnabled ?? false;
+          const timesMissing =
+            childcareEnabled &&
+            (!openingHour.childcareStartTime || !openingHour.childcareEndTime);
+          const startError =
+            childcareEnabled &&
+            !!openingHour.childcareStartTime &&
+            openingHour.childcareStartTime >= openingHour.opens
+              ? t(
+                  'create.calendar.days.childcare.validation_messages.start_too_late',
+                )
+              : undefined;
+          const endError =
+            childcareEnabled &&
+            !!openingHour.childcareEndTime &&
+            openingHour.childcareEndTime <= openingHour.closes
+              ? t(
+                  'create.calendar.days.childcare.validation_messages.end_too_early',
+                )
+              : undefined;
 
           return (
             <Stack key={openingHour.id} flex={1} spacing={4}>
@@ -470,22 +467,20 @@ const CalendarOpeninghoursModal = ({
                       endTime={openingHour.childcareEndTime}
                       startTimeLabel={t('create.calendar.days.childcare.from')}
                       endTimeLabel={t('create.calendar.days.childcare.to')}
-                      onChangeStartTime={(newTime) => {
-                        markTouched(`${openingHour.id}-start`);
+                      onChangeStartTime={(newTime) =>
                         handleChangeField(
                           openingHour.id,
                           'childcareStartTime',
                           newTime,
-                        );
-                      }}
-                      onChangeEndTime={(newTime) => {
-                        markTouched(`${openingHour.id}-end`);
+                        )
+                      }
+                      onChangeEndTime={(newTime) =>
                         handleChangeField(
                           openingHour.id,
                           'childcareEndTime',
                           newTime,
-                        );
-                      }}
+                        )
+                      }
                       labelPosition={TimeSpanPickerLabelPositions.INLINE}
                       disabled={!childcareEnabled}
                     />
