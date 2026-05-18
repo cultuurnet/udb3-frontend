@@ -97,6 +97,7 @@ test('create an event with calendarType single and childcare hours', async ({
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
+  await page.waitForURL('**/edit');
 
   // Publish
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
@@ -138,6 +139,8 @@ test('create a Kamp of vakantie event with overnight stay', async ({
   await page.getByRole('button', { name: 'Kinderen 6-11' }).click();
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
+
+  await page.waitForURL('**/edit');
 
   // Publish
   await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
