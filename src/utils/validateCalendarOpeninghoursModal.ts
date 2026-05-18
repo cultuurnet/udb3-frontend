@@ -44,7 +44,9 @@ export const overlapsWithAnotherPeriod = (
 
 export const hasMissingDaysError = (periods: DeviatingPeriodData[]): boolean =>
   periods.some((period) =>
-    period.openingHours.some((openingHour) => openingHour.dayOfWeek.length === 0),
+    period.openingHours.some(
+      (openingHour) => openingHour.dayOfWeek.length === 0,
+    ),
   );
 
 export const hasDateRangeError = (
