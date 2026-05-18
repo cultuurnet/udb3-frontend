@@ -1,6 +1,6 @@
 import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -73,29 +73,25 @@ const CalendarOpeninghoursModal = ({
   );
   const eventEndDate = useCalendarSelector((state) => state.context.endDate);
 
-  const initialOpeningHours = useMemo<OpeningHoursRow[]>(
-    () =>
-      savedOpeningHours.length === 0
-        ? [
-            {
-              id: createOpeninghoursId(),
-              opens: '00:00',
-              closes: '23:59',
-              dayOfWeek: [],
-              childcareEnabled: false,
-              childcareStartTime: '',
-              childcareEndTime: '',
-            },
-          ]
-        : savedOpeningHours.map((hours) => ({
-            ...hours,
-            childcareEnabled: !!hours.childcareStartTime,
-            childcareStartTime: hours.childcareStartTime ?? '',
-            childcareEndTime: hours.childcareEndTime ?? '',
-          })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const initialOpeningHours: OpeningHoursRow[] =
+    savedOpeningHours.length === 0
+      ? [
+          {
+            id: createOpeninghoursId(),
+            opens: '00:00',
+            closes: '23:59',
+            dayOfWeek: [],
+            childcareEnabled: false,
+            childcareStartTime: '',
+            childcareEndTime: '',
+          },
+        ]
+      : savedOpeningHours.map((hours) => ({
+          ...hours,
+          childcareEnabled: !!hours.childcareStartTime,
+          childcareStartTime: hours.childcareStartTime ?? '',
+          childcareEndTime: hours.childcareEndTime ?? '',
+        }));
 
   const { control, getValues } = useForm<OpeningHoursFormData>({
     defaultValues: { openingHours: initialOpeningHours },
