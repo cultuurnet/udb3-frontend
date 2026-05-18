@@ -364,6 +364,11 @@ const CalendarOpeninghoursModal = ({
       confirmButtonDisabled={modalConfirmDisabled}
       onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSave}
       onClose={handleModalClose}
+      css={`
+        .modal-dialog {
+          max-width: 55rem;
+        }
+      `}
     >
       <Stack padding={4} display={isDeleteConfirm ? undefined : 'none'}>
         <Text>

@@ -232,6 +232,7 @@ const DeviatingPeriod = ({
           />
           <Input
             value={period.description[lang] ?? ''}
+            width="80%"
             onChange={(e) =>
               onChange({
                 ...period,
@@ -279,7 +280,7 @@ const DeviatingPeriod = ({
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline alignItems="flex-end" spacing={4.5}>
+                <Inline alignItems="flex-end" spacing={5}>
                   <Stack spacing={3}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.days')}
