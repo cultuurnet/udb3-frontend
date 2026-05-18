@@ -51,14 +51,11 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
   const modal = page.getByRole('dialog');
   await expect(modal).toBeVisible();
 
-  await modal
-    .getByRole('button', { name: calendar.opening_hours_modal.button_confirm })
-    .click();
   await expect(
-    modal.getByText(
-      calendar.opening_hours_modal.validation_messages.day_of_week.min,
-    ),
-  ).toBeVisible();
+    modal.getByRole('button', {
+      name: calendar.opening_hours_modal.button_confirm,
+    }),
+  ).toBeDisabled();
 
   await modal
     .getByRole('button', { name: calendar.opening_hours_modal.select_days })

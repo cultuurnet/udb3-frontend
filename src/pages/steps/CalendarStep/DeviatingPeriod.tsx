@@ -192,7 +192,7 @@ const DeviatingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainBlue} fontWeight="bold">
+        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
           {t('create.calendar.opening_hours_modal.deviating.select_period')}
         </Text>
         <Inline spacing={5} alignItems="flex-end">
@@ -232,6 +232,7 @@ const DeviatingPeriod = ({
           />
           <Input
             value={period.description[lang] ?? ''}
+            width="80%"
             onChange={(e) =>
               onChange({
                 ...period,
@@ -265,7 +266,7 @@ const DeviatingPeriod = ({
       </Stack>
 
       <Stack spacing={2} marginTop={3}>
-        <Text color={colors.udbMainBlue} fontWeight="bold">
+        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>
@@ -279,7 +280,7 @@ const DeviatingPeriod = ({
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline alignItems="flex-end" spacing={4.5}>
+                <Inline alignItems="flex-end" spacing={5}>
                   <Stack spacing={3}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.days')}

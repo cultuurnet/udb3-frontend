@@ -1,11 +1,9 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
@@ -26,6 +24,15 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
+  hasChildcareErrors,
+  hasDateRangeError,
+  hasMissingDaysError,
+  hasMissingOpeningHoursDaysError,
+  type OpeningHoursFormData,
+  type OpeningHoursRow,
+  overlapsWithAnotherPeriod,
+} from '../../../utils/validateCalendarOpeninghoursModal';
+import {
   CalendarState,
   createOpeninghoursId,
   useCalendarSelector,
@@ -34,38 +41,6 @@ import {
 import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
-
-const schema = yup
-  .object({
-    openingHours: yup.array().of(
-      yup
-        .object({
-          closes: yup.string().required(),
-          opens: yup.string().required(),
-          dayOfWeek: yup
-            .array()
-            .of(yup.mixed<DayOfWeek>().oneOf(Object.values(DaysOfWeek)))
-            .min(1),
-          childcareStartTime: yup.string(),
-          childcareEndTime: yup.string(),
-        })
-        .required(),
-    ),
-  } as const)
-  .required();
-
-type OpeningHoursRow = {
-  id: string;
-  opens: string;
-  closes: string;
-  dayOfWeek: DayOfWeek[];
-  childcareStartTime: string;
-  childcareEndTime: string;
-};
-
-type FormValues = {
-  openingHours: OpeningHoursRow[];
-};
 
 type CalendarOpeninghoursModalProps = {
   visible: boolean;
@@ -103,7 +78,7 @@ const CalendarOpeninghoursModal = ({
   );
   const eventEndDate = useCalendarSelector((state) => state.context.endDate);
 
-  const initialOpeningHours =
+  const initialOpeningHours: OpeningHoursRow[] =
     savedOpeningHours.length === 0
       ? [
           {
@@ -111,42 +86,25 @@ const CalendarOpeninghoursModal = ({
             opens: '00:00',
             closes: '23:59',
             dayOfWeek: [],
+            childcareEnabled: false,
             childcareStartTime: '',
             childcareEndTime: '',
           },
         ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
+          childcareEnabled: !!hours.childcareStartTime,
           childcareStartTime: hours.childcareStartTime ?? '',
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
 
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-    clearErrors,
-  } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+  const { control, getValues } = useForm<OpeningHoursFormData>({
     defaultValues: { openingHours: initialOpeningHours },
   });
 
   const { replace } = useFieldArray({ control, name: 'openingHours' });
   const openingHours = useWatch({ control, name: 'openingHours' });
 
-  const [childcareEnabledMap, setChildcareEnabledMap] = useState<
-    Record<string, boolean>
-  >(() =>
-    Object.fromEntries(
-      savedOpeningHours.map((openingHour) => [
-        openingHour.id,
-        !!openingHour.childcareStartTime,
-      ]),
-    ),
-  );
-  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
-    {},
-  );
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
   >(initialDeviatingPeriods ?? []);
@@ -167,17 +125,15 @@ const CalendarOpeninghoursModal = ({
     string | null
   >(null);
 
-  const markTouched = (key: string) =>
-    setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
-
   const handleAddOpeningHours = () =>
     replace([
-      ...openingHours,
+      ...getValues('openingHours'),
       {
         id: createOpeninghoursId(),
         opens: '00:00',
         closes: '23:59',
         dayOfWeek: [],
+        childcareEnabled: false,
         childcareStartTime: '',
         childcareEndTime: '',
       },
@@ -185,7 +141,9 @@ const CalendarOpeninghoursModal = ({
 
   const handleRemoveOpeningHours = (idToRemove: string) =>
     replace(
-      openingHours.filter((openingHour) => openingHour.id !== idToRemove),
+      getValues('openingHours').filter(
+        (openingHour) => openingHour.id !== idToRemove,
+      ),
     );
 
   const handleChangeField = (
@@ -194,16 +152,14 @@ const CalendarOpeninghoursModal = ({
     newTime: string,
   ) =>
     replace(
-      openingHours.map((openingHour) =>
-        openingHour.id === idToChange
-          ? { ...openingHour, [field]: newTime }
-          : openingHour,
+      getValues('openingHours').map((hour) =>
+        hour.id === idToChange ? { ...hour, [field]: newTime } : hour,
       ),
     );
 
   const handleToggleDaysOfWeek = (newDays: string[], idToChange: string) =>
     replace(
-      openingHours.map((openingHour) =>
+      getValues('openingHours').map((openingHour) =>
         openingHour.id === idToChange
           ? {
               ...openingHour,
@@ -218,39 +174,11 @@ const CalendarOpeninghoursModal = ({
     );
 
   const handleToggleChildcare = (idToChange: string, enabled: boolean) =>
-    setChildcareEnabledMap((prev) => ({ ...prev, [idToChange]: enabled }));
-
-  const getChildcareRowState = (
-    openingHour: (typeof openingHours)[number],
-    childcareEnabled: boolean,
-  ) => {
-    const startTouched =
-      touchedFields[`${openingHour.id}-start`] &&
-      !!openingHour.childcareStartTime;
-    const endTouched =
-      touchedFields[`${openingHour.id}-end`] && !!openingHour.childcareEndTime;
-    return {
-      timesMissing:
-        childcareEnabled &&
-        (!openingHour.childcareStartTime || !openingHour.childcareEndTime),
-      startError:
-        childcareEnabled &&
-        startTouched &&
-        openingHour.childcareStartTime >= openingHour.opens
-          ? t(
-              'create.calendar.days.childcare.validation_messages.start_too_late',
-            )
-          : undefined,
-      endError:
-        childcareEnabled &&
-        endTouched &&
-        openingHour.childcareEndTime <= openingHour.closes
-          ? t(
-              'create.calendar.days.childcare.validation_messages.end_too_early',
-            )
-          : undefined,
-    };
-  };
+    replace(
+      getValues('openingHours').map((hour) =>
+        hour.id === idToChange ? { ...hour, childcareEnabled: enabled } : hour,
+      ),
+    );
 
   const handleAddDeviatingPeriod = () => {
     const today = startOfDay(new Date());
@@ -258,8 +186,8 @@ const CalendarOpeninghoursModal = ({
       ...prev,
       {
         id: uniqueId('deviating-period-'),
-        startDate: today,
-        endDate: today,
+        startDate: eventStart ?? today,
+        endDate: eventStart ?? today,
         description: {},
         openingHours: [
           {
@@ -300,84 +228,38 @@ const CalendarOpeninghoursModal = ({
     }
   };
 
-  const handleSave = handleSubmit((data) => {
+  const handleSave = () => {
     onChangeAdjustedDays?.(deviatingPeriods);
     onChangeClosingPeriods?.(closingPeriods);
     handleChangeOpeningHours(
-      data.openingHours.map((hour) => ({
+      openingHours.map(({ childcareEnabled, ...hour }) => ({
         ...hour,
-        childcareStartTime: childcareEnabledMap[hour.id]
+        childcareStartTime: childcareEnabled
           ? hour.childcareStartTime
           : undefined,
-        childcareEndTime: childcareEnabledMap[hour.id]
-          ? hour.childcareEndTime
-          : undefined,
+        childcareEndTime: childcareEnabled ? hour.childcareEndTime : undefined,
       })),
     );
     onClose();
-  });
+  };
 
   const eventStart =
     isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
   const eventEnd =
     isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
 
-  const overlapsWithAnotherPeriod = (period: DeviatingPeriodData) =>
-    deviatingPeriods.some(
-      (other) =>
-        other.id !== period.id &&
-        period.startDate <= other.endDate &&
-        period.endDate >= other.startDate,
-    );
-
-  const overlapsWithAnotherClosingPeriod = (period: ClosingPeriodData) =>
-    closingPeriods.some(
-      (other) =>
-        other.id !== period.id &&
-        period.startDate <= other.endDate &&
-        period.endDate >= other.startDate,
-    );
-
-  const hasChildcareErrors = openingHours.some((hours) => {
-    if (!childcareEnabledMap[hours.id]) return false;
-
-    const timesMissing = !hours.childcareStartTime || !hours.childcareEndTime;
-
-    const startTooLate =
-      !!hours.childcareStartTime && hours.childcareStartTime >= hours.opens;
-    const endTooEarly =
-      !!hours.childcareEndTime && hours.childcareEndTime <= hours.closes;
-
-    return timesMissing || startTooLate || endTooEarly;
-  });
-
-  const hasMissingDaysError = deviatingPeriods.some((period) =>
-    period.openingHours.some(
-      (openingHour) => openingHour.dayOfWeek.length === 0,
-    ),
-  );
-
-  const hasDateRangeError = deviatingPeriods.some(
-    (period) =>
-      (eventStart && period.startDate < eventStart) ||
-      (eventEnd && period.endDate > eventEnd),
-  );
-
-  const hasOverlapError = deviatingPeriods.some(overlapsWithAnotherPeriod);
-
-  const hasClosingDateRangeError = closingPeriods.some(
-    (period) =>
-      (eventStart && period.startDate < eventStart) ||
-      (eventEnd && period.endDate > eventEnd),
-  );
-
-  const hasClosingOverlapError = closingPeriods.some(
-    overlapsWithAnotherClosingPeriod,
-  );
-
-  // Modal state
   const isDeleteConfirm =
     pendingDeleteDeviatingId !== null || pendingDeleteClosingId !== null;
+
+  const modalConfirmDisabled =
+    !isDeleteConfirm &&
+    (hasChildcareErrors(openingHours) ||
+      hasMissingOpeningHoursDaysError(openingHours) ||
+      hasMissingDaysError(deviatingPeriods) ||
+      hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
+      deviatingPeriods.some((period) =>
+        overlapsWithAnotherPeriod(period, deviatingPeriods),
+      ));
 
   const modalTitle = isDeleteConfirm
     ? pendingDeleteDeviatingId
@@ -395,21 +277,11 @@ const CalendarOpeninghoursModal = ({
     ? ButtonVariants.DANGER
     : ButtonVariants.PRIMARY;
 
-  const modalConfirmDisabled =
-    !isDeleteConfirm &&
-    (hasChildcareErrors ||
-      hasMissingDaysError ||
-      hasDateRangeError ||
-      hasOverlapError ||
-      hasClosingDateRangeError ||
-      hasClosingOverlapError);
-
   const handleModalClose = () => {
     if (isDeleteConfirm) {
       setPendingDeleteDeviatingId(null);
       setPendingDeleteClosingId(null);
     } else {
-      clearErrors();
       onClose();
     }
   };
@@ -428,7 +300,7 @@ const CalendarOpeninghoursModal = ({
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: min(960px, 95vw);
+          max-width: 55rem;
         }
       `}
     >
@@ -450,12 +322,27 @@ const CalendarOpeninghoursModal = ({
         alignItems="flex-start"
         display={isDeleteConfirm ? 'none' : undefined}
       >
-        {openingHours.map((openingHour, index) => {
-          const childcareEnabled = childcareEnabledMap[openingHour.id] ?? false;
-          const { timesMissing, startError, endError } = getChildcareRowState(
-            openingHour,
-            childcareEnabled,
-          );
+        {openingHours.map((openingHour) => {
+          const childcareEnabled = openingHour.childcareEnabled ?? false;
+          const timesMissing =
+            childcareEnabled &&
+            (!openingHour.childcareStartTime || !openingHour.childcareEndTime);
+          const startError =
+            childcareEnabled &&
+            !!openingHour.childcareStartTime &&
+            openingHour.childcareStartTime >= openingHour.opens
+              ? t(
+                  'create.calendar.days.childcare.validation_messages.start_too_late',
+                )
+              : undefined;
+          const endError =
+            childcareEnabled &&
+            !!openingHour.childcareEndTime &&
+            openingHour.childcareEndTime <= openingHour.closes
+              ? t(
+                  'create.calendar.days.childcare.validation_messages.end_too_early',
+                )
+              : undefined;
 
           return (
             <Stack key={openingHour.id} flex={1} spacing={4}>
@@ -538,22 +425,20 @@ const CalendarOpeninghoursModal = ({
                       endTime={openingHour.childcareEndTime}
                       startTimeLabel={t('create.calendar.days.childcare.from')}
                       endTimeLabel={t('create.calendar.days.childcare.to')}
-                      onChangeStartTime={(newTime) => {
-                        markTouched(`${openingHour.id}-start`);
+                      onChangeStartTime={(newTime) =>
                         handleChangeField(
                           openingHour.id,
                           'childcareStartTime',
                           newTime,
-                        );
-                      }}
-                      onChangeEndTime={(newTime) => {
-                        markTouched(`${openingHour.id}-end`);
+                        )
+                      }
+                      onChangeEndTime={(newTime) =>
                         handleChangeField(
                           openingHour.id,
                           'childcareEndTime',
                           newTime,
-                        );
-                      }}
+                        )
+                      }
                       labelPosition={TimeSpanPickerLabelPositions.INLINE}
                       disabled={!childcareEnabled}
                     />
@@ -567,13 +452,6 @@ const CalendarOpeninghoursModal = ({
                   />
                 )}
               </Inline>
-              {errors.openingHours?.[index]?.dayOfWeek?.type && (
-                <Text color="red">
-                  {t(
-                    'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
-                  )}
-                </Text>
-              )}
               {timesMissing && (
                 <Alert css="width: 100%;">
                   {t(
@@ -645,7 +523,7 @@ const CalendarOpeninghoursModal = ({
                     showChildcare={showChildcare}
                     hasOverlap={
                       period.id === lastEditedPeriodId &&
-                      overlapsWithAnotherPeriod(period)
+                      overlapsWithAnotherPeriod(period, deviatingPeriods)
                     }
                     eventStartDate={eventStart}
                     eventEndDate={eventEnd}
@@ -716,7 +594,7 @@ const CalendarOpeninghoursModal = ({
                     }
                     hasOverlap={
                       period.id === lastEditedClosingPeriodId &&
-                      overlapsWithAnotherClosingPeriod(period)
+                      overlapsWithAnotherPeriod(period, closingPeriods)
                     }
                     eventStartDate={eventStart}
                     eventEndDate={eventEnd}
