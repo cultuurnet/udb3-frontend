@@ -111,17 +111,15 @@ const CalendarOpeninghoursModal = ({
   const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(
     null,
   );
-  const [pendingDeleteDeviatingId, setPendingDeleteDeviatingId] = useState<
-    string | null
-  >(null);
+  const [pendingDelete, setPendingDelete] = useState<{
+    kind: 'deviating' | 'closing';
+    id: string;
+  } | null>(null);
 
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>(
     initialClosingPeriods ?? [],
   );
   const [lastEditedClosingPeriodId, setLastEditedClosingPeriodId] = useState<
-    string | null
-  >(null);
-  const [pendingDeleteClosingId, setPendingDeleteClosingId] = useState<
     string | null
   >(null);
 
@@ -215,17 +213,16 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleConfirmDelete = () => {
-    if (pendingDeleteDeviatingId) {
+    if (pendingDelete?.kind === 'deviating') {
       setDeviatingPeriods((prev) =>
-        prev.filter((period) => period.id !== pendingDeleteDeviatingId),
+        prev.filter((period) => period.id !== pendingDelete.id),
       );
-      setPendingDeleteDeviatingId(null);
-    } else if (pendingDeleteClosingId) {
+    } else if (pendingDelete?.kind === 'closing') {
       setClosingPeriods((prev) =>
-        prev.filter((period) => period.id !== pendingDeleteClosingId),
+        prev.filter((period) => period.id !== pendingDelete.id),
       );
-      setPendingDeleteClosingId(null);
     }
+    setPendingDelete(null);
   };
 
   const handleSave = () => {
@@ -248,8 +245,7 @@ const CalendarOpeninghoursModal = ({
   const eventEnd =
     isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
 
-  const isDeleteConfirm =
-    pendingDeleteDeviatingId !== null || pendingDeleteClosingId !== null;
+  const isDeleteConfirm = pendingDelete !== null;
 
   const modalConfirmDisabled =
     !isDeleteConfirm &&
@@ -262,13 +258,13 @@ const CalendarOpeninghoursModal = ({
       ));
 
   const modalTitle = isDeleteConfirm
-    ? pendingDeleteDeviatingId
+    ? pendingDelete?.kind === 'deviating'
       ? t('create.calendar.opening_hours_modal.deviating.delete_modal.title')
       : t('create.calendar.opening_hours_modal.closing.delete_modal.title')
     : t('create.calendar.opening_hours_modal.title');
 
   const modalConfirmTitle = isDeleteConfirm
-    ? pendingDeleteDeviatingId
+    ? pendingDelete?.kind === 'deviating'
       ? t('create.calendar.opening_hours_modal.deviating.delete_modal.confirm')
       : t('create.calendar.opening_hours_modal.closing.delete_modal.confirm')
     : t('create.calendar.opening_hours_modal.button_confirm');
@@ -279,8 +275,7 @@ const CalendarOpeninghoursModal = ({
 
   const handleModalClose = () => {
     if (isDeleteConfirm) {
-      setPendingDeleteDeviatingId(null);
-      setPendingDeleteClosingId(null);
+      setPendingDelete(null);
     } else {
       onClose();
     }
@@ -306,7 +301,7 @@ const CalendarOpeninghoursModal = ({
     >
       <Stack padding={4} display={isDeleteConfirm ? undefined : 'none'}>
         <Text>
-          {pendingDeleteDeviatingId
+          {pendingDelete?.kind === 'deviating'
             ? t(
                 'create.calendar.opening_hours_modal.deviating.delete_modal.body',
               )
@@ -491,7 +486,9 @@ const CalendarOpeninghoursModal = ({
                     ),
                   );
                 }}
-                onRemove={() => setPendingDeleteDeviatingId(period.id)}
+                onRemove={() =>
+                  setPendingDelete({ kind: 'deviating', id: period.id })
+                }
                 onQuickLinkExpand={(expanded) =>
                   setDeviatingPeriods((prev) =>
                     prev.flatMap((existing) =>
@@ -536,7 +533,9 @@ const CalendarOpeninghoursModal = ({
                     ),
                   );
                 }}
-                onRemove={() => setPendingDeleteClosingId(period.id)}
+                onRemove={() =>
+                  setPendingDelete({ kind: 'closing', id: period.id })
+                }
                 onQuickLinkExpand={(expanded) =>
                   setClosingPeriods((prev) =>
                     prev.flatMap((existing) =>
