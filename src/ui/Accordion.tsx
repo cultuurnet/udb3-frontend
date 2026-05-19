@@ -3,6 +3,7 @@ import { Accordion as BootstrapAccordion } from 'react-bootstrap';
 
 import { Stack, type StackProps } from './Stack';
 import { colors } from './theme';
+import { Title } from './Title';
 
 type ItemProps = {
   title: string;
@@ -23,7 +24,7 @@ function AccordionItem({
   return (
     <BootstrapAccordion.Item eventKey={eventKey}>
       <BootstrapAccordion.Header>
-        <strong>{title}</strong>
+        <Title size={3}>{title}</Title>
       </BootstrapAccordion.Header>
       <BootstrapAccordion.Body>
         <Stack {...stackProps}>{children}</Stack>
