@@ -51,14 +51,11 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
   const modal = page.getByRole('dialog');
   await expect(modal).toBeVisible();
 
-  await modal
-    .getByRole('button', { name: calendar.opening_hours_modal.button_confirm })
-    .click();
   await expect(
-    modal.getByText(
-      calendar.opening_hours_modal.validation_messages.day_of_week.min,
-    ),
-  ).toBeVisible();
+    modal.getByRole('button', {
+      name: calendar.opening_hours_modal.button_confirm,
+    }),
+  ).toBeDisabled();
 
   await modal
     .getByRole('button', { name: calendar.opening_hours_modal.select_days })
@@ -68,10 +65,12 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
     .click();
 
   await modal
-    .locator('#openinghours-row-timespan-openinghours-2-time-span-picker-start')
+    .getByLabel(calendar.opening_hours_modal.start_time, { exact: true })
+    .first()
     .fill('09:00');
   await modal
-    .locator('#openinghours-row-timespan-openinghours-2-time-span-picker-end')
+    .getByLabel(calendar.opening_hours_modal.end_time, { exact: true })
+    .first()
     .fill('17:00');
 
   await modal.getByLabel(calendar.days.childcare.label).click();
@@ -81,19 +80,16 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
     ),
   ).toBeVisible();
   await modal
-    .locator(
-      'input#openinghours-childcare-timespan-openinghours-2-time-span-picker-start',
-    )
+    .getByLabel(calendar.days.childcare.from, { exact: true })
+    .nth(1)
     .fill('08:00');
   await modal
-    .locator(
-      'input#openinghours-childcare-timespan-openinghours-2-time-span-picker-end',
-    )
+    .getByLabel(calendar.days.childcare.to, { exact: true })
+    .nth(1)
     .fill('18:00');
   await modal
-    .locator(
-      'input#openinghours-childcare-timespan-openinghours-2-time-span-picker-end',
-    )
+    .getByLabel(calendar.days.childcare.to, { exact: true })
+    .nth(1)
     .blur();
   await expect(
     modal.getByText(
@@ -108,9 +104,10 @@ test('add opening hours to a permanent event', async ({ baseURL, page }) => {
     })
     .click();
   await expect(
-    modal.locator(
-      '#openinghours-row-timespan-openinghours-3-time-span-picker-start',
-    ),
+    modal
+      .getByLabel(calendar.opening_hours_modal.start_time, { exact: true })
+      .and(modal.locator(':not([disabled])'))
+      .nth(1),
   ).toBeVisible();
 
   await modal

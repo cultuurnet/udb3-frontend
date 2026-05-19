@@ -180,12 +180,49 @@
         "button_add_hours": "Weitere Stunden hinzufügen",
         "button_cancel": "Absagen",
         "button_confirm": "Speichern",
-        "end_time": "Bis um",
-        "start_time": "Aus",
+        "end_time": "bis",
+        "start_time": "von",
         "title": "Öffnungszeiten",
         "days": "Tage",
         "hours": "Stunden",
         "select_days": "Tag(e) auswählen",
+        "deviating": {
+          "title": "Abweichende Stunden hinzufügen",
+          "period_title": "Abweichende Periode {{index}}",
+          "remove_period": "Periode entfernen",
+          "select_period": "Zeitraum auswählen",
+          "fill_hours": "Stunden für diesen Zeitraum eingeben",
+          "add_period": "Abweichende Periode hinzufügen",
+          "description_placeholder": "Beschreibung",
+          "errors": {
+            "overlap": "Abweichende Perioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_before_event": "Die Periode mit abweichenden Stunden kann nicht vor dem Startdatum der Aktivität beginnen.",
+            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden."
+          },
+          "delete_modal": {
+            "title": "Abweichende Periode löschen",
+            "body": "Sind Sie sicher, dass Sie diese Periode mit abweichenden Stunden löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Endgültig löschen"
+          }
+        },
+        "closing": {
+          "title": "Schließtage oder -perioden hinzufügen",
+          "period_title": "Schließperiode {{index}}",
+          "remove_period": "Periode entfernen",
+          "select_period": "Zeitraum auswählen",
+          "add_period": "Schließperiode hinzufügen",
+          "description_placeholder": "Beschreibung",
+          "errors": {
+            "overlap": "Schließperioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_before_event": "Die Schließperiode kann nicht vor dem Startdatum der Aktivität beginnen.",
+            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden."
+          },
+          "delete_modal": {
+            "title": "Schließperiode löschen",
+            "body": "Sind Sie sicher, dass Sie diese Schließperiode löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Endgültig löschen"
+          }
+        },
         "validation_messages": {
           "day_of_week": {
             "min": "Sie müssen mindestens 1 Wochentag angeben."

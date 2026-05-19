@@ -310,6 +310,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       : {};
 
     const propsToApply = {
+      spacing: iconName ? 2 : undefined,
       ...bootstrapProps,
       disabled,
       onClick,

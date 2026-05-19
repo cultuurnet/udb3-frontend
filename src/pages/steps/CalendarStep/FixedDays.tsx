@@ -20,6 +20,8 @@ import {
 } from '../machines/calendarMachine';
 import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
 import { CalendarOpeninghoursModalLegacy } from './CalendarOpeninghoursModalLegacy';
+import type { ClosingPeriodData } from './ClosingPeriod';
+import type { DeviatingPeriodData } from './DeviatingPeriod';
 
 const FixedDayOptions = {
   PERMANENT: 'permanent',
@@ -33,6 +35,10 @@ type FixedDaysProps = {
   onChangeEndDate: (date: Date | null) => void;
   onChangeOpeningHours: (newOpeningHours: OpeningHours[]) => void;
   onChangeCalendarState: (newState: CalendarState) => void;
+  onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
+  initialAdjustedDays?: DeviatingPeriodData[];
+  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  initialClosingPeriods?: ClosingPeriodData[];
 };
 
 export const FixedDays = ({
@@ -41,20 +47,13 @@ export const FixedDays = ({
   onChangeStartDate,
   onChangeEndDate,
   onChangeCalendarState,
+  onChangeAdjustedDays,
+  initialAdjustedDays,
+  onChangeClosingPeriods,
+  initialClosingPeriods,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
-
-  const options = [
-    {
-      label: t('create.calendar.fixed_days.with_start_and_end_date'),
-      value: FixedDayOptions.PERIODIC,
-    },
-    {
-      label: t('create.calendar.fixed_days.permanent'),
-      value: FixedDayOptions.PERMANENT,
-    },
-  ];
 
   const [
     isCalendarOpeninghoursModalVisible,
@@ -186,17 +185,22 @@ export const FixedDays = ({
         />
         {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
       </Stack>
-      {isBoaEnabled ? (
-        <CalendarOpeninghoursModal
-          visible={isCalendarOpeninghoursModalVisible}
-          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
-          onChangeCalendarState={onChangeCalendarState}
-        />
-      ) : (
+      {!isBoaEnabled && (
         <CalendarOpeninghoursModalLegacy
           visible={isCalendarOpeninghoursModalVisible}
           onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
           onChangeCalendarState={onChangeCalendarState}
+        />
+      )}
+      {isBoaEnabled && isCalendarOpeninghoursModalVisible && (
+        <CalendarOpeninghoursModal
+          visible={isCalendarOpeninghoursModalVisible}
+          onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
+          onChangeCalendarState={onChangeCalendarState}
+          onChangeAdjustedDays={onChangeAdjustedDays}
+          initialDeviatingPeriods={initialAdjustedDays}
+          onChangeClosingPeriods={onChangeClosingPeriods}
+          initialClosingPeriods={initialClosingPeriods}
         />
       )}
     </Stack>
