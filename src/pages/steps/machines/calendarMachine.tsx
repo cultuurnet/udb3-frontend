@@ -53,7 +53,11 @@ const getEndDate = () => {
   return today.toString();
 };
 
-export type OpeningHoursWithId = OpeningHours & { id: string };
+export type OpeningHoursWithId = OpeningHours & {
+  id: string;
+  childcareStartTime?: string;
+  childcareEndTime?: string;
+};
 
 export const createDayId = () => uniqueId('day-');
 export const createOpeninghoursId = () => uniqueId('openinghours-');

@@ -179,13 +179,52 @@
       },
       "opening_hours_modal": {
         "button_add": "Meer openingstijden toevoegen",
+        "button_add_hours": "Meer uren toevoegen",
         "button_cancel": "Annuleren",
         "button_confirm": "Opslaan",
-        "end_time": "Tot",
-        "start_time": "Van",
+        "end_time": "tot",
+        "start_time": "van",
         "title": "Openingsuren",
         "days": "Dagen",
+        "hours": "Uren",
         "select_days": "Selecteer dag(en)",
+        "deviating": {
+          "title": "Voeg afwijkende uren toe",
+          "period_title": "Afwijkende periode {{index}}",
+          "remove_period": "Verwijder periode",
+          "select_period": "Selecteer de periode",
+          "fill_hours": "Vul de uren in voor deze periode",
+          "add_period": "Afwijkende periode toevoegen",
+          "description_placeholder": "Beschrijving",
+          "errors": {
+            "overlap": "Afwijkende periodes mogen niet overlappen. Selecteer een andere startdatum voor deze periode.",
+            "start_before_event": "De periode met afwijkende uren kan niet beginnen voor de startdatum van de activiteit.",
+            "end_after_event": "De periode met afwijkende uren kan niet eindigen na de einddatum van de activiteit."
+          },
+          "delete_modal": {
+            "title": "Periode met afwijkende uren verwijderen",
+            "body": "Ben je zeker dat je deze periode met afwijkende uren wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+            "confirm": "Definitief verwijderen"
+          }
+        },
+        "closing": {
+          "title": "Voeg sluitingsdagen of -periodes toe",
+          "period_title": "Sluitingsperiode {{index}}",
+          "remove_period": "Verwijder periode",
+          "select_period": "Selecteer de periode",
+          "add_period": "Sluitingsperiode toevoegen",
+          "description_placeholder": "Beschrijving",
+          "errors": {
+            "overlap": "Sluitingsperiodes mogen niet overlappen. Selecteer een andere startdatum voor deze periode.",
+            "start_before_event": "De sluitingsperiode kan niet beginnen voor de startdatum van de activiteit.",
+            "end_after_event": "De sluitingsperiode kan niet eindigen na de einddatum van de activiteit."
+          },
+          "delete_modal": {
+            "title": "Sluitingsperiode verwijderen",
+            "body": "Ben je zeker dat je deze sluitingsperiode wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+            "confirm": "Definitief verwijderen"
+          }
+        },
         "validation_messages": {
           "day_of_week": {
             "min": "Je moet minstens 1 dag van de week aanduiden."
