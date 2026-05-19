@@ -1,3 +1,4 @@
+import { isBefore, startOfDay } from 'date-fns';
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +9,10 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { DatePicker } from '@/ui/DatePicker';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Label, LabelVariants } from '@/ui/Label';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -42,6 +45,12 @@ const AgeRangeStep = ({
   const [customMinAgeRange, setCustomMinAgeRange] = useState('');
   const [customMaxAgeRange, setCustomMaxAgeRange] = useState('');
   const [customAgeRangeError, setCustomAgeRangeError] = useState('');
+  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(
+    () => new Date(),
+  );
+  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(
+    () => new Date(),
+  );
 
   const isCustomAgeRangeSelected = (typicalAgeRange: string): boolean => {
     return !Object.keys(AgeRanges).some(
@@ -178,7 +187,53 @@ const AgeRangeStep = ({
                   `}
                 />
               )}
-              {inputMode === AgeInputModes.DATE_OF_BIRTH ? null : (
+              {inputMode === AgeInputModes.DATE_OF_BIRTH ? (
+                <Stack spacing={3} maxWidth="40rem">
+                  <Text fontWeight="bold">
+                    {t('create.name_and_age.age.birth_date.title')}
+                  </Text>
+                  <Inline spacing={3} alignItems="flex-end">
+                    <Stack spacing={2}>
+                      <Label
+                        variant={LabelVariants.BOLD}
+                        htmlFor="age-birth-date-min"
+                      >
+                        {t('create.name_and_age.age.birth_date.from')}
+                      </Label>
+                      <DatePicker
+                        id="age-birth-date-min"
+                        selected={minBirthDate}
+                        onChange={(date) => setMinBirthDate(date)}
+                      />
+                    </Stack>
+                    <Stack spacing={2}>
+                      <Label
+                        variant={LabelVariants.BOLD}
+                        htmlFor="age-birth-date-max"
+                      >
+                        {t('create.name_and_age.age.birth_date.to')}
+                      </Label>
+                      <DatePicker
+                        id="age-birth-date-max"
+                        selected={maxBirthDate}
+                        onChange={(date) => setMaxBirthDate(date)}
+                      />
+                    </Stack>
+                  </Inline>
+                  {minBirthDate &&
+                    maxBirthDate &&
+                    isBefore(
+                      startOfDay(maxBirthDate),
+                      startOfDay(minBirthDate),
+                    ) && (
+                      <Text color="red">
+                        {t(
+                          'create.name_and_age.age.birth_date.error_max_before_min',
+                        )}
+                      </Text>
+                    )}
+                </Stack>
+              ) : (
                 <>
                   <Inline
                     spacing={3}

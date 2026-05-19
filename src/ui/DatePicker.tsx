@@ -77,7 +77,7 @@ const CalendarWithQuickLinks = ({
 
 const DatePicker = ({
   id,
-  selected = new Date(),
+  selected,
   onChange,
   onCalendarClose,
   onMonthChange,
