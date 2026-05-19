@@ -74,7 +74,7 @@ const ClosingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainBlue} fontWeight="bold">
+        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
         <Inline spacing={5} alignItems="flex-end">
