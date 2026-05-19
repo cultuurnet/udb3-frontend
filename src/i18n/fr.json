@@ -259,6 +259,10 @@
       },
       "age": {
         "title": "Adapté à",
+        "input_mode": {
+          "age": "Saisir comme âge",
+          "date_of_birth": "Saisir comme date de naissance"
+        },
         "all": "De tous âges",
         "toddlers": "Tout-petits",
         "preschoolers": "Jeunes enfants",
