@@ -12,20 +12,22 @@ const meta: Meta<typeof ToggleGroup> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const ToggleGroupExample = () => {
+  const [value, setValue] = useState('age');
+  return (
+    <ToggleGroup
+      name="age-input-mode"
+      value={value}
+      onChange={setValue}
+      options={[
+        { value: 'age', label: 'Ingeven als leeftijd' },
+        { value: 'date_of_birth', label: 'Ingeven als geboortedatum' },
+      ]}
+      maxWidth="40rem"
+    />
+  );
+};
+
 export const Default: Story = {
-  render: () => {
-    const [value, setValue] = useState('age');
-    return (
-      <ToggleGroup
-        name="age-input-mode"
-        value={value}
-        onChange={setValue}
-        options={[
-          { value: 'age', label: 'Ingeven als leeftijd' },
-          { value: 'date_of_birth', label: 'Ingeven als geboortedatum' },
-        ]}
-        maxWidth="40rem"
-      />
-    );
-  },
+  render: () => <ToggleGroupExample />,
 };
