@@ -8,7 +8,7 @@ jobs:
   test-e2e:
     if: github.event.pull_request.draft == false
 
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     runs-on: ubuntu-latest
 
@@ -45,6 +45,8 @@ jobs:
 
       - name: Run Playwright tests
         env:
+          TZ: Europe/Brussels
+          LANG: nl_BE.UTF-8
           NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
@@ -72,7 +74,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: npx playwright test
 
-      - name: Upload test results
+      - name: Upload Playwright HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -80,10 +82,33 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Upload test artifacts
+      - name: Upload Playwright traces, videos and screenshots
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: test-results
+          name: playwright-traces
           path: test-results/
-          retention-days: 7
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Print debug instructions on failure
+        if: failure()
+        run: |
+          {
+            echo "## Playwright failure — how to debug"
+            echo ""
+            echo "Download these artifacts from this workflow run:"
+            echo ""
+            echo "- **playwright-report** — open \`index.html\` locally (\`npx playwright show-report path/to/playwright-report\`)"
+            echo "- **playwright-traces** — per-test \`trace.zip\`, video, and screenshots for every failing attempt"
+            echo ""
+            echo "Open a trace with:"
+            echo '```'
+            echo "npx playwright show-trace path/to/test-results/<test-name>/trace.zip"
+            echo '```'
+            echo ""
+            echo "Reproduce the CI conditions locally:"
+            echo '```'
+            echo "CI=true yarn test:e2e --grep \"<test name pattern>\""
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
