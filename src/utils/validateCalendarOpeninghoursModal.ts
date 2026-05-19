@@ -31,9 +31,11 @@ export const hasMissingOpeningHoursDaysError = (
   openingHours: OpeningHoursRow[],
 ): boolean => openingHours.some((hour) => hour.dayOfWeek.length === 0);
 
+type PeriodWithDateRange = { id: string; startDate: Date; endDate: Date };
+
 export const overlapsWithAnotherPeriod = (
-  period: DeviatingPeriodData,
-  periods: DeviatingPeriodData[],
+  period: PeriodWithDateRange,
+  periods: PeriodWithDateRange[],
 ): boolean =>
   periods.some(
     (other) =>

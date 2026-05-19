@@ -20,6 +20,7 @@ import {
 } from '../machines/calendarMachine';
 import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
 import { CalendarOpeninghoursModalLegacy } from './CalendarOpeninghoursModalLegacy';
+import type { ClosingPeriodData } from './ClosingPeriod';
 import type { DeviatingPeriodData } from './DeviatingPeriod';
 
 const FixedDayOptions = {
@@ -36,6 +37,8 @@ type FixedDaysProps = {
   onChangeCalendarState: (newState: CalendarState) => void;
   onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
   initialAdjustedDays?: DeviatingPeriodData[];
+  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  initialClosingPeriods?: ClosingPeriodData[];
 };
 
 export const FixedDays = ({
@@ -46,6 +49,8 @@ export const FixedDays = ({
   onChangeCalendarState,
   onChangeAdjustedDays,
   initialAdjustedDays,
+  onChangeClosingPeriods,
+  initialClosingPeriods,
 }: FixedDaysProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
@@ -194,6 +199,8 @@ export const FixedDays = ({
           onChangeCalendarState={onChangeCalendarState}
           onChangeAdjustedDays={onChangeAdjustedDays}
           initialDeviatingPeriods={initialAdjustedDays}
+          onChangeClosingPeriods={onChangeClosingPeriods}
+          initialClosingPeriods={initialClosingPeriods}
         />
       )}
     </Stack>

@@ -123,6 +123,12 @@ type OpeningHoursAdjustedDay = {
   openingHours: OpeningHours[];
 };
 
+type OpeningHoursClosedDay = {
+  startDate: string;
+  endDate: string;
+  description?: Partial<Record<Values<typeof SupportedLanguages>, string>>;
+};
+
 type CalendarSummary = Record<
   Values<typeof SupportedLanguages>,
   {
@@ -153,6 +159,7 @@ type BaseOffer = {
   endDate?: string;
   openingHours: OpeningHours[];
   openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
+  openingHoursClosedDays?: OpeningHoursClosedDay[];
   subEvent: SubEvent[];
   performer: [{ performer: string }];
   sameAs: string[];
@@ -263,6 +270,7 @@ export type {
   Offer,
   OpeningHours,
   OpeningHoursAdjustedDay,
+  OpeningHoursClosedDay,
   Status,
   StatusReason,
   StatusType,

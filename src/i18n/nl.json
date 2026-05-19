@@ -207,6 +207,24 @@
             "confirm": "Definitief verwijderen"
           }
         },
+        "closing": {
+          "title": "Voeg sluitingsdagen of -periodes toe",
+          "period_title": "Sluitingsperiode {{index}}",
+          "remove_period": "Verwijder periode",
+          "select_period": "Selecteer de periode",
+          "add_period": "Sluitingsperiode toevoegen",
+          "description_placeholder": "Beschrijving",
+          "errors": {
+            "overlap": "Sluitingsperiodes mogen niet overlappen. Selecteer een andere startdatum voor deze periode.",
+            "start_before_event": "De sluitingsperiode kan niet beginnen voor de startdatum van de activiteit.",
+            "end_after_event": "De sluitingsperiode kan niet eindigen na de einddatum van de activiteit."
+          },
+          "delete_modal": {
+            "title": "Sluitingsperiode verwijderen",
+            "body": "Ben je zeker dat je deze sluitingsperiode wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+            "confirm": "Definitief verwijderen"
+          }
+        },
         "validation_messages": {
           "day_of_week": {
             "min": "Je moet minstens 1 dag van de week aanduiden."
