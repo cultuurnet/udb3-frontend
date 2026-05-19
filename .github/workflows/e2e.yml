@@ -45,6 +45,8 @@ jobs:
 
       - name: Run Playwright tests
         env:
+          TZ: Europe/Brussels
+          LANG: nl_BE.UTF-8
           NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
