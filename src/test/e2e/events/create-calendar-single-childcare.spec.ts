@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+test.describe.configure({ mode: 'serial' });
+
+const childcareStartInput = 'input[id$="-childcare-time-span-picker-start"]';
+const childcareEndInput = 'input[id$="-childcare-time-span-picker-end"]';
+
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     {
@@ -61,15 +66,10 @@ test('create an event with calendarType single and childcare hours', async ({
   ).toBeHidden();
 
   // 5. Childcare hours
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
-    .fill(dummyEvent.hours.childcareStart);
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
-    .fill(dummyEvent.hours.childcareEnd);
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
-    .blur();
+  await expect(page.locator(childcareStartInput)).toBeVisible();
+  await page.locator(childcareStartInput).fill(dummyEvent.hours.childcareStart);
+  await page.locator(childcareEndInput).fill(dummyEvent.hours.childcareEnd);
+  await page.locator(childcareEndInput).blur();
 
   // Once both times are set the info alert disappears
   await expect(
@@ -95,6 +95,18 @@ test('create an event with calendarType single and childcare hours', async ({
   await page.getByLabel('Naam van de activiteit').click();
   await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
+
+  await page.getByRole('button', { name: 'Opslaan' }).click();
+  await page.waitForURL('**/edit');
+
+  // Publish — wait for the button to be ready before clicking
+  const publishButton = page.getByRole('button', {
+    name: 'Publiceren',
+    exact: true,
+  });
+  await expect(publishButton).toBeEnabled();
+  await publishButton.click();
+  await expect(publishButton).toBeHidden();
 });
 
 test('create a Kamp of vakantie event with overnight stay', async ({
@@ -129,10 +141,21 @@ test('create a Kamp of vakantie event with overnight stay', async ({
 
   // 5. Name and Age
   await page.getByLabel('Naam van de activiteit').click();
-  await page
-    .getByLabel('Naam van de activiteit')
-    .fill('E2E test event with overnight stay');
+  await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Kinderen 6-11' }).click();
+
+  await page.getByRole('button', { name: 'Opslaan' }).click();
+
+  await page.waitForURL('**/edit');
+
+  // Publish — wait for the button to be ready before clicking
+  const publishButton = page.getByRole('button', {
+    name: 'Publiceren',
+    exact: true,
+  });
+  await expect(publishButton).toBeEnabled();
+  await publishButton.click();
+  await expect(publishButton).toBeHidden();
 });
 
 test('does not show Overnachting column for a non-Kamp event type', async ({
@@ -181,12 +204,9 @@ test('shows childcare validation errors when times overlap activity hours', asyn
 
   // 5. Touch the start input with an invalid value — start error appears,
   //    end error stays hidden because it has not been touched yet.
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
-    .fill('11:00');
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-start')
-    .blur();
+  await expect(page.locator(childcareStartInput)).toBeVisible();
+  await page.locator(childcareStartInput).fill('11:00');
+  await page.locator(childcareStartInput).blur();
   await expect(
     page.getByText(
       'Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.',
@@ -200,12 +220,8 @@ test('shows childcare validation errors when times overlap activity hours', asyn
 
   // 6. Touch the end input with an invalid value — end error now visible too,
   //    info alert disappears once both times are set.
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
-    .fill('15:00');
-  await page
-    .locator('input#calendar-step-day-day-1-childcare-time-span-picker-end')
-    .blur();
+  await page.locator(childcareEndInput).fill('15:00');
+  await page.locator(childcareEndInput).blur();
   await expect(
     page.getByText(
       'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
