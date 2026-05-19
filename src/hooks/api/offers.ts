@@ -254,6 +254,28 @@ const useChangeOfferTypicalAgeRangeMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const changeOfferBirthdateRange = async ({
+  headers,
+  eventId,
+  birthdateRange,
+  scope,
+}) =>
+  fetchFromApi({
+    path: `/${scope}/${eventId}/birthdateRange`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(birthdateRange),
+    },
+  });
+
+const useChangeOfferBirthdateRangeMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeOfferBirthdateRange,
+    mutationKey: 'offers-change-birthdate-range',
+    ...configuration,
+  });
+
 const changeOfferCalendar = async ({
   headers,
   id,
@@ -674,6 +696,7 @@ export {
   useAddOfferPriceInfoMutation,
   useAddOfferVideoMutation,
   useBulkUpdateOfferLabelsMutation,
+  useChangeOfferBirthdateRangeMutation,
   useChangeOfferCalendarMutation,
   useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,

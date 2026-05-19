@@ -12,6 +12,7 @@ import {
   useGetEducationLevelsQuery,
 } from '@/hooks/api/cultuurkuur';
 import {
+  useChangeOfferBirthdateRangeMutation,
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
@@ -55,8 +56,12 @@ const useEditNameAndAgeRange = ({
     onSuccess: () => onSuccess('basic_info'),
   });
 
+  const changeBirthdateRangeMutation = useChangeOfferBirthdateRangeMutation({
+    onSuccess: () => onSuccess('basic_info'),
+  });
+
   return async ({ nameAndAgeRange, location }: FormDataUnion) => {
-    const { name, typicalAgeRange } = nameAndAgeRange;
+    const { name, typicalAgeRange, birthdateRange } = nameAndAgeRange;
 
     if (scope === OfferTypes.PLACES) {
       await checkDuplicatePlace({ headers, offerId, location, name });
@@ -66,6 +71,14 @@ const useEditNameAndAgeRange = ({
       await changeTypicalAgeRangeMutation.mutateAsync({
         eventId: offerId,
         typicalAgeRange,
+        scope,
+      });
+    }
+
+    if (birthdateRange?.from && birthdateRange?.to) {
+      await changeBirthdateRangeMutation.mutateAsync({
+        eventId: offerId,
+        birthdateRange,
         scope,
       });
     }
@@ -217,6 +230,14 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
       typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
+      birthdateRange: yup
+        .object()
+        .shape({
+          from: yup.string().required(),
+          to: yup.string().required(),
+        })
+        .nullable()
+        .notRequired(),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');

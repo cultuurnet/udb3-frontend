@@ -1,4 +1,4 @@
-import { isBefore, startOfDay } from 'date-fns';
+import { format, isBefore, parse, startOfDay } from 'date-fns';
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -90,6 +90,44 @@ const AgeRangeStep = ({
     }, [field.value?.typicalAgeRange]);
   };
 
+  const useInitializeBirthdateRangeFields = (field: Field) => {
+    useEffect(() => {
+      const birthdateRange = field.value?.birthdateRange;
+      if (!birthdateRange?.from || !birthdateRange?.to) return;
+
+      setMinBirthDate(parse(birthdateRange.from, 'yyyy-MM-dd', new Date()));
+      setMaxBirthDate(parse(birthdateRange.to, 'yyyy-MM-dd', new Date()));
+      setInputMode(AgeInputModes.DATE_OF_BIRTH);
+    }, [field.value?.birthdateRange]);
+  };
+
+  const commitBirthdateRange = (
+    field: Field,
+    newMin: Date | undefined,
+    newMax: Date | undefined,
+  ) => {
+    setMinBirthDate(newMin);
+    setMaxBirthDate(newMax);
+
+    const isValid =
+      !!newMin &&
+      !!newMax &&
+      !isBefore(startOfDay(newMax), startOfDay(newMin));
+
+    const nextValue = {
+      ...field.value,
+      birthdateRange: isValid
+        ? {
+            from: format(newMin!, 'yyyy-MM-dd'),
+            to: format(newMax!, 'yyyy-MM-dd'),
+          }
+        : undefined,
+    };
+
+    field.onChange(nextValue);
+    onChange(nextValue);
+  };
+
   const getSelectedAgeRange = (typicalAgeRange: string): string => {
     const foundAgeRange = Object.keys(AgeRanges).find((key: string) => {
       return (
@@ -160,6 +198,8 @@ const AgeRangeStep = ({
         render={({ field }) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
           useInitializeAgeRangeFields(field);
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          useInitializeBirthdateRangeFields(field);
 
           const selectedAgeRange = getSelectedAgeRange(
             field.value?.typicalAgeRange,
@@ -174,9 +214,22 @@ const AgeRangeStep = ({
                 <ToggleGroup
                   name="age-input-mode"
                   value={inputMode}
-                  onChange={(newMode: string) =>
-                    setInputMode(newMode as AgeInputMode)
-                  }
+                  onChange={(newMode: string) => {
+                    const next = newMode as AgeInputMode;
+                    setInputMode(next);
+                    if (next === AgeInputModes.DATE_OF_BIRTH) {
+                      commitBirthdateRange(field, minBirthDate, maxBirthDate);
+                    } else {
+                      field.onChange({
+                        ...field.value,
+                        birthdateRange: undefined,
+                      });
+                      onChange({
+                        ...field.value,
+                        birthdateRange: undefined,
+                      });
+                    }
+                  }}
                   options={Object.values(AgeInputModes).map((mode) => ({
                     value: mode,
                     label: t(`create.name_and_age.age.input_mode.${mode}`),
@@ -203,7 +256,9 @@ const AgeRangeStep = ({
                       <DatePicker
                         id="age-birth-date-min"
                         selected={minBirthDate}
-                        onChange={(date) => setMinBirthDate(date)}
+                        onChange={(date) =>
+                          commitBirthdateRange(field, date, maxBirthDate)
+                        }
                       />
                     </Stack>
                     <Stack spacing={2}>
@@ -216,7 +271,9 @@ const AgeRangeStep = ({
                       <DatePicker
                         id="age-birth-date-max"
                         selected={maxBirthDate}
-                        onChange={(date) => setMaxBirthDate(date)}
+                        onChange={(date) =>
+                          commitBirthdateRange(field, minBirthDate, date)
+                        }
                       />
                     </Stack>
                   </Inline>

@@ -120,6 +120,11 @@ type CalendarSummary = Record<
   }
 >;
 
+type BirthdateRange = {
+  from: string;
+  to: string;
+};
+
 type BaseOffer = {
   '@id': string;
   name: Partial<Record<Values<typeof SupportedLanguages>, string>>;
@@ -155,6 +160,7 @@ type BaseOffer = {
   videos?: VideoObject[];
   image?: string;
   typicalAgeRange: string;
+  birthdateRange?: BirthdateRange;
   bookingInfo?: BookingInfo;
   priceInfo?: PriceInfo[];
   regions: string[];
@@ -244,6 +250,7 @@ const hasMovieLabel = (offer: Offer): boolean => {
 
 export type {
   BaseOffer,
+  BirthdateRange,
   BookingAvailability,
   DayOfWeek,
   Label,
