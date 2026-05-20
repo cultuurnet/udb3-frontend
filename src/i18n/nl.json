@@ -269,6 +269,10 @@
       },
       "age": {
         "title": "Geschikt voor",
+        "input_mode": {
+          "age": "Ingeven als leeftijd",
+          "date_of_birth": "Ingeven als geboortedatum"
+        },
         "all": "Alle leeftijden",
         "toddlers": "Peuters",
         "preschoolers": "Kleuters",
