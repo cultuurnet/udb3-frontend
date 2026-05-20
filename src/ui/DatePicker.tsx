@@ -10,6 +10,8 @@ import ReactDatePicker, {
 } from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 
+import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+
 import type { BoxProps } from './Box';
 import { Box } from './Box';
 import { Button, ButtonVariants } from './Button';
@@ -17,7 +19,7 @@ import { Icons } from './Icon';
 import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
 import { Stack } from './Stack';
-import { colors, getValueFromTheme } from './theme';
+import { Breakpoints, colors, getValueFromTheme } from './theme';
 
 setDefaultLocale('nl');
 registerLocale('nl', nl);
@@ -60,6 +62,7 @@ const CalendarWithQuickLinks = ({
 }: CalendarWithQuickLinksProps) => (
   <Inline
     backgroundColor={colors.white}
+    stackOn={Breakpoints.M}
     css={`
       border-radius: 0.5rem;
       box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
@@ -96,6 +99,7 @@ const DatePicker = ({
 }: Props) => {
   const { i18n } = useTranslation();
   const datePickerRef = useRef(null);
+  const isMobile = useMatchBreakpoint(Breakpoints.M);
 
   return (
     <Inline
@@ -343,6 +347,7 @@ const DatePicker = ({
         }
         disabled={disabled}
         locale={i18n.language}
+        withPortal={isMobile}
         popperProps={{ strategy: 'fixed' }}
         // Empty css prop is necessary here
         highlightDates={highlightDates}
