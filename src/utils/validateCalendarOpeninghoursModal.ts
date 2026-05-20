@@ -27,6 +27,13 @@ export const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
     return timesMissing || startTooLate || endTooEarly;
   });
 
+export const hasInvalidOpeningHoursError = (
+  openingHours: OpeningHoursRow[],
+): boolean =>
+  openingHours.some(
+    (hour) => !!hour.opens && !!hour.closes && hour.closes < hour.opens,
+  );
+
 export const hasMissingOpeningHoursDaysError = (
   openingHours: OpeningHoursRow[],
 ): boolean => openingHours.some((hour) => hour.dayOfWeek.length === 0);
