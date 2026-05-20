@@ -13,15 +13,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const ToggleGroupExample = () => {
-  const [value, setValue] = useState('age');
+  const [value, setValue] = useState('toggle_1');
   return (
     <ToggleGroup
       name="age-input-mode"
       value={value}
       onChange={setValue}
       options={[
-        { value: 'age', label: 'Ingeven als leeftijd' },
-        { value: 'date_of_birth', label: 'Ingeven als geboortedatum' },
+        { value: 'toggle_1', label: 'Toggle 1' },
+        { value: 'toggle_2', label: 'Toggle 2' },
       ]}
       maxWidth="40rem"
     />
