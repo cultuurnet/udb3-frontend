@@ -102,8 +102,14 @@ const CalendarOpeninghoursModal = ({
     defaultValues: { openingHours: initialOpeningHours },
   });
 
-  const { replace } = useFieldArray({ control, name: 'openingHours' });
+  const { append, remove, update } = useFieldArray({
+    control,
+    name: 'openingHours',
+  });
   const openingHours = useWatch({ control, name: 'openingHours' });
+
+  const findOpeningHourIndex = (id: string) =>
+    openingHours.findIndex((openingHour) => openingHour.id === id);
 
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
@@ -124,59 +130,52 @@ const CalendarOpeninghoursModal = ({
   >(null);
 
   const handleAddOpeningHours = () =>
-    replace([
-      ...getValues('openingHours'),
-      {
-        id: createOpeninghoursId(),
-        opens: '00:00',
-        closes: '23:59',
-        dayOfWeek: [],
-        childcareEnabled: false,
-        childcareStartTime: '',
-        childcareEndTime: '',
-      },
-    ]);
+    append({
+      id: createOpeninghoursId(),
+      opens: '00:00',
+      closes: '23:59',
+      dayOfWeek: [],
+      childcareEnabled: false,
+      childcareStartTime: '',
+      childcareEndTime: '',
+    });
 
-  const handleRemoveOpeningHours = (idToRemove: string) =>
-    replace(
-      getValues('openingHours').filter(
-        (openingHour) => openingHour.id !== idToRemove,
-      ),
-    );
+  const handleRemoveOpeningHours = (idToRemove: string) => {
+    const index = findOpeningHourIndex(idToRemove);
+    if (index !== -1) remove(index);
+  };
 
   const handleChangeField = (
     idToChange: string,
     field: 'opens' | 'closes' | 'childcareStartTime' | 'childcareEndTime',
     newTime: string,
-  ) =>
-    replace(
-      getValues('openingHours').map((hour) =>
-        hour.id === idToChange ? { ...hour, [field]: newTime } : hour,
-      ),
-    );
+  ) => {
+    const index = findOpeningHourIndex(idToChange);
+    if (index !== -1)
+      update(index, { ...getValues('openingHours')[index], [field]: newTime });
+  };
 
-  const handleToggleDaysOfWeek = (newDays: string[], idToChange: string) =>
-    replace(
-      getValues('openingHours').map((openingHour) =>
-        openingHour.id === idToChange
-          ? {
-              ...openingHour,
-              dayOfWeek: [...newDays].sort(
-                (a, b) =>
-                  DaysOfWeek.indexOf(a as DayOfWeek) -
-                  DaysOfWeek.indexOf(b as DayOfWeek),
-              ) as DayOfWeek[],
-            }
-          : openingHour,
-      ),
-    );
+  const handleToggleDaysOfWeek = (newDays: string[], idToChange: string) => {
+    const index = findOpeningHourIndex(idToChange);
+    if (index !== -1)
+      update(index, {
+        ...getValues('openingHours')[index],
+        dayOfWeek: [...newDays].sort(
+          (a, b) =>
+            DaysOfWeek.indexOf(a as DayOfWeek) -
+            DaysOfWeek.indexOf(b as DayOfWeek),
+        ) as DayOfWeek[],
+      });
+  };
 
-  const handleToggleChildcare = (idToChange: string, enabled: boolean) =>
-    replace(
-      getValues('openingHours').map((hour) =>
-        hour.id === idToChange ? { ...hour, childcareEnabled: enabled } : hour,
-      ),
-    );
+  const handleToggleChildcare = (idToChange: string, enabled: boolean) => {
+    const index = findOpeningHourIndex(idToChange);
+    if (index !== -1)
+      update(index, {
+        ...getValues('openingHours')[index],
+        childcareEnabled: enabled,
+      });
+  };
 
   const handleAddDeviatingPeriod = () => {
     const today = startOfDay(new Date());
