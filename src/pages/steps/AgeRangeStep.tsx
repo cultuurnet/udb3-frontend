@@ -208,9 +208,7 @@ const AgeRangeStepBoa = ({
                               }
                             `}
                           >
-                            {t(
-                              `create.name_and_age.age.${key.toLowerCase()}`,
-                            )}
+                            {t(`create.name_and_age.age.${key.toLowerCase()}`)}
                             <Text
                               css={css`
                                 color: ${getValue('rangeTextColor')};
