@@ -111,9 +111,7 @@ const AgeRangeStep = ({
     setMaxBirthDate(newMax);
 
     const isValid =
-      !!newMin &&
-      !!newMax &&
-      !isBefore(startOfDay(newMax), startOfDay(newMin));
+      !!newMin && !!newMax && !isBefore(startOfDay(newMax), startOfDay(newMin));
 
     const nextValue = {
       ...field.value,
