@@ -230,14 +230,6 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
       typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
-      birthdateRange: yup
-        .object()
-        .shape({
-          from: yup.string().required(),
-          to: yup.string().required(),
-        })
-        .nullable()
-        .notRequired(),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');
