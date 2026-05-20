@@ -5,8 +5,7 @@ import { Box } from './Box';
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
-import { Text, TextVariants } from './Text';
-import { getValueFromTheme } from './theme';
+import { colors, getValueFromTheme } from './theme';
 import { Typeahead } from './Typeahead';
 
 const TimeSpanPickerLabelPositions = {
@@ -154,9 +153,8 @@ const TimeSpanPicker = ({
         if (isInline) {
           return (
             <Box key={key} position="relative" display="inline-block">
-              <Text
-                variant={TextVariants.MUTED}
-                fontSize="0.85rem"
+              <Label
+                htmlFor={`${idPrefix}-${key}`}
                 css={`
                   position: absolute;
                   left: 0.75rem;
@@ -164,10 +162,14 @@ const TimeSpanPicker = ({
                   transform: translateY(-50%);
                   pointer-events: none;
                   z-index: 1;
+                  font-size: 0.85rem;
+                  color: ${colors.grey5};
+                  font-weight: normal;
+                  margin: 0;
                 `}
               >
                 {label}
-              </Text>
+              </Label>
               {typeahead}
             </Box>
           );

@@ -12,7 +12,7 @@ import { getInlineProps, Inline } from './Inline';
 import { Link } from './Link';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
 import { Text } from './Text';
-import { getGlobalFormInputHeight, getValueFromTheme } from './theme';
+import { colors, getGlobalFormInputHeight, getValueFromTheme } from './theme';
 
 const BootStrapVariants = {
   PRIMARY: 'primary',
@@ -27,6 +27,7 @@ const ButtonVariants = {
   ...BootStrapVariants,
   UNSTYLED: 'unstyled',
   LINK: 'link',
+  OUTLINED: 'outlined',
 } as const;
 
 const ButtonSizes = {
@@ -262,6 +263,7 @@ type ButtonProps = Omit<InlineProps, 'size'> & {
   variant?: Values<typeof ButtonVariants>;
   type?: 'button' | 'submit' | 'reset';
   active?: boolean;
+  outlineColor?: string;
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -283,6 +285,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       forwardedAs,
       type = 'button',
       active,
+      outlineColor = colors.udbMainDarkBlue,
       textAlign = 'center',
       ...props
     },
@@ -307,6 +310,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       : {};
 
     const propsToApply = {
+      spacing: iconName ? 2 : undefined,
       ...bootstrapProps,
       disabled,
       onClick,
@@ -355,6 +359,44 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <BootstrapButton {...propsToApply} css={customCSS}>
           {inner}
         </BootstrapButton>
+      );
+    }
+
+    if (variant === ButtonVariants.OUTLINED) {
+      return (
+        <BaseButton
+          {...propsToApply}
+          alignItems="center"
+          spacing={2}
+          css={`
+            background: transparent;
+            border: 1px solid ${outlineColor};
+            color: ${outlineColor};
+            border-radius: ${getValue('borderRadius')};
+            padding: ${getValue('paddingY')} ${getValue('paddingX')};
+            min-height: ${getGlobalFormInputHeight};
+            cursor: pointer;
+            box-shadow: none;
+
+            &:hover {
+              background-color: color-mix(
+                in srgb,
+                ${outlineColor} 12%,
+                transparent
+              );
+            }
+
+            &:focus {
+              outline: solid ${outlineColor};
+            }
+
+            &:focus:not(:focus-visible) {
+              outline: none;
+            }
+          `}
+        >
+          {inner}
+        </BaseButton>
       );
     }
 

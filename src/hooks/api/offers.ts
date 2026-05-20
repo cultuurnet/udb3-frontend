@@ -265,6 +265,8 @@ const changeOfferCalendar = async ({
   startDate,
   endDate,
   openingHours,
+  openingHoursAdjustedDays,
+  openingHoursClosedDays,
   dayOfWeek,
   opens,
   closes,
@@ -283,6 +285,12 @@ const changeOfferCalendar = async ({
         startDate,
         endDate,
         openingHours,
+        ...(openingHoursAdjustedDays?.length > 0 && {
+          openingHoursAdjustedDays,
+        }),
+        ...(openingHoursClosedDays?.length > 0 && {
+          openingHoursClosedDays,
+        }),
         dayOfWeek,
         opens,
         closes,

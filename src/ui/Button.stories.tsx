@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button, ButtonVariants } from './Button';
 import { Icon, Icons } from './Icon';
+import { colors } from './theme';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
@@ -14,6 +15,7 @@ const meta: Meta<typeof Button> = {
         'children',
         'disabled',
         'loading',
+        'outlineColor',
         'shouldHideText',
         'variant',
       ],
@@ -63,6 +65,15 @@ export const Danger: Story = {
   args: {
     variant: ButtonVariants.DANGER,
     children: 'Danger',
+    ...commonArgs,
+  },
+};
+
+export const Outlined: Story = {
+  args: {
+    variant: ButtonVariants.OUTLINED,
+    outlineColor: colors.udbMainDarkBlue,
+    children: 'Outlined',
     ...commonArgs,
   },
 };
