@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -15,7 +17,12 @@ import {
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { useToast } from '@/pages/manage/movies/useToast';
-import { Offer, SubEvent } from '@/types/Offer';
+import {
+  Offer,
+  OpeningHoursAdjustedDay,
+  OpeningHoursClosedDay,
+  SubEvent,
+} from '@/types/Offer';
 import { Values } from '@/types/Values';
 import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
@@ -39,6 +46,8 @@ import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { FormDataUnion, StepProps, StepsConfiguration } from '../Steps';
 import { convertTimeTableToSubEvents } from '../TimeTableStep';
 import { CalendarOptionToggle } from './CalendarOptionToggle';
+import type { ClosingPeriodData } from './ClosingPeriod';
+import type { DeviatingPeriodData } from './DeviatingPeriod';
 import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
@@ -96,6 +105,8 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
+    childcareStartTime: openingHour.childcare?.start,
+    childcareEndTime: openingHour.childcare?.end,
   }));
 
   const newContext = {
@@ -149,6 +160,13 @@ const convertStateToFormData = (
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
+    ...(openingHour.childcareStartTime &&
+      openingHour.childcareEndTime && {
+        childcare: {
+          start: openingHour.childcareStartTime,
+          end: openingHour.childcareEndTime,
+        },
+      }),
   }));
 
   return {
@@ -161,6 +179,51 @@ const convertStateToFormData = (
     }),
   };
 };
+
+const convertAdjustedDays = (
+  adjustedDays: OpeningHoursAdjustedDay[],
+): DeviatingPeriodData[] =>
+  adjustedDays.map((day) => ({
+    id: uniqueId('deviating-period-'),
+    startDate: new Date(day.startDate),
+    endDate: new Date(day.endDate),
+    description: day.description ?? {},
+    openingHours: day.openingHours.map((openingHour) => ({
+      id: createOpeninghoursId(),
+      ...openingHour,
+    })),
+  }));
+
+const formatAdjustedDays = (adjustedDays: DeviatingPeriodData[]) =>
+  adjustedDays.map(({ openingHours, ...period }) => ({
+    startDate: format(period.startDate, 'yyyy-MM-dd'),
+    endDate: format(period.endDate, 'yyyy-MM-dd'),
+    ...(Object.keys(period.description).length > 0 && {
+      description: period.description,
+    }),
+    openingHours: openingHours.map(
+      ({ id: _id, ...openingHour }) => openingHour,
+    ),
+  }));
+
+const convertClosingDays = (
+  closedDays: OpeningHoursClosedDay[],
+): ClosingPeriodData[] =>
+  closedDays.map((day) => ({
+    id: uniqueId('closing-period-'),
+    startDate: new Date(day.startDate),
+    endDate: new Date(day.endDate),
+    description: day.description ?? {},
+  }));
+
+const formatClosingDays = (closingPeriods: ClosingPeriodData[]) =>
+  closingPeriods.map((period) => ({
+    startDate: format(period.startDate, 'yyyy-MM-dd'),
+    endDate: format(period.endDate, 'yyyy-MM-dd'),
+    ...(Object.keys(period.description).length > 0 && {
+      description: period.description,
+    }),
+  }));
 
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
 
@@ -202,12 +265,26 @@ const CalendarStep = ({
     [days],
   );
 
+  const adjustedDaysRef = useRef<DeviatingPeriodData[]>([]);
+  const [adjustedDays, setAdjustedDays] = useState<DeviatingPeriodData[]>([]);
+
+  const closingPeriodsRef = useRef<ClosingPeriodData[]>([]);
+  const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>([]);
+
   const handleChangeCalendarState = (newState: CalendarState) => {
     const calendarType = Object.values(CalendarType).find((type) =>
       newState.matches(type),
     );
 
-    const formData = convertStateToFormData(newState.context, calendarType);
+    const formData = {
+      ...convertStateToFormData(newState.context, calendarType),
+      ...(adjustedDaysRef.current.length > 0 && {
+        openingHoursAdjustedDays: formatAdjustedDays(adjustedDaysRef.current),
+      }),
+      ...(closingPeriodsRef.current.length > 0 && {
+        openingHoursClosedDays: formatClosingDays(closingPeriodsRef.current),
+      }),
+    };
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -222,6 +299,18 @@ const CalendarStep = ({
     }
 
     onChange(formData);
+  };
+
+  const handleChangeAdjustedDays = (newAdjustedDays: DeviatingPeriodData[]) => {
+    adjustedDaysRef.current = newAdjustedDays;
+    setAdjustedDays(newAdjustedDays);
+  };
+
+  const handleChangeClosingPeriods = (
+    newClosingPeriods: ClosingPeriodData[],
+  ) => {
+    closingPeriodsRef.current = newClosingPeriods;
+    setClosingPeriods(newClosingPeriods);
   };
 
   const {
@@ -282,6 +371,17 @@ const CalendarStep = ({
     }
     setIsCalendarInitialized(true);
     handleLoadInitialContext({ newContext, calendarType });
+    if (offer.openingHoursAdjustedDays?.length) {
+      const converted = convertAdjustedDays(offer.openingHoursAdjustedDays);
+      adjustedDaysRef.current = converted;
+      setAdjustedDays(converted);
+    }
+
+    if (offer.openingHoursClosedDays?.length) {
+      const converted = convertClosingDays(offer.openingHoursClosedDays);
+      closingPeriodsRef.current = converted;
+      setClosingPeriods(converted);
+    }
   }, [handleLoadInitialContext, offer, router.pathname, isCalendarInitialized]);
 
   const toast = useToast({
@@ -346,6 +446,10 @@ const CalendarStep = ({
             onChangeEndDate={handleChangeEndDate}
             onChangeOpeningHours={handleChangeOpeningHours}
             onChangeCalendarState={handleChangeCalendarState}
+            onChangeAdjustedDays={handleChangeAdjustedDays}
+            initialAdjustedDays={adjustedDays}
+            onChangeClosingPeriods={handleChangeClosingPeriods}
+            initialClosingPeriods={closingPeriods}
           />
         )}
         {isOneOrMoreDays && (
