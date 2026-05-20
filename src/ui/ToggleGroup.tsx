@@ -4,9 +4,9 @@ import {
 } from 'react-bootstrap';
 
 import { getStackProps, Stack, StackProps } from './Stack';
-import { colors } from './theme';
+import { colors, getValueFromTheme } from './theme';
 
-const heavyBoxShadow = 'rgba(0, 0, 0, 0.24) 0px 3px 8px';
+const getGlobalValue = getValueFromTheme('global');
 
 type ToggleGroupOption = {
   value: string;
@@ -62,7 +62,7 @@ const ToggleGroup = ({
           border-color: transparent;
           border-radius: 0.625rem !important;
           color: ${colors.textColor};
-          box-shadow: ${heavyBoxShadow};
+          box-shadow: ${getGlobalValue('boxShadow.heavy')};
           z-index: 1;
         }
       `}
