@@ -6,6 +6,7 @@ import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -25,7 +26,7 @@ const AgeInputModes = {
   DATE_OF_BIRTH: 'date_of_birth',
 } as const;
 
-type AgeInputMode = (typeof AgeInputModes)[keyof typeof AgeInputModes];
+type AgeInputMode = Values<typeof AgeInputModes>;
 
 const getValue = getValueFromTheme('ageRange');
 

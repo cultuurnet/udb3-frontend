@@ -3,10 +3,18 @@ import {
   ToggleButtonGroup as BootstrapToggleButtonGroup,
 } from 'react-bootstrap';
 
-import { getStackProps, Stack, StackProps } from './Stack';
-import { colors } from './theme';
+import type { Values } from '@/types/Values';
 
-const heavyBoxShadow = 'rgba(0, 0, 0, 0.24) 0px 3px 8px';
+import { getStackProps, Stack, StackProps } from './Stack';
+import { colors, getValueFromTheme } from './theme';
+
+const getGlobalValue = getValueFromTheme('global');
+
+const ToggleGroupVariants = {
+  UNSTYLED: 'unstyled',
+} as const;
+
+type ToggleGroupVariant = Values<typeof ToggleGroupVariants>;
 
 type ToggleGroupOption = {
   value: string;
@@ -18,6 +26,7 @@ type Props = Omit<StackProps, 'onChange' | 'options' | 'value' | 'name'> & {
   value: string;
   options: ToggleGroupOption[];
   onChange: (value: string) => void;
+  variant?: ToggleGroupVariant;
 };
 
 const ToggleGroup = ({
@@ -26,6 +35,7 @@ const ToggleGroup = ({
   options,
   onChange,
   className,
+  variant = ToggleGroupVariants.UNSTYLED,
   ...props
 }: Props) => (
   <Stack className={className} {...getStackProps(props)}>
@@ -62,7 +72,7 @@ const ToggleGroup = ({
           border-color: transparent;
           border-radius: 0.625rem !important;
           color: ${colors.textColor};
-          box-shadow: ${heavyBoxShadow};
+          box-shadow: ${getGlobalValue('boxShadow.heavy')};
           z-index: 1;
         }
       `}
@@ -72,7 +82,7 @@ const ToggleGroup = ({
           key={toggleOption.value}
           id={`${name}-${toggleOption.value}`}
           value={toggleOption.value}
-          variant=""
+          variant={variant}
         >
           {toggleOption.label}
         </BootstrapToggleButton>
@@ -82,4 +92,4 @@ const ToggleGroup = ({
 );
 
 export type { ToggleGroupOption };
-export { ToggleGroup };
+export { ToggleGroup, ToggleGroupVariants };
