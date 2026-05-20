@@ -298,6 +298,10 @@
       },
       "age": {
         "title": "Geeignet für",
+        "input_mode": {
+          "age": "Als Alter eingeben",
+          "date_of_birth": "Als Geburtsdatum eingeben"
+        },
         "all": "Alle Altersgruppen",
         "toddlers": "Kleinkinder",
         "preschoolers": "Kindergartenkinder",
