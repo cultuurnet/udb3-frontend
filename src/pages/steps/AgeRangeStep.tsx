@@ -23,7 +23,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
 import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
@@ -225,8 +225,8 @@ const AgeRangeStepBoa = ({
 
           return (
             <Stack spacing={2}>
-              <Text fontWeight="bold">
-                {t(`create.name_and_age.age.title`)}
+              <Text fontWeight="bold" paddingBottom={3}>
+                {t(`create.name_and_age.age.title_boa`)}
               </Text>
               <ToggleGroup
                 name="age-input-mode"
@@ -240,11 +240,11 @@ const AgeRangeStepBoa = ({
                 }))}
                 maxWidth="40rem"
                 css={`
-                  margin-bottom: 1rem;
+                  margin-bottom: 2rem;
                 `}
               />
               {inputMode === AgeInputModes.DATE_OF_BIRTH ? null : (
-                <Stack spacing={3} maxWidth="40rem">
+                <Stack spacing={3} maxWidth="40rem" paddingLeft={5}>
                   <Text fontWeight="bold">
                     {t('create.name_and_age.age.input_range_title')}
                   </Text>
@@ -326,7 +326,14 @@ const AgeRangeStepBoa = ({
                       })}
                   </Inline>
                   {showChildrenOnlySection && (
-                    <Stack spacing={2} marginTop={3}>
+                    <Stack
+                      spacing={2}
+                      marginTop={4}
+                      paddingTop={4}
+                      css={`
+                        border-top: 1px solid ${colors.grey3};
+                      `}
+                    >
                       <Text fontWeight="bold">
                         {t('create.name_and_age.age.audience.question')}
                       </Text>

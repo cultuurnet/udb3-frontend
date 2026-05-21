@@ -140,7 +140,7 @@ const NameAndAgeRangeStep = ({
       name={name}
       render={() => {
         return (
-          <Stack spacing={4} maxWidth={parseSpacing(11)}>
+          <Stack spacing={5} maxWidth={parseSpacing(11)}>
             <NameStep
               {...getStepProps(props)}
               name={name}
