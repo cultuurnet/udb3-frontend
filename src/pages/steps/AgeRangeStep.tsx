@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -5,8 +6,10 @@ import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes } from '@/constants/OfferType';
 import {
   useChangeAudienceMutation,
+  useChangeDeparturePlacesMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -103,6 +106,7 @@ const AgeRangeStepBoa = ({
   ...props
 }: AgeRangeStepProps) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
   const [minAge, setMinAge] = useState('');
@@ -112,6 +116,13 @@ const AgeRangeStepBoa = ({
   const [audienceMutationError, setAudienceMutationError] = useState<
     string | null
   >(null);
+
+  const invalidateOfferQuery = () => {
+    if (!offerId) return;
+    queryClient.invalidateQueries({
+      queryKey: [OfferTypes.EVENTS, { id: offerId }],
+    });
+  };
 
   const audienceType = useWatch({
     control,
@@ -130,6 +141,16 @@ const AgeRangeStepBoa = ({
   const event: Event | undefined = getEventByIdQuery.data;
 
   const changeAudienceMutation = useChangeAudienceMutation({
+    onSuccess: invalidateOfferQuery,
+    onError: () => {
+      setAudienceMutationError(
+        t('create.name_and_age.age.audience.mutation_error'),
+      );
+    },
+  });
+
+  const changeDeparturePlacesMutation = useChangeDeparturePlacesMutation({
+    onSuccess: invalidateOfferQuery,
     onError: () => {
       setAudienceMutationError(
         t('create.name_and_age.age.audience.mutation_error'),
@@ -364,6 +385,12 @@ const AgeRangeStepBoa = ({
         onConfirm={() => {
           if (pendingAudienceChange) {
             applyAudienceChange(pendingAudienceChange);
+            if (offerId) {
+              changeDeparturePlacesMutation.mutate({
+                eventId: offerId,
+                departurePlaces: [],
+              });
+            }
             setPendingAudienceChange(null);
           }
         }}
