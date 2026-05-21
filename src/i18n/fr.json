@@ -317,7 +317,19 @@
         "input_range_title": "Indiquez un âge minimum et maximum",
         "error_max_lower_than_min": "L'âge maximum ne peut être inférieur à l'âge minimum.",
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
-        "error_no_min_age": "Veuillez entrer un âge minimum"
+        "error_no_min_age": "Veuillez entrer un âge minimum",
+        "audience": {
+          "question": "Pour qui cette activité est-elle organisée ?",
+          "children_only": "Uniquement pour les enfants",
+          "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
+          "departure_places_warning_modal": {
+            "title": "Supprimer les lieux de départ",
+            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          }
+        }
       }
     },
     "type_and_theme": {

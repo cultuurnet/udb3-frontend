@@ -327,7 +327,19 @@
         "input_range_title": "Geef een minimum en maximum leeftijd in",
         "error_max_lower_than_min": "De maximumleeftijd kan niet lager zijn dan de minimumleeftijd.",
         "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
-        "error_no_min_age": "Gelieve een minimum leeftijd in te vullen"
+        "error_no_min_age": "Gelieve een minimum leeftijd in te vullen",
+        "audience": {
+          "question": "Voor wie is deze activiteit?",
+          "children_only": "Voor kinderen alleen",
+          "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
+          "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
+          "departure_places_warning_modal": {
+            "title": "Vertreklocaties verwijderen",
+            "body": "Let op: deze actie verwijdert je ingevulde vertreklocaties.",
+            "confirm": "Doorgaan",
+            "cancel": "Annuleren"
+          }
+        }
       },
       "cultuurkuur": {
         "info": "Voeg de onderwijsniveaus toe waarvoor je activiteit geschikt is. Meer info over de nieuwe structuur van het onderwijs vind je <link1>hier</link1>.",
