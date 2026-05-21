@@ -10,7 +10,7 @@ import {
   useGetPlaceByIdQuery,
 } from '@/hooks/api/places';
 import type { Headers } from '@/hooks/api/types/Headers';
-import { Offer, OfferHistory } from '@/types/Offer';
+import { BirthdateRange, Offer, OfferHistory } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
@@ -254,12 +254,19 @@ const useChangeOfferTypicalAgeRangeMutation = (configuration = {}) =>
     ...configuration,
   });
 
+type ChangeOfferBirthdateRangeArguments = {
+  headers: Headers;
+  eventId: string;
+  birthdateRange: BirthdateRange;
+  scope: Scope;
+};
+
 const changeOfferBirthdateRange = async ({
   headers,
   eventId,
   birthdateRange,
   scope,
-}) =>
+}: ChangeOfferBirthdateRangeArguments) =>
   fetchFromApi({
     path: `/${scope}/${eventId}/birthdateRange`,
     options: {
@@ -276,7 +283,17 @@ const useChangeOfferBirthdateRangeMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const deleteOfferBirthdateRange = async ({ headers, eventId, scope }) =>
+type DeleteOfferBirthdateRangeArguments = {
+  headers: Headers;
+  eventId: string;
+  scope: Scope;
+};
+
+const deleteOfferBirthdateRange = async ({
+  headers,
+  eventId,
+  scope,
+}: DeleteOfferBirthdateRangeArguments) =>
   fetchFromApi({
     path: `/${scope}/${eventId}/birthdateRange`,
     options: {
