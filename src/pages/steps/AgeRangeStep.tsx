@@ -1,14 +1,23 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import {
+  useChangeAudienceMutation,
+  useGetEventByIdQuery,
+} from '@/hooks/api/events';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Event } from '@/types/Event';
 import { Values } from '@/types/Values';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
+import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -25,6 +34,8 @@ const AgeInputModes = {
 type AgeInputMode = Values<typeof AgeInputModes>;
 
 const MAX_AGE = 120;
+const BOA_MIN_AGE = 2;
+const BOA_MAX_AGE = 12;
 
 const getValue = getValueFromTheme('ageRange');
 
@@ -58,6 +69,21 @@ const findPresetKey = (typicalAgeRange: string | undefined): string | null => {
   );
 };
 
+const overlapsWithBoaAgeRange = (
+  typicalAgeRange: string | undefined,
+): boolean => {
+  if (!typicalAgeRange) return false;
+  if (typicalAgeRange === '-' || typicalAgeRange === '0-') return true;
+
+  const [minStr, maxStr] = typicalAgeRange.split('-');
+  const min = minStr ? parseInt(minStr, 10) : undefined;
+  const max = maxStr ? parseInt(maxStr, 10) : undefined;
+
+  if (min !== undefined && min > BOA_MAX_AGE) return false;
+  if (max !== undefined && max < BOA_MIN_AGE) return false;
+  return true;
+};
+
 const AgeRangeStep = (props: AgeRangeStepProps) => {
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
@@ -71,6 +97,8 @@ const AgeRangeStep = (props: AgeRangeStepProps) => {
 const AgeRangeStepBoa = ({
   control,
   onChange,
+  offerId,
+  setValue,
   ...props
 }: AgeRangeStepProps) => {
   const { t } = useTranslation();
@@ -78,6 +106,35 @@ const AgeRangeStepBoa = ({
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
   const [minAge, setMinAge] = useState('');
   const [maxAge, setMaxAge] = useState('');
+  const [pendingAudienceChange, setPendingAudienceChange] =
+    useState<AudienceType | null>(null);
+  const [audienceMutationError, setAudienceMutationError] = useState<
+    string | null
+  >(null);
+
+  const audienceType = useWatch({
+    control,
+    name: 'audience.audienceType',
+  }) as AudienceType | undefined;
+
+  const typicalAgeRange = useWatch({
+    control,
+    name: 'nameAndAgeRange.typicalAgeRange',
+  }) as string | undefined;
+
+  const getEventByIdQuery = useGetEventByIdQuery(
+    { id: offerId ?? '' },
+    { enabled: !!offerId },
+  );
+  const event: Event | undefined = getEventByIdQuery.data;
+
+  const changeAudienceMutation = useChangeAudienceMutation({
+    onError: () => {
+      setAudienceMutationError(
+        t('create.name_and_age.age.audience.mutation_error'),
+      );
+    },
+  });
 
   const useInitializeAgeRangeFields = (field: Field) => {
     useEffect(() => {
@@ -106,6 +163,31 @@ const AgeRangeStepBoa = ({
     field.onChange({ ...field.value, typicalAgeRange: apiLabel });
     onChange({ ...field.value, typicalAgeRange: apiLabel });
   };
+
+  const applyAudienceChange = (newType: AudienceType) => {
+    setAudienceMutationError(null);
+    setValue('audience', { audienceType: newType });
+    if (offerId) {
+      changeAudienceMutation.mutate({ eventId: offerId, audienceType: newType });
+    }
+  };
+
+  const handleAudienceClick = (newType: AudienceType) => {
+    if (newType === audienceType) return;
+    const isSwitchingAwayFromChildrenOnly =
+      audienceType === AudienceTypes.CHILDREN_ONLY &&
+      newType !== AudienceTypes.CHILDREN_ONLY;
+    const hasDeparturePlaces = !!event?.departurePlaces?.length;
+    if (isSwitchingAwayFromChildrenOnly && hasDeparturePlaces) {
+      setPendingAudienceChange(newType);
+      return;
+    }
+    applyAudienceChange(newType);
+  };
+
+  const showChildrenOnlySection =
+    audienceType !== AudienceTypes.EDUCATION &&
+    overlapsWithBoaAgeRange(typicalAgeRange);
 
   return (
     <Stack {...getStackProps(props)}>
@@ -208,7 +290,9 @@ const AgeRangeStepBoa = ({
                               }
                             `}
                           >
-                            {t(`create.name_and_age.age.${key.toLowerCase()}`)}
+                            {t(
+                              `create.name_and_age.age.${key.toLowerCase()}`,
+                            )}
                             <Text
                               css={css`
                                 color: ${getValue('rangeTextColor')};
@@ -221,6 +305,42 @@ const AgeRangeStepBoa = ({
                         );
                       })}
                   </Inline>
+                  {showChildrenOnlySection && (
+                    <Stack spacing={2} marginTop={3}>
+                      <Text fontWeight="bold">
+                        {t('create.name_and_age.age.audience.question')}
+                      </Text>
+                      <RadioButtonWithLabel
+                        id="audience-children-only"
+                        name="age-audience-type"
+                        checked={
+                          audienceType === AudienceTypes.CHILDREN_ONLY
+                        }
+                        label={t(
+                          'create.name_and_age.age.audience.children_only',
+                        )}
+                        onChange={() =>
+                          handleAudienceClick(AudienceTypes.CHILDREN_ONLY)
+                        }
+                      />
+                      <RadioButtonWithLabel
+                        id="audience-with-family"
+                        name="age-audience-type"
+                        checked={
+                          audienceType !== AudienceTypes.CHILDREN_ONLY
+                        }
+                        label={t(
+                          'create.name_and_age.age.audience.with_family',
+                        )}
+                        onChange={() =>
+                          handleAudienceClick(AudienceTypes.EVERYONE)
+                        }
+                      />
+                      {audienceMutationError && (
+                        <Text color="red">{audienceMutationError}</Text>
+                      )}
+                    </Stack>
+                  )}
                 </Stack>
               )}
             </Stack>
