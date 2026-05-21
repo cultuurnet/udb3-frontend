@@ -276,6 +276,22 @@ const useChangeOfferBirthdateRangeMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const deleteOfferBirthdateRange = async ({ headers, eventId, scope }) =>
+  fetchFromApi({
+    path: `/${scope}/${eventId}/birthdateRange`,
+    options: {
+      method: 'DELETE',
+      headers,
+    },
+  });
+
+const useDeleteOfferBirthdateRangeMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteOfferBirthdateRange,
+    mutationKey: 'offers-delete-birthdate-range',
+    ...configuration,
+  });
+
 const changeOfferCalendar = async ({
   headers,
   id,
@@ -712,6 +728,7 @@ export {
   useChangeOfferTypeMutation,
   useChangeOfferTypicalAgeRangeMutation,
   useDeleteDescriptionMutation,
+  useDeleteOfferBirthdateRangeMutation,
   useDeleteOfferImageMutation,
   useDeleteOfferOrganizerMutation,
   useDeleteOfferVideoMutation,

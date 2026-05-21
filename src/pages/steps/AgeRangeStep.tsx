@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
+import { useDeleteOfferBirthdateRangeMutation } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -36,10 +37,13 @@ const AgeRangeStep = ({
   formState: { errors },
   control,
   onChange,
+  offerId,
+  scope,
   ...props
 }: AgeRangeStepProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+  const deleteBirthdateRangeMutation = useDeleteOfferBirthdateRangeMutation();
 
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
   const [isCustomAgeRange, setIsCustomAgeRange] = useState(false);
@@ -214,14 +218,20 @@ const AgeRangeStep = ({
                     setInputMode(next);
                     if (next === AgeInputModes.DATE_OF_BIRTH) {
                       commitBirthdateRange(field, minBirthDate, maxBirthDate);
-                    } else {
-                      field.onChange({
-                        ...field.value,
-                        birthdateRange: undefined,
-                      });
-                      onChange({
-                        ...field.value,
-                        birthdateRange: undefined,
+                      return;
+                    }
+                    field.onChange({
+                      ...field.value,
+                      birthdateRange: undefined,
+                    });
+                    onChange({
+                      ...field.value,
+                      birthdateRange: undefined,
+                    });
+                    if (offerId && field.value?.birthdateRange) {
+                      deleteBirthdateRangeMutation.mutate({
+                        eventId: offerId,
+                        scope,
                       });
                     }
                   }}

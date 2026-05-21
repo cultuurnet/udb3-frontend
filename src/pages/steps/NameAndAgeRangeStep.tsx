@@ -167,6 +167,8 @@ const NameAndAgeRangeStep = ({
                 {...getStepProps(props)}
                 name={name}
                 control={control}
+                offerId={offerId}
+                scope={scope}
               />
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
