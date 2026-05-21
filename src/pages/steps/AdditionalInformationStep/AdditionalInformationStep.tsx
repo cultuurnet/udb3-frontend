@@ -299,6 +299,19 @@ const AdditionalInformationStep = ({
   }, [hash]);
 
   useEffect(() => {
+    if (!offer) return;
+    const isAccessibilityTabVisible = isChildrenOnly && isBoaEnabled;
+    if (isAccessibilityTabVisible) return;
+    setTab((current) => {
+      if (current !== Fields.ACCESSIBILITY) return current;
+      router.replace({ hash: Fields.DESCRIPTION }, undefined, {
+        shallow: true,
+      });
+      return Fields.DESCRIPTION;
+    });
+  }, [offer, isChildrenOnly, isBoaEnabled, router]);
+
+  useEffect(() => {
     if (!offerId) return;
     if (!containerRef.current?.parentElement) return;
 
@@ -310,8 +323,9 @@ const AdditionalInformationStep = ({
     });
   }, [offerId]);
 
-  const handleSelectTab = (tab: string) => {
-    router.push({ hash: tab }, undefined, { shallow: true });
+  const handleSelectTab = (newTab: string) => {
+    setTab(newTab);
+    router.push({ hash: newTab }, undefined, { shallow: true });
   };
 
   const [validatedFields, setValidatedFields] = useState(
