@@ -187,7 +187,10 @@ const AgeRangeStepBoa = ({
     setAudienceMutationError(null);
     setValue('audience', { audienceType: newType });
     if (offerId) {
-      changeAudienceMutation.mutate({ eventId: offerId, audienceType: newType });
+      changeAudienceMutation.mutate({
+        eventId: offerId,
+        audienceType: newType,
+      });
     }
   };
 
@@ -309,9 +312,7 @@ const AgeRangeStepBoa = ({
                               }
                             `}
                           >
-                            {t(
-                              `create.name_and_age.age.${key.toLowerCase()}`,
-                            )}
+                            {t(`create.name_and_age.age.${key.toLowerCase()}`)}
                             <Text
                               css={css`
                                 color: ${getValue('rangeTextColor')};
@@ -332,9 +333,7 @@ const AgeRangeStepBoa = ({
                       <RadioButtonWithLabel
                         id="audience-children-only"
                         name="age-audience-type"
-                        checked={
-                          audienceType === AudienceTypes.CHILDREN_ONLY
-                        }
+                        checked={audienceType === AudienceTypes.CHILDREN_ONLY}
                         label={t(
                           'create.name_and_age.age.audience.children_only',
                         )}
@@ -345,9 +344,7 @@ const AgeRangeStepBoa = ({
                       <RadioButtonWithLabel
                         id="audience-with-family"
                         name="age-audience-type"
-                        checked={
-                          audienceType !== AudienceTypes.CHILDREN_ONLY
-                        }
+                        checked={audienceType !== AudienceTypes.CHILDREN_ONLY}
                         label={t(
                           'create.name_and_age.age.audience.with_family',
                         )}
