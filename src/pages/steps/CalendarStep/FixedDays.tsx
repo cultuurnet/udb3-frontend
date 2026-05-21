@@ -163,7 +163,7 @@ export const FixedDays = ({
                   </Inline>
                   {openingHour.childcareStartTime &&
                     openingHour.childcareEndTime && (
-                      <Text color={colors.grey5}>
+                      <Text fontStyle="italic">
                         {t('create.calendar.fixed_days.overview.childcare', {
                           start: openingHour.childcareStartTime,
                           end: openingHour.childcareEndTime,
@@ -217,7 +217,7 @@ export const FixedDays = ({
                         </Inline>
                         {openingHour.childcare?.start &&
                           openingHour.childcare?.end && (
-                            <Text color={colors.grey5}>
+                            <Text fontStyle="italic">
                               {t(
                                 'create.calendar.fixed_days.overview.childcare',
                                 {
