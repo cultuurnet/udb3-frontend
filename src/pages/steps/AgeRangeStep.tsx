@@ -183,15 +183,14 @@ const AgeRangeStepBoa = ({
     onChange({ ...field.value, typicalAgeRange: apiLabel });
   };
 
-  const applyAudienceChange = (newType: AudienceType) => {
+  const applyAudienceChange = async (newType: AudienceType) => {
     setAudienceMutationError(null);
     setValue('audience', { audienceType: newType });
-    if (offerId) {
-      changeAudienceMutation.mutate({
-        eventId: offerId,
-        audienceType: newType,
-      });
-    }
+    if (!offerId) return;
+    await changeAudienceMutation.mutateAsync({
+      eventId: offerId,
+      audienceType: newType,
+    });
   };
 
   const handleAudienceClick = (newType: AudienceType) => {
@@ -204,7 +203,7 @@ const AgeRangeStepBoa = ({
       setPendingAudienceChange(newType);
       return;
     }
-    applyAudienceChange(newType);
+    applyAudienceChange(newType).catch(() => undefined);
   };
 
   const showChildrenOnlySection =
@@ -386,17 +385,22 @@ const AgeRangeStepBoa = ({
         )}
         confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setPendingAudienceChange(null)}
-        onConfirm={() => {
-          if (pendingAudienceChange) {
-            applyAudienceChange(pendingAudienceChange);
+        onConfirm={async () => {
+          if (!pendingAudienceChange) return;
+          try {
+            await applyAudienceChange(pendingAudienceChange);
             if (offerId) {
-              changeDeparturePlacesMutation.mutate({
+              await changeDeparturePlacesMutation.mutateAsync({
                 eventId: offerId,
                 departurePlaces: [],
               });
             }
-            setPendingAudienceChange(null);
+          } catch {
+            // Failure already surfaced inline via the mutation's onError —
+            // bail out and keep the modal open so the user can retry.
+            return;
           }
+          setPendingAudienceChange(null);
         }}
       >
         <Box padding={4}>
