@@ -46,12 +46,8 @@ const AgeRangeStep = ({
   const [customMinAgeRange, setCustomMinAgeRange] = useState('');
   const [customMaxAgeRange, setCustomMaxAgeRange] = useState('');
   const [customAgeRangeError, setCustomAgeRangeError] = useState('');
-  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(
-    () => new Date(),
-  );
-  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(
-    () => new Date(),
-  );
+  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
+  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
 
   const isCustomAgeRangeSelected = (typicalAgeRange: string): boolean => {
     return !Object.keys(AgeRanges).some(
