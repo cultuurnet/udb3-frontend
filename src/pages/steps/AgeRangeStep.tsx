@@ -1,6 +1,6 @@
 import { format, isBefore, parse, startOfDay } from 'date-fns';
 import { FormEvent, useEffect, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
@@ -67,40 +67,43 @@ const AgeRangeStep = ({
     setCustomAgeRangeError('');
   };
 
-  const useInitializeAgeRangeFields = (field: Field) => {
-    useEffect(() => {
-      if (!field.value?.typicalAgeRange) return;
-      const typicalAgeRange = field.value.typicalAgeRange;
+  const watchedTypicalAgeRange = useWatch({
+    control,
+    name: 'nameAndAgeRange.typicalAgeRange',
+  });
+  const watchedBirthdateRange = useWatch({
+    control,
+    name: 'nameAndAgeRange.birthdateRange',
+  });
 
-      if (typicalAgeRange === '0-') {
-        setIsCustomAgeRange(false);
-        resetCustomAgeRange();
-        return;
-      }
+  useEffect(() => {
+    if (!watchedTypicalAgeRange) return;
 
-      if (isCustomAgeRangeSelected(typicalAgeRange)) {
-        const [min, max] = field.value.typicalAgeRange.split('-');
-
-        setCustomMinAgeRange(min ?? '');
-        setCustomMaxAgeRange(max ?? '');
-        setIsCustomAgeRange(true);
-        return;
-      }
-
+    if (watchedTypicalAgeRange === '0-') {
+      setIsCustomAgeRange(false);
       resetCustomAgeRange();
-    }, [field.value?.typicalAgeRange]);
-  };
+      return;
+    }
 
-  const useInitializeBirthdateRangeFields = (field: Field) => {
-    useEffect(() => {
-      const birthdateRange = field.value?.birthdateRange;
-      if (!birthdateRange?.from || !birthdateRange?.to) return;
+    if (isCustomAgeRangeSelected(watchedTypicalAgeRange)) {
+      const [min, max] = watchedTypicalAgeRange.split('-');
+      setCustomMinAgeRange(min ?? '');
+      setCustomMaxAgeRange(max ?? '');
+      setIsCustomAgeRange(true);
+      return;
+    }
 
-      setMinBirthDate(parse(birthdateRange.from, 'yyyy-MM-dd', new Date()));
-      setMaxBirthDate(parse(birthdateRange.to, 'yyyy-MM-dd', new Date()));
-      setInputMode(AgeInputModes.DATE_OF_BIRTH);
-    }, [field.value?.birthdateRange]);
-  };
+    resetCustomAgeRange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedTypicalAgeRange]);
+
+  useEffect(() => {
+    if (!watchedBirthdateRange?.from || !watchedBirthdateRange?.to) return;
+
+    setMinBirthDate(parse(watchedBirthdateRange.from, 'yyyy-MM-dd', new Date()));
+    setMaxBirthDate(parse(watchedBirthdateRange.to, 'yyyy-MM-dd', new Date()));
+    setInputMode(AgeInputModes.DATE_OF_BIRTH);
+  }, [watchedBirthdateRange]);
 
   const commitBirthdateRange = (
     field: Field,
@@ -193,11 +196,6 @@ const AgeRangeStep = ({
         name={'nameAndAgeRange'}
         control={control}
         render={({ field }) => {
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          useInitializeAgeRangeFields(field);
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          useInitializeBirthdateRangeFields(field);
-
           const selectedAgeRange = getSelectedAgeRange(
             field.value?.typicalAgeRange,
           );
