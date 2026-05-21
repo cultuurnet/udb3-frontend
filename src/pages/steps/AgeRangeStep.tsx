@@ -138,10 +138,8 @@ const AgeRangeStepBoa = ({
 
   const useInitializeAgeRangeFields = (field: Field) => {
     useEffect(() => {
-      const typicalAgeRange = field.value?.typicalAgeRange;
-      if (!typicalAgeRange) return;
-
-      const [min, max] = typicalAgeRange.split('-');
+      if (!field.value?.typicalAgeRange) return;
+      const [min, max] = field.value.typicalAgeRange.split('-');
       setMinAge(min ?? '');
       setMaxAge(max ?? '');
     }, [field.value?.typicalAgeRange]);
@@ -159,7 +157,6 @@ const AgeRangeStepBoa = ({
     const [min, max] = apiLabel.split('-');
     setMinAge(min ?? '');
     setMaxAge(max ?? '');
-
     field.onChange({ ...field.value, typicalAgeRange: apiLabel });
     onChange({ ...field.value, typicalAgeRange: apiLabel });
   };
@@ -347,6 +344,37 @@ const AgeRangeStepBoa = ({
           );
         }}
       />
+
+      <Modal
+        variant={ModalVariants.QUESTION}
+        size={ModalSizes.MD}
+        visible={pendingAudienceChange !== null}
+        title={t(
+          'create.name_and_age.age.audience.departure_places_warning_modal.title',
+        )}
+        confirmTitle={t(
+          'create.name_and_age.age.audience.departure_places_warning_modal.confirm',
+        )}
+        cancelTitle={t(
+          'create.name_and_age.age.audience.departure_places_warning_modal.cancel',
+        )}
+        confirmButtonVariant={ButtonVariants.DANGER}
+        onClose={() => setPendingAudienceChange(null)}
+        onConfirm={() => {
+          if (pendingAudienceChange) {
+            applyAudienceChange(pendingAudienceChange);
+            setPendingAudienceChange(null);
+          }
+        }}
+      >
+        <Box padding={4}>
+          <Text>
+            {t(
+              'create.name_and_age.age.audience.departure_places_warning_modal.body',
+            )}
+          </Text>
+        </Box>
+      </Modal>
     </Stack>
   );
 };
