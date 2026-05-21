@@ -184,13 +184,21 @@ const AgeRangeStepBoa = ({
   };
 
   const applyAudienceChange = async (newType: AudienceType) => {
+    const previousType = audienceType;
     setAudienceMutationError(null);
     setValue('audience', { audienceType: newType });
     if (!offerId) return;
-    await changeAudienceMutation.mutateAsync({
-      eventId: offerId,
-      audienceType: newType,
-    });
+    try {
+      await changeAudienceMutation.mutateAsync({
+        eventId: offerId,
+        audienceType: newType,
+      });
+    } catch (error) {
+      // Revert the optimistic form update so the radio reflects the
+      // backend state again.
+      setValue('audience', { audienceType: previousType });
+      throw error;
+    }
   };
 
   const handleAudienceClick = (newType: AudienceType) => {
