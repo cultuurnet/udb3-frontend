@@ -35,8 +35,6 @@ const test = base.extend<TestFixtures>({
   },
 });
 
-test.describe.configure({ mode: 'serial' });
-
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     {
@@ -110,7 +108,12 @@ test.describe('Birthdate range', () => {
     await page.locator(birthDateMaxInput).press('Enter');
 
     // Wait for the PUT /birthdateRange mutation to complete
-    await page.waitForLoadState('networkidle');
+    await page.waitForResponse(
+      (response) =>
+        response.url().includes('/birthdateRange') &&
+        response.request().method() === 'PUT' &&
+        response.ok(),
+    );
 
     await page.goto(eventEditUrl);
 
