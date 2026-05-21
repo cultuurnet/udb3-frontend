@@ -298,6 +298,7 @@
       },
       "age": {
         "title": "Geeignet für",
+        "title_boa": "Geben Sie an, für welche Altersgruppen diese Aktivität geeignet ist",
         "input_mode": {
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"

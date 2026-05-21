@@ -298,6 +298,7 @@
       },
       "age": {
         "title": "Adapté à",
+        "title_boa": "Indiquez pour quels âges cette activité est adaptée",
         "input_mode": {
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
