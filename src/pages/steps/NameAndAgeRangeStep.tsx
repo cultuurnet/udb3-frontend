@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -90,7 +89,6 @@ const NameAndAgeRangeStep = ({
   ...props
 }: StepProps) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const errorBody = error?.body as DuplicatePlaceErrorBody;
   const errorMessage = error?.message;
@@ -154,6 +152,8 @@ const NameAndAgeRangeStep = ({
                 {...getStepProps(props)}
                 name={name}
                 control={control}
+                offerId={offerId}
+                setValue={setValue}
               />
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
