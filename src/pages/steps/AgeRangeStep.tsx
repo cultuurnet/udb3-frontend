@@ -73,7 +73,8 @@ const overlapsWithBoaAgeRange = (
   typicalAgeRange: string | undefined,
 ): boolean => {
   if (!typicalAgeRange) return false;
-  if (typicalAgeRange === '-' || typicalAgeRange === '0-') return true;
+  // "Alle leeftijden" is not children-specific
+  if (typicalAgeRange === '-' || typicalAgeRange === '0-') return false;
 
   const [minStr, maxStr] = typicalAgeRange.split('-');
   const min = minStr ? parseInt(minStr, 10) : undefined;
