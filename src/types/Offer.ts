@@ -137,9 +137,11 @@ type CalendarSummary = Record<
   }
 >;
 
+type DateString = string & { readonly __dateFormat: 'yyyy-MM-dd' };
+
 type BirthdateRange = {
-  from: string;
-  to: string;
+  from: DateString;
+  to: DateString;
 };
 
 type BaseOffer = {
