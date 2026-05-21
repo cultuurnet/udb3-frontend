@@ -136,9 +136,24 @@
       "fixed_days": {
         "with_start_and_end_date": "Met start-en einddatum",
         "permanent": "Permanent",
-        "opening_hours": "Openingsuren",
+        "opening_hours": "Uren",
         "button_change_opening_hours": "Openingsuren wijzigen",
-        "button_add_opening_hours": "Openingsuren toevoegen"
+        "button_add_opening_hours": "Openingsuren toevoegen",
+        "button_add_hours": "Uren toevoegen",
+        "overview": {
+          "edit": "Bewerken",
+          "delete": "Verwijderen",
+          "weekly_on": "Wekelijks op:",
+          "closed": "Gesloten",
+          "deviating_except": "Behalve:",
+          "deviating_then_weekly": "dan wekelijks op:",
+          "childcare": "met vooropvang vanaf {{start}} en na opvang tot {{end}}",
+          "delete_modal": {
+            "title": "Uren verwijderen",
+            "body": "Ben je zeker dat je alle openingsuren wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+            "confirm": "Definitief verwijderen"
+          }
+        }
       },
       "days": {
         "short": {
@@ -184,7 +199,7 @@
         "button_confirm": "Opslaan",
         "end_time": "tot",
         "start_time": "van",
-        "title": "Openingsuren",
+        "title": "Voeg uren toe",
         "days": "Dagen",
         "hours": "Uren",
         "select_days": "Selecteer dag(en)",

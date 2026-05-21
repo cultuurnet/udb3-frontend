@@ -134,9 +134,24 @@
       "fixed_days": {
         "with_start_and_end_date": "Avec date de début et de fin",
         "permanent": "En permanence",
-        "opening_hours": "Heures d 'ouverture",
+        "opening_hours": "Heures",
         "button_change_opening_hours": "Modifier les heures d'ouverture",
-        "button_add_opening_hours": "Ajouter des heures d'ouverture"
+        "button_add_opening_hours": "Ajouter des heures d'ouverture",
+        "button_add_hours": "Ajouter des heures",
+        "overview": {
+          "edit": "Modifier",
+          "delete": "Supprimer",
+          "weekly_on": "Chaque semaine:",
+          "closed": "Fermé",
+          "deviating_except": "Sauf:",
+          "deviating_then_weekly": "puis chaque semaine:",
+          "childcare": "avec garderie avant dès {{start}} et garderie après jusqu'à {{end}}",
+          "delete_modal": {
+            "title": "Supprimer les heures",
+            "body": "Êtes-vous sûr de vouloir supprimer toutes les heures d'ouverture? Cette action ne peut pas être annulée.",
+            "confirm": "Supprimer définitivement"
+          }
+        }
       },
       "days": {
         "short": {
@@ -182,7 +197,7 @@
         "button_confirm": "Sauvegarder",
         "end_time": "à",
         "start_time": "de",
-        "title": "Heures d 'ouverture",
+        "title": "Ajouter des heures",
         "days": "Jours",
         "hours": "Heures",
         "select_days": "Sélectionner jour(s)",
