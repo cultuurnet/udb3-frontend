@@ -50,12 +50,15 @@ export const usePublicationStatus = (offer: Offer): OfferPublicationStatus => {
 
     const color = PublicationStatusToColor[publicationStatus];
 
-    const label =
-      publicationStatus === PublicationStatus.PLANNED
-        ? t(`dashboard.row_status.${publicationStatus}`, {
-            date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
-          })
-        : t(`dashboard.row_status.${publicationStatus}`);
+    const needsDate =
+      publicationStatus === PublicationStatus.PLANNED ||
+      publicationStatus === PublicationStatus.PUBLISHED;
+
+    const label = needsDate
+      ? t(`dashboard.row_status.${publicationStatus}`, {
+          date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
+        })
+      : t(`dashboard.row_status.${publicationStatus}`);
 
     const userId = user?.sub;
     const userIdv1 = user?.['https://publiq.be/uitidv1id'];

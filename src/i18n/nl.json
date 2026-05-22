@@ -1028,7 +1028,7 @@
     },
     "row_status": {
       "PLANNED": "Publicatie vanaf {{date}}",
-      "PUBLISHED": "Gepubliceerd",
+      "PUBLISHED": "Gepubliceerd op {{date}}",
       "DRAFT": "Kladversie",
       "APPROVED": "Gepubliceerd",
       "REJECTED": "Publicatie afgewezen",

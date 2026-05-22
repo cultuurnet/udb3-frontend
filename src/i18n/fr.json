@@ -990,7 +990,7 @@
     },
     "row_status": {
       "PLANNED": "Publication à partir de {{date}}",
-      "PUBLISHED": "Publié",
+      "PUBLISHED": "Publié le {{date}}",
       "DRAFT": "Version préliminaire",
       "APPROVED": "Publié",
       "REJECTED": "Publication rejetée",
