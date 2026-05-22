@@ -354,6 +354,10 @@ const Preview = () => {
       ),
     },
     {
+      field: t('preview.labels.age'),
+      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
+    },
+    {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
@@ -404,10 +408,6 @@ const Preview = () => {
     {
       field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
-    },
-    {
-      field: t('preview.labels.age'),
-      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
     },
     {
       field: t('preview.labels.image'),
