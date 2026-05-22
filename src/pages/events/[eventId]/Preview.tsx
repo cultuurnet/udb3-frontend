@@ -173,12 +173,20 @@ const Preview = () => {
     return (
       <table
         css={`
-          background-color: ${colors.grey1};
           width: 100%;
 
           td {
-            border: 1px solid ${colors.grey3};
-            padding: 8px;
+            padding-left: 0 !important;
+            border-bottom: 1px solid ${colors.grey3};
+          }
+          tr:first-child td {
+            padding-top: 0;
+          }
+          td:first-child {
+            color: ${colors.grey5};
+          }
+          tr:last-child td {
+            border-bottom: none;
           }
         `}
       >
