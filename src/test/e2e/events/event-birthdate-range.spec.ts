@@ -101,19 +101,23 @@ test.describe('Birthdate range', () => {
     await page.goto(eventEditUrl);
     await page.locator(ageInputModeDOBToggle).click();
 
+    const waitForBirthdateRangePut = () =>
+      page.waitForResponse(
+        (response) =>
+          response.url().includes('/birthdateRange') &&
+          response.request().method() === 'PUT' &&
+          response.ok(),
+      );
+
+    const firstPut = waitForBirthdateRangePut();
     await page.locator(birthDateMinInput).fill('01/01/2010');
     await page.locator(birthDateMinInput).press('Enter');
+    await firstPut;
 
+    const secondPut = waitForBirthdateRangePut();
     await page.locator(birthDateMaxInput).fill('31/12/2015');
     await page.locator(birthDateMaxInput).press('Enter');
-
-    // Wait for the PUT /birthdateRange mutation to complete
-    await page.waitForResponse(
-      (response) =>
-        response.url().includes('/birthdateRange') &&
-        response.request().method() === 'PUT' &&
-        response.ok(),
-    );
+    await secondPut;
 
     await page.goto(eventEditUrl);
 
