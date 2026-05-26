@@ -53,6 +53,11 @@ const AgeRangeStep = ({
   const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
 
+  useEffect(() => {
+    setMinBirthDate((current) => current ?? new Date());
+    setMaxBirthDate((current) => current ?? new Date());
+  }, []);
+
   const isCustomAgeRangeSelected = (typicalAgeRange: string): boolean => {
     return !Object.keys(AgeRanges).some(
       (key) =>
@@ -214,10 +219,9 @@ const AgeRangeStep = ({
                   onChange={(newMode: string) => {
                     const next = newMode as AgeInputMode;
                     setInputMode(next);
-                    if (next === AgeInputModes.DATE_OF_BIRTH) {
-                      commitBirthdateRange(field, minBirthDate, maxBirthDate);
-                      return;
-                    }
+
+                    if (next === AgeInputModes.DATE_OF_BIRTH) return;
+
                     field.onChange({
                       ...field.value,
                       birthdateRange: undefined,
