@@ -35,13 +35,13 @@
     "till": "au"
   },
   "city_picker": {
-    "label_be": "Municipalité",
-    "label_nl": "Municipalité",
-    "label_de": "Municipalité",
+    "label_be": "Commune",
+    "label_nl": "Commune",
+    "label_de": "Commune",
     "info_be": "Par exemple. Gand ou 9000",
     "info_nl": "Par exemple. Groningue ou Amsterdam",
     "info_de": "Par exemple. Aix-la-Chapelle ou Berlin",
-    "no_cities": "Aucune municipalité trouvée",
+    "no_cities": "Aucune commune trouvée",
     "no_cities_netherlands": "Aucune résidence trouvée"
   },
   "country_picker": {
@@ -50,7 +50,7 @@
   "copyright": {
     "questions": {
       "1": {
-        "answer": "Si la photo est protégée par le droit d'auteur, le nom du créateur doit être indiqué dans le champ du droit d'auteur. Les photos doivent être libres de droits. Les photos saisies peuvent être utilisées par l'asbl publiq pour publication sur le site Internet ou dans des campagnes promotionnelles et de presse. publiq vzw se réserve le droit d'effectuer des retouches photo sur les images collectées. Les photos sont également incluses dans les archives photographiques de l'asbl publiq et peuvent être utilisées dans les canaux de communication de l'asbl publiq tels que le site Web, les newsletters, la communication de presse,…",
+        "answer": "Si la photo est protégée par le droit d'auteur, le nom de l'auteur doit être indiqué dans le champ du droit d'auteur. Les photos doivent être libres de droits. Les photos saisies peuvent être utilisées par l'asbl publiq pour publication sur le site Internet ou dans des campagnes promotionnelles et de presse. publiq vzw se réserve le droit d'effectuer des retouches photo sur les images collectées. Les photos sont également incluses dans les archives photographiques de l'asbl publiq et peuvent être utilisées dans les canaux de communication de l'asbl publiq tels que le site Web, les newsletters, la communication de presse,…",
         "question": "Que fait publiq vzw avec les photos que je télécharge ?"
       },
       "2": {
@@ -76,7 +76,7 @@
           "paragraph1": "Même si vous :",
           "step1": "le titulaire du droit d'auteur",
           "step2": "ne poursuit pas un but lucratif en utilisant le matériel",
-          "step3": "vu le même matériau ou un matériau similaire utilisé ailleurs",
+          "step3": "vu le même matériel ou un matériel similaire utilisé ailleurs",
           "step4": "acheté le matériel audiovisuel (en ligne, dans un livre, sur CD, DVD,...)",
           "step5": "enregistré ou copié vous-même le matériel à partir d'un livre, d'un magazine, d'un journal, d'une télévision, d'un cinéma, de la radio",
           "step6": "a déclaré qu'\"aucune violation du droit d'auteur n'est prévue\""
@@ -88,11 +88,11 @@
         "question": "Le gestionnaire peut-il servir de médiateur dans les litiges relatifs aux droits d'auteur ?"
       },
       "6": {
-        "answer": "Ce n'est pas parce que vous apparaissez vous-même sur une photo, une vidéo ou un enregistrement audio que vous détenez le droit d'auteur. Par exemple, si un ami filme une conversation entre vous deux, ce serait l'ami qui détient les droits d'auteur, pas vous. Les mots utilisés dans cette conversation ne sont pas soumis à un droit d'auteur distinct de celui de la vidéo elle-même, à moins qu'ils n'aient été pré-écrits. Si votre ami, ou quelqu'un d'autre, a téléchargé une vidéo ou une image contenant une image ou un enregistrement de vous-même sans votre permission, et vous pensez que cela constitue une atteinte à votre vie privée ou à votre sécurité, vous pouvez donc déposer une plainte relative à la confidentialité.",
+        "answer": "Ce n'est pas parce que vous apparaissez vous-même sur une photo, une vidéo ou un enregistrement audio que vous détenez le droit d'auteur. Par exemple, si un ami filme une conversation entre vous deux, c'est votre ami qui détient les droits d'auteur, pas vous. Les mots utilisés dans cette conversation ne sont pas soumis à un droit d'auteur distinct de celui de la vidéo elle-même, à moins qu'ils n'aient été pré-écrits. Si votre ami, ou quelqu'un d'autre, a téléchargé une vidéo ou une image contenant une image ou un enregistrement de vous-même sans votre permission, et vous pensez que cela constitue une atteinte à votre vie privée ou à votre sécurité, vous pouvez donc déposer une plainte relative à la confidentialité.",
         "question": "Quelle est la différence entre le droit d'auteur et la vie privée ?"
       },
       "7": {
-        "answer": "Tout d'abord : évitez Google Images. Vous vous retrouvez avec une série interminable d'images dont vous n'êtes pas sûr qu'elles représentent qui ou ce que vous recherchiez, et pour lesquelles vous pouvez rarement trouver les droits. Vous pouvez rechercher des images réutilisables via la \"recherche avancée\", mais cela n'offre aucune certitude. Flickr.com est plus fiable dans ce domaine : l'option de recherche Creative Commons filtre les images réutilisables parmi une large gamme. Entrez un terme de recherche, puis cliquez sur \"recherche avancée\", allez au bas de cette page sur \"creative commons\" et cochez la case \"rechercher uniquement dans le contenu sous licence Creative Commons\". Les résultats qui vous restent ensuite forment l'étang dans lequel vous pouvez choisir. Vous devez respecter les règles : si vous souhaitez utiliser les images, vous devez mettre un lien vers la source et mentionner le copyright.",
+        "answer": "Tout d'abord : évitez Google Images. Vous vous retrouvez avec une série interminable d'images dont vous n'êtes pas sûr qu'elles représentent qui ou ce que vous recherchez, et pour lesquelles vous pouvez rarement trouver les droits. Vous pouvez rechercher des images réutilisables via la \"recherche avancée\", mais cela n'offre aucune certitude. Flickr.com est plus fiable dans ce domaine : l'option de recherche Creative Commons filtre les images réutilisables parmi une large gamme. Entrez un terme de recherche, puis cliquez sur \"recherche avancée\", allez au bas de la page sur \"creative commons\" et cochez la case \"rechercher uniquement dans le contenu sous licence Creative Commons\". Les résultats restants forment l'échantillon dans lequel vous pouvez choisir. Vous devez respecter les règles : si vous souhaitez utiliser les images, vous devez mettre un lien vers la source et mentionner le copyright.",
         "question": "Où et comment pouvez-vous trouver plus de certitude sur le matériel photo libre de droits sur Internet ?"
       }
     }
@@ -120,12 +120,12 @@
     "calendar": {
       "title": {
         "events": "Quand cette activité a-t-elle lieu ?",
-        "places": "Quand cet endroit ou cet emplacement est-il ouvert ?"
+        "places": "Quand ce lieu est-il ouvert ?"
       },
       "types": {
-        "one_or_more_days": "À des dates spécifiques",
+        "one_or_more_days": "À des dates spécifiques ",
         "one_or_more_days_example": "p. ex. le 5 juillet de 12h à 20h",
-        "fixed_days": "Période continue",
+        "fixed_days": "À des moments hebdomadaires fixes ou en continu",
         "fixed_days_example": "p. ex. chaque mercredi de 14h à 15h"
       },
       "one_or_more_days": {
@@ -187,7 +187,7 @@
         "hours": "Heures",
         "select_days": "Sélectionner jour(s)",
         "deviating": {
-          "title": "Ajouter des heures déviantes",
+          "title": "Ajouter des heures dérogatoires",
           "period_title": "Période dérogatoire {{index}}",
           "remove_period": "Supprimer la période",
           "select_period": "Sélectionner la période",
@@ -233,7 +233,7 @@
     "location": {
       "title": {
         "events": "Où cette activité aura-t-elle lieu ?",
-        "places": "Où est cet endroit ou cet emplacement ?"
+        "places": "Où est ce lieu ?"
       },
       "recent_locations": {
         "title": "Choisissez un lieu que vous avez utilisé récemment",
@@ -282,10 +282,10 @@
       "title": " Données de base",
       "validation_messages": {
         "name": {
-          "required": "Nom est requis."
+          "required": "Le nom est requis."
         },
         "age_range": {
-          "required": "Group d'âge est requis",
+          "required": "Le groupe d'âge est requis",
           "matches": "L'âge spécifié n'est pas valide"
         }
       },
@@ -294,7 +294,7 @@
         "title_places": "Nom du lieu",
         "tip_events": "Choisissez un <strong>bon titre</strong>, p.ex. \"Rouler à vélo le long des chapelles\", \"La Saga de la Licorne\".",
         "tip_places": "Utilisez la <strong>dénomination officielle</strong>, p.ex. \"Argos, centre pour l'art et les médias\", \"Site de l'abbaye Herkenrode\", \"Centre culturel De Werf\".",
-        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans la base de données UiT. <placeLink>Cliquez ici</placeLink> pour accéder à la page de localisation existante."
+        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans la base de données UiT. <placeLink>Cliquez ici</placeLink> pour accéder à la page du lieu existant."
       },
       "age": {
         "title": "Adapté à",
@@ -321,7 +321,7 @@
     "type_and_theme": {
       "title_events": "Quel type d'activité souhaitez-vous ajouter ?",
       "title_places": "Quel type de lieu souhaitez-vous ajouter ?",
-      "change_theme": "Changer thème",
+      "change_theme": "Changer le thème",
       "theme_groups": {
         "dance": "Danse",
         "art_and_heritage": "Art et Patrimoine",
@@ -329,12 +329,12 @@
         "sport": "Sport",
         "various": "Divers"
       },
-      "change_type": "Changer type",
+      "change_type": "Changer le type",
       "refine": "Affiner"
     },
     "additionalInformation": {
-      "title_events": "Faites ressortir cette activité",
-      "title_places": "Faites en sorte que cet emplacement se démarque",
+      "title_events": "Faites en sorte que cette activité se démarque",
+      "title_places": "Faites en sorte que ce lieu se démarque",
       "accessibility": {
         "title": "Accessibilité",
         "departure": {
@@ -354,8 +354,8 @@
         "members": "Seulement pour des membres",
         "title": "Accès",
         "help": {
-          "education": "Votre article ne sera publié que sur des chaînes d'éducation culturelle telles que cultuurkuur.be. Après la publication, vous pouvez ajouter des informations spécifiques pour les écoles.",
-          "members": "Votre article est seulement publié sur des chaînes pour des associations et leurs membres."
+          "education": "Votre article ne sera publié que sur des canaux d'éducation culturelle telles que cultuurkuur.be. Après la publication, vous pouvez ajouter des informations spécifiques pour les écoles.",
+          "members": "Votre article est seulement publié sur des canaux pour des associations et leurs membres."
         }
       },
       "contact_info": {
@@ -374,10 +374,10 @@
         "email_error": "Pas d'adresse email valide",
         "email": "Adresse mail",
         "phone": "Numéro de téléphone",
-        "phone_error": "Pas un numéro de téléphone valide",
+        "phone_error": "Pas de numéro de téléphone valide",
         "url": "Site Internet ou page de réservation",
-        "url_error": "Pas de URL valide",
-        "select_url_label": "Comment ce lien de réservation peut-il apparaître ?",
+        "url_error": "Pas d'URL valide",
+        "select_url_label": "Comment ce lien de réservation doit-il apparaître ?",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
           "availability": "Controlez la disponibilité",
@@ -910,8 +910,8 @@
       }
     },
     "footer": {
-      "auto_save": "Vos modifications seront automatiquement enregistrées à partir de maintenant",
-      "done_editing": "Finis d'éditer"
+      "auto_save": "Vos modifications seront désormais enregistrées automatiquement",
+      "done_editing": "Fini d'éditer"
     },
     "publish_modal": {
       "actions": {
