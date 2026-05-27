@@ -303,6 +303,12 @@
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
         },
+        "birth_date": {
+          "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
+          "from": "von",
+          "to": "bis",
+          "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
+        },
         "all": "Alle Altersgruppen",
         "toddlers": "Kleinkinder",
         "preschoolers": "Kindergartenkinder",
@@ -319,6 +325,7 @@
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
+        "error_invalid": "Das angegebene Alter ist ungültig.",
         "audience": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder",

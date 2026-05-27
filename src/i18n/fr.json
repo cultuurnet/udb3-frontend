@@ -303,6 +303,12 @@
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
         },
+        "birth_date": {
+          "title": "Indiquez les dates de naissance minimum et maximum des participants",
+          "from": "du",
+          "to": "au",
+          "error_max_before_min": "La date 'au' ne peut pas être antérieure à la date 'du'."
+        },
         "all": "De tous âges",
         "toddlers": "Tout-petits",
         "preschoolers": "Jeunes enfants",
@@ -319,6 +325,7 @@
         "error_max_lower_than_min": "L'âge maximum ne peut être inférieur à l'âge minimum.",
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
         "error_no_min_age": "Veuillez entrer un âge minimum",
+        "error_invalid": "L'âge spécifié n'est pas valide.",
         "audience": {
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants",
