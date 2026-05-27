@@ -1,14 +1,18 @@
+import { format, isBefore, parse, startOfDay } from 'date-fns';
 import { FormEvent, useEffect, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
+import { useDeleteOfferBirthdateRangeMutation } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { DatePicker } from '@/ui/DatePicker';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Label, LabelVariants } from '@/ui/Label';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
@@ -71,24 +75,48 @@ const AgeRangeStep = (props: AgeRangeStepProps) => {
 const AgeRangeStepBoa = ({
   control,
   onChange,
+  offerId,
+  scope,
   ...props
 }: AgeRangeStepProps) => {
   const { t } = useTranslation();
+  const deleteBirthdateRangeMutation = useDeleteOfferBirthdateRangeMutation();
 
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
   const [minAge, setMinAge] = useState('');
   const [maxAge, setMaxAge] = useState('');
+  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
+  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
 
-  const useInitializeAgeRangeFields = (field: Field) => {
-    useEffect(() => {
-      const typicalAgeRange = field.value?.typicalAgeRange;
-      if (!typicalAgeRange) return;
+  const watchedTypicalAgeRange = useWatch({
+    control,
+    name: 'nameAndAgeRange.typicalAgeRange',
+  });
+  const watchedBirthdateRange = useWatch({
+    control,
+    name: 'nameAndAgeRange.birthdateRange',
+  });
 
-      const [min, max] = typicalAgeRange.split('-');
-      setMinAge(min ?? '');
-      setMaxAge(max ?? '');
-    }, [field.value?.typicalAgeRange]);
-  };
+  useEffect(() => {
+    setMinBirthDate((current) => current ?? new Date());
+    setMaxBirthDate((current) => current ?? new Date());
+  }, []);
+
+  useEffect(() => {
+    if (!watchedTypicalAgeRange) return;
+
+    const [min, max] = watchedTypicalAgeRange.split('-');
+    setMinAge(min ?? '');
+    setMaxAge(max ?? '');
+  }, [watchedTypicalAgeRange]);
+
+  useEffect(() => {
+    if (!watchedBirthdateRange?.from || !watchedBirthdateRange?.to) return;
+
+    setMinBirthDate(parse(watchedBirthdateRange.from, 'yyyy-MM-dd', new Date()));
+    setMaxBirthDate(parse(watchedBirthdateRange.to, 'yyyy-MM-dd', new Date()));
+    setInputMode(AgeInputModes.DATE_OF_BIRTH);
+  }, [watchedBirthdateRange]);
 
   const commitAgeRange = (field: Field, newMin: string, newMax: string) => {
     if (validateAgeRange(newMin, newMax)) return;
@@ -107,15 +135,35 @@ const AgeRangeStepBoa = ({
     onChange({ ...field.value, typicalAgeRange: apiLabel });
   };
 
+  const commitBirthdateRange = (
+    field: Field,
+    newMin: Date | undefined,
+    newMax: Date | undefined,
+  ) => {
+    setMinBirthDate(newMin);
+    setMaxBirthDate(newMax);
+
+    const nextValue = {
+      ...field.value,
+      birthdateRange:
+        newMin && newMax && !isBefore(startOfDay(newMax), startOfDay(newMin))
+          ? {
+              from: format(newMin, 'yyyy-MM-dd'),
+              to: format(newMax, 'yyyy-MM-dd'),
+            }
+          : undefined,
+    };
+
+    field.onChange(nextValue);
+    onChange(nextValue);
+  };
+
   return (
     <Stack {...getStackProps(props)}>
       <Controller
         name={'nameAndAgeRange'}
         control={control}
         render={({ field }) => {
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          useInitializeAgeRangeFields(field);
-
           const selectedPreset = findPresetKey(field.value?.typicalAgeRange);
           const errorKey = validateAgeRange(minAge, maxAge);
 
@@ -127,9 +175,22 @@ const AgeRangeStepBoa = ({
               <ToggleGroup
                 name="age-input-mode"
                 value={inputMode}
-                onChange={(newMode: string) =>
-                  setInputMode(newMode as AgeInputMode)
-                }
+                onChange={(newMode: string) => {
+                  const next = newMode as AgeInputMode;
+                  setInputMode(next);
+
+                  if (next === AgeInputModes.DATE_OF_BIRTH) return;
+
+                  field.onChange({ ...field.value, birthdateRange: undefined });
+                  onChange({ ...field.value, birthdateRange: undefined });
+
+                  if (offerId && field.value?.birthdateRange) {
+                    deleteBirthdateRangeMutation.mutate({
+                      eventId: offerId,
+                      scope,
+                    });
+                  }
+                }}
                 options={Object.values(AgeInputModes).map((mode) => ({
                   value: mode,
                   label: t(`create.name_and_age.age.input_mode.${mode}`),
@@ -139,7 +200,57 @@ const AgeRangeStepBoa = ({
                   margin-bottom: 1rem;
                 `}
               />
-              {inputMode === AgeInputModes.DATE_OF_BIRTH ? null : (
+              {inputMode === AgeInputModes.DATE_OF_BIRTH ? (
+                <Stack spacing={3} maxWidth="40rem">
+                  <Text fontWeight="bold">
+                    {t('create.name_and_age.age.birth_date.title')}
+                  </Text>
+                  <Inline spacing={3} alignItems="flex-end">
+                    <Stack spacing={2}>
+                      <Label
+                        variant={LabelVariants.BOLD}
+                        htmlFor="age-birth-date-min"
+                      >
+                        {t('create.name_and_age.age.birth_date.from')}
+                      </Label>
+                      <DatePicker
+                        id="age-birth-date-min"
+                        selected={minBirthDate}
+                        onChange={(date) =>
+                          commitBirthdateRange(field, date, maxBirthDate)
+                        }
+                      />
+                    </Stack>
+                    <Stack spacing={2}>
+                      <Label
+                        variant={LabelVariants.BOLD}
+                        htmlFor="age-birth-date-max"
+                      >
+                        {t('create.name_and_age.age.birth_date.to')}
+                      </Label>
+                      <DatePicker
+                        id="age-birth-date-max"
+                        selected={maxBirthDate}
+                        onChange={(date) =>
+                          commitBirthdateRange(field, minBirthDate, date)
+                        }
+                      />
+                    </Stack>
+                  </Inline>
+                  {minBirthDate &&
+                    maxBirthDate &&
+                    isBefore(
+                      startOfDay(maxBirthDate),
+                      startOfDay(minBirthDate),
+                    ) && (
+                      <Text color="red">
+                        {t(
+                          'create.name_and_age.age.birth_date.error_max_before_min',
+                        )}
+                      </Text>
+                    )}
+                </Stack>
+              ) : (
                 <Stack spacing={3} maxWidth="40rem">
                   <Text fontWeight="bold">
                     {t('create.name_and_age.age.input_range_title')}

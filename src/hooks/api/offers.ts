@@ -10,7 +10,7 @@ import {
   useGetPlaceByIdQuery,
 } from '@/hooks/api/places';
 import type { Headers } from '@/hooks/api/types/Headers';
-import { Offer, OfferHistory } from '@/types/Offer';
+import { BirthdateRange, Offer, OfferHistory } from '@/types/Offer';
 import { PaginatedData } from '@/types/PaginatedData';
 import { createEmbededCalendarSummaries } from '@/utils/createEmbededCalendarSummaries';
 import { createSortingArgument } from '@/utils/createSortingArgument';
@@ -251,6 +251,61 @@ const useChangeOfferTypicalAgeRangeMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: changeOfferTypicalAgeRange,
     mutationKey: 'offers-change-typical-age-range',
+    ...configuration,
+  });
+
+type ChangeOfferBirthdateRangeArguments = {
+  headers: Headers;
+  eventId: string;
+  birthdateRange: BirthdateRange;
+  scope: Scope;
+};
+
+const changeOfferBirthdateRange = async ({
+  headers,
+  eventId,
+  birthdateRange,
+  scope,
+}: ChangeOfferBirthdateRangeArguments) =>
+  fetchFromApi({
+    path: `/${scope}/${eventId}/birthdateRange`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(birthdateRange),
+    },
+  });
+
+const useChangeOfferBirthdateRangeMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeOfferBirthdateRange,
+    mutationKey: 'offers-change-birthdate-range',
+    ...configuration,
+  });
+
+type DeleteOfferBirthdateRangeArguments = {
+  headers: Headers;
+  eventId: string;
+  scope: Scope;
+};
+
+const deleteOfferBirthdateRange = async ({
+  headers,
+  eventId,
+  scope,
+}: DeleteOfferBirthdateRangeArguments) =>
+  fetchFromApi({
+    path: `/${scope}/${eventId}/birthdateRange`,
+    options: {
+      method: 'DELETE',
+      headers,
+    },
+  });
+
+const useDeleteOfferBirthdateRangeMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: deleteOfferBirthdateRange,
+    mutationKey: 'offers-delete-birthdate-range',
     ...configuration,
   });
 
@@ -682,6 +737,7 @@ export {
   useAddOfferPriceInfoMutation,
   useAddOfferVideoMutation,
   useBulkUpdateOfferLabelsMutation,
+  useChangeOfferBirthdateRangeMutation,
   useChangeOfferCalendarMutation,
   useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,
@@ -689,6 +745,7 @@ export {
   useChangeOfferTypeMutation,
   useChangeOfferTypicalAgeRangeMutation,
   useDeleteDescriptionMutation,
+  useDeleteOfferBirthdateRangeMutation,
   useDeleteOfferImageMutation,
   useDeleteOfferOrganizerMutation,
   useDeleteOfferVideoMutation,
