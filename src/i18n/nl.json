@@ -328,6 +328,12 @@
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
         },
+        "birth_date": {
+          "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
+          "from": "van",
+          "to": "tot",
+          "error_max_before_min": "De 'tot'-datum mag niet vroeger vallen dan de 'van'-datum."
+        },
         "all": "Alle leeftijden",
         "toddlers": "Peuters",
         "preschoolers": "Kleuters",
