@@ -318,6 +318,12 @@
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
         },
+        "birth_date": {
+          "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
+          "from": "von",
+          "to": "bis",
+          "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
+        },
         "all": "Alle Altersgruppen",
         "toddlers": "Kleinkinder",
         "preschoolers": "Kindergartenkinder",
