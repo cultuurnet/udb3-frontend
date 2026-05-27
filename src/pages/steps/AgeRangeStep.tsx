@@ -99,7 +99,6 @@ const AgeRangeStep = ({
     }
 
     resetCustomAgeRange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedTypicalAgeRange]);
 
   useEffect(() => {
