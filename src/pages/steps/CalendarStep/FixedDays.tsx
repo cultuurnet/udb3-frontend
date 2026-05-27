@@ -151,25 +151,35 @@ export const FixedDays = ({
                     ${index > 0 ? 'border-top: 1px solid lightgrey;' : ''}
                   `}
                 >
-                  <Inline justifyContent="space-between">
-                    <Text maxWidth="20rem">
+                  <Inline alignItems="flex-start">
+                    <Text minWidth="12rem">
                       {openingHour.dayOfWeek
-                        .map((day) => t(`create.calendar.days.full.${day}`))
+                        .map((day) => t(`create.calendar.days.short.${day}`))
                         .join(', ')}
                     </Text>
-                    <Text>
+                    <Text minWidth="8rem">
                       {openingHour.opens} - {openingHour.closes}
                     </Text>
+                    <Stack spacing={1} minWidth="10rem">
+                      {openingHour.childcareStartTime &&
+                        openingHour.childcareEndTime && (
+                          <>
+                            <Text fontStyle="italic">
+                              {t(
+                                'create.calendar.fixed_days.overview.childcare_before',
+                                { start: openingHour.childcareStartTime },
+                              )}
+                            </Text>
+                            <Text fontStyle="italic">
+                              {t(
+                                'create.calendar.fixed_days.overview.childcare_after',
+                                { end: openingHour.childcareEndTime },
+                              )}
+                            </Text>
+                          </>
+                        )}
+                    </Stack>
                   </Inline>
-                  {openingHour.childcareStartTime &&
-                    openingHour.childcareEndTime && (
-                      <Text fontStyle="italic">
-                        {t('create.calendar.fixed_days.overview.childcare', {
-                          start: openingHour.childcareStartTime,
-                          end: openingHour.childcareEndTime,
-                        })}
-                      </Text>
-                    )}
                 </Stack>
               ))}
             </Stack>
@@ -203,30 +213,37 @@ export const FixedDays = ({
                           ${index > 0 ? 'border-top: 1px solid lightgrey;' : ''}
                         `}
                       >
-                        <Inline justifyContent="space-between">
-                          <Text>
+                        <Inline alignItems="flex-start">
+                          <Text minWidth="12rem">
                             {openingHour.dayOfWeek
                               .map((day) =>
-                                t(`create.calendar.days.full.${day}`),
+                                t(`create.calendar.days.short.${day}`),
                               )
                               .join(', ')}
                           </Text>
-                          <Text>
+                          <Text minWidth="8rem">
                             {openingHour.opens} - {openingHour.closes}
                           </Text>
-                        </Inline>
-                        {openingHour.childcare?.start &&
-                          openingHour.childcare?.end && (
-                            <Text fontStyle="italic">
-                              {t(
-                                'create.calendar.fixed_days.overview.childcare',
-                                {
-                                  start: openingHour.childcare.start,
-                                  end: openingHour.childcare.end,
-                                },
+                          <Stack spacing={1} minWidth="10rem">
+                            {openingHour.childcare?.start &&
+                              openingHour.childcare?.end && (
+                                <>
+                                  <Text fontStyle="italic">
+                                    {t(
+                                      'create.calendar.fixed_days.overview.childcare_before',
+                                      { start: openingHour.childcare.start },
+                                    )}
+                                  </Text>
+                                  <Text fontStyle="italic">
+                                    {t(
+                                      'create.calendar.fixed_days.overview.childcare_after',
+                                      { end: openingHour.childcare.end },
+                                    )}
+                                  </Text>
+                                </>
                               )}
-                            </Text>
-                          )}
+                          </Stack>
+                        </Inline>
                       </Stack>
                     ))}
                   </Stack>
@@ -284,7 +301,7 @@ export const FixedDays = ({
           >
             <Text maxWidth="20rem">
               {openingHour.dayOfWeek
-                .map((dayOfWeek) => t(`create.calendar.days.full.${dayOfWeek}`))
+                .map((dayOfWeek) => t(`create.calendar.days.short.${dayOfWeek}`))
                 .join(', ')}
             </Text>
             <Text>
