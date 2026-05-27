@@ -422,17 +422,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               box-shadow: none;
             }
 
-            ${isLinkDanger
-              ? `
-              span {
-                color: ${colors.dangerDark};
-              }
+            ${isLinkDanger &&
+            `
+              span { color: ${colors.dangerDark}; }
               &:hover span {
                 color: ${colors.dangerBright};
                 text-decoration-color: ${colors.dangerBright};
               }
-            `
-              : ''}
+            `}
           `}
           alignItems="center"
           justifyContent="flex-start"
