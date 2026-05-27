@@ -113,7 +113,9 @@ const AgeRangeStepBoa = ({
   useEffect(() => {
     if (!watchedBirthdateRange?.from || !watchedBirthdateRange?.to) return;
 
-    setMinBirthDate(parse(watchedBirthdateRange.from, 'yyyy-MM-dd', new Date()));
+    setMinBirthDate(
+      parse(watchedBirthdateRange.from, 'yyyy-MM-dd', new Date()),
+    );
     setMaxBirthDate(parse(watchedBirthdateRange.to, 'yyyy-MM-dd', new Date()));
     setInputMode(AgeInputModes.DATE_OF_BIRTH);
   }, [watchedBirthdateRange]);
