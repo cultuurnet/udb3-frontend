@@ -26,6 +26,7 @@ import {
 import {
   hasChildcareErrors,
   hasDateRangeError,
+  hasInvalidOpeningHoursError,
   hasMissingDaysError,
   hasMissingOpeningHoursDaysError,
   type OpeningHoursFormData,
@@ -250,6 +251,7 @@ const CalendarOpeninghoursModal = ({
     !isDeleteConfirm &&
     (hasChildcareErrors(openingHours) ||
       hasMissingOpeningHoursDaysError(openingHours) ||
+      hasInvalidOpeningHoursError(openingHours) ||
       hasMissingDaysError(deviatingPeriods) ||
       hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
       deviatingPeriods.some((period) =>
@@ -452,6 +454,11 @@ const CalendarOpeninghoursModal = ({
                     'create.calendar.days.childcare.validation_messages.set_times_required',
                   )}
                 </Alert>
+              )}
+              {openingHour.closes < openingHour.opens && (
+                <Text color="red">
+                  {t('create.calendar.days.validation_messages.invalid_hours')}
+                </Text>
               )}
               {startError && <Text color="red">{startError}</Text>}
               {endError && <Text color="red">{endError}</Text>}
