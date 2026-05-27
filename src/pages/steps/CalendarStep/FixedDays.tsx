@@ -301,7 +301,9 @@ export const FixedDays = ({
           >
             <Text maxWidth="20rem">
               {openingHour.dayOfWeek
-                .map((dayOfWeek) => t(`create.calendar.days.short.${dayOfWeek}`))
+                .map((dayOfWeek) =>
+                  t(`create.calendar.days.short.${dayOfWeek}`),
+                )
                 .join(', ')}
             </Text>
             <Text>
