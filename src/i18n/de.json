@@ -1867,6 +1867,9 @@
     "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttermin auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "ages": "Alters: {{ages}}",
     "children_only": "Nur für Kinder",
+    "accessibility": {
+      "description": "Es gibt einen Transport, der Kinder zu Ihrer Aktivität bringt von:"
+    },
     "labels": {
       "title": "Titel",
       "type": "Typ",
@@ -1886,7 +1889,8 @@
       "age": "Geeignet für",
       "image": "Abbildungen",
       "video": "Videos",
-      "event_id": "ID"
+      "event_id": "ID",
+      "accessibility": "Erreichbarkeit"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
     "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",

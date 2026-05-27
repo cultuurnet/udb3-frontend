@@ -22,6 +22,7 @@ import i18n, { SupportedLanguage } from '@/i18n/index';
 import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
+import { AccessibilityPreview } from '@/pages/preview/AccessibilityPreview';
 import { AgePreview } from '@/pages/preview/AgePreview';
 import { BookingInfoPreview } from '@/pages/preview/BookingInfoPreview';
 import { ContactInfoPreview } from '@/pages/preview/ContactInfoPreview';
@@ -429,6 +430,16 @@ const Preview = () => {
       field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
     },
+    ...(isEvent(offer) && offer.departurePlaces?.length
+      ? [
+          {
+            field: t('preview.labels.accessibility'),
+            value: (
+              <AccessibilityPreview departurePlaces={offer.departurePlaces} />
+            ),
+          },
+        ]
+      : []),
     {
       field: t('preview.labels.image'),
       value: <ImagePreview mediaObject={mediaObject} />,

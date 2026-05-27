@@ -1928,6 +1928,9 @@
     "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
     "children_only": "Voor kinderen alleen",
+    "accessibility": {
+      "description": "Er is vervoer voorzien dat kinderen tot bij jouw activiteit brengt vanuit:"
+    },
     "labels": {
       "title": "Titel",
       "type": "Type",
@@ -1947,7 +1950,8 @@
       "age": "Geschikt voor",
       "image": "Afbeeldingen",
       "video": "Video's",
-      "event_id": "ID"
+      "event_id": "ID",
+      "accessibility": "Bereikbaarheid"
     },
     "public_url": "Bekijk op {{publicationBrand}}",
     "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",

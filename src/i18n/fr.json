@@ -1867,6 +1867,9 @@
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
     "children_only": "Pour les enfants uniquement",
+    "accessibility": {
+      "description": "Un transport est prévu pour amener les enfants à votre activité depuis:"
+    },
     "labels": {
       "title": "Titre",
       "type": "Type",
@@ -1886,7 +1889,8 @@
       "age": "Adapté à",
       "image": "Images",
       "video": "Videos",
-      "event_id": "ID"
+      "event_id": "ID",
+      "accessibility": "Accessibilité"
     },
     "public_url": "Voir sur {{publicationBrand}}",
     "rejected_explanation": "Cet article a été refusé pour publication. <publication_rules_link>Consultez les instructions</publication_rules_link>",
