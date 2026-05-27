@@ -38,9 +38,9 @@ type FixedDaysProps = {
   onChangeEndDate: (date: Date | null) => void;
   onChangeOpeningHours: (newOpeningHours: OpeningHours[]) => void;
   onChangeCalendarState: (newState: CalendarState) => void;
-  onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
+  onChangeAdjustedDays: (adjustedDays: DeviatingPeriodData[]) => void;
   initialAdjustedDays?: DeviatingPeriodData[];
-  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  onChangeClosingPeriods: (closingPeriods: ClosingPeriodData[]) => void;
   initialClosingPeriods?: ClosingPeriodData[];
 };
 
@@ -94,8 +94,8 @@ export const FixedDays = ({
   }, [isPermanent]);
 
   const handleDeleteAll = () => {
-    onChangeAdjustedDays?.([]);
-    onChangeClosingPeriods?.([]);
+    onChangeAdjustedDays([]);
+    onChangeClosingPeriods([]);
     handleChangeOpeningHours([]);
     setIsDeleteConfirmModalVisible(false);
   };

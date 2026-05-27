@@ -48,9 +48,9 @@ type CalendarOpeninghoursModalProps = {
   onClose: () => void;
   onChangeCalendarState: (newSate: CalendarState) => void;
   showChildcare?: boolean;
-  onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
+  onChangeAdjustedDays: (adjustedDays: DeviatingPeriodData[]) => void;
   initialDeviatingPeriods?: DeviatingPeriodData[];
-  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  onChangeClosingPeriods: (closingPeriods: ClosingPeriodData[]) => void;
   initialClosingPeriods?: ClosingPeriodData[];
 };
 
@@ -226,8 +226,8 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSave = () => {
-    onChangeAdjustedDays?.(deviatingPeriods);
-    onChangeClosingPeriods?.(closingPeriods);
+    onChangeAdjustedDays(deviatingPeriods);
+    onChangeClosingPeriods(closingPeriods);
     handleChangeOpeningHours(
       openingHours.map(({ childcareEnabled, ...hour }) => ({
         ...hour,
