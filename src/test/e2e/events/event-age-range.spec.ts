@@ -139,4 +139,26 @@ test.describe('Age range', () => {
     await expect(minAgeInput(page)).toHaveValue('18');
     await expect(maxAgeInput(page)).toHaveValue('');
   });
+
+  test('shows an error and does not persist non-numeric input', async ({
+    page,
+    eventEditUrl,
+  }) => {
+    await page.goto(eventEditUrl);
+
+    // A freshly created event starts at the "Volwassenen 18+" preset (18-).
+    await expect(minAgeInput(page)).toHaveValue('18');
+
+    await minAgeInput(page).fill('abc');
+    await minAgeInput(page).blur();
+
+    await expect(page.getByText(age.error_invalid)).toBeVisible();
+
+    await page.goto(eventEditUrl);
+
+    // The invalid value was never saved, so the previous range is untouched.
+    await expect(page.getByText(age.error_invalid)).toBeHidden();
+    await expect(minAgeInput(page)).toHaveValue('18');
+    await expect(maxAgeInput(page)).toHaveValue('');
+  });
 });

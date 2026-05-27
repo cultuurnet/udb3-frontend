@@ -29,14 +29,25 @@ const AgeInputModes = {
 type AgeInputMode = Values<typeof AgeInputModes>;
 
 const MAX_AGE = 120;
+const AGE_PATTERN = /^\d+$/;
 
 const getValue = getValueFromTheme('ageRange');
 
 type AgeRangeStepProps = StackProps & StepProps;
 
+const parseAge = (value: string): number | undefined =>
+  value === '' ? undefined : Number(value);
+
 const validateAgeRange = (min: string, max: string): string | null => {
-  const minNum = min ? parseInt(min, 10) : undefined;
-  const maxNum = max ? parseInt(max, 10) : undefined;
+  if (
+    (min !== '' && !AGE_PATTERN.test(min)) ||
+    (max !== '' && !AGE_PATTERN.test(max))
+  ) {
+    return 'create.name_and_age.age.error_invalid';
+  }
+
+  const minNum = parseAge(min);
+  const maxNum = parseAge(max);
 
   if (
     (minNum !== undefined && minNum > MAX_AGE) ||
