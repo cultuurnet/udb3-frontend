@@ -119,7 +119,11 @@ export const FixedDays = ({
       <Stack spacing={3}>
         <Inline justifyContent="space-between" alignItems="center">
           <Text fontWeight="bold">
-            {t(isBoaEnabled ? 'create.calendar.fixed_days.hours' : 'create.calendar.fixed_days.opening_hours')}
+            {t(
+              isBoaEnabled
+                ? 'create.calendar.fixed_days.hours'
+                : 'create.calendar.fixed_days.opening_hours',
+            )}
           </Text>
           <Inline spacing={3}>
             <Button
@@ -210,7 +214,9 @@ export const FixedDays = ({
                         paddingTop={index > 0 ? 2 : 0}
                         paddingBottom={2}
                         css={`
-                          ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
+                          ${index > 0
+                            ? `border-top: 1px solid ${colors.grey3};`
+                            : ''}
                         `}
                       >
                         <Inline alignItems="flex-start">
