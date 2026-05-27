@@ -132,13 +132,22 @@ const AgeRangeStepBoa = ({
     setInputMode(AgeInputModes.DATE_OF_BIRTH);
   }, [watchedBirthdateRange]);
 
-  const commitAgeRange = (field: Field, newMin: string, newMax: string) => {
-    const value = !newMin && !newMax ? '' : `${newMin}-${newMax}`;
+  const commitTypicalAgeRange = (
+    field: Field,
+    value: string,
+    min: string,
+    max: string,
+  ) => {
     field.onChange({ ...field.value, typicalAgeRange: value });
 
-    if (validateAgeRange(newMin, newMax)) return;
+    if (validateAgeRange(min, max)) return;
 
     onChange({ ...field.value, typicalAgeRange: value });
+  };
+
+  const commitAgeRange = (field: Field, newMin: string, newMax: string) => {
+    const value = !newMin && !newMax ? '' : `${newMin}-${newMax}`;
+    commitTypicalAgeRange(field, value, newMin, newMax);
   };
 
   const handlePresetClick = (field: Field, apiLabel: string) => {
@@ -146,8 +155,7 @@ const AgeRangeStepBoa = ({
     setMinAge(min ?? '');
     setMaxAge(max ?? '');
 
-    field.onChange({ ...field.value, typicalAgeRange: apiLabel });
-    onChange({ ...field.value, typicalAgeRange: apiLabel });
+    commitTypicalAgeRange(field, apiLabel, min ?? '', max ?? '');
   };
 
   const commitBirthdateRange = (
