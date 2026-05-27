@@ -145,7 +145,8 @@
           "closed": "Geschlossen",
           "deviating_except": "Außer:",
           "deviating_then_weekly": "dann wöchentlich:",
-          "childcare": "mit Vorbetreuung ab {{start}} und Nachbetreuung bis {{end}}",
+          "childcare_before": "Vorbetreuung ab {{start}}",
+          "childcare_after": "Nachbetreuung bis {{end}}",
           "delete_modal": {
             "title": "Zeiten löschen",
             "body": "Sind Sie sicher, dass Sie alle Öffnungszeiten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",

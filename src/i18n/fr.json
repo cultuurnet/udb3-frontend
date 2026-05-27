@@ -145,7 +145,8 @@
           "closed": "Fermé",
           "deviating_except": "Sauf:",
           "deviating_then_weekly": "puis chaque semaine:",
-          "childcare": "avec garderie avant dès {{start}} et garderie après jusqu'à {{end}}",
+          "childcare_before": "garderie avant dès {{start}}",
+          "childcare_after": "garderie après jusqu'à {{end}}",
           "delete_modal": {
             "title": "Supprimer les heures",
             "body": "Êtes-vous sûr de vouloir supprimer toutes les heures d'ouverture? Cette action ne peut pas être annulée.",

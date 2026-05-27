@@ -147,7 +147,8 @@
           "closed": "Gesloten",
           "deviating_except": "Behalve:",
           "deviating_then_weekly": "dan wekelijks op:",
-          "childcare": "met vooropvang vanaf {{start}} en na opvang tot {{end}}",
+          "childcare_before": "vooropvang van {{start}}",
+          "childcare_after": "naopvang tot {{end}}",
           "delete_modal": {
             "title": "Uren verwijderen",
             "body": "Ben je zeker dat je alle openingsuren wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
