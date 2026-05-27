@@ -104,11 +104,6 @@ const AgeRangeStepBoa = ({
   });
 
   useEffect(() => {
-    setMinBirthDate((current) => current ?? new Date());
-    setMaxBirthDate((current) => current ?? new Date());
-  }, []);
-
-  useEffect(() => {
     if (!watchedTypicalAgeRange) return;
 
     const [min, max] = watchedTypicalAgeRange.split('-');
@@ -188,7 +183,11 @@ const AgeRangeStepBoa = ({
                   const next = newMode as AgeInputMode;
                   setInputMode(next);
 
-                  if (next === AgeInputModes.DATE_OF_BIRTH) return;
+                  if (next === AgeInputModes.DATE_OF_BIRTH) {
+                    setMinBirthDate((current) => current ?? new Date());
+                    setMaxBirthDate((current) => current ?? new Date());
+                    return;
+                  }
 
                   field.onChange({ ...field.value, birthdateRange: undefined });
                   onChange({ ...field.value, birthdateRange: undefined });
