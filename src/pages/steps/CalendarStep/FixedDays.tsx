@@ -148,7 +148,7 @@ export const FixedDays = ({
                   key={index}
                   paddingY={2}
                   css={`
-                    ${index > 0 ? 'border-top: 1px solid lightgrey;' : ''}
+                    ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
                   `}
                 >
                   <Inline alignItems="flex-start">
@@ -210,7 +210,7 @@ export const FixedDays = ({
                         paddingTop={index > 0 ? 2 : 0}
                         paddingBottom={2}
                         css={`
-                          ${index > 0 ? 'border-top: 1px solid lightgrey;' : ''}
+                          ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
                         `}
                       >
                         <Inline alignItems="flex-start">
@@ -293,7 +293,7 @@ export const FixedDays = ({
             paddingTop={2}
             paddingBottom={2}
             css={`
-              border-top: 1px solid lightgrey;
+              border-top: 1px solid ${colors.grey3};
             `}
             justifyContent="space-between"
             spacing={2}
