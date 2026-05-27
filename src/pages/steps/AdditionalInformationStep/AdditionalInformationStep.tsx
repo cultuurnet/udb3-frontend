@@ -302,14 +302,10 @@ const AdditionalInformationStep = ({
     if (!offer) return;
     const isAccessibilityTabVisible = isChildrenOnly && isBoaEnabled;
     if (isAccessibilityTabVisible) return;
-    setTab((current) => {
-      if (current !== Fields.ACCESSIBILITY) return current;
-      router.replace({ hash: Fields.DESCRIPTION }, undefined, {
-        shallow: true,
-      });
-      return Fields.DESCRIPTION;
-    });
-  }, [offer, isChildrenOnly, isBoaEnabled, router]);
+    if (tab !== Fields.ACCESSIBILITY) return;
+    setTab(Fields.DESCRIPTION);
+    router.replace({ hash: Fields.DESCRIPTION }, undefined, { shallow: true });
+  }, [offer, isChildrenOnly, isBoaEnabled, router, tab]);
 
   useEffect(() => {
     if (!offerId) return;
