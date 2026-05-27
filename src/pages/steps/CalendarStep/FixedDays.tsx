@@ -145,7 +145,7 @@ export const FixedDays = ({
             <Stack>
               {openingHours.map((openingHour, index) => (
                 <Stack
-                  key={index}
+                  key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
                   paddingY={2}
                   css={`
                     ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
@@ -206,7 +206,7 @@ export const FixedDays = ({
                     </Text>
                     {period.openingHours.map((openingHour, index) => (
                       <Stack
-                        key={index}
+                        key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
                         paddingTop={index > 0 ? 2 : 0}
                         paddingBottom={2}
                         css={`
@@ -288,7 +288,7 @@ export const FixedDays = ({
             {t('create.calendar.fixed_days.button_change_opening_hours')}
           </Button>
         </List.Item>
-        {openingHours.map((openingHour, index) => (
+        {openingHours.map((openingHour) => (
           <List.Item
             paddingTop={2}
             paddingBottom={2}
@@ -297,7 +297,7 @@ export const FixedDays = ({
             `}
             justifyContent="space-between"
             spacing={2}
-            key={index}
+            key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
           >
             <Text maxWidth="20rem">
               {openingHour.dayOfWeek
