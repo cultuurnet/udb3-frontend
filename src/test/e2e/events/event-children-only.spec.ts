@@ -35,8 +35,6 @@ const test = base.extend<TestFixtures>({
   },
 });
 
-test.describe.configure({ mode: 'serial' });
-
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     {
