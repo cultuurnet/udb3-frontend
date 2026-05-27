@@ -1861,6 +1861,7 @@
     "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
+    "children_only": "Pour les enfants uniquement",
     "labels": {
       "title": "Titre",
       "type": "Type",

@@ -1922,6 +1922,7 @@
     "info_lesson_series": "Je lessenreeks verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
+    "children_only": "Voor kinderen alleen",
     "labels": {
       "title": "Titel",
       "type": "Type",

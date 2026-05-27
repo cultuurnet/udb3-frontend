@@ -112,6 +112,7 @@ const Preview = () => {
     typicalAgeRange,
     mediaObject,
     videos,
+    audience,
   } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
@@ -245,7 +246,12 @@ const Preview = () => {
     },
     {
       field: t('preview.labels.age'),
-      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
+      value: (
+        <AgePreview
+          typicalAgeRange={typicalAgeRange}
+          audienceType={audience?.audienceType}
+        />
+      ),
     },
     {
       field: t('preview.labels.location'),
