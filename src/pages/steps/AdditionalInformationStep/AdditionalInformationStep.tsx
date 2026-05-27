@@ -288,9 +288,8 @@ const AdditionalInformationStep = ({
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
-  // @ts-expect-error
-  // Remove ts error when the  childrenOnly audienceType has been added
-  const isChildrenOnly = offer?.audience?.audienceType === 'childrenOnly';
+  const isChildrenOnly =
+    offer?.audience?.audienceType === AudienceTypes.CHILDREN_ONLY;
 
   const [, hash] = asPath.split('#');
 
