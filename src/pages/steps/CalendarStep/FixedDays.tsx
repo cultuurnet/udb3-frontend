@@ -62,7 +62,7 @@ export const FixedDays = ({
     isCalendarOpeninghoursModalVisible,
     setIsCalendarOpeninghoursModalVisible,
   ] = useState(false);
-  const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+  const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] = useState(false);
 
   const { handleChangeOpeningHours } = useCalendarHandlers(
     onChangeCalendarState,
@@ -97,7 +97,7 @@ export const FixedDays = ({
     onChangeAdjustedDays?.([]);
     onChangeClosingPeriods?.([]);
     handleChangeOpeningHours([]);
-    setIsDeleteConfirmVisible(false);
+    setIsDeleteConfirmModalVisible(false);
   };
 
   return (
@@ -134,7 +134,7 @@ export const FixedDays = ({
               initialAdjustedDays={initialAdjustedDays}
               initialClosingPeriods={initialClosingPeriods}
               onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
-              onRequestDelete={() => setIsDeleteConfirmVisible(true)}
+              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
             />
           </Stack>
         )}
@@ -152,7 +152,7 @@ export const FixedDays = ({
               initialAdjustedDays={initialAdjustedDays}
               initialClosingPeriods={initialClosingPeriods}
               onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
-              onRequestDelete={() => setIsDeleteConfirmVisible(true)}
+              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
             />
           </Stack>
         )}
@@ -177,7 +177,7 @@ export const FixedDays = ({
       )}
       {isBoaEnabled && (
         <Modal
-          visible={isDeleteConfirmVisible}
+          visible={isDeleteConfirmModalVisible}
           variant={ModalVariants.QUESTION}
           size={ModalSizes.MD}
           title={t('create.calendar.fixed_days.overview.delete_modal.title')}
@@ -186,7 +186,7 @@ export const FixedDays = ({
           )}
           confirmButtonVariant={ButtonVariants.DANGER}
           cancelTitle={t('create.calendar.opening_hours_modal.button_cancel')}
-          onClose={() => setIsDeleteConfirmVisible(false)}
+          onClose={() => setIsDeleteConfirmModalVisible(false)}
           onConfirm={handleDeleteAll}
         >
           <Box padding={4}>
