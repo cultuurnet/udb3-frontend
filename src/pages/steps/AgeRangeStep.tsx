@@ -52,6 +52,12 @@ const validateAgeRange = (min: string, max: string): string | null => {
   return null;
 };
 
+const isValidAgeRange = (typicalAgeRange: string | undefined): boolean => {
+  if (!typicalAgeRange) return true;
+  const [min, max] = typicalAgeRange.split('-');
+  return validateAgeRange(min ?? '', max ?? '') === null;
+};
+
 const findPresetKey = (typicalAgeRange: string | undefined): string | null => {
   if (!typicalAgeRange) return null;
   if (typicalAgeRange === '0-' || typicalAgeRange === '-') return 'ALL';
@@ -121,10 +127,11 @@ const AgeRangeStepBoa = ({
   }, [watchedBirthdateRange]);
 
   const commitAgeRange = (field: Field, newMin: string, newMax: string) => {
-    if (validateAgeRange(newMin, newMax)) return;
-
     const value = !newMin && !newMax ? '' : `${newMin}-${newMax}`;
     field.onChange({ ...field.value, typicalAgeRange: value });
+
+    if (validateAgeRange(newMin, newMax)) return;
+
     onChange({ ...field.value, typicalAgeRange: value });
   };
 
@@ -344,4 +351,4 @@ const AgeRangeStepBoa = ({
   );
 };
 
-export { AgeRangeStep };
+export { AgeRangeStep, isValidAgeRange };

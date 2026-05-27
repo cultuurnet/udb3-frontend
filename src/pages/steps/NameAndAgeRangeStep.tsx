@@ -29,7 +29,7 @@ import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
-import { AgeRangeStep } from './AgeRangeStep';
+import { AgeRangeStep, isValidAgeRange } from './AgeRangeStep';
 import { UseEditArguments } from './hooks/useEditField';
 import { NameStep } from './NameStep';
 import {
@@ -231,7 +231,10 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
-      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
+      typicalAgeRange: yup
+        .string()
+        .matches(numberHyphenNumberRegex)
+        .test('matches', '', (value) => isValidAgeRange(value)),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');
