@@ -153,12 +153,18 @@ test.describe.serial('Calendar opening hours modal', () => {
     await expect(page.getByText('09:00 - 17:00')).toBeVisible();
     await expect(
       page.getByText(
-        calendar.fixed_days.overview.childcare_before.replace('{{start}}', '08:00'),
+        calendar.fixed_days.overview.childcare_before.replace(
+          '{{start}}',
+          '08:00',
+        ),
       ),
     ).toBeVisible();
     await expect(
       page.getByText(
-        calendar.fixed_days.overview.childcare_after.replace('{{end}}', '18:00'),
+        calendar.fixed_days.overview.childcare_after.replace(
+          '{{end}}',
+          '18:00',
+        ),
       ),
     ).toBeVisible();
   });
@@ -253,12 +259,18 @@ test.describe.serial('Calendar opening hours modal', () => {
     await expect(page.getByText('10:00 - 16:00')).toBeVisible();
     await expect(
       page.getByText(
-        calendar.fixed_days.overview.childcare_before.replace('{{start}}', '09:00'),
+        calendar.fixed_days.overview.childcare_before.replace(
+          '{{start}}',
+          '09:00',
+        ),
       ),
     ).toBeVisible();
     await expect(
       page.getByText(
-        calendar.fixed_days.overview.childcare_after.replace('{{end}}', '17:00'),
+        calendar.fixed_days.overview.childcare_after.replace(
+          '{{end}}',
+          '17:00',
+        ),
       ),
     ).toBeVisible();
   });
