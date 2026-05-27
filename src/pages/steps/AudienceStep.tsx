@@ -79,7 +79,7 @@ const AudienceStep = ({
           {t('create.additionalInformation.audience.title')}
         </Text>
         {Object.values(AudienceTypes)
-          .filter((type) => type !== AudienceTypes.EDUCATION)
+          .filter((type) => type !== AudienceTypes.EDUCATION && type !== AudienceTypes.CHILDREN_ONLY)
           .map((type, index) => {
             return (
               <Fragment key={index}>
