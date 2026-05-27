@@ -119,7 +119,7 @@ export const FixedDays = ({
       <Stack spacing={3}>
         <Inline justifyContent="space-between" alignItems="center">
           <Text fontWeight="bold">
-            {t('create.calendar.fixed_days.opening_hours')}
+            {t(isBoaEnabled ? 'create.calendar.fixed_days.hours' : 'create.calendar.fixed_days.opening_hours')}
           </Text>
           <Inline spacing={3}>
             <Button

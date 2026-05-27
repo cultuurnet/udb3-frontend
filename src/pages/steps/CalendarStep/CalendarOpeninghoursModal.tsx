@@ -262,7 +262,7 @@ const CalendarOpeninghoursModal = ({
     ? pendingDelete?.kind === 'deviating'
       ? t('create.calendar.opening_hours_modal.deviating.delete_modal.title')
       : t('create.calendar.opening_hours_modal.closing.delete_modal.title')
-    : t('create.calendar.opening_hours_modal.title');
+    : t('create.calendar.opening_hours_modal.title_add_hours');
 
   const modalConfirmTitle = isDeleteConfirm
     ? pendingDelete?.kind === 'deviating'
