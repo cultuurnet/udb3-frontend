@@ -115,7 +115,7 @@ export const FixedDays = ({
   };
 
   const openingHoursContent =
-    hasBoaContent && isBoaEnabled ? (
+    isBoaEnabled && hasBoaContent ? (
       <Stack spacing={3}>
         <Inline justifyContent="space-between" alignItems="center">
           <Text fontWeight="bold">
