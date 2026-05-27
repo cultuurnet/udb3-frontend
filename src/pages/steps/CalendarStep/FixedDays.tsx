@@ -62,7 +62,8 @@ export const FixedDays = ({
     isCalendarOpeninghoursModalVisible,
     setIsCalendarOpeninghoursModalVisible,
   ] = useState(false);
-  const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] = useState(false);
+  const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
+    useState(false);
 
   const { handleChangeOpeningHours } = useCalendarHandlers(
     onChangeCalendarState,
