@@ -148,8 +148,8 @@ test.describe.serial('Calendar opening hours modal', () => {
         name: calendar.fixed_days.overview.edit,
       }),
     ).toBeVisible();
-    await expect(page.getByText(calendar.days.full.monday)).toBeVisible();
-    await expect(page.getByText(calendar.days.full.tuesday)).toBeVisible();
+    await expect(page.getByText(calendar.days.short.monday, { exact: true })).toBeVisible();
+    await expect(page.getByText(calendar.days.short.tuesday, { exact: true })).toBeVisible();
     await expect(page.getByText('09:00 - 17:00')).toBeVisible();
     await expect(
       page.getByText(
@@ -254,7 +254,7 @@ test.describe.serial('Calendar opening hours modal', () => {
       page.getByText(calendar.fixed_days.overview.deviating_then_weekly),
     ).toBeVisible();
     await expect(
-      page.getByText(calendar.days.full.monday).last(),
+      page.getByText(calendar.days.short.monday, { exact: true }).last(),
     ).toBeVisible();
     await expect(page.getByText('10:00 - 16:00')).toBeVisible();
     await expect(
