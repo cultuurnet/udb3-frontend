@@ -8,8 +8,6 @@ import { AgeRanges } from '@/constants/AgeRange';
 import { useDeleteOfferBirthdateRangeMutation } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Values } from '@/types/Values';
-import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePicker } from '@/ui/DatePicker';
 import { Inline } from '@/ui/Inline';
@@ -20,6 +18,7 @@ import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
+import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
 import { Field, StepProps } from './Steps';
 
 const AgeInputModes = {
@@ -29,12 +28,68 @@ const AgeInputModes = {
 
 type AgeInputMode = Values<typeof AgeInputModes>;
 
+const MAX_AGE = 120;
+const AGE_PATTERN = /^\d+$/;
+
 const getValue = getValueFromTheme('ageRange');
 
 type AgeRangeStepProps = StackProps & StepProps;
 
-const AgeRangeStep = ({
-  formState: { errors },
+const parseAge = (value: string): number | undefined =>
+  value === '' ? undefined : Number(value);
+
+const validateAgeRange = (min: string, max: string): string | null => {
+  if (
+    (min !== '' && !AGE_PATTERN.test(min)) ||
+    (max !== '' && !AGE_PATTERN.test(max))
+  ) {
+    return 'create.name_and_age.age.error_invalid';
+  }
+
+  const minNum = parseAge(min);
+  const maxNum = parseAge(max);
+
+  if (
+    (minNum !== undefined && minNum > MAX_AGE) ||
+    (maxNum !== undefined && maxNum > MAX_AGE)
+  ) {
+    return 'create.name_and_age.age.error_max_age';
+  }
+
+  if (minNum !== undefined && maxNum !== undefined && maxNum < minNum) {
+    return 'create.name_and_age.age.error_max_lower_than_min';
+  }
+
+  return null;
+};
+
+const isValidAgeRange = (typicalAgeRange: string | undefined): boolean => {
+  if (!typicalAgeRange) return true;
+  const [min, max] = typicalAgeRange.split('-');
+  return validateAgeRange(min ?? '', max ?? '') === null;
+};
+
+const findPresetKey = (typicalAgeRange: string | undefined): string | null => {
+  if (!typicalAgeRange) return null;
+  if (typicalAgeRange === '0-' || typicalAgeRange === '-') return 'ALL';
+  return (
+    Object.keys(AgeRanges).find(
+      (key) => AgeRanges[key].apiLabel === typicalAgeRange,
+    ) ?? null
+  );
+};
+
+const AgeRangeStep = (props: AgeRangeStepProps) => {
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
+  if (!isBoaEnabled) {
+    return <AgeRangeStepLegacy {...props} />;
+  }
+
+  return <AgeRangeStepBoa {...props} />;
+};
+
+const AgeRangeStepBoa = ({
   control,
   onChange,
   offerId,
@@ -42,35 +97,13 @@ const AgeRangeStep = ({
   ...props
 }: AgeRangeStepProps) => {
   const { t } = useTranslation();
-  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const deleteBirthdateRangeMutation = useDeleteOfferBirthdateRangeMutation();
 
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
-  const [isCustomAgeRange, setIsCustomAgeRange] = useState(false);
-  const [customMinAgeRange, setCustomMinAgeRange] = useState('');
-  const [customMaxAgeRange, setCustomMaxAgeRange] = useState('');
-  const [customAgeRangeError, setCustomAgeRangeError] = useState('');
+  const [minAge, setMinAge] = useState('');
+  const [maxAge, setMaxAge] = useState('');
   const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
-
-  useEffect(() => {
-    setMinBirthDate((current) => current ?? new Date());
-    setMaxBirthDate((current) => current ?? new Date());
-  }, []);
-
-  const isCustomAgeRangeSelected = (typicalAgeRange: string): boolean => {
-    return !Object.keys(AgeRanges).some(
-      (key) =>
-        AgeRanges[key].apiLabel && AgeRanges[key].apiLabel === typicalAgeRange,
-    );
-  };
-
-  const resetCustomAgeRange = (): void => {
-    setCustomMinAgeRange('');
-    setCustomMaxAgeRange('');
-    setIsCustomAgeRange(false);
-    setCustomAgeRangeError('');
-  };
 
   const watchedTypicalAgeRange = useWatch({
     control,
@@ -84,21 +117,9 @@ const AgeRangeStep = ({
   useEffect(() => {
     if (!watchedTypicalAgeRange) return;
 
-    if (watchedTypicalAgeRange === '0-') {
-      setIsCustomAgeRange(false);
-      resetCustomAgeRange();
-      return;
-    }
-
-    if (isCustomAgeRangeSelected(watchedTypicalAgeRange)) {
-      const [min, max] = watchedTypicalAgeRange.split('-');
-      setCustomMinAgeRange(min ?? '');
-      setCustomMaxAgeRange(max ?? '');
-      setIsCustomAgeRange(true);
-      return;
-    }
-
-    resetCustomAgeRange();
+    const [min, max] = watchedTypicalAgeRange.split('-');
+    setMinAge(min ?? '');
+    setMaxAge(max ?? '');
   }, [watchedTypicalAgeRange]);
 
   useEffect(() => {
@@ -110,6 +131,32 @@ const AgeRangeStep = ({
     setMaxBirthDate(parse(watchedBirthdateRange.to, 'yyyy-MM-dd', new Date()));
     setInputMode(AgeInputModes.DATE_OF_BIRTH);
   }, [watchedBirthdateRange]);
+
+  const commitTypicalAgeRange = (
+    field: Field,
+    value: string,
+    min: string,
+    max: string,
+  ) => {
+    field.onChange({ ...field.value, typicalAgeRange: value });
+
+    if (validateAgeRange(min, max)) return;
+
+    onChange({ ...field.value, typicalAgeRange: value });
+  };
+
+  const commitAgeRange = (field: Field, newMin: string, newMax: string) => {
+    const value = !newMin && !newMax ? '' : `${newMin}-${newMax}`;
+    commitTypicalAgeRange(field, value, newMin, newMax);
+  };
+
+  const handlePresetClick = (field: Field, apiLabel: string) => {
+    const [min, max] = apiLabel.split('-');
+    setMinAge(min ?? '');
+    setMaxAge(max ?? '');
+
+    commitTypicalAgeRange(field, apiLabel, min ?? '', max ?? '');
+  };
 
   const commitBirthdateRange = (
     field: Field,
@@ -134,118 +181,62 @@ const AgeRangeStep = ({
     onChange(nextValue);
   };
 
-  const getSelectedAgeRange = (typicalAgeRange: string): string => {
-    const foundAgeRange = Object.keys(AgeRanges).find((key: string) => {
-      return (
-        AgeRanges[key].apiLabel && AgeRanges[key].apiLabel === typicalAgeRange
-      );
-    });
-
-    if (typicalAgeRange === '0-') {
-      return 'ALL';
-    }
-
-    if (isCustomAgeRange) {
-      return 'CUSTOM';
-    }
-
-    if (!foundAgeRange) return 'NONE';
-
-    return foundAgeRange;
-  };
-
-  const handleSubmitCustomAgeRange = (field: Field) => {
-    if (parseInt(customMinAgeRange) > parseInt(customMaxAgeRange)) {
-      setCustomAgeRangeError(
-        t('create.name_and_age.age.error_max_lower_than_min'),
-      );
-      return;
-    }
-
-    setCustomAgeRangeError('');
-
-    const customAgeRange =
-      !customMinAgeRange && !customMaxAgeRange
-        ? ''
-        : `${customMinAgeRange}-${customMaxAgeRange}`;
-
-    field.onChange({
-      ...field.value,
-      typicalAgeRange: customAgeRange,
-    });
-
-    onChange({
-      ...field.value,
-      typicalAgeRange: customAgeRange,
-    });
-  };
-
-  const handleMinAgeRangeChange = (field: Field, value: string) => {
-    setCustomMinAgeRange(value);
-    handleSubmitCustomAgeRange(field);
-  };
-
-  const handleMaxAgeRangeChange = (field: Field, value: string) => {
-    setCustomMaxAgeRange(value);
-
-    if (!customMinAgeRange) {
-      setCustomAgeRangeError(t('create.name_and_age.age.error_no_min_age'));
-      return;
-    }
-
-    handleSubmitCustomAgeRange(field);
-  };
-
   return (
     <Stack {...getStackProps(props)}>
       <Controller
         name={'nameAndAgeRange'}
         control={control}
         render={({ field }) => {
-          const selectedAgeRange = getSelectedAgeRange(
-            field.value?.typicalAgeRange,
-          );
+          const selectedPreset = findPresetKey(field.value?.typicalAgeRange);
+          const errorKey = validateAgeRange(minAge, maxAge);
 
           return (
             <Stack spacing={2}>
               <Text fontWeight="bold">
                 {t(`create.name_and_age.age.title`)}
               </Text>
-              {isBoaEnabled && (
-                <ToggleGroup
-                  name="age-input-mode"
-                  value={inputMode}
-                  onChange={(newMode: string) => {
-                    const next = newMode as AgeInputMode;
-                    setInputMode(next);
+              <ToggleGroup
+                name="age-input-mode"
+                value={inputMode}
+                onChange={(newMode: string) => {
+                  const next = newMode as AgeInputMode;
+                  setInputMode(next);
 
-                    if (next === AgeInputModes.DATE_OF_BIRTH) return;
+                  if (next === AgeInputModes.DATE_OF_BIRTH) {
+                    setMinBirthDate((current) => current ?? new Date());
+                    setMaxBirthDate((current) => current ?? new Date());
+                    return;
+                  }
 
-                    field.onChange({
-                      ...field.value,
-                      birthdateRange: undefined,
-                    });
-                    onChange({
-                      ...field.value,
-                      birthdateRange: undefined,
-                    });
-                    if (offerId && field.value?.birthdateRange) {
-                      deleteBirthdateRangeMutation.mutate({
-                        eventId: offerId,
-                        scope,
-                      });
-                    }
-                  }}
-                  options={Object.values(AgeInputModes).map((mode) => ({
-                    value: mode,
-                    label: t(`create.name_and_age.age.input_mode.${mode}`),
-                  }))}
-                  maxWidth="40rem"
-                  css={`
-                    margin-bottom: 1rem;
-                  `}
-                />
-              )}
+                  const previousBirthdateRange = field.value?.birthdateRange;
+
+                  field.onChange({ ...field.value, birthdateRange: undefined });
+                  onChange({ ...field.value, birthdateRange: undefined });
+
+                  if (offerId && previousBirthdateRange) {
+                    deleteBirthdateRangeMutation.mutate(
+                      { eventId: offerId, scope },
+                      {
+                        onError: () => {
+                          field.onChange({
+                            ...field.value,
+                            birthdateRange: previousBirthdateRange,
+                          });
+                          setInputMode(AgeInputModes.DATE_OF_BIRTH);
+                        },
+                      },
+                    );
+                  }
+                }}
+                options={Object.values(AgeInputModes).map((mode) => ({
+                  value: mode,
+                  label: t(`create.name_and_age.age.input_mode.${mode}`),
+                }))}
+                maxWidth="40rem"
+                css={`
+                  margin-bottom: 1rem;
+                `}
+              />
               {inputMode === AgeInputModes.DATE_OF_BIRTH ? (
                 <Stack spacing={3} maxWidth="40rem">
                   <Text fontWeight="bold">
@@ -297,121 +288,88 @@ const AgeRangeStep = ({
                     )}
                 </Stack>
               ) : (
-                <>
+                <Stack spacing={3} maxWidth="40rem">
+                  <Text fontWeight="bold">
+                    {t('create.name_and_age.age.input_range_title')}
+                  </Text>
+                  <Inline spacing={3}>
+                    <Input
+                      type="numeric"
+                      value={minAge}
+                      placeholder={t('create.name_and_age.age.from')}
+                      aria-label={t('create.name_and_age.age.from')}
+                      maxWidth="8rem"
+                      onChange={(event: FormEvent<HTMLInputElement>) => {
+                        setMinAge((event.target as HTMLInputElement).value);
+                      }}
+                      onBlur={(event: FormEvent<HTMLInputElement>) => {
+                        commitAgeRange(
+                          field,
+                          (event.target as HTMLInputElement).value,
+                          maxAge,
+                        );
+                      }}
+                    />
+                    <Input
+                      type="numeric"
+                      value={maxAge}
+                      placeholder={t('create.name_and_age.age.till')}
+                      aria-label={t('create.name_and_age.age.till')}
+                      maxWidth="8rem"
+                      onChange={(event: FormEvent<HTMLInputElement>) => {
+                        setMaxAge((event.target as HTMLInputElement).value);
+                      }}
+                      onBlur={(event: FormEvent<HTMLInputElement>) => {
+                        commitAgeRange(
+                          field,
+                          minAge,
+                          (event.target as HTMLInputElement).value,
+                        );
+                      }}
+                    />
+                  </Inline>
+                  {errorKey && <Text color="red">{t(errorKey)}</Text>}
                   <Inline
                     spacing={3}
                     flexWrap="wrap"
-                    maxWidth="40rem"
                     css={`
-                      row-gap: ${parseSpacing(3.5)()};
+                      row-gap: 0.5rem;
                     `}
                   >
-                    {Object.keys(AgeRanges).map((key: string) => {
-                      const apiLabel = AgeRanges[key].apiLabel;
-                      return (
-                        <Button
-                          key={key}
-                          width="auto"
-                          active={selectedAgeRange === key}
-                          display="inline-flex"
-                          variant={ButtonVariants.SECONDARY_TOGGLE}
-                          onClick={() => {
-                            setIsCustomAgeRange(key === 'CUSTOM');
-
-                            field.onChange({
-                              ...field.value,
-                              typicalAgeRange: apiLabel,
-                            });
-
-                            onChange({
-                              ...field.value,
-                              typicalAgeRange: apiLabel,
-                            });
-                          }}
-                          css={`
-                            &.btn {
-                              padding: 0.3rem 0.7rem;
-                              box-shadow: ${({ theme }) =>
-                                theme.components.global.boxShadow.heavy};
-                            }
-                          `}
-                        >
-                          {t(`create.name_and_age.age.${key.toLowerCase()}`)}
-                          <Text
-                            css={css`
-                              color: ${getValue('rangeTextColor')};
-                              font-size: 0.9rem;
+                    {Object.keys(AgeRanges)
+                      .filter((key) => AgeRanges[key].apiLabel)
+                      .map((key) => {
+                        const apiLabel = AgeRanges[key].apiLabel!;
+                        return (
+                          <Button
+                            key={key}
+                            width="auto"
+                            active={selectedPreset === key}
+                            display="inline-flex"
+                            variant={ButtonVariants.SECONDARY_TOGGLE}
+                            onClick={() => handlePresetClick(field, apiLabel)}
+                            css={`
+                              &.btn {
+                                padding: 0.3rem 0.7rem;
+                                box-shadow: ${({ theme }) =>
+                                  theme.components.global.boxShadow.heavy};
+                              }
                             `}
                           >
-                            &nbsp; {AgeRanges[key].label ?? ''}
-                          </Text>
-                        </Button>
-                      );
-                    })}
-                  </Inline>
-                  <Inline>
-                    {isCustomAgeRange && (
-                      <Stack spacing={3}>
-                        <Inline spacing={3}>
-                          <Stack>
-                            <Text fontWeight="bold">
-                              {t('create.name_and_age.age.from')}
+                            {t(`create.name_and_age.age.${key.toLowerCase()}`)}
+                            <Text
+                              css={css`
+                                color: ${getValue('rangeTextColor')};
+                                font-size: 0.9rem;
+                              `}
+                            >
+                              &nbsp; {AgeRanges[key].label ?? ''}
                             </Text>
-                            <Input
-                              marginRight={3}
-                              type="numeric"
-                              value={customMinAgeRange}
-                              placeholder={t('create.name_and_age.age.from')}
-                              onChange={(event) => {
-                                const value = (event.target as HTMLInputElement)
-                                  .value;
-                                setCustomMinAgeRange(value);
-                              }}
-                              onBlur={(event: FormEvent<HTMLInputElement>) => {
-                                const value = (event.target as HTMLInputElement)
-                                  .value;
-                                handleMinAgeRangeChange(field, value);
-                              }}
-                            />
-                          </Stack>
-                          <Stack>
-                            <Text fontWeight="bold">
-                              {t('create.name_and_age.age.till')}
-                            </Text>
-                            <Input
-                              marginRight={3}
-                              type="numeric"
-                              value={customMaxAgeRange}
-                              placeholder={t('create.name_and_age.age.till')}
-                              onChange={(event) => {
-                                const value = (event.target as HTMLInputElement)
-                                  .value;
-                                setCustomMaxAgeRange(value);
-                              }}
-                              onBlur={(event: FormEvent<HTMLInputElement>) => {
-                                const value = (event.target as HTMLInputElement)
-                                  .value;
-                                handleMaxAgeRangeChange(field, value);
-                              }}
-                            />
-                          </Stack>
-                        </Inline>
-                        {customAgeRangeError && (
-                          <Alert variant={AlertVariants.DANGER}>
-                            {customAgeRangeError}
-                          </Alert>
-                        )}
-                      </Stack>
-                    )}
+                          </Button>
+                        );
+                      })}
                   </Inline>
-                  {errors.nameAndAgeRange?.typicalAgeRange && (
-                    <Text color="red">
-                      {t(
-                        `create.name_and_age.validation_messages.age_range.${errors.nameAndAgeRange?.typicalAgeRange.type}`,
-                      )}
-                    </Text>
-                  )}
-                </>
+                </Stack>
               )}
             </Stack>
           );
@@ -421,4 +379,4 @@ const AgeRangeStep = ({
   );
 };
 
-export { AgeRangeStep };
+export { AgeRangeStep, isValidAgeRange };

@@ -330,7 +330,10 @@
         "from": "Van",
         "till": "Tot",
         "age": "jaar",
+        "input_range_title": "Geef een minimum en maximum leeftijd in",
         "error_max_lower_than_min": "De maximumleeftijd kan niet lager zijn dan de minimumleeftijd.",
+        "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
+        "error_invalid": "De opgegeven leeftijd is niet geldig.",
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen"
       },
       "cultuurkuur": {
