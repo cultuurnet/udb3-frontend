@@ -131,6 +131,8 @@ const AgeRangeStepBoa = ({
   const queryClient = useQueryClient();
   const deleteBirthdateRangeMutation = useDeleteOfferBirthdateRangeMutation();
 
+  const isEvent = scope === OfferTypes.EVENTS;
+
   const [inputMode, setInputMode] = useState<AgeInputMode>(AgeInputModes.AGE);
   const [minAge, setMinAge] = useState('');
   const [maxAge, setMaxAge] = useState('');
@@ -165,7 +167,7 @@ const AgeRangeStepBoa = ({
 
   const getEventByIdQuery = useGetEventByIdQuery(
     { id: offerId ?? '' },
-    { enabled: !!offerId },
+    { enabled: !!offerId && isEvent },
   );
   const event: Event | undefined = getEventByIdQuery.data;
 
@@ -286,6 +288,7 @@ const AgeRangeStepBoa = ({
   };
 
   const showChildrenOnlySection =
+    isEvent &&
     audienceType !== AudienceTypes.EDUCATION &&
     overlapsWithBoaAgeRange(watchedTypicalAgeRange);
 
