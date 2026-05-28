@@ -31,6 +31,7 @@ import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import { ImagePreview } from '@/pages/preview/ImagePreview';
 import { LocationPreview } from '@/pages/preview/LocationPreview';
+import { PreviewTable } from '@/pages/preview/PreviewTable';
 import {
   columns,
   DetailsTabContent,
@@ -183,47 +184,27 @@ const Preview = () => {
     }
 
     return (
-      <table
-        css={`
-          width: 100%;
-
-          td {
-            padding-left: 0 !important;
-            border-bottom: 1px solid ${colors.grey3};
-          }
-          tr:first-child td {
-            padding-top: 0;
-          }
-          td:first-child {
-            color: ${colors.grey5};
-          }
-          tr:last-child td {
-            border-bottom: none;
-          }
-        `}
-      >
-        <tbody>
-          {offer.priceInfo.map((price, index) => (
-            <tr key={index}>
-              <td>
-                {getLanguageObjectOrFallback<string>(
-                  price.name,
-                  i18n.language as SupportedLanguage,
-                  mainLanguage,
-                )}
-              </td>
-              <td>
-                {price.price.toString().replace('.', ',')} euro
-                {isCultuurkuurEvent
-                  ? (price.groupPrice &&
-                      ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
-                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
-                  : ''}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <PreviewTable>
+        {offer.priceInfo.map((price, index) => (
+          <tr key={index}>
+            <td>
+              {getLanguageObjectOrFallback<string>(
+                price.name,
+                i18n.language as SupportedLanguage,
+                mainLanguage,
+              )}
+            </td>
+            <td>
+              {price.price.toString().replace('.', ',')} euro
+              {isCultuurkuurEvent
+                ? (price.groupPrice &&
+                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
+                  ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
+                : ''}
+            </td>
+          </tr>
+        ))}
+      </PreviewTable>
     );
   };
 
