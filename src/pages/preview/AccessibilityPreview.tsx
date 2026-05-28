@@ -9,9 +9,9 @@ import { colors } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-import type { SupportedLanguage } from '../../i18n';
-import i18n from '../../i18n';
-import type { AddressInternal } from '../../types/Address';
+import type { SupportedLanguage } from '@/i18n/index';
+import i18n from '@/i18n/index';
+import type { AddressInternal } from '@/types/Address';
 
 type DeparturePlaceAddressProps = {
   placeUri: string;
