@@ -84,22 +84,16 @@ const OpeningHoursSummary = ({
 
   return (
     <Stack spacing={5}>
-      {openingHours.length > 0 && (
+      <Stack>
+        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          {t('create.calendar.fixed_days.overview.weekly_on')}
+        </Text>
         <Stack>
-          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-            {t('create.calendar.fixed_days.overview.weekly_on')}
-          </Text>
-          <Stack>
-            {openingHours.map((openingHour, index) => (
-              <OpeningHourRow
-                key={index}
-                index={index}
-                {...openingHour}
-              />
-            ))}
-          </Stack>
+          {openingHours.map((openingHour, index) => (
+            <OpeningHourRow key={index} index={index} {...openingHour} />
+          ))}
         </Stack>
-      )}
+      </Stack>
 
       {adjustedDays && adjustedDays.length > 0 && (
         <Stack>
@@ -124,11 +118,7 @@ const OpeningHoursSummary = ({
                   )}
                 </Text>
                 {adjustedDay.openingHours.map((openingHour, index) => (
-                  <OpeningHourRow
-                    key={index}
-                    index={index}
-                    {...openingHour}
-                  />
+                  <OpeningHourRow key={index} index={index} {...openingHour} />
                 ))}
               </Stack>
             ))}
