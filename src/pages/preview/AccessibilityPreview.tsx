@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import { isPlace } from '@/types/Place';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -22,7 +23,7 @@ const DeparturePlaceAddress = ({ placeUri }: DeparturePlaceAddressProps) => {
     scope: OfferTypes.PLACES,
   });
 
-  if (!place) return null;
+  if (!isPlace(place)) return null;
 
   const address = getLanguageObjectOrFallback<AddressInternal>(
     place.address,
