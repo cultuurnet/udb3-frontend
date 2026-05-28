@@ -2,16 +2,15 @@ import { useTranslation } from 'react-i18next';
 
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetOfferByIdQuery } from '@/hooks/api/offers';
+import type { SupportedLanguage } from '@/i18n/index';
+import i18n from '@/i18n/index';
+import type { AddressInternal } from '@/types/Address';
 import { isPlace } from '@/types/Place';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
-
-import type { SupportedLanguage } from '@/i18n/index';
-import i18n from '@/i18n/index';
-import type { AddressInternal } from '@/types/Address';
 
 type DeparturePlaceAddressProps = {
   placeUri: string;
