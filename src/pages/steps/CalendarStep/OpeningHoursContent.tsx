@@ -14,6 +14,60 @@ import { useCalendarSelector } from '../machines/calendarMachine';
 import type { ClosingPeriodData } from './ClosingPeriod';
 import type { DeviatingPeriodData } from './DeviatingPeriod';
 
+type OpeningHourRowProps = {
+  dayOfWeek: string[];
+  opens: string;
+  closes: string;
+  childcareStart?: string;
+  childcareEnd?: string;
+  index: number;
+};
+
+const OpeningHourRow = ({
+  dayOfWeek,
+  opens,
+  closes,
+  childcareStart,
+  childcareEnd,
+  index,
+}: OpeningHourRowProps) => {
+  const { t } = useTranslation();
+  return (
+    <Stack
+      paddingTop={index > 0 ? 2 : 0}
+      paddingBottom={2}
+      css={`
+        ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
+      `}
+    >
+      <Inline alignItems="flex-start">
+        <Text minWidth="12rem">
+          {dayOfWeek.map((day) => t(`create.calendar.days.short.${day}`)).join(', ')}
+        </Text>
+        <Text minWidth="8rem">
+          {opens} - {closes}
+        </Text>
+        <Stack spacing={1} minWidth="10rem">
+          {childcareStart && childcareEnd && (
+            <>
+              <Text fontStyle="italic">
+                {t('create.calendar.fixed_days.overview.childcare_before', {
+                  start: childcareStart,
+                })}
+              </Text>
+              <Text fontStyle="italic">
+                {t('create.calendar.fixed_days.overview.childcare_after', {
+                  end: childcareEnd,
+                })}
+              </Text>
+            </>
+          )}
+        </Stack>
+      </Inline>
+    </Stack>
+  );
+};
+
 type OpeningHoursContentProps = {
   initialAdjustedDays?: DeviatingPeriodData[];
   initialClosingPeriods?: ClosingPeriodData[];
@@ -65,43 +119,15 @@ export const OpeningHoursContent = ({
             </Text>
             <Stack>
               {openingHours.map((openingHour, index) => (
-                <Stack
-                  key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
-                  paddingY={2}
-                  css={`
-                    ${index > 0 ? `border-top: 1px solid ${colors.grey3};` : ''}
-                  `}
-                >
-                  <Inline alignItems="flex-start">
-                    <Text minWidth="12rem">
-                      {openingHour.dayOfWeek
-                        .map((day) => t(`create.calendar.days.short.${day}`))
-                        .join(', ')}
-                    </Text>
-                    <Text minWidth="8rem">
-                      {openingHour.opens} - {openingHour.closes}
-                    </Text>
-                    <Stack spacing={1} minWidth="10rem">
-                      {openingHour.childcareStartTime &&
-                        openingHour.childcareEndTime && (
-                          <>
-                            <Text fontStyle="italic">
-                              {t(
-                                'create.calendar.fixed_days.overview.childcare_before',
-                                { start: openingHour.childcareStartTime },
-                              )}
-                            </Text>
-                            <Text fontStyle="italic">
-                              {t(
-                                'create.calendar.fixed_days.overview.childcare_after',
-                                { end: openingHour.childcareEndTime },
-                              )}
-                            </Text>
-                          </>
-                        )}
-                    </Stack>
-                  </Inline>
-                </Stack>
+                <OpeningHourRow
+                  key={openingHour.id}
+                  index={index}
+                  dayOfWeek={openingHour.dayOfWeek}
+                  opens={openingHour.opens}
+                  closes={openingHour.closes}
+                  childcareStart={openingHour.childcareStartTime}
+                  childcareEnd={openingHour.childcareEndTime}
+                />
               ))}
             </Stack>
           </Stack>
@@ -126,48 +152,15 @@ export const OpeningHoursContent = ({
                       )}
                     </Text>
                     {period.openingHours.map((openingHour, index) => (
-                      <Stack
-                        key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
-                        paddingTop={index > 0 ? 2 : 0}
-                        paddingBottom={2}
-                        css={`
-                          ${index > 0
-                            ? `border-top: 1px solid ${colors.grey3};`
-                            : ''}
-                        `}
-                      >
-                        <Inline alignItems="flex-start">
-                          <Text minWidth="12rem">
-                            {openingHour.dayOfWeek
-                              .map((day) =>
-                                t(`create.calendar.days.short.${day}`),
-                              )
-                              .join(', ')}
-                          </Text>
-                          <Text minWidth="8rem">
-                            {openingHour.opens} - {openingHour.closes}
-                          </Text>
-                          <Stack spacing={1} minWidth="10rem">
-                            {openingHour.childcare?.start &&
-                              openingHour.childcare?.end && (
-                                <>
-                                  <Text fontStyle="italic">
-                                    {t(
-                                      'create.calendar.fixed_days.overview.childcare_before',
-                                      { start: openingHour.childcare.start },
-                                    )}
-                                  </Text>
-                                  <Text fontStyle="italic">
-                                    {t(
-                                      'create.calendar.fixed_days.overview.childcare_after',
-                                      { end: openingHour.childcare.end },
-                                    )}
-                                  </Text>
-                                </>
-                              )}
-                          </Stack>
-                        </Inline>
-                      </Stack>
+                      <OpeningHourRow
+                        key={openingHour.id}
+                        index={index}
+                        dayOfWeek={openingHour.dayOfWeek}
+                        opens={openingHour.opens}
+                        closes={openingHour.closes}
+                        childcareStart={openingHour.childcare?.start}
+                        childcareEnd={openingHour.childcare?.end}
+                      />
                     ))}
                   </Stack>
                 ))}
@@ -221,7 +214,7 @@ export const OpeningHoursContent = ({
             `}
             justifyContent="space-between"
             spacing={2}
-            key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
+            key={openingHour.id}
           >
             <Text maxWidth="20rem">
               {openingHour.dayOfWeek
