@@ -42,7 +42,9 @@ const OpeningHourRow = ({
     >
       <Inline alignItems="flex-start">
         <Text minWidth="12rem">
-          {dayOfWeek.map((day) => t(`create.calendar.days.short.${day}`)).join(', ')}
+          {dayOfWeek
+            .map((day) => t(`create.calendar.days.short.${day}`))
+            .join(', ')}
         </Text>
         <Text minWidth="8rem">
           {opens} - {closes}
