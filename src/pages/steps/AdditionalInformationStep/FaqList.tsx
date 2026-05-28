@@ -66,17 +66,8 @@ const FaqList = ({
                   {t('create.additionalInformation.faq.edit')}
                 </Button>
                 <Button
-                  variant={ButtonVariants.LINK}
+                  variant={ButtonVariants.LINK_DANGER}
                   onClick={() => setDeletingIndex(index)}
-                  css={`
-                    span {
-                      color: ${colors.dangerDark};
-                    }
-                    &:hover span {
-                      color: ${colors.dangerBright};
-                      text-decoration-color: ${colors.dangerBright};
-                    }
-                  `}
                 >
                   {t('create.additionalInformation.faq.delete')}
                 </Button>
