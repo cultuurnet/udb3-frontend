@@ -336,6 +336,12 @@
             "body": "Achtung: Mit dieser Aktion werden die von Ihnen angegebenen Abfahrtsorte gelöscht.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
+          },
+          "members_warning_modal": {
+            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
+            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
           }
         }
       }
@@ -369,6 +375,8 @@
         }
       },
       "audience": {
+        "childrenOnly": "Nur für Kinder",
+        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/><br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/><br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",

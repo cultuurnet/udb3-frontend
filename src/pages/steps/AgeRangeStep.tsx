@@ -140,6 +140,8 @@ const AgeRangeStepBoa = ({
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
   const [pendingAudienceChange, setPendingAudienceChange] =
     useState<AudienceType | null>(null);
+  const [isMembersWarningModalVisible, setIsMembersWarningModalVisible] =
+    useState(false);
   const [audienceMutationError, setAudienceMutationError] = useState<
     string | null
   >(null);
@@ -276,6 +278,13 @@ const AgeRangeStepBoa = ({
 
   const handleAudienceClick = (newType: AudienceType) => {
     if (newType === audienceType) return;
+    if (
+      newType === AudienceTypes.CHILDREN_ONLY &&
+      audienceType === AudienceTypes.MEMBERS
+    ) {
+      setIsMembersWarningModalVisible(true);
+      return;
+    }
     const isSwitchingAwayFromChildrenOnly =
       audienceType === AudienceTypes.CHILDREN_ONLY &&
       newType !== AudienceTypes.CHILDREN_ONLY;
@@ -564,6 +573,37 @@ const AgeRangeStepBoa = ({
             {t(
               'create.name_and_age.age.audience.departure_places_warning_modal.body',
             )}
+          </Text>
+        </Box>
+      </Modal>
+
+      <Modal
+        variant={ModalVariants.QUESTION}
+        size={ModalSizes.MD}
+        visible={isMembersWarningModalVisible}
+        title={t(
+          'create.name_and_age.age.audience.members_warning_modal.title',
+        )}
+        confirmTitle={t(
+          'create.name_and_age.age.audience.members_warning_modal.confirm',
+        )}
+        cancelTitle={t(
+          'create.name_and_age.age.audience.members_warning_modal.cancel',
+        )}
+        confirmButtonVariant={ButtonVariants.DANGER}
+        onClose={() => setIsMembersWarningModalVisible(false)}
+        onConfirm={async () => {
+          try {
+            await applyAudienceChange(AudienceTypes.CHILDREN_ONLY);
+          } catch {
+            return;
+          }
+          setIsMembersWarningModalVisible(false);
+        }}
+      >
+        <Box padding={4}>
+          <Text>
+            {t('create.name_and_age.age.audience.members_warning_modal.body')}
           </Text>
         </Box>
       </Modal>

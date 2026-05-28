@@ -67,6 +67,12 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
       disabled={disabled}
       checked={checked}
       css={`
+        .form-check-input:disabled {
+          opacity: 1;
+          border-color: ${colors.grey5};
+          cursor: not-allowed;
+        }
+
         &.form-switch {
           font-size: 1rem;
           width: 2.5em;

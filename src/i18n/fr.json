@@ -336,6 +336,12 @@
             "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
             "confirm": "Continuer",
             "cancel": "Annuler"
+          },
+          "members_warning_modal": {
+            "title": "Attention : cette action modifie les informations d'accessibilité",
+            "body": "Une activité 'uniquement pour les enfants' ne peut pas être limitée aux membres uniquement. Voulez-vous continuer ? L'accès sera alors défini automatiquement sur 'Pour tout le monde'.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
           }
         }
       }
@@ -371,6 +377,8 @@
         }
       },
       "audience": {
+        "childrenOnly": "Uniquement pour les enfants",
+        "children_only_warning": "Cette activité est définie comme 'Uniquement pour les enfants'.<br/>Pour modifier l'accès, allez à <strong>Données de base</strong> &rsaquo; <strong>Pour qui cette activité est-elle organisée ?</strong>.<br/>Choisissez 'Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur'.",
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
         "members": "Seulement pour des membres",
