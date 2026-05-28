@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceTypes } from '@/constants/AudienceType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
@@ -20,7 +20,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 
 type Props = {
   typicalAgeRange: string;
-  audienceType?: string;
+  audienceType?: AudienceType;
 };
 
 const AgePreview = ({ typicalAgeRange, audienceType }: Props) => {
