@@ -92,7 +92,7 @@ const OpeningHoursSummary = ({
           <Stack>
             {openingHours.map((openingHour, index) => (
               <OpeningHourRow
-                key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
+                key={index}
                 index={index}
                 {...openingHour}
               />
@@ -125,7 +125,7 @@ const OpeningHoursSummary = ({
                 </Text>
                 {adjustedDay.openingHours.map((openingHour, index) => (
                   <OpeningHourRow
-                    key={`${openingHour.opens}-${openingHour.closes}-${openingHour.dayOfWeek.join(',')}`}
+                    key={index}
                     index={index}
                     {...openingHour}
                   />
