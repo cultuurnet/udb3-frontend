@@ -352,6 +352,12 @@
             "body": "Een activiteit 'voor kinderen alleen' kan niet beperkt worden tot enkel leden. Wil je doorgaan? Dan zetten we de toegang automatisch op 'Voor iedereen'.",
             "confirm": "Verdergaan",
             "cancel": "Annuleren"
+          },
+          "age_range_warning_modal": {
+            "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen'. De toegang wordt automatisch ingesteld op 'Voor iedereen' en eventuele vertreklocaties worden verwijderd.",
+            "confirm": "Verdergaan",
+            "cancel": "Annuleren"
           }
         }
       },

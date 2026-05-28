@@ -342,6 +342,12 @@
             "body": "Une activité 'uniquement pour les enfants' ne peut pas être limitée aux membres uniquement. Voulez-vous continuer ? L'accès sera alors défini automatiquement sur 'Pour tout le monde'.",
             "confirm": "Continuer",
             "cancel": "Annuler"
+          },
+          "age_range_warning_modal": {
+            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants'. L'accès sera automatiquement défini sur 'Pour tout le monde' et les lieux de départ éventuels seront supprimés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
           }
         }
       }

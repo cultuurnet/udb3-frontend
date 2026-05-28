@@ -342,6 +342,12 @@
             "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
+          },
+          "age_range_warning_modal": {
+            "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
           }
         }
       }
@@ -376,7 +382,7 @@
       },
       "audience": {
         "childrenOnly": "Nur für Kinder",
-        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/><br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/><br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
+        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",

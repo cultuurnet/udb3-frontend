@@ -142,6 +142,10 @@ const AgeRangeStepBoa = ({
     useState<AudienceType | null>(null);
   const [isMembersWarningModalVisible, setIsMembersWarningModalVisible] =
     useState(false);
+  const [pendingAgeRangeChange, setPendingAgeRangeChange] = useState<{
+    newValue: string;
+    previousValue: string;
+  } | null>(null);
   const [audienceMutationError, setAudienceMutationError] = useState<
     string | null
   >(null);
@@ -215,9 +219,19 @@ const AgeRangeStepBoa = ({
     min: string,
     max: string,
   ) => {
+    const previousValue = field.value?.typicalAgeRange ?? '';
+
     field.onChange({ ...field.value, typicalAgeRange: value });
 
     if (validateAgeRange(min, max)) return;
+
+    if (
+      audienceType === AudienceTypes.CHILDREN_ONLY &&
+      !overlapsWithBoaAgeRange(value)
+    ) {
+      setPendingAgeRangeChange({ newValue: value, previousValue });
+      return;
+    }
 
     onChange({ ...field.value, typicalAgeRange: value });
   };
@@ -604,6 +618,54 @@ const AgeRangeStepBoa = ({
         <Box padding={4}>
           <Text>
             {t('create.name_and_age.age.audience.members_warning_modal.body')}
+          </Text>
+        </Box>
+      </Modal>
+
+      <Modal
+        variant={ModalVariants.QUESTION}
+        size={ModalSizes.MD}
+        visible={pendingAgeRangeChange !== null}
+        title={t(
+          'create.name_and_age.age.audience.age_range_warning_modal.title',
+        )}
+        confirmTitle={t(
+          'create.name_and_age.age.audience.age_range_warning_modal.confirm',
+        )}
+        cancelTitle={t(
+          'create.name_and_age.age.audience.age_range_warning_modal.cancel',
+        )}
+        confirmButtonVariant={ButtonVariants.DANGER}
+        onClose={() => {
+          if (!pendingAgeRangeChange) return;
+          setValue(
+            'nameAndAgeRange.typicalAgeRange',
+            pendingAgeRangeChange.previousValue,
+          );
+          setPendingAgeRangeChange(null);
+        }}
+        onConfirm={async () => {
+          if (!pendingAgeRangeChange) return;
+          try {
+            await applyAudienceChange(AudienceTypes.EVERYONE);
+            if (offerId && event?.departurePlaces?.length) {
+              await changeDeparturePlacesMutation.mutateAsync({
+                eventId: offerId,
+                departurePlaces: [],
+              });
+            }
+            onChange({ typicalAgeRange: pendingAgeRangeChange.newValue });
+          } catch {
+            return;
+          }
+          setPendingAgeRangeChange(null);
+        }}
+      >
+        <Box padding={4}>
+          <Text>
+            {t(
+              'create.name_and_age.age.audience.age_range_warning_modal.body',
+            )}
           </Text>
         </Box>
       </Modal>
