@@ -75,5 +75,5 @@ export const usePublicationStatus = (
     const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
 
     return { color, label, isExternalCreator, isFinished };
-  }, [offer, user, t]);
+  }, [offer, user, t, showDate]);
 };
