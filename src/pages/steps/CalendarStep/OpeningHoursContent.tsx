@@ -75,7 +75,7 @@ type OpeningHoursContentProps = {
   onRequestDelete: () => void;
 };
 
-export const OpeningHoursContent = ({
+const OpeningHoursContent = ({
   initialAdjustedDays,
   initialClosingPeriods,
   onOpenModal,
@@ -246,3 +246,5 @@ export const OpeningHoursContent = ({
     </Button>
   );
 };
+
+export { OpeningHoursContent };
