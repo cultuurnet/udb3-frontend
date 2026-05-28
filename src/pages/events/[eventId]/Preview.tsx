@@ -239,7 +239,10 @@ const Preview = () => {
       if (isRejected) {
         return (
           <Stack>
-            <StatusIndicator label={status.label} color={status.color} />
+            <StatusIndicator
+              label={status.labelWithDate}
+              color={status.color}
+            />
             <Text>
               <Trans
                 i18nKey="preview.rejected_explanation"
@@ -254,7 +257,9 @@ const Preview = () => {
         );
       }
 
-      return <StatusIndicator label={status.label} color={status.color} />;
+      return (
+        <StatusIndicator label={status.labelWithDate} color={status.color} />
+      );
     };
 
     const data = [

@@ -133,7 +133,7 @@ type OfferRowProps = InlineProps & {
 const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
   const { t, i18n } = useTranslation();
 
-  const status = usePublicationStatus(offer as Offer, false);
+  const status = usePublicationStatus(offer as Offer);
 
   const offerType = parseOfferType(offer['@context']);
 
