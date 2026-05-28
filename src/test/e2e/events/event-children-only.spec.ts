@@ -1,4 +1,4 @@
-import { expect, test as base } from '@playwright/test';
+import { expect, Page, test as base } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
@@ -8,8 +8,10 @@ const age = nl.create.name_and_age.age;
 const audience = age.audience;
 
 const audienceQuestionLocator = audience.question;
-const childrenOnlyRadioLabel = audience.children_only;
-const withFamilyRadioLabel = audience.with_family;
+
+const childrenOnlyRadio = (page: Page) =>
+  page.locator('#audience-children-only');
+const withFamilyRadio = (page: Page) => page.locator('#audience-with-family');
 
 type TestFixtures = {
   eventId: string;
@@ -135,28 +137,20 @@ test.describe('Children-only audience section', () => {
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // Default is "with family"
-    await expect(
-      page.getByLabel(withFamilyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await expect(withFamilyRadio(page)).toBeChecked();
 
     // Select children-only and verify it sticks
-    await page.getByLabel(childrenOnlyRadioLabel, { exact: true }).click();
-    await expect(
-      page.getByLabel(childrenOnlyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await childrenOnlyRadio(page).click();
+    await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Reload — selection should persist because the audience mutation fired
     await page.waitForLoadState('networkidle');
     await page.goto(eventEditUrl);
-    await expect(
-      page.getByLabel(childrenOnlyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Switch back to "with family"
-    await page.getByLabel(withFamilyRadioLabel, { exact: true }).click();
-    await expect(
-      page.getByLabel(withFamilyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await withFamilyRadio(page).click();
+    await expect(withFamilyRadio(page)).toBeChecked();
   });
 
   test('hides the section again when the age range moves outside the BOA range', async ({
@@ -198,11 +192,9 @@ test.describe('Children-only audience section', () => {
         res.request().method() === 'PUT' &&
         res.ok(),
     );
-    await page.getByLabel(childrenOnlyRadioLabel, { exact: true }).click();
+    await childrenOnlyRadio(page).click();
     await audiencePut;
-    await expect(
-      page.getByLabel(childrenOnlyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Add a departure place via the Bereikbaarheid tab and explicitly wait
     // for the PUT and the cache-invalidated GET refetch to complete — the
@@ -239,7 +231,7 @@ test.describe('Children-only audience section', () => {
     ).toBeVisible();
 
     // Try to switch back to "with family" → warning modal must appear
-    await page.getByLabel(withFamilyRadioLabel, { exact: true }).click();
+    await withFamilyRadio(page).click();
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
@@ -257,12 +249,10 @@ test.describe('Children-only audience section', () => {
       })
       .click();
     await expect(modal).toBeHidden();
-    await expect(
-      page.getByLabel(childrenOnlyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Click again, then confirm → audience flips and departure places are cleared
-    await page.getByLabel(withFamilyRadioLabel, { exact: true }).click();
+    await withFamilyRadio(page).click();
     await expect(modal).toBeVisible();
     await modal
       .getByRole('button', {
@@ -270,9 +260,7 @@ test.describe('Children-only audience section', () => {
       })
       .click();
     await expect(modal).toBeHidden();
-    await expect(
-      page.getByLabel(withFamilyRadioLabel, { exact: true }),
-    ).toBeChecked();
+    await expect(withFamilyRadio(page)).toBeChecked();
 
     await page.waitForLoadState('networkidle');
 
