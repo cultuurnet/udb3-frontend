@@ -96,8 +96,8 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
       `}
     >
       <tbody>
-        {rows.map((row, index) => (
-          <tr key={index}>
+        {rows.map((row) => (
+          <tr key={row.label}>
             <td>{row.label}</td>
             <td>{row.value}</td>
           </tr>
