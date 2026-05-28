@@ -338,7 +338,10 @@
         "from": "De",
         "till": "à",
         "age": "ans",
+        "input_range_title": "Indiquez un âge minimum et maximum",
         "error_max_lower_than_min": "L'âge maximum ne peut être inférieur à l'âge minimum.",
+        "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
+        "error_invalid": "L'âge spécifié n'est pas valide.",
         "error_no_min_age": "Veuillez entrer un âge minimum"
       }
     },
