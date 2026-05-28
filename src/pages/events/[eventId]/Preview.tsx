@@ -17,6 +17,7 @@ import {
   useGetOfferHistoryQuery,
 } from '@/hooks/api/offers';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { Footer } from '@/pages/Footer';
@@ -36,6 +37,7 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
+import { OpeningHoursSummary } from '@/pages/steps/CalendarStep/OpeningHoursContent';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
@@ -78,10 +80,12 @@ const Preview = () => {
   const isEdited = router.query.edited === 'true';
   const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
     locale: i18n.language,
-    format: 'lg',
+    format: isBoaEnabled ? 'md' : 'lg',
   });
 
   const calendarSummary = getCalendarSummaryQuery.data;
@@ -393,7 +397,7 @@ const Preview = () => {
     {
       field: t('preview.labels.calendar'),
       value: (
-        <Stack>
+        <Stack spacing={4}>
           <Text
             css={`
               white-space: pre-wrap;
@@ -401,6 +405,15 @@ const Preview = () => {
           >
             {calendarSummary}
           </Text>
+
+          {isBoaEnabled && offer.openingHours?.length > 0 && (
+            <OpeningHoursSummary
+              openingHours={offer.openingHours}
+              adjustedDays={offer.openingHoursAdjustedDays}
+              closedDays={offer.openingHoursClosedDays}
+              lang={i18n.language as SupportedLanguage}
+            />
+          )}
           {isLessonSeries && (
             <Alert width="100%" marginTop={5} marginBottom={4}>
               <Text>{t('preview.info_lesson_series')}</Text>
