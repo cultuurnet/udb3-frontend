@@ -1017,6 +1017,8 @@
     },
     "row_status": {
       "PLANNED": "Veröffentlichung aus {{date}}",
+      "PLANNED_NO_DATE": "Geplant",
+      "PUBLISHED_NO_DATE": "Veröffentlicht",
       "PUBLISHED": "Veröffentlicht am {{date}}",
       "DRAFT": "Entwurfsversion",
       "APPROVED": "Veröffentlicht",

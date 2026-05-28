@@ -1,4 +1,4 @@
-import { format, isAfter, isFuture } from 'date-fns';
+import { format, isAfter, isFuture, isValid } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +22,10 @@ export type OfferPublicationStatus = PublicationStatusInfo & {
   isFinished: boolean;
 };
 
-export const usePublicationStatus = (offer: Offer): OfferPublicationStatus => {
+export const usePublicationStatus = (
+  offer: Offer,
+  showDate = true,
+): OfferPublicationStatus => {
   const { t } = useTranslation();
   const getUserQuery = useGetUserQuery();
   const user = getUserQuery.data;
@@ -54,11 +57,18 @@ export const usePublicationStatus = (offer: Offer): OfferPublicationStatus => {
       publicationStatus === PublicationStatus.PLANNED ||
       publicationStatus === PublicationStatus.PUBLISHED;
 
-    const label = needsDate
-      ? t(`dashboard.row_status.${publicationStatus}`, {
-          date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
-        })
-      : t(`dashboard.row_status.${publicationStatus}`);
+    const availableFromDate = new Date(offer.availableFrom);
+    const statusKey =
+      !showDate && needsDate
+        ? `${publicationStatus}_NO_DATE`
+        : publicationStatus;
+
+    const label =
+      showDate && needsDate && isValid(availableFromDate)
+        ? t(`dashboard.row_status.${publicationStatus}`, {
+            date: format(availableFromDate, 'dd/MM/yyyy'),
+          })
+        : t(`dashboard.row_status.${statusKey}`);
 
     const userId = user?.sub;
     const userIdv1 = user?.['https://publiq.be/uitidv1id'];
