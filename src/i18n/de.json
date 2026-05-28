@@ -338,7 +338,10 @@
         "from": "Von",
         "till": "Bis",
         "age": "Jahre",
+        "input_range_title": "Geben Sie ein Mindest- und Höchstalter ein",
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
+        "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
+        "error_invalid": "Das angegebene Alter ist ungültig.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein"
       }
     },
