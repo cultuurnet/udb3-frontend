@@ -19,7 +19,6 @@ import {
   useIsPeriodic,
   useIsPermanent,
 } from '../machines/calendarMachine';
-import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
 import { CalendarOpeninghoursModalLegacy } from './CalendarOpeninghoursModalLegacy';
 import type { ClosingPeriodData } from './ClosingPeriod';
@@ -50,6 +49,7 @@ export const FixedDays = ({
   onChangeStartDate,
   onChangeEndDate,
   onChangeCalendarState,
+  onChangeOpeningHours,
   onChangeAdjustedDays,
   initialAdjustedDays,
   onChangeClosingPeriods,
@@ -64,10 +64,6 @@ export const FixedDays = ({
   ] = useState(false);
   const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
     useState(false);
-
-  const { handleChangeOpeningHours } = useCalendarHandlers(
-    onChangeCalendarState,
-  );
 
   const isPeriodic = useIsPeriodic();
   const isPermanent = useIsPermanent();
@@ -97,7 +93,7 @@ export const FixedDays = ({
   const handleDeleteAll = () => {
     onChangeAdjustedDays([]);
     onChangeClosingPeriods([]);
-    handleChangeOpeningHours([]);
+    onChangeOpeningHours([]);
     setIsDeleteConfirmModalVisible(false);
   };
 
