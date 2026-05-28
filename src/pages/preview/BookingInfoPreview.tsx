@@ -26,55 +26,6 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
     );
   }
 
-  const rows = [
-    bookingInfo.email && {
-      label: t('create.additionalInformation.booking_info.email'),
-      value: (
-        <Link href={`mailto:${bookingInfo.email}`}>{bookingInfo.email}</Link>
-      ),
-    },
-    bookingInfo.phone && {
-      label: t('create.additionalInformation.booking_info.phone'),
-      value: <Text>{bookingInfo.phone}</Text>,
-    },
-    bookingInfo.url && {
-      label: t('preview.booking_link_label'),
-      value: (
-        <Stack spacing={2}>
-          <Link target="_blank" href={bookingInfo.url}>
-            {bookingInfo.url}
-          </Link>
-          <Link
-            variant={LinkVariants.BUTTON_PRIMARY}
-            target="_blank"
-            href={bookingInfo.url}
-            alignSelf="flex-start"
-          >
-            {getLanguageObjectOrFallback(
-              bookingInfo.urlLabel,
-              i18n.language as SupportedLanguage,
-              mainLanguage,
-            )}
-          </Link>
-        </Stack>
-      ),
-    },
-    bookingInfo.availabilityStarts &&
-      bookingInfo.availabilityEnds && {
-        label: t('preview.booking_period'),
-        value: (
-          <Text>
-            {formatPeriod(
-              bookingInfo.availabilityStarts,
-              bookingInfo.availabilityEnds,
-              i18n.language,
-              t,
-            )}
-          </Text>
-        ),
-      },
-  ].filter(Boolean);
-
   return (
     <table
       css={`
@@ -96,12 +47,63 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
       `}
     >
       <tbody>
-        {rows.map((row) => (
-          <tr key={row.label}>
-            <td>{row.label}</td>
-            <td>{row.value}</td>
+        {bookingInfo.email && (
+          <tr>
+            <td>{t('create.additionalInformation.booking_info.email')}</td>
+            <td>
+              <Link href={`mailto:${bookingInfo.email}`}>
+                {bookingInfo.email}
+              </Link>
+            </td>
           </tr>
-        ))}
+        )}
+        {bookingInfo.phone && (
+          <tr>
+            <td>{t('create.additionalInformation.booking_info.phone')}</td>
+            <td>
+              <Text>{bookingInfo.phone}</Text>
+            </td>
+          </tr>
+        )}
+        {bookingInfo.url && (
+          <tr>
+            <td>{t('preview.booking_link_label')}</td>
+            <td>
+              <Stack spacing={2}>
+                <Link target="_blank" href={bookingInfo.url}>
+                  {bookingInfo.url}
+                </Link>
+                <Link
+                  variant={LinkVariants.BUTTON_PRIMARY}
+                  target="_blank"
+                  href={bookingInfo.url}
+                  alignSelf="flex-start"
+                >
+                  {getLanguageObjectOrFallback(
+                    bookingInfo.urlLabel,
+                    i18n.language as SupportedLanguage,
+                    mainLanguage,
+                  )}
+                </Link>
+              </Stack>
+            </td>
+          </tr>
+        )}
+        {bookingInfo.availabilityStarts && bookingInfo.availabilityEnds && (
+          <tr>
+            <td>{t('preview.booking_period')}</td>
+            <td>
+              <Text>
+                {formatPeriod(
+                  bookingInfo.availabilityStarts,
+                  bookingInfo.availabilityEnds,
+                  i18n.language,
+                  t,
+                )}
+              </Text>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );
