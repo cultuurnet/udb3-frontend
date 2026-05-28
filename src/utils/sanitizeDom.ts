@@ -6,7 +6,7 @@ const sanitizationPresets = {
 
 const sanitizationOptions = {
   [sanitizationPresets.EVENT_DESCRIPTION]: {
-    ALLOWED_TAGS: ['ul', 'ol', 'li', 'span', 'p', 'em', 'strong', 'a'],
+    ALLOWED_TAGS: ['ul', 'ol', 'li', 'span', 'p', 'br', 'em', 'strong', 'a'],
     ALLOWED_ATTR: ['style', 'href'],
   },
 };
