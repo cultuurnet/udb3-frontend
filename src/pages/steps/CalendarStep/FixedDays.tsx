@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
-import { Button, ButtonVariants } from '@/ui/Button';
+import { Box } from '@/ui/Box';
+import { ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
-import { List } from '@/ui/List';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -22,6 +23,7 @@ import { CalendarOpeninghoursModal } from './CalendarOpeninghoursModal';
 import { CalendarOpeninghoursModalLegacy } from './CalendarOpeninghoursModalLegacy';
 import type { ClosingPeriodData } from './ClosingPeriod';
 import type { DeviatingPeriodData } from './DeviatingPeriod';
+import { OpeningHoursContent } from './OpeningHoursContent';
 
 const FixedDayOptions = {
   PERMANENT: 'permanent',
@@ -35,9 +37,9 @@ type FixedDaysProps = {
   onChangeEndDate: (date: Date | null) => void;
   onChangeOpeningHours: (newOpeningHours: OpeningHours[]) => void;
   onChangeCalendarState: (newState: CalendarState) => void;
-  onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
+  onChangeAdjustedDays: (adjustedDays: DeviatingPeriodData[]) => void;
   initialAdjustedDays?: DeviatingPeriodData[];
-  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  onChangeClosingPeriods: (closingPeriods: ClosingPeriodData[]) => void;
   initialClosingPeriods?: ClosingPeriodData[];
 };
 
@@ -47,6 +49,7 @@ export const FixedDays = ({
   onChangeStartDate,
   onChangeEndDate,
   onChangeCalendarState,
+  onChangeOpeningHours,
   onChangeAdjustedDays,
   initialAdjustedDays,
   onChangeClosingPeriods,
@@ -59,6 +62,8 @@ export const FixedDays = ({
     isCalendarOpeninghoursModalVisible,
     setIsCalendarOpeninghoursModalVisible,
   ] = useState(false);
+  const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
+    useState(false);
 
   const isPeriodic = useIsPeriodic();
   const isPermanent = useIsPermanent();
@@ -67,12 +72,6 @@ export const FixedDays = ({
   const endDate = useCalendarSelector((state) => state.context.endDate);
 
   const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
-
-  const openingHours = useCalendarSelector(
-    (state) => state.context.openingHours,
-  );
-
-  const hasOpeningHours = openingHours.length > 0;
 
   const handleChangeOption = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -91,56 +90,12 @@ export const FixedDays = ({
     return FixedDayOptions.PERIODIC;
   }, [isPermanent]);
 
-  const openingHoursContent = hasOpeningHours ? (
-    <List>
-      <List.Item
-        alignItems="center"
-        paddingTop={3}
-        paddingBottom={3}
-        justifyContent="space-between"
-        spacing={5}
-      >
-        <Text fontWeight="bold">
-          {t('create.calendar.fixed_days.opening_hours')}
-        </Text>
-        <Button
-          variant={ButtonVariants.SECONDARY}
-          onClick={() => setIsCalendarOpeninghoursModalVisible(true)}
-        >
-          {t('create.calendar.fixed_days.button_change_opening_hours')}
-        </Button>
-      </List.Item>
-      {openingHours.map((openingHour, index) => (
-        <List.Item
-          paddingTop={2}
-          paddingBottom={2}
-          css={`
-            border-top: 1px solid lightgrey;
-          `}
-          justifyContent="space-between"
-          spacing={2}
-          key={index}
-        >
-          <Text maxWidth="25rem">
-            {openingHour.dayOfWeek
-              .map((dayOfWeek) => t(`create.calendar.days.full.${dayOfWeek}`))
-              .join(', ')}
-          </Text>
-          <Text>
-            {openingHour.opens} - {openingHour.closes}
-          </Text>
-        </List.Item>
-      ))}
-    </List>
-  ) : (
-    <Button
-      variant={ButtonVariants.SECONDARY}
-      onClick={() => setIsCalendarOpeninghoursModalVisible(true)}
-      alignSelf="flex-start"
-    >
-      {t('create.calendar.fixed_days.button_add_opening_hours')}
-    </Button>
-  );
+  const handleDeleteAll = () => {
+    onChangeAdjustedDays([]);
+    onChangeClosingPeriods([]);
+    onChangeOpeningHours([]);
+    setIsDeleteConfirmModalVisible(false);
+  };
 
   return (
     <Stack spacing={5} alignItems="flex-start">
@@ -172,7 +127,12 @@ export const FixedDays = ({
               apiHolidays={apiHolidays}
               onShowHolidaysChange={onShowHolidaysChange}
             />
-            {openingHoursContent}
+            <OpeningHoursContent
+              initialAdjustedDays={initialAdjustedDays}
+              initialClosingPeriods={initialClosingPeriods}
+              onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
+              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
+            />
           </Stack>
         )}
         <RadioButtonWithLabel
@@ -183,7 +143,16 @@ export const FixedDays = ({
           onChange={handleChangeOption}
           label={t('create.calendar.fixed_days.permanent')}
         />
-        {isPermanent && <Stack paddingX={4.5}>{openingHoursContent}</Stack>}
+        {isPermanent && (
+          <Stack paddingX={4.5}>
+            <OpeningHoursContent
+              initialAdjustedDays={initialAdjustedDays}
+              initialClosingPeriods={initialClosingPeriods}
+              onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
+              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
+            />
+          </Stack>
+        )}
       </Stack>
       {!isBoaEnabled && (
         <CalendarOpeninghoursModalLegacy
@@ -202,6 +171,27 @@ export const FixedDays = ({
           onChangeClosingPeriods={onChangeClosingPeriods}
           initialClosingPeriods={initialClosingPeriods}
         />
+      )}
+      {isBoaEnabled && (
+        <Modal
+          visible={isDeleteConfirmModalVisible}
+          variant={ModalVariants.QUESTION}
+          size={ModalSizes.MD}
+          title={t('create.calendar.fixed_days.overview.delete_modal.title')}
+          confirmTitle={t(
+            'create.calendar.fixed_days.overview.delete_modal.confirm',
+          )}
+          confirmButtonVariant={ButtonVariants.DANGER}
+          cancelTitle={t('create.calendar.opening_hours_modal.button_cancel')}
+          onClose={() => setIsDeleteConfirmModalVisible(false)}
+          onConfirm={handleDeleteAll}
+        >
+          <Box padding={4}>
+            <Text>
+              {t('create.calendar.fixed_days.overview.delete_modal.body')}
+            </Text>
+          </Box>
+        </Modal>
       )}
     </Stack>
   );

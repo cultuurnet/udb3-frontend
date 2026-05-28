@@ -63,7 +63,7 @@ test.describe.serial('Calendar opening hours modal', () => {
   test('add opening hours to a permanent event', async ({ page }) => {
     await page
       .getByRole('button', {
-        name: calendar.fixed_days.button_add_opening_hours,
+        name: calendar.fixed_days.button_add_hours,
       })
       .click();
     const modal = page.getByRole('dialog');
@@ -114,7 +114,6 @@ test.describe.serial('Calendar opening hours modal', () => {
         calendar.days.childcare.validation_messages.set_times_required,
       ),
     ).toBeHidden();
-    await modal.getByLabel(calendar.days.childcare.label).click();
 
     await modal
       .getByRole('button', {
@@ -146,18 +145,38 @@ test.describe.serial('Calendar opening hours modal', () => {
 
     await expect(
       page.getByRole('button', {
-        name: calendar.fixed_days.button_change_opening_hours,
+        name: calendar.fixed_days.overview.edit,
       }),
     ).toBeVisible();
-    await expect(page.getByText(calendar.days.full.monday)).toBeVisible();
-    await expect(page.getByText(calendar.days.full.tuesday)).toBeVisible();
+    await expect(
+      page.getByText(calendar.days.short.monday, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(calendar.days.short.tuesday, { exact: true }),
+    ).toBeVisible();
     await expect(page.getByText('09:00 - 17:00')).toBeVisible();
+    await expect(
+      page.getByText(
+        calendar.fixed_days.overview.childcare_before.replace(
+          '{{start}}',
+          '08:00',
+        ),
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        calendar.fixed_days.overview.childcare_after.replace(
+          '{{end}}',
+          '18:00',
+        ),
+      ),
+    ).toBeVisible();
   });
 
   test('add deviating period to a permanent event', async ({ page }) => {
     await page
       .getByRole('button', {
-        name: calendar.fixed_days.button_change_opening_hours,
+        name: calendar.fixed_days.overview.edit,
       })
       .click();
     const modal = page.getByRole('dialog');
@@ -201,18 +220,69 @@ test.describe.serial('Calendar opening hours modal', () => {
       .last()
       .fill('16:00');
 
+    await modal.getByLabel(calendar.days.childcare.label).last().click();
+    await modal
+      .getByLabel(calendar.days.childcare.from, { exact: true })
+      .last()
+      .fill('09:00');
+    await modal
+      .getByLabel(calendar.days.childcare.to, { exact: true })
+      .last()
+      .fill('17:00');
+    await modal
+      .getByLabel(calendar.days.childcare.to, { exact: true })
+      .last()
+      .blur();
+
     await modal
       .getByRole('button', {
         name: calendar.opening_hours_modal.button_confirm,
       })
       .click();
     await expect(modal).toBeHidden();
+    await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
+    await page.waitForLoadState('networkidle');
+
+    await expect(
+      page.getByText(calendar.fixed_days.overview.deviating_except),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        `${formatDate(addDays(today, 7))} - ${formatDate(addDays(today, 12))}`,
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText('(E2E deviating period description)'),
+    ).toBeVisible();
+    await expect(
+      page.getByText(calendar.fixed_days.overview.deviating_then_weekly),
+    ).toBeVisible();
+    await expect(
+      page.getByText(calendar.days.short.monday, { exact: true }).last(),
+    ).toBeVisible();
+    await expect(page.getByText('10:00 - 16:00')).toBeVisible();
+    await expect(
+      page.getByText(
+        calendar.fixed_days.overview.childcare_before.replace(
+          '{{start}}',
+          '09:00',
+        ),
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        calendar.fixed_days.overview.childcare_after.replace(
+          '{{end}}',
+          '17:00',
+        ),
+      ),
+    ).toBeVisible();
   });
 
   test('add closing period to a permanent event', async ({ page }) => {
     await page
       .getByRole('button', {
-        name: calendar.fixed_days.button_change_opening_hours,
+        name: calendar.fixed_days.overview.edit,
       })
       .click();
     const modal = page.getByRole('dialog');
@@ -250,5 +320,40 @@ test.describe.serial('Calendar opening hours modal', () => {
       })
       .click();
     await expect(modal).toBeHidden();
+    await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
+    await page.waitForLoadState('networkidle');
+
+    await expect(
+      page.getByText(calendar.fixed_days.overview.closed),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        `${formatDate(addDays(today, 14))} - ${formatDate(addDays(today, 18))}`,
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText('(E2E closing period description)'),
+    ).toBeVisible();
+  });
+
+  test('delete all opening hours', async ({ page }) => {
+    await page
+      .getByRole('button', { name: calendar.fixed_days.overview.delete })
+      .click();
+
+    const confirmModal = page.getByRole('dialog');
+    await expect(confirmModal).toBeVisible();
+    await confirmModal
+      .getByRole('button', {
+        name: calendar.fixed_days.overview.delete_modal.confirm,
+      })
+      .click();
+    await expect(confirmModal).toBeHidden();
+    await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
+    await page.waitForLoadState('networkidle');
+
+    await expect(
+      page.getByRole('button', { name: calendar.fixed_days.button_add_hours }),
+    ).toBeVisible();
   });
 });

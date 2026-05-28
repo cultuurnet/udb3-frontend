@@ -27,6 +27,7 @@ const ButtonVariants = {
   ...BootStrapVariants,
   UNSTYLED: 'unstyled',
   LINK: 'link',
+  LINK_DANGER: 'link-danger',
   OUTLINED: 'outlined',
 } as const;
 
@@ -294,7 +295,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isBootstrapVariant = (
       Object.values(BootStrapVariants) as string[]
     ).includes(variant);
-    const isLinkVariant = variant === ButtonVariants.LINK;
+    const isLinkVariant =
+      variant === ButtonVariants.LINK || variant === ButtonVariants.LINK_DANGER;
+    const isLinkDanger = variant === ButtonVariants.LINK_DANGER;
 
     if (variant === ButtonVariants.SECONDARY) variant = 'secondary';
 
@@ -418,6 +421,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               outline: none;
               box-shadow: none;
             }
+
+            ${isLinkDanger &&
+            `
+              span { color: ${colors.dangerDark}; }
+              &:hover span {
+                color: ${colors.dangerBright};
+                text-decoration-color: ${colors.dangerBright};
+              }
+            `}
           `}
           alignItems="center"
           justifyContent="flex-start"

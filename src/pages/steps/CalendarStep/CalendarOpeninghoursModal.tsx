@@ -48,9 +48,9 @@ type CalendarOpeninghoursModalProps = {
   onClose: () => void;
   onChangeCalendarState: (newSate: CalendarState) => void;
   showChildcare?: boolean;
-  onChangeAdjustedDays?: (adjustedDays: DeviatingPeriodData[]) => void;
+  onChangeAdjustedDays: (adjustedDays: DeviatingPeriodData[]) => void;
   initialDeviatingPeriods?: DeviatingPeriodData[];
-  onChangeClosingPeriods?: (closingPeriods: ClosingPeriodData[]) => void;
+  onChangeClosingPeriods: (closingPeriods: ClosingPeriodData[]) => void;
   initialClosingPeriods?: ClosingPeriodData[];
 };
 
@@ -226,8 +226,8 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSave = () => {
-    onChangeAdjustedDays?.(deviatingPeriods);
-    onChangeClosingPeriods?.(closingPeriods);
+    onChangeAdjustedDays(deviatingPeriods);
+    onChangeClosingPeriods(closingPeriods);
     handleChangeOpeningHours(
       openingHours.map(({ childcareEnabled, ...hour }) => ({
         ...hour,
@@ -262,7 +262,7 @@ const CalendarOpeninghoursModal = ({
     ? pendingDelete?.kind === 'deviating'
       ? t('create.calendar.opening_hours_modal.deviating.delete_modal.title')
       : t('create.calendar.opening_hours_modal.closing.delete_modal.title')
-    : t('create.calendar.opening_hours_modal.title');
+    : t('create.calendar.opening_hours_modal.title_add_hours');
 
   const modalConfirmTitle = isDeleteConfirm
     ? pendingDelete?.kind === 'deviating'

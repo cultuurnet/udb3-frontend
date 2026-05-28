@@ -135,8 +135,25 @@
         "with_start_and_end_date": "Mit Start- und Enddatum",
         "permanent": "Permanent",
         "opening_hours": "Öffnungszeiten",
+        "hours": "Stunden",
         "button_change_opening_hours": "Öffnungszeiten ändern",
-        "button_add_opening_hours": "Öffnungszeiten hinzufügen"
+        "button_add_opening_hours": "Öffnungszeiten hinzufügen",
+        "button_add_hours": "Stunden hinzufügen",
+        "overview": {
+          "edit": "Bearbeiten",
+          "delete": "Löschen",
+          "weekly_on": "Wöchentlich:",
+          "closed": "Geschlossen",
+          "deviating_except": "Außer:",
+          "deviating_then_weekly": "dann wöchentlich:",
+          "childcare_before": "Vorbetreuung ab {{start}}",
+          "childcare_after": "Nachbetreuung bis {{end}}",
+          "delete_modal": {
+            "title": "Zeiten löschen",
+            "body": "Sind Sie sicher, dass Sie alle Öffnungszeiten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Endgültig löschen"
+          }
+        }
       },
       "days": {
         "short": {
@@ -183,6 +200,7 @@
         "end_time": "bis",
         "start_time": "von",
         "title": "Öffnungszeiten",
+        "title_add_hours": "Stunden hinzufügen",
         "days": "Tage",
         "hours": "Stunden",
         "select_days": "Tag(e) auswählen",
