@@ -29,6 +29,8 @@ module.exports = {
     '<rootDir>/src/test/e2e',
   ],
   moduleNameMapper: {
+    'styled-components':
+      '<rootDir>/node_modules/styled-components/dist/styled-components.cjs.js',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     ...jsconfigpaths,
   },
