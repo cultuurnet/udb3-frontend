@@ -138,14 +138,12 @@ const AgeRangeStepBoa = ({
   const [maxAge, setMaxAge] = useState('');
   const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
-  const [pendingAudienceChange, setPendingAudienceChange] =
-    useState<AudienceType | null>(null);
-  const [isMembersWarningModalVisible, setIsMembersWarningModalVisible] =
-    useState(false);
-  const [pendingAgeRangeChange, setPendingAgeRangeChange] = useState<{
-    newValue: string;
-    previousValue: string;
-  } | null>(null);
+  type ActiveModal =
+    | { kind: 'departurePlaces'; targetAudience: AudienceType }
+    | { kind: 'members' }
+    | { kind: 'ageRange'; newValue: string; previousValue: string };
+  const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
+  const closeModal = () => setActiveModal(null);
   const [audienceMutationError, setAudienceMutationError] = useState<
     string | null
   >(null);
@@ -232,7 +230,7 @@ const AgeRangeStepBoa = ({
       audienceType === AudienceTypes.CHILDREN_ONLY &&
       !overlapsWithBoaAgeRange(value)
     ) {
-      setPendingAgeRangeChange({ newValue: value, previousValue });
+      setActiveModal({ kind: 'ageRange', newValue: value, previousValue });
       return;
     }
 
@@ -300,7 +298,7 @@ const AgeRangeStepBoa = ({
       newType === AudienceTypes.CHILDREN_ONLY &&
       audienceType === AudienceTypes.MEMBERS
     ) {
-      setIsMembersWarningModalVisible(true);
+      setActiveModal({ kind: 'members' });
       return;
     }
     const isSwitchingAwayFromChildrenOnly =
@@ -308,7 +306,7 @@ const AgeRangeStepBoa = ({
       newType !== AudienceTypes.CHILDREN_ONLY;
     const hasDeparturePlaces = !!event?.departurePlaces?.length;
     if (isSwitchingAwayFromChildrenOnly && hasDeparturePlaces) {
-      setPendingAudienceChange(newType);
+      setActiveModal({ kind: 'departurePlaces', targetAudience: newType });
       return;
     }
     applyAudienceChange(newType).catch(() => undefined);
@@ -568,7 +566,7 @@ const AgeRangeStepBoa = ({
               <Modal
                 variant={ModalVariants.QUESTION}
                 size={ModalSizes.MD}
-                visible={pendingAgeRangeChange !== null}
+                visible={activeModal?.kind === 'ageRange'}
                 title={t(
                   'create.name_and_age.age.audience.age_range_warning_modal.title',
                 )}
@@ -580,8 +578,8 @@ const AgeRangeStepBoa = ({
                 )}
                 confirmButtonVariant={ButtonVariants.DANGER}
                 onClose={() => {
-                  if (!pendingAgeRangeChange) return;
-                  const { previousValue } = pendingAgeRangeChange;
+                  if (activeModal?.kind !== 'ageRange') return;
+                  const { previousValue } = activeModal;
                   field.onChange({
                     ...field.value,
                     typicalAgeRange: previousValue,
@@ -589,11 +587,12 @@ const AgeRangeStepBoa = ({
                   const [min, max] = previousValue.split('-');
                   setMinAge(min ?? '');
                   setMaxAge(max ?? '');
-                  setPendingAgeRangeChange(null);
+                  closeModal();
                 }}
                 onConfirm={async () => {
                   if (isAudiencePending) return;
-                  if (!pendingAgeRangeChange) return;
+                  if (activeModal?.kind !== 'ageRange') return;
+                  const { newValue } = activeModal;
                   try {
                     await applyAudienceChange(AudienceTypes.EVERYONE);
                     if (offerId && event?.departurePlaces?.length) {
@@ -604,12 +603,12 @@ const AgeRangeStepBoa = ({
                     }
                     onChange({
                       ...field.value,
-                      typicalAgeRange: pendingAgeRangeChange.newValue,
+                      typicalAgeRange: newValue,
                     });
                   } catch {
                     return;
                   }
-                  setPendingAgeRangeChange(null);
+                  closeModal();
                 }}
               >
                 <Box padding={4}>
@@ -628,7 +627,7 @@ const AgeRangeStepBoa = ({
       <Modal
         variant={ModalVariants.QUESTION}
         size={ModalSizes.MD}
-        visible={pendingAudienceChange !== null}
+        visible={activeModal?.kind === 'departurePlaces'}
         title={t(
           'create.name_and_age.age.audience.departure_places_warning_modal.title',
         )}
@@ -639,12 +638,12 @@ const AgeRangeStepBoa = ({
           'create.name_and_age.age.audience.departure_places_warning_modal.cancel',
         )}
         confirmButtonVariant={ButtonVariants.DANGER}
-        onClose={() => setPendingAudienceChange(null)}
+        onClose={closeModal}
         onConfirm={async () => {
           if (isAudiencePending) return;
-          if (!pendingAudienceChange) return;
+          if (activeModal?.kind !== 'departurePlaces') return;
           try {
-            await applyAudienceChange(pendingAudienceChange);
+            await applyAudienceChange(activeModal.targetAudience);
             if (offerId) {
               await changeDeparturePlacesMutation.mutateAsync({
                 eventId: offerId,
@@ -656,7 +655,7 @@ const AgeRangeStepBoa = ({
             // bail out and keep the modal open so the user can retry.
             return;
           }
-          setPendingAudienceChange(null);
+          closeModal();
         }}
       >
         <Box padding={4}>
@@ -671,7 +670,7 @@ const AgeRangeStepBoa = ({
       <Modal
         variant={ModalVariants.QUESTION}
         size={ModalSizes.MD}
-        visible={isMembersWarningModalVisible}
+        visible={activeModal?.kind === 'members'}
         title={t(
           'create.name_and_age.age.audience.members_warning_modal.title',
         )}
@@ -682,7 +681,7 @@ const AgeRangeStepBoa = ({
           'create.name_and_age.age.audience.members_warning_modal.cancel',
         )}
         confirmButtonVariant={ButtonVariants.DANGER}
-        onClose={() => setIsMembersWarningModalVisible(false)}
+        onClose={closeModal}
         onConfirm={async () => {
           if (isAudiencePending) return;
           try {
@@ -690,7 +689,7 @@ const AgeRangeStepBoa = ({
           } catch {
             return;
           }
-          setIsMembersWarningModalVisible(false);
+          closeModal();
         }}
       >
         <Box padding={4}>
