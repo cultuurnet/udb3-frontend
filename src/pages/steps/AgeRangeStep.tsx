@@ -195,6 +195,9 @@ const AgeRangeStepBoa = ({
     },
   });
 
+  const isAudiencePending =
+    changeAudienceMutation.isPending || changeDeparturePlacesMutation.isPending;
+
   useEffect(() => {
     if (!watchedTypicalAgeRange) return;
 
@@ -291,6 +294,7 @@ const AgeRangeStepBoa = ({
   };
 
   const handleAudienceClick = (newType: AudienceType) => {
+    if (isAudiencePending) return;
     if (newType === audienceType) return;
     if (
       newType === AudienceTypes.CHILDREN_ONLY &&
@@ -532,6 +536,7 @@ const AgeRangeStepBoa = ({
                           id="audience-children-only"
                           name="age-audience-type"
                           checked={audienceType === AudienceTypes.CHILDREN_ONLY}
+                          disabled={isAudiencePending}
                           label={t(
                             'create.name_and_age.age.audience.children_only',
                           )}
@@ -543,6 +548,7 @@ const AgeRangeStepBoa = ({
                           id="audience-with-family"
                           name="age-audience-type"
                           checked={audienceType !== AudienceTypes.CHILDREN_ONLY}
+                          disabled={isAudiencePending}
                           label={t(
                             'create.name_and_age.age.audience.with_family',
                           )}
@@ -586,6 +592,7 @@ const AgeRangeStepBoa = ({
                   setPendingAgeRangeChange(null);
                 }}
                 onConfirm={async () => {
+                  if (isAudiencePending) return;
                   if (!pendingAgeRangeChange) return;
                   try {
                     await applyAudienceChange(AudienceTypes.EVERYONE);
@@ -634,6 +641,7 @@ const AgeRangeStepBoa = ({
         confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setPendingAudienceChange(null)}
         onConfirm={async () => {
+          if (isAudiencePending) return;
           if (!pendingAudienceChange) return;
           try {
             await applyAudienceChange(pendingAudienceChange);
@@ -676,6 +684,7 @@ const AgeRangeStepBoa = ({
         confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setIsMembersWarningModalVisible(false)}
         onConfirm={async () => {
+          if (isAudiencePending) return;
           try {
             await applyAudienceChange(AudienceTypes.CHILDREN_ONLY);
           } catch {
