@@ -270,4 +270,115 @@ test.describe('Children-only audience section', () => {
       page.getByRole('tab', { name: 'Bereikbaarheid' }),
     ).toBeHidden();
   });
+
+  test('age outside 2–12 while "kinderen alleen": confirm resets audience and saves the new age', async ({
+    page,
+    eventEditUrl,
+    eventId,
+  }) => {
+    await page.goto(eventEditUrl);
+
+    // Setup: 6–11 + children-only.
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.kids}`) })
+      .click();
+    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
+
+    const audiencePut = page.waitForResponse(
+      (res) =>
+        res.url().includes(`/events/${eventId}/audience`) &&
+        res.request().method() === 'PUT' &&
+        res.ok(),
+    );
+    await childrenOnlyRadio(page).click();
+    await audiencePut;
+    // Wait for the audienceType update to commit before clicking the next
+    // preset — otherwise commitTypicalAgeRange may still read a stale value
+    // from useWatch and skip the warning modal.
+    await expect(childrenOnlyRadio(page)).toBeChecked();
+
+    // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.adults}`) })
+      .click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+    await expect(
+      modal.getByText(audience.age_range_warning_modal.body),
+    ).toBeVisible();
+
+    // Confirm: audience reset PUT + typicalAgeRange PUT fire in sequence.
+    const confirmAudiencePut = page.waitForResponse(
+      (res) =>
+        res.url().includes(`/events/${eventId}/audience`) &&
+        res.request().method() === 'PUT' &&
+        res.ok(),
+    );
+    const confirmAgePut = page.waitForResponse(
+      (res) =>
+        res.url().includes(`/events/${eventId}/typicalAgeRange`) &&
+        res.request().method() === 'PUT' &&
+        res.ok(),
+    );
+    await modal
+      .getByRole('button', {
+        name: audience.age_range_warning_modal.confirm,
+      })
+      .click();
+    await confirmAudiencePut;
+    await confirmAgePut;
+
+    await page.goto(eventEditUrl);
+
+    // New age (18+) no longer overlaps BOA → children-only section is hidden.
+    await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
+  });
+
+  test('age outside 2–12 while "kinderen alleen": cancel keeps the previous age and audience', async ({
+    page,
+    eventEditUrl,
+    eventId,
+  }) => {
+    await page.goto(eventEditUrl);
+
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.kids}`) })
+      .click();
+    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
+
+    const audiencePut = page.waitForResponse(
+      (res) =>
+        res.url().includes(`/events/${eventId}/audience`) &&
+        res.request().method() === 'PUT' &&
+        res.ok(),
+    );
+    await childrenOnlyRadio(page).click();
+    await audiencePut;
+    await expect(childrenOnlyRadio(page)).toBeChecked();
+
+    // Trigger the modal.
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.adults}`) })
+      .click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    // Cancel → modal closes, previous range + audience preserved.
+    await modal
+      .getByRole('button', {
+        name: audience.age_range_warning_modal.cancel,
+      })
+      .click();
+    await expect(modal).toBeHidden();
+
+    // "Kinderen 6-11" preset stays active and the audience remains
+    // "kinderen alleen" — proves field.onChange revert actually updated the
+    // Controller's field.value (a setValue-based revert would not have).
+    await expect(
+      page.getByRole('button', { name: new RegExp(`^${age.kids}`) }),
+    ).toHaveClass(/(?:^|\s)active(?:\s|$)/);
+    await expect(childrenOnlyRadio(page)).toBeChecked();
+  });
 });
