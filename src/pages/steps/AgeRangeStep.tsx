@@ -148,13 +148,6 @@ const AgeRangeStepBoa = ({
     string | null
   >(null);
 
-  const invalidateOfferQuery = () => {
-    if (!offerId) return;
-    queryClient.invalidateQueries({
-      queryKey: [OfferTypes.EVENTS, { id: offerId }],
-    });
-  };
-
   const audienceType = useWatch({
     control,
     name: 'audience.audienceType',
@@ -176,7 +169,12 @@ const AgeRangeStepBoa = ({
   const event: Event | undefined = getEventByIdQuery.data;
 
   const changeAudienceMutation = useChangeAudienceMutation({
-    onSuccess: invalidateOfferQuery,
+    onSuccess: () => {
+      if (!offerId) return;
+      queryClient.invalidateQueries({
+        queryKey: [OfferTypes.EVENTS, { id: offerId }],
+      });
+    },
     onError: () => {
       setAudienceMutationError(
         t('create.name_and_age.age.audience.mutation_error'),
@@ -185,7 +183,12 @@ const AgeRangeStepBoa = ({
   });
 
   const changeDeparturePlacesMutation = useChangeDeparturePlacesMutation({
-    onSuccess: invalidateOfferQuery,
+    onSuccess: () => {
+      if (!offerId) return;
+      queryClient.invalidateQueries({
+        queryKey: [OfferTypes.EVENTS, { id: offerId }],
+      });
+    },
     onError: () => {
       setAudienceMutationError(
         t('create.name_and_age.age.audience.mutation_error'),
