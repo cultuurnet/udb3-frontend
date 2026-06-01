@@ -349,22 +349,29 @@ const AgeRangeStepBoa = ({
                       ...field.value,
                       birthdateRange: undefined,
                     });
-                    onChange({ ...field.value, birthdateRange: undefined });
 
-                    if (offerId && previousBirthdateRange) {
-                      deleteBirthdateRangeMutation.mutate(
-                        { eventId: offerId, scope },
-                        {
-                          onError: () => {
-                            field.onChange({
-                              ...field.value,
-                              birthdateRange: previousBirthdateRange,
-                            });
-                            setInputMode(AgeInputModes.DATE_OF_BIRTH);
-                          },
-                        },
-                      );
+                    if (!offerId || !previousBirthdateRange) {
+                      return;
                     }
+
+                    deleteBirthdateRangeMutation.mutate(
+                      { eventId: offerId, scope },
+                      {
+                        onSuccess: () => {
+                          onChange({
+                            ...field.value,
+                            birthdateRange: undefined,
+                          });
+                        },
+                        onError: () => {
+                          field.onChange({
+                            ...field.value,
+                            birthdateRange: previousBirthdateRange,
+                          });
+                          setInputMode(AgeInputModes.DATE_OF_BIRTH);
+                        },
+                      },
+                    );
                   }}
                   options={Object.values(AgeInputModes).map((mode) => ({
                     value: mode,
