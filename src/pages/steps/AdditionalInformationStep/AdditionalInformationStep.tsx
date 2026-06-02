@@ -288,9 +288,8 @@ const AdditionalInformationStep = ({
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
-  // @ts-expect-error
-  // Remove ts error when the  childrenOnly audienceType has been added
-  const isChildrenOnly = offer?.audience?.audienceType === 'childrenOnly';
+  const isChildrenOnly =
+    offer?.audience?.audienceType === AudienceTypes.CHILDREN_ONLY;
 
   const [, hash] = asPath.split('#');
 
@@ -298,6 +297,15 @@ const AdditionalInformationStep = ({
     if (!hash || !Object.values(Fields).some((field) => hash === field)) return;
     setTab(hash);
   }, [hash]);
+
+  useEffect(() => {
+    if (!offer) return;
+    const isAccessibilityTabVisible = isChildrenOnly && isBoaEnabled;
+    if (isAccessibilityTabVisible) return;
+    if (tab !== Fields.ACCESSIBILITY) return;
+    setTab(Fields.DESCRIPTION);
+    router.replace({ hash: Fields.DESCRIPTION }, undefined, { shallow: true });
+  }, [offer, isChildrenOnly, isBoaEnabled, router, tab]);
 
   useEffect(() => {
     if (!offerId) return;
@@ -311,8 +319,9 @@ const AdditionalInformationStep = ({
     });
   }, [offerId]);
 
-  const handleSelectTab = (tab: string) => {
-    router.push({ hash: tab }, undefined, { shallow: true });
+  const handleSelectTab = (newTab: string) => {
+    setTab(newTab);
+    router.push({ hash: newTab }, undefined, { shallow: true });
   };
 
   const [validatedFields, setValidatedFields] = useState(
