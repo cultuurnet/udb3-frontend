@@ -5,22 +5,21 @@ const getLanguageObjectOrFallback = <TReturned>(
   language: SupportedLanguage,
   mainLanguage?: SupportedLanguage,
 ) => {
-  if (!obj) return;
+  if (obj == null) return;
 
-  if (obj?.[language]) {
-    return obj[language] as TReturned;
-  }
+  // Plain value (string / number) — already the leaf, return as-is.
+  if (typeof obj !== 'object') return obj as TReturned;
 
-  if (mainLanguage && obj[mainLanguage]) {
-    return obj[mainLanguage] as TReturned;
-  }
-
-  // use nl as fallback language
-  if (typeof obj !== 'string' && obj[SupportedLanguages.NL]) {
+  if (obj[language]) return obj[language] as TReturned;
+  if (mainLanguage && obj[mainLanguage]) return obj[mainLanguage] as TReturned;
+  if (obj[SupportedLanguages.NL])
     return obj[SupportedLanguages.NL] as TReturned;
-  }
 
-  return obj as TReturned;
+  // Final fallback: first available value on the multilingual map.
+  // Prevents callers from ever receiving the raw `{ nl?, fr?, … }` object,
+  // which React can't render and downstream code can't treat as a leaf.
+  const firstValue = Object.values(obj).find((v) => v != null);
+  return firstValue as TReturned | undefined;
 };
 
 export { getLanguageObjectOrFallback };
