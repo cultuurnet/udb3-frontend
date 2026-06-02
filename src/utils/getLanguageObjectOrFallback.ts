@@ -12,7 +12,8 @@ const getLanguageObjectOrFallback = <TReturned>(
 
   if (obj[language]) return obj[language] as TReturned;
   if (mainLanguage && obj[mainLanguage]) return obj[mainLanguage] as TReturned;
-  if (obj[SupportedLanguages.NL]) return obj[SupportedLanguages.NL] as TReturned;
+  if (obj[SupportedLanguages.NL])
+    return obj[SupportedLanguages.NL] as TReturned;
 
   // Final fallback: first available value on the multilingual map.
   // Prevents callers from ever receiving the raw `{ nl?, fr?, … }` object,
