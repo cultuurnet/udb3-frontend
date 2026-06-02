@@ -23,7 +23,6 @@
     "postinsall": "patch-package --error-on-fail=false",
     "vrt": "storybook build && DOCKER_DEFAULT_PLATFORM=linux/amd64 lost-pixel docker --image lostpixel/lost-pixel:v3.22.0",
     "vrt:full-update": "storybook build && DOCKER_DEFAULT_PLATFORM=linux/amd64 lost-pixel docker update --update-storybook --image lostpixel/lost-pixel:v3.22.0"
-
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
