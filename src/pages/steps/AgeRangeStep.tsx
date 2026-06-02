@@ -1,5 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { format, isBefore, parse, startOfDay } from 'date-fns';
+import {
+  differenceInYears,
+  format,
+  isBefore,
+  parse,
+  startOfDay,
+} from 'date-fns';
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -107,6 +113,41 @@ const overlapsWithBoaAgeRange = (
   if (min !== undefined && min > BOA_MAX_AGE) return false;
   if (max !== undefined && max < BOA_MIN_AGE) return false;
   return true;
+};
+
+const birthdateRangeFitsBoa = (
+  birthdateRange: { from?: string; to?: string } | undefined,
+): boolean => {
+  console.log({ birthdateRange });
+  if (!birthdateRange?.from || !birthdateRange?.to) return false;
+
+  const now = new Date();
+  // `from` is the earliest birthdate (oldest person) and `to` is the latest
+  // birthdate (youngest person), so the age window is [today-to, today-from].
+  const maxAge = differenceInYears(
+    now,
+    parse(birthdateRange.from, 'yyyy-MM-dd', now),
+  );
+  const minAge = differenceInYears(
+    now,
+    parse(birthdateRange.to, 'yyyy-MM-dd', now),
+  );
+
+  console.log({ maxAge });
+  console.log({ minAge });
+
+  console.log('first condition', Number.isNaN(minAge) || Number.isNaN(maxAge));
+
+  console.log(
+    'final condtion?',
+    minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE,
+  );
+
+  if (Number.isNaN(minAge) || Number.isNaN(maxAge)) return false;
+  // Both ages must sit entirely inside [BOA_MIN_AGE, BOA_MAX_AGE] — not just
+  // touch it. An audience marked "kinderen alleen" must be uniformly within
+  // the children window, not partially adult or partially infant.
+  return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
 };
 
 const AgeRangeStep = (props: AgeRangeStepProps) => {
@@ -318,7 +359,9 @@ const AgeRangeStepBoa = ({
   const showChildrenOnlySection =
     isEvent &&
     audienceType !== AudienceTypes.EDUCATION &&
-    overlapsWithBoaAgeRange(watchedTypicalAgeRange);
+    (audienceType === AudienceTypes.CHILDREN_ONLY ||
+      overlapsWithBoaAgeRange(watchedTypicalAgeRange) ||
+      birthdateRangeFitsBoa(watchedBirthdateRange));
 
   return (
     <Stack {...getStackProps(props)}>
@@ -345,6 +388,21 @@ const AgeRangeStepBoa = ({
                     if (next === AgeInputModes.DATE_OF_BIRTH) {
                       setMinBirthDate((current) => current ?? new Date());
                       setMaxBirthDate((current) => current ?? new Date());
+
+                      // Create flow: give the destination tab a clean slate
+                      // — clear the other side's age data and reset audience
+                      // so the children-only section also resets.
+                      if (!offerId) {
+                        field.onChange({
+                          ...field.value,
+                          typicalAgeRange: '',
+                        });
+                        setMinAge('');
+                        setMaxAge('');
+                        setValue('audience', {
+                          audienceType: AudienceTypes.EVERYONE,
+                        });
+                      }
                       return;
                     }
 
@@ -355,7 +413,17 @@ const AgeRangeStepBoa = ({
                       birthdateRange: undefined,
                     });
 
-                    if (!offerId || !previousBirthdateRange) {
+                    if (!offerId) {
+                      // Same clean-slate treatment on the way back to AGE.
+                      setMinBirthDate(undefined);
+                      setMaxBirthDate(undefined);
+                      setValue('audience', {
+                        audienceType: AudienceTypes.EVERYONE,
+                      });
+                      return;
+                    }
+
+                    if (!previousBirthdateRange) {
                       return;
                     }
 
@@ -521,46 +589,45 @@ const AgeRangeStepBoa = ({
                           );
                         })}
                     </Inline>
-                    {showChildrenOnlySection && (
-                      <Stack
-                        spacing={2}
-                        marginTop={4}
-                        paddingTop={4}
-                        css={`
-                          border-top: 1px solid ${colors.grey3};
-                        `}
-                      >
-                        <Text fontWeight="bold">
-                          {t('create.name_and_age.age.audience.question')}
-                        </Text>
-                        <RadioButtonWithLabel
-                          id="audience-children-only"
-                          name="age-audience-type"
-                          checked={audienceType === AudienceTypes.CHILDREN_ONLY}
-                          disabled={isAudiencePending}
-                          label={t(
-                            'create.name_and_age.age.audience.children_only',
-                          )}
-                          onChange={() =>
-                            handleAudienceClick(AudienceTypes.CHILDREN_ONLY)
-                          }
-                        />
-                        <RadioButtonWithLabel
-                          id="audience-with-family"
-                          name="age-audience-type"
-                          checked={audienceType !== AudienceTypes.CHILDREN_ONLY}
-                          disabled={isAudiencePending}
-                          label={t(
-                            'create.name_and_age.age.audience.with_family',
-                          )}
-                          onChange={() =>
-                            handleAudienceClick(AudienceTypes.EVERYONE)
-                          }
-                        />
-                        {audienceMutationError && (
-                          <Text color="red">{audienceMutationError}</Text>
-                        )}
-                      </Stack>
+                  </Stack>
+                )}
+                {showChildrenOnlySection && (
+                  <Stack
+                    spacing={2}
+                    marginTop={4}
+                    paddingTop={4}
+                    paddingLeft={5}
+                    css={`
+                      border-top: 1px solid ${colors.grey3};
+                    `}
+                  >
+                    <Text fontWeight="bold">
+                      {t('create.name_and_age.age.audience.question')}
+                    </Text>
+                    <RadioButtonWithLabel
+                      id="audience-children-only"
+                      name="age-audience-type"
+                      checked={audienceType === AudienceTypes.CHILDREN_ONLY}
+                      disabled={isAudiencePending}
+                      label={t(
+                        'create.name_and_age.age.audience.children_only',
+                      )}
+                      onChange={() =>
+                        handleAudienceClick(AudienceTypes.CHILDREN_ONLY)
+                      }
+                    />
+                    <RadioButtonWithLabel
+                      id="audience-with-family"
+                      name="age-audience-type"
+                      checked={audienceType !== AudienceTypes.CHILDREN_ONLY}
+                      disabled={isAudiencePending}
+                      label={t('create.name_and_age.age.audience.with_family')}
+                      onChange={() =>
+                        handleAudienceClick(AudienceTypes.EVERYONE)
+                      }
+                    />
+                    {audienceMutationError && (
+                      <Text color="red">{audienceMutationError}</Text>
                     )}
                   </Stack>
                 )}
