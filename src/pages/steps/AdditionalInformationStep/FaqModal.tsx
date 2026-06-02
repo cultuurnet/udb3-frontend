@@ -181,7 +181,7 @@ const FaqModal = ({
             />
           }
         />
-        {answerHint && <Alert>{answerHint}</Alert>}
+        {answerHint && <Alert width="100%">{answerHint}</Alert>}
       </Stack>
     </Modal>
   );
