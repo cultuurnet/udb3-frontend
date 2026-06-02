@@ -5,6 +5,9 @@ const { withSentryConfig } = require('@sentry/nextjs');
  */
 const moduleExports = {
   productionBrowserSourceMaps: true,
+  compiler: {
+    styledComponents: true,
+  },
   async rewrites() {
     return [
       {
