@@ -604,6 +604,9 @@ const AgeRangeStepBoa = ({
                         departurePlaces: [],
                       });
                     }
+                    setValue('nameAndAgeRange.typicalAgeRange', newValue, {
+                      shouldDirty: true,
+                    });
                     onChange({
                       ...field.value,
                       typicalAgeRange: newValue,
