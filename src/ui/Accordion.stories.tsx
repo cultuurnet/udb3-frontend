@@ -17,13 +17,13 @@ export const Default: Story = {
   render: () => (
     <Accordion>
       <Accordion.Item eventKey="0" title="First item">
-        Content of the first item
+        <span>Content of the first item</span>
       </Accordion.Item>
       <Accordion.Item eventKey="1" title="Second item">
-        Content of the second item
+        <span>Content of the second item</span>
       </Accordion.Item>
       <Accordion.Item eventKey="2" title="Third item">
-        Content of the third item
+        <span>Content of the third item</span>
       </Accordion.Item>
     </Accordion>
   ),

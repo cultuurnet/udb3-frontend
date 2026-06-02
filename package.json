@@ -20,7 +20,10 @@
     "test:unit": "jest",
     "test:e2e": "playwright test",
     "ci": "yarn types:check & yarn lint:check & yarn format:check",
-    "postinsall": "patch-package --error-on-fail=false"
+    "postinsall": "patch-package --error-on-fail=false",
+    "vrt": "storybook build && DOCKER_DEFAULT_PLATFORM=linux/amd64 lost-pixel docker --image lostpixel/lost-pixel:v3.22.0",
+    "vrt:full-update": "storybook build && DOCKER_DEFAULT_PLATFORM=linux/amd64 lost-pixel docker update --update-storybook --image lostpixel/lost-pixel:v3.22.0"
+
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
@@ -108,6 +111,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-storybook": "10.4.1",
     "eslint-plugin-unicorn": "^56.0.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "identity-obj-proxy": "^3.0.0",
@@ -115,6 +119,7 @@
     "jest-environment-jsdom": "^30.1.1",
     "jest-fetch-mock": "^3.0.3",
     "jsconfig-paths-jest-mapper": "^1.0.0",
+    "lost-pixel": "^3.22.0",
     "patch-package": "^8.0.0",
     "playwright": "^1.55.0",
     "postinstall-postinstall": "^2.1.0",
@@ -123,7 +128,6 @@
     "react-test-renderer": "^19.0.0",
     "storybook": "^10.4.1",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.18.1",
-    "eslint-plugin-storybook": "10.4.1"
+    "typescript-eslint": "^8.18.1"
   }
 }
