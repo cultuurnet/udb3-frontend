@@ -11,6 +11,7 @@ import {
 } from '@/hooks/api/events';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -46,6 +47,7 @@ const AudienceStep = ({
   });
 
   const watchedAudienceType = useWatch({ control, name: 'audienceType' });
+  const isChildrenOnly = watchedAudienceType === AudienceTypes.CHILDREN_ONLY;
 
   const getEventByIdQuery = useGetEventByIdQuery({ id: offerId });
 
@@ -78,8 +80,16 @@ const AudienceStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
+        {isChildrenOnly && (
+          <Alert variant={AlertVariants.WARNING}>
+            {t('create.additionalInformation.audience.children_only_warning')}
+          </Alert>
+        )}
         {Object.values(AudienceTypes)
           .filter((type) => type !== AudienceTypes.EDUCATION)
+          .filter(
+            (type) => type !== AudienceTypes.CHILDREN_ONLY || isChildrenOnly,
+          )
           .map((type, index) => {
             return (
               <Fragment key={index}>
@@ -90,12 +100,14 @@ const AudienceStep = ({
                       {...register(`audienceType`)}
                       label={t(`create.additionalInformation.audience.${type}`)}
                       checked={watchedAudienceType === type}
+                      disabled={isChildrenOnly}
                       onChange={() => handleOnChangeAudience(type)}
                     />
                   }
                 />
                 {watchedAudienceType === type &&
-                  watchedAudienceType !== AudienceTypes.EVERYONE && (
+                  watchedAudienceType !== AudienceTypes.EVERYONE &&
+                  watchedAudienceType !== AudienceTypes.CHILDREN_ONLY && (
                     <Text variant="muted" maxWidth="30%">
                       {t(
                         `create.additionalInformation.audience.help.${watchedAudienceType}`,

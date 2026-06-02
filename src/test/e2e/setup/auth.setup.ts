@@ -14,16 +14,11 @@ setup('authenticate', async ({ baseURL, page }) => {
 
   await page.getByRole('button', { name: 'Meld je aan', exact: true }).click();
 
-  // Now we're back to our own app
-  // Wait that the main page has loaded
-  // await page.waitForURL(new RegExp(`${baseURL}/dashboard*`), {
-  //   timeout: 60_000,
-  // });
-
-  // Wait for network to be idle, if we save storage too early, needed storage values might not yet be available
-  await page.waitForLoadState('networkidle');
-
-  await page.getByText('Welkom').waitFor();
+  // The welcome title only renders once useGetUserQuery resolves —
+  // by the time it's visible, the auth cookies/tokens are populated, so
+  // it's safe to save storage state. Avoid `networkidle`: dashboard polling
+  // queries keep the network alive and would never let it settle.
+  await page.getByText('Welkom').waitFor({ timeout: 60_000 });
 
   await page.context().storageState({ path: authFile });
 });

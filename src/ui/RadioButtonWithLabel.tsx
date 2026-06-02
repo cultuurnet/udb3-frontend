@@ -7,6 +7,7 @@ import type { RadioButtonProps } from './RadioButton';
 import { RadioButton } from './RadioButton';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
+import { colors } from './theme';
 
 type Props = RadioButtonProps &
   Omit<BoxProps, 'onChange'> & {
@@ -52,7 +53,11 @@ const RadioButtonWithLabel = React.forwardRef(
           color={color}
         />
         <Stack>
-          <Label cursor="pointer" htmlFor={id}>
+          <Label
+            cursor={disabled ? 'not-allowed' : 'pointer'}
+            color={disabled ? colors.grey5 : undefined}
+            htmlFor={id}
+          >
             {label}
           </Label>
           {!!info && <Text variant={TextVariants.MUTED}>{info}</Text>}

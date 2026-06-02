@@ -316,6 +316,7 @@
       },
       "age": {
         "title": "Geeignet für",
+        "title_boa": "Geben Sie an, für welche Altersgruppen diese Aktivität geeignet ist",
         "input_mode": {
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
@@ -341,8 +342,32 @@
         "input_range_title": "Geben Sie ein Mindest- und Höchstalter ein",
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
+        "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
-        "error_no_min_age": "Bitte geben Sie ein Mindestalter ein"
+        "audience": {
+          "question": "Für wen ist diese Aktivität?",
+          "children_only": "Nur für Kinder",
+          "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
+          "mutation_error": "Beim Speichern der Zielgruppe ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+          "departure_places_warning_modal": {
+            "title": "Abfahrtsorte löschen",
+            "body": "Achtung: Mit dieser Aktion werden die von Ihnen angegebenen Abfahrtsorte gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "members_warning_modal": {
+            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
+            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "age_range_warning_modal": {
+            "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          }
+        }
       }
     },
     "type_and_theme": {
@@ -374,6 +399,8 @@
         }
       },
       "audience": {
+        "childrenOnly": "Nur für Kinder",
+        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",
