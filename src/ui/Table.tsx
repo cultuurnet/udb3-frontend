@@ -32,41 +32,39 @@ const Table = ({
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
+  const tableCss = variant === 'preview' ? `
+        width: 100%;
+        &.table td {
+          padding-left: 0 !important;
+          border-bottom: 1px solid ${colors.grey3};
+        }
+        &.table tr:first-child td {
+          padding-top: 0;
+        }
+        &.table td:first-child {
+          color: ${colors.grey5};
+        }
+        &.table tr:last-child td {
+          border-bottom: none;
+        }
+      ` : `
+        &.table td {
+          padding: 0.75rem;
+          vertical-align: top;
+          border-top: 1px solid ${getValue('borderColor')};
+        }
+        &.table thead th {
+          padding: 0.75rem;
+          vertical-align: top;
+          border-bottom: 2px solid ${getValue('borderColor')};
+          font-weight: 600;
+        }
+      `;
+
   return (
     <Box
       forwardedAs={BootstrapTable}
-      css={
-        variant === 'preview'
-          ? `
-            width: 100%;
-            &.table td {
-              padding-left: 0 !important;
-              border-bottom: 1px solid ${colors.grey3};
-            }
-            &.table tr:first-child td {
-              padding-top: 0;
-            }
-            &.table td:first-child {
-              color: ${colors.grey5};
-            }
-            &.table tr:last-child td {
-              border-bottom: none;
-            }
-          `
-          : `
-            &.table td {
-              padding: 0.75rem;
-              vertical-align: top;
-              border-top: 1px solid ${getValue('borderColor')};
-            }
-            &.table thead th {
-              padding: 0.75rem;
-              vertical-align: top;
-              border-bottom: 2px solid ${getValue('borderColor')};
-              font-weight: 600;
-            }
-          `
-      }
+      css={tableCss}
       {...getTableProps(props)}
       {...getBoxProps(props)}
     >
