@@ -32,7 +32,9 @@ const Table = ({
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
-  const tableCss = variant === 'preview' ? `
+  const tableCss =
+    variant === 'preview'
+      ? `
         width: 100%;
         &.table td {
           padding-left: 0 !important;
@@ -47,7 +49,8 @@ const Table = ({
         &.table tr:last-child td {
           border-bottom: none;
         }
-      ` : `
+      `
+      : `
         &.table td {
           padding: 0.75rem;
           vertical-align: top;
