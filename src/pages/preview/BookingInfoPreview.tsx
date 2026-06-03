@@ -81,12 +81,7 @@ const BookingInfoPreview = ({ bookingInfo, mainLanguage }: Props) => {
   ].filter(Boolean);
 
   return (
-    <Table
-      variant="preview"
-      showHeader={false}
-      columns={columns}
-      data={data}
-    />
+    <Table variant="preview" showHeader={false} columns={columns} data={data} />
   );
 };
 
