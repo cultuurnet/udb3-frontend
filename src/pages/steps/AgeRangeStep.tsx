@@ -118,7 +118,6 @@ const overlapsWithBoaAgeRange = (
 const birthdateRangeFitsBoa = (
   birthdateRange: { from?: string; to?: string } | undefined,
 ): boolean => {
-  console.log({ birthdateRange });
   if (!birthdateRange?.from || !birthdateRange?.to) return false;
 
   const now = new Date();
@@ -131,16 +130,6 @@ const birthdateRangeFitsBoa = (
   const minAge = differenceInYears(
     now,
     parse(birthdateRange.to, 'yyyy-MM-dd', now),
-  );
-
-  console.log({ maxAge });
-  console.log({ minAge });
-
-  console.log('first condition', Number.isNaN(minAge) || Number.isNaN(maxAge));
-
-  console.log(
-    'final condtion?',
-    minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE,
   );
 
   if (Number.isNaN(minAge) || Number.isNaN(maxAge)) return false;
