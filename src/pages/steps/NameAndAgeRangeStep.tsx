@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -103,7 +102,6 @@ const NameAndAgeRangeStep = ({
   ...props
 }: StepProps) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const errorBody = error?.body as DuplicatePlaceErrorBody;
   const errorMessage = error?.message;
@@ -155,7 +153,7 @@ const NameAndAgeRangeStep = ({
       name={name}
       render={() => {
         return (
-          <Stack spacing={4} maxWidth={parseSpacing(11)}>
+          <Stack spacing={5} maxWidth={parseSpacing(11)}>
             <NameStep
               {...getStepProps(props)}
               name={name}
@@ -168,6 +166,7 @@ const NameAndAgeRangeStep = ({
                 name={name}
                 control={control}
                 offerId={offerId}
+                setValue={setValue}
                 scope={scope}
               />
             )}

@@ -18,14 +18,12 @@ module.exports = {
   ...nextConfig,
   stories: ['../src/ui/**/*.stories.tsx'],
   framework: '@storybook/nextjs',
+
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-a11y',
     '@storybook/addon-docs',
   ],
-  docs: {
-    autodocs: true,
-  },
 
   webpackFinal: async (config) => {
     config.module.rules.push({

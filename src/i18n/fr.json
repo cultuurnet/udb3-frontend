@@ -316,6 +316,7 @@
       },
       "age": {
         "title": "Adapté à",
+        "title_boa": "Indiquez pour quels âges cette activité est adaptée",
         "input_mode": {
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
@@ -341,8 +342,32 @@
         "input_range_title": "Indiquez un âge minimum et maximum",
         "error_max_lower_than_min": "L'âge maximum ne peut être inférieur à l'âge minimum.",
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
+        "error_no_min_age": "Veuillez entrer un âge minimum",
         "error_invalid": "L'âge spécifié n'est pas valide.",
-        "error_no_min_age": "Veuillez entrer un âge minimum"
+        "audience": {
+          "question": "Pour qui cette activité est-elle organisée ?",
+          "children_only": "Uniquement pour les enfants",
+          "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
+          "departure_places_warning_modal": {
+            "title": "Supprimer les lieux de départ",
+            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "members_warning_modal": {
+            "title": "Attention : cette action modifie les informations d'accessibilité",
+            "body": "Une activité 'uniquement pour les enfants' ne peut pas être limitée aux membres uniquement. Voulez-vous continuer ? L'accès sera alors défini automatiquement sur 'Pour tout le monde'.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "age_range_warning_modal": {
+            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants'. L'accès sera automatiquement défini sur 'Pour tout le monde' et les lieux de départ éventuels seront supprimés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          }
+        }
       }
     },
     "type_and_theme": {
@@ -376,6 +401,8 @@
         }
       },
       "audience": {
+        "childrenOnly": "Uniquement pour les enfants",
+        "children_only_warning": "Cette activité est définie comme 'Uniquement pour les enfants'.<br/>Pour modifier l'accès, allez à <strong>Données de base</strong> &rsaquo; <strong>Pour qui cette activité est-elle organisée ?</strong>.<br/>Choisissez 'Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur'.",
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
         "members": "Seulement pour des membres",
