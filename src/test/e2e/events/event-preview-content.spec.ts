@@ -77,7 +77,10 @@ test.describe('Event Preview Content', () => {
   test('shows date and publication status', async ({ page }) => {
     await expect(
       page.getByText(
-        nl.dashboard.row_status.PUBLISHED.replace('{{date}}', format(new Date(), 'dd/MM/yyyy')),
+        nl.dashboard.row_status.PUBLISHED.replace(
+          '{{date}}',
+          format(new Date(), 'dd/MM/yyyy'),
+        ),
       ),
     ).toBeVisible();
   });
