@@ -122,6 +122,16 @@ const prefetchGetRolesQuery = ({ req, queryClient, ...args }) =>
 - Include `mutationKey` for duplicate prevention
 - Invalidate queries on success: `queryClient.invalidateQueries({ queryKey: ['entities'] })`
 
+### shadcn Components
+
+shadcn components live in `src/ui/shadcn/`. To add a new component:
+
+```bash
+npx shadcn@latest add <component>
+```
+
+After adding, fix the import order warning by running `yarn lint` or manually reordering imports. The `tw:` prefix is applied automatically via `components.json`.
+
 ### UI Component System
 
 The project uses a **custom UI system** built on React Bootstrap with styled-components. See `src/ui/theme.ts` for centralized theme configuration.
