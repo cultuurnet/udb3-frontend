@@ -1,3 +1,5 @@
+/* Preflight is intentionally excluded to prevent it from resetting Bootstrap's base styles. */
+/* prefix:'tw' in tailwind.config.js is honored — use tw:flex, tw:mt-4, etc. (colon separator, not dash). */
 @import 'tailwindcss/theme';
 @import 'tailwindcss/utilities';
 @source "../**/*.{ts,tsx,js}";
