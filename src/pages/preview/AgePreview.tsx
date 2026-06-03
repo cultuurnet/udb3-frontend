@@ -23,6 +23,17 @@ type Props = {
   audienceType?: AudienceType;
 };
 
+const ChildrenOnlyLabel = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Inline alignItems="center" spacing={2}>
+      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Text>{t('preview.children_only')}</Text>
+    </Inline>
+  );
+};
+
 const AgePreview = ({ typicalAgeRange, audienceType }: Props) => {
   const { t } = useTranslation();
 
@@ -42,13 +53,6 @@ const AgePreview = ({ typicalAgeRange, audienceType }: Props) => {
   const ageText = AgeRanges[ageRangeLabelKey]
     ? AgeRanges[ageRangeLabelKey].label
     : formatCustomAgeRange(typicalAgeRange);
-
-  const ChildrenOnlyLabel = () => (
-    <Inline alignItems="center" spacing={2}>
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
-      <Text>{t('preview.children_only')}</Text>
-    </Inline>
-  );
 
   return (
     <Stack spacing={2}>
