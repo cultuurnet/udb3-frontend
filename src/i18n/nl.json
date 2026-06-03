@@ -460,10 +460,8 @@
         },
         "select_url_label": "Hoe mag deze reservatie link verschijnen?",
         "reservation_period": {
-          "cta": "Reservatieperiode toevoegen",
-          "title": "Reservatie periode",
-          "info_text": "Binnen welke periode kunnen mensen een plek reserveren of ticket kopen?",
-          "delete": "Reservatieperiode verwijderen",
+          "title": "Wanneer kunnen mensen zich inschrijven?",
+          "toggle": "Reservatieperiode",
           "startHour": "Startuur",
           "endHour": "Einduur",
           "error": {
