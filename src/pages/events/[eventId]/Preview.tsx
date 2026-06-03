@@ -31,7 +31,6 @@ import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import { ImagePreview } from '@/pages/preview/ImagePreview';
 import { LocationPreview } from '@/pages/preview/LocationPreview';
-import { PreviewTable } from '@/pages/preview/PreviewTable';
 import {
   columns,
   DetailsTabContent,
@@ -60,6 +59,11 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { parseOfferType } from '@/utils/parseOfferType';
 
 const getGlobalValue = getValueFromTheme('global');
+
+const priceColumns = [
+  { Header: 'Name', accessor: 'name' },
+  { Header: 'Price', accessor: 'price' },
+];
 
 const Preview = () => {
   const router = useRouter();
@@ -183,28 +187,28 @@ const Preview = () => {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
 
+    const data = offer.priceInfo.map((price) => ({
+      name: getLanguageObjectOrFallback<string>(
+        price.name,
+        i18n.language as SupportedLanguage,
+        mainLanguage,
+      ),
+      price: `${price.price.toString().replace('.', ',')} euro${
+        isCultuurkuurEvent
+          ? (price.groupPrice &&
+              ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
+            ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
+          : ''
+      }`,
+    }));
+
     return (
-      <PreviewTable>
-        {offer.priceInfo.map((price, index) => (
-          <tr key={index}>
-            <td>
-              {getLanguageObjectOrFallback<string>(
-                price.name,
-                i18n.language as SupportedLanguage,
-                mainLanguage,
-              )}
-            </td>
-            <td>
-              {price.price.toString().replace('.', ',')} euro
-              {isCultuurkuurEvent
-                ? (price.groupPrice &&
-                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
-                  ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
-                : ''}
-            </td>
-          </tr>
-        ))}
-      </PreviewTable>
+      <Table
+        variant="preview"
+        showHeader={false}
+        columns={priceColumns}
+        data={data}
+      />
     );
   };
 
