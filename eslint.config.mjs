@@ -18,6 +18,7 @@ export default [
       'out/**',
       'build/**',
       'dist/**',
+      'storybook-static/**',
       'playwright-report/**',
       'scripts/**',
     ],
