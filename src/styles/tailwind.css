@@ -5,7 +5,7 @@
 @source "../**/*.{ts,tsx,js}";
 @config "../../tailwind.config.js";
 
-/* Values mirrored from src/ui/theme.ts — that file remains the canonical source during migration. */
+/* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
   --color-udb-red: #c0120c;
   --color-udb-main-blue: #009fdf;
