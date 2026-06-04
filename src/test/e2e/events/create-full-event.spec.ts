@@ -176,9 +176,7 @@ test('create event with all possible fields filled in', async ({
 
   await page.getByRole('radio', { name: 'Koop tickets' }).click();
 
-  await page
-    .getByRole('button', { name: 'Reservatieperiode toevoegen' })
-    .click();
+  await page.getByLabel('Reservatieperiode').check();
 
   const startReservationDate = faker.date.future();
   const endReservationDate = faker.date.future({

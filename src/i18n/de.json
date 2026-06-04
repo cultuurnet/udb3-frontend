@@ -437,9 +437,10 @@
         },
         "select_url_label": "Wie kann dieser Reservierungslink aussehen?",
         "reservation_period": {
-          "cta": "Reservierungszeitraum hinzufügen",
-          "title": "Reservierungszeitraum",
-          "delete": "Reservierungszeitraum löschen",
+          "title": "Wann können sich die Leute anmelden?",
+          "toggle": "Reservierungszeitraum",
+          "startHour": "Startuhrzeit",
+          "endHour": "Enduhrzeit",
           "error": {
             "enddate_before_startdate": "Das gewählte Enddatum muss nach dem Startdatum liegen.",
             "endDateTime_before_startDateTime": "Die gewählte Enddatum und -uhrzeit müssen nach der Startdatum und -uhrzeit liegen."
