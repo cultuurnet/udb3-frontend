@@ -439,9 +439,10 @@
           "reserve": "Réservez des places"
         },
         "reservation_period": {
-          "cta": "Ajouter une période de réservation",
-          "title": "Période de réservation",
-          "delete": "Supprimer la période de réservation",
+          "title": "Quand les gens peuvent-ils s'inscrire ?",
+          "toggle": "Période de réservation",
+          "startHour": "Heure de début",
+          "endHour": "Heure de fin",
           "error": {
             "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début.",
             "endDateTime_before_startDateTime": "La date et l'heure de fin choisies doivent être postérieures à la date et l'heure de début."
