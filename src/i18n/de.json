@@ -437,9 +437,10 @@
         },
         "select_url_label": "Wie kann dieser Reservierungslink aussehen?",
         "reservation_period": {
-          "cta": "Reservierungszeitraum hinzufügen",
-          "title": "Reservierungszeitraum",
-          "delete": "Reservierungszeitraum löschen",
+          "title": "Wann können sich die Leute anmelden?",
+          "toggle": "Reservierungszeitraum",
+          "startHour": "Startuhrzeit",
+          "endHour": "Enduhrzeit",
           "error": {
             "enddate_before_startdate": "Das gewählte Enddatum muss nach dem Startdatum liegen.",
             "endDateTime_before_startDateTime": "Die gewählte Enddatum und -uhrzeit müssen nach der Startdatum und -uhrzeit liegen."
@@ -1616,7 +1617,7 @@
         "event": "Aktivität",
         "place": "Ort"
       },
-      "cultuurkuur_event": "Es ist eine Aktivität für Schulen",
+      "cultuurkuur_event": "Es ist eine kulturpädagogische Aktivität - speziell für Schulen",
       "cultuurkuur_info": "Ihre Aktivität wird auf cultuurkuur.be angezeigt, der Plattform für Bildung und Kultur. Bitte beachten Sie: Ihre Aktivität wird nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht."
     }
   },

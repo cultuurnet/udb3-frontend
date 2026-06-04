@@ -439,9 +439,10 @@
           "reserve": "Réservez des places"
         },
         "reservation_period": {
-          "cta": "Ajouter une période de réservation",
-          "title": "Période de réservation",
-          "delete": "Supprimer la période de réservation",
+          "title": "Quand les gens peuvent-ils s'inscrire ?",
+          "toggle": "Période de réservation",
+          "startHour": "Heure de début",
+          "endHour": "Heure de fin",
           "error": {
             "enddate_before_startdate": "La date de fin choisie doit être postérieure à la date de début.",
             "endDateTime_before_startDateTime": "La date et l'heure de fin choisies doivent être postérieures à la date et l'heure de début."
@@ -1616,7 +1617,7 @@
         "event": "Activité",
         "place": "Lieu"
       },
-      "cultuurkuur_event": "C'est une activité pour les écoles",
+      "cultuurkuur_event": "C'est une activité d'éducation culturelle - spécifiquement pour les écoles",
       "cultuurkuur_info": "Votre activité sera visible sur cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture. Attention : il ne sera pas publié sur UiTinVlaanderen ni sur d'autres canaux grand public."
     }
   },
