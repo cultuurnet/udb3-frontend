@@ -1676,7 +1676,7 @@
         "event": "Activiteit",
         "place": "Locatie"
       },
-      "cultuurkuur_event": "Dit is een activiteit voor scholen",
+      "cultuurkuur_event": "Dit is een cultuureducatieve activiteit - specifiek voor scholen",
       "cultuurkuur_info": "Je activiteit zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je activiteit wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
       "cultuurkuur_tooltip": "Deze knop maakt van je activiteit een activiteit voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
     }

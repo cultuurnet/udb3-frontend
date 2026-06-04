@@ -14,7 +14,7 @@ const test = base.extend<TestFixtures>({
 
     await page.getByRole('button', { name: 'Activiteit' }).click();
 
-    await page.getByText('Dit is een activiteit voor scholen').click();
+    await page.getByText('Dit is een cultuureducatieve activiteit').click();
 
     await expect(
       page.getByText(
