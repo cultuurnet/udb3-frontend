@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('Create a cultuurkuur event', async ({ baseURL, page }) => {
   await page.goto(`${baseURL}/create`);
   await page.getByRole('button', { name: 'Activiteit' }).click();
-  await page.getByText('Dit is een activiteit voor scholen').click();
+  await page.getByText('Dit is een cultuureducatieve activiteit').click();
 
   await expect(
     page.getByText(
