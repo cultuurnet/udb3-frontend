@@ -74,6 +74,7 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: nl.create.actions.save }).click();
     await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
+    await page.waitForLoadState('networkidle');
 
     await page
       .getByRole('button', { name: calendar.fixed_days.button_add_hours })
