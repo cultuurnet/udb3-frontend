@@ -108,6 +108,12 @@ test.describe.serial('Event Preview Content', () => {
       .first()
       .blur();
 
+    await expect(
+      modal.getByRole('button', {
+        name: calendar.opening_hours_modal.button_confirm,
+      }),
+    ).toBeEnabled();
+
     await modal
       .getByRole('button', {
         name: calendar.opening_hours_modal.button_confirm,
