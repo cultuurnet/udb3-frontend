@@ -1,11 +1,6 @@
-import { Badge as BootstrapBadge } from 'react-bootstrap';
-
 import type { Values } from '@/types/Values';
-
-import type { BoxProps } from './Box';
-import { getBoxProps } from './Box';
-import { Text } from './Text';
-import { colors } from './theme';
+import { Badge as ShadcnBadge } from '@/ui/shadcn/badge';
+import { cn } from '@/ui/shadcn/utils';
 
 const BadgeVariants = {
   DANGER: 'danger',
@@ -13,9 +8,20 @@ const BadgeVariants = {
   INFO: 'info',
 } as const;
 
-type Props = BoxProps & {
+type Props = {
+  children: React.ReactNode;
   variant?: Values<typeof BadgeVariants>;
   pill?: boolean;
+  className?: string;
+};
+
+const shadcnVariant: Record<
+  Values<typeof BadgeVariants>,
+  'destructive' | 'secondary' | 'default'
+> = {
+  danger: 'destructive',
+  secondary: 'secondary',
+  info: 'default',
 };
 
 const Badge = ({
@@ -23,23 +29,17 @@ const Badge = ({
   pill,
   className,
   variant = BadgeVariants.DANGER,
-  ...props
-}: Props) => {
-  return (
-    <BootstrapBadge
-      bg={variant}
-      pill={pill}
-      css={`
-        &.badge {
-          align-self: center;
-        }
-        ${variant === BadgeVariants.INFO &&
-        `background-color: ${colors.udbMainBlue} !important;`}
-      `}
-    >
-      <Text {...getBoxProps(props)}>{children}</Text>
-    </BootstrapBadge>
-  );
-};
+}: Props) => (
+  <ShadcnBadge
+    variant={shadcnVariant[variant]}
+    className={cn(
+      'tw:self-center',
+      pill ? 'tw:rounded-full' : undefined,
+      className,
+    )}
+  >
+    {children}
+  </ShadcnBadge>
+);
 
 export { Badge, BadgeVariants };
