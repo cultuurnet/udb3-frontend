@@ -158,7 +158,7 @@
           "sunday": "Dimanche"
         },
         "validation_messages": {
-          "invalid_hours": "L'heure de fin ne peut pas tomber avant l'heure de début."
+          "invalid_hours": "L'heure de fin ne peut être antérieure à l'heure de début."
         },
         "childcare": {
           "label": "Garderie",
@@ -237,7 +237,7 @@
       },
       "recent_locations": {
         "title": "Choisissez un lieu que vous avez utilisé récemment",
-        "info": "Nous avons mis les lieux pour lesquels vous avez récemment entré ici pour vous. Vous pouvez les ajouter en un clic.",
+        "info": "Nous montrons ici pour vous les lieux pour lesquels vous avez récemment encodés. Vous pouvez les ajouter en un clic.",
         "other": "Ou choisissez un autre lieu",
         "pick": "Choisissez un lieu"
       },
@@ -263,7 +263,7 @@
       "online_url": {
         "label": "Lien de participation",
         "placeholder": "https://",
-        "info": "Ajoutez un lien pour informer votre public de comment participer à votre activité. Vous ne souhaitez pas partager publiquement ce lien ? Vous pouvez sauter cette étape et ajouter les informations relatives à la participation à votre description à l'étape 6."
+        "info": "Ajoutez un lien pour informer votre public de quelle manière participer à votre activité. Vous ne souhaitez pas partager publiquement ce lien ? Vous pouvez sauter cette étape et ajouter les informations relatives à la participation à votre description à l'étape 6."
       },
       "place": {
         "choose_label": "Choisissez un emplacement",
@@ -399,8 +399,8 @@
         "label": "Affiner avec des étiquettes",
         "info": "Avec les étiquettes, ajoutez des mots-clés courts et spécifiques",
         "add_new_label": "Aucune étiquette trouvée ? Ajouter une nouvelle étiquette : ",
-        "error": "Pas une étiquette valide",
-        "tips": "Cette étiquette ne semble pas valable. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
+        "error": "Étiquette non valide",
+        "tips": "Cette étiquette ne semble pas valide. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
       },
       "description": {
         "clear": "Vider",
@@ -519,7 +519,7 @@
             ],
             "0.3.1.0.1": [
               {
-                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?",
+                "question": "Ai-je besoin de connaissances préalables ou d'expérience pour participer ?",
                 "answer": "Soyez précis sur le niveau requis (ex. grands débutants ou participants avancés)."
               },
               {
@@ -851,10 +851,10 @@
         "uitpas_cardsystems": "UiTPAS systèmes de cartes",
         "uitpas_select_distribution_key": "Sélectionnez une clé de distribution",
         "uitpas_alert": {
-          "success": "Votre activité est désormais enregistrée en tant qu'activité UitPAS.",
+          "success": "Votre activité est désormais enregistrée en tant qu'activité UiTPAS.",
           "no_price": "Ceci est un organisateur UiTPAS. Ajoutez <link1>un prix</link1> pour publier votre activité en tant qu'activité UiTPAS.",
           "already_has_ticketsales": "Des billets ont déjà été vendus pour cette activité. Vous ne pouvez plus modifier l'organisation et les systèmes de carte.",
-          "not_found": "Cette activité n'est pas encore connue par UiTPAS.",
+          "not_found": "Cette activité n'est pas encore connue d'UiTPAS.",
           "not_found_cta": "Ajoutez cette activité à UiTPAS"
         }
       },
@@ -891,7 +891,7 @@
         "target": "Public cible",
         "title": "Prix",
         "subtitle": "Quels sont les tarifs d'entrée ?",
-        "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas les ajouter vous-même.",
+        "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas l'ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
@@ -933,11 +933,11 @@
     "toast": {
       "success": {
         "basic_info": "Les données de base ont été modifiées avec succès",
-        "calendar": "Le calendrier a été modifiées avec succès",
+        "calendar": "Le calendrier a été modifié avec succès",
         "description": "La description a été modifiée avec succès",
         "faq": "La FAQ a été modifiée avec succès",
-        "organizer": "L'organisation a modifiée avec succès",
-        "price_info": "Les prix ont été modifiées avec succès",
+        "organizer": "L'organisation a été modifiée avec succès",
+        "price_info": "Les prix ont été modifiés avec succès",
         "contact_info": "Les coordonnées ont été modifiées avec succès",
         "booking_info": "Les informations de réservation ont été modifiées avec succès",
         "media": "Image/vidéo modifiée avec succès",
@@ -955,9 +955,9 @@
       "duplicate": "Dupliquer"
     },
     "create": {
-      "events": "Ajouter activité",
-      "organizers": "Ajouter organisation",
-      "places": "Ajouter lieu"
+      "events": "Ajouter une activité",
+      "organizers": "Ajouter une organisation",
+      "places": "Ajouter un lieu"
     },
     "event": "Activité",
     "modal": {
@@ -966,7 +966,7 @@
       "types": {
         "events": "activités",
         "organizers": "organisateurs",
-        "places": "éndroits"
+        "places": "lieux"
       }
     },
     "newsletter": {
@@ -984,7 +984,7 @@
       "title": "Conseils de saisie pratiques dans votre boîte aux lettres"
     },
     "no_items": {
-      "events": "Aucune activité trouvé.",
+      "events": "Aucune activité trouvée.",
       "organizers": "Vous ne gérez actuellement aucune organisation.",
       "places": "Aucun lieu trouvé."
     },
@@ -997,7 +997,7 @@
       "DELETED": "Supprimé"
     },
     "external_creator": "Créé par une application externe",
-    "not_published": "Pas publié",
+    "not_published": "Non publié",
     "online_from": "Publié le {{date}}",
     "organizer": "Organisateur",
     "passed": "{{type}} terminé",
@@ -1013,10 +1013,10 @@
       "results": {
         "events": "<0>{{count}}</0> activité",
         "events_plural": "<0>{{count}}</0> activités",
-        "organizers": "<0>{{count}}</0> éndroit",
-        "organizers_plural": "<0>{{count}}</0> éndroits",
-        "places": "<0>{{count}}</0> organisateur",
-        "places_plural": "<0>{{count}}</0> organisateurs"
+        "organizers": "<0>{{count}}</0> organisateur",
+        "organizers_plural": "<0>{{count}}</0> organisateurs",
+        "places": "<0>{{count}}</0> lieu",
+        "places_plural": "<0>{{count}}</0> lieux"
       }
     },
     "tabs": {
@@ -1026,7 +1026,7 @@
     },
     "suggestions": {
       "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
-      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Démarrez votre candidature pour devenir administrateur ici pour devenir. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
     },
     "welcome": "Bienvenue"
   },
@@ -1117,7 +1117,7 @@
     "mission": "Plus d'audience pour votre activité.",
     "organizers": "Organisateurs",
     "organizers_info": "Cela leur permet d'atteindre un public nouveau et plus large, totalisant plus de 3 millions de personnes chaque année.",
-    "start": "Commencez ici"
+    "start": "Commencez-ici"
   },
   "menu": {
     "add": "Remplir",
@@ -1166,7 +1166,7 @@
         "placeholder": "Nom du cinéma"
       },
       "step1": {
-        "title": "Dans quel genre de film voulez-vous entrer ?"
+        "title": "Pour quel genre de film allez-vous encoder ?"
       },
       "step2": {
         "title": "Quand se passe le film ?"
@@ -1186,10 +1186,10 @@
           "calendar": "Les créneaux horaires ont été modifiés avec succès",
           "description": "La description a été modifiée avec succès",
           "image": "Image modifiée avec succès",
-          "location": "Le cinéma a été changé avec succès",
-          "name": "Le nom a été changé avec succès",
-          "theme": "Thème changé avec succès",
-          "title": "Changé avec succès",
+          "location": "Le cinéma a été modifié avec succès",
+          "name": "Le nom a été modifié avec succès",
+          "theme": "Thème modifié avec succès",
+          "title": "Modifié avec succès",
           "video": "La vidéo a été modifiée avec succès"
         }
       },
@@ -1226,16 +1226,16 @@
       "events": {
         "available": "A lieu",
         "temporarilyUnavailable": "Reporté",
-        "temporarilyUnavailableInfo": "Votre activité a été reporté à une date ultérieure qui reste à déterminer.",
+        "temporarilyUnavailableInfo": "Votre activité a été reportée à une date ultérieure qui reste à déterminer.",
         "unavailable": "Annulé",
         "unavailableInfo": "Votre activité n'aura pas lieu à l'heure prévue ou à une date ultérieure."
       },
       "places": {
         "available": "Ouvert",
         "temporarilyUnavailable": "Fermé temporairement",
-        "temporarilyUnavailableInfo": "Votre lieu ne sera temporairement plus publiée sur UiTinVlaanderen et les autres calendriers de UiT. Lorsque votre lieu rouvre, vous pouvez en modifier le statut pour qu'il redevienne 'ouvert'.",
+        "temporarilyUnavailableInfo": "Votre lieu ne sera temporairement plus publié sur UiTinVlaanderen et les autres calendriers de UiT. Lorsque votre lieu rouvre, vous pouvez en modifier le statut pour qu'il redevienne 'ouvert'.",
         "unavailable": "Fermé définitivement",
-        "unavailableInfo": "Votre lieu ne sera plus publiée sur UiTinVlaanderen et les autres calendriers de UiT."
+        "unavailableInfo": "Votre lieu ne sera plus publié sur UiTinVlaanderen et les autres calendriers de UiT."
       }
     },
     "statusLabel": "Statut",
@@ -1259,7 +1259,7 @@
           "streetAndNumber": "Rue et numéro",
           "title": "Adresse",
           "zip": "Code postal",
-          "blank_street": "Je ne veux pas rendre publique ma rue et mon numéro"
+          "blank_street": "Je ne veux pas rendre public ma rue et mon numéro"
         },
         "name": {
           "info": "Le nom public officiel de l'organisation",
@@ -1304,12 +1304,12 @@
       },
       "errors": {
         "zip": "Le code postal est un champ obligatoire.",
-        "name": "Le nom du lieu est un domaine obligatoire.",
-        "streetAndNumber": "Rue est un domaine obligatoire.",
-        "type": "Catégorie est un domaine obligatoire.",
+        "name": "Le nom du lieu est un champ obligatoire.",
+        "streetAndNumber": "Rue est un champ obligatoire.",
+        "type": "Catégorie est un champ obligatoire.",
         "postalCode": "Votre code postal ne répond pas aux exigences.",
         "duplicate_place_generic": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank.",
-        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank. Utilisez <placeLink>{{placeName}}</placeLink> comme emplacement."
+        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank. Utilisez <placeLink>{{placeName}}</placeLink> comme lieu."
       }
     }
   },
@@ -1368,10 +1368,10 @@
       "link": "Lier",
       "new_production": "Nouvelle production : ",
       "no_productions": "Aucune production trouvée.",
-      "no_suggested_events_found": "Aucune activité trouvé pour être lié à une production. Réessayez plus tard.",
+      "no_suggested_events_found": "Aucune activité trouvée pour être liée à une production. Réessayez plus tard.",
       "production_name": "Nom de production",
       "skip": "Sauter",
-      "suggested_events": "Conformément à activités proposés",
+      "suggested_events": "Conformément aux activités proposés",
       "title": "Ajouter des productions"
     },
     "delete": {
@@ -1394,8 +1394,8 @@
       "confirm": "Confirmer",
       "create": "Ajouter",
       "delete": "Supprimer",
-      "delete_question_event": "Voulez-vous vraiment supprimer l'activité sélectionné de la production '{{productionName}}' ?",
-      "delete_question_events": "Voulez-vous vraiment supprimer les {{eventCount}} activités sélectionnés de la production '{{productionName}}' ?",
+      "delete_question_event": "Voulez-vous vraiment supprimer l'activité sélectionnée de la production '{{productionName}}' ?",
+      "delete_question_events": "Voulez-vous vraiment supprimer les {{eventCount}} activités sélectionnées de la production '{{productionName}}' ?",
       "details": "Details",
       "events_in_production": "Activités dans {{productionName}}",
       "loading": "Changer",
@@ -1534,7 +1534,7 @@
       "request": {
         "confirm_modal": {
           "title": "Demande de gestion pour {{organizerName}}",
-          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses activités ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses activités ? Commencez ici votre demande pour devenir gestionnaire. Une fois qu'un gestionnaire actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
           "cancel": "Annuler",
           "confirm": "Demander la gestion",
           "error": {
@@ -1542,8 +1542,8 @@
             "409": "Vous avez déjà une demande en cours pour cette organisation."
           }
         },
-        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un administrateur actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
-        "success": "Votre demande pour gérer la page de {{organizerName}} et ses activités a été envoyée avec succès !<br/>Dès qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
+        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un gestionnaire actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+        "success": "Votre demande pour gérer la page de {{organizerName}} et ses activités a été envoyée avec succès !<br/>Dès qu'un gestionnaire actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
       }
     }
   },
@@ -1705,7 +1705,7 @@
         "label": "Rechercher par nom d'étiquette",
         "placeholder": "Entrez une requête de recherche d'au moins 2 caractères."
       },
-      "no_results": "Aucun étiquettes trouvé.",
+      "no_results": "Aucune étiquette trouvée.",
       "success_created": "Étiquette '{{name}}' créée avec succès.",
       "success_updated": "Étiquette '{{name}}' mise à jour avec succès.",
       "something_wrong": "Une erreur s'est produite lors de la recherche:",
