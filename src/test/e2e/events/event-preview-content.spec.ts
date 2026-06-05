@@ -122,6 +122,10 @@ test.describe.serial('Event Preview Content', () => {
     await expect(modal).toBeHidden();
     await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
     await page.waitForLoadState('networkidle');
+    await expect(
+      page.getByText(calendar.days.short.monday, { exact: true }),
+    ).toBeVisible();
+    await expect(page.getByText('09:00 - 17:00')).toBeVisible();
 
     await page
       .getByRole('textbox', { name: 'rdw-editor' })
