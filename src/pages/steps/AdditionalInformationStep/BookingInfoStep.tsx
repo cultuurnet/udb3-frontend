@@ -12,18 +12,17 @@ import {
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Alert } from '@/ui/Alert';
-import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
-import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { RadioButtonTypes } from '@/ui/RadioButton';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
-import { Title } from '@/ui/Title';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
@@ -68,8 +67,6 @@ type BookingInfo = {
   availabilityStarts?: string;
   availabilityEnds?: string;
 };
-
-const getValue = getValueFromTheme('contactInformation');
 
 const UrlLabelType = {
   BUY: 'buy',
@@ -188,123 +185,82 @@ const ReservationPeriod = ({
     handlePeriodChange,
   ]);
 
+  const handleToggle = (isEnabled: boolean) => {
+    if (isEnabled) {
+      setIsDatePickerVisible(true);
+      setUserHasInteracted(true);
+      return;
+    }
+
+    handleDelete();
+    setIsDatePickerVisible(false);
+  };
+
   return (
-    <Stack>
-      <Inline>
-        {!isDatePickerVisible && (
-          <Stack>
-            <Text fontWeight="bold" marginBottom={2}>
-              {t(
-                'create.additionalInformation.booking_info.reservation_period.title',
-              )}
-            </Text>
-            <Button
-              onClick={() => {
-                setIsDatePickerVisible(true);
-                setUserHasInteracted(true);
-              }}
-              variant={ButtonVariants.SECONDARY}
-            >
-              {t(
-                'create.additionalInformation.booking_info.reservation_period.cta',
-              )}
-            </Button>
-          </Stack>
+    <Stack spacing={4}>
+      <Text fontWeight="bold">
+        {t(
+          'create.additionalInformation.booking_info.reservation_period.title',
         )}
-      </Inline>
-      {isDatePickerVisible && (
-        <Stack
-          borderRadius={getGlobalBorderRadius}
-          padding={4}
-          backgroundColor="white"
-          css={`
-            border: 1px solid ${getValue('borderColor')};
-          `}
-        >
-          <Stack
-            spacing={4}
-            css={`
-              position: relative;
-            `}
-          >
-            <Button
-              iconName={Icons.TRASH}
-              variant={ButtonVariants.DANGER}
-              onClick={() => {
-                handleDelete();
-                setIsDatePickerVisible(false);
-              }}
-              title={t(
-                'create.additionalInformation.booking_info.reservation_period.delete',
-              )}
-              css={`
-                position: absolute;
-                right: 0;
-                top: 0;
-              `}
-            />
-            <Title size={3}>
-              {t(
-                'create.additionalInformation.booking_info.reservation_period.title',
-              )}
-            </Title>
-
-            <Text>
-              {t(
-                'create.additionalInformation.booking_info.reservation_period.info_text',
-              )}
-            </Text>
-
-            <DatePeriodPicker
-              showHolidaysToggle={isBoaEnabled}
-              id="reservation-date-picker"
-              dateStart={startDate}
-              dateEnd={endDate}
-              minDate={new Date()}
-              onDateStartChange={(date) => {
-                setStartDate(date);
-                setUserHasInteracted(true);
-              }}
-              onDateEndChange={(date) => {
-                setEndDate(date);
-                setUserHasInteracted(true);
-              }}
-              apiHolidays={apiHolidays}
-              onShowHolidaysChange={onShowHolidaysChange}
-            />
-
-            {hasTimeError && (
-              <Alert variant="danger">
-                {t(
-                  'create.additionalInformation.booking_info.reservation_period.error.endDateTime_before_startDateTime',
-                )}
-              </Alert>
-            )}
-
-            <TimeSpanPicker
-              id="reservation-time-picker"
-              startTime={startTime}
-              endTime={endTime}
-              startTimeLabel={t(
-                'create.additionalInformation.booking_info.reservation_period.startHour',
-              )}
-              endTimeLabel={t(
-                'create.additionalInformation.booking_info.reservation_period.endHour',
-              )}
-              onChangeStartTime={(time) => {
-                setStartTime(time);
-                setUserHasInteracted(true);
-              }}
-              onChangeEndTime={(time) => {
-                setEndTime(time);
-                setUserHasInteracted(true);
-              }}
-              minWidth="120px"
-              width="100%"
-            />
-          </Stack>
-        </Stack>
+      </Text>
+      <RadioButtonWithLabel
+        id="reservation-period-toggle"
+        type={RadioButtonTypes.SWITCH}
+        label={t(
+          'create.additionalInformation.booking_info.reservation_period.toggle',
+        )}
+        checked={isDatePickerVisible}
+        onChange={(e) => handleToggle(e.target.checked)}
+        color={colors.udbMainPositiveGreen}
+      />
+      {hasTimeError && (
+        <Alert variant="danger">
+          {t(
+            'create.additionalInformation.booking_info.reservation_period.error.endDateTime_before_startDateTime',
+          )}
+        </Alert>
       )}
+      <Inline spacing={4} alignItems="flex-end" flexWrap="wrap">
+        <DatePeriodPicker
+          showHolidaysToggle={isBoaEnabled}
+          id="reservation-date-picker"
+          dateStart={startDate}
+          dateEnd={endDate}
+          minDate={new Date()}
+          disabled={!isDatePickerVisible}
+          onDateStartChange={(date) => {
+            setStartDate(date);
+            setUserHasInteracted(true);
+          }}
+          onDateEndChange={(date) => {
+            setEndDate(date);
+            setUserHasInteracted(true);
+          }}
+          apiHolidays={apiHolidays}
+          onShowHolidaysChange={onShowHolidaysChange}
+        />
+        <TimeSpanPicker
+          id="reservation-time-picker"
+          disabled={!isDatePickerVisible}
+          startTime={startTime}
+          endTime={endTime}
+          startTimeLabel={t(
+            'create.additionalInformation.booking_info.reservation_period.startHour',
+          )}
+          endTimeLabel={t(
+            'create.additionalInformation.booking_info.reservation_period.endHour',
+          )}
+          onChangeStartTime={(time) => {
+            setStartTime(time);
+            setUserHasInteracted(true);
+          }}
+          onChangeEndTime={(time) => {
+            setEndTime(time);
+            setUserHasInteracted(true);
+          }}
+          minWidth="120px"
+        />
+      </Inline>
     </Stack>
   );
 };
@@ -566,73 +522,67 @@ const BookingInfoStep = ({
   };
 
   return (
-    <Stack maxWidth="55rem" {...getStackProps(props)}>
-      <Inline justifyContent="space-between">
-        <Stack
-          as="form"
-          width="45%"
-          spacing={4}
-          onBlur={() => handleAddBookingInfoMutation(getValues())}
-          ref={formComponent}
-        >
-          {Object.keys(ContactInfoType).map((key, index) => {
-            const type = ContactInfoType[key];
-            return (
-              <FormElement
-                key={index}
-                flex={2}
-                id={type}
-                label={t(`create.additionalInformation.booking_info.${type}`)}
-                Component={
-                  <Input
-                    placeholder={t(
-                      `create.additionalInformation.booking_info.${type}`,
-                    )}
-                    {...register(type)}
-                  />
-                }
-                error={
-                  (formState.errors?.[type] &&
-                    t(
-                      `create.additionalInformation.booking_info.${type}_error`,
-                    )) ||
-                  (type === ContactInfoType.URL &&
-                    hasInvalidUrl &&
-                    t(`create.additionalInformation.booking_info.url_error`))
-                }
-              />
-            );
-          })}
-          {url && (
-            <Stack>
-              <Text fontWeight="bold">
-                {t(
-                  'create.additionalInformation.booking_info.select_url_label',
-                )}
-              </Text>
-              <RadioButtonGroup
-                name="urlLabel"
-                selected={selectedUrlLabel}
-                items={URL_LABELS}
-                onChange={(e) => {
-                  setSelectedUrlLabel(e.target.value);
-                  handleOnUrlLabelChange(e);
-                }}
-              />
-            </Stack>
-          )}
-        </Stack>
-        <Stack width="50%">
-          <ReservationPeriod
-            handlePeriodChange={handleChangeBookingPeriod}
-            handleDelete={handleDeleteBookingPeriod}
-            availabilityEnds={availabilityEnds}
-            availabilityStarts={availabilityStarts}
-            isDatePickerVisible={isDatePickerVisible}
-            setIsDatePickerVisible={setIsDatePickerVisible}
-          />
-        </Stack>
-      </Inline>
+    <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
+      <Stack
+        as="form"
+        width="45%"
+        spacing={4}
+        onBlur={() => handleAddBookingInfoMutation(getValues())}
+        ref={formComponent}
+      >
+        {Object.keys(ContactInfoType).map((key, index) => {
+          const type = ContactInfoType[key];
+          return (
+            <FormElement
+              key={index}
+              flex={2}
+              id={type}
+              label={t(`create.additionalInformation.booking_info.${type}`)}
+              Component={
+                <Input
+                  placeholder={t(
+                    `create.additionalInformation.booking_info.${type}`,
+                  )}
+                  {...register(type)}
+                />
+              }
+              error={
+                (formState.errors?.[type] &&
+                  t(
+                    `create.additionalInformation.booking_info.${type}_error`,
+                  )) ||
+                (type === ContactInfoType.URL &&
+                  hasInvalidUrl &&
+                  t(`create.additionalInformation.booking_info.url_error`))
+              }
+            />
+          );
+        })}
+        {url && (
+          <Stack>
+            <Text fontWeight="bold">
+              {t('create.additionalInformation.booking_info.select_url_label')}
+            </Text>
+            <RadioButtonGroup
+              name="urlLabel"
+              selected={selectedUrlLabel}
+              items={URL_LABELS}
+              onChange={(e) => {
+                setSelectedUrlLabel(e.target.value);
+                handleOnUrlLabelChange(e);
+              }}
+            />
+          </Stack>
+        )}
+      </Stack>
+      <ReservationPeriod
+        handlePeriodChange={handleChangeBookingPeriod}
+        handleDelete={handleDeleteBookingPeriod}
+        availabilityEnds={availabilityEnds}
+        availabilityStarts={availabilityStarts}
+        isDatePickerVisible={isDatePickerVisible}
+        setIsDatePickerVisible={setIsDatePickerVisible}
+      />
     </Stack>
   );
 };
