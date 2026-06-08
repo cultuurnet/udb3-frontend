@@ -61,12 +61,12 @@ export const overlapsWithAnotherPeriod = (
   );
 
 export const getOverlappingDays = (
-  openingHours: { opens: string; closes: string; dayOfWeek: DayOfWeek[] }[],
+  openingHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
 ): DayOfWeek[] => {
   const getOpeningHoursForDay = (day: DayOfWeek) =>
     openingHours.filter((row) => row.dayOfWeek.includes(day));
 
-  const hasTimeConflict = (rows: OpeningHoursRow[]) =>
+  const hasTimeConflict = (rows: Pick<OpeningHoursRow, 'opens' | 'closes'>[]) =>
     rows.some((row, index) =>
       rows
         .slice(index + 1)
@@ -79,7 +79,7 @@ export const getOverlappingDays = (
 };
 
 const hasAnyOverlappingDays = (
-  openingHours: { opens: string; closes: string; dayOfWeek: DayOfWeek[] }[],
+  openingHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
   getOverlappingDays(openingHours).length > 0 ||
