@@ -24,11 +24,8 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
-  hasChildcareErrors,
-  hasDateRangeError,
-  hasInvalidOpeningHoursError,
-  hasMissingDaysError,
-  hasMissingOpeningHoursDaysError,
+  hasAnyModalErrors,
+  isModalConfirmDisabled,
   type OpeningHoursFormData,
   type OpeningHoursRow,
   overlapsWithAnotherPeriod,
@@ -129,6 +126,9 @@ const CalendarOpeninghoursModal = ({
   const [lastEditedClosingPeriodId, setLastEditedClosingPeriodId] = useState<
     string | null
   >(null);
+  const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
+    new Set(),
+  );
 
   const handleAddOpeningHours = () =>
     append({
@@ -225,6 +225,22 @@ const CalendarOpeninghoursModal = ({
     setPendingDelete(null);
   };
 
+  const eventStart =
+    isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
+  const eventEnd =
+    isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
+
+  const isDeleteConfirm = pendingDelete !== null;
+
+  const modalConfirmDisabled = isModalConfirmDisabled(
+    isDeleteConfirm,
+    openingHours,
+    deviatingPeriods,
+    shownErrorIds,
+    eventStart,
+    eventEnd,
+  );
+
   const handleSave = () => {
     onChangeAdjustedDays(deviatingPeriods);
     onChangeClosingPeriods(closingPeriods);
@@ -237,26 +253,26 @@ const CalendarOpeninghoursModal = ({
         childcareEndTime: childcareEnabled ? hour.childcareEndTime : undefined,
       })),
     );
+    setShownErrorIds(new Set());
     onClose();
   };
 
-  const eventStart =
-    isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
-  const eventEnd =
-    isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
-
-  const isDeleteConfirm = pendingDelete !== null;
-
-  const modalConfirmDisabled =
-    !isDeleteConfirm &&
-    (hasChildcareErrors(openingHours) ||
-      hasMissingOpeningHoursDaysError(openingHours) ||
-      hasInvalidOpeningHoursError(openingHours) ||
-      hasMissingDaysError(deviatingPeriods) ||
-      hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
-      deviatingPeriods.some((period) =>
-        overlapsWithAnotherPeriod(period, deviatingPeriods),
-      ));
+  const handleSaveAttempt = () => {
+    if (
+      hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd)
+    ) {
+      setShownErrorIds(
+        new Set([
+          ...openingHours.map((hour) => hour.id),
+          ...deviatingPeriods.flatMap((period) =>
+            period.openingHours.map((hour) => hour.id),
+          ),
+        ]),
+      );
+    } else {
+      handleSave();
+    }
+  };
 
   const modalTitle = isDeleteConfirm
     ? pendingDelete?.kind === 'deviating'
@@ -278,6 +294,7 @@ const CalendarOpeninghoursModal = ({
     if (isDeleteConfirm) {
       setPendingDelete(null);
     } else {
+      setShownErrorIds(new Set());
       onClose();
     }
   };
@@ -292,7 +309,7 @@ const CalendarOpeninghoursModal = ({
       cancelTitle={t('create.calendar.opening_hours_modal.button_cancel')}
       confirmButtonVariant={modalConfirmVariant}
       confirmButtonDisabled={modalConfirmDisabled}
-      onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSave}
+      onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSaveAttempt}
       onClose={handleModalClose}
       css={`
         .modal-dialog {
@@ -359,6 +376,10 @@ const CalendarOpeninghoursModal = ({
                     )}
                     onChange={(newDays) =>
                       handleToggleDaysOfWeek(newDays, openingHour.id)
+                    }
+                    hasError={
+                      shownErrorIds.has(openingHour.id) &&
+                      openingHour.dayOfWeek.length === 0
                     }
                   />
                 </Stack>
@@ -448,6 +469,14 @@ const CalendarOpeninghoursModal = ({
                   />
                 )}
               </Inline>
+              {shownErrorIds.has(openingHour.id) &&
+                openingHour.dayOfWeek.length === 0 && (
+                  <Text color="red">
+                    {t(
+                      'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
+                    )}
+                  </Text>
+                )}
               {timesMissing && (
                 <Alert css="width: 100%;">
                   {t(
@@ -509,6 +538,7 @@ const CalendarOpeninghoursModal = ({
                 }
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
+                shownErrorIds={shownErrorIds}
               />
             ))}
             <Button

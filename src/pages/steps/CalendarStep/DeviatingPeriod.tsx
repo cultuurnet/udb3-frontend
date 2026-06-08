@@ -53,6 +53,7 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasOverlap?: boolean;
+  shownErrorIds?: ReadonlySet<string>;
 };
 
 const DeviatingPeriod = ({
@@ -65,6 +66,7 @@ const DeviatingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasOverlap = false,
+  shownErrorIds = new Set(),
   ...boxProps
 }: Props) => {
   const { t, i18n } = useTranslation();
@@ -298,6 +300,10 @@ const DeviatingPeriod = ({
                       onChange={(newDays) =>
                         handleToggleDaysOfWeek(newDays, openingHour.id)
                       }
+                      hasError={
+                        shownErrorIds.has(openingHour.id) &&
+                        openingHour.dayOfWeek.length === 0
+                      }
                     />
                   </Stack>
                   <Stack spacing={3}>
@@ -392,6 +398,14 @@ const DeviatingPeriod = ({
                     />
                   )}
                 </Inline>
+                {shownErrorIds.has(openingHour.id) &&
+                  openingHour.dayOfWeek.length === 0 && (
+                    <Text color="red">
+                      {t(
+                        'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
+                      )}
+                    </Text>
+                  )}
                 {timesMissing && (
                   <Alert
                     css={`
