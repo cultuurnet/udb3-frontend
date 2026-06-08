@@ -171,10 +171,12 @@ test('create event with all possible fields filled in', async ({
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
 
-  await page.getByPlaceholder('Website').click();
-  await page.getByPlaceholder('Website').fill(dummyEvent.bookingInfo.url);
+  await page.getByLabel('Link').click();
+  await page.getByLabel('Link').fill(dummyEvent.bookingInfo.url);
 
-  await page.getByRole('radio', { name: 'Koop tickets' }).click();
+  await page
+    .getByLabel('Tekst op reservatieknop')
+    .selectOption({ label: 'Koop tickets' });
 
   await page.getByLabel('Reservatieperiode').check();
 

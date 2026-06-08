@@ -452,13 +452,16 @@
         "phone_error": "Geen geldig telefoonnummer",
         "url": "Website of reservatiepagina",
         "url_error": "Geen geldige url",
+        "link": "Link",
+        "max_capacity": "Maximum capaciteit",
+        "status": "Status",
+        "url_label_dropdown_label": "Tekst op reservatieknop",
         "url_type_labels": {
           "buy": "Koop tickets",
           "reserve": "Reserveer plaatsen",
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
-        "select_url_label": "Hoe mag deze reservatie link verschijnen?",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
