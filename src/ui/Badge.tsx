@@ -33,7 +33,7 @@ const Badge = ({
   <ShadcnBadge
     variant={shadcnVariant[variant]}
     className={cn(
-      'tw:self-center',
+      'tw:self-center tw:px-2',
       pill ? 'tw:rounded-full' : undefined,
       className,
     )}
