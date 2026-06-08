@@ -551,6 +551,7 @@ const CalendarOpeninghoursModal = ({
                   period.id === lastEditedPeriodId &&
                   overlapsWithAnotherPeriod(period, deviatingPeriods)
                 }
+                overlappingDays={getOverlappingDays(period.openingHours)}
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
                 shownErrorIds={shownErrorIds}

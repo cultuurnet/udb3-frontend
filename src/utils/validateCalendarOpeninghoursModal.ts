@@ -61,18 +61,31 @@ export const overlapsWithAnotherPeriod = (
   );
 
 export const getOverlappingDays = (
-  openingHours: OpeningHoursRow[],
+  openingHours: { opens: string; closes: string; dayOfWeek: DayOfWeek[] }[],
 ): DayOfWeek[] => {
   const getOpeningHoursForDay = (day: DayOfWeek) =>
     openingHours.filter((row) => row.dayOfWeek.includes(day));
 
   const hasTimeConflict = (rows: OpeningHoursRow[]) =>
     rows.some((row, index) =>
-      rows.slice(index + 1).some((other) => row.opens < other.closes && other.opens < row.closes),
+      rows
+        .slice(index + 1)
+        .some((other) => row.opens < other.closes && other.opens < row.closes),
     );
 
-  return DaysOfWeek.filter((day) => hasTimeConflict(getOpeningHoursForDay(day)));
+  return DaysOfWeek.filter((day) =>
+    hasTimeConflict(getOpeningHoursForDay(day)),
+  );
 };
+
+const hasAnyOverlappingDays = (
+  openingHours: { opens: string; closes: string; dayOfWeek: DayOfWeek[] }[],
+  deviatingPeriods: DeviatingPeriodData[],
+): boolean =>
+  getOverlappingDays(openingHours).length > 0 ||
+  deviatingPeriods.some(
+    (period) => getOverlappingDays(period.openingHours).length > 0,
+  );
 
 export const hasAnyModalErrors = (
   openingHours: OpeningHoursRow[],
@@ -84,7 +97,7 @@ export const hasAnyModalErrors = (
   deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
   hasChildcareErrors(openingHours) ||
   hasInvalidOpeningHours(openingHours) ||
-  getOverlappingDays(openingHours).length > 0 ||
+  hasAnyOverlappingDays(openingHours, deviatingPeriods) ||
   hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
   deviatingPeriods.some((period) =>
     overlapsWithAnotherPeriod(period, deviatingPeriods),
@@ -100,7 +113,7 @@ export const isModalConfirmDisabled = (
 ): boolean => {
   if (isDeleteConfirm) return false;
   if (hasChildcareErrors(openingHours)) return true;
-  if (getOverlappingDays(openingHours).length > 0) return true;
+  if (hasAnyOverlappingDays(openingHours, deviatingPeriods)) return true;
   if (shownErrorIds.size === 0) return false;
 
   const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));

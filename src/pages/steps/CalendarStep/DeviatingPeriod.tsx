@@ -53,6 +53,7 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasOverlap?: boolean;
+  overlappingDays?: DayOfWeek[];
   shownErrorIds?: ReadonlySet<string>;
 };
 
@@ -66,6 +67,7 @@ const DeviatingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasOverlap = false,
+  overlappingDays = [],
   shownErrorIds = new Set(),
   ...boxProps
 }: Props) => {
@@ -423,6 +425,18 @@ const DeviatingPeriod = ({
               </Stack>
             );
           })}
+          {overlappingDays.length > 0 && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
+                {
+                  days: overlappingDays
+                    .map((day) => t(`create.calendar.days.full.${day}`))
+                    .join(', '),
+                },
+              )}
+            </Text>
+          )}
           <Button
             iconName={Icons.PLUS}
             variant={ButtonVariants.OUTLINED}
