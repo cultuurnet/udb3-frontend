@@ -3,7 +3,7 @@ import { Table as BootstrapTable } from 'react-bootstrap';
 import { useTable } from 'react-table';
 
 import { Box, getBoxProps } from './Box';
-import { getValueFromTheme } from './theme';
+import { colors, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('selectionTable');
 
@@ -15,6 +15,7 @@ const Table = ({
   tableOptions = {},
   onTableReady = null,
   showHeader = true,
+  variant = 'default',
   ...props
 }) => {
   const tableInstance = useTable(
@@ -31,10 +32,25 @@ const Table = ({
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
-  return (
-    <Box
-      forwardedAs={BootstrapTable}
-      css={`
+  const tableCss =
+    variant === 'preview'
+      ? `
+        width: 100%;
+        &.table td {
+          padding-left: 0 !important;
+          border-bottom: 1px solid ${colors.grey3};
+        }
+        &.table tr:first-child td {
+          padding-top: 0;
+        }
+        &.table td:first-child {
+          color: ${colors.grey5};
+        }
+        &.table tr:last-child td {
+          border-bottom: none;
+        }
+      `
+      : `
         &.table td {
           padding: 0.75rem;
           vertical-align: top;
@@ -46,7 +62,12 @@ const Table = ({
           border-bottom: 2px solid ${getValue('borderColor')};
           font-weight: 600;
         }
-      `}
+      `;
+
+  return (
+    <Box
+      forwardedAs={BootstrapTable}
+      css={tableCss}
       {...getTableProps(props)}
       {...getBoxProps(props)}
     >
@@ -103,6 +124,7 @@ Table.propTypes = {
   tableHooks: PropTypes.array,
   tableOptions: PropTypes.object,
   onTableReady: PropTypes.func,
+  variant: PropTypes.oneOf(['default', 'preview']),
 };
 
 export { Table };
