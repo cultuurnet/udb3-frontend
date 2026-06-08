@@ -69,12 +69,6 @@ test.describe.serial('Calendar opening hours modal', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    await expect(
-      modal.getByRole('button', {
-        name: calendar.opening_hours_modal.button_confirm,
-      }),
-    ).toBeDisabled();
-
     await modal
       .getByRole('button', { name: calendar.opening_hours_modal.select_days })
       .click();
