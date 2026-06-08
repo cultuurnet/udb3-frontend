@@ -47,4 +47,26 @@
   --color-udb-danger-dark: #a93226;
   --color-udb-danger-bright: #ff4444;
   --radius-udb: 8px;
+
+  /* shadcn theme — must be in @theme to generate tw:bg-primary, tw:text-destructive etc. */
+  --color-primary: #009fdf; /* udb-main-blue */
+  --color-primary-foreground: #ffffff; /* udb-white */
+  --color-secondary: #6a777b; /* udb-main-grey */
+  --color-secondary-foreground: #ffffff;
+  --color-destructive: #dd5242; /* udb-danger */
+  --color-destructive-foreground: #ffffff;
+  --color-background: #ffffff; /* udb-white */
+  --color-foreground: #222222; /* udb-text */
+  --color-muted: #f0f0f0; /* udb-grey-1 */
+  --color-muted-foreground: #767676; /* udb-grey-5 */
+  --color-accent: #dff8ff; /* udb-main-medium-blue */
+  --color-accent-foreground: #222222; /* udb-text */
+  --color-border: #dddddd; /* udb-grey-3 */
+  --color-input: #cccccc; /* udb-grey-2 */
+  --color-ring: #009fdf; /* udb-main-blue */
+  --color-card: #ffffff; /* udb-white */
+  --color-card-foreground: #222222; /* udb-text */
+  --color-popover: #ffffff; /* udb-white */
+  --color-popover-foreground: #222222; /* udb-text */
+  --radius: 8px;
 }
