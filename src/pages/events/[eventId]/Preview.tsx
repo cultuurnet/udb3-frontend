@@ -17,11 +17,13 @@ import {
   useGetOfferHistoryQuery,
 } from '@/hooks/api/offers';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { Footer } from '@/pages/Footer';
 import { LabelsForm } from '@/pages/LabelsForm';
 import { OfferPreviewSidebar } from '@/pages/OfferPreviewSidebar';
+import { AccessibilityPreview } from '@/pages/preview/AccessibilityPreview';
 import { AgePreview } from '@/pages/preview/AgePreview';
 import { BookingInfoPreview } from '@/pages/preview/BookingInfoPreview';
 import { ContactInfoPreview } from '@/pages/preview/ContactInfoPreview';
@@ -35,6 +37,7 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
+import { OpeningHoursSummary } from '@/pages/steps/CalendarStep/OpeningHoursContent';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
@@ -57,6 +60,11 @@ import { parseOfferType } from '@/utils/parseOfferType';
 
 const getGlobalValue = getValueFromTheme('global');
 
+const priceColumns = [
+  { Header: 'Name', accessor: 'name' },
+  { Header: 'Price', accessor: 'price' },
+];
+
 const Preview = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -77,10 +85,12 @@ const Preview = () => {
   const isEdited = router.query.edited === 'true';
   const isCultuurkuurEvent = isEvent(offer) && isCultuurkuur(offer);
 
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
     locale: i18n.language,
-    format: 'lg',
+    format: isBoaEnabled ? 'md' : 'lg',
   });
 
   const calendarSummary = getCalendarSummaryQuery.data;
@@ -97,8 +107,15 @@ const Preview = () => {
     (offerPermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
-    offer;
+  const {
+    mainLanguage,
+    name,
+    terms,
+    typicalAgeRange,
+    mediaObject,
+    videos,
+    audience,
+  } = offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -170,40 +187,28 @@ const Preview = () => {
       return <EmptyValue>{t('preview.empty_value.price')}</EmptyValue>;
     }
 
-    return (
-      <table
-        css={`
-          background-color: ${colors.grey1};
-          width: 100%;
+    const data = offer.priceInfo.map((price) => ({
+      name: getLanguageObjectOrFallback<string>(
+        price.name,
+        i18n.language as SupportedLanguage,
+        mainLanguage,
+      ),
+      price: `${price.price.toString().replace('.', ',')} euro${
+        isCultuurkuurEvent
+          ? (price.groupPrice &&
+              ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
+            ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
+          : ''
+      }`,
+    }));
 
-          td {
-            border: 1px solid ${colors.grey3};
-            padding: 8px;
-          }
-        `}
-      >
-        <tbody>
-          {offer.priceInfo.map((price, index) => (
-            <tr key={index}>
-              <td>
-                {getLanguageObjectOrFallback<string>(
-                  price.name,
-                  i18n.language as SupportedLanguage,
-                  mainLanguage,
-                )}
-              </td>
-              <td>
-                {price.price.toString().replace('.', ',')} euro
-                {isCultuurkuurEvent
-                  ? (price.groupPrice &&
-                      ` (${t('create.additionalInformation.price_info.cultuurkuur.per_group')})`) ||
-                    ` (${t('create.additionalInformation.price_info.cultuurkuur.per_student')})`
-                  : ''}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    return (
+      <Table
+        variant="preview"
+        showHeader={false}
+        columns={priceColumns}
+        data={data}
+      />
     );
   };
 
@@ -238,7 +243,10 @@ const Preview = () => {
       if (isRejected) {
         return (
           <Stack>
-            <StatusIndicator label={status.label} color={status.color} />
+            <StatusIndicator
+              label={status.labelWithDate}
+              color={status.color}
+            />
             <Text>
               <Trans
                 i18nKey="preview.rejected_explanation"
@@ -253,7 +261,9 @@ const Preview = () => {
         );
       }
 
-      return <StatusIndicator label={status.label} color={status.color} />;
+      return (
+        <StatusIndicator label={status.labelWithDate} color={status.color} />
+      );
     };
 
     const data = [
@@ -354,6 +364,15 @@ const Preview = () => {
       ),
     },
     {
+      field: t('preview.labels.age'),
+      value: (
+        <AgePreview
+          typicalAgeRange={typicalAgeRange}
+          audienceType={audience?.audienceType}
+        />
+      ),
+    },
+    {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
@@ -368,7 +387,7 @@ const Preview = () => {
     {
       field: t('preview.labels.calendar'),
       value: (
-        <Stack>
+        <Stack spacing={4}>
           <Text
             css={`
               white-space: pre-wrap;
@@ -376,6 +395,15 @@ const Preview = () => {
           >
             {calendarSummary}
           </Text>
+
+          {isBoaEnabled && offer.openingHours?.length > 0 && (
+            <OpeningHoursSummary
+              openingHours={offer.openingHours}
+              adjustedDays={offer.openingHoursAdjustedDays}
+              closedDays={offer.openingHoursClosedDays}
+              lang={i18n.language as SupportedLanguage}
+            />
+          )}
           {isLessonSeries && (
             <Alert width="100%" marginTop={5} marginBottom={4}>
               <Text>{t('preview.info_lesson_series')}</Text>
@@ -405,10 +433,16 @@ const Preview = () => {
       field: t('preview.labels.contact'),
       value: <ContactInfoPreview contactPoint={offer.contactPoint} />,
     },
-    {
-      field: t('preview.labels.age'),
-      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
-    },
+    ...(isEvent(offer) && offer.departurePlaces?.length
+      ? [
+          {
+            field: t('preview.labels.accessibility'),
+            value: (
+              <AccessibilityPreview departurePlaces={offer.departurePlaces} />
+            ),
+          },
+        ]
+      : []),
     {
       field: t('preview.labels.image'),
       value: <ImagePreview mediaObject={mediaObject} />,

@@ -43,3 +43,29 @@ export const Default: Story = {
     data,
   },
 };
+
+const previewColumns = [
+  {
+    Header: 'Label',
+    accessor: 'label',
+  },
+  {
+    Header: 'Value',
+    accessor: 'value',
+  },
+];
+
+const previewData = [
+  { label: 'Label 1', value: 'Value 1' },
+  { label: 'Label 2', value: 'Value 2' },
+  { label: 'Label 3', value: 'Value 3' },
+];
+
+export const Preview: Story = {
+  args: {
+    columns: previewColumns,
+    data: previewData,
+    variant: 'preview',
+    showHeader: false,
+  },
+};
