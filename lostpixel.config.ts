@@ -6,6 +6,6 @@ export const config: CustomProjectConfig = {
     elementLocator: '#storybook-root',
   },
   generateOnly: true,
-  failOnDifference: false,
+  failOnDifference: true,
   threshold: 20,
 };
