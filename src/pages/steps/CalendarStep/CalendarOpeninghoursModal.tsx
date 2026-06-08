@@ -595,7 +595,7 @@ const CalendarOpeninghoursModal = ({
                     ),
                   )
                 }
-                hasPeriodDateOverlap={
+                hasOverlap={
                   period.id === lastEditedClosingPeriodId &&
                   overlapsWithAnotherPeriod(period, closingPeriods)
                 }
