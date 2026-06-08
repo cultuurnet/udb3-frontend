@@ -34,7 +34,9 @@ const Badge = ({
   variant = BadgeVariants.DANGER,
   ...props
 }: Props) => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
 
   return isShadcnMigrationEnabled ? (
     <ShadcnBadge
