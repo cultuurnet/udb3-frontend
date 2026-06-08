@@ -35,13 +35,13 @@
     "till": "au"
   },
   "city_picker": {
-    "label_be": "Municipalité",
-    "label_nl": "Municipalité",
-    "label_de": "Municipalité",
+    "label_be": "Commune",
+    "label_nl": "Commune",
+    "label_de": "Commune",
     "info_be": "Par exemple. Gand ou 9000",
     "info_nl": "Par exemple. Groningue ou Amsterdam",
     "info_de": "Par exemple. Aix-la-Chapelle ou Berlin",
-    "no_cities": "Aucune municipalité trouvée",
+    "no_cities": "Aucune commune trouvée",
     "no_cities_netherlands": "Aucune résidence trouvée"
   },
   "country_picker": {
@@ -50,7 +50,7 @@
   "copyright": {
     "questions": {
       "1": {
-        "answer": "Si la photo est protégée par le droit d'auteur, le nom du créateur doit être indiqué dans le champ du droit d'auteur. Les photos doivent être libres de droits. Les photos saisies peuvent être utilisées par l'asbl publiq pour publication sur le site Internet ou dans des campagnes promotionnelles et de presse. publiq vzw se réserve le droit d'effectuer des retouches photo sur les images collectées. Les photos sont également incluses dans les archives photographiques de l'asbl publiq et peuvent être utilisées dans les canaux de communication de l'asbl publiq tels que le site Web, les newsletters, la communication de presse,…",
+        "answer": "Si la photo est protégée par le droit d'auteur, le nom de l'auteur doit être indiqué dans le champ du droit d'auteur. Les photos doivent être libres de droits. Les photos saisies peuvent être utilisées par l'asbl publiq pour publication sur le site Internet ou dans des campagnes promotionnelles et de presse. publiq vzw se réserve le droit d'effectuer des retouches photo sur les images collectées. Les photos sont également incluses dans les archives photographiques de l'asbl publiq et peuvent être utilisées dans les canaux de communication de l'asbl publiq tels que le site Web, les newsletters, la communication de presse,…",
         "question": "Que fait publiq vzw avec les photos que je télécharge ?"
       },
       "2": {
@@ -76,7 +76,7 @@
           "paragraph1": "Même si vous :",
           "step1": "le titulaire du droit d'auteur",
           "step2": "ne poursuit pas un but lucratif en utilisant le matériel",
-          "step3": "vu le même matériau ou un matériau similaire utilisé ailleurs",
+          "step3": "vu le même matériel ou un matériel similaire utilisé ailleurs",
           "step4": "acheté le matériel audiovisuel (en ligne, dans un livre, sur CD, DVD,...)",
           "step5": "enregistré ou copié vous-même le matériel à partir d'un livre, d'un magazine, d'un journal, d'une télévision, d'un cinéma, de la radio",
           "step6": "a déclaré qu'\"aucune violation du droit d'auteur n'est prévue\""
@@ -88,11 +88,11 @@
         "question": "Le gestionnaire peut-il servir de médiateur dans les litiges relatifs aux droits d'auteur ?"
       },
       "6": {
-        "answer": "Ce n'est pas parce que vous apparaissez vous-même sur une photo, une vidéo ou un enregistrement audio que vous détenez le droit d'auteur. Par exemple, si un ami filme une conversation entre vous deux, ce serait l'ami qui détient les droits d'auteur, pas vous. Les mots utilisés dans cette conversation ne sont pas soumis à un droit d'auteur distinct de celui de la vidéo elle-même, à moins qu'ils n'aient été pré-écrits. Si votre ami, ou quelqu'un d'autre, a téléchargé une vidéo ou une image contenant une image ou un enregistrement de vous-même sans votre permission, et vous pensez que cela constitue une atteinte à votre vie privée ou à votre sécurité, vous pouvez donc déposer une plainte relative à la confidentialité.",
+        "answer": "Ce n'est pas parce que vous apparaissez vous-même sur une photo, une vidéo ou un enregistrement audio que vous détenez le droit d'auteur. Par exemple, si un ami filme une conversation entre vous deux, c'est votre ami qui détient les droits d'auteur, pas vous. Les mots utilisés dans cette conversation ne sont pas soumis à un droit d'auteur distinct de celui de la vidéo elle-même, à moins qu'ils n'aient été pré-écrits. Si votre ami, ou quelqu'un d'autre, a téléchargé une vidéo ou une image contenant une image ou un enregistrement de vous-même sans votre permission, et vous pensez que cela constitue une atteinte à votre vie privée ou à votre sécurité, vous pouvez donc déposer une plainte relative à la confidentialité.",
         "question": "Quelle est la différence entre le droit d'auteur et la vie privée ?"
       },
       "7": {
-        "answer": "Tout d'abord : évitez Google Images. Vous vous retrouvez avec une série interminable d'images dont vous n'êtes pas sûr qu'elles représentent qui ou ce que vous recherchiez, et pour lesquelles vous pouvez rarement trouver les droits. Vous pouvez rechercher des images réutilisables via la \"recherche avancée\", mais cela n'offre aucune certitude. Flickr.com est plus fiable dans ce domaine : l'option de recherche Creative Commons filtre les images réutilisables parmi une large gamme. Entrez un terme de recherche, puis cliquez sur \"recherche avancée\", allez au bas de cette page sur \"creative commons\" et cochez la case \"rechercher uniquement dans le contenu sous licence Creative Commons\". Les résultats qui vous restent ensuite forment l'étang dans lequel vous pouvez choisir. Vous devez respecter les règles : si vous souhaitez utiliser les images, vous devez mettre un lien vers la source et mentionner le copyright.",
+        "answer": "Tout d'abord : évitez Google Images. Vous vous retrouvez avec une série interminable d'images dont vous n'êtes pas sûr qu'elles représentent qui ou ce que vous recherchez, et pour lesquelles vous pouvez rarement trouver les droits. Vous pouvez rechercher des images réutilisables via la \"recherche avancée\", mais cela n'offre aucune certitude. Flickr.com est plus fiable dans ce domaine : l'option de recherche Creative Commons filtre les images réutilisables parmi une large gamme. Entrez un terme de recherche, puis cliquez sur \"recherche avancée\", allez au bas de la page sur \"creative commons\" et cochez la case \"rechercher uniquement dans le contenu sous licence Creative Commons\". Les résultats restants forment l'échantillon dans lequel vous pouvez choisir. Vous devez respecter les règles : si vous souhaitez utiliser les images, vous devez mettre un lien vers la source et mentionner le copyright.",
         "question": "Où et comment pouvez-vous trouver plus de certitude sur le matériel photo libre de droits sur Internet ?"
       }
     }
@@ -120,12 +120,12 @@
     "calendar": {
       "title": {
         "events": "Quand cette activité a-t-elle lieu ?",
-        "places": "Quand cet endroit ou cet emplacement est-il ouvert ?"
+        "places": "Quand ce lieu est-il ouvert ?"
       },
       "types": {
         "one_or_more_days": "À des dates spécifiques",
         "one_or_more_days_example": "p. ex. le 5 juillet de 12h à 20h",
-        "fixed_days": "Période continue",
+        "fixed_days": "À des moments hebdomadaires fixes ou en continu",
         "fixed_days_example": "p. ex. chaque mercredi de 14h à 15h"
       },
       "one_or_more_days": {
@@ -175,7 +175,7 @@
           "sunday": "Dimanche"
         },
         "validation_messages": {
-          "invalid_hours": "L'heure de fin ne peut pas tomber avant l'heure de début."
+          "invalid_hours": "L'heure de fin ne peut être antérieure à l'heure de début."
         },
         "childcare": {
           "label": "Garderie",
@@ -205,7 +205,7 @@
         "hours": "Heures",
         "select_days": "Sélectionner jour(s)",
         "deviating": {
-          "title": "Ajouter des heures déviantes",
+          "title": "Ajouter des heures dérogatoires",
           "period_title": "Période dérogatoire {{index}}",
           "remove_period": "Supprimer la période",
           "select_period": "Sélectionner la période",
@@ -252,11 +252,11 @@
     "location": {
       "title": {
         "events": "Où cette activité aura-t-elle lieu ?",
-        "places": "Où est cet endroit ou cet emplacement ?"
+        "places": "Où est ce lieu ?"
       },
       "recent_locations": {
         "title": "Choisissez un lieu que vous avez utilisé récemment",
-        "info": "Nous avons mis les lieux pour lesquels vous avez récemment entré ici pour vous. Vous pouvez les ajouter en un clic.",
+        "info": "Nous montrons ici pour vous les lieux pour lesquels vous avez récemment encodés. Vous pouvez les ajouter en un clic.",
         "other": "Ou choisissez un autre lieu",
         "pick": "Choisissez un lieu"
       },
@@ -282,7 +282,7 @@
       "online_url": {
         "label": "Lien de participation",
         "placeholder": "https://",
-        "info": "Ajoutez un lien pour informer votre public de comment participer à votre activité. Vous ne souhaitez pas partager publiquement ce lien ? Vous pouvez sauter cette étape et ajouter les informations relatives à la participation à votre description à l'étape 6."
+        "info": "Ajoutez un lien pour informer votre public de quelle manière participer à votre activité. Vous ne souhaitez pas partager publiquement ce lien ? Vous pouvez sauter cette étape et ajouter les informations relatives à la participation à votre description à l'étape 6."
       },
       "place": {
         "choose_label": "Choisissez un emplacement",
@@ -301,10 +301,10 @@
       "title": " Données de base",
       "validation_messages": {
         "name": {
-          "required": "Nom est requis."
+          "required": "Le nom est requis."
         },
         "age_range": {
-          "required": "Group d'âge est requis",
+          "required": "Le groupe d'âge est requis",
           "matches": "L'âge spécifié n'est pas valide"
         }
       },
@@ -313,7 +313,7 @@
         "title_places": "Nom du lieu",
         "tip_events": "Choisissez un <strong>bon titre</strong>, p.ex. \"Rouler à vélo le long des chapelles\", \"La Saga de la Licorne\".",
         "tip_places": "Utilisez la <strong>dénomination officielle</strong>, p.ex. \"Argos, centre pour l'art et les médias\", \"Site de l'abbaye Herkenrode\", \"Centre culturel De Werf\".",
-        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans la base de données UiT. <placeLink>Cliquez ici</placeLink> pour accéder à la page de localisation existante."
+        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans la base de données UiT. <placeLink>Cliquez ici</placeLink> pour accéder à la page du lieu existant."
       },
       "age": {
         "title": "Adapté à",
@@ -374,7 +374,7 @@
     "type_and_theme": {
       "title_events": "Quel type d'activité souhaitez-vous ajouter ?",
       "title_places": "Quel type de lieu souhaitez-vous ajouter ?",
-      "change_theme": "Changer thème",
+      "change_theme": "Changer le thème",
       "theme_groups": {
         "dance": "Danse",
         "art_and_heritage": "Art et Patrimoine",
@@ -382,12 +382,12 @@
         "sport": "Sport",
         "various": "Divers"
       },
-      "change_type": "Changer type",
+      "change_type": "Changer le type",
       "refine": "Affiner"
     },
     "additionalInformation": {
-      "title_events": "Faites ressortir cette activité",
-      "title_places": "Faites en sorte que cet emplacement se démarque",
+      "title_events": "Faites en sorte que cette activité se démarque",
+      "title_places": "Faites en sorte que ce lieu se démarque",
       "accessibility": {
         "title": "Accessibilité",
         "departure": {
@@ -409,8 +409,8 @@
         "members": "Seulement pour des membres",
         "title": "Accès",
         "help": {
-          "education": "Votre article ne sera publié que sur des chaînes d'éducation culturelle telles que cultuurkuur.be. Après la publication, vous pouvez ajouter des informations spécifiques pour les écoles.",
-          "members": "Votre article est seulement publié sur des chaînes pour des associations et leurs membres."
+          "education": "Votre article ne sera publié que sur des canaux d'éducation culturelle tels que cultuurkuur.be. Après la publication, vous pouvez ajouter des informations spécifiques pour les écoles.",
+          "members": "Votre article est seulement publié sur des canaux pour des associations et leurs membres."
         }
       },
       "contact_info": {
@@ -429,10 +429,10 @@
         "email_error": "Pas d'adresse email valide",
         "email": "Adresse mail",
         "phone": "Numéro de téléphone",
-        "phone_error": "Pas un numéro de téléphone valide",
+        "phone_error": "Pas de numéro de téléphone valide",
         "url": "Site Internet ou page de réservation",
-        "url_error": "Pas de URL valide",
-        "select_url_label": "Comment ce lien de réservation peut-il apparaître ?",
+        "url_error": "Pas d'URL valide",
+        "select_url_label": "Comment ce lien de réservation doit-il apparaître ?",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
           "availability": "Controlez la disponibilité",
@@ -455,8 +455,8 @@
         "label": "Affiner avec des étiquettes",
         "info": "Avec les étiquettes, ajoutez des mots-clés courts et spécifiques",
         "add_new_label": "Aucune étiquette trouvée ? Ajouter une nouvelle étiquette : ",
-        "error": "Pas une étiquette valide",
-        "tips": "Cette étiquette ne semble pas valable. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
+        "error": "Étiquette non valide",
+        "tips": "Cette étiquette ne semble pas valide. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
       },
       "description": {
         "clear": "Vider",
@@ -575,7 +575,7 @@
             ],
             "0.3.1.0.1": [
               {
-                "question": "Ai-je besoin de connaissances préalables ou d'une expérience pour participer ?",
+                "question": "Ai-je besoin de connaissances préalables ou d'expérience pour participer ?",
                 "answer": "Soyez précis sur le niveau requis (ex. grands débutants ou participants avancés)."
               },
               {
@@ -907,10 +907,10 @@
         "uitpas_cardsystems": "UiTPAS systèmes de cartes",
         "uitpas_select_distribution_key": "Sélectionnez une clé de distribution",
         "uitpas_alert": {
-          "success": "Votre activité est désormais enregistrée en tant qu'activité UitPAS.",
+          "success": "Votre activité est désormais enregistrée en tant qu'activité UiTPAS.",
           "no_price": "Ceci est un organisateur UiTPAS. Ajoutez <link1>un prix</link1> pour publier votre activité en tant qu'activité UiTPAS.",
           "already_has_ticketsales": "Des billets ont déjà été vendus pour cette activité. Vous ne pouvez plus modifier l'organisation et les systèmes de carte.",
-          "not_found": "Cette activité n'est pas encore connue par UiTPAS.",
+          "not_found": "Cette activité n'est pas encore connue d'UiTPAS.",
           "not_found_cta": "Ajoutez cette activité à UiTPAS"
         }
       },
@@ -947,7 +947,7 @@
         "target": "Public cible",
         "title": "Prix",
         "subtitle": "Quels sont les tarifs d'entrée ?",
-        "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas les ajouter vous-même.",
+        "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas l'ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
@@ -966,8 +966,8 @@
       }
     },
     "footer": {
-      "auto_save": "Vos modifications seront automatiquement enregistrées à partir de maintenant",
-      "done_editing": "Finis d'éditer"
+      "auto_save": "Vos modifications seront désormais enregistrées automatiquement",
+      "done_editing": "Fini d'éditer"
     },
     "publish_modal": {
       "actions": {
@@ -989,11 +989,11 @@
     "toast": {
       "success": {
         "basic_info": "Les données de base ont été modifiées avec succès",
-        "calendar": "Le calendrier a été modifiées avec succès",
+        "calendar": "Le calendrier a été modifié avec succès",
         "description": "La description a été modifiée avec succès",
         "faq": "La FAQ a été modifiée avec succès",
-        "organizer": "L'organisation a modifiée avec succès",
-        "price_info": "Les prix ont été modifiées avec succès",
+        "organizer": "L'organisation a été modifiée avec succès",
+        "price_info": "Les prix ont été modifiés avec succès",
         "contact_info": "Les coordonnées ont été modifiées avec succès",
         "booking_info": "Les informations de réservation ont été modifiées avec succès",
         "media": "Image/vidéo modifiée avec succès",
@@ -1011,9 +1011,9 @@
       "duplicate": "Dupliquer"
     },
     "create": {
-      "events": "Ajouter activité",
-      "organizers": "Ajouter organisation",
-      "places": "Ajouter lieu"
+      "events": "Ajouter une activité",
+      "organizers": "Ajouter une organisation",
+      "places": "Ajouter un lieu"
     },
     "event": "Activité",
     "modal": {
@@ -1022,7 +1022,7 @@
       "types": {
         "events": "activités",
         "organizers": "organisateurs",
-        "places": "éndroits"
+        "places": "lieux"
       }
     },
     "newsletter": {
@@ -1040,7 +1040,7 @@
       "title": "Conseils de saisie pratiques dans votre boîte aux lettres"
     },
     "no_items": {
-      "events": "Aucune activité trouvé.",
+      "events": "Aucune activité trouvée.",
       "organizers": "Vous ne gérez actuellement aucune organisation.",
       "places": "Aucun lieu trouvé."
     },
@@ -1055,7 +1055,7 @@
       "DELETED": "Supprimé"
     },
     "external_creator": "Créé par une application externe",
-    "not_published": "Pas publié",
+    "not_published": "Non publié",
     "online_from": "Publié le {{date}}",
     "organizer": "Organisateur",
     "passed": "{{type}} terminé",
@@ -1071,10 +1071,10 @@
       "results": {
         "events": "<0>{{count}}</0> activité",
         "events_plural": "<0>{{count}}</0> activités",
-        "organizers": "<0>{{count}}</0> éndroit",
-        "organizers_plural": "<0>{{count}}</0> éndroits",
-        "places": "<0>{{count}}</0> organisateur",
-        "places_plural": "<0>{{count}}</0> organisateurs"
+        "organizers": "<0>{{count}}</0> organisateur",
+        "organizers_plural": "<0>{{count}}</0> organisateurs",
+        "places": "<0>{{count}}</0> lieu",
+        "places_plural": "<0>{{count}}</0> lieux"
       }
     },
     "tabs": {
@@ -1084,7 +1084,7 @@
     },
     "suggestions": {
       "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
-      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Démarrez votre candidature pour devenir administrateur ici pour devenir. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
     },
     "welcome": "Bienvenue"
   },
@@ -1175,7 +1175,7 @@
     "mission": "Plus d'audience pour votre activité.",
     "organizers": "Organisateurs",
     "organizers_info": "Cela leur permet d'atteindre un public nouveau et plus large, totalisant plus de 3 millions de personnes chaque année.",
-    "start": "Commencez ici"
+    "start": "Commencez-ici"
   },
   "menu": {
     "add": "Remplir",
@@ -1224,7 +1224,7 @@
         "placeholder": "Nom du cinéma"
       },
       "step1": {
-        "title": "Dans quel genre de film voulez-vous entrer ?"
+        "title": "Pour quel genre de film allez-vous encoder ?"
       },
       "step2": {
         "title": "Quand se passe le film ?"
@@ -1244,10 +1244,10 @@
           "calendar": "Les créneaux horaires ont été modifiés avec succès",
           "description": "La description a été modifiée avec succès",
           "image": "Image modifiée avec succès",
-          "location": "Le cinéma a été changé avec succès",
-          "name": "Le nom a été changé avec succès",
-          "theme": "Thème changé avec succès",
-          "title": "Changé avec succès",
+          "location": "Le cinéma a été modifié avec succès",
+          "name": "Le nom a été modifié avec succès",
+          "theme": "Thème modifié avec succès",
+          "title": "Modifié avec succès",
           "video": "La vidéo a été modifiée avec succès"
         }
       },
@@ -1284,16 +1284,16 @@
       "events": {
         "available": "A lieu",
         "temporarilyUnavailable": "Reporté",
-        "temporarilyUnavailableInfo": "Votre activité a été reporté à une date ultérieure qui reste à déterminer.",
+        "temporarilyUnavailableInfo": "Votre activité a été reportée à une date ultérieure qui reste à déterminer.",
         "unavailable": "Annulé",
         "unavailableInfo": "Votre activité n'aura pas lieu à l'heure prévue ou à une date ultérieure."
       },
       "places": {
         "available": "Ouvert",
         "temporarilyUnavailable": "Fermé temporairement",
-        "temporarilyUnavailableInfo": "Votre lieu ne sera temporairement plus publiée sur UiTinVlaanderen et les autres calendriers de UiT. Lorsque votre lieu rouvre, vous pouvez en modifier le statut pour qu'il redevienne 'ouvert'.",
+        "temporarilyUnavailableInfo": "Votre lieu ne sera temporairement plus publié sur UiTinVlaanderen et les autres calendriers de UiT. Lorsque votre lieu rouvre, vous pouvez en modifier le statut pour qu'il redevienne 'ouvert'.",
         "unavailable": "Fermé définitivement",
-        "unavailableInfo": "Votre lieu ne sera plus publiée sur UiTinVlaanderen et les autres calendriers de UiT."
+        "unavailableInfo": "Votre lieu ne sera plus publié sur UiTinVlaanderen et les autres calendriers de UiT."
       }
     },
     "statusLabel": "Statut",
@@ -1317,7 +1317,7 @@
           "streetAndNumber": "Rue et numéro",
           "title": "Adresse",
           "zip": "Code postal",
-          "blank_street": "Je ne veux pas rendre publique ma rue et mon numéro"
+          "blank_street": "Je ne veux pas rendre public ma rue et mon numéro"
         },
         "name": {
           "info": "Le nom public officiel de l'organisation",
@@ -1362,12 +1362,12 @@
       },
       "errors": {
         "zip": "Le code postal est un champ obligatoire.",
-        "name": "Le nom du lieu est un domaine obligatoire.",
-        "streetAndNumber": "Rue est un domaine obligatoire.",
-        "type": "Catégorie est un domaine obligatoire.",
+        "name": "Le nom du lieu est un champ obligatoire.",
+        "streetAndNumber": "Rue est un champ obligatoire.",
+        "type": "Catégorie est un champ obligatoire.",
         "postalCode": "Votre code postal ne répond pas aux exigences.",
         "duplicate_place_generic": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank.",
-        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank. Utilisez <placeLink>{{placeName}}</placeLink> comme emplacement."
+        "duplicate_place": "Le lieu que vous souhaitez créer existe déjà dans l'UiTdatabank. Utilisez <placeLink>{{placeName}}</placeLink> comme lieu."
       }
     }
   },
@@ -1426,10 +1426,10 @@
       "link": "Lier",
       "new_production": "Nouvelle production : ",
       "no_productions": "Aucune production trouvée.",
-      "no_suggested_events_found": "Aucune activité trouvé pour être lié à une production. Réessayez plus tard.",
+      "no_suggested_events_found": "Aucune activité trouvée pour être liée à une production. Réessayez plus tard.",
       "production_name": "Nom de production",
       "skip": "Sauter",
-      "suggested_events": "Conformément à activités proposés",
+      "suggested_events": "Conformément aux activités proposés",
       "title": "Ajouter des productions"
     },
     "delete": {
@@ -1452,8 +1452,8 @@
       "confirm": "Confirmer",
       "create": "Ajouter",
       "delete": "Supprimer",
-      "delete_question_event": "Voulez-vous vraiment supprimer l'activité sélectionné de la production '{{productionName}}' ?",
-      "delete_question_events": "Voulez-vous vraiment supprimer les {{eventCount}} activités sélectionnés de la production '{{productionName}}' ?",
+      "delete_question_event": "Voulez-vous vraiment supprimer l'activité sélectionnée de la production '{{productionName}}' ?",
+      "delete_question_events": "Voulez-vous vraiment supprimer les {{eventCount}} activités sélectionnées de la production '{{productionName}}' ?",
       "details": "Details",
       "events_in_production": "Activités dans {{productionName}}",
       "loading": "Changer",
@@ -1592,7 +1592,7 @@
       "request": {
         "confirm_modal": {
           "title": "Demande de gestion pour {{organizerName}}",
-          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses activités ? Commencez ici votre demande pour devenir administrateur. Une fois qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+          "body": "Êtes-vous impliqué dans la gestion de {{organizerName}} et souhaitez-vous gérer la page de l'organisation et de ses activités ? Commencez ici votre demande pour devenir gestionnaire. Une fois qu'un gestionnaire actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail.",
           "cancel": "Annuler",
           "confirm": "Demander la gestion",
           "error": {
@@ -1600,8 +1600,8 @@
             "409": "Vous avez déjà une demande en cours pour cette organisation."
           }
         },
-        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un administrateur actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
-        "success": "Votre demande pour gérer la page de {{organizerName}} et ses activités a été envoyée avec succès !<br/>Dès qu'un administrateur actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
+        "pending": "Votre demande pour gérer {{organizerName}} est en cours de traitement.<br/>Dès qu'un gestionnaire actuel aura approuvé votre demande, vous recevrez l'accès et une confirmation par e-mail.",
+        "success": "Votre demande pour gérer la page de {{organizerName}} et ses activités a été envoyée avec succès !<br/>Dès qu'un gestionnaire actuel approuve votre demande, vous recevrez l'accès et une confirmation par e-mail."
       }
     }
   },
@@ -1763,7 +1763,7 @@
         "label": "Rechercher par nom d'étiquette",
         "placeholder": "Entrez une requête de recherche d'au moins 2 caractères."
       },
-      "no_results": "Aucun étiquettes trouvé.",
+      "no_results": "Aucune étiquette trouvée.",
       "success_created": "Étiquette '{{name}}' créée avec succès.",
       "success_updated": "Étiquette '{{name}}' mise à jour avec succès.",
       "something_wrong": "Une erreur s'est produite lors de la recherche:",
@@ -1914,7 +1914,7 @@
     "booking_period": "Période de réservation",
     "booking_link_label": "Lien",
     "educational": "Spécifiquement pour des écoles",
-    "educational_info": "Cet activité étant spécifiquement destiné aux écoles, il sera uniquement publié sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
+    "educational_info": "Cette activité étant spécifiquement destinée aux écoles, elle sera uniquement publiée sur Cultuurkuur.be, la plateforme dédiée à l'éducation et à la culture.",
     "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
@@ -1950,7 +1950,7 @@
       "description": "Aucune description",
       "theme": "Aucun thème",
       "organiser": "Aucune information sur l'organisation",
-      "price": "Pas d'information du prix",
+      "price": "Pas d'information sur le prix",
       "booking": "Aucune information sur la réservation",
       "contact": "Aucune information de contact",
       "images": "Aucune image",
@@ -1967,7 +1967,7 @@
       "delete": "Supprimer",
       "delete_modal": {
         "title_event": "Supprimer l'activité",
-        "title_location": "Supprimer l'emplacement ",
+        "title_location": "Supprimer le lieu ",
         "body": "Êtes-vous sûr de vouloir supprimer \"{{title}}\" ? Cette action ne peut pas être annulée.",
         "cancel": "Annuler",
         "confirm": "Supprimer définitivement"
