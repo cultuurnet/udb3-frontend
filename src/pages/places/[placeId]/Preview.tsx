@@ -13,6 +13,7 @@ import {
 } from '@/hooks/api/offers';
 import { useDeletePlaceByIdMutation } from '@/hooks/api/places';
 import { useGetPermissionsQuery } from '@/hooks/api/user';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { AlertDuplicatePlace } from '@/pages/AlertDuplicatePlace';
@@ -32,6 +33,7 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
+import { OpeningHoursSummary } from '@/pages/steps/CalendarStep/OpeningHoursContent';
 import { Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
@@ -80,6 +82,8 @@ const Preview = () => {
 
   const isEdited = router.query.edited === 'true';
 
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
 
@@ -112,6 +116,7 @@ const Preview = () => {
     typicalAgeRange,
     mediaObject,
     videos,
+    audience,
   } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
@@ -156,7 +161,10 @@ const Preview = () => {
       if (isRejected) {
         return (
           <Stack>
-            <StatusIndicator label={status.label} color={status.color} />
+            <StatusIndicator
+              label={status.labelWithDate}
+              color={status.color}
+            />
             <Text>
               <Trans
                 i18nKey="preview.rejected_explanation"
@@ -171,7 +179,9 @@ const Preview = () => {
         );
       }
 
-      return <StatusIndicator label={status.label} color={status.color} />;
+      return (
+        <StatusIndicator label={status.labelWithDate} color={status.color} />
+      );
     };
 
     const data = [
@@ -244,9 +254,33 @@ const Preview = () => {
       ),
     },
     {
+      field: t('preview.labels.age'),
+      value: (
+        <AgePreview
+          typicalAgeRange={typicalAgeRange}
+          audienceType={audience?.audienceType}
+        />
+      ),
+    },
+    {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
+    ...(isBoaEnabled && offer.openingHours?.length > 0
+      ? [
+          {
+            field: t('preview.labels.calendar'),
+            value: (
+              <OpeningHoursSummary
+                openingHours={offer.openingHours}
+                adjustedDays={offer.openingHoursAdjustedDays}
+                closedDays={offer.openingHoursClosedDays}
+                lang={i18n.language as SupportedLanguage}
+              />
+            ),
+          },
+        ]
+      : []),
     {
       field: t('preview.labels.booking_info'),
       value: (
@@ -269,10 +303,6 @@ const Preview = () => {
           entity={offer}
         />
       ),
-    },
-    {
-      field: t('preview.labels.age'),
-      value: <AgePreview typicalAgeRange={typicalAgeRange} />,
     },
     {
       field: t('preview.labels.image'),

@@ -18,7 +18,7 @@ export const columns = [
 ];
 
 const getGlobalValue = getValueFromTheme('global');
-const { grey4, grey5 } = colors;
+const { grey4, grey6 } = colors;
 
 const DetailsTabContent = ({ showEventId, tableData }: Props) => {
   return (
@@ -58,7 +58,7 @@ const DetailsTabContent = ({ showEventId, tableData }: Props) => {
             background-color: ${grey4};
           }
           tr:has(td:nth-child(2) .empty-value) td:nth-child(2) {
-            color: ${grey5};
+            color: ${grey6};
           }
           tbody {
             opacity: ${showEventId ? 1 : 0.4};

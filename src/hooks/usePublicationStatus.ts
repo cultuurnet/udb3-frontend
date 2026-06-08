@@ -1,4 +1,4 @@
-import { format, isAfter, isFuture } from 'date-fns';
+import { format, isAfter, isFuture, isValid } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +15,7 @@ import { useGetUserQuery } from './api/user';
 export type PublicationStatusInfo = {
   color?: string;
   label?: string;
+  labelWithDate?: string;
   isExternalCreator?: boolean;
 };
 
@@ -50,17 +51,29 @@ export const usePublicationStatus = (offer: Offer): OfferPublicationStatus => {
 
     const color = PublicationStatusToColor[publicationStatus];
 
-    const label =
-      publicationStatus === PublicationStatus.PLANNED
+    const needsDate =
+      publicationStatus === PublicationStatus.PLANNED ||
+      publicationStatus === PublicationStatus.PUBLISHED;
+
+    const availableFromDate = new Date(offer.availableFrom);
+    const hasPublicationDate =
+      publicationStatus === PublicationStatus.PLANNED ||
+      publicationStatus === PublicationStatus.PUBLISHED;
+
+    const label = t(
+      `dashboard.row_status.${publicationStatus}${hasPublicationDate ? '_NO_DATE' : ''}`,
+    );
+    const labelWithDate =
+      hasPublicationDate && isValid(availableFromDate)
         ? t(`dashboard.row_status.${publicationStatus}`, {
-            date: format(new Date(offer.availableFrom), 'dd/MM/yyyy'),
+            date: format(availableFromDate, 'dd/MM/yyyy'),
           })
-        : t(`dashboard.row_status.${publicationStatus}`);
+        : label;
 
     const userId = user?.sub;
     const userIdv1 = user?.['https://publiq.be/uitidv1id'];
     const isExternalCreator = ![userId, userIdv1].includes(offer.creator);
 
-    return { color, label, isExternalCreator, isFinished };
+    return { color, label, labelWithDate, isExternalCreator, isFinished };
   }, [offer, user, t]);
 };
