@@ -314,7 +314,7 @@ const CalendarOpeninghoursModal = ({
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: 55rem;
+          max-width: 57rem;
         }
       `}
     >
