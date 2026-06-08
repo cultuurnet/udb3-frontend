@@ -1,6 +1,9 @@
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { Badge as ShadcnBadge } from '@/ui/shadcn/badge';
 import { cn } from '@/ui/shadcn/utils';
+
+import { BadgeLegacy } from './BadgeLegacy';
 
 const BadgeVariants = {
   DANGER: 'danger',
@@ -29,17 +32,26 @@ const Badge = ({
   pill,
   className,
   variant = BadgeVariants.DANGER,
-}: Props) => (
-  <ShadcnBadge
-    variant={shadcnVariant[variant]}
-    className={cn(
-      'tw:self-center tw:px-2',
-      pill ? 'tw:rounded-full' : undefined,
-      className,
-    )}
-  >
-    {children}
-  </ShadcnBadge>
-);
+  ...props
+}: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
+
+  return isShadcnMigrationEnabled ? (
+    <ShadcnBadge
+      variant={shadcnVariant[variant]}
+      className={cn(
+        'tw:self-center',
+        pill ? 'tw:rounded-full' : undefined,
+        className,
+      )}
+    >
+      {children}
+    </ShadcnBadge>
+  ) : (
+    <BadgeLegacy variant={variant} pill={pill} className={className} {...props}>
+      {children}
+    </BadgeLegacy>
+  );
+};
 
 export { Badge, BadgeVariants };
