@@ -52,8 +52,8 @@ type Props = BoxProps & {
   showChildcare?: boolean;
   eventStartDate?: Date;
   eventEndDate?: Date;
-  hasOverlap?: boolean;
-  overlappingDays?: DayOfWeek[];
+  hasPeriodDateOverlap?: boolean;
+  daysWithTimeConflict?: DayOfWeek[];
   shownErrorIds?: ReadonlySet<string>;
 };
 
@@ -66,8 +66,8 @@ const DeviatingPeriod = ({
   showChildcare = true,
   eventStartDate,
   eventEndDate,
-  hasOverlap = false,
-  overlappingDays = [],
+  hasPeriodDateOverlap = false,
+  daysWithTimeConflict = [],
   shownErrorIds = new Set(),
   ...boxProps
 }: Props) => {
@@ -248,7 +248,7 @@ const DeviatingPeriod = ({
             )}
           />
         </Inline>
-        {hasOverlap && (
+        {hasPeriodDateOverlap && (
           <Text color="red">
             {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
           </Text>
@@ -425,12 +425,12 @@ const DeviatingPeriod = ({
               </Stack>
             );
           })}
-          {overlappingDays.length > 0 && (
+          {daysWithTimeConflict.length > 0 && (
             <Text color="red">
               {t(
                 'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
                 {
-                  days: overlappingDays
+                  days: daysWithTimeConflict
                     .map((day) => t(`create.calendar.days.full.${day}`))
                     .join(', '),
                 },

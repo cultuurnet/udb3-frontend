@@ -232,7 +232,7 @@ const CalendarOpeninghoursModal = ({
     isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
 
   const isDeleteConfirm = pendingDelete !== null;
-  const overlappingDays = getOverlappingDays(openingHours);
+  const daysWithTimeConflict = getOverlappingDays(openingHours);
 
   const modalConfirmDisabled = isModalConfirmDisabled(
     isDeleteConfirm,
@@ -497,12 +497,12 @@ const CalendarOpeninghoursModal = ({
             </Stack>
           );
         })}
-        {overlappingDays.length > 0 && (
+        {daysWithTimeConflict.length > 0 && (
           <Text color="red">
             {t(
               'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
               {
-                days: overlappingDays
+                days: daysWithTimeConflict
                   .map((day) => t(`create.calendar.days.full.${day}`))
                   .join(', '),
               },
@@ -547,11 +547,11 @@ const CalendarOpeninghoursModal = ({
                   )
                 }
                 showChildcare={showChildcare}
-                hasOverlap={
+                hasPeriodDateOverlap={
                   period.id === lastEditedPeriodId &&
                   overlapsWithAnotherPeriod(period, deviatingPeriods)
                 }
-                overlappingDays={getOverlappingDays(period.openingHours)}
+                daysWithTimeConflict={getOverlappingDays(period.openingHours)}
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
                 shownErrorIds={shownErrorIds}
@@ -595,7 +595,7 @@ const CalendarOpeninghoursModal = ({
                     ),
                   )
                 }
-                hasOverlap={
+                hasPeriodDateOverlap={
                   period.id === lastEditedClosingPeriodId &&
                   overlapsWithAnotherPeriod(period, closingPeriods)
                 }
