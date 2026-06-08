@@ -368,7 +368,7 @@ const CalendarOpeninghoursModal = ({
                     id={`day-of-week-${openingHour.id}`}
                     options={Object.values(DaysOfWeek).map((day) => ({
                       value: day,
-                      label: t(`create.calendar.days.full.${day}`),
+                      label: t(`create.calendar.days.short.${day}`),
                     }))}
                     selectedValues={openingHour.dayOfWeek as DayOfWeek[]}
                     placeholder={t(
@@ -377,6 +377,7 @@ const CalendarOpeninghoursModal = ({
                     onChange={(newDays) =>
                       handleToggleDaysOfWeek(newDays, openingHour.id)
                     }
+                    width="15rem"
                     hasError={
                       shownErrorIds.has(openingHour.id) &&
                       openingHour.dayOfWeek.length === 0

@@ -291,7 +291,7 @@ const DeviatingPeriod = ({
                       id={`deviating-day-of-week-${openingHour.id}`}
                       options={Object.values(DaysOfWeek).map((day) => ({
                         value: day,
-                        label: t(`create.calendar.days.full.${day}`),
+                        label: t(`create.calendar.days.short.${day}`),
                       }))}
                       selectedValues={openingHour.dayOfWeek}
                       placeholder={t(
@@ -300,6 +300,7 @@ const DeviatingPeriod = ({
                       onChange={(newDays) =>
                         handleToggleDaysOfWeek(newDays, openingHour.id)
                       }
+                      width="15rem"
                       hasError={
                         shownErrorIds.has(openingHour.id) &&
                         openingHour.dayOfWeek.length === 0
