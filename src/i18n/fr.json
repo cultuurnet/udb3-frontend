@@ -244,7 +244,8 @@
         "validation_messages": {
           "day_of_week": {
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
-          }
+          },
+          "overlapping_days": "Les horaires du {{days}} se chevauchent. Assurez-vous que le deuxième créneau commence après la fin du premier."
         }
       }
     },

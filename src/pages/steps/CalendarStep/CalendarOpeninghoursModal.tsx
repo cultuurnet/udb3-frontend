@@ -24,6 +24,7 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
+  getOverlappingDays,
   hasAnyModalErrors,
   isModalConfirmDisabled,
   type OpeningHoursFormData,
@@ -495,6 +496,18 @@ const CalendarOpeninghoursModal = ({
             </Stack>
           );
         })}
+        {getOverlappingDays(openingHours).length > 0 && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
+              {
+                days: getOverlappingDays(openingHours)
+                  .map((day) => t(`create.calendar.days.full.${day}`))
+                  .join(', '),
+              },
+            )}
+          </Text>
+        )}
         <Button
           iconName={Icons.PLUS}
           variant={ButtonVariants.OUTLINED}

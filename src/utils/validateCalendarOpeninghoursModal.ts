@@ -1,3 +1,4 @@
+import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
 
 import { type DeviatingPeriodData } from '../pages/steps/CalendarStep/DeviatingPeriod';
@@ -59,6 +60,15 @@ export const overlapsWithAnotherPeriod = (
       period.endDate >= other.startDate,
   );
 
+export const getOverlappingDays = (
+  openingHours: OpeningHoursRow[],
+): DayOfWeek[] => {
+  const allDays = openingHours.flatMap((row) => row.dayOfWeek);
+  return DaysOfWeek.filter(
+    (day) => allDays.indexOf(day) !== allDays.lastIndexOf(day),
+  );
+};
+
 export const hasAnyModalErrors = (
   openingHours: OpeningHoursRow[],
   deviatingPeriods: DeviatingPeriodData[],
@@ -69,6 +79,7 @@ export const hasAnyModalErrors = (
   deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
   hasChildcareErrors(openingHours) ||
   hasInvalidOpeningHours(openingHours) ||
+  getOverlappingDays(openingHours).length > 0 ||
   hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
   deviatingPeriods.some((period) =>
     overlapsWithAnotherPeriod(period, deviatingPeriods),
@@ -84,6 +95,7 @@ export const isModalConfirmDisabled = (
 ): boolean => {
   if (isDeleteConfirm) return false;
   if (hasChildcareErrors(openingHours)) return true;
+  if (getOverlappingDays(openingHours).length > 0) return true;
   if (shownErrorIds.size === 0) return false;
 
   const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
