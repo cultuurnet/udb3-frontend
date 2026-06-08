@@ -18,15 +18,28 @@ type Props = {
   className?: string;
 };
 
-const Spinner = ({ variant = SpinnerVariants.PRIMARY, size, className }: Props) => {
+const Spinner = ({
+  variant = SpinnerVariants.PRIMARY,
+  size,
+  className,
+}: Props) => {
   const iconSize = size === SpinnerSizes.SMALL ? 16 : 32;
 
   return (
-    <div className={cn('tw:flex tw:w-full tw:items-center tw:justify-center', className)}>
+    <div
+      className={cn(
+        'tw:flex tw:w-full tw:items-center tw:justify-center',
+        className,
+      )}
+    >
       <ShadcnSpinner
         width={iconSize}
         height={iconSize}
-        className={variant === SpinnerVariants.LIGHT ? 'tw:text-white' : 'tw:text-primary'}
+        className={
+          variant === SpinnerVariants.LIGHT
+            ? 'tw:text-white'
+            : 'tw:text-primary'
+        }
       />
     </div>
   );
