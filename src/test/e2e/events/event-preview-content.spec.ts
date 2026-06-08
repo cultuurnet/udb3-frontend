@@ -36,6 +36,7 @@ const getRowByLabel = (page: Page, detailsTable: Locator, label: string) =>
   });
 
 test.describe.serial('Event Preview Content', () => {
+  let editUrl: string;
   let eventPreviewUrl: string;
   let detailsTable: Locator;
 
@@ -74,6 +75,18 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
     await page.getByRole('button', { name: nl.create.actions.save }).click();
     await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
+
+    editUrl = page.url();
+    await context.close();
+  });
+
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    await context.addCookies(cookies);
+    const page = await context.newPage();
+    suppressHydrationErrors(page);
+
+    await page.goto(editUrl);
     await page.waitForLoadState('networkidle');
 
     await page
@@ -120,7 +133,6 @@ test.describe.serial('Event Preview Content', () => {
       })
       .click();
     await expect(modal).toBeHidden();
-    await page.waitForURL(/\/events\/[a-f0-9-]+\/edit/);
     await page.waitForLoadState('networkidle');
     await expect(
       page.getByText(calendar.days.short.monday, { exact: true }),
@@ -279,7 +291,7 @@ test.describe.serial('Event Preview Content', () => {
     ).toContainText(dummyEvent.organizerName);
   });
 
-  test('shows price info with nested table', async ({ page }) => {
+  test('shows price info', async ({ page }) => {
     const priceRow = getRowByLabel(page, detailsTable, nl.preview.labels.price);
 
     await expect(priceRow.locator('td:nth-child(2)').first()).toContainText(
