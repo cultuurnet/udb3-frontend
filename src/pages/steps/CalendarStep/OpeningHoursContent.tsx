@@ -1,7 +1,12 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type {
+  OpeningHours,
+  OpeningHoursAdjustedDay,
+  OpeningHoursClosedDay,
+} from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { List } from '@/ui/List';
@@ -14,23 +19,13 @@ import { useCalendarSelector } from '../machines/calendarMachine';
 import type { ClosingPeriodData } from './ClosingPeriod';
 import type { DeviatingPeriodData } from './DeviatingPeriod';
 
-type OpeningHourRowProps = {
-  dayOfWeek: string[];
-  opens: string;
-  closes: string;
-  childcareStart?: string;
-  childcareEnd?: string;
-  index: number;
-};
-
 const OpeningHourRow = ({
   dayOfWeek,
   opens,
   closes,
-  childcareStart,
-  childcareEnd,
+  childcare,
   index,
-}: OpeningHourRowProps) => {
+}: OpeningHours & { index: number }) => {
   const { t } = useTranslation();
   return (
     <Stack
@@ -50,22 +45,102 @@ const OpeningHourRow = ({
           {opens} - {closes}
         </Text>
         <Stack spacing={1} minWidth="10rem">
-          {childcareStart && childcareEnd && (
+          {childcare && (
             <>
               <Text fontStyle="italic">
                 {t('create.calendar.fixed_days.overview.childcare_before', {
-                  start: childcareStart,
+                  start: childcare.start,
                 })}
               </Text>
               <Text fontStyle="italic">
                 {t('create.calendar.fixed_days.overview.childcare_after', {
-                  end: childcareEnd,
+                  end: childcare.end,
                 })}
               </Text>
             </>
           )}
         </Stack>
       </Inline>
+    </Stack>
+  );
+};
+
+type OpeningHoursSummaryProps = {
+  openingHours: OpeningHours[];
+  adjustedDays?: OpeningHoursAdjustedDay[];
+  closedDays?: OpeningHoursClosedDay[];
+  lang: SupportedLanguage;
+};
+
+const OpeningHoursSummary = ({
+  openingHours,
+  adjustedDays,
+  closedDays,
+  lang,
+}: OpeningHoursSummaryProps) => {
+  const { t } = useTranslation();
+
+  if (openingHours.length === 0) return null;
+
+  return (
+    <Stack spacing={5}>
+      <Stack>
+        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          {t('create.calendar.fixed_days.overview.weekly_on')}
+        </Text>
+        <Stack>
+          {openingHours.map((openingHour, index) => (
+            <OpeningHourRow key={index} index={index} {...openingHour} />
+          ))}
+        </Stack>
+      </Stack>
+
+      {adjustedDays && adjustedDays.length > 0 && (
+        <Stack>
+          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+            {t('create.calendar.fixed_days.overview.deviating_except')}
+          </Text>
+          <Stack spacing={4}>
+            {adjustedDays.map((adjustedDay) => (
+              <Stack
+                key={`${adjustedDay.startDate}-${adjustedDay.endDate}`}
+                spacing={1}
+              >
+                <Text>
+                  {`${format(parseISO(adjustedDay.startDate), 'dd/MM/yyyy')} - ${format(parseISO(adjustedDay.endDate), 'dd/MM/yyyy')}`}
+                  {adjustedDay.description?.[lang]
+                    ? ` (${adjustedDay.description[lang]})`
+                    : ''}
+                </Text>
+                <Text color={colors.udbMainDarkBlue}>
+                  {t(
+                    'create.calendar.fixed_days.overview.deviating_then_weekly',
+                  )}
+                </Text>
+                {adjustedDay.openingHours.map((openingHour, index) => (
+                  <OpeningHourRow key={index} index={index} {...openingHour} />
+                ))}
+              </Stack>
+            ))}
+          </Stack>
+        </Stack>
+      )}
+
+      {closedDays && closedDays.length > 0 && (
+        <Stack spacing={1}>
+          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+            {t('create.calendar.fixed_days.overview.closed')}
+          </Text>
+          {closedDays.map((closedDay) => (
+            <Text key={`${closedDay.startDate}-${closedDay.endDate}`}>
+              {`${format(parseISO(closedDay.startDate), 'dd/MM/yyyy')} - ${format(parseISO(closedDay.endDate), 'dd/MM/yyyy')}`}
+              {closedDay.description?.[lang]
+                ? ` (${closedDay.description[lang]})`
+                : ''}
+            </Text>
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 };
@@ -113,79 +188,36 @@ const OpeningHoursContent = ({
             </Button>
           </Inline>
         </Inline>
-
-        <Stack spacing={5}>
-          <Stack>
-            <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-              {t('create.calendar.fixed_days.overview.weekly_on')}
-            </Text>
-            <Stack>
-              {openingHours.map((openingHour, index) => (
-                <OpeningHourRow
-                  key={openingHour.id}
-                  index={index}
-                  dayOfWeek={openingHour.dayOfWeek}
-                  opens={openingHour.opens}
-                  closes={openingHour.closes}
-                  childcareStart={openingHour.childcareStartTime}
-                  childcareEnd={openingHour.childcareEndTime}
-                />
-              ))}
-            </Stack>
-          </Stack>
-
-          {initialAdjustedDays && initialAdjustedDays.length > 0 && (
-            <Stack>
-              <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-                {t('create.calendar.fixed_days.overview.deviating_except')}
-              </Text>
-              <Stack spacing={4}>
-                {initialAdjustedDays.map((period) => (
-                  <Stack key={period.id} spacing={1}>
-                    <Text>
-                      {`${format(period.startDate, 'dd/MM/yyyy')} - ${format(period.endDate, 'dd/MM/yyyy')}`}
-                      {period.description[lang]
-                        ? ` (${period.description[lang]})`
-                        : ''}
-                    </Text>
-                    <Text color={colors.udbMainDarkBlue}>
-                      {t(
-                        'create.calendar.fixed_days.overview.deviating_then_weekly',
-                      )}
-                    </Text>
-                    {period.openingHours.map((openingHour, index) => (
-                      <OpeningHourRow
-                        key={openingHour.id}
-                        index={index}
-                        dayOfWeek={openingHour.dayOfWeek}
-                        opens={openingHour.opens}
-                        closes={openingHour.closes}
-                        childcareStart={openingHour.childcare?.start}
-                        childcareEnd={openingHour.childcare?.end}
-                      />
-                    ))}
-                  </Stack>
-                ))}
-              </Stack>
-            </Stack>
+        <OpeningHoursSummary
+          openingHours={openingHours.map((openingHour) => ({
+            ...openingHour,
+            childcare:
+              openingHour.childcareStartTime && openingHour.childcareEndTime
+                ? {
+                    start: openingHour.childcareStartTime,
+                    end: openingHour.childcareEndTime,
+                  }
+                : undefined,
+          }))}
+          adjustedDays={initialAdjustedDays?.map(
+            ({ openingHours, startDate, endDate, description }) => ({
+              startDate: format(startDate, 'yyyy-MM-dd'),
+              endDate: format(endDate, 'yyyy-MM-dd'),
+              description,
+              openingHours: openingHours.map(
+                ({ id: _id, ...openingHour }) => openingHour,
+              ),
+            }),
           )}
-
-          {initialClosingPeriods && initialClosingPeriods.length > 0 && (
-            <Stack spacing={1}>
-              <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-                {t('create.calendar.fixed_days.overview.closed')}
-              </Text>
-              {initialClosingPeriods.map((period) => (
-                <Text key={period.id}>
-                  {`${format(period.startDate, 'dd/MM/yyyy')} - ${format(period.endDate, 'dd/MM/yyyy')}`}
-                  {period.description[lang]
-                    ? ` (${period.description[lang]})`
-                    : ''}
-                </Text>
-              ))}
-            </Stack>
+          closedDays={initialClosingPeriods?.map(
+            ({ startDate, endDate, description }) => ({
+              startDate: format(startDate, 'yyyy-MM-dd'),
+              endDate: format(endDate, 'yyyy-MM-dd'),
+              description,
+            }),
           )}
-        </Stack>
+          lang={lang}
+        />
       </Stack>
     );
   }
@@ -249,4 +281,4 @@ const OpeningHoursContent = ({
   );
 };
 
-export { OpeningHoursContent };
+export { OpeningHoursContent, OpeningHoursSummary };
