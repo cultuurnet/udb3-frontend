@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { Table } from './Table';
 
@@ -41,5 +41,31 @@ export const Default: Story = {
   args: {
     columns,
     data,
+  },
+};
+
+const previewColumns = [
+  {
+    Header: 'Label',
+    accessor: 'label',
+  },
+  {
+    Header: 'Value',
+    accessor: 'value',
+  },
+];
+
+const previewData = [
+  { label: 'Label 1', value: 'Value 1' },
+  { label: 'Label 2', value: 'Value 2' },
+  { label: 'Label 3', value: 'Value 3' },
+];
+
+export const Preview: Story = {
+  args: {
+    columns: previewColumns,
+    data: previewData,
+    variant: 'preview',
+    showHeader: false,
   },
 };

@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { Controller } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -12,6 +11,7 @@ import {
   useGetEducationLevelsQuery,
 } from '@/hooks/api/cultuurkuur';
 import {
+  useChangeOfferBirthdateRangeMutation,
   useChangeOfferNameMutation,
   useChangeOfferTypicalAgeRangeMutation,
 } from '@/hooks/api/offers';
@@ -28,7 +28,7 @@ import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
-import { AgeRangeStep } from './AgeRangeStep';
+import { AgeRangeStep, isValidAgeRange } from './AgeRangeStep';
 import { UseEditArguments } from './hooks/useEditField';
 import { NameStep } from './NameStep';
 import {
@@ -55,8 +55,12 @@ const useEditNameAndAgeRange = ({
     onSuccess: () => onSuccess('basic_info'),
   });
 
+  const changeBirthdateRangeMutation = useChangeOfferBirthdateRangeMutation({
+    onSuccess: () => onSuccess('basic_info'),
+  });
+
   return async ({ nameAndAgeRange, location }: FormDataUnion) => {
-    const { name, typicalAgeRange } = nameAndAgeRange;
+    const { name, typicalAgeRange, birthdateRange } = nameAndAgeRange;
 
     if (scope === OfferTypes.PLACES) {
       await checkDuplicatePlace({ headers, offerId, location, name });
@@ -66,6 +70,14 @@ const useEditNameAndAgeRange = ({
       await changeTypicalAgeRangeMutation.mutateAsync({
         eventId: offerId,
         typicalAgeRange,
+        scope,
+      });
+    }
+
+    if (birthdateRange?.from && birthdateRange?.to) {
+      await changeBirthdateRangeMutation.mutateAsync({
+        eventId: offerId,
+        birthdateRange,
         scope,
       });
     }
@@ -90,7 +102,6 @@ const NameAndAgeRangeStep = ({
   ...props
 }: StepProps) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const errorBody = error?.body as DuplicatePlaceErrorBody;
   const errorMessage = error?.message;
@@ -142,7 +153,7 @@ const NameAndAgeRangeStep = ({
       name={name}
       render={() => {
         return (
-          <Stack spacing={4} maxWidth={parseSpacing(11)}>
+          <Stack spacing={5} maxWidth={parseSpacing(11)}>
             <NameStep
               {...getStepProps(props)}
               name={name}
@@ -154,6 +165,9 @@ const NameAndAgeRangeStep = ({
                 {...getStepProps(props)}
                 name={name}
                 control={control}
+                offerId={offerId}
+                setValue={setValue}
+                scope={scope}
               />
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
@@ -216,7 +230,10 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
       name: yup.object().shape({}).required(),
-      typicalAgeRange: yup.string().matches(numberHyphenNumberRegex),
+      typicalAgeRange: yup
+        .string()
+        .matches(numberHyphenNumberRegex)
+        .test('matches', '', (value) => isValidAgeRange(value)),
     }),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');

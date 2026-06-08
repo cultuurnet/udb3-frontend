@@ -137,8 +137,25 @@
         "with_start_and_end_date": "Met start-en einddatum",
         "permanent": "Permanent",
         "opening_hours": "Openingsuren",
+        "hours": "Uren",
         "button_change_opening_hours": "Openingsuren wijzigen",
-        "button_add_opening_hours": "Openingsuren toevoegen"
+        "button_add_opening_hours": "Openingsuren toevoegen",
+        "button_add_hours": "Uren toevoegen",
+        "overview": {
+          "edit": "Bewerken",
+          "delete": "Verwijderen",
+          "weekly_on": "Wekelijks op:",
+          "closed": "Gesloten",
+          "deviating_except": "Behalve:",
+          "deviating_then_weekly": "dan wekelijks op:",
+          "childcare_before": "vooropvang van {{start}}",
+          "childcare_after": "naopvang tot {{end}}",
+          "delete_modal": {
+            "title": "Uren verwijderen",
+            "body": "Ben je zeker dat je alle openingsuren wil verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+            "confirm": "Definitief verwijderen"
+          }
+        }
       },
       "days": {
         "short": {
@@ -185,6 +202,7 @@
         "end_time": "tot",
         "start_time": "van",
         "title": "Openingsuren",
+        "title_add_hours": "Voeg uren toe",
         "days": "Dagen",
         "hours": "Uren",
         "select_days": "Selecteer dag(en)",
@@ -308,9 +326,16 @@
       },
       "age": {
         "title": "Geschikt voor",
+        "title_boa": "Geef aan op welke leeftijden deze activiteit geschikt is",
         "input_mode": {
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
+        },
+        "birth_date": {
+          "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
+          "from": "van",
+          "to": "tot",
+          "error_max_before_min": "De 'tot'-datum mag niet vroeger vallen dan de 'van'-datum."
         },
         "all": "Alle leeftijden",
         "toddlers": "Peuters",
@@ -324,8 +349,35 @@
         "from": "Van",
         "till": "Tot",
         "age": "jaar",
+        "input_range_title": "Geef een minimum en maximum leeftijd in",
         "error_max_lower_than_min": "De maximumleeftijd kan niet lager zijn dan de minimumleeftijd.",
-        "error_no_min_age": "Gelieve een minimum leeftijd in te vullen"
+        "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
+        "error_no_min_age": "Gelieve een minimum leeftijd in te vullen",
+        "error_invalid": "De opgegeven leeftijd is niet geldig.",
+        "audience": {
+          "question": "Voor wie is deze activiteit?",
+          "children_only": "Voor kinderen alleen",
+          "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
+          "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
+          "departure_places_warning_modal": {
+            "title": "Vertreklocaties verwijderen",
+            "body": "Let op: deze actie verwijdert je ingevulde vertreklocaties.",
+            "confirm": "Doorgaan",
+            "cancel": "Annuleren"
+          },
+          "members_warning_modal": {
+            "title": "Let op: met deze actie wijzig je de toegankelijkheidsinformatie",
+            "body": "Een activiteit 'voor kinderen alleen' kan niet beperkt worden tot enkel leden. Wil je doorgaan? Dan zetten we de toegang automatisch op 'Voor iedereen'.",
+            "confirm": "Verdergaan",
+            "cancel": "Annuleren"
+          },
+          "age_range_warning_modal": {
+            "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen'. De toegang wordt automatisch ingesteld op 'Voor iedereen' en eventuele vertreklocaties worden verwijderd.",
+            "confirm": "Verdergaan",
+            "cancel": "Annuleren"
+          }
+        }
       },
       "cultuurkuur": {
         "info": "Voeg de onderwijsniveaus toe waarvoor je activiteit geschikt is. Meer info over de nieuwe structuur van het onderwijs vind je <link1>hier</link1>.",
@@ -368,6 +420,8 @@
       },
       "audience": {
         "title": "Toegang",
+        "childrenOnly": "Voor kinderen alleen",
+        "children_only_warning": "Deze activiteit is ingesteld als 'Voor kinderen alleen'.<br/>Om de toegang te wijzigen, ga je naar <strong>Basisgegevens</strong> &rsaquo; <strong>Voor wie is deze activiteit?</strong>.<br/>Kies daar 'Voor kinderen samen met hun familie of een andere begeleider'.",
         "education": "Specifiek voor scholen",
         "everyone": "Voor iedereen",
         "members": "Enkel voor leden",
@@ -406,10 +460,8 @@
         },
         "select_url_label": "Hoe mag deze reservatie link verschijnen?",
         "reservation_period": {
-          "cta": "Reservatieperiode toevoegen",
-          "title": "Reservatie periode",
-          "info_text": "Binnen welke periode kunnen mensen een plek reserveren of ticket kopen?",
-          "delete": "Reservatieperiode verwijderen",
+          "title": "Wanneer kunnen mensen zich inschrijven?",
+          "toggle": "Reservatieperiode",
           "startHour": "Startuur",
           "endHour": "Einduur",
           "error": {
@@ -1028,7 +1080,9 @@
     },
     "row_status": {
       "PLANNED": "Publicatie vanaf {{date}}",
-      "PUBLISHED": "Gepubliceerd",
+      "PLANNED_NO_DATE": "Gepland",
+      "PUBLISHED_NO_DATE": "Gepubliceerd",
+      "PUBLISHED": "Gepubliceerd op {{date}}",
       "DRAFT": "Kladversie",
       "APPROVED": "Gepubliceerd",
       "REJECTED": "Publicatie afgewezen",
@@ -1622,7 +1676,7 @@
         "event": "Activiteit",
         "place": "Locatie"
       },
-      "cultuurkuur_event": "Dit is een activiteit voor scholen",
+      "cultuurkuur_event": "Dit is een cultuureducatieve activiteit - specifiek voor scholen",
       "cultuurkuur_info": "Je activiteit zal verschijnen op cultuurkuur.be, het platform voor onderwijs & cultuur. Let op: je activiteit wordt niet gepubliceerd op UiTinVlaanderen of andere publiekskanalen.",
       "cultuurkuur_tooltip": "Deze knop maakt van je activiteit een activiteit voor scholen, met aangepaste informatievelden. Opgelet, dit kan niet ongedaan gemaakt worden."
     }
@@ -1914,14 +1968,17 @@
     "publication_alert_cultuurkuur_timeframe": "vanaf morgen",
     "publication_alert_uitagendas_timeframe": "binnen 1 uur",
     "uit_agendas": "UiTinVlaanderen en in de andere UiTagenda's",
-    "booking_data": "Reservatiegegevens",
     "booking_period": "Reservatieperiode",
-    "booking_url": "Reservatielink",
+    "booking_link_label": "Link",
     "educational": "Specifiek voor scholen",
     "educational_info": "Omdat deze activiteit specifiek op scholen gericht is, wordt het enkel op Cultuurkuur.be gepubliceerd; het platform voor onderwijs & cultuur.",
     "info_lesson_series": "Je lessenreeks verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
+    "children_only": "Voor kinderen alleen",
+    "accessibility": {
+      "description": "Er is vervoer voorzien dat kinderen tot bij jouw activiteit brengt vanuit:"
+    },
     "labels": {
       "title": "Titel",
       "type": "Type",
@@ -1941,7 +1998,8 @@
       "age": "Geschikt voor",
       "image": "Afbeeldingen",
       "video": "Video's",
-      "event_id": "ID"
+      "event_id": "ID",
+      "accessibility": "Bereikbaarheid"
     },
     "public_url": "Bekijk op {{publicationBrand}}",
     "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",

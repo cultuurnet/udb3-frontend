@@ -135,8 +135,25 @@
         "with_start_and_end_date": "Mit Start- und Enddatum",
         "permanent": "Permanent",
         "opening_hours": "Öffnungszeiten",
+        "hours": "Stunden",
         "button_change_opening_hours": "Öffnungszeiten ändern",
-        "button_add_opening_hours": "Öffnungszeiten hinzufügen"
+        "button_add_opening_hours": "Öffnungszeiten hinzufügen",
+        "button_add_hours": "Stunden hinzufügen",
+        "overview": {
+          "edit": "Bearbeiten",
+          "delete": "Löschen",
+          "weekly_on": "Wöchentlich:",
+          "closed": "Geschlossen",
+          "deviating_except": "Außer:",
+          "deviating_then_weekly": "dann wöchentlich:",
+          "childcare_before": "Vorbetreuung ab {{start}}",
+          "childcare_after": "Nachbetreuung bis {{end}}",
+          "delete_modal": {
+            "title": "Zeiten löschen",
+            "body": "Sind Sie sicher, dass Sie alle Öffnungszeiten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Endgültig löschen"
+          }
+        }
       },
       "days": {
         "short": {
@@ -183,6 +200,7 @@
         "end_time": "bis",
         "start_time": "von",
         "title": "Öffnungszeiten",
+        "title_add_hours": "Stunden hinzufügen",
         "days": "Tage",
         "hours": "Stunden",
         "select_days": "Tag(e) auswählen",
@@ -298,9 +316,16 @@
       },
       "age": {
         "title": "Geeignet für",
+        "title_boa": "Geben Sie an, für welche Altersgruppen diese Aktivität geeignet ist",
         "input_mode": {
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
+        },
+        "birth_date": {
+          "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
+          "from": "von",
+          "to": "bis",
+          "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
         },
         "all": "Alle Altersgruppen",
         "toddlers": "Kleinkinder",
@@ -314,8 +339,35 @@
         "from": "Von",
         "till": "Bis",
         "age": "Jahre",
+        "input_range_title": "Geben Sie ein Mindest- und Höchstalter ein",
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
-        "error_no_min_age": "Bitte geben Sie ein Mindestalter ein"
+        "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
+        "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
+        "error_invalid": "Das angegebene Alter ist ungültig.",
+        "audience": {
+          "question": "Für wen ist diese Aktivität?",
+          "children_only": "Nur für Kinder",
+          "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
+          "mutation_error": "Beim Speichern der Zielgruppe ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+          "departure_places_warning_modal": {
+            "title": "Abfahrtsorte löschen",
+            "body": "Achtung: Mit dieser Aktion werden die von Ihnen angegebenen Abfahrtsorte gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "members_warning_modal": {
+            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
+            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "age_range_warning_modal": {
+            "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          }
+        }
       }
     },
     "type_and_theme": {
@@ -347,6 +399,8 @@
         }
       },
       "audience": {
+        "childrenOnly": "Nur für Kinder",
+        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",
@@ -383,9 +437,10 @@
         },
         "select_url_label": "Wie kann dieser Reservierungslink aussehen?",
         "reservation_period": {
-          "cta": "Reservierungszeitraum hinzufügen",
-          "title": "Reservierungszeitraum",
-          "delete": "Reservierungszeitraum löschen",
+          "title": "Wann können sich die Leute anmelden?",
+          "toggle": "Reservierungszeitraum",
+          "startHour": "Startuhrzeit",
+          "endHour": "Enduhrzeit",
           "error": {
             "enddate_before_startdate": "Das gewählte Enddatum muss nach dem Startdatum liegen.",
             "endDateTime_before_startDateTime": "Die gewählte Enddatum und -uhrzeit müssen nach der Startdatum und -uhrzeit liegen."
@@ -990,7 +1045,9 @@
     },
     "row_status": {
       "PLANNED": "Veröffentlichung aus {{date}}",
-      "PUBLISHED": "Veröffentlicht",
+      "PLANNED_NO_DATE": "Geplant",
+      "PUBLISHED_NO_DATE": "Veröffentlicht",
+      "PUBLISHED": "Veröffentlicht am {{date}}",
       "DRAFT": "Entwurfsversion",
       "APPROVED": "Veröffentlicht",
       "REJECTED": "Veröffentlichung abgelehnt",
@@ -1562,7 +1619,7 @@
         "event": "Aktivität",
         "place": "Ort"
       },
-      "cultuurkuur_event": "Es ist eine Aktivität für Schulen",
+      "cultuurkuur_event": "Es ist eine kulturpädagogische Aktivität - speziell für Schulen",
       "cultuurkuur_info": "Ihre Aktivität wird auf cultuurkuur.be angezeigt, der Plattform für Bildung und Kultur. Bitte beachten Sie: Ihre Aktivität wird nicht auf UiTinVlaanderen oder anderen öffentlichen Kanälen veröffentlicht."
     }
   },
@@ -1853,14 +1910,17 @@
     "publication_alert_cultuurkuur_timeframe": "ab morgen",
     "publication_alert_uitagendas_timeframe": "innerhalb 1 Stunde",
     "uit_agendas": "UiTinVlaanderen und anderen UiTagendas",
-    "booking_data": "Reservierungsdetails",
     "booking_period": "Reservierungszeitraum",
-    "booking_url": "Reservierungslink",
+    "booking_link_label": "Link",
     "educational": "Nur für Schulen",
     "educational_info": "Da diese Angebot nur für Schulen konzipiert ist, wird sie nur auf Cultuurkuur.be, der Plattform für Bildung und Kultur, veröffentlicht.",
     "info_lesson_series": "Ihre Unterrichtsreihe wird bis zum Beginn der ersten Stunde auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttermin auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "ages": "Alters: {{ages}}",
+    "children_only": "Nur für Kinder",
+    "accessibility": {
+      "description": "Es gibt einen Transport, der Kinder zu Ihrer Aktivität bringt von:"
+    },
     "labels": {
       "title": "Titel",
       "type": "Typ",
@@ -1880,7 +1940,8 @@
       "age": "Geeignet für",
       "image": "Abbildungen",
       "video": "Videos",
-      "event_id": "ID"
+      "event_id": "ID",
+      "accessibility": "Erreichbarkeit"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
     "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",

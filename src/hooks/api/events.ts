@@ -5,6 +5,7 @@ import { Video } from '@/pages/VideoUploadBox';
 import { ContactPoint } from '@/types/ContactPoint';
 import type { AttendanceMode, Event } from '@/types/Event';
 import type {
+  BirthdateRange,
   BookingAvailability,
   BookingInfo,
   MediaObject,
@@ -56,6 +57,7 @@ type EventArguments = {
   attendanceMode: Values<typeof AttendanceMode>;
   mainLanguage: string;
   typicalAgeRange: string;
+  birthdateRange?: BirthdateRange;
   onlineUrl: string;
   mediaObject: MediaObject[];
   priceInfo: PriceInfo;
@@ -86,6 +88,7 @@ const addEvent = async ({
   audienceType,
   attendanceMode,
   typicalAgeRange,
+  birthdateRange,
   onlineUrl,
   mediaObject,
   videos,
@@ -116,6 +119,7 @@ const addEvent = async ({
         audienceType,
         attendanceMode,
         typicalAgeRange,
+        ...(birthdateRange?.from && birthdateRange?.to && { birthdateRange }),
         onlineUrl,
         mediaObject,
         priceInfo,

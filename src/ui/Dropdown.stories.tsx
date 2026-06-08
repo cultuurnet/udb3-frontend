@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';

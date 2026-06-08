@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import unicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
@@ -15,6 +18,7 @@ export default [
       'out/**',
       'build/**',
       'dist/**',
+      'storybook-static/**',
       'playwright-report/**',
       'scripts/**',
     ],
@@ -53,4 +57,5 @@ export default [
       },
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];

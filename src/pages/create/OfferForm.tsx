@@ -26,7 +26,13 @@ import { Address, AddressInternal } from '@/types/Address';
 import { ContactPoint } from '@/types/ContactPoint';
 import { Country } from '@/types/Country';
 import { AttendanceMode, isEvent } from '@/types/Event';
-import { BookingInfo, MediaObject, Offer, PriceInfo } from '@/types/Offer';
+import {
+  BirthdateRange,
+  BookingInfo,
+  MediaObject,
+  Offer,
+  PriceInfo,
+} from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
@@ -58,6 +64,7 @@ type FormData = {
   nameAndAgeRange: {
     name: Record<Values<typeof SupportedLanguages>, string>;
     typicalAgeRange: string;
+    birthdateRange?: BirthdateRange;
   };
   mediaObject?: MediaObject[];
   bookingInfo?: BookingInfo;
@@ -168,6 +175,7 @@ const OfferForm = () => {
       nameAndAgeRange: {
         name: offer.name,
         typicalAgeRange: offer.typicalAgeRange,
+        birthdateRange: offer.birthdateRange,
       },
       audience: {
         audienceType: offer.audience?.audienceType,
@@ -244,7 +252,7 @@ const OfferForm = () => {
   const convertFormDataToOffer = ({
     description,
     scope,
-    nameAndAgeRange: { name, typicalAgeRange },
+    nameAndAgeRange: { name, typicalAgeRange, birthdateRange },
     typeAndTheme,
     location,
     calendar,
@@ -272,6 +280,7 @@ const OfferForm = () => {
       organizer,
       videos,
       typicalAgeRange,
+      birthdateRange,
       mainLanguage: i18n.language,
       name,
       labels,
