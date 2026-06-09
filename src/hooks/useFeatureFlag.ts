@@ -17,6 +17,7 @@ const FeatureFlags = {
   SHOW_CONSOLE_DEBUGGING: 'show_console_debugging',
   SHOW_IFRAME_BORDER: 'show_iframe_border',
   BOA: 'boa',
+  SHADCN_MIGRATION: 'shadcn_migration',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;
