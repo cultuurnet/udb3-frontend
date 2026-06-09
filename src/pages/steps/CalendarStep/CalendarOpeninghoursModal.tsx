@@ -1,13 +1,13 @@
 import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
 import { Accordion } from '@/ui/Accordion';
-import { Alert } from '@/ui/Alert';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -24,6 +24,7 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
+  getErrorSections,
   getOverlappingDays,
   hasAnyModalErrors,
   isModalConfirmDisabled,
@@ -130,6 +131,7 @@ const CalendarOpeninghoursModal = ({
   const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
     new Set(),
   );
+  const modalContentRef = useRef<HTMLElement>(null);
 
   const handleAddOpeningHours = () =>
     append({
@@ -234,6 +236,21 @@ const CalendarOpeninghoursModal = ({
   const isDeleteConfirm = pendingDelete !== null;
   const daysWithTimeConflict = getOverlappingDays(openingHours);
 
+  const errorSections = getErrorSections(
+    openingHours,
+    deviatingPeriods,
+    closingPeriods,
+    shownErrorIds,
+    eventStart,
+    eventEnd,
+  );
+
+  const errorSectionNames = [
+    errorSections.hours && t('create.calendar.opening_hours_modal.sections.hours'),
+    errorSections.deviating && t('create.calendar.opening_hours_modal.sections.deviating'),
+    errorSections.closing && t('create.calendar.opening_hours_modal.sections.closing'),
+  ].filter(Boolean) as string[];
+
   const modalConfirmDisabled = isModalConfirmDisabled(
     isDeleteConfirm,
     openingHours,
@@ -241,6 +258,7 @@ const CalendarOpeninghoursModal = ({
     shownErrorIds,
     eventStart,
     eventEnd,
+    closingPeriods,
   );
 
   const handleSave = () => {
@@ -271,6 +289,10 @@ const CalendarOpeninghoursModal = ({
           ),
         ]),
       );
+      modalContentRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     } else {
       handleSave();
     }
@@ -332,11 +354,27 @@ const CalendarOpeninghoursModal = ({
       </Stack>
 
       <Stack
+        ref={modalContentRef}
         spacing={4}
         padding={4}
         alignItems="flex-start"
         display={isDeleteConfirm ? 'none' : undefined}
       >
+        {modalConfirmDisabled && errorSectionNames.length > 0 && (
+          <Alert variant={AlertVariants.DANGER}>
+            {t(
+              'create.calendar.opening_hours_modal.validation_messages.section_errors',
+              {
+                sections: [
+                  errorSectionNames.slice(0, -1).join(', '),
+                  errorSectionNames.at(-1),
+                ]
+                  .filter(Boolean)
+                  .join(` ${t('create.calendar.opening_hours_modal.sections.and')} `),
+              },
+            )}
+          </Alert>
+        )}
         {openingHours.map((openingHour) => {
           const childcareEnabled = openingHour.childcareEnabled ?? false;
           const timesMissing =
