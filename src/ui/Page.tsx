@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 import { Children } from 'react';
 
-import { Box, getBoxProps } from './Box';
 import { cn } from '@/ui/shadcn/utils';
+
+import { Box, getBoxProps } from './Box';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import type { StackProps } from './Stack';
