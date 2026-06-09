@@ -180,8 +180,8 @@ const CalendarOpeninghoursModal = ({
       ...prev,
       {
         id: uniqueId('deviating-period-'),
-        startDate: today,
-        endDate: today,
+        startDate: eventStart ?? today,
+        endDate: eventStart ?? today,
         description: {},
         openingHours: [
           {
@@ -201,8 +201,8 @@ const CalendarOpeninghoursModal = ({
       ...prev,
       {
         id: uniqueId('closing-period-'),
-        startDate: today,
-        endDate: today,
+        startDate: eventStart ?? today,
+        endDate: eventStart ?? today,
         description: {},
       },
     ]);
