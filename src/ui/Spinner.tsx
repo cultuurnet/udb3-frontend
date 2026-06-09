@@ -28,8 +28,6 @@ const Spinner = ({
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
-  const iconSize = size === SpinnerSizes.SMALL ? 16 : 32;
-
   return isShadcnMigrationEnabled ? (
     <div
       className={cn(
@@ -38,13 +36,12 @@ const Spinner = ({
       )}
     >
       <ShadcnSpinner
-        width={iconSize}
-        height={iconSize}
-        className={
+        className={cn(
+          size === SpinnerSizes.SMALL ? 'tw:size-4' : 'tw:size-8',
           variant === SpinnerVariants.LIGHT
             ? 'tw:text-white'
-            : 'tw:text-primary'
-        }
+            : 'tw:text-primary',
+        )}
       />
     </div>
   ) : (

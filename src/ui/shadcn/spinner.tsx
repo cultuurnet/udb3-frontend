@@ -1,24 +1,14 @@
+import { Loader2Icon } from 'lucide-react';
+
 import { cn } from '@/ui/shadcn/utils';
 
-import { Icon, Icons } from '../Icon';
-
-function Spinner({
-  className,
-  width,
-  height,
-}: {
-  className?: string;
-  width?: number;
-  height?: number;
-}) {
+function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
-    <Icon
-      name={Icons.CHECK_NOTCH}
+    <Loader2Icon
       role="status"
       aria-label="Loading"
-      className={cn('tw:animate-spin', className)}
-      width={width}
-      height={height}
+      className={cn('tw:size-4 tw:animate-spin', className)}
+      {...props}
     />
   );
 }
