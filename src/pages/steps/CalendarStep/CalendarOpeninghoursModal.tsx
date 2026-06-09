@@ -246,9 +246,12 @@ const CalendarOpeninghoursModal = ({
   );
 
   const errorSectionNames = [
-    errorSections.hours && t('create.calendar.opening_hours_modal.sections.hours'),
-    errorSections.deviating && t('create.calendar.opening_hours_modal.sections.deviating'),
-    errorSections.closing && t('create.calendar.opening_hours_modal.sections.closing'),
+    errorSections.hours &&
+      t('create.calendar.opening_hours_modal.sections.hours'),
+    errorSections.deviating &&
+      t('create.calendar.opening_hours_modal.sections.deviating'),
+    errorSections.closing &&
+      t('create.calendar.opening_hours_modal.sections.closing'),
   ].filter(Boolean) as string[];
 
   const modalConfirmDisabled = isModalConfirmDisabled(
@@ -370,7 +373,9 @@ const CalendarOpeninghoursModal = ({
                   errorSectionNames.at(-1),
                 ]
                   .filter(Boolean)
-                  .join(` ${t('create.calendar.opening_hours_modal.sections.and')} `),
+                  .join(
+                    ` ${t('create.calendar.opening_hours_modal.sections.and')} `,
+                  ),
               },
             )}
           </Alert>
