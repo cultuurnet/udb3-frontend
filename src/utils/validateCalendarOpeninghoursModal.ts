@@ -22,7 +22,7 @@ export type OpeningHoursFormData = {
 const hasNoDaySelected = (openingHours: { dayOfWeek: unknown[] }[]): boolean =>
   openingHours.some((hour) => hour.dayOfWeek.length === 0);
 
-const hasInvalidOpeningHours = (openingHours: OpeningHoursRow[]): boolean =>
+const hasInvalidTimeRange = (openingHours: OpeningHoursRow[]): boolean =>
   openingHours.some(
     (hour) => !!hour.opens && !!hour.closes && hour.closes < hour.opens,
   );
@@ -38,11 +38,16 @@ const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
     return timesMissing || startTooLate || endTooEarly;
   });
 
+const hasOpeningHourErrors = (openingHours: OpeningHoursRow[]): boolean =>
+  hasNoDaySelected(openingHours) ||
+  hasInvalidTimeRange(openingHours) ||
+  hasChildcareErrors(openingHours);
+
 type PeriodWithDateRange = { id: string; startDate: Date; endDate: Date };
 
 const dayStart = (date: Date): number => startOfDay(new Date(date)).getTime();
 
-export const overlapsWithAnotherPeriod = (
+export const hasPeriodOverlap = (
   period: PeriodWithDateRange,
   periods: PeriodWithDateRange[],
 ): boolean =>
@@ -53,7 +58,7 @@ export const overlapsWithAnotherPeriod = (
       dayStart(period.endDate) >= dayStart(other.startDate),
   );
 
-const hasPeriodErrors = (
+const hasPeriodDateError = (
   periods: PeriodWithDateRange[],
   eventStart: Date | undefined,
   eventEnd: Date | undefined,
@@ -63,7 +68,7 @@ const hasPeriodErrors = (
       dayStart(period.startDate) > dayStart(period.endDate) ||
       (eventStart && period.startDate < eventStart) ||
       (eventEnd && period.endDate > eventEnd) ||
-      overlapsWithAnotherPeriod(period, periods),
+      hasPeriodOverlap(period, periods),
   );
 
 export const getOverlappingDays = (
@@ -84,7 +89,7 @@ export const getOverlappingDays = (
   );
 };
 
-const hasAnyOverlappingDays = (
+const hasOverlappingTimeSlots = (
   openingHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
@@ -99,12 +104,10 @@ export const hasAnyModalErrors = (
   eventStart: Date | undefined,
   eventEnd: Date | undefined,
 ): boolean =>
-  hasNoDaySelected(openingHours) ||
+  hasOpeningHourErrors(openingHours) ||
   deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
-  hasChildcareErrors(openingHours) ||
-  hasInvalidOpeningHours(openingHours) ||
-  hasAnyOverlappingDays(openingHours, deviatingPeriods) ||
-  hasPeriodErrors(deviatingPeriods, eventStart, eventEnd);
+  hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
+  hasPeriodDateError(deviatingPeriods, eventStart, eventEnd);
 
 export const isModalConfirmDisabled = (
   isDeleteConfirm: boolean,
@@ -117,14 +120,12 @@ export const isModalConfirmDisabled = (
 ): boolean => {
   if (isDeleteConfirm) return false;
   if (hasChildcareErrors(openingHours)) return true;
-  if (hasAnyOverlappingDays(openingHours, deviatingPeriods)) return true;
+  if (hasOverlappingTimeSlots(openingHours, deviatingPeriods)) return true;
   if (shownErrorIds.size === 0) return false;
 
   const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
   const hasFlaggedRowErrors =
-    hasNoDaySelected(flaggedRows) ||
-    hasInvalidOpeningHours(flaggedRows) ||
-    hasChildcareErrors(flaggedRows) ||
+    hasOpeningHourErrors(flaggedRows) ||
     deviatingPeriods.some((period) =>
       hasNoDaySelected(
         period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
@@ -137,7 +138,8 @@ export const isModalConfirmDisabled = (
 
   return (
     hasFlaggedRowErrors ||
-    hasPeriodErrors(validatedPeriods, eventStart, eventEnd) ||
-    hasPeriodErrors(closingPeriods, eventStart, eventEnd)
+    [validatedPeriods, closingPeriods].some((periods) =>
+      hasPeriodDateError(periods, eventStart, eventEnd),
+    )
   );
 };
