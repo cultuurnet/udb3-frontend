@@ -99,7 +99,7 @@ test.describe.serial('Event Preview Content', () => {
       .getByRole('button', { name: calendar.opening_hours_modal.select_days })
       .click();
     await modal
-      .getByRole('checkbox', { name: calendar.days.full.monday })
+      .getByRole('checkbox', { name: calendar.days.short.monday })
       .click();
 
     await modal
