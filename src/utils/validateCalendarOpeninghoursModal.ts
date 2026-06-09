@@ -147,19 +147,24 @@ export const isModalConfirmDisabled = (
     return true;
   if (shownErrorIds.size === 0) return false;
 
-  const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
-  const validatedPeriods = deviatingPeriods.filter((period) =>
+  const flaggedOpeningHours = openingHours.filter((hour) =>
+    shownErrorIds.has(hour.id),
+  );
+  const flaggedDeviatingPeriods = deviatingPeriods.filter((period) =>
     period.openingHours.every((hour) => shownErrorIds.has(hour.id)),
+  );
+  const flaggedClosingPeriods = closingPeriods.filter((period) =>
+    shownErrorIds.has(period.id),
   );
   return (
     hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
-    hasOpeningHourErrors(flaggedRows) ||
+    hasOpeningHourErrors(flaggedOpeningHours) ||
     deviatingPeriods.some((period) =>
       hasNoDaySelected(
         period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
       ),
     ) ||
-    [validatedPeriods, closingPeriods].some((periods) =>
+    [flaggedDeviatingPeriods, flaggedClosingPeriods].some((periods) =>
       hasPeriodDateError(periods, eventStart, eventEnd),
     )
   );
