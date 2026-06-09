@@ -103,11 +103,40 @@ export const hasAnyModalErrors = (
   deviatingPeriods: DeviatingPeriodData[],
   eventStart: Date | undefined,
   eventEnd: Date | undefined,
+  closingPeriods: PeriodWithDateRange[] = [],
 ): boolean =>
   hasOpeningHourErrors(openingHours) ||
   deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
   hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
-  hasPeriodDateError(deviatingPeriods, eventStart, eventEnd);
+  [deviatingPeriods, closingPeriods].some((periods) =>
+    hasPeriodDateError(periods, eventStart, eventEnd),
+  );
+
+const hasPostSaveErrors = (
+  openingHours: OpeningHoursRow[],
+  deviatingPeriods: DeviatingPeriodData[],
+  shownErrorIds: ReadonlySet<string>,
+  eventStart: Date | undefined,
+  eventEnd: Date | undefined,
+  closingPeriods: PeriodWithDateRange[],
+): boolean => {
+  const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
+  const validatedPeriods = deviatingPeriods.filter((period) =>
+    period.openingHours.every((hour) => shownErrorIds.has(hour.id)),
+  );
+  return (
+    hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
+    hasOpeningHourErrors(flaggedRows) ||
+    deviatingPeriods.some((period) =>
+      hasNoDaySelected(
+        period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
+      ),
+    ) ||
+    [validatedPeriods, closingPeriods].some((periods) =>
+      hasPeriodDateError(periods, eventStart, eventEnd),
+    )
+  );
+};
 
 export const isModalConfirmDisabled = (
   isDeleteConfirm: boolean,
@@ -119,27 +148,6 @@ export const isModalConfirmDisabled = (
   closingPeriods: PeriodWithDateRange[] = [],
 ): boolean => {
   if (isDeleteConfirm) return false;
-  if (hasChildcareErrors(openingHours)) return true;
-  if (hasOverlappingTimeSlots(openingHours, deviatingPeriods)) return true;
   if (shownErrorIds.size === 0) return false;
-
-  const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
-  const hasFlaggedRowErrors =
-    hasOpeningHourErrors(flaggedRows) ||
-    deviatingPeriods.some((period) =>
-      hasNoDaySelected(
-        period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
-      ),
-    );
-
-  const validatedPeriods = deviatingPeriods.filter((period) =>
-    period.openingHours.every((hour) => shownErrorIds.has(hour.id)),
-  );
-
-  return (
-    hasFlaggedRowErrors ||
-    [validatedPeriods, closingPeriods].some((periods) =>
-      hasPeriodDateError(periods, eventStart, eventEnd),
-    )
-  );
+  return hasPostSaveErrors(openingHours, deviatingPeriods, shownErrorIds, eventStart, eventEnd, closingPeriods);
 };

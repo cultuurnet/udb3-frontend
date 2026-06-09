@@ -26,10 +26,10 @@ import {
 import {
   getOverlappingDays,
   hasAnyModalErrors,
+  hasPeriodOverlap,
   isModalConfirmDisabled,
   type OpeningHoursFormData,
   type OpeningHoursRow,
-  hasPeriodOverlap,
 } from '../../../utils/validateCalendarOpeninghoursModal';
 import {
   CalendarState,
@@ -256,10 +256,7 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSaveAttempt = () => {
-    if (
-      hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd) ||
-      closingPeriods.some((period) => hasPeriodOverlap(period, closingPeriods))
-    ) {
+    if (hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd, closingPeriods)) {
       setShownErrorIds(
         new Set([
           ...openingHours.map((hour) => hour.id),
