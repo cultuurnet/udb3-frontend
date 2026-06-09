@@ -14,7 +14,7 @@ const BadgeVariants = {
 type Props = {
   children: React.ReactNode;
   variant?: Values<typeof BadgeVariants>;
-  pill?: boolean; // legacy only — shadcn Badge is rounded-full by default, remove after migration
+  pill?: boolean; // TODO legacy only — shadcn Badge is rounded-full by default, remove after migration
   className?: string;
 };
 
