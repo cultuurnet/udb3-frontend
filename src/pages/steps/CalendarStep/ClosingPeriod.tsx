@@ -30,6 +30,7 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasOverlap?: boolean;
+  hasInvalidDateOrder?: boolean;
 };
 
 const ClosingPeriod = ({
@@ -41,6 +42,7 @@ const ClosingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasOverlap = false,
+  hasInvalidDateOrder = false,
   ...boxProps
 }: Props) => {
   const { t, i18n } = useTranslation();
@@ -117,6 +119,13 @@ const ClosingPeriod = ({
         {hasOverlap && (
           <Text color="red">
             {t('create.calendar.opening_hours_modal.closing.errors.overlap')}
+          </Text>
+        )}
+        {hasInvalidDateOrder && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.closing.errors.start_after_end',
+            )}
           </Text>
         )}
         {eventStartDate && period.startDate < eventStartDate && (

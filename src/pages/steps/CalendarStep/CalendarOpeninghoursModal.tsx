@@ -113,9 +113,6 @@ const CalendarOpeninghoursModal = ({
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
   >(initialDeviatingPeriods ?? []);
-  const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(
-    null,
-  );
   const [pendingDelete, setPendingDelete] = useState<{
     kind: 'deviating' | 'closing';
     id: string;
@@ -124,9 +121,6 @@ const CalendarOpeninghoursModal = ({
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>(
     initialClosingPeriods ?? [],
   );
-  const [lastEditedClosingPeriodId, setLastEditedClosingPeriodId] = useState<
-    string | null
-  >(null);
   const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
     new Set(),
   );
@@ -263,7 +257,10 @@ const CalendarOpeninghoursModal = ({
 
   const handleSaveAttempt = () => {
     if (
-      hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd)
+      hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd) ||
+      closingPeriods.some((period) =>
+        overlapsWithAnotherPeriod(period, closingPeriods),
+      )
     ) {
       setShownErrorIds(
         new Set([
@@ -321,7 +318,7 @@ const CalendarOpeninghoursModal = ({
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: 57rem;
+          max-width: 58rem;
         }
       `}
     >
@@ -543,7 +540,6 @@ const CalendarOpeninghoursModal = ({
                 index={index}
                 period={period}
                 onChange={(updated: DeviatingPeriodData) => {
-                  setLastEditedPeriodId(updated.id);
                   setDeviatingPeriods((prev) =>
                     prev.map((existing) =>
                       existing.id === updated.id ? updated : existing,
@@ -562,8 +558,14 @@ const CalendarOpeninghoursModal = ({
                 }
                 showChildcare={showChildcare}
                 hasPeriodDateOverlap={
-                  period.id === lastEditedPeriodId &&
-                  overlapsWithAnotherPeriod(period, deviatingPeriods)
+                  shownErrorIds.size > 0 &&
+                  overlapsWithAnotherPeriod(
+                    period,
+                    deviatingPeriods.slice(0, index),
+                  )
+                }
+                hasInvalidDateOrder={
+                  shownErrorIds.size > 0 && period.startDate > period.endDate
                 }
                 daysWithTimeConflict={getOverlappingDays(period.openingHours)}
                 eventStartDate={eventStart}
@@ -592,7 +594,6 @@ const CalendarOpeninghoursModal = ({
                 index={index}
                 period={period}
                 onChange={(updated: ClosingPeriodData) => {
-                  setLastEditedClosingPeriodId(updated.id);
                   setClosingPeriods((prev) =>
                     prev.map((existing) =>
                       existing.id === updated.id ? updated : existing,
@@ -610,8 +611,14 @@ const CalendarOpeninghoursModal = ({
                   )
                 }
                 hasOverlap={
-                  period.id === lastEditedClosingPeriodId &&
-                  overlapsWithAnotherPeriod(period, closingPeriods)
+                  shownErrorIds.size > 0 &&
+                  overlapsWithAnotherPeriod(
+                    period,
+                    closingPeriods.slice(0, index),
+                  )
+                }
+                hasInvalidDateOrder={
+                  shownErrorIds.size > 0 && period.startDate > period.endDate
                 }
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}

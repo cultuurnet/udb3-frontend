@@ -214,6 +214,7 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes dérogatoires ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période avec des heures dérogatoires ne peut pas commencer avant la date de début de l'activité.",
             "end_after_event": "La période avec des heures dérogatoires ne peut pas se terminer après la date de fin de l'activité."
           },
@@ -232,6 +233,7 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes de fermeture ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période de fermeture ne peut pas commencer avant la date de début de l'activité.",
             "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité."
           },

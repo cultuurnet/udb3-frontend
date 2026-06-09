@@ -53,6 +53,7 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasPeriodDateOverlap?: boolean;
+  hasInvalidDateOrder?: boolean;
   daysWithTimeConflict?: DayOfWeek[];
   shownErrorIds?: ReadonlySet<string>;
 };
@@ -67,6 +68,7 @@ const DeviatingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasPeriodDateOverlap = false,
+  hasInvalidDateOrder = false,
   daysWithTimeConflict = [],
   shownErrorIds = new Set(),
   ...boxProps
@@ -251,6 +253,13 @@ const DeviatingPeriod = ({
         {hasPeriodDateOverlap && (
           <Text color="red">
             {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
+          </Text>
+        )}
+        {hasInvalidDateOrder && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
+            )}
           </Text>
         )}
         {eventStartDate && period.startDate < eventStartDate && (
