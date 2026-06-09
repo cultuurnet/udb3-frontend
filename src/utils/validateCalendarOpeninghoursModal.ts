@@ -112,14 +112,18 @@ export const hasAnyModalErrors = (
     hasPeriodDateError(periods, eventStart, eventEnd),
   );
 
-const hasPostSaveErrors = (
+export const isModalConfirmDisabled = (
+  isDeleteConfirm: boolean,
   openingHours: OpeningHoursRow[],
   deviatingPeriods: DeviatingPeriodData[],
   shownErrorIds: ReadonlySet<string>,
   eventStart: Date | undefined,
   eventEnd: Date | undefined,
-  closingPeriods: PeriodWithDateRange[],
+  closingPeriods: PeriodWithDateRange[] = [],
 ): boolean => {
+  if (isDeleteConfirm) return false;
+  if (shownErrorIds.size === 0) return false;
+
   const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
   const validatedPeriods = deviatingPeriods.filter((period) =>
     period.openingHours.every((hour) => shownErrorIds.has(hour.id)),
@@ -136,18 +140,4 @@ const hasPostSaveErrors = (
       hasPeriodDateError(periods, eventStart, eventEnd),
     )
   );
-};
-
-export const isModalConfirmDisabled = (
-  isDeleteConfirm: boolean,
-  openingHours: OpeningHoursRow[],
-  deviatingPeriods: DeviatingPeriodData[],
-  shownErrorIds: ReadonlySet<string>,
-  eventStart: Date | undefined,
-  eventEnd: Date | undefined,
-  closingPeriods: PeriodWithDateRange[] = [],
-): boolean => {
-  if (isDeleteConfirm) return false;
-  if (shownErrorIds.size === 0) return false;
-  return hasPostSaveErrors(openingHours, deviatingPeriods, shownErrorIds, eventStart, eventEnd, closingPeriods);
 };
