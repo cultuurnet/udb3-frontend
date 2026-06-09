@@ -31,12 +31,21 @@ const makePeriod = (
   ...partial,
 });
 
+const makeClosingPeriod = (
+  partial: Partial<{ id: string; startDate: Date; endDate: Date }> = {},
+) => ({
+  id: 'closing-1',
+  startDate: new Date('2025-06-01'),
+  endDate: new Date('2025-06-07'),
+  ...partial,
+});
+
 describe('getOverlappingDays', () => {
   it('returns empty when a day only appears in one row', () => {
     expect(getOverlappingDays([makeRow()])).toEqual([]);
   });
 
-  it('returns empty when the same day appears in two rows with non-overlapping times', () => {
+  it('returns empty when times on the same day do not overlap', () => {
     const rows = [
       makeRow({
         id: 'a',
@@ -72,7 +81,7 @@ describe('getOverlappingDays', () => {
     expect(getOverlappingDays(rows)).toEqual([]);
   });
 
-  it('returns the day when two rows on the same day have overlapping times', () => {
+  it('returns the day when two rows on the same day overlap', () => {
     const rows = [
       makeRow({
         id: 'a',
@@ -90,7 +99,7 @@ describe('getOverlappingDays', () => {
     expect(getOverlappingDays(rows)).toEqual(['monday']);
   });
 
-  it('only flags the day where times conflict, not the non-conflicting one', () => {
+  it('only flags the conflicting day, not others', () => {
     const rows = [
       makeRow({
         id: 'a',
@@ -116,40 +125,73 @@ describe('getOverlappingDays', () => {
 });
 
 describe('hasAnyModalErrors', () => {
+  const check = (
+    rows: OpeningHoursRow[],
+    periods: DeviatingPeriodData[] = [],
+    closingPeriods: ReturnType<typeof makeClosingPeriod>[] = [],
+    eventStart?: Date,
+    eventEnd?: Date,
+  ) => hasAnyModalErrors(rows, periods, eventStart, eventEnd, closingPeriods);
+
+  it('returns false when everything is valid', () => {
+    expect(check([makeRow()])).toBe(false);
+  });
+
   it('returns true when a row has no day selected', () => {
-    expect(
-      hasAnyModalErrors([makeRow({ dayOfWeek: [] })], [], undefined, undefined),
-    ).toBe(true);
+    expect(check([makeRow({ dayOfWeek: [] })])).toBe(true);
   });
 
-  it('returns false for a valid row with no deviating periods', () => {
-    expect(hasAnyModalErrors([makeRow()], [], undefined, undefined)).toBe(
-      false,
-    );
-  });
-
-  it('returns true when a deviating period starts before the event start', () => {
-    const period = makePeriod({ startDate: new Date('2025-05-01') });
+  it('returns true when a period is before the event start', () => {
     expect(
-      hasAnyModalErrors(
+      check(
         [makeRow()],
-        [period],
+        [makePeriod({ startDate: new Date('2025-05-01') })],
+        [],
         new Date('2025-06-01'),
-        undefined,
       ),
     ).toBe(true);
   });
 
-  it('returns true when a deviating period ends after the event end', () => {
-    const period = makePeriod({ endDate: new Date('2025-07-01') });
+  it('returns true when a period is after the event end', () => {
     expect(
-      hasAnyModalErrors(
+      check(
         [makeRow()],
-        [period],
+        [makePeriod({ endDate: new Date('2025-07-01') })],
+        [],
         undefined,
         new Date('2025-06-30'),
       ),
     ).toBe(true);
+  });
+
+  it('returns true when a period has start after end', () => {
+    expect(
+      check(
+        [makeRow()],
+        [
+          makePeriod({
+            startDate: new Date('2025-06-10'),
+            endDate: new Date('2025-06-01'),
+          }),
+        ],
+      ),
+    ).toBe(true);
+  });
+
+  it('returns true when two deviating periods overlap', () => {
+    const periods = [
+      makePeriod({
+        id: 'p1',
+        startDate: new Date('2025-06-01'),
+        endDate: new Date('2025-06-10'),
+      }),
+      makePeriod({
+        id: 'p2',
+        startDate: new Date('2025-06-05'),
+        endDate: new Date('2025-06-15'),
+      }),
+    ];
+    expect(check([makeRow()], periods)).toBe(true);
   });
 
   it('returns true when a deviating period has overlapping opening hours', () => {
@@ -159,55 +201,82 @@ describe('hasAnyModalErrors', () => {
         { id: 'b', opens: '12:00', closes: '17:00', dayOfWeek: ['monday'] },
       ],
     });
-    expect(hasAnyModalErrors([makeRow()], [period], undefined, undefined)).toBe(
-      true,
-    );
-  });
-});
-
-describe('isModalConfirmDisabled — first-click reveals, second-click saves', () => {
-  it('keeps the button enabled on first open even when a row has no day selected', () => {
-    expect(
-      isModalConfirmDisabled(
-        false,
-        [makeRow({ dayOfWeek: [] })],
-        [],
-        new Set(),
-        undefined,
-        undefined,
-      ),
-    ).toBe(false);
+    expect(check([makeRow()], [period])).toBe(true);
   });
 
-  it('disables the button after the first save attempt exposes the missing-day error', () => {
-    const row = makeRow({ id: 'row-1', dayOfWeek: [] });
+  it('returns true when two closing periods overlap', () => {
+    const closingPeriods = [
+      makeClosingPeriod({
+        id: 'c1',
+        startDate: new Date('2025-06-01'),
+        endDate: new Date('2025-06-10'),
+      }),
+      makeClosingPeriod({
+        id: 'c2',
+        startDate: new Date('2025-06-05'),
+        endDate: new Date('2025-06-15'),
+      }),
+    ];
+    expect(check([makeRow()], [], closingPeriods)).toBe(true);
+  });
+
+  it('returns true when a closing period has start after end', () => {
     expect(
-      isModalConfirmDisabled(
-        false,
-        [row],
+      check(
+        [makeRow()],
         [],
-        new Set(['row-1']),
-        undefined,
-        undefined,
+        [
+          makeClosingPeriod({
+            startDate: new Date('2025-06-10'),
+            endDate: new Date('2025-06-01'),
+          }),
+        ],
       ),
     ).toBe(true);
   });
+});
 
-  it('re-enables the button once the error is fixed while shownErrorIds are still populated', () => {
-    const row = makeRow({ id: 'row-1' });
-    expect(
-      isModalConfirmDisabled(
-        false,
-        [row],
-        [],
-        new Set(['row-1']),
-        undefined,
-        undefined,
-      ),
-    ).toBe(false);
+describe('isModalConfirmDisabled', () => {
+  const check = (
+    rows: OpeningHoursRow[],
+    shownErrorIds: ReadonlySet<string>,
+    { isDelete = false } = {},
+  ) =>
+    isModalConfirmDisabled(
+      isDelete,
+      rows,
+      [],
+      shownErrorIds,
+      undefined,
+      undefined,
+    );
+
+  it.each([
+    ['missing day', makeRow({ id: 'row-1', dayOfWeek: [] })],
+    [
+      'overlapping times',
+      makeRow({ id: 'row-1', opens: '09:00', closes: '08:00' }),
+    ],
+    [
+      'childcare errors',
+      makeRow({
+        id: 'row-1',
+        childcareEnabled: true,
+        childcareStartTime: '',
+        childcareEndTime: '',
+      }),
+    ],
+  ])('is false before first save attempt even with %s', (_, row) => {
+    expect(check([row], new Set())).toBe(false);
   });
 
-  it('always disables immediately for overlapping days, even before a save attempt', () => {
+  it('is true after first save reveals a missing day', () => {
+    expect(
+      check([makeRow({ id: 'row-1', dayOfWeek: [] })], new Set(['row-1'])),
+    ).toBe(true);
+  });
+
+  it('is true after first save reveals overlapping days', () => {
     const rows = [
       makeRow({
         id: 'a',
@@ -222,22 +291,18 @@ describe('isModalConfirmDisabled — first-click reveals, second-click saves', (
         dayOfWeek: ['monday'],
       }),
     ];
-    expect(
-      isModalConfirmDisabled(false, rows, [], new Set(), undefined, undefined),
-    ).toBe(true);
+    expect(check(rows, new Set(['a', 'b']))).toBe(true);
   });
 
-  it('never disables for a delete confirm regardless of errors', () => {
-    const row = makeRow({ id: 'row-1', dayOfWeek: [] });
+  it('is false once the error is fixed', () => {
+    expect(check([makeRow({ id: 'row-1' })], new Set(['row-1']))).toBe(false);
+  });
+
+  it('is false when confirming a delete regardless of errors', () => {
     expect(
-      isModalConfirmDisabled(
-        true,
-        [row],
-        [],
-        new Set(['row-1']),
-        undefined,
-        undefined,
-      ),
+      check([makeRow({ id: 'row-1', dayOfWeek: [] })], new Set(['row-1']), {
+        isDelete: true,
+      }),
     ).toBe(false);
   });
 });
