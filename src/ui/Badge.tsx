@@ -14,7 +14,7 @@ const BadgeVariants = {
 type Props = {
   children: React.ReactNode;
   variant?: Values<typeof BadgeVariants>;
-  pill?: boolean;
+  pill?: boolean; // legacy only — shadcn Badge is rounded-full by default, remove after migration
   className?: string;
 };
 
@@ -41,11 +41,7 @@ const Badge = ({
   return isShadcnMigrationEnabled ? (
     <ShadcnBadge
       variant={shadcnVariant[variant]}
-      className={cn(
-        'tw:self-center',
-        pill ? 'tw:rounded-full' : undefined,
-        className,
-      )}
+      className={cn('tw:self-center', className)}
     >
       {children}
     </ShadcnBadge>
