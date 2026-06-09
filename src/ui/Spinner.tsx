@@ -1,7 +1,9 @@
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { cn } from '@/ui/shadcn/utils';
 
 import { Spinner as ShadcnSpinner } from './shadcn/spinner';
+import { SpinnerLegacy } from './SpinnerLegacy';
 
 const SpinnerVariants = {
   PRIMARY: 'primary',
@@ -23,9 +25,12 @@ const Spinner = ({
   size,
   className,
 }: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
   const iconSize = size === SpinnerSizes.SMALL ? 16 : 32;
 
-  return (
+  return isShadcnMigrationEnabled ? (
     <div
       className={cn(
         'tw:flex tw:w-full tw:items-center tw:justify-center',
@@ -42,6 +47,8 @@ const Spinner = ({
         }
       />
     </div>
+  ) : (
+    <SpinnerLegacy variant={variant} size={size} className={className} />
   );
 };
 
