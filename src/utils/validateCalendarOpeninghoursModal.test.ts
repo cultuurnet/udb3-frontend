@@ -258,7 +258,7 @@ describe('isModalConfirmDisabled', () => {
       makeRow({ id: 'row-1', opens: '09:00', closes: '08:00' }),
     ],
     [
-      'childcare errors',
+      'childcare missing times',
       makeRow({
         id: 'row-1',
         childcareEnabled: true,
@@ -268,6 +268,38 @@ describe('isModalConfirmDisabled', () => {
     ],
   ])('is false before first save attempt even with %s', (_, row) => {
     expect(check([row], new Set())).toBe(false);
+  });
+
+  it.each([
+    [
+      'childcare start too late',
+      makeRow({
+        id: 'row-1',
+        childcareEnabled: true,
+        childcareStartTime: '09:00',
+        childcareEndTime: '',
+      }),
+    ],
+    [
+      'childcare end too early',
+      makeRow({
+        id: 'row-1',
+        childcareEnabled: true,
+        childcareStartTime: '',
+        childcareEndTime: '17:00',
+      }),
+    ],
+    [
+      'childcare both times invalid',
+      makeRow({
+        id: 'row-1',
+        childcareEnabled: true,
+        childcareStartTime: '10:00',
+        childcareEndTime: '16:00',
+      }),
+    ],
+  ])('is true immediately (before save attempt) with %s', (_, row) => {
+    expect(check([row], new Set())).toBe(true);
   });
 
   it('is true after first save reveals a missing day', () => {

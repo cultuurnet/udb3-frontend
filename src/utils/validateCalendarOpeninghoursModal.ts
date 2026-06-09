@@ -38,6 +38,27 @@ const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
     return timesMissing || startTooLate || endTooEarly;
   });
 
+const hasChildcareTimeComparisonErrors = (
+  openingHours: OpeningHoursRow[],
+  deviatingPeriods: DeviatingPeriodData[],
+): boolean =>
+  openingHours.some((hour) => {
+    if (!hour.childcareEnabled) return false;
+    return (
+      (!!hour.childcareStartTime && hour.childcareStartTime >= hour.opens) ||
+      (!!hour.childcareEndTime && hour.childcareEndTime <= hour.closes)
+    );
+  }) ||
+  deviatingPeriods.some((period) =>
+    period.openingHours.some((hour) => {
+      if (!hour.childcare) return false;
+      return (
+        (!!hour.childcare.start && hour.childcare.start >= hour.opens) ||
+        (!!hour.childcare.end && hour.childcare.end <= hour.closes)
+      );
+    }),
+  );
+
 const hasOpeningHourErrors = (openingHours: OpeningHoursRow[]): boolean =>
   hasNoDaySelected(openingHours) ||
   hasInvalidTimeRange(openingHours) ||
@@ -122,6 +143,8 @@ export const isModalConfirmDisabled = (
   closingPeriods: PeriodWithDateRange[] = [],
 ): boolean => {
   if (isDeleteConfirm) return false;
+  if (hasChildcareTimeComparisonErrors(openingHours, deviatingPeriods))
+    return true;
   if (shownErrorIds.size === 0) return false;
 
   const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
