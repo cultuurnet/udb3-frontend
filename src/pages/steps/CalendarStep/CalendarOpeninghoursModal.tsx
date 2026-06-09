@@ -564,7 +564,8 @@ const CalendarOpeninghoursModal = ({
                 hasOverlap={
                   period.openingHours.some((openingHour) =>
                     shownErrorIds.has(openingHour.id),
-                  ) && hasPeriodOverlap(period, deviatingPeriods.slice(0, index))
+                  ) &&
+                  hasPeriodOverlap(period, deviatingPeriods.slice(0, index))
                 }
                 hasInvalidDateOrder={
                   period.openingHours.some((openingHour) =>
@@ -619,7 +620,8 @@ const CalendarOpeninghoursModal = ({
                   hasPeriodOverlap(period, closingPeriods.slice(0, index))
                 }
                 hasInvalidDateOrder={
-                  shownErrorIds.has(period.id) && period.startDate > period.endDate
+                  shownErrorIds.has(period.id) &&
+                  period.startDate > period.endDate
                 }
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
