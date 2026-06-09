@@ -271,6 +271,7 @@ const CalendarOpeninghoursModal = ({
           ...deviatingPeriods.flatMap((period) =>
             period.openingHours.map((hour) => hour.id),
           ),
+          ...closingPeriods.map((period) => period.id),
         ]),
       );
       modalContentRef.current?.scrollIntoView({
@@ -561,11 +562,14 @@ const CalendarOpeninghoursModal = ({
                 }
                 showChildcare={showChildcare}
                 hasOverlap={
-                  shownErrorIds.size > 0 &&
-                  hasPeriodOverlap(period, deviatingPeriods.slice(0, index))
+                  period.openingHours.some((openingHour) =>
+                    shownErrorIds.has(openingHour.id),
+                  ) && hasPeriodOverlap(period, deviatingPeriods.slice(0, index))
                 }
                 hasInvalidDateOrder={
-                  shownErrorIds.size > 0 && period.startDate > period.endDate
+                  period.openingHours.some((openingHour) =>
+                    shownErrorIds.has(openingHour.id),
+                  ) && period.startDate > period.endDate
                 }
                 daysWithTimeConflict={getOverlappingDays(period.openingHours)}
                 eventStartDate={eventStart}
@@ -611,11 +615,11 @@ const CalendarOpeninghoursModal = ({
                   )
                 }
                 hasOverlap={
-                  shownErrorIds.size > 0 &&
+                  shownErrorIds.has(period.id) &&
                   hasPeriodOverlap(period, closingPeriods.slice(0, index))
                 }
                 hasInvalidDateOrder={
-                  shownErrorIds.size > 0 && period.startDate > period.endDate
+                  shownErrorIds.has(period.id) && period.startDate > period.endDate
                 }
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
