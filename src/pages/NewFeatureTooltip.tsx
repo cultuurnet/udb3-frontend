@@ -1,5 +1,3 @@
-import { css } from 'styled-components';
-
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -19,17 +17,7 @@ const Features = {
 
 const QuestionCircleIcon = () => {
   return (
-    <Badge
-      variant={BadgeVariants.SECONDARY}
-      pill
-      css={css`
-        aspect-ratio: 1 / 1;
-
-        &.badge {
-          background-color: ${getValue('backgroundColor')};
-        }
-      `}
-    >
+    <Badge variant={BadgeVariants.SECONDARY} pill>
       <Icon
         name={Icons.QUESTION}
         color="white"
