@@ -256,7 +256,15 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSaveAttempt = () => {
-    if (hasAnyModalErrors(openingHours, deviatingPeriods, eventStart, eventEnd, closingPeriods)) {
+    if (
+      hasAnyModalErrors(
+        openingHours,
+        deviatingPeriods,
+        eventStart,
+        eventEnd,
+        closingPeriods,
+      )
+    ) {
       setShownErrorIds(
         new Set([
           ...openingHours.map((hour) => hour.id),
