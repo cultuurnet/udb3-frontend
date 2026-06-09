@@ -103,12 +103,6 @@ export const hasAnyModalErrors = (
     overlapsWithAnotherPeriod(period, deviatingPeriods),
   );
 
-const hasDeviatingPeriodErrors = (
-  deviatingPeriods: DeviatingPeriodData[],
-  eventStart: Date | undefined,
-  eventEnd: Date | undefined,
-): boolean => hasAnyModalErrors([], deviatingPeriods, eventStart, eventEnd);
-
 const hasClosingPeriodErrors = (
   closingPeriods: PeriodWithDateRange[],
   eventStart: Date | undefined,
@@ -118,34 +112,6 @@ const hasClosingPeriodErrors = (
   closingPeriods.some((closingPeriod) =>
     overlapsWithAnotherPeriod(closingPeriod, closingPeriods),
   );
-
-const hasMainOpeningHoursErrors = (
-  openingHours: OpeningHoursRow[],
-  shownErrorIds: ReadonlySet<string>,
-): boolean => {
-  if (getOverlappingDays(openingHours).length > 0) return true;
-  if (hasChildcareErrors(openingHours)) return true;
-  if (shownErrorIds.size === 0) return false;
-  const flaggedRows = openingHours.filter((hour) => shownErrorIds.has(hour.id));
-  return (
-    hasNoDaySelected(flaggedRows) ||
-    hasInvalidOpeningHours(flaggedRows) ||
-    hasChildcareErrors(flaggedRows)
-  );
-};
-
-export const getErrorSections = (
-  openingHours: OpeningHoursRow[],
-  deviatingPeriods: DeviatingPeriodData[],
-  closingPeriods: PeriodWithDateRange[],
-  shownErrorIds: ReadonlySet<string>,
-  eventStart: Date | undefined,
-  eventEnd: Date | undefined,
-) => ({
-  hours: hasMainOpeningHoursErrors(openingHours, shownErrorIds),
-  deviating: hasDeviatingPeriodErrors(deviatingPeriods, eventStart, eventEnd),
-  closing: hasClosingPeriodErrors(closingPeriods, eventStart, eventEnd),
-});
 
 export const isModalConfirmDisabled = (
   isDeleteConfirm: boolean,

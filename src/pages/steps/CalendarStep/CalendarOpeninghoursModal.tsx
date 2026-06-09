@@ -24,7 +24,6 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
-  getErrorSections,
   getOverlappingDays,
   hasAnyModalErrors,
   isModalConfirmDisabled,
@@ -236,24 +235,6 @@ const CalendarOpeninghoursModal = ({
   const isDeleteConfirm = pendingDelete !== null;
   const daysWithTimeConflict = getOverlappingDays(openingHours);
 
-  const errorSections = getErrorSections(
-    openingHours,
-    deviatingPeriods,
-    closingPeriods,
-    shownErrorIds,
-    eventStart,
-    eventEnd,
-  );
-
-  const errorSectionNames = [
-    errorSections.hours &&
-      t('create.calendar.opening_hours_modal.sections.hours'),
-    errorSections.deviating &&
-      t('create.calendar.opening_hours_modal.sections.deviating'),
-    errorSections.closing &&
-      t('create.calendar.opening_hours_modal.sections.closing'),
-  ].filter(Boolean) as string[];
-
   const modalConfirmDisabled = isModalConfirmDisabled(
     isDeleteConfirm,
     openingHours,
@@ -363,20 +344,10 @@ const CalendarOpeninghoursModal = ({
         alignItems="flex-start"
         display={isDeleteConfirm ? 'none' : undefined}
       >
-        {modalConfirmDisabled && errorSectionNames.length > 0 && (
+        {modalConfirmDisabled && (
           <Alert variant={AlertVariants.DANGER}>
             {t(
-              'create.calendar.opening_hours_modal.validation_messages.section_errors',
-              {
-                sections: [
-                  errorSectionNames.slice(0, -1).join(', '),
-                  errorSectionNames.at(-1),
-                ]
-                  .filter(Boolean)
-                  .join(
-                    ` ${t('create.calendar.opening_hours_modal.sections.and')} `,
-                  ),
-              },
+              'create.calendar.opening_hours_modal.validation_messages.errors',
             )}
           </Alert>
         )}

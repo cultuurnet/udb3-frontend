@@ -243,18 +243,12 @@
             "confirm": "Definitief verwijderen"
           }
         },
-        "sections": {
-          "hours": "uren",
-          "deviating": "afwijkende uren",
-          "closing": "sluitingsdagen",
-          "and": "en"
-        },
         "validation_messages": {
           "day_of_week": {
             "min": "Je moet minstens 1 dag van de week aanduiden."
           },
           "overlapping_days": "De uren op {{days}} overlappen. Zorg dat het tweede tijdslot begint na het einde van het eerste.",
-          "section_errors": "Om je kalenderinformatie te kunnen opslaan, moet je je {{sections}} eerst verder aanvullen."
+          "errors": "Om je kalenderinformatie te kunnen opslaan, moet je je gegevens eerst verder aanvullen."
         }
       }
     },
