@@ -252,7 +252,6 @@
             "min": "Sie müssen mindestens 1 Wochentag angeben."
           },
           "overlapping_days": "Die Zeiten am {{days}} überschneiden sich. Stellen Sie sicher, dass der zweite Zeitslot nach dem Ende des ersten beginnt.",
-          "deviating_errors": "Um Ihre Kalenderinformationen speichern zu können, müssen Sie zunächst Ihre abweichenden Stunden vervollständigen.",
           "section_errors": "Um Ihre Kalenderinformationen speichern zu können, müssen Sie zunächst Ihre {{sections}} vervollständigen."
         }
       }

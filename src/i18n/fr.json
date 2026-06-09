@@ -252,7 +252,6 @@
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
           },
           "overlapping_days": "Les horaires du {{days}} se chevauchent. Assurez-vous que le deuxième créneau commence après la fin du premier.",
-          "deviating_errors": "Pour pouvoir enregistrer vos informations de calendrier, vous devez d'abord compléter vos heures déviantes.",
           "section_errors": "Pour pouvoir enregistrer vos informations de calendrier, vous devez d'abord compléter vos {{sections}}."
         }
       }
