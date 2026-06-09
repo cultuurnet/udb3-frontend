@@ -248,7 +248,7 @@
             "min": "Sie müssen mindestens 1 Wochentag angeben."
           },
           "overlapping_days": "Die Zeiten am {{days}} überschneiden sich. Stellen Sie sicher, dass der zweite Zeitslot nach dem Ende des ersten beginnt.",
-          "errors": "Um Ihre Kalenderinformationen speichern zu können, müssen Sie diese zunächst vervollständigen."
+          "errors": "Es fehlen noch einige Angaben. Füllen Sie die rot markierten Felder aus, um Ihren Kalender zu speichern."
         }
       }
     },

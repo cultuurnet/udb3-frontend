@@ -250,7 +250,7 @@
             "min": "Je moet minstens 1 dag van de week aanduiden."
           },
           "overlapping_days": "De uren op {{days}} overlappen. Zorg dat het tweede tijdslot begint na het einde van het eerste.",
-          "errors": "Om je kalenderinformatie te kunnen opslaan, moet je je gegevens eerst verder aanvullen."
+          "errors": "Er ontbreken nog enkele gegevens. Vul de rood gemarkeerde velden aan om je kalender op te slaan."
         }
       }
     },
