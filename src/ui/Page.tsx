@@ -81,6 +81,8 @@ const Page = ({
 
 const getValueForTitle = getValueFromTheme('pageTitle');
 
+// TODO: when migrating Page to Tailwind, remove Box wrapper and Box props,
+// replace with Tailwind classes on Title's className
 const PageTitle = ({ children, className, ...props }: TitleProps) => (
   <Box paddingY={3} color={getValueForTitle('color')} {...getBoxProps(props)}>
     <Title
