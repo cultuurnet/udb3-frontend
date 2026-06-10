@@ -1,9 +1,12 @@
 import { expect, test } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
+
 test.describe.configure({ mode: 'serial' });
 
 const childcareStartInput = 'input[id$="-childcare-time-span-picker-start"]';
 const childcareEndInput = 'input[id$="-childcare-time-span-picker-end"]';
+const childcare = nl.create.calendar.days.childcare;
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
@@ -48,21 +51,17 @@ test('create an event with calendarType single and childcare hours', async ({
   await page.getByLabel('Einduur').fill(dummyEvent.hours.activityEnd);
 
   // 4. Toggle Kinderopvang — info alert prompts the user to set times
-  await page.getByLabel('Kinderopvang').click();
+  await page.getByLabel(childcare.label).click();
   await expect(
-    page.getByText('Geef het start- en einduur van de kinderopvang in.'),
+    page.getByText(childcare.validation_messages.set_times_required),
   ).toBeVisible();
 
   // Errors must NOT be visible before the user touches the inputs
   await expect(
-    page.getByText(
-      'Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.start_too_late),
   ).toBeHidden();
   await expect(
-    page.getByText(
-      'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
   // 5. Childcare hours
@@ -73,7 +72,7 @@ test('create an event with calendarType single and childcare hours', async ({
 
   // Once both times are set the info alert disappears
   await expect(
-    page.getByText('Geef het start- en einduur van de kinderopvang in.'),
+    page.getByText(childcare.validation_messages.set_times_required),
   ).toBeHidden();
 
   // 6. Address
@@ -187,19 +186,15 @@ test('shows childcare validation errors when times overlap activity hours', asyn
   await page.getByLabel('Einduur').fill('16:00');
 
   // 4. Toggle Kinderopvang — info alert visible, no errors yet
-  await page.getByLabel('Kinderopvang').click();
+  await page.getByLabel(childcare.label).click();
   await expect(
-    page.getByText('Geef het start- en einduur van de kinderopvang in.'),
+    page.getByText(childcare.validation_messages.set_times_required),
   ).toBeVisible();
   await expect(
-    page.getByText(
-      'Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.start_too_late),
   ).toBeHidden();
   await expect(
-    page.getByText(
-      'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
   // 5. Touch the start input with an invalid value — start error appears,
@@ -208,14 +203,10 @@ test('shows childcare validation errors when times overlap activity hours', asyn
   await page.locator(childcareStartInput).fill('11:00');
   await page.locator(childcareStartInput).blur();
   await expect(
-    page.getByText(
-      'Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.start_too_late),
   ).toBeVisible();
   await expect(
-    page.getByText(
-      'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
   // 6. Touch the end input with an invalid value — end error now visible too,
@@ -223,11 +214,9 @@ test('shows childcare validation errors when times overlap activity hours', asyn
   await page.locator(childcareEndInput).fill('15:00');
   await page.locator(childcareEndInput).blur();
   await expect(
-    page.getByText(
-      'Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.',
-    ),
+    page.getByText(childcare.validation_messages.end_too_early),
   ).toBeVisible();
   await expect(
-    page.getByText('Geef het start- en einduur van de kinderopvang in.'),
+    page.getByText(childcare.validation_messages.set_times_required),
   ).toBeHidden();
 });
