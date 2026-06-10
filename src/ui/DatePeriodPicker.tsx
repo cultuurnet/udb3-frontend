@@ -136,6 +136,8 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
   ];
 };
 
+type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
+
 type Props = InlineProps & {
   id: string;
   dateStart: Date;
@@ -149,9 +151,7 @@ type Props = InlineProps & {
   showQuickLinks?: boolean;
   apiHolidays?: ApiHoliday[];
   fetchHolidays?: (startDate: string, endDate: string) => Promise<ApiHoliday[]>;
-  onQuickLinkClick?: (
-    periods: { startDate: Date; endDate: Date; name: string }[],
-  ) => void;
+  onQuickLinkClick?: (periods: QuickLinkPeriod[]) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
 };
 
@@ -393,3 +393,4 @@ const DatePeriodPicker = ({
 };
 
 export { DatePeriodPicker };
+export type { QuickLinkPeriod };
