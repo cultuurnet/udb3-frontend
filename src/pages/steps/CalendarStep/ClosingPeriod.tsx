@@ -1,4 +1,6 @@
+import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFetchHolidays } from '@/hooks/api/holidays';
@@ -48,6 +50,7 @@ const ClosingPeriod = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const [quickLinkRangeError, setQuickLinkRangeError] = useState(false);
 
   return (
     <Stack
@@ -85,16 +88,33 @@ const ClosingPeriod = ({
             id={`closing-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
-            onDateStartChange={(date) =>
-              onChange({ ...period, startDate: date })
-            }
-            onDateEndChange={(date) => onChange({ ...period, endDate: date })}
+            onDateStartChange={(date) => {
+              setQuickLinkRangeError(false);
+              onChange({ ...period, startDate: date });
+            }}
+            onDateEndChange={(date) => {
+              setQuickLinkRangeError(false);
+              onChange({ ...period, endDate: date });
+            }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
+              const quickLinksWithinEventRange = periods.filter(
+                (quickLink) =>
+                  (!eventStartDate ||
+                    startOfDay(quickLink.startDate) >=
+                      startOfDay(eventStartDate)) &&
+                  (!eventEndDate ||
+                    startOfDay(quickLink.endDate) <= startOfDay(eventEndDate)),
+              );
+              if (quickLinksWithinEventRange.length === 0) {
+                setQuickLinkRangeError(true);
+                return;
+              }
+              setQuickLinkRangeError(false);
               onQuickLinkExpand(
-                periods.map((p) => ({
+                quickLinksWithinEventRange.map((p) => ({
                   id: uniqueId('closing-period-'),
                   startDate: p.startDate,
                   endDate: p.endDate,
@@ -139,6 +159,13 @@ const ClosingPeriod = ({
           <Text color="red">
             {t(
               'create.calendar.opening_hours_modal.closing.errors.end_after_event',
+            )}
+          </Text>
+        )}
+        {quickLinkRangeError && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.closing.errors.quick_link_out_of_range',
             )}
           </Text>
         )}

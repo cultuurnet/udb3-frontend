@@ -216,7 +216,8 @@
             "overlap": "Abweichende Perioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
             "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Periode mit abweichenden Stunden kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Abweichende Periode löschen",
@@ -235,7 +236,8 @@
             "overlap": "Schließperioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
             "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Schließperiode kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Schließperiode löschen",

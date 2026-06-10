@@ -1,4 +1,4 @@
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -89,6 +89,7 @@ const DeviatingPeriod = ({
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
     {},
   );
+  const [quickLinkRangeError, setQuickLinkRangeError] = useState(false);
 
   const markTouched = (key: string) =>
     setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
@@ -207,16 +208,32 @@ const DeviatingPeriod = ({
             id={`deviating-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
-            onDateStartChange={(date) =>
-              onChange({ ...period, startDate: date })
-            }
-            onDateEndChange={(date) => onChange({ ...period, endDate: date })}
+            onDateStartChange={(date) => {
+              setQuickLinkRangeError(false);
+              onChange({ ...period, startDate: date });
+            }}
+            onDateEndChange={(date) => {
+              setQuickLinkRangeError(false);
+              onChange({ ...period, endDate: date });
+            }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
+              const quickLinksWithinEventRange = periods.filter(
+                (p) =>
+                  (!eventStartDate ||
+                    startOfDay(p.startDate) >= startOfDay(eventStartDate)) &&
+                  (!eventEndDate ||
+                    startOfDay(p.endDate) <= startOfDay(eventEndDate)),
+              );
+              if (quickLinksWithinEventRange.length === 0) {
+                setQuickLinkRangeError(true);
+                return;
+              }
+              setQuickLinkRangeError(false);
               onQuickLinkExpand(
-                periods.map((p) => {
+                quickLinksWithinEventRange.map((p) => {
                   const isSingleDay = isSameDay(p.startDate, p.endDate);
                   const dayOfWeek = isSingleDay
                     ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
@@ -273,6 +290,13 @@ const DeviatingPeriod = ({
           <Text color="red">
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+            )}
+          </Text>
+        )}
+        {quickLinkRangeError && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
             )}
           </Text>
         )}
