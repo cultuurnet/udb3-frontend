@@ -1,7 +1,7 @@
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
-import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -46,6 +46,7 @@ const ClosingPeriod = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   return (
     <Stack
@@ -89,6 +90,8 @@ const ClosingPeriod = ({
             onDateEndChange={(date) => onChange({ ...period, endDate: date })}
             showQuickLinks
             fetchHolidays={fetchHolidays}
+            apiHolidays={apiHolidays}
+            onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
               onQuickLinkExpand(
