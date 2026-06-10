@@ -1,9 +1,8 @@
-import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -50,7 +49,8 @@ const ClosingPeriod = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
-  const [quickLinkRangeError, setQuickLinkRangeError] = useState(false);
+  const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
+    useQuickLinkRangeFilter(eventStartDate, eventEndDate);
 
   return (
     <Stack
@@ -89,32 +89,21 @@ const ClosingPeriod = ({
             dateStart={period.startDate}
             dateEnd={period.endDate}
             onDateStartChange={(date) => {
-              setQuickLinkRangeError(false);
+              clearQuickLinkRangeError();
               onChange({ ...period, startDate: date });
             }}
             onDateEndChange={(date) => {
-              setQuickLinkRangeError(false);
+              clearQuickLinkRangeError();
               onChange({ ...period, endDate: date });
             }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
-              const quickLinksWithinEventRange = periods.filter(
-                (quickLink) =>
-                  (!eventStartDate ||
-                    startOfDay(quickLink.startDate) >=
-                      startOfDay(eventStartDate)) &&
-                  (!eventEndDate ||
-                    startOfDay(quickLink.endDate) <= startOfDay(eventEndDate)),
-              );
-              if (quickLinksWithinEventRange.length === 0) {
-                setQuickLinkRangeError(true);
-                return;
-              }
-              setQuickLinkRangeError(false);
+              const filtered = filterByEventRange(periods);
+              if (filtered.length === 0) return;
               onQuickLinkExpand(
-                quickLinksWithinEventRange.map((p) => ({
+                filtered.map((p) => ({
                   id: uniqueId('closing-period-'),
                   startDate: p.startDate,
                   endDate: p.endDate,

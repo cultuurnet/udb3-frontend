@@ -1,10 +1,11 @@
-import { format, isSameDay, startOfDay } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
@@ -76,6 +77,8 @@ const DeviatingPeriod = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
+    useQuickLinkRangeFilter(eventStartDate, eventEndDate);
   const [childcareEnabledMap, setChildcareEnabledMap] = useState<
     Record<string, boolean>
   >(() =>
@@ -89,8 +92,6 @@ const DeviatingPeriod = ({
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
     {},
   );
-  const [quickLinkRangeError, setQuickLinkRangeError] = useState(false);
-
   const markTouched = (key: string) =>
     setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
 
@@ -209,31 +210,21 @@ const DeviatingPeriod = ({
             dateStart={period.startDate}
             dateEnd={period.endDate}
             onDateStartChange={(date) => {
-              setQuickLinkRangeError(false);
+              clearQuickLinkRangeError();
               onChange({ ...period, startDate: date });
             }}
             onDateEndChange={(date) => {
-              setQuickLinkRangeError(false);
+              clearQuickLinkRangeError();
               onChange({ ...period, endDate: date });
             }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
-              const quickLinksWithinEventRange = periods.filter(
-                (p) =>
-                  (!eventStartDate ||
-                    startOfDay(p.startDate) >= startOfDay(eventStartDate)) &&
-                  (!eventEndDate ||
-                    startOfDay(p.endDate) <= startOfDay(eventEndDate)),
-              );
-              if (quickLinksWithinEventRange.length === 0) {
-                setQuickLinkRangeError(true);
-                return;
-              }
-              setQuickLinkRangeError(false);
+              const filtered = filterByEventRange(periods);
+              if (filtered.length === 0) return;
               onQuickLinkExpand(
-                quickLinksWithinEventRange.map((p) => {
+                filtered.map((p) => {
                   const isSingleDay = isSameDay(p.startDate, p.endDate);
                   const dayOfWeek = isSingleDay
                     ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
