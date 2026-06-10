@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
-import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
@@ -70,6 +70,7 @@ const DeviatingPeriod = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
   const [childcareEnabledMap, setChildcareEnabledMap] = useState<
     Record<string, boolean>
   >(() =>
@@ -207,6 +208,8 @@ const DeviatingPeriod = ({
             onDateEndChange={(date) => onChange({ ...period, endDate: date })}
             showQuickLinks
             fetchHolidays={fetchHolidays}
+            apiHolidays={apiHolidays}
+            onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
               onQuickLinkExpand(
