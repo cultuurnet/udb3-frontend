@@ -64,16 +64,34 @@ test('create an event with calendarType single and childcare hours', async ({
     page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
-  // 5. Childcare hours
+  // 5. Childcare hours — alert disappears as soon as one time is set
   await expect(page.locator(childcareStartInput)).toBeVisible();
+
+  await test.step('hides alert when only the start time is set', async () => {
+    await page
+      .locator(childcareStartInput)
+      .fill(dummyEvent.hours.childcareStart);
+    await page.locator(childcareStartInput).blur();
+    await expect(
+      page.getByText(childcare.validation_messages.set_times_required),
+    ).toBeHidden();
+    await page.locator(childcareStartInput).fill('');
+    await page.locator(childcareStartInput).blur();
+  });
+
+  await test.step('hides alert when only the end time is set', async () => {
+    await page.locator(childcareEndInput).fill(dummyEvent.hours.childcareEnd);
+    await page.locator(childcareEndInput).blur();
+    await expect(
+      page.getByText(childcare.validation_messages.set_times_required),
+    ).toBeHidden();
+    await page.locator(childcareEndInput).fill('');
+    await page.locator(childcareEndInput).blur();
+  });
+
   await page.locator(childcareStartInput).fill(dummyEvent.hours.childcareStart);
   await page.locator(childcareEndInput).fill(dummyEvent.hours.childcareEnd);
   await page.locator(childcareEndInput).blur();
-
-  // Once both times are set the info alert disappears
-  await expect(
-    page.getByText(childcare.validation_messages.set_times_required),
-  ).toBeHidden();
 
   // 6. Address
   await page.getByLabel('Gemeente').click();
