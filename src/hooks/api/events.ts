@@ -684,7 +684,7 @@ const changeStatusSubEvents = async ({
   bookingAvailability,
 }) =>
   fetchFromApi({
-    path: `/events/${eventId.toString()}/subEvents`,
+    path: `/events/${eventId.toString()}/sub-events`,
     options: {
       method: 'PATCH',
       headers,
@@ -745,7 +745,7 @@ const changeSubEventReservation = async ({
   bookingAvailability,
 }) =>
   fetchFromApi({
-    path: `/events/${eventId}/subEvents`,
+    path: `/events/${eventId}/sub-events`,
     options: {
       method: 'PATCH',
       headers,
