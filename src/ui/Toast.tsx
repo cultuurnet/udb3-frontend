@@ -5,8 +5,7 @@ import { css } from 'styled-components';
 import type { Values } from '@/types/Values';
 import { Icon, Icons } from '@/ui/Icon';
 
-import { parseSpacing } from './Box';
-import { Paragraph } from './Paragraph';
+import { Box, parseSpacing } from './Box';
 import { getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const ToastVariants = {
@@ -103,7 +102,7 @@ const Toast = ({
       show={visible}
       onClose={onClose}
     >
-      <Paragraph
+      <Box
         as={BootstrapToast.Body}
         backgroundColor="transparent"
         color={getValue('textColor.dark')}
@@ -114,7 +113,7 @@ const Toast = ({
           {body}
         </span>
         {onClose && <Icon name={Icons.TIMES} onClick={onClose} width={10} />}
-      </Paragraph>
+      </Box>
     </BootstrapToast>
   );
 };
