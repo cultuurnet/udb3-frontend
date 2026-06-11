@@ -38,7 +38,7 @@ const Title = ({
   return isShadcnMigrationEnabled ? (
     <Tag
       className={cn(
-        sizeClasses[size] ?? sizeClasses[3],
+        sizeClasses[size],
         variant === TitleVariants.UNDERLINED && 'tw:border-b tw:border-border',
         className,
       )}
