@@ -372,6 +372,7 @@ const Preview = () => {
         <AgePreview
           typicalAgeRange={typicalAgeRange}
           audienceType={audience?.audienceType}
+          birthdateRange={offer.birthdateRange}
         />
       ),
     },

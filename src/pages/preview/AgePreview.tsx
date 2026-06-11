@@ -1,7 +1,9 @@
-import { useTranslation } from 'react-i18next';
+import { format, parse } from 'date-fns';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { BirthdateRange } from '@/types/Offer';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
@@ -21,6 +23,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 type Props = {
   typicalAgeRange: string;
   audienceType?: AudienceType;
+  birthdateRange?: BirthdateRange;
 };
 
 const ChildrenOnlyLabel = () => {
@@ -34,7 +37,11 @@ const ChildrenOnlyLabel = () => {
   );
 };
 
-const AgePreview = ({ typicalAgeRange, audienceType }: Props) => {
+const AgePreview = ({
+  typicalAgeRange,
+  audienceType,
+  birthdateRange,
+}: Props) => {
   const { t } = useTranslation();
 
   const hasAgeInfo = typicalAgeRange;
@@ -54,9 +61,25 @@ const AgePreview = ({ typicalAgeRange, audienceType }: Props) => {
     ? AgeRanges[ageRangeLabelKey].label
     : formatCustomAgeRange(typicalAgeRange);
 
+  const formattedFrom = birthdateRange?.from
+    ? format(parse(birthdateRange.from, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy')
+    : null;
+  const formattedTo = birthdateRange?.to
+    ? format(parse(birthdateRange.to, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy')
+    : null;
+
   return (
     <Stack spacing={2}>
       <Text>{t('preview.ages', { ages: ageText })}</Text>
+      {formattedFrom && formattedTo && (
+        <Text>
+          <Trans
+            i18nKey="preview.birth_years"
+            values={{ from: formattedFrom, to: formattedTo }}
+            components={{ bold: <strong /> }}
+          />
+        </Text>
+      )}
       {audienceType === AudienceTypes.CHILDREN_ONLY && <ChildrenOnlyLabel />}
     </Stack>
   );
