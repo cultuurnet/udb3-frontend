@@ -47,16 +47,20 @@ const OpeningHourRow = ({
         <Stack spacing={1} minWidth="10rem">
           {childcare && (
             <>
-              <Text fontStyle="italic">
-                {t('create.calendar.fixed_days.overview.childcare_before', {
-                  start: childcare.start,
-                })}
-              </Text>
-              <Text fontStyle="italic">
-                {t('create.calendar.fixed_days.overview.childcare_after', {
-                  end: childcare.end,
-                })}
-              </Text>
+              {childcare.start && (
+                <Text fontStyle="italic">
+                  {t('create.calendar.fixed_days.overview.childcare_before', {
+                    start: childcare.start,
+                  })}
+                </Text>
+              )}
+              {childcare.end && (
+                <Text fontStyle="italic">
+                  {t('create.calendar.fixed_days.overview.childcare_after', {
+                    end: childcare.end,
+                  })}
+                </Text>
+              )}
             </>
           )}
         </Stack>
@@ -192,10 +196,14 @@ const OpeningHoursContent = ({
           openingHours={openingHours.map((openingHour) => ({
             ...openingHour,
             childcare:
-              openingHour.childcareStartTime && openingHour.childcareEndTime
+              openingHour.childcareStartTime || openingHour.childcareEndTime
                 ? {
-                    start: openingHour.childcareStartTime,
-                    end: openingHour.childcareEndTime,
+                    ...(openingHour.childcareStartTime && {
+                      start: openingHour.childcareStartTime,
+                    }),
+                    ...(openingHour.childcareEndTime && {
+                      end: openingHour.childcareEndTime,
+                    }),
                   }
                 : undefined,
           }))}

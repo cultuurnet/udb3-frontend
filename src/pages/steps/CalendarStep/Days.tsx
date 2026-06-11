@@ -132,7 +132,8 @@ export const Days = ({
 
         const childcareTimesMissing =
           day.childcareEnabled &&
-          (!day.childcareStartTime || !day.childcareEndTime);
+          !day.childcareStartTime &&
+          !day.childcareEndTime;
 
         const childcareStartError =
           day.childcareEnabled &&
