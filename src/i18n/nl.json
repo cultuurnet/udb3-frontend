@@ -1981,6 +1981,7 @@
     "info_lesson_series": "Je lessenreeks verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan het eerste lesmoment.",
     "info_holiday_camp": "Je kamp of vakantie verschijnt op UiTinVlaanderen en in de andere UiTagenda's tot aan de startdag.",
     "ages": "Leeftijden: {{ages}}",
+    "birth_years": "Geboren tussen <bold>{{from}}</bold> en <bold>{{to}}</bold>",
     "children_only": "Voor kinderen alleen",
     "accessibility": {
       "description": "Er is vervoer voorzien dat kinderen tot bij jouw activiteit brengt vanuit:"

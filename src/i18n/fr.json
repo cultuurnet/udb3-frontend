@@ -1923,6 +1923,7 @@
     "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
+    "birth_years": "Né(e) entre <bold>{{from}}</bold> et <bold>{{to}}</bold>",
     "children_only": "Pour les enfants uniquement",
     "accessibility": {
       "description": "Un transport est prévu pour amener les enfants à votre activité depuis:"
