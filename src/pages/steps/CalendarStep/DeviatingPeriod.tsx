@@ -352,6 +352,7 @@ const DeviatingPeriod = ({
                         <Label
                           variant={LabelVariants.BOLD}
                           htmlFor={`deviating-childcare-toggle-${openingHour.id}`}
+                          color={!childcareEnabled ? colors.grey5 : undefined}
                         >
                           {t('create.calendar.days.childcare.label')}
                         </Label>

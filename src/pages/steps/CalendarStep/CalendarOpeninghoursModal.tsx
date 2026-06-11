@@ -411,6 +411,7 @@ const CalendarOpeninghoursModal = ({
                       <Label
                         variant={LabelVariants.BOLD}
                         htmlFor={`openinghours-childcare-toggle-${openingHour.id}`}
+                        color={!childcareEnabled ? colors.grey5 : undefined}
                       >
                         {t('create.calendar.days.childcare.label')}
                       </Label>
