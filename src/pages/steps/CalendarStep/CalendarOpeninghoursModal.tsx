@@ -28,8 +28,8 @@ import {
   getOverlappingDays,
   hasPeriodOverlap,
   isOpeningHoursConfirmDisabled,
-  type OpeningHoursFormData,
-  type OpeningHoursRow,
+  type RegularHoursFormData,
+  type RegularHoursRow,
 } from '../../../utils/validateOpeningHours';
 import {
   CalendarState,
@@ -77,7 +77,7 @@ const CalendarOpeninghoursModal = ({
   );
   const eventEndDate = useCalendarSelector((state) => state.context.endDate);
 
-  const initialOpeningHours: OpeningHoursRow[] =
+  const initialOpeningHours: RegularHoursRow[] =
     savedOpeningHours.length === 0
       ? [
           {
@@ -97,7 +97,7 @@ const CalendarOpeninghoursModal = ({
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
 
-  const { control, getValues } = useForm<OpeningHoursFormData>({
+  const { control, getValues } = useForm<RegularHoursFormData>({
     defaultValues: { openingHours: initialOpeningHours },
   });
 

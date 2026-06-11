@@ -5,7 +5,7 @@ import { DayOfWeek } from '@/types/Offer';
 
 import { type DeviatingPeriodData } from '../pages/steps/CalendarStep/DeviatingPeriod';
 
-export type OpeningHoursRow = {
+export type RegularHoursRow = {
   id: string;
   opens: string;
   closes: string;
@@ -15,19 +15,19 @@ export type OpeningHoursRow = {
   childcareEndTime: string;
 };
 
-export type OpeningHoursFormData = {
-  openingHours: OpeningHoursRow[];
+export type RegularHoursFormData = {
+  openingHours: RegularHoursRow[];
 };
 
 const hasNoDaySelected = (openingHours: { dayOfWeek: unknown[] }[]): boolean =>
   openingHours.some((hour) => hour.dayOfWeek.length === 0);
 
-const hasInvalidTimeRange = (openingHours: OpeningHoursRow[]): boolean =>
+const hasInvalidTimeRange = (openingHours: RegularHoursRow[]): boolean =>
   openingHours.some(
     (hour) => !!hour.opens && !!hour.closes && hour.closes < hour.opens,
   );
 
-const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
+const hasChildcareErrors = (openingHours: RegularHoursRow[]): boolean =>
   openingHours.some((hour) => {
     if (!hour.childcareEnabled) return false;
     const timesMissing = !hour.childcareStartTime || !hour.childcareEndTime;
@@ -39,7 +39,7 @@ const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
   });
 
 const hasChildcareTimeComparisonErrors = (
-  regularHours: OpeningHoursRow[],
+  regularHours: RegularHoursRow[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
   regularHours.some((hour) => {
@@ -59,7 +59,7 @@ const hasChildcareTimeComparisonErrors = (
     }),
   );
 
-const hasRegularHourErrors = (regularHours: OpeningHoursRow[]): boolean =>
+const hasRegularHourErrors = (regularHours: RegularHoursRow[]): boolean =>
   hasNoDaySelected(regularHours) ||
   hasInvalidTimeRange(regularHours) ||
   hasChildcareErrors(regularHours);
@@ -97,12 +97,12 @@ const hasPeriodDateError = (
   );
 
 export const getOverlappingDays = (
-  openingHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
+  openingHours: Pick<RegularHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
 ): DayOfWeek[] => {
   const getOpeningHoursForDay = (day: DayOfWeek) =>
     openingHours.filter((row) => row.dayOfWeek.includes(day));
 
-  const hasTimeConflict = (rows: Pick<OpeningHoursRow, 'opens' | 'closes'>[]) =>
+  const hasTimeConflict = (rows: Pick<RegularHoursRow, 'opens' | 'closes'>[]) =>
     rows.some((row, index) =>
       rows
         .slice(index + 1)
@@ -115,7 +115,7 @@ export const getOverlappingDays = (
 };
 
 const hasOverlappingTimeSlots = (
-  regularHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
+  regularHours: Pick<RegularHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
   getOverlappingDays(regularHours).length > 0 ||
@@ -124,7 +124,7 @@ const hasOverlappingTimeSlots = (
   );
 
 type OpeningHoursParams = {
-  regularHours: OpeningHoursRow[];
+  regularHours: RegularHoursRow[];
   deviatingPeriods: DeviatingPeriodData[];
   eventStart: Date | undefined;
   eventEnd: Date | undefined;

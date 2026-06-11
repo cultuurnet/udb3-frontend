@@ -4,10 +4,10 @@ import {
   getOpeningHoursErrorIds,
   getOverlappingDays,
   isOpeningHoursConfirmDisabled,
-  type OpeningHoursRow,
+  type RegularHoursRow,
 } from './validateOpeningHours';
 
-const makeRow = (partial: Partial<OpeningHoursRow> = {}): OpeningHoursRow => ({
+const makeRow = (partial: Partial<RegularHoursRow> = {}): RegularHoursRow => ({
   id: 'row-1',
   opens: '09:00',
   closes: '17:00',
@@ -126,7 +126,7 @@ describe('getOverlappingDays', () => {
 
 describe('getOpeningHoursErrorIds', () => {
   const check = (
-    rows: OpeningHoursRow[],
+    rows: RegularHoursRow[],
     periods: DeviatingPeriodData[] = [],
     closingPeriods: ReturnType<typeof makeClosingPeriod>[] = [],
     eventStart?: Date,
@@ -245,7 +245,7 @@ describe('getOpeningHoursErrorIds', () => {
 
 describe('isOpeningHoursConfirmDisabled', () => {
   const check = (
-    rows: OpeningHoursRow[],
+    rows: RegularHoursRow[],
     shownErrorIds: ReadonlySet<string>,
     { isDelete = false } = {},
   ) =>
