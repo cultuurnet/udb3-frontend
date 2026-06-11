@@ -214,8 +214,10 @@
           "description_placeholder": "Beschreibung",
           "errors": {
             "overlap": "Abweichende Perioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Periode mit abweichenden Stunden kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Abweichende Periode löschen",
@@ -232,8 +234,10 @@
           "description_placeholder": "Beschreibung",
           "errors": {
             "overlap": "Schließperioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Schließperiode kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Schließperiode löschen",
@@ -244,7 +248,9 @@
         "validation_messages": {
           "day_of_week": {
             "min": "Sie müssen mindestens 1 Wochentag angeben."
-          }
+          },
+          "overlapping_days": "Die Zeiten am {{days}} überschneiden sich. Stellen Sie sicher, dass der zweite Zeitslot nach dem Ende des ersten beginnt.",
+          "errors": "Es fehlen noch einige Angaben. Füllen Sie die rot markierten Felder aus, um Ihren Kalender zu speichern."
         }
       }
     },
