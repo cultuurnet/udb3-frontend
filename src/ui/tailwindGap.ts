@@ -1,6 +1,7 @@
-// Gap classes mirror Box's parseSpacing scale (2^n / 15 rem) so the Tailwind
-// flex+gap version stays pixel-equivalent to the legacy margin spacing.
-// The strings must stay static literals so Tailwind can extract them.
+// Pixel-equivalent to the legacy Box spacing scale (2^n / 15 rem) to avoid
+// visual regressions in Lost Pixel during migration. Once legacy is fully
+// dropped these should be standardized to Tailwind's default gap scale.
+// Strings must stay static literals so Tailwind can extract them.
 const GAP_CLASS_BY_SPACING: Record<number, string> = {
   0: 'tw:gap-0',
   1: 'tw:gap-[0.1333rem]',

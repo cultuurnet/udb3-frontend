@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-import { Box, BoxProps, boxPropTypes, UIProp } from './Box';
+import { Box, BoxProps, boxPropTypes, getBoxProps, UIProp } from './Box';
 import { InlineLegacy } from './InlineLegacy';
 import { cn } from './shadcn/utils';
 import { getGapClass } from './tailwindGap';
@@ -26,7 +26,7 @@ const InlineShadcn = forwardRef<HTMLElement, Props>(
         getGapClass(spacing as number | undefined),
         className,
       )}
-      {...props}
+      {...getBoxProps(props)}
     >
       {children}
     </Box>
