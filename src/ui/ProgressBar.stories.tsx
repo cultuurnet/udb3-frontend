@@ -5,14 +5,19 @@ import { ProgressBar, ProgressBarVariants } from './ProgressBar';
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
   component: ProgressBar,
-
   argTypes: {
     progress: {
-      control: { type: 'number' },
+      control: { type: 'range', min: 0, max: 100 },
     },
     variant: {
       control: { type: 'select' },
       options: Object.values(ProgressBarVariants),
+    },
+    label: {
+      control: { type: 'text' },
+    },
+    showPercentage: {
+      control: { type: 'boolean' },
     },
   },
 };
@@ -27,16 +32,16 @@ export const Info: Story = {
   },
 };
 
-export const Danger: Story = {
+export const Success: Story = {
   args: {
-    variant: ProgressBarVariants.DANGER,
+    variant: ProgressBarVariants.SUCCESS,
     progress: 50,
   },
 };
 
-export const Success: Story = {
+export const Danger: Story = {
   args: {
-    variant: ProgressBarVariants.SUCCESS,
+    variant: ProgressBarVariants.DANGER,
     progress: 50,
   },
 };
@@ -45,5 +50,15 @@ export const Warning: Story = {
   args: {
     variant: ProgressBarVariants.WARNING,
     progress: 50,
+  },
+};
+
+export const WithLabelAndPercentage: Story = {
+  name: 'With Label and Percentage (shadcn)',
+  args: {
+    variant: ProgressBarVariants.SUCCESS,
+    progress: 66,
+    label: 'Upload progress',
+    showPercentage: true,
   },
 };
