@@ -737,6 +737,35 @@ const useChangeStatusSubEventsMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const changeSubEventReservation = async ({
+  headers,
+  eventId,
+  subEventId,
+  bookingInfo,
+  bookingAvailability,
+}) =>
+  fetchFromApi({
+    path: `/events/${eventId}/subEvents`,
+    options: {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify([
+        {
+          id: subEventId,
+          ...(bookingInfo && { bookingInfo }),
+          ...(bookingAvailability && { bookingAvailability }),
+        },
+      ]),
+    },
+  });
+
+const useChangeSubEventReservationMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeSubEventReservation,
+    mutationKey: 'events-change-subevent-reservation',
+    ...configuration,
+  });
+
 const publish = async ({ headers, id, publicationDate }) =>
   fetchFromApi({
     path: `/events/${id}`,
@@ -909,6 +938,7 @@ export {
   useChangeOnlineUrlMutation,
   useChangeStatusMutation,
   useChangeStatusSubEventsMutation,
+  useChangeSubEventReservationMutation,
   useDeleteEventByIdMutation,
   useDeleteOnlineUrlMutation,
   useDuplicateEventMutation,
