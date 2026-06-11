@@ -78,15 +78,13 @@ type FooterLinkProps = {
 const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
   <Link
     {...props}
-    css={`
-      text-decoration: underline;
-      color: ${footerVariant === FooterVariants.LOGIN
-        ? getValueForPage('footer.linkColor')
-        : '#005c7c'};
-      &:hover {
-        color: #222;
-      }
-    `}
+    className="tw:underline tw:hover:text-udb-text"
+    style={{
+      color:
+        footerVariant === FooterVariants.LOGIN
+          ? getValueForPage('footer.linkColor')
+          : colors.udbMainDarkestBlue,
+    }}
   />
 );
 
