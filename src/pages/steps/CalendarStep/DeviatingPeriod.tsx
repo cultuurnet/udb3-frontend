@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
-import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
@@ -79,6 +79,7 @@ const DeviatingPeriod = ({
   const fetchHolidays = useFetchHolidays();
   const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
     useQuickLinkRangeFilter(eventStartDate, eventEndDate);
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
   const [childcareEnabledMap, setChildcareEnabledMap] = useState<
     Record<string, boolean>
   >(() =>
@@ -219,6 +220,8 @@ const DeviatingPeriod = ({
             }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
+            apiHolidays={apiHolidays}
+            onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
               const filtered = filterByEventRange(periods);

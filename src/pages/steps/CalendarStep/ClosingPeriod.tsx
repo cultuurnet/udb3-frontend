@@ -1,7 +1,7 @@
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
-import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
@@ -51,6 +51,7 @@ const ClosingPeriod = ({
   const fetchHolidays = useFetchHolidays();
   const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
     useQuickLinkRangeFilter(eventStartDate, eventEndDate);
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   return (
     <Stack
@@ -98,6 +99,8 @@ const ClosingPeriod = ({
             }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
+            apiHolidays={apiHolidays}
+            onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
               const filtered = filterByEventRange(periods);
