@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { Children } from 'react';
 
-import { getBoxProps } from './Box';
+import { cn } from '@/ui/shadcn/utils';
+
+import { Box, getBoxProps } from './Box';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import type { StackProps } from './Stack';
@@ -79,17 +81,18 @@ const Page = ({
 
 const getValueForTitle = getValueFromTheme('pageTitle');
 
+// TODO: when migrating Page to Tailwind, remove Box wrapper and Box props,
+// replace with Tailwind classes on Title's className
 const PageTitle = ({ children, className, ...props }: TitleProps) => (
-  <Title
-    size={1}
-    className={className}
-    color={getValueForTitle('color')}
-    lineHeight="235%"
-    paddingY={3}
-    {...getBoxProps(props)}
-  >
-    {children}
-  </Title>
+  <Box paddingY={3} color={getValueForTitle('color')} {...getBoxProps(props)}>
+    <Title
+      size={1}
+      lineHeight="235%"
+      className={cn('tw:leading-[235%]', className)}
+    >
+      {children}
+    </Title>
+  </Box>
 );
 
 type PageActionsProps = InlineProps;

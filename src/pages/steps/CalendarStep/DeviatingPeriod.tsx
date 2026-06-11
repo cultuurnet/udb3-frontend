@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
-import { useFetchHolidays } from '@/hooks/api/holidays';
+import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
@@ -32,7 +33,7 @@ type OpeningHour = {
   opens: string;
   closes: string;
   dayOfWeek: DayOfWeek[];
-  childcare?: { start: string; end: string };
+  childcare?: { start?: string; end?: string };
 };
 
 type DeviatingPeriodData = {
@@ -53,6 +54,9 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasOverlap?: boolean;
+  hasInvalidDateOrder?: boolean;
+  daysWithTimeConflict?: DayOfWeek[];
+  shownErrorIds?: ReadonlySet<string>;
 };
 
 const DeviatingPeriod = ({
@@ -65,11 +69,17 @@ const DeviatingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasOverlap = false,
+  hasInvalidDateOrder = false,
+  daysWithTimeConflict = [],
+  shownErrorIds = new Set(),
   ...boxProps
 }: Props) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
+    useQuickLinkRangeFilter(eventStartDate, eventEndDate);
+  const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
   const [childcareEnabledMap, setChildcareEnabledMap] = useState<
     Record<string, boolean>
   >(() =>
@@ -83,7 +93,6 @@ const DeviatingPeriod = ({
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
     {},
   );
-
   const markTouched = (key: string) =>
     setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
 
@@ -145,7 +154,8 @@ const DeviatingPeriod = ({
     return {
       timesMissing:
         childcareEnabled &&
-        (!openingHour.childcare?.start || !openingHour.childcare?.end),
+        !openingHour.childcare?.start &&
+        !openingHour.childcare?.end,
       startError:
         childcareEnabled &&
         startTouched &&
@@ -201,16 +211,24 @@ const DeviatingPeriod = ({
             id={`deviating-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
-            onDateStartChange={(date) =>
-              onChange({ ...period, startDate: date })
-            }
-            onDateEndChange={(date) => onChange({ ...period, endDate: date })}
+            onDateStartChange={(date) => {
+              clearQuickLinkRangeError();
+              onChange({ ...period, startDate: date });
+            }}
+            onDateEndChange={(date) => {
+              clearQuickLinkRangeError();
+              onChange({ ...period, endDate: date });
+            }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
+            apiHolidays={apiHolidays}
+            onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
+              const filtered = filterByEventRange(periods);
+              if (filtered.length === 0) return;
               onQuickLinkExpand(
-                periods.map((p) => {
+                filtered.map((p) => {
                   const isSingleDay = isSameDay(p.startDate, p.endDate);
                   const dayOfWeek = isSingleDay
                     ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
@@ -249,6 +267,13 @@ const DeviatingPeriod = ({
             {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
           </Text>
         )}
+        {hasInvalidDateOrder && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
+            )}
+          </Text>
+        )}
         {eventStartDate && period.startDate < eventStartDate && (
           <Text color="red">
             {t(
@@ -260,6 +285,13 @@ const DeviatingPeriod = ({
           <Text color="red">
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+            )}
+          </Text>
+        )}
+        {quickLinkRangeError && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
             )}
           </Text>
         )}
@@ -289,7 +321,7 @@ const DeviatingPeriod = ({
                       id={`deviating-day-of-week-${openingHour.id}`}
                       options={Object.values(DaysOfWeek).map((day) => ({
                         value: day,
-                        label: t(`create.calendar.days.full.${day}`),
+                        label: t(`create.calendar.days.short.${day}`),
                       }))}
                       selectedValues={openingHour.dayOfWeek}
                       placeholder={t(
@@ -297,6 +329,11 @@ const DeviatingPeriod = ({
                       )}
                       onChange={(newDays) =>
                         handleToggleDaysOfWeek(newDays, openingHour.id)
+                      }
+                      width="15rem"
+                      hasError={
+                        shownErrorIds.has(openingHour.id) &&
+                        openingHour.dayOfWeek.length === 0
                       }
                     />
                   </Stack>
@@ -392,6 +429,14 @@ const DeviatingPeriod = ({
                     />
                   )}
                 </Inline>
+                {shownErrorIds.has(openingHour.id) &&
+                  openingHour.dayOfWeek.length === 0 && (
+                    <Text color="red">
+                      {t(
+                        'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
+                      )}
+                    </Text>
+                  )}
                 {timesMissing && (
                   <Alert
                     css={`
@@ -408,6 +453,18 @@ const DeviatingPeriod = ({
               </Stack>
             );
           })}
+          {daysWithTimeConflict.length > 0 && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
+                {
+                  days: daysWithTimeConflict
+                    .map((day) => t(`create.calendar.days.full.${day}`))
+                    .join(', '),
+                },
+              )}
+            </Text>
+          )}
           <Button
             iconName={Icons.PLUS}
             variant={ButtonVariants.OUTLINED}
