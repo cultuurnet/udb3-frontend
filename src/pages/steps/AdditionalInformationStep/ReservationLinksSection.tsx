@@ -1,0 +1,189 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import type { Values } from '@/types/Values';
+import type { BoxProps } from '@/ui/Box';
+import { FormElement } from '@/ui/FormElement';
+import { Inline } from '@/ui/Inline';
+import { Input } from '@/ui/Input';
+import { Select } from '@/ui/Select';
+import { getStackProps, Stack } from '@/ui/Stack';
+import { Text } from '@/ui/Text';
+import { colors } from '@/ui/theme';
+import { isValidUrl } from '@/utils/isValidInfo';
+import { prefixUrlWithHttps } from '@/utils/url';
+
+type UrlLabelOption = { label: string; value: string };
+
+const ReservationLinksSectionVariants = {
+  CARD: 'card',
+  INLINE: 'inline',
+} as const;
+
+type ReservationLinksSectionProps = BoxProps & {
+  title?: string;
+  variant?: Values<typeof ReservationLinksSectionVariants>;
+  idPrefix: string;
+  url: string;
+  urlLabel: string;
+  capacity: string;
+  status: string;
+  urlLabelOptions: UrlLabelOption[];
+  onChangeBookingInfo: (url: string, urlLabel: string) => void;
+  onChangeBookingAvailability: (status: string, capacity: string) => void;
+};
+
+const ReservationLinksSection = ({
+  title,
+  variant = ReservationLinksSectionVariants.CARD,
+  idPrefix,
+  url: initialUrl,
+  urlLabel: initialUrlLabel,
+  capacity: initialCapacity,
+  status: initialStatus,
+  urlLabelOptions,
+  onChangeBookingInfo,
+  onChangeBookingAvailability,
+  ...boxProps
+}: ReservationLinksSectionProps) => {
+  const { t } = useTranslation();
+
+  const [url, setUrl] = useState(initialUrl);
+  const [urlLabel, setUrlLabel] = useState(initialUrlLabel);
+  const [capacity, setCapacity] = useState(initialCapacity);
+  const [status, setStatus] = useState(initialStatus);
+  const [hasInvalidUrl, setHasInvalidUrl] = useState(false);
+
+  const isCapacityInvalid =
+    capacity !== '' &&
+    (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
+
+  const handleUrlBlur = () => {
+    if (url === '') {
+      setHasInvalidUrl(false);
+      onChangeBookingInfo('', urlLabel);
+      return;
+    }
+
+    const prefixedUrl = prefixUrlWithHttps(url);
+
+    if (!isValidUrl(prefixedUrl)) {
+      setHasInvalidUrl(true);
+      return;
+    }
+
+    setHasInvalidUrl(false);
+    setUrl(prefixedUrl);
+    onChangeBookingInfo(prefixedUrl, urlLabel);
+  };
+
+  const handleCapacityBlur = () => {
+    if (isCapacityInvalid) return;
+    onChangeBookingAvailability(status, capacity);
+  };
+
+  const isCard = variant === ReservationLinksSectionVariants.CARD;
+
+  return (
+    <Stack
+      spacing={4}
+      padding={isCard ? 4 : 0}
+      css={
+        isCard
+          ? `
+        border: 1px solid ${colors.grey3};
+        border-radius: 0.5rem;
+      `
+          : undefined
+      }
+      {...getStackProps(boxProps)}
+    >
+      {isCard && title && <Text fontWeight="bold">{title}</Text>}
+      <Inline spacing={4} flexWrap="wrap">
+        <FormElement
+          flex={1}
+          id={`${idPrefix}-link`}
+          label={t('create.additionalInformation.booking_info.link')}
+          Component={
+            <Input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onBlur={handleUrlBlur}
+            />
+          }
+          error={
+            hasInvalidUrl &&
+            t('create.additionalInformation.booking_info.url_error')
+          }
+        />
+        <FormElement
+          flex={1}
+          id={`${idPrefix}-max-capacity`}
+          label={t('create.additionalInformation.booking_info.max_capacity')}
+          Component={
+            <Input
+              type="number"
+              value={capacity}
+              onChange={(e) => setCapacity(e.target.value)}
+              onBlur={handleCapacityBlur}
+            />
+          }
+          error={
+            isCapacityInvalid &&
+            t('create.additionalInformation.booking_info.capacity_error')
+          }
+        />
+      </Inline>
+      <Inline spacing={4} flexWrap="wrap">
+        <FormElement
+          flex={1}
+          id={`${idPrefix}-status`}
+          label={t('create.additionalInformation.booking_info.status')}
+          Component={
+            <Select
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                onChangeBookingAvailability(e.target.value, capacity);
+              }}
+            >
+              <option value={BookingAvailabilityType.AVAILABLE}>
+                {t('bookingAvailability.available')}
+              </option>
+              <option value={BookingAvailabilityType.UNAVAILABLE}>
+                {t('bookingAvailability.unavailable')}
+              </option>
+            </Select>
+          }
+        />
+        <FormElement
+          flex={1}
+          id={`${idPrefix}-url-label`}
+          label={t(
+            'create.additionalInformation.booking_info.url_label_dropdown_label',
+          )}
+          Component={
+            <Select
+              value={urlLabel}
+              onChange={(e) => {
+                setUrlLabel(e.target.value);
+                onChangeBookingInfo(url, e.target.value);
+              }}
+            >
+              {urlLabelOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          }
+        />
+      </Inline>
+    </Stack>
+  );
+};
+
+export { ReservationLinksSection, ReservationLinksSectionVariants };
+export type { ReservationLinksSectionProps };
