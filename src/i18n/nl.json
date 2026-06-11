@@ -454,6 +454,7 @@
         "url_error": "Geen geldige url",
         "link": "Link",
         "max_capacity": "Maximum capaciteit",
+        "capacity_error": "Voer een geldig aantal in (0 of meer).",
         "status": "Status",
         "url_label_dropdown_label": "Tekst op reservatieknop",
         "url_type_labels": {
