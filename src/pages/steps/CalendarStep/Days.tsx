@@ -16,7 +16,7 @@ import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text, TextVariants } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import {
   TimeSpanPicker,
