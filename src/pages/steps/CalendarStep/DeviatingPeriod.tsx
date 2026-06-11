@@ -358,6 +358,7 @@ const DeviatingPeriod = ({
                         </Label>
                       </Inline>
                       <TimeSpanPicker
+                        key={`childcare-${openingHour.id}-${childcareEnabled}`}
                         id={`deviating-childcare-timespan-${openingHour.id}`}
                         startTime={openingHour.childcare?.start ?? ''}
                         endTime={openingHour.childcare?.end ?? ''}

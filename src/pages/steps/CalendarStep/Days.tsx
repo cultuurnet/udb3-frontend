@@ -210,6 +210,7 @@ export const Days = ({
                     </Label>
                   </Inline>
                   <TimeSpanPicker
+                    key={`childcare-${day.id}-${day.childcareEnabled}`}
                     id={`calendar-step-day-${day.id}-childcare`}
                     labelPosition={TimeSpanPickerLabelPositions.INLINE}
                     startTimeLabel={t('create.calendar.days.childcare.from')}
