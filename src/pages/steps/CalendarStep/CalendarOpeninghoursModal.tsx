@@ -24,13 +24,13 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
-  getModalErrorIds,
+  getOpeningHoursErrorIds,
   getOverlappingDays,
   hasPeriodOverlap,
-  isModalConfirmDisabled,
+  isOpeningHoursConfirmDisabled,
   type OpeningHoursFormData,
   type OpeningHoursRow,
-} from '../../../utils/validateCalendarOpeninghoursModal';
+} from '../../../utils/validateOpeningHours';
 import {
   CalendarState,
   createOpeninghoursId,
@@ -229,9 +229,9 @@ const CalendarOpeninghoursModal = ({
   const isDeleteConfirm = pendingDelete !== null;
   const daysWithTimeConflict = getOverlappingDays(openingHours);
 
-  const isConfirmDisabled = isModalConfirmDisabled({
+  const isConfirmDisabled = isOpeningHoursConfirmDisabled({
     isDeleteConfirm,
-    openingHours,
+    regularHours: openingHours,
     deviatingPeriods,
     shownErrorIds,
     eventStart,
@@ -256,8 +256,8 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSaveAttempt = () => {
-    const errorIds = getModalErrorIds({
-      openingHours,
+    const errorIds = getOpeningHoursErrorIds({
+      regularHours: openingHours,
       deviatingPeriods,
       eventStart,
       eventEnd,

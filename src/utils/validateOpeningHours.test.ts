@@ -1,11 +1,11 @@
 import type { DeviatingPeriodData } from '@/pages/steps/CalendarStep/DeviatingPeriod';
 
 import {
-  getModalErrorIds,
+  getOpeningHoursErrorIds,
   getOverlappingDays,
-  isModalConfirmDisabled,
+  isOpeningHoursConfirmDisabled,
   type OpeningHoursRow,
-} from './validateCalendarOpeninghoursModal';
+} from './validateOpeningHours';
 
 const makeRow = (partial: Partial<OpeningHoursRow> = {}): OpeningHoursRow => ({
   id: 'row-1',
@@ -124,7 +124,7 @@ describe('getOverlappingDays', () => {
   });
 });
 
-describe('getModalErrorIds', () => {
+describe('getOpeningHoursErrorIds', () => {
   const check = (
     rows: OpeningHoursRow[],
     periods: DeviatingPeriodData[] = [],
@@ -132,8 +132,8 @@ describe('getModalErrorIds', () => {
     eventStart?: Date,
     eventEnd?: Date,
   ) =>
-    getModalErrorIds({
-      openingHours: rows,
+    getOpeningHoursErrorIds({
+      regularHours: rows,
       deviatingPeriods: periods,
       eventStart,
       eventEnd,
@@ -243,15 +243,15 @@ describe('getModalErrorIds', () => {
   });
 });
 
-describe('isModalConfirmDisabled', () => {
+describe('isOpeningHoursConfirmDisabled', () => {
   const check = (
     rows: OpeningHoursRow[],
     shownErrorIds: ReadonlySet<string>,
     { isDelete = false } = {},
   ) =>
-    isModalConfirmDisabled({
+    isOpeningHoursConfirmDisabled({
       isDeleteConfirm: isDelete,
-      openingHours: rows,
+      regularHours: rows,
       deviatingPeriods: [],
       shownErrorIds,
       eventStart: undefined,

@@ -39,10 +39,10 @@ const hasChildcareErrors = (openingHours: OpeningHoursRow[]): boolean =>
   });
 
 const hasChildcareTimeComparisonErrors = (
-  openingHours: OpeningHoursRow[],
+  regularHours: OpeningHoursRow[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
-  openingHours.some((hour) => {
+  regularHours.some((hour) => {
     if (!hour.childcareEnabled) return false;
     return (
       (!!hour.childcareStartTime && hour.childcareStartTime >= hour.opens) ||
@@ -59,10 +59,10 @@ const hasChildcareTimeComparisonErrors = (
     }),
   );
 
-const hasOpeningHourErrors = (openingHours: OpeningHoursRow[]): boolean =>
-  hasNoDaySelected(openingHours) ||
-  hasInvalidTimeRange(openingHours) ||
-  hasChildcareErrors(openingHours);
+const hasRegularHourErrors = (regularHours: OpeningHoursRow[]): boolean =>
+  hasNoDaySelected(regularHours) ||
+  hasInvalidTimeRange(regularHours) ||
+  hasChildcareErrors(regularHours);
 
 export type PeriodWithDateRange = {
   id: string;
@@ -115,33 +115,33 @@ export const getOverlappingDays = (
 };
 
 const hasOverlappingTimeSlots = (
-  openingHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
+  regularHours: Pick<OpeningHoursRow, 'opens' | 'closes' | 'dayOfWeek'>[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
-  getOverlappingDays(openingHours).length > 0 ||
+  getOverlappingDays(regularHours).length > 0 ||
   deviatingPeriods.some(
     (period) => getOverlappingDays(period.openingHours).length > 0,
   );
 
-type ModalErrorParams = {
-  openingHours: OpeningHoursRow[];
+type OpeningHoursParams = {
+  regularHours: OpeningHoursRow[];
   deviatingPeriods: DeviatingPeriodData[];
   eventStart: Date | undefined;
   eventEnd: Date | undefined;
   closingPeriods?: PeriodWithDateRange[];
 };
 
-export const getModalErrorIds = ({
-  openingHours,
+export const getOpeningHoursErrorIds = ({
+  regularHours,
   deviatingPeriods,
   eventStart,
   eventEnd,
   closingPeriods = [],
-}: ModalErrorParams): ReadonlySet<string> => {
+}: OpeningHoursParams): ReadonlySet<string> => {
   const hasErrors =
-    hasOpeningHourErrors(openingHours) ||
+    hasRegularHourErrors(regularHours) ||
     deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
-    hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
+    hasOverlappingTimeSlots(regularHours, deviatingPeriods) ||
     [deviatingPeriods, closingPeriods].some((periods) =>
       hasPeriodDateError(periods, eventStart, eventEnd),
     );
@@ -149,7 +149,7 @@ export const getModalErrorIds = ({
   if (!hasErrors) return new Set();
 
   return new Set([
-    ...openingHours.map((hour) => hour.id),
+    ...regularHours.map((hour) => hour.id),
     ...deviatingPeriods.flatMap((period) =>
       period.openingHours.map((hour) => hour.id),
     ),
@@ -157,26 +157,26 @@ export const getModalErrorIds = ({
   ]);
 };
 
-type ModalConfirmParams = ModalErrorParams & {
+type OpeningHoursConfirmParams = OpeningHoursParams & {
   isDeleteConfirm: boolean;
   shownErrorIds: ReadonlySet<string>;
 };
 
-export const isModalConfirmDisabled = ({
+export const isOpeningHoursConfirmDisabled = ({
   isDeleteConfirm,
-  openingHours,
+  regularHours,
   deviatingPeriods,
   shownErrorIds,
   eventStart,
   eventEnd,
   closingPeriods = [],
-}: ModalConfirmParams): boolean => {
+}: OpeningHoursConfirmParams): boolean => {
   if (isDeleteConfirm) return false;
-  if (hasChildcareTimeComparisonErrors(openingHours, deviatingPeriods))
+  if (hasChildcareTimeComparisonErrors(regularHours, deviatingPeriods))
     return true;
   if (shownErrorIds.size === 0) return false;
 
-  const flaggedOpeningHours = openingHours.filter((hour) =>
+  const flaggedRegularHours = regularHours.filter((hour) =>
     shownErrorIds.has(hour.id),
   );
   const flaggedDeviatingPeriods = deviatingPeriods.filter((period) =>
@@ -186,8 +186,8 @@ export const isModalConfirmDisabled = ({
     shownErrorIds.has(period.id),
   );
 
-  const hasOverlap = hasOverlappingTimeSlots(openingHours, deviatingPeriods);
-  const hasFlaggedOpeningHourErrors = hasOpeningHourErrors(flaggedOpeningHours);
+  const hasOverlap = hasOverlappingTimeSlots(regularHours, deviatingPeriods);
+  const hasFlaggedRegularHourErrors = hasRegularHourErrors(flaggedRegularHours);
   const hasFlaggedDeviatingPeriodErrors = deviatingPeriods.some((period) =>
     hasNoDaySelected(
       period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
@@ -200,7 +200,7 @@ export const isModalConfirmDisabled = ({
 
   return (
     hasOverlap ||
-    hasFlaggedOpeningHourErrors ||
+    hasFlaggedRegularHourErrors ||
     hasFlaggedDeviatingPeriodErrors ||
     hasFlaggedDateErrors
   );
