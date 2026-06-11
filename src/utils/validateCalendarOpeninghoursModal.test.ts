@@ -1,8 +1,8 @@
 import type { DeviatingPeriodData } from '@/pages/steps/CalendarStep/DeviatingPeriod';
 
 import {
+  getModalErrorIds,
   getOverlappingDays,
-  hasAnyModalErrors,
   isModalConfirmDisabled,
   type OpeningHoursRow,
 } from './validateCalendarOpeninghoursModal';
@@ -124,14 +124,21 @@ describe('getOverlappingDays', () => {
   });
 });
 
-describe('hasAnyModalErrors', () => {
+describe('getModalErrorIds', () => {
   const check = (
     rows: OpeningHoursRow[],
     periods: DeviatingPeriodData[] = [],
     closingPeriods: ReturnType<typeof makeClosingPeriod>[] = [],
     eventStart?: Date,
     eventEnd?: Date,
-  ) => hasAnyModalErrors(rows, periods, eventStart, eventEnd, closingPeriods);
+  ) =>
+    getModalErrorIds({
+      openingHours: rows,
+      deviatingPeriods: periods,
+      eventStart,
+      eventEnd,
+      closingPeriods,
+    }).size > 0;
 
   it('returns false when everything is valid', () => {
     expect(check([makeRow()])).toBe(false);
@@ -242,14 +249,14 @@ describe('isModalConfirmDisabled', () => {
     shownErrorIds: ReadonlySet<string>,
     { isDelete = false } = {},
   ) =>
-    isModalConfirmDisabled(
-      isDelete,
-      rows,
-      [],
+    isModalConfirmDisabled({
+      isDeleteConfirm: isDelete,
+      openingHours: rows,
+      deviatingPeriods: [],
       shownErrorIds,
-      undefined,
-      undefined,
-    );
+      eventStart: undefined,
+      eventEnd: undefined,
+    });
 
   it.each([
     ['missing day', makeRow({ id: 'row-1', dayOfWeek: [] })],

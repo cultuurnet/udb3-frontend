@@ -64,7 +64,11 @@ const hasOpeningHourErrors = (openingHours: OpeningHoursRow[]): boolean =>
   hasInvalidTimeRange(openingHours) ||
   hasChildcareErrors(openingHours);
 
-type PeriodWithDateRange = { id: string; startDate: Date; endDate: Date };
+export type PeriodWithDateRange = {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+};
 
 const dayStart = (date: Date): number => startOfDay(new Date(date)).getTime();
 
@@ -119,29 +123,54 @@ const hasOverlappingTimeSlots = (
     (period) => getOverlappingDays(period.openingHours).length > 0,
   );
 
-export const hasAnyModalErrors = (
-  openingHours: OpeningHoursRow[],
-  deviatingPeriods: DeviatingPeriodData[],
-  eventStart: Date | undefined,
-  eventEnd: Date | undefined,
-  closingPeriods: PeriodWithDateRange[] = [],
-): boolean =>
-  hasOpeningHourErrors(openingHours) ||
-  deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
-  hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
-  [deviatingPeriods, closingPeriods].some((periods) =>
-    hasPeriodDateError(periods, eventStart, eventEnd),
-  );
+type ModalErrorParams = {
+  openingHours: OpeningHoursRow[];
+  deviatingPeriods: DeviatingPeriodData[];
+  eventStart: Date | undefined;
+  eventEnd: Date | undefined;
+  closingPeriods?: PeriodWithDateRange[];
+};
 
-export const isModalConfirmDisabled = (
-  isDeleteConfirm: boolean,
-  openingHours: OpeningHoursRow[],
-  deviatingPeriods: DeviatingPeriodData[],
-  shownErrorIds: ReadonlySet<string>,
-  eventStart: Date | undefined,
-  eventEnd: Date | undefined,
-  closingPeriods: PeriodWithDateRange[] = [],
-): boolean => {
+export const getModalErrorIds = ({
+  openingHours,
+  deviatingPeriods,
+  eventStart,
+  eventEnd,
+  closingPeriods = [],
+}: ModalErrorParams): ReadonlySet<string> => {
+  const hasErrors =
+    hasOpeningHourErrors(openingHours) ||
+    deviatingPeriods.some((period) => hasNoDaySelected(period.openingHours)) ||
+    hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
+    [deviatingPeriods, closingPeriods].some((periods) =>
+      hasPeriodDateError(periods, eventStart, eventEnd),
+    );
+
+  if (!hasErrors) return new Set();
+
+  return new Set([
+    ...openingHours.map((hour) => hour.id),
+    ...deviatingPeriods.flatMap((period) =>
+      period.openingHours.map((hour) => hour.id),
+    ),
+    ...closingPeriods.map((period) => period.id),
+  ]);
+};
+
+type ModalConfirmParams = ModalErrorParams & {
+  isDeleteConfirm: boolean;
+  shownErrorIds: ReadonlySet<string>;
+};
+
+export const isModalConfirmDisabled = ({
+  isDeleteConfirm,
+  openingHours,
+  deviatingPeriods,
+  shownErrorIds,
+  eventStart,
+  eventEnd,
+  closingPeriods = [],
+}: ModalConfirmParams): boolean => {
   if (isDeleteConfirm) return false;
   if (hasChildcareTimeComparisonErrors(openingHours, deviatingPeriods))
     return true;
@@ -156,16 +185,23 @@ export const isModalConfirmDisabled = (
   const flaggedClosingPeriods = closingPeriods.filter((period) =>
     shownErrorIds.has(period.id),
   );
+
+  const hasOverlap = hasOverlappingTimeSlots(openingHours, deviatingPeriods);
+  const hasFlaggedOpeningHourErrors = hasOpeningHourErrors(flaggedOpeningHours);
+  const hasFlaggedDeviatingPeriodErrors = deviatingPeriods.some((period) =>
+    hasNoDaySelected(
+      period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
+    ),
+  );
+  const hasFlaggedDateErrors = [
+    flaggedDeviatingPeriods,
+    flaggedClosingPeriods,
+  ].some((periods) => hasPeriodDateError(periods, eventStart, eventEnd));
+
   return (
-    hasOverlappingTimeSlots(openingHours, deviatingPeriods) ||
-    hasOpeningHourErrors(flaggedOpeningHours) ||
-    deviatingPeriods.some((period) =>
-      hasNoDaySelected(
-        period.openingHours.filter((hour) => shownErrorIds.has(hour.id)),
-      ),
-    ) ||
-    [flaggedDeviatingPeriods, flaggedClosingPeriods].some((periods) =>
-      hasPeriodDateError(periods, eventStart, eventEnd),
-    )
+    hasOverlap ||
+    hasFlaggedOpeningHourErrors ||
+    hasFlaggedDeviatingPeriodErrors ||
+    hasFlaggedDateErrors
   );
 };

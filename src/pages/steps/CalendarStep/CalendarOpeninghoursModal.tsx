@@ -24,8 +24,8 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
+  getModalErrorIds,
   getOverlappingDays,
-  hasAnyModalErrors,
   hasPeriodOverlap,
   isModalConfirmDisabled,
   type OpeningHoursFormData,
@@ -229,7 +229,7 @@ const CalendarOpeninghoursModal = ({
   const isDeleteConfirm = pendingDelete !== null;
   const daysWithTimeConflict = getOverlappingDays(openingHours);
 
-  const modalConfirmDisabled = isModalConfirmDisabled(
+  const isConfirmDisabled = isModalConfirmDisabled({
     isDeleteConfirm,
     openingHours,
     deviatingPeriods,
@@ -237,7 +237,7 @@ const CalendarOpeninghoursModal = ({
     eventStart,
     eventEnd,
     closingPeriods,
-  );
+  });
 
   const handleSave = () => {
     onChangeAdjustedDays(deviatingPeriods);
@@ -256,24 +256,15 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSaveAttempt = () => {
-    if (
-      hasAnyModalErrors(
-        openingHours,
-        deviatingPeriods,
-        eventStart,
-        eventEnd,
-        closingPeriods,
-      )
-    ) {
-      setShownErrorIds(
-        new Set([
-          ...openingHours.map((hour) => hour.id),
-          ...deviatingPeriods.flatMap((period) =>
-            period.openingHours.map((hour) => hour.id),
-          ),
-          ...closingPeriods.map((period) => period.id),
-        ]),
-      );
+    const errorIds = getModalErrorIds({
+      openingHours,
+      deviatingPeriods,
+      eventStart,
+      eventEnd,
+      closingPeriods,
+    });
+    if (errorIds.size) {
+      setShownErrorIds(errorIds);
       modalContentRef.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
@@ -317,7 +308,7 @@ const CalendarOpeninghoursModal = ({
       confirmTitle={modalConfirmTitle}
       cancelTitle={t('create.calendar.opening_hours_modal.button_cancel')}
       confirmButtonVariant={modalConfirmVariant}
-      confirmButtonDisabled={modalConfirmDisabled}
+      confirmButtonDisabled={isConfirmDisabled}
       onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSaveAttempt}
       onClose={handleModalClose}
       css={`
@@ -345,7 +336,7 @@ const CalendarOpeninghoursModal = ({
         alignItems="flex-start"
         display={isDeleteConfirm ? 'none' : undefined}
       >
-        {modalConfirmDisabled && (
+        {isConfirmDisabled && (
           <Alert variant={AlertVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.validation_messages.errors',
