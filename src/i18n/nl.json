@@ -218,7 +218,8 @@
             "overlap": "Afwijkende periodes mogen niet overlappen. Selecteer een andere startdatum voor deze periode.",
             "start_after_end": "De startdatum mag niet na de einddatum liggen.",
             "start_before_event": "De periode met afwijkende uren kan niet beginnen voor de startdatum van de activiteit.",
-            "end_after_event": "De periode met afwijkende uren kan niet eindigen na de einddatum van de activiteit."
+            "end_after_event": "De periode met afwijkende uren kan niet eindigen na de einddatum van de activiteit.",
+            "quick_link_out_of_range": "De gekozen data zijn niet toegevoegd omdat ze buiten de looptijd van je activiteit vallen."
           },
           "delete_modal": {
             "title": "Periode met afwijkende uren verwijderen",
@@ -237,7 +238,8 @@
             "overlap": "Sluitingsperiodes mogen niet overlappen. Selecteer een andere startdatum voor deze periode.",
             "start_after_end": "De startdatum mag niet na de einddatum liggen.",
             "start_before_event": "De sluitingsperiode kan niet beginnen voor de startdatum van de activiteit.",
-            "end_after_event": "De sluitingsperiode kan niet eindigen na de einddatum van de activiteit."
+            "end_after_event": "De sluitingsperiode kan niet eindigen na de einddatum van de activiteit.",
+            "quick_link_out_of_range": "De gekozen data zijn niet toegevoegd omdat ze buiten de looptijd van je activiteit vallen."
           },
           "delete_modal": {
             "title": "Sluitingsperiode verwijderen",
