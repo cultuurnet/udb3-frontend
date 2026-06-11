@@ -9,6 +9,7 @@ import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
+  useChangeOfferBookingAvailabilityMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -280,10 +281,12 @@ const BookingInfoStep = ({
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
   const [hasInvalidUrl, setHasInvalidUrl] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [maximumCapacity, setMaximumCapacity] = useState('');
+  const [capacity, setCapacity] = useState('');
   const [bookingStatus, setBookingStatus] = useState<string>(
     BookingAvailabilityType.AVAILABLE,
   );
+  const [isAvailabilityInitialized, setIsAvailabilityInitialized] =
+    useState(false);
   const queryClient = useQueryClient();
 
   const eventId = offerId;
@@ -352,6 +355,7 @@ const BookingInfoStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
+  const bookingAvailability = getOfferByIdQuery.data?.bookingAvailability;
 
   const { register, handleSubmit, formState, control, setValue, getValues } =
     useForm<FormData>({
@@ -385,6 +389,20 @@ const BookingInfoStep = ({
       setValue('availabilityEnds', bookingInfo.availabilityEnds);
     }
   }, [field, offerId, setValue, bookingInfo, onValidationChange]);
+
+  useEffect(() => {
+    if (!bookingAvailability || isAvailabilityInitialized) return;
+
+    if (bookingAvailability.type) {
+      setBookingStatus(bookingAvailability.type);
+    }
+
+    if (bookingAvailability.capacity !== undefined) {
+      setCapacity(String(bookingAvailability.capacity));
+    }
+
+    setIsAvailabilityInitialized(true);
+  }, [bookingAvailability, isAvailabilityInitialized]);
 
   useEffect(() => {
     if (!bookingInfo?.urlLabel?.en) return;
@@ -481,6 +499,29 @@ const BookingInfoStep = ({
         }),
       },
       scope,
+    });
+  };
+
+  const changeBookingAvailabilityMutation =
+    useChangeOfferBookingAvailabilityMutation({
+      onSuccess: onSuccessfulChange,
+    });
+
+  const isCapacityInvalid =
+    capacity !== '' &&
+    (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
+
+  const handleChangeBookingAvailability = (
+    type: string,
+    capacityValue: string,
+  ) => {
+    if (isCapacityInvalid) return;
+
+    changeBookingAvailabilityMutation.mutate({
+      id: eventId,
+      scope,
+      type,
+      capacity: capacityValue === '' ? undefined : Number(capacityValue),
     });
   };
 
@@ -582,9 +623,16 @@ const BookingInfoStep = ({
             Component={
               <Input
                 type="number"
-                value={maximumCapacity}
-                onChange={(e) => setMaximumCapacity(e.target.value)}
+                value={capacity}
+                onChange={(e) => setCapacity(e.target.value)}
+                onBlur={() =>
+                  handleChangeBookingAvailability(bookingStatus, capacity)
+                }
               />
+            }
+            error={
+              isCapacityInvalid &&
+              t('create.additionalInformation.booking_info.capacity_error')
             }
           />
         </Inline>
@@ -596,7 +644,10 @@ const BookingInfoStep = ({
             Component={
               <Select
                 value={bookingStatus}
-                onChange={(e) => setBookingStatus(e.target.value)}
+                onChange={(e) => {
+                  setBookingStatus(e.target.value);
+                  handleChangeBookingAvailability(e.target.value, capacity);
+                }}
               >
                 <option value={BookingAvailabilityType.AVAILABLE}>
                   {t('bookingAvailability.available')}
