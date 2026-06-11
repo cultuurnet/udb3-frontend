@@ -18,6 +18,7 @@ const dummyEvent = {
     email: faker.internet.email(),
     phone: faker.phone.number({ style: 'international' }),
     url: faker.internet.url(),
+    capacity: faker.number.int({ min: 1, max: 500 }),
   },
   image: {
     description: faker.lorem.words(5),
@@ -173,6 +174,10 @@ test('create event with all possible fields filled in', async ({
 
   await page.getByLabel('Link').click();
   await page.getByLabel('Link').fill(dummyEvent.bookingInfo.url);
+
+  await page
+    .getByLabel('Maximum capaciteit')
+    .fill(String(dummyEvent.bookingInfo.capacity));
 
   await page
     .getByLabel('Tekst op reservatieknop')
