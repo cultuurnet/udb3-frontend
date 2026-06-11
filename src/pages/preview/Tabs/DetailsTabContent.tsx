@@ -18,7 +18,7 @@ export const columns = [
 ];
 
 const getGlobalValue = getValueFromTheme('global');
-const { grey4, grey6 } = colors;
+const { grey3, grey4, grey6 } = colors;
 
 const DetailsTabContent = ({ showEventId, tableData }: Props) => {
   return (
@@ -32,7 +32,6 @@ const DetailsTabContent = ({ showEventId, tableData }: Props) => {
       `}
     >
       <Table
-        bordered
         showHeader={false}
         columns={columns}
         data={tableData}
@@ -42,8 +41,11 @@ const DetailsTabContent = ({ showEventId, tableData }: Props) => {
             font-weight: 600;
             width: 25%;
           }
-          tbody tr:first-child td {
-            border-top: none;
+          tbody tr td {
+            border: none;
+          }
+          tbody tr:not(:last-child) td {
+            border-bottom: 1px solid ${grey3} !important;
           }
           td strong,
           td b {
