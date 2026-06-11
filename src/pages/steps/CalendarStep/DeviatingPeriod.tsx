@@ -33,7 +33,7 @@ type OpeningHour = {
   opens: string;
   closes: string;
   dayOfWeek: DayOfWeek[];
-  childcare?: { start: string; end: string };
+  childcare?: { start?: string; end?: string };
 };
 
 type DeviatingPeriodData = {
@@ -154,7 +154,8 @@ const DeviatingPeriod = ({
     return {
       timesMissing:
         childcareEnabled &&
-        (!openingHour.childcare?.start || !openingHour.childcare?.end),
+        !openingHour.childcare?.start &&
+        !openingHour.childcare?.end,
       startError:
         childcareEnabled &&
         startTouched &&

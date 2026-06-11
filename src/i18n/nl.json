@@ -186,7 +186,7 @@
           "validation_messages": {
             "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
             "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.",
-            "set_times_required": "Geef het start- en einduur van de kinderopvang in."
+            "set_times_required": "Geef het start- en/of einduur van de kinderopvang in."
           }
         },
         "overnight_stay": {

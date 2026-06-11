@@ -92,7 +92,9 @@ const CalendarOpeninghoursModal = ({
         ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
-          childcareEnabled: !!hours.childcareStartTime,
+          childcareEnabled: !!(
+            hours.childcareStartTime || hours.childcareEndTime
+          ),
           childcareStartTime: hours.childcareStartTime ?? '',
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
@@ -347,7 +349,8 @@ const CalendarOpeninghoursModal = ({
           const childcareEnabled = openingHour.childcareEnabled ?? false;
           const timesMissing =
             childcareEnabled &&
-            (!openingHour.childcareStartTime || !openingHour.childcareEndTime);
+            !openingHour.childcareStartTime &&
+            !openingHour.childcareEndTime;
           const startError =
             childcareEnabled &&
             !!openingHour.childcareStartTime &&
