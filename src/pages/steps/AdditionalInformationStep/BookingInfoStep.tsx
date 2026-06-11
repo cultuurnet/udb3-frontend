@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
@@ -20,7 +22,6 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { RadioButtonTypes } from '@/ui/RadioButton';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
-import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -30,6 +31,10 @@ import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
+import {
+  ReservationLinksSection,
+  ReservationLinksSectionVariants,
+} from './ReservationLinksSection';
 
 const schema = yup
   .object({
@@ -279,14 +284,8 @@ const BookingInfoStep = ({
 }: Props) => {
   const { t } = useTranslation();
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
-  const [hasInvalidUrl, setHasInvalidUrl] = useState(false);
+  const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [capacity, setCapacity] = useState('');
-  const [bookingStatus, setBookingStatus] = useState<string>(
-    BookingAvailabilityType.AVAILABLE,
-  );
-  const [isAvailabilityInitialized, setIsAvailabilityInitialized] =
-    useState(false);
   const queryClient = useQueryClient();
 
   const eventId = offerId;
@@ -356,6 +355,7 @@ const BookingInfoStep = ({
 
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
   const bookingAvailability = getOfferByIdQuery.data?.bookingAvailability;
+  const subEvents = getOfferByIdQuery.data?.subEvent ?? [];
 
   const { register, handleSubmit, formState, control, setValue, getValues } =
     useForm<FormData>({
@@ -375,11 +375,17 @@ const BookingInfoStep = ({
       field,
     );
 
-    Object.values(ContactInfoType).map((type) => {
-      if (bookingInfo?.[type]) {
-        setValue(type, bookingInfo[type]);
-      }
-    });
+    if (bookingInfo.url) {
+      setOfferUrl(bookingInfo.url);
+    }
+
+    Object.values(ContactInfoType)
+      .filter((type) => type !== ContactInfoType.URL)
+      .forEach((type) => {
+        if (bookingInfo?.[type]) {
+          setValue(type, bookingInfo[type]);
+        }
+      });
 
     if (bookingInfo.availabilityStarts) {
       setValue('availabilityStarts', bookingInfo.availabilityStarts);
@@ -389,20 +395,6 @@ const BookingInfoStep = ({
       setValue('availabilityEnds', bookingInfo.availabilityEnds);
     }
   }, [field, offerId, setValue, bookingInfo, onValidationChange]);
-
-  useEffect(() => {
-    if (!bookingAvailability || isAvailabilityInitialized) return;
-
-    if (bookingAvailability.type) {
-      setBookingStatus(bookingAvailability.type);
-    }
-
-    if (bookingAvailability.capacity !== undefined) {
-      setCapacity(String(bookingAvailability.capacity));
-    }
-
-    setIsAvailabilityInitialized(true);
-  }, [bookingAvailability, isAvailabilityInitialized]);
 
   useEffect(() => {
     if (!bookingInfo?.urlLabel?.en) return;
@@ -447,6 +439,7 @@ const BookingInfoStep = ({
   const handleAddBookingInfoMutation = (newBookingInfo: BookingInfo) => {
     const bookingInfo = newBookingInfo;
     const newUrlLabels =
+      bookingInfo.urlLabel ??
       URL_LABEL_TRANSLATIONS[selectedUrlLabel] ??
       URL_LABEL_TRANSLATIONS.reserve;
 
@@ -455,10 +448,7 @@ const BookingInfoStep = ({
     }
 
     if (bookingInfo.url && !isValidUrl(bookingInfo.url)) {
-      setHasInvalidUrl(true);
       return;
-    } else {
-      setHasInvalidUrl(false);
     }
 
     if (bookingInfo.url === '') {
@@ -507,21 +497,62 @@ const BookingInfoStep = ({
       onSuccess: onSuccessfulChange,
     });
 
-  const isCapacityInvalid =
-    capacity !== '' &&
-    (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
+  const handleChangeOfferBookingInfo = (url: string, urlLabelType: string) => {
+    setOfferUrl(url);
+    setSelectedUrlLabel(urlLabelType);
 
-  const handleChangeBookingAvailability = (
+    handleAddBookingInfoMutation({
+      ...getValues(),
+      url,
+      urlLabel:
+        URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve,
+    });
+  };
+
+  const handleChangeOfferBookingAvailability = (
     type: string,
     capacityValue: string,
   ) => {
-    if (isCapacityInvalid) return;
-
     changeBookingAvailabilityMutation.mutate({
       id: eventId,
       scope,
       type,
       capacity: capacityValue === '' ? undefined : Number(capacityValue),
+    });
+  };
+
+  const changeSubEventReservationMutation =
+    useChangeSubEventReservationMutation({
+      onSuccess: onSuccessfulChange,
+    });
+
+  const handleChangeSubEventBookingInfo = (
+    subEventId: number,
+    url: string,
+    urlLabelType: string,
+  ) => {
+    const urlLabel =
+      URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve;
+
+    changeSubEventReservationMutation.mutate({
+      eventId,
+      subEventId,
+      bookingInfo: url ? { url, urlLabel } : {},
+    });
+  };
+
+  const handleChangeSubEventAvailability = (
+    subEventId: number,
+    type: string,
+    capacityValue: string,
+  ) => {
+    changeSubEventReservationMutation.mutate({
+      eventId,
+      subEventId,
+      bookingAvailability: {
+        type,
+        ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
+      },
     });
   };
 
@@ -539,6 +570,7 @@ const BookingInfoStep = ({
 
     handleAddBookingInfoMutation({
       ...formValues,
+      url: offerUrl,
       availabilityEnds: isoEndDate,
       availabilityStarts: isoStartDate,
     });
@@ -549,19 +581,9 @@ const BookingInfoStep = ({
 
     handleAddBookingInfoMutation({
       ...formValues,
+      url: offerUrl,
       availabilityEnds: undefined,
       availabilityStarts: undefined,
-    });
-  };
-
-  const handleOnUrlLabelChange = (urlLabelType: string) => {
-    const newUrlLabels = URL_LABEL_TRANSLATIONS[urlLabelType];
-
-    const formValues = getValues();
-
-    handleAddBookingInfoMutation({
-      ...formValues,
-      urlLabel: newUrlLabels,
     });
   };
 
@@ -571,7 +593,9 @@ const BookingInfoStep = ({
         as="form"
         width="45%"
         spacing={4}
-        onBlur={() => handleAddBookingInfoMutation(getValues())}
+        onBlur={() =>
+          handleAddBookingInfoMutation({ ...getValues(), url: offerUrl })
+        }
         ref={formComponent}
       >
         {Object.keys(ContactInfoType)
@@ -598,89 +622,73 @@ const BookingInfoStep = ({
             />
           ))}
       </Stack>
-      <Stack
-        spacing={4}
-        onBlur={() => handleAddBookingInfoMutation(getValues())}
-      >
+      <Stack spacing={4}>
         <Text fontWeight="bold">
           {t('create.additionalInformation.booking_info.url')}
         </Text>
-        <Inline spacing={4} flexWrap="wrap">
-          <FormElement
-            flex={1}
-            id="booking-link"
-            label={t('create.additionalInformation.booking_info.link')}
-            Component={<Input type="url" {...register('url')} />}
-            error={
-              hasInvalidUrl &&
-              t('create.additionalInformation.booking_info.url_error')
-            }
-          />
-          <FormElement
-            flex={1}
-            id="booking-max-capacity"
-            label={t('create.additionalInformation.booking_info.max_capacity')}
-            Component={
-              <Input
-                type="number"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-                onBlur={() =>
-                  handleChangeBookingAvailability(bookingStatus, capacity)
+        {subEvents.length > 0 ? (
+          <Stack spacing={5}>
+            {subEvents.map((subEvent, index) => (
+              <ReservationLinksSection
+                key={index}
+                idPrefix={`subevent-${index}`}
+                variant={
+                  subEvents.length > 1
+                    ? ReservationLinksSectionVariants.CARD
+                    : ReservationLinksSectionVariants.INLINE
+                }
+                title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
+                  new Date(subEvent.endDate),
+                  'dd/MM/yyyy',
+                )}`}
+                url={subEvent.bookingInfo?.url ?? ''}
+                urlLabel={
+                  subEvent.bookingInfo?.urlLabel?.en
+                    ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                    : ''
+                }
+                capacity={
+                  subEvent.bookingAvailability?.capacity !== undefined
+                    ? String(subEvent.bookingAvailability.capacity)
+                    : ''
+                }
+                status={
+                  subEvent.bookingAvailability?.type ??
+                  BookingAvailabilityType.AVAILABLE
+                }
+                urlLabelOptions={URL_LABELS}
+                onChangeBookingInfo={(url, urlLabelType) =>
+                  handleChangeSubEventBookingInfo(index, url, urlLabelType)
+                }
+                onChangeBookingAvailability={(type, capacityValue) =>
+                  handleChangeSubEventAvailability(index, type, capacityValue)
                 }
               />
+            ))}
+          </Stack>
+        ) : (
+          <ReservationLinksSection
+            variant={ReservationLinksSectionVariants.INLINE}
+            idPrefix="offer-booking"
+            url={bookingInfo?.url ?? ''}
+            urlLabel={
+              bookingInfo?.urlLabel?.en
+                ? getUrlLabelType(bookingInfo.urlLabel.en)
+                : ''
             }
-            error={
-              isCapacityInvalid &&
-              t('create.additionalInformation.booking_info.capacity_error')
+            capacity={
+              bookingAvailability?.capacity !== undefined
+                ? String(bookingAvailability.capacity)
+                : ''
             }
+            status={
+              bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
+            }
+            urlLabelOptions={URL_LABELS}
+            onChangeBookingInfo={handleChangeOfferBookingInfo}
+            onChangeBookingAvailability={handleChangeOfferBookingAvailability}
           />
-        </Inline>
-        <Inline spacing={4} flexWrap="wrap">
-          <FormElement
-            flex={1}
-            id="booking-status"
-            label={t('create.additionalInformation.booking_info.status')}
-            Component={
-              <Select
-                value={bookingStatus}
-                onChange={(e) => {
-                  setBookingStatus(e.target.value);
-                  handleChangeBookingAvailability(e.target.value, capacity);
-                }}
-              >
-                <option value={BookingAvailabilityType.AVAILABLE}>
-                  {t('bookingAvailability.available')}
-                </option>
-                <option value={BookingAvailabilityType.UNAVAILABLE}>
-                  {t('bookingAvailability.unavailable')}
-                </option>
-              </Select>
-            }
-          />
-          <FormElement
-            flex={1}
-            id="booking-url-label"
-            label={t(
-              'create.additionalInformation.booking_info.url_label_dropdown_label',
-            )}
-            Component={
-              <Select
-                value={selectedUrlLabel}
-                onChange={(e) => {
-                  setSelectedUrlLabel(e.target.value);
-                  handleOnUrlLabelChange(e.target.value);
-                }}
-              >
-                {URL_LABELS.map((urlLabel) => (
-                  <option key={urlLabel.value} value={urlLabel.value}>
-                    {urlLabel.label}
-                  </option>
-                ))}
-              </Select>
-            }
-          />
-        </Inline>
+        )}
       </Stack>
       <ReservationPeriod
         handlePeriodChange={handleChangeBookingPeriod}
