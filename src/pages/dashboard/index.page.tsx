@@ -334,7 +334,7 @@ const TabContent = ({
           box-shadow: unset !important;
         `}
       >
-        <Spinner marginY={4} />
+        <Spinner className="tw:my-4" />
       </Panel>
     );
   }

@@ -1,13 +1,13 @@
 import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
 import { Accordion } from '@/ui/Accordion';
-import { Alert } from '@/ui/Alert';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -24,15 +24,13 @@ import {
 } from '@/ui/TimeSpanPicker';
 
 import {
-  hasChildcareErrors,
-  hasDateRangeError,
-  hasInvalidOpeningHoursError,
-  hasMissingDaysError,
-  hasMissingOpeningHoursDaysError,
-  type OpeningHoursFormData,
-  type OpeningHoursRow,
-  overlapsWithAnotherPeriod,
-} from '../../../utils/validateCalendarOpeninghoursModal';
+  getOpeningHoursErrorIds,
+  getOverlappingDays,
+  hasPeriodOverlap,
+  isOpeningHoursConfirmDisabled,
+  type RegularHoursFormData,
+  type RegularHoursRow,
+} from '../../../utils/validateOpeningHours';
 import {
   CalendarState,
   createOpeninghoursId,
@@ -79,7 +77,7 @@ const CalendarOpeninghoursModal = ({
   );
   const eventEndDate = useCalendarSelector((state) => state.context.endDate);
 
-  const initialOpeningHours: OpeningHoursRow[] =
+  const initialOpeningHours: RegularHoursRow[] =
     savedOpeningHours.length === 0
       ? [
           {
@@ -94,12 +92,14 @@ const CalendarOpeninghoursModal = ({
         ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
-          childcareEnabled: !!hours.childcareStartTime,
+          childcareEnabled: !!(
+            hours.childcareStartTime || hours.childcareEndTime
+          ),
           childcareStartTime: hours.childcareStartTime ?? '',
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
 
-  const { control, getValues } = useForm<OpeningHoursFormData>({
+  const { control, getValues } = useForm<RegularHoursFormData>({
     defaultValues: { openingHours: initialOpeningHours },
   });
 
@@ -115,9 +115,6 @@ const CalendarOpeninghoursModal = ({
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
   >(initialDeviatingPeriods ?? []);
-  const [lastEditedPeriodId, setLastEditedPeriodId] = useState<string | null>(
-    null,
-  );
   const [pendingDelete, setPendingDelete] = useState<{
     kind: 'deviating' | 'closing';
     id: string;
@@ -126,9 +123,10 @@ const CalendarOpeninghoursModal = ({
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>(
     initialClosingPeriods ?? [],
   );
-  const [lastEditedClosingPeriodId, setLastEditedClosingPeriodId] = useState<
-    string | null
-  >(null);
+  const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
+    new Set(),
+  );
+  const modalContentRef = useRef<HTMLElement>(null);
 
   const handleAddOpeningHours = () =>
     append({
@@ -205,8 +203,8 @@ const CalendarOpeninghoursModal = ({
       ...prev,
       {
         id: uniqueId('closing-period-'),
-        startDate: today,
-        endDate: today,
+        startDate: eventStart ?? today,
+        endDate: eventStart ?? today,
         description: {},
       },
     ]);
@@ -225,6 +223,24 @@ const CalendarOpeninghoursModal = ({
     setPendingDelete(null);
   };
 
+  const eventStart =
+    isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
+  const eventEnd =
+    isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
+
+  const isDeleteConfirm = pendingDelete !== null;
+  const daysWithTimeConflict = getOverlappingDays(openingHours);
+
+  const isConfirmDisabled = isOpeningHoursConfirmDisabled({
+    isDeleteConfirm,
+    regularHours: openingHours,
+    deviatingPeriods,
+    shownErrorIds,
+    eventStart,
+    eventEnd,
+    closingPeriods,
+  });
+
   const handleSave = () => {
     onChangeAdjustedDays(deviatingPeriods);
     onChangeClosingPeriods(closingPeriods);
@@ -237,26 +253,28 @@ const CalendarOpeninghoursModal = ({
         childcareEndTime: childcareEnabled ? hour.childcareEndTime : undefined,
       })),
     );
+    setShownErrorIds(new Set());
     onClose();
   };
 
-  const eventStart =
-    isPeriodic && eventStartDate ? new Date(eventStartDate) : undefined;
-  const eventEnd =
-    isPeriodic && eventEndDate ? new Date(eventEndDate) : undefined;
-
-  const isDeleteConfirm = pendingDelete !== null;
-
-  const modalConfirmDisabled =
-    !isDeleteConfirm &&
-    (hasChildcareErrors(openingHours) ||
-      hasMissingOpeningHoursDaysError(openingHours) ||
-      hasInvalidOpeningHoursError(openingHours) ||
-      hasMissingDaysError(deviatingPeriods) ||
-      hasDateRangeError(deviatingPeriods, eventStart, eventEnd) ||
-      deviatingPeriods.some((period) =>
-        overlapsWithAnotherPeriod(period, deviatingPeriods),
-      ));
+  const handleSaveAttempt = () => {
+    const errorIds = getOpeningHoursErrorIds({
+      regularHours: openingHours,
+      deviatingPeriods,
+      eventStart,
+      eventEnd,
+      closingPeriods,
+    });
+    if (errorIds.size) {
+      setShownErrorIds(errorIds);
+      modalContentRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    } else {
+      handleSave();
+    }
+  };
 
   const modalTitle = isDeleteConfirm
     ? pendingDelete?.kind === 'deviating'
@@ -278,6 +296,7 @@ const CalendarOpeninghoursModal = ({
     if (isDeleteConfirm) {
       setPendingDelete(null);
     } else {
+      setShownErrorIds(new Set());
       onClose();
     }
   };
@@ -291,12 +310,12 @@ const CalendarOpeninghoursModal = ({
       confirmTitle={modalConfirmTitle}
       cancelTitle={t('create.calendar.opening_hours_modal.button_cancel')}
       confirmButtonVariant={modalConfirmVariant}
-      confirmButtonDisabled={modalConfirmDisabled}
-      onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSave}
+      confirmButtonDisabled={isConfirmDisabled}
+      onConfirm={isDeleteConfirm ? handleConfirmDelete : handleSaveAttempt}
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: 55rem;
+          max-width: 58rem;
         }
       `}
     >
@@ -313,16 +332,25 @@ const CalendarOpeninghoursModal = ({
       </Stack>
 
       <Stack
+        ref={modalContentRef}
         spacing={4}
         padding={4}
         alignItems="flex-start"
         display={isDeleteConfirm ? 'none' : undefined}
       >
+        {isConfirmDisabled && (
+          <Alert variant={AlertVariants.DANGER}>
+            {t(
+              'create.calendar.opening_hours_modal.validation_messages.errors',
+            )}
+          </Alert>
+        )}
         {openingHours.map((openingHour) => {
           const childcareEnabled = openingHour.childcareEnabled ?? false;
           const timesMissing =
             childcareEnabled &&
-            (!openingHour.childcareStartTime || !openingHour.childcareEndTime);
+            !openingHour.childcareStartTime &&
+            !openingHour.childcareEndTime;
           const startError =
             childcareEnabled &&
             !!openingHour.childcareStartTime &&
@@ -351,7 +379,7 @@ const CalendarOpeninghoursModal = ({
                     id={`day-of-week-${openingHour.id}`}
                     options={Object.values(DaysOfWeek).map((day) => ({
                       value: day,
-                      label: t(`create.calendar.days.full.${day}`),
+                      label: t(`create.calendar.days.short.${day}`),
                     }))}
                     selectedValues={openingHour.dayOfWeek as DayOfWeek[]}
                     placeholder={t(
@@ -359,6 +387,11 @@ const CalendarOpeninghoursModal = ({
                     )}
                     onChange={(newDays) =>
                       handleToggleDaysOfWeek(newDays, openingHour.id)
+                    }
+                    width="15rem"
+                    hasError={
+                      shownErrorIds.has(openingHour.id) &&
+                      openingHour.dayOfWeek.length === 0
                     }
                   />
                 </Stack>
@@ -448,6 +481,14 @@ const CalendarOpeninghoursModal = ({
                   />
                 )}
               </Inline>
+              {shownErrorIds.has(openingHour.id) &&
+                openingHour.dayOfWeek.length === 0 && (
+                  <Text color="red">
+                    {t(
+                      'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
+                    )}
+                  </Text>
+                )}
               {timesMissing && (
                 <Alert css="width: 100%;">
                   {t(
@@ -465,6 +506,18 @@ const CalendarOpeninghoursModal = ({
             </Stack>
           );
         })}
+        {daysWithTimeConflict.length > 0 && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
+              {
+                days: daysWithTimeConflict
+                  .map((day) => t(`create.calendar.days.full.${day}`))
+                  .join(', '),
+              },
+            )}
+          </Text>
+        )}
         <Button
           iconName={Icons.PLUS}
           variant={ButtonVariants.OUTLINED}
@@ -485,7 +538,6 @@ const CalendarOpeninghoursModal = ({
                 index={index}
                 period={period}
                 onChange={(updated: DeviatingPeriodData) => {
-                  setLastEditedPeriodId(updated.id);
                   setDeviatingPeriods((prev) =>
                     prev.map((existing) =>
                       existing.id === updated.id ? updated : existing,
@@ -504,11 +556,20 @@ const CalendarOpeninghoursModal = ({
                 }
                 showChildcare={showChildcare}
                 hasOverlap={
-                  period.id === lastEditedPeriodId &&
-                  overlapsWithAnotherPeriod(period, deviatingPeriods)
+                  period.openingHours.some((openingHour) =>
+                    shownErrorIds.has(openingHour.id),
+                  ) &&
+                  hasPeriodOverlap(period, deviatingPeriods.slice(0, index))
                 }
+                hasInvalidDateOrder={
+                  period.openingHours.some((openingHour) =>
+                    shownErrorIds.has(openingHour.id),
+                  ) && period.startDate > period.endDate
+                }
+                daysWithTimeConflict={getOverlappingDays(period.openingHours)}
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}
+                shownErrorIds={shownErrorIds}
               />
             ))}
             <Button
@@ -532,7 +593,6 @@ const CalendarOpeninghoursModal = ({
                 index={index}
                 period={period}
                 onChange={(updated: ClosingPeriodData) => {
-                  setLastEditedClosingPeriodId(updated.id);
                   setClosingPeriods((prev) =>
                     prev.map((existing) =>
                       existing.id === updated.id ? updated : existing,
@@ -550,8 +610,12 @@ const CalendarOpeninghoursModal = ({
                   )
                 }
                 hasOverlap={
-                  period.id === lastEditedClosingPeriodId &&
-                  overlapsWithAnotherPeriod(period, closingPeriods)
+                  shownErrorIds.has(period.id) &&
+                  hasPeriodOverlap(period, closingPeriods.slice(0, index))
+                }
+                hasInvalidDateOrder={
+                  shownErrorIds.has(period.id) &&
+                  period.startDate > period.endDate
                 }
                 eventStartDate={eventStart}
                 eventEndDate={eventEnd}

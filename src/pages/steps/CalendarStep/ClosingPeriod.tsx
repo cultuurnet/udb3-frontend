@@ -2,6 +2,7 @@ import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
 import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
+import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -30,6 +31,7 @@ type Props = BoxProps & {
   eventStartDate?: Date;
   eventEndDate?: Date;
   hasOverlap?: boolean;
+  hasInvalidDateOrder?: boolean;
 };
 
 const ClosingPeriod = ({
@@ -41,11 +43,14 @@ const ClosingPeriod = ({
   eventStartDate,
   eventEndDate,
   hasOverlap = false,
+  hasInvalidDateOrder = false,
   ...boxProps
 }: Props) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language as SupportedLanguage;
   const fetchHolidays = useFetchHolidays();
+  const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
+    useQuickLinkRangeFilter(eventStartDate, eventEndDate);
   const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   return (
@@ -84,18 +89,24 @@ const ClosingPeriod = ({
             id={`closing-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
-            onDateStartChange={(date) =>
-              onChange({ ...period, startDate: date })
-            }
-            onDateEndChange={(date) => onChange({ ...period, endDate: date })}
+            onDateStartChange={(date) => {
+              clearQuickLinkRangeError();
+              onChange({ ...period, startDate: date });
+            }}
+            onDateEndChange={(date) => {
+              clearQuickLinkRangeError();
+              onChange({ ...period, endDate: date });
+            }}
             showQuickLinks
             fetchHolidays={fetchHolidays}
             apiHolidays={apiHolidays}
             onShowHolidaysChange={onShowHolidaysChange}
             onQuickLinkClick={(periods) => {
               if (!onQuickLinkExpand || periods.length === 0) return;
+              const filtered = filterByEventRange(periods);
+              if (filtered.length === 0) return;
               onQuickLinkExpand(
-                periods.map((p) => ({
+                filtered.map((p) => ({
                   id: uniqueId('closing-period-'),
                   startDate: p.startDate,
                   endDate: p.endDate,
@@ -122,6 +133,13 @@ const ClosingPeriod = ({
             {t('create.calendar.opening_hours_modal.closing.errors.overlap')}
           </Text>
         )}
+        {hasInvalidDateOrder && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.closing.errors.start_after_end',
+            )}
+          </Text>
+        )}
         {eventStartDate && period.startDate < eventStartDate && (
           <Text color="red">
             {t(
@@ -133,6 +151,13 @@ const ClosingPeriod = ({
           <Text color="red">
             {t(
               'create.calendar.opening_hours_modal.closing.errors.end_after_event',
+            )}
+          </Text>
+        )}
+        {quickLinkRangeError && (
+          <Text color="red">
+            {t(
+              'create.calendar.opening_hours_modal.closing.errors.quick_link_out_of_range',
             )}
           </Text>
         )}
