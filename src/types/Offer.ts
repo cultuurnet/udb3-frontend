@@ -100,6 +100,7 @@ type SubEvent = {
   endDate: string;
   status?: Status;
   bookingAvailability?: BookingAvailability;
+  bookingInfo?: BookingInfo;
   childcare?: {
     start: string;
     end: string;
