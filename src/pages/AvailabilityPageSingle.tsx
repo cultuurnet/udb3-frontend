@@ -112,7 +112,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
       <Page.Title>{t('offerStatus.title', { name })}</Page.Title>
       <Page.Content maxWidth="50rem">
         {changeStatusMutation.status === QueryStatus.LOADING ? (
-          <Spinner marginTop={4} />
+          <Spinner className="tw:mt-4" />
         ) : error || changeStatusMutation.error ? (
           <Alert variant={AlertVariants.WARNING}>
             {error.message || changeStatusMutation.error?.message}
