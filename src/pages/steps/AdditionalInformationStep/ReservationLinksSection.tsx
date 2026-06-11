@@ -124,7 +124,7 @@ const ReservationLinksSection = ({
           label={t('create.additionalInformation.booking_info.max_capacity')}
           Component={
             <Input
-              type="number"
+              maxWidth="8rem"
               value={capacity}
               onChange={(e) => setCapacity(e.target.value)}
               onBlur={handleCapacityBlur}
