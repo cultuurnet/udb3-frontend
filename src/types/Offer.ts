@@ -36,6 +36,7 @@ type Status = {
 
 type BookingAvailability = {
   type: Values<typeof BookingAvailabilityType>;
+  capacity?: number;
 };
 
 type Term = {
@@ -183,6 +184,7 @@ type BaseOffer = {
   typicalAgeRange: string;
   birthdateRange?: BirthdateRange;
   bookingInfo?: BookingInfo;
+  bookingAvailability?: BookingAvailability;
   priceInfo?: PriceInfo[];
   regions: string[];
   faqs?: FaqItem[];
