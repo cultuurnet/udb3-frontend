@@ -1,8 +1,8 @@
 import React, { ComponentProps } from 'react';
 import { css } from 'styled-components';
 
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Paragraph } from '@/ui/Paragraph';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
@@ -39,7 +39,7 @@ function ButtonCard({
   `;
   const buttonContent = (
     <>
-      <Paragraph
+      <Box
         fontWeight="bold"
         display="flex"
         justifyContent="space-between"
@@ -61,7 +61,7 @@ function ButtonCard({
           {title}
         </Text>
         {badge}
-      </Paragraph>
+      </Box>
       {description && (
         <Text
           textAlign="left"
