@@ -1,28 +1,48 @@
-import type { BoxProps } from './Box';
-import { Box, getBoxProps } from './Box';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-type Props = BoxProps & {
+import { ImageLegacy } from './ImageLegacy';
+
+type Props = {
   src: string;
   alt: string;
+  width?: number;
+  height?: number | string;
+  className?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
 };
 
-const Image = ({
+const ImageShadcn = ({
   src,
   alt,
-  className,
   width = 600,
   height = 'auto',
-  ...props
+  className,
+  loading,
+  decoding,
 }: Props) => (
-  <Box
-    as="img"
+  <img
     src={src}
     alt={alt}
-    className={className}
     width={width}
     height={height}
-    {...getBoxProps(props)}
+    className={className}
+    loading={loading}
+    decoding={decoding}
   />
 );
 
+const Image = (props: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return isShadcnMigrationEnabled ? (
+    <ImageShadcn {...props} />
+  ) : (
+    <ImageLegacy {...props} />
+  );
+};
+
+export type { Props as ImageProps };
 export { Image };
