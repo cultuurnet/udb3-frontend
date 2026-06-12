@@ -10,6 +10,7 @@ import { Box } from '@/ui/Box';
 import { ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Inline } from '@/ui/Inline';
+import { LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { Stack } from '@/ui/Stack';
@@ -140,6 +141,7 @@ export const FixedDays = ({
                 showHolidaysToggle={isBoaEnabled}
                 apiHolidays={apiHolidays}
                 onShowHolidaysChange={onShowHolidaysChange}
+                labelVariant={LabelVariants.NORMAL}
               />
               {isPeriodShorterThanTwoWeeks && (
                 <Alert
