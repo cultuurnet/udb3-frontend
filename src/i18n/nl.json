@@ -136,6 +136,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Met start-en einddatum",
         "permanent": "Permanent",
+        "period_too_short": "Voor activiteiten die korter dan 2 weken duren, kies je best de optie 'Op specifieke data'.",
         "opening_hours": "Openingsuren",
         "hours": "Uren",
         "button_change_opening_hours": "Openingsuren wijzigen",
