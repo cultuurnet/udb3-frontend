@@ -266,12 +266,16 @@ const DatePicker = ({
           display: none;
         }
 
-        .react-datepicker__year-option:first-child::after {
+        .react-datepicker__year-option:has(
+            .react-datepicker__navigation--years-upcoming
+          )::after {
           content: '▲';
           font-size: 0.8rem;
         }
 
-        .react-datepicker__year-option:last-child::after {
+        .react-datepicker__year-option:has(
+            .react-datepicker__navigation--years-previous
+          )::after {
           content: '▼';
           font-size: 0.8rem;
         }
@@ -364,18 +368,22 @@ const DatePicker = ({
                     {children}
                   </CalendarWithQuickLinks>
                 ) : (
-                  <Stack
-                    className={className}
+                  <Box
+                    backgroundColor={colors.white}
                     css={`
                       border-radius: 0.5rem;
-                      overflow: hidden;
+                      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
                     `}
                   >
-                    <Box className="custom-calendar-header">
-                      {calendarHeader}
+                    <Box className={className}>
+                      {calendarHeader && (
+                        <Stack className="custom-calendar-header">
+                          {calendarHeader}
+                        </Stack>
+                      )}
+                      {children}
                     </Box>
-                    {children}
-                  </Stack>
+                  </Box>
                 )
             : undefined
         }
