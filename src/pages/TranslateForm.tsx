@@ -24,7 +24,7 @@ import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
 import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Toast } from '@/ui/Toast';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
@@ -64,7 +64,7 @@ const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
 const ContentPanel = ({ children }: { children: React.ReactNode }) => (
   <Stack
     marginTop={4}
-    backgroundColor="white"
+    backgroundColor={colors.white}
     padding={4}
     spacing={5}
     borderRadius={getGlobalBorderRadius}
