@@ -134,6 +134,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Avec date de début et de fin",
         "permanent": "En permanence",
+        "period_too_short": "Pour les activités d'une durée inférieure à 2 semaines, il est préférable de choisir l'option 'Sur des dates spécifiques'.",
         "opening_hours": "Heures d 'ouverture",
         "hours": "Heures",
         "button_change_opening_hours": "Modifier les heures d'ouverture",
