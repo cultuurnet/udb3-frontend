@@ -344,7 +344,7 @@ const Preview = () => {
               />
             )}
             {isEdited && (
-              <Alert width="100%" marginBottom={4}>
+              <Alert fullWidth className="tw:mb-4">
                 <Text
                   css={`
                     b {

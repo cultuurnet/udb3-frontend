@@ -80,7 +80,10 @@ const RecentUsedOrganizers = ({
           )}
         </Text>
       </Inline>
-      <Alert variant={AlertVariants.PRIMARY} width="41rem" maxWidth="95%">
+      <Alert
+        variant={AlertVariants.PRIMARY}
+        className="tw:w-164 tw:max-w-[95%]"
+      >
         {t(
           'create.additionalInformation.organizer.select_recent_used_organizer_info',
         )}

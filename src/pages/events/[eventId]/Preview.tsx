@@ -339,7 +339,9 @@ const Preview = () => {
             value: (
               <Stack>
                 <Text>{t('preview.educational')}</Text>
-                <Alert marginY={4}>{t('preview.educational_info')}</Alert>
+                <Alert className="tw:my-4">
+                  {t('preview.educational_info')}
+                </Alert>
               </Stack>
             ),
           },
@@ -405,12 +407,12 @@ const Preview = () => {
             />
           )}
           {isLessonSeries && (
-            <Alert width="100%" marginTop={5} marginBottom={4}>
+            <Alert fullWidth className="tw:mt-8 tw:mb-4">
               <Text>{t('preview.info_lesson_series')}</Text>
             </Alert>
           )}
           {isHolidayCamp && (
-            <Alert width="100%" marginTop={5} marginBottom={4}>
+            <Alert fullWidth className="tw:mt-8 tw:mb-4">
               <Text>{t('preview.info_holiday_camp')}</Text>
             </Alert>
           )}
@@ -471,7 +473,7 @@ const Preview = () => {
         <Inline>
           <Stack flex={3}>
             {isEdited && (
-              <Alert width="100%" marginBottom={4}>
+              <Alert fullWidth className="tw:mb-4">
                 <Text
                   css={`
                     b {

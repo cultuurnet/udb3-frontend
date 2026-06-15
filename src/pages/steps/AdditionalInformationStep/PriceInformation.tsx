@@ -604,7 +604,7 @@ const PriceInformation = ({
         </Inline>
         <Stack spacing={4}>
           {isCultuurkuurAlertVisible && (
-            <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+            <Alert variant={AlertVariants.WARNING} className="tw:mb-2">
               {hasBasePriceInfo
                 ? t(
                     'create.additionalInformation.price_info.cultuurkuur.warning.multiple_prices',
@@ -615,7 +615,7 @@ const PriceInformation = ({
             </Alert>
           )}
           {hasUitpasPrices && (
-            <Alert variant={AlertVariants.PRIMARY} marginBottom={3}>
+            <Alert variant={AlertVariants.PRIMARY} className="tw:mb-2">
               {t('create.additionalInformation.price_info.uitpas_info')}
             </Alert>
           )}

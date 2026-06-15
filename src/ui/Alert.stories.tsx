@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { Alert, AlertVariants } from './Alert';
+import { Button, ButtonVariants } from './Button';
 
 const meta: Meta<typeof Alert> = {
   title: 'Components/Alert',
@@ -15,6 +16,11 @@ const meta: Meta<typeof Alert> = {
     variant: {
       control: { type: 'select' },
       options: Object.values(AlertVariants),
+    },
+    action: {
+      control: false,
+      description:
+        'Optional action element rendered below the description. Shadcn implementation only.',
     },
   },
 };
@@ -62,6 +68,48 @@ export const Danger: Story = {
   args: {
     variant: AlertVariants.DANGER,
     children: 'A Danger Alert',
+    ...commonArgs,
+  },
+};
+
+export const WithAction: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only available in the shadcn implementation (requires `SHADCN_MIGRATION` feature flag).',
+      },
+    },
+  },
+  render: () => (
+    <Alert
+      variant={AlertVariants.DANGER}
+      title="Something went wrong"
+      action={
+        <Button variant={ButtonVariants.LINK} onClick={() => {}}>
+          Retry
+        </Button>
+      }
+      visible
+    >
+      Your changes could not be saved. Please try again.
+    </Alert>
+  ),
+};
+
+export const WithTitle: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only available in the shadcn implementation (requires `SHADCN_MIGRATION` feature flag).',
+      },
+    },
+  },
+  args: {
+    variant: AlertVariants.PRIMARY,
+    title: 'Something needs your attention',
+    children: 'Check the details below and take the necessary action.',
     ...commonArgs,
   },
 };
