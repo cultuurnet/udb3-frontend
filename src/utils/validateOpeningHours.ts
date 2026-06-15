@@ -30,7 +30,7 @@ const hasInvalidTimeRange = (openingHours: RegularHoursRow[]): boolean =>
 const hasChildcareErrors = (openingHours: RegularHoursRow[]): boolean =>
   openingHours.some((hour) => {
     if (!hour.childcareEnabled) return false;
-    const timesMissing = !hour.childcareStartTime || !hour.childcareEndTime;
+    const timesMissing = !hour.childcareStartTime && !hour.childcareEndTime;
     const startTooLate =
       !!hour.childcareStartTime && hour.childcareStartTime >= hour.opens;
     const endTooEarly =
