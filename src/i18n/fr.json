@@ -134,6 +134,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Avec date de début et de fin",
         "permanent": "En permanence",
+        "period_too_short": "Pour les activités d'une durée inférieure à 2 semaines, il est préférable de choisir l'option 'Sur des dates spécifiques'.",
         "opening_hours": "Heures d 'ouverture",
         "hours": "Heures",
         "button_change_opening_hours": "Modifier les heures d'ouverture",
@@ -184,7 +185,7 @@
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
             "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
-            "set_times_required": "Veuillez indiquer les heures de début et de fin de la garderie."
+            "set_times_required": "Veuillez indiquer l'heure de début et/ou de fin de la garderie."
           }
         },
         "overnight_stay": {
@@ -214,8 +215,10 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes dérogatoires ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période avec des heures dérogatoires ne peut pas commencer avant la date de début de l'activité.",
-            "end_after_event": "La période avec des heures dérogatoires ne peut pas se terminer après la date de fin de l'activité."
+            "end_after_event": "La période avec des heures dérogatoires ne peut pas se terminer après la date de fin de l'activité.",
+            "quick_link_out_of_range": "Les dates choisies n'ont pas été ajoutées car elles se situent en dehors de la durée de votre activité."
           },
           "delete_modal": {
             "title": "Supprimer la période avec des heures dérogatoires",
@@ -232,8 +235,10 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes de fermeture ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période de fermeture ne peut pas commencer avant la date de début de l'activité.",
-            "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité."
+            "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité.",
+            "quick_link_out_of_range": "Les dates choisies n'ont pas été ajoutées car elles se situent en dehors de la durée de votre activité."
           },
           "delete_modal": {
             "title": "Supprimer la période de fermeture",
@@ -244,7 +249,9 @@
         "validation_messages": {
           "day_of_week": {
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
-          }
+          },
+          "overlapping_days": "Les horaires du {{days}} se chevauchent. Assurez-vous que le deuxième créneau commence après la fin du premier.",
+          "errors": "Il manque encore quelques données. Complétez les champs marqués en rouge pour enregistrer votre calendrier."
         }
       }
     },
