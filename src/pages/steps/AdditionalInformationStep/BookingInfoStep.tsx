@@ -523,6 +523,37 @@ const BookingInfoStep = ({
 
   const changeSubEventReservationMutation =
     useChangeSubEventReservationMutation({
+      onMutate: async ({ subEventId, bookingInfo, bookingAvailability }) => {
+        const queryKey = [scope, { id: eventId }];
+        await queryClient.cancelQueries({ queryKey });
+        const previousOffer = queryClient.getQueryData(queryKey);
+
+        queryClient.setQueryData(queryKey, (offer: any) => {
+          if (!offer?.subEvent) return offer;
+          return {
+            ...offer,
+            subEvent: offer.subEvent.map((subEvent: any, index: number) =>
+              index === subEventId
+                ? {
+                    ...subEvent,
+                    ...(bookingInfo !== undefined && { bookingInfo }),
+                    ...(bookingAvailability && { bookingAvailability }),
+                  }
+                : subEvent,
+            ),
+          };
+        });
+
+        return { previousOffer };
+      },
+      onError: (_error, _variables, context: any) => {
+        if (context?.previousOffer) {
+          queryClient.setQueryData(
+            [scope, { id: eventId }],
+            context.previousOffer,
+          );
+        }
+      },
       onSuccess: onSuccessfulChange,
     });
 

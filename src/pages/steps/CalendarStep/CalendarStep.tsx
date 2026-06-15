@@ -270,12 +270,14 @@ const CalendarStep = ({
   const closingPeriodsRef = useRef<ClosingPeriodData[]>([]);
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>([]);
 
+  const offerRef = useRef<Offer | undefined>(undefined);
+
   const handleChangeCalendarState = (newState: CalendarState) => {
     const calendarType = Object.values(CalendarType).find((type) =>
       newState.matches(type),
     );
 
-    const formData = {
+    const baseFormData = {
       ...convertStateToFormData(newState.context, calendarType),
       ...(adjustedDaysRef.current.length > 0 && {
         openingHoursAdjustedDays: formatAdjustedDays(adjustedDaysRef.current),
@@ -284,6 +286,31 @@ const CalendarStep = ({
         openingHoursClosedDays: formatClosingDays(closingPeriodsRef.current),
       }),
     };
+
+    const existingSubEvents = offerRef.current?.subEvent;
+    const formData =
+      existingSubEvents && Array.isArray(baseFormData.subEvent)
+        ? {
+            ...baseFormData,
+            subEvent: baseFormData.subEvent.map((subEvent, index) => {
+              const existing = existingSubEvents[index];
+              if (!existing) return subEvent;
+              return {
+                ...subEvent,
+                bookingInfo: existing.bookingInfo,
+                ...(subEvent.bookingAvailability && {
+                  bookingAvailability: {
+                    type: subEvent.bookingAvailability.type,
+                    ...(existing.bookingAvailability?.capacity !==
+                      undefined && {
+                      capacity: existing.bookingAvailability.capacity,
+                    }),
+                  },
+                }),
+              };
+            }),
+          }
+        : baseFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -354,6 +381,7 @@ const CalendarStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const offer: Offer | undefined = getOfferByIdQuery.data;
+  offerRef.current = offer;
 
   useEffect(() => {
     if (!offer || isCalendarInitialized) return;
