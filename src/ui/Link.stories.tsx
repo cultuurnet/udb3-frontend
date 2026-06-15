@@ -4,7 +4,7 @@ import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 
 import { Icon, Icons } from './Icon';
-import { Link, LinkVariants } from './Link';
+import { Link, LinkBadgeVariants, LinkVariants } from './Link';
 
 const meta: Meta<typeof Link> = {
   title: 'Components/Link',
@@ -111,6 +111,30 @@ export const AsButton: Story = {
       </Link>
       <Link {...args} variant={LinkVariants.BUTTON_DANGER}>
         Danger
+      </Link>
+    </Inline>
+  ),
+};
+
+export const AsBadge: Story = {
+  args: {
+    href: 'https://www.google.com',
+  },
+  parameters: {
+    controls: {
+      exclude: ['children', 'iconName', 'variant'],
+    },
+  },
+  render: (args) => (
+    <Inline spacing={3}>
+      <Link {...args} variant={LinkBadgeVariants.BADGE_DANGER}>
+        Danger
+      </Link>
+      <Link {...args} variant={LinkBadgeVariants.BADGE_SECONDARY}>
+        Secondary
+      </Link>
+      <Link {...args} variant={LinkBadgeVariants.BADGE_INFO}>
+        Info
       </Link>
     </Inline>
   ),
