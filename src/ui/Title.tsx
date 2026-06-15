@@ -1,38 +1,21 @@
-import { css } from 'styled-components';
+import React from 'react';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
-import { getValueFromTheme } from '@/ui/theme';
+import { cn } from '@/ui/shadcn/utils';
 
 import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
-import { Text } from './Text';
-
-const getValue = getValueFromTheme('title');
+import { TitleLegacy } from './TitleLegacy';
 
 const TitleVariants = {
   DEFAULT: 'default',
   UNDERLINED: 'underlined',
 } as const;
 
-const getFontWeight = (props) => {
-  if (props.size === 1) return 300;
-  return 700;
-};
-
-const getFontSize = (props) => {
-  if (props.size === 1) return 1.6;
-  if (props.size === 2) return 1.2;
-  return 1;
-};
-
-const getBorderBottom = (props) => {
-  if (props.variant === TitleVariants.UNDERLINED) {
-    return css`
-      border-bottom: 1px solid ${getValue('borderColor')};
-    `;
-  }
-
-  return css``;
+const sizeClasses: Record<number, string> = {
+  1: 'tw:text-2xl tw:font-light',
+  2: 'tw:text-xl tw:font-bold',
+  3: 'tw:text-base tw:font-bold',
 };
 
 type TitleProps = InlineProps & {
@@ -46,21 +29,26 @@ const Title = ({
   className,
   ...props
 }: TitleProps) => {
-  return (
-    <Inline
-      forwardedAs={`h${size}`}
-      size={size}
-      variant={variant}
-      className={className}
-      css={`
-        font-weight: ${getFontWeight};
-        font-size: ${getFontSize}rem;
-        ${getBorderBottom}
-      `}
-      {...getInlineProps(props)}
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  const Tag = `h${size}` as React.ElementType;
+
+  return isShadcnMigrationEnabled ? (
+    <Tag
+      className={cn(
+        sizeClasses[size],
+        variant === TitleVariants.UNDERLINED && 'tw:border-b tw:border-border',
+        className,
+      )}
     >
-      {typeof children === 'string' ? <Text>{children}</Text> : children}
-    </Inline>
+      {children}
+    </Tag>
+  ) : (
+    <TitleLegacy size={size} variant={variant} className={className} {...props}>
+      {children}
+    </TitleLegacy>
   );
 };
 

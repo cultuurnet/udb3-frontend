@@ -147,12 +147,13 @@ const convertStateToFormData = (
     endDate: formatDateToISO(day.endDate ? new Date(day.endDate) : new Date()),
     bookingAvailability: day.bookingAvailability,
     status: day.status,
-    ...(day.childcareEnabled && {
-      childcare: {
-        start: day.childcareStartTime,
-        end: day.childcareEndTime,
-      },
-    }),
+    ...(day.childcareEnabled &&
+      (day.childcareStartTime || day.childcareEndTime) && {
+        childcare: {
+          ...(day.childcareStartTime && { start: day.childcareStartTime }),
+          ...(day.childcareEndTime && { end: day.childcareEndTime }),
+        },
+      }),
     ...(day.hasOvernightStay && { overnight: true }),
   }));
 
@@ -160,13 +161,16 @@ const convertStateToFormData = (
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
-    ...(openingHour.childcareStartTime &&
-      openingHour.childcareEndTime && {
-        childcare: {
+    ...((openingHour.childcareStartTime || openingHour.childcareEndTime) && {
+      childcare: {
+        ...(openingHour.childcareStartTime && {
           start: openingHour.childcareStartTime,
+        }),
+        ...(openingHour.childcareEndTime && {
           end: openingHour.childcareEndTime,
-        },
-      }),
+        }),
+      },
+    }),
   }));
 
   return {
@@ -524,7 +528,7 @@ const calendarStepConfiguration: StepsConfiguration<'calendar'> = {
           const errors = subEvent
             .map((sub, index) => {
               if (!sub.childcare) return undefined;
-              if (!sub.childcare.start || !sub.childcare.end) {
+              if (!sub.childcare.start && !sub.childcare.end) {
                 return context.createError({
                   path: `${context.path}.${index}`,
                   message: 'Childcare times required',

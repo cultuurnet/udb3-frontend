@@ -20,6 +20,7 @@ type MultiSelectDropdownProps = {
   placeholder: string;
   onChange: (selectedValues: string[]) => void;
   width?: string;
+  hasError?: boolean;
 };
 
 const MultiSelectDropdown = ({
@@ -29,6 +30,7 @@ const MultiSelectDropdown = ({
   placeholder,
   onChange,
   width = '175px',
+  hasError = false,
 }: MultiSelectDropdownProps) => {
   const label =
     selectedValues.length === 0
@@ -46,7 +48,7 @@ const MultiSelectDropdown = ({
           align-items: center;
           width: ${width};
           background-color: ${colors.white} !important;
-          border: 1px solid ${colors.grey2} !important;
+          border: 1px solid ${hasError ? 'red' : colors.grey2} !important;
           border-radius: ${getGlobalBorderRadius} !important;
           height: ${getGlobalFormInputHeight};
           color: ${colors.textColor} !important;
@@ -59,7 +61,7 @@ const MultiSelectDropdown = ({
           &:focus,
           &:active {
             background-color: ${colors.white} !important;
-            border-color: ${colors.grey2} !important;
+            border-color: ${hasError ? 'red' : colors.grey2} !important;
             color: ${colors.textColor} !important;
           }
 
