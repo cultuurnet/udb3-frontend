@@ -141,7 +141,8 @@ const DeviatingPeriod = ({
     childcareEnabled: boolean,
   ) => ({
     timesMissing:
-      (childcareEnabled && !openingHour.childcare?.start) ||
+      childcareEnabled &&
+      !openingHour.childcare?.start &&
       !openingHour.childcare?.end,
     startError:
       childcareEnabled &&
