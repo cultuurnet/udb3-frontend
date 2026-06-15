@@ -343,10 +343,7 @@ const OrganizerStep = ({
                   link1: (
                     <Link
                       as="a"
-                      css={`
-                        text-decoration: underline;
-                        font-weight: bold;
-                      `}
+                      className="tw:underline tw:font-bold"
                       href="#price_info"
                       onClick={(e) => {
                         e.preventDefault();
