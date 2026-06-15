@@ -626,7 +626,7 @@ const BookingInfoStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.booking_info.url')}
         </Text>
-        {subEvents.length > 0 ? (
+        {getOfferByIdQuery.data && (
           <Stack spacing={5}>
             {subEvents.map((subEvent, index) => (
               <ReservationLinksSection
@@ -666,28 +666,6 @@ const BookingInfoStep = ({
               />
             ))}
           </Stack>
-        ) : (
-          <ReservationLinksSection
-            variant={ReservationLinksSectionVariants.INLINE}
-            idPrefix="offer-booking"
-            url={bookingInfo?.url ?? ''}
-            urlLabel={
-              bookingInfo?.urlLabel?.en
-                ? getUrlLabelType(bookingInfo.urlLabel.en)
-                : ''
-            }
-            capacity={
-              bookingAvailability?.capacity !== undefined
-                ? String(bookingAvailability.capacity)
-                : ''
-            }
-            status={
-              bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
-            }
-            urlLabelOptions={URL_LABELS}
-            onChangeBookingInfo={handleChangeOfferBookingInfo}
-            onChangeBookingAvailability={handleChangeOfferBookingAvailability}
-          />
         )}
       </Stack>
       <ReservationPeriod

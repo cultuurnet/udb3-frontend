@@ -53,10 +53,7 @@ import { OneOrMoreDays } from './OneOrMoreDays';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const changeCalendarMutation = useChangeOfferCalendarMutation({
-    onSuccess: () =>
-      onSuccess('calendar', {
-        shouldInvalidateEvent: false,
-      }),
+    onSuccess: () => onSuccess('calendar'),
   });
 
   return async ({ scope, calendar, timeTable }: FormDataUnion) => {
