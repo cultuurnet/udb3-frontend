@@ -46,7 +46,7 @@ const ProgressBar = ({
   );
 
   return isShadcnMigrationEnabled ? (
-    <div className={cn('tw:flex tw:flex-col tw:gap-1', className)}>
+    <div className={cn('tw:flex tw:w-full tw:flex-col tw:gap-1', className)}>
       {(label || showPercentage) && (
         <div className="tw:flex tw:text-sm">
           {label && <span>{label}</span>}
