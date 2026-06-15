@@ -27,7 +27,12 @@ import {
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { BookingInfo, OpeningHours, StatusReason } from '@/types/Offer';
+import {
+  BookingAvailability,
+  BookingInfo,
+  OpeningHours,
+  StatusReason,
+} from '@/types/Offer';
 import { Values } from '@/types/Values';
 
 const getTodayWithoutTime = () => {
@@ -65,10 +70,6 @@ export const createOpeninghoursId = () => uniqueId('openinghours-');
 type Status = {
   type: Values<typeof OfferStatus>;
   reason?: StatusReason;
-};
-
-type BookingAvailability = {
-  type: Values<typeof BookingAvailabilityType>;
 };
 
 const createInitialContext = () => ({
