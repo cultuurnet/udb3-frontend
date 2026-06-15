@@ -58,9 +58,7 @@ test.describe('Places translation', () => {
 
     // Title tab should show the checkmark after saving translations
     await expect(
-      page
-        .getByRole('tab', { name: 'Titel' })
-        .locator('.fa-circle-check'),
+      page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
     ).toBeVisible();
 
     // Description tab only exists when the place has a description
