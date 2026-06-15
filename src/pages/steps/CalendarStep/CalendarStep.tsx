@@ -91,6 +91,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     endDate: subEvent.endDate,
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
+    bookingInfo: subEvent.bookingInfo,
     childcareEnabled: !!subEvent.childcare,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
@@ -144,6 +145,7 @@ const convertStateToFormData = (
     endDate: formatDateToISO(day.endDate ? new Date(day.endDate) : new Date()),
     bookingAvailability: day.bookingAvailability,
     status: day.status,
+    ...(day.bookingInfo && { bookingInfo: day.bookingInfo }),
     ...(day.childcareEnabled && {
       childcare: {
         start: day.childcareStartTime,
