@@ -141,11 +141,11 @@ const DeviatingPeriod = ({
     childcareEnabled: boolean,
   ) => ({
     timesMissing:
-      childcareEnabled &&
-      !openingHour.childcare?.start &&
+      (childcareEnabled && !openingHour.childcare?.start) ||
       !openingHour.childcare?.end,
     startError:
-      (childcareEnabled && !!openingHour.childcare?.start) ||
+      childcareEnabled &&
+      !!openingHour.childcare?.start &&
       openingHour.childcare?.start >= openingHour.opens
         ? t('create.calendar.days.childcare.validation_messages.start_too_late')
         : undefined,
