@@ -366,7 +366,14 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           if (event.type !== 'TOGGLE_CHILDCARE') return context.days;
           return context.days.map((day) =>
             day.id === event.id
-              ? { ...day, childcareEnabled: event.enabled }
+              ? {
+                  ...day,
+                  childcareEnabled: event.enabled,
+                  ...(!event.enabled && {
+                    childcareStartTime: '',
+                    childcareEndTime: '',
+                  }),
+                }
               : day,
           );
         },

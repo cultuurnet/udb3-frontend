@@ -8,6 +8,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
@@ -78,15 +79,12 @@ type FooterLinkProps = {
 const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
   <Link
     {...props}
-    css={`
-      text-decoration: underline;
-      color: ${footerVariant === FooterVariants.LOGIN
-        ? getValueForPage('footer.linkColor')
-        : '#005c7c'};
-      &:hover {
-        color: #222;
-      }
-    `}
+    className={cn(
+      'tw:underline tw:hover:text-udb-text',
+      footerVariant === FooterVariants.LOGIN
+        ? 'tw:text-udb-main-grey'
+        : 'tw:text-udb-main-darkest-blue',
+    )}
   />
 );
 

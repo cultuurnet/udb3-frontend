@@ -134,6 +134,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Mit Start- und Enddatum",
         "permanent": "Permanent",
+        "period_too_short": "Für Aktivitäten, die kürzer als 2 Wochen dauern, empfiehlt sich die Option 'An bestimmten Daten'.",
         "opening_hours": "Öffnungszeiten",
         "hours": "Stunden",
         "button_change_opening_hours": "Öffnungszeiten ändern",
@@ -184,7 +185,7 @@
           "validation_messages": {
             "start_too_late": "Die Startzeit der Kinderbetreuung muss vor der Startzeit der Aktivität liegen.",
             "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen.",
-            "set_times_required": "Bitte geben Sie die Start- und Endzeit der Kinderbetreuung an."
+            "set_times_required": "Bitte geben Sie die Start- und/oder Endzeit der Kinderbetreuung an."
           }
         },
         "overnight_stay": {
@@ -214,8 +215,10 @@
           "description_placeholder": "Beschreibung",
           "errors": {
             "overlap": "Abweichende Perioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Periode mit abweichenden Stunden kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Periode mit abweichenden Stunden kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Abweichende Periode löschen",
@@ -232,8 +235,10 @@
           "description_placeholder": "Beschreibung",
           "errors": {
             "overlap": "Schließperioden dürfen sich nicht überschneiden. Wählen Sie ein anderes Startdatum für diese Periode.",
+            "start_after_end": "Das Startdatum darf nicht nach dem Enddatum liegen.",
             "start_before_event": "Die Schließperiode kann nicht vor dem Startdatum der Aktivität beginnen.",
-            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden."
+            "end_after_event": "Die Schließperiode kann nicht nach dem Enddatum der Aktivität enden.",
+            "quick_link_out_of_range": "Die gewählten Daten wurden nicht hinzugefügt, da sie außerhalb des Zeitraums Ihrer Aktivität liegen."
           },
           "delete_modal": {
             "title": "Schließperiode löschen",
@@ -244,7 +249,9 @@
         "validation_messages": {
           "day_of_week": {
             "min": "Sie müssen mindestens 1 Wochentag angeben."
-          }
+          },
+          "overlapping_days": "Die Zeiten am {{days}} überschneiden sich. Stellen Sie sicher, dass der zweite Zeitslot nach dem Ende des ersten beginnt.",
+          "errors": "Es fehlen noch einige Angaben. Füllen Sie die rot markierten Felder aus, um Ihren Kalender zu speichern."
         }
       }
     },
@@ -1921,6 +1928,7 @@
     "info_lesson_series": "Ihre Unterrichtsreihe wird bis zum Beginn der ersten Stunde auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "info_holiday_camp": "Ihr Camp oder Urlaub wird bis zum Starttermin auf UiTinVlaanderen und anderen UiTagendas angezeigt.",
     "ages": "Alters: {{ages}}",
+    "birth_years": "Geboren zwischen <bold>{{from}}</bold> und <bold>{{to}}</bold>",
     "children_only": "Nur für Kinder",
     "accessibility": {
       "description": "Es gibt einen Transport, der Kinder zu Ihrer Aktivität bringt von:"

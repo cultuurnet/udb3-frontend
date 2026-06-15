@@ -10,6 +10,8 @@ import type {
   BookingInfo,
   MediaObject,
   OpeningHours,
+  OpeningHoursAdjustedDay,
+  OpeningHoursClosedDay,
   PriceInfo,
   Status,
   SubEvent,
@@ -70,6 +72,8 @@ type EventArguments = {
   audience: {
     audienceType: string;
   };
+  openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
+  openingHoursClosedDays?: OpeningHoursClosedDay[];
 };
 type AddEventArguments = EventArguments & { headers: Headers };
 
@@ -99,6 +103,8 @@ const addEvent = async ({
   labels,
   hiddenLabels,
   audience,
+  openingHoursAdjustedDays,
+  openingHoursClosedDays,
 }: AddEventArguments) =>
   fetchFromApi({
     path: '/events/',
@@ -130,6 +136,12 @@ const addEvent = async ({
         labels,
         hiddenLabels,
         audience,
+        ...(openingHoursAdjustedDays?.length > 0 && {
+          openingHoursAdjustedDays,
+        }),
+        ...(openingHoursClosedDays?.length > 0 && {
+          openingHoursClosedDays,
+        }),
       }),
     },
   });
