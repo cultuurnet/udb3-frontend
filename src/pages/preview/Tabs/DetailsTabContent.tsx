@@ -45,7 +45,7 @@ const DetailsTabContent = ({ showEventId, tableData }: Props) => {
             border: none;
           }
           tbody tr:not(:last-child) td {
-            border-bottom: 1px solid ${grey3} !important;
+            border-bottom: 1px solid ${grey3};
           }
           td strong,
           td b {

@@ -306,7 +306,7 @@ const Preview = () => {
               border: none;
             }
             tbody tr:not(:last-child) td {
-              border-bottom: 1px solid ${colors.grey3} !important;
+              border-bottom: 1px solid ${colors.grey3};
             }
           `}
         />
