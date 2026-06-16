@@ -305,19 +305,14 @@ const CalendarStep = ({
           subEvent: baseFormData.subEvent.map((subEvent, index) => {
             const existing = existingSubEvents[index];
             if (!existing) return subEvent;
+            const bookingAvailability =
+              existing.bookingAvailability ?? subEvent.bookingAvailability;
             return {
               ...subEvent,
               ...(existing.bookingInfo && {
                 bookingInfo: existing.bookingInfo,
               }),
-              ...(subEvent.bookingAvailability && {
-                bookingAvailability: {
-                  type: subEvent.bookingAvailability.type,
-                  ...(existing.bookingAvailability?.capacity !== undefined && {
-                    capacity: existing.bookingAvailability.capacity,
-                  }),
-                },
-              }),
+              ...(bookingAvailability && { bookingAvailability }),
             };
           }),
         }
