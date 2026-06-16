@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { UrlLabelType } from '@/constants/UrlLabelType';
 import type { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { FormElement } from '@/ui/FormElement';
@@ -14,7 +15,11 @@ import { colors } from '@/ui/theme';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
 
-type UrlLabelOption = { label: string; value: string };
+type UrlLabelValue = Values<typeof UrlLabelType> | '';
+
+type BookingAvailabilityValue = Values<typeof BookingAvailabilityType>;
+
+type UrlLabelOption = { label: string; value: UrlLabelValue };
 
 const ReservationLinksSectionVariants = {
   CARD: 'card',
@@ -26,12 +31,15 @@ type ReservationLinksSectionProps = BoxProps & {
   variant?: Values<typeof ReservationLinksSectionVariants>;
   idPrefix: string;
   url: string;
-  urlLabel: string;
+  urlLabel: UrlLabelValue;
   capacity: string;
-  status: string;
+  status: BookingAvailabilityValue;
   urlLabelOptions: UrlLabelOption[];
-  onChangeBookingInfo: (url: string, urlLabel: string) => void;
-  onChangeBookingAvailability: (status: string, capacity: string) => void;
+  onChangeBookingInfo: (url: string, urlLabel: UrlLabelValue) => void;
+  onChangeBookingAvailability: (
+    status: BookingAvailabilityValue,
+    capacity: string,
+  ) => void;
 };
 
 const ReservationLinksSection = ({
@@ -145,8 +153,9 @@ const ReservationLinksSection = ({
             <Select
               value={status}
               onChange={(e) => {
-                setStatus(e.target.value);
-                onChangeBookingAvailability(e.target.value, capacity);
+                const newStatus = e.target.value as BookingAvailabilityValue;
+                setStatus(newStatus);
+                onChangeBookingAvailability(newStatus, capacity);
               }}
             >
               <option value={BookingAvailabilityType.AVAILABLE}>
@@ -168,8 +177,9 @@ const ReservationLinksSection = ({
             <Select
               value={urlLabel}
               onChange={(e) => {
-                setUrlLabel(e.target.value);
-                onChangeBookingInfo(url, e.target.value);
+                const newUrlLabel = e.target.value as UrlLabelValue;
+                setUrlLabel(newUrlLabel);
+                onChangeBookingInfo(url, newUrlLabel);
               }}
             >
               {urlLabelOptions.map((option) => (

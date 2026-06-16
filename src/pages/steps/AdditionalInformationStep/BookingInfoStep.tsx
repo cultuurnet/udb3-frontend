@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { UrlLabelType } from '@/constants/UrlLabelType';
 import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
@@ -14,6 +15,7 @@ import {
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
@@ -74,14 +76,9 @@ type BookingInfo = {
   availabilityEnds?: string;
 };
 
-const UrlLabelType = {
-  BUY: 'buy',
-  RESERVE: 'reserve',
-  AVAILABILITY: 'availability',
-  SUBSCRIBE: 'subscribe',
-} as const;
-
-const getUrlLabelType = (englishUrlLabel: string): string => {
+const getUrlLabelType = (
+  englishUrlLabel: string,
+): Values<typeof UrlLabelType> => {
   if (englishUrlLabel.toLowerCase().includes(UrlLabelType.AVAILABILITY))
     return UrlLabelType.AVAILABILITY;
 
@@ -290,13 +287,6 @@ const BookingInfoStep = ({
   const eventId = offerId;
 
   const formComponent = useRef<HTMLFormElement>(null);
-
-  const UrlLabelType = {
-    BUY: 'buy',
-    RESERVE: 'reserve',
-    AVAILABILITY: 'availability',
-    SUBSCRIBE: 'subscribe',
-  } as const;
 
   const URL_LABEL_TRANSLATIONS = {
     buy: {
