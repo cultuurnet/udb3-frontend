@@ -193,4 +193,30 @@ test.describe('Per-subEvent reservation info', () => {
       kept.capacity,
     );
   });
+
+  test('shows a new reservation section when a subEvent is added in the calendar', async ({
+    page,
+    baseURL,
+    eventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${eventId}/edit`);
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    // The fixture event has two subEvents, so two reservation cards.
+    await expect(page.locator('#subevent-0-link')).toBeVisible();
+    await expect(page.locator('#subevent-1-link')).toBeVisible();
+    await expect(page.locator('#subevent-2-link')).toHaveCount(0);
+
+    // Add a day in the calendar step.
+    const calendarPut = page.waitForResponse(
+      (response) =>
+        response.url().includes('/calendar') &&
+        response.request().method() === 'PUT',
+    );
+    await page.getByRole('button', { name: 'Dag toevoegen' }).click();
+    await calendarPut;
+
+    // A reservation section appears for the newly added subEvent.
+    await expect(page.locator('#subevent-2-link')).toBeVisible();
+  });
 });
