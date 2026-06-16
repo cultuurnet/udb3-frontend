@@ -307,7 +307,9 @@ const CalendarStep = ({
             if (!existing) return subEvent;
             return {
               ...subEvent,
-              bookingInfo: existing.bookingInfo,
+              ...(existing.bookingInfo && {
+                bookingInfo: existing.bookingInfo,
+              }),
               ...(subEvent.bookingAvailability && {
                 bookingAvailability: {
                   type: subEvent.bookingAvailability.type,
