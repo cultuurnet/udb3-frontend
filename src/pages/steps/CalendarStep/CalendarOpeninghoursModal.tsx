@@ -173,6 +173,7 @@ const CalendarOpeninghoursModal = ({
       update(index, {
         ...getValues('openingHours')[index],
         childcareEnabled: enabled,
+        ...(!enabled && { childcareStartTime: '', childcareEndTime: '' }),
       });
   };
 
@@ -444,11 +445,13 @@ const CalendarOpeninghoursModal = ({
                       <Label
                         variant={LabelVariants.BOLD}
                         htmlFor={`openinghours-childcare-toggle-${openingHour.id}`}
+                        color={!childcareEnabled ? colors.grey5 : undefined}
                       >
                         {t('create.calendar.days.childcare.label')}
                       </Label>
                     </Inline>
                     <TimeSpanPicker
+                      key={`childcare-${openingHour.id}-${childcareEnabled}`}
                       id={`openinghours-childcare-timespan-${openingHour.id}`}
                       startTime={openingHour.childcareStartTime}
                       endTime={openingHour.childcareEndTime}
