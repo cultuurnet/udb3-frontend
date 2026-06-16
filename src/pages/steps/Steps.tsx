@@ -13,6 +13,7 @@ import { Scope } from '@/constants/OfferType';
 import { SupportedLanguage } from '@/i18n/index';
 import type { BoxProps } from '@/ui/Box';
 import { Box } from '@/ui/Box';
+import { Inline } from '@/ui/Inline';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -109,9 +110,11 @@ const StepWrapper = ({
       spacing={4}
       {...getStackProps(props)}
     >
-      <Title color={getValue('title.color')} alignItems="center" spacing={3}>
-        <NumberIndicator>{stepNumber}</NumberIndicator>
-        <Text lineHeight="1rem">{title}</Text>
+      <Title color={getValue('title.color')} className="tw:mb-5">
+        <Inline alignItems="center" className="tw:gap-2">
+          <NumberIndicator>{stepNumber}</NumberIndicator>
+          <Text>{title}</Text>
+        </Inline>
       </Title>
       {children}
     </Stack>
