@@ -15,6 +15,7 @@ import {
 import { SupportedLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
+import type { FaqItem } from '@/types/Offer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -35,6 +36,19 @@ import { DescriptionPreview } from './preview/DescriptionPreview';
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
 
+const createEditorStateFromHtml = (html: string | undefined): EditorState => {
+  if (!html || !htmlToDraft) return EditorState.createEmpty();
+  const draftState = htmlToDraft(html);
+  const contentState = ContentState.createFromBlockArray(
+    draftState.contentBlocks,
+    draftState.entityMap,
+  );
+  return EditorState.createWithContent(contentState);
+};
+
+const getPlainText = (editorState: EditorState) =>
+  editorState.getCurrentContent().getPlainText().trim();
+
 const languageOptions = [...Object.values(SupportedLanguages), 'en'];
 const getGlobalValue = getValueFromTheme('global');
 const getTextValue = getValueFromTheme('text');
@@ -50,26 +64,12 @@ const TranslateTabs = {
   FAQ: 'faq',
 } as const;
 
-const createEditorStateFromHtml = (html: string | undefined) => {
-  if (!html || !htmlToDraft) return EditorState.createEmpty();
-  const draftState = htmlToDraft(html);
-  const contentState = ContentState.createFromBlockArray(
-    draftState.contentBlocks,
-    draftState.entityMap,
-  );
-  return EditorState.createWithContent(contentState);
-};
-
-const getPlainText = (editorState: EditorState) =>
-  editorState.getCurrentContent().getPlainText().trim();
-
-const TabTitle = ({
-  label,
-  hasFilled,
-}: {
+type TabTitleProps = {
   label: string;
   hasFilled: boolean;
-}) => (
+};
+
+const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
   <Inline spacing={3}>
     {hasFilled && (
       <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
@@ -92,6 +92,234 @@ const ContentPanel = ({ children }: { children: React.ReactNode }) => (
     {children}
   </Stack>
 );
+
+type TranslateFormBaseProps = {
+  language: string;
+  originalLanguage: string;
+  isEditingOriginal: boolean;
+  onStartEditing: () => void;
+};
+
+type TitleFieldProps = TranslateFormBaseProps & {
+  value: string;
+  onChange: (value: string) => void;
+  onBlur: (value: string) => void;
+};
+
+const TitleField = ({
+  language,
+  originalLanguage,
+  isEditingOriginal,
+  onStartEditing,
+  value,
+  onChange,
+  onBlur,
+}: TitleFieldProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack display="grid" alignItems="center" css={rowGridCss}>
+      <Text variant="muted">
+        {originalLanguage === language
+          ? t('translate.original_label', { language })
+          : t('translate.translation_label', { language })}
+      </Text>
+      {originalLanguage === language && !isEditingOriginal ? (
+        <Inline spacing={3}>
+          <Text variant="muted">{value}</Text>
+          <Button onClick={onStartEditing} variant={ButtonVariants.LINK}>
+            {t('translate.change')}
+          </Button>
+        </Inline>
+      ) : (
+        <FormElement
+          id={`translate-title-${language}`}
+          Component={
+            <Input
+              maxWidth={300}
+              placeholder={t('translate.placeholder_title', { language })}
+              value={value}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChange(e.target.value)
+              }
+              onBlur={(e) => onBlur(e.target.value)}
+            />
+          }
+        />
+      )}
+    </Stack>
+  );
+};
+
+type DescriptionFieldProps = TranslateFormBaseProps & {
+  description: string;
+  editorState: EditorState;
+  onEditorStateChange: (state: EditorState) => void;
+  onBlur: () => void;
+};
+
+const DescriptionField = ({
+  language,
+  originalLanguage,
+  isEditingOriginal,
+  onStartEditing,
+  description,
+  editorState,
+  onEditorStateChange,
+  onBlur,
+}: DescriptionFieldProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack
+      id={`description-container-${language}`}
+      display="grid"
+      css={rowGridCss}
+    >
+      <Text variant="muted">
+        {originalLanguage === language
+          ? t('translate.original_label', { language })
+          : t('translate.translation_label', { language })}
+      </Text>
+      {originalLanguage === language && !isEditingOriginal ? (
+        <Stack spacing={3}>
+          <Panel padding={3} color={getTextValue('muted.color')}>
+            <DescriptionPreview description={description} />
+          </Panel>
+          <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
+            {t('translate.change')}
+          </Button>
+        </Stack>
+      ) : (
+        <FormElement
+          id={`create-description-${language}`}
+          Component={
+            <RichTextEditor
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+              onBlur={onBlur}
+            />
+          }
+        />
+      )}
+    </Stack>
+  );
+};
+
+type FaqFieldProps = {
+  faqIndex: number;
+  isFirst: boolean;
+  originalLanguage: string;
+  translationLanguages: string[];
+  faq: FaqItem;
+  isEditingOriginal: boolean;
+  onStartEditing: () => void;
+  questionValues: Record<string, string>;
+  answerEditorStates: Record<string, EditorState>;
+  onQuestionChange: (language: string, value: string) => void;
+  onAnswerStateChange: (language: string, state: EditorState) => void;
+  onSave: (language: string) => void;
+};
+
+const FaqField = ({
+  faqIndex,
+  isFirst,
+  originalLanguage,
+  translationLanguages,
+  faq,
+  isEditingOriginal,
+  onStartEditing,
+  questionValues,
+  answerEditorStates,
+  onQuestionChange,
+  onAnswerStateChange,
+  onSave,
+}: FaqFieldProps) => {
+  const { t } = useTranslation();
+  const key = (lang: string) => `${faqIndex}_${lang}`;
+
+  return (
+    <Stack spacing={4} maxWidth="60rem">
+      {!isFirst && <Box height="1px" backgroundColor={colors.grey3} />}
+      <Text fontWeight="bold">
+        {t('translate.faq.title', { index: faqIndex + 1 })}
+      </Text>
+      <Stack display="grid" css={rowGridCss}>
+        <Text variant="muted">
+          {t('translate.original_label', { language: originalLanguage })}
+        </Text>
+        {isEditingOriginal ? (
+          <Stack spacing={3}>
+            <Input
+              value={questionValues[key(originalLanguage)] ?? ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onQuestionChange(originalLanguage, e.target.value)
+              }
+              onBlur={() => onSave(originalLanguage)}
+            />
+            <RichTextEditor
+              editorState={
+                answerEditorStates[key(originalLanguage)] ??
+                EditorState.createEmpty()
+              }
+              onEditorStateChange={(state) =>
+                onAnswerStateChange(originalLanguage, state)
+              }
+              onBlur={() => onSave(originalLanguage)}
+            />
+          </Stack>
+        ) : (
+          <Stack spacing={2}>
+            <Inline justifyContent="space-between">
+              <Text fontWeight="bold" maxWidth={300}>
+                {faq[originalLanguage]?.question ?? ''}
+              </Text>
+              <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
+                {t('translate.change')}
+              </Button>
+            </Inline>
+            <DescriptionPreview
+              description={faq[originalLanguage]?.answer ?? ''}
+            />
+          </Stack>
+        )}
+      </Stack>
+      {translationLanguages.map((language) => (
+        <Stack
+          key={`faq-${faqIndex}-${language}`}
+          id={`faq-translation-${faqIndex}-${language}`}
+          display="grid"
+          css={rowGridCss}
+        >
+          <Text variant="muted">
+            {t('translate.translation_label', { language })}
+          </Text>
+          <Stack spacing={3}>
+            <Input
+              placeholder={t('translate.faq.placeholder_question', {
+                language,
+              })}
+              value={questionValues[key(language)] ?? ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onQuestionChange(language, e.target.value)
+              }
+              onBlur={() => onSave(language)}
+            />
+            <RichTextEditor
+              editorState={
+                answerEditorStates[key(language)] ?? EditorState.createEmpty()
+              }
+              onEditorStateChange={(state) =>
+                onAnswerStateChange(language, state)
+              }
+              onBlur={() => onSave(language)}
+            />
+          </Stack>
+        </Stack>
+      ))}
+    </Stack>
+  );
+};
 
 const TranslateForm = () => {
   const { t } = useTranslation();
@@ -193,12 +421,7 @@ const TranslateForm = () => {
   const handleTitleBlur = async (language: string, value: string) => {
     const originalValue = offer?.name?.[language] ?? '';
     if (!value || value === originalValue) return;
-    await changeNameMutation.mutateAsync({
-      id,
-      lang: language,
-      name: value,
-      scope,
-    });
+    await changeNameMutation.mutateAsync({ id, lang: language, name: value, scope });
     toast.trigger(`title_${language}`);
     invalidateOffer();
   };
@@ -211,11 +434,7 @@ const TranslateForm = () => {
     const originalPlainText = getPlainText(
       createEditorStateFromHtml(offer?.description?.[language]),
     );
-    if (
-      !plainText ||
-      plainText === originalPlainText ||
-      !editorState.getLastChangeType()
-    )
+    if (!plainText || plainText === originalPlainText || !editorState.getLastChangeType())
       return;
     await changeDescriptionMutation.mutateAsync({
       id,
@@ -242,8 +461,7 @@ const TranslateForm = () => {
       createEditorStateFromHtml(offer.faqs[faqIndex]?.[language]?.answer),
     );
 
-    if (question === originalQuestion && plainText === originalPlainText)
-      return;
+    if (question === originalQuestion && plainText === originalPlainText) return;
 
     const updatedFaqs = offer.faqs.map((faq, i) =>
       i !== faqIndex
@@ -252,9 +470,7 @@ const TranslateForm = () => {
             ...faq,
             [language]: {
               question,
-              answer: draftToHtml(
-                convertToRaw(editorState.getCurrentContent()),
-              ),
+              answer: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             },
           },
     );
@@ -282,205 +498,6 @@ const TranslateForm = () => {
         (lang) => !!faq[lang]?.question?.trim() || !!faq[lang]?.answer,
       ),
     ) ?? false;
-
-  const titleFields = languageOptions.map((language) => (
-    <Stack
-      key={`translate-title-${language}`}
-      display="grid"
-      alignItems="center"
-      css={rowGridCss}
-    >
-      <Text variant="muted">
-        {originalLanguage === language
-          ? t('translate.original_label', { language })
-          : t('translate.translation_label', { language })}
-      </Text>
-      {originalLanguage === language && !isEditingOriginalTitle ? (
-        <Inline spacing={3}>
-          <Text variant="muted">{titleValues[language] ?? ''}</Text>
-          <Button
-            onClick={() => setIsEditingOriginalTitle(true)}
-            variant={ButtonVariants.LINK}
-          >
-            {t('translate.change')}
-          </Button>
-        </Inline>
-      ) : (
-        <FormElement
-          id={`translate-title-${language}`}
-          Component={
-            <Input
-              placeholder={t('translate.placeholder_title', { language })}
-              value={titleValues[language] ?? ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTitleValues((prev) => ({
-                  ...prev,
-                  [language]: e.target.value,
-                }))
-              }
-              onBlur={(e) => handleTitleBlur(language, e.target.value)}
-            />
-          }
-        />
-      )}
-    </Stack>
-  ));
-
-  const descriptionFields = languageOptions.map((language) => (
-    <Stack
-      key={`translate-description-${language}`}
-      id={`description-container-${language}`}
-      display="grid"
-      css={rowGridCss}
-    >
-      <Text variant="muted">
-        {originalLanguage === language
-          ? t('translate.original_label', { language })
-          : t('translate.translation_label', { language })}
-      </Text>
-      {originalLanguage === language && !isEditingOriginalDescription ? (
-        <Stack spacing={3}>
-          <Panel padding={3} color={getTextValue('muted.color')}>
-            <DescriptionPreview
-              description={offer?.description?.[language] ?? ''}
-            />
-          </Panel>
-          <Button
-            variant={ButtonVariants.LINK}
-            onClick={() => setIsEditingOriginalDescription(true)}
-          >
-            {t('translate.change')}
-          </Button>
-        </Stack>
-      ) : (
-        <FormElement
-          id={`create-description-${language}`}
-          Component={
-            <RichTextEditor
-              editorState={
-                descriptionEditorStates[language] ?? EditorState.createEmpty()
-              }
-              onEditorStateChange={(editorState) =>
-                setDescriptionEditorStates((prev) => ({
-                  ...prev,
-                  [language]: editorState,
-                }))
-              }
-              onBlur={() =>
-                handleDescriptionBlur(
-                  language,
-                  descriptionEditorStates[language] ??
-                    EditorState.createEmpty(),
-                )
-              }
-            />
-          }
-        />
-      )}
-    </Stack>
-  ));
-
-  const faqFields = offer?.faqs?.map((faq, faqIndex) => (
-    <Stack key={`faq-${faqIndex}`} spacing={4} maxWidth="55rem">
-      {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
-      <Text fontWeight="bold">
-        {t('translate.faq.title', { index: faqIndex + 1 })}
-      </Text>
-
-      <Stack display="grid" css={rowGridCss}>
-        <Text variant="muted">
-          {t('translate.original_label', { language: originalLanguage })}
-        </Text>
-        {editingOriginalFaqs.has(faqIndex) ? (
-          <Stack spacing={3}>
-            <Input
-              value={faqQuestionValues[`${faqIndex}_${originalLanguage}`] ?? ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFaqQuestionValues((prev) => ({
-                  ...prev,
-                  [`${faqIndex}_${originalLanguage}`]: e.target.value,
-                }))
-              }
-              onBlur={() => saveFaqTranslation(faqIndex, originalLanguage)}
-            />
-            <RichTextEditor
-              editorState={
-                faqAnswerEditorStates[`${faqIndex}_${originalLanguage}`] ??
-                EditorState.createEmpty()
-              }
-              onEditorStateChange={(editorState) =>
-                setFaqAnswerEditorStates((prev) => ({
-                  ...prev,
-                  [`${faqIndex}_${originalLanguage}`]: editorState,
-                }))
-              }
-              onBlur={() => saveFaqTranslation(faqIndex, originalLanguage)}
-            />
-          </Stack>
-        ) : (
-          <Stack spacing={2}>
-            <Inline justifyContent="space-between">
-              <Text fontWeight="bold">
-                {faq[originalLanguage]?.question ?? ''}
-              </Text>
-              <Button
-                variant={ButtonVariants.LINK}
-                onClick={() =>
-                  setEditingOriginalFaqs((prev) => new Set([...prev, faqIndex]))
-                }
-              >
-                {t('translate.change')}
-              </Button>
-            </Inline>
-            <DescriptionPreview
-              description={faq[originalLanguage]?.answer ?? ''}
-            />
-          </Stack>
-        )}
-      </Stack>
-
-      {translationLanguages.map((language) => (
-        <Stack
-          key={`faq-${faqIndex}-${language}`}
-          id={`faq-translation-${faqIndex}-${language}`}
-          display="grid"
-          css={rowGridCss}
-        >
-          <Text variant="muted">
-            {t('translate.translation_label', { language })}
-          </Text>
-          <Stack spacing={3}>
-            <Input
-              placeholder={t('translate.faq.placeholder_question', {
-                language,
-              })}
-              value={faqQuestionValues[`${faqIndex}_${language}`] ?? ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFaqQuestionValues((prev) => ({
-                  ...prev,
-                  [`${faqIndex}_${language}`]: e.target.value,
-                }))
-              }
-              onBlur={() => saveFaqTranslation(faqIndex, language)}
-            />
-            <RichTextEditor
-              editorState={
-                faqAnswerEditorStates[`${faqIndex}_${language}`] ??
-                EditorState.createEmpty()
-              }
-              onEditorStateChange={(editorState) =>
-                setFaqAnswerEditorStates((prev) => ({
-                  ...prev,
-                  [`${faqIndex}_${language}`]: editorState,
-                }))
-              }
-              onBlur={() => saveFaqTranslation(faqIndex, language)}
-            />
-          </Stack>
-        </Stack>
-      ))}
-    </Stack>
-  ));
 
   return (
     <Page>
@@ -510,7 +527,23 @@ const TranslateForm = () => {
               />
             }
           >
-            <ContentPanel>{titleFields}</ContentPanel>
+            <ContentPanel>
+              {languageOptions.map((language) => (
+                <Box key={`translate-title-${language}`}>
+                  <TitleField
+                    language={language}
+                    originalLanguage={originalLanguage}
+                    isEditingOriginal={isEditingOriginalTitle}
+                    onStartEditing={() => setIsEditingOriginalTitle(true)}
+                    value={titleValues[language] || ''}
+                    onChange={(value) =>
+                      setTitleValues((prev) => ({ ...prev, [language]: value }))
+                    }
+                    onBlur={(value) => handleTitleBlur(language, value)}
+                  />
+                </Box>
+              ))}
+            </ContentPanel>
           </Tabs.Tab>
           {hasDescription && (
             <Tabs.Tab
@@ -522,7 +555,36 @@ const TranslateForm = () => {
                 />
               }
             >
-              <ContentPanel>{descriptionFields}</ContentPanel>
+              <ContentPanel>
+                {languageOptions.map((language) => (
+                  <Box key={`translate-description-${language}`}>
+                    <DescriptionField
+                      language={language}
+                      originalLanguage={originalLanguage}
+                      isEditingOriginal={isEditingOriginalDescription}
+                      onStartEditing={() =>
+                        setIsEditingOriginalDescription(true)
+                      }
+                      description={offer?.description?.[language] ?? ''}
+                      editorState={
+                        descriptionEditorStates[language] ||
+                        EditorState.createEmpty()
+                      }
+                      onEditorStateChange={(editorState) =>
+                        setDescriptionEditorStates((prev) => ({
+                          ...prev,
+                          [language]: editorState,
+                        }))
+                      }
+                      onBlur={() => {
+                        const editorState = descriptionEditorStates[language];
+                        if (editorState)
+                          handleDescriptionBlur(language, editorState);
+                      }}
+                    />
+                  </Box>
+                ))}
+              </ContentPanel>
             </Tabs.Tab>
           )}
           {hasFaqs && (
@@ -535,7 +597,40 @@ const TranslateForm = () => {
                 />
               }
             >
-              <ContentPanel>{faqFields}</ContentPanel>
+              <ContentPanel>
+                {offer?.faqs?.map((faq, faqIndex) => (
+                  <Box key={`faq-${faqIndex}`}>
+                    <FaqField
+                      faqIndex={faqIndex}
+                      isFirst={faqIndex === 0}
+                      originalLanguage={originalLanguage}
+                      translationLanguages={translationLanguages}
+                      faq={faq}
+                      isEditingOriginal={editingOriginalFaqs.has(faqIndex)}
+                      onStartEditing={() =>
+                        setEditingOriginalFaqs(
+                          (prev) => new Set([...prev, faqIndex]),
+                        )
+                      }
+                      questionValues={faqQuestionValues}
+                      answerEditorStates={faqAnswerEditorStates}
+                      onQuestionChange={(lang, value) =>
+                        setFaqQuestionValues((prev) => ({
+                          ...prev,
+                          [`${faqIndex}_${lang}`]: value,
+                        }))
+                      }
+                      onAnswerStateChange={(lang, state) =>
+                        setFaqAnswerEditorStates((prev) => ({
+                          ...prev,
+                          [`${faqIndex}_${lang}`]: state,
+                        }))
+                      }
+                      onSave={(lang) => saveFaqTranslation(faqIndex, lang)}
+                    />
+                  </Box>
+                ))}
+              </ContentPanel>
             </Tabs.Tab>
           )}
         </Tabs>
@@ -555,4 +650,5 @@ const TranslateForm = () => {
     </Page>
   );
 };
+
 export { TranslateForm };
