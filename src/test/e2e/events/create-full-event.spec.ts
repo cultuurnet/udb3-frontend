@@ -172,15 +172,15 @@ test('create event with all possible fields filled in', async ({
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
 
-  await page.getByLabel('Link').click();
-  await page.getByLabel('Link').fill(dummyEvent.bookingInfo.url);
+  await page.locator('#subevent-0-link').click();
+  await page.locator('#subevent-0-link').fill(dummyEvent.bookingInfo.url);
 
   await page
-    .getByLabel('Maximum capaciteit')
+    .locator('#subevent-0-max-capacity')
     .fill(String(dummyEvent.bookingInfo.capacity));
 
   await page
-    .getByLabel('Tekst op reservatieknop')
+    .locator('#subevent-0-url-label')
     .selectOption({ label: 'Koop tickets' });
 
   await page.getByLabel('Reservatieperiode').check();
