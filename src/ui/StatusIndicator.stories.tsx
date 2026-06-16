@@ -67,7 +67,3 @@ export const WithDescription: Story = {
     description: 'Aangemaakt door een andere gebruiker',
   },
 };
-
-export const WithoutColorAndLabel: Story = {
-  args: {},
-};
