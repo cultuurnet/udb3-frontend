@@ -136,7 +136,6 @@ const TitleField = ({
           id={`translate-title-${language}`}
           Component={
             <Input
-              maxWidth={300}
               placeholder={t('translate.placeholder_title', { language })}
               value={value}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -240,7 +239,7 @@ const FaqField = ({
   const key = (lang: string) => `${faqIndex}_${lang}`;
 
   return (
-    <Stack spacing={4} maxWidth="60rem">
+    <Stack spacing={4} maxWidth="55rem">
       {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
       <Text fontWeight="bold">
         {t('translate.faq.title', { index: faqIndex + 1 })}
@@ -272,7 +271,7 @@ const FaqField = ({
         ) : (
           <Stack spacing={2}>
             <Inline justifyContent="space-between">
-              <Text fontWeight="bold" maxWidth={300}>
+              <Text fontWeight="bold">
                 {faq[originalLanguage]?.question ?? ''}
               </Text>
               <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
