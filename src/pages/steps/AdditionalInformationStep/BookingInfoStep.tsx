@@ -15,6 +15,7 @@ import {
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
@@ -486,13 +487,13 @@ const BookingInfoStep = ({
       onMutate: async ({ subEventId, bookingInfo, bookingAvailability }) => {
         const queryKey = [scope, { id: eventId }];
         await queryClient.cancelQueries({ queryKey });
-        const previousOffer = queryClient.getQueryData(queryKey);
+        const previousOffer = queryClient.getQueryData<Offer>(queryKey);
 
-        queryClient.setQueryData(queryKey, (offer: any) => {
+        queryClient.setQueryData<Offer>(queryKey, (offer) => {
           if (!offer?.subEvent) return offer;
           return {
             ...offer,
-            subEvent: offer.subEvent.map((subEvent: any, index: number) =>
+            subEvent: offer.subEvent.map((subEvent, index) =>
               index === subEventId
                 ? {
                     ...subEvent,
@@ -506,9 +507,13 @@ const BookingInfoStep = ({
 
         return { previousOffer };
       },
-      onError: (_error, _variables, context: any) => {
+      onError: (
+        _error,
+        _variables,
+        context: { previousOffer?: Offer } | undefined,
+      ) => {
         if (context?.previousOffer) {
-          queryClient.setQueryData(
+          queryClient.setQueryData<Offer>(
             [scope, { id: eventId }],
             context.previousOffer,
           );
