@@ -1690,7 +1690,8 @@
     "search_text": "En train de chercher..."
   },
   "common": {
-    "back_to_overview": "Retour à la liste"
+    "back_to_overview": "Retour à la liste",
+    "close": "Fermer"
   },
   "users": {
     "search": {

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
@@ -63,6 +64,7 @@ const AlertShadcn = ({
   action,
   className,
 }: AlertProps) => {
+  const { t } = useTranslation();
   const icon = AlertVariantIcon[variant];
 
   return (
@@ -99,6 +101,7 @@ const AlertShadcn = ({
       </div>
       {closable && (
         <button
+          aria-label={t('common.close')}
           onClick={onClose}
           className={cn(
             'tw:absolute tw:right-2 tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/10',

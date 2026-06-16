@@ -1748,7 +1748,8 @@
     "search_text": "Aan het zoeken..."
   },
   "common": {
-    "back_to_overview": "Terug naar de lijst"
+    "back_to_overview": "Terug naar de lijst",
+    "close": "Sluiten"
   },
   "users": {
     "search": {
