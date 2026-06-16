@@ -28,7 +28,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePicker } from '@/ui/DatePicker';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { Label, LabelVariants } from '@/ui/Label';
+import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -451,10 +451,7 @@ const AgeRangeStepBoa = ({
                     </Text>
                     <Inline spacing={3} alignItems="flex-end">
                       <Stack spacing={2}>
-                        <Label
-                          variant={LabelVariants.BOLD}
-                          htmlFor="age-birth-date-min"
-                        >
+                        <Label htmlFor="age-birth-date-min">
                           {t('create.name_and_age.age.birth_date.from')}
                         </Label>
                         <DatePicker
@@ -466,10 +463,7 @@ const AgeRangeStepBoa = ({
                         />
                       </Stack>
                       <Stack spacing={2}>
-                        <Label
-                          variant={LabelVariants.BOLD}
-                          htmlFor="age-birth-date-max"
-                        >
+                        <Label htmlFor="age-birth-date-max">
                           {t('create.name_and_age.age.birth_date.to')}
                         </Label>
                         <DatePicker
