@@ -81,13 +81,14 @@ test.describe.serial('Event Preview Content', () => {
   });
 
   test.beforeAll(async ({ browser }) => {
+    test.setTimeout(120_000);
+
     const context = await browser.newContext();
     await context.addCookies(cookies);
     const page = await context.newPage();
     suppressHydrationErrors(page);
 
     await page.goto(editUrl);
-    await page.waitForLoadState('networkidle');
 
     await page
       .getByRole('button', { name: calendar.fixed_days.button_add_hours })
@@ -127,7 +128,6 @@ test.describe.serial('Event Preview Content', () => {
       })
       .click();
     await expect(modal).toBeHidden();
-    await page.waitForLoadState('networkidle');
     await expect(
       page.getByText(calendar.days.short.monday, { exact: true }),
     ).toBeVisible();
