@@ -34,9 +34,12 @@ type ReservationLinksSectionProps = BoxProps & {
   urlLabel: UrlLabelValue;
   capacity: string;
   status: BookingAvailabilityValue;
+  // Booking availability (capacity + status) can only be updated for single and
+  // multiple calendar types, so it is hidden for offers without subEvents.
+  showBookingAvailability?: boolean;
   urlLabelOptions: UrlLabelOption[];
   onChangeBookingInfo: (url: string, urlLabel: UrlLabelValue) => void;
-  onChangeBookingAvailability: (
+  onChangeBookingAvailability?: (
     status: BookingAvailabilityValue,
     capacity: string,
   ) => void;
@@ -50,6 +53,7 @@ const ReservationLinksSection = ({
   urlLabel: initialUrlLabel,
   capacity: initialCapacity,
   status: initialStatus,
+  showBookingAvailability = true,
   urlLabelOptions,
   onChangeBookingInfo,
   onChangeBookingAvailability,
@@ -88,7 +92,7 @@ const ReservationLinksSection = ({
 
   const handleCapacityBlur = () => {
     if (isCapacityInvalid) return;
-    onChangeBookingAvailability(status, capacity);
+    onChangeBookingAvailability?.(status, capacity);
   };
 
   const isCard = variant === ReservationLinksSectionVariants.CARD;
@@ -126,47 +130,51 @@ const ReservationLinksSection = ({
             t('create.additionalInformation.booking_info.url_error')
           }
         />
-        <FormElement
-          flex={1}
-          id={`${idPrefix}-max-capacity`}
-          label={t('create.additionalInformation.booking_info.max_capacity')}
-          Component={
-            <Input
-              maxWidth="8rem"
-              value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
-              onBlur={handleCapacityBlur}
-            />
-          }
-          error={
-            isCapacityInvalid &&
-            t('create.additionalInformation.booking_info.capacity_error')
-          }
-        />
+        {showBookingAvailability && (
+          <FormElement
+            flex={1}
+            id={`${idPrefix}-max-capacity`}
+            label={t('create.additionalInformation.booking_info.max_capacity')}
+            Component={
+              <Input
+                maxWidth="8rem"
+                value={capacity}
+                onChange={(e) => setCapacity(e.target.value)}
+                onBlur={handleCapacityBlur}
+              />
+            }
+            error={
+              isCapacityInvalid &&
+              t('create.additionalInformation.booking_info.capacity_error')
+            }
+          />
+        )}
       </Inline>
       <Inline spacing={4} flexWrap="wrap">
-        <FormElement
-          flex={1}
-          id={`${idPrefix}-status`}
-          label={t('create.additionalInformation.booking_info.status')}
-          Component={
-            <Select
-              value={status}
-              onChange={(e) => {
-                const newStatus = e.target.value as BookingAvailabilityValue;
-                setStatus(newStatus);
-                onChangeBookingAvailability(newStatus, capacity);
-              }}
-            >
-              <option value={BookingAvailabilityType.AVAILABLE}>
-                {t('bookingAvailability.available')}
-              </option>
-              <option value={BookingAvailabilityType.UNAVAILABLE}>
-                {t('bookingAvailability.unavailable')}
-              </option>
-            </Select>
-          }
-        />
+        {showBookingAvailability && (
+          <FormElement
+            flex={1}
+            id={`${idPrefix}-status`}
+            label={t('create.additionalInformation.booking_info.status')}
+            Component={
+              <Select
+                value={status}
+                onChange={(e) => {
+                  const newStatus = e.target.value as BookingAvailabilityValue;
+                  setStatus(newStatus);
+                  onChangeBookingAvailability?.(newStatus, capacity);
+                }}
+              >
+                <option value={BookingAvailabilityType.AVAILABLE}>
+                  {t('bookingAvailability.available')}
+                </option>
+                <option value={BookingAvailabilityType.UNAVAILABLE}>
+                  {t('bookingAvailability.unavailable')}
+                </option>
+              </Select>
+            }
+          />
+        )}
         <FormElement
           flex={1}
           id={`${idPrefix}-url-label`}

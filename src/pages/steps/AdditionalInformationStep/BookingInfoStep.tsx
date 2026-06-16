@@ -552,6 +552,18 @@ const BookingInfoStep = ({
     });
   };
 
+  const handleChangeOfferBookingInfo = (url: string, urlLabelType: string) => {
+    setOfferUrl(url);
+    setSelectedUrlLabel(urlLabelType);
+
+    handleAddBookingInfoMutation({
+      ...getValues(),
+      url,
+      urlLabel:
+        URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve,
+    });
+  };
+
   const handleChangeBookingPeriod = (
     availabilityEnds: Date,
     availabilityStarts: Date,
@@ -624,43 +636,67 @@ const BookingInfoStep = ({
         </Text>
         {getOfferByIdQuery.data && (
           <Stack spacing={5}>
-            {subEvents.map((subEvent, index) => (
+            {subEvents.length > 0 ? (
+              subEvents.map((subEvent, index) => (
+                <ReservationLinksSection
+                  key={index}
+                  idPrefix={`subevent-${index}`}
+                  variant={
+                    subEvents.length > 1
+                      ? ReservationLinksSectionVariants.CARD
+                      : ReservationLinksSectionVariants.INLINE
+                  }
+                  title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
+                    new Date(subEvent.endDate),
+                    'dd/MM/yyyy',
+                  )}`}
+                  url={subEvent.bookingInfo?.url ?? ''}
+                  urlLabel={
+                    subEvent.bookingInfo?.urlLabel?.en
+                      ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                      : ''
+                  }
+                  capacity={
+                    subEvent.bookingAvailability?.capacity !== undefined
+                      ? String(subEvent.bookingAvailability.capacity)
+                      : ''
+                  }
+                  status={
+                    subEvent.bookingAvailability?.type ??
+                    BookingAvailabilityType.AVAILABLE
+                  }
+                  urlLabelOptions={URL_LABELS}
+                  onChangeBookingInfo={(url, urlLabelType) =>
+                    handleChangeSubEventBookingInfo(index, url, urlLabelType)
+                  }
+                  onChangeBookingAvailability={(type, capacityValue) =>
+                    handleChangeSubEventAvailability(index, type, capacityValue)
+                  }
+                />
+              ))
+            ) : (
               <ReservationLinksSection
-                key={index}
-                idPrefix={`subevent-${index}`}
-                variant={
-                  subEvents.length > 1
-                    ? ReservationLinksSectionVariants.CARD
-                    : ReservationLinksSectionVariants.INLINE
-                }
-                title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
-                  new Date(subEvent.endDate),
-                  'dd/MM/yyyy',
-                )}`}
-                url={subEvent.bookingInfo?.url ?? ''}
+                idPrefix="offer"
+                variant={ReservationLinksSectionVariants.INLINE}
+                showBookingAvailability={false}
+                url={bookingInfo?.url ?? ''}
                 urlLabel={
-                  subEvent.bookingInfo?.urlLabel?.en
-                    ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                  bookingInfo?.urlLabel?.en
+                    ? getUrlLabelType(bookingInfo.urlLabel.en)
                     : ''
                 }
                 capacity={
-                  subEvent.bookingAvailability?.capacity !== undefined
-                    ? String(subEvent.bookingAvailability.capacity)
+                  bookingAvailability?.capacity !== undefined
+                    ? String(bookingAvailability.capacity)
                     : ''
                 }
                 status={
-                  subEvent.bookingAvailability?.type ??
-                  BookingAvailabilityType.AVAILABLE
+                  bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
                 }
                 urlLabelOptions={URL_LABELS}
-                onChangeBookingInfo={(url, urlLabelType) =>
-                  handleChangeSubEventBookingInfo(index, url, urlLabelType)
-                }
-                onChangeBookingAvailability={(type, capacityValue) =>
-                  handleChangeSubEventAvailability(index, type, capacityValue)
-                }
+                onChangeBookingInfo={handleChangeOfferBookingInfo}
               />
-            ))}
+            )}
           </Stack>
         )}
       </Stack>

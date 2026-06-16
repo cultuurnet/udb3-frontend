@@ -56,12 +56,13 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const queryClient = useQueryClient();
   const changeCalendarMutation = useChangeOfferCalendarMutation({
     onMutate: async ({ id, scope, subEvent }) => {
-      if (!subEvent) return;
       const queryKey = [scope, { id }];
       await queryClient.cancelQueries({ queryKey });
       const previousOffer = queryClient.getQueryData<Offer>(queryKey);
+      // Mirror the new calendar in the cache: calendar types without subEvents
+      // (periodic/permanent) clear them, so the reservation UI updates too.
       queryClient.setQueryData<Offer>(queryKey, (offer) =>
-        offer ? { ...offer, subEvent } : offer,
+        offer ? { ...offer, subEvent: subEvent ?? [] } : offer,
       );
       return { previousOffer };
     },
