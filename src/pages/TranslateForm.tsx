@@ -427,9 +427,7 @@ const TranslateForm = () => {
               <Button
                 variant={ButtonVariants.LINK}
                 onClick={() =>
-                  setEditingOriginalFaqs(
-                    (prev) => new Set([...prev, faqIndex]),
-                  )
+                  setEditingOriginalFaqs((prev) => new Set([...prev, faqIndex]))
                 }
               >
                 {t('translate.change')}
