@@ -170,7 +170,9 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByRole('tab', { name: 'Reservatie' }).click();
     await page.getByPlaceholder('E-mailadres').fill(dummyEvent.bookingEmail);
     await page.getByPlaceholder('Telefoonnummer').fill(dummyEvent.bookingPhone);
-    await page.getByPlaceholder('Website').fill(dummyEvent.bookingUrl);
+
+    await page.locator('#offer-link').fill(dummyEvent.bookingUrl);
+    await page.locator('#offer-link').blur();
 
     await page.getByRole('tab', { name: 'Labels' }).click();
     await page.getByLabel('Verfijn met labels').fill(dummyEvent.label);
