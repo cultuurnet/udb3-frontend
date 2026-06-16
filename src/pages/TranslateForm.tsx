@@ -421,7 +421,7 @@ const TranslateForm = () => {
         ) : (
           <Stack spacing={2}>
             <Inline justifyContent="space-between">
-              <Text fontWeight="bold" maxWidth={300}>
+              <Text fontWeight="bold">
                 {faq[originalLanguage]?.question ?? ''}
               </Text>
               <Button
