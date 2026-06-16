@@ -69,7 +69,7 @@ test.describe('Places translation', () => {
 
       for (const translation of translations) {
         const descriptionContainer = page.locator(
-          `#description-editor-container-${translation.lang}`,
+          `#description-container-${translation.lang}`,
         );
 
         await descriptionContainer

@@ -14,6 +14,7 @@ import {
 import { SupportedLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
@@ -32,6 +33,19 @@ import { DescriptionPreview } from './preview/DescriptionPreview';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
+
+const createEditorStateFromHtml = (html: string | undefined): EditorState => {
+  if (!html || !htmlToDraft) return EditorState.createEmpty();
+  const draftState = htmlToDraft(html);
+  const contentState = ContentState.createFromBlockArray(
+    draftState.contentBlocks,
+    draftState.entityMap,
+  );
+  return EditorState.createWithContent(contentState);
+};
+
+const getPlainText = (editorState: EditorState) =>
+  editorState.getCurrentContent().getPlainText().trim();
 
 const languageOptions = [...Object.values(SupportedLanguages), 'en'];
 const getGlobalValue = getValueFromTheme('global');
@@ -76,6 +90,119 @@ const ContentPanel = ({ children }: { children: React.ReactNode }) => (
   </Stack>
 );
 
+type TranslateFormBaseProps = {
+  language: string;
+  originalLanguage: string;
+  isEditingOriginal: boolean;
+  onStartEditing: () => void;
+};
+
+type TitleFieldProps = TranslateFormBaseProps & {
+  value: string;
+  onChange: (value: string) => void;
+  onBlur: (value: string) => void;
+};
+
+const TitleField = ({
+  language,
+  originalLanguage,
+  isEditingOriginal,
+  onStartEditing,
+  value,
+  onChange,
+  onBlur,
+}: TitleFieldProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack display="grid" alignItems="center" css={rowGridCss}>
+      <Text variant="muted">
+        {originalLanguage === language
+          ? t('translate.original_label', { language })
+          : t('translate.translation_label', { language })}
+      </Text>
+      {originalLanguage === language && !isEditingOriginal ? (
+        <Inline spacing={3}>
+          <Text variant="muted">{value}</Text>
+          <Button onClick={onStartEditing} variant={ButtonVariants.LINK}>
+            {t('translate.change')}
+          </Button>
+        </Inline>
+      ) : (
+        <FormElement
+          id={`translate-title-${language}`}
+          Component={
+            <Input
+              maxWidth={300}
+              placeholder={t('translate.placeholder_title', { language })}
+              value={value}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChange(e.target.value)
+              }
+              onBlur={(e) => onBlur(e.target.value)}
+            />
+          }
+        />
+      )}
+    </Stack>
+  );
+};
+
+type DescriptionFieldProps = TranslateFormBaseProps & {
+  description: string;
+  editorState: EditorState;
+  onEditorStateChange: (state: EditorState) => void;
+  onBlur: () => void;
+};
+
+const DescriptionField = ({
+  language,
+  originalLanguage,
+  isEditingOriginal,
+  onStartEditing,
+  description,
+  editorState,
+  onEditorStateChange,
+  onBlur,
+}: DescriptionFieldProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack
+      id={`description-container-${language}`}
+      display="grid"
+      css={rowGridCss}
+    >
+      <Text variant="muted">
+        {originalLanguage === language
+          ? t('translate.original_label', { language })
+          : t('translate.translation_label', { language })}
+      </Text>
+      {originalLanguage === language && !isEditingOriginal ? (
+        <Stack spacing={3}>
+          <Panel padding={3} color={getTextValue('muted.color')}>
+            <DescriptionPreview description={description} />
+          </Panel>
+          <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
+            {t('translate.change')}
+          </Button>
+        </Stack>
+      ) : (
+        <FormElement
+          id={`create-description-${language}`}
+          Component={
+            <RichTextEditor
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+              onBlur={onBlur}
+            />
+          }
+        />
+      )}
+    </Stack>
+  );
+};
+
 const TranslateForm = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -90,22 +217,22 @@ const TranslateForm = () => {
   const [isEditingOriginalDescription, setIsEditingOriginalDescription] =
     useState(false);
   const [titleValues, setTitleValues] = useState<Record<string, string>>({});
-
   const [descriptionEditorStates, setDescriptionEditorStates] = useState<
     Record<string, EditorState>
   >({});
 
   const toast = useToast({
-    messages: Object.fromEntries([
-      ...languageOptions.map((lang) => [
-        `title_${lang}`,
-        t('translate.success.title', { language: lang }),
-      ]),
-      ...languageOptions.map((lang) => [
-        `description_${lang}`,
-        t('translate.success.description', { language: lang }),
-      ]),
-    ]),
+    messages: {
+      ...Object.fromEntries(
+        languageOptions.flatMap((lang) => [
+          [`title_${lang}`, t('translate.success.title', { language: lang })],
+          [
+            `description_${lang}`,
+            t('translate.success.description', { language: lang }),
+          ],
+        ]),
+      ),
+    },
   });
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: id as string, scope });
@@ -152,9 +279,7 @@ const TranslateForm = () => {
 
   const handleTitleBlur = async (language: string, value: string) => {
     const originalValue = offer?.name?.[language] || '';
-
     if (value === '' || value === originalValue) return;
-
     await changeNameMutation.mutateAsync({
       id,
       lang: language,
@@ -213,113 +338,13 @@ const TranslateForm = () => {
     (lang) => !!offer?.description?.[lang],
   );
 
-  const titleFields = languageOptions.map((language) => (
-    <Stack
-      key={`translate-title-${language}`}
-      display="grid"
-      alignItems="center"
-      css={rowGridCss}
-    >
-      <Text variant="muted">
-        {originalLanguage === language
-          ? t('translate.original_label', { language })
-          : t('translate.translation_label', { language })}
-      </Text>
-      {originalLanguage === language && !isEditingOriginalTitle ? (
-        <Inline spacing={3}>
-          <Text variant="muted">{titleValues[language] || ''}</Text>
-          <Button
-            onClick={() => setIsEditingOriginalTitle(true)}
-            variant={ButtonVariants.LINK}
-          >
-            {t('translate.change')}
-          </Button>
-        </Inline>
-      ) : (
-        <FormElement
-          id={`translate-title-${language}`}
-          Component={
-            <Input
-              maxWidth={300}
-              placeholder={t('translate.placeholder_title', { language })}
-              value={titleValues[language] || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTitleValues((prev) => ({
-                  ...prev,
-                  [language]: e.target.value,
-                }))
-              }
-              onBlur={(e) => handleTitleBlur(language, e.target.value)}
-            />
-          }
-        />
-      )}
-    </Stack>
-  ));
-
-  const descriptionFields = languageOptions.map((language) => (
-    <Stack
-      key={`translate-description-${language}`}
-      display="grid"
-      css={rowGridCss}
-    >
-      <Text variant="muted">
-        {originalLanguage === language
-          ? t('translate.original_label', { language })
-          : t('translate.translation_label', { language })}
-      </Text>
-      {originalLanguage === language && !isEditingOriginalDescription ? (
-        <Stack spacing={3}>
-          <Panel padding={3} color={getTextValue('muted.color')}>
-            <DescriptionPreview
-              description={
-                descriptionEditorStates[language]
-                  ? draftToHtml(
-                      convertToRaw(
-                        descriptionEditorStates[language].getCurrentContent(),
-                      ),
-                    )
-                  : ''
-              }
-            />
-          </Panel>
-          <Button
-            variant={ButtonVariants.LINK}
-            onClick={() => setIsEditingOriginalDescription(true)}
-          >
-            {t('translate.change')}
-          </Button>
-        </Stack>
-      ) : (
-        <div id={`description-editor-container-${language}`}>
-          <FormElement
-            id={`create-description-${language}`}
-            Component={
-              <RichTextEditor
-                editorState={
-                  descriptionEditorStates[language] || EditorState.createEmpty()
-                }
-                onEditorStateChange={(editorState) =>
-                  setDescriptionEditorStates((prev) => ({
-                    ...prev,
-                    [language]: editorState,
-                  }))
-                }
-                onBlur={() => {
-                  const editorState = descriptionEditorStates[language];
-                  if (editorState) handleDescriptionBlur(language, editorState);
-                }}
-              />
-            }
-          />
-        </div>
-      )}
-    </Stack>
-  ));
-
   return (
     <Page>
-      <Page.Title>{`${originalTitle} ${t('translate.title')}`}</Page.Title>
+      <Page.Title>
+        {originalTitle
+          ? `${originalTitle} ${t('translate.title')}`
+          : t('translate.title')}
+      </Page.Title>
       <Page.Content>
         <Toast
           variant="success"
@@ -341,7 +366,23 @@ const TranslateForm = () => {
               />
             }
           >
-            <ContentPanel>{titleFields}</ContentPanel>
+            <ContentPanel>
+              {languageOptions.map((language) => (
+                <Box key={`translate-title-${language}`}>
+                  <TitleField
+                    language={language}
+                    originalLanguage={originalLanguage}
+                    isEditingOriginal={isEditingOriginalTitle}
+                    onStartEditing={() => setIsEditingOriginalTitle(true)}
+                    value={titleValues[language] || ''}
+                    onChange={(value) =>
+                      setTitleValues((prev) => ({ ...prev, [language]: value }))
+                    }
+                    onBlur={(value) => handleTitleBlur(language, value)}
+                  />
+                </Box>
+              ))}
+            </ContentPanel>
           </Tabs.Tab>
           {hasDescription && (
             <Tabs.Tab
@@ -353,19 +394,47 @@ const TranslateForm = () => {
                 />
               }
             >
-              <ContentPanel>{descriptionFields}</ContentPanel>
+              <ContentPanel>
+                {languageOptions.map((language) => (
+                  <Box key={`translate-description-${language}`}>
+                    <DescriptionField
+                      language={language}
+                      originalLanguage={originalLanguage}
+                      isEditingOriginal={isEditingOriginalDescription}
+                      onStartEditing={() =>
+                        setIsEditingOriginalDescription(true)
+                      }
+                      description={offer?.description?.[language] ?? ''}
+                      editorState={
+                        descriptionEditorStates[language] ||
+                        EditorState.createEmpty()
+                      }
+                      onEditorStateChange={(editorState) =>
+                        setDescriptionEditorStates((prev) => ({
+                          ...prev,
+                          [language]: editorState,
+                        }))
+                      }
+                      onBlur={() => {
+                        const editorState = descriptionEditorStates[language];
+                        if (editorState)
+                          handleDescriptionBlur(language, editorState);
+                      }}
+                    />
+                  </Box>
+                ))}
+              </ContentPanel>
             </Tabs.Tab>
           )}
         </Tabs>
         <Inline marginTop={4}>
           <Button
             variant={ButtonVariants.SUCCESS}
-            onClick={(e: React.MouseEvent) => {
-              e.preventDefault();
+            onClick={() =>
               router.push(
                 scope === OfferTypes.EVENTS ? `/events/${id}` : `/places/${id}`,
-              );
-            }}
+              )
+            }
           >
             {t('translate.done')}
           </Button>
