@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 import { Box } from '@/ui/Box';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
@@ -8,17 +6,15 @@ import { Text, TextVariants } from '@/ui/Text';
 type Props = InlineProps & {
   color?: string;
   label?: string;
-  isExternalCreator?: boolean;
+  description?: string;
 };
 
 export const StatusIndicatorLegacy = ({
   color,
   label,
-  isExternalCreator,
+  description,
   ...props
 }: Props) => {
-  const { t } = useTranslation();
-
   return (
     <Stack>
       <Inline
@@ -42,11 +38,7 @@ export const StatusIndicatorLegacy = ({
             </Text>,
           ]}
       </Inline>
-      {isExternalCreator && (
-        <Text variant={TextVariants.MUTED}>
-          {t('dashboard.external_creator')}
-        </Text>
-      )}
+      {description && <Text variant={TextVariants.MUTED}>{description}</Text>}
     </Stack>
   );
 };

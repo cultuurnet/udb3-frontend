@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Text, TextVariants } from '@/ui/Text';
 
@@ -8,16 +6,14 @@ import { StatusIndicatorLegacy } from './StatusIndicatorLegacy';
 type PublicationStatusIndicatorProps = {
   color?: string;
   label?: string;
-  isExternalCreator?: boolean;
+  description?: string;
 };
 
 const StatusIndicatorShadcn = ({
   color,
   label,
-  isExternalCreator,
+  description,
 }: PublicationStatusIndicatorProps) => {
-  const { t } = useTranslation();
-
   return (
     <div className="tw:flex tw:flex-col">
       <div className="tw:flex tw:flex-row tw:items-center tw:gap-x-2 tw:mb-1">
@@ -31,11 +27,7 @@ const StatusIndicatorShadcn = ({
           </>
         )}
       </div>
-      {isExternalCreator && (
-        <Text variant={TextVariants.MUTED}>
-          {t('dashboard.external_creator')}
-        </Text>
-      )}
+      {description && <Text variant={TextVariants.MUTED}>{description}</Text>}
     </div>
   );
 };
