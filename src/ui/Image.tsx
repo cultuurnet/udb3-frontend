@@ -6,7 +6,7 @@ type Props = {
   src: string;
   alt: string;
   width?: number;
-  height?: number | string;
+  height?: number;
   className?: string;
   loading?: 'lazy' | 'eager';
   decoding?: 'async' | 'sync' | 'auto';
@@ -15,8 +15,8 @@ type Props = {
 const ImageShadcn = ({
   src,
   alt,
-  width = 600,
-  height = 'auto',
+  width,
+  height,
   className,
   loading,
   decoding,

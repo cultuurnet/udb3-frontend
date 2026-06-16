@@ -10,8 +10,8 @@ const ImageLegacy = ({
   src,
   alt,
   className,
-  width = 600,
-  height = 'auto',
+  width,
+  height,
   ...props
 }: Props) => (
   <Box
