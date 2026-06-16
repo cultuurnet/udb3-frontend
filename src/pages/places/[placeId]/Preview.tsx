@@ -220,8 +220,11 @@ const Preview = () => {
               font-weight: 600;
               width: 25%;
             }
-            tbody tr:first-child td {
-              border-top: none;
+            tbody tr td {
+              border: none;
+            }
+            tbody tr:not(:last-child) td {
+              border-bottom: 1px solid ${colors.grey3};
             }
           `}
         />
@@ -259,6 +262,7 @@ const Preview = () => {
         <AgePreview
           typicalAgeRange={typicalAgeRange}
           audienceType={audience?.audienceType}
+          birthdateRange={offer?.birthdateRange}
         />
       ),
     },
