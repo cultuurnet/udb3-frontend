@@ -6,7 +6,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Box, BoxProps, boxPropTypes, getBoxProps, UIProp } from './Box';
 import { InlineLegacy } from './InlineLegacy';
 import { cn } from './shadcn/utils';
-import { getGapClass } from './tailwindGap';
+import { GAP_CLASS_BY_SPACING, getGapClass } from './tailwindGap';
 import type { BreakpointValues } from './theme';
 
 type InlineProps = {
@@ -46,7 +46,9 @@ const Inline = forwardRef<HTMLElement, Props>((props, ref) => {
   // version.
   const canUseShadcn =
     isShadcnMigrationEnabled &&
-    (props.spacing === undefined || typeof props.spacing === 'number') &&
+    (props.spacing === undefined ||
+      (typeof props.spacing === 'number' &&
+        props.spacing in GAP_CLASS_BY_SPACING)) &&
     props.stackOn === undefined &&
     props.display === undefined;
 

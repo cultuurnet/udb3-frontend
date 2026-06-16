@@ -17,4 +17,4 @@ const GAP_CLASS_BY_SPACING: Record<number, string> = {
 const getGapClass = (spacing?: number): string =>
   spacing === undefined ? '' : (GAP_CLASS_BY_SPACING[spacing] ?? '');
 
-export { getGapClass };
+export { GAP_CLASS_BY_SPACING, getGapClass };
