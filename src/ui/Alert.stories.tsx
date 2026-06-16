@@ -132,3 +132,19 @@ export const FullWidth: Story = {
     ...commonArgs,
   },
 };
+
+export const WithList: Story = {
+  render: () => (
+    <Alert variant={AlertVariants.PRIMARY} visible>
+      {`<strong>Tips voor de beschrijving van een cursus met open sessies</strong><br/><ul><li>Leg uit wat je precies leert of doet tijdens de sessies.</li><li>Vul daarna verder aan met extra informatie.</li><li>Gebruik daarvoor ook de veelgestelde vragen.</li></ul>`}
+    </Alert>
+  ),
+};
+
+export const WithInlineFormatting: Story = {
+  render: () => (
+    <Alert variant={AlertVariants.INFO} visible>
+      {`This alert has <strong>strong text</strong>, <b>bold text</b>, and <code>inline code</code>.`}
+    </Alert>
+  ),
+};

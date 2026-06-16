@@ -93,7 +93,11 @@ const AlertShadcn = ({
             {typeof children !== 'string' ? (
               children
             ) : (
-              <span dangerouslySetInnerHTML={{ __html: children as string }} />
+              // TODO: remove !important overrides when GlobalStyle.js CSS reset (list-style: none, font: inherit) is cleaned up.
+              <span
+                className="tw:[&_ul]:list-disc! tw:[&_ul]:pl-8! tw:[&_li]:list-item! tw:[&_strong]:font-bold! tw:[&_b]:font-bold! tw:[&_code]:font-mono!"
+                dangerouslySetInnerHTML={{ __html: children as string }}
+              />
             )}
           </AlertDescription>
           {action && <div className="tw:mt-3">{action}</div>}
