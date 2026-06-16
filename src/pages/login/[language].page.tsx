@@ -241,14 +241,7 @@ const MainChannelLink = () => {
   const { t } = useTranslation();
   return (
     <Link
-      css={`
-      display: inline
-      text-decoration: underline;
-      color: #555;
-      &:hover {
-        color: #222;
-      }
-    `}
+      className="tw:inline tw:underline tw:text-[#555] tw:hover:text-udb-text"
       href={t('main.channels_info_link_url')}
     >
       {t('main.channels_info_link_text')}
