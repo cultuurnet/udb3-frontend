@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import { useAddNewsletterSubscriberMutation } from '@/hooks/api/newsletter';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Box } from '@/ui/Box';
 import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Image } from '@/ui/Image';
@@ -98,13 +97,13 @@ const NewsletterSignupForm = (props: Props) => {
           </Stack>
         )}
 
-        <Box paddingLeft={5}>
+        <div className="tw:pl-8">
           <Image
             src={`/assets/${t('dashboard.newsletter.logo')}`}
             alt={t('dashboard.newsletter.logo_alt')}
             width={200}
           />
-        </Box>
+        </div>
       </Inline>
     </Panel>
   );
