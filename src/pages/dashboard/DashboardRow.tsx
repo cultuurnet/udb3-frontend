@@ -163,15 +163,7 @@ export const DashboardRow = ({
           href={url}
           color={getValue('listItem.color')}
           fontWeight="bold"
-          css={`
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 38rem;
-            display: block;
-            font-size: 18px;
-            text-decoration: none;
-          `}
+          className="tw:block tw:overflow-hidden tw:whitespace-nowrap tw:text-ellipsis tw:max-w-152 tw:text-[18px] tw:no-underline"
         >
           {title}
         </Link>

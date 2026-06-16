@@ -134,6 +134,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Avec date de début et de fin",
         "permanent": "En permanence",
+        "period_too_short": "Pour les activités d'une durée inférieure à 2 semaines, il est préférable de choisir l'option 'Sur des dates spécifiques'.",
         "opening_hours": "Heures d 'ouverture",
         "hours": "Heures",
         "button_change_opening_hours": "Modifier les heures d'ouverture",
@@ -1923,6 +1924,7 @@
     "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
+    "birth_years": "Né(e) entre <bold>{{from}}</bold> et <bold>{{to}}</bold>",
     "children_only": "Pour les enfants uniquement",
     "accessibility": {
       "description": "Un transport est prévu pour amener les enfants à votre activité depuis:"

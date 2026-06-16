@@ -90,12 +90,6 @@ const DeviatingPeriod = ({
       ]),
     ),
   );
-  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
-    {},
-  );
-  const markTouched = (key: string) =>
-    setTouchedFields((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
-
   const updateOpeningHour = (idToChange: string, patch: Partial<OpeningHour>) =>
     onChange({
       ...period,
@@ -145,35 +139,24 @@ const DeviatingPeriod = ({
   const getChildcareRowState = (
     openingHour: OpeningHour,
     childcareEnabled: boolean,
-  ) => {
-    const startTouched =
-      touchedFields[`${openingHour.id}-start`] &&
-      !!openingHour.childcare?.start;
-    const endTouched =
-      touchedFields[`${openingHour.id}-end`] && !!openingHour.childcare?.end;
-    return {
-      timesMissing:
-        childcareEnabled &&
-        !openingHour.childcare?.start &&
-        !openingHour.childcare?.end,
-      startError:
-        childcareEnabled &&
-        startTouched &&
-        openingHour.childcare?.start >= openingHour.opens
-          ? t(
-              'create.calendar.days.childcare.validation_messages.start_too_late',
-            )
-          : undefined,
-      endError:
-        childcareEnabled &&
-        endTouched &&
-        openingHour.childcare?.end <= openingHour.closes
-          ? t(
-              'create.calendar.days.childcare.validation_messages.end_too_early',
-            )
-          : undefined,
-    };
-  };
+  ) => ({
+    timesMissing:
+      childcareEnabled &&
+      !openingHour.childcare?.start &&
+      !openingHour.childcare?.end,
+    startError:
+      childcareEnabled &&
+      !!openingHour.childcare?.start &&
+      openingHour.childcare?.start >= openingHour.opens
+        ? t('create.calendar.days.childcare.validation_messages.start_too_late')
+        : undefined,
+    endError:
+      childcareEnabled &&
+      !!openingHour.childcare?.end &&
+      openingHour.childcare?.end <= openingHour.closes
+        ? t('create.calendar.days.childcare.validation_messages.end_too_early')
+        : undefined,
+  });
 
   return (
     <Stack
@@ -386,11 +369,13 @@ const DeviatingPeriod = ({
                         <Label
                           variant={LabelVariants.BOLD}
                           htmlFor={`deviating-childcare-toggle-${openingHour.id}`}
+                          color={!childcareEnabled ? colors.grey5 : undefined}
                         >
                           {t('create.calendar.days.childcare.label')}
                         </Label>
                       </Inline>
                       <TimeSpanPicker
+                        key={`childcare-${openingHour.id}-${childcareEnabled}`}
                         id={`deviating-childcare-timespan-${openingHour.id}`}
                         startTime={openingHour.childcare?.start ?? ''}
                         endTime={openingHour.childcare?.end ?? ''}
@@ -398,24 +383,22 @@ const DeviatingPeriod = ({
                           'create.calendar.days.childcare.from',
                         )}
                         endTimeLabel={t('create.calendar.days.childcare.to')}
-                        onChangeStartTime={(newTime) => {
-                          markTouched(`${openingHour.id}-start`);
+                        onChangeStartTime={(newTime) =>
                           updateOpeningHour(openingHour.id, {
                             childcare: {
                               start: newTime,
                               end: openingHour.childcare?.end ?? '',
                             },
-                          });
-                        }}
-                        onChangeEndTime={(newTime) => {
-                          markTouched(`${openingHour.id}-end`);
+                          })
+                        }
+                        onChangeEndTime={(newTime) =>
                           updateOpeningHour(openingHour.id, {
                             childcare: {
                               start: openingHour.childcare?.start ?? '',
                               end: newTime,
                             },
-                          });
-                        }}
+                          })
+                        }
                         labelPosition={TimeSpanPickerLabelPositions.INLINE}
                         disabled={!childcareEnabled}
                       />
