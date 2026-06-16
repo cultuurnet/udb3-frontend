@@ -53,7 +53,10 @@ import { OneOrMoreDays } from './OneOrMoreDays';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const changeCalendarMutation = useChangeOfferCalendarMutation({
-    onSuccess: () => onSuccess('calendar'),
+    onSuccess: () =>
+      onSuccess('calendar', {
+        shouldInvalidateEvent: false,
+      }),
   });
 
   return async ({ scope, calendar, timeTable }: FormDataUnion) => {
@@ -292,29 +295,31 @@ const CalendarStep = ({
     };
 
     const existingSubEvents = offerRef.current?.subEvent;
-    const formData =
-      existingSubEvents && Array.isArray(baseFormData.subEvent)
-        ? {
-            ...baseFormData,
-            subEvent: baseFormData.subEvent.map((subEvent, index) => {
-              const existing = existingSubEvents[index];
-              if (!existing) return subEvent;
-              return {
-                ...subEvent,
-                bookingInfo: existing.bookingInfo,
-                ...(subEvent.bookingAvailability && {
-                  bookingAvailability: {
-                    type: subEvent.bookingAvailability.type,
-                    ...(existing.bookingAvailability?.capacity !==
-                      undefined && {
-                      capacity: existing.bookingAvailability.capacity,
-                    }),
-                  },
-                }),
-              };
-            }),
-          }
-        : baseFormData;
+    const canPreserveReservationData =
+      existingSubEvents &&
+      Array.isArray(baseFormData.subEvent) &&
+      existingSubEvents.length === baseFormData.subEvent.length;
+    const formData = canPreserveReservationData
+      ? {
+          ...baseFormData,
+          subEvent: baseFormData.subEvent.map((subEvent, index) => {
+            const existing = existingSubEvents[index];
+            if (!existing) return subEvent;
+            return {
+              ...subEvent,
+              bookingInfo: existing.bookingInfo,
+              ...(subEvent.bookingAvailability && {
+                bookingAvailability: {
+                  type: subEvent.bookingAvailability.type,
+                  ...(existing.bookingAvailability?.capacity !== undefined && {
+                    capacity: existing.bookingAvailability.capacity,
+                  }),
+                },
+              }),
+            };
+          }),
+        }
+      : baseFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,
