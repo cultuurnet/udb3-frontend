@@ -206,16 +206,19 @@ const DescriptionField = ({
   );
 };
 
+type FaqValues = {
+  questions: Record<string, string>;
+  answerStates: Record<string, EditorState>;
+};
+
 type FaqFieldProps = {
   faqIndex: number;
-  isFirst: boolean;
   originalLanguage: string;
   translationLanguages: string[];
   faq: FaqItem;
   isEditingOriginal: boolean;
   onStartEditing: () => void;
-  questionValues: Record<string, string>;
-  answerEditorStates: Record<string, EditorState>;
+  values: FaqValues;
   onQuestionChange: (language: string, value: string) => void;
   onAnswerStateChange: (language: string, state: EditorState) => void;
   onSave: (language: string) => void;
@@ -223,14 +226,12 @@ type FaqFieldProps = {
 
 const FaqField = ({
   faqIndex,
-  isFirst,
   originalLanguage,
   translationLanguages,
   faq,
   isEditingOriginal,
   onStartEditing,
-  questionValues,
-  answerEditorStates,
+  values,
   onQuestionChange,
   onAnswerStateChange,
   onSave,
@@ -240,7 +241,7 @@ const FaqField = ({
 
   return (
     <Stack spacing={4} maxWidth="60rem">
-      {!isFirst && <Box height="1px" backgroundColor={colors.grey3} />}
+      {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
       <Text fontWeight="bold">
         {t('translate.faq.title', { index: faqIndex + 1 })}
       </Text>
@@ -251,7 +252,7 @@ const FaqField = ({
         {isEditingOriginal ? (
           <Stack spacing={3}>
             <Input
-              value={questionValues[key(originalLanguage)] ?? ''}
+              value={values.questions[key(originalLanguage)] ?? ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onQuestionChange(originalLanguage, e.target.value)
               }
@@ -259,7 +260,7 @@ const FaqField = ({
             />
             <RichTextEditor
               editorState={
-                answerEditorStates[key(originalLanguage)] ??
+                values.answerStates[key(originalLanguage)] ??
                 EditorState.createEmpty()
               }
               onEditorStateChange={(state) =>
@@ -299,7 +300,7 @@ const FaqField = ({
               placeholder={t('translate.faq.placeholder_question', {
                 language,
               })}
-              value={questionValues[key(language)] ?? ''}
+              value={values.questions[key(language)] ?? ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onQuestionChange(language, e.target.value)
               }
@@ -307,7 +308,7 @@ const FaqField = ({
             />
             <RichTextEditor
               editorState={
-                answerEditorStates[key(language)] ?? EditorState.createEmpty()
+                values.answerStates[key(language)] ?? EditorState.createEmpty()
               }
               onEditorStateChange={(state) =>
                 onAnswerStateChange(language, state)
@@ -421,7 +422,12 @@ const TranslateForm = () => {
   const handleTitleBlur = async (language: string, value: string) => {
     const originalValue = offer?.name?.[language] ?? '';
     if (!value || value === originalValue) return;
-    await changeNameMutation.mutateAsync({ id, lang: language, name: value, scope });
+    await changeNameMutation.mutateAsync({
+      id,
+      lang: language,
+      name: value,
+      scope,
+    });
     toast.trigger(`title_${language}`);
     invalidateOffer();
   };
@@ -434,7 +440,11 @@ const TranslateForm = () => {
     const originalPlainText = getPlainText(
       createEditorStateFromHtml(offer?.description?.[language]),
     );
-    if (!plainText || plainText === originalPlainText || !editorState.getLastChangeType())
+    if (
+      !plainText ||
+      plainText === originalPlainText ||
+      !editorState.getLastChangeType()
+    )
       return;
     await changeDescriptionMutation.mutateAsync({
       id,
@@ -461,7 +471,8 @@ const TranslateForm = () => {
       createEditorStateFromHtml(offer.faqs[faqIndex]?.[language]?.answer),
     );
 
-    if (question === originalQuestion && plainText === originalPlainText) return;
+    if (question === originalQuestion && plainText === originalPlainText)
+      return;
 
     const updatedFaqs = offer.faqs.map((faq, i) =>
       i !== faqIndex
@@ -470,7 +481,9 @@ const TranslateForm = () => {
             ...faq,
             [language]: {
               question,
-              answer: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+              answer: draftToHtml(
+                convertToRaw(editorState.getCurrentContent()),
+              ),
             },
           },
     );
@@ -602,7 +615,6 @@ const TranslateForm = () => {
                   <Box key={`faq-${faqIndex}`}>
                     <FaqField
                       faqIndex={faqIndex}
-                      isFirst={faqIndex === 0}
                       originalLanguage={originalLanguage}
                       translationLanguages={translationLanguages}
                       faq={faq}
@@ -612,8 +624,10 @@ const TranslateForm = () => {
                           (prev) => new Set([...prev, faqIndex]),
                         )
                       }
-                      questionValues={faqQuestionValues}
-                      answerEditorStates={faqAnswerEditorStates}
+                      values={{
+                        questions: faqQuestionValues,
+                        answerStates: faqAnswerEditorStates,
+                      }}
                       onQuestionChange={(lang, value) =>
                         setFaqQuestionValues((prev) => ({
                           ...prev,
