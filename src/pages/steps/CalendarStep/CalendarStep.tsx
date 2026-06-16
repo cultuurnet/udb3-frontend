@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
@@ -52,7 +53,27 @@ import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
+  const queryClient = useQueryClient();
   const changeCalendarMutation = useChangeOfferCalendarMutation({
+    onMutate: async ({ id, scope, subEvent }) => {
+      if (!subEvent) return;
+      const queryKey = [scope, { id }];
+      await queryClient.cancelQueries({ queryKey });
+      const previousOffer = queryClient.getQueryData<Offer>(queryKey);
+      queryClient.setQueryData<Offer>(queryKey, (offer) =>
+        offer ? { ...offer, subEvent } : offer,
+      );
+      return { previousOffer };
+    },
+    onError: (
+      _error,
+      { id, scope },
+      context: { previousOffer?: Offer } | undefined,
+    ) => {
+      if (context?.previousOffer) {
+        queryClient.setQueryData([scope, { id }], context.previousOffer);
+      }
+    },
     onSuccess: () =>
       onSuccess('calendar', {
         shouldInvalidateEvent: false,
@@ -295,10 +316,11 @@ const CalendarStep = ({
     };
 
     const existingSubEvents = offerRef.current?.subEvent;
+
     const canPreserveReservationData =
       existingSubEvents &&
       Array.isArray(baseFormData.subEvent) &&
-      existingSubEvents.length === baseFormData.subEvent.length;
+      existingSubEvents.length <= baseFormData.subEvent.length;
     const formData = canPreserveReservationData
       ? {
           ...baseFormData,
