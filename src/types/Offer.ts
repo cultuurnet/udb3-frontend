@@ -79,7 +79,7 @@ export type BookingInfo = {
 };
 
 export type FaqItem = {
-  [language in Values<typeof SupportedLanguages>]?: {
+  [language in Values<typeof SupportedLanguages> | 'en']?: {
     question: string;
     answer: string;
   };
