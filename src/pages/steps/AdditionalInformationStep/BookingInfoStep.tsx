@@ -11,7 +11,6 @@ import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
-  useChangeOfferBookingAvailabilityMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -489,35 +488,6 @@ const BookingInfoStep = ({
         }),
       },
       scope,
-    });
-  };
-
-  const changeBookingAvailabilityMutation =
-    useChangeOfferBookingAvailabilityMutation({
-      onSuccess: onSuccessfulChange,
-    });
-
-  const handleChangeOfferBookingInfo = (url: string, urlLabelType: string) => {
-    setOfferUrl(url);
-    setSelectedUrlLabel(urlLabelType);
-
-    handleAddBookingInfoMutation({
-      ...getValues(),
-      url,
-      urlLabel:
-        URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve,
-    });
-  };
-
-  const handleChangeOfferBookingAvailability = (
-    type: string,
-    capacityValue: string,
-  ) => {
-    changeBookingAvailabilityMutation.mutate({
-      id: eventId,
-      scope,
-      type,
-      capacity: capacityValue === '' ? undefined : Number(capacityValue),
     });
   };
 
