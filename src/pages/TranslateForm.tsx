@@ -310,7 +310,6 @@ const TranslateForm = () => {
           id={`translate-title-${language}`}
           Component={
             <Input
-              maxWidth={300}
               placeholder={t('translate.placeholder_title', { language })}
               value={titleValues[language] ?? ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -382,7 +381,7 @@ const TranslateForm = () => {
   ));
 
   const faqFields = offer?.faqs?.map((faq, faqIndex) => (
-    <Stack key={`faq-${faqIndex}`} spacing={4} maxWidth="60rem">
+    <Stack key={`faq-${faqIndex}`} spacing={4} maxWidth="55rem">
       {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
       <Text fontWeight="bold">
         {t('translate.faq.title', { index: faqIndex + 1 })}
