@@ -16,8 +16,8 @@ const meta: Meta<typeof StatusIndicator> = {
     label: {
       control: { type: 'text' },
     },
-    isExternalCreator: {
-      control: { type: 'boolean' },
+    description: {
+      control: { type: 'text' },
     },
   },
 };
@@ -29,7 +29,6 @@ export const Published: Story = {
   args: {
     color: colors.udbMainPositiveGreen,
     label: 'Gepubliceerd',
-    isExternalCreator: false,
   },
 };
 
@@ -37,7 +36,6 @@ export const Planned: Story = {
   args: {
     color: colors.udbMainDarkBlue,
     label: 'Publicatie vanaf 01/01/2024',
-    isExternalCreator: false,
   },
 };
 
@@ -45,7 +43,6 @@ export const Draft: Story = {
   args: {
     color: colors.warning,
     label: 'Kladversie',
-    isExternalCreator: false,
   },
 };
 
@@ -53,7 +50,6 @@ export const Rejected: Story = {
   args: {
     color: colors.danger,
     label: 'Publicatie afgewezen',
-    isExternalCreator: false,
   },
 };
 
@@ -61,20 +57,13 @@ export const Deleted: Story = {
   args: {
     color: colors.udbMainGrey,
     label: 'Verwijderd',
-    isExternalCreator: false,
   },
 };
 
-export const WithExternalCreator: Story = {
+export const WithDescription: Story = {
   args: {
     color: colors.udbMainPositiveGreen,
     label: 'Gepubliceerd',
-    isExternalCreator: true,
-  },
-};
-
-export const WithoutColorAndLabel: Story = {
-  args: {
-    isExternalCreator: false,
+    description: 'Aangemaakt door een andere gebruiker',
   },
 };
