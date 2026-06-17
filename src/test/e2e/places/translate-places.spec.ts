@@ -44,7 +44,6 @@ test.describe('Places translation', () => {
 
     await page.getByRole('heading', { name: placeTitle }).isVisible();
 
-    // Title tab is active by default — fill in all title translations
     for (const translation of translations) {
       const langField = page.getByPlaceholder(translation.placeholder);
       await langField.fill(translation.newTitle);
@@ -56,12 +55,10 @@ test.describe('Places translation', () => {
       await page.locator('.toast svg[data-icon="xmark"]').click();
     }
 
-    // Title tab should show the checkmark after saving translations
     await expect(
       page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
     ).toBeVisible();
 
-    // Description tab only exists when the place has a description
     const descriptionTab = page.getByRole('tab', { name: 'Beschrijving' });
 
     if (await descriptionTab.isVisible()) {
@@ -87,7 +84,6 @@ test.describe('Places translation', () => {
         await page.locator('.toast svg[data-icon="xmark"]').click();
       }
 
-      // Description tab should show the checkmark after saving translations
       await expect(
         page
           .getByRole('tab', { name: 'Beschrijving' })

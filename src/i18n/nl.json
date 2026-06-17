@@ -1722,7 +1722,13 @@
     "done": "Klaar met vertalen",
     "success": {
       "title": "Titel ({{language}}) succesvol bijgewerkt",
-      "description": "Beschrijving ({{language}}) succesvol bijgewerkt"
+      "description": "Beschrijving ({{language}}) succesvol bijgewerkt",
+      "faq": "FAQ succesvol bijgewerkt"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Vertaal vraag in {{language}}"
     }
   },
   "date_period_picker": {
