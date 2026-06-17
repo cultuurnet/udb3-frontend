@@ -631,7 +631,7 @@ const BookingInfoStep = ({
         <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.contact_details')}
         </Text>
-        <Inline spacing={4} flexWrap="wrap">
+        <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
           {Object.keys(ContactInfoType)
             .map((key) => ContactInfoType[key])
             .filter((type) => type !== ContactInfoType.URL)
