@@ -488,6 +488,10 @@ const TranslateForm = () => {
     );
 
     await updateFaqMutation.mutateAsync({ id, scope, faq: updatedFaqs });
+    queryClient.setQueryData([scope, { id }], (old: any) => ({
+      ...old,
+      faqs: updatedFaqs,
+    }));
     toast.trigger('faq');
     invalidateOffer();
   };
