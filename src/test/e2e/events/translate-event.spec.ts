@@ -13,15 +13,13 @@ const translations = [
 test.describe.serial('Event translation', () => {
   let translateUrl: string;
 
-  test.beforeEach(async ({ page }) => {
-    await page
-      .context()
-      .addCookies([
-        { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
-      ]);
-  });
+  test.beforeAll(async ({ browser, baseURL }) => {
+    const context = await browser.newContext();
+    await context.addCookies([
+      { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+    ]);
+    const page = await context.newPage();
 
-  test('translates title and description', async ({ page, baseURL }) => {
     await createBasicEvent(
       page,
       baseURL,
@@ -46,7 +44,20 @@ test.describe.serial('Event translation', () => {
     await page.waitForLoadState('networkidle');
 
     translateUrl = page.url();
+    await context.close();
+  });
 
+  test.beforeEach(async ({ page }) => {
+    await page
+      .context()
+      .addCookies([
+        { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+      ]);
+    await page.goto(translateUrl);
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('translates title', async ({ page }) => {
     for (const { lang, placeholder } of translations) {
       const langField = page.getByPlaceholder(placeholder);
       await langField.fill(`${faker.lorem.words(5)} ${lang}`);
@@ -61,7 +72,9 @@ test.describe.serial('Event translation', () => {
     await expect(
       page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
     ).toBeVisible();
+  });
 
+  test('translates description', async ({ page }) => {
     await page.getByRole('tab', { name: 'Beschrijving' }).click();
 
     for (const { lang } of translations) {
@@ -90,9 +103,6 @@ test.describe.serial('Event translation', () => {
   });
 
   test('translates faq', async ({ page }) => {
-    await page.goto(translateUrl);
-    await page.waitForLoadState('networkidle');
-
     await page.getByRole('tab', { name: 'FAQ' }).click();
 
     for (const { lang } of translations) {
