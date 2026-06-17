@@ -484,7 +484,7 @@ const BookingInfoStep = ({
 
   const changeSubEventReservationMutation =
     useChangeSubEventReservationMutation({
-      onMutate: async ({ subEventId, bookingInfo, bookingAvailability }) => {
+      onMutate: async ({ subEventIndex, bookingInfo, bookingAvailability }) => {
         const queryKey = [scope, { id: eventId }];
         await queryClient.cancelQueries({ queryKey });
         const previousOffer = queryClient.getQueryData<Offer>(queryKey);
@@ -494,7 +494,7 @@ const BookingInfoStep = ({
           return {
             ...offer,
             subEvent: offer.subEvent.map((subEvent, index) =>
-              index === subEventId
+              index === subEventIndex
                 ? {
                     ...subEvent,
                     ...(bookingInfo !== undefined && { bookingInfo }),
@@ -523,7 +523,7 @@ const BookingInfoStep = ({
     });
 
   const handleChangeSubEventBookingInfo = (
-    subEventId: number,
+    subEventIndex: number,
     url: string,
     urlLabelType: string,
   ) => {
@@ -532,19 +532,19 @@ const BookingInfoStep = ({
 
     changeSubEventReservationMutation.mutate({
       eventId,
-      subEventId,
+      subEventIndex,
       bookingInfo: url ? { url, urlLabel } : {},
     });
   };
 
   const handleChangeSubEventAvailability = (
-    subEventId: number,
+    subEventIndex: number,
     type: string,
     capacityValue: string,
   ) => {
     changeSubEventReservationMutation.mutate({
       eventId,
-      subEventId,
+      subEventIndex,
       bookingAvailability: {
         type,
         ...(capacityValue !== '' && { capacity: Number(capacityValue) }),

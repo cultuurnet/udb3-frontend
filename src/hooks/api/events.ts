@@ -752,7 +752,7 @@ const useChangeStatusSubEventsMutation = (configuration = {}) =>
 const changeSubEventReservation = async ({
   headers,
   eventId,
-  subEventId,
+  subEventIndex,
   bookingInfo,
   bookingAvailability,
 }) =>
@@ -763,7 +763,7 @@ const changeSubEventReservation = async ({
       headers,
       body: JSON.stringify([
         {
-          id: subEventId,
+          id: subEventIndex,
           ...(bookingInfo && { bookingInfo }),
           ...(bookingAvailability && { bookingAvailability }),
         },
