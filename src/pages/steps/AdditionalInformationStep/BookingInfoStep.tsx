@@ -95,7 +95,7 @@ const getUrlLabelType = (
   return UrlLabelType.BUY;
 };
 
-type ReservationPeriodProps = {
+type ReservationPeriodProps = StackProps & {
   availabilityStarts: string;
   availabilityEnds: string;
   handleDelete: () => void;
@@ -114,6 +114,7 @@ const ReservationPeriod = ({
   handlePeriodChange,
   isDatePickerVisible,
   setIsDatePickerVisible,
+  ...props
 }: ReservationPeriodProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
@@ -201,7 +202,7 @@ const ReservationPeriod = ({
   };
 
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} {...getStackProps(props)}>
       <Text fontWeight="bold">
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
@@ -647,6 +648,15 @@ const BookingInfoStep = ({
             />
           ))}
       </Stack>
+      <ReservationPeriod
+        marginBottom={6}
+        handlePeriodChange={handleChangeBookingPeriod}
+        handleDelete={handleDeleteBookingPeriod}
+        availabilityEnds={availabilityEnds}
+        availabilityStarts={availabilityStarts}
+        isDatePickerVisible={isDatePickerVisible}
+        setIsDatePickerVisible={setIsDatePickerVisible}
+      />
       <Stack spacing={4}>
         <Text fontWeight="bold">
           {t('create.additionalInformation.booking_info.url')}
@@ -717,14 +727,6 @@ const BookingInfoStep = ({
           </Stack>
         )}
       </Stack>
-      <ReservationPeriod
-        handlePeriodChange={handleChangeBookingPeriod}
-        handleDelete={handleDeleteBookingPeriod}
-        availabilityEnds={availabilityEnds}
-        availabilityStarts={availabilityStarts}
-        isDatePickerVisible={isDatePickerVisible}
-        setIsDatePickerVisible={setIsDatePickerVisible}
-      />
     </Stack>
   );
 };
