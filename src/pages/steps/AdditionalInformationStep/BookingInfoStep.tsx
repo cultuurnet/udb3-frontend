@@ -539,7 +539,7 @@ const BookingInfoStep = ({
 
   const handleChangeSubEventAvailability = (
     subEventIndex: number,
-    type: string,
+    type: Values<typeof BookingAvailabilityType>,
     capacityValue: string,
   ) => {
     changeSubEventReservationMutation.mutate({
