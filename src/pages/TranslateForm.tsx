@@ -12,7 +12,7 @@ import {
   useGetOfferByIdQuery,
   useUpdateOfferFaqMutation,
 } from '@/hooks/api/offers';
-import { SupportedLanguages } from '@/i18n/index';
+import { TranslationLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
 import type { FaqItem } from '@/types/Offer';
@@ -49,7 +49,7 @@ const createEditorStateFromHtml = (html: string | undefined): EditorState => {
 const getPlainText = (editorState: EditorState) =>
   editorState.getCurrentContent().getPlainText().trim();
 
-const languageOptions = [...Object.values(SupportedLanguages), 'en'];
+const languageOptions = Object.values(TranslationLanguages);
 const getGlobalValue = getValueFromTheme('global');
 const getTextValue = getValueFromTheme('text');
 

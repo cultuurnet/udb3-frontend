@@ -14,6 +14,11 @@ const SupportedLanguages = {
   DE: 'de',
 } as const;
 
+const TranslationLanguages = {
+  ...SupportedLanguages,
+  EN: 'en',
+} as const;
+
 type SupportedLanguage = Values<typeof SupportedLanguages>;
 
 i18n.use(LanguageDetector);
@@ -42,5 +47,5 @@ i18n
     console.log('i18n initialisation failed', error);
   });
 
-export { i18n as default, SupportedLanguages };
+export { i18n as default, SupportedLanguages, TranslationLanguages };
 export type { SupportedLanguage };
