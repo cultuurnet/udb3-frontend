@@ -57,6 +57,8 @@ type FormData = yup.InferType<typeof schema>;
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
 
+const SUBTITLE_COLOR = colors.udbMainDarkBlue;
+
 const ContactInfoType = {
   EMAIL: 'email',
   PHONE: 'phone',
@@ -615,6 +617,9 @@ const BookingInfoStep = ({
 
   return (
     <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
+      <Text fontWeight="bold" fontSize="1.1rem">
+        {t('create.additionalInformation.booking_info.section_title')}
+      </Text>
       <Stack
         as="form"
         spacing={4}
