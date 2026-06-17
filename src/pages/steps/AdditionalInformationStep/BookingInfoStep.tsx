@@ -616,7 +616,7 @@ const BookingInfoStep = ({
   };
 
   return (
-    <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
+    <Stack maxWidth="75rem" spacing={5} {...getStackProps(props)}>
       <Text fontWeight="bold" fontSize="1.1rem">
         {t('create.additionalInformation.booking_info.section_title')}
       </Text>
@@ -674,41 +674,56 @@ const BookingInfoStep = ({
           <Stack spacing={5}>
             {subEvents.length > 0 ? (
               subEvents.map((subEvent, index) => (
-                <ReservationLinksSection
-                  key={index}
-                  idPrefix={`subevent-${index}`}
-                  variant={
-                    subEvents.length > 1
-                      ? ReservationLinksSectionVariants.CARD
-                      : ReservationLinksSectionVariants.INLINE
-                  }
-                  title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
-                    new Date(subEvent.endDate),
-                    'dd/MM/yyyy',
-                  )}`}
-                  url={subEvent.bookingInfo?.url ?? ''}
-                  urlLabel={
-                    subEvent.bookingInfo?.urlLabel?.en
-                      ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
-                      : ''
-                  }
-                  capacity={
-                    subEvent.bookingAvailability?.capacity !== undefined
-                      ? String(subEvent.bookingAvailability.capacity)
-                      : ''
-                  }
-                  status={
-                    subEvent.bookingAvailability?.type ??
-                    BookingAvailabilityType.AVAILABLE
-                  }
-                  urlLabelOptions={URL_LABELS}
-                  onChangeBookingInfo={(url, urlLabelType) =>
-                    handleChangeSubEventBookingInfo(index, url, urlLabelType)
-                  }
-                  onChangeBookingAvailability={(type, capacityValue) =>
-                    handleChangeSubEventAvailability(index, type, capacityValue)
-                  }
-                />
+                <Inline key={index} spacing={5} alignItems="flex-start">
+                  <ReservationLinksSection
+                    flex={1}
+                    idPrefix={`subevent-${index}`}
+                    variant={
+                      subEvents.length > 1
+                        ? ReservationLinksSectionVariants.CARD
+                        : ReservationLinksSectionVariants.INLINE
+                    }
+                    title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
+                      new Date(subEvent.endDate),
+                      'dd/MM/yyyy',
+                    )}`}
+                    url={subEvent.bookingInfo?.url ?? ''}
+                    urlLabel={
+                      subEvent.bookingInfo?.urlLabel?.en
+                        ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                        : ''
+                    }
+                    capacity={
+                      subEvent.bookingAvailability?.capacity !== undefined
+                        ? String(subEvent.bookingAvailability.capacity)
+                        : ''
+                    }
+                    status={
+                      subEvent.bookingAvailability?.type ??
+                      BookingAvailabilityType.AVAILABLE
+                    }
+                    urlLabelOptions={URL_LABELS}
+                    onChangeBookingInfo={(url, urlLabelType) =>
+                      handleChangeSubEventBookingInfo(index, url, urlLabelType)
+                    }
+                    onChangeBookingAvailability={(type, capacityValue) =>
+                      handleChangeSubEventAvailability(
+                        index,
+                        type,
+                        capacityValue,
+                      )
+                    }
+                  />
+                  <Stack width="22rem" flexShrink={0}>
+                    {index === 0 && (
+                      <Alert variant="primary" fullWidth>
+                        {t(
+                          'create.additionalInformation.booking_info.max_capacity_info',
+                        )}
+                      </Alert>
+                    )}
+                  </Stack>
+                </Inline>
               ))
             ) : (
               <ReservationLinksSection

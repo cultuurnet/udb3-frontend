@@ -462,6 +462,7 @@
         "link": "Link",
         "max_capacity": "Maximum capaciteit",
         "capacity_error": "Voer een geldig aantal in (0 of meer).",
+        "max_capacity_info": "Met maximum capaciteit bedoelen we het maximum aantal mensen dat kan deelnemen aan jouw activiteit.",
         "status": "Status",
         "section_title": "Vertel hoe mensen een plaats kunnen reserveren",
         "contact_details": "Contactgegevens",
