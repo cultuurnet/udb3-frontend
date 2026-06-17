@@ -617,36 +617,40 @@ const BookingInfoStep = ({
     <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
       <Stack
         as="form"
-        width="45%"
         spacing={4}
         onBlur={() =>
           handleAddBookingInfoMutation({ ...getValues(), url: offerUrl })
         }
         ref={formComponent}
       >
-        {Object.keys(ContactInfoType)
-          .map((key) => ContactInfoType[key])
-          .filter((type) => type !== ContactInfoType.URL)
-          .map((type) => (
-            <FormElement
-              key={type}
-              flex={2}
-              id={type}
-              label={t(`create.additionalInformation.booking_info.${type}`)}
-              Component={
-                <Input
-                  placeholder={t(
-                    `create.additionalInformation.booking_info.${type}`,
-                  )}
-                  {...register(type)}
-                />
-              }
-              error={
-                formState.errors?.[type] &&
-                t(`create.additionalInformation.booking_info.${type}_error`)
-              }
-            />
-          ))}
+        <Text fontWeight="bold">
+          {t('create.additionalInformation.booking_info.contact_details')}
+        </Text>
+        <Inline spacing={4} flexWrap="wrap">
+          {Object.keys(ContactInfoType)
+            .map((key) => ContactInfoType[key])
+            .filter((type) => type !== ContactInfoType.URL)
+            .map((type) => (
+              <FormElement
+                key={type}
+                flex={1}
+                id={type}
+                label={t(`create.additionalInformation.booking_info.${type}`)}
+                Component={
+                  <Input
+                    placeholder={t(
+                      `create.additionalInformation.booking_info.${type}`,
+                    )}
+                    {...register(type)}
+                  />
+                }
+                error={
+                  formState.errors?.[type] &&
+                  t(`create.additionalInformation.booking_info.${type}_error`)
+                }
+              />
+            ))}
+        </Inline>
       </Stack>
       <ReservationPeriod
         marginBottom={6}
