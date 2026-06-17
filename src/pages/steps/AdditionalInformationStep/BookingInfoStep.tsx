@@ -227,7 +227,12 @@ const ReservationPeriod = ({
           )}
         </Alert>
       )}
-      <Inline spacing={4} alignItems="flex-end" flexWrap="wrap">
+      <Inline
+        spacing={4}
+        alignItems="flex-end"
+        flexWrap="wrap"
+        opacity={isDatePickerVisible ? 1 : 0.5}
+      >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
           id="reservation-date-picker"
