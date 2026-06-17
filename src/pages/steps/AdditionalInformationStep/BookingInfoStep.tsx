@@ -205,7 +205,7 @@ const ReservationPeriod = ({
 
   return (
     <Stack spacing={4} {...getStackProps(props)}>
-      <Text fontWeight="bold">
+      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
@@ -628,7 +628,7 @@ const BookingInfoStep = ({
         }
         ref={formComponent}
       >
-        <Text fontWeight="bold">
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.contact_details')}
         </Text>
         <Inline spacing={4} flexWrap="wrap">
@@ -667,7 +667,7 @@ const BookingInfoStep = ({
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
       <Stack spacing={4}>
-        <Text fontWeight="bold">
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (
