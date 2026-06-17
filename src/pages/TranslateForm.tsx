@@ -10,10 +10,12 @@ import {
   useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,
   useGetOfferByIdQuery,
+  useUpdateOfferFaqMutation,
 } from '@/hooks/api/offers';
-import { SupportedLanguages } from '@/i18n/index';
+import { TranslationLanguages } from '@/i18n/index';
 import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
+import type { FaqItem } from '@/types/Offer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -47,7 +49,7 @@ const createEditorStateFromHtml = (html: string | undefined): EditorState => {
 const getPlainText = (editorState: EditorState) =>
   editorState.getCurrentContent().getPlainText().trim();
 
-const languageOptions = [...Object.values(SupportedLanguages), 'en'];
+const languageOptions = Object.values(TranslationLanguages);
 const getGlobalValue = getValueFromTheme('global');
 const getTextValue = getValueFromTheme('text');
 
@@ -59,6 +61,7 @@ const rowGridCss = `
 const TranslateTabs = {
   TITLE: 'title',
   DESCRIPTION: 'description',
+  FAQ: 'faq',
 } as const;
 
 type TabTitleProps = {
@@ -133,7 +136,6 @@ const TitleField = ({
           id={`translate-title-${language}`}
           Component={
             <Input
-              maxWidth={300}
               placeholder={t('translate.placeholder_title', { language })}
               value={value}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -203,6 +205,122 @@ const DescriptionField = ({
   );
 };
 
+type FaqValues = {
+  questions: Record<string, string>;
+  answerStates: Record<string, EditorState>;
+};
+
+type FaqFieldProps = {
+  faqIndex: number;
+  originalLanguage: string;
+  translationLanguages: string[];
+  faqItem: FaqItem;
+  isEditingOriginal: boolean;
+  onStartEditing: () => void;
+  values: FaqValues;
+  onQuestionChange: (language: string, value: string) => void;
+  onAnswerStateChange: (language: string, state: EditorState) => void;
+  onSave: (language: string) => void;
+};
+
+const FaqField = ({
+  faqIndex,
+  originalLanguage,
+  translationLanguages,
+  faqItem,
+  isEditingOriginal,
+  onStartEditing,
+  values,
+  onQuestionChange,
+  onAnswerStateChange,
+  onSave,
+}: FaqFieldProps) => {
+  const { t } = useTranslation();
+  const key = (lang: string) => `${faqIndex}_${lang}`;
+
+  return (
+    <Stack spacing={4} maxWidth="55rem">
+      {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
+      <Text fontWeight="bold">
+        {t('translate.faq.title', { index: faqIndex + 1 })}
+      </Text>
+      <Stack display="grid" css={rowGridCss}>
+        <Text variant="muted">
+          {t('translate.original_label', { language: originalLanguage })}
+        </Text>
+        {isEditingOriginal ? (
+          <Stack spacing={3}>
+            <Input
+              value={values.questions[key(originalLanguage)] ?? ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onQuestionChange(originalLanguage, e.target.value)
+              }
+              onBlur={() => onSave(originalLanguage)}
+            />
+            <RichTextEditor
+              editorState={
+                values.answerStates[key(originalLanguage)] ??
+                EditorState.createEmpty()
+              }
+              onEditorStateChange={(state) =>
+                onAnswerStateChange(originalLanguage, state)
+              }
+              onBlur={() => onSave(originalLanguage)}
+            />
+          </Stack>
+        ) : (
+          <Stack spacing={2}>
+            <Inline justifyContent="space-between">
+              <Text fontWeight="bold">
+                {faqItem[originalLanguage]?.question ?? ''}
+              </Text>
+              <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
+                {t('translate.change')}
+              </Button>
+            </Inline>
+            <DescriptionPreview
+              description={faqItem[originalLanguage]?.answer ?? ''}
+            />
+          </Stack>
+        )}
+      </Stack>
+      {translationLanguages.map((language) => (
+        <Stack
+          key={`faq-${faqIndex}-${language}`}
+          id={`faq-translation-${faqIndex}-${language}`}
+          display="grid"
+          css={rowGridCss}
+        >
+          <Text variant="muted">
+            {t('translate.translation_label', { language })}
+          </Text>
+          <Stack spacing={3}>
+            <Input
+              placeholder={t('translate.faq.placeholder_question', {
+                language,
+              })}
+              value={values.questions[key(language)] ?? ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onQuestionChange(language, e.target.value)
+              }
+              onBlur={() => onSave(language)}
+            />
+            <RichTextEditor
+              editorState={
+                values.answerStates[key(language)] ?? EditorState.createEmpty()
+              }
+              onEditorStateChange={(state) =>
+                onAnswerStateChange(language, state)
+              }
+              onBlur={() => onSave(language)}
+            />
+          </Stack>
+        </Stack>
+      ))}
+    </Stack>
+  );
+};
+
 const TranslateForm = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -216,8 +334,18 @@ const TranslateForm = () => {
   const [isEditingOriginalTitle, setIsEditingOriginalTitle] = useState(false);
   const [isEditingOriginalDescription, setIsEditingOriginalDescription] =
     useState(false);
+  const [editingOriginalFaqs, setEditingOriginalFaqs] = useState<Set<number>>(
+    new Set(),
+  );
+
   const [titleValues, setTitleValues] = useState<Record<string, string>>({});
   const [descriptionEditorStates, setDescriptionEditorStates] = useState<
+    Record<string, EditorState>
+  >({});
+  const [faqQuestionValues, setFaqQuestionValues] = useState<
+    Record<string, string>
+  >({});
+  const [faqAnswerEditorStates, setFaqAnswerEditorStates] = useState<
     Record<string, EditorState>
   >({});
 
@@ -232,54 +360,67 @@ const TranslateForm = () => {
           ],
         ]),
       ),
+      faq: t('translate.success.faq'),
     },
   });
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: id as string, scope });
   const offer = getOfferByIdQuery.data;
 
-  const originalLanguage = offer?.mainLanguage || 'nl';
-  const originalTitle = offer?.name?.[originalLanguage] || '';
+  const originalLanguage = offer?.mainLanguage ?? 'nl';
+  const originalTitle = offer?.name?.[originalLanguage] ?? '';
 
   useEffect(() => {
-    if (offer?.name) {
-      setTitleValues(offer.name);
-    }
+    if (offer?.name) setTitleValues(offer.name);
 
     if (offer?.description) {
-      const newEditorStates: Record<string, EditorState> = {};
+      setDescriptionEditorStates(
+        Object.fromEntries(
+          languageOptions.map((lang) => [
+            lang,
+            createEditorStateFromHtml(
+              sanitizeDom(
+                offer.description?.[lang],
+                sanitizationPresets.EVENT_DESCRIPTION,
+              ),
+            ),
+          ]),
+        ),
+      );
+    }
 
-      languageOptions.forEach((lang) => {
-        const description = sanitizeDom(
-          offer.description?.[lang],
-          sanitizationPresets.EVENT_DESCRIPTION,
-        );
+    if (offer?.faqs) {
+      const questions: Record<string, string> = {};
+      const states: Record<string, EditorState> = {};
 
-        if (description) {
-          const draftState = htmlToDraft(description);
-          const contentState = ContentState.createFromBlockArray(
-            draftState.contentBlocks,
-            draftState.entityMap,
+      offer.faqs.forEach((faq, faqIndex) => {
+        languageOptions.forEach((lang) => {
+          const key = `${faqIndex}_${lang}`;
+          questions[key] = faq[lang]?.question ?? '';
+          states[key] = createEditorStateFromHtml(
+            sanitizeDom(
+              faq[lang]?.answer,
+              sanitizationPresets.EVENT_DESCRIPTION,
+            ),
           );
-          newEditorStates[lang] = EditorState.createWithContent(contentState);
-        } else {
-          newEditorStates[lang] = EditorState.createEmpty();
-        }
+        });
       });
 
-      setDescriptionEditorStates(newEditorStates);
+      setFaqQuestionValues(questions);
+      setFaqAnswerEditorStates(states);
     }
-  }, [offer?.name, offer?.description]);
+  }, [offer?.name, offer?.description, offer?.faqs]);
 
   const invalidateOffer = () =>
     queryClient.invalidateQueries({ queryKey: [scope, { id }] });
 
   const changeNameMutation = useChangeOfferNameMutation();
   const changeDescriptionMutation = useChangeOfferDescriptionMutation();
+  const updateFaqMutation = useUpdateOfferFaqMutation();
 
   const handleTitleBlur = async (language: string, value: string) => {
-    const originalValue = offer?.name?.[language] || '';
-    if (value === '' || value === originalValue) return;
+    const originalValue = offer?.name?.[language] ?? '';
+    if (!value || value === originalValue) return;
     await changeNameMutation.mutateAsync({
       id,
       lang: language,
@@ -294,28 +435,16 @@ const TranslateForm = () => {
     language: string,
     editorState: EditorState,
   ) => {
-    const plainText = editorState.getCurrentContent().getPlainText().trim();
-
-    const originalDescription = offer?.description?.[language];
-    let originalPlainText = '';
-
-    if (originalDescription) {
-      const draftState = htmlToDraft(originalDescription);
-      const contentState = ContentState.createFromBlockArray(
-        draftState.contentBlocks,
-        draftState.entityMap,
-      );
-      originalPlainText = contentState.getPlainText().trim();
-    }
-
+    const plainText = getPlainText(editorState);
+    const originalPlainText = getPlainText(
+      createEditorStateFromHtml(offer?.description?.[language]),
+    );
     if (
-      plainText.length === 0 ||
+      !plainText ||
       plainText === originalPlainText ||
       !editorState.getLastChangeType()
-    ) {
+    )
       return;
-    }
-
     await changeDescriptionMutation.mutateAsync({
       id,
       language,
@@ -326,17 +455,64 @@ const TranslateForm = () => {
     invalidateOffer();
   };
 
+  const saveFaqTranslation = async (faqIndex: number, language: string) => {
+    if (!offer?.faqs) return;
+
+    const key = `${faqIndex}_${language}`;
+    const question = faqQuestionValues[key] ?? '';
+    const editorState = faqAnswerEditorStates[key] ?? EditorState.createEmpty();
+    const plainText = getPlainText(editorState);
+
+    if (!question.trim() || !plainText) return;
+
+    const originalQuestion = offer.faqs[faqIndex]?.[language]?.question ?? '';
+    const originalPlainText = getPlainText(
+      createEditorStateFromHtml(offer.faqs[faqIndex]?.[language]?.answer),
+    );
+
+    if (question === originalQuestion && plainText === originalPlainText)
+      return;
+
+    const updatedFaqs = offer.faqs.map((faq, i) =>
+      i !== faqIndex
+        ? faq
+        : {
+            ...faq,
+            [language]: {
+              question,
+              answer: draftToHtml(
+                convertToRaw(editorState.getCurrentContent()),
+              ),
+            },
+          },
+    );
+
+    await updateFaqMutation.mutateAsync({ id, scope, faq: updatedFaqs });
+    queryClient.setQueryData([scope, { id }], (old: any) => ({
+      ...old,
+      faqs: updatedFaqs,
+    }));
+    toast.trigger('faq');
+  };
+
   const translationLanguages = languageOptions.filter(
     (lang) => lang !== originalLanguage,
   );
 
   const hasDescription = !!offer?.description;
+  const hasFaqs = !!offer?.faqs?.length;
   const hasTitleContent = translationLanguages.some(
     (lang) => !!offer?.name?.[lang]?.trim(),
   );
   const hasDescriptionContent = translationLanguages.some(
     (lang) => !!offer?.description?.[lang],
   );
+  const hasFaqContent =
+    offer?.faqs?.some((faq) =>
+      translationLanguages.some(
+        (lang) => !!faq[lang]?.question?.trim() || !!faq[lang]?.answer,
+      ),
+    ) ?? false;
 
   return (
     <Page>
@@ -426,6 +602,53 @@ const TranslateForm = () => {
               </ContentPanel>
             </Tabs.Tab>
           )}
+          {hasFaqs && (
+            <Tabs.Tab
+              eventKey={TranslateTabs.FAQ}
+              title={
+                <TabTitle
+                  label={t('translate.faq.label')}
+                  hasFilled={hasFaqContent}
+                />
+              }
+            >
+              <ContentPanel>
+                {offer?.faqs?.map((faqItem, faqIndex) => (
+                  <Box key={`faq-${faqIndex}`}>
+                    <FaqField
+                      faqIndex={faqIndex}
+                      originalLanguage={originalLanguage}
+                      translationLanguages={translationLanguages}
+                      faqItem={faqItem}
+                      isEditingOriginal={editingOriginalFaqs.has(faqIndex)}
+                      onStartEditing={() =>
+                        setEditingOriginalFaqs(
+                          (prev) => new Set([...prev, faqIndex]),
+                        )
+                      }
+                      values={{
+                        questions: faqQuestionValues,
+                        answerStates: faqAnswerEditorStates,
+                      }}
+                      onQuestionChange={(lang, value) =>
+                        setFaqQuestionValues((prev) => ({
+                          ...prev,
+                          [`${faqIndex}_${lang}`]: value,
+                        }))
+                      }
+                      onAnswerStateChange={(lang, state) =>
+                        setFaqAnswerEditorStates((prev) => ({
+                          ...prev,
+                          [`${faqIndex}_${lang}`]: state,
+                        }))
+                      }
+                      onSave={(lang) => saveFaqTranslation(faqIndex, lang)}
+                    />
+                  </Box>
+                ))}
+              </ContentPanel>
+            </Tabs.Tab>
+          )}
         </Tabs>
         <Inline marginTop={4}>
           <Button
@@ -443,4 +666,5 @@ const TranslateForm = () => {
     </Page>
   );
 };
+
 export { TranslateForm };

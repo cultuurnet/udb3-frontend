@@ -1664,7 +1664,13 @@
     "done": "Fertig mit Übersetzen",
     "success": {
       "title": "Titel ({{language}}) erfolgreich aktualisiert",
-      "description": "Beschreibung ({{language}}) erfolgreich aktualisiert"
+      "description": "Beschreibung ({{language}}) erfolgreich aktualisiert",
+      "faq": "FAQ erfolgreich aktualisiert"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Frage in {{language}} übersetzen"
     }
   },
   "date_period_picker": {

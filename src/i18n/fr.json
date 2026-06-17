@@ -1645,7 +1645,13 @@
     "done": "Terminé la traduction",
     "success": {
       "title": "Titre ({{language}}) mis à jour avec succès",
-      "description": "Description ({{language}}) mise à jour avec succès"
+      "description": "Description ({{language}}) mise à jour avec succès",
+      "faq": "FAQ mis à jour avec succès"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Traduire la question en {{language}}"
     }
   },
   "date_period_picker": {
