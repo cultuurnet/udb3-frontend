@@ -214,7 +214,7 @@ type FaqFieldProps = {
   faqIndex: number;
   originalLanguage: string;
   translationLanguages: string[];
-  faq: FaqItem;
+  faqItem: FaqItem;
   isEditingOriginal: boolean;
   onStartEditing: () => void;
   values: FaqValues;
@@ -227,7 +227,7 @@ const FaqField = ({
   faqIndex,
   originalLanguage,
   translationLanguages,
-  faq,
+  faqItem,
   isEditingOriginal,
   onStartEditing,
   values,
@@ -272,14 +272,14 @@ const FaqField = ({
           <Stack spacing={2}>
             <Inline justifyContent="space-between">
               <Text fontWeight="bold">
-                {faq[originalLanguage]?.question ?? ''}
+                {faqItem[originalLanguage]?.question ?? ''}
               </Text>
               <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>
                 {t('translate.change')}
               </Button>
             </Inline>
             <DescriptionPreview
-              description={faq[originalLanguage]?.answer ?? ''}
+              description={faqItem[originalLanguage]?.answer ?? ''}
             />
           </Stack>
         )}
@@ -613,13 +613,13 @@ const TranslateForm = () => {
               }
             >
               <ContentPanel>
-                {offer?.faqs?.map((faq, faqIndex) => (
+                {offer?.faqs?.map((faqItem, faqIndex) => (
                   <Box key={`faq-${faqIndex}`}>
                     <FaqField
                       faqIndex={faqIndex}
                       originalLanguage={originalLanguage}
                       translationLanguages={translationLanguages}
-                      faq={faq}
+                      faqItem={faqItem}
                       isEditingOriginal={editingOriginalFaqs.has(faqIndex)}
                       onStartEditing={() =>
                         setEditingOriginalFaqs(
