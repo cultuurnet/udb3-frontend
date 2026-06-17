@@ -493,7 +493,6 @@ const TranslateForm = () => {
       faqs: updatedFaqs,
     }));
     toast.trigger('faq');
-    invalidateOffer();
   };
 
   const translationLanguages = languageOptions.filter(
