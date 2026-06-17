@@ -36,6 +36,7 @@ type Status = {
 
 type BookingAvailability = {
   type: Values<typeof BookingAvailabilityType>;
+  capacity?: number;
 };
 
 type Term = {
@@ -99,6 +100,7 @@ type SubEvent = {
   endDate: string;
   status?: Status;
   bookingAvailability?: BookingAvailability;
+  bookingInfo?: BookingInfo;
   childcare?: {
     start?: string;
     end?: string;
@@ -183,6 +185,7 @@ type BaseOffer = {
   typicalAgeRange: string;
   birthdateRange?: BirthdateRange;
   bookingInfo?: BookingInfo;
+  bookingAvailability?: BookingAvailability;
   priceInfo?: PriceInfo[];
   regions: string[];
   faqs?: FaqItem[];

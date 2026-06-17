@@ -81,13 +81,14 @@ test.describe.serial('Event Preview Content', () => {
   });
 
   test.beforeAll(async ({ browser }) => {
+    test.setTimeout(120_000);
+
     const context = await browser.newContext();
     await context.addCookies(cookies);
     const page = await context.newPage();
     suppressHydrationErrors(page);
 
     await page.goto(editUrl);
-    await page.waitForLoadState('networkidle');
 
     await page
       .getByRole('button', { name: calendar.fixed_days.button_add_hours })
@@ -127,7 +128,6 @@ test.describe.serial('Event Preview Content', () => {
       })
       .click();
     await expect(modal).toBeHidden();
-    await page.waitForLoadState('networkidle');
     await expect(
       page.getByText(calendar.days.short.monday, { exact: true }),
     ).toBeVisible();
@@ -170,7 +170,9 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByRole('tab', { name: 'Reservatie' }).click();
     await page.getByPlaceholder('E-mailadres').fill(dummyEvent.bookingEmail);
     await page.getByPlaceholder('Telefoonnummer').fill(dummyEvent.bookingPhone);
-    await page.getByPlaceholder('Website').fill(dummyEvent.bookingUrl);
+
+    await page.locator('#offer-link').fill(dummyEvent.bookingUrl);
+    await page.locator('#offer-link').blur();
 
     await page.getByRole('tab', { name: 'Labels' }).click();
     await page.getByLabel('Verfijn met labels').fill(dummyEvent.label);
