@@ -356,14 +356,24 @@ const BookingInfoStep = ({
     });
 
   useEffect(() => {
-    if (!bookingInfo) return;
-
-    const hasBookingInfo = Object.keys(bookingInfo).length > 0;
+    const hasOfferBookingInfo =
+      !!bookingInfo && Object.keys(bookingInfo).length > 0;
+    const hasSubEventReservation = (
+      getOfferByIdQuery.data?.subEvent ?? []
+    ).some(
+      (subEvent) =>
+        !!subEvent.bookingInfo?.url ||
+        subEvent.bookingAvailability?.capacity !== undefined,
+    );
 
     onValidationChange(
-      hasBookingInfo ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      hasOfferBookingInfo || hasSubEventReservation
+        ? ValidationStatus.SUCCESS
+        : ValidationStatus.NONE,
       field,
     );
+
+    if (!bookingInfo) return;
 
     if (bookingInfo.url) {
       setOfferUrl(bookingInfo.url);
@@ -384,7 +394,14 @@ const BookingInfoStep = ({
     if (bookingInfo.availabilityEnds) {
       setValue('availabilityEnds', bookingInfo.availabilityEnds);
     }
-  }, [field, offerId, setValue, bookingInfo, onValidationChange]);
+  }, [
+    field,
+    offerId,
+    setValue,
+    bookingInfo,
+    getOfferByIdQuery.data?.subEvent,
+    onValidationChange,
+  ]);
 
   useEffect(() => {
     if (!bookingInfo?.urlLabel?.en) return;
