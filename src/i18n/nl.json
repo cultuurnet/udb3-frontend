@@ -463,6 +463,7 @@
         "max_capacity": "Maximum capaciteit",
         "capacity_error": "Voer een geldig aantal in (0 of meer).",
         "status": "Status",
+        "contact_details": "Contactgegevens",
         "url_label_dropdown_label": "Tekst op reservatieknop",
         "url_type_labels": {
           "buy": "Koop tickets",

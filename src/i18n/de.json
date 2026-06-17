@@ -440,6 +440,7 @@
         "max_capacity": "Maximale Kapazität",
         "capacity_error": "Geben Sie eine gültige Anzahl ein (0 oder mehr).",
         "status": "Status",
+        "contact_details": "Kontaktdaten",
         "url_label_dropdown_label": "Text auf der Reservierungsschaltfläche",
         "url_type_labels": {
           "subscribe": "Melden Sie sich an",
