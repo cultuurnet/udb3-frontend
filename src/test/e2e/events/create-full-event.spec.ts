@@ -18,6 +18,7 @@ const dummyEvent = {
     email: faker.internet.email(),
     phone: faker.phone.number({ style: 'international' }),
     url: faker.internet.url(),
+    capacity: faker.number.int({ min: 1, max: 500 }),
   },
   image: {
     description: faker.lorem.words(5),
@@ -171,10 +172,16 @@ test('create event with all possible fields filled in', async ({
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
 
-  await page.getByPlaceholder('Website').click();
-  await page.getByPlaceholder('Website').fill(dummyEvent.bookingInfo.url);
+  await page.locator('#subevent-0-link').click();
+  await page.locator('#subevent-0-link').fill(dummyEvent.bookingInfo.url);
 
-  await page.getByRole('radio', { name: 'Koop tickets' }).click();
+  await page
+    .locator('#subevent-0-max-capacity')
+    .fill(String(dummyEvent.bookingInfo.capacity));
+
+  await page
+    .locator('#subevent-0-url-label')
+    .selectOption({ label: 'Koop tickets' });
 
   await page.getByLabel('Reservatieperiode').check();
 

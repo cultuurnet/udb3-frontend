@@ -27,7 +27,12 @@ import {
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
 import { OfferStatus } from '@/constants/OfferStatus';
-import { OpeningHours, StatusReason } from '@/types/Offer';
+import {
+  BookingAvailability,
+  BookingInfo,
+  OpeningHours,
+  StatusReason,
+} from '@/types/Offer';
 import { Values } from '@/types/Values';
 
 const getTodayWithoutTime = () => {
@@ -67,10 +72,6 @@ type Status = {
   reason?: StatusReason;
 };
 
-type BookingAvailability = {
-  type: Values<typeof BookingAvailabilityType>;
-};
-
 const createInitialContext = () => ({
   days: [
     {
@@ -83,6 +84,7 @@ const createInitialContext = () => ({
       bookingAvailability: {
         type: BookingAvailabilityType.AVAILABLE,
       } as BookingAvailability,
+      bookingInfo: undefined as BookingInfo | undefined,
       childcareEnabled: false,
       childcareStartTime: '',
       childcareEndTime: '',
@@ -242,6 +244,7 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               id: createDayId(),
               status: { type: OfferStatus.AVAILABLE },
               bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
+              bookingInfo: undefined,
               childcareEnabled: false,
               childcareStartTime: '',
               childcareEndTime: '',
