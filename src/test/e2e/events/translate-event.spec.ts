@@ -27,39 +27,42 @@ test.describe('Event translation', () => {
       },
     ];
 
-    // Go to a permanent event preview page.
     await page.goto(`${baseURL}/events/e9f0f4e6-8f4e-4f4f-9aae-901f90f1c48b`);
-
     await page.waitForLoadState('networkidle');
-    // get title of event
+
     const eventTitle = await page.locator('h1').first().innerText();
 
     await page.getByRole('button', { name: 'Vertalen' }).click();
-
     await page.waitForURL(/\/events\/.*\/translate/, {
       waitUntil: 'domcontentloaded',
     });
-
     await page.waitForLoadState('networkidle');
 
     await page.getByRole('heading', { name: eventTitle }).isVisible();
 
-    // Test each language translation
+    // Title tab is active by default — fill in all title translations
     for (const translation of translations) {
-      // Add translation for current language
       const langField = page.getByPlaceholder(translation.placeholder);
       await langField.fill(translation.newTitle);
       await langField.blur();
 
-      //   Check for success toast on title update
       await expect(
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-
       await page.locator('.toast svg[data-icon="xmark"]').click();
+    }
 
+    // Title tab should show the checkmark after saving translations
+    await expect(
+      page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
+    ).toBeVisible();
+
+    // Switch to description tab
+    await page.getByRole('tab', { name: 'Beschrijving' }).click();
+
+    for (const translation of translations) {
       const descriptionContainer = page.locator(
-        `#description-editor-container-${translation.lang}`,
+        `#description-container-${translation.lang}`,
       );
 
       await descriptionContainer
@@ -69,17 +72,21 @@ test.describe('Event translation', () => {
         .getByRole('textbox', { name: 'rdw-editor' })
         .blur();
 
-      // Check for success toast on description update
       await expect(
         page.getByText(
           `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
         ),
       ).toBeVisible();
-
       await page.locator('.toast svg[data-icon="xmark"]').click();
     }
 
-    // Go back to preview
+    // Description tab should show the checkmark after saving translations
+    await expect(
+      page
+        .getByRole('tab', { name: 'Beschrijving' })
+        .locator('.fa-circle-check'),
+    ).toBeVisible();
+
     await page.getByRole('button', { name: 'Klaar met vertalen' }).click();
     await page.waitForURL(/\/events\/.*/, {
       waitUntil: 'domcontentloaded',
