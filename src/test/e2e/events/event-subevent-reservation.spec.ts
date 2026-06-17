@@ -219,4 +219,63 @@ test.describe('Per-subEvent reservation info', () => {
     // A reservation section appears for the newly added subEvent.
     await expect(page.locator('#subevent-2-link')).toBeVisible();
   });
+
+  test('keeps the correct reservation info when a middle subEvent is deleted', async ({
+    page,
+    baseURL,
+  }) => {
+    // A dedicated three-day event (the shared fixture only has two).
+    await createBasicEvent(
+      page,
+      baseURL!,
+      `E2E SubEvent Middle Delete ${Date.now()}`,
+      addDays(new Date(), 1),
+      [addDays(new Date(), 10), addDays(new Date(), 20)],
+    );
+    await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+    await page.waitForURL(/\/events\/[a-f0-9-]+/);
+    const eventId = page.url().match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
+
+    const links = [
+      faker.internet.url(),
+      faker.internet.url(),
+      faker.internet.url(),
+    ];
+
+    await page.goto(`${baseURL}/events/${eventId}/edit`);
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    for (const [index, url] of links.entries()) {
+      await page.locator(`#subevent-${index}-link`).fill(url);
+      const patch = waitForSubEventsPatch(page);
+      await page.locator(`#subevent-${index}-link`).blur();
+      await patch;
+    }
+
+    // Reload so the calendar machine is seeded with the saved reservation info.
+    await page.reload();
+
+    // Delete the middle subEvent. Index-based preservation is skipped here, so
+    // the remaining subEvents keep their own data (the deleted one is dropped).
+    const calendarPut = page.waitForResponse(
+      (response) =>
+        response.url().includes('/calendar') &&
+        response.request().method() === 'PUT',
+    );
+    const dayRows = page.locator('li').filter({
+      has: page.locator(
+        '[id^="calendar-step-day-day-"][id$="date-period-picker-start"]',
+      ),
+    });
+    await dayRows.nth(1).locator('button:has(svg[data-icon="trash"])').click();
+    await calendarPut;
+
+    await page.reload();
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    // Only two subEvents remain, keeping the first and last links.
+    await expect(page.locator('#subevent-2-link')).toHaveCount(0);
+    await expect(page.locator('#subevent-0-link')).toHaveValue(links[0]);
+    await expect(page.locator('#subevent-1-link')).toHaveValue(links[2]);
+  });
 });
