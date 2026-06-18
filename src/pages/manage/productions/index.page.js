@@ -206,10 +206,7 @@ const Index = () => {
     <Page>
       <Page.Title>{t('menu.productions')}</Page.Title>
       <Page.Actions>
-        <Link
-          href="/manage/productions/create"
-          css="text-transform: lowercase;"
-        >
+        <Link href="/manage/productions/create" className="tw:lowercase">
           {t('productions.overview.create')}
         </Link>
       </Page.Actions>

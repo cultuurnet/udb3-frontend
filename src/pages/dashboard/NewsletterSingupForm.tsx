@@ -97,12 +97,13 @@ const NewsletterSignupForm = (props: Props) => {
           </Stack>
         )}
 
-        <Image
-          src={`/assets/${t('dashboard.newsletter.logo')}`}
-          alt={t('dashboard.newsletter.logo_alt')}
-          width={200}
-          paddingLeft={5}
-        />
+        <div className="tw:pl-8">
+          <Image
+            src={`/assets/${t('dashboard.newsletter.logo')}`}
+            alt={t('dashboard.newsletter.logo_alt')}
+            width={200}
+          />
+        </div>
       </Inline>
     </Panel>
   );

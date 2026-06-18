@@ -87,7 +87,7 @@ const VideoUploadBox = ({
                     alt="video"
                     width={THUMBNAIL_SIZE}
                     height={THUMBNAIL_SIZE}
-                    objectFit="contain"
+                    className="tw:object-contain"
                   />
                   <Text>{url}</Text>
                 </Inline>

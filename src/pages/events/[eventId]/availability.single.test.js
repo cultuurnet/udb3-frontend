@@ -21,7 +21,7 @@ const setup = async () => {
     },
     responses: {
       '/events/:id': { body: event },
-      '/events/:id/subEvents': {},
+      '/events/:id/sub-events': {},
     },
   });
 
@@ -50,7 +50,7 @@ test('I can save a status', async () => {
     }),
   );
 
-  await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
+  await waitForFetch(`/events/${page.router.query.eventId}/sub-events`);
 
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
@@ -94,7 +94,7 @@ test('I can save a status with a reason', async () => {
     }),
   );
 
-  await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
+  await waitForFetch(`/events/${page.router.query.eventId}/sub-events`);
 
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
