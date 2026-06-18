@@ -357,8 +357,8 @@
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
           "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
           "departure_places_warning_modal": {
-            "title": "Supprimer les lieux de départ",
-            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           },

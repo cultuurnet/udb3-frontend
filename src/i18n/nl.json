@@ -367,8 +367,8 @@
           "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
           "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
           "departure_places_warning_modal": {
-            "title": "Vertreklocaties verwijderen",
-            "body": "Let op: deze actie verwijdert je ingevulde vertreklocaties.",
+            "title": "Let op, deze actie verwijdert je vertreklocaties",
+            "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
             "confirm": "Doorgaan",
             "cancel": "Annuleren"
           },
