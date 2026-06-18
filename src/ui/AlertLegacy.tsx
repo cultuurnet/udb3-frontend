@@ -106,7 +106,6 @@ const AlertVariants = {
   SUCCESS: 'success',
   DANGER: 'danger',
   WARNING: 'warning',
-  DARK: 'dark',
 } as const;
 
 const AlertVariantIconsMap = {
