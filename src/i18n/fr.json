@@ -438,7 +438,11 @@
         "phone_error": "Pas de numéro de téléphone valide",
         "url": "Site Internet ou page de réservation",
         "url_error": "Pas d'URL valide",
-        "select_url_label": "Comment ce lien de réservation doit-il apparaître ?",
+        "link": "Lien",
+        "max_capacity": "Capacité maximale",
+        "capacity_error": "Saisissez un nombre valide (0 ou plus).",
+        "status": "Statut",
+        "url_label_dropdown_label": "Texte sur le bouton de réservation",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
           "availability": "Controlez la disponibilité",
@@ -1645,7 +1649,13 @@
     "done": "Terminé la traduction",
     "success": {
       "title": "Titre ({{language}}) mis à jour avec succès",
-      "description": "Description ({{language}}) mise à jour avec succès"
+      "description": "Description ({{language}}) mise à jour avec succès",
+      "faq": "FAQ mis à jour avec succès"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Traduire la question en {{language}}"
     }
   },
   "date_period_picker": {

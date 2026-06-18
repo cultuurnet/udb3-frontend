@@ -8,7 +8,7 @@ import type { OfferStatus } from '@/constants/OfferStatus';
 import { PriceCategory } from '@/pages/steps/AdditionalInformationStep/PriceInformation';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-import { SupportedLanguages } from '../i18n';
+import { SupportedLanguages, TranslationLanguages } from '../i18n';
 import type { ContactPoint } from './ContactPoint';
 import { Event } from './Event';
 import type { Organizer } from './Organizer';
@@ -36,6 +36,7 @@ type Status = {
 
 type BookingAvailability = {
   type: Values<typeof BookingAvailabilityType>;
+  capacity?: number;
 };
 
 type Term = {
@@ -79,7 +80,7 @@ export type BookingInfo = {
 };
 
 export type FaqItem = {
-  [language in Values<typeof SupportedLanguages>]?: {
+  [language in Values<typeof TranslationLanguages>]?: {
     question: string;
     answer: string;
   };
@@ -99,6 +100,7 @@ type SubEvent = {
   endDate: string;
   status?: Status;
   bookingAvailability?: BookingAvailability;
+  bookingInfo?: BookingInfo;
   childcare?: {
     start?: string;
     end?: string;
@@ -183,6 +185,7 @@ type BaseOffer = {
   typicalAgeRange: string;
   birthdateRange?: BirthdateRange;
   bookingInfo?: BookingInfo;
+  bookingAvailability?: BookingAvailability;
   priceInfo?: PriceInfo[];
   regions: string[];
   faqs?: FaqItem[];
