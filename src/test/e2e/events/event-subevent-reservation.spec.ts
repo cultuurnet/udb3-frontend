@@ -278,4 +278,43 @@ test.describe('Per-subEvent reservation info', () => {
     await expect(page.locator('#subevent-0-link')).toHaveValue(links[0]);
     await expect(page.locator('#subevent-1-link')).toHaveValue(links[2]);
   });
+
+  test('saves the reservation period without offer-level contact info', async ({
+    page,
+    baseURL,
+    eventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${eventId}/edit`);
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    await page.getByLabel('Reservatieperiode').check();
+
+    const startInput = page.locator(
+      '#reservation-date-pickerdate-period-picker-start',
+    );
+    const endInput = page.locator(
+      '#reservation-date-pickerdate-period-picker-end',
+    );
+
+    await startInput.fill(addDays(new Date(), 7).toLocaleDateString('nl-BE'));
+    await startInput.press('Enter');
+
+    // The period save fires once both dates are committed.
+    const bookingInfoPut = page.waitForResponse(
+      (response) =>
+        response.url().includes('/bookingInfo') &&
+        response.request().method() === 'PUT',
+    );
+    await endInput.fill(addDays(new Date(), 14).toLocaleDateString('nl-BE'));
+    await endInput.press('Enter');
+    await bookingInfoPut;
+
+    await page.reload();
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    // The period persisted: the toggle is on and the dates are populated.
+    await expect(page.getByLabel('Reservatieperiode')).toBeChecked();
+    await expect(startInput).not.toHaveValue('');
+    await expect(endInput).not.toHaveValue('');
+  });
 });
