@@ -351,20 +351,14 @@
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
-        "audience": {
+        "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder",
           "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
-          "mutation_error": "Beim Speichern der Zielgruppe ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+          "mutation_error": "Beim Speichern Ihrer Auswahl ist ein Fehler aufgetreten. Bitte erneut versuchen.",
           "departure_places_warning_modal": {
             "title": "Achtung, diese Aktion löscht Ihre Abfahrtsorte",
             "body": "Sie können Abfahrtsorte nur bei Aktivitäten angeben, die sich ausschließlich an Kinder richten.",
-            "confirm": "Fortfahren",
-            "cancel": "Abbrechen"
-          },
-          "members_warning_modal": {
-            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
-            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           },
