@@ -189,9 +189,7 @@ const NameAndAgeRangeStep = ({
                     components={{
                       link1: (
                         <Link
-                          css={`
-                            text-decoration: underline;
-                          `}
+                          className="tw:underline"
                           href={t('create.name_and_age.cultuurkuur.link')}
                         />
                       ),

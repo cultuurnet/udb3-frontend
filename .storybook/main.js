@@ -18,6 +18,7 @@ module.exports = {
   ...nextConfig,
   stories: ['../src/ui/**/*.stories.tsx'],
   framework: '@storybook/nextjs',
+  staticDirs: ['../public'],
 
   addons: [
     '@storybook/addon-links',

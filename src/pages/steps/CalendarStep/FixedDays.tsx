@@ -1,12 +1,16 @@
+import { differenceInDays } from 'date-fns';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import { Inline } from '@/ui/Inline';
+import { LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { Stack } from '@/ui/Stack';
@@ -90,6 +94,12 @@ export const FixedDays = ({
     return FixedDayOptions.PERIODIC;
   }, [isPermanent]);
 
+  const isPeriodShorterThanTwoWeeks =
+    isPeriodic &&
+    startDate &&
+    endDate &&
+    differenceInDays(new Date(endDate), new Date(startDate)) < 13;
+
   const handleDeleteAll = () => {
     onChangeAdjustedDays([]);
     onChangeClosingPeriods([]);
@@ -106,7 +116,11 @@ export const FixedDays = ({
           value={FixedDayOptions.PERIODIC}
           checked={selectedOption === FixedDayOptions.PERIODIC}
           onChange={handleChangeOption}
-          label={t('create.calendar.fixed_days.with_start_and_end_date')}
+          label={
+            <Text fontWeight="bold">
+              {t('create.calendar.fixed_days.with_start_and_end_date')}
+            </Text>
+          }
         />
         {isPeriodic && (
           <Stack
@@ -118,22 +132,36 @@ export const FixedDays = ({
               border-bottom: 1px solid ${colors.grey1};
             `}
           >
-            <DatePeriodPicker
-              id="calendar-step-fixed"
-              dateStart={new Date(startDate)}
-              dateEnd={new Date(endDate)}
-              onDateStartChange={onChangeStartDate}
-              onDateEndChange={onChangeEndDate}
-              showHolidaysToggle={isBoaEnabled}
-              apiHolidays={apiHolidays}
-              onShowHolidaysChange={onShowHolidaysChange}
-            />
-            <OpeningHoursContent
-              initialAdjustedDays={initialAdjustedDays}
-              initialClosingPeriods={initialClosingPeriods}
-              onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
-              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
-            />
+            <Inline spacing={5}>
+              <DatePeriodPicker
+                id="calendar-step-fixed"
+                dateStart={new Date(startDate)}
+                dateEnd={new Date(endDate)}
+                onDateStartChange={onChangeStartDate}
+                onDateEndChange={onChangeEndDate}
+                showHolidaysToggle={isBoaEnabled}
+                apiHolidays={apiHolidays}
+                onShowHolidaysChange={onShowHolidaysChange}
+                labelVariant={LabelVariants.NORMAL}
+              />
+              {isPeriodShorterThanTwoWeeks && (
+                <Alert
+                  variant={AlertVariants.PRIMARY}
+                  alignSelf="flex-end"
+                  maxWidth="30rem"
+                >
+                  {t('create.calendar.fixed_days.period_too_short')}
+                </Alert>
+              )}
+            </Inline>
+            <Box maxWidth="31rem">
+              <OpeningHoursContent
+                initialAdjustedDays={initialAdjustedDays}
+                initialClosingPeriods={initialClosingPeriods}
+                onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
+                onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
+              />
+            </Box>
           </Stack>
         )}
         <RadioButtonWithLabel
@@ -142,7 +170,11 @@ export const FixedDays = ({
           value={FixedDayOptions.PERMANENT}
           checked={selectedOption === FixedDayOptions.PERMANENT}
           onChange={handleChangeOption}
-          label={t('create.calendar.fixed_days.permanent')}
+          label={
+            <Text fontWeight="bold">
+              {t('create.calendar.fixed_days.permanent')}
+            </Text>
+          }
         />
         {isPermanent && (
           <Stack paddingX={4.5}>

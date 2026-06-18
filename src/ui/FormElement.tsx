@@ -153,7 +153,7 @@ const FormElement = ({
           <Inline as="div" alignItems="center">
             {clonedComponent}
             {loading && (
-              <Spinner size={SpinnerSizes.SMALL} width="auto" padding={3} />
+              <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto tw:p-3" />
             )}
           </Inline>
           {error && <Text variant={TextVariants.ERROR}>{error}</Text>}
