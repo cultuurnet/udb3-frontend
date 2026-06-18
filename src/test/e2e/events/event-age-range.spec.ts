@@ -37,9 +37,8 @@ const minAgeInput = (page: Page) =>
 const maxAgeInput = (page: Page) =>
   page.getByPlaceholder(age.till, { exact: true });
 
-const childrenOnlyRadio = (page: Page) =>
-  page.locator('#audience-children-only');
-const withFamilyRadio = (page: Page) => page.locator('#audience-with-family');
+const childrenOnlyRadio = (page: Page) => page.locator('#children-only');
+const withFamilyRadio = (page: Page) => page.locator('#with-family');
 
 const waitForTypicalAgeRangePut = (page: Page) =>
   page.waitForResponse(
@@ -49,10 +48,10 @@ const waitForTypicalAgeRangePut = (page: Page) =>
       response.ok(),
   );
 
-const waitForAudiencePut = (page: Page) =>
+const waitForChildrenOnlyPut = (page: Page) =>
   page.waitForResponse(
     (response) =>
-      /\/events\/[a-f0-9-]+\/audience$/.test(response.url()) &&
+      /\/events\/[a-f0-9-]+\/children-only$/.test(response.url()) &&
       response.request().method() === 'PUT' &&
       response.ok(),
   );
@@ -204,9 +203,9 @@ test.describe('Age range', () => {
     await page.getByRole('button', { name: new RegExp(age.kids) }).click();
     await ageRangePut;
 
-    const audiencePut = waitForAudiencePut(page);
+    const childrenOnlyPut = waitForChildrenOnlyPut(page);
     await childrenOnlyRadio(page).click();
-    await audiencePut;
+    await childrenOnlyPut;
 
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
@@ -226,12 +225,12 @@ test.describe('Age range', () => {
     await page.getByRole('button', { name: new RegExp(age.kids) }).click();
     await ageRangePut;
 
-    const audiencePut = waitForAudiencePut(page);
+    const childrenOnlyPut = waitForChildrenOnlyPut(page);
     await childrenOnlyRadio(page).click();
-    await audiencePut;
-    // Wait for the audience update to commit into the tree before clicking the
-    // next preset — otherwise commitTypicalAgeRange may still read a stale
-    // audienceType from useWatch and skip the warning modal.
+    await childrenOnlyPut;
+    // Wait for the children-only update to commit into the tree before clicking
+    // the next preset — otherwise commitTypicalAgeRange may still read a stale
+    // childrenOnly from useWatch and skip the warning modal.
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
@@ -240,18 +239,18 @@ test.describe('Age range', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
     await expect(modal).toContainText(
-      age.audience.age_range_warning_modal.body,
+      age.children_only.age_range_warning_modal.body,
     );
 
-    // Confirm: audience reset PUT + typicalAgeRange PUT both fire.
-    const confirmAudiencePut = waitForAudiencePut(page);
+    // Confirm: children-only reset PUT + typicalAgeRange PUT both fire.
+    const confirmChildrenOnlyPut = waitForChildrenOnlyPut(page);
     const confirmAgePut = waitForTypicalAgeRangePut(page);
     await modal
       .getByRole('button', {
-        name: age.audience.age_range_warning_modal.confirm,
+        name: age.children_only.age_range_warning_modal.confirm,
       })
       .click();
-    await confirmAudiencePut;
+    await confirmChildrenOnlyPut;
     await confirmAgePut;
 
     await page.goto(eventEditUrl);
@@ -272,12 +271,12 @@ test.describe('Age range', () => {
     await page.getByRole('button', { name: new RegExp(age.kids) }).click();
     await ageRangePut;
 
-    const audiencePut = waitForAudiencePut(page);
+    const childrenOnlyPut = waitForChildrenOnlyPut(page);
     await childrenOnlyRadio(page).click();
-    await audiencePut;
-    // Wait for the audience update to commit into the tree before clicking the
-    // next preset — otherwise commitTypicalAgeRange may still read a stale
-    // audienceType from useWatch and skip the warning modal.
+    await childrenOnlyPut;
+    // Wait for the children-only update to commit into the tree before clicking
+    // the next preset — otherwise commitTypicalAgeRange may still read a stale
+    // childrenOnly from useWatch and skip the warning modal.
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     await page.getByRole('button', { name: new RegExp(age.adults) }).click();
@@ -287,7 +286,7 @@ test.describe('Age range', () => {
 
     await modal
       .getByRole('button', {
-        name: age.audience.age_range_warning_modal.cancel,
+        name: age.children_only.age_range_warning_modal.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
@@ -299,46 +298,7 @@ test.describe('Age range', () => {
       page.getByRole('button', { name: new RegExp(age.kids) }),
     ).toHaveClass(/(?:^|\s)active(?:\s|$)/);
 
-    // Audience stayed CHILDREN_ONLY.
-    await expect(childrenOnlyRadio(page)).toBeChecked();
-  });
-
-  test('members → children only: warning modal confirm makes audience CHILDREN_ONLY', async ({
-    page,
-    eventEditUrl,
-  }) => {
-    await page.goto(eventEditUrl);
-
-    // Pre-condition: set audience to MEMBERS via the AudienceStep tab.
-    // Clicking the tab heading is more robust than relying on the #hash
-    // effect — the pane is otherwise mounted-but-hidden and not clickable.
-    await page.getByRole('tab', { name: /Toegang/ }).click();
-    const setMembers = waitForAudiencePut(page);
-    await page.locator('#audience-members').click();
-    await setMembers;
-
-    // Now select a BOA-overlapping age range.
-    const ageRangePut = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
-    await ageRangePut;
-
-    // Click "for children only" — modal warns about the MEMBERS override.
-    await childrenOnlyRadio(page).click();
-
-    const modal = page.getByRole('dialog');
-    await expect(modal).toBeVisible();
-    await expect(modal).toContainText(age.audience.members_warning_modal.body);
-
-    const confirmAudiencePut = waitForAudiencePut(page);
-    await modal
-      .getByRole('button', { name: age.audience.members_warning_modal.confirm })
-      .click();
-    await confirmAudiencePut;
-
-    await expect(modal).toBeHidden();
-    await expect(childrenOnlyRadio(page)).toBeChecked();
-
-    await page.goto(eventEditUrl);
+    // childrenOnly flag stayed true.
     await expect(childrenOnlyRadio(page)).toBeChecked();
   });
 });
