@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { Alert, AlertVariants } from './Alert';
-import { Button, ButtonVariants } from './Button';
 
 const meta: Meta<typeof Alert> = {
   title: 'Components/Alert',
@@ -85,11 +84,7 @@ export const WithAction: Story = {
     <Alert
       variant={AlertVariants.DANGER}
       title="Something went wrong"
-      action={
-        <Button variant={ButtonVariants.LINK} onClick={() => {}}>
-          Retry
-        </Button>
-      }
+      action={<a href="#">Retry</a>}
       visible
     >
       Your changes could not be saved. Please try again.
