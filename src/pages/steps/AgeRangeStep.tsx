@@ -185,7 +185,7 @@ const AgeRangeStepBoa = ({
   const childrenOnly = useWatch({
     control,
     name: 'childrenOnly',
-  }) as boolean;
+  });
 
   const watchedTypicalAgeRange = useWatch({
     control,
