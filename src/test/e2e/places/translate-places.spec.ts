@@ -83,7 +83,7 @@ test.describe('Places translation', () => {
           ),
         ).toBeVisible();
         await page.locator('.toast svg[data-icon="xmark"]').first().click();
-      await expect(page.locator('.toast')).not.toBeVisible();
+        await expect(page.locator('.toast')).not.toBeVisible();
       }
 
       await expect(
