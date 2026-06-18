@@ -5,9 +5,9 @@ import { getInlineProps, Inline } from './Inline';
 import { Label } from './Label';
 import type { RadioButtonProps } from './RadioButton';
 import { RadioButton } from './RadioButton';
+import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
-import { colors } from './theme';
 
 type Props = RadioButtonProps &
   Omit<BoxProps, 'onChange'> & {
@@ -54,8 +54,11 @@ const RadioButtonWithLabel = React.forwardRef(
         />
         <Stack>
           <Label
-            cursor={disabled ? 'not-allowed' : 'pointer'}
-            color={disabled ? colors.grey5 : undefined}
+            className={cn(
+              disabled
+                ? 'tw:cursor-not-allowed tw:text-muted-foreground'
+                : 'tw:cursor-pointer',
+            )}
             htmlFor={id}
           >
             {label}

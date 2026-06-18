@@ -39,7 +39,7 @@ const CheckboxWithLabel = ({
         checked={checked}
         disabled={disabled}
       />
-      <Label cursor="pointer" htmlFor={id}>
+      <Label className="tw:cursor-pointer" htmlFor={id}>
         {children}
       </Label>
     </Inline>
