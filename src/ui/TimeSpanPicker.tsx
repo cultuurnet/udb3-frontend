@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { Box } from './Box';
-import type { InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { cn } from './shadcn/utils';
 import { getValueFromTheme } from './theme';
@@ -50,7 +49,7 @@ type Props = {
   onChangeEndTime: (newEndTime: string) => void;
   disabled?: boolean;
   labelPosition?: TimeSpanPickerLabelPosition;
-} & InlineProps;
+};
 
 const isQuarterHour = (time: string) =>
   quarterHours.some((quarterHour) => time.endsWith(quarterHour));

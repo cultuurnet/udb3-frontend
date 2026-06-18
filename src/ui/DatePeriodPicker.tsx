@@ -20,7 +20,6 @@ import { SupportedLanguages } from '../i18n';
 import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
-import type { InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { RadioButtonTypes } from './RadioButton';
 import { RadioButtonWithLabel } from './RadioButtonWithLabel';
@@ -138,7 +137,7 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
 
 type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
 
-type Props = InlineProps & {
+type Props = {
   id: string;
   className?: string;
   dateStart: Date;
