@@ -51,7 +51,7 @@ const RadioButtonWithLabel = React.forwardRef(
           checked={checked}
           color={color}
         />
-        <div>
+        <div className="tw:flex tw:flex-col">
           <Label
             className={cn(
               disabled
