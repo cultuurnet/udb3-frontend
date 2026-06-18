@@ -42,7 +42,6 @@ const ImagePreview = ({ mediaObject }: Props) => {
           <Image
             src={`${media.thumbnailUrl}?height=${HEIGHT}`}
             alt={media.description}
-            width="auto"
           />
         </Link>
         <Stack spacing={1}>
