@@ -132,6 +132,7 @@ const AlertLegacy = ({
   fullWidth,
   closable,
   onClose,
+  className,
   ...props
 }: AlertProps) => {
   return (
@@ -140,6 +141,7 @@ const AlertLegacy = ({
       data-testid={`alert-${variant}`}
       alignSelf={fullWidth ? 'normal' : 'flex-start'}
       display={visible ? 'flex' : 'none'}
+      className={className}
       {...getStackProps(props)}
       padding={4}
       borderRadius={getValue('borderRadius')}
