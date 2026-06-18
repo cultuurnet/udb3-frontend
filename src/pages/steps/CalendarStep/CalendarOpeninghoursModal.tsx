@@ -15,6 +15,7 @@ import { Label, LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -445,7 +446,9 @@ const CalendarOpeninghoursModal = ({
                       <Label
                         variant={LabelVariants.BOLD}
                         htmlFor={`openinghours-childcare-toggle-${openingHour.id}`}
-                        color={!childcareEnabled ? colors.grey5 : undefined}
+                        className={cn(
+                          !childcareEnabled && 'tw:text-muted-foreground',
+                        )}
                       >
                         {t('create.calendar.days.childcare.label')}
                       </Label>

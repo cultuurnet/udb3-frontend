@@ -14,6 +14,7 @@ import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
+import { cn } from '@/ui/shadcn/utils';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -191,7 +192,9 @@ export const Days = ({
                     <Label
                       variant={LabelVariants.BOLD}
                       htmlFor={`calendar-step-day-${day.id}-childcare-toggle`}
-                      color={!day.childcareEnabled ? colors.grey5 : undefined}
+                      className={cn(
+                        !day.childcareEnabled && 'tw:text-muted-foreground',
+                      )}
                     >
                       {t('create.calendar.days.childcare.label')}
                     </Label>
