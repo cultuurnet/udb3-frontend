@@ -6,7 +6,6 @@ import { Label } from './Label';
 import type { RadioButtonProps } from './RadioButton';
 import { RadioButton } from './RadioButton';
 import { cn } from './shadcn/utils';
-import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 
 type Props = RadioButtonProps &
@@ -52,7 +51,7 @@ const RadioButtonWithLabel = React.forwardRef(
           checked={checked}
           color={color}
         />
-        <Stack>
+        <div>
           <Label
             className={cn(
               disabled
@@ -64,7 +63,7 @@ const RadioButtonWithLabel = React.forwardRef(
             {label}
           </Label>
           {!!info && <Text variant={TextVariants.MUTED}>{info}</Text>}
-        </Stack>
+        </div>
       </Inline>
     );
   },
