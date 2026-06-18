@@ -479,17 +479,6 @@ const BookingInfoStep = ({
       delete bookingInfo.email;
     }
 
-    if (
-      !Object.keys(bookingInfo).some((key) =>
-        ['phone', 'url', 'email'].includes(key),
-      ) &&
-      bookingInfo.availabilityEnds &&
-      bookingInfo.availabilityStarts
-    ) {
-      delete bookingInfo.availabilityEnds;
-      delete bookingInfo.availabilityStarts;
-    }
-
     if (!isDatePickerVisible) {
       delete bookingInfo.availabilityEnds;
       delete bookingInfo.availabilityStarts;
