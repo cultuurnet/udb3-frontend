@@ -364,7 +364,7 @@
           },
           "age_range_warning_modal": {
             "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
-            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder' und eventuelle Abfahrtsorte werden gelöscht.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           }

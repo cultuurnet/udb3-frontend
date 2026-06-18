@@ -364,7 +364,7 @@
           },
           "age_range_warning_modal": {
             "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
-            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants'. L'accès sera automatiquement défini sur 'Pour tout le monde' et les lieux de départ éventuels seront supprimés.",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           }
