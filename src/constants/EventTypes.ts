@@ -64,4 +64,11 @@ const cultuurkuurTypes: string[] = [
   EventTypes.Festival,
 ];
 
-export { cultuurkuurTypes, EventTypes, eventTypesWithNoThemes };
+// Types only available when the BOA feature flag is enabled.
+const boaTypes: string[] = [
+  'K7mPx3nQrT9bWfH2zL5cYv', // Kinderopvang
+  '8aRjN4dGsXuE6tBkM1pVwQ', // Activiteit met de jeugdbeweging
+  'hZ5fCyL9nKqW3xDvTrJ2gP', // Speelpleinwerking
+];
+
+export { boaTypes, cultuurkuurTypes, EventTypes, eventTypesWithNoThemes };
