@@ -153,10 +153,10 @@ export const Days = ({
 
         return (
           <Stack spacing={4} key={`list-item-${day.id}`}>
-            <List.Item alignItems="center" spacing={5}>
+            <List.Item alignItems="center" spacing={0} className="tw:gap-8">
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
-                spacing={3}
+                className="tw:gap-2"
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}
                 dateEnd={new Date(day.endDate)}
@@ -170,14 +170,13 @@ export const Days = ({
               />
               {isOneOrMoreDays && (
                 <TimeSpanPicker
-                  spacing={3}
                   id={`calendar-step-day-${day.id}`}
                   startTime={startTime}
                   endTime={endTime}
                   onChangeStartTime={handleChangeStartTime}
                   onChangeEndTime={handleChangeEndTime}
                   disabled={isDisabled}
-                  minWidth="120px"
+                  className="tw:min-w-30"
                 />
               )}
               {isOneOrMoreDays && isBoaEnabled && (
@@ -228,7 +227,7 @@ export const Days = ({
                 </Stack>
               )}
               {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
-                <Stack spacing={2}>
+                <div className="tw:flex tw:flex-col tw:gap-y-1">
                   <Label
                     variant={LabelVariants.BOLD}
                     htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
@@ -263,7 +262,7 @@ export const Days = ({
                       {t('create.calendar.days.overnight_stay.with')}
                     </Label>
                   </Inline>
-                </Stack>
+                </div>
               )}
               {days.length > 1 && (
                 <Button

@@ -20,6 +20,7 @@ import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
 import { Label } from './Label';
+import { cn } from './shadcn/utils';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
@@ -427,8 +428,8 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
   return (
     <Stack
       as="div"
-      spacing={4}
-      className={className}
+      spacing={0}
+      className={cn(className, 'tw:gap-4')}
       alignItems="flex-start"
       {...getStackProps(props)}
     >

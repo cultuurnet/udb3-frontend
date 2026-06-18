@@ -220,7 +220,12 @@ const ReservationPeriod = ({
           )}
         </Alert>
       )}
-      <Inline spacing={4} alignItems="flex-end" flexWrap="wrap">
+      <Inline
+        spacing={0}
+        alignItems="flex-end"
+        flexWrap="wrap"
+        className="tw:gap-4"
+      >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
           id="reservation-date-picker"
@@ -258,7 +263,7 @@ const ReservationPeriod = ({
             setEndTime(time);
             setUserHasInteracted(true);
           }}
-          minWidth="120px"
+          className="tw:min-w-30"
         />
       </Inline>
     </Stack>

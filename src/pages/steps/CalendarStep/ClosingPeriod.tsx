@@ -77,9 +77,9 @@ const ClosingPeriod = ({
         <Text color={colors.udbMainDarkBlue} fontWeight="bold">
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
-        <Inline spacing={5} alignItems="flex-end">
+        <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
-            width="100%"
+            className="tw:w-full"
             id={`closing-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
