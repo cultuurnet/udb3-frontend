@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 import { EventTypes } from '../../../constants/EventTypes';
 import nl from '../../../i18n/nl.json';
+import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 const { question: suggestionQuestion, answer: suggestionAnswer } =
@@ -17,25 +18,6 @@ const faqData = {
   question: 'Wat zijn de openingsuren?',
   answer: 'We zijn open van 9u tot 17u.',
   editedQuestion: 'Wat zijn de openingstijden?',
-};
-
-const addFaqItem = async (page: Page) => {
-  await page
-    .getByRole('button', { name: 'Voeg een veelgestelde vraag toe' })
-    .click();
-  await page
-    .locator('[role="dialog"]')
-    .getByRole('combobox')
-    .fill(faqData.question);
-  await page
-    .locator('[role="dialog"]')
-    .getByRole('textbox', { name: 'rdw-editor' })
-    .fill(faqData.answer);
-  await page
-    .locator('[role="dialog"]')
-    .getByRole('button', { name: 'Opslaan' })
-    .click();
-  await expect(page.getByText(faqData.question)).toBeVisible();
 };
 
 test.describe('FAQ', () => {
@@ -79,7 +61,7 @@ test.describe('FAQ', () => {
   });
 
   test('can edit a FAQ item', async ({ page }) => {
-    await addFaqItem(page);
+    await addFaqItem(page, faqData.question, faqData.answer);
 
     await page.getByRole('button', { name: 'Bewerken' }).click();
     await page
@@ -114,7 +96,7 @@ test.describe('FAQ', () => {
   });
 
   test('can delete a FAQ item', async ({ page }) => {
-    await addFaqItem(page);
+    await addFaqItem(page, faqData.question, faqData.answer);
 
     await page.getByRole('button', { name: 'Verwijderen' }).click();
     await page.getByRole('button', { name: 'Definitief verwijderen' }).click();

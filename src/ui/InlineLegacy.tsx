@@ -1,0 +1,93 @@
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  Fragment,
+  isValidElement,
+} from 'react';
+import type { ExecutionContext } from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+
+import {
+  Box,
+  boxProps,
+  FALSY_VALUES,
+  parseProperty,
+  withoutDisallowedPropsConfig,
+} from './Box';
+import type { InlineProps } from './Inline';
+import type { BreakpointValues, Theme } from './theme';
+
+const parseStackOnProperty =
+  () =>
+  (props: ExecutionContext & { theme?: Theme; stackOn?: BreakpointValues }) => {
+    if (!props.stackOn) return;
+    return css`
+      @media (max-width: ${props.theme?.breakpoints?.[props.stackOn]}px) {
+        flex-direction: column;
+      }
+    `;
+  };
+
+const inlineProps = css`
+  display: flex;
+  flex-direction: row;
+
+  ${parseProperty('alignItems')};
+  ${parseProperty('alignSelf')};
+  ${parseProperty('justifyContent')};
+  ${parseStackOnProperty()};
+`;
+
+const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
+  ${inlineProps};
+  ${boxProps};
+`;
+
+const InlineLegacy = forwardRef<HTMLElement, InlineProps>(
+  ({ spacing, className, children, as = 'span', stackOn, ...props }, ref) => {
+    const shouldCollapse = useMatchBreakpoint(stackOn);
+    const marginProp =
+      shouldCollapse && stackOn ? 'marginBottom' : 'marginRight';
+
+    const validChildren = Children.toArray(children).filter(
+      (child) => !FALSY_VALUES.includes(child),
+    );
+
+    const clonedChildren = Children.map(validChildren, (child, i) => {
+      const isLastItem = i === validChildren.length - 1;
+
+      const isBoxComponent =
+        isValidElement(child) &&
+        typeof child.type !== 'string' &&
+        child.type !== Fragment;
+
+      // @ts-expect-error
+      return cloneElement(child, {
+        // @ts-expect-error
+        ...child.props,
+        ...(!isLastItem && spacing && isBoxComponent
+          ? { [marginProp]: spacing }
+          : {}),
+      });
+    });
+
+    return (
+      <StyledBox
+        as={as}
+        className={className}
+        stackOn={stackOn}
+        {...props}
+        ref={ref}
+      >
+        {clonedChildren}
+      </StyledBox>
+    );
+  },
+);
+
+InlineLegacy.displayName = 'InlineLegacy';
+
+export { InlineLegacy };

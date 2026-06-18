@@ -367,8 +367,8 @@
           "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
           "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
           "departure_places_warning_modal": {
-            "title": "Vertreklocaties verwijderen",
-            "body": "Let op: deze actie verwijdert je ingevulde vertreklocaties.",
+            "title": "Let op, deze actie verwijdert je vertreklocaties",
+            "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
             "confirm": "Doorgaan",
             "cancel": "Annuleren"
           },
@@ -459,13 +459,17 @@
         "phone_error": "Geen geldig telefoonnummer",
         "url": "Website of reservatiepagina",
         "url_error": "Geen geldige url",
+        "link": "Link",
+        "max_capacity": "Maximum capaciteit",
+        "capacity_error": "Voer een geldig aantal in (0 of meer).",
+        "status": "Status",
+        "url_label_dropdown_label": "Tekst op reservatieknop",
         "url_type_labels": {
           "buy": "Koop tickets",
           "reserve": "Reserveer plaatsen",
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
-        "select_url_label": "Hoe mag deze reservatie link verschijnen?",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
@@ -1718,7 +1722,13 @@
     "done": "Klaar met vertalen",
     "success": {
       "title": "Titel ({{language}}) succesvol bijgewerkt",
-      "description": "Beschrijving ({{language}}) succesvol bijgewerkt"
+      "description": "Beschrijving ({{language}}) succesvol bijgewerkt",
+      "faq": "FAQ succesvol bijgewerkt"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Vertaal vraag in {{language}}"
     }
   },
   "date_period_picker": {
