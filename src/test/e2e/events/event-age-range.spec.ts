@@ -228,9 +228,6 @@ test.describe('Age range', () => {
     const childrenOnlyPut = waitForChildrenOnlyPut(page);
     await childrenOnlyRadio(page).click();
     await childrenOnlyPut;
-    // Wait for the children-only update to commit into the tree before clicking
-    // the next preset — otherwise commitTypicalAgeRange may still read a stale
-    // childrenOnly from useWatch and skip the warning modal.
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
@@ -242,7 +239,6 @@ test.describe('Age range', () => {
       age.children_only.age_range_warning_modal.body,
     );
 
-    // Confirm: children-only reset PUT + typicalAgeRange PUT both fire.
     const confirmChildrenOnlyPut = waitForChildrenOnlyPut(page);
     const confirmAgePut = waitForTypicalAgeRangePut(page);
     await modal
@@ -274,9 +270,6 @@ test.describe('Age range', () => {
     const childrenOnlyPut = waitForChildrenOnlyPut(page);
     await childrenOnlyRadio(page).click();
     await childrenOnlyPut;
-    // Wait for the children-only update to commit into the tree before clicking
-    // the next preset — otherwise commitTypicalAgeRange may still read a stale
-    // childrenOnly from useWatch and skip the warning modal.
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     await page.getByRole('button', { name: new RegExp(age.adults) }).click();

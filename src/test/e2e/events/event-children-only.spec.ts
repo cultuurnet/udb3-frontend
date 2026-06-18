@@ -184,7 +184,6 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // Wait for both the children-only PUT and the follow-up offer refetch
     const childrenOnlyPut = page.waitForResponse(
       (res) =>
         res.url().includes(`/events/${eventId}/children-only`) &&
@@ -291,9 +290,6 @@ test.describe('Children-only audience section', () => {
     );
     await childrenOnlyRadio(page).click();
     await childrenOnlyPut;
-    // Wait for the childrenOnly update to commit before clicking the next
-    // preset — otherwise commitTypicalAgeRange may still read a stale value
-    // from useWatch and skip the warning modal.
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
@@ -307,7 +303,6 @@ test.describe('Children-only audience section', () => {
       modal.getByText(childrenOnly.age_range_warning_modal.body),
     ).toBeVisible();
 
-    // Confirm: children-only reset PUT + typicalAgeRange PUT fire in sequence.
     const confirmChildrenOnlyPut = page.waitForResponse(
       (res) =>
         res.url().includes(`/events/${eventId}/children-only`) &&
