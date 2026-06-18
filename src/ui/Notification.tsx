@@ -15,7 +15,7 @@ type Props = {
 const NotificationShadcn = ({ icon, header, body, className }: Props) => (
   <div
     className={cn(
-      'tw:fixed tw:right-4 tw:bottom-24 tw:min-w-85 tw:rounded tw:bg-white tw:z-5 tw:shadow-lg',
+      'tw:fixed tw:right-4 tw:bottom-24 tw:min-w-85 tw:rounded tw:bg-white tw:z-5 tw:shadow-heavy',
       className,
     )}
   >
