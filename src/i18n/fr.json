@@ -402,8 +402,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Uniquement pour les enfants",
-        "children_only_warning": "Cette activité est définie comme 'Uniquement pour les enfants'.<br/>Pour modifier l'accès, allez à <strong>Données de base</strong> &rsaquo; <strong>Pour qui cette activité est-elle organisée ?</strong>.<br/>Choisissez 'Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur'.",
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
         "members": "Seulement pour des membres",

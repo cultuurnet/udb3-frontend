@@ -400,8 +400,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Nur für Kinder",
-        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",

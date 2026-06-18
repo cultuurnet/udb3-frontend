@@ -421,8 +421,6 @@
       },
       "audience": {
         "title": "Toegang",
-        "childrenOnly": "Voor kinderen alleen",
-        "children_only_warning": "Deze activiteit is ingesteld als 'Voor kinderen alleen'.<br/>Om de toegang te wijzigen, ga je naar <strong>Basisgegevens</strong> &rsaquo; <strong>Voor wie is deze activiteit?</strong>.<br/>Kies daar 'Voor kinderen samen met hun familie of een andere begeleider'.",
         "education": "Specifiek voor scholen",
         "everyone": "Voor iedereen",
         "members": "Enkel voor leden",
