@@ -21,10 +21,10 @@ import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { RadioButtonTypes } from './RadioButton';
 import { RadioButtonWithLabel } from './RadioButtonWithLabel';
+import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
@@ -138,6 +138,7 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
 
 type Props = InlineProps & {
   id: string;
+  className?: string;
   dateStart: Date;
   dateEnd: Date;
   minDate?: Date;
@@ -170,7 +171,7 @@ const DatePeriodPicker = ({
   fetchHolidays,
   onQuickLinkClick,
   onShowHolidaysChange,
-  ...props
+  className,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);
@@ -306,8 +307,8 @@ const DatePeriodPicker = ({
   ) : undefined;
 
   return (
-    <Inline as="div" spacing={5} {...getInlineProps(props)}>
-      <Stack spacing={2} as="div">
+    <div className={cn('tw:flex tw:gap-8', className)}>
+      <div className="tw:flex tw:flex-col tw:gap-y-1">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
           {t('date_period_picker.start')}
         </Label>
@@ -345,8 +346,8 @@ const DatePeriodPicker = ({
           calendarContent={calendarContent}
           calendarQuickLinks={calendarQuickLinks}
         />
-      </Stack>
-      <Stack spacing={2} as="div">
+      </div>
+      <div className="tw:flex tw:flex-col tw:gap-y-1">
         <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
           {t('date_period_picker.end')}
         </Label>
@@ -387,8 +388,8 @@ const DatePeriodPicker = ({
           }
           calendarContent={calendarContent}
         />
-      </Stack>
-    </Inline>
+      </div>
+    </div>
   );
 };
 
