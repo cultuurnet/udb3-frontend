@@ -374,7 +374,7 @@
           },
           "age_range_warning_modal": {
             "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
-            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen'. De toegang wordt automatisch ingesteld op 'Voor iedereen' en eventuele vertreklocaties worden verwijderd.",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen' en eventuele vertreklocaties worden verwijderd.",
             "confirm": "Verdergaan",
             "cancel": "Annuleren"
           }
