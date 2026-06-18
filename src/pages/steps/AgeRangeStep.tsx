@@ -170,7 +170,6 @@ const AgeRangeStepBoa = ({
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
   type ActiveModal =
     | { kind: 'departurePlaces' }
-    | { kind: 'members' }
     | { kind: 'ageRange'; newValue: string; previousValue: string };
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const closeModal = () => setActiveModal(null);
