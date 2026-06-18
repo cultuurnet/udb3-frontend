@@ -219,7 +219,7 @@ const Preview = () => {
 
     return (
       <Text>
-        {offer.bookingAvailability.type === BookingAvailability.AVAILABLE
+        {offer.bookingAvailability?.type === BookingAvailability.AVAILABLE
           ? t('bookingAvailability.available')
           : t('bookingAvailability.unavailable')}
       </Text>

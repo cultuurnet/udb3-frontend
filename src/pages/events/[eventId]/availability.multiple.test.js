@@ -21,7 +21,7 @@ const setup = async () => {
     },
     responses: {
       '/events/:id': { body: eventWithSubEvents },
-      '/events/:id/subEvents': {},
+      '/events/:id/sub-events': {},
     },
   });
 
@@ -70,7 +70,7 @@ test('I can save a status', async () => {
     }),
   );
 
-  await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
+  await waitForFetch(`/events/${page.router.query.eventId}/sub-events`);
 
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
@@ -121,7 +121,7 @@ test('I can save a status with a reason', async () => {
     }),
   );
 
-  await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
+  await waitForFetch(`/events/${page.router.query.eventId}/sub-events`);
 
   expect(fetch.mock.calls[3][1].body).toEqual(
     JSON.stringify([
@@ -165,10 +165,10 @@ test('I can save a booking availability', async () => {
     }),
   );
 
-  await waitForFetch(`/events/${page.router.query.eventId}/subEvents`);
+  await waitForFetch(`/events/${page.router.query.eventId}/sub-events`);
 
   const filteredMockCalls = fetch.mock.calls.find((call) => {
-    return call[0].endsWith('/subEvents');
+    return call[0].endsWith('/sub-events');
   });
 
   expect(filteredMockCalls[1].body).toEqual(
