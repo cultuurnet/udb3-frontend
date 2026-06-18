@@ -2,7 +2,6 @@ import { format, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { BirthdateRange } from '@/types/Offer';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -22,7 +21,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 
 type Props = {
   typicalAgeRange: string;
-  audienceType?: AudienceType;
+  childrenOnly?: boolean;
   birthdateRange?: BirthdateRange;
 };
 
@@ -39,7 +38,7 @@ const ChildrenOnlyLabel = () => {
 
 const AgePreview = ({
   typicalAgeRange,
-  audienceType,
+  childrenOnly,
   birthdateRange,
 }: Props) => {
   const { t } = useTranslation();
@@ -80,7 +79,7 @@ const AgePreview = ({
           />
         </Text>
       )}
-      {audienceType === AudienceTypes.CHILDREN_ONLY && <ChildrenOnlyLabel />}
+      {childrenOnly && <ChildrenOnlyLabel />}
     </Stack>
   );
 };

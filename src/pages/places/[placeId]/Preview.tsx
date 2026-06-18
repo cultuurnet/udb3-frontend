@@ -116,7 +116,6 @@ const Preview = () => {
     typicalAgeRange,
     mediaObject,
     videos,
-    audience,
   } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
@@ -261,7 +260,6 @@ const Preview = () => {
       value: (
         <AgePreview
           typicalAgeRange={typicalAgeRange}
-          audienceType={audience?.audienceType}
           birthdateRange={offer?.birthdateRange}
         />
       ),
