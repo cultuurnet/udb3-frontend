@@ -174,6 +174,7 @@ const DescriptionField = ({
       id={`description-container-${language}`}
       display="grid"
       css={rowGridCss}
+      maxWidth="55rem"
     >
       <Text variant="muted">
         {originalLanguage === language

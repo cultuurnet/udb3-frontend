@@ -229,7 +229,7 @@ const ProfileMenu = ({
         src={user?.picture || defaultProfileImageUrl}
         width={40}
         height={40}
-        borderRadius="50%"
+        className="tw:rounded-full"
         alt="Profile picture"
       />
       <Stack as="div" padding={2} spacing={2} flex={1} display={{ s: 'none' }}>
