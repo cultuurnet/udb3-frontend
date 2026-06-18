@@ -34,8 +34,6 @@ const Label = ({
     FeatureFlags.SHADCN_MIGRATION,
   );
 
-  // TODO: Stack injects marginBottom via cloneElement which the plain label ignores;
-  // spacing will work correctly once Stack is migrated to CSS gap
   return isShadcnMigrationEnabled ? (
     <label
       htmlFor={htmlFor}
