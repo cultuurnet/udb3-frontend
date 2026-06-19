@@ -79,7 +79,12 @@ const Job = ({
       <Stack as="div" spacing={3} flex={1}>
         <Inline as="div" flex={1} justifyContent="space-between">
           <Stack>
-            <Inline forwardedAs="div" spacing={2} css="word-break: break-word;">
+            <Inline
+              forwardedAs="div"
+              spacing={2}
+              alignItems="center"
+              css="word-break: break-word;"
+            >
               <Box as="span">{t('jobs.time_ago', { time: timeAgo })}</Box>
               {state !== JobStates.FAILED && <StatusIcon state={state} />}
             </Inline>

@@ -148,11 +148,7 @@ type Props = {
 
 const IconShadcn = ({ name, width = 18, height = 18, className }: Props) => {
   const LucideIcon = LucideIconsMap[name];
-  return (
-    <span className="tw:inline-flex tw:items-center">
-      <LucideIcon width={width} height={height} className={className} />
-    </span>
-  );
+  return <LucideIcon width={width} height={height} className={className} />;
 };
 
 const Icon = (props: Props) => {

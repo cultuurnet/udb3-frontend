@@ -70,7 +70,7 @@ type TabTitleProps = {
 };
 
 const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
-  <Inline spacing={3}>
+  <Inline spacing={3} alignItems="center">
     {hasFilled && (
       <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
     )}

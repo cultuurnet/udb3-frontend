@@ -29,7 +29,7 @@ const CultuurkuurSelectionOverview = ({
   if (selectedCount === 0) return null;
 
   return (
-    <Inline spacing={1}>
+    <Inline spacing={1} alignItems="center">
       <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       <Text>
         <Inline alignItems="center">
