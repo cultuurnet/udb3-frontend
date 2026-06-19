@@ -138,14 +138,11 @@ const Preview = () => {
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
-  const canSeeHistory = userPermissions?.includes(
-    PermissionTypes.AANBOD_HISTORIEK,
-  );
 
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     eventId as string,
     offerType,
-    { enabled: canSeeHistory || isGodUser },
+    { enabled: isGodUser },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
 
@@ -154,7 +151,7 @@ const Preview = () => {
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  if (canSeeHistory || isGodUser) {
+  if (isGodUser) {
     tabOptions.push('history');
   }
 
@@ -219,7 +216,7 @@ const Preview = () => {
 
     return (
       <Text>
-        {offer.bookingAvailability.type === BookingAvailability.AVAILABLE
+        {offer.bookingAvailability?.type === BookingAvailability.AVAILABLE
           ? t('bookingAvailability.available')
           : t('bookingAvailability.unavailable')}
       </Text>
@@ -302,8 +299,11 @@ const Preview = () => {
               font-weight: 600;
               width: 25%;
             }
-            tbody tr:first-child td {
-              border-top: none;
+            tbody tr td {
+              border: none;
+            }
+            tbody tr:not(:last-child) td {
+              border-bottom: 1px solid ${colors.grey3};
             }
           `}
         />
@@ -369,6 +369,7 @@ const Preview = () => {
         <AgePreview
           typicalAgeRange={typicalAgeRange}
           audienceType={audience?.audienceType}
+          birthdateRange={offer.birthdateRange}
         />
       ),
     },

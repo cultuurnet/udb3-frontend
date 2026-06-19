@@ -1,52 +1,48 @@
-import { useTranslation } from 'react-i18next';
-
-import { Box } from '@/ui/Box';
-import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
-import { Stack } from '@/ui/Stack';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Text, TextVariants } from '@/ui/Text';
 
-export type PublicationStatusIndicatorProps = InlineProps & {
+import { StatusIndicatorLegacy } from './StatusIndicatorLegacy';
+
+type PublicationStatusIndicatorProps = {
   color?: string;
   label?: string;
-  isExternalCreator?: boolean;
+  description?: string;
 };
 
-export const StatusIndicator = ({
+const StatusIndicatorShadcn = ({
   color,
   label,
-  isExternalCreator,
-  ...props
+  description,
 }: PublicationStatusIndicatorProps) => {
-  const { t } = useTranslation();
-
   return (
-    <Stack>
-      <Inline
-        marginBottom={1}
-        spacing={3}
-        alignItems="center"
-        {...getInlineProps(props)}
-      >
-        {color &&
-          label && [
-            <Box
-              key="status-indicator-box"
-              width="0.90rem"
-              height="0.90rem"
-              backgroundColor={color}
-              borderRadius="50%"
-              flexShrink={0}
-            />,
-            <Text key="status-indicator-label" variant={TextVariants.MUTED}>
-              {label}
-            </Text>,
-          ]}
-      </Inline>
-      {isExternalCreator && (
-        <Text variant={TextVariants.MUTED}>
-          {t('dashboard.external_creator')}
-        </Text>
-      )}
-    </Stack>
+    <div className="tw:flex tw:flex-col">
+      <div className="tw:flex tw:flex-row tw:items-center tw:gap-x-2 tw:mb-1">
+        {color && label && (
+          <>
+            <span
+              className="tw:w-3.5 tw:h-3.5 tw:rounded-full tw:shrink-0"
+              style={{ backgroundColor: color }}
+            />
+            <Text variant={TextVariants.MUTED}>{label}</Text>
+          </>
+        )}
+      </div>
+      {description && <Text variant={TextVariants.MUTED}>{description}</Text>}
+    </div>
   );
 };
+
+const StatusIndicator = (props: PublicationStatusIndicatorProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return isShadcnMigrationEnabled ? (
+    <StatusIndicatorShadcn {...props} />
+  ) : (
+    <StatusIndicatorLegacy {...props} />
+  );
+};
+
+export type { PublicationStatusIndicatorProps };
+export { StatusIndicator };
