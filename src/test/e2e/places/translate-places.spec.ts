@@ -52,7 +52,8 @@ test.describe('Places translation', () => {
       await expect(
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').click();
+      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
@@ -81,7 +82,8 @@ test.describe('Places translation', () => {
             `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
           ),
         ).toBeVisible();
-        await page.locator('.toast svg[data-icon="xmark"]').click();
+        await page.locator('.toast svg[data-icon="xmark"]').first().click();
+        await expect(page.locator('.toast')).not.toBeVisible();
       }
 
       await expect(
