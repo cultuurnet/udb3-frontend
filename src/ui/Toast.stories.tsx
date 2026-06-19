@@ -6,9 +6,23 @@ const meta: Meta<typeof Toast> = {
   title: 'Components/Toast',
   component: Toast,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
+    controls: { include: ['body', 'variant'] },
   },
-
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`[data-sonner-toaster] { position: absolute !important; }`}</style>
+        <div style={{ position: 'relative', width: '100%', minHeight: '80px' }}>
+          <Story />
+        </div>
+      </>
+    ),
+  ],
+  args: {
+    visible: true,
+    duration: Infinity,
+  },
   argTypes: {
     variant: {
       control: { type: 'select' },
@@ -21,34 +35,51 @@ const meta: Meta<typeof Toast> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
-  args: {
-    variant: ToastVariants.PRIMARY,
-    body: 'My Super Mega Long Toast Message',
-  },
-  parameters: { controls: { include: ['body', 'variant'] } },
-};
-
 export const Success: Story = {
   args: {
     variant: ToastVariants.SUCCESS,
-    body: 'My Super Mega Long Toast Message',
+    body: 'Success toast',
+    visible: true,
   },
-  parameters: { controls: { include: ['body'] } },
 };
 
 export const Danger: Story = {
   args: {
     variant: ToastVariants.DANGER,
-    body: 'My Super Mega Long Toast Message',
+    body: 'Danger toast',
+    visible: true,
   },
-  parameters: { controls: { include: ['body'] } },
 };
 
 export const Warning: Story = {
   args: {
     variant: ToastVariants.WARNING,
-    body: 'My Super Mega Long Toast Message',
+    body: 'Warning toast',
+    visible: true,
   },
-  parameters: { controls: { include: ['body'] } },
+};
+
+export const Info: Story = {
+  args: {
+    variant: ToastVariants.INFO,
+    body: 'Info toast',
+    visible: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only available in the shadcn implementation (requires SHADCN_MIGRATION feature flag).',
+      },
+    },
+  },
+};
+
+export const WithCloseButton: Story = {
+  args: {
+    variant: ToastVariants.SUCCESS,
+    body: 'Success toast with close button',
+    visible: true,
+    onClose: () => {},
+  },
 };
