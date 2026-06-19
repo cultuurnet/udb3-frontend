@@ -65,14 +65,6 @@ export const Info: Story = {
     body: 'Info toast',
     visible: true,
   },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Only available in the shadcn implementation (requires SHADCN_MIGRATION feature flag).',
-      },
-    },
-  },
 };
 
 export const WithCloseButton: Story = {
