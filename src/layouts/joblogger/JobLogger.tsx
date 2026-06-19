@@ -189,7 +189,10 @@ const JobLogger = ({ visible, onClose, onStatusChange }: JobLoggerProps) => {
       <Stack padding={3} width={320} backgroundColor="white">
         <Inline as="div" justifyContent="flex-end">
           <Button variant={ButtonVariants.UNSTYLED} onClick={onClose}>
-            <Icon name={Icons.TIMES} opacity={{ default: 0.5, hover: 1 }} />
+            <Icon
+              name={Icons.TIMES}
+              className="tw:opacity-50 tw:hover:opacity-100"
+            />
           </Button>
         </Inline>
         <Stack spacing={4}>

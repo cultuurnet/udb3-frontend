@@ -8,6 +8,7 @@ import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { Spinner, SpinnerSizes } from '@/ui/Spinner';
 import { Link, LinkVariants } from '@/ui/Link';
 import type { ListItemProps } from '@/ui/List';
 import { List } from '@/ui/List';
@@ -32,25 +33,7 @@ const StatusIcon = memo(({ state }: { state: Values<typeof JobStates> }) => {
   if (state === JobStates.FINISHED) {
     return <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />;
   }
-  return (
-    <Icon
-      name={Icons.CHECK_NOTCH}
-      className="tw:text-udb-main-dark-blue"
-      css={`
-        @keyframes rotation {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(359deg);
-          }
-        }
-        .svg-inline--fa {
-          animation: rotation 1s infinite linear;
-        }
-      `}
-    />
-  );
+  return <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto" />;
 });
 
 StatusIcon.displayName = 'StatusIcon';
@@ -105,7 +88,7 @@ const Job = ({
             </Box>
           </Stack>
           <Button onClick={onClick} variant={ButtonVariants.UNSTYLED}>
-            <Icon name={Icons.TIMES} alignItems="center" />
+            <Icon name={Icons.TIMES} />
           </Button>
         </Inline>
         {!!exportUrl && state === JobStates.FINISHED && (

@@ -10,6 +10,7 @@ import {
 import { LABEL_PATTERN } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { Label } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -158,13 +159,13 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
                 `}
               >
                 <Text>{label}</Text>
-                <Icon
-                  name={Icons.TIMES}
-                  width="0.8rem"
-                  height="0.8rem"
-                  marginLeft={1}
+                <Button
+                  variant={ButtonVariants.UNSTYLED}
+                  className="tw:ml-1"
                   onClick={onLabelRemove(label)}
-                />
+                >
+                  <Icon name={Icons.TIMES} width="0.8rem" height="0.8rem" />
+                </Button>
               </Inline>
             ))}
           </Inline>
