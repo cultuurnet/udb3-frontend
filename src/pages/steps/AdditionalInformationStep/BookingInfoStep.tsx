@@ -57,6 +57,8 @@ type FormData = yup.InferType<typeof schema>;
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
 
+const SUBTITLE_COLOR = colors.udbMainDarkBlue;
+
 const ContactInfoType = {
   EMAIL: 'email',
   PHONE: 'phone',
@@ -95,7 +97,7 @@ const getUrlLabelType = (
   return UrlLabelType.BUY;
 };
 
-type ReservationPeriodProps = {
+type ReservationPeriodProps = StackProps & {
   availabilityStarts: string;
   availabilityEnds: string;
   handleDelete: () => void;
@@ -114,6 +116,7 @@ const ReservationPeriod = ({
   handlePeriodChange,
   isDatePickerVisible,
   setIsDatePickerVisible,
+  ...props
 }: ReservationPeriodProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
@@ -201,8 +204,8 @@ const ReservationPeriod = ({
   };
 
   return (
-    <Stack spacing={4}>
-      <Text fontWeight="bold">
+    <Stack spacing={4} {...getStackProps(props)}>
+      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
@@ -224,7 +227,12 @@ const ReservationPeriod = ({
           )}
         </Alert>
       )}
-      <Inline spacing={4} alignItems="flex-end" flexWrap="wrap">
+      <Inline
+        spacing={4}
+        alignItems="flex-end"
+        flexWrap="wrap"
+        opacity={isDatePickerVisible ? 1 : 0.5}
+      >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
           id="reservation-date-picker"
@@ -471,17 +479,6 @@ const BookingInfoStep = ({
       delete bookingInfo.email;
     }
 
-    if (
-      !Object.keys(bookingInfo).some((key) =>
-        ['phone', 'url', 'email'].includes(key),
-      ) &&
-      bookingInfo.availabilityEnds &&
-      bookingInfo.availabilityStarts
-    ) {
-      delete bookingInfo.availabilityEnds;
-      delete bookingInfo.availabilityStarts;
-    }
-
     if (!isDatePickerVisible) {
       delete bookingInfo.availabilityEnds;
       delete bookingInfo.availabilityStarts;
@@ -613,83 +610,114 @@ const BookingInfoStep = ({
   };
 
   return (
-    <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
+    <Stack maxWidth="75rem" spacing={5} {...getStackProps(props)}>
+      <Text fontWeight="bold" fontSize="1.1rem">
+        {t('create.additionalInformation.booking_info.section_title')}
+      </Text>
       <Stack
         as="form"
-        width="45%"
         spacing={4}
         onBlur={() =>
           handleAddBookingInfoMutation({ ...getValues(), url: offerUrl })
         }
         ref={formComponent}
       >
-        {Object.keys(ContactInfoType)
-          .map((key) => ContactInfoType[key])
-          .filter((type) => type !== ContactInfoType.URL)
-          .map((type) => (
-            <FormElement
-              key={type}
-              flex={2}
-              id={type}
-              label={t(`create.additionalInformation.booking_info.${type}`)}
-              Component={
-                <Input
-                  placeholder={t(
-                    `create.additionalInformation.booking_info.${type}`,
-                  )}
-                  {...register(type)}
-                />
-              }
-              error={
-                formState.errors?.[type] &&
-                t(`create.additionalInformation.booking_info.${type}_error`)
-              }
-            />
-          ))}
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+          {t('create.additionalInformation.booking_info.contact_details')}
+        </Text>
+        <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
+          {Object.keys(ContactInfoType)
+            .map((key) => ContactInfoType[key])
+            .filter((type) => type !== ContactInfoType.URL)
+            .map((type) => (
+              <FormElement
+                key={type}
+                flex={1}
+                id={type}
+                label={t(`create.additionalInformation.booking_info.${type}`)}
+                Component={
+                  <Input
+                    placeholder={t(
+                      `create.additionalInformation.booking_info.${type}`,
+                    )}
+                    {...register(type)}
+                  />
+                }
+                error={
+                  formState.errors?.[type] &&
+                  t(`create.additionalInformation.booking_info.${type}_error`)
+                }
+              />
+            ))}
+        </Inline>
       </Stack>
+      <ReservationPeriod
+        marginBottom={6}
+        handlePeriodChange={handleChangeBookingPeriod}
+        handleDelete={handleDeleteBookingPeriod}
+        availabilityEnds={availabilityEnds}
+        availabilityStarts={availabilityStarts}
+        isDatePickerVisible={isDatePickerVisible}
+        setIsDatePickerVisible={setIsDatePickerVisible}
+      />
       <Stack spacing={4}>
-        <Text fontWeight="bold">
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (
           <Stack spacing={5}>
             {subEvents.length > 0 ? (
               subEvents.map((subEvent, index) => (
-                <ReservationLinksSection
-                  key={index}
-                  idPrefix={`subevent-${index}`}
-                  variant={
-                    subEvents.length > 1
-                      ? ReservationLinksSectionVariants.CARD
-                      : ReservationLinksSectionVariants.INLINE
-                  }
-                  title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
-                    new Date(subEvent.endDate),
-                    'dd/MM/yyyy',
-                  )}`}
-                  url={subEvent.bookingInfo?.url ?? ''}
-                  urlLabel={
-                    subEvent.bookingInfo?.urlLabel?.en
-                      ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
-                      : ''
-                  }
-                  capacity={
-                    subEvent.bookingAvailability?.capacity !== undefined
-                      ? String(subEvent.bookingAvailability.capacity)
-                      : ''
-                  }
-                  status={
-                    subEvent.bookingAvailability?.type ??
-                    BookingAvailabilityType.AVAILABLE
-                  }
-                  urlLabelOptions={URL_LABELS}
-                  onChangeBookingInfo={(url, urlLabelType) =>
-                    handleChangeSubEventBookingInfo(index, url, urlLabelType)
-                  }
-                  onChangeBookingAvailability={(type, capacityValue) =>
-                    handleChangeSubEventAvailability(index, type, capacityValue)
-                  }
-                />
+                <Inline key={index} spacing={5} alignItems="flex-start">
+                  <ReservationLinksSection
+                    flex={1}
+                    idPrefix={`subevent-${index}`}
+                    variant={
+                      subEvents.length > 1
+                        ? ReservationLinksSectionVariants.CARD
+                        : ReservationLinksSectionVariants.INLINE
+                    }
+                    title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
+                      new Date(subEvent.endDate),
+                      'dd/MM/yyyy',
+                    )}`}
+                    url={subEvent.bookingInfo?.url ?? ''}
+                    urlLabel={
+                      subEvent.bookingInfo?.urlLabel?.en
+                        ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                        : ''
+                    }
+                    capacity={
+                      subEvent.bookingAvailability?.capacity !== undefined
+                        ? String(subEvent.bookingAvailability.capacity)
+                        : ''
+                    }
+                    status={
+                      subEvent.bookingAvailability?.type ??
+                      BookingAvailabilityType.AVAILABLE
+                    }
+                    urlLabelOptions={URL_LABELS}
+                    onChangeBookingInfo={(url, urlLabelType) =>
+                      handleChangeSubEventBookingInfo(index, url, urlLabelType)
+                    }
+                    onChangeBookingAvailability={(type, capacityValue) =>
+                      handleChangeSubEventAvailability(
+                        index,
+                        type,
+                        capacityValue,
+                      )
+                    }
+                  />
+                  <Stack width="22rem" flexShrink={0}>
+                    {index === 0 && (
+                      <Alert variant="primary" fullWidth>
+                        {t(
+                          'create.additionalInformation.booking_info.max_capacity_info',
+                        )}
+                      </Alert>
+                    )}
+                  </Stack>
+                </Inline>
               ))
             ) : (
               <ReservationLinksSection
@@ -717,14 +745,6 @@ const BookingInfoStep = ({
           </Stack>
         )}
       </Stack>
-      <ReservationPeriod
-        handlePeriodChange={handleChangeBookingPeriod}
-        handleDelete={handleDeleteBookingPeriod}
-        availabilityEnds={availabilityEnds}
-        availabilityStarts={availabilityStarts}
-        isDatePickerVisible={isDatePickerVisible}
-        setIsDatePickerVisible={setIsDatePickerVisible}
-      />
     </Stack>
   );
 };
