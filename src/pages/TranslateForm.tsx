@@ -10,8 +10,8 @@ import {
   useChangeOfferNameMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
+import { useToast } from '@/hooks/useToast';
 import { SupportedLanguages } from '@/i18n/index';
-import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
@@ -23,7 +23,6 @@ import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
-import { Toast } from '@/ui/Toast';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { DescriptionPreview } from './preview/DescriptionPreview';
@@ -231,12 +230,7 @@ const TranslateForm = () => {
     <Page>
       <Page.Title>{`${originalTitle} ${t('translate.title')}`}</Page.Title>
       <Page.Content>
-        <Toast
-          variant="success"
-          body={toast.message}
-          visible={!!toast.message}
-          onClose={() => toast.clear()}
-        />
+        {toast.component}
         <Stack
           backgroundColor="white"
           padding={4}

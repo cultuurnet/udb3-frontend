@@ -15,6 +15,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { useToast } from '@/hooks/useToast';
 import {
   locationStepConfiguration,
   useEditLocation,
@@ -28,7 +29,6 @@ import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
-import { Toast } from '@/ui/Toast';
 import {
   getEducationLabels,
   getLocationLabels,
@@ -37,7 +37,6 @@ import { CustomValidationError, FetchError } from '@/utils/fetchFromApi';
 import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-import { useToast } from '../manage/movies/useToast';
 import { DUPLICATE_STATUS_CODE } from '../PlaceAddModal';
 import { calendarStepConfiguration } from './CalendarStep';
 import { useAddOffer } from './hooks/useAddOffer';
@@ -376,12 +375,7 @@ const StepsForm = ({
             {t('create.duplicate.alert')}
           </Alert>
         )}
-        <Toast
-          variant="success"
-          body={toast.message}
-          visible={!!toast.message}
-          onClose={() => toast.clear()}
-        />
+        {toast.component}
         {needsLocationMigration && (
           <Alert variant={AlertVariants.DANGER} marginY={5}>
             <Trans
