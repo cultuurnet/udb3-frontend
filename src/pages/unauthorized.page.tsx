@@ -3,13 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Icon, Icons } from '@/ui/Icon';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
-import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
 
 const Unauthorized = () => {
   const { t } = useTranslation();
-  const getValue = getValueFromTheme('pageError');
 
   return (
     <Stack
@@ -24,7 +22,7 @@ const Unauthorized = () => {
         name={Icons.EXCLAMATION_TRIANGLE}
         width="10rem"
         height="auto"
-        color={getValue('iconColor')}
+        className="tw:text-destructive"
       />
       <Title size={1}>{t('unauthorized.title')}</Title>
       <Title size={2}>{t('unauthorized.sub_title')}</Title>

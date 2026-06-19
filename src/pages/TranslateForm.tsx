@@ -72,7 +72,7 @@ type TabTitleProps = {
 const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
   <Inline spacing={3}>
     {hasFilled && (
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
     )}
     <Text>{label}</Text>
   </Inline>

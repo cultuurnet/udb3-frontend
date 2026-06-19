@@ -5,7 +5,6 @@ import { Button } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
 
 type Props = {
@@ -20,7 +19,6 @@ const CultuurkuurSelectionOverview = ({
   onOpenModal,
 }: Props) => {
   const { t } = useTranslation();
-  const getGlobalValue = getValueFromTheme('global');
 
   const selectedCount = (
     labelsKey === 'location'
@@ -32,7 +30,7 @@ const CultuurkuurSelectionOverview = ({
 
   return (
     <Inline spacing={1}>
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       <Text>
         <Inline alignItems="center">
           <Button variant="link" onClick={onOpenModal}>

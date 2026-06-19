@@ -12,10 +12,6 @@ import { Link, LinkVariants } from '@/ui/Link';
 import type { ListItemProps } from '@/ui/List';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getValue = getValueFromTheme('jobStatusIcon');
-const getGlobalValue = getValueFromTheme('global');
 
 const dateFnsLocales = { nl: nlBE, fr };
 
@@ -34,12 +30,12 @@ const JobStates = {
 
 const StatusIcon = memo(({ state }: { state: Values<typeof JobStates> }) => {
   if (state === JobStates.FINISHED) {
-    return <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('success')} />;
+    return <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />;
   }
   return (
     <Icon
       name={Icons.CHECK_NOTCH}
-      color={getValue('busy.spinnerStrokeColor')}
+      className="tw:text-udb-main-dark-blue"
       css={`
         @keyframes rotation {
           from {

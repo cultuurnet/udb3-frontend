@@ -27,15 +27,12 @@ import { getInlineProps, Inline } from '@/ui/Inline';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { Typeahead } from '@/ui/Typeahead';
 import { valueToArray } from '@/utils/valueToArray';
 
 import { UseEditArguments } from './hooks/useEditField';
 
 type ProductionStepProps = StackProps & StepProps;
-
-const getGlobalValue = getValueFromTheme('global');
 
 const useEditNameAndProduction = ({
   scope,
@@ -158,10 +155,7 @@ const ProductionStep = ({
 
         return (
           <Inline alignItems="center" spacing={3} {...getInlineProps(props)}>
-            <Icon
-              name={Icons.CHECK_CIRCLE}
-              color={getGlobalValue('successColor')}
-            />
+            <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
             <Text>{selectedProduction.name}</Text>
             <Button
               variant={ButtonVariants.LINK}

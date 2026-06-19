@@ -20,7 +20,7 @@ const QuestionCircleIcon = () => {
     <Badge variant={BadgeVariants.SECONDARY} pill>
       <Icon
         name={Icons.QUESTION}
-        color="white"
+        className="tw:text-white"
         width="0.8rem"
         height="0.8rem"
       />
