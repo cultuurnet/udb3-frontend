@@ -1,26 +1,12 @@
 import { pickBy } from 'lodash';
-import {
-  Children,
-  cloneElement,
-  forwardRef,
-  Fragment,
-  isValidElement,
-} from 'react';
-import styled, { css } from 'styled-components';
+import { forwardRef } from 'react';
 
-import {
-  BoxProps,
-  getBoxProps,
-  UIProp,
-  withoutDisallowedPropsConfig,
-} from './Box';
-import {
-  Box,
-  boxProps,
-  boxPropTypes,
-  FALSY_VALUES,
-  parseProperty,
-} from './Box';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+
+import { Box, BoxProps, boxPropTypes, getBoxProps, UIProp } from './Box';
+import { cn } from './shadcn/utils';
+import { StackLegacy } from './StackLegacy';
+import { getGapClass } from './tailwindGap';
 import type { BreakpointValues } from './theme';
 
 type StackProps = {
@@ -30,55 +16,44 @@ type StackProps = {
 
 type Props = BoxProps & StackProps;
 
-const stackProps = css`
-  display: flex;
-  flex-direction: column;
-
-  ${parseProperty('alignItems')};
-  ${parseProperty('justifyContent')};
-`;
-
-const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
-  ${stackProps};
-  ${boxProps};
-`;
-
-const Stack = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as = 'section', ...props }, ref) => {
-    const validChildren = Children.toArray(children).filter(
-      (child) => !FALSY_VALUES.includes(child),
-    );
-
-    const clonedChildren = Children.map(validChildren, (child, i) => {
-      const isLastItem = i === validChildren.length - 1;
-
-      const isBoxComponent =
-        isValidElement(child) &&
-        typeof child.type !== 'string' &&
-        child.type !== Fragment;
-
-      // @ts-expect-error
-      return cloneElement(child, {
-        // @ts-expect-error
-        ...child.props,
-        ...(!isLastItem && spacing && isBoxComponent
-          ? { marginBottom: spacing }
-          : {}),
-      });
-    });
-
-    return (
-      <StyledBox
-        className={className}
-        as={as}
-        ref={ref}
-        {...getBoxProps(props)}
-      >
-        {clonedChildren}
-      </StyledBox>
-    );
-  },
+const StackShadcn = forwardRef<HTMLElement, Props>(
+  ({ spacing, className, children, as = 'section', ...props }, ref) => (
+    <Box
+      as={as}
+      ref={ref}
+      className={cn(
+        'tw:flex tw:flex-col',
+        getGapClass(spacing as number | undefined),
+        className,
+      )}
+      {...getBoxProps(props)}
+    >
+      {children}
+    </Box>
+  ),
 );
+
+StackShadcn.displayName = 'StackShadcn';
+
+const Stack = forwardRef<HTMLElement, Props>((props, ref) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  // Tailwind gap can't express responsive spacing objects (the theme
+  // breakpoints differ from Tailwind's), and `tw:flex` would clash with a
+  // caller-provided `display`. Those cases fall back to the legacy version.
+  const canUseShadcn =
+    isShadcnMigrationEnabled &&
+    (props.spacing === undefined || typeof props.spacing === 'number') &&
+    props.display === undefined;
+
+  return canUseShadcn ? (
+    <StackShadcn ref={ref} {...props} />
+  ) : (
+    <StackLegacy ref={ref} {...props} />
+  );
+});
 
 Stack.displayName = 'Stack';
 

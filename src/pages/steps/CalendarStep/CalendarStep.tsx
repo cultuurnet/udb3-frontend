@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
@@ -51,7 +52,28 @@ import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
+  const queryClient = useQueryClient();
   const changeCalendarMutation = useChangeOfferCalendarMutation({
+    onMutate: async ({ id, scope, subEvent }) => {
+      const queryKey = [scope, { id }];
+      await queryClient.cancelQueries({ queryKey });
+      const previousOffer = queryClient.getQueryData<Offer>(queryKey);
+      // Mirror the new calendar in the cache: calendar types without subEvents
+      // (periodic/permanent) clear them, so the reservation UI updates too.
+      queryClient.setQueryData<Offer>(queryKey, (offer) =>
+        offer ? { ...offer, subEvent: subEvent ?? [] } : offer,
+      );
+      return { previousOffer };
+    },
+    onError: (
+      _error,
+      { id, scope },
+      context: { previousOffer?: Offer } | undefined,
+    ) => {
+      if (context?.previousOffer) {
+        queryClient.setQueryData([scope, { id }], context.previousOffer);
+      }
+    },
     onSuccess: () =>
       onSuccess('calendar', {
         shouldInvalidateEvent: false,
@@ -93,6 +115,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     endDate: subEvent.endDate,
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
+    bookingInfo: subEvent.bookingInfo,
     childcareEnabled: !!subEvent.childcare,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
@@ -146,6 +169,7 @@ const convertStateToFormData = (
     endDate: formatDateToISO(day.endDate ? new Date(day.endDate) : new Date()),
     bookingAvailability: day.bookingAvailability,
     status: day.status,
+    ...(day.bookingInfo && { bookingInfo: day.bookingInfo }),
     ...(day.childcareEnabled &&
       (day.childcareStartTime || day.childcareEndTime) && {
         childcare: {
@@ -274,12 +298,14 @@ const CalendarStep = ({
   const closingPeriodsRef = useRef<ClosingPeriodData[]>([]);
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>([]);
 
+  const offerRef = useRef<Offer | undefined>(undefined);
+
   const handleChangeCalendarState = (newState: CalendarState) => {
     const calendarType = Object.values(CalendarType).find((type) =>
       newState.matches(type),
     );
 
-    const formData = {
+    const baseFormData = {
       ...convertStateToFormData(newState.context, calendarType),
       ...(adjustedDaysRef.current.length > 0 && {
         openingHoursAdjustedDays: formatAdjustedDays(adjustedDaysRef.current),
@@ -288,6 +314,31 @@ const CalendarStep = ({
         openingHoursClosedDays: formatClosingDays(closingPeriodsRef.current),
       }),
     };
+
+    const existingSubEvents = offerRef.current?.subEvent;
+
+    const canPreserveReservationData =
+      existingSubEvents &&
+      Array.isArray(baseFormData.subEvent) &&
+      existingSubEvents.length <= baseFormData.subEvent.length;
+    const formData = canPreserveReservationData
+      ? {
+          ...baseFormData,
+          subEvent: baseFormData.subEvent.map((subEvent, index) => {
+            const existing = existingSubEvents[index];
+            if (!existing) return subEvent;
+            const bookingAvailability =
+              existing.bookingAvailability ?? subEvent.bookingAvailability;
+            return {
+              ...subEvent,
+              ...(existing.bookingInfo && {
+                bookingInfo: existing.bookingInfo,
+              }),
+              ...(bookingAvailability && { bookingAvailability }),
+            };
+          }),
+        }
+      : baseFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -358,6 +409,7 @@ const CalendarStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const offer: Offer | undefined = getOfferByIdQuery.data;
+  offerRef.current = offer;
 
   useEffect(() => {
     if (!offer || isCalendarInitialized) return;

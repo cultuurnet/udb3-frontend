@@ -1,23 +1,28 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { format } from 'date-fns';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { UrlLabelType } from '@/constants/UrlLabelType';
+import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Offer } from '@/types/Offer';
+import type { Values } from '@/types/Values';
 import { Alert } from '@/ui/Alert';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { RadioButtonTypes } from '@/ui/RadioButton';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -28,6 +33,10 @@ import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
+import {
+  ReservationLinksSection,
+  ReservationLinksSectionVariants,
+} from './ReservationLinksSection';
 
 const schema = yup
   .object({
@@ -47,6 +56,8 @@ type FormData = yup.InferType<typeof schema>;
 
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
+
+const SUBTITLE_COLOR = colors.udbMainDarkBlue;
 
 const ContactInfoType = {
   EMAIL: 'email',
@@ -68,14 +79,9 @@ type BookingInfo = {
   availabilityEnds?: string;
 };
 
-const UrlLabelType = {
-  BUY: 'buy',
-  RESERVE: 'reserve',
-  AVAILABILITY: 'availability',
-  SUBSCRIBE: 'subscribe',
-} as const;
-
-const getUrlLabelType = (englishUrlLabel: string): string => {
+const getUrlLabelType = (
+  englishUrlLabel: string,
+): Values<typeof UrlLabelType> => {
   if (englishUrlLabel.toLowerCase().includes(UrlLabelType.AVAILABILITY))
     return UrlLabelType.AVAILABILITY;
 
@@ -91,7 +97,7 @@ const getUrlLabelType = (englishUrlLabel: string): string => {
   return UrlLabelType.BUY;
 };
 
-type ReservationPeriodProps = {
+type ReservationPeriodProps = StackProps & {
   availabilityStarts: string;
   availabilityEnds: string;
   handleDelete: () => void;
@@ -110,6 +116,7 @@ const ReservationPeriod = ({
   handlePeriodChange,
   isDatePickerVisible,
   setIsDatePickerVisible,
+  ...props
 }: ReservationPeriodProps) => {
   const { t } = useTranslation();
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
@@ -197,8 +204,8 @@ const ReservationPeriod = ({
   };
 
   return (
-    <Stack spacing={4}>
-      <Text fontWeight="bold">
+    <Stack spacing={4} {...getStackProps(props)}>
+      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
@@ -220,7 +227,12 @@ const ReservationPeriod = ({
           )}
         </Alert>
       )}
-      <Inline spacing={4} alignItems="flex-end" flexWrap="wrap">
+      <Inline
+        spacing={4}
+        alignItems="flex-end"
+        flexWrap="wrap"
+        opacity={isDatePickerVisible ? 1 : 0.5}
+      >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
           id="reservation-date-picker"
@@ -277,21 +289,13 @@ const BookingInfoStep = ({
 }: Props) => {
   const { t } = useTranslation();
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
-  const [hasInvalidUrl, setHasInvalidUrl] = useState(false);
+  const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const queryClient = useQueryClient();
 
-  // TODO: refactor
   const eventId = offerId;
 
   const formComponent = useRef<HTMLFormElement>(null);
-
-  const UrlLabelType = {
-    BUY: 'buy',
-    RESERVE: 'reserve',
-    AVAILABILITY: 'availability',
-    SUBSCRIBE: 'subscribe',
-  } as const;
 
   const URL_LABEL_TRANSLATIONS = {
     buy: {
@@ -322,6 +326,12 @@ const BookingInfoStep = ({
 
   const URL_LABELS = [
     {
+      label: t(
+        'create.additionalInformation.booking_info.url_type_labels.subscribe',
+      ),
+      value: UrlLabelType.SUBSCRIBE,
+    },
+    {
       label: t('create.additionalInformation.booking_info.url_type_labels.buy'),
       value: UrlLabelType.BUY,
     },
@@ -337,17 +347,13 @@ const BookingInfoStep = ({
       ),
       value: UrlLabelType.AVAILABILITY,
     },
-    {
-      label: t(
-        'create.additionalInformation.booking_info.url_type_labels.subscribe',
-      ),
-      value: UrlLabelType.SUBSCRIBE,
-    },
   ];
 
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
+  const bookingAvailability = getOfferByIdQuery.data?.bookingAvailability;
+  const subEvents = getOfferByIdQuery.data?.subEvent ?? [];
 
   const { register, handleSubmit, formState, control, setValue, getValues } =
     useForm<FormData>({
@@ -358,20 +364,36 @@ const BookingInfoStep = ({
     });
 
   useEffect(() => {
-    if (!bookingInfo) return;
-
-    const hasBookingInfo = Object.keys(bookingInfo).length > 0;
+    const hasOfferBookingInfo =
+      !!bookingInfo && Object.keys(bookingInfo).length > 0;
+    const hasSubEventReservation = (
+      getOfferByIdQuery.data?.subEvent ?? []
+    ).some(
+      (subEvent) =>
+        !!subEvent.bookingInfo?.url ||
+        subEvent.bookingAvailability?.capacity !== undefined,
+    );
 
     onValidationChange(
-      hasBookingInfo ? ValidationStatus.SUCCESS : ValidationStatus.NONE,
+      hasOfferBookingInfo || hasSubEventReservation
+        ? ValidationStatus.SUCCESS
+        : ValidationStatus.NONE,
       field,
     );
 
-    Object.values(ContactInfoType).map((type) => {
-      if (bookingInfo?.[type]) {
-        setValue(type, bookingInfo[type]);
-      }
-    });
+    if (!bookingInfo) return;
+
+    if (bookingInfo.url) {
+      setOfferUrl(bookingInfo.url);
+    }
+
+    Object.values(ContactInfoType)
+      .filter((type) => type !== ContactInfoType.URL)
+      .forEach((type) => {
+        if (bookingInfo?.[type]) {
+          setValue(type, bookingInfo[type]);
+        }
+      });
 
     if (bookingInfo.availabilityStarts) {
       setValue('availabilityStarts', bookingInfo.availabilityStarts);
@@ -380,7 +402,14 @@ const BookingInfoStep = ({
     if (bookingInfo.availabilityEnds) {
       setValue('availabilityEnds', bookingInfo.availabilityEnds);
     }
-  }, [field, offerId, setValue, bookingInfo, onValidationChange]);
+  }, [
+    field,
+    offerId,
+    setValue,
+    bookingInfo,
+    getOfferByIdQuery.data?.subEvent,
+    onValidationChange,
+  ]);
 
   useEffect(() => {
     if (!bookingInfo?.urlLabel?.en) return;
@@ -391,9 +420,9 @@ const BookingInfoStep = ({
     }
   }, [bookingInfo?.urlLabel?.en]);
 
-  const [url, availabilityStarts, availabilityEnds] = useWatch({
+  const [availabilityStarts, availabilityEnds] = useWatch({
     control,
-    name: ['url', 'availabilityStarts', 'availabilityEnds'],
+    name: ['availabilityStarts', 'availabilityEnds'],
   });
 
   const addBookingInfoMutation = useAddOfferBookingInfoMutation({
@@ -425,6 +454,7 @@ const BookingInfoStep = ({
   const handleAddBookingInfoMutation = (newBookingInfo: BookingInfo) => {
     const bookingInfo = newBookingInfo;
     const newUrlLabels =
+      bookingInfo.urlLabel ??
       URL_LABEL_TRANSLATIONS[selectedUrlLabel] ??
       URL_LABEL_TRANSLATIONS.reserve;
 
@@ -433,10 +463,7 @@ const BookingInfoStep = ({
     }
 
     if (bookingInfo.url && !isValidUrl(bookingInfo.url)) {
-      setHasInvalidUrl(true);
       return;
-    } else {
-      setHasInvalidUrl(false);
     }
 
     if (bookingInfo.url === '') {
@@ -450,17 +477,6 @@ const BookingInfoStep = ({
 
     if (bookingInfo.email === '') {
       delete bookingInfo.email;
-    }
-
-    if (
-      !Object.keys(bookingInfo).some((key) =>
-        ['phone', 'url', 'email'].includes(key),
-      ) &&
-      bookingInfo.availabilityEnds &&
-      bookingInfo.availabilityStarts
-    ) {
-      delete bookingInfo.availabilityEnds;
-      delete bookingInfo.availabilityStarts;
     }
 
     if (!isDatePickerVisible) {
@@ -480,6 +496,88 @@ const BookingInfoStep = ({
     });
   };
 
+  const changeSubEventReservationMutation =
+    useChangeSubEventReservationMutation({
+      onMutate: async ({ subEventIndex, bookingInfo, bookingAvailability }) => {
+        const queryKey = [scope, { id: eventId }];
+        await queryClient.cancelQueries({ queryKey });
+        const previousOffer = queryClient.getQueryData<Offer>(queryKey);
+
+        queryClient.setQueryData<Offer>(queryKey, (offer) => {
+          if (!offer?.subEvent) return offer;
+          return {
+            ...offer,
+            subEvent: offer.subEvent.map((subEvent, index) =>
+              index === subEventIndex
+                ? {
+                    ...subEvent,
+                    ...(bookingInfo !== undefined && { bookingInfo }),
+                    ...(bookingAvailability && { bookingAvailability }),
+                  }
+                : subEvent,
+            ),
+          };
+        });
+
+        return { previousOffer };
+      },
+      onError: (
+        _error,
+        _variables,
+        context: { previousOffer?: Offer } | undefined,
+      ) => {
+        if (context?.previousOffer) {
+          queryClient.setQueryData<Offer>(
+            [scope, { id: eventId }],
+            context.previousOffer,
+          );
+        }
+      },
+      onSuccess: onSuccessfulChange,
+    });
+
+  const handleChangeSubEventBookingInfo = (
+    subEventIndex: number,
+    url: string,
+    urlLabelType: string,
+  ) => {
+    const urlLabel =
+      URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve;
+
+    changeSubEventReservationMutation.mutate({
+      eventId,
+      subEventIndex,
+      bookingInfo: url ? { url, urlLabel } : {},
+    });
+  };
+
+  const handleChangeSubEventAvailability = (
+    subEventIndex: number,
+    type: Values<typeof BookingAvailabilityType>,
+    capacityValue: string,
+  ) => {
+    changeSubEventReservationMutation.mutate({
+      eventId,
+      subEventIndex,
+      bookingAvailability: {
+        type,
+        ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
+      },
+    });
+  };
+
+  const handleChangeOfferBookingInfo = (url: string, urlLabelType: string) => {
+    setOfferUrl(url);
+    setSelectedUrlLabel(urlLabelType);
+
+    handleAddBookingInfoMutation({
+      ...getValues(),
+      url,
+      urlLabel:
+        URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve,
+    });
+  };
+
   const handleChangeBookingPeriod = (
     availabilityEnds: Date,
     availabilityStarts: Date,
@@ -494,6 +592,7 @@ const BookingInfoStep = ({
 
     handleAddBookingInfoMutation({
       ...formValues,
+      url: offerUrl,
       availabilityEnds: isoEndDate,
       availabilityStarts: isoStartDate,
     });
@@ -504,78 +603,56 @@ const BookingInfoStep = ({
 
     handleAddBookingInfoMutation({
       ...formValues,
+      url: offerUrl,
       availabilityEnds: undefined,
       availabilityStarts: undefined,
     });
   };
 
-  const handleOnUrlLabelChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const urlLabelType = e.target.value;
-    const newUrlLabels = URL_LABEL_TRANSLATIONS[urlLabelType];
-
-    const formValues = getValues();
-
-    handleAddBookingInfoMutation({
-      ...formValues,
-      urlLabel: newUrlLabels,
-    });
-  };
-
   return (
-    <Stack maxWidth="55rem" spacing={5} {...getStackProps(props)}>
+    <Stack maxWidth="75rem" spacing={5} {...getStackProps(props)}>
+      <Text fontWeight="bold" fontSize="1.1rem">
+        {t('create.additionalInformation.booking_info.section_title')}
+      </Text>
       <Stack
         as="form"
-        width="45%"
         spacing={4}
-        onBlur={() => handleAddBookingInfoMutation(getValues())}
+        onBlur={() =>
+          handleAddBookingInfoMutation({ ...getValues(), url: offerUrl })
+        }
         ref={formComponent}
       >
-        {Object.keys(ContactInfoType).map((key, index) => {
-          const type = ContactInfoType[key];
-          return (
-            <FormElement
-              key={index}
-              flex={2}
-              id={type}
-              label={t(`create.additionalInformation.booking_info.${type}`)}
-              Component={
-                <Input
-                  placeholder={t(
-                    `create.additionalInformation.booking_info.${type}`,
-                  )}
-                  {...register(type)}
-                />
-              }
-              error={
-                (formState.errors?.[type] &&
-                  t(
-                    `create.additionalInformation.booking_info.${type}_error`,
-                  )) ||
-                (type === ContactInfoType.URL &&
-                  hasInvalidUrl &&
-                  t(`create.additionalInformation.booking_info.url_error`))
-              }
-            />
-          );
-        })}
-        {url && (
-          <Stack>
-            <Text fontWeight="bold">
-              {t('create.additionalInformation.booking_info.select_url_label')}
-            </Text>
-            <RadioButtonGroup
-              name="urlLabel"
-              selected={selectedUrlLabel}
-              items={URL_LABELS}
-              onChange={(e) => {
-                setSelectedUrlLabel(e.target.value);
-                handleOnUrlLabelChange(e);
-              }}
-            />
-          </Stack>
-        )}
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+          {t('create.additionalInformation.booking_info.contact_details')}
+        </Text>
+        <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
+          {Object.keys(ContactInfoType)
+            .map((key) => ContactInfoType[key])
+            .filter((type) => type !== ContactInfoType.URL)
+            .map((type) => (
+              <FormElement
+                key={type}
+                flex={1}
+                id={type}
+                label={t(`create.additionalInformation.booking_info.${type}`)}
+                Component={
+                  <Input
+                    placeholder={t(
+                      `create.additionalInformation.booking_info.${type}`,
+                    )}
+                    {...register(type)}
+                  />
+                }
+                error={
+                  formState.errors?.[type] &&
+                  t(`create.additionalInformation.booking_info.${type}_error`)
+                }
+              />
+            ))}
+        </Inline>
       </Stack>
       <ReservationPeriod
+        marginBottom={6}
         handlePeriodChange={handleChangeBookingPeriod}
         handleDelete={handleDeleteBookingPeriod}
         availabilityEnds={availabilityEnds}
@@ -583,6 +660,91 @@ const BookingInfoStep = ({
         isDatePickerVisible={isDatePickerVisible}
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
+      <Stack spacing={4}>
+        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+          {t('create.additionalInformation.booking_info.url')}
+        </Text>
+        {getOfferByIdQuery.data && (
+          <Stack spacing={5}>
+            {subEvents.length > 0 ? (
+              subEvents.map((subEvent, index) => (
+                <Inline key={index} spacing={5} alignItems="flex-start">
+                  <ReservationLinksSection
+                    flex={1}
+                    idPrefix={`subevent-${index}`}
+                    variant={
+                      subEvents.length > 1
+                        ? ReservationLinksSectionVariants.CARD
+                        : ReservationLinksSectionVariants.INLINE
+                    }
+                    title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(
+                      new Date(subEvent.endDate),
+                      'dd/MM/yyyy',
+                    )}`}
+                    url={subEvent.bookingInfo?.url ?? ''}
+                    urlLabel={
+                      subEvent.bookingInfo?.urlLabel?.en
+                        ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                        : ''
+                    }
+                    capacity={
+                      subEvent.bookingAvailability?.capacity !== undefined
+                        ? String(subEvent.bookingAvailability.capacity)
+                        : ''
+                    }
+                    status={
+                      subEvent.bookingAvailability?.type ??
+                      BookingAvailabilityType.AVAILABLE
+                    }
+                    urlLabelOptions={URL_LABELS}
+                    onChangeBookingInfo={(url, urlLabelType) =>
+                      handleChangeSubEventBookingInfo(index, url, urlLabelType)
+                    }
+                    onChangeBookingAvailability={(type, capacityValue) =>
+                      handleChangeSubEventAvailability(
+                        index,
+                        type,
+                        capacityValue,
+                      )
+                    }
+                  />
+                  <Stack width="22rem" flexShrink={0}>
+                    {index === 0 && (
+                      <Alert variant="primary" fullWidth>
+                        {t(
+                          'create.additionalInformation.booking_info.max_capacity_info',
+                        )}
+                      </Alert>
+                    )}
+                  </Stack>
+                </Inline>
+              ))
+            ) : (
+              <ReservationLinksSection
+                idPrefix="offer"
+                variant={ReservationLinksSectionVariants.INLINE}
+                showBookingAvailability={false}
+                url={bookingInfo?.url ?? ''}
+                urlLabel={
+                  bookingInfo?.urlLabel?.en
+                    ? getUrlLabelType(bookingInfo.urlLabel.en)
+                    : ''
+                }
+                capacity={
+                  bookingAvailability?.capacity !== undefined
+                    ? String(bookingAvailability.capacity)
+                    : ''
+                }
+                status={
+                  bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
+                }
+                urlLabelOptions={URL_LABELS}
+                onChangeBookingInfo={handleChangeOfferBookingInfo}
+              />
+            )}
+          </Stack>
+        )}
+      </Stack>
     </Stack>
   );
 };

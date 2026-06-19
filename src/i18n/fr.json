@@ -357,8 +357,8 @@
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
           "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
           "departure_places_warning_modal": {
-            "title": "Supprimer les lieux de départ",
-            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           },
@@ -438,7 +438,14 @@
         "phone_error": "Pas de numéro de téléphone valide",
         "url": "Site Internet ou page de réservation",
         "url_error": "Pas d'URL valide",
-        "select_url_label": "Comment ce lien de réservation doit-il apparaître ?",
+        "link": "Lien",
+        "max_capacity": "Capacité maximale",
+        "capacity_error": "Saisissez un nombre valide (0 ou plus).",
+        "max_capacity_info": "Par capacité maximale, nous entendons le nombre maximum de personnes pouvant participer à votre activité.",
+        "status": "Statut",
+        "section_title": "Indiquez comment les gens peuvent réserver une place",
+        "contact_details": "Coordonnées",
+        "url_label_dropdown_label": "Texte sur le bouton de réservation",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
           "availability": "Controlez la disponibilité",
@@ -1645,7 +1652,13 @@
     "done": "Terminé la traduction",
     "success": {
       "title": "Titre ({{language}}) mis à jour avec succès",
-      "description": "Description ({{language}}) mise à jour avec succès"
+      "description": "Description ({{language}}) mise à jour avec succès",
+      "faq": "FAQ mis à jour avec succès"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Traduire la question en {{language}}"
     }
   },
   "date_period_picker": {
