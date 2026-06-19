@@ -20,8 +20,8 @@ const Unauthorized = () => {
     >
       <Icon
         name={Icons.EXCLAMATION_TRIANGLE}
-        width="10rem"
-        height="auto"
+        width={160}
+        height={160}
         className="tw:text-destructive"
       />
       <Title size={1}>{t('unauthorized.title')}</Title>

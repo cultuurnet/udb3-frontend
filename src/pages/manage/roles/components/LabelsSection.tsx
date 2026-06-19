@@ -164,7 +164,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
                   className="tw:ml-1"
                   onClick={onLabelRemove(label)}
                 >
-                  <Icon name={Icons.TIMES} width="0.8rem" height="0.8rem" />
+                  <Icon name={Icons.TIMES} width={13} height={13} />
                 </Button>
               </Inline>
             ))}

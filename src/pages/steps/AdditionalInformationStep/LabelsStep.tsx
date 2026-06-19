@@ -33,7 +33,6 @@ type LabelsStepProps = StackProps & TabContentProps;
 
 export const LABEL_PATTERN = /^[0-9a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ\-_\s]{1,49}$/;
 
-const getGlobalValue = getValueFromTheme('global');
 const getButtonValue = getValueFromTheme('button');
 
 function LabelsStep({
@@ -177,7 +176,7 @@ function LabelsStep({
                   handleInvalidateOrganizerQuery();
                 }}
               >
-                <Icon name={Icons.TIMES} width="0.8rem" height="0.8rem" />
+                <Icon name={Icons.TIMES} width={13} height={13} />
               </Button>
             </Inline>
           ))}

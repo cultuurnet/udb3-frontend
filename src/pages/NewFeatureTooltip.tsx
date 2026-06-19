@@ -3,9 +3,6 @@ import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, InlineProps } from '@/ui/Inline';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getValue = getValueFromTheme('newFeatureTooltip');
 
 const Features = {
   EVENT_SCORE: '27f6ab5d-5ca3-4933-a8bf-ccce25b40723',
@@ -21,8 +18,8 @@ const QuestionCircleIcon = () => {
       <Icon
         name={Icons.QUESTION}
         className="tw:text-white"
-        width="0.8rem"
-        height="0.8rem"
+        width={13}
+        height={13}
       />
     </Badge>
   );

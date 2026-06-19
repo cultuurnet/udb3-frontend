@@ -8,10 +8,10 @@ import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
-import { Spinner, SpinnerSizes } from '@/ui/Spinner';
 import { Link, LinkVariants } from '@/ui/Link';
 import type { ListItemProps } from '@/ui/List';
 import { List } from '@/ui/List';
+import { Spinner, SpinnerSizes } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 
 const dateFnsLocales = { nl: nlBE, fr };
