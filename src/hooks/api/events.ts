@@ -124,7 +124,7 @@ const addEvent = async ({
         location,
         audienceType,
         attendanceMode,
-        typicalAgeRange,
+        ...(typicalAgeRange && { typicalAgeRange }),
         ...(birthdateRange?.from && birthdateRange?.to && { birthdateRange }),
         onlineUrl,
         mediaObject,
