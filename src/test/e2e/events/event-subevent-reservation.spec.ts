@@ -34,6 +34,12 @@ const waitForSubEventsPatch = (page: Page) =>
       response.request().method() === 'PATCH',
   );
 
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+  ]);
+});
+
 test.describe('Per-subEvent reservation info', () => {
   test('sets reservation info per subEvent (card variant)', async ({
     page,
