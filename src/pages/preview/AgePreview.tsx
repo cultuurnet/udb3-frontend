@@ -43,22 +43,21 @@ const AgePreview = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const hasAgeInfo = typicalAgeRange;
+  const hasAgeInfo = typicalAgeRange || childrenOnly || birthdateRange;
 
   if (!hasAgeInfo) return null;
-
-  if (typicalAgeRange === '-' || typicalAgeRange === '0-') {
-    return <Text>{t('create.name_and_age.age.all')}</Text>;
-  }
 
   const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
     const ageRange = AgeRanges[key];
     return ageRange.apiLabel === typicalAgeRange;
   });
 
-  const ageText = AgeRanges[ageRangeLabelKey]
-    ? AgeRanges[ageRangeLabelKey].label
-    : formatCustomAgeRange(typicalAgeRange);
+  const isAllAges = typicalAgeRange === '-' || typicalAgeRange === '0-';
+  const rangeLabel = typicalAgeRange
+    ? (AgeRanges[ageRangeLabelKey]?.label ??
+      formatCustomAgeRange(typicalAgeRange))
+    : null;
+  const ageText = isAllAges ? t('create.name_and_age.age.all') : rangeLabel;
 
   const formattedFrom = birthdateRange?.from
     ? format(parse(birthdateRange.from, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy')
@@ -69,7 +68,7 @@ const AgePreview = ({
 
   return (
     <Stack spacing={2}>
-      <Text>{t('preview.ages', { ages: ageText })}</Text>
+      {ageText && <Text>{t('preview.ages', { ages: ageText })}</Text>}
       {formattedFrom && formattedTo && (
         <Text>
           <Trans
