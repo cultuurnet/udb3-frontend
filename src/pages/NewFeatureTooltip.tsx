@@ -1,7 +1,6 @@
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, InlineProps } from '@/ui/Inline';
 
 const Features = {
@@ -15,12 +14,7 @@ const Features = {
 const QuestionCircleIcon = () => {
   return (
     <Badge variant={BadgeVariants.SECONDARY} pill>
-      <Icon
-        name={Icons.QUESTION}
-        className="tw:text-white"
-        width={13}
-        height={13}
-      />
+      <span className="tw:text-white  tw:font-bold">?</span>
     </Badge>
   );
 };
