@@ -41,6 +41,7 @@ export const Default: Story = {
 
     return (
       <Notification
+        className="tw:static!"
         icon={<Icon name={customArgs.iconName} />}
         header={
           <Text fontSize="1.2rem" fontWeight="bold">
