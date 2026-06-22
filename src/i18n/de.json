@@ -431,7 +431,10 @@
         "link": "Link",
         "max_capacity": "Maximale Kapazität",
         "capacity_error": "Geben Sie eine gültige Anzahl ein (0 oder mehr).",
+        "max_capacity_info": "Mit maximaler Kapazität meinen wir die maximale Anzahl von Personen, die an deiner Aktivität teilnehmen können.",
         "status": "Status",
+        "section_title": "Erkläre, wie Menschen einen Platz reservieren können",
+        "contact_details": "Kontaktdaten",
         "url_label_dropdown_label": "Text auf der Reservierungsschaltfläche",
         "url_type_labels": {
           "subscribe": "Melden Sie sich an",
