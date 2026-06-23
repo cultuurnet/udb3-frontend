@@ -12,10 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { AudienceTypes } from '@/constants/AudienceType';
 import { OfferTypes } from '@/constants/OfferType';
 import {
-  useChangeAudienceMutation,
+  useChangeChildrenOnlyMutation,
   useChangeDeparturePlacesMutation,
   useGetEventByIdQuery,
 } from '@/hooks/api/events';
@@ -169,19 +169,23 @@ const AgeRangeStepBoa = ({
   const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(undefined);
   const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(undefined);
   type ActiveModal =
-    | { kind: 'departurePlaces'; targetAudience: AudienceType }
-    | { kind: 'members' }
+    | { kind: 'departurePlaces' }
     | { kind: 'ageRange'; newValue: string; previousValue: string };
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const closeModal = () => setActiveModal(null);
-  const [audienceMutationError, setAudienceMutationError] = useState<
+  const [childrenOnlyMutationError, setChildrenOnlyMutationError] = useState<
     string | null
   >(null);
 
   const audienceType = useWatch({
     control,
     name: 'audience.audienceType',
-  }) as AudienceType | undefined;
+  });
+
+  const childrenOnly = useWatch({
+    control,
+    name: 'childrenOnly',
+  });
 
   const watchedTypicalAgeRange = useWatch({
     control,
@@ -198,7 +202,7 @@ const AgeRangeStepBoa = ({
   );
   const event: Event | undefined = getEventByIdQuery.data;
 
-  const changeAudienceMutation = useChangeAudienceMutation({
+  const changeChildrenOnlyMutation = useChangeChildrenOnlyMutation({
     onSuccess: () => {
       if (!offerId) return;
       queryClient.invalidateQueries({
@@ -206,8 +210,8 @@ const AgeRangeStepBoa = ({
       });
     },
     onError: () => {
-      setAudienceMutationError(
-        t('create.name_and_age.age.audience.mutation_error'),
+      setChildrenOnlyMutationError(
+        t('create.name_and_age.age.children_only.mutation_error'),
       );
     },
   });
@@ -220,14 +224,15 @@ const AgeRangeStepBoa = ({
       });
     },
     onError: () => {
-      setAudienceMutationError(
-        t('create.name_and_age.age.audience.mutation_error'),
+      setChildrenOnlyMutationError(
+        t('create.name_and_age.age.children_only.mutation_error'),
       );
     },
   });
 
-  const isAudiencePending =
-    changeAudienceMutation.isPending || changeDeparturePlacesMutation.isPending;
+  const isChildrenOnlyPending =
+    changeChildrenOnlyMutation.isPending ||
+    changeDeparturePlacesMutation.isPending;
 
   useEffect(() => {
     if (!watchedTypicalAgeRange) return;
@@ -259,10 +264,7 @@ const AgeRangeStepBoa = ({
 
     if (validateAgeRange(min, max)) return;
 
-    if (
-      audienceType === AudienceTypes.CHILDREN_ONLY &&
-      !overlapsWithBoaAgeRange(value)
-    ) {
+    if (childrenOnly && !overlapsWithBoaAgeRange(value)) {
       setActiveModal({ kind: 'ageRange', newValue: value, previousValue });
       return;
     }
@@ -306,49 +308,36 @@ const AgeRangeStepBoa = ({
     onChange(nextValue);
   };
 
-  const applyAudienceChange = async (newType: AudienceType) => {
-    const previousType = audienceType;
-    setAudienceMutationError(null);
-    setValue('audience', { audienceType: newType });
+  const applyChildrenOnlyChange = async (value: boolean) => {
+    const previousValue = childrenOnly;
+    setChildrenOnlyMutationError(null);
+    setValue('childrenOnly', value);
     if (!offerId) return;
     try {
-      await changeAudienceMutation.mutateAsync({
+      await changeChildrenOnlyMutation.mutateAsync({
         eventId: offerId,
-        audienceType: newType,
+        childrenOnly: value,
       });
     } catch (error) {
-      // Revert the optimistic form update so the radio reflects the
-      // backend state again.
-      setValue('audience', { audienceType: previousType });
+      setValue('childrenOnly', previousValue);
       throw error;
     }
   };
 
-  const handleAudienceClick = (newType: AudienceType) => {
-    if (isAudiencePending) return;
-    if (newType === audienceType) return;
-    if (
-      newType === AudienceTypes.CHILDREN_ONLY &&
-      audienceType === AudienceTypes.MEMBERS
-    ) {
-      setActiveModal({ kind: 'members' });
+  const handleChildrenOnlyClick = (value: boolean) => {
+    if (isChildrenOnlyPending) return;
+    if (value === childrenOnly) return;
+    if (!value && event?.departurePlaces?.length) {
+      setActiveModal({ kind: 'departurePlaces' });
       return;
     }
-    const isSwitchingAwayFromChildrenOnly =
-      audienceType === AudienceTypes.CHILDREN_ONLY &&
-      newType !== AudienceTypes.CHILDREN_ONLY;
-    const hasDeparturePlaces = !!event?.departurePlaces?.length;
-    if (isSwitchingAwayFromChildrenOnly && hasDeparturePlaces) {
-      setActiveModal({ kind: 'departurePlaces', targetAudience: newType });
-      return;
-    }
-    applyAudienceChange(newType).catch(() => undefined);
+    applyChildrenOnlyChange(value).catch(() => undefined);
   };
 
   const showChildrenOnlySection =
     isEvent &&
     audienceType !== AudienceTypes.EDUCATION &&
-    (audienceType === AudienceTypes.CHILDREN_ONLY ||
+    (childrenOnly ||
       overlapsWithBoaAgeRange(watchedTypicalAgeRange) ||
       birthdateRangeFitsBoa(watchedBirthdateRange));
 
@@ -388,9 +377,7 @@ const AgeRangeStepBoa = ({
                         });
                         setMinAge('');
                         setMaxAge('');
-                        setValue('audience', {
-                          audienceType: AudienceTypes.EVERYONE,
-                        });
+                        setValue('childrenOnly', false);
                       }
                       return;
                     }
@@ -406,9 +393,7 @@ const AgeRangeStepBoa = ({
                       // Same clean-slate treatment on the way back to AGE.
                       setMinBirthDate(undefined);
                       setMaxBirthDate(undefined);
-                      setValue('audience', {
-                        audienceType: AudienceTypes.EVERYONE,
-                      });
+                      setValue('childrenOnly', false);
                       return;
                     }
 
@@ -585,32 +570,30 @@ const AgeRangeStepBoa = ({
                     `}
                   >
                     <Text fontWeight="bold">
-                      {t('create.name_and_age.age.audience.question')}
+                      {t('create.name_and_age.age.children_only.question')}
                     </Text>
                     <RadioButtonWithLabel
-                      id="audience-children-only"
-                      name="age-audience-type"
-                      checked={audienceType === AudienceTypes.CHILDREN_ONLY}
-                      disabled={isAudiencePending}
+                      id="children-only"
+                      name="children-only-toggle"
+                      checked={childrenOnly === true}
+                      disabled={isChildrenOnlyPending}
                       label={t(
-                        'create.name_and_age.age.audience.children_only',
+                        'create.name_and_age.age.children_only.children_only',
                       )}
-                      onChange={() =>
-                        handleAudienceClick(AudienceTypes.CHILDREN_ONLY)
-                      }
+                      onChange={() => handleChildrenOnlyClick(true)}
                     />
                     <RadioButtonWithLabel
-                      id="audience-with-family"
-                      name="age-audience-type"
-                      checked={audienceType !== AudienceTypes.CHILDREN_ONLY}
-                      disabled={isAudiencePending}
-                      label={t('create.name_and_age.age.audience.with_family')}
-                      onChange={() =>
-                        handleAudienceClick(AudienceTypes.EVERYONE)
-                      }
+                      id="with-family"
+                      name="children-only-toggle"
+                      checked={childrenOnly !== true}
+                      disabled={isChildrenOnlyPending}
+                      label={t(
+                        'create.name_and_age.age.children_only.with_family',
+                      )}
+                      onChange={() => handleChildrenOnlyClick(false)}
                     />
-                    {audienceMutationError && (
-                      <Text color="red">{audienceMutationError}</Text>
+                    {childrenOnlyMutationError && (
+                      <Text color="red">{childrenOnlyMutationError}</Text>
                     )}
                   </Stack>
                 )}
@@ -621,13 +604,13 @@ const AgeRangeStepBoa = ({
                 size={ModalSizes.MD}
                 visible={activeModal?.kind === 'ageRange'}
                 title={t(
-                  'create.name_and_age.age.audience.age_range_warning_modal.title',
+                  'create.name_and_age.age.children_only.age_range_warning_modal.title',
                 )}
                 confirmTitle={t(
-                  'create.name_and_age.age.audience.age_range_warning_modal.confirm',
+                  'create.name_and_age.age.children_only.age_range_warning_modal.confirm',
                 )}
                 cancelTitle={t(
-                  'create.name_and_age.age.audience.age_range_warning_modal.cancel',
+                  'create.name_and_age.age.children_only.age_range_warning_modal.cancel',
                 )}
                 confirmButtonVariant={ButtonVariants.DANGER}
                 onClose={() => {
@@ -643,11 +626,11 @@ const AgeRangeStepBoa = ({
                   closeModal();
                 }}
                 onConfirm={async () => {
-                  if (isAudiencePending) return;
+                  if (isChildrenOnlyPending) return;
                   if (activeModal?.kind !== 'ageRange') return;
                   const { newValue } = activeModal;
                   try {
-                    await applyAudienceChange(AudienceTypes.EVERYONE);
+                    await applyChildrenOnlyChange(false);
                     if (offerId && event?.departurePlaces?.length) {
                       await changeDeparturePlacesMutation.mutateAsync({
                         eventId: offerId,
@@ -670,7 +653,7 @@ const AgeRangeStepBoa = ({
                 <Box padding={4}>
                   <Text>
                     {t(
-                      'create.name_and_age.age.audience.age_range_warning_modal.body',
+                      'create.name_and_age.age.children_only.age_range_warning_modal.body',
                     )}
                   </Text>
                 </Box>
@@ -685,21 +668,21 @@ const AgeRangeStepBoa = ({
         size={ModalSizes.MD}
         visible={activeModal?.kind === 'departurePlaces'}
         title={t(
-          'create.name_and_age.age.audience.departure_places_warning_modal.title',
+          'create.name_and_age.age.children_only.departure_places_warning_modal.title',
         )}
         confirmTitle={t(
-          'create.name_and_age.age.audience.departure_places_warning_modal.confirm',
+          'create.name_and_age.age.children_only.departure_places_warning_modal.confirm',
         )}
         cancelTitle={t(
-          'create.name_and_age.age.audience.departure_places_warning_modal.cancel',
+          'create.name_and_age.age.children_only.departure_places_warning_modal.cancel',
         )}
         confirmButtonVariant={ButtonVariants.DANGER}
         onClose={closeModal}
         onConfirm={async () => {
-          if (isAudiencePending) return;
+          if (isChildrenOnlyPending) return;
           if (activeModal?.kind !== 'departurePlaces') return;
           try {
-            await applyAudienceChange(activeModal.targetAudience);
+            await applyChildrenOnlyChange(false);
             if (offerId) {
               await changeDeparturePlacesMutation.mutateAsync({
                 eventId: offerId,
@@ -717,40 +700,8 @@ const AgeRangeStepBoa = ({
         <Box padding={4}>
           <Text>
             {t(
-              'create.name_and_age.age.audience.departure_places_warning_modal.body',
+              'create.name_and_age.age.children_only.departure_places_warning_modal.body',
             )}
-          </Text>
-        </Box>
-      </Modal>
-
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
-        visible={activeModal?.kind === 'members'}
-        title={t(
-          'create.name_and_age.age.audience.members_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.audience.members_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.audience.members_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
-        onClose={closeModal}
-        onConfirm={async () => {
-          if (isAudiencePending) return;
-          try {
-            await applyAudienceChange(AudienceTypes.CHILDREN_ONLY);
-          } catch {
-            return;
-          }
-          closeModal();
-        }}
-      >
-        <Box padding={4}>
-          <Text>
-            {t('create.name_and_age.age.audience.members_warning_modal.body')}
           </Text>
         </Box>
       </Modal>

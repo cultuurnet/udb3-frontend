@@ -181,16 +181,16 @@ test.describe.serial('Event Preview Content', () => {
     await page
       .getByRole('button', { name: new RegExp(`^${age.kids}`) })
       .click();
-    await expect(page.getByText(age.audience.question)).toBeVisible();
+    await expect(page.getByText(age.children_only.question)).toBeVisible();
 
-    const audiencePut = page.waitForResponse(
+    const childrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes('/audience') &&
+        res.url().includes('/children-only') &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
-    await page.locator('#audience-children-only').click();
-    await audiencePut;
+    await page.locator('#children-only').click();
+    await childrenOnlyPut;
 
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
     await page.waitForURL(/\/events\/[a-f0-9-]+/);

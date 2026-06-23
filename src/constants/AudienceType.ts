@@ -4,7 +4,6 @@ const AudienceTypes = {
   EVERYONE: 'everyone',
   MEMBERS: 'members',
   EDUCATION: 'education',
-  CHILDREN_ONLY: 'childrenOnly',
 } as const;
 
 type AudienceType = Values<typeof AudienceTypes>;

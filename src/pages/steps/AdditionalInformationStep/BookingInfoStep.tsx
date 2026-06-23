@@ -288,6 +288,7 @@ const BookingInfoStep = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
   const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -666,7 +667,7 @@ const BookingInfoStep = ({
         </Text>
         {getOfferByIdQuery.data && (
           <Stack spacing={5}>
-            {subEvents.length > 0 ? (
+            {subEvents.length > 0 && isBoaEnabled ? (
               subEvents.map((subEvent, index) => (
                 <Inline key={index} spacing={5} alignItems="flex-start">
                   <ReservationLinksSection
