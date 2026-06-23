@@ -1,6 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+  ]);
+});
+
 const brusselsMessage = 'Voer je Brusselse activiteiten in op';
 
 const dummyEvent = {
