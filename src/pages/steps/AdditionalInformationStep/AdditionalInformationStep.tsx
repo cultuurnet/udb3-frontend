@@ -11,6 +11,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { CultuurKuurStep } from '@/pages/steps/AdditionalInformationStep/CultuurKuurStep';
 import { LabelsStep } from '@/pages/steps/AdditionalInformationStep/LabelsStep';
 import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/PhysicalLocationStep';
+import { isEvent } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
@@ -279,8 +280,7 @@ const AdditionalInformationStep = ({
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
 
-  const isChildrenOnly =
-    offer?.audience?.audienceType === AudienceTypes.CHILDREN_ONLY;
+  const isChildrenOnly = offer && isEvent(offer) && offer.childrenOnly === true;
 
   const [, hash] = asPath.split('#');
 

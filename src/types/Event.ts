@@ -30,6 +30,7 @@ type Event = BaseOffer & {
   production?: ProductionOnEvent;
   attendanceMode: Values<typeof AttendanceMode>;
   departurePlaces?: string[];
+  childrenOnly?: boolean;
 };
 
 const isEvent = (value: unknown): value is Event => {
