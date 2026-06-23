@@ -14,7 +14,6 @@ import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/Ph
 import { isEvent } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
-import { parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -341,20 +340,7 @@ const AdditionalInformationStep = ({
 
   return (
     <Stack ref={containerRef} {...getStackProps(props)}>
-      <Tabs
-        activeKey={tab}
-        variant={TabsVariants.FLOATING}
-        onSelect={handleSelectTab}
-        css={`
-          .tab-content {
-            padding-top: ${parseSpacing(4)};
-          }
-          .nav-item .nav-link {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-          }
-        `}
-      >
+      <Tabs activeKey={tab} variant={TabsVariants.FLOATING} onSelect={handleSelectTab}>
         {orderedTabs.map(
           ({
             shouldShowOn,
@@ -395,23 +381,25 @@ const AdditionalInformationStep = ({
                   />
                 }
               >
-                <TabContent
-                  minHeight={isOrganizer ? '600px' : '450px'}
-                  offerId={offerId}
-                  scope={scope}
-                  field={field}
-                  onValidationChange={handleValidationChange}
-                  onSuccessfulChange={() =>
-                    invalidateOfferQuery(field, shouldInvalidate)
-                  }
-                  onFaqSuccessfulChange={
-                    field === Fields.DESCRIPTION
-                      ? () => invalidateOfferQuery(Fields.FAQ, true)
-                      : undefined
-                  }
-                  {...props}
-                  {...stepProps}
-                />
+                <div className="tw:pt-4">
+                  <TabContent
+                    minHeight={isOrganizer ? '600px' : '450px'}
+                    offerId={offerId}
+                    scope={scope}
+                    field={field}
+                    onValidationChange={handleValidationChange}
+                    onSuccessfulChange={() =>
+                      invalidateOfferQuery(field, shouldInvalidate)
+                    }
+                    onFaqSuccessfulChange={
+                      field === Fields.DESCRIPTION
+                        ? () => invalidateOfferQuery(Fields.FAQ, true)
+                        : undefined
+                    }
+                    {...props}
+                    {...stepProps}
+                  />
+                </div>
               </Tabs.Tab>
             );
           },
