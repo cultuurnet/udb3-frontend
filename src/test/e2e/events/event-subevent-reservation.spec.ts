@@ -203,14 +203,13 @@ test.describe('Per-subEvent reservation info', () => {
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
 
-    // The deleted subEvent and its reservation info are gone...
+    // Both subevent cards are gone — single date shows the offer-level card.
+    await expect(page.locator('#subevent-0-link')).toHaveCount(0);
     await expect(page.locator('#subevent-1-link')).toHaveCount(0);
 
-    // The remaining subEvent keeps its own reservation info.
-    await expect(page.locator('#subevent-0-link')).toHaveValue(kept.url);
-    await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
-      kept.capacity,
-    );
+    // The offer-level card is shown with cleared booking info.
+    await expect(page.locator('#offer-link')).toBeVisible();
+    await expect(page.locator('#offer-link')).toHaveValue('');
   });
 
   test('shows a new reservation section when a subEvent is added in the calendar', async ({
