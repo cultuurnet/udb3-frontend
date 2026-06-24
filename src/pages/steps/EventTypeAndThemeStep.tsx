@@ -11,7 +11,7 @@ import {
   CULTUURKUUR_THEME_ERROR,
   CULTUURKUUR_TYPE_ERROR,
 } from '@/constants/Cultuurkuur';
-import { cultuurkuurTypes, EventTypes } from '@/constants/EventTypes';
+import { boaTypes, cultuurkuurTypes, EventTypes } from '@/constants/EventTypes';
 import { OfferType, OfferTypes } from '@/constants/OfferType';
 import {
   useChangeOfferThemeMutation,
@@ -20,6 +20,7 @@ import {
 import { useGetEntityByIdAndScope } from '@/hooks/api/scope';
 import { EventType } from '@/hooks/api/terms';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Event } from '@/types/Event';
 import { Term } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -242,6 +243,8 @@ const EventTypeAndThemeStep = ({
     name: 'typeAndTheme',
   });
 
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
   const getTypesByScopeQuery = useGetTypesByScopeQuery({
     scope,
   });
@@ -254,10 +257,18 @@ const EventTypeAndThemeStep = ({
 
   const types = useMemo(() => {
     const sortedTypes = sortByLocalizedName(getTypesByScopeQuery.data ?? []);
-    return isCultuurkuurEvent
-      ? sortedTypes.filter((type) => cultuurkuurTypes.includes(type.id))
-      : sortedTypes;
-  }, [getTypesByScopeQuery.data, sortByLocalizedName, isCultuurkuurEvent]);
+    if (isCultuurkuurEvent) {
+      return sortedTypes.filter((type) => cultuurkuurTypes.includes(type.id));
+    }
+    return isBoaEnabled
+      ? sortedTypes
+      : sortedTypes.filter((type) => !boaTypes.includes(type.id));
+  }, [
+    getTypesByScopeQuery.data,
+    sortByLocalizedName,
+    isCultuurkuurEvent,
+    isBoaEnabled,
+  ]);
 
   const themes = useMemo(
     () =>
