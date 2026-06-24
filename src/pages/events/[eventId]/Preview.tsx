@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { CalendarType } from '@/constants/CalendarType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
@@ -31,6 +32,7 @@ import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import { ImagePreview } from '@/pages/preview/ImagePreview';
 import { LocationPreview } from '@/pages/preview/LocationPreview';
+import { ReservationPreview } from '@/pages/preview/ReservationPreview';
 import {
   columns,
   DetailsTabContent,
@@ -416,12 +418,22 @@ const Preview = () => {
     { field: t('preview.labels.booking'), value: <BookingPreview /> },
     {
       field: t('preview.labels.booking_info'),
-      value: (
-        <BookingInfoPreview
-          bookingInfo={offer.bookingInfo}
-          mainLanguage={offer.mainLanguage}
-        />
-      ),
+      value:
+        (isBoaEnabled && offer.calendarType === CalendarType.SINGLE) ||
+        offer.calendarType === CalendarType.MULTIPLE ? (
+          <ReservationPreview
+            bookingInfo={offer.bookingInfo}
+            bookingAvailability={offer.bookingAvailability}
+            subEvents={offer.subEvent ?? []}
+            mainLanguage={offer.mainLanguage}
+            canShowBookingAvailability
+          />
+        ) : (
+          <BookingInfoPreview
+            bookingInfo={offer.bookingInfo}
+            mainLanguage={offer.mainLanguage}
+          />
+        ),
     },
     {
       field: t('preview.labels.contact'),
