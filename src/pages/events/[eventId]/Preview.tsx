@@ -418,22 +418,23 @@ const Preview = () => {
     { field: t('preview.labels.booking'), value: <BookingPreview /> },
     {
       field: t('preview.labels.booking_info'),
-      value:
-        (isBoaEnabled && offer.calendarType === CalendarType.SINGLE) ||
-        offer.calendarType === CalendarType.MULTIPLE ? (
-          <ReservationPreview
-            bookingInfo={offer.bookingInfo}
-            bookingAvailability={offer.bookingAvailability}
-            subEvents={offer.subEvent ?? []}
-            mainLanguage={offer.mainLanguage}
-            canShowBookingAvailability
-          />
-        ) : (
-          <BookingInfoPreview
-            bookingInfo={offer.bookingInfo}
-            mainLanguage={offer.mainLanguage}
-          />
-        ),
+      value: isBoaEnabled ? (
+        <ReservationPreview
+          bookingInfo={offer.bookingInfo}
+          bookingAvailability={offer.bookingAvailability}
+          subEvents={offer.subEvent ?? []}
+          mainLanguage={offer.mainLanguage}
+          canShowBookingAvailability={
+            offer.calendarType === CalendarType.SINGLE ||
+            offer.calendarType === CalendarType.MULTIPLE
+          }
+        />
+      ) : (
+        <BookingInfoPreview
+          bookingInfo={offer.bookingInfo}
+          mainLanguage={offer.mainLanguage}
+        />
+      ),
     },
     {
       field: t('preview.labels.contact'),
