@@ -337,34 +337,29 @@ const ReservationUrlSection = ({
     return (
       <Inline spacing={5} alignItems="flex-start" stackOn="m">
         <ReservationLinksSection
-          idPrefix="subevent-0"
+          idPrefix="offer"
           variant={ReservationLinksSectionVariants.CARD}
           width="46rem"
-          title={`${format(new Date(subEvents[0].startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvents[0].endDate), 'dd/MM/yyyy')}`}
-          url={subEvents[0].bookingInfo?.url ?? ''}
+          showBookingAvailability={canEditBookingAvailability}
+          url={bookingInfo?.url ?? ''}
           urlLabel={
-            subEvents[0].bookingInfo?.urlLabel?.en
-              ? getUrlLabelType(subEvents[0].bookingInfo.urlLabel.en)
+            bookingInfo?.urlLabel?.en
+              ? getUrlLabelType(bookingInfo.urlLabel.en)
               : ''
           }
           capacity={
-            subEvents[0].bookingAvailability?.capacity !== undefined
-              ? String(subEvents[0].bookingAvailability.capacity)
+            bookingAvailability?.capacity !== undefined
+              ? String(bookingAvailability.capacity)
               : ''
           }
           status={
-            subEvents[0].bookingAvailability?.type ??
-            BookingAvailabilityType.AVAILABLE
+            bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
           }
           urlLabelOptions={urlLabelOptions}
-          onChangeBookingInfo={(url, urlLabelType) =>
-            onChangeSubEventBookingInfo(0, url, urlLabelType)
-          }
-          onChangeBookingAvailability={(type, capacityValue) =>
-            onChangeSubEventAvailability(0, type, capacityValue)
-          }
+          onChangeBookingInfo={onChangeOfferBookingInfo}
+          onChangeBookingAvailability={onChangeOfferBookingAvailability}
         />
-        {capacityAlert}
+        {canEditBookingAvailability && capacityAlert}
       </Inline>
     );
   }
