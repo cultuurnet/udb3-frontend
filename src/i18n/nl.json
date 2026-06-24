@@ -465,6 +465,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
+        "reservation_type_general": "1 algemene link",
+        "reservation_type_specific": "Een link per moment of periode",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
