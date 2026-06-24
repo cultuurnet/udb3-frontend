@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
+
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
@@ -177,6 +179,12 @@ test('create event with all possible fields filled in', async ({
   await page
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
+
+  await page
+    .getByText(
+      nl.create.additionalInformation.booking_info.reservation_type_multiple,
+    )
+    .click();
 
   await page.locator('#subevent-0-link').click();
   await page.locator('#subevent-0-link').fill(dummyEvent.bookingInfo.url);
