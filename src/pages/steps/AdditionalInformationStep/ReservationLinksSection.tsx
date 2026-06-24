@@ -118,7 +118,6 @@ const ReservationLinksSection = ({
           flex={1}
           id={`${idPrefix}-link`}
           labelVariant={LabelVariants.NORMAL}
-          labelColor={colors.udbMainDarkBlue}
           label={t('create.additionalInformation.booking_info.link')}
           Component={
             <Input
@@ -138,7 +137,6 @@ const ReservationLinksSection = ({
             flex={1}
             id={`${idPrefix}-max-capacity`}
             labelVariant={LabelVariants.NORMAL}
-            labelColor={colors.udbMainDarkBlue}
             label={t('create.additionalInformation.booking_info.max_capacity')}
             Component={
               <Input
@@ -161,7 +159,6 @@ const ReservationLinksSection = ({
             flex={1}
             id={`${idPrefix}-status`}
             labelVariant={LabelVariants.NORMAL}
-            labelColor={colors.udbMainDarkBlue}
             label={t('create.additionalInformation.booking_info.status')}
             Component={
               <Select
@@ -186,7 +183,6 @@ const ReservationLinksSection = ({
           flex={1}
           id={`${idPrefix}-url-label`}
           labelVariant={LabelVariants.NORMAL}
-          labelColor={colors.udbMainDarkBlue}
           label={t(
             'create.additionalInformation.booking_info.url_label_dropdown_label',
           )}

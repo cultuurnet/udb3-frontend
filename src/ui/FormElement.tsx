@@ -17,7 +17,6 @@ type Props = {
   label?: ReactNode;
   labelPosition?: Values<typeof LabelPositions>;
   labelVariant?: Values<typeof LabelVariants>;
-  labelColor?: string;
   error?: ReactElement | string;
   info?: ReactNode;
   loading?: boolean;
@@ -49,7 +48,6 @@ const FormElement = ({
   label,
   labelPosition = LabelPositions.TOP,
   labelVariant = LabelVariants.BOLD,
-  labelColor,
   error,
   info,
   loading = false,
@@ -109,7 +107,6 @@ const FormElement = ({
   const labelElement = (
     <Label
       variant={labelVariant}
-      color={labelColor}
       htmlFor={id}
       {...(labelPosition !== LabelPositions.TOP
         ? { height: '36px', alignItems: 'center' }
