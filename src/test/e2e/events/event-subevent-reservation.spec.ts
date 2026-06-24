@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
+import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 type TestFixtures = {
@@ -34,6 +35,13 @@ const waitForSubEventsPatch = (page: Page) =>
       response.request().method() === 'PATCH',
   );
 
+const switchToSpecificReservations = (page: Page) =>
+  page
+    .getByText(
+      nl.create.additionalInformation.booking_info.reservation_type_specific,
+    )
+    .click();
+
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
@@ -53,6 +61,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await expect(page.locator('#subevent-0-link')).toBeVisible();
     await expect(page.locator('#subevent-1-link')).toBeVisible();
@@ -79,6 +88,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     for (const [index, reservation] of reservations.entries()) {
       await expect(page.locator(`#subevent-${index}-link`)).toHaveValue(
@@ -99,6 +109,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await page.locator('#subevent-0-max-capacity').fill(capacity);
     let patch = waitForSubEventsPatch(page);
@@ -128,6 +139,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
       capacity,
@@ -151,6 +163,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // subEvent 0 keeps its info, subEvent 1 is the one that gets deleted.
     for (const [index, reservation] of [kept, removed].entries()) {
@@ -207,6 +220,7 @@ test.describe('Per-subEvent reservation info', () => {
   }) => {
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // The fixture event has two subEvents, so two reservation cards.
     await expect(page.locator('#subevent-0-link')).toBeVisible();
@@ -250,6 +264,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     for (const [index, url] of links.entries()) {
       await page.locator(`#subevent-${index}-link`).fill(url);
@@ -278,6 +293,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // Only two subEvents remain, keeping the first and last links.
     await expect(page.locator('#subevent-2-link')).toHaveCount(0);
