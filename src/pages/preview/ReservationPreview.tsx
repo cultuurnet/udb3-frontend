@@ -135,10 +135,9 @@ const ReservationPreview = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const subEventsWithUrl =
-    subEvents.length > 1
-      ? subEvents.filter((subEvent) => subEvent.bookingInfo?.url)
-      : [];
+  const subEventsWithUrl = subEvents.filter(
+    (subEvent) => subEvent.bookingInfo?.url,
+  );
   const hasContactInfo = !!(bookingInfo?.phone || bookingInfo?.email);
   const hasSingleDateUrl = !!bookingInfo?.url;
   const hasMultipleDateUrls = subEventsWithUrl.length > 0;
