@@ -8,7 +8,6 @@ import type { BoxProps } from '@/ui/Box';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { LabelVariants } from '@/ui/Label';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -117,7 +116,6 @@ const ReservationLinksSection = ({
         <FormElement
           flex={1}
           id={`${idPrefix}-link`}
-          labelVariant={LabelVariants.NORMAL}
           label={t('create.additionalInformation.booking_info.link')}
           Component={
             <Input
@@ -136,7 +134,6 @@ const ReservationLinksSection = ({
           <FormElement
             flex={1}
             id={`${idPrefix}-max-capacity`}
-            labelVariant={LabelVariants.NORMAL}
             label={t('create.additionalInformation.booking_info.max_capacity')}
             Component={
               <Input
@@ -158,7 +155,6 @@ const ReservationLinksSection = ({
           <FormElement
             flex={1}
             id={`${idPrefix}-status`}
-            labelVariant={LabelVariants.NORMAL}
             label={t('create.additionalInformation.booking_info.status')}
             Component={
               <Select
@@ -182,7 +178,6 @@ const ReservationLinksSection = ({
         <FormElement
           flex={1}
           id={`${idPrefix}-url-label`}
-          labelVariant={LabelVariants.NORMAL}
           label={t(
             'create.additionalInformation.booking_info.url_label_dropdown_label',
           )}
