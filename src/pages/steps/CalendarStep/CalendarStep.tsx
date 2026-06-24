@@ -87,6 +87,11 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
       scope,
     };
 
+    const bookingAvailability = queryClient.getQueryData<Offer>([
+      scope,
+      { id: offerId },
+    ])?.bookingAvailability;
+
     if (timeTable) {
       const subEvent = convertTimeTableToSubEvents(timeTable);
 
@@ -95,6 +100,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
         subEvent,
         calendarType:
           subEvent.length > 1 ? CalendarType.MULTIPLE : CalendarType.SINGLE,
+        bookingAvailability,
       });
 
       return;
@@ -103,6 +109,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
     await changeCalendarMutation.mutateAsync({
       ...common,
       ...calendar,
+      bookingAvailability,
     });
   };
 };
