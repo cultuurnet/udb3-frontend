@@ -442,8 +442,8 @@
           "buy": "Tickets kaufen",
           "reserve": "Plätze reservieren"
         },
-        "reservation_type_general": "1 allgemeiner Link",
-        "reservation_type_specific": "Ein Link pro Moment oder Zeitraum",
+        "reservation_type_single": "Allgemeiner Link",
+        "reservation_type_multiple": "Links pro Moment/Zeitraum",
         "reservation_period": {
           "title": "Wann können sich die Leute anmelden?",
           "toggle": "Reservierungszeitraum",

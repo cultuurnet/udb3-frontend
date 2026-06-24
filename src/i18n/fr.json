@@ -444,8 +444,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
-        "reservation_type_general": "1 lien général",
-        "reservation_type_specific": "Un lien par moment ou période",
+        "reservation_type_single": "Lien général",
+        "reservation_type_multiple": "Liens par moment/période",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",

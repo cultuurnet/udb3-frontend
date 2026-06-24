@@ -38,7 +38,7 @@ const waitForSubEventsPatch = (page: Page) =>
 const switchToSpecificReservations = (page: Page) =>
   page
     .getByText(
-      nl.create.additionalInformation.booking_info.reservation_type_specific,
+      nl.create.additionalInformation.booking_info.reservation_type_multiple,
     )
     .click();
 

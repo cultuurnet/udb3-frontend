@@ -281,7 +281,7 @@ const ReservationPeriod = ({
   );
 };
 
-type ReservationType = 'general' | 'specific';
+type ReservationType = 'single' | 'multiple';
 
 type ReservationUrlSectionProps = {
   subEvents: SubEvent[];
@@ -373,21 +373,21 @@ const ReservationUrlSection = ({
           onChange={(key) => onReservationTypeChange(key as ReservationType)}
           options={[
             {
-              value: 'general',
+              value: 'single',
               label: t(
-                'create.additionalInformation.booking_info.reservation_type_general',
+                'create.additionalInformation.booking_info.reservation_type_single',
               ),
             },
             {
-              value: 'specific',
+              value: 'multiple',
               label: t(
-                'create.additionalInformation.booking_info.reservation_type_specific',
+                'create.additionalInformation.booking_info.reservation_type_multiple',
               ),
             },
           ]}
           maxWidth="40rem"
         />
-        {reservationType === 'general' && (
+        {reservationType === 'single' && (
           <Inline spacing={5} alignItems="flex-start" stackOn="m">
             <ReservationLinksSection
               idPrefix="offer"
@@ -415,7 +415,7 @@ const ReservationUrlSection = ({
             {canEditBookingAvailability && capacityAlert}
           </Inline>
         )}
-        {reservationType === 'specific' && (
+        {reservationType === 'multiple' && (
           <Stack spacing={5}>
             {subEvents.map((subEvent, index) => (
               <Inline
@@ -502,7 +502,7 @@ const BookingInfoStep = ({
   const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [reservationType, setReservationType] =
-    useState<ReservationType>('general');
+    useState<ReservationType>('single');
   const queryClient = useQueryClient();
 
   const eventId = offerId;
