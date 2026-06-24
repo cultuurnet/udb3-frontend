@@ -76,7 +76,7 @@ const ReservationCard = ({
           <Text color={colors.udbMainGrey} fontWeight="bold">
             {t('create.additionalInformation.booking_info.link')}
           </Text>
-          <Text>{url}</Text>
+          <Link href={url}>{url}</Link>
         </Stack>
         {showAvailability && capacity && (
           <Stack flex={1} spacing={1}>
