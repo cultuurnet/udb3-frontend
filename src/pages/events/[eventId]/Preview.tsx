@@ -107,15 +107,8 @@ const Preview = () => {
     (offerPermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const {
-    mainLanguage,
-    name,
-    terms,
-    typicalAgeRange,
-    mediaObject,
-    videos,
-    audience,
-  } = offer;
+  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
+    offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -138,14 +131,11 @@ const Preview = () => {
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
-  const canSeeHistory = userPermissions?.includes(
-    PermissionTypes.AANBOD_HISTORIEK,
-  );
 
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     eventId as string,
     offerType,
-    { enabled: canSeeHistory || isGodUser },
+    { enabled: isGodUser },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
 
@@ -154,7 +144,7 @@ const Preview = () => {
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  if (canSeeHistory || isGodUser) {
+  if (isGodUser) {
     tabOptions.push('history');
   }
 
@@ -371,7 +361,7 @@ const Preview = () => {
       value: (
         <AgePreview
           typicalAgeRange={typicalAgeRange}
-          audienceType={audience?.audienceType}
+          childrenOnly={isEvent(offer) ? offer.childrenOnly : undefined}
           birthdateRange={offer.birthdateRange}
         />
       ),

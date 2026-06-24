@@ -5,13 +5,12 @@ import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 const age = nl.create.name_and_age.age;
-const audience = age.audience;
+const childrenOnly = age.children_only;
 
-const audienceQuestionLocator = audience.question;
+const audienceQuestionLocator = childrenOnly.question;
 
-const childrenOnlyRadio = (page: Page) =>
-  page.locator('#audience-children-only');
-const withFamilyRadio = (page: Page) => page.locator('#audience-with-family');
+const childrenOnlyRadio = (page: Page) => page.locator('#children-only');
+const withFamilyRadio = (page: Page) => page.locator('#with-family');
 
 type TestFixtures = {
   eventId: string;
@@ -185,15 +184,14 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // Wait for both the audience PUT and the follow-up offer refetch
-    const audiencePut = page.waitForResponse(
+    const childrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes(`/events/${eventId}/audience`) &&
+        res.url().includes(`/events/${eventId}/children-only`) &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
     await childrenOnlyRadio(page).click();
-    await audiencePut;
+    await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Add a departure place via the Bereikbaarheid tab and explicitly wait
@@ -236,16 +234,16 @@ test.describe('Children-only audience section', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
     await expect(
-      modal.getByText(audience.departure_places_warning_modal.title),
+      modal.getByText(childrenOnly.departure_places_warning_modal.title),
     ).toBeVisible();
     await expect(
-      modal.getByText(audience.departure_places_warning_modal.body),
+      modal.getByText(childrenOnly.departure_places_warning_modal.body),
     ).toBeVisible();
 
     // Cancel → modal closes, audience selection stays at "kinderen alleen"
     await modal
       .getByRole('button', {
-        name: audience.departure_places_warning_modal.cancel,
+        name: childrenOnly.departure_places_warning_modal.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
@@ -256,7 +254,7 @@ test.describe('Children-only audience section', () => {
     await expect(modal).toBeVisible();
     await modal
       .getByRole('button', {
-        name: audience.departure_places_warning_modal.confirm,
+        name: childrenOnly.departure_places_warning_modal.confirm,
       })
       .click();
     await expect(modal).toBeHidden();
@@ -284,17 +282,14 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    const audiencePut = page.waitForResponse(
+    const childrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes(`/events/${eventId}/audience`) &&
+        res.url().includes(`/events/${eventId}/children-only`) &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
     await childrenOnlyRadio(page).click();
-    await audiencePut;
-    // Wait for the audienceType update to commit before clicking the next
-    // preset — otherwise commitTypicalAgeRange may still read a stale value
-    // from useWatch and skip the warning modal.
+    await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
@@ -305,13 +300,12 @@ test.describe('Children-only audience section', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
     await expect(
-      modal.getByText(audience.age_range_warning_modal.body),
+      modal.getByText(childrenOnly.age_range_warning_modal.body),
     ).toBeVisible();
 
-    // Confirm: audience reset PUT + typicalAgeRange PUT fire in sequence.
-    const confirmAudiencePut = page.waitForResponse(
+    const confirmChildrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes(`/events/${eventId}/audience`) &&
+        res.url().includes(`/events/${eventId}/children-only`) &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
@@ -323,10 +317,10 @@ test.describe('Children-only audience section', () => {
     );
     await modal
       .getByRole('button', {
-        name: audience.age_range_warning_modal.confirm,
+        name: childrenOnly.age_range_warning_modal.confirm,
       })
       .click();
-    await confirmAudiencePut;
+    await confirmChildrenOnlyPut;
     await confirmAgePut;
 
     await page.goto(eventEditUrl);
@@ -347,14 +341,14 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    const audiencePut = page.waitForResponse(
+    const childrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes(`/events/${eventId}/audience`) &&
+        res.url().includes(`/events/${eventId}/children-only`) &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
     await childrenOnlyRadio(page).click();
-    await audiencePut;
+    await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Trigger the modal.
@@ -368,7 +362,7 @@ test.describe('Children-only audience section', () => {
     // Cancel → modal closes, previous range + audience preserved.
     await modal
       .getByRole('button', {
-        name: audience.age_range_warning_modal.cancel,
+        name: childrenOnly.age_range_warning_modal.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
