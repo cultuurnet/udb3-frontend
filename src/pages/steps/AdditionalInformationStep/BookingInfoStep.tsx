@@ -568,8 +568,8 @@ const BookingInfoStep = ({
   const subEvents = getOfferByIdQuery.data?.subEvent ?? [];
   const calendarType = getOfferByIdQuery.data?.calendarType;
   const canEditBookingAvailability =
-    calendarType !== CalendarType.PERIODIC &&
-    calendarType !== CalendarType.PERMANENT;
+    calendarType === CalendarType.SINGLE ||
+    calendarType === CalendarType.MULTIPLE;
 
   const { register, handleSubmit, formState, control, setValue, getValues } =
     useForm<FormData>({
