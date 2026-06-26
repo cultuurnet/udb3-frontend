@@ -191,7 +191,7 @@ const TabTitle = ({
         <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       )}
       {validationStatus === ValidationStatus.WARNING && (
-        <Icon name={Icons.EXCLAMATION_CIRCLE} className="tw:text-udb-warning" />
+        <Icon name={Icons.EXCLAMATION_CIRCLE} className="tw:text-warning" />
       )}
       <Text>
         {scope === ScopeTypes.ORGANIZERS && field === Fields.MEDIA
