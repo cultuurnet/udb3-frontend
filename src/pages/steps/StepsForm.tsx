@@ -383,7 +383,7 @@ const StepsForm = ({
           onClose={() => toast.clear()}
         />
         {needsLocationMigration && (
-          <Alert variant={AlertVariants.DANGER} marginY={5}>
+          <Alert variant={AlertVariants.DANGER} className="tw:my-8">
             <Trans
               i18nKey="create.migration.alert"
               components={{

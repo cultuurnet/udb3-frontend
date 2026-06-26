@@ -56,7 +56,7 @@ const AlertDuplicatePlace = ({
     : undefined;
 
   return (
-    <Alert variant={variant} maxWidth="50rem" {...props}>
+    <Alert variant={variant} className="tw:max-w-200" {...props}>
       <Trans
         i18nKey={labelKey}
         values={offerId ? undefined : { placeName: duplicatePlaceName }}

@@ -1703,7 +1703,8 @@
     "search_text": "Wird gesucht..."
   },
   "common": {
-    "back_to_overview": "Zurück zur Liste"
+    "back_to_overview": "Zurück zur Liste",
+    "close": "Schließen"
   },
   "users": {
     "search": {

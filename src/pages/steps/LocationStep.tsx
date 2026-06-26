@@ -106,7 +106,7 @@ const LocationSuggestions = ({
         <Text fontWeight={'bold'}>{title}</Text>
       </Inline>
       {alertVisible && (
-        <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+        <Alert variant={AlertVariants.PRIMARY} className="tw:my-4">
           {t('create.location.recent_locations.info')}
         </Alert>
       )}
