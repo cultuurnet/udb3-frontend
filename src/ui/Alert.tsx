@@ -78,13 +78,17 @@ const AlertShadcn = ({
         className,
       )}
     >
-      <div className={cn('tw:flex tw:gap-3', title ? 'tw:items-start' : 'tw:items-center')}>
+      <div className="tw:flex tw:items-start tw:gap-3">
         {icon && (
           <Icon
             name={icon.name}
             width={18}
             height={18}
-            className={cn('tw:shrink-0', icon.className)}
+            className={cn(
+              !title && 'tw:mt-0.75',
+              'tw:shrink-0',
+              icon.className,
+            )}
           />
         )}
         <div className="tw:flex-1 tw:min-w-0">
