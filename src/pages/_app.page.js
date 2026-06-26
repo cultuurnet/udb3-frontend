@@ -21,6 +21,7 @@ import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
+import { Toaster } from '@/ui/Toast';
 
 import { AnnouncementModalProvider } from '../context/AnnouncementModalContext';
 
@@ -128,6 +129,7 @@ const App = ({ Component, pageProps, children }) => {
         ]}
       >
         <GlobalStyle />
+        <Toaster position="top-right" />
         {publicRuntimeConfig?.environment === 'development' && (
           <ReactQueryDevtools initialIsOpen={false} />
         )}
