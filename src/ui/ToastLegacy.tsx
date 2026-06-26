@@ -101,7 +101,7 @@ const ToastLegacy = ({
           {icon && <Icon name={icon} className={`text-${variant} me-2`} />}
           {body}
         </span>
-        {onClose && <Icon name={Icons.TIMES} onClick={onClose} width={10} />}
+        {onClose && <Icon name={Icons.TIMES} width={10} />}
       </Box>
     </BootstrapToast>
   );
