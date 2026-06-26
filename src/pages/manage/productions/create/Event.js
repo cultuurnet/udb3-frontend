@@ -78,7 +78,7 @@ const Event = ({
 
       <Text>{description}</Text>
 
-      <Alert variant={AlertVariants.DARK} visible={!!productionName}>
+      <Alert variant={AlertVariants.PRIMARY} visible={!!productionName}>
         {t('productions.event.part_of_production')}{' '}
         <Text fontWeight="bold">{productionName}</Text>
       </Alert>

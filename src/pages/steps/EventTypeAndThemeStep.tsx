@@ -398,7 +398,7 @@ const EventTypeAndThemeStep = ({
                   >
                     <Icon
                       name={Icons.CHECK_CIRCLE}
-                      color={getGlobalValue('successColor')}
+                      className="tw:text-success"
                     />
                     <Text>{field.value?.type?.label}</Text>
                     <Button
@@ -506,10 +506,7 @@ const EventTypeAndThemeStep = ({
                   row-gap: ${parseSpacing(3.5)()};
                 `}
               >
-                <Icon
-                  name={Icons.CHECK_CIRCLE}
-                  color={getGlobalValue('successColor')}
-                />
+                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
                 <Text>{field.value?.theme?.label}</Text>
                 <Button
                   variant={ButtonVariants.LINK}

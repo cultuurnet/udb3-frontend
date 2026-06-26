@@ -956,6 +956,11 @@
         "subtitle": "Quels sont les tarifs d'entrée ?",
         "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas l'ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Est-il possible de s'inscrire à cette plaine de jeux par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Est-il possible de s'inscrire à cette garde d'enfants par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "0.57.0.0.0": "Est-il possible de s'inscrire à ce camp ou à ces vacances par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option."
+        },
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
           "unique_name": "Le nom spécifié est déjà utilisé.",
@@ -1698,7 +1703,8 @@
     "search_text": "En train de chercher..."
   },
   "common": {
-    "back_to_overview": "Retour à la liste"
+    "back_to_overview": "Retour à la liste",
+    "close": "Fermer"
   },
   "users": {
     "search": {

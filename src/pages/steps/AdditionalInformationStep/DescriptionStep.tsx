@@ -112,7 +112,7 @@ const FaqTips = ({
   if (!showEventTip && !isCultuurkuur) return null;
 
   return (
-    <Alert marginTop={4.8} width="30rem">
+    <Alert className="tw:mt-7 tw:w-120">
       {isCultuurkuur
         ? t(cultuurkuurKey, { keySeparator: '*' })
         : t(eventTypeKey, { keySeparator: '*' })}
@@ -135,7 +135,7 @@ const DescriptionTips = ({
 
   return (
     (eventTypeId || scope === ScopeTypes.ORGANIZERS) && (
-      <Alert marginTop={4.8} width="30rem">
+      <Alert className="tw:mt-7 tw:w-120">
         {t(translationKey, {
           keySeparator: '*',
         })}
