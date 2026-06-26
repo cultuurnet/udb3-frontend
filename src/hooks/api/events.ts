@@ -74,7 +74,6 @@ type EventArguments = {
   };
   openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
   openingHoursClosedDays?: OpeningHoursClosedDay[];
-  childrenOnly?: boolean;
 };
 type AddEventArguments = EventArguments & { headers: Headers };
 
@@ -106,7 +105,6 @@ const addEvent = async ({
   audience,
   openingHoursAdjustedDays,
   openingHoursClosedDays,
-  childrenOnly,
 }: AddEventArguments) =>
   fetchFromApi({
     path: '/events/',
@@ -144,7 +142,6 @@ const addEvent = async ({
         ...(openingHoursClosedDays?.length > 0 && {
           openingHoursClosedDays,
         }),
-        ...(childrenOnly && { childrenOnly }),
       }),
     },
   });
