@@ -192,7 +192,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
       )}
 
       {!loadingUsers && users.length === 0 && (
-        <Alert variant={AlertVariants.PRIMARY} marginTop={4}>
+        <Alert variant={AlertVariants.PRIMARY} className="tw:mt-4">
           {t('roles.form.users.no_users_message')}
         </Alert>
       )}

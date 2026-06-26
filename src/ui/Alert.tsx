@@ -1,104 +1,18 @@
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
-import { parseSpacing } from '@/ui/Box';
+import {
+  Alert as ShadcnAlert,
+  AlertDescription,
+  AlertTitle,
+} from '@/ui/shadcn/alert';
+import { cn } from '@/ui/shadcn/utils';
 
-import { Button } from './Button';
-import { ButtonVariants } from './Button';
-import { Icons } from './Icon';
+import { AlertLegacy } from './AlertLegacy';
+import { Icon, Icons } from './Icon';
 import type { InlineProps } from './Inline';
-import { Inline } from './Inline';
-import { getStackProps, Stack } from './Stack';
-import { Text } from './Text';
-import { getValueFromTheme } from './theme';
-
-const IconWarning = () => {
-  return (
-    <svg
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={24}
-      viewBox="0 0 24 24"
-    >
-      <g clipPath="url(#a)">
-        <g clipPath="url(#b)">
-          <path
-            d="M1 21h22L12 2 1 21Zm12-3h-2v-2h2v2Zm0-4h-2v-4h2v4Z"
-            fill="#E69336"
-          />
-        </g>
-      </g>
-      <defs>
-        <clipPath id="a">
-          <path fill="#fff" d="M0 0h24v24H0z" />
-        </clipPath>
-        <clipPath id="b">
-          <path fill="#fff" d="M0 0h24v24H0z" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
-
-export const IconSuccess = () => {
-  return (
-    <svg
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={24}
-      viewBox="0 0 24 24"
-    >
-      <g clipPath="url(#a)">
-        <path
-          d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z"
-          fill="#6BCD69"
-        />
-      </g>
-      <defs>
-        <clipPath id="a">
-          <path fill="#fff" d="M0 0h24v24H0z" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
-
-const IconInfo = () => {
-  return (
-    <svg
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={16}
-      viewBox="0 0 16 20"
-    >
-      <path
-        d="M14 14V9c0-3.07-1.64-5.64-4.5-6.32V2C9.5 1.17 8.83.5 8 .5S6.5 1.17 6.5 2v.68C3.63 3.36 2 5.92 2 9v5l-2 2v1h16v-1l-2-2Zm-5 0H7v-2h2v2Zm0-4H7V6h2v4ZM8 20c1.1 0 2-.9 2-2H6a2 2 0 0 0 2 2Z"
-        fill="#3868EC"
-      />
-    </svg>
-  );
-};
-
-const IconError = () => {
-  return (
-    <svg
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={24}
-      viewBox="0 0 24 24"
-    >
-      <g clipPath="url(#a)">
-        <path
-          d="M11 15h2v2h-2v-2Zm0-8h2v6h-2V7Zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2ZM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8Z"
-          fill="#DD5242"
-        />
-      </g>
-      <defs>
-        <clipPath id="a">
-          <path fill="#fff" d="M0 0h24v24H0z" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
 
 const AlertVariants = {
   PRIMARY: 'primary',
@@ -106,17 +20,28 @@ const AlertVariants = {
   SUCCESS: 'success',
   DANGER: 'danger',
   WARNING: 'warning',
-  DARK: 'dark',
 } as const;
 
-const AlertVariantIconsMap = {
-  [AlertVariants.PRIMARY]: <IconInfo />,
-  [AlertVariants.SUCCESS]: <IconSuccess />,
-  [AlertVariants.WARNING]: <IconWarning />,
-  [AlertVariants.DANGER]: <IconError />,
+const AlertVariantIcon: Partial<
+  Record<
+    Values<typeof AlertVariants>,
+    { name: Values<typeof Icons>; className: string }
+  >
+> = {
+  [AlertVariants.PRIMARY]: { name: Icons.INFO, className: 'tw:text-info' },
+  [AlertVariants.SUCCESS]: {
+    name: Icons.CHECK_CIRCLE,
+    className: 'tw:text-success',
+  },
+  [AlertVariants.WARNING]: {
+    name: Icons.EXCLAMATION_TRIANGLE,
+    className: 'tw:text-udb-warning',
+  },
+  [AlertVariants.DANGER]: {
+    name: Icons.EXCLAMATION_CIRCLE,
+    className: 'tw:text-destructive',
+  },
 };
-
-const getValue = getValueFromTheme(`alert`);
 
 type AlertProps = InlineProps & {
   variant?: Values<typeof AlertVariants>;
@@ -124,6 +49,79 @@ type AlertProps = InlineProps & {
   fullWidth?: boolean;
   closable?: boolean;
   onClose?: () => void;
+  title?: string;
+  action?: ReactNode;
+};
+
+const AlertShadcn = ({
+  variant = AlertVariants.PRIMARY,
+  visible = true,
+  children,
+  fullWidth,
+  closable,
+  onClose,
+  title,
+  action,
+  className,
+}: AlertProps) => {
+  const { t } = useTranslation();
+  const icon = AlertVariantIcon[variant];
+
+  return (
+    <ShadcnAlert
+      data-testid={`alert-${variant}`}
+      variant={variant}
+      className={cn(
+        !visible && 'tw:hidden',
+        !fullWidth && 'tw:w-auto tw:self-start',
+        closable && 'tw:pr-10',
+        className,
+      )}
+    >
+      <div className="tw:flex tw:items-start tw:gap-3">
+        {icon && (
+          <Icon
+            name={icon.name}
+            width={18}
+            height={18}
+            className={cn(
+              !title && 'tw:mt-0.75',
+              'tw:shrink-0',
+              icon.className,
+            )}
+          />
+        )}
+        <div className="tw:flex-1 tw:min-w-0">
+          {title && <AlertTitle>{title}</AlertTitle>}
+          <AlertDescription>
+            {typeof children !== 'string' ? (
+              children
+            ) : (
+              // TODO: remove !important overrides when GlobalStyle.js CSS reset (list-style: none, font: inherit) is cleaned up.
+              <span
+                className="tw:[&_ul]:list-disc! tw:[&_ul]:pl-8! tw:[&_li]:list-item! tw:[&_strong]:font-bold! tw:[&_b]:font-bold! tw:[&_code]:font-mono!"
+                dangerouslySetInnerHTML={{ __html: children as string }}
+              />
+            )}
+          </AlertDescription>
+          {action && <div className="tw:mt-3">{action}</div>}
+        </div>
+      </div>
+      {closable && (
+        <button
+          aria-label={t('common.close')}
+          onClick={onClose}
+          className={cn(
+            'tw:absolute tw:right-2 tw:flex tw:items-center tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/10',
+            title ? 'tw:top-2' : 'tw:top-1/2 tw:-translate-y-1/2',
+            icon?.className,
+          )}
+        >
+          <Icon name={Icons.TIMES} width={16} height={16} />
+        </button>
+      )}
+    </ShadcnAlert>
+  );
 };
 
 const Alert = ({
@@ -133,88 +131,44 @@ const Alert = ({
   fullWidth,
   closable,
   onClose,
+  title,
+  action,
+  className,
   ...props
 }: AlertProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (!isShadcnMigrationEnabled) {
+    return (
+      <AlertLegacy
+        variant={variant}
+        visible={visible}
+        fullWidth={fullWidth}
+        closable={closable}
+        onClose={onClose}
+        className={className}
+        {...props}
+      >
+        {children}
+      </AlertLegacy>
+    );
+  }
+
   return (
-    <Inline
-      role="alert"
-      data-testid={`alert-${variant}`}
-      alignSelf={fullWidth ? 'normal' : 'flex-start'}
-      display={visible ? 'flex' : 'none'}
-      {...getStackProps(props)}
-      padding={4}
-      borderRadius={getValue('borderRadius')}
+    <AlertShadcn
       variant={variant}
-      backgroundColor={getValue(`backgroundColor.${variant}`)}
-      css={`
-        position: relative;
-        border: 1px solid ${getValue(`borderColor.${variant}`)};
-        &::before {
-          position: absolute;
-          content: '';
-          top: 0;
-          left: 0;
-          width: 6px;
-          height: 100%;
-          background-color: ${getValue(`borderColor.${variant}`)};
-          display: block;
-          border-top-left-radius: ${getValue('borderRadius')};
-          border-bottom-left-radius: ${getValue('borderRadius')};
-        }
-      `}
+      visible={visible}
+      fullWidth={fullWidth}
+      closable={closable}
+      onClose={onClose}
+      title={title}
+      action={action}
+      className={className}
     >
-      <Inline spacing={3} flex={1}>
-        <Stack>{AlertVariantIconsMap[variant]}</Stack>
-        {typeof children !== 'string' ? (
-          <Text>{children}</Text>
-        ) : (
-          <Text
-            dangerouslySetInnerHTML={{ __html: children as string }}
-            css={`
-              strong {
-                font-weight: bold;
-              }
-
-              ul {
-                list-style-type: disc;
-                margin-bottom: ${parseSpacing(4)};
-
-                li {
-                  margin-left: ${parseSpacing(5)};
-                }
-              }
-            `}
-          />
-        )}
-      </Inline>
-      {closable && (
-        <Button
-          variant={ButtonVariants.UNSTYLED}
-          iconName={Icons.TIMES_CIRCLE}
-          alignSelf="center"
-          borderRadius="50%"
-          width="30px"
-          height="30px"
-          display="inline-flex"
-          alignItems="center"
-          justifyContent="center"
-          css={`
-            color: ${getValue(`borderColor.${variant}`)};
-            cursor: pointer;
-            transition: background 0.2s;
-            &:hover {
-              background-color: inherit;
-              filter: brightness(95%);
-            }
-            &:active {
-              background-color: inherit;
-              filter: brightness(95%) saturate(150%);
-            }
-          `}
-          onClick={onClose}
-        ></Button>
-      )}
-    </Inline>
+      {children}
+    </AlertShadcn>
   );
 };
 

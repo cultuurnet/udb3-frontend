@@ -102,6 +102,7 @@ const GlobalStyle = createGlobalStyle`
     vertical-align: baseline;
   }
 
+  /* TODO: these resets break HTML content in components like Alert. Remove as part of GlobalStyle cleanup. */
   ol,
   ul {
     list-style: none;

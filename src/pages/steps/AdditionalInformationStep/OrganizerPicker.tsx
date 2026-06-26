@@ -20,7 +20,6 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { isNewEntry, NewEntry, Typeahead } from '@/ui/Typeahead';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { CULTUURKUUR_ORGANIZER_LABEL } from '@/utils/hasCultuurkuurOrganizerLabel';
@@ -28,8 +27,6 @@ import { parseOfferId } from '@/utils/parseOfferId';
 import { valueToArray } from '@/utils/valueToArray';
 
 const MAX_RECENT_USED_ORGANIZERS = 4;
-
-const getValueFromGlobalTheme = getValueFromTheme('global');
 
 const isUitpasOrganizer = (organizer: Organizer, uitpasLabels: string[]) => {
   if (!uitpasLabels || uitpasLabels.length === 0) return false;
@@ -80,7 +77,10 @@ const RecentUsedOrganizers = ({
           )}
         </Text>
       </Inline>
-      <Alert variant={AlertVariants.PRIMARY} width="41rem" maxWidth="95%">
+      <Alert
+        variant={AlertVariants.PRIMARY}
+        className="tw:w-164 tw:max-w-[95%]"
+      >
         {t(
           'create.additionalInformation.organizer.select_recent_used_organizer_info',
         )}
@@ -212,10 +212,7 @@ const OrganizerPicker = ({
           organizer ? (
             <Stack>
               <Inline alignItems="center" paddingY={3} spacing={3}>
-                <Icon
-                  name={Icons.CHECK_CIRCLE}
-                  color={getValueFromGlobalTheme('successColor')}
-                />
+                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
                 <Text>
                   {getOrganizerName(
                     organizer,

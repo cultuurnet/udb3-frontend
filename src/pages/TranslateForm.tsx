@@ -12,8 +12,8 @@ import {
   useGetOfferByIdQuery,
   useUpdateOfferFaqMutation,
 } from '@/hooks/api/offers';
+import { useToast } from '@/hooks/useToast';
 import { TranslationLanguages } from '@/i18n/index';
-import { useToast } from '@/pages/manage/movies/useToast';
 import RichTextEditor from '@/pages/RichTextEditor';
 import type { FaqItem } from '@/types/Offer';
 import { Box } from '@/ui/Box';
@@ -28,7 +28,6 @@ import { Stack } from '@/ui/Stack';
 import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
-import { Toast } from '@/ui/Toast';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { DescriptionPreview } from './preview/DescriptionPreview';
@@ -70,9 +69,9 @@ type TabTitleProps = {
 };
 
 const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
-  <Inline spacing={3}>
+  <Inline spacing={3} alignItems="center">
     {hasFilled && (
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
     )}
     <Text>{label}</Text>
   </Inline>
@@ -523,12 +522,7 @@ const TranslateForm = () => {
           : t('translate.title')}
       </Page.Title>
       <Page.Content>
-        <Toast
-          variant="success"
-          body={toast.message}
-          visible={!!toast.message}
-          onClose={() => toast.clear()}
-        />
+        {toast.component}
         <Tabs
           activeKey={tab}
           onSelect={(key) => setTab(key)}

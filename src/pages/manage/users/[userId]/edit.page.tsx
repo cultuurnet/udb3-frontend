@@ -15,6 +15,7 @@ import {
   useGetUserByIdQuery,
   UserById,
 } from '@/hooks/api/user';
+import { useToast } from '@/hooks/useToast';
 import { Role } from '@/types/Role';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
@@ -29,7 +30,6 @@ import { Table } from '@/ui/Table';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
-import { Toast } from '@/ui/Toast';
 import { Typeahead } from '@/ui/Typeahead';
 import { FetchError } from '@/utils/fetchFromApi';
 import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideProps';
@@ -47,8 +47,7 @@ const UserEditPage = () => {
   const [removeError, setRemoveError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [typeaheadKey, setTypeaheadKey] = useState(0);
-  const [toastMessage, setToastMessage] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const toast = useToast();
 
   const addUserToRoleMutation = useAddUserToRoleMutation({
     onSuccess: () => {
@@ -110,11 +109,6 @@ const UserEditPage = () => {
     setShowRemoveModal(true);
   };
 
-  const showSuccessToast = (message: string) => {
-    setToastMessage(message);
-    setShowToast(true);
-  };
-
   const handleRemoveConfirm = async () => {
     if (!user || !selectedRole) return;
 
@@ -124,7 +118,7 @@ const UserEditPage = () => {
         roleId: selectedRole!.uuid,
         userId: user.uuid,
       });
-      showSuccessToast(
+      toast.show(
         t('users.edit.success.role_deleted', {
           roleName: selectedRole?.name,
         }),
@@ -144,7 +138,7 @@ const UserEditPage = () => {
         roleId: role.uuid,
         userId: user.uuid,
       });
-      showSuccessToast(
+      toast.show(
         t('users.edit.success.role_added', {
           roleName: role?.name,
         }),
@@ -199,12 +193,7 @@ const UserEditPage = () => {
     <Page>
       <Page.Title>{t('users.edit.title')}</Page.Title>
       <Page.Content>
-        <Toast
-          variant="success"
-          body={toastMessage}
-          visible={showToast}
-          onClose={() => setShowToast(false)}
-        />
+        {toast.component}
         <Modal
           variant={ModalVariants.QUESTION}
           visible={showRemoveModal}

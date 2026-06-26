@@ -104,7 +104,7 @@ const OrganizersPreview = () => {
                 {isOwnershipRequested && !isSuccessAlertVisible && (
                   <Alert
                     variant={AlertVariants.PRIMARY}
-                    marginBottom={4}
+                    className="tw:mb-4"
                     fullWidth
                   >
                     {t('organizers.ownerships.request.pending', {

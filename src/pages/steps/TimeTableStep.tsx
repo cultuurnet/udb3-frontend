@@ -88,7 +88,7 @@ const TimeTableStep = ({
         />
       </Box>
       {errors?.timeTable && (
-        <Alert visible variant={AlertVariants.DANGER} maxWidth="53rem">
+        <Alert visible variant={AlertVariants.DANGER} className="tw:max-w-212">
           {t(
             `movies.create.validation_messages.timeTable.${errors.timeTable.type}`,
           )}

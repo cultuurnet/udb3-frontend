@@ -16,6 +16,11 @@ const meta: Meta<typeof Alert> = {
       control: { type: 'select' },
       options: Object.values(AlertVariants),
     },
+    action: {
+      control: false,
+      description:
+        'Optional action element rendered below the description. Shadcn implementation only.',
+    },
   },
 };
 
@@ -62,6 +67,44 @@ export const Danger: Story = {
   args: {
     variant: AlertVariants.DANGER,
     children: 'A Danger Alert',
+    ...commonArgs,
+  },
+};
+
+export const WithAction: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only available in the shadcn implementation (requires `SHADCN_MIGRATION` feature flag).',
+      },
+    },
+  },
+  render: () => (
+    <Alert
+      variant={AlertVariants.DANGER}
+      title="Something went wrong"
+      action={<a href="#">Retry</a>}
+      visible
+    >
+      Your changes could not be saved. Please try again.
+    </Alert>
+  ),
+};
+
+export const WithTitle: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only available in the shadcn implementation (requires `SHADCN_MIGRATION` feature flag).',
+      },
+    },
+  },
+  args: {
+    variant: AlertVariants.PRIMARY,
+    title: 'Something needs your attention',
+    children: 'Check the details below and take the necessary action.',
     ...commonArgs,
   },
 };
