@@ -207,6 +207,14 @@ const PriceInformation = ({
 
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
+
+  const eventTypeId = offer?.terms?.find(
+    (term) => term.domain === 'eventtype',
+  )?.id;
+
+  const boaAlertI18nKey = `create*additionalInformation*price_info*boa*${eventTypeId}`;
+  const hasBoaAlert =
+    !!eventTypeId && i18n.exists(boaAlertI18nKey, { keySeparator: '*' });
   const rates = watch('rates');
   const ratesRef = useRef(rates);
 
@@ -598,9 +606,16 @@ const PriceInformation = ({
               )}
             </Inline>
           </Stack>
-          <Alert variant={AlertVariants.PRIMARY}>
-            {t('create.additionalInformation.price_info.global_info')}
-          </Alert>
+          <Stack spacing={3} maxWidth="27rem">
+            {hasBoaAlert && (
+              <Alert variant={AlertVariants.PRIMARY} fullWidth>
+                {t(boaAlertI18nKey, { keySeparator: '*' })}
+              </Alert>
+            )}
+            <Alert variant={AlertVariants.PRIMARY} fullWidth>
+              {t('create.additionalInformation.price_info.global_info')}
+            </Alert>
+          </Stack>
         </Inline>
         <Stack spacing={4}>
           {isCultuurkuurAlertVisible && (
