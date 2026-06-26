@@ -78,13 +78,13 @@ const AlertShadcn = ({
         className,
       )}
     >
-      <div className="tw:flex tw:items-start tw:gap-3">
+      <div className={cn('tw:flex tw:gap-3', title ? 'tw:items-start' : 'tw:items-center')}>
         {icon && (
           <Icon
             name={icon.name}
-            width={14}
-            height={14}
-            className={cn(!title && 'tw:mt-0.5', 'tw:shrink-0', icon.className)}
+            width={18}
+            height={18}
+            className={cn('tw:shrink-0', icon.className)}
           />
         )}
         <div className="tw:flex-1 tw:min-w-0">
@@ -108,12 +108,12 @@ const AlertShadcn = ({
           aria-label={t('common.close')}
           onClick={onClose}
           className={cn(
-            'tw:absolute tw:right-2 tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/10',
-            title ? 'tw:top-2' : 'tw:top-2.5',
+            'tw:absolute tw:right-2 tw:flex tw:items-center tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/10',
+            title ? 'tw:top-2' : 'tw:top-1/2 tw:-translate-y-1/2',
             icon?.className,
           )}
         >
-          <Icon name={Icons.TIMES} width={14} height={14} />
+          <Icon name={Icons.TIMES} width={16} height={16} />
         </button>
       )}
     </ShadcnAlert>
