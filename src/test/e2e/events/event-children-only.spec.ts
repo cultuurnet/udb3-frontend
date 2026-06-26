@@ -63,15 +63,9 @@ test.describe('Children-only audience section', () => {
       .getByRole('button', { name: new RegExp(`^${age.seniors}`) })
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
-
-    // "Jongeren 16-26" → min > 12 → hidden
-    await page
-      .getByRole('button', { name: new RegExp(`^${age.youngsters}`) })
-      .click();
-    await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
-  test('appears when the age range overlaps with the BOA range (2-12)', async ({
+  test('appears when the age range overlaps with the BOA range (2-16)', async ({
     page,
     eventEditUrl,
   }) => {
@@ -95,9 +89,15 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // "Tieners 12-15" → min = 12 → visible (overlaps at 12)
+    // "Tieners 12-15" → min = 12 ≤ 16 → visible
     await page
       .getByRole('button', { name: new RegExp(`^${age.teenagers}`) })
+      .click();
+    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
+
+    // "Jongeren 16-26" → min = 16 ≤ 16 → visible (overlaps at 16)
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.youngsters}`) })
       .click();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
   });
@@ -111,14 +111,14 @@ test.describe('Children-only audience section', () => {
     const fromInput = page.getByLabel(age.from, { exact: true });
     const tillInput = page.getByLabel(age.till, { exact: true });
 
-    // Custom range 8-15 → min ≤ 12, max ≥ 2 → visible
+    // Custom range 8-15 → min ≤ 16, max ≥ 2 → visible
     await fromInput.fill('8');
     await tillInput.fill('15');
     await tillInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // Custom range 13-20 → min > 12 → hidden
-    await fromInput.fill('13');
+    // Custom range 17-20 → min > 16 → hidden
+    await fromInput.fill('17');
     await tillInput.fill('20');
     await tillInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
@@ -269,7 +269,7 @@ test.describe('Children-only audience section', () => {
     ).toBeHidden();
   });
 
-  test('age outside 2–12 while "kinderen alleen": confirm resets audience and saves the new age', async ({
+  test('age outside 2–16 while "kinderen alleen": confirm resets audience and saves the new age', async ({
     page,
     eventEditUrl,
     eventId,
@@ -329,7 +329,7 @@ test.describe('Children-only audience section', () => {
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
-  test('age outside 2–12 while "kinderen alleen": cancel keeps the previous age and audience', async ({
+  test('age outside 2–16 while "kinderen alleen": cancel keeps the previous age and audience', async ({
     page,
     eventEditUrl,
     eventId,
