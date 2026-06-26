@@ -66,7 +66,8 @@ test.describe.serial('Event translation', () => {
       await expect(
         page.getByText(`Titel (${lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').click();
+      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
@@ -92,7 +93,8 @@ test.describe.serial('Event translation', () => {
       await expect(
         page.getByText(`Beschrijving (${lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').click();
+      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
@@ -118,7 +120,8 @@ test.describe.serial('Event translation', () => {
       await faqContainer.getByRole('textbox', { name: 'rdw-editor' }).blur();
 
       await expect(page.getByText('FAQ succesvol bijgewerkt')).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').click();
+      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(

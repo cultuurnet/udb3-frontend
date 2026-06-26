@@ -326,6 +326,7 @@ const changeOfferCalendar = async ({
   opens,
   closes,
   scope,
+  bookingAvailability,
 }) => {
   return fetchFromApi({
     path: `/${scope}/${id.toString()}/calendar`,
@@ -349,6 +350,9 @@ const changeOfferCalendar = async ({
         dayOfWeek,
         opens,
         closes,
+        ...(bookingAvailability?.capacity !== undefined && {
+          bookingAvailability,
+        }),
       }),
       headers,
     },

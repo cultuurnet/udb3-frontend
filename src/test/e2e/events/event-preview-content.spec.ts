@@ -1,7 +1,8 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 import nl from '../../../i18n/nl.json';
+import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 const calendar = nl.create.calendar;
@@ -23,6 +24,11 @@ const dummyEvent = {
   bookingEmail: `booking-${timestamp}@example.com`,
   bookingPhone: '+32123456789',
   bookingUrl: 'https://www.example.com',
+  bookingUrlLabel: 'buy',
+  bookingUrlLabelText:
+    nl.create.additionalInformation.booking_info.url_type_labels.buy,
+  bookingCapacity: '100',
+  bookingAvailabilityStatus: nl.bookingAvailability.available,
   imageDescription: 'Testafbeelding beschrijving',
   imageCopyright: 'Test copyright',
   video: 'https://www.youtube.com/watch?v=lkIFF4maKMU',
@@ -173,6 +179,9 @@ test.describe.serial('Event Preview Content', () => {
 
     await page.locator('#offer-link').fill(dummyEvent.bookingUrl);
     await page.locator('#offer-link').blur();
+    await page
+      .locator('#offer-url-label')
+      .selectOption(dummyEvent.bookingUrlLabel);
 
     await page.getByRole('tab', { name: 'Labels' }).click();
     await page.getByLabel('Verfijn met labels').fill(dummyEvent.label);
@@ -181,16 +190,16 @@ test.describe.serial('Event Preview Content', () => {
     await page
       .getByRole('button', { name: new RegExp(`^${age.kids}`) })
       .click();
-    await expect(page.getByText(age.audience.question)).toBeVisible();
+    await expect(page.getByText(age.children_only.question)).toBeVisible();
 
-    const audiencePut = page.waitForResponse(
+    const childrenOnlyPut = page.waitForResponse(
       (res) =>
-        res.url().includes('/audience') &&
+        res.url().includes('/children-only') &&
         res.request().method() === 'PUT' &&
         res.ok(),
     );
-    await page.locator('#audience-children-only').click();
-    await audiencePut;
+    await page.locator('#children-only').click();
+    await childrenOnlyPut;
 
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
     await page.waitForURL(/\/events\/[a-f0-9-]+/);
@@ -305,6 +314,14 @@ test.describe.serial('Event Preview Content', () => {
     await expect(bookingCell.first()).toContainText(dummyEvent.bookingEmail);
     await expect(bookingCell.first()).toContainText(dummyEvent.bookingPhone);
     await expect(bookingCell.first()).toContainText(dummyEvent.bookingUrl);
+    await expect(
+      bookingCell.first().getByRole('link', { name: dummyEvent.bookingUrl }),
+    ).toBeVisible();
+    await expect(
+      bookingCell.first().getByRole('link', {
+        name: dummyEvent.bookingUrlLabelText,
+      }),
+    ).toBeVisible();
   });
 
   test('shows contact info', async ({ page }) => {
@@ -337,5 +354,71 @@ test.describe.serial('Event Preview Content', () => {
         'td:nth-child(2)',
       ),
     ).toContainText(dummyEvent.video);
+  });
+});
+
+test.describe.serial('Event Preview Booking Info - Single Date', () => {
+  let singleDateEventPreviewUrl: string;
+  let bookingInfoCell: Locator;
+
+  test.beforeAll(async ({ browser, baseURL }) => {
+    test.setTimeout(60_000);
+
+    const context = await browser.newContext();
+    await context.addCookies(cookies);
+    const page = await context.newPage();
+    suppressHydrationErrors(page);
+
+    await createBasicEvent(
+      page,
+      baseURL!,
+      `E2E Preview Booking Info Test ${timestamp}`,
+      addDays(new Date(), 1),
+    );
+
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await page.locator('#offer-link').fill(dummyEvent.bookingUrl);
+    await page.locator('#offer-link').blur();
+    await page
+      .locator('#offer-url-label')
+      .selectOption(dummyEvent.bookingUrlLabel);
+    await page.locator('#offer-max-capacity').fill(dummyEvent.bookingCapacity);
+    await page.locator('#offer-max-capacity').blur();
+
+    await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+    await page.waitForURL(/\/events\/[a-f0-9-]+/);
+
+    const eventId = page.url().match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
+    singleDateEventPreviewUrl = `/events/${eventId}`;
+
+    await context.close();
+  });
+
+  test.beforeEach(async ({ context, page }) => {
+    await context.addCookies(cookies);
+    suppressHydrationErrors(page);
+    await page.goto(singleDateEventPreviewUrl);
+    await page.getByRole('button', { name: 'Bewerken' }).waitFor();
+
+    bookingInfoCell = getRowByLabel(
+      page,
+      page.locator('section table.details-table').first(),
+      nl.preview.labels.booking_info,
+    ).locator('td:nth-child(2)');
+  });
+
+  test('shows booking info card with link, capacity and availability status', async () => {
+    await expect(bookingInfoCell.first()).toContainText(dummyEvent.bookingUrl);
+    await expect(
+      bookingInfoCell
+        .first()
+        .getByRole('link', { name: dummyEvent.bookingUrlLabelText }),
+    ).toBeVisible();
+    await expect(bookingInfoCell.first()).toContainText(
+      dummyEvent.bookingCapacity,
+    );
+    await expect(bookingInfoCell.first()).toContainText(
+      dummyEvent.bookingAvailabilityStatus,
+    );
   });
 });

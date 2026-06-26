@@ -2,16 +2,11 @@ import { format, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
 import { BirthdateRange } from '@/types/Offer';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getGlobalValue = getValueFromTheme('global');
-
 const formatCustomAgeRange = (ageRange: string) => {
   const [min, max] = ageRange.split('-');
   if (min && !max) {
@@ -22,7 +17,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 
 type Props = {
   typicalAgeRange: string;
-  audienceType?: AudienceType;
+  childrenOnly?: boolean;
   birthdateRange?: BirthdateRange;
 };
 
@@ -31,7 +26,7 @@ const ChildrenOnlyLabel = () => {
 
   return (
     <Inline alignItems="center" spacing={2}>
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       <Text>{t('preview.children_only')}</Text>
     </Inline>
   );
@@ -39,27 +34,26 @@ const ChildrenOnlyLabel = () => {
 
 const AgePreview = ({
   typicalAgeRange,
-  audienceType,
+  childrenOnly,
   birthdateRange,
 }: Props) => {
   const { t } = useTranslation();
 
-  const hasAgeInfo = typicalAgeRange;
+  const hasAgeInfo = typicalAgeRange || childrenOnly || birthdateRange;
 
   if (!hasAgeInfo) return null;
-
-  if (typicalAgeRange === '-' || typicalAgeRange === '0-') {
-    return <Text>{t('create.name_and_age.age.all')}</Text>;
-  }
 
   const ageRangeLabelKey = Object.keys(AgeRanges).find((key) => {
     const ageRange = AgeRanges[key];
     return ageRange.apiLabel === typicalAgeRange;
   });
 
-  const ageText = AgeRanges[ageRangeLabelKey]
-    ? AgeRanges[ageRangeLabelKey].label
-    : formatCustomAgeRange(typicalAgeRange);
+  const isAllAges = typicalAgeRange === '-' || typicalAgeRange === '0-';
+  const rangeLabel = typicalAgeRange
+    ? (AgeRanges[ageRangeLabelKey]?.label ??
+      formatCustomAgeRange(typicalAgeRange))
+    : null;
+  const ageText = isAllAges ? t('create.name_and_age.age.all') : rangeLabel;
 
   const formattedFrom = birthdateRange?.from
     ? format(parse(birthdateRange.from, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy')
@@ -70,7 +64,7 @@ const AgePreview = ({
 
   return (
     <Stack spacing={2}>
-      <Text>{t('preview.ages', { ages: ageText })}</Text>
+      {ageText && <Text>{t('preview.ages', { ages: ageText })}</Text>}
       {formattedFrom && formattedTo && (
         <Text>
           <Trans
@@ -80,7 +74,7 @@ const AgePreview = ({
           />
         </Text>
       )}
-      {audienceType === AudienceTypes.CHILDREN_ONLY && <ChildrenOnlyLabel />}
+      {childrenOnly && <ChildrenOnlyLabel />}
     </Stack>
   );
 };

@@ -46,7 +46,7 @@ const BackButton = ({
       title={buttonText.toString()}
       iconName={Icons.ARROW_LEFT}
       css={`
-        .svg-inline--fa {
+        svg {
           width: ${parseDimension(iconWidth)};
           height: ${parseDimension(iconHeight)};
           margin-right: 1rem;

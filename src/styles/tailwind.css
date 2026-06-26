@@ -54,6 +54,7 @@
   --color-primary-foreground: #ffffff; /* udb-white */
   --color-secondary: #6a777b; /* udb-main-grey */
   --color-secondary-foreground: #ffffff;
+  --color-warning: #e69336; /* udb-warning */
   --color-success: #6bcd69; /* udb-main-positive-green */
   --color-success-foreground: #ffffff;
   --color-success-muted: #f3fcf7; /* udb-main-light-green */

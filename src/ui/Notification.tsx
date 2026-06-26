@@ -1,67 +1,41 @@
 import { ReactElement } from 'react';
-import { Toast as BootstrapToast } from 'react-bootstrap';
-import { css } from 'styled-components';
 
-import { parseSpacing } from './Box';
-import { Inline } from './Inline';
-import { Stack } from './Stack';
-import { Text } from './Text';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { cn } from '@/ui/shadcn/utils';
 
-const getValue = getValueFromTheme('toast');
-const getGlobalValue = getValueFromTheme('global');
-
-const commonCss = css`
-  &.toast {
-    border-radius: ${getGlobalBorderRadius};
-    border: none;
-
-    max-width: none;
-
-    background-color: white;
-
-    position: fixed;
-    right: ${parseSpacing(4)()};
-    bottom: ${parseSpacing(6.5)()};
-
-    z-index: ${getValue('zIndex')};
-
-    min-width: fit-content;
-
-    box-shadow: ${getGlobalValue('boxShadow.heavy')};
-  }
-`;
+import { NotificationLegacy } from './NotificationLegacy';
 
 type Props = {
   icon?: ReactElement;
   header?: ReactElement;
   body: ReactElement;
+  className?: string;
 };
 
-const Notification = ({ icon, header, body }: Props) => {
-  return (
-    <BootstrapToast
-      css={css`
-        ${commonCss}
-      `}
-    >
-      <Inline
-        spacing={4}
-        paddingTop={4}
-        paddingBottom={4}
-        paddingRight={5}
-        paddingLeft={4}
-        alignItems="center"
-        justifyContent="center"
-        color={getValue('textColor.dark')}
-      >
-        {icon && <Stack alignItems="center">{icon}</Stack>}
-        <Stack>
-          {header}
-          <Text fontSize="1rem">{body}</Text>
-        </Stack>
-      </Inline>
-    </BootstrapToast>
+const NotificationShadcn = ({ icon, header, body, className }: Props) => (
+  <div
+    className={cn(
+      'tw:fixed tw:right-4 tw:bottom-24 tw:min-w-85 tw:rounded tw:bg-white tw:z-5 tw:shadow-heavy',
+      className,
+    )}
+  >
+    <div className="tw:flex tw:items-center tw:justify-center tw:gap-4 tw:pt-4 tw:pb-4 tw:pr-8 tw:pl-4 tw:text-foreground">
+      {icon && <div className="tw:flex tw:items-center">{icon}</div>}
+      <div className="tw:flex tw:flex-col">
+        {header}
+        {body}
+      </div>
+    </div>
+  </div>
+);
+
+const Notification = (props: Props) => {
+  const [isShadcnMigration] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
+
+  return isShadcnMigration ? (
+    <NotificationShadcn {...props} />
+  ) : (
+    <NotificationLegacy {...props} />
   );
 };
 

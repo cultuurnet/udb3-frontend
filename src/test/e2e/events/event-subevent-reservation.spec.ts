@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
+import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 type TestFixtures = {
@@ -34,6 +35,19 @@ const waitForSubEventsPatch = (page: Page) =>
       response.request().method() === 'PATCH',
   );
 
+const switchToSpecificReservations = (page: Page) =>
+  page
+    .getByText(
+      nl.create.additionalInformation.booking_info.reservation_type_multiple,
+    )
+    .click();
+
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+  ]);
+});
+
 test.describe('Per-subEvent reservation info', () => {
   test('sets reservation info per subEvent (card variant)', async ({
     page,
@@ -47,6 +61,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await expect(page.locator('#subevent-0-link')).toBeVisible();
     await expect(page.locator('#subevent-1-link')).toBeVisible();
@@ -73,6 +88,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     for (const [index, reservation] of reservations.entries()) {
       await expect(page.locator(`#subevent-${index}-link`)).toHaveValue(
@@ -93,6 +109,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await page.locator('#subevent-0-max-capacity').fill(capacity);
     let patch = waitForSubEventsPatch(page);
@@ -122,6 +139,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
       capacity,
@@ -145,6 +163,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // subEvent 0 keeps its info, subEvent 1 is the one that gets deleted.
     for (const [index, reservation] of [kept, removed].entries()) {
@@ -184,14 +203,13 @@ test.describe('Per-subEvent reservation info', () => {
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
 
-    // The deleted subEvent and its reservation info are gone...
+    // Both subevent cards are gone — single date shows the offer-level card.
+    await expect(page.locator('#subevent-0-link')).toHaveCount(0);
     await expect(page.locator('#subevent-1-link')).toHaveCount(0);
 
-    // The remaining subEvent keeps its own reservation info.
-    await expect(page.locator('#subevent-0-link')).toHaveValue(kept.url);
-    await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
-      kept.capacity,
-    );
+    // The offer-level card is shown with cleared booking info.
+    await expect(page.locator('#offer-link')).toBeVisible();
+    await expect(page.locator('#offer-link')).toHaveValue('');
   });
 
   test('shows a new reservation section when a subEvent is added in the calendar', async ({
@@ -201,6 +219,7 @@ test.describe('Per-subEvent reservation info', () => {
   }) => {
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // The fixture event has two subEvents, so two reservation cards.
     await expect(page.locator('#subevent-0-link')).toBeVisible();
@@ -244,6 +263,7 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     for (const [index, url] of links.entries()) {
       await page.locator(`#subevent-${index}-link`).fill(url);
@@ -272,10 +292,50 @@ test.describe('Per-subEvent reservation info', () => {
 
     await page.reload();
     await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await switchToSpecificReservations(page);
 
     // Only two subEvents remain, keeping the first and last links.
     await expect(page.locator('#subevent-2-link')).toHaveCount(0);
     await expect(page.locator('#subevent-0-link')).toHaveValue(links[0]);
     await expect(page.locator('#subevent-1-link')).toHaveValue(links[2]);
+  });
+
+  test('saves the reservation period without offer-level contact info', async ({
+    page,
+    baseURL,
+    eventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${eventId}/edit`);
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    await page.getByLabel('Reservatieperiode').check();
+
+    const startInput = page.locator(
+      '#reservation-date-pickerdate-period-picker-start',
+    );
+    const endInput = page.locator(
+      '#reservation-date-pickerdate-period-picker-end',
+    );
+
+    await startInput.fill(addDays(new Date(), 7).toLocaleDateString('nl-BE'));
+    await startInput.press('Enter');
+
+    // The period save fires once both dates are committed.
+    const bookingInfoPut = page.waitForResponse(
+      (response) =>
+        response.url().includes('/bookingInfo') &&
+        response.request().method() === 'PUT',
+    );
+    await endInput.fill(addDays(new Date(), 14).toLocaleDateString('nl-BE'));
+    await endInput.press('Enter');
+    await bookingInfoPut;
+
+    await page.reload();
+    await page.getByRole('tab', { name: 'Reservatie' }).click();
+
+    // The period persisted: the toggle is on and the dates are populated.
+    await expect(page.getByLabel('Reservatieperiode')).toBeChecked();
+    await expect(startInput).not.toHaveValue('');
+    await expect(endInput).not.toHaveValue('');
   });
 });

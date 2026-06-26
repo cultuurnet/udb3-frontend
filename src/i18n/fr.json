@@ -351,26 +351,20 @@
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
         "error_no_min_age": "Veuillez entrer un âge minimum",
         "error_invalid": "L'âge spécifié n'est pas valide.",
-        "audience": {
+        "children_only": {
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants",
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
-          "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer.",
           "departure_places_warning_modal": {
-            "title": "Supprimer les lieux de départ",
-            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          },
-          "members_warning_modal": {
-            "title": "Attention : cette action modifie les informations d'accessibilité",
-            "body": "Une activité 'uniquement pour les enfants' ne peut pas être limitée aux membres uniquement. Voulez-vous continuer ? L'accès sera alors défini automatiquement sur 'Pour tout le monde'.",
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           },
           "age_range_warning_modal": {
             "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
-            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants'. L'accès sera automatiquement défini sur 'Pour tout le monde' et les lieux de départ éventuels seront supprimés.",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           }
@@ -408,8 +402,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Uniquement pour les enfants",
-        "children_only_warning": "Cette activité est définie comme 'Uniquement pour les enfants'.<br/>Pour modifier l'accès, allez à <strong>Données de base</strong> &rsaquo; <strong>Pour qui cette activité est-elle organisée ?</strong>.<br/>Choisissez 'Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur'.",
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
         "members": "Seulement pour des membres",
@@ -441,7 +433,10 @@
         "link": "Lien",
         "max_capacity": "Capacité maximale",
         "capacity_error": "Saisissez un nombre valide (0 ou plus).",
+        "max_capacity_info": "Par capacité maximale, nous entendons le nombre maximum de personnes pouvant participer à votre activité.",
         "status": "Statut",
+        "section_title": "Indiquez comment les gens peuvent réserver une place",
+        "contact_details": "Coordonnées",
         "url_label_dropdown_label": "Texte sur le bouton de réservation",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
@@ -449,6 +444,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
+        "reservation_type_single": "Lien général",
+        "reservation_type_multiple": "Liens par moment/période",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",

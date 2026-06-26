@@ -351,26 +351,20 @@
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
-        "audience": {
+        "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder",
           "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
-          "mutation_error": "Beim Speichern der Zielgruppe ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+          "mutation_error": "Beim Speichern Ihrer Auswahl ist ein Fehler aufgetreten. Bitte erneut versuchen.",
           "departure_places_warning_modal": {
-            "title": "Abfahrtsorte löschen",
-            "body": "Achtung: Mit dieser Aktion werden die von Ihnen angegebenen Abfahrtsorte gelöscht.",
-            "confirm": "Fortfahren",
-            "cancel": "Abbrechen"
-          },
-          "members_warning_modal": {
-            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
-            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
+            "title": "Achtung, diese Aktion löscht Ihre Abfahrtsorte",
+            "body": "Sie können Abfahrtsorte nur bei Aktivitäten angeben, die sich ausschließlich an Kinder richten.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           },
           "age_range_warning_modal": {
             "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
-            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder' und eventuelle Abfahrtsorte werden gelöscht.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           }
@@ -406,8 +400,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Nur für Kinder",
-        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",
@@ -439,7 +431,10 @@
         "link": "Link",
         "max_capacity": "Maximale Kapazität",
         "capacity_error": "Geben Sie eine gültige Anzahl ein (0 oder mehr).",
+        "max_capacity_info": "Mit maximaler Kapazität meinen wir die maximale Anzahl von Personen, die an deiner Aktivität teilnehmen können.",
         "status": "Status",
+        "section_title": "Erkläre, wie Menschen einen Platz reservieren können",
+        "contact_details": "Kontaktdaten",
         "url_label_dropdown_label": "Text auf der Reservierungsschaltfläche",
         "url_type_labels": {
           "subscribe": "Melden Sie sich an",
@@ -447,6 +442,8 @@
           "buy": "Tickets kaufen",
           "reserve": "Plätze reservieren"
         },
+        "reservation_type_single": "Allgemeiner Link",
+        "reservation_type_multiple": "Links pro Moment/Zeitraum",
         "reservation_period": {
           "title": "Wann können sich die Leute anmelden?",
           "toggle": "Reservierungszeitraum",

@@ -109,9 +109,9 @@ const StepWrapper = ({
       spacing={4}
       {...getStackProps(props)}
     >
-      <Title color={getValue('title.color')} alignItems="center" spacing={3}>
+      <Title className="tw:mb-5 tw:flex tw:items-center tw:gap-2">
         <NumberIndicator>{stepNumber}</NumberIndicator>
-        <Text lineHeight="1rem">{title}</Text>
+        <Text>{title}</Text>
       </Title>
       {children}
     </Stack>

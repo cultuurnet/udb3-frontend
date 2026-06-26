@@ -146,7 +146,7 @@ const LinkLegacy = ({
 
   const content = (
     <Inline justifyContent="space-between" width="100%">
-      <Inline spacing={3}>
+      <Inline spacing={3} alignItems="center">
         {iconName && <Icon name={iconName} />}
         {customChildren
           ? children
