@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { CalendarType } from '@/constants/CalendarType';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
@@ -31,6 +32,7 @@ import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import { ImagePreview } from '@/pages/preview/ImagePreview';
 import { LocationPreview } from '@/pages/preview/LocationPreview';
+import { ReservationPreview } from '@/pages/preview/ReservationPreview';
 import {
   columns,
   DetailsTabContent,
@@ -107,15 +109,8 @@ const Preview = () => {
     (offerPermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const {
-    mainLanguage,
-    name,
-    terms,
-    typicalAgeRange,
-    mediaObject,
-    videos,
-    audience,
-  } = offer;
+  const { mainLanguage, name, terms, typicalAgeRange, mediaObject, videos } =
+    offer;
 
   const title = getLanguageObjectOrFallback<string>(
     name,
@@ -339,7 +334,9 @@ const Preview = () => {
             value: (
               <Stack>
                 <Text>{t('preview.educational')}</Text>
-                <Alert marginY={4}>{t('preview.educational_info')}</Alert>
+                <Alert className="tw:my-4">
+                  {t('preview.educational_info')}
+                </Alert>
               </Stack>
             ),
           },
@@ -368,7 +365,7 @@ const Preview = () => {
       value: (
         <AgePreview
           typicalAgeRange={typicalAgeRange}
-          audienceType={audience?.audienceType}
+          childrenOnly={isEvent(offer) ? offer.childrenOnly : undefined}
           birthdateRange={offer.birthdateRange}
         />
       ),
@@ -406,12 +403,12 @@ const Preview = () => {
             />
           )}
           {isLessonSeries && (
-            <Alert width="100%" marginTop={5} marginBottom={4}>
+            <Alert fullWidth className="tw:mt-8 tw:mb-4">
               <Text>{t('preview.info_lesson_series')}</Text>
             </Alert>
           )}
           {isHolidayCamp && (
-            <Alert width="100%" marginTop={5} marginBottom={4}>
+            <Alert fullWidth className="tw:mt-8 tw:mb-4">
               <Text>{t('preview.info_holiday_camp')}</Text>
             </Alert>
           )}
@@ -423,7 +420,18 @@ const Preview = () => {
     { field: t('preview.labels.booking'), value: <BookingPreview /> },
     {
       field: t('preview.labels.booking_info'),
-      value: (
+      value: isBoaEnabled ? (
+        <ReservationPreview
+          bookingInfo={offer.bookingInfo}
+          bookingAvailability={offer.bookingAvailability}
+          subEvents={offer.subEvent ?? []}
+          mainLanguage={offer.mainLanguage}
+          canShowBookingAvailability={
+            offer.calendarType === CalendarType.SINGLE ||
+            offer.calendarType === CalendarType.MULTIPLE
+          }
+        />
+      ) : (
         <BookingInfoPreview
           bookingInfo={offer.bookingInfo}
           mainLanguage={offer.mainLanguage}
@@ -472,7 +480,7 @@ const Preview = () => {
         <Inline>
           <Stack flex={3}>
             {isEdited && (
-              <Alert width="100%" marginBottom={4}>
+              <Alert fullWidth className="tw:mb-4">
                 <Text
                   css={`
                     b {

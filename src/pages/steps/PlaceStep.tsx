@@ -20,7 +20,6 @@ import { Inline } from '@/ui/Inline';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { isOneTimeSlotValid } from '@/ui/TimeTable';
 import { Typeahead } from '@/ui/Typeahead';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
@@ -28,8 +27,6 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { City } from '../CityPicker';
 import { PlaceAddModal } from '../PlaceAddModal';
 import { PlaceTypeahead } from './PlaceTypeahead';
-
-const getGlobalValue = getValueFromTheme('global');
 
 type PlaceStepProps = StackProps &
   StepProps & {
@@ -228,10 +225,7 @@ const PlaceStep = ({
 
           return (
             <Inline alignItems="center" spacing={3}>
-              <Icon
-                name={Icons.CHECK_CIRCLE}
-                color={getGlobalValue('successColor')}
-              />
+              <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
               <Text>
                 {getLanguageObjectOrFallback(
                   selectedPlace.name,

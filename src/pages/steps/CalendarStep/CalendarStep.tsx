@@ -86,6 +86,11 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
       scope,
     };
 
+    const bookingAvailability = queryClient.getQueryData<Offer>([
+      scope,
+      { id: offerId },
+    ])?.bookingAvailability;
+
     if (timeTable) {
       const subEvent = convertTimeTableToSubEvents(timeTable);
 
@@ -94,6 +99,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
         subEvent,
         calendarType:
           subEvent.length > 1 ? CalendarType.MULTIPLE : CalendarType.SINGLE,
+        bookingAvailability,
       });
 
       return;
@@ -102,6 +108,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
     await changeCalendarMutation.mutateAsync({
       ...common,
       ...calendar,
+      bookingAvailability,
     });
   };
 };
@@ -321,7 +328,7 @@ const CalendarStep = ({
       existingSubEvents &&
       Array.isArray(baseFormData.subEvent) &&
       existingSubEvents.length <= baseFormData.subEvent.length;
-    const formData = canPreserveReservationData
+    const preservedFormData = canPreserveReservationData
       ? {
           ...baseFormData,
           subEvent: baseFormData.subEvent.map((subEvent, index) => {
@@ -339,6 +346,23 @@ const CalendarStep = ({
           }),
         }
       : baseFormData;
+
+    const shouldClearSubEventBookingInfo =
+      existingSubEvents &&
+      existingSubEvents.length > 1 &&
+      Array.isArray(preservedFormData.subEvent) &&
+      preservedFormData.subEvent.length === 1;
+
+    const formData = shouldClearSubEventBookingInfo
+      ? {
+          ...preservedFormData,
+          subEvent: preservedFormData.subEvent.map((subEvent) => ({
+            ...subEvent,
+            bookingInfo: {},
+            bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
+          })),
+        }
+      : preservedFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,

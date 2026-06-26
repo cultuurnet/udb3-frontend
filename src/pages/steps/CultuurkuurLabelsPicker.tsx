@@ -50,7 +50,7 @@ const CultuurkuurLabelsPicker = ({
           marginBottom={hasPreselectedValues ? 0 : 4}
           onClick={() => setIsCultuurkuurModalVisible(true)}
         >
-          <Inline spacing={2}>
+          <Inline spacing={2} alignItems="center">
             <Icon name={Icons.PLUS_CIRCLE} />
             <span>{t(`cultuurkuur_modal.title.${labelsKey}`)}</span>
           </Inline>

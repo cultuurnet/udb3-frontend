@@ -77,6 +77,7 @@ type FormData = {
   audience?: {
     audienceType: AudienceType;
   };
+  childrenOnly?: boolean;
 };
 
 const getTerms = (typeAndTheme: FormDataUnion['typeAndTheme']) => {
@@ -180,6 +181,7 @@ const OfferForm = () => {
       audience: {
         audienceType: offer.audience?.audienceType,
       },
+      ...(isEvent(offer) && { childrenOnly: offer.childrenOnly ?? false }),
     };
   };
 
