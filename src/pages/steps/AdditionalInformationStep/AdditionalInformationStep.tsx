@@ -20,7 +20,6 @@ import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Tabs } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
 import { AccessibilityStep } from '../AccessibilityStep';
@@ -33,8 +32,6 @@ import { FormScore } from './FormScore';
 import { MediaStep } from './MediaStep';
 import { OrganizerStep } from './OrganizerStep';
 import { PriceInformation } from './PriceInformation';
-
-const getGlobalValue = getValueFromTheme('global');
 
 const AdditionalInformationStepVariant = {
   MOVIE: 'movie',
@@ -189,18 +186,12 @@ const TabTitle = ({
   const title = titleKey ? t(titleKey) : t(defaultTitleKey);
 
   return (
-    <Inline spacing={3} {...getInlineProps(props)}>
+    <Inline spacing={3} alignItems="center" {...getInlineProps(props)}>
       {validationStatus === ValidationStatus.SUCCESS && (
-        <Icon
-          name={Icons.CHECK_CIRCLE}
-          color={getGlobalValue('successColor')}
-        />
+        <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       )}
       {validationStatus === ValidationStatus.WARNING && (
-        <Icon
-          name={Icons.EXCLAMATION_CIRCLE}
-          color={getGlobalValue('warningIcon')}
-        />
+        <Icon name={Icons.EXCLAMATION_CIRCLE} className="tw:text-warning" />
       )}
       <Text>
         {scope === ScopeTypes.ORGANIZERS && field === Fields.MEDIA

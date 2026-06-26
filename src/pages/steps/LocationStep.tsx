@@ -48,7 +48,7 @@ import { Link } from '@/ui/Link';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { colors } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
@@ -80,8 +80,6 @@ const { publicRuntimeConfig } = getConfig();
 
 const CULTUURKUUR_LOCATION_ID = publicRuntimeConfig.cultuurKuurLocationId;
 const API_URL = publicRuntimeConfig.apiUrl;
-
-const getGlobalValue = getValueFromTheme('global');
 
 type LocationSuggestionProps = {
   locations: Place[];
@@ -782,10 +780,7 @@ const LocationStep = ({
           return renderFieldWithRecentLocations(
             <>
               <Inline alignItems="center" spacing={3} marginBottom={4}>
-                <Icon
-                  name={Icons.CHECK_CIRCLE}
-                  color={getGlobalValue('successColor')}
-                />
+                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
                 <Text>
                   {municipality.name}
                   {municipality.zip ? `, ${municipality.zip}` : ''}
@@ -827,7 +822,7 @@ const LocationStep = ({
                     <Inline alignItems="center" spacing={3}>
                       <Icon
                         name={Icons.CHECK_CIRCLE}
-                        color={getGlobalValue('successColor')}
+                        className="tw:text-success"
                       />
                       <Text>{field.value.streetAndNumber}</Text>
                       <Button
