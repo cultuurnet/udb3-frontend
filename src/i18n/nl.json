@@ -991,6 +991,11 @@
             "multiple_prices": "Let op: enkel het basistarief zal zichtbaar zijn voor je Cultuurkuur-activiteit. Andere tarieven worden niet weergegeven."
           }
         },
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Kan je voor deze speelpleinwerking inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Kan je voor deze kinderopvang inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "0.57.0.0.0": "Kan je voor dit kamp of deze vakantie inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe."
+        },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
           "unique_name": "De opgegeven naam in reeds gebruikt.",

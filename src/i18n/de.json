@@ -954,6 +954,11 @@
         "subtitle": "Wie hoch sind die Eintrittspreise?",
         "uitpas_error": "Der UiTPAS-Preis wird von UiTdatabank für Sie berechnet. Sie können diese nicht selbst hinzufügen.",
         "uitpas_info": "Der UiTPAS Opportunity-Tarif wird automatisch auf Basis des Basispreises und der aktiven Kartensysteme berechnet.",
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Kan je voor deze speelpleinwerking inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Kan je voor deze kinderopvang inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "0.57.0.0.0": "Kan je voor dit kamp of deze vakantie inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe."
+        },
         "validation_messages": {
           "matches": "Der angegebene Preis ist ungültig.",
           "unique_name": "Der angegebene Name wird bereits verwendet.",
