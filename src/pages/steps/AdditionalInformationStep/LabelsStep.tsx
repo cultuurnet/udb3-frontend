@@ -18,6 +18,7 @@ import {
 import { Label, Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -32,7 +33,6 @@ type LabelsStepProps = StackProps & TabContentProps;
 
 export const LABEL_PATTERN = /^[0-9a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ\-_\s]{1,49}$/;
 
-const getGlobalValue = getValueFromTheme('global');
 const getButtonValue = getValueFromTheme('button');
 
 function LabelsStep({
@@ -160,11 +160,9 @@ function LabelsStep({
               `}
             >
               <Text>{label}</Text>
-              <Icon
-                name={Icons.TIMES}
-                width="0.8rem"
-                height="0.8rem"
-                marginLeft={1}
+              <Button
+                variant={ButtonVariants.UNSTYLED}
+                className="tw:ml-1"
                 onClick={async () => {
                   await removeLabelMutation.mutateAsync({
                     id: offerId,
@@ -177,7 +175,9 @@ function LabelsStep({
                   );
                   handleInvalidateOrganizerQuery();
                 }}
-              />
+              >
+                <Icon name={Icons.TIMES} width={13} height={13} />
+              </Button>
             </Inline>
           ))}
         </Inline>

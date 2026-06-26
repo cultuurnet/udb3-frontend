@@ -21,7 +21,6 @@ import { Inline } from '@/ui/Inline';
 import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -31,8 +30,6 @@ import { CountryPicker } from './CountryPicker';
 import { PlaceTypeahead } from './PlaceTypeahead';
 
 const MAX_DEPARTURE_LOCATIONS = 20;
-
-const getGlobalValue = getValueFromTheme('global');
 
 type DepartureLocation = {
   city?: City;
@@ -58,7 +55,7 @@ const CollapsedSelection = ({
   clearLabel,
 }: CollapsedSelectionProps) => (
   <Inline alignItems="center" spacing={3}>
-    <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+    <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
     <Text>{label}</Text>
     <Button variant={ButtonVariants.LINK} onClick={onClear}>
       {clearLabel}

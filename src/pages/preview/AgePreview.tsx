@@ -7,10 +7,6 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getGlobalValue = getValueFromTheme('global');
-
 const formatCustomAgeRange = (ageRange: string) => {
   const [min, max] = ageRange.split('-');
   if (min && !max) {
@@ -30,7 +26,7 @@ const ChildrenOnlyLabel = () => {
 
   return (
     <Inline alignItems="center" spacing={2}>
-      <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('successColor')} />
+      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       <Text>{t('preview.children_only')}</Text>
     </Inline>
   );
