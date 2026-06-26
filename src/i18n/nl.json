@@ -361,26 +361,20 @@
         "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen",
         "error_invalid": "De opgegeven leeftijd is niet geldig.",
-        "audience": {
+        "children_only": {
           "question": "Voor wie is deze activiteit?",
           "children_only": "Voor kinderen alleen",
           "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
-          "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
+          "mutation_error": "Er ging iets mis bij het opslaan van je keuze. Probeer opnieuw.",
           "departure_places_warning_modal": {
             "title": "Let op, deze actie verwijdert je vertreklocaties",
             "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
             "confirm": "Doorgaan",
             "cancel": "Annuleren"
           },
-          "members_warning_modal": {
-            "title": "Let op: met deze actie wijzig je de toegankelijkheidsinformatie",
-            "body": "Een activiteit 'voor kinderen alleen' kan niet beperkt worden tot enkel leden. Wil je doorgaan? Dan zetten we de toegang automatisch op 'Voor iedereen'.",
-            "confirm": "Verdergaan",
-            "cancel": "Annuleren"
-          },
           "age_range_warning_modal": {
             "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
-            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen'. De toegang wordt automatisch ingesteld op 'Voor iedereen' en eventuele vertreklocaties worden verwijderd.",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen' en eventuele vertreklocaties worden verwijderd.",
             "confirm": "Verdergaan",
             "cancel": "Annuleren"
           }
@@ -427,8 +421,6 @@
       },
       "audience": {
         "title": "Toegang",
-        "childrenOnly": "Voor kinderen alleen",
-        "children_only_warning": "Deze activiteit is ingesteld als 'Voor kinderen alleen'.<br/>Om de toegang te wijzigen, ga je naar <strong>Basisgegevens</strong> &rsaquo; <strong>Voor wie is deze activiteit?</strong>.<br/>Kies daar 'Voor kinderen samen met hun familie of een andere begeleider'.",
         "education": "Specifiek voor scholen",
         "everyone": "Voor iedereen",
         "members": "Enkel voor leden",
@@ -473,6 +465,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
+        "reservation_type_single": "Algemene link",
+        "reservation_type_multiple": "Links per moment/periode",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",

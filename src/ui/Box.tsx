@@ -464,6 +464,7 @@ const reactPropTypes = [
   'onInput',
   'onSubmit',
   'onChange',
+  'onMouseDown',
   'dangerouslySetInnerHTML',
 ];
 
