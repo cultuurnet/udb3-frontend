@@ -66,7 +66,7 @@ const getInputValue = (e: FormEvent<HTMLInputElement>) =>
   (e.target as HTMLInputElement).value;
 
 const buildAgeRangeString = (min: string, max: string) =>
-  !min && !max ? '' : `${min}-${max}`;
+  min && max ? `${min}-${max}` : '';
 
 type AgeRangeStepProps = StackProps & StepProps;
 
