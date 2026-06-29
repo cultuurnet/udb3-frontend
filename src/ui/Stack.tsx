@@ -6,7 +6,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Box, BoxProps, boxPropTypes, getBoxProps, UIProp } from './Box';
 import { cn } from './shadcn/utils';
 import { StackLegacy } from './StackLegacy';
-import { getGapClass } from './tailwindGap';
+import { GAP_CLASS_BY_SPACING, getGapClass } from './tailwindGap';
 import type { BreakpointValues } from './theme';
 
 type StackProps = {
@@ -45,7 +45,9 @@ const Stack = forwardRef<HTMLElement, Props>((props, ref) => {
   // caller-provided `display`. Those cases fall back to the legacy version.
   const canUseShadcn =
     isShadcnMigrationEnabled &&
-    (props.spacing === undefined || typeof props.spacing === 'number') &&
+    (props.spacing === undefined ||
+      (typeof props.spacing === 'number' &&
+        props.spacing in GAP_CLASS_BY_SPACING)) &&
     props.display === undefined;
 
   return canUseShadcn ? (
