@@ -6,6 +6,7 @@ import type { Values } from '@/types/Values';
 import { Icon, Icons } from '@/ui/Icon';
 
 import { Box, parseSpacing } from './Box';
+import { Button, ButtonVariants } from './Button';
 import { getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const ToastVariants = {
@@ -101,7 +102,13 @@ const ToastLegacy = ({
           {icon && <Icon name={icon} className={`text-${variant} me-2`} />}
           {body}
         </span>
-        {onClose && <Icon name={Icons.TIMES} width={10} />}
+        {onClose && (
+          <Button
+            variant={ButtonVariants.UNSTYLED}
+            iconName={Icons.TIMES}
+            onClick={onClose}
+          />
+        )}
       </Box>
     </BootstrapToast>
   );
