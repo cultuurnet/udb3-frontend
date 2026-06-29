@@ -496,7 +496,7 @@ const CalendarOpeninghoursModal = ({
                   </Text>
                 )}
               {timesMissing && (
-                <Alert css="width: 100%;">
+                <Alert fullWidth>
                   {t(
                     'create.calendar.days.childcare.validation_messages.set_times_required',
                   )}

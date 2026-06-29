@@ -74,6 +74,7 @@ type EventArguments = {
   };
   openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
   openingHoursClosedDays?: OpeningHoursClosedDay[];
+  childrenOnly?: boolean;
 };
 type AddEventArguments = EventArguments & { headers: Headers };
 
@@ -105,6 +106,7 @@ const addEvent = async ({
   audience,
   openingHoursAdjustedDays,
   openingHoursClosedDays,
+  childrenOnly,
 }: AddEventArguments) =>
   fetchFromApi({
     path: '/events/',
@@ -124,7 +126,7 @@ const addEvent = async ({
         location,
         audienceType,
         attendanceMode,
-        typicalAgeRange,
+        ...(typicalAgeRange && { typicalAgeRange }),
         ...(birthdateRange?.from && birthdateRange?.to && { birthdateRange }),
         onlineUrl,
         mediaObject,
@@ -142,6 +144,7 @@ const addEvent = async ({
         ...(openingHoursClosedDays?.length > 0 && {
           openingHoursClosedDays,
         }),
+        ...(childrenOnly && { childrenOnly }),
       }),
     },
   });
@@ -817,6 +820,23 @@ const useChangeAudienceMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const changeChildrenOnly = async ({ headers, eventId, childrenOnly }) =>
+  fetchFromApi({
+    path: `/events/${eventId}/children-only`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ childrenOnly }),
+    },
+  });
+
+const useChangeChildrenOnlyMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeChildrenOnly,
+    mutationKey: 'events-change-children-only',
+    ...configuration,
+  });
+
 const changeAttendanceMode = async ({
   headers,
   eventId,
@@ -944,6 +964,7 @@ export {
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
   useChangeCalendarMutation,
+  useChangeChildrenOnlyMutation,
   useChangeDeparturePlacesMutation,
   useChangeLocationMutation,
   useChangeNameMutation,

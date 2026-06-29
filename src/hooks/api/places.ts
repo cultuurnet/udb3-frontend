@@ -469,7 +469,7 @@ const addPlace = async ({
         workflowStatus,
         startDate,
         endDate,
-        typicalAgeRange,
+        ...(typicalAgeRange && { typicalAgeRange }),
       }),
     },
   });

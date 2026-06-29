@@ -289,7 +289,7 @@ const ContactInfoStep = ({
         </Button>
       </Inline>
       {isCultuurkuurAlertVisible && (
-        <Alert variant={AlertVariants.WARNING} marginBottom={3}>
+        <Alert variant={AlertVariants.WARNING} className="tw:mb-2">
           {t('create.additionalInformation.contact_info.cultuurkuur.warning')}
         </Alert>
       )}

@@ -13,6 +13,13 @@
     "new_features": "Nieuw in UiTdatabank",
     "no_features": "Er zijn momenteel geen nieuwigheden."
   },
+  "boa": {
+    "title": "Welkom bij het piloottraject BOA in UiTdatabank",
+    "paragraph1": "Leuk dat je meedoet! Om de vernieuwde invoerschermen voor buitenschoolse opvang en activiteiten (BOA) te kunnen testen, moeten we deze functionaliteiten even 'aanzetten' voor jou.",
+    "paragraph2": "Door op de knop hieronder te klikken, stellen we veilig op de achtergrond in dat jij deelneemt aan de piloot. Zo 'onthoudt' jouw webbrowser dat jij toegang krijgt tot de nieuwe velden (zoals opvanguren, geboortejaren en veelgestelde vragen).",
+    "button": "Start met testen",
+    "button_stop": "Stop met testen"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuleren",
@@ -361,26 +368,20 @@
         "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen",
         "error_invalid": "De opgegeven leeftijd is niet geldig.",
-        "audience": {
+        "children_only": {
           "question": "Voor wie is deze activiteit?",
           "children_only": "Voor kinderen alleen",
           "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
-          "mutation_error": "Er ging iets mis bij het opslaan van het doelpubliek. Probeer opnieuw.",
+          "mutation_error": "Er ging iets mis bij het opslaan van je keuze. Probeer opnieuw.",
           "departure_places_warning_modal": {
             "title": "Let op, deze actie verwijdert je vertreklocaties",
             "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
             "confirm": "Doorgaan",
             "cancel": "Annuleren"
           },
-          "members_warning_modal": {
-            "title": "Let op: met deze actie wijzig je de toegankelijkheidsinformatie",
-            "body": "Een activiteit 'voor kinderen alleen' kan niet beperkt worden tot enkel leden. Wil je doorgaan? Dan zetten we de toegang automatisch op 'Voor iedereen'.",
-            "confirm": "Verdergaan",
-            "cancel": "Annuleren"
-          },
           "age_range_warning_modal": {
             "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
-            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen'. De toegang wordt automatisch ingesteld op 'Voor iedereen' en eventuele vertreklocaties worden verwijderd.",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen' en eventuele vertreklocaties worden verwijderd.",
             "confirm": "Verdergaan",
             "cancel": "Annuleren"
           }
@@ -427,8 +428,6 @@
       },
       "audience": {
         "title": "Toegang",
-        "childrenOnly": "Voor kinderen alleen",
-        "children_only_warning": "Deze activiteit is ingesteld als 'Voor kinderen alleen'.<br/>Om de toegang te wijzigen, ga je naar <strong>Basisgegevens</strong> &rsaquo; <strong>Voor wie is deze activiteit?</strong>.<br/>Kies daar 'Voor kinderen samen met hun familie of een andere begeleider'.",
         "education": "Specifiek voor scholen",
         "everyone": "Voor iedereen",
         "members": "Enkel voor leden",
@@ -473,6 +472,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
+        "reservation_type_single": "Algemene link",
+        "reservation_type_multiple": "Links per moment/periode",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
@@ -996,6 +997,11 @@
             "no_price": "Voeg een prijs toe voor scholen, per leerling of per groep.",
             "multiple_prices": "Let op: enkel het basistarief zal zichtbaar zijn voor je Cultuurkuur-activiteit. Andere tarieven worden niet weergegeven."
           }
+        },
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Kan je voor deze speelpleinwerking inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Kan je voor deze kinderopvang inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "0.57.0.0.0": "Kan je voor dit kamp of deze vakantie inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe."
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
@@ -1762,7 +1768,8 @@
     "search_text": "Aan het zoeken..."
   },
   "common": {
-    "back_to_overview": "Terug naar de lijst"
+    "back_to_overview": "Terug naar de lijst",
+    "close": "Sluiten"
   },
   "users": {
     "search": {

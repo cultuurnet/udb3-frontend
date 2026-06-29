@@ -113,7 +113,6 @@ const Preview = () => {
     typicalAgeRange,
     mediaObject,
     videos,
-    audience,
   } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
@@ -258,7 +257,6 @@ const Preview = () => {
       value: (
         <AgePreview
           typicalAgeRange={typicalAgeRange}
-          audienceType={audience?.audienceType}
           birthdateRange={offer?.birthdateRange}
         />
       ),
@@ -345,7 +343,7 @@ const Preview = () => {
               />
             )}
             {isEdited && (
-              <Alert width="100%" marginBottom={4}>
+              <Alert fullWidth className="tw:mb-4">
                 <Text
                   css={`
                     b {

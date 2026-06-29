@@ -13,6 +13,13 @@
     "new_features": "Neu bei UiTdatabank",
     "no_features": "Momentan gibt es keine Neuigkeiten."
   },
+  "boa": {
+    "title": "Willkommen beim Pilotprojekt BOA in der UiTdatabank",
+    "paragraph1": "Schön, dass Sie mitmachen! Um die erneuerten Eingabemasken für die Schulkindbetreuung und Aktivitäten (BOA) testen zu können, müssen wir diese Funktionalitäten für Sie aktivieren.",
+    "paragraph2": "Durch Klicken auf die Schaltfläche unten richten wir im Hintergrund sicher ein, dass Sie am Pilotprojekt teilnehmen. So merkt sich Ihr Webbrowser, dass Sie Zugang zu den neuen Feldern haben (wie Betreuungszeiten, Geburtsjahre und häufig gestellte Fragen).",
+    "button": "Mit dem Testen beginnen",
+    "button_stop": "Tests beenden"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Abbrechen",
@@ -351,26 +358,20 @@
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
-        "audience": {
+        "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder",
           "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
-          "mutation_error": "Beim Speichern der Zielgruppe ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+          "mutation_error": "Beim Speichern Ihrer Auswahl ist ein Fehler aufgetreten. Bitte erneut versuchen.",
           "departure_places_warning_modal": {
             "title": "Achtung, diese Aktion löscht Ihre Abfahrtsorte",
             "body": "Sie können Abfahrtsorte nur bei Aktivitäten angeben, die sich ausschließlich an Kinder richten.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           },
-          "members_warning_modal": {
-            "title": "Achtung: Mit dieser Aktion ändern Sie die Zugänglichkeitsinformationen",
-            "body": "Eine Aktivität 'nur für Kinder' kann nicht auf nur Mitglieder beschränkt werden. Möchten Sie fortfahren? Dann setzen wir den Zugang automatisch auf 'Für jeden'.",
-            "confirm": "Fortfahren",
-            "cancel": "Abbrechen"
-          },
           "age_range_warning_modal": {
             "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
-            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder'. Der Zugang wird automatisch auf 'Für alle' gesetzt und eventuelle Abfahrtsorte werden gelöscht.",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder' und eventuelle Abfahrtsorte werden gelöscht.",
             "confirm": "Fortfahren",
             "cancel": "Abbrechen"
           }
@@ -406,8 +407,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Nur für Kinder",
-        "children_only_warning": "Diese Aktivität ist als 'Nur für Kinder' markiert.<br/>Um den Zugang zu ändern, gehen Sie zu <strong>Basisangaben</strong> &rsaquo; <strong>Für wen ist diese Aktivität?</strong>.<br/>Wählen Sie 'Für Kinder mit ihrer Familie oder einer anderen Begleitperson'.",
         "education": "Nur für Schulen",
         "everyone": "Für alle",
         "members": "Nur für Mitglieder",
@@ -450,6 +449,8 @@
           "buy": "Tickets kaufen",
           "reserve": "Plätze reservieren"
         },
+        "reservation_type_single": "Allgemeiner Link",
+        "reservation_type_multiple": "Links pro Moment/Zeitraum",
         "reservation_period": {
           "title": "Wann können sich die Leute anmelden?",
           "toggle": "Reservierungszeitraum",
@@ -960,6 +961,11 @@
         "subtitle": "Wie hoch sind die Eintrittspreise?",
         "uitpas_error": "Der UiTPAS-Preis wird von UiTdatabank für Sie berechnet. Sie können diese nicht selbst hinzufügen.",
         "uitpas_info": "Der UiTPAS Opportunity-Tarif wird automatisch auf Basis des Basispreises und der aktiven Kartensysteme berechnet.",
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Kann man sich für diesen Spielplatzbetrieb pro (halben) Tag, pro Woche anmelden oder arbeiten Sie mit anderen Formeln? Fügen Sie dann pro Option einen eigenen Tarif hinzu.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Kann man sich für diese Kinderbetreuung pro (halben) Tag, pro Woche anmelden oder arbeiten Sie mit anderen Formeln? Fügen Sie dann pro Option einen eigenen Tarif hinzu.",
+          "0.57.0.0.0": "Kann man sich für dieses Lager oder diese Ferien pro (halben) Tag, pro Woche anmelden oder arbeiten Sie mit anderen Formeln? Fügen Sie dann pro Option einen eigenen Tarif hinzu."
+        },
         "validation_messages": {
           "matches": "Der angegebene Preis ist ungültig.",
           "unique_name": "Der angegebene Name wird bereits verwendet.",
@@ -1704,7 +1710,8 @@
     "search_text": "Wird gesucht..."
   },
   "common": {
-    "back_to_overview": "Zurück zur Liste"
+    "back_to_overview": "Zurück zur Liste",
+    "close": "Schließen"
   },
   "users": {
     "search": {

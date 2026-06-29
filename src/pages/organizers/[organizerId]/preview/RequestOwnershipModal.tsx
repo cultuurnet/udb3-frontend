@@ -96,7 +96,7 @@ const RequestOwnershipModal = ({
       {isSuccessAlertVisible && (
         <Alert
           variant={AlertVariants.SUCCESS}
-          marginBottom={4}
+          className="tw:mb-4"
           closable
           fullWidth
           onClose={() => setIsSuccessAlertVisible(false)}
@@ -107,7 +107,7 @@ const RequestOwnershipModal = ({
       {isErrorAlertVisible && (
         <Alert
           variant={AlertVariants.DANGER}
-          marginBottom={4}
+          className="tw:mb-4"
           fullWidth
           closable
           onClose={() => setIsErrorAlertVisible(false)}
