@@ -17,7 +17,7 @@ import {
   useChangeOfferCalendarMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
-import { useToast } from '@/pages/manage/movies/useToast';
+import { useToast } from '@/hooks/useToast';
 import {
   Offer,
   OpeningHoursAdjustedDay,
@@ -27,7 +27,6 @@ import {
 import { Values } from '@/types/Values';
 import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
-import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import { UseEditArguments } from '../hooks/useEditField';
@@ -549,12 +548,7 @@ const CalendarStep = ({
           />
         )}
       </Panel>
-      <Toast
-        variant="success"
-        body={toast.message}
-        visible={!!toast.message}
-        onClose={() => toast.clear()}
-      />
+      {toast.component}
     </Stack>
   );
 };

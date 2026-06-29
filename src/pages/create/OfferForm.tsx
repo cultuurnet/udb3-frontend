@@ -267,6 +267,7 @@ const OfferForm = () => {
     labels,
     hiddenLabels,
     audience,
+    childrenOnly,
   }: FormData) => {
     const audienceType =
       location.country && scope === OfferTypes.EVENTS
@@ -292,6 +293,7 @@ const OfferForm = () => {
         audienceType: AudienceTypes.EVERYONE,
       }),
       audience,
+      ...(childrenOnly && { childrenOnly }),
       ...getLocationAttributes(scope, location, i18n.language),
       ...getTerms(typeAndTheme),
       ...calendar,

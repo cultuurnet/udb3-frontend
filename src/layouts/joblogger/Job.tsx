@@ -11,11 +11,8 @@ import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import type { ListItemProps } from '@/ui/List';
 import { List } from '@/ui/List';
+import { Spinner, SpinnerSizes } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getValue = getValueFromTheme('jobStatusIcon');
-const getGlobalValue = getValueFromTheme('global');
 
 const dateFnsLocales = { nl: nlBE, fr };
 
@@ -34,27 +31,9 @@ const JobStates = {
 
 const StatusIcon = memo(({ state }: { state: Values<typeof JobStates> }) => {
   if (state === JobStates.FINISHED) {
-    return <Icon name={Icons.CHECK_CIRCLE} color={getGlobalValue('success')} />;
+    return <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />;
   }
-  return (
-    <Icon
-      name={Icons.CHECK_NOTCH}
-      color={getValue('busy.spinnerStrokeColor')}
-      css={`
-        @keyframes rotation {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(359deg);
-          }
-        }
-        .svg-inline--fa {
-          animation: rotation 1s infinite linear;
-        }
-      `}
-    />
-  );
+  return <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto" />;
 });
 
 StatusIcon.displayName = 'StatusIcon';
@@ -100,7 +79,12 @@ const Job = ({
       <Stack as="div" spacing={3} flex={1}>
         <Inline as="div" flex={1} justifyContent="space-between">
           <Stack>
-            <Inline forwardedAs="div" spacing={2} css="word-break: break-word;">
+            <Inline
+              forwardedAs="div"
+              spacing={2}
+              alignItems="center"
+              css="word-break: break-word;"
+            >
               <Box as="span">{t('jobs.time_ago', { time: timeAgo })}</Box>
               {state !== JobStates.FAILED && <StatusIcon state={state} />}
             </Inline>
@@ -109,7 +93,7 @@ const Job = ({
             </Box>
           </Stack>
           <Button onClick={onClick} variant={ButtonVariants.UNSTYLED}>
-            <Icon name={Icons.TIMES} alignItems="center" />
+            <Icon name={Icons.TIMES} />
           </Button>
         </Inline>
         {!!exportUrl && state === JobStates.FINISHED && (

@@ -25,7 +25,7 @@ import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import type { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button } from '@/ui/Button';
-import { Icons } from '@/ui/Icon';
+import { Icon, Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
@@ -127,8 +127,6 @@ const MenuItem = memo(
           width="100%"
           variant="unstyled"
           href={href}
-          iconName={iconName}
-          suffix={suffix}
           onClick={onClick}
           backgroundColor={{
             default: isActive
@@ -136,8 +134,6 @@ const MenuItem = memo(
               : 'none',
             hover: getValueForMenuItem('hover.backgroundColor'),
           }}
-          spacing={{ default: 4, s: 1 }}
-          stackOn={Breakpoints.S}
           customChildren
           title={label}
           paddingLeft={{ default: 4, s: 1 }}
@@ -146,20 +142,24 @@ const MenuItem = memo(
           paddingRight={{ default: 3, s: 1 }}
           borderRadius={getGlobalBorderRadius}
         >
-          {label && (
-            <Text
-              flex={1}
-              css={`
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              `}
-              fontSize={{ default: '0.975rem', s: '0.625rem' }}
-              textAlign={{ default: 'left', s: 'center' }}
-            >
-              {label}
-            </Text>
-          )}
+          <span className="tw:flex tw:w-full tw:flex-col tw:items-center tw:gap-1 tw:md:flex-row tw:md:gap-4">
+            <Icon name={iconName} />
+            {label && (
+              <Text
+                flex={1}
+                css={`
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                `}
+                fontSize={{ default: '0.975rem', s: '0.625rem' }}
+                textAlign={{ default: 'left', s: 'center' }}
+              >
+                {label}
+              </Text>
+            )}
+            {suffix}
+          </span>
         </Component>
       </List.Item>
     );
