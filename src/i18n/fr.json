@@ -13,6 +13,13 @@
     "new_features": "Nouveau dans UiTdatabank",
     "no_features": "Il n'y a actuellement aucune nouveauté."
   },
+  "boa": {
+    "title": "Bienvenue dans le projet pilote BOA dans l'UiTdatabank",
+    "paragraph1": "Super de vous voir participer ! Pour tester les nouveaux écrans de saisie pour l'accueil extrascolaire et les activités (BOA), nous devons activer ces fonctionnalités pour vous.",
+    "paragraph2": "En cliquant sur le bouton ci-dessous, nous configurons en toute sécurité en arrière-plan votre participation au projet pilote. Ainsi, votre navigateur web se souviendra que vous avez accès aux nouveaux champs (comme les heures d'accueil, les années de naissance et les questions fréquentes).",
+    "button": "Commencer les tests",
+    "button_stop": "Arrêter les tests"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuler",
@@ -444,6 +451,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
+        "reservation_type_single": "Lien général",
+        "reservation_type_multiple": "Liens par moment/période",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",
@@ -954,6 +963,11 @@
         "subtitle": "Quels sont les tarifs d'entrée ?",
         "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas l'ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Est-il possible de s'inscrire à cette plaine de jeux par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Est-il possible de s'inscrire à cette garde d'enfants par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "0.57.0.0.0": "Est-il possible de s'inscrire à ce camp ou à ces vacances par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option."
+        },
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
           "unique_name": "Le nom spécifié est déjà utilisé.",
@@ -1696,7 +1710,8 @@
     "search_text": "En train de chercher..."
   },
   "common": {
-    "back_to_overview": "Retour à la liste"
+    "back_to_overview": "Retour à la liste",
+    "close": "Fermer"
   },
   "users": {
     "search": {

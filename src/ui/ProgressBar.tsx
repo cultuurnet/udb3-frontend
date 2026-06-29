@@ -20,18 +20,11 @@ type Props = {
   className?: string;
 };
 
-const trackClasses: Record<Values<typeof ProgressBarVariants>, string> = {
-  info: 'tw:bg-primary/20',
-  success: 'tw:bg-success/20',
-  danger: 'tw:bg-destructive/20',
-  warning: 'tw:bg-udb-warning/20',
-};
-
 const indicatorClasses: Record<Values<typeof ProgressBarVariants>, string> = {
   info: 'tw:bg-primary',
   success: 'tw:bg-success',
   danger: 'tw:bg-destructive',
-  warning: 'tw:bg-udb-warning',
+  warning: 'tw:bg-warning',
 };
 
 const ProgressBar = ({
@@ -55,7 +48,6 @@ const ProgressBar = ({
       )}
       <Progress
         value={progress}
-        className={trackClasses[variant]}
         indicatorClassName={indicatorClasses[variant]}
       />
     </div>

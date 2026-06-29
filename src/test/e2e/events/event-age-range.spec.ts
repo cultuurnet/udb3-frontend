@@ -173,7 +173,7 @@ test.describe('Age range', () => {
     await expect(maxAgeInput(page)).toHaveValue('');
   });
 
-  test('shows the children-only radios only when the age overlaps 2–12', async ({
+  test('shows the children-only radios only when the age overlaps 2–16', async ({
     page,
     eventEditUrl,
   }) => {

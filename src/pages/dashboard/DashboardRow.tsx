@@ -234,7 +234,7 @@ export const DashboardRow = ({
             )}
             {!finishedAt && isOwnershipRequested && (
               <Inline spacing={2} alignItems="center">
-                <Icon name={Icons.CHECK} color={colors.udbMainPositiveGreen} />
+                <Icon name={Icons.CHECK} className="tw:text-success" />
                 <Text>{t('organizers.ownerships.requested')}</Text>
               </Inline>
             )}

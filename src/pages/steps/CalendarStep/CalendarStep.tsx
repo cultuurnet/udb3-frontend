@@ -17,7 +17,7 @@ import {
   useChangeOfferCalendarMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
-import { useToast } from '@/pages/manage/movies/useToast';
+import { useToast } from '@/hooks/useToast';
 import {
   Offer,
   OpeningHoursAdjustedDay,
@@ -27,7 +27,6 @@ import {
 import { Values } from '@/types/Values';
 import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
-import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import { UseEditArguments } from '../hooks/useEditField';
@@ -87,6 +86,11 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
       scope,
     };
 
+    const bookingAvailability = queryClient.getQueryData<Offer>([
+      scope,
+      { id: offerId },
+    ])?.bookingAvailability;
+
     if (timeTable) {
       const subEvent = convertTimeTableToSubEvents(timeTable);
 
@@ -95,6 +99,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
         subEvent,
         calendarType:
           subEvent.length > 1 ? CalendarType.MULTIPLE : CalendarType.SINGLE,
+        bookingAvailability,
       });
 
       return;
@@ -103,6 +108,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
     await changeCalendarMutation.mutateAsync({
       ...common,
       ...calendar,
+      bookingAvailability,
     });
   };
 };
@@ -322,7 +328,7 @@ const CalendarStep = ({
       existingSubEvents &&
       Array.isArray(baseFormData.subEvent) &&
       existingSubEvents.length <= baseFormData.subEvent.length;
-    const formData = canPreserveReservationData
+    const preservedFormData = canPreserveReservationData
       ? {
           ...baseFormData,
           subEvent: baseFormData.subEvent.map((subEvent, index) => {
@@ -340,6 +346,23 @@ const CalendarStep = ({
           }),
         }
       : baseFormData;
+
+    const shouldClearSubEventBookingInfo =
+      existingSubEvents &&
+      existingSubEvents.length > 1 &&
+      Array.isArray(preservedFormData.subEvent) &&
+      preservedFormData.subEvent.length === 1;
+
+    const formData = shouldClearSubEventBookingInfo
+      ? {
+          ...preservedFormData,
+          subEvent: preservedFormData.subEvent.map((subEvent) => ({
+            ...subEvent,
+            bookingInfo: {},
+            bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
+          })),
+        }
+      : preservedFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -525,12 +548,7 @@ const CalendarStep = ({
           />
         )}
       </Panel>
-      <Toast
-        variant="success"
-        body={toast.message}
-        visible={!!toast.message}
-        onClose={() => toast.clear()}
-      />
+      {toast.component}
     </Stack>
   );
 };

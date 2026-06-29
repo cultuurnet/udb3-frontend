@@ -13,6 +13,13 @@
     "new_features": "Nieuw in UiTdatabank",
     "no_features": "Er zijn momenteel geen nieuwigheden."
   },
+  "boa": {
+    "title": "Welkom bij het piloottraject BOA in UiTdatabank",
+    "paragraph1": "Leuk dat je meedoet! Om de vernieuwde invoerschermen voor buitenschoolse opvang en activiteiten (BOA) te kunnen testen, moeten we deze functionaliteiten even 'aanzetten' voor jou.",
+    "paragraph2": "Door op de knop hieronder te klikken, stellen we veilig op de achtergrond in dat jij deelneemt aan de piloot. Zo 'onthoudt' jouw webbrowser dat jij toegang krijgt tot de nieuwe velden (zoals opvanguren, geboortejaren en veelgestelde vragen).",
+    "button": "Start met testen",
+    "button_stop": "Stop met testen"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuleren",
@@ -465,6 +472,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
+        "reservation_type_single": "Algemene link",
+        "reservation_type_multiple": "Links per moment/periode",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
@@ -988,6 +997,11 @@
             "no_price": "Voeg een prijs toe voor scholen, per leerling of per groep.",
             "multiple_prices": "Let op: enkel het basistarief zal zichtbaar zijn voor je Cultuurkuur-activiteit. Andere tarieven worden niet weergegeven."
           }
+        },
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Kan je voor deze speelpleinwerking inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Kan je voor deze kinderopvang inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe.",
+          "0.57.0.0.0": "Kan je voor dit kamp of deze vakantie inschrijven per (halve) dag, week of werk je met andere formules? Voeg dan per optie een apart tarief toe."
         },
         "validation_messages": {
           "matches": "De opgegeven prijs is ongeldig.",
@@ -1754,7 +1768,8 @@
     "search_text": "Aan het zoeken..."
   },
   "common": {
-    "back_to_overview": "Terug naar de lijst"
+    "back_to_overview": "Terug naar de lijst",
+    "close": "Sluiten"
   },
   "users": {
     "search": {

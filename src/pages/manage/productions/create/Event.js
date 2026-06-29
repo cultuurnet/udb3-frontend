@@ -57,7 +57,7 @@ const Event = ({
       description={description}
       footer={
         productionName && (
-          <Alert variant={AlertVariants.INFO}>
+          <Alert variant={AlertVariants.PRIMARY}>
             {t('productions.event.part_of_production')}{' '}
             <Text fontWeight="bold">{productionName}</Text>
           </Alert>

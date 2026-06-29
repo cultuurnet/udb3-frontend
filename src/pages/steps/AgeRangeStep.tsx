@@ -48,7 +48,7 @@ type AgeInputMode = Values<typeof AgeInputModes>;
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
-const BOA_MAX_AGE = 12;
+const BOA_MAX_AGE = 16;
 const AGE_PATTERN = /^\d+$/;
 
 const getValue = getValueFromTheme('ageRange');
