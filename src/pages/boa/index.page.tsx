@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -12,11 +13,19 @@ import { getApplicationServerSideProps } from '@/utils/getApplicationServerSideP
 const Boa = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [, setBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+  const [isBoaEnabled, setBoaEnabled, removeBoaFlag] = useFeatureFlag(
+    FeatureFlags.BOA,
+  );
+  const isBoaEnabledOnMount = useRef(isBoaEnabled).current;
 
   const handleStartTesting = () => {
     setBoaEnabled(true);
     router.push('/create?scope=events');
+  };
+
+  const handleStopTesting = () => {
+    removeBoaFlag();
+    router.push('/');
   };
 
   return (
@@ -38,9 +47,21 @@ const Boa = () => {
           </Paragraph>
         </Stack>
         <Inline justifyContent="center">
-          <Button variant={ButtonVariants.SUCCESS} onClick={handleStartTesting}>
-            {t('boa.button')}
-          </Button>
+          {isBoaEnabledOnMount ? (
+            <Button
+              variant={ButtonVariants.SECONDARY}
+              onClick={handleStopTesting}
+            >
+              {t('boa.button_stop')}
+            </Button>
+          ) : (
+            <Button
+              variant={ButtonVariants.SUCCESS}
+              onClick={handleStartTesting}
+            >
+              {t('boa.button')}
+            </Button>
+          )}
         </Inline>
       </Stack>
     </Stack>
