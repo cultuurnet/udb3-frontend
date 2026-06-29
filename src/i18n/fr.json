@@ -13,6 +13,13 @@
     "new_features": "Nouveau dans UiTdatabank",
     "no_features": "Il n'y a actuellement aucune nouveauté."
   },
+  "boa": {
+    "title": "Bienvenue dans le projet pilote BOA dans l'UiTdatabank",
+    "paragraph1": "Super de vous voir participer ! Pour tester les nouveaux écrans de saisie pour l'accueil extrascolaire et les activités (BOA), nous devons activer ces fonctionnalités pour vous.",
+    "paragraph2": "En cliquant sur le bouton ci-dessous, nous configurons en toute sécurité en arrière-plan votre participation au projet pilote. Ainsi, votre navigateur web se souviendra que vous avez accès aux nouveaux champs (comme les heures d'accueil, les années de naissance et les questions fréquentes).",
+    "button": "Commencer les tests",
+    "button_stop": "Arrêter les tests"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuler",
