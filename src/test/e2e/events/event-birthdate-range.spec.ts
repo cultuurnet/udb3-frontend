@@ -121,8 +121,7 @@ test.describe('Birthdate range', () => {
 
     await page.goto(eventEditUrl);
 
-    // Birth-date controls should still be visible (component auto-switches
-    // back to DOB mode when the offer carries a birthdateRange).
+    await page.locator(ageInputModeDOBToggle).click();
     await expect(page.getByText(birthDate.title)).toBeVisible();
     await expect(page.locator(birthDateMinInput)).toHaveValue('01/01/2010');
     await expect(page.locator(birthDateMaxInput)).toHaveValue('31/12/2015');
