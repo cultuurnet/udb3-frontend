@@ -125,8 +125,7 @@ const LayoutWrapper = ({ children }) => {
   if (
     asPath.startsWith('/login') ||
     asPath.startsWith('/404') ||
-    asPath.startsWith('/500') ||
-    asPath.startsWith('/boa')
+    asPath.startsWith('/500')
   ) {
     return <Inline height="100vh">{children}</Inline>;
   }
