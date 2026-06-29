@@ -17,7 +17,8 @@
     "title": "Welkom bij het piloottraject BOA in UiTdatabank",
     "paragraph1": "Leuk dat je meedoet! Om de vernieuwde invoerschermen voor buitenschoolse opvang en activiteiten (BOA) te kunnen testen, moeten we deze functionaliteiten even 'aanzetten' voor jou.",
     "paragraph2": "Door op de knop hieronder te klikken, stellen we veilig op de achtergrond in dat jij deelneemt aan de piloot. Zo 'onthoudt' jouw webbrowser dat jij toegang krijgt tot de nieuwe velden (zoals opvanguren, geboortejaren en veelgestelde vragen).",
-    "button": "Start met testen"
+    "button": "Start met testen",
+    "button_stop": "Stop met testen"
   },
   "bookingAvailability": {
     "actions": {

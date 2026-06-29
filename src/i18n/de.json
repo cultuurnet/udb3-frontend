@@ -17,7 +17,8 @@
     "title": "Willkommen beim Pilotprojekt BOA in der UiTdatabank",
     "paragraph1": "Schön, dass Sie mitmachen! Um die erneuerten Eingabemasken für die Schulkindbetreuung und Aktivitäten (BOA) testen zu können, müssen wir diese Funktionalitäten für Sie aktivieren.",
     "paragraph2": "Durch Klicken auf die Schaltfläche unten richten wir im Hintergrund sicher ein, dass Sie am Pilotprojekt teilnehmen. So merkt sich Ihr Webbrowser, dass Sie Zugang zu den neuen Feldern haben (wie Betreuungszeiten, Geburtsjahre und häufig gestellte Fragen).",
-    "button": "Mit dem Testen beginnen"
+    "button": "Mit dem Testen beginnen",
+    "button_stop": "Tests beenden"
   },
   "bookingAvailability": {
     "actions": {
