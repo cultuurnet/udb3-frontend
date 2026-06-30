@@ -7,12 +7,8 @@ import stripHTML from 'string-strip-html';
 import { CalendarType } from '@/constants/CalendarType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { Card } from '@/ui/Card';
-import { Image } from '@/ui/Image';
-import { Inline } from '@/ui/Inline';
-import { Stack } from '@/ui/Stack';
+import { EventCard } from '@/ui/EventCard';
 import { Text } from '@/ui/Text';
-import { Title } from '@/ui/Title';
 
 const Event = ({
   terms = [],
@@ -50,39 +46,24 @@ const Event = ({
   }, [rawDescription]);
 
   return (
-    <Card {...props} spacing={5} padding={5}>
-      <Inline justifyContent="space-between" spacing={5}>
-        <Stack spacing={4}>
-          <Text>{type}</Text>
-          <Stack>
-            <Title>{title}</Title>
-            <Text>{getCalendarSummaryQuery.data}</Text>
-          </Stack>
-          <Text>
-            {locationName} {locationCity}
-          </Text>
-          {!!organizerName && <Text>{organizerName}</Text>}
-        </Stack>
-        {imageUrl && (
-          <Image
-            width="10rem"
-            height="10rem"
-            src={imageUrl}
-            alt={description}
-            backgroundRepeat="no-repeat"
-            backgroundPosition="center center"
-            objectFit="cover"
-          />
-        )}
-      </Inline>
-
-      <Text>{description}</Text>
-
-      <Alert variant={AlertVariants.PRIMARY} visible={!!productionName}>
-        {t('productions.event.part_of_production')}{' '}
-        <Text fontWeight="bold">{productionName}</Text>
-      </Alert>
-    </Card>
+    <EventCard
+      {...props}
+      type={type}
+      title={title}
+      date={getCalendarSummaryQuery.data}
+      location={`${locationName} ${locationCity}`}
+      organizer={organizerName}
+      image={imageUrl && { src: imageUrl, alt: description }}
+      description={description}
+      footer={
+        productionName && (
+          <Alert variant={AlertVariants.PRIMARY}>
+            {t('productions.event.part_of_production')}{' '}
+            <Text fontWeight="bold">{productionName}</Text>
+          </Alert>
+        )
+      }
+    />
   );
 };
 
