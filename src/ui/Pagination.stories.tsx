@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import { useEffect, useState } from 'react';
 
 import { Pagination } from './Pagination';
 
@@ -19,8 +20,21 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     currentPage: 1,
-    totalItems: 50,
-    perPage: 10,
+    totalItems: 200,
+    perPage: 5,
     limitPages: 5,
+  },
+  render: (args) => {
+    const [currentPage, setCurrentPage] = useState(args.currentPage);
+    useEffect(() => {
+      setCurrentPage(args.currentPage);
+    }, [args.currentPage]);
+    return (
+      <Pagination
+        {...args}
+        currentPage={currentPage}
+        onChangePage={setCurrentPage}
+      />
+    );
   },
 };

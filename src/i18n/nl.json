@@ -2068,5 +2068,11 @@
         "description": "Deze locatie bestaat al in UiTdatabank. Alle bijhorende activiteiten vind je bij <placeLink>{{placeName}}</placeLink>"
       }
     }
+  },
+  "pagination": {
+    "previous": "Vorige",
+    "previous_aria": "Ga naar vorige pagina",
+    "next": "Volgende",
+    "next_aria": "Ga naar volgende pagina"
   }
 }

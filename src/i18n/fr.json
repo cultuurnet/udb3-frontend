@@ -2005,5 +2005,11 @@
       "client_id": "ID client : {{clientId}}",
       "client_name": "Nom du client : {{clientName}}"
     }
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "previous_aria": "Aller à la page précédente",
+    "next": "Suivant",
+    "next_aria": "Aller à la page suivante"
   }
 }
