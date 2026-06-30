@@ -106,7 +106,19 @@ const filterHolidaysForPreset = (
   t: TFunction,
 ) =>
   holidays
-    .map((holiday) => parseHoliday(holiday, language, t))
+    .map((holiday) => {
+      const parsed = parseHoliday(holiday, language, t);
+      if (parsed.region) {
+        const regionPrefix = t(
+          `date_period_picker.region_prefix.${parsed.region}`,
+          { defaultValue: '' },
+        );
+        if (regionPrefix) {
+          return { ...parsed, name: `${regionPrefix} ${parsed.name}` };
+        }
+      }
+      return parsed;
+    })
     .filter(
       (holiday) =>
         holiday.endDate >= new Date() && preset.matchesHoliday(holiday),
