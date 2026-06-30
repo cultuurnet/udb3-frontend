@@ -170,7 +170,7 @@ const Create = () => {
       <Page.Title>{t('productions.create.title')}</Page.Title>
       <Page.Content>
         {getSuggestedEventsQuery.status === QueryStatus.LOADING ? (
-          <Spinner marginTop={4} />
+          <Spinner className="tw:mt-4" />
         ) : events.length === 0 ? (
           <Text>{t('productions.create.no_suggested_events_found')}</Text>
         ) : (
@@ -207,7 +207,7 @@ const Create = () => {
                       event?.organizer?.name?.[event.location.mainLanguage]
                     }
                     terms={event?.terms}
-                    flex={1}
+                    className="tw:flex-1"
                     imageUrl={event?.image}
                     description={
                       event?.description?.[i18n.language] ??
