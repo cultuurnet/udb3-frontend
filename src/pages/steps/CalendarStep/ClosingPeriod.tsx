@@ -1,3 +1,4 @@
+import { startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
@@ -140,20 +141,22 @@ const ClosingPeriod = ({
             )}
           </Text>
         )}
-        {eventStartDate && period.startDate < eventStartDate && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.closing.errors.start_before_event',
-            )}
-          </Text>
-        )}
-        {eventEndDate && period.endDate > eventEndDate && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.closing.errors.end_after_event',
-            )}
-          </Text>
-        )}
+        {eventStartDate &&
+          startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.closing.errors.start_before_event',
+              )}
+            </Text>
+          )}
+        {eventEndDate &&
+          startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.closing.errors.end_after_event',
+              )}
+            </Text>
+          )}
         {quickLinkRangeError && (
           <Text color="red">
             {t(
