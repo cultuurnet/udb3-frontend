@@ -1753,6 +1753,11 @@
       "FR": "Franstalig",
       "NL": "Vlaams"
     },
+    "region_prefix": {
+      "DE": "Duitstalige",
+      "FR": "Franstalige",
+      "NL": "Vlaamse"
+    },
     "select_end_date": "Selecteer een einddatum",
     "select_start_date": "Selecteer een startdatum",
     "show_holidays": "Toon vakanties en feestdagen",

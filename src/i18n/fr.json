@@ -1680,6 +1680,11 @@
       "FR": "francophone",
       "NL": "flamand"
     },
+    "region_prefix": {
+      "DE": "Germanophones",
+      "FR": "Francophones",
+      "NL": "Flamandes"
+    },
     "select_end_date": "Sélectionnez une date de fin",
     "select_start_date": "Sélectionnez une date de début",
     "show_holidays": "Afficher les vacances et jours fériés",
