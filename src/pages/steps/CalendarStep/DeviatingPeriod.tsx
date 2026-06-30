@@ -1,4 +1,4 @@
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -257,20 +257,22 @@ const DeviatingPeriod = ({
             )}
           </Text>
         )}
-        {eventStartDate && period.startDate < eventStartDate && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
-            )}
-          </Text>
-        )}
-        {eventEndDate && period.endDate > eventEndDate && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
-            )}
-          </Text>
-        )}
+        {eventStartDate &&
+          startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+              )}
+            </Text>
+          )}
+        {eventEndDate &&
+          startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+              )}
+            </Text>
+          )}
         {quickLinkRangeError && (
           <Text color="red">
             {t(

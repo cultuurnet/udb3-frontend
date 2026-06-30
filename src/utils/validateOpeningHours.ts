@@ -91,8 +91,8 @@ const hasPeriodDateError = (
   periods.some(
     (period) =>
       dayStart(period.startDate) > dayStart(period.endDate) ||
-      (eventStart && period.startDate < eventStart) ||
-      (eventEnd && period.endDate > eventEnd) ||
+      (eventStart && dayStart(period.startDate) < dayStart(eventStart)) ||
+      (eventEnd && dayStart(period.endDate) > dayStart(eventEnd)) ||
       hasPeriodOverlap(period, periods),
   );
 
