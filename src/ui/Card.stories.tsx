@@ -1,22 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { Card } from './Card';
+import { Card, CardContent, CardFooter, CardHeader } from './Card';
 import { Text } from './Text';
+import { Title } from './Title';
 
 const meta: Meta<typeof Card> = {
   title: 'Components/Card',
   component: Card,
   parameters: {
     layout: 'centered',
-    controls: {
-      exclude: ['stackOn', 'spacing'],
-    },
-  },
-
-  argTypes: {
-    children: {
-      control: { type: 'text' },
-    },
   },
 };
 
@@ -24,12 +16,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    children: 'This is a card',
-  },
-  render: (args) => (
-    <Card {...args}>
-      <Text>{args.children}</Text>
+  render: () => (
+    <Card className="tw:w-96">
+      <CardHeader>
+        <Text>Subtitle</Text>
+        <Title>Card title</Title>
+      </CardHeader>
+      <CardContent>
+        <Text>Some content goes here.</Text>
+      </CardContent>
+      <CardFooter>
+        <Text>Footer</Text>
+      </CardFooter>
     </Card>
   ),
 };
