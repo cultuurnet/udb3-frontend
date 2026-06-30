@@ -18,7 +18,7 @@ import { parseSpacing } from '@/ui/Box';
 import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Tabs } from '@/ui/Tabs';
+import { Tabs, TabsVariants } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { hasCultuurkuurOrganizerLabel } from '@/utils/hasCultuurkuurOrganizerLabel';
 
@@ -343,10 +343,15 @@ const AdditionalInformationStep = ({
     <Stack ref={containerRef} {...getStackProps(props)}>
       <Tabs
         activeKey={tab}
+        variant={TabsVariants.FLOATING}
         onSelect={handleSelectTab}
         css={`
           .tab-content {
             padding-top: ${parseSpacing(4)};
+          }
+          .nav-item .nav-link {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
           }
         `}
       >
