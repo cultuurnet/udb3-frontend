@@ -23,6 +23,7 @@ type Props<T extends string = string> = {
   onSelect?: (key: T | null) => void;
   activeBackgroundColor?: string;
   variant?: Values<typeof TabsVariants>;
+  compact?: boolean;
   children?: ReactNode;
   className?: string;
 };
@@ -49,6 +50,7 @@ function TabsShadcn<T extends string = string>({
   onSelect,
   activeBackgroundColor,
   variant = TabsVariants.DEFAULT,
+  compact,
   children,
   className,
 }: Props<T>) {
@@ -70,6 +72,7 @@ function TabsShadcn<T extends string = string>({
             key={tab.eventKey}
             value={tab.eventKey}
             variant={shadcnVariant}
+            size={compact ? 'sm' : 'md'}
             className={tab.className}
             {...(activeBackgroundColor &&
               tab.eventKey === activeKey && {

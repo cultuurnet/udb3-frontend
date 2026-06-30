@@ -340,7 +340,12 @@ const AdditionalInformationStep = ({
 
   return (
     <Stack ref={containerRef} {...getStackProps(props)}>
-      <Tabs activeKey={tab} variant={TabsVariants.FLOATING} onSelect={handleSelectTab}>
+      <Tabs
+        activeKey={tab}
+        variant={TabsVariants.FLOATING}
+        compact
+        onSelect={handleSelectTab}
+      >
         {orderedTabs.map(
           ({
             shouldShowOn,

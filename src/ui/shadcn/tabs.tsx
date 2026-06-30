@@ -32,7 +32,7 @@ const tabsTriggerVariants = cva(
           'tw:data-[state=active]:border-b-background tw:data-[state=active]:relative tw:data-[state=active]:z-[2] tw:data-[state=active]:shadow-none',
         ),
         line: cn(
-          'tw:rounded-none tw:rounded-t-lg tw:bg-transparent tw:text-muted-foreground tw:px-8 tw:py-[0.6rem]',
+          'tw:rounded-none tw:rounded-t-lg tw:bg-transparent tw:text-muted-foreground tw:py-[0.6rem]',
           'tw:border-0 tw:border-b-[3px] tw:border-b-transparent tw:-mb-px',
           'tw:hover:bg-primary/10',
           'tw:data-[state=active]:font-bold tw:data-[state=active]:border-b-foreground',
@@ -44,8 +44,16 @@ const tabsTriggerVariants = cva(
           'tw:data-[state=active]:bg-udb-main-dark-blue tw:data-[state=active]:text-primary-foreground tw:data-[state=active]:shadow-none',
         ),
       },
+      size: {
+        sm: '',
+        md: '',
+      },
     },
-    defaultVariants: { variant: 'default' },
+    compoundVariants: [
+      { variant: 'line', size: 'sm', className: 'tw:px-4' },
+      { variant: 'line', size: 'md', className: 'tw:px-8' },
+    ],
+    defaultVariants: { variant: 'default', size: 'md' },
   },
 );
 
@@ -72,10 +80,10 @@ type TabsTriggerProps = React.ComponentPropsWithoutRef<
 const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Trigger>,
   TabsTriggerProps
->(({ className, variant, ...props }, ref) => (
+>(({ className, variant, size, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
-    className={cn(tabsTriggerVariants({ variant }), className)}
+    className={cn(tabsTriggerVariants({ variant, size }), className)}
     {...props}
   />
 ));

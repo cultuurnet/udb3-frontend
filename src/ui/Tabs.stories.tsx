@@ -10,7 +10,7 @@ const meta: Meta<typeof Tabs> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['activeBackgroundColor', 'variant'],
+      include: ['activeBackgroundColor', 'variant', 'compact'],
     },
   },
 
@@ -19,6 +19,11 @@ const meta: Meta<typeof Tabs> = {
     variant: {
       control: { type: 'select' },
       options: ['default', 'floating', 'outlined'],
+    },
+    compact: {
+      control: { type: 'boolean' },
+      description:
+        'Reduces horizontal padding on tab triggers. Only has a visual effect on the floating variant, which uses wider padding by default.',
     },
   },
 };
@@ -59,7 +64,7 @@ export const Floating: Story = {
     variant: TabsVariants.FLOATING,
   },
   parameters: {
-    controls: { exclude: ['variant'] },
+    controls: { exclude: ['variant', 'activeBackgroundColor'] },
   },
   render: function RenderComponent(args) {
     const [activeKey, setActiveKey] = useState(args.activeKey || 'events');

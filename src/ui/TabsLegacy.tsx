@@ -25,6 +25,7 @@ type Props<T> = BoxProps &
   Omit<TabsProps, 'variant'> & {
     activeBackgroundColor?: string;
     variant?: Values<typeof TabsVariants>;
+    compact?: boolean;
   };
 
 const TabsLegacy = <T,>({
@@ -32,6 +33,7 @@ const TabsLegacy = <T,>({
   onSelect,
   activeBackgroundColor = 'white',
   variant = TabsVariants.DEFAULT,
+  compact,
   children: rawChildren,
   className,
   ...props
@@ -155,12 +157,24 @@ const TabsLegacy = <T,>({
     `,
   };
 
+  const compactStyle = compact
+    ? css`
+        .nav-item .nav-link {
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+        }
+      `
+    : null;
+
   return (
     <Box className={className} {...getBoxProps(props)}>
       <BootstrapTabs
         activeKey={activeKey}
         onSelect={onSelect}
-        css={TabStyles[variant]}
+        css={css`
+          ${TabStyles[variant]}
+          ${compactStyle}
+        `}
       >
         {children}
       </BootstrapTabs>
