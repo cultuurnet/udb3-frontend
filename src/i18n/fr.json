@@ -13,6 +13,13 @@
     "new_features": "Nouveau dans UiTdatabank",
     "no_features": "Il n'y a actuellement aucune nouveauté."
   },
+  "boa": {
+    "title": "Bienvenue dans le projet pilote BOA dans l'UiTdatabank",
+    "paragraph1": "Super de vous voir participer ! Pour tester les nouveaux écrans de saisie pour l'accueil extrascolaire et les activités (BOA), nous devons activer ces fonctionnalités pour vous.",
+    "paragraph2": "En cliquant sur le bouton ci-dessous, nous configurons en toute sécurité en arrière-plan votre participation au projet pilote. Ainsi, votre navigateur web se souviendra que vous avez accès aux nouveaux champs (comme les heures d'accueil, les années de naissance et les questions fréquentes).",
+    "button": "Commencer les tests",
+    "button_stop": "Arrêter les tests"
+  },
   "bookingAvailability": {
     "actions": {
       "cancel": "Annuler",
@@ -134,6 +141,7 @@
       "fixed_days": {
         "with_start_and_end_date": "Avec date de début et de fin",
         "permanent": "En permanence",
+        "period_too_short": "Pour les activités d'une durée inférieure à 2 semaines, il est préférable de choisir l'option 'Sur des dates spécifiques'.",
         "opening_hours": "Heures d 'ouverture",
         "hours": "Heures",
         "button_change_opening_hours": "Modifier les heures d'ouverture",
@@ -184,7 +192,7 @@
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
             "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
-            "set_times_required": "Veuillez indiquer les heures de début et de fin de la garderie."
+            "set_times_required": "Veuillez indiquer l'heure de début et/ou de fin de la garderie."
           }
         },
         "overnight_stay": {
@@ -214,8 +222,10 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes dérogatoires ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période avec des heures dérogatoires ne peut pas commencer avant la date de début de l'activité.",
-            "end_after_event": "La période avec des heures dérogatoires ne peut pas se terminer après la date de fin de l'activité."
+            "end_after_event": "La période avec des heures dérogatoires ne peut pas se terminer après la date de fin de l'activité.",
+            "quick_link_out_of_range": "Les dates choisies n'ont pas été ajoutées car elles se situent en dehors de la durée de votre activité."
           },
           "delete_modal": {
             "title": "Supprimer la période avec des heures dérogatoires",
@@ -232,8 +242,10 @@
           "description_placeholder": "Description",
           "errors": {
             "overlap": "Les périodes de fermeture ne peuvent pas se chevaucher. Sélectionnez une autre date de début pour cette période.",
+            "start_after_end": "La date de début ne peut pas être postérieure à la date de fin.",
             "start_before_event": "La période de fermeture ne peut pas commencer avant la date de début de l'activité.",
-            "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité."
+            "end_after_event": "La période de fermeture ne peut pas se terminer après la date de fin de l'activité.",
+            "quick_link_out_of_range": "Les dates choisies n'ont pas été ajoutées car elles se situent en dehors de la durée de votre activité."
           },
           "delete_modal": {
             "title": "Supprimer la période de fermeture",
@@ -244,7 +256,9 @@
         "validation_messages": {
           "day_of_week": {
             "min": "Vous devez indiquer au moins 1 jour de la semaine."
-          }
+          },
+          "overlapping_days": "Les horaires du {{days}} se chevauchent. Assurez-vous que le deuxième créneau commence après la fin du premier.",
+          "errors": "Il manque encore quelques données. Complétez les champs marqués en rouge pour enregistrer votre calendrier."
         }
       }
     },
@@ -344,26 +358,20 @@
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
         "error_no_min_age": "Veuillez entrer un âge minimum",
         "error_invalid": "L'âge spécifié n'est pas valide.",
-        "audience": {
+        "children_only": {
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants",
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
-          "mutation_error": "Une erreur est survenue lors de l'enregistrement du public cible. Veuillez réessayer.",
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer.",
           "departure_places_warning_modal": {
-            "title": "Supprimer les lieux de départ",
-            "body": "Attention : cette action supprime les lieux de départ que vous avez renseignés.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          },
-          "members_warning_modal": {
-            "title": "Attention : cette action modifie les informations d'accessibilité",
-            "body": "Une activité 'uniquement pour les enfants' ne peut pas être limitée aux membres uniquement. Voulez-vous continuer ? L'accès sera alors défini automatiquement sur 'Pour tout le monde'.",
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           },
           "age_range_warning_modal": {
             "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
-            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants'. L'accès sera automatiquement défini sur 'Pour tout le monde' et les lieux de départ éventuels seront supprimés.",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
             "confirm": "Continuer",
             "cancel": "Annuler"
           }
@@ -401,8 +409,6 @@
         }
       },
       "audience": {
-        "childrenOnly": "Uniquement pour les enfants",
-        "children_only_warning": "Cette activité est définie comme 'Uniquement pour les enfants'.<br/>Pour modifier l'accès, allez à <strong>Données de base</strong> &rsaquo; <strong>Pour qui cette activité est-elle organisée ?</strong>.<br/>Choisissez 'Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur'.",
         "education": "Spécifiquement pour des écoles",
         "everyone": "Pour tout le monde",
         "members": "Seulement pour des membres",
@@ -431,13 +437,22 @@
         "phone_error": "Pas de numéro de téléphone valide",
         "url": "Site Internet ou page de réservation",
         "url_error": "Pas d'URL valide",
-        "select_url_label": "Comment ce lien de réservation doit-il apparaître ?",
+        "link": "Lien",
+        "max_capacity": "Capacité maximale",
+        "capacity_error": "Saisissez un nombre valide (0 ou plus).",
+        "max_capacity_info": "Par capacité maximale, nous entendons le nombre maximum de personnes pouvant participer à votre activité.",
+        "status": "Statut",
+        "section_title": "Indiquez comment les gens peuvent réserver une place",
+        "contact_details": "Coordonnées",
+        "url_label_dropdown_label": "Texte sur le bouton de réservation",
         "url_type_labels": {
           "subscribe": "Inscrivez-vous",
           "availability": "Controlez la disponibilité",
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
+        "reservation_type_single": "Lien général",
+        "reservation_type_multiple": "Liens par moment/période",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",
@@ -948,6 +963,11 @@
         "subtitle": "Quels sont les tarifs d'entrée ?",
         "uitpas_error": "Le prix UiTPAS est calculé pour vous par UiTdatabank. Vous ne pouvez pas l'ajouter vous-même.",
         "uitpas_info": "Le taux d'opportunité UiTPAS est automatiquement calculé en fonction du prix de base et des systèmes de cartes actifs.",
+        "boa": {
+          "hZ5fCyL9nKqW3xDvTrJ2gP": "Est-il possible de s'inscrire à cette plaine de jeux par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "K7mPx3nQrT9bWfH2zL5cYv": "Est-il possible de s'inscrire à cette garde d'enfants par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option.",
+          "0.57.0.0.0": "Est-il possible de s'inscrire à ce camp ou à ces vacances par (demi-)journée, par semaine, ou travaillez-vous avec d'autres formules ? Ajoutez alors un tarif distinct par option."
+        },
         "validation_messages": {
           "matches": "Le prix indiqué n'est pas valide.",
           "unique_name": "Le nom spécifié est déjà utilisé.",
@@ -1638,7 +1658,13 @@
     "done": "Terminé la traduction",
     "success": {
       "title": "Titre ({{language}}) mis à jour avec succès",
-      "description": "Description ({{language}}) mise à jour avec succès"
+      "description": "Description ({{language}}) mise à jour avec succès",
+      "faq": "FAQ mis à jour avec succès"
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "FAQ {{index}}",
+      "placeholder_question": "Traduire la question en {{language}}"
     }
   },
   "date_period_picker": {
@@ -1684,7 +1710,8 @@
     "search_text": "En train de chercher..."
   },
   "common": {
-    "back_to_overview": "Retour à la liste"
+    "back_to_overview": "Retour à la liste",
+    "close": "Fermer"
   },
   "users": {
     "search": {
@@ -1917,6 +1944,7 @@
     "info_lesson_series": "Votre série de cours apparaîtra sur UiTinVlaanderen et dans d'autres UiTagendas jusqu'au premier cours.",
     "info_holiday_camp": "Votre séjour (camp ou vacances) apparaîtra sur UiTinVlaanderen et dans d'autres calendriers d'activités jusqu'à sa date de début.",
     "ages": "Ages: {{ages}}",
+    "birth_years": "Né(e) entre <bold>{{from}}</bold> et <bold>{{to}}</bold>",
     "children_only": "Pour les enfants uniquement",
     "accessibility": {
       "description": "Un transport est prévu pour amener les enfants à votre activité depuis:"

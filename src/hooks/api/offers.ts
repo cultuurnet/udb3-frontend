@@ -326,6 +326,7 @@ const changeOfferCalendar = async ({
   opens,
   closes,
   scope,
+  bookingAvailability,
 }) => {
   return fetchFromApi({
     path: `/${scope}/${id.toString()}/calendar`,
@@ -349,6 +350,9 @@ const changeOfferCalendar = async ({
         dayOfWeek,
         opens,
         closes,
+        ...(bookingAvailability?.capacity !== undefined && {
+          bookingAvailability,
+        }),
       }),
       headers,
     },
@@ -676,6 +680,32 @@ const useAddOfferBookingInfoMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const changeOfferBookingAvailability = async ({
+  headers,
+  id,
+  scope,
+  type,
+  capacity,
+}) =>
+  fetchFromApi({
+    path: `/${scope}/${id}/booking-availability`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        type,
+        ...(capacity !== undefined && { capacity }),
+      }),
+    },
+  });
+
+const useChangeOfferBookingAvailabilityMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeOfferBookingAvailability,
+    mutationKey: 'offers-change-booking-availability',
+    ...configuration,
+  });
+
 const addOfferOrganizer = async ({ headers, id, organizerId, scope }) =>
   fetchFromApi({
     path: `/${scope}/${id}/organizer/${organizerId}`,
@@ -738,6 +768,7 @@ export {
   useAddOfferVideoMutation,
   useBulkUpdateOfferLabelsMutation,
   useChangeOfferBirthdateRangeMutation,
+  useChangeOfferBookingAvailabilityMutation,
   useChangeOfferCalendarMutation,
   useChangeOfferDescriptionMutation,
   useChangeOfferNameMutation,

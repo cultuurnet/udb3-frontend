@@ -12,13 +12,13 @@ import { useHeaders } from '@/hooks/api/useHeaders';
 import { Countries, Country } from '@/types/Country';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
+import { Box, parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { Paragraph } from '@/ui/Paragraph';
+import { Paragraph, ParagraphVariants } from '@/ui/Paragraph';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
@@ -233,9 +233,11 @@ const PlaceAddModal = ({
         </Inline>
         <Stack>
           <Text fontWeight="bold">{t('location.add_modal.labels.type')}</Text>
-          <Paragraph marginBottom={3} variant={TextVariants.MUTED}>
-            {t('location.add_modal.labels.typeInfo')}
-          </Paragraph>
+          <Box marginBottom={3}>
+            <Paragraph variant={ParagraphVariants.MUTED}>
+              {t('location.add_modal.labels.typeInfo')}
+            </Paragraph>
+          </Box>
           {formState.errors.term?.id && (
             <Text color="red">{t('location.add_modal.errors.type')}</Text>
           )}

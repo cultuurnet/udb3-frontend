@@ -69,17 +69,11 @@ test.describe.serial('Calendar opening hours modal', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    await expect(
-      modal.getByRole('button', {
-        name: calendar.opening_hours_modal.button_confirm,
-      }),
-    ).toBeDisabled();
-
     await modal
       .getByRole('button', { name: calendar.opening_hours_modal.select_days })
       .click();
     await modal
-      .getByRole('checkbox', { name: calendar.days.full.monday })
+      .getByRole('checkbox', { name: calendar.days.short.monday })
       .click();
 
     await modal
@@ -131,7 +125,7 @@ test.describe.serial('Calendar opening hours modal', () => {
       .getByRole('button', { name: calendar.opening_hours_modal.select_days })
       .click();
     await modal
-      .getByRole('checkbox', { name: calendar.days.full.tuesday })
+      .getByRole('checkbox', { name: calendar.days.short.tuesday })
       .click();
 
     await modal
@@ -206,7 +200,7 @@ test.describe.serial('Calendar opening hours modal', () => {
       .last()
       .click();
     await modal
-      .getByRole('checkbox', { name: calendar.days.full.monday })
+      .getByRole('checkbox', { name: calendar.days.short.monday })
       .click();
 
     await modal

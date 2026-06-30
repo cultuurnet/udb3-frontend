@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
@@ -16,7 +17,7 @@ import {
   useChangeOfferCalendarMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
-import { useToast } from '@/pages/manage/movies/useToast';
+import { useToast } from '@/hooks/useToast';
 import {
   Offer,
   OpeningHoursAdjustedDay,
@@ -26,7 +27,6 @@ import {
 import { Values } from '@/types/Values';
 import { Panel } from '@/ui/Panel';
 import { getStackProps, Stack } from '@/ui/Stack';
-import { Toast } from '@/ui/Toast';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 
 import { UseEditArguments } from '../hooks/useEditField';
@@ -52,7 +52,34 @@ import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
+  const queryClient = useQueryClient();
   const changeCalendarMutation = useChangeOfferCalendarMutation({
+    onMutate: async ({ id, scope, subEvent, calendarType }) => {
+      const queryKey = [scope, { id }];
+      await queryClient.cancelQueries({ queryKey });
+      const previousOffer = queryClient.getQueryData<Offer>(queryKey);
+      // Mirror the new calendar in the cache: calendar types without subEvents
+      // (periodic/permanent) clear them, so the reservation UI updates too.
+      queryClient.setQueryData<Offer>(queryKey, (offer) =>
+        offer
+          ? {
+              ...offer,
+              subEvent: subEvent ?? [],
+              ...(calendarType && { calendarType }),
+            }
+          : offer,
+      );
+      return { previousOffer };
+    },
+    onError: (
+      _error,
+      { id, scope },
+      context: { previousOffer?: Offer } | undefined,
+    ) => {
+      if (context?.previousOffer) {
+        queryClient.setQueryData([scope, { id }], context.previousOffer);
+      }
+    },
     onSuccess: () =>
       onSuccess('calendar', {
         shouldInvalidateEvent: false,
@@ -65,6 +92,11 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
       scope,
     };
 
+    const bookingAvailability = queryClient.getQueryData<Offer>([
+      scope,
+      { id: offerId },
+    ])?.bookingAvailability;
+
     if (timeTable) {
       const subEvent = convertTimeTableToSubEvents(timeTable);
 
@@ -73,6 +105,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
         subEvent,
         calendarType:
           subEvent.length > 1 ? CalendarType.MULTIPLE : CalendarType.SINGLE,
+        bookingAvailability,
       });
 
       return;
@@ -81,6 +114,7 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
     await changeCalendarMutation.mutateAsync({
       ...common,
       ...calendar,
+      bookingAvailability,
     });
   };
 };
@@ -94,6 +128,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     endDate: subEvent.endDate,
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
+    bookingInfo: subEvent.bookingInfo,
     childcareEnabled: !!subEvent.childcare,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
@@ -147,12 +182,14 @@ const convertStateToFormData = (
     endDate: formatDateToISO(day.endDate ? new Date(day.endDate) : new Date()),
     bookingAvailability: day.bookingAvailability,
     status: day.status,
-    ...(day.childcareEnabled && {
-      childcare: {
-        start: day.childcareStartTime,
-        end: day.childcareEndTime,
-      },
-    }),
+    ...(day.bookingInfo && { bookingInfo: day.bookingInfo }),
+    ...(day.childcareEnabled &&
+      (day.childcareStartTime || day.childcareEndTime) && {
+        childcare: {
+          ...(day.childcareStartTime && { start: day.childcareStartTime }),
+          ...(day.childcareEndTime && { end: day.childcareEndTime }),
+        },
+      }),
     ...(day.hasOvernightStay && { overnight: true }),
   }));
 
@@ -160,13 +197,16 @@ const convertStateToFormData = (
     opens: openingHour.opens,
     closes: openingHour.closes,
     dayOfWeek: openingHour.dayOfWeek,
-    ...(openingHour.childcareStartTime &&
-      openingHour.childcareEndTime && {
-        childcare: {
+    ...((openingHour.childcareStartTime || openingHour.childcareEndTime) && {
+      childcare: {
+        ...(openingHour.childcareStartTime && {
           start: openingHour.childcareStartTime,
+        }),
+        ...(openingHour.childcareEndTime && {
           end: openingHour.childcareEndTime,
-        },
-      }),
+        }),
+      },
+    }),
   }));
 
   return {
@@ -271,12 +311,14 @@ const CalendarStep = ({
   const closingPeriodsRef = useRef<ClosingPeriodData[]>([]);
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>([]);
 
+  const offerRef = useRef<Offer | undefined>(undefined);
+
   const handleChangeCalendarState = (newState: CalendarState) => {
     const calendarType = Object.values(CalendarType).find((type) =>
       newState.matches(type),
     );
 
-    const formData = {
+    const baseFormData = {
       ...convertStateToFormData(newState.context, calendarType),
       ...(adjustedDaysRef.current.length > 0 && {
         openingHoursAdjustedDays: formatAdjustedDays(adjustedDaysRef.current),
@@ -285,6 +327,48 @@ const CalendarStep = ({
         openingHoursClosedDays: formatClosingDays(closingPeriodsRef.current),
       }),
     };
+
+    const existingSubEvents = offerRef.current?.subEvent;
+
+    const canPreserveReservationData =
+      existingSubEvents &&
+      Array.isArray(baseFormData.subEvent) &&
+      existingSubEvents.length <= baseFormData.subEvent.length;
+    const preservedFormData = canPreserveReservationData
+      ? {
+          ...baseFormData,
+          subEvent: baseFormData.subEvent.map((subEvent, index) => {
+            const existing = existingSubEvents[index];
+            if (!existing) return subEvent;
+            const bookingAvailability =
+              existing.bookingAvailability ?? subEvent.bookingAvailability;
+            return {
+              ...subEvent,
+              ...(existing.bookingInfo && {
+                bookingInfo: existing.bookingInfo,
+              }),
+              ...(bookingAvailability && { bookingAvailability }),
+            };
+          }),
+        }
+      : baseFormData;
+
+    const shouldClearSubEventBookingInfo =
+      existingSubEvents &&
+      existingSubEvents.length > 1 &&
+      Array.isArray(preservedFormData.subEvent) &&
+      preservedFormData.subEvent.length === 1;
+
+    const formData = shouldClearSubEventBookingInfo
+      ? {
+          ...preservedFormData,
+          subEvent: preservedFormData.subEvent.map((subEvent) => ({
+            ...subEvent,
+            bookingInfo: {},
+            bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
+          })),
+        }
+      : preservedFormData;
 
     setValue('calendar', formData, {
       shouldTouch: true,
@@ -355,6 +439,7 @@ const CalendarStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const offer: Offer | undefined = getOfferByIdQuery.data;
+  offerRef.current = offer;
 
   useEffect(() => {
     if (!offer || isCalendarInitialized) return;
@@ -469,12 +554,7 @@ const CalendarStep = ({
           />
         )}
       </Panel>
-      <Toast
-        variant="success"
-        body={toast.message}
-        visible={!!toast.message}
-        onClose={() => toast.clear()}
-      />
+      {toast.component}
     </Stack>
   );
 };
@@ -524,7 +604,7 @@ const calendarStepConfiguration: StepsConfiguration<'calendar'> = {
           const errors = subEvent
             .map((sub, index) => {
               if (!sub.childcare) return undefined;
-              if (!sub.childcare.start || !sub.childcare.end) {
+              if (!sub.childcare.start && !sub.childcare.end) {
                 return context.createError({
                   path: `${context.path}.${index}`,
                   message: 'Childcare times required',

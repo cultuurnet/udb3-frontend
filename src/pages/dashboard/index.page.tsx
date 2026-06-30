@@ -334,7 +334,7 @@ const TabContent = ({
           box-shadow: unset !important;
         `}
       >
-        <Spinner marginY={4} />
+        <Spinner className="tw:my-4" />
       </Panel>
     );
   }
@@ -684,7 +684,10 @@ const Dashboard = (): any => {
                   {suggestedOrganizers.data?.member?.length > 0 && (
                     <>
                       <Title>{t('dashboard.suggestions.title')}</Title>
-                      <Alert variant={AlertVariants.PRIMARY} marginY={4}>
+                      <Alert
+                        variant={AlertVariants.PRIMARY}
+                        className="tw:my-4"
+                      >
                         {t('dashboard.suggestions.description')}
                       </Alert>
                       <RequestOwnershipModal

@@ -32,7 +32,8 @@ const useFeatureFlag = (featureFlagName: FeatureFlagName) => {
 
   const dependencies = useMemo(() => [cookieName], [cookieName]);
 
-  const { cookies, setCookie } = useCookiesWithOptions(dependencies);
+  const { cookies, setCookie, removeCookie } =
+    useCookiesWithOptions(dependencies);
 
   const cookieValue = useMemo(
     () => isFeatureFlagEnabledInCookies(featureFlagName, cookies),
@@ -63,9 +64,13 @@ const useFeatureFlag = (featureFlagName: FeatureFlagName) => {
     [cookieName, cookieValue, setCookie],
   );
 
+  const remove = useCallback(() => {
+    removeCookie(cookieName);
+  }, [cookieName, removeCookie]);
+
   const statePair = useMemo(
-    () => [isFeatureEnabled, set] as const,
-    [isFeatureEnabled, set],
+    () => [isFeatureEnabled, set, remove] as const,
+    [isFeatureEnabled, set, remove],
   );
 
   return statePair;

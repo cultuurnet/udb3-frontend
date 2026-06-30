@@ -99,14 +99,11 @@ const Preview = () => {
   const isGodUser = userPermissions?.includes(
     PermissionTypes.GEBRUIKERS_BEHEREN,
   );
-  const canSeeHistory = userPermissions?.includes(
-    PermissionTypes.AANBOD_HISTORIEK,
-  );
 
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     placeId as string,
     offerType,
-    { enabled: canSeeHistory || isGodUser },
+    { enabled: isGodUser },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
   const {
@@ -116,7 +113,6 @@ const Preview = () => {
     typicalAgeRange,
     mediaObject,
     videos,
-    audience,
   } = offer ?? {};
 
   const title = getLanguageObjectOrFallback<string>(
@@ -138,7 +134,7 @@ const Preview = () => {
   const isDeleted = offer?.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  if (canSeeHistory || isGodUser) {
+  if (isGodUser) {
     tabOptions.push('history');
   }
 
@@ -220,8 +216,11 @@ const Preview = () => {
               font-weight: 600;
               width: 25%;
             }
-            tbody tr:first-child td {
-              border-top: none;
+            tbody tr td {
+              border: none;
+            }
+            tbody tr:not(:last-child) td {
+              border-bottom: 1px solid ${colors.grey3};
             }
           `}
         />
@@ -258,7 +257,7 @@ const Preview = () => {
       value: (
         <AgePreview
           typicalAgeRange={typicalAgeRange}
-          audienceType={audience?.audienceType}
+          birthdateRange={offer?.birthdateRange}
         />
       ),
     },
@@ -344,7 +343,7 @@ const Preview = () => {
               />
             )}
             {isEdited && (
-              <Alert width="100%" marginBottom={4}>
+              <Alert fullWidth className="tw:mb-4">
                 <Text
                   css={`
                     b {

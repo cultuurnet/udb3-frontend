@@ -1,13 +1,7 @@
-import { css } from 'styled-components';
-
 import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
 import { getInlineProps, InlineProps } from '@/ui/Inline';
-import { getValueFromTheme } from '@/ui/theme';
-
-const getValue = getValueFromTheme('newFeatureTooltip');
 
 const Features = {
   EVENT_SCORE: '27f6ab5d-5ca3-4933-a8bf-ccce25b40723',
@@ -19,23 +13,8 @@ const Features = {
 
 const QuestionCircleIcon = () => {
   return (
-    <Badge
-      variant={BadgeVariants.SECONDARY}
-      pill
-      css={css`
-        aspect-ratio: 1 / 1;
-
-        &.badge {
-          background-color: ${getValue('backgroundColor')};
-        }
-      `}
-    >
-      <Icon
-        name={Icons.QUESTION}
-        color="white"
-        width="0.8rem"
-        height="0.8rem"
-      />
+    <Badge variant={BadgeVariants.SECONDARY} pill>
+      <span className="tw:text-white  tw:font-bold">?</span>
     </Badge>
   );
 };

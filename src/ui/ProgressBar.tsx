@@ -1,9 +1,9 @@
-import { ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
-
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
+import { Progress } from '@/ui/shadcn/progress';
+import { cn } from '@/ui/shadcn/utils';
 
-import type { BoxProps } from './Box';
-import { Box, getBoxProps } from './Box';
+import { ProgressBarLegacy } from './ProgressBarLegacy';
 
 const ProgressBarVariants = {
   INFO: 'info',
@@ -12,21 +12,51 @@ const ProgressBarVariants = {
   WARNING: 'warning',
 } as const;
 
-type Props = BoxProps & {
+type Props = {
   progress: number;
   variant: Values<typeof ProgressBarVariants>;
+  label?: string;
+  showPercentage?: boolean;
+  className?: string;
 };
 
-const ProgressBar = ({ progress, variant, ...props }: Props) => {
-  return (
-    <Box
-      as={BootstrapProgressBar}
-      display="flex"
-      width="100%"
-      now={progress}
+const indicatorClasses: Record<Values<typeof ProgressBarVariants>, string> = {
+  info: 'tw:bg-primary',
+  success: 'tw:bg-success',
+  danger: 'tw:bg-destructive',
+  warning: 'tw:bg-warning',
+};
+
+const ProgressBar = ({
+  progress,
+  variant,
+  label,
+  showPercentage = false,
+  className,
+}: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return isShadcnMigrationEnabled ? (
+    <div className={cn('tw:flex tw:w-full tw:flex-col tw:gap-1', className)}>
+      {(label || showPercentage) && (
+        <div className="tw:flex tw:text-sm">
+          {label && <span>{label}</span>}
+          {showPercentage && <span className="tw:ml-auto">{progress}%</span>}
+        </div>
+      )}
+      <Progress
+        value={progress}
+        indicatorClassName={indicatorClasses[variant]}
+      />
+    </div>
+  ) : (
+    <ProgressBarLegacy
+      progress={progress}
       variant={variant}
-      {...getBoxProps(props)}
-    ></Box>
+      className={className}
+    />
   );
 };
 

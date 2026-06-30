@@ -10,11 +10,10 @@ import {
   useGetRoleByIdQuery,
   useRemovePermissionFromRoleMutation,
 } from '@/hooks/api/roles';
-import { useToast } from '@/pages/manage/movies/useToast';
+import { useToast } from '@/hooks/useToast';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Stack } from '@/ui/Stack';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
-import { Toast } from '@/ui/Toast';
 
 type PermissionsSectionProps = {
   roleId: string;
@@ -140,12 +139,7 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
         })}
       </Stack>
 
-      <Toast
-        variant="success"
-        body={toast.message}
-        visible={!!toast.message}
-        onClose={() => toast.clear()}
-      />
+      {toast.component}
     </Stack>
   );
 };

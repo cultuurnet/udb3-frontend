@@ -10,6 +10,8 @@ import type {
   BookingInfo,
   MediaObject,
   OpeningHours,
+  OpeningHoursAdjustedDay,
+  OpeningHoursClosedDay,
   PriceInfo,
   Status,
   SubEvent,
@@ -70,6 +72,9 @@ type EventArguments = {
   audience: {
     audienceType: string;
   };
+  openingHoursAdjustedDays?: OpeningHoursAdjustedDay[];
+  openingHoursClosedDays?: OpeningHoursClosedDay[];
+  childrenOnly?: boolean;
 };
 type AddEventArguments = EventArguments & { headers: Headers };
 
@@ -99,6 +104,9 @@ const addEvent = async ({
   labels,
   hiddenLabels,
   audience,
+  openingHoursAdjustedDays,
+  openingHoursClosedDays,
+  childrenOnly,
 }: AddEventArguments) =>
   fetchFromApi({
     path: '/events/',
@@ -118,7 +126,7 @@ const addEvent = async ({
         location,
         audienceType,
         attendanceMode,
-        typicalAgeRange,
+        ...(typicalAgeRange && { typicalAgeRange }),
         ...(birthdateRange?.from && birthdateRange?.to && { birthdateRange }),
         onlineUrl,
         mediaObject,
@@ -130,6 +138,13 @@ const addEvent = async ({
         labels,
         hiddenLabels,
         audience,
+        ...(openingHoursAdjustedDays?.length > 0 && {
+          openingHoursAdjustedDays,
+        }),
+        ...(openingHoursClosedDays?.length > 0 && {
+          openingHoursClosedDays,
+        }),
+        ...(childrenOnly && { childrenOnly }),
       }),
     },
   });
@@ -684,7 +699,7 @@ const changeStatusSubEvents = async ({
   bookingAvailability,
 }) =>
   fetchFromApi({
-    path: `/events/${eventId.toString()}/subEvents`,
+    path: `/events/${eventId.toString()}/sub-events`,
     options: {
       method: 'PATCH',
       headers,
@@ -737,6 +752,35 @@ const useChangeStatusSubEventsMutation = (configuration = {}) =>
     ...configuration,
   });
 
+const changeSubEventReservation = async ({
+  headers,
+  eventId,
+  subEventIndex,
+  bookingInfo,
+  bookingAvailability,
+}) =>
+  fetchFromApi({
+    path: `/events/${eventId}/sub-events`,
+    options: {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify([
+        {
+          id: subEventIndex,
+          ...(bookingInfo && { bookingInfo }),
+          ...(bookingAvailability && { bookingAvailability }),
+        },
+      ]),
+    },
+  });
+
+const useChangeSubEventReservationMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeSubEventReservation,
+    mutationKey: 'events-change-subevent-reservation',
+    ...configuration,
+  });
+
 const publish = async ({ headers, id, publicationDate }) =>
   fetchFromApi({
     path: `/events/${id}`,
@@ -773,6 +817,23 @@ const useChangeAudienceMutation = (configuration = {}) =>
   useAuthenticatedMutation({
     mutationFn: changeAudience,
     mutationKey: 'events-change-audience',
+    ...configuration,
+  });
+
+const changeChildrenOnly = async ({ headers, eventId, childrenOnly }) =>
+  fetchFromApi({
+    path: `/events/${eventId}/children-only`,
+    options: {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ childrenOnly }),
+    },
+  });
+
+const useChangeChildrenOnlyMutation = (configuration = {}) =>
+  useAuthenticatedMutation({
+    mutationFn: changeChildrenOnly,
+    mutationKey: 'events-change-children-only',
     ...configuration,
   });
 
@@ -903,12 +964,14 @@ export {
   useChangeAudienceMutation,
   useChangeAvailableFromMutation,
   useChangeCalendarMutation,
+  useChangeChildrenOnlyMutation,
   useChangeDeparturePlacesMutation,
   useChangeLocationMutation,
   useChangeNameMutation,
   useChangeOnlineUrlMutation,
   useChangeStatusMutation,
   useChangeStatusSubEventsMutation,
+  useChangeSubEventReservationMutation,
   useDeleteEventByIdMutation,
   useDeleteOnlineUrlMutation,
   useDuplicateEventMutation,

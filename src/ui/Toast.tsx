@@ -1,122 +1,104 @@
-import { useMemo } from 'react';
-import { Toast as BootstrapToast } from 'react-bootstrap';
-import { css } from 'styled-components';
+import { useEffect, useId, useRef } from 'react';
+import { toast as sonnerToast } from 'sonner';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
-import { Icon, Icons } from '@/ui/Icon';
+import { Toaster } from '@/ui/shadcn/sonner';
 
-import { parseSpacing } from './Box';
-import { Paragraph } from './Paragraph';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { ToastLegacy } from './ToastLegacy';
 
 const ToastVariants = {
-  PRIMARY: 'primary',
-  SECONDARY: 'secondary',
   SUCCESS: 'success',
   DANGER: 'danger',
   WARNING: 'warning',
   INFO: 'info',
-  LIGHT: 'light',
-  DARK: 'dark',
 } as const;
 
-const getValue = getValueFromTheme('toast');
-
-const commonCss = css`
-  &.toast {
-    border-radius: ${getGlobalBorderRadius};
-
-    position: fixed;
-    right: ${parseSpacing(3)()};
-    top: ${parseSpacing(3)()};
-
-    z-index: ${getValue('zIndex')};
-
-    min-width: ${parseSpacing(8)()};
-  }
-`;
-
-const VariantToStylesMap = {
-  [ToastVariants.PRIMARY]: css`
-    ${commonCss}
-    &.bg-primary {
-      background-color: ${getValue('primary.backgroundColor')} !important;
-    }
-  `,
-  [ToastVariants.SECONDARY]: css`
-    ${commonCss}
-    &.bg-secondary {
-      color: ${getValue('secondary.color')} !important;
-      background-color: ${getValue('secondary.backgroundColor')} !important;
-    }
-  `,
-  [ToastVariants.SUCCESS]: css`
-    ${commonCss}
-    &.bg-success {
-      background-color: ${getValue('success.backgroundColor')} !important;
-    }
-  `,
-  [ToastVariants.DANGER]: css`
-    ${commonCss}
-    &.bg-danger {
-      background-color: ${getValue('danger.backgroundColor')} !important;
-    }
-  `,
-  [ToastVariants.WARNING]: css`
-    ${commonCss}
-    &.bg-warning {
-      background-color: ${getValue('warning.backgroundColor')} !important;
-    }
-  `,
-};
-
-type Props = {
-  variant: Values<typeof ToastVariants>;
+type ToastProps = {
+  variant?: Values<typeof ToastVariants>;
   body: string;
   visible?: boolean;
   onClose?: () => void;
+  duration?: number;
+};
+
+const getSonnerFn = (variant: Values<typeof ToastVariants>) => {
+  if (variant === ToastVariants.SUCCESS) return sonnerToast.success;
+  if (variant === ToastVariants.DANGER) return sonnerToast.error;
+  if (variant === ToastVariants.WARNING) return sonnerToast.warning;
+  if (variant === ToastVariants.INFO) return sonnerToast.info;
+  return sonnerToast;
+};
+
+const ToastShadcn = ({
+  variant = ToastVariants.SUCCESS,
+  body,
+  visible = true,
+  onClose,
+  duration = 5000,
+}: ToastProps) => {
+  const toasterId = useId();
+  const toastId = useId();
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    if (visible && body) {
+      const fn = getSonnerFn(variant);
+      fn(body, {
+        id: toastId,
+        toasterId,
+        duration,
+        closeButton: !!onClose,
+        onDismiss: () => onCloseRef.current?.(),
+        onAutoClose: () => onCloseRef.current?.(),
+      });
+    } else {
+      sonnerToast.dismiss(toastId);
+    }
+  }, [visible, body, variant, toastId, toasterId, duration, onClose]);
+
+  useEffect(() => {
+    return () => {
+      sonnerToast.dismiss(toastId);
+    };
+  }, [toastId]);
+
+  return <Toaster id={toasterId} position="top-right" />;
 };
 
 const Toast = ({
-  variant = ToastVariants.PRIMARY,
+  variant = ToastVariants.SUCCESS,
+  body,
   visible = true,
-  body = '',
   onClose,
-}: Props) => {
-  const icon = useMemo(() => {
-    const icons = {
-      [ToastVariants.PRIMARY]: Icons.QUESTION_CIRCLE,
-      [ToastVariants.WARNING]: Icons.EXCLAMATION_CIRCLE,
-      [ToastVariants.DANGER]: Icons.EXCLAMATION_CIRCLE,
-      [ToastVariants.SUCCESS]: Icons.CHECK_CIRCLE,
-    };
+  duration,
+}: ToastProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
 
-    return icons[variant];
-  }, [variant]);
+  if (!isShadcnMigrationEnabled) {
+    return (
+      <ToastLegacy
+        variant={variant}
+        body={body}
+        visible={visible}
+        onClose={onClose}
+      />
+    );
+  }
 
   return (
-    <BootstrapToast
-      className={`d-inline-block m-1 p-2`}
-      css={VariantToStylesMap[variant]}
-      autohide
-      delay={5000}
-      show={visible}
+    <ToastShadcn
+      variant={variant}
+      body={body}
+      visible={visible}
       onClose={onClose}
-    >
-      <Paragraph
-        as={BootstrapToast.Body}
-        backgroundColor="transparent"
-        color={getValue('textColor.dark')}
-        className={'d-flex justify-content-between align-items-center flex-row'}
-      >
-        <span className={'d-flex me-2'}>
-          {icon && <Icon name={icon} className={`text-${variant} me-2`} />}
-          {body}
-        </span>
-        {onClose && <Icon name={Icons.TIMES} onClick={onClose} width={10} />}
-      </Paragraph>
-    </BootstrapToast>
+      duration={duration}
+    />
   );
 };
 
-export { Toast, ToastVariants };
+export { toast } from 'sonner';
+export { Toast, Toaster, ToastVariants };

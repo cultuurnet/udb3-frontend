@@ -136,6 +136,8 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
   ];
 };
 
+type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
+
 type Props = InlineProps & {
   id: string;
   dateStart: Date;
@@ -149,10 +151,9 @@ type Props = InlineProps & {
   showQuickLinks?: boolean;
   apiHolidays?: ApiHoliday[];
   fetchHolidays?: (startDate: string, endDate: string) => Promise<ApiHoliday[]>;
-  onQuickLinkClick?: (
-    periods: { startDate: Date; endDate: Date; name: string }[],
-  ) => void;
+  onQuickLinkClick?: (periods: QuickLinkPeriod[]) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
+  labelVariant?: Values<typeof LabelVariants>;
 };
 
 const DatePeriodPicker = ({
@@ -170,6 +171,7 @@ const DatePeriodPicker = ({
   fetchHolidays,
   onQuickLinkClick,
   onShowHolidaysChange,
+  labelVariant = LabelVariants.BOLD,
   ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
@@ -308,7 +310,7 @@ const DatePeriodPicker = ({
   return (
     <Inline as="div" spacing={5} {...getInlineProps(props)}>
       <Stack spacing={2} as="div">
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-start`}>
+        <Label variant={labelVariant} htmlFor={`${idPrefix}-start`}>
           {t('date_period_picker.start')}
         </Label>
         <DatePicker
@@ -347,7 +349,7 @@ const DatePeriodPicker = ({
         />
       </Stack>
       <Stack spacing={2} as="div">
-        <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-end`}>
+        <Label variant={labelVariant} htmlFor={`${idPrefix}-end`}>
           {t('date_period_picker.end')}
         </Label>
         <DatePicker
@@ -393,3 +395,4 @@ const DatePeriodPicker = ({
 };
 
 export { DatePeriodPicker };
+export type { QuickLinkPeriod };

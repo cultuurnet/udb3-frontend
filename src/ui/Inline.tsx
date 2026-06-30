@@ -1,27 +1,13 @@
 import { pickBy } from 'lodash';
-import {
-  Children,
-  cloneElement,
-  forwardRef,
-  Fragment,
-  isValidElement,
-} from 'react';
-import type { ExecutionContext } from 'styled-components';
-import styled, { css } from 'styled-components';
+import { forwardRef } from 'react';
 
-import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-import {
-  Box,
-  BoxProps,
-  boxProps,
-  boxPropTypes,
-  FALSY_VALUES,
-  parseProperty,
-  UIProp,
-  withoutDisallowedPropsConfig,
-} from './Box';
-import type { BreakpointValues, Theme } from './theme';
+import { Box, BoxProps, boxPropTypes, UIProp } from './Box';
+import { InlineLegacy } from './InlineLegacy';
+import { cn } from './shadcn/utils';
+import { GAP_CLASS_BY_SPACING, getGapClass } from './tailwindGap';
+import type { BreakpointValues } from './theme';
 
 type InlineProps = {
   spacing?: UIProp<number>;
@@ -30,73 +16,51 @@ type InlineProps = {
 
 type Props = BoxProps & InlineProps;
 
-const parseStackOnProperty =
-  () =>
-  (props: ExecutionContext & { theme?: Theme; stackOn?: BreakpointValues }) => {
-    if (!props.stackOn) return;
-    return css`
-      @media (max-width: ${props.theme?.breakpoints?.[props.stackOn]}px) {
-        flex-direction: column;
-      }
-    `;
-  };
-
-const inlineProps = css`
-  display: flex;
-  flex-direction: row;
-
-  ${parseProperty('alignItems')};
-  ${parseProperty('alignSelf')};
-  ${parseProperty('justifyContent')};
-  ${parseStackOnProperty()};
-`;
-
-const StyledBox = styled(Box).withConfig(withoutDisallowedPropsConfig)`
-  ${inlineProps};
-  ${boxProps};
-`;
-
-const Inline = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as = 'span', stackOn, ...props }, ref) => {
-    const shouldCollapse = useMatchBreakpoint(stackOn);
-    const marginProp =
-      shouldCollapse && stackOn ? 'marginBottom' : 'marginRight';
-
-    const validChildren = Children.toArray(children).filter(
-      (child) => !FALSY_VALUES.includes(child),
-    );
-
-    const clonedChildren = Children.map(validChildren, (child, i) => {
-      const isLastItem = i === validChildren.length - 1;
-
-      const isBoxComponent =
-        isValidElement(child) &&
-        typeof child.type !== 'string' &&
-        child.type !== Fragment;
-
-      // @ts-expect-error
-      return cloneElement(child, {
-        // @ts-expect-error
-        ...child.props,
-        ...(!isLastItem && spacing && isBoxComponent
-          ? { [marginProp]: spacing }
-          : {}),
-      });
-    });
-
-    return (
-      <StyledBox
-        as={as}
-        className={className}
-        stackOn={stackOn}
-        {...props}
-        ref={ref}
-      >
-        {clonedChildren}
-      </StyledBox>
-    );
-  },
+const InlineShadcn = forwardRef<HTMLElement, Props>(
+  (
+    { spacing, className, children, as = 'span', forwardedAs, ...props },
+    ref,
+  ) => (
+    <Box
+      as={forwardedAs ?? as}
+      ref={ref}
+      className={cn(
+        'tw:flex',
+        getGapClass(spacing as number | undefined),
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Box>
+  ),
 );
+
+InlineShadcn.displayName = 'InlineShadcn';
+
+const Inline = forwardRef<HTMLElement, Props>((props, ref) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  // Tailwind gap can't express responsive spacing objects or `stackOn`
+  // (the theme breakpoints differ from Tailwind's), and `tw:flex` would clash
+  // with a caller-provided `display`. Those cases fall back to the legacy
+  // version.
+  const canUseShadcn =
+    isShadcnMigrationEnabled &&
+    (props.spacing === undefined ||
+      (typeof props.spacing === 'number' &&
+        props.spacing in GAP_CLASS_BY_SPACING)) &&
+    props.stackOn === undefined &&
+    props.display === undefined;
+
+  return canUseShadcn ? (
+    <InlineShadcn ref={ref} {...props} />
+  ) : (
+    <InlineLegacy ref={ref} {...props} />
+  );
+});
 
 Inline.displayName = 'Inline';
 

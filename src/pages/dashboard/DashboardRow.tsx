@@ -163,15 +163,7 @@ export const DashboardRow = ({
           href={url}
           color={getValue('listItem.color')}
           fontWeight="bold"
-          css={`
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 38rem;
-            display: block;
-            font-size: 18px;
-            text-decoration: none;
-          `}
+          className="tw:block tw:overflow-hidden tw:whitespace-nowrap tw:text-ellipsis tw:max-w-152 tw:text-[18px] tw:no-underline"
         >
           {title}
         </Link>
@@ -242,7 +234,7 @@ export const DashboardRow = ({
             )}
             {!finishedAt && isOwnershipRequested && (
               <Inline spacing={2} alignItems="center">
-                <Icon name={Icons.CHECK} color={colors.udbMainPositiveGreen} />
+                <Icon name={Icons.CHECK} className="tw:text-success" />
                 <Text>{t('organizers.ownerships.requested')}</Text>
               </Inline>
             )}

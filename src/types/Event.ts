@@ -29,8 +29,8 @@ type Event = BaseOffer & {
   onlineUrl?: string;
   production?: ProductionOnEvent;
   attendanceMode: Values<typeof AttendanceMode>;
-  bookingAvailability: { type: Values<typeof BookingAvailability> };
   departurePlaces?: string[];
+  childrenOnly?: boolean;
 };
 
 const isEvent = (value: unknown): value is Event => {

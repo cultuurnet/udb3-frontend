@@ -55,13 +55,17 @@ test('create a movie', async ({ baseURL, page }) => {
     .nth(0)
     .fill(faker.internet.email());
   await contactButton.click();
-  await page.locator('select').last().selectOption('phone');
+  await page
+    .getByRole('tabpanel')
+    .locator('select')
+    .last()
+    .selectOption('phone');
   await page
     .getByTestId('contact-info-value')
     .last()
     .fill(faker.phone.number({ style: 'international' }));
   await contactButton.click();
-  await page.locator('select').last().selectOption('url');
+  await page.getByRole('tabpanel').locator('select').last().selectOption('url');
   await page
     .getByTestId('contact-info-value')
     .last()

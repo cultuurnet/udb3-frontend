@@ -1,0 +1,35 @@
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import * as React from 'react';
+
+import { cn } from '@/ui/shadcn/utils';
+
+type ProgressProps = React.ComponentPropsWithoutRef<
+  typeof ProgressPrimitive.Root
+> & {
+  indicatorClassName?: string;
+};
+
+const Progress = React.forwardRef<
+  React.ComponentRef<typeof ProgressPrimitive.Root>,
+  ProgressProps
+>(({ className, value, indicatorClassName, ...props }, ref) => (
+  <ProgressPrimitive.Root
+    ref={ref}
+    className={cn(
+      'tw:relative tw:h-2 tw:w-full tw:overflow-hidden tw:rounded-full tw:bg-muted',
+      className,
+    )}
+    {...props}
+  >
+    <ProgressPrimitive.Indicator
+      className={cn(
+        'tw:h-full tw:w-full tw:flex-1 tw:bg-primary tw:transition-all',
+        indicatorClassName,
+      )}
+      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+    />
+  </ProgressPrimitive.Root>
+));
+Progress.displayName = ProgressPrimitive.Root.displayName;
+
+export { Progress };
