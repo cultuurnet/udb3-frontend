@@ -208,7 +208,8 @@ const OpeningHoursContent = ({
                   }
                 : undefined,
           }))}
-          adjustedDays={initialAdjustedDays &&
+          adjustedDays={
+            initialAdjustedDays &&
             sortPeriods(initialAdjustedDays).map(
               ({ openingHours, startDate, endDate, description }) => ({
                 startDate: format(startDate, 'yyyy-MM-dd'),
@@ -218,15 +219,18 @@ const OpeningHoursContent = ({
                   ({ id: _id, ...openingHour }) => openingHour,
                 ),
               }),
-            )}
-          closedDays={initialClosingPeriods &&
+            )
+          }
+          closedDays={
+            initialClosingPeriods &&
             sortPeriods(initialClosingPeriods).map(
               ({ startDate, endDate, description }) => ({
                 startDate: format(startDate, 'yyyy-MM-dd'),
                 endDate: format(endDate, 'yyyy-MM-dd'),
                 description,
               }),
-            )}
+            )
+          }
           lang={lang}
         />
       </Stack>
