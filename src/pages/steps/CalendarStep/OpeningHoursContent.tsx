@@ -210,7 +210,7 @@ const OpeningHoursContent = ({
           }))}
           adjustedDays={
             initialAdjustedDays &&
-            (sortPeriods(initialAdjustedDays) as DeviatingPeriodData[]).map(
+            sortPeriods(initialAdjustedDays).map(
               ({ openingHours, startDate, endDate, description }) => ({
                 startDate: format(startDate, 'yyyy-MM-dd'),
                 endDate: format(endDate, 'yyyy-MM-dd'),
