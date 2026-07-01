@@ -10,12 +10,12 @@ import {
 } from '@/ui/shadcn/tooltip';
 import { TooltipLegacy } from '@/ui/TooltipLegacy';
 
-type Placement = ComponentPropsWithoutRef<typeof TooltipContent>['side'];
+type Side = ComponentPropsWithoutRef<typeof TooltipContent>['side'];
 
 type Props = {
   id?: string; // TODO: remove after migration — Radix handles accessibility automatically
   content: string;
-  placement?: Placement;
+  side?: Side;
   children?: ReactNode;
 };
 
@@ -27,11 +27,11 @@ const DefaultTrigger = () => (
   </Badge>
 );
 
-const Tooltip = ({ id, content, placement, children }: Props) => {
+const Tooltip = ({ id, content, side, children }: Props) => {
   const [isShadcnMigration] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
 
   if (!isShadcnMigration) {
-    return <TooltipLegacy id={id} content={content} placement={placement} />;
+    return <TooltipLegacy id={id} content={content} placement={side} />;
   }
 
   return (
@@ -40,7 +40,7 @@ const Tooltip = ({ id, content, placement, children }: Props) => {
         <TooltipTrigger asChild>
           <span>{children ?? <DefaultTrigger />}</span>
         </TooltipTrigger>
-        <TooltipContent side={placement}>{content}</TooltipContent>
+        <TooltipContent side={side}>{content}</TooltipContent>
       </ShadcnTooltip>
     </TooltipProvider>
   );

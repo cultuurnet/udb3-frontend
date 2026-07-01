@@ -11,7 +11,7 @@ const meta: Meta<typeof Tooltip> = {
     layout: 'centered',
   },
   argTypes: {
-    placement: {
+    side: {
       control: { type: 'select' },
       options: ['top', 'bottom', 'left', 'right'],
     },
@@ -35,7 +35,7 @@ const shadcnOnly = {
 export const Default: Story = {
   args: {
     content: 'This is a tooltip',
-    placement: 'top',
+    side: 'top',
   },
 };
 
@@ -43,10 +43,10 @@ export const WithButton: Story = {
   parameters: shadcnOnly,
   args: {
     content: 'This is a tooltip on a button',
-    placement: 'top',
+    side: 'top',
   },
-  render: ({ content, placement }) => (
-    <Tooltip content={content} placement={placement}>
+  render: ({ content, side }) => (
+    <Tooltip content={content} side={side}>
       <Button>Hover me</Button>
     </Tooltip>
   ),
@@ -56,10 +56,10 @@ export const WithIconButton: Story = {
   parameters: shadcnOnly,
   args: {
     content: 'Search',
-    placement: 'top',
+    side: 'top',
   },
-  render: ({ content, placement }) => (
-    <Tooltip content={content} placement={placement}>
+  render: ({ content, side }) => (
+    <Tooltip content={content} side={side}>
       <Button variant={ButtonVariants.UNSTYLED}>
         <Icon name={Icons.SEARCH} />
       </Button>
@@ -71,10 +71,10 @@ export const WithText: Story = {
   parameters: shadcnOnly,
   args: {
     content: 'This is a tooltip on text',
-    placement: 'top',
+    side: 'top',
   },
-  render: ({ content, placement }) => (
-    <Tooltip content={content} placement={placement}>
+  render: ({ content, side }) => (
+    <Tooltip content={content} side={side}>
       <span className="tw:underline tw:cursor-help">Hover over this text</span>
     </Tooltip>
   ),
