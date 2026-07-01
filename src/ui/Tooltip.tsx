@@ -21,9 +21,11 @@ type Props = {
 
 const TOOLTIP_DELAY_MS = 100;
 
-const DefaultTrigger = () => (
+const DefaultTrigger = ({ content }: { content: string }) => (
   <Badge variant={BadgeVariants.SECONDARY} pill>
-    ?
+    <span tabIndex={0} aria-label={content}>
+      ?
+    </span>
   </Badge>
 );
 
@@ -38,7 +40,7 @@ const Tooltip = ({ id, content, side, children }: Props) => {
     <TooltipProvider delayDuration={TOOLTIP_DELAY_MS}>
       <ShadcnTooltip>
         <TooltipTrigger asChild>
-          <span>{children ?? <DefaultTrigger />}</span>
+          <span>{children ?? <DefaultTrigger content={content} />}</span>
         </TooltipTrigger>
         <TooltipContent side={side}>{content}</TooltipContent>
       </ShadcnTooltip>
