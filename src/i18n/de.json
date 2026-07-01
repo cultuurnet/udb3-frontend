@@ -1699,11 +1699,6 @@
       "FR": "Frankophon",
       "NL": "Flämisch"
     },
-    "region_prefix": {
-      "DE": "Deutschsprachige",
-      "FR": "Frankophone",
-      "NL": "Flämische"
-    },
     "select_end_date": "Enddatum auswählen",
     "select_start_date": "Startdatum auswählen",
     "show_holidays": "Ferien und Feiertage anzeigen",
