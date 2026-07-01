@@ -115,7 +115,7 @@ const CalendarOpeninghoursModal = ({
 
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
-  >(sortPeriods(initialDeviatingPeriods ?? []));
+  >(sortPeriods(initialDeviatingPeriods ?? []) as DeviatingPeriodData[]);
   const [pendingDelete, setPendingDelete] = useState<{
     kind: 'deviating' | 'closing';
     id: string;
