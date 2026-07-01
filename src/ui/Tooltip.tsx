@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { OverlayTriggerProps } from 'react-bootstrap'; // TODO: remove after migration — only used for placement type
+import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Badge, BadgeVariants } from '@/ui/Badge';
@@ -11,11 +10,14 @@ import {
 } from '@/ui/shadcn/tooltip';
 import { TooltipLegacy } from '@/ui/TooltipLegacy';
 
+type Placement = ComponentPropsWithoutRef<typeof TooltipContent>['side'];
+
 type Props = {
   id?: string; // TODO: remove after migration — Radix handles accessibility automatically
   content: string;
+  placement?: Placement;
   children?: ReactNode;
-} & Pick<OverlayTriggerProps, 'placement'>;
+};
 
 const TOOLTIP_DELAY_MS = 100;
 
@@ -32,20 +34,13 @@ const Tooltip = ({ id, content, placement, children }: Props) => {
     return <TooltipLegacy id={id} content={content} placement={placement} />;
   }
 
-  const side = placement?.toString().split('-')[0] as
-    | 'top'
-    | 'right'
-    | 'bottom'
-    | 'left'
-    | undefined;
-
   return (
     <TooltipProvider delayDuration={TOOLTIP_DELAY_MS}>
       <ShadcnTooltip>
         <TooltipTrigger asChild>
           <span>{children ?? <DefaultTrigger />}</span>
         </TooltipTrigger>
-        <TooltipContent side={side}>{content}</TooltipContent>
+        <TooltipContent side={placement}>{content}</TooltipContent>
       </ShadcnTooltip>
     </TooltipProvider>
   );
