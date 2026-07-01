@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-import { Box, BoxProps, boxPropTypes, getBoxProps, UIProp } from './Box';
+import { Box, BoxProps, boxPropTypes, UIProp } from './Box';
 import { InlineLegacy } from './InlineLegacy';
 import { cn } from './shadcn/utils';
 import { GAP_CLASS_BY_SPACING, getGapClass } from './tailwindGap';
@@ -17,16 +17,19 @@ type InlineProps = {
 type Props = BoxProps & InlineProps;
 
 const InlineShadcn = forwardRef<HTMLElement, Props>(
-  ({ spacing, className, children, as = 'span', ...props }, ref) => (
+  (
+    { spacing, className, children, as = 'span', forwardedAs, ...props },
+    ref,
+  ) => (
     <Box
-      as={as}
+      as={forwardedAs ?? as}
       ref={ref}
       className={cn(
         'tw:flex',
         getGapClass(spacing as number | undefined),
         className,
       )}
-      {...getBoxProps(props)}
+      {...props}
     >
       {children}
     </Box>
