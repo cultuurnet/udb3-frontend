@@ -4,20 +4,18 @@ import * as React from 'react';
 import { cn } from '@/ui/shadcn/utils';
 
 const alertVariants = cva(
-  'tw:relative tw:w-full tw:rounded-lg tw:border tw:px-4 tw:py-3 tw:[&>svg+div]:translate-y-[-3px] tw:[&>svg]:absolute tw:[&>svg]:left-4 tw:[&>svg]:top-4 tw:[&>svg]:text-foreground tw:[&>svg~*]:pl-7',
+  'tw:relative tw:w-full tw:rounded-lg tw:border tw:bg-background tw:px-4 tw:py-3 tw:text-foreground tw:[&>svg+div]:translate-y-[-3px] tw:[&>svg]:absolute tw:[&>svg]:left-4 tw:[&>svg]:top-4 tw:[&>svg]:text-foreground tw:[&>svg~*]:pl-7',
   {
     variants: {
       variant: {
-        default: 'tw:bg-background tw:text-foreground',
-        primary:
-          'tw:bg-background tw:border-l-[6px] tw:border-info tw:text-foreground tw:[&>svg]:text-info',
-        info: 'tw:bg-background tw:border-1 tw:border-foreground',
-        success:
-          'tw:bg-background tw:border-l-[6px] tw:border-success tw:text-foreground tw:[&>svg]:text-success',
+        default: '',
+        primary: 'tw:border-l-[6px] tw:border-info tw:[&>svg]:text-info',
+        info: 'tw:border-1 tw:border-foreground',
+        success: 'tw:border-l-[6px] tw:border-success tw:[&>svg]:text-success',
         warning:
-          'tw:bg-background tw:border-l-[6px] tw:border-udb-warning tw:text-foreground tw:[&>svg]:text-udb-warning',
+          'tw:border-l-[6px] tw:border-udb-warning tw:[&>svg]:text-udb-warning',
         danger:
-          'tw:bg-background tw:border-l-[6px] tw:border-destructive tw:text-foreground tw:[&>svg]:text-destructive',
+          'tw:border-l-[6px] tw:border-destructive tw:[&>svg]:text-destructive',
       },
     },
     defaultVariants: {
