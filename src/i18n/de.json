@@ -468,7 +468,7 @@
         "info": "Fügen Sie bei Etiketten kurze, spezifische Schlüsselwörter hinzu",
         "add_new_label": "Kein Etikett gefunden? Neues Etikett hinzufügen: ",
         "error": "kein gültiges Etikett",
-        "tips": "Ein Etikett muss die folgenden Regeln erfüllen:<ul> <li>besteht nur aus <strong>Buchstaben</strong> oder <strong>Zahlen</strong></li> <li>darf <strong>Leerzeichen</strong>, <strong>'-'</strong> und <strong>'_'</strong> enthalten, darf aber nicht mit diesen Zeichen beginnen</li> <li>zählt <strong>von</strong> <strong>2 bis 50 Zeichen</strong></li> </ul>"
+        "tips": "<strong>Ein Etikett muss die folgenden Regeln erfüllen:</strong><ul> <li>besteht nur aus <b>Buchstaben</b> oder <b>Zahlen</b></li> <li>darf <b>Leerzeichen</b>, <b>'-'</b> und <b>'_'</b> enthalten, darf aber nicht mit diesen Zeichen beginnen</li> <li>zählt <b>von</b> <b>2 bis 50 Zeichen</b></li> </ul>"
       },
       "description": {
         "clear": "Leeren",

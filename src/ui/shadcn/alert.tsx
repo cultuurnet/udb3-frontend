@@ -12,14 +12,14 @@ const alertVariants = cva(
         destructive:
           'tw:border-destructive/50 tw:text-destructive tw:dark:border-destructive tw:[&>svg]:text-destructive',
         primary:
-          'tw:bg-info-muted tw:border-l-[6px] tw:border-info tw:[&>svg]:text-info',
+          'tw:bg-background tw:border-l-[6px] tw:border-info tw:text-foreground tw:[&_h5]:text-info tw:[&_strong]:text-info tw:[&>svg]:text-info',
         info: 'tw:bg-background tw:border-1 tw:border-foreground',
         success:
-          'tw:bg-success-muted tw:border-l-[6px] tw:border-success tw:[&>svg]:text-success',
+          'tw:bg-background tw:border-l-[6px] tw:border-success tw:text-foreground tw:[&_h5]:text-success tw:[&_strong]:text-success tw:[&>svg]:text-success',
         warning:
-          'tw:bg-warning-muted tw:border-l-[6px] tw:border-udb-warning tw:[&>svg]:text-udb-warning',
+          'tw:bg-background tw:border-l-[6px] tw:border-udb-warning tw:text-foreground tw:[&_h5]:text-udb-warning tw:[&_strong]:text-udb-warning tw:[&>svg]:text-udb-warning',
         danger:
-          'tw:bg-destructive-muted tw:border-l-[6px] tw:border-destructive tw:[&>svg]:text-destructive',
+          'tw:bg-background tw:border-l-[6px] tw:border-destructive tw:text-foreground tw:[&_h5]:text-destructive tw:[&_strong]:text-destructive tw:[&>svg]:text-destructive',
       },
     },
     defaultVariants: {
