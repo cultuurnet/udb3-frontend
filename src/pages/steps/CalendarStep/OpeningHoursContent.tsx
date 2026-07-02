@@ -18,6 +18,7 @@ import type { SupportedLanguage } from '../../../i18n';
 import { useCalendarSelector } from '../machines/calendarMachine';
 import type { ClosingPeriodData } from './ClosingPeriod';
 import type { DeviatingPeriodData } from './DeviatingPeriod';
+import { sortPeriods } from './sortPeriods';
 
 const OpeningHourRow = ({
   dayOfWeek,
@@ -207,23 +208,29 @@ const OpeningHoursContent = ({
                   }
                 : undefined,
           }))}
-          adjustedDays={initialAdjustedDays?.map(
-            ({ openingHours, startDate, endDate, description }) => ({
-              startDate: format(startDate, 'yyyy-MM-dd'),
-              endDate: format(endDate, 'yyyy-MM-dd'),
-              description,
-              openingHours: openingHours.map(
-                ({ id: _id, ...openingHour }) => openingHour,
-              ),
-            }),
-          )}
-          closedDays={initialClosingPeriods?.map(
-            ({ startDate, endDate, description }) => ({
-              startDate: format(startDate, 'yyyy-MM-dd'),
-              endDate: format(endDate, 'yyyy-MM-dd'),
-              description,
-            }),
-          )}
+          adjustedDays={
+            initialAdjustedDays &&
+            sortPeriods(initialAdjustedDays).map(
+              ({ openingHours, startDate, endDate, description }) => ({
+                startDate: format(startDate, 'yyyy-MM-dd'),
+                endDate: format(endDate, 'yyyy-MM-dd'),
+                description,
+                openingHours: openingHours.map(
+                  ({ id: _id, ...openingHour }) => openingHour,
+                ),
+              }),
+            )
+          }
+          closedDays={
+            initialClosingPeriods &&
+            sortPeriods(initialClosingPeriods).map(
+              ({ startDate, endDate, description }) => ({
+                startDate: format(startDate, 'yyyy-MM-dd'),
+                endDate: format(endDate, 'yyyy-MM-dd'),
+                description,
+              }),
+            )
+          }
           lang={lang}
         />
       </Stack>
