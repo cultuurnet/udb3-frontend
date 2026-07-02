@@ -491,7 +491,7 @@
         "info": "Met labels voeg je korte, specifieke trefwoorden toe",
         "add_new_label": "Geen label gevonden? Nieuw label toevoegen: ",
         "error": "Geen geldig label",
-        "tips": "<strong>Een label moet voldoen aan volgende regels:</strong><ul> <li>bestaat enkel uit <b>letters</b> of <b>cijfers</b></li> <li>mag <b>spaties</b>, <b>'-'</b> en <b>'_'</b> bevatten maar mag niet met deze tekens beginnen</li> <li>telt <b>2 tot 50 karakters</b></li> </ul>"
+        "tips": "Een label moet voldoen aan volgende regels:<ul> <li>bestaat enkel uit <strong>letters</strong> of <strong>cijfers</strong></li> <li>mag <strong>spaties</strong>, <strong>'-'</strong> en <strong>'_'</strong> bevatten maar mag niet met deze tekens beginnen</li> <li>telt <strong>2 tot 50 karakters</strong></li> </ul>"
       },
       "description": {
         "clear": "Leegmaken",

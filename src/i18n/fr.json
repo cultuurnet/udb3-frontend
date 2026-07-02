@@ -470,7 +470,7 @@
         "info": "Avec les étiquettes, ajoutez des mots-clés courts et spécifiques",
         "add_new_label": "Aucune étiquette trouvée ? Ajouter une nouvelle étiquette : ",
         "error": "Étiquette non valide",
-        "tips": "<strong>Cette étiquette ne semble pas valide. Une étiquette</strong><ul><li>Ne comporte que des <b>lettres</b> ou des <b>chiffres</b></li><li>Peut contenir <b>des espaces</b>, <b>'-'</b> ou <b>'_'</b> mais ne peut commencer avec ces caractêres</li><li>Comporte de <b>2 à 50 caractères</b></li></ul>"
+        "tips": "Cette étiquette ne semble pas valide. Une étiquette<ul><li>Ne comporte que des <strong>lettres</strong> ou des <strong>chiffres</strong></li><li>Peut contenir <strong>des espaces</strong>, <strong>'-'</strong> ou <strong>'_'</strong> mais ne peut commencer avec ces caractêres</li><li>Comporte de <strong>2 à 50 caractères</strong></li></ul>"
       },
       "description": {
         "clear": "Vider",
