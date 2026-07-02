@@ -2,7 +2,6 @@ import i18n, { SupportedLanguage } from '@/i18n/index';
 import { FaqItem, Offer } from '@/types/Offer';
 import { Accordion } from '@/ui/Accordion';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
