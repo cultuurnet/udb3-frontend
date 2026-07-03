@@ -1,11 +1,8 @@
+import type { ReactNode } from 'react';
 import React from 'react';
 
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { cn } from '@/ui/shadcn/utils';
-
-import type { TextProps as LegacyTextProps } from './TextLegacy';
-import { TextLegacy } from './TextLegacy';
 
 const TextVariants = {
   REGULAR: 'regular',
@@ -13,14 +10,16 @@ const TextVariants = {
   ERROR: 'error',
 } as const;
 
-// TODO: remove LegacyTextProps once legacy Box system is dropped; Text should only accept variant and className
-type Props = LegacyTextProps & {
+type Props = {
+  as?: string | React.ComponentType<any>;
+  children?: ReactNode;
+  className?: string;
   variant?: Values<typeof TextVariants>;
+  dangerouslySetInnerHTML?: { __html: string };
 };
 
-// TODO: add size variants (sm, base, lg) once legacy is dropped
-// TODO: consider making this a full Record with regular: '' to be explicit
-const variantClasses: Partial<Record<Values<typeof TextVariants>, string>> = {
+const variantClasses: Record<Values<typeof TextVariants>, string> = {
+  regular: '',
   muted: 'tw:text-muted-foreground',
   error: 'tw:text-destructive',
 };
@@ -30,20 +29,17 @@ const Text = ({
   children,
   className,
   variant = TextVariants.REGULAR,
-  ...props
+  dangerouslySetInnerHTML,
 }: Props) => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(
-    FeatureFlags.SHADCN_MIGRATION,
-  );
-
   const Tag = as as React.ElementType;
 
-  return isShadcnMigrationEnabled ? (
-    <Tag className={cn(variantClasses[variant], className)}>{children}</Tag>
-  ) : (
-    <TextLegacy as={as} variant={variant} className={className} {...props}>
+  return (
+    <Tag
+      className={cn(variantClasses[variant], className)}
+      dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+    >
       {children}
-    </TextLegacy>
+    </Tag>
   );
 };
 
