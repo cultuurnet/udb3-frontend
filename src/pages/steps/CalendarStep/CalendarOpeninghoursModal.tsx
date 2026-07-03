@@ -40,6 +40,7 @@ import {
 import { useCalendarHandlers } from '../machines/useCalendarHandlers';
 import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
+import { sortPeriods } from './sortPeriods';
 
 type CalendarOpeninghoursModalProps = {
   visible: boolean;
@@ -114,14 +115,14 @@ const CalendarOpeninghoursModal = ({
 
   const [deviatingPeriods, setDeviatingPeriods] = useState<
     DeviatingPeriodData[]
-  >(initialDeviatingPeriods ?? []);
+  >(sortPeriods(initialDeviatingPeriods ?? []));
   const [pendingDelete, setPendingDelete] = useState<{
     kind: 'deviating' | 'closing';
     id: string;
   } | null>(null);
 
   const [closingPeriods, setClosingPeriods] = useState<ClosingPeriodData[]>(
-    initialClosingPeriods ?? [],
+    sortPeriods(initialClosingPeriods ?? []),
   );
   const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
     new Set(),

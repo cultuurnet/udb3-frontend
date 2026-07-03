@@ -186,7 +186,7 @@ const TabTitle = ({
   const title = titleKey ? t(titleKey) : t(defaultTitleKey);
 
   return (
-    <Inline spacing={3} alignItems="center" {...getInlineProps(props)}>
+    <Inline spacing={2} alignItems="center" {...getInlineProps(props)}>
       {validationStatus === ValidationStatus.SUCCESS && (
         <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
       )}

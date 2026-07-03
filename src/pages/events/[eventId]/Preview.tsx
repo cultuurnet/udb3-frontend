@@ -30,6 +30,7 @@ import { BookingInfoPreview } from '@/pages/preview/BookingInfoPreview';
 import { ContactInfoPreview } from '@/pages/preview/ContactInfoPreview';
 import { DescriptionPreview } from '@/pages/preview/DescriptionPreview';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
+import { FaqPreview } from '@/pages/preview/FaqPreview';
 import { ImagePreview } from '@/pages/preview/ImagePreview';
 import { LocationPreview } from '@/pages/preview/LocationPreview';
 import { ReservationPreview } from '@/pages/preview/ReservationPreview';
@@ -353,11 +354,20 @@ const Preview = () => {
       ),
     },
     {
-      field: t('preview.labels.description'),
-      value: description ? (
-        <DescriptionPreview description={description} />
-      ) : (
-        <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
+      field: isBoaEnabled
+        ? t('preview.labels.description_and_faq')
+        : t('preview.labels.description'),
+      value: (
+        <Stack spacing={4}>
+          {description ? (
+            <DescriptionPreview description={description} />
+          ) : (
+            <EmptyValue>{t('preview.empty_value.description')}</EmptyValue>
+          )}
+          {isBoaEnabled && (
+            <FaqPreview faqs={offer.faqs} mainLanguage={mainLanguage} />
+          )}
+        </Stack>
       ),
     },
     {
