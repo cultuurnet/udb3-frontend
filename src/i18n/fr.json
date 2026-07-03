@@ -1030,9 +1030,9 @@
       "duplicate": "Dupliquer"
     },
     "create": {
-      "events": "Ajouter une activité",
-      "organizers": "Ajouter une organisation",
-      "places": "Ajouter un lieu"
+      "events": "Encoder une activité",
+      "organizers": "Encoder une organisation",
+      "places": "Encoder un lieu"
     },
     "event": "Activité",
     "modal": {
@@ -1103,7 +1103,7 @@
     },
     "suggestions": {
       "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
-      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+      "description": "Vous avez déjà encodé des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
     },
     "welcome": "Bienvenue"
   },
@@ -1144,11 +1144,14 @@
     "0.8.0.0.0": "Espace public",
     "1.50.0.0.0": "Festin gastronomique ou bar festif",
     "3CuHvenJ+EGkcvhXLg9Ykg": "Site archéologique",
+    "8aRjN4dGsXuE6tBkM1pVwQ": "Activité d'un mouvement de jeunesse",
     "BtVNd33sR0WntjALVbyp3w": "Cinéma",
     "eBwaUAAhw0ur0Z02i5ttnw": "Centre sportif",
     "ekdc4ATGoUitCa0e6me6xA": "Horeca",
     "GnPFp9uvOUyqhOckIFMKmg": "Musée ou galerie",
+    "hZ5fCyL9nKqW3xDvTrJ2gP": "Plaine de jeux",
     "JCjA0i5COUmdjMwcyjNAFA": "Maison de jeunes ou centre de jeunesse",
+    "K7mPx3nQrT9bWfH2zL5cYv": "Accueil extrascolaire",
     "kI7uAyn2uUu9VV6Z3uWZTA": "Bibliothèque ou centre de documentation",
     "OyaPaf64AEmEAYXHeLMAtA": "Hall ou salle d'expo",
     "rJRFUqmd6EiqTD4c7HS90w": "École ou centre éducatif",
@@ -1158,7 +1161,7 @@
     "YVBc8KVdrU6XfTNvhMYUpg": "Discothèque"
   },
   "footer": {
-    "about": "Sur UiTdatabank",
+    "about": "À propos de UiTdatabank",
     "by": "Un produit de",
     "changeProfile": "Modifier mon profil",
     "contact": "Contactez-nous",
@@ -1190,10 +1193,10 @@
     "channels_info_link_url": "https://www.publiq.be/nl/publicatiekanalen",
     "flanders_image": "flanders-logo.svg",
     "lead": "Organisez-vous une activité ?",
-    "lead_sub": "Ajoutez vos activités gratuitement et élargissez votre public",
+    "lead_sub": "Encodez vos activités gratuitement et élargissez votre public",
     "mission": "Plus d'audience pour votre activité.",
     "organizers": "Organisateurs",
-    "organizers_info": "Cela leur permet d'atteindre un public nouveau et plus large, totalisant plus de 3 millions de personnes chaque année.",
+    "organizers_info": "Ils touchent ainsi un nouveau public, plus large, totalisant chaque année plus de 3 millions de personnes.",
     "start": "Commencez-ici"
   },
   "menu": {
@@ -1956,6 +1959,7 @@
       "access": "Accès",
       "labels": "Étiquettes",
       "description": "Description",
+      "description_and_faq": "Description & FAQ",
       "location": "Où",
       "online_location": "Participation en ligne",
       "calendar": "Quand",
