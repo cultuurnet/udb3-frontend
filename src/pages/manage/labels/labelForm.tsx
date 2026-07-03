@@ -303,8 +303,7 @@ const LabelFormFields = ({
         <FormElement
           label={
             <Text
-              fontSize="0.8rem"
-              fontWeight="normal"
+              className="tw:text-[0.8rem] tw:font-normal"
               variant={TextVariants.MUTED}
             >
               {t('labels.form.fields.name')}
@@ -313,7 +312,7 @@ const LabelFormFields = ({
           id="label-name-display"
           Component={
             <Inline spacing={2}>
-              <Text fontWeight="bold">{watchedName}</Text>
+              <Text className="tw:font-bold">{watchedName}</Text>
             </Inline>
           }
         />

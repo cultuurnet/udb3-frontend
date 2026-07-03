@@ -111,7 +111,7 @@ const VideoUploadBox = ({
               <Stack>
                 <VideoIcon width="80" />
               </Stack>
-              <Text variant={TextVariants.MUTED} textAlign="center">
+              <Text variant={TextVariants.MUTED} className="tw:text-center">
                 {t('videos.intro')}
               </Text>
             </Stack>

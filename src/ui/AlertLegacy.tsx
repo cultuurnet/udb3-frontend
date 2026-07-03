@@ -1,5 +1,4 @@
 import type { Values } from '@/types/Values';
-import { parseSpacing } from '@/ui/Box';
 
 import { Button } from './Button';
 import { ButtonVariants } from './Button';
@@ -171,20 +170,7 @@ const AlertLegacy = ({
         ) : (
           <Text
             dangerouslySetInnerHTML={{ __html: children as string }}
-            css={`
-              strong {
-                font-weight: bold;
-              }
-
-              ul {
-                list-style-type: disc;
-                margin-bottom: ${parseSpacing(4)};
-
-                li {
-                  margin-left: ${parseSpacing(5)};
-                }
-              }
-            `}
+            className="tw:[&_strong]:font-bold! tw:[&_ul]:list-disc! tw:[&_ul]:mb-[1.0667rem] tw:[&_ul_li]:ml-[2.1333rem]"
           />
         )}
       </Inline>

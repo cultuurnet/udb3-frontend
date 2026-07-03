@@ -70,17 +70,17 @@ const ReservationCard = ({
       `}
       {...getStackProps(boxProps)}
     >
-      {title && <Text fontWeight="bold">{title}</Text>}
+      {title && <Text className="tw:font-bold">{title}</Text>}
       <Inline spacing={4} flexWrap="wrap">
         <Stack flex={1} spacing={1}>
-          <Text color={colors.udbMainGrey} fontWeight="bold">
+          <Text className="tw:font-bold tw:text-udb-main-grey">
             {t('create.additionalInformation.booking_info.link')}
           </Text>
           <Link href={url}>{url}</Link>
         </Stack>
         {showAvailability && capacity && (
           <Stack flex={1} spacing={1}>
-            <Text color={colors.udbMainGrey} fontWeight="bold">
+            <Text className="tw:font-bold tw:text-udb-main-grey">
               {t('create.additionalInformation.booking_info.max_capacity')}
             </Text>
             <Text>{capacity}</Text>
@@ -90,7 +90,7 @@ const ReservationCard = ({
       <Inline spacing={4} flexWrap="wrap">
         {showAvailability && (
           <Stack flex={1} spacing={1}>
-            <Text color={colors.udbMainGrey} fontWeight="bold">
+            <Text className="tw:font-bold tw:text-udb-main-grey">
               {t('create.additionalInformation.booking_info.status')}
             </Text>
             <Text>{statusText}</Text>
@@ -98,7 +98,7 @@ const ReservationCard = ({
         )}
         {urlLabelText && (
           <Stack flex={1} spacing={1}>
-            <Text color={colors.udbMainGrey} fontWeight="bold">
+            <Text className="tw:font-bold tw:text-udb-main-grey">
               {t(
                 'create.additionalInformation.booking_info.url_label_dropdown_label',
               )}

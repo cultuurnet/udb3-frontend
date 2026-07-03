@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -10,12 +9,9 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
 
 import { Field, StepProps } from './Steps';
-
-const getValue = getValueFromTheme('ageRange');
 
 type AgeRangeStepLegacyProps = StackProps & StepProps;
 
@@ -147,7 +143,7 @@ const AgeRangeStepLegacy = ({
 
           return (
             <Stack spacing={2}>
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {t(`create.name_and_age.age.title`)}
               </Text>
               <Inline
@@ -189,12 +185,7 @@ const AgeRangeStepLegacy = ({
                       `}
                     >
                       {t(`create.name_and_age.age.${key.toLowerCase()}`)}
-                      <Text
-                        css={css`
-                          color: ${getValue('rangeTextColor')};
-                          font-size: 0.9rem;
-                        `}
-                      >
+                      <Text variant={TextVariants.MUTED} className="tw:text-sm">
                         &nbsp; {AgeRanges[key].label ?? ''}
                       </Text>
                     </Button>
@@ -206,7 +197,7 @@ const AgeRangeStepLegacy = ({
                   <Stack spacing={3}>
                     <Inline spacing={3}>
                       <Stack>
-                        <Text fontWeight="bold">
+                        <Text className="tw:font-bold">
                           {t('create.name_and_age.age.from')}
                         </Text>
                         <Input
@@ -227,7 +218,7 @@ const AgeRangeStepLegacy = ({
                         />
                       </Stack>
                       <Stack>
-                        <Text fontWeight="bold">
+                        <Text className="tw:font-bold">
                           {t('create.name_and_age.age.till')}
                         </Text>
                         <Input
@@ -257,7 +248,7 @@ const AgeRangeStepLegacy = ({
                 )}
               </Inline>
               {errors.nameAndAgeRange?.typicalAgeRange && (
-                <Text color="red">
+                <Text variant={TextVariants.ERROR}>
                   {t(
                     `create.name_and_age.validation_messages.age_range.${errors.nameAndAgeRange?.typicalAgeRange.type}`,
                   )}

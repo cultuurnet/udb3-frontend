@@ -351,7 +351,7 @@ const TabContent = ({
         alignItems="flex-start"
         justifyContent="center"
       >
-        <Text maxWidth="36rem">{t(`dashboard.no_items.${tab}`)}</Text>
+        <Text className="tw:max-w-xl">{t(`dashboard.no_items.${tab}`)}</Text>
       </Panel>
     );
   }
@@ -634,12 +634,12 @@ const Dashboard = (): any => {
             alignItems="center"
             spacing={4}
           >
-            <Text as="div" display={{ default: 'block', l: 'none' }}>
+            <Text as="div" className="tw:block tw:max-[1200px]:hidden">
               <Trans
                 i18nKey={`dashboard.sorting.results.${tab}`}
                 count={sharedTableContentProps.totalItems}
               >
-                <Text fontWeight="bold" />
+                <Text className="tw:font-bold" />
               </Trans>
             </Text>
             <SelectWithLabel

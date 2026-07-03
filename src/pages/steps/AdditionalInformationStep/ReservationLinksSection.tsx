@@ -111,7 +111,7 @@ const ReservationLinksSection = ({
       }
       {...getStackProps(boxProps)}
     >
-      {isCard && title && <Text fontWeight="bold">{title}</Text>}
+      {isCard && title && <Text className="tw:font-bold">{title}</Text>}
       <Inline spacing={4} flexWrap="wrap">
         <FormElement
           flex={1}

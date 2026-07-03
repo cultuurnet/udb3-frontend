@@ -27,7 +27,7 @@ import { Event } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
@@ -187,8 +187,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
           />
           <Text
             variant={TextVariants.MUTED}
-            maxWidth={parseSpacing(9)}
-            marginTop={3}
+            className="tw:mt-[0.5333rem] tw:max-w-[34.1333rem]"
           >
             {t('create.location.is_cultuurkuur.info')}
           </Text>

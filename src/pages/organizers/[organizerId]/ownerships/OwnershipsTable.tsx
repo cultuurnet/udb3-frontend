@@ -73,7 +73,7 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
 
   if ('approvedDate' in request) {
     return (
-      <Text fontSize="small">
+      <Text className="tw:text-[small]">
         {t('organizers.ownerships.table.status.approved_by', {
           email: request.approvedByEmail,
           date: new Date(request.approvedDate).toLocaleString('nl-BE'),
@@ -84,7 +84,7 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
 
   if ('rejectedDate' in request) {
     return (
-      <Text fontSize="small">
+      <Text className="tw:text-[small]">
         {t('organizers.ownerships.table.status.rejected_by', {
           email: request.rejectedByEmail,
           date: new Date(request.rejectedDate).toLocaleString('nl-BE'),
@@ -93,7 +93,7 @@ const Status = ({ request }: { request: OwnershipRequest }) => {
     );
   }
   return (
-    <Text fontSize="small">
+    <Text className="tw:text-[small]">
       {t(`organizers.ownerships.table.status.${request.state}`)}
     </Text>
   );
@@ -262,7 +262,7 @@ export const OwnershipsTable = ({
             )}
             {hasDate && (
               <List.Item minWidth={0}>
-                <Text fontSize="small">
+                <Text className="tw:text-[small]">
                   {new Date(request.created).toLocaleDateString('nl-BE')}
                 </Text>
               </List.Item>

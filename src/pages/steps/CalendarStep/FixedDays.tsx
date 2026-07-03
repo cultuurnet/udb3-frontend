@@ -117,7 +117,7 @@ export const FixedDays = ({
           checked={selectedOption === FixedDayOptions.PERIODIC}
           onChange={handleChangeOption}
           label={
-            <Text fontWeight="bold">
+            <Text className="tw:font-bold">
               {t('create.calendar.fixed_days.with_start_and_end_date')}
             </Text>
           }
@@ -170,7 +170,7 @@ export const FixedDays = ({
           checked={selectedOption === FixedDayOptions.PERMANENT}
           onChange={handleChangeOption}
           label={
-            <Text fontWeight="bold">
+            <Text className="tw:font-bold">
               {t('create.calendar.fixed_days.permanent')}
             </Text>
           }

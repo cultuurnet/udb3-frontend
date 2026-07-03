@@ -167,7 +167,7 @@ const PictureUploadBox = ({
               <Stack>
                 <ImageIcon width="80" />
               </Stack>
-              <Text variant={TextVariants.MUTED} textAlign="center">
+              <Text variant={TextVariants.MUTED} className="tw:text-center">
                 {scope === ScopeTypes.ORGANIZERS
                   ? t('organizers.create.step2.pictures.intro')
                   : t('pictures.intro')}

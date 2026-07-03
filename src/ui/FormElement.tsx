@@ -2,10 +2,10 @@ import type { ReactElement, ReactNode, Ref } from 'react';
 import { cloneElement } from 'react';
 
 import type { Values } from '@/types/Values';
-import { parseSpacing } from '@/ui/Box';
 
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelPositions, LabelVariants } from './Label';
+import { cn } from './shadcn/utils';
 import { Spinner, SpinnerSizes } from './Spinner';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
@@ -32,11 +32,10 @@ const MaxLengthCounter = ({
   maxLength: number;
 }) => (
   <Text
-    variant={TextVariants.MUTED}
-    fontSize="0.9rem"
-    className="text-right"
-    maxWidth="43rem"
-    color={currentLength >= maxLength ? 'red' : 'inherit'}
+    className={cn(
+      'tw:max-w-172 tw:text-right tw:text-sm',
+      currentLength >= maxLength ? 'tw:text-destructive' : 'tw:text-inherit',
+    )}
   >
     {currentLength} / {maxLength}
   </Text>
@@ -93,12 +92,7 @@ const FormElement = ({
       <Text
         variant={TextVariants.MUTED}
         dangerouslySetInnerHTML={{ __html: info }}
-        maxWidth={parseSpacing(9)}
-        css={`
-          strong {
-            font-weight: bold;
-          }
-        `}
+        className="tw:max-w-[34.1333rem] tw:[&_strong]:font-bold!"
       />
     ) : (
       info

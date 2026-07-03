@@ -29,7 +29,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { Breakpoints, getValueFromTheme } from '@/ui/theme';
 import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
@@ -321,7 +321,7 @@ const PriceInformation = ({
   return (
     <Stack>
       <Stack marginBottom={4}>
-        <Text fontWeight="bold">
+        <Text className="tw:font-bold">
           {t('create.additionalInformation.price_info.prices')}
         </Text>
         <Text>{t('create.additionalInformation.price_info.subtitle')}</Text>
@@ -375,7 +375,9 @@ const PriceInformation = ({
                     >
                       <Inline>
                         {rate.category === PriceCategory.BASE && (
-                          <Text width="13rem">{rate.name[i18n.language]}</Text>
+                          <Text className="tw:w-52">
+                            {rate.name[i18n.language]}
+                          </Text>
                         )}
                         {rate.category === PriceCategory.TARIFF && (
                           <FormElement
@@ -420,7 +422,9 @@ const PriceInformation = ({
                           />
                         )}
                         {rate.category === PriceCategory.UITPAS && (
-                          <Text width="15rem">{rate.name[i18n.language]}</Text>
+                          <Text className="tw:w-60">
+                            {rate.name[i18n.language]}
+                          </Text>
                         )}
                       </Inline>
                       <Inline alignItems="center">
@@ -550,7 +554,10 @@ const PriceInformation = ({
                     </Inline>
                   </Inline>
                   {validationErrors.map((errorType) => (
-                    <Text color="red" key={`validation_error_${errorType}`}>
+                    <Text
+                      variant={TextVariants.ERROR}
+                      key={`validation_error_${errorType}`}
+                    >
                       {t(
                         `create.additionalInformation.price_info.validation_messages.${errorType}`,
                       )}

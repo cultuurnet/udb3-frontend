@@ -61,8 +61,6 @@ type FormData = yup.InferType<typeof schema>;
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
 
-const SUBTITLE_COLOR = colors.udbMainDarkBlue;
-
 const ContactInfoType = {
   EMAIL: 'email',
   PHONE: 'phone',
@@ -209,7 +207,7 @@ const ReservationPeriod = ({
 
   return (
     <Stack spacing={4} {...getStackProps(props)}>
-      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+      <Text className="tw:text-lg tw:font-bold tw:text-udb-main-dark-blue">
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
@@ -865,7 +863,7 @@ const BookingInfoStep = ({
 
   return (
     <Stack maxWidth="75rem" spacing={5} {...getStackProps(props)}>
-      <Text fontWeight="bold" fontSize="1.1rem">
+      <Text className="tw:text-lg tw:font-bold">
         {t('create.additionalInformation.booking_info.section_title')}
       </Text>
       <Stack
@@ -876,7 +874,7 @@ const BookingInfoStep = ({
         }
         ref={formComponent}
       >
-        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+        <Text className="tw:text-lg tw:font-bold tw:text-udb-main-dark-blue">
           {t('create.additionalInformation.booking_info.contact_details')}
         </Text>
         <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
@@ -915,7 +913,7 @@ const BookingInfoStep = ({
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
       <Stack spacing={4}>
-        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+        <Text className="tw:text-lg tw:font-bold tw:text-udb-main-dark-blue">
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (

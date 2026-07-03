@@ -36,7 +36,9 @@ export const Default: Story = {
 
     return (
       <Stack spacing={3}>
-        {args.groupLabel && <Text fontWeight="bold">{args.groupLabel}</Text>}
+        {args.groupLabel && (
+          <Text className="tw:font-bold">{args.groupLabel}</Text>
+        )}
         <RadioButtonGroup
           {...args}
           selected={selected}

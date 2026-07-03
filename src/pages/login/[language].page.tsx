@@ -111,22 +111,10 @@ const USPCard = ({
       {...getStackProps(props)}
     >
       {icon}
-      <Text
-        color="#141515"
-        fontSize="1.5rem"
-        fontWeight="bold"
-        css={`
-          letter-spacing: 0.05em;
-        `}
-      >
-        {quantity} <Text color={colors.udbMainBlue}>+</Text>
+      <Text className="tw:text-2xl tw:font-bold tw:text-udb-main-darkest-grey tw:tracking-wider">
+        {quantity} <Text className="tw:text-udb-main-blue">+</Text>
       </Text>
-      <Text
-        textAlign="center"
-        lineHeight="2rem"
-        fontWeight="600"
-        fontSize="1.15rem"
-      >
+      <Text className="tw:text-center tw:text-lg tw:font-semibold tw:leading-8">
         {title}
       </Text>
       <Text>{text}</Text>
@@ -168,15 +156,10 @@ const UDBCard = ({ onLogin, ...props }: UDBCardProps) => {
           {t('brand')}
         </Box>
       </Stack>
-      <Text
-        textAlign="center"
-        fontWeight="bold"
-        fontSize="1.5rem"
-        color="#6A6E70"
-      >
+      <Text className="tw:text-center tw:text-2xl tw:font-bold tw:text-udb-main-dark-grey">
         {t('main.lead')}
       </Text>
-      <Text textAlign="center">{t('main.lead_sub')}</Text>
+      <Text className="tw:text-center">{t('main.lead_sub')}</Text>
       <Button onClick={onLogin} size={ButtonSizes.LARGE}>
         {t('main.start')}
       </Button>

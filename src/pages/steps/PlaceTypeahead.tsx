@@ -12,6 +12,7 @@ import { Country } from '@/types/Country';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { Inline } from '@/ui/Inline';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { isNewEntry, Typeahead } from '@/ui/Typeahead';
@@ -117,12 +118,10 @@ const PlaceTypeahead = ({
           <Stack>
             <Inline justifyContent="space-between">
               <Text
-                maxWidth={`calc(100% - ${isUitpas ? '3rem' : '0rem'})`}
-                css={`
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                `}
+                className={cn(
+                  'tw:truncate',
+                  isUitpas ? 'tw:max-w-[calc(100%-3rem)]' : 'tw:max-w-full',
+                )}
               >
                 <Highlighter search={text}>{placeName}</Highlighter>
               </Text>

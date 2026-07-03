@@ -62,7 +62,7 @@ const HistoryTabContent = ({ offerHistory }: Props) => {
       <List spacing={3}>
         {offerHistory.map((history, index) => (
           <List.Item key={index} flexDirection="column" alignItems="flex-start">
-            <Text fontWeight="bold">{formatDate(history.date)}</Text>
+            <Text className="tw:font-bold">{formatDate(history.date)}</Text>
             {history.author && <Text>{history.author}</Text>}
             <Text>{history.description}</Text>
             {history.api && (

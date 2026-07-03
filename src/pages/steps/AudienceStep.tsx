@@ -72,7 +72,7 @@ const AudienceStep = ({
   return (
     <Stack {...getStackProps(props)}>
       <Stack spacing={3} marginBottom={3}>
-        <Text fontWeight="bold">
+        <Text className="tw:font-bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
         {Object.values(AudienceTypes)
@@ -93,7 +93,7 @@ const AudienceStep = ({
                 />
                 {watchedAudienceType === type &&
                   watchedAudienceType !== AudienceTypes.EVERYONE && (
-                    <Text variant="muted" maxWidth="30%">
+                    <Text variant="muted" className="tw:max-w-[30%]">
                       {t(
                         `create.additionalInformation.audience.help.${watchedAudienceType}`,
                       )}

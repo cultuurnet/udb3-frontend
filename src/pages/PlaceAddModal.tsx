@@ -12,7 +12,7 @@ import { useHeaders } from '@/hooks/api/useHeaders';
 import { Countries, Country } from '@/types/Country';
 import { Place } from '@/types/Place';
 import { AlertVariants } from '@/ui/Alert';
-import { Box, parseSpacing } from '@/ui/Box';
+import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
@@ -185,7 +185,7 @@ const PlaceAddModal = ({
           info={
             <Text
               variant={TextVariants.MUTED}
-              maxWidth={parseSpacing(9)}
+              className="tw:max-w-[34.1333rem]"
               dangerouslySetInnerHTML={{
                 __html: t(`create.name_and_age.name.tip_places`),
               }}
@@ -232,14 +232,18 @@ const PlaceAddModal = ({
           />
         </Inline>
         <Stack>
-          <Text fontWeight="bold">{t('location.add_modal.labels.type')}</Text>
+          <Text className="tw:font-bold">
+            {t('location.add_modal.labels.type')}
+          </Text>
           <Box marginBottom={3}>
             <Paragraph variant={ParagraphVariants.MUTED}>
               {t('location.add_modal.labels.typeInfo')}
             </Paragraph>
           </Box>
           {formState.errors.term?.id && (
-            <Text color="red">{t('location.add_modal.errors.type')}</Text>
+            <Text variant={TextVariants.ERROR}>
+              {t('location.add_modal.errors.type')}
+            </Text>
           )}
           <Inline spacing={3} flexWrap="wrap" maxWidth="70rem">
             {terms.map(({ id, name, domain }) => (

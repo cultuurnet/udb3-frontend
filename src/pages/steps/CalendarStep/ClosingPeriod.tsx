@@ -11,7 +11,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 
 import type { SupportedLanguage } from '../../../i18n';
@@ -65,7 +65,7 @@ const ClosingPeriod = ({
       {...boxProps}
     >
       <Inline justifyContent="space-between" alignItems="center">
-        <Text fontWeight="bold">
+        <Text className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.closing.period_title', {
             index: index + 1,
           })}
@@ -81,7 +81,7 @@ const ClosingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text className="tw:font-bold tw:text-udb-main-dark-blue">
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
         <Inline spacing={5} alignItems="flex-end">
@@ -130,12 +130,12 @@ const ClosingPeriod = ({
           />
         </Inline>
         {hasOverlap && (
-          <Text color="red">
+          <Text variant={TextVariants.ERROR}>
             {t('create.calendar.opening_hours_modal.closing.errors.overlap')}
           </Text>
         )}
         {hasInvalidDateOrder && (
-          <Text color="red">
+          <Text variant={TextVariants.ERROR}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.start_after_end',
             )}
@@ -143,7 +143,7 @@ const ClosingPeriod = ({
         )}
         {eventStartDate &&
           startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-            <Text color="red">
+            <Text variant={TextVariants.ERROR}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.start_before_event',
               )}
@@ -151,14 +151,14 @@ const ClosingPeriod = ({
           )}
         {eventEndDate &&
           startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-            <Text color="red">
+            <Text variant={TextVariants.ERROR}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.end_after_event',
               )}
             </Text>
           )}
         {quickLinkRangeError && (
-          <Text color="red">
+          <Text variant={TextVariants.ERROR}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.quick_link_out_of_range',
             )}

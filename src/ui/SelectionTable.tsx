@@ -95,14 +95,7 @@ const SelectionTable = ({
   return (
     <Stack spacing={3}>
       <Inline forwardedAs="div" width="100%" alignItems="center" spacing={5}>
-        <Text
-          minWidth="11rem"
-          css={`
-            flex-shrink: 0;
-          `}
-        >
-          {selectedRowsText}
-        </Text>
+        <Text className="tw:min-w-44 tw:shrink-0">{selectedRowsText}</Text>
         <Inline spacing={3}>
           {actions.map(({ iconName, title, onClick, disabled }) => (
             <Button

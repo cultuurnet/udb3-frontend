@@ -241,7 +241,7 @@ const FaqField = ({
   return (
     <Stack spacing={4} maxWidth="55rem">
       {faqIndex > 0 && <Box height="1px" backgroundColor={colors.grey3} />}
-      <Text fontWeight="bold">
+      <Text className="tw:font-bold">
         {t('translate.faq.title', { index: faqIndex + 1 })}
       </Text>
       <Stack display="grid" css={rowGridCss}>
@@ -271,7 +271,7 @@ const FaqField = ({
         ) : (
           <Stack spacing={2}>
             <Inline justifyContent="space-between">
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {faqItem[originalLanguage]?.question ?? ''}
               </Text>
               <Button variant={ButtonVariants.LINK} onClick={onStartEditing}>

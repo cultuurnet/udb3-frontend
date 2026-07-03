@@ -20,7 +20,7 @@ import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { Title } from '@/ui/Title';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -302,7 +302,7 @@ const AccessibilityStep = ({
           {t('create.additionalInformation.accessibility.departure.add')}
         </Button>
         {departureLocations.length >= MAX_DEPARTURE_LOCATIONS && (
-          <Text color="red">
+          <Text variant={TextVariants.ERROR}>
             {t(
               'create.additionalInformation.accessibility.departure.max_reached',
               { maxLocations: MAX_DEPARTURE_LOCATIONS },

@@ -14,6 +14,7 @@ import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
@@ -56,9 +57,7 @@ const OrganizerInfo = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text minWidth="15rem" color={udbMainDarkGrey} size={3}>
-        {t(title)}
-      </Text>
+      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
       <Stack>
         {(urls ?? []).map((url) => (
           <Link key={url} href={url}>
@@ -73,12 +72,11 @@ const OrganizerInfo = ({
           />
         ) : (
           <Text
-            css={`
-              white-space: pre-wrap;
-            `}
-            color={
-              content?.startsWith('organizers.detail.no') && udbMainDarkGrey
-            }
+            className={cn(
+              'tw:whitespace-pre-wrap',
+              content?.startsWith('organizers.detail.no') &&
+                'tw:text-udb-main-dark-grey',
+            )}
           >
             {content?.startsWith('organizers.detail.no') ? t(content) : content}
           </Text>
@@ -104,18 +102,18 @@ const OrganizerImages = ({
   if (!images || images.length === 0) {
     return (
       <Inline padding={3}>
-        <Text minWidth="15rem" color={udbMainDarkGrey}>
+        <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">
           {t(title)}
         </Text>
-        <Text color={udbMainDarkGrey}>{t('organizers.detail.no_images')}</Text>
+        <Text className="tw:text-udb-main-dark-grey">
+          {t('organizers.detail.no_images')}
+        </Text>
       </Inline>
     );
   }
   return (
     <Inline padding={3}>
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
-        {t(title)}
-      </Text>
+      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
       <Stack
         spacing={3}
         flex={1}
@@ -146,21 +144,12 @@ const OrganizerImages = ({
             </Inline>
             <Stack>
               {isMainImage(image.thumbnailUrl) && (
-                <Text
-                  backgroundColor={udbMainDarkGrey}
-                  color="white"
-                  alignSelf="flex-start"
-                  borderRadius="3px"
-                  paddingRight={3}
-                  paddingLeft={3}
-                  fontSize="0.8rem"
-                  fontWeight="bold"
-                >
+                <Text className="tw:self-start tw:rounded-[3px] tw:bg-udb-main-dark-grey tw:pr-[0.5333rem] tw:pl-[0.5333rem] tw:text-[0.8rem] tw:font-bold tw:text-white">
                   {t('organizers.detail.mainImage')}
                 </Text>
               )}
               <Text>{image.description}</Text>
-              <Text color={udbMainDarkGrey}>
+              <Text className="tw:text-udb-main-dark-grey">
                 {`© ${image.copyrightHolder}`}
               </Text>
             </Stack>
@@ -187,9 +176,7 @@ const OrganizerLabels = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
-        {t(title)}
-      </Text>
+      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
       <LabelsForm
         scope={ScopeTypes.ORGANIZERS}
         id={organizerId}
@@ -270,12 +257,12 @@ const VerenigingsloketPreview = ({
               <span style={{ fontWeight: 'bold' }}>{organizerName}</span>
             </Trans>
           </Text>
-          <Text fontWeight="bold">
+          <Text className="tw:font-bold">
             {t('organizers.detail.verenigingsloket.delete_modal.text')}
           </Text>
         </Stack>
       </Modal>
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
+      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">
         {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
