@@ -348,8 +348,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         iconName && <Icon name={iconName} key="icon" />,
         customChildren
           ? children
-          : !shouldHideText && (
-              <Text flex={1} textAlign="left" key="text">
+          : !!children &&
+            !shouldHideText && (
+              <Text className="tw:flex-1 tw:text-left" key="text">
                 {children}
               </Text>
             ),
