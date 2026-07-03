@@ -2,6 +2,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
 import { addDays, format } from 'date-fns';
 
 import nl from '../../../i18n/nl.json';
+import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
@@ -31,6 +32,8 @@ const dummyEvent = {
   bookingAvailabilityStatus: nl.bookingAvailability.available,
   imageDescription: 'Testafbeelding beschrijving',
   imageCopyright: 'Test copyright',
+  faqQuestion: 'Wat zijn de openingsuren?',
+  faqAnswer: 'We zijn open van 9u tot 17u.',
   video: 'https://www.youtube.com/watch?v=lkIFF4maKMU',
   organizerName: 'Democrazy',
   label: 'publiq',
@@ -144,6 +147,8 @@ test.describe.serial('Event Preview Content', () => {
       .fill(dummyEvent.description);
     await page.getByText('Geef een enthousiaste').click();
 
+    await addFaqItem(page, dummyEvent.faqQuestion, dummyEvent.faqAnswer);
+
     await page.getByRole('tab', { name: 'Afbeelding & video' }).click();
     await page.getByRole('button', { name: 'Afbeelding toevoegen' }).click();
     await page.setInputFiles('input[type="file"]', 'upload/e2e-image.jpg');
@@ -251,10 +256,29 @@ test.describe.serial('Event Preview Content', () => {
 
   test('shows event description', async ({ page }) => {
     await expect(
-      getRowByLabel(page, detailsTable, nl.preview.labels.description).locator(
-        'td:nth-child(2)',
-      ),
+      getRowByLabel(
+        page,
+        detailsTable,
+        nl.preview.labels.description_and_faq,
+      ).locator('td:nth-child(2)'),
     ).toContainText(dummyEvent.description);
+  });
+
+  test('shows FAQ item', async ({ page }) => {
+    const faqRow = getRowByLabel(
+      page,
+      detailsTable,
+      nl.preview.labels.description_and_faq,
+    );
+
+    await expect(
+      faqRow.getByRole('button', { name: dummyEvent.faqQuestion }),
+    ).toBeVisible();
+    await expect(faqRow.getByText(dummyEvent.faqAnswer)).not.toBeVisible();
+
+    await faqRow.getByRole('button', { name: dummyEvent.faqQuestion }).click();
+
+    await expect(faqRow.getByText(dummyEvent.faqAnswer)).toBeVisible();
   });
 
   test('shows event location', async ({ page }) => {
