@@ -569,7 +569,7 @@ const LocationStep = ({
                       />
                     </Alert>
                   )}
-                  {children}
+                  <div>{children}</div>
                 </Stack>
               </Inline>
             </Stack>
@@ -778,7 +778,7 @@ const LocationStep = ({
 
           return renderFieldWithRecentLocations(
             <>
-              <Inline alignItems="center" spacing={3} marginBottom={4}>
+              <div className="tw:flex tw:items-center tw:gap-2 tw:mb-4">
                 <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
                 <Text>
                   {municipality.name}
@@ -797,7 +797,7 @@ const LocationStep = ({
                     `create.location.municipality.change_${country?.toLowerCase()}`,
                   )}
                 </Button>
-              </Inline>
+              </div>
               {scope === ScopeTypes.EVENTS && (
                 <PlaceStep
                   municipality={municipality}
@@ -818,7 +818,7 @@ const LocationStep = ({
               ) && (
                 <Stack>
                   {isPlaceAddressComplete ? (
-                    <Inline alignItems="center" spacing={3}>
+                    <div className="tw:flex tw:items-center tw:gap-2">
                       <Icon
                         name={Icons.CHECK_CIRCLE}
                         className="tw:text-success"
@@ -839,7 +839,7 @@ const LocationStep = ({
                       >
                         {t(`create.location.street_and_number.change`)}
                       </Button>
-                    </Inline>
+                    </div>
                   ) : (
                     <Stack>
                       {['NL', 'DE'].includes(location?.country) && (

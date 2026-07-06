@@ -904,7 +904,6 @@ const BookingInfoStep = ({
         </Inline>
       </Stack>
       <ReservationPeriod
-        marginBottom={6}
         handlePeriodChange={handleChangeBookingPeriod}
         handleDelete={handleDeleteBookingPeriod}
         availabilityEnds={availabilityEnds}
