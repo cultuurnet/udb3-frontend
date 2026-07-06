@@ -1,11 +1,5 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import getConfig from 'next/config';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import type { Values } from '@/types/Values';
 
@@ -35,45 +29,28 @@ const useFeatureFlag = (featureFlagName: FeatureFlagName) => {
   const { cookies, setCookie, removeCookie } =
     useCookiesWithOptions(dependencies);
 
-  const cookieValue = useMemo(
-    () => isFeatureFlagEnabledInCookies(featureFlagName, cookies),
+  const isEnabled = useMemo(
+    () =>
+      isFeatureFlagEnabledInEnv(featureFlagName) ||
+      isFeatureFlagEnabledInCookies(featureFlagName, cookies),
     [cookies, featureFlagName],
   );
 
-  const [isFeatureEnabled, setIsFeatureEnabled] = useState(cookieValue);
-
-  useEffect(() => {
-    setIsFeatureEnabled(cookieValue);
-  }, [cookieValue]);
-
   const set = useCallback<Dispatch<SetStateAction<boolean>>>(
     (val) => {
-      const setValue = (newValue: boolean) => {
-        setCookie(cookieName, newValue);
-      };
-
-      if (typeof val === 'function') {
-        const updatedValue = val(cookieValue);
-
-        setValue(updatedValue);
-        return;
-      }
-
-      setValue(val);
+      setCookie(cookieName, typeof val === 'function' ? val(isEnabled) : val);
     },
-    [cookieName, cookieValue, setCookie],
+    [cookieName, isEnabled, setCookie],
   );
 
   const remove = useCallback(() => {
     removeCookie(cookieName);
   }, [cookieName, removeCookie]);
 
-  const statePair = useMemo(
-    () => [isFeatureEnabled, set, remove] as const,
-    [isFeatureEnabled, set, remove],
+  return useMemo(
+    () => [isEnabled, set, remove] as const,
+    [isEnabled, set, remove],
   );
-
-  return statePair;
 };
 
 const isFeatureFlagEnabledInCookies = (
@@ -84,9 +61,15 @@ const isFeatureFlagEnabledInCookies = (
   return cookies?.[cookieName] === true || cookies?.[cookieName] === 'true';
 };
 
+const isFeatureFlagEnabledInEnv = (featureFlagName: FeatureFlagName) => {
+  const { publicRuntimeConfig } = getConfig() ?? {};
+  return publicRuntimeConfig?.[createCookieName(featureFlagName)] === 'true';
+};
+
 export {
   createCookieName,
   FeatureFlags,
   isFeatureFlagEnabledInCookies,
+  isFeatureFlagEnabledInEnv,
   useFeatureFlag,
 };
