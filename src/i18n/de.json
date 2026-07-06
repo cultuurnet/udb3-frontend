@@ -1959,6 +1959,7 @@
       "access": "Zugang",
       "labels": "Labels",
       "description": "Beschreibung",
+      "description_and_faq": "Beschreibung & FAQ",
       "location": "Wo",
       "online_location": "Online-Teilnahme",
       "calendar": "Wann",
