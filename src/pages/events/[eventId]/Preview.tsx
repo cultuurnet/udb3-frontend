@@ -395,7 +395,7 @@ const Preview = () => {
     {
       field: t('preview.labels.calendar'),
       value: (
-        <Stack spacing={4}>
+        <div className="tw:flex tw:flex-col tw:gap-4">
           <Text className="tw:whitespace-pre-wrap">{calendarSummary}</Text>
 
           {isBoaEnabled && offer.openingHours?.length > 0 && (
@@ -416,7 +416,7 @@ const Preview = () => {
               <Text>{t('preview.info_holiday_camp')}</Text>
             </Alert>
           )}
-        </Stack>
+        </div>
       ),
     },
     { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
