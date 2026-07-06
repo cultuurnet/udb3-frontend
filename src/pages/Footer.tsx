@@ -200,7 +200,7 @@ const Footer = ({
           alignItems={{ default: 'flex-end', xs: 'center' }}
           justifyContent="flex-start"
         >
-          <Inline as="p" spacing={2}>
+          <Inline as="p" className="tw:items-center tw:gap-2">
             <Text
               className={cn(
                 variant === FooterVariants.LOGIN &&

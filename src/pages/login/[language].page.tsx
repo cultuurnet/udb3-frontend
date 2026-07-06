@@ -103,21 +103,22 @@ const USPCard = ({
       backgroundColor={colors.white}
       alignItems="center"
       padding={5}
-      spacing={3}
       css={css`
         box-shadow: 0px 4px 40px 0px #c6e0eb80;
         transform: ${isSmallView ? 'none' : `rotate(${rotateDegree ?? 0}`} );
       `}
       {...getStackProps(props)}
     >
-      {icon}
-      <Text className="tw:text-2xl tw:font-bold tw:text-udb-main-darkest-grey tw:tracking-wider">
-        {quantity} <Text className="tw:text-udb-main-blue">+</Text>
-      </Text>
-      <Text className="tw:text-center tw:text-lg tw:font-semibold tw:leading-8">
-        {title}
-      </Text>
-      <Text>{text}</Text>
+      <div className="tw:flex tw:flex-col tw:items-center tw:gap-3">
+        {icon}
+        <Text className="tw:text-2xl tw:font-bold tw:text-udb-main-darkest-grey tw:tracking-wider">
+          {quantity} <Text className="tw:text-udb-main-blue">+</Text>
+        </Text>
+        <Text className="tw:text-center tw:text-lg tw:font-semibold tw:leading-8">
+          {title}
+        </Text>
+        <Text>{text}</Text>
+      </div>
     </Stack>
   );
 };
@@ -135,7 +136,6 @@ const UDBCard = ({ onLogin, ...props }: UDBCardProps) => {
   return (
     <Stack
       flex={1}
-      spacing={4}
       paddingTop={5}
       paddingBottom={5}
       paddingLeft={3}
@@ -150,19 +150,21 @@ const UDBCard = ({ onLogin, ...props }: UDBCardProps) => {
       `}
       {...getStackProps(props)}
     >
-      <Stack alignItems="center">
-        <UDBLogo width="80%" />
-        <Box as="h1" display="none">
-          {t('brand')}
-        </Box>
-      </Stack>
-      <Text className="tw:text-center tw:text-2xl tw:font-bold tw:text-udb-main-dark-grey">
-        {t('main.lead')}
-      </Text>
-      <Text className="tw:text-center">{t('main.lead_sub')}</Text>
-      <Button onClick={onLogin} size={ButtonSizes.LARGE}>
-        {t('main.start')}
-      </Button>
+      <div className="tw:flex tw:flex-col tw:items-center tw:gap-4">
+        <Stack alignItems="center">
+          <UDBLogo width="80%" />
+          <Box as="h1" display="none">
+            {t('brand')}
+          </Box>
+        </Stack>
+        <Text className="tw:text-center tw:text-2xl tw:font-bold tw:text-udb-main-dark-grey">
+          {t('main.lead')}
+        </Text>
+        <Text className="tw:text-center">{t('main.lead_sub')}</Text>
+        <Button onClick={onLogin} size={ButtonSizes.LARGE}>
+          {t('main.start')}
+        </Button>
+      </div>
     </Stack>
   );
 };
