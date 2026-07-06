@@ -202,11 +202,10 @@ const Footer = ({
         >
           <Inline as="p" spacing={2}>
             <Text
-              css={`
-                color: ${variant === FooterVariants.LOGIN
-                  ? getValueForPage('footer.linkColor')
-                  : 'inherit'};
-              `}
+              className={cn(
+                variant === FooterVariants.LOGIN &&
+                  'tw:text-udb-main-dark-grey',
+              )}
             >
               {t('footer.by')}
             </Text>

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import type { Values } from '@/types/Values';
 import { cn } from '@/ui/shadcn/utils';
@@ -24,24 +24,32 @@ const variantClasses: Record<Values<typeof TextVariants>, string> = {
   error: 'tw:text-destructive',
 };
 
-const Text = ({
-  as = 'span',
-  children,
-  className,
-  variant = TextVariants.REGULAR,
-  dangerouslySetInnerHTML,
-}: Props) => {
-  const Tag = as as React.ElementType;
+const Text = forwardRef<HTMLElement, Props>(
+  (
+    {
+      as = 'span',
+      children,
+      className,
+      variant = TextVariants.REGULAR,
+      dangerouslySetInnerHTML,
+    },
+    ref,
+  ) => {
+    const Tag = as as React.ElementType;
 
-  return (
-    <Tag
-      className={cn(variantClasses[variant], className)}
-      dangerouslySetInnerHTML={dangerouslySetInnerHTML}
-    >
-      {children}
-    </Tag>
-  );
-};
+    return (
+      <Tag
+        ref={ref}
+        className={cn(variantClasses[variant], className)}
+        dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+      >
+        {children}
+      </Tag>
+    );
+  },
+);
+
+Text.displayName = 'Text';
 
 export { Text, TextVariants };
 export type { Props as TextProps };

@@ -396,13 +396,7 @@ const Preview = () => {
       field: t('preview.labels.calendar'),
       value: (
         <Stack spacing={4}>
-          <Text
-            css={`
-              white-space: pre-wrap;
-            `}
-          >
-            {calendarSummary}
-          </Text>
+          <Text className="tw:whitespace-pre-wrap">{calendarSummary}</Text>
 
           {isBoaEnabled && offer.openingHours?.length > 0 && (
             <OpeningHoursSummary
@@ -491,13 +485,7 @@ const Preview = () => {
           <Stack flex={3}>
             {isEdited && (
               <Alert fullWidth className="tw:mb-4">
-                <Text
-                  css={`
-                    b {
-                      font-weight: 600;
-                    }
-                  `}
-                >
+                <Text className="tw:[&_b]:font-semibold!">
                   <Trans
                     i18nKey="preview.publication_alert"
                     values={{

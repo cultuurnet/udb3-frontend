@@ -127,12 +127,7 @@ const PlaceTypeahead = ({
               </Text>
               {isUitpas && <UitpasIcon width="2rem" />}
             </Inline>
-            <Text
-              className={'address'}
-              css={`
-                color: ${({ theme }) => theme.colors.grey6};
-              `}
-            >
+            <Text className={cn('address', 'tw:text-[#666666]')}>
               <Highlighter search={text}>{streetAddress}</Highlighter>
             </Text>
           </Stack>
