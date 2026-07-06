@@ -10,7 +10,6 @@ export type RegularHoursRow = {
   opens: string;
   closes: string;
   dayOfWeek: DayOfWeek[];
-  childcareEnabled: boolean;
   childcareStartTime: string;
   childcareEndTime: string;
 };
@@ -29,26 +28,22 @@ const hasInvalidTimeRange = (openingHours: RegularHoursRow[]): boolean =>
 
 const hasChildcareErrors = (openingHours: RegularHoursRow[]): boolean =>
   openingHours.some((hour) => {
-    if (!hour.childcareEnabled) return false;
-    const timesMissing = !hour.childcareStartTime && !hour.childcareEndTime;
     const startTooLate =
       !!hour.childcareStartTime && hour.childcareStartTime >= hour.opens;
     const endTooEarly =
       !!hour.childcareEndTime && hour.childcareEndTime <= hour.closes;
-    return timesMissing || startTooLate || endTooEarly;
+    return startTooLate || endTooEarly;
   });
 
 const hasChildcareTimeComparisonErrors = (
   regularHours: RegularHoursRow[],
   deviatingPeriods: DeviatingPeriodData[],
 ): boolean =>
-  regularHours.some((hour) => {
-    if (!hour.childcareEnabled) return false;
-    return (
+  regularHours.some(
+    (hour) =>
       (!!hour.childcareStartTime && hour.childcareStartTime >= hour.opens) ||
-      (!!hour.childcareEndTime && hour.childcareEndTime <= hour.closes)
-    );
-  }) ||
+      (!!hour.childcareEndTime && hour.childcareEndTime <= hour.closes),
+  ) ||
   deviatingPeriods.some((period) =>
     period.openingHours.some((hour) => {
       if (!hour.childcare) return false;
