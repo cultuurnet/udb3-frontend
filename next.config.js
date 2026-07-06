@@ -1,5 +1,15 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
+// Enabling a feature flag via a NEXT_PUBLIC_FF_* env var enables it for all users.
+const featureFlagRuntimeConfig = Object.fromEntries(
+  Object.entries(process.env)
+    .filter(([key]) => key.startsWith('NEXT_PUBLIC_FF_'))
+    .map(([key, value]) => [
+      key.replace('NEXT_PUBLIC_', '').toLowerCase(),
+      value,
+    ]),
+);
+
 /**
  * @type {import('next').NextConfig}
  */
@@ -40,6 +50,7 @@ const moduleExports = {
     ckUrl: process.env.NEXT_PUBLIC_CK_URL,
     udbPublicationRulesUrl: process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL,
     uitidProfileUrl: process.env.NEXT_PUBLIC_UITID_PROFILE_URL,
+    ...featureFlagRuntimeConfig,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
   eslint: {
