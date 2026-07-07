@@ -89,6 +89,38 @@ export const Floating: Story = {
   },
 };
 
+export const FloatingCompact: Story = {
+  args: {
+    activeKey: 'events',
+    variant: TabsVariants.FLOATING,
+    compact: true,
+  },
+  parameters: {
+    controls: { exclude: ['variant', 'activeBackgroundColor', 'compact'] },
+  },
+  render: function RenderComponent(args) {
+    const [activeKey, setActiveKey] = useState(args.activeKey || 'events');
+
+    return (
+      <Tabs
+        {...args}
+        activeKey={activeKey}
+        onSelect={(key) => setActiveKey(key as string)}
+      >
+        <Tabs.Tab eventKey="events" title="Events">
+          <Text>EVENTS</Text>
+        </Tabs.Tab>
+        <Tabs.Tab eventKey="places" title="Places">
+          <Text>PLACES</Text>
+        </Tabs.Tab>
+        <Tabs.Tab eventKey="organizers" title="Organizers">
+          <Text>ORGANIZERS</Text>
+        </Tabs.Tab>
+      </Tabs>
+    );
+  },
+};
+
 export const Outlined: Story = {
   args: {
     activeKey: 'events',
