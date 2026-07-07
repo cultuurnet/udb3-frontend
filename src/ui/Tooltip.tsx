@@ -1,13 +1,14 @@
-import { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, forwardRef, ReactNode } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { Badge, BadgeVariants } from '@/ui/Badge';
+import { badgeVariants } from '@/ui/shadcn/badge';
 import {
   Tooltip as ShadcnTooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/ui/shadcn/tooltip';
+import { cn } from '@/ui/shadcn/utils';
 import { TooltipLegacy } from '@/ui/TooltipLegacy';
 
 type Side = ComponentPropsWithoutRef<typeof TooltipContent>['side'];
@@ -21,13 +22,20 @@ type Props = {
 
 const TOOLTIP_DELAY_MS = 100;
 
-const DefaultTrigger = ({ content }: { content: string }) => (
-  <Badge variant={BadgeVariants.SECONDARY} pill>
-    <span tabIndex={0} aria-label={content}>
+const DefaultTrigger = forwardRef<HTMLButtonElement, { content: string }>(
+  ({ content, ...props }, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      aria-label={content}
+      className={cn(badgeVariants({ variant: 'secondary' }), 'tw:self-center')}
+      {...props}
+    >
       ?
-    </span>
-  </Badge>
+    </button>
+  ),
 );
+DefaultTrigger.displayName = 'DefaultTrigger';
 
 const Tooltip = ({ id, content, side, children }: Props) => {
   const [isShadcnMigration] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
@@ -40,7 +48,7 @@ const Tooltip = ({ id, content, side, children }: Props) => {
     <TooltipProvider delayDuration={TOOLTIP_DELAY_MS}>
       <ShadcnTooltip>
         <TooltipTrigger asChild>
-          <span>{children ?? <DefaultTrigger content={content} />}</span>
+          {children ?? <DefaultTrigger content={content} />}
         </TooltipTrigger>
         <TooltipContent side={side}>{content}</TooltipContent>
       </ShadcnTooltip>
