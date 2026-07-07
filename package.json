@@ -19,6 +19,7 @@
     "storybook:build": "storybook build",
     "test:unit": "jest",
     "test:e2e": "playwright test",
+    "test:storybook": "vitest run --project storybook",
     "ci": "yarn types:check & yarn lint:check & yarn format:check",
     "postinsall": "patch-package --error-on-fail=false",
     "vrt": "storybook build && DOCKER_DEFAULT_PLATFORM=linux/amd64 lost-pixel docker --image lostpixel/lost-pixel:v3.22.0",
