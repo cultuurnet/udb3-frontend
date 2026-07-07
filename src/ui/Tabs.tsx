@@ -19,7 +19,7 @@ type TabProps = {
 };
 
 type Props<T extends string = string> = {
-  activeKey?: string;
+  activeKey: string;
   onSelect?: (key: T | null) => void;
   activeBackgroundColor?: string;
   variant?: Values<typeof TabsVariants>;
