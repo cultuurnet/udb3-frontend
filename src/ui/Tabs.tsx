@@ -73,7 +73,6 @@ function TabsShadcn<T extends string = string>({
             value={tab.eventKey}
             variant={shadcnVariant}
             size={compact ? 'sm' : 'md'}
-            className={tab.className}
             {...(activeBackgroundColor &&
               tab.eventKey === activeKey && {
                 style: getActiveStyle(shadcnVariant, activeBackgroundColor),
@@ -84,7 +83,12 @@ function TabsShadcn<T extends string = string>({
         ))}
       </ShadcnTabsList>
       {tabs.map((tab) => (
-        <ShadcnTabsContent key={tab.eventKey} value={tab.eventKey} forceMount>
+        <ShadcnTabsContent
+          key={tab.eventKey}
+          value={tab.eventKey}
+          className={tab.className}
+          forceMount
+        >
           {tab.children}
         </ShadcnTabsContent>
       ))}
