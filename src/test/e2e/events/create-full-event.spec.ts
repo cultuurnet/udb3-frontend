@@ -238,7 +238,7 @@ test('create event with all possible fields filled in', async ({
     'Type',
     'Thema',
     'Labels',
-    'Beschrijving',
+    'Beschrijving & FAQ',
     'Waar',
     'Wanneer',
     'Organisatie',
