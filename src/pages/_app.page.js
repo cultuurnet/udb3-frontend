@@ -16,7 +16,11 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import Cookies from 'universal-cookie';
 
 import { DEFAULT_COOKIE_OPTIONS } from '@/constants/Cookies';
-import { createCookieName, FeatureFlags } from '@/hooks/useFeatureFlag';
+import {
+  createCookieName,
+  FeatureFlags,
+  isFeatureFlagEnabledInEnv,
+} from '@/hooks/useFeatureFlag';
 import i18n from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
@@ -45,16 +49,24 @@ if (!isServer()) {
     // eslint-disable-next-line no-console
     console.table(
       Object.entries(FeatureFlags).reduce(
-        (acc, [constant, featureFlagName]) => ({
-          ...acc,
-          [`FeatureFlags.${constant}`]: {
-            enabled:
-              cookies.get(createCookieName(featureFlagName)) === 'true' ||
-              cookies.get(createCookieName(featureFlagName)) === true
-                ? '✅'
-                : '🚫',
-          },
-        }),
+        (acc, [constant, featureFlagName]) => {
+          const forcedByEnv = isFeatureFlagEnabledInEnv(featureFlagName);
+          const enabledByCookie =
+            cookies.get(createCookieName(featureFlagName)) === 'true' ||
+            cookies.get(createCookieName(featureFlagName)) === true;
+
+          return {
+            ...acc,
+            [`FeatureFlags.${constant}`]: {
+              enabled: forcedByEnv || enabledByCookie ? '✅' : '🚫',
+              source: forcedByEnv
+                ? 'env (all users)'
+                : enabledByCookie
+                  ? 'cookie'
+                  : '-',
+            },
+          };
+        },
         {},
       ),
     );

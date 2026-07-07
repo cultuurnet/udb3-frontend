@@ -16,7 +16,6 @@ import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
-import { Inline } from '@/ui/Inline';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -224,7 +223,7 @@ const PlaceStep = ({
           }
 
           return (
-            <Inline alignItems="center" spacing={3}>
+            <div className="tw:flex tw:items-center tw:gap-2">
               <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
               <Text>
                 {getLanguageObjectOrFallback(
@@ -243,7 +242,7 @@ const PlaceStep = ({
                   ? t('movies.create.actions.change_cinema')
                   : t('create.location.country.change_location')}
               </Button>
-            </Inline>
+            </div>
           );
         }}
       />
