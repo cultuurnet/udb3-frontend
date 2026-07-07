@@ -1,4 +1,10 @@
-import { Children, CSSProperties, isValidElement, ReactNode } from 'react';
+import {
+  Children,
+  CSSProperties,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+} from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
@@ -55,8 +61,11 @@ function TabsShadcn<T extends string = string>({
   className,
 }: Props<T>) {
   const tabs = Children.toArray(children)
-    .filter(isValidElement)
-    .map((child) => child.props as TabProps);
+    .filter(
+      (child): child is ReactElement<TabProps> =>
+        isValidElement(child) && child.type === Tabs.Tab,
+    )
+    .map((child) => child.props);
 
   const shadcnVariant = variantMap[variant];
 
