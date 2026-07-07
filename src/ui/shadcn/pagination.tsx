@@ -38,15 +38,17 @@ PaginationItem.displayName = 'PaginationItem';
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, 'size'> &
-  React.ComponentProps<'a'>;
+  React.ComponentProps<'button'>;
 
 const PaginationLink = ({
   className,
   isActive,
   size = 'icon',
+  type = 'button',
   ...props
 }: PaginationLinkProps) => (
-  <a
+  <button
+    type={type}
     aria-current={isActive ? 'page' : undefined}
     className={cn(
       buttonVariants({
@@ -75,8 +77,8 @@ const PaginationPrevious = ({
       size="default"
       className={cn(
         'tw:gap-1 tw:pl-2.5',
-        props['aria-disabled']
-          ? 'tw:cursor-not-allowed! tw:opacity-50 tw:hover:bg-transparent! tw:hover:text-current!'
+        props.disabled
+          ? 'tw:cursor-not-allowed! tw:hover:bg-transparent! tw:hover:text-current!'
           : 'tw:hover:bg-udb-grey-1 tw:hover:text-foreground',
         className,
       )}
@@ -100,8 +102,8 @@ const PaginationNext = ({
       size="default"
       className={cn(
         'tw:gap-1 tw:pr-2.5',
-        props['aria-disabled']
-          ? 'tw:cursor-not-allowed! tw:opacity-50 tw:hover:bg-transparent! tw:hover:text-current!'
+        props.disabled
+          ? 'tw:cursor-not-allowed! tw:hover:bg-transparent! tw:hover:text-current!'
           : 'tw:hover:bg-udb-grey-1 tw:hover:text-foreground',
         className,
       )}

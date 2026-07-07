@@ -40,10 +40,7 @@ const PaginationShadcn = ({
     <PaginationItem key={page}>
       <PaginationLink
         isActive={page === currentPage}
-        onClick={(e) => {
-          e.preventDefault();
-          onChangePage?.(page);
-        }}
+        onClick={() => onChangePage?.(page)}
       >
         {page}
       </PaginationLink>
@@ -88,11 +85,8 @@ const PaginationShadcn = ({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage > 1) onChangePage?.(currentPage - 1);
-            }}
-            aria-disabled={currentPage === 1}
+            onClick={() => onChangePage?.(currentPage - 1)}
+            disabled={currentPage === 1}
           />
         </PaginationItem>
         {startPages.map(renderPage)}
@@ -104,11 +98,8 @@ const PaginationShadcn = ({
         {windowPages.map(renderPage)}
         <PaginationItem>
           <PaginationNext
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage < pages.length) onChangePage?.(currentPage + 1);
-            }}
-            aria-disabled={currentPage === pages.length}
+            onClick={() => onChangePage?.(currentPage + 1)}
+            disabled={currentPage === pages.length}
           />
         </PaginationItem>
       </PaginationContent>
