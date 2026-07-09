@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
@@ -28,6 +29,8 @@ const PaginationShadcn = ({
   limitPages = 5,
   onChangePage,
 }: PaginationProps) => {
+  const { t } = useTranslation();
+
   const pages = useMemo(() => {
     const pages = [];
     for (let i = 0; i < Math.ceil(totalItems / perPage); i++) {
@@ -36,16 +39,23 @@ const PaginationShadcn = ({
     return pages;
   }, [totalItems, perPage]);
 
-  const renderPage = (page: number) => (
-    <PaginationItem key={page}>
-      <PaginationLink
-        isActive={page === currentPage}
-        onClick={() => onChangePage?.(page)}
-      >
-        {page}
-      </PaginationLink>
-    </PaginationItem>
-  );
+  const renderPage = (page: number) => {
+    const isActive = page === currentPage;
+    return (
+      <PaginationItem key={page}>
+        <PaginationLink
+          isActive={isActive}
+          aria-label={t(
+            isActive ? 'pagination.current_page_aria' : 'pagination.page_aria',
+            { page },
+          )}
+          onClick={() => onChangePage?.(page)}
+        >
+          {page}
+        </PaginationLink>
+      </PaginationItem>
+    );
+  };
 
   const { startPages, hasEllipsis, windowPages } = useMemo(() => {
     const totalPages = pages.length;

@@ -2077,6 +2077,8 @@
     "previous": "Vorige",
     "previous_aria": "Ga naar vorige pagina",
     "next": "Volgende",
-    "next_aria": "Ga naar volgende pagina"
+    "next_aria": "Ga naar volgende pagina",
+    "page_aria": "Ga naar pagina {{page}}",
+    "current_page_aria": "Huidige pagina, pagina {{page}}"
   }
 }
