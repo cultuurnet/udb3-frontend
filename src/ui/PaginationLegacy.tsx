@@ -14,6 +14,7 @@ type PaginationProps = InlineProps & {
   perPage: number;
   limitPages?: number;
   onChangePage?: (newValue: number) => void;
+  isFetching?: boolean;
 };
 
 const PaginationLegacy = ({
@@ -23,6 +24,7 @@ const PaginationLegacy = ({
   perPage = 10,
   limitPages = 5,
   onChangePage,
+  isFetching = false,
   ...props
 }: PaginationProps) => {
   const { udbMainLightGrey } = colors;
@@ -131,7 +133,7 @@ const PaginationLegacy = ({
       {pages.length > 1 && (
         <BootstrapPagination.Prev
           className="prev-btn"
-          disabled={currentPage === 1}
+          disabled={currentPage === 1 || isFetching}
           onClick={() => {
             if (currentPage > 1) {
               onChangePage(currentPage - 1);
@@ -155,6 +157,7 @@ const PaginationLegacy = ({
           <BootstrapPagination.Item
             key={page}
             active={page === currentPage}
+            disabled={isFetching}
             onClick={() => {
               onChangePage(page);
             }}
@@ -166,7 +169,7 @@ const PaginationLegacy = ({
       {pages.length > 1 && (
         <BootstrapPagination.Next
           className="next-btn"
-          disabled={currentPage === pages.length}
+          disabled={currentPage === pages.length || isFetching}
           onClick={() => {
             if (currentPage < pages.length) {
               onChangePage(currentPage + 1);

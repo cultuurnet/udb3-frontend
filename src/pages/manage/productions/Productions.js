@@ -22,6 +22,7 @@ const Productions = ({
   onChangePage,
   className,
   loading = false,
+  isFetching = false,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -73,6 +74,7 @@ const Productions = ({
                   totalItems={totalItems}
                   perPage={perPage}
                   onChangePage={onChangePage}
+                  isFetching={isFetching}
                 />
               </Panel.Footer>
             )}
@@ -92,6 +94,7 @@ Productions.propTypes = {
   onChangePage: PropTypes.func,
   className: PropTypes.string,
   loading: PropTypes.bool,
+  isFetching: PropTypes.bool,
 };
 
 export { Productions };

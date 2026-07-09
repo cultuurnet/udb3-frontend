@@ -20,6 +20,7 @@ type PaginationProps = {
   perPage: number;
   limitPages?: number;
   onChangePage?: (newValue: number) => void;
+  isFetching?: boolean;
 };
 
 const PaginationShadcn = ({
@@ -28,6 +29,7 @@ const PaginationShadcn = ({
   perPage = 10,
   limitPages = 5,
   onChangePage,
+  isFetching = false,
 }: PaginationProps) => {
   const { t } = useTranslation();
 
@@ -45,6 +47,7 @@ const PaginationShadcn = ({
       <PaginationItem key={page}>
         <PaginationLink
           isActive={isActive}
+          disabled={isFetching}
           aria-label={t(
             isActive ? 'pagination.current_page_aria' : 'pagination.page_aria',
             { page },
@@ -107,7 +110,7 @@ const PaginationShadcn = ({
         <PaginationItem>
           <PaginationPrevious
             onClick={() => onChangePage?.(currentPage - 1)}
-            disabled={currentPage === 1}
+            disabled={currentPage === 1 || isFetching}
           />
         </PaginationItem>
         {startPages.map(renderPage)}
@@ -120,7 +123,7 @@ const PaginationShadcn = ({
         <PaginationItem>
           <PaginationNext
             onClick={() => onChangePage?.(currentPage + 1)}
-            disabled={currentPage === pages.length}
+            disabled={currentPage === pages.length || isFetching}
           />
         </PaginationItem>
       </PaginationContent>
