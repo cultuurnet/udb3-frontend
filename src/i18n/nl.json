@@ -2079,6 +2079,7 @@
     "next": "Volgende",
     "next_aria": "Ga naar volgende pagina",
     "page_aria": "Ga naar pagina {{page}}",
-    "current_page_aria": "Huidige pagina, pagina {{page}}"
+    "current_page_aria": "Huidige pagina, pagina {{page}}",
+    "page_status": "Pagina {{page}} van {{total}}"
   }
 }

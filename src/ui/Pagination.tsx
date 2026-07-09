@@ -92,6 +92,17 @@ const PaginationShadcn = ({
 
   return (
     <PaginationRoot>
+      <span
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="tw:sr-only"
+      >
+        {t('pagination.page_status', {
+          page: currentPage,
+          total: pages.length,
+        })}
+      </span>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
