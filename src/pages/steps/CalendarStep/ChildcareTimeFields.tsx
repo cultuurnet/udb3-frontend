@@ -13,6 +13,7 @@ import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
+import { getChildcareTimeErrors } from '@/utils/validateOpeningHours';
 
 type ChildcareTimeFieldsProps = BoxProps & {
   idPrefix: string;
@@ -122,15 +123,22 @@ const getChildcareErrors = (
     activityStart,
     activityEnd,
   }: GetChildcareErrorsParams,
-): { startError?: string; endError?: string } => ({
-  startError:
-    !!childcareStartTime && childcareStartTime >= activityStart
+): { startError?: string; endError?: string } => {
+  const { startTooLate, endTooEarly } = getChildcareTimeErrors({
+    childcareStart: childcareStartTime,
+    childcareEnd: childcareEndTime,
+    activityStart,
+    activityEnd,
+  });
+
+  return {
+    startError: startTooLate
       ? t('create.calendar.days.childcare.validation_messages.start_too_late')
       : undefined,
-  endError:
-    !!childcareEndTime && childcareEndTime <= activityEnd
+    endError: endTooEarly
       ? t('create.calendar.days.childcare.validation_messages.end_too_early')
       : undefined,
-});
+  };
+};
 
 export { ChildcareTimeFields, getChildcareErrors };
