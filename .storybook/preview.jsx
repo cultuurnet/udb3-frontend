@@ -16,15 +16,25 @@ export const parameters = {
       order: ['Introduction', 'Primitives', 'Components'],
     },
   },
+
   actions: { argTypesRegex: '^on.*' },
+
   controls: {
     sort: 'alpha',
     exclude: ['as'],
   },
+
   docs: {
     components: {
       Canvas: CustomCanvas,
     },
+  },
+
+  a11y: {
+    // 'todo' - show a11y violations in the test UI only
+    // 'error' - fail CI on a11y violations
+    // 'off' - skip a11y checks entirely
+    test: 'todo',
   },
 };
 

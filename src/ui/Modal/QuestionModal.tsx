@@ -1,10 +1,29 @@
-import PropTypes from 'prop-types';
+import type { ReactNode } from 'react';
 import { Modal as BootstrapModal } from 'react-bootstrap';
+
+import type { Values } from '@/types/Values';
 
 import { Button, ButtonVariants } from '../Button';
 import { getGlobalBorderRadius, getValueFromTheme } from '../theme';
 
 const getValueForModal = getValueFromTheme('modal');
+
+type Props = {
+  className?: string;
+  visible?: boolean;
+  title?: ReactNode;
+  confirmTitle?: string;
+  cancelTitle?: string;
+  onShow?: () => void;
+  onClose?: () => void;
+  onConfirm?: () => void;
+  children?: ReactNode;
+  scrollable?: boolean;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  confirmButtonDisabled?: boolean;
+  confirmLoading?: boolean;
+  confirmButtonVariant?: Values<typeof ButtonVariants>;
+};
 
 const QuestionModal = ({
   className,
@@ -21,7 +40,7 @@ const QuestionModal = ({
   confirmButtonDisabled = false,
   confirmLoading,
   confirmButtonVariant = ButtonVariants.PRIMARY,
-}) => (
+}: Props) => (
   <BootstrapModal
     className={className}
     show={visible}
@@ -29,7 +48,7 @@ const QuestionModal = ({
     onHide={onClose}
     scrollable={scrollable}
     keyboard={false}
-    size={size}
+    size={size === 'md' ? undefined : size}
     css={`
       z-index: ${getValueForModal('zIndex')};
 
@@ -74,20 +93,5 @@ const QuestionModal = ({
   </BootstrapModal>
 );
 
-QuestionModal.propTypes = {
-  className: PropTypes.string,
-  visible: PropTypes.bool,
-  title: PropTypes.node,
-  confirmTitle: PropTypes.string,
-  cancelTitle: PropTypes.string,
-  onShow: PropTypes.func,
-  scrollable: PropTypes.bool,
-  onClose: PropTypes.func,
-  onConfirm: PropTypes.func,
-  children: PropTypes.node,
-  size: PropTypes.string,
-  confirmButtonDisabled: PropTypes.bool,
-  confirmButtonVariant: PropTypes.oneOf(Object.values(ButtonVariants)),
-};
-
 export { QuestionModal };
+export type { Props as QuestionModalProps };
