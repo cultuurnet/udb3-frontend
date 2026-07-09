@@ -1,4 +1,5 @@
 import type { UseMutationOptions } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
 
 import {
   ExtendQueryOptions,
@@ -407,6 +408,7 @@ const createGetOrganizersByCreatorQueryOptions = ({
       ...sortingArguments,
     } as typeof queryArguments & typeof sortingArguments,
     enabled: !!(creator?.sub && creator?.email),
+    placeholderData: keepPreviousData,
   });
 };
 

@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
 
 import { PermissionType } from '@/constants/PermissionTypes';
 import {
@@ -67,6 +67,7 @@ const createGetRolesQueryOptions = ({
       start: `${paginationOptions.start}`,
       limit: `${paginationOptions.limit}`,
     },
+    placeholderData: keepPreviousData,
   });
 
 const useGetRolesByQuery = ({
