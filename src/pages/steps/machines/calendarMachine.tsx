@@ -85,7 +85,6 @@ const createInitialContext = () => ({
         type: BookingAvailabilityType.AVAILABLE,
       } as BookingAvailability,
       bookingInfo: undefined as BookingInfo | undefined,
-      childcareEnabled: false,
       childcareStartTime: '',
       childcareEndTime: '',
       hasOvernightStay: false,
@@ -148,11 +147,6 @@ type CalendarEvents =
   | {
       type: 'CHANGE_OPENING_HOURS';
       newOpeningHours: OpeningHoursWithId[];
-    }
-  | {
-      type: 'TOGGLE_CHILDCARE';
-      id: string;
-      enabled: boolean;
     }
   | {
       type: 'CHANGE_CHILDCARE_START_TIME';
@@ -224,7 +218,6 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
         return {
           ...event.newContext,
           days: event.newContext.days.map((day) => ({
-            childcareEnabled: false,
             childcareStartTime: '',
             childcareEndTime: '',
             hasOvernightStay: false,
@@ -245,7 +238,6 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               status: { type: OfferStatus.AVAILABLE },
               bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
               bookingInfo: undefined,
-              childcareEnabled: false,
               childcareStartTime: '',
               childcareEndTime: '',
               hasOvernightStay: false,
@@ -361,23 +353,6 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
           });
         },
       }),
-      toggleChildcare: assign({
-        days: (context, event) => {
-          if (event.type !== 'TOGGLE_CHILDCARE') return context.days;
-          return context.days.map((day) =>
-            day.id === event.id
-              ? {
-                  ...day,
-                  childcareEnabled: event.enabled,
-                  ...(!event.enabled && {
-                    childcareStartTime: '',
-                    childcareEndTime: '',
-                  }),
-                }
-              : day,
-          );
-        },
-      }),
       changeChildcareStartTime: assign({
         days: (context, event) => {
           if (event.type !== 'CHANGE_CHILDCARE_START_TIME') return context.days;
@@ -488,9 +463,6 @@ const calendarMachineConfig: MachineConfig<
         CHANGE_END_HOUR: {
           actions: ['changeEndHour'] as CalendarActions,
         },
-        TOGGLE_CHILDCARE: {
-          actions: ['toggleChildcare'] as CalendarActions,
-        },
         CHANGE_CHILDCARE_START_TIME: {
           actions: ['changeChildcareStartTime'] as CalendarActions,
         },
@@ -538,9 +510,6 @@ const calendarMachineConfig: MachineConfig<
         },
         CHANGE_END_HOUR: {
           actions: ['changeEndHour'] as CalendarActions,
-        },
-        TOGGLE_CHILDCARE: {
-          actions: ['toggleChildcare'] as CalendarActions,
         },
         CHANGE_CHILDCARE_START_TIME: {
           actions: ['changeChildcareStartTime'] as CalendarActions,

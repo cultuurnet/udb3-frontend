@@ -85,12 +85,12 @@ test.describe.serial('Calendar opening hours modal', () => {
       .first()
       .fill('17:00');
 
-    await modal.getByLabel(calendar.days.childcare.label).click();
-    await expect(
-      modal.getByText(
-        calendar.days.childcare.validation_messages.set_times_required,
-      ),
-    ).toBeVisible();
+    await modal
+      .getByRole('checkbox', { name: calendar.days.childcare.before })
+      .click();
+    await modal
+      .getByRole('checkbox', { name: calendar.days.childcare.after })
+      .click();
     await modal
       .getByLabel(calendar.days.childcare.from, { exact: true })
       .nth(1)
@@ -103,11 +103,6 @@ test.describe.serial('Calendar opening hours modal', () => {
       .getByLabel(calendar.days.childcare.to, { exact: true })
       .nth(1)
       .blur();
-    await expect(
-      modal.getByText(
-        calendar.days.childcare.validation_messages.set_times_required,
-      ),
-    ).toBeHidden();
 
     await modal
       .getByRole('button', {
@@ -214,7 +209,14 @@ test.describe.serial('Calendar opening hours modal', () => {
       .last()
       .fill('16:00');
 
-    await modal.getByLabel(calendar.days.childcare.label).last().click();
+    await modal
+      .getByRole('checkbox', { name: calendar.days.childcare.before })
+      .last()
+      .click();
+    await modal
+      .getByRole('checkbox', { name: calendar.days.childcare.after })
+      .last()
+      .click();
     await modal
       .getByLabel(calendar.days.childcare.from, { exact: true })
       .last()

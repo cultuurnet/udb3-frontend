@@ -50,12 +50,6 @@ test('create an event with calendarType single and childcare hours', async ({
   await page.getByLabel('Beginuur').fill(dummyEvent.hours.activityStart);
   await page.getByLabel('Einduur').fill(dummyEvent.hours.activityEnd);
 
-  // 4. Toggle Kinderopvang — info alert prompts the user to set times
-  await page.getByLabel(childcare.label).click();
-  await expect(
-    page.getByText(childcare.validation_messages.set_times_required),
-  ).toBeVisible();
-
   // Errors must NOT be visible before the user touches the inputs
   await expect(
     page.getByText(childcare.validation_messages.start_too_late),
@@ -64,36 +58,18 @@ test('create an event with calendarType single and childcare hours', async ({
     page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
-  // 5. Childcare hours — alert disappears as soon as one time is set
-  await expect(page.locator(childcareStartInput)).toBeVisible();
+  // 4. Enable each childcare field independently
+  await page.getByRole('checkbox', { name: childcare.before }).click();
+  await page.getByRole('checkbox', { name: childcare.after }).click();
 
-  await test.step('hides alert when only the start time is set', async () => {
-    await page
-      .locator(childcareStartInput)
-      .fill(dummyEvent.hours.childcareStart);
-    await page.locator(childcareStartInput).blur();
-    await expect(
-      page.getByText(childcare.validation_messages.set_times_required),
-    ).toBeHidden();
-    await page.locator(childcareStartInput).fill('');
-    await page.locator(childcareStartInput).blur();
-  });
-
-  await test.step('hides alert when only the end time is set', async () => {
-    await page.locator(childcareEndInput).fill(dummyEvent.hours.childcareEnd);
-    await page.locator(childcareEndInput).blur();
-    await expect(
-      page.getByText(childcare.validation_messages.set_times_required),
-    ).toBeHidden();
-    await page.locator(childcareEndInput).fill('');
-    await page.locator(childcareEndInput).blur();
-  });
+  await expect(page.locator(childcareStartInput)).toBeEnabled();
+  await expect(page.locator(childcareEndInput)).toBeEnabled();
 
   await page.locator(childcareStartInput).fill(dummyEvent.hours.childcareStart);
   await page.locator(childcareEndInput).fill(dummyEvent.hours.childcareEnd);
   await page.locator(childcareEndInput).blur();
 
-  // 6. Address
+  // 5. Address
   await page.getByLabel('Gemeente').click();
   await page.getByLabel('Gemeente').fill(dummyEvent.address.zip);
   await page
@@ -108,7 +84,7 @@ test('create an event with calendarType single and childcare hours', async ({
     .first()
     .click();
 
-  // 7. Name and Age
+  // 6. Name and Age
   await page.getByLabel('Naam van de activiteit').click();
   await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
@@ -203,11 +179,6 @@ test('shows childcare validation errors when times overlap activity hours', asyn
   await page.getByLabel('Beginuur').fill('10:00');
   await page.getByLabel('Einduur').fill('16:00');
 
-  // 4. Toggle Kinderopvang — info alert visible, no errors yet
-  await page.getByLabel(childcare.label).click();
-  await expect(
-    page.getByText(childcare.validation_messages.set_times_required),
-  ).toBeVisible();
   await expect(
     page.getByText(childcare.validation_messages.start_too_late),
   ).toBeHidden();
@@ -215,9 +186,10 @@ test('shows childcare validation errors when times overlap activity hours', asyn
     page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
-  // 5. Touch the start input with an invalid value — start error appears,
-  //    end error stays hidden because it has not been touched yet.
-  await expect(page.locator(childcareStartInput)).toBeVisible();
+  // 4. Enable and touch the start input with an invalid value — start error
+  //    appears, end error stays hidden because it has not been touched yet.
+  await page.getByRole('checkbox', { name: childcare.before }).click();
+  await expect(page.locator(childcareStartInput)).toBeEnabled();
   await page.locator(childcareStartInput).fill('11:00');
   await page.locator(childcareStartInput).blur();
   await expect(
@@ -227,14 +199,20 @@ test('shows childcare validation errors when times overlap activity hours', asyn
     page.getByText(childcare.validation_messages.end_too_early),
   ).toBeHidden();
 
-  // 6. Touch the end input with an invalid value — end error now visible too,
-  //    info alert disappears once both times are set.
+  // 5. Enable and touch the end input with an invalid value — end error now
+  //    visible too.
+  await page.getByRole('checkbox', { name: childcare.after }).click();
   await page.locator(childcareEndInput).fill('15:00');
   await page.locator(childcareEndInput).blur();
   await expect(
     page.getByText(childcare.validation_messages.end_too_early),
   ).toBeVisible();
+
+  // 6. Disabling the start field clears its value and its error
+  await page.getByRole('checkbox', { name: childcare.before }).click();
+  await expect(page.locator(childcareStartInput)).toBeDisabled();
+  await expect(page.locator(childcareStartInput)).toHaveValue('');
   await expect(
-    page.getByText(childcare.validation_messages.set_times_required),
+    page.getByText(childcare.validation_messages.start_too_late),
   ).toBeHidden();
 });
