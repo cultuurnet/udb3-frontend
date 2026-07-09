@@ -1,14 +1,25 @@
-import PropTypes from 'prop-types';
+import type { ReactNode } from 'react';
 import { css } from 'styled-components';
 
 import { Box, parseSpacing } from './Box';
 import { Inline } from './Inline';
+import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme('detailTable');
 
-const DetailTable = ({ items = [], className, ...props }) => {
+type Item = {
+  header: ReactNode;
+  value: ReactNode;
+};
+
+type Props = StackProps & {
+  items?: Item[];
+  className?: string;
+};
+
+const DetailTable = ({ items = [], className, ...props }: Props) => {
   return (
     <Stack
       as="table"
@@ -39,13 +50,6 @@ const DetailTable = ({ items = [], className, ...props }) => {
       </Stack>
     </Stack>
   );
-};
-
-DetailTable.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({ header: PropTypes.string, value: PropTypes.string }),
-  ),
-  className: PropTypes.string,
 };
 
 export { DetailTable };
