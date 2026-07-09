@@ -12,7 +12,6 @@ const makeRow = (partial: Partial<RegularHoursRow> = {}): RegularHoursRow => ({
   opens: '09:00',
   closes: '17:00',
   dayOfWeek: ['monday'],
-  childcareEnabled: false,
   childcareStartTime: '',
   childcareEndTime: '',
   ...partial,
@@ -264,15 +263,6 @@ describe('isOpeningHoursConfirmDisabled', () => {
       'overlapping times',
       makeRow({ id: 'row-1', opens: '09:00', closes: '08:00' }),
     ],
-    [
-      'childcare missing times',
-      makeRow({
-        id: 'row-1',
-        childcareEnabled: true,
-        childcareStartTime: '',
-        childcareEndTime: '',
-      }),
-    ],
   ])('is false before first save attempt even with %s', (_, row) => {
     expect(check([row], new Set())).toBe(false);
   });
@@ -282,7 +272,6 @@ describe('isOpeningHoursConfirmDisabled', () => {
       'childcare start too late',
       makeRow({
         id: 'row-1',
-        childcareEnabled: true,
         childcareStartTime: '09:00',
         childcareEndTime: '',
       }),
@@ -291,7 +280,6 @@ describe('isOpeningHoursConfirmDisabled', () => {
       'childcare end too early',
       makeRow({
         id: 'row-1',
-        childcareEnabled: true,
         childcareStartTime: '',
         childcareEndTime: '17:00',
       }),
@@ -300,7 +288,6 @@ describe('isOpeningHoursConfirmDisabled', () => {
       'childcare both times invalid',
       makeRow({
         id: 'row-1',
-        childcareEnabled: true,
         childcareStartTime: '10:00',
         childcareEndTime: '16:00',
       }),

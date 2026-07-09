@@ -186,13 +186,14 @@
           "invalid_hours": "L'heure de fin ne peut être antérieure à l'heure de début."
         },
         "childcare": {
-          "label": "Garderie",
+          "before": "Garderie avant",
+          "after": "Garderie après",
           "from": "de",
           "to": "à",
+          "info": "Y a-t-il une garderie ?",
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
-            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
-            "set_times_required": "Veuillez indiquer l'heure de début et/ou de fin de la garderie."
+            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
           }
         },
         "overnight_stay": {

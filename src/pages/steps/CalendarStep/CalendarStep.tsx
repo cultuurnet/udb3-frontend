@@ -129,7 +129,6 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     status: subEvent.status,
     bookingAvailability: subEvent.bookingAvailability,
     bookingInfo: subEvent.bookingInfo,
-    childcareEnabled: !!subEvent.childcare,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
     hasOvernightStay: !!subEvent.overnight,
@@ -183,13 +182,12 @@ const convertStateToFormData = (
     bookingAvailability: day.bookingAvailability,
     status: day.status,
     ...(day.bookingInfo && { bookingInfo: day.bookingInfo }),
-    ...(day.childcareEnabled &&
-      (day.childcareStartTime || day.childcareEndTime) && {
-        childcare: {
-          ...(day.childcareStartTime && { start: day.childcareStartTime }),
-          ...(day.childcareEndTime && { end: day.childcareEndTime }),
-        },
-      }),
+    ...((day.childcareStartTime || day.childcareEndTime) && {
+      childcare: {
+        ...(day.childcareStartTime && { start: day.childcareStartTime }),
+        ...(day.childcareEndTime && { end: day.childcareEndTime }),
+      },
+    }),
     ...(day.hasOvernightStay && { overnight: true }),
   }));
 
@@ -412,7 +410,6 @@ const CalendarStep = ({
     handleChooseWithStartAndEndDate,
     handleChoosePermanent,
     handleChangeOpeningHours,
-    handleToggleChildcare,
     handleChangeChildcareStartTime,
     handleChangeChildcareEndTime,
     handleToggleOvernightStay,
@@ -544,7 +541,6 @@ const CalendarStep = ({
             onChangeEndDate={handleChangeEndDateOfDay}
             onChangeStartTime={handleChangeStartTime}
             onChangeEndTime={handleChangeEndTime}
-            onToggleChildcare={handleToggleChildcare}
             onChangeChildcareStartTime={handleChangeChildcareStartTime}
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
             onToggleOvernightStay={handleToggleOvernightStay}

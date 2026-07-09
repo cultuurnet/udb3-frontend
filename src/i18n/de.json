@@ -186,13 +186,14 @@
           "invalid_hours": "Die Endzeit darf nicht vor der Beginzeit liegen."
         },
         "childcare": {
-          "label": "Kinderbetreuung",
+          "before": "Betreuung vor",
+          "after": "Betreuung nach",
           "from": "von",
           "to": "bis",
+          "info": "Gibt es eine Kinderbetreuung?",
           "validation_messages": {
             "start_too_late": "Die Startzeit der Kinderbetreuung muss vor der Startzeit der Aktivität liegen.",
-            "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen.",
-            "set_times_required": "Bitte geben Sie die Start- und/oder Endzeit der Kinderbetreuung an."
+            "end_too_early": "Die Endzeit der Kinderbetreuung muss nach der Endzeit der Aktivität liegen."
           }
         },
         "overnight_stay": {
