@@ -138,6 +138,7 @@ const LinkShadcn = ({
 }: LinkProps) => {
   const isInternalLink = href.startsWith('/') || href.startsWith('#');
 
+  const isButton = buttonVariants.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
 
   const clonedSuffix =
@@ -147,7 +148,7 @@ const LinkShadcn = ({
 
   const content = isBadge ? (
     children
-  ) : (
+  ) : isButton || iconName || clonedSuffix ? (
     <span className="tw:flex tw:justify-between tw:w-full">
       <span className="tw:flex tw:gap-[0.5333rem]">
         {iconName && <Icon name={iconName} />}
@@ -157,6 +158,8 @@ const LinkShadcn = ({
       </span>
       {clonedSuffix}
     </span>
+  ) : shouldHideText ? null : (
+    children
   );
 
   const resolvedAs = href && isInternalLink ? NextLink : as;
