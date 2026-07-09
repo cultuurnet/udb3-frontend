@@ -1,9 +1,20 @@
-import PropTypes from 'prop-types';
+import type { ReactNode } from 'react';
 import { Modal as BootstrapModal } from 'react-bootstrap';
 
 import { getGlobalBorderRadius, getValueFromTheme } from '../theme';
 
 const getValueForModal = getValueFromTheme('modal');
+
+type Props = {
+  className?: string;
+  visible?: boolean;
+  title?: ReactNode;
+  scrollable?: boolean;
+  onShow?: () => void;
+  onClose?: () => void;
+  children?: ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+};
 
 const ContentModal = ({
   visible = false,
@@ -14,7 +25,7 @@ const ContentModal = ({
   children,
   size = 'xl',
   className,
-}) => (
+}: Props) => (
   <BootstrapModal
     className={className}
     show={visible}
@@ -22,7 +33,7 @@ const ContentModal = ({
     onHide={onClose}
     scrollable={scrollable}
     keyboard={false}
-    size={size}
+    size={size === 'md' ? undefined : size}
     css={`
       z-index: ${getValueForModal('zIndex')};
 
@@ -54,15 +65,5 @@ const ContentModal = ({
   </BootstrapModal>
 );
 
-ContentModal.propTypes = {
-  className: PropTypes.string,
-  visible: PropTypes.bool,
-  title: PropTypes.string,
-  onShow: PropTypes.func,
-  onClose: PropTypes.func,
-  scrollable: PropTypes.bool,
-  children: PropTypes.node,
-  size: PropTypes.string,
-};
-
 export { ContentModal };
+export type { Props as ContentModalProps };

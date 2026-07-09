@@ -18,6 +18,10 @@ const meta: Meta<typeof Modal> = {
       control: { type: 'select' },
       options: Object.values(ModalVariants),
     },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg', 'xl'],
+    },
     confirmTitle: { control: { type: 'text' } },
     cancelTitle: { control: { type: 'text' } },
   },
@@ -77,9 +81,6 @@ export const Question: Story = {
           {...args}
           visible={visible}
           onConfirm={() => {
-            setVisible(false);
-          }}
-          onCancel={() => {
             setVisible(false);
           }}
           onClose={() => setVisible(false)}
