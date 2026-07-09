@@ -85,7 +85,7 @@ const createGetLabelsQueryOptions = ({
       limit: `${paginationOptions.limit}`,
       suggestion: onlySuggestions,
     },
-    placeholderData: keepPreviousData,
+    placeholderData: onlySuggestions ? undefined : keepPreviousData,
   });
 
 const useGetLabelsByQuery = ({
