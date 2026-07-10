@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
-import nl from '../../../i18n/nl.json';
-
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
@@ -180,22 +178,16 @@ test('create event with all possible fields filled in', async ({
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
 
-  await page
-    .getByText(
-      nl.create.additionalInformation.booking_info.reservation_type_multiple,
-    )
-    .click();
+  await page.locator('#offer-link').click();
+  await page.locator('#offer-link').fill(dummyEvent.bookingInfo.url);
 
-  await page.locator('#subevent-0-link').click();
-  await page.locator('#subevent-0-link').fill(dummyEvent.bookingInfo.url);
+  await page
+    .locator('#offer-url-label')
+    .selectOption({ label: 'Koop tickets' });
 
   await page
     .locator('#subevent-0-max-capacity')
     .fill(String(dummyEvent.bookingInfo.capacity));
-
-  await page
-    .locator('#subevent-0-url-label')
-    .selectOption({ label: 'Koop tickets' });
 
   await page.getByLabel('Reservatieperiode').check();
 

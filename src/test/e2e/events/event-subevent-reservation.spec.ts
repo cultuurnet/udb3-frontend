@@ -3,30 +3,43 @@ import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
-import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 type TestFixtures = {
-  eventId: string;
+  singleEventId: string;
+  multipleEventId: string;
+};
+
+const publishAndGetId = async (page: Page) => {
+  await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
+  await page.waitForURL(/\/events\/[a-f0-9-]+/);
+  return page.url().match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
 };
 
 const test = base.extend<TestFixtures>({
-  eventId: async ({ page, baseURL }, applyFixture) => {
+  singleEventId: async ({ page, baseURL }, applyFixture) => {
     await createBasicEvent(
       page,
       baseURL!,
-      `E2E SubEvent Reservation Test ${Date.now()}`,
+      `E2E Single Reservation ${Date.now()}`,
+      addDays(new Date(), 1),
+    );
+    await applyFixture(await publishAndGetId(page));
+  },
+  multipleEventId: async ({ page, baseURL }, applyFixture) => {
+    await createBasicEvent(
+      page,
+      baseURL!,
+      `E2E Multiple Reservation ${Date.now()}`,
       addDays(new Date(), 1),
       [addDays(new Date(), 10)],
     );
-    await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
-
-    await page.waitForURL(/\/events\/[a-f0-9-]+/);
-    const eventId = page.url().match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
-
-    await applyFixture(eventId);
+    await applyFixture(await publishAndGetId(page));
   },
 });
+
+const openReservationTab = (page: Page) =>
+  page.getByRole('tab', { name: 'Reservatie' }).click();
 
 const waitForSubEventsPatch = (page: Page) =>
   page.waitForResponse(
@@ -35,12 +48,35 @@ const waitForSubEventsPatch = (page: Page) =>
       response.request().method() === 'PATCH',
   );
 
-const switchToSpecificReservations = (page: Page) =>
-  page
-    .getByText(
-      nl.create.additionalInformation.booking_info.reservation_type_multiple,
-    )
-    .click();
+const waitForCalendarPut = (page: Page) =>
+  page.waitForResponse(
+    (response) =>
+      response.url().includes('/calendar') &&
+      response.request().method() === 'PUT',
+  );
+
+const waitForBookingInfoPut = (page: Page) =>
+  page.waitForResponse(
+    (response) =>
+      response.url().includes('/bookingInfo') &&
+      response.request().method() === 'PUT',
+  );
+
+const dayRows = (page: Page) =>
+  page.locator('li').filter({
+    has: page.locator(
+      '[id^="calendar-step-day-day-"][id$="date-period-picker-start"]',
+    ),
+  });
+
+const setCapacity = async (page: Page, id: string, capacity: string) => {
+  await page.locator(id).fill(capacity);
+  const patch = waitForSubEventsPatch(page);
+  await page.locator(id).blur();
+  await patch;
+};
+
+const randomCapacity = () => String(faker.number.int({ min: 1, max: 500 }));
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
@@ -48,89 +84,102 @@ test.beforeEach(async ({ context }) => {
   ]);
 });
 
-test.describe('Per-subEvent reservation info', () => {
-  test('sets reservation info per subEvent (card variant)', async ({
+test.describe('Single-date event reservation', () => {
+  test('stores capacity on the subEvent level', async ({
     page,
     baseURL,
-    eventId,
+    singleEventId,
   }) => {
-    const reservations = [
-      { url: faker.internet.url(), capacity: String(faker.number.int(500)) },
-      { url: faker.internet.url(), capacity: String(faker.number.int(500)) },
-    ];
+    const capacity = randomCapacity();
 
-    await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await page.goto(`${baseURL}/events/${singleEventId}/edit`);
+    await openReservationTab(page);
 
-    await expect(page.locator('#subevent-0-link')).toBeVisible();
-    await expect(page.locator('#subevent-1-link')).toBeVisible();
+    await expect(page.locator('#offer-max-capacity')).toBeVisible();
+    await expect(page.locator('#subevent-0-max-capacity')).toHaveCount(0);
 
-    for (const [index, reservation] of reservations.entries()) {
-      await page.locator(`#subevent-${index}-link`).fill(reservation.url);
-      let patch = waitForSubEventsPatch(page);
-      await page.locator(`#subevent-${index}-link`).blur();
-      await patch;
+    await setCapacity(page, '#offer-max-capacity', capacity);
 
-      await page
-        .locator(`#subevent-${index}-max-capacity`)
-        .fill(reservation.capacity);
-      patch = waitForSubEventsPatch(page);
-      await page.locator(`#subevent-${index}-max-capacity`).blur();
-      await patch;
+    await page.reload();
+    await openReservationTab(page);
 
-      patch = waitForSubEventsPatch(page);
-      await page
-        .locator(`#subevent-${index}-url-label`)
-        .selectOption({ label: 'Koop tickets' });
-      await patch;
+    await expect(page.locator('#offer-max-capacity')).toHaveValue(capacity);
+  });
+});
+
+test.describe('Multiple-date event reservation', () => {
+  test('sets capacity and status per subEvent', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    const capacities = [randomCapacity(), randomCapacity()];
+
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-max-capacity')).toBeVisible();
+    await expect(page.locator('#subevent-1-max-capacity')).toBeVisible();
+
+    for (const [index, capacity] of capacities.entries()) {
+      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
     }
 
     await page.reload();
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await openReservationTab(page);
 
-    for (const [index, reservation] of reservations.entries()) {
-      await expect(page.locator(`#subevent-${index}-link`)).toHaveValue(
-        reservation.url,
-      );
+    for (const [index, capacity] of capacities.entries()) {
       await expect(page.locator(`#subevent-${index}-max-capacity`)).toHaveValue(
-        reservation.capacity,
+        capacity,
       );
     }
   });
 
-  test('preserves subEvent reservation info when a date changes in the calendar', async ({
+  test('saves an offer-level reservation link', async ({
     page,
     baseURL,
-    eventId,
+    multipleEventId,
   }) => {
-    const capacity = String(faker.number.int({ min: 1, max: 500 }));
+    const url = faker.internet.url();
 
-    await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
 
-    await page.locator('#subevent-0-max-capacity').fill(capacity);
-    let patch = waitForSubEventsPatch(page);
-    await page.locator('#subevent-0-max-capacity').blur();
-    await patch;
+    const bookingInfoPut = waitForBookingInfoPut(page);
+    await page.locator('#offer-link').fill(url);
+    await page.locator('#offer-link').blur();
+    await bookingInfoPut;
 
-    patch = waitForSubEventsPatch(page);
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#offer-link')).toHaveValue(url);
+  });
+});
+
+test.describe('Calendar edits preserve subEvent capacity', () => {
+  test("preserves a subEvent's capacity and status when its date changes", async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    const capacity = randomCapacity();
+
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await setCapacity(page, '#subevent-0-max-capacity', capacity);
+
+    const statusPatch = waitForSubEventsPatch(page);
     await page
       .locator('#subevent-0-status')
       .selectOption({ label: 'Volzet of uitverkocht' });
-    await patch;
-
-    const calendarPut = page.waitForResponse(
-      (response) =>
-        response.url().includes('/calendar') &&
-        response.request().method() === 'PUT',
-    );
+    await statusPatch;
 
     const startDateInput = page
       .locator('[id^="calendar-step-day-day-"][id$="date-period-picker-start"]')
       .first();
+    const calendarPut = waitForCalendarPut(page);
     await startDateInput.fill(
       addDays(new Date(), 5).toLocaleDateString('nl-BE'),
     );
@@ -138,8 +187,7 @@ test.describe('Per-subEvent reservation info', () => {
     await calendarPut;
 
     await page.reload();
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await openReservationTab(page);
 
     await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
       capacity,
@@ -147,195 +195,78 @@ test.describe('Per-subEvent reservation info', () => {
     await expect(page.locator('#subevent-0-status')).toHaveValue('Unavailable');
   });
 
-  test('removes the reservation info of a subEvent when it is deleted from the calendar', async ({
-    page,
-    baseURL,
-    eventId,
-  }) => {
-    const kept = {
-      url: faker.internet.url(),
-      capacity: String(faker.number.int(500)),
-    };
-    const removed = {
-      url: faker.internet.url(),
-      capacity: String(faker.number.int(500)),
-    };
-
-    await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
-
-    // subEvent 0 keeps its info, subEvent 1 is the one that gets deleted.
-    for (const [index, reservation] of [kept, removed].entries()) {
-      await page.locator(`#subevent-${index}-link`).fill(reservation.url);
-      let patch = waitForSubEventsPatch(page);
-      await page.locator(`#subevent-${index}-link`).blur();
-      await patch;
-
-      await page
-        .locator(`#subevent-${index}-max-capacity`)
-        .fill(reservation.capacity);
-      patch = waitForSubEventsPatch(page);
-      await page.locator(`#subevent-${index}-max-capacity`).blur();
-      await patch;
-    }
-
-    // Reload so the calendar machine is seeded with the saved reservation info.
-    await page.reload();
-
-    // Delete the last subEvent (subEvent 1) in the calendar step.
-    const calendarPut = page.waitForResponse(
-      (response) =>
-        response.url().includes('/calendar') &&
-        response.request().method() === 'PUT',
-    );
-    const lastDayRow = page
-      .locator('li')
-      .filter({
-        has: page.locator(
-          '[id^="calendar-step-day-day-"][id$="date-period-picker-start"]',
-        ),
-      })
-      .last();
-    await lastDayRow.locator('button:has(svg[data-icon="trash"])').click();
-    await calendarPut;
-
-    await page.reload();
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-
-    // Both subevent cards are gone — single date shows the offer-level card.
-    await expect(page.locator('#subevent-0-link')).toHaveCount(0);
-    await expect(page.locator('#subevent-1-link')).toHaveCount(0);
-
-    // The offer-level card is shown with cleared booking info.
-    await expect(page.locator('#offer-link')).toBeVisible();
-    await expect(page.locator('#offer-link')).toHaveValue('');
-  });
-
-  test('shows a new reservation section when a subEvent is added in the calendar', async ({
-    page,
-    baseURL,
-    eventId,
-  }) => {
-    await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
-
-    // The fixture event has two subEvents, so two reservation cards.
-    await expect(page.locator('#subevent-0-link')).toBeVisible();
-    await expect(page.locator('#subevent-1-link')).toBeVisible();
-    await expect(page.locator('#subevent-2-link')).toHaveCount(0);
-
-    // Add a day in the calendar step.
-    const calendarPut = page.waitForResponse(
-      (response) =>
-        response.url().includes('/calendar') &&
-        response.request().method() === 'PUT',
-    );
-    await page.getByRole('button', { name: 'Dag toevoegen' }).click();
-    await calendarPut;
-
-    // A reservation section appears for the newly added subEvent.
-    await expect(page.locator('#subevent-2-link')).toBeVisible();
-  });
-
-  test('keeps the correct reservation info when a middle subEvent is deleted', async ({
+  test("keeps the survivors' capacities when a middle subEvent is deleted", async ({
     page,
     baseURL,
   }) => {
-    // A dedicated three-day event (the shared fixture only has two).
     await createBasicEvent(
       page,
       baseURL!,
-      `E2E SubEvent Middle Delete ${Date.now()}`,
+      `E2E Middle Delete ${Date.now()}`,
       addDays(new Date(), 1),
       [addDays(new Date(), 10), addDays(new Date(), 20)],
     );
-    await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
-    await page.waitForURL(/\/events\/[a-f0-9-]+/);
-    const eventId = page.url().match(/\/events\/([a-f0-9-]+)/)?.[1] ?? '';
+    const eventId = await publishAndGetId(page);
 
-    const links = [
-      faker.internet.url(),
-      faker.internet.url(),
-      faker.internet.url(),
-    ];
+    const capacities = [randomCapacity(), randomCapacity(), randomCapacity()];
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await openReservationTab(page);
 
-    for (const [index, url] of links.entries()) {
-      await page.locator(`#subevent-${index}-link`).fill(url);
-      const patch = waitForSubEventsPatch(page);
-      await page.locator(`#subevent-${index}-link`).blur();
-      await patch;
+    for (const [index, capacity] of capacities.entries()) {
+      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
     }
 
-    // Reload so the calendar machine is seeded with the saved reservation info.
-    await page.reload();
-
-    // Delete the middle subEvent. Index-based preservation is skipped here, so
-    // the remaining subEvents keep their own data (the deleted one is dropped).
-    const calendarPut = page.waitForResponse(
-      (response) =>
-        response.url().includes('/calendar') &&
-        response.request().method() === 'PUT',
-    );
-    const dayRows = page.locator('li').filter({
-      has: page.locator(
-        '[id^="calendar-step-day-day-"][id$="date-period-picker-start"]',
-      ),
-    });
-    await dayRows.nth(1).locator('button:has(svg[data-icon="trash"])').click();
+    // Delete the middle subEvent without reloading, so the PUT must preserve
+    // the survivors' capacities by matching each on its start date.
+    const calendarPut = waitForCalendarPut(page);
+    await dayRows(page)
+      .nth(1)
+      .locator('button:has(svg[data-icon="trash"])')
+      .click();
     await calendarPut;
 
     await page.reload();
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
-    await switchToSpecificReservations(page);
+    await openReservationTab(page);
 
-    // Only two subEvents remain, keeping the first and last links.
-    await expect(page.locator('#subevent-2-link')).toHaveCount(0);
-    await expect(page.locator('#subevent-0-link')).toHaveValue(links[0]);
-    await expect(page.locator('#subevent-1-link')).toHaveValue(links[2]);
+    await expect(page.locator('#subevent-2-max-capacity')).toHaveCount(0);
+    await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
+      capacities[0],
+    );
+    await expect(page.locator('#subevent-1-max-capacity')).toHaveValue(
+      capacities[2],
+    );
   });
 
-  test('saves the reservation period without offer-level contact info', async ({
+  test('keeps the surviving capacity when reduced to a single date', async ({
     page,
     baseURL,
-    eventId,
+    multipleEventId,
   }) => {
-    await page.goto(`${baseURL}/events/${eventId}/edit`);
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
+    const capacities = [randomCapacity(), randomCapacity()];
 
-    await page.getByLabel('Reservatieperiode').check();
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
 
-    const startInput = page.locator(
-      '#reservation-date-pickerdate-period-picker-start',
-    );
-    const endInput = page.locator(
-      '#reservation-date-pickerdate-period-picker-end',
-    );
+    for (const [index, capacity] of capacities.entries()) {
+      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
+    }
 
-    await startInput.fill(addDays(new Date(), 7).toLocaleDateString('nl-BE'));
-    await startInput.press('Enter');
-
-    // The period save fires once both dates are committed.
-    const bookingInfoPut = page.waitForResponse(
-      (response) =>
-        response.url().includes('/bookingInfo') &&
-        response.request().method() === 'PUT',
-    );
-    await endInput.fill(addDays(new Date(), 14).toLocaleDateString('nl-BE'));
-    await endInput.press('Enter');
-    await bookingInfoPut;
+    // Delete the last date, collapsing to a single-date event.
+    const calendarPut = waitForCalendarPut(page);
+    await dayRows(page)
+      .last()
+      .locator('button:has(svg[data-icon="trash"])')
+      .click();
+    await calendarPut;
 
     await page.reload();
-    await page.getByRole('tab', { name: 'Reservatie' }).click();
+    await openReservationTab(page);
 
-    // The period persisted: the toggle is on and the dates are populated.
-    await expect(page.getByLabel('Reservatieperiode')).toBeChecked();
-    await expect(startInput).not.toHaveValue('');
-    await expect(endInput).not.toHaveValue('');
+    await expect(page.locator('#subevent-1-max-capacity')).toHaveCount(0);
+    await expect(page.locator('#offer-max-capacity')).toBeVisible();
+    await expect(page.locator('#offer-max-capacity')).toHaveValue(
+      capacities[0],
+    );
   });
 });
