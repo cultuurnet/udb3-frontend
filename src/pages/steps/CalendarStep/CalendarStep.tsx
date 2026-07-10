@@ -51,6 +51,32 @@ import type { DeviatingPeriodData } from './DeviatingPeriod';
 import { FixedDays } from './FixedDays';
 import { OneOrMoreDays } from './OneOrMoreDays';
 
+const preserveBookingAvailability = <
+  T extends Pick<SubEvent, 'startDate' | 'bookingAvailability'>,
+>(
+  subEvents: T[],
+  existingSubEvents: SubEvent[],
+) => {
+  const availabilityByStartDate = new Map(
+    existingSubEvents.map((subEvent) => [
+      new Date(subEvent.startDate).getTime(),
+      subEvent.bookingAvailability,
+    ]),
+  );
+
+  return subEvents.map((subEvent) => {
+    const startDate = new Date(subEvent.startDate).getTime();
+    if (!availabilityByStartDate.has(startDate)) return subEvent;
+
+    const bookingAvailability = availabilityByStartDate.get(startDate);
+    availabilityByStartDate.delete(startDate);
+
+    return bookingAvailability
+      ? { ...subEvent, bookingAvailability }
+      : subEvent;
+  });
+};
+
 const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
   const queryClient = useQueryClient();
   const changeCalendarMutation = useChangeOfferCalendarMutation({
@@ -92,11 +118,6 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
       scope,
     };
 
-    const bookingAvailability = queryClient.getQueryData<Offer>([
-      scope,
-      { id: offerId },
-    ])?.bookingAvailability;
-
     if (timeTable) {
       const subEvent = convertTimeTableToSubEvents(timeTable);
 
@@ -105,16 +126,24 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
         subEvent,
         calendarType:
           subEvent.length > 1 ? CalendarType.MULTIPLE : CalendarType.SINGLE,
-        bookingAvailability,
       });
 
       return;
     }
 
+    const existingSubEvents =
+      queryClient.getQueryData<Offer>([scope, { id: offerId }])?.subEvent ?? [];
+
+    // Keep each surviving subEvent's capacity across removals (matched on start
+    // date), so deleting a date never wipes the others.
+    const subEvent = Array.isArray(calendar?.subEvent)
+      ? preserveBookingAvailability(calendar.subEvent, existingSubEvents)
+      : calendar?.subEvent;
+
     await changeCalendarMutation.mutateAsync({
       ...common,
       ...calendar,
-      bookingAvailability,
+      ...(subEvent && { subEvent }),
     });
   };
 };
@@ -328,6 +357,8 @@ const CalendarStep = ({
 
     const existingSubEvents = offerRef.current?.subEvent;
 
+    // Preserve by index: covers date edits and added days. Removals are handled
+    // at PUT time by preserveBookingAvailability (matched on start date).
     const canPreserveReservationData =
       existingSubEvents &&
       Array.isArray(baseFormData.subEvent) &&
@@ -363,7 +394,6 @@ const CalendarStep = ({
           subEvent: preservedFormData.subEvent.map((subEvent) => ({
             ...subEvent,
             bookingInfo: {},
-            bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
           })),
         }
       : preservedFormData;
