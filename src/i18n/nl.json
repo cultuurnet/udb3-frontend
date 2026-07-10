@@ -473,8 +473,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
-        "reservation_type_single": "Algemene link",
-        "reservation_type_multiple": "Links per moment/periode",
+        "capacity_title_single": "Hoeveel plaatsen heeft je activiteit?",
+        "capacity_title_multiple": "Hoeveel mensen kunnen aan jouw activiteit deelnemen?",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",

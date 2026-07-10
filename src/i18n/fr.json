@@ -452,8 +452,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
-        "reservation_type_single": "Lien général",
-        "reservation_type_multiple": "Liens par moment/période",
+        "capacity_title_single": "Combien de places propose votre activité ?",
+        "capacity_title_multiple": "Combien de personnes peuvent participer à votre activité ?",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",
