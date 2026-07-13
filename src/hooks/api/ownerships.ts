@@ -1,4 +1,8 @@
-import { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  UseMutationOptions,
+  UseMutationResult,
+} from '@tanstack/react-query';
 
 import { SortOrder } from '@/constants/SortOptions';
 import { Values } from '@/types/Values';
@@ -164,6 +168,7 @@ const createGetOwnershipRequestsQueryOptions = ({
       itemType,
     },
     refetchOnWindowFocus: false,
+    placeholderData: keepPreviousData,
   });
 
 const useGetOwnershipRequestsQuery = (
