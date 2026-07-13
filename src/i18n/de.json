@@ -450,8 +450,8 @@
           "buy": "Tickets kaufen",
           "reserve": "Plätze reservieren"
         },
-        "reservation_type_single": "Allgemeiner Link",
-        "reservation_type_multiple": "Links pro Moment/Zeitraum",
+        "capacity_title_single": "Wie viele Plätze hat deine Aktivität?",
+        "capacity_title_multiple": "Wie viele Personen können an deiner Aktivität teilnehmen?",
         "reservation_period": {
           "title": "Wann können sich die Leute anmelden?",
           "toggle": "Reservierungszeitraum",
