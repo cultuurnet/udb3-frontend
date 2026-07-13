@@ -186,8 +186,8 @@
           "invalid_hours": "Die Endzeit darf nicht vor der Beginzeit liegen."
         },
         "childcare": {
-          "before": "Betreuung vor",
-          "after": "Betreuung nach",
+          "before": "Vorbetreuung",
+          "after": "Nachbetreuung",
           "from": "von",
           "to": "bis",
           "info": "Gibt es eine Kinderbetreuung?",
