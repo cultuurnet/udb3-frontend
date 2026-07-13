@@ -74,6 +74,7 @@ const BookingAvailabilityFields = ({
             onChange={(e) => {
               const newStatus = e.target.value as BookingAvailabilityValue;
               setStatus(newStatus);
+              if (isCapacityInvalid) return;
               onChangeBookingAvailability(newStatus, capacity);
             }}
           >
