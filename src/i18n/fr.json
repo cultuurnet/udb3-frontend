@@ -2010,5 +2010,14 @@
       "client_id": "ID client : {{clientId}}",
       "client_name": "Nom du client : {{clientName}}"
     }
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "previous_aria": "Aller à la page précédente",
+    "next": "Suivant",
+    "next_aria": "Aller à la page suivante",
+    "page_aria": "Aller à la page {{page}}",
+    "current_page_aria": "Page actuelle, page {{page}}",
+    "page_status": "Page {{page}} sur {{total}}"
   }
 }

@@ -241,6 +241,7 @@ const Index = () => {
                 perPage={productionsPerPage}
                 onClickProduction={setActiveProductionId}
                 onChangePage={setCurrentPageProductions}
+                isFetching={getProductionsQuery.isFetching}
               />,
               <Events
                 key="events"

@@ -1,31 +1,37 @@
 import { useMemo } from 'react';
-import { Pagination as BootstrapPagination } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
-import { Icon, Icons } from './Icon';
-import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
-import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-const getValue = getValueFromTheme(`pagination`);
+import { PaginationLegacy } from './PaginationLegacy';
+import {
+  Pagination as PaginationRoot,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from './shadcn/pagination';
 
-type PaginationProps = InlineProps & {
+type PaginationProps = {
   currentPage: number;
   totalItems: number;
   perPage: number;
   limitPages?: number;
   onChangePage?: (newValue: number) => void;
+  isFetching?: boolean;
 };
 
-const Pagination = ({
-  className,
+const PaginationShadcn = ({
   currentPage = 1,
   totalItems = 1,
   perPage = 10,
   limitPages = 5,
   onChangePage,
-  ...props
+  isFetching = false,
 }: PaginationProps) => {
-  const { udbMainLightGrey } = colors;
+  const { t } = useTranslation();
 
   const pages = useMemo(() => {
     const pages = [];
@@ -35,149 +41,104 @@ const Pagination = ({
     return pages;
   }, [totalItems, perPage]);
 
-  const currentRange = useMemo(() => {
-    const middle = Math.ceil(limitPages / 2);
-
-    const startLeftSide = currentPage < middle ? 0 : currentPage - middle;
-    const restFromLeft = currentPage < middle ? middle - currentPage : 0;
-    const startRightSide = currentPage + middle - 1;
-    const restFromRight =
-      startRightSide > pages.length ? startRightSide - pages.length : 0;
-
-    const left = pages.slice(
-      startLeftSide - restFromRight < 0 ? 0 : startLeftSide - restFromRight,
-      currentPage - 1,
+  const renderPage = (page: number) => {
+    const isActive = page === currentPage;
+    return (
+      <PaginationItem key={page}>
+        <PaginationLink
+          isActive={isActive}
+          disabled={isFetching}
+          aria-label={t(
+            isActive ? 'pagination.current_page_aria' : 'pagination.page_aria',
+            { page },
+          )}
+          onClick={() => onChangePage?.(page)}
+        >
+          {page}
+        </PaginationLink>
+      </PaginationItem>
     );
-    const center = pages.slice(currentPage - 1, currentPage);
-    const right = pages.slice(currentPage, startRightSide + restFromLeft);
+  };
 
-    return [...left, ...center, ...right];
+  const { startPages, hasEllipsis, windowPages } = useMemo(() => {
+    const totalPages = pages.length;
+    const windowSize = limitPages - 2;
+
+    if (totalPages <= limitPages) {
+      return { startPages: pages, hasEllipsis: false, windowPages: [] };
+    }
+
+    if (currentPage <= limitPages - 1) {
+      return {
+        startPages: pages.slice(0, limitPages),
+        hasEllipsis: false,
+        windowPages: [],
+      };
+    }
+
+    const windowStart = Math.min(
+      currentPage - Math.floor(windowSize / 2),
+      totalPages - windowSize + 1,
+    );
+
+    return {
+      startPages: [1],
+      hasEllipsis: true,
+      windowPages: Array.from(
+        { length: windowSize },
+        (_, i) => windowStart + i,
+      ),
+    };
   }, [pages, currentPage, limitPages]);
 
+  if (pages.length <= 1) return null;
+
   return (
-    <Inline
-      forwardedAs="ul"
-      justifyContent="center"
-      css={`
-        .page-item:first-child .page-link,
-        .page-item:last-child .page-link {
-          border-radius: ${getGlobalBorderRadius};
-        }
-
-        .page-item:nth-child(2) .page-link {
-          border-top-left-radius: ${getGlobalBorderRadius};
-          border-bottom-left-radius: ${getGlobalBorderRadius};
-        }
-
-        .page-item:nth-last-child(2) .page-link {
-          border-top-right-radius: ${getGlobalBorderRadius};
-          border-bottom-right-radius: ${getGlobalBorderRadius};
-        }
-
-        .page-link {
-          color: ${getValue('color')};
-          border: 1px solid ${getValue('borderColor')};
-          padding: ${getValue('paddingY')} ${getValue('paddingX')};
-          border-radius: ${getGlobalBorderRadius};
-          margin: 0.4rem;
-
-          &:hover {
-            background-color: ${getValue('hoverBackgroundColor')};
-            color: ${getValue('hoverColor')};
-            border-color: ${getValue('hoverBorderColor')};
-          }
-
-          &:focus {
-            box-shadow: ${getValue('focusBoxShadow')};
-          }
-        }
-
-        & > .page-item.active > .page-link {
-          background-color: ${getValue('activeBackgroundColor')};
-          color: ${getValue('activeColor')};
-          border-color: ${getValue('activeBorderColor')};
-          z-index: ${getValue('zIndex')};
-        }
-
-        .prev-btn.disabled > span {
-          background-color: ${udbMainLightGrey};
-          color: white;
-        }
-
-        .next-btn.disabled > span {
-          background-color: ${udbMainLightGrey};
-          color: white;
-        }
-
-        .prev-btn > .page-link {
-          padding: 0.5rem;
-        }
-
-        .next-btn > .page-link {
-          padding: 0.5rem;
-        }
-
-        .prev-btn > a > span {
-          color: ${udbMainLightGrey};
-        }
-
-        .next-btn > a > span {
-          color: ${udbMainLightGrey};
-        }
-      `}
-      {...getInlineProps(props)}
-      className={className}
-    >
-      {pages.length > 1 && (
-        <BootstrapPagination.Prev
-          className="prev-btn"
-          disabled={currentPage === 1}
-          onClick={() => {
-            if (currentPage > 1) {
-              onChangePage(currentPage - 1);
-            }
-          }}
-        >
-          <Icon name={Icons.ANGLE_LEFT} />
-        </BootstrapPagination.Prev>
-      )}
-      {currentRange.map((page, index) => {
-        if (index === 0 && currentRange[0] !== pages[0]) {
-          return <BootstrapPagination.Ellipsis key="ellipsis-left" />;
-        } else if (
-          index === currentRange.length - 1 &&
-          currentRange[index] !== pages[pages.length - 1]
-        ) {
-          return <BootstrapPagination.Ellipsis key="ellipsis-right" />;
-        }
-
-        return (
-          <BootstrapPagination.Item
-            key={page}
-            active={page === currentPage}
-            onClick={() => {
-              onChangePage(page);
-            }}
-          >
-            {page}
-          </BootstrapPagination.Item>
-        );
-      })}
-      {pages.length > 1 && (
-        <BootstrapPagination.Next
-          className="next-btn"
-          disabled={currentPage === pages.length}
-          onClick={() => {
-            if (currentPage < pages.length) {
-              onChangePage(currentPage + 1);
-            }
-          }}
-        >
-          <Icon name={Icons.ANGLE_RIGHT} />
-        </BootstrapPagination.Next>
-      )}
-    </Inline>
+    <PaginationRoot>
+      <span
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="tw:sr-only"
+      >
+        {t('pagination.page_status', {
+          page: currentPage,
+          total: pages.length,
+        })}
+      </span>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => onChangePage?.(currentPage - 1)}
+            disabled={currentPage === 1 || isFetching}
+          />
+        </PaginationItem>
+        {startPages.map(renderPage)}
+        {hasEllipsis && (
+          <PaginationItem key="ellipsis">
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+        {windowPages.map(renderPage)}
+        <PaginationItem>
+          <PaginationNext
+            onClick={() => onChangePage?.(currentPage + 1)}
+            disabled={currentPage === pages.length || isFetching}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </PaginationRoot>
   );
+};
+
+const Pagination = (props: PaginationProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (!isShadcnMigrationEnabled) return <PaginationLegacy {...props} />;
+
+  return <PaginationShadcn {...props} />;
 };
 
 export { Pagination };

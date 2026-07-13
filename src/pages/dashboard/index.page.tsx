@@ -309,6 +309,7 @@ type TabContentProps = {
   actions?: React.ReactNode[];
   onChangePage: (page: number) => void;
   onDelete: (item: Item) => void;
+  isFetching?: boolean;
 };
 
 const TabContent = ({
@@ -320,6 +321,7 @@ const TabContent = ({
   totalItems,
   onDelete,
   onChangePage,
+  isFetching = false,
 }: TabContentProps) => {
   const { t } = useTranslation();
 
@@ -392,6 +394,7 @@ const TabContent = ({
             totalItems={totalItems}
             perPage={itemsPerPage}
             onChangePage={onChangePage}
+            isFetching={isFetching}
           />
         </Panel.Footer>
       )}
@@ -538,6 +541,7 @@ const Dashboard = (): any => {
   const sharedTableContentProps = {
     tab,
     status: getItemsByCreatorQuery.status,
+    isFetching: getItemsByCreatorQuery.isFetching,
     items,
     totalItems: getItemsByCreatorQuery.data?.totalItems ?? 0,
     page,

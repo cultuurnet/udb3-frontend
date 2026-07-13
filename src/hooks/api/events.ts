@@ -1,3 +1,5 @@
+import { keepPreviousData } from '@tanstack/react-query';
+
 import type { CalendarType } from '@/constants/CalendarType';
 import { OfferTypes, Scope } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
@@ -444,6 +446,7 @@ const createGetEventsByCreatorQueryOptions = ({
       typeof sortingArgument &
       typeof embededCalendarSummaries,
     enabled: !!(creator?.sub && creator?.email),
+    placeholderData: keepPreviousData,
   });
 };
 
