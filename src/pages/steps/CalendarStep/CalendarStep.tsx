@@ -57,20 +57,18 @@ const preserveBookingAvailability = <
   subEvents: T[],
   existingSubEvents: SubEvent[],
 ) => {
-  const availabilityByStartDate = new Map(
-    existingSubEvents.map((subEvent) => [
-      new Date(subEvent.startDate).getTime(),
-      subEvent.bookingAvailability,
-    ]),
-  );
+  // Match each subEvent to one existing entry by date, so shared dates don't
+  // collapse and survivors keep their capacity.
+  const unmatched = [...existingSubEvents];
 
   return subEvents.map((subEvent) => {
     const startDate = new Date(subEvent.startDate).getTime();
-    if (!availabilityByStartDate.has(startDate)) return subEvent;
+    const index = unmatched.findIndex(
+      (existing) => new Date(existing.startDate).getTime() === startDate,
+    );
+    if (index === -1) return subEvent;
 
-    const bookingAvailability = availabilityByStartDate.get(startDate);
-    availabilityByStartDate.delete(startDate);
-
+    const [{ bookingAvailability }] = unmatched.splice(index, 1);
     return bookingAvailability
       ? { ...subEvent, bookingAvailability }
       : subEvent;
