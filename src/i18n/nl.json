@@ -188,8 +188,8 @@
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
         },
         "childcare": {
-          "before": "Opvang voor",
-          "after": "Opvang na",
+          "before": "Vooropvang",
+          "after": "Naopvang",
           "from": "van",
           "to": "tot",
           "info": "Is er kinderopvang?",
