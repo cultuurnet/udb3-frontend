@@ -150,7 +150,7 @@ const LinkLegacy = ({
         {iconName && <Icon name={iconName} />}
         {customChildren
           ? children
-          : !shouldHideText && <Text flex={1}>{children}</Text>}
+          : !shouldHideText && <Text className="tw:flex-1">{children}</Text>}
       </Inline>
       {clonedSuffix}
     </Inline>

@@ -25,6 +25,7 @@ import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { RadioButtonTypes } from './RadioButton';
 import { RadioButtonWithLabel } from './RadioButtonWithLabel';
+import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
@@ -273,7 +274,9 @@ const DatePeriodPicker = ({
         id={`${idPrefix}-show-holidays`}
         type={RadioButtonTypes.SWITCH}
         label={
-          <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
+          <Text
+            className={cn(isHighlighted ? 'tw:font-bold' : 'tw:font-normal')}
+          >
             {t('date_period_picker.show_holidays')}
           </Text>
         }
@@ -285,7 +288,11 @@ const DatePeriodPicker = ({
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text key={label} variant={TextVariants.MUTED} fontSize="0.85rem">
+            <Text
+              key={label}
+              variant={TextVariants.MUTED}
+              className="tw:text-sm"
+            >
               {label}
             </Text>
           ))}

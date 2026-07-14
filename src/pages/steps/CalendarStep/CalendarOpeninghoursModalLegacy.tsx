@@ -12,7 +12,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -190,7 +190,7 @@ const CalendarOpeninghoursModalLegacy = ({
           <Stack key={openingHour.id} flex={1}>
             <Inline alignItems="flex-end" spacing={5}>
               <Stack spacing={3}>
-                <Text fontWeight="bold">
+                <Text className="tw:font-bold">
                   {t('create.calendar.opening_hours_modal.days')}
                 </Text>
                 <Inline spacing={4}>
@@ -235,7 +235,7 @@ const CalendarOpeninghoursModalLegacy = ({
               />
             </Inline>
             {errors.openingHours?.[index]?.dayOfWeek?.type && (
-              <Text color="red">
+              <Text variant={TextVariants.ERROR}>
                 {t(
                   'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                 )}

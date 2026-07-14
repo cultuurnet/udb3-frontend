@@ -7,8 +7,7 @@ import i18n from '@/i18n/index';
 import type { AddressInternal } from '@/types/Address';
 import { isPlace } from '@/types/Place';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -52,7 +51,9 @@ const AccessibilityPreview = ({
 
   return (
     <Stack spacing={2}>
-      <Text color={colors.grey5}>{t('preview.accessibility.description')}</Text>
+      <Text variant={TextVariants.MUTED}>
+        {t('preview.accessibility.description')}
+      </Text>
       <Stack spacing={1}>
         {departurePlaces.map((uri) => (
           <DeparturePlaceAddress key={uri} placeUri={uri} />

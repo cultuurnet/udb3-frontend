@@ -344,13 +344,7 @@ const Preview = () => {
             )}
             {isEdited && (
               <Alert fullWidth className="tw:mb-4">
-                <Text
-                  css={`
-                    b {
-                      font-weight: 600;
-                    }
-                  `}
-                >
+                <Text className="tw:[&_b]:font-semibold!">
                   <Trans
                     i18nKey="preview.publication_alert"
                     values={{

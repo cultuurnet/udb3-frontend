@@ -15,7 +15,7 @@ import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
 import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
@@ -218,14 +218,16 @@ export const Days = ({
               )}
             </List.Item>
             {timesErrors[index] && (
-              <Text color="red">
+              <Text variant={TextVariants.ERROR}>
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
             {childcareStartError && (
-              <Text color="red">{childcareStartError}</Text>
+              <Text variant={TextVariants.ERROR}>{childcareStartError}</Text>
             )}
-            {childcareEndError && <Text color="red">{childcareEndError}</Text>}
+            {childcareEndError && (
+              <Text variant={TextVariants.ERROR}>{childcareEndError}</Text>
+            )}
             {isDisabled && (
               <Alert
                 variant={AlertVariants.PRIMARY}

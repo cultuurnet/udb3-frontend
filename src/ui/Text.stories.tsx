@@ -22,7 +22,20 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    as: 'span',
     children: 'text',
+  },
+};
+
+export const Muted: Story = {
+  args: {
+    children: 'text',
+    variant: TextVariants.MUTED,
+  },
+};
+
+export const Error: Story = {
+  args: {
+    children: 'text',
+    variant: TextVariants.ERROR,
   },
 };

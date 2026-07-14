@@ -94,7 +94,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        <Text fontWeight={700}>Selecteer je foto</Text>
+        <Text className="tw:font-bold">Selecteer je foto</Text>
         {imagePreviewUrl ? (
           <Stack spacing={2}>
             <Image
@@ -122,7 +122,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
           </Button>
           <Text variant={TextVariants.ERROR}>{error}</Text>
         </Stack>
-        <Text variant={TextVariants.MUTED} textAlign="center">
+        <Text variant={TextVariants.MUTED} className="tw:text-center">
           {t('pictures.upload_modal.file_requirements', {
             maxFileSize: MAX_FILE_SIZE / 1_000_000,
           })}
@@ -322,7 +322,7 @@ const PictureUploadModal = ({
           Component={<Input {...register('copyrightHolder')} />}
         />
 
-        <Text variant={TextVariants.MUTED} fontSize="0.8rem">
+        <Text variant={TextVariants.MUTED} className="tw:text-[0.8rem]">
           <Trans i18nKey="pictures.upload_modal.disclaimer.terms_and_conditions.text">
             <TermsAndConditionsLink />
             <CopyrightLink />

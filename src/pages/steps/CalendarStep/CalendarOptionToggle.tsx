@@ -63,10 +63,7 @@ export const CalendarOptionToggle = ({
       >
         <Text
           variant={TextVariants.MUTED}
-          fontSize="14px"
-          css={`
-            margin-top: -0.4rem;
-          `}
+          className="tw:text-sm tw:-mt-[0.4rem]"
         >
           {t('create.calendar.types.one_or_more_days_example')}
         </Text>
@@ -83,10 +80,7 @@ export const CalendarOptionToggle = ({
       >
         <Text
           variant={TextVariants.MUTED}
-          fontSize="14px"
-          css={`
-            margin-top: -0.4rem;
-          `}
+          className="tw:text-sm tw:-mt-[0.4rem]"
         >
           {!isCultuurkuurEvent && t('create.calendar.types.fixed_days_example')}
         </Text>

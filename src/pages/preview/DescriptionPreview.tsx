@@ -1,44 +1,28 @@
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 type Props = {
   description: string;
 };
 
-const DescriptionPreview = ({ description }: Props) => {
-  const getLinkThemeValue = getValueFromTheme('link');
+// TODO: remove !-overrides when GlobalStyle.js's `font: inherit` / `list-style: none` resets are cleaned up.
+const richTextClassName = [
+  'tw:[&_p]:my-[7.5px]',
+  'tw:[&_a]:underline',
+  'tw:[&_a]:text-udb-main-darkest-blue',
+  'tw:[&_a:hover]:text-udb-main-blue',
+  'tw:[&_em]:italic!',
+  'tw:[&_strong]:font-bold!',
+  'tw:[&_ul]:[margin:7.5px_0_7.5px_20px]',
+  'tw:[&_ol]:[margin:7.5px_0_7.5px_20px]',
+  'tw:[&_ul]:list-disc!',
+  'tw:[&_ol]:list-decimal!',
+].join(' ');
 
+const DescriptionPreview = ({ description }: Props) => {
   return (
     <Text
-      css={`
-        p {
-          margin: 7.5px 0;
-        }
-        a {
-          color: ${getLinkThemeValue('color')};
-          text-decoration: underline;
-          &:hover {
-            color: ${getLinkThemeValue('hoverColor')};
-          }
-        }
-        em {
-          font-style: italic;
-        }
-        strong {
-          font-weight: bold;
-        }
-        ul,
-        ol {
-          margin: 7.5px 0 7.5px 20px;
-        }
-        ul {
-          list-style-type: disc;
-        }
-        ol {
-          list-style-type: decimal;
-        }
-      `}
+      className={richTextClassName}
       dangerouslySetInnerHTML={{
         __html: sanitizeDom(description, sanitizationPresets.EVENT_DESCRIPTION),
       }}

@@ -103,7 +103,7 @@ const LocationSuggestions = ({
   return (
     <Stack {...props} spacing={5}>
       <Inline>
-        <Text fontWeight={'bold'}>{title}</Text>
+        <Text className="tw:font-bold">{title}</Text>
       </Inline>
       {alertVisible && (
         <Alert variant={AlertVariants.PRIMARY} className="tw:my-4">
@@ -535,7 +535,7 @@ const LocationStep = ({
                   flex={1}
                 >
                   {showRecentLocations && (
-                    <Text fontWeight={'bold'}>
+                    <Text className="tw:font-bold">
                       {hasRecentLocations
                         ? t('create.location.recent_locations.other')
                         : t('create.location.recent_locations.pick')}
@@ -698,7 +698,7 @@ const LocationStep = ({
                     info={
                       <Text
                         variant={TextVariants.MUTED}
-                        maxWidth={parseSpacing(9)}
+                        className="tw:max-w-[34.1333rem]"
                       >
                         {t('create.location.online_url.info')}
                       </Text>
@@ -712,7 +712,7 @@ const LocationStep = ({
           if (!country || municipality?.zip === '0000') {
             return renderFieldWithRecentLocations(
               <>
-                <Text fontWeight="bold" marginBottom={3}>
+                <Text className="tw:mb-[0.5333rem] tw:font-bold">
                   {t('create.location.is_cultuurkuur.title')}
                 </Text>
 
@@ -726,8 +726,7 @@ const LocationStep = ({
                 {isCultuurkuurEvent && (
                   <Text
                     variant={TextVariants.MUTED}
-                    maxWidth={parseSpacing(9)}
-                    marginTop={3}
+                    className="tw:mt-[0.5333rem] tw:max-w-[34.1333rem]"
                   >
                     {t('create.location.is_cultuurkuur.info')}
                   </Text>

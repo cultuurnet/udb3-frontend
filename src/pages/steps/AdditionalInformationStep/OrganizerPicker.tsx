@@ -71,7 +71,7 @@ const RecentUsedOrganizers = ({
       `}
     >
       <Inline>
-        <Text fontWeight="bold">
+        <Text className="tw:font-bold">
           {t(
             'create.additionalInformation.organizer.select_recent_used_organizer',
           )}
@@ -245,7 +245,7 @@ const OrganizerPicker = ({
                 onChange={handleSelectRecentOrganizer}
               />
               <Stack width="100%">
-                <Text fontWeight="bold" marginBottom={4}>
+                <Text className="tw:mb-[1.0667rem] tw:font-bold">
                   {recentUsedOrganizers.length > 0
                     ? t(
                         'create.additionalInformation.organizer.or_choose_other_organizer',

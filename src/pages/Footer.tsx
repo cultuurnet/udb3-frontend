@@ -200,13 +200,12 @@ const Footer = ({
           alignItems={{ default: 'flex-end', xs: 'center' }}
           justifyContent="flex-start"
         >
-          <Inline as="p" spacing={2}>
+          <Inline as="p" className="tw:items-center tw:gap-2">
             <Text
-              css={`
-                color: ${variant === FooterVariants.LOGIN
-                  ? getValueForPage('footer.linkColor')
-                  : 'inherit'};
-              `}
+              className={cn(
+                variant === FooterVariants.LOGIN &&
+                  'tw:text-udb-main-dark-grey',
+              )}
             >
               {t('footer.by')}
             </Text>

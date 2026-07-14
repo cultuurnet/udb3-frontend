@@ -14,7 +14,7 @@ import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -344,7 +344,7 @@ const CalendarOpeninghoursModal = ({
                 marginBottom={showChildcare ? 4 : undefined}
               >
                 <Stack spacing={3}>
-                  <Text fontWeight="bold">
+                  <Text className="tw:font-bold">
                     {t('create.calendar.opening_hours_modal.days')}
                   </Text>
                   <MultiSelectDropdown
@@ -368,7 +368,7 @@ const CalendarOpeninghoursModal = ({
                   />
                 </Stack>
                 <Stack spacing={3}>
-                  <Text fontWeight="bold">
+                  <Text className="tw:font-bold">
                     {t('create.calendar.opening_hours_modal.hours')}
                   </Text>
                   <TimeSpanPicker
@@ -421,24 +421,26 @@ const CalendarOpeninghoursModal = ({
               </Inline>
               {shownErrorIds.has(openingHour.id) &&
                 openingHour.dayOfWeek.length === 0 && (
-                  <Text color="red">
+                  <Text variant={TextVariants.ERROR}>
                     {t(
                       'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                     )}
                   </Text>
                 )}
               {openingHour.closes < openingHour.opens && (
-                <Text color="red">
+                <Text variant={TextVariants.ERROR}>
                   {t('create.calendar.days.validation_messages.invalid_hours')}
                 </Text>
               )}
-              {startError && <Text color="red">{startError}</Text>}
-              {endError && <Text color="red">{endError}</Text>}
+              {startError && (
+                <Text variant={TextVariants.ERROR}>{startError}</Text>
+              )}
+              {endError && <Text variant={TextVariants.ERROR}>{endError}</Text>}
             </Stack>
           );
         })}
         {daysWithTimeConflict.length > 0 && (
-          <Text color="red">
+          <Text variant={TextVariants.ERROR}>
             {t(
               'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
               {

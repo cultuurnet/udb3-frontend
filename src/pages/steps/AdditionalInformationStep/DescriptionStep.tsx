@@ -28,7 +28,7 @@ import { Inline } from '@/ui/Inline';
 import { ProgressBar, ProgressBarVariants } from '@/ui/ProgressBar';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { Breakpoints, colors } from '@/ui/theme';
+import { Breakpoints } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
@@ -320,7 +320,7 @@ const DescriptionStep = ({
               alignItems="flex-start"
               maxWidth={isFaqTipVisible ? undefined : '60%'}
             >
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {t('create.additionalInformation.faq.label')}
               </Text>
               {!!entity?.faqs?.length ? (
@@ -353,7 +353,7 @@ const DescriptionStep = ({
                         )}
                       </Button>
                       {showFaqMaxError && (
-                        <Text color={colors.danger}>
+                        <Text variant={TextVariants.ERROR}>
                           {t(
                             'create.additionalInformation.faq.max_items_error',
                           )}

@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
 
 import { parseSpacing } from './Box';
+import { cn } from './shadcn/utils';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
@@ -133,9 +134,10 @@ const ToggleBox = ({
       )}
       {text && (
         <Text
-          color={getValue(active ? 'activeTextColor' : 'textColor')}
-          fontWeight={700}
-          fontSize="16px"
+          className={cn(
+            'tw:text-base tw:font-bold',
+            active ? 'tw:text-foreground' : 'tw:text-udb-main-dark-grey',
+          )}
         >
           {text}
         </Text>

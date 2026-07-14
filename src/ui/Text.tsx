@@ -1,40 +1,55 @@
-import type { BoxProps } from './Box';
-import { Box, getBoxProps } from './Box';
-import { getValueFromTheme } from './theme';
+import type { ReactNode } from 'react';
+import React, { forwardRef } from 'react';
 
-const getValue = getValueFromTheme('text');
+import type { Values } from '@/types/Values';
+import { cn } from '@/ui/shadcn/utils';
 
 const TextVariants = {
   REGULAR: 'regular',
   MUTED: 'muted',
   ERROR: 'error',
+} as const;
+
+type Props = {
+  as?: string | React.ComponentType<any>;
+  children?: ReactNode;
+  className?: string;
+  variant?: Values<typeof TextVariants>;
+  dangerouslySetInnerHTML?: { __html: string };
 };
 
-type Props = BoxProps;
-
-const getColor = (variant) => {
-  if (variant === TextVariants.MUTED) return getValue('muted.color');
-  if (variant === TextVariants.ERROR) return getValue('error.color');
+const variantClasses: Record<Values<typeof TextVariants>, string> = {
+  regular: '',
+  muted: 'tw:text-muted-foreground',
+  error: 'tw:text-destructive',
 };
 
-const Text = ({
-  as = 'span',
-  children,
-  className,
-  variant = TextVariants.REGULAR,
-  ...props
-}: Props) => {
-  return (
-    <Box
-      as={as}
-      className={className}
-      color={getColor(variant)}
-      {...getBoxProps(props)}
-    >
-      {children}
-    </Box>
-  );
-};
+const Text = forwardRef<HTMLElement, Props>(
+  (
+    {
+      as = 'span',
+      children,
+      className,
+      variant = TextVariants.REGULAR,
+      dangerouslySetInnerHTML,
+    },
+    ref,
+  ) => {
+    const Tag = as as React.ElementType;
+
+    return (
+      <Tag
+        ref={ref}
+        className={cn(variantClasses[variant], className)}
+        dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+      >
+        {children}
+      </Tag>
+    );
+  },
+);
+
+Text.displayName = 'Text';
 
 export { Text, TextVariants };
 export type { Props as TextProps };

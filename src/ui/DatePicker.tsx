@@ -397,7 +397,7 @@ const DatePicker = ({
         onClick={() => datePickerRef.current?.setOpen(true)}
         disabled={disabled}
         css={`
-          &.btn {
+          &&.btn {
             box-shadow: none;
             border: 1px lightgray solid;
             border-top-left-radius: 0;

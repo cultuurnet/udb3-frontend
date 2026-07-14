@@ -145,16 +145,7 @@ const MenuItem = memo(
           <span className="tw:flex tw:w-full tw:flex-col tw:items-center tw:gap-1 tw:md:flex-row tw:md:gap-4">
             <Icon name={iconName} />
             {label && (
-              <Text
-                flex={1}
-                css={`
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                `}
-                fontSize={{ default: '0.975rem', s: '0.625rem' }}
-                textAlign={{ default: 'left', s: 'center' }}
-              >
+              <Text className="tw:flex-1 tw:overflow-hidden tw:text-ellipsis tw:whitespace-nowrap tw:text-left tw:text-base tw:max-[768px]:text-center tw:max-[768px]:text-[0.625rem]">
                 {label}
               </Text>
             )}
@@ -236,7 +227,7 @@ const ProfileMenu = ({
         {user && (
           <Stack>
             <Text>{user['https://publiq.be/first_name']}</Text>
-            <Text fontSize="0.625rem">{user.email}</Text>
+            <Text className="tw:text-[0.625rem]">{user.email}</Text>
           </Stack>
         )}
       </Stack>

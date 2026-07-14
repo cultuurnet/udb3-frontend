@@ -179,6 +179,33 @@ const ButtonGroup = () => (
 - **Stack**: Vertical layout with automatic spacing between children
 - **Inline**: Horizontal layout with `stackOn` breakpoint for responsive stacking
 
+#### Gotcha: `Stack`/`Inline` `spacing` silently breaks on narrow components
+
+`Stack`/`Inline` have two different spacing implementations depending on `SHADCN_MIGRATION` (default OFF for all users):
+
+- **Shadcn** (`StackShadcn`/`InlineShadcn`): sets CSS `gap` on the container. Works regardless of child type.
+- **Legacy** (`StackLegacy`/`InlineLegacy`, the default): clones `marginBottom` (Stack) or `marginRight`/`marginBottom` (Inline) onto every direct child except the last, via `React.cloneElement`.
+
+The legacy clone only works if the receiving component actually applies whatever prop it's given (Box-derived components do). Any component with a **narrow prop type that doesn't spread `...rest`** onto its root element — e.g. `Text` (`src/ui/Text.tsx`, which only accepts `as`/`children`/`className`/`variant`/`dangerouslySetInnerHTML`) — silently drops the cloned margin. The result: spacing looks fine in Storybook/shadcn mode, but disappears in the default legacy mode, with no warning or type error (`marginBottom` is a valid prop on `Stack`'s children type-wise, since it's set via `cloneElement`, not passed explicitly by the caller).
+
+**When adding/reviewing code**: don't rely on `<Stack spacing={n}>` / `<Inline spacing={n}>` when a narrow, non-prop-spreading component (most notably `Text`) is a non-last direct child. Instead, drop the `spacing` prop and use a flag-independent wrapper:
+
+```tsx
+// Breaks silently in legacy mode — Text drops the cloned marginBottom
+<Stack spacing={4}>
+  <Text>{title}</Text>
+  <SomeOtherComponent />
+</Stack>
+
+// Works in both modes
+<div className="tw:flex tw:flex-col tw:gap-4">
+  <Text>{title}</Text>
+  <SomeOtherComponent />
+</div>
+```
+
+Use `tw:flex tw:flex-row` (or just `tw:flex`) instead of `tw:flex-col` for an `Inline`-style row. This was the root cause of a wide-reaching, hard-to-spot spacing regression across ~30 files found during the `Text` migration (III-7172) — grep for `<Stack spacing=` / `<Inline spacing=` with a `<Text` as a non-last direct child to find more instances.
+
 ### Form Architecture (React Hook Form + Yup)
 
 **Standard form setup:**

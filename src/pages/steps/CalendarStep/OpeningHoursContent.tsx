@@ -37,26 +37,26 @@ const OpeningHourRow = ({
       `}
     >
       <Inline alignItems="flex-start">
-        <Text minWidth="12rem">
+        <Text className="tw:min-w-48">
           {dayOfWeek
             .map((day) => t(`create.calendar.days.short.${day}`))
             .join(', ')}
         </Text>
-        <Text minWidth="8rem">
+        <Text className="tw:min-w-32">
           {opens} - {closes}
         </Text>
         <Stack spacing={1} minWidth="10rem">
           {childcare && (
             <>
               {childcare.start && (
-                <Text fontStyle="italic">
+                <Text className="tw:italic">
                   {t('create.calendar.fixed_days.overview.childcare_before', {
                     start: childcare.start,
                   })}
                 </Text>
               )}
               {childcare.end && (
-                <Text fontStyle="italic">
+                <Text className="tw:italic">
                   {t('create.calendar.fixed_days.overview.childcare_after', {
                     end: childcare.end,
                   })}
@@ -90,7 +90,7 @@ const OpeningHoursSummary = ({
   return (
     <Stack spacing={5}>
       <Stack>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text className="tw:font-bold tw:text-udb-main-dark-blue">
           {t('create.calendar.fixed_days.overview.weekly_on')}
         </Text>
         <Stack>
@@ -102,7 +102,7 @@ const OpeningHoursSummary = ({
 
       {adjustedDays && adjustedDays.length > 0 && (
         <Stack>
-          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          <Text className="tw:font-bold tw:text-udb-main-dark-blue">
             {t('create.calendar.fixed_days.overview.deviating_except')}
           </Text>
           <Stack spacing={4}>
@@ -117,7 +117,7 @@ const OpeningHoursSummary = ({
                     ? ` (${adjustedDay.description[lang]})`
                     : ''}
                 </Text>
-                <Text color={colors.udbMainDarkBlue}>
+                <Text className="tw:text-udb-main-dark-blue">
                   {t(
                     'create.calendar.fixed_days.overview.deviating_then_weekly',
                   )}
@@ -133,7 +133,7 @@ const OpeningHoursSummary = ({
 
       {closedDays && closedDays.length > 0 && (
         <Stack spacing={1}>
-          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          <Text className="tw:font-bold tw:text-udb-main-dark-blue">
             {t('create.calendar.fixed_days.overview.closed')}
           </Text>
           {closedDays.map((closedDay) => (
@@ -180,7 +180,9 @@ const OpeningHoursContent = ({
     return (
       <Stack spacing={3}>
         <Inline justifyContent="space-between" alignItems="center">
-          <Text fontWeight="bold">{t('create.calendar.fixed_days.hours')}</Text>
+          <Text className="tw:font-bold">
+            {t('create.calendar.fixed_days.hours')}
+          </Text>
           <Inline spacing={3}>
             <Button variant={ButtonVariants.LINK} onClick={onOpenModal}>
               {t('create.calendar.fixed_days.overview.edit')}
@@ -247,7 +249,7 @@ const OpeningHoursContent = ({
           justifyContent="space-between"
           spacing={5}
         >
-          <Text fontWeight="bold">
+          <Text className="tw:font-bold">
             {t('create.calendar.fixed_days.opening_hours')}
           </Text>
           <Button variant={ButtonVariants.SECONDARY} onClick={onOpenModal}>
@@ -265,7 +267,7 @@ const OpeningHoursContent = ({
             spacing={2}
             key={openingHour.id}
           >
-            <Text maxWidth="20rem">
+            <Text className="tw:max-w-80">
               {openingHour.dayOfWeek
                 .map((dayOfWeek) =>
                   t(`create.calendar.days.short.${dayOfWeek}`),
