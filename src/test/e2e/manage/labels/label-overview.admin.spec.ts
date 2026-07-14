@@ -51,26 +51,20 @@ test.describe('Label Overview - Admin', () => {
     await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
-    const initialRows = page.getByRole('row');
-    const initialFirstRow = await initialRows.nth(1).textContent();
+    const firstRow = page.getByRole('row').nth(1);
+    const initialFirstRow = await firstRow.textContent();
 
-    await expect(page.getByRole('button', { name: '2' })).toBeVisible();
-    await page.getByRole('button', { name: '2' }).click();
-    await page.waitForLoadState('networkidle');
+    const page2Button = page.getByRole('button', { name: '2' });
+    await expect(page2Button).toBeVisible();
+    await page2Button.click();
     await expect(searchInput).toHaveValue('de');
+    await expect(firstRow).not.toHaveText(initialFirstRow);
 
-    const page2Rows = page.getByRole('row');
-    const page2FirstRow = await page2Rows.nth(1).textContent();
-    expect(page2FirstRow).not.toEqual(initialFirstRow);
-
-    await expect(page.getByRole('button', { name: /^1$/ })).toBeVisible();
-    await page.getByRole('button', { name: /^1$/ }).click();
-    await page.waitForLoadState('networkidle');
+    const page1Button = page.getByRole('button', { name: /^1$/ });
+    await expect(page1Button).toBeVisible();
+    await page1Button.click();
     await expect(searchInput).toHaveValue('de');
-
-    const resetRows = page.getByRole('row');
-    const resetFirstRow = await resetRows.nth(1).textContent();
-    expect(resetFirstRow).toEqual(initialFirstRow);
+    await expect(firstRow).toHaveText(initialFirstRow);
   });
 
   test('can click create label button', async ({ page }) => {

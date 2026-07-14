@@ -433,7 +433,6 @@ const Preview = () => {
       value: isBoaEnabled ? (
         <ReservationPreview
           bookingInfo={offer.bookingInfo}
-          bookingAvailability={offer.bookingAvailability}
           subEvents={offer.subEvent ?? []}
           mainLanguage={offer.mainLanguage}
           canShowBookingAvailability={

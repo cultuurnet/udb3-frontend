@@ -132,14 +132,6 @@ export const useCalendarHandlers = (
     [handleOnChangeState, send],
   );
 
-  const handleToggleChildcare = useCallback(
-    (id: string, enabled: boolean) => {
-      const newState = send('TOGGLE_CHILDCARE', { id, enabled });
-      handleOnChangeState(newState);
-    },
-    [handleOnChangeState, send],
-  );
-
   const handleChangeChildcareStartTime = useCallback(
     (id: string, newTime: string) => {
       const newState = send('CHANGE_CHILDCARE_START_TIME', { id, newTime });
@@ -179,7 +171,6 @@ export const useCalendarHandlers = (
     handleChooseWithStartAndEndDate,
     handleChoosePermanent,
     handleChangeOpeningHours,
-    handleToggleChildcare,
     handleChangeChildcareStartTime,
     handleChangeChildcareEndTime,
     handleToggleOvernightStay,

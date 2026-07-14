@@ -17,16 +17,14 @@ import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
-import {
-  TimeSpanPicker,
-  TimeSpanPickerLabelPositions,
-} from '@/ui/TimeSpanPicker';
+import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
   useCalendarSelector,
   useIsOneOrMoreDays,
 } from '../machines/calendarMachine';
 import { FormDataUnion } from '../Steps';
+import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 
 type ChangeTimeHandler = (id: string, hours: number, minutes: number) => void;
 
@@ -58,7 +56,6 @@ type DaysProps = {
   onChangeEndDate: (id: string, date: Date | null) => void;
   onChangeStartTime?: (id: string, hours: number, minutes: number) => void;
   onChangeEndTime?: (id: string, hours: number, minutes: number) => void;
-  onToggleChildcare?: (id: string, enabled: boolean) => void;
   onChangeChildcareStartTime?: (id: string, newTime: string) => void;
   onChangeChildcareEndTime?: (id: string, newTime: string) => void;
   onToggleOvernightStay?: (id: string, enabled: boolean) => void;
@@ -72,7 +69,6 @@ export const Days = ({
   onChangeEndDate,
   onChangeStartTime,
   onChangeEndTime,
-  onToggleChildcare,
   onChangeChildcareStartTime,
   onChangeChildcareEndTime,
   onToggleOvernightStay,
@@ -117,31 +113,21 @@ export const Days = ({
         const isBookingUnavailable =
           day.bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE;
 
-        const childcareTimesMissing =
-          day.childcareEnabled &&
-          !day.childcareStartTime &&
-          !day.childcareEndTime;
-
-        const childcareStartError =
-          day.childcareEnabled &&
-          !!day.childcareStartTime &&
-          day.childcareStartTime >= startTime
-            ? t(
-                'create.calendar.days.childcare.validation_messages.start_too_late',
-              )
-            : undefined;
-        const childcareEndError =
-          day.childcareEnabled &&
-          !!day.childcareEndTime &&
-          day.childcareEndTime <= endTime
-            ? t(
-                'create.calendar.days.childcare.validation_messages.end_too_early',
-              )
-            : undefined;
+        const { startError: childcareStartError, endError: childcareEndError } =
+          getChildcareErrors(t, {
+            childcareStartTime: day.childcareStartTime,
+            childcareEndTime: day.childcareEndTime,
+            activityStart: startTime,
+            activityEnd: endTime,
+          });
 
         return (
           <Stack spacing={4} key={`list-item-${day.id}`}>
-            <List.Item alignItems="center" spacing={5}>
+            <List.Item
+              alignItems="center"
+              spacing={5}
+              marginBottom={isOneOrMoreDays && isBoaEnabled ? 4 : undefined}
+            >
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
                 spacing={3}
@@ -169,51 +155,18 @@ export const Days = ({
                 />
               )}
               {isOneOrMoreDays && isBoaEnabled && (
-                <Stack spacing={2}>
-                  <Inline
-                    alignItems="center"
-                    css={`
-                      gap: 0.5rem;
-                      .form-switch {
-                        font-size: 0.85rem;
-                      }
-                    `}
-                  >
-                    <RadioButton
-                      id={`calendar-step-day-${day.id}-childcare-toggle`}
-                      type={RadioButtonTypes.SWITCH}
-                      color={colors.udbMainPositiveGreen}
-                      checked={!!day.childcareEnabled}
-                      disabled={isDisabled}
-                      onChange={(e) =>
-                        onToggleChildcare?.(day.id, e.target.checked)
-                      }
-                    />
-                    <Label
-                      variant={LabelVariants.BOLD}
-                      htmlFor={`calendar-step-day-${day.id}-childcare-toggle`}
-                      color={!day.childcareEnabled ? colors.grey5 : undefined}
-                    >
-                      {t('create.calendar.days.childcare.label')}
-                    </Label>
-                  </Inline>
-                  <TimeSpanPicker
-                    key={`childcare-${day.id}-${day.childcareEnabled}`}
-                    id={`calendar-step-day-${day.id}-childcare`}
-                    labelPosition={TimeSpanPickerLabelPositions.INLINE}
-                    startTimeLabel={t('create.calendar.days.childcare.from')}
-                    endTimeLabel={t('create.calendar.days.childcare.to')}
-                    startTime={day.childcareStartTime ?? ''}
-                    endTime={day.childcareEndTime ?? ''}
-                    onChangeStartTime={(newTime) =>
-                      onChangeChildcareStartTime?.(day.id, newTime)
-                    }
-                    onChangeEndTime={(newTime) =>
-                      onChangeChildcareEndTime?.(day.id, newTime)
-                    }
-                    disabled={isDisabled || !day.childcareEnabled}
-                  />
-                </Stack>
+                <ChildcareTimeFields
+                  idPrefix={`calendar-step-day-${day.id}`}
+                  startTime={day.childcareStartTime ?? ''}
+                  endTime={day.childcareEndTime ?? ''}
+                  onChangeStartTime={(newTime) =>
+                    onChangeChildcareStartTime?.(day.id, newTime)
+                  }
+                  onChangeEndTime={(newTime) =>
+                    onChangeChildcareEndTime?.(day.id, newTime)
+                  }
+                  disabled={isDisabled}
+                />
               )}
               {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
                 <Stack spacing={2}>
@@ -268,17 +221,6 @@ export const Days = ({
               <Text color="red">
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
-            )}
-            {childcareTimesMissing && (
-              <Alert
-                css={`
-                  width: 100%;
-                `}
-              >
-                {t(
-                  'create.calendar.days.childcare.validation_messages.set_times_required',
-                )}
-              </Alert>
             )}
             {childcareStartError && (
               <Text color="red">{childcareStartError}</Text>

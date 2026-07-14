@@ -186,13 +186,14 @@
           "invalid_hours": "L'heure de fin ne peut être antérieure à l'heure de début."
         },
         "childcare": {
-          "label": "Garderie",
+          "before": "Garderie avant",
+          "after": "Garderie après",
           "from": "de",
           "to": "à",
+          "info": "Y a-t-il une garderie ?",
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
-            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
-            "set_times_required": "Veuillez indiquer l'heure de début et/ou de fin de la garderie."
+            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
           }
         },
         "overnight_stay": {
@@ -451,8 +452,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
-        "reservation_type_single": "Lien général",
-        "reservation_type_multiple": "Liens par moment/période",
+        "capacity_title_single": "Combien de places propose votre activité ?",
+        "capacity_title_multiple": "Combien de personnes peuvent participer à votre activité ?",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",
@@ -2009,5 +2010,14 @@
       "client_id": "ID client : {{clientId}}",
       "client_name": "Nom du client : {{clientName}}"
     }
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "previous_aria": "Aller à la page précédente",
+    "next": "Suivant",
+    "next_aria": "Aller à la page suivante",
+    "page_aria": "Aller à la page {{page}}",
+    "current_page_aria": "Page actuelle, page {{page}}",
+    "page_status": "Page {{page}} sur {{total}}"
   }
 }

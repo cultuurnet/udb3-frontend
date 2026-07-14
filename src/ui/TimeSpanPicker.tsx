@@ -1,3 +1,4 @@
+import type { FocusEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
@@ -48,6 +49,8 @@ type Props = {
   onChangeStartTime: (newStartTime: string) => void;
   onChangeEndTime: (newEndTime: string) => void;
   disabled?: boolean;
+  startDisabled?: boolean;
+  endDisabled?: boolean;
   labelPosition?: TimeSpanPickerLabelPosition;
 } & InlineProps;
 
@@ -99,6 +102,8 @@ const TimeSpanPicker = ({
   onChangeStartTime,
   onChangeEndTime,
   disabled,
+  startDisabled,
+  endDisabled,
   minWidth,
   labelPosition = TimeSpanPickerLabelPositions.TOP,
   ...props
@@ -116,6 +121,7 @@ const TimeSpanPicker = ({
       value: startTime,
       onChange: onChangeStartTime,
       name: 'startTime',
+      disabled: startDisabled ?? disabled,
     },
     {
       key: 'end',
@@ -123,67 +129,78 @@ const TimeSpanPicker = ({
       value: endTime,
       onChange: onChangeEndTime,
       name: 'endTime',
+      disabled: endDisabled ?? disabled,
     },
   ];
 
   return (
     <Inline as="div" spacing={3} {...getInlineProps(props)}>
-      {fields.map(({ key, label, value, onChange, name }) => {
-        const typeahead = (
-          <Typeahead<string>
-            inputType="time"
-            inputRequired={true}
-            name={name}
-            id={`${idPrefix}-${key}`}
-            filterBy={timeSlots}
-            defaultInputValue={value}
-            options={hourOptions}
-            minLength={0}
-            onBlur={(event) => onChange(event.target.value)}
-            onChange={([newValue]: string[]) => {
-              if (!newValue) return;
-              onChange(newValue);
-            }}
-            positionFixed
-            disabled={disabled}
-            css={isInline ? inlineLabelDropDownCss : dropDownCss}
-          />
-        );
+      {fields.map(
+        ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
+          const typeahead = (
+            <Typeahead<string>
+              key={`${key}-${fieldDisabled}`}
+              inputType="time"
+              inputRequired={true}
+              name={name}
+              id={`${idPrefix}-${key}`}
+              filterBy={timeSlots}
+              defaultInputValue={value}
+              options={hourOptions}
+              minLength={0}
+              onBlur={(event: FocusEvent<HTMLInputElement>) =>
+                onChange(event.target.value)
+              }
+              onChange={([newValue]: string[]) => {
+                if (!newValue) return;
+                onChange(newValue);
+              }}
+              positionFixed
+              disabled={fieldDisabled}
+              css={isInline ? inlineLabelDropDownCss : dropDownCss}
+            />
+          );
 
-        if (isInline) {
+          if (isInline) {
+            return (
+              <Box key={key} position="relative" display="inline-block">
+                <Label
+                  htmlFor={`${idPrefix}-${key}`}
+                  css={`
+                    position: absolute;
+                    left: 0.75rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                    z-index: 1;
+                    font-size: 0.85rem;
+                    color: ${colors.grey5};
+                    font-weight: normal;
+                    margin: 0;
+                  `}
+                >
+                  {label}
+                </Label>
+                {typeahead}
+              </Box>
+            );
+          }
+
           return (
-            <Box key={key} position="relative" display="inline-block">
+            <Stack key={key} spacing={2} as="div">
               <Label
+                variant={LabelVariants.BOLD}
                 htmlFor={`${idPrefix}-${key}`}
-                css={`
-                  position: absolute;
-                  left: 0.75rem;
-                  top: 50%;
-                  transform: translateY(-50%);
-                  pointer-events: none;
-                  z-index: 1;
-                  font-size: 0.85rem;
-                  color: ${colors.grey5};
-                  font-weight: normal;
-                  margin: 0;
-                `}
+                flex="1 0 auto"
+                alignItems="flex-start"
               >
                 {label}
               </Label>
               {typeahead}
-            </Box>
+            </Stack>
           );
-        }
-
-        return (
-          <Stack key={key} spacing={2} as="div">
-            <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
-              {label}
-            </Label>
-            {typeahead}
-          </Stack>
-        );
-      })}
+        },
+      )}
     </Inline>
   );
 };

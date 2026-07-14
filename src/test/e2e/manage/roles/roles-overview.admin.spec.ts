@@ -54,29 +54,20 @@ test.describe('Roles Overview - Admin', () => {
     await page.waitForTimeout(300);
     await page.waitForLoadState('networkidle');
 
-    const firstPageRows = page.getByRole('row');
-    const firstPageFirstRow = await firstPageRows.nth(1).textContent();
+    const firstRow = page.getByRole('row').nth(1);
+    const firstPageFirstRow = await firstRow.textContent();
 
     const page2Button = page.getByRole('button', { name: /^2$/ });
     await expect(page2Button).toBeVisible();
     await page2Button.click();
-    await page.waitForLoadState('networkidle');
     await expect(searchInput).toHaveValue('eer');
-
-    const secondPageRows = page.getByRole('row');
-    const secondPageFirstRow = await secondPageRows.nth(1).textContent();
-    expect(secondPageFirstRow).not.toEqual(firstPageFirstRow);
+    await expect(firstRow).not.toHaveText(firstPageFirstRow);
 
     const page1Button = page.getByRole('button', { name: /^1$/ });
     await expect(page1Button).toBeVisible();
     await page1Button.click();
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(300);
     await expect(searchInput).toHaveValue('eer');
-
-    const resetRows = page.getByRole('row');
-    const resetFirstRow = await resetRows.nth(1).textContent();
-    expect(resetFirstRow).toEqual(firstPageFirstRow);
+    await expect(firstRow).toHaveText(firstPageFirstRow);
   });
 
   test('can click create role button', async ({ page }) => {

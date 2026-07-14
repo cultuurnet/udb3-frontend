@@ -222,6 +222,7 @@ const RolesOverviewPage = () => {
           totalItems={totalRoles}
           perPage={rolesPerPage}
           onChangePage={setCurrentPageRoles}
+          isFetching={rolesQuery.isFetching}
         />
 
         <DeleteRoleModal

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Card, CardContent, CardFooter, CardHeader } from './Card';
 import { Text } from './Text';

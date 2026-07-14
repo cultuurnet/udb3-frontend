@@ -188,13 +188,14 @@
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
         },
         "childcare": {
-          "label": "Kinderopvang",
+          "before": "Vooropvang",
+          "after": "Naopvang",
           "from": "van",
           "to": "tot",
+          "info": "Is er kinderopvang?",
           "validation_messages": {
             "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
-            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.",
-            "set_times_required": "Geef het start- en/of einduur van de kinderopvang in."
+            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen."
           }
         },
         "overnight_stay": {
@@ -472,8 +473,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
-        "reservation_type_single": "Algemene link",
-        "reservation_type_multiple": "Links per moment/periode",
+        "capacity_title_single": "Hoeveel plaatsen heeft je activiteit?",
+        "capacity_title_multiple": "Hoeveel mensen kunnen aan jouw activiteit deelnemen?",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
@@ -2072,5 +2073,14 @@
         "description": "Deze locatie bestaat al in UiTdatabank. Alle bijhorende activiteiten vind je bij <placeLink>{{placeName}}</placeLink>"
       }
     }
+  },
+  "pagination": {
+    "previous": "Vorige",
+    "previous_aria": "Ga naar vorige pagina",
+    "next": "Volgende",
+    "next_aria": "Ga naar volgende pagina",
+    "page_aria": "Ga naar pagina {{page}}",
+    "current_page_aria": "Huidige pagina, pagina {{page}}",
+    "page_status": "Pagina {{page}} van {{total}}"
   }
 }
