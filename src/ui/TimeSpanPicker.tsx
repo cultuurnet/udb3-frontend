@@ -134,54 +134,59 @@ const TimeSpanPicker = ({
 
   return (
     <div className={cn('tw:flex tw:gap-2', className)}>
-      {fields.map(({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
-        const typeahead = (
-          <Typeahead<string>
-            key={`${key}-${fieldDisabled}`}
-            inputType="time"
-            inputRequired={true}
-            name={name}
-            id={`${idPrefix}-${key}`}
-            filterBy={timeSlots}
-            defaultInputValue={value}
-            options={hourOptions}
-            minLength={0}
-            onBlur={(event: FocusEvent<HTMLInputElement>) =>
-              onChange(event.target.value)
-            }
-            onChange={([newValue]: string[]) => {
-              if (!newValue) return;
-              onChange(newValue);
-            }}
-            positionFixed
-            disabled={fieldDisabled}
-            css={isInline ? inlineLabelDropDownCss : dropDownCss}
-          />
-        );
+      {fields.map(
+        ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
+          const typeahead = (
+            <Typeahead<string>
+              key={`${key}-${fieldDisabled}`}
+              inputType="time"
+              inputRequired={true}
+              name={name}
+              id={`${idPrefix}-${key}`}
+              filterBy={timeSlots}
+              defaultInputValue={value}
+              options={hourOptions}
+              minLength={0}
+              onBlur={(event: FocusEvent<HTMLInputElement>) =>
+                onChange(event.target.value)
+              }
+              onChange={([newValue]: string[]) => {
+                if (!newValue) return;
+                onChange(newValue);
+              }}
+              positionFixed
+              disabled={fieldDisabled}
+              css={isInline ? inlineLabelDropDownCss : dropDownCss}
+            />
+          );
 
-        if (isInline) {
+          if (isInline) {
+            return (
+              <Box key={key} position="relative" display="inline-block">
+                <Label
+                  htmlFor={`${idPrefix}-${key}`}
+                  className="tw:absolute tw:left-3 tw:top-1/2 tw:-translate-y-1/2 tw:pointer-events-none tw:z-1 tw:text-[0.85rem] tw:text-muted-foreground tw:font-normal tw:m-0"
+                >
+                  {label}
+                </Label>
+                {typeahead}
+              </Box>
+            );
+          }
+
           return (
-            <Box key={key} position="relative" display="inline-block">
+            <div key={key} className="tw:flex tw:flex-col tw:gap-y-1">
               <Label
+                variant={LabelVariants.BOLD}
                 htmlFor={`${idPrefix}-${key}`}
-                className="tw:absolute tw:left-3 tw:top-1/2 tw:-translate-y-1/2 tw:pointer-events-none tw:z-1 tw:text-[0.85rem] tw:text-muted-foreground tw:font-normal tw:m-0"
               >
                 {label}
               </Label>
               {typeahead}
-            </Box>
+            </div>
           );
-        }
-
-        return (
-          <div key={key} className="tw:flex tw:flex-col tw:gap-y-1">
-            <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
-              {label}
-            </Label>
-            {typeahead}
-          </div>
-        );
-      })}
+        },
+      )}
     </div>
   );
 };
