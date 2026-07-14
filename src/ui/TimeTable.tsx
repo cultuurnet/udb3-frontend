@@ -428,10 +428,10 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
   return (
     <Stack
       as="div"
-      spacing={0}
-      className={cn(className, 'tw:gap-4')}
+      className={cn('tw:gap-4', className)}
       alignItems="flex-start"
       {...getStackProps(props)}
+      spacing={0}
     >
       <DatePeriodPicker
         id={id}
