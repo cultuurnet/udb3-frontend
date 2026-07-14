@@ -41,33 +41,20 @@ type HolidayPreset = {
 
 const locales = { nl, fr, de };
 
-const getHolidayLabel = (
-  holiday: ApiHoliday,
-  language: string,
-  t: TFunction,
-): string => {
+const parseHoliday = (holiday: ApiHoliday, language: string, t: TFunction) => {
   const name =
     holiday.name[language as Values<typeof SupportedLanguages>] ?? '';
   const regionLabel = holiday.region
     ? t(`date_period_picker.region.${holiday.region}`)
     : undefined;
-  return regionLabel ? `${name} (${regionLabel})` : name;
+  return {
+    type: holiday.type,
+    region: holiday.region,
+    name: regionLabel ? `${name} (${regionLabel})` : name,
+    startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
+    endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
+  };
 };
-
-const parseHoliday = (
-  holiday: ApiHoliday,
-  language: string,
-  t: TFunction,
-  includesRegionLabel = false,
-) => ({
-  type: holiday.type,
-  region: holiday.region,
-  name: includesRegionLabel
-    ? getHolidayLabel(holiday, language, t)
-    : (holiday.name[language as Values<typeof SupportedLanguages>] ?? ''),
-  startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
-  endDate: parse(holiday.endDate, 'yyyy-MM-dd', new Date()),
-});
 
 const getAcademicYearStart = (date: Date): number =>
   date.getMonth() >= 7 ? date.getFullYear() : date.getFullYear() - 1;
@@ -196,7 +183,7 @@ const DatePeriodPicker = ({
   const holidayPeriods = useMemo(
     () =>
       (apiHolidays ?? []).map((holiday) =>
-        parseHoliday(holiday, i18n.language, t, true),
+        parseHoliday(holiday, i18n.language, t),
       ),
     [apiHolidays, i18n.language, t],
   );

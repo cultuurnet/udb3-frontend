@@ -13,34 +13,30 @@ import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import {
   useAddOfferBookingInfoMutation,
-  useChangeOfferBookingAvailabilityMutation,
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
-import type { BookingAvailability, Offer, SubEvent } from '@/types/Offer';
+import type { Offer, SubEvent } from '@/types/Offer';
 import type { Values } from '@/types/Values';
-import { Alert } from '@/ui/Alert';
+import { Alert, AlertVariants } from '@/ui/Alert';
+import type { BoxProps } from '@/ui/Box';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
-import { Inline } from '@/ui/Inline';
+import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { RadioButtonTypes } from '@/ui/RadioButton';
 import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
-import { ToggleGroup } from '@/ui/ToggleGroup';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
 
 import { TabContentProps, ValidationStatus } from './AdditionalInformationStep';
-import type { ReservationLinksSectionProps } from './ReservationLinksSection';
-import {
-  ReservationLinksSection,
-  ReservationLinksSectionVariants,
-} from './ReservationLinksSection';
+import { BookingAvailabilityFields } from './BookingAvailabilityFields';
 
 const schema = yup
   .object({
@@ -282,208 +278,170 @@ const ReservationPeriod = ({
   );
 };
 
-type ReservationType = 'single' | 'multiple';
-
-type ReservationUrlSectionProps = {
+type BookingAvailabilitySectionProps = {
+  calendarType: Offer['calendarType'] | undefined;
   subEvents: SubEvent[];
-  isBoaEnabled: boolean;
-  bookingInfo: Offer['bookingInfo'];
-  bookingAvailability: BookingAvailability | undefined;
-  canEditBookingAvailability: boolean;
-  reservationType: ReservationType;
-  urlLabelOptions: ReservationLinksSectionProps['urlLabelOptions'];
-  onReservationTypeChange: (type: ReservationType) => void;
-  onChangeSubEventBookingInfo: (
-    index: number,
-    url: string,
-    urlLabelType: string,
-  ) => void;
   onChangeSubEventAvailability: (
     index: number,
     type: Values<typeof BookingAvailabilityType>,
     capacity: string,
   ) => void;
-  onChangeOfferBookingInfo: (url: string, urlLabelType: string) => void;
-  onChangeOfferBookingAvailability: (
-    type: Values<typeof BookingAvailabilityType>,
-    capacity: string,
-  ) => void;
 };
 
-const ReservationUrlSection = ({
-  subEvents,
-  isBoaEnabled,
-  bookingInfo,
-  bookingAvailability,
-  canEditBookingAvailability,
-  reservationType,
+type UrlLabelValue = Values<typeof UrlLabelType> | '';
+
+type UrlLabelOption = { label: string; value: UrlLabelValue };
+
+type ReservationLinkProps = BoxProps & {
+  idPrefix: string;
+  url: string;
+  urlLabel: UrlLabelValue;
+  urlLabelOptions: UrlLabelOption[];
+  onChangeBookingInfo: (url: string, urlLabel: UrlLabelValue) => void;
+};
+
+const ReservationLink = ({
+  idPrefix,
+  url: initialUrl,
+  urlLabel: initialUrlLabel,
   urlLabelOptions,
-  onReservationTypeChange,
-  onChangeSubEventBookingInfo,
-  onChangeSubEventAvailability,
-  onChangeOfferBookingInfo,
-  onChangeOfferBookingAvailability,
-}: ReservationUrlSectionProps) => {
+  onChangeBookingInfo,
+  ...boxProps
+}: ReservationLinkProps) => {
   const { t } = useTranslation();
 
-  const capacityAlert = (
-    <Stack width="22rem" flexShrink={0}>
-      <Alert variant="primary" fullWidth>
+  const [url, setUrl] = useState(initialUrl);
+  const [urlLabel, setUrlLabel] = useState(initialUrlLabel);
+  const [hasInvalidUrl, setHasInvalidUrl] = useState(false);
+
+  const handleUrlBlur = () => {
+    if (url === '') {
+      setHasInvalidUrl(false);
+      onChangeBookingInfo('', urlLabel);
+      return;
+    }
+
+    const prefixedUrl = prefixUrlWithHttps(url);
+
+    if (!isValidUrl(prefixedUrl)) {
+      setHasInvalidUrl(true);
+      return;
+    }
+
+    setHasInvalidUrl(false);
+    setUrl(prefixedUrl);
+    onChangeBookingInfo(prefixedUrl, urlLabel);
+  };
+
+  return (
+    <Inline spacing={4} flexWrap="wrap" {...getInlineProps(boxProps)}>
+      <FormElement
+        flex={1}
+        id={`${idPrefix}-link`}
+        label={t('create.additionalInformation.booking_info.link')}
+        Component={
+          <Input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onBlur={handleUrlBlur}
+          />
+        }
+        error={
+          hasInvalidUrl &&
+          t('create.additionalInformation.booking_info.url_error')
+        }
+      />
+      <FormElement
+        flex={1}
+        id={`${idPrefix}-url-label`}
+        label={t(
+          'create.additionalInformation.booking_info.url_label_dropdown_label',
+        )}
+        Component={
+          <Select
+            value={urlLabel}
+            onChange={(e) => {
+              const newUrlLabel = e.target.value as UrlLabelValue;
+              setUrlLabel(newUrlLabel);
+              onChangeBookingInfo(url, newUrlLabel);
+            }}
+          >
+            {urlLabelOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+        }
+      />
+    </Inline>
+  );
+};
+
+const CapacityInfoAlert = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Stack spacing={3} maxWidth="27rem">
+      <Alert variant={AlertVariants.PRIMARY} fullWidth>
         {t('create.additionalInformation.booking_info.max_capacity_info')}
       </Alert>
     </Stack>
   );
+};
 
-  if (subEvents.length === 1 && isBoaEnabled) {
-    return (
-      <Inline spacing={5} alignItems="flex-start" stackOn="m">
-        <ReservationLinksSection
-          idPrefix="offer"
-          variant={ReservationLinksSectionVariants.CARD}
-          width="46rem"
-          showBookingAvailability={canEditBookingAvailability}
-          url={bookingInfo?.url ?? ''}
-          urlLabel={
-            bookingInfo?.urlLabel?.en
-              ? getUrlLabelType(bookingInfo.urlLabel.en)
-              : ''
-          }
-          capacity={
-            bookingAvailability?.capacity !== undefined
-              ? String(bookingAvailability.capacity)
-              : ''
-          }
-          status={
-            bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
-          }
-          urlLabelOptions={urlLabelOptions}
-          onChangeBookingInfo={onChangeOfferBookingInfo}
-          onChangeBookingAvailability={onChangeOfferBookingAvailability}
-        />
-        {canEditBookingAvailability && capacityAlert}
-      </Inline>
-    );
-  }
+const getCapacityValue = (
+  bookingAvailability: SubEvent['bookingAvailability'],
+) =>
+  bookingAvailability?.capacity !== undefined
+    ? String(bookingAvailability.capacity)
+    : '';
 
-  if (subEvents.length > 1 && isBoaEnabled) {
-    return (
-      <Stack spacing={4}>
-        <ToggleGroup
-          name="reservation-type"
-          value={reservationType}
-          onChange={(key) => onReservationTypeChange(key as ReservationType)}
-          options={[
-            {
-              value: 'single',
-              label: t(
-                'create.additionalInformation.booking_info.reservation_type_single',
-              ),
-            },
-            {
-              value: 'multiple',
-              label: t(
-                'create.additionalInformation.booking_info.reservation_type_multiple',
-              ),
-            },
-          ]}
-          maxWidth="40rem"
-        />
-        {reservationType === 'single' && (
-          <Inline spacing={5} alignItems="flex-start" stackOn="m">
-            <ReservationLinksSection
-              idPrefix="offer"
-              variant={ReservationLinksSectionVariants.CARD}
-              width="46rem"
-              showBookingAvailability={canEditBookingAvailability}
-              url={bookingInfo?.url ?? ''}
-              urlLabel={
-                bookingInfo?.urlLabel?.en
-                  ? getUrlLabelType(bookingInfo.urlLabel.en)
-                  : ''
-              }
-              capacity={
-                bookingAvailability?.capacity !== undefined
-                  ? String(bookingAvailability.capacity)
-                  : ''
-              }
-              status={
-                bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
-              }
-              urlLabelOptions={urlLabelOptions}
-              onChangeBookingInfo={onChangeOfferBookingInfo}
-              onChangeBookingAvailability={onChangeOfferBookingAvailability}
-            />
-            {canEditBookingAvailability && capacityAlert}
-          </Inline>
-        )}
-        {reservationType === 'multiple' && (
-          <Stack spacing={5}>
-            {subEvents.map((subEvent, index) => (
-              <Inline
-                key={index}
-                spacing={5}
-                alignItems="flex-start"
-                stackOn="m"
-              >
-                <ReservationLinksSection
-                  idPrefix={`subevent-${index}`}
-                  variant={ReservationLinksSectionVariants.CARD}
-                  width="46rem"
-                  title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
-                  url={subEvent.bookingInfo?.url ?? ''}
-                  urlLabel={
-                    subEvent.bookingInfo?.urlLabel?.en
-                      ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
-                      : ''
-                  }
-                  capacity={
-                    subEvent.bookingAvailability?.capacity !== undefined
-                      ? String(subEvent.bookingAvailability.capacity)
-                      : ''
-                  }
-                  status={
-                    subEvent.bookingAvailability?.type ??
-                    BookingAvailabilityType.AVAILABLE
-                  }
-                  urlLabelOptions={urlLabelOptions}
-                  onChangeBookingInfo={(url, urlLabelType) =>
-                    onChangeSubEventBookingInfo(index, url, urlLabelType)
-                  }
-                  onChangeBookingAvailability={(type, capacityValue) =>
-                    onChangeSubEventAvailability(index, type, capacityValue)
-                  }
-                />
-                <Stack width="22rem" flexShrink={0}>
-                  {index === 0 && capacityAlert}
-                </Stack>
-              </Inline>
-            ))}
-          </Stack>
-        )}
-      </Stack>
-    );
-  }
+const BookingAvailabilitySection = ({
+  calendarType,
+  subEvents,
+  onChangeSubEventAvailability,
+}: BookingAvailabilitySectionProps) => {
+  const { t } = useTranslation();
+
+  const isMultiple = calendarType === CalendarType.MULTIPLE;
 
   return (
-    <ReservationLinksSection
-      idPrefix="offer"
-      variant={ReservationLinksSectionVariants.INLINE}
-      showBookingAvailability={false}
-      url={bookingInfo?.url ?? ''}
-      urlLabel={
-        bookingInfo?.urlLabel?.en
-          ? getUrlLabelType(bookingInfo.urlLabel.en)
-          : ''
-      }
-      capacity={
-        bookingAvailability?.capacity !== undefined
-          ? String(bookingAvailability.capacity)
-          : ''
-      }
-      status={bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE}
-      urlLabelOptions={urlLabelOptions}
-      onChangeBookingInfo={onChangeOfferBookingInfo}
-    />
+    <Stack spacing={4}>
+      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+        {t(
+          isMultiple
+            ? 'create.additionalInformation.booking_info.capacity_title_multiple'
+            : 'create.additionalInformation.booking_info.capacity_title_single',
+        )}
+      </Text>
+      <Inline stackOn="m" alignItems="flex-start" spacing={4}>
+        <Stack spacing={3} minWidth="30rem">
+          {subEvents.map((subEvent, index) => (
+            <Stack key={`${subEvent.startDate}-${index}`} spacing={2}>
+              {isMultiple && (
+                <Text fontWeight="bold" color={SUBTITLE_COLOR}>
+                  {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
+                </Text>
+              )}
+              <BookingAvailabilityFields
+                idPrefix={isMultiple ? `subevent-${index}` : 'offer'}
+                capacity={getCapacityValue(subEvent.bookingAvailability)}
+                status={
+                  subEvent.bookingAvailability?.type ??
+                  BookingAvailabilityType.AVAILABLE
+                }
+                onChangeBookingAvailability={(type, capacityValue) =>
+                  onChangeSubEventAvailability(index, type, capacityValue)
+                }
+              />
+            </Stack>
+          ))}
+        </Stack>
+        <CapacityInfoAlert />
+      </Inline>
+    </Stack>
   );
 };
 
@@ -502,8 +460,6 @@ const BookingInfoStep = ({
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
   const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [reservationType, setReservationType] =
-    useState<ReservationType>('single');
   const queryClient = useQueryClient();
 
   const eventId = offerId;
@@ -565,7 +521,6 @@ const BookingInfoStep = ({
   const getOfferByIdQuery = useGetOfferByIdQuery({ id: offerId, scope });
 
   const bookingInfo = getOfferByIdQuery.data?.bookingInfo;
-  const bookingAvailability = getOfferByIdQuery.data?.bookingAvailability;
   const subEvents = getOfferByIdQuery.data?.subEvent ?? [];
   const calendarType = getOfferByIdQuery.data?.calendarType;
   const canEditBookingAvailability =
@@ -753,21 +708,6 @@ const BookingInfoStep = ({
       onSuccess: onSuccessfulChange,
     });
 
-  const handleChangeSubEventBookingInfo = (
-    subEventIndex: number,
-    url: string,
-    urlLabelType: string,
-  ) => {
-    const urlLabel =
-      URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve;
-
-    changeSubEventReservationMutation.mutate({
-      eventId,
-      subEventIndex,
-      bookingInfo: url ? { url, urlLabel } : {},
-    });
-  };
-
   const handleChangeSubEventAvailability = (
     subEventIndex: number,
     type: Values<typeof BookingAvailabilityType>,
@@ -780,44 +720,6 @@ const BookingInfoStep = ({
         type,
         ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
       },
-    });
-  };
-
-  const changeOfferBookingAvailabilityMutation =
-    useChangeOfferBookingAvailabilityMutation({
-      onMutate: async ({ type, capacity }) => {
-        const queryKey = [scope, { id: eventId }];
-        await queryClient.cancelQueries({ queryKey });
-        const previousOffer: any = queryClient.getQueryData(queryKey);
-
-        queryClient.setQueryData(queryKey, () => ({
-          ...previousOffer,
-          bookingAvailability: {
-            type,
-            ...(capacity !== undefined && { capacity }),
-          },
-        }));
-
-        return { previousOffer };
-      },
-      onError: (_err, _variables, context) => {
-        queryClient.setQueryData(
-          [scope, { id: eventId }],
-          context.previousOffer,
-        );
-      },
-      onSuccess: onSuccessfulChange,
-    });
-
-  const handleChangeOfferBookingAvailability = (
-    type: Values<typeof BookingAvailabilityType>,
-    capacityValue: string,
-  ) => {
-    changeOfferBookingAvailabilityMutation.mutate({
-      id: eventId,
-      scope,
-      type,
-      ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
     });
   };
 
@@ -907,7 +809,6 @@ const BookingInfoStep = ({
         </Inline>
       </Stack>
       <ReservationPeriod
-        marginBottom={6}
         handlePeriodChange={handleChangeBookingPeriod}
         handleDelete={handleDeleteBookingPeriod}
         availabilityEnds={availabilityEnds}
@@ -920,24 +821,27 @@ const BookingInfoStep = ({
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (
-          <ReservationUrlSection
-            subEvents={subEvents}
-            isBoaEnabled={isBoaEnabled}
-            bookingInfo={bookingInfo}
-            bookingAvailability={bookingAvailability}
-            canEditBookingAvailability={canEditBookingAvailability}
-            reservationType={reservationType}
-            urlLabelOptions={URL_LABELS}
-            onReservationTypeChange={setReservationType}
-            onChangeSubEventBookingInfo={handleChangeSubEventBookingInfo}
-            onChangeSubEventAvailability={handleChangeSubEventAvailability}
-            onChangeOfferBookingInfo={handleChangeOfferBookingInfo}
-            onChangeOfferBookingAvailability={
-              handleChangeOfferBookingAvailability
+          <ReservationLink
+            idPrefix="offer"
+            maxWidth="46rem"
+            url={bookingInfo?.url ?? ''}
+            urlLabel={
+              bookingInfo?.urlLabel?.en
+                ? getUrlLabelType(bookingInfo.urlLabel.en)
+                : ''
             }
+            urlLabelOptions={URL_LABELS}
+            onChangeBookingInfo={handleChangeOfferBookingInfo}
           />
         )}
       </Stack>
+      {isBoaEnabled && canEditBookingAvailability && getOfferByIdQuery.data && (
+        <BookingAvailabilitySection
+          calendarType={calendarType}
+          subEvents={subEvents}
+          onChangeSubEventAvailability={handleChangeSubEventAvailability}
+        />
+      )}
     </Stack>
   );
 };

@@ -5,7 +5,7 @@ import { Modal, ModalVariants } from '@/ui/Modal';
 
 type Props = {
   visible: boolean;
-  onConfirm: (videoId: string) => void;
+  onConfirm: () => void;
   onClose: () => void;
 };
 

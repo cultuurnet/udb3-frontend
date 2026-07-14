@@ -153,7 +153,7 @@ const ScopeStep = ({
                         <Tooltip
                           content={t('steps.offerTypeStep.cultuurkuur_tooltip')}
                           id={t('steps.offerTypeStep.cultuurkuur_tooltip')}
-                          placement="bottom"
+                          side="bottom"
                         />
                       )}
                     </Inline>

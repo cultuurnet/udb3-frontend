@@ -225,6 +225,7 @@ const LabelsOverviewPage = () => {
           totalItems={totalItemsLabels}
           perPage={labelsPerPage}
           onChangePage={setCurrentPageLabels}
+          isFetching={labelsQuery.isFetching}
         />
       </Page.Content>
     </Page>

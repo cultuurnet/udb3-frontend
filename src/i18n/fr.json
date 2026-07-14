@@ -110,7 +110,7 @@
     "DE": "L'Allemagne"
   },
   "create": {
-    "title": "Ajouter une offre",
+    "title": "Encoder une offre",
     "actions": {
       "publish": "Publier",
       "publish_later": "Publier plus tard",
@@ -122,7 +122,7 @@
       }
     },
     "scope": {
-      "title": "Que voulez-vous ajouter"
+      "title": "Que voulez-vous encoder?"
     },
     "calendar": {
       "title": {
@@ -186,13 +186,14 @@
           "invalid_hours": "L'heure de fin ne peut être antérieure à l'heure de début."
         },
         "childcare": {
-          "label": "Garderie",
+          "before": "Garderie avant",
+          "after": "Garderie après",
           "from": "de",
           "to": "à",
+          "info": "Y a-t-il une garderie ?",
           "validation_messages": {
             "start_too_late": "L'heure de début de la garderie doit être antérieure à l'heure de début de l'activité.",
-            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité.",
-            "set_times_required": "Veuillez indiquer l'heure de début et/ou de fin de la garderie."
+            "end_too_early": "L'heure de fin de la garderie doit être postérieure à l'heure de fin de l'activité."
           }
         },
         "overnight_stay": {
@@ -217,7 +218,7 @@
           "period_title": "Période dérogatoire {{index}}",
           "remove_period": "Supprimer la période",
           "select_period": "Sélectionner la période",
-          "fill_hours": "Remplir les heures pour cette période",
+          "fill_hours": " les heures pour cette période",
           "add_period": "Ajouter une période dérogatoire",
           "description_placeholder": "Description",
           "errors": {
@@ -269,7 +270,7 @@
       },
       "recent_locations": {
         "title": "Choisissez un lieu que vous avez utilisé récemment",
-        "info": "Nous montrons ici pour vous les lieux pour lesquels vous avez récemment encodés. Vous pouvez les ajouter en un clic.",
+        "info": "Voici les lieux pour lesquels vous avez encodés récemment. Ajoutez-les en un clic.",
         "other": "Ou choisissez un autre lieu",
         "pick": "Choisissez un lieu"
       },
@@ -379,8 +380,8 @@
       }
     },
     "type_and_theme": {
-      "title_events": "Quel type d'activité souhaitez-vous ajouter ?",
-      "title_places": "Quel type de lieu souhaitez-vous ajouter ?",
+      "title_events": "Quel type d'activité souhaitez-vous encoder ?",
+      "title_places": "Quel type de lieu souhaitez-vous encoder ?",
       "change_theme": "Changer le thème",
       "theme_groups": {
         "dance": "Danse",
@@ -451,8 +452,8 @@
           "buy": "Achetez des tickets",
           "reserve": "Réservez des places"
         },
-        "reservation_type_single": "Lien général",
-        "reservation_type_multiple": "Liens par moment/période",
+        "capacity_title_single": "Combien de places propose votre activité ?",
+        "capacity_title_multiple": "Combien de personnes peuvent participer à votre activité ?",
         "reservation_period": {
           "title": "Quand les gens peuvent-ils s'inscrire ?",
           "toggle": "Période de réservation",
@@ -476,7 +477,7 @@
         "clear": "Vider",
         "progress_info": {
           "complete": "Intégrez le message le plus important dans les {{idealLength}} premiers caractères. Vous pouvez ensuite ajouter des informations générales.",
-          "not_complete": "Pour attirer un nouveau public, les {{idealLength}} premier caractères sont les plus importants. Encore {{count}} caractères."
+          "not_complete": "Pour attirer un nouveau public, les {{idealLength}} premiers caractères sont les plus importants. Encore {{count}} caractères."
         },
         "editor": {
           "link_title": "Titre du lien",
@@ -915,7 +916,7 @@
         "change": "Modifier l'organisateur",
         "title": "Organisateur",
         "select_recent_used_organizer": "Réutiliser une organisation",
-        "select_recent_used_organizer_info": "Voici les organisations pour lesquelles vous avez récemment saisi des activités. Ajoutez-les d'un simple clic. Les administrateurs de l'organisation sélectionnée pourront également modifier l'activité ultérieurement.",
+        "select_recent_used_organizer_info": "Voici les organisations pour lesquelles vous avez récemment encodé des activités. Ajoutez-les d'un simple clic. Les administrateurs de l'organisation sélectionnée pourront également modifier l'activité ultérieurement.",
         "or_choose_other_organizer": "Ou ajouter une nouvelle organisation",
         "choose_other_organizer": "Ajouter une nouvelle organisation",
         "uitpas_cardsystems": "UiTPAS systèmes de cartes",
@@ -946,7 +947,7 @@
         "title": "Image & vidéo"
       },
       "price_info": {
-        "add": "Ajouter tarif",
+        "add": "Ajouter un tarif",
         "basic_rate": "Tarif de base",
         "change": "Modifier",
         "close": "Fermer",
@@ -1030,9 +1031,9 @@
       "duplicate": "Dupliquer"
     },
     "create": {
-      "events": "Ajouter une activité",
-      "organizers": "Ajouter une organisation",
-      "places": "Ajouter un lieu"
+      "events": "Encoder une activité",
+      "organizers": "Encoder une organisation",
+      "places": "Encoder un lieu"
     },
     "event": "Activité",
     "modal": {
@@ -1103,7 +1104,7 @@
     },
     "suggestions": {
       "title": "Organisations pour lesquelles vous avez déjà effectué une saisie",
-      "description": "Vous avez déjà saisi des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
+      "description": "Vous avez déjà encodé des activités pour ces organisations, mais vous n'êtes pas encore administrateur de ces organisations. Vous êtes impliqué dans la gestion de ces organisations et vous souhaitez gérer la page de l'organisation et ses activités ? Posez votre candidature pour devenir administrateur ici. Une fois qu'un administrateur actuel aura approuvé votre demande, vous aurez accès et recevrez un e-mail de confirmation. "
     },
     "welcome": "Bienvenue"
   },
@@ -1120,15 +1121,15 @@
     "0.15.0.0.0": "Zone naturel ou parc",
     "0.16.0.0.0": "Jardin ou parc",
     "0.17.0.0.0": "Randonnée pédestre ou cycliste",
-    "0.19.0.0.0": "Assister à une compétition sportive",
+    "0.19.0.0.0": "Regarder un événement sportif",
     "0.28.0.0.0": "Festivité",
     "0.3.1.0.0": "Série de cours",
     "0.3.1.0.1": "Cours avec sessions ouvertes",
     "0.3.2.0.0": "Conférence ou congrès",
     "0.3.3.0.0": "Congrès ou journée d'étude",
-    "0.37.0.0.0": "Marché, foire ou fête foraine",
+    "0.37.0.0.0": "Marché, brocante ou kermesse",
     "0.41.0.0.0": "Parc à thème ou parc d'attractions",
-    "0.49.0.0.0": "Soirée",
+    "0.49.0.0.0": "Soirée ou fête",
     "0.5.0.0.0": "Festival",
     "0.50.21.0.0": "Jeu ou quiz",
     "0.50.4.0.0": "Concert",
@@ -1137,18 +1138,21 @@
     "0.54.0.0.0": "Spectacle de danse",
     "0.55.0.0.0": "Théâtre",
     "8.70.0.0.0": "Théâtre",
-    "0.57.0.0.0": "Camp de vacances",
+    "0.57.0.0.0": "Camp ou séjour de vacances",
     "0.59.0.0.0": "Activité sportive",
     "0.6.0.0.0": "Foire",
-    "0.7.0.0.0": "Tour ou excursion guidé",
+    "0.7.0.0.0": "Visite ou excursion guidée",
     "0.8.0.0.0": "Espace public",
-    "1.50.0.0.0": "Festin de nourriture ou de boisson",
+    "1.50.0.0.0": "Festin gastronomique ou bar festif",
     "3CuHvenJ+EGkcvhXLg9Ykg": "Site archéologique",
+    "8aRjN4dGsXuE6tBkM1pVwQ": "Activité d'un mouvement de jeunesse",
     "BtVNd33sR0WntjALVbyp3w": "Cinéma",
     "eBwaUAAhw0ur0Z02i5ttnw": "Centre sportif",
     "ekdc4ATGoUitCa0e6me6xA": "Horeca",
     "GnPFp9uvOUyqhOckIFMKmg": "Musée ou galerie",
+    "hZ5fCyL9nKqW3xDvTrJ2gP": "Plaine de jeux",
     "JCjA0i5COUmdjMwcyjNAFA": "Maison de jeunes ou centre de jeunesse",
+    "K7mPx3nQrT9bWfH2zL5cYv": "Accueil extrascolaire",
     "kI7uAyn2uUu9VV6Z3uWZTA": "Bibliothèque ou centre de documentation",
     "OyaPaf64AEmEAYXHeLMAtA": "Hall ou salle d'expo",
     "rJRFUqmd6EiqTD4c7HS90w": "École ou centre éducatif",
@@ -1158,7 +1162,7 @@
     "YVBc8KVdrU6XfTNvhMYUpg": "Discothèque"
   },
   "footer": {
-    "about": "Sur UiTdatabank",
+    "about": "À propos de UiTdatabank",
     "by": "Un produit de",
     "changeProfile": "Modifier mon profil",
     "contact": "Contactez-nous",
@@ -1190,14 +1194,14 @@
     "channels_info_link_url": "https://www.publiq.be/nl/publicatiekanalen",
     "flanders_image": "flanders-logo.svg",
     "lead": "Organisez-vous une activité ?",
-    "lead_sub": "Ajoutez vos activités gratuitement et élargissez votre public",
+    "lead_sub": "Encodez vos activités gratuitement et élargissez votre public",
     "mission": "Plus d'audience pour votre activité.",
     "organizers": "Organisateurs",
-    "organizers_info": "Cela leur permet d'atteindre un public nouveau et plus large, totalisant plus de 3 millions de personnes chaque année.",
+    "organizers_info": "Ils touchent ainsi un nouveau public, plus large, totalisant chaque année plus de 3 millions de personnes.",
     "start": "Commencez-ici"
   },
   "menu": {
-    "add": "Remplir",
+    "add": "Encoder",
     "announcements": "Nouveautés",
     "home": "Home",
     "labels": "Étiquettes",
@@ -1655,7 +1659,7 @@
     "placeholder_title": "Traduire le titre en {{language}}",
     "original_label": "Original {{language}}",
     "translation_label": "Traduction {{language}}",
-    "done": "Terminé la traduction",
+    "done": "Enregistrer la traduction",
     "success": {
       "title": "Titre ({{language}}) mis à jour avec succès",
       "description": "Description ({{language}}) mise à jour avec succès",
@@ -1696,8 +1700,8 @@
     "1.7.2.0.0": "Film d'action et d'aventure",
     "1.7.3.0.0": "Comédie",
     "1.7.4.0.0": "Drame",
-    "1.7.6.0.0": "Film d'horreur ou d'horreur",
-    "1.7.7.0.0": "La science-fiction",
+    "1.7.6.0.0": "Film d'horreur ou d'épouvante",
+    "1.7.7.0.0": "Science-fiction",
     "1.7.8.0.0": "Film historique"
   },
   "time_span_picker": {
@@ -1956,6 +1960,7 @@
       "access": "Accès",
       "labels": "Étiquettes",
       "description": "Description",
+      "description_and_faq": "Description & FAQ",
       "location": "Où",
       "online_location": "Participation en ligne",
       "calendar": "Quand",
@@ -2005,5 +2010,14 @@
       "client_id": "ID client : {{clientId}}",
       "client_name": "Nom du client : {{clientName}}"
     }
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "previous_aria": "Aller à la page précédente",
+    "next": "Suivant",
+    "next_aria": "Aller à la page suivante",
+    "page_aria": "Aller à la page {{page}}",
+    "current_page_aria": "Page actuelle, page {{page}}",
+    "page_status": "Page {{page}} sur {{total}}"
   }
 }

@@ -1,3 +1,4 @@
+import type { FocusEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
@@ -48,6 +49,8 @@ type Props = {
   onChangeStartTime: (newStartTime: string) => void;
   onChangeEndTime: (newEndTime: string) => void;
   disabled?: boolean;
+  startDisabled?: boolean;
+  endDisabled?: boolean;
   labelPosition?: TimeSpanPickerLabelPosition;
 };
 
@@ -99,6 +102,8 @@ const TimeSpanPicker = ({
   onChangeStartTime,
   onChangeEndTime,
   disabled,
+  startDisabled,
+  endDisabled,
   labelPosition = TimeSpanPickerLabelPositions.TOP,
   className,
 }: Props) => {
@@ -115,6 +120,7 @@ const TimeSpanPicker = ({
       value: startTime,
       onChange: onChangeStartTime,
       name: 'startTime',
+      disabled: startDisabled ?? disabled,
     },
     {
       key: 'end',
@@ -122,14 +128,16 @@ const TimeSpanPicker = ({
       value: endTime,
       onChange: onChangeEndTime,
       name: 'endTime',
+      disabled: endDisabled ?? disabled,
     },
   ];
 
   return (
     <div className={cn('tw:flex tw:gap-2', className)}>
-      {fields.map(({ key, label, value, onChange, name }) => {
+      {fields.map(({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
         const typeahead = (
           <Typeahead<string>
+            key={`${key}-${fieldDisabled}`}
             inputType="time"
             inputRequired={true}
             name={name}
@@ -138,13 +146,15 @@ const TimeSpanPicker = ({
             defaultInputValue={value}
             options={hourOptions}
             minLength={0}
-            onBlur={(event) => onChange(event.target.value)}
+            onBlur={(event: FocusEvent<HTMLInputElement>) =>
+              onChange(event.target.value)
+            }
             onChange={([newValue]: string[]) => {
               if (!newValue) return;
               onChange(newValue);
             }}
             positionFixed
-            disabled={disabled}
+            disabled={fieldDisabled}
             css={isInline ? inlineLabelDropDownCss : dropDownCss}
           />
         );

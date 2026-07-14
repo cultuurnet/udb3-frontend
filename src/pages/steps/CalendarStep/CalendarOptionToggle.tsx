@@ -39,7 +39,7 @@ export const CalendarOptionToggle = ({
             <Tooltip
               content={t('create.calendar.types.cultuurkuur_tip')}
               id={t('create.calendar.types.cultuurkuur_tip')}
-              placement="bottom"
+              side="bottom"
             />
           </Inline>
         ),

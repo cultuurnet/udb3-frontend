@@ -1,3 +1,5 @@
+import { keepPreviousData } from '@tanstack/react-query';
+
 import { PaginatedData } from '@/types/PaginatedData';
 import { Production } from '@/types/Production';
 import { fetchFromApi } from '@/utils/fetchFromApi';
@@ -51,6 +53,7 @@ const createGetProductionsQueryOptions = ({
       start: `${paginationOptions.start}`,
       limit: `${paginationOptions.limit}`,
     },
+    placeholderData: keepPreviousData,
   });
 
 const useGetProductionsQuery = (

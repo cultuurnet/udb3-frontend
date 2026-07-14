@@ -171,19 +171,15 @@ const NameAndAgeRangeStep = ({
               />
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
-              <>
-                <Text fontWeight="bold" marginBottom={3}>
+              <div className="tw:flex tw:flex-col tw:gap-3">
+                <Text fontWeight="bold">
                   {t(`create.name_and_age.age.title`)}
                 </Text>
                 <CultuurkuurLabelsPicker
                   labelsKey="education"
                   {...labelsPickerProps}
                 />
-                <Text
-                  variant={TextVariants.MUTED}
-                  maxWidth={parseSpacing(9)}
-                  marginTop={3}
-                >
+                <Text variant={TextVariants.MUTED} className="tw:max-w-lg">
                   <Trans
                     i18nKey={'create.name_and_age.cultuurkuur.info'}
                     components={{
@@ -201,7 +197,7 @@ const NameAndAgeRangeStep = ({
                     {t('cultuurkuur_modal.overview.error_education_levels')}
                   </Text>
                 )}
-              </>
+              </div>
             )}
             <AlertDuplicatePlace
               variant={AlertVariants.DANGER}

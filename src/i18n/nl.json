@@ -188,13 +188,14 @@
           "invalid_hours": "Het einduur kan niet voor het beginuur vallen."
         },
         "childcare": {
-          "label": "Kinderopvang",
+          "before": "Vooropvang",
+          "after": "Naopvang",
           "from": "van",
           "to": "tot",
+          "info": "Is er kinderopvang?",
           "validation_messages": {
             "start_too_late": "Het startuur van de kinderopvang moet voor het startuur van de activiteit liggen.",
-            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen.",
-            "set_times_required": "Geef het start- en/of einduur van de kinderopvang in."
+            "end_too_early": "Het einduur van de kinderopvang moet na het einduur van de activiteit liggen."
           }
         },
         "overnight_stay": {
@@ -472,8 +473,8 @@
           "availability": "Controleer beschikbaarheid",
           "subscribe": "Schrijf je in"
         },
-        "reservation_type_single": "Algemene link",
-        "reservation_type_multiple": "Links per moment/periode",
+        "capacity_title_single": "Hoeveel plaatsen heeft je activiteit?",
+        "capacity_title_multiple": "Hoeveel mensen kunnen aan jouw activiteit deelnemen?",
         "reservation_period": {
           "title": "Wanneer kunnen mensen zich inschrijven?",
           "toggle": "Reservatieperiode",
@@ -1179,11 +1180,14 @@
     "0.8.0.0.0": "Openbare ruimte",
     "1.50.0.0.0": "Eet- of drankfestijn",
     "3CuHvenJ+EGkcvhXLg9Ykg": "Archeologische Site",
+    "8aRjN4dGsXuE6tBkM1pVwQ": "Activiteit met de jeugdbeweging",
     "BtVNd33sR0WntjALVbyp3w": "Bioscoop",
     "eBwaUAAhw0ur0Z02i5ttnw": "Sportcentrum",
     "ekdc4ATGoUitCa0e6me6xA": "Horeca",
     "GnPFp9uvOUyqhOckIFMKmg": "Museum of galerij",
+    "hZ5fCyL9nKqW3xDvTrJ2gP": "Speelpleinwerking",
     "JCjA0i5COUmdjMwcyjNAFA": "Jeugdhuis of jeugdcentrum",
+    "K7mPx3nQrT9bWfH2zL5cYv": "Kinderopvang",
     "kI7uAyn2uUu9VV6Z3uWZTA": "Bibliotheek of documentatiecentrum",
     "OyaPaf64AEmEAYXHeLMAtA": "Zaal of expohal",
     "rJRFUqmd6EiqTD4c7HS90w": "School of onderwijscentrum",
@@ -2014,6 +2018,7 @@
       "access": "Toegang",
       "labels": "Labels",
       "description": "Beschrijving",
+      "description_and_faq": "Beschrijving & FAQ",
       "location": "Waar",
       "online_location": "Online deelname",
       "calendar": "Wanneer",
@@ -2068,5 +2073,14 @@
         "description": "Deze locatie bestaat al in UiTdatabank. Alle bijhorende activiteiten vind je bij <placeLink>{{placeName}}</placeLink>"
       }
     }
+  },
+  "pagination": {
+    "previous": "Vorige",
+    "previous_aria": "Ga naar vorige pagina",
+    "next": "Volgende",
+    "next_aria": "Ga naar volgende pagina",
+    "page_aria": "Ga naar pagina {{page}}",
+    "current_page_aria": "Huidige pagina, pagina {{page}}",
+    "page_status": "Pagina {{page}} van {{total}}"
   }
 }
