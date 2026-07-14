@@ -1,8 +1,9 @@
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
+import { cn } from '@/ui/shadcn/utils';
 
-import type { BoxProps } from './Box';
-import { getInlineProps, Inline } from './Inline';
-import { Text } from './Text';
+import type { LabelProps as LegacyProps } from './LabelLegacy';
+import { LabelLegacy } from './LabelLegacy';
 
 const LabelVariants = {
   BOLD: 'bold',
@@ -15,15 +16,9 @@ const LabelPositions = {
   RIGHT: 'right',
 } as const;
 
-const getFontWeight = (props) => {
-  if (props.variant === LabelVariants.BOLD) return 700;
-  return 'normal';
-};
-
-type Props = BoxProps & {
-  htmlFor: string;
+// TODO: remove LegacyProps once legacy Box system is dropped; Label should only accept variant, htmlFor, and className
+type Props = LegacyProps & {
   variant?: Values<typeof LabelVariants>;
-  required?: boolean;
 };
 
 const Label = ({
@@ -31,21 +26,32 @@ const Label = ({
   children,
   className,
   variant = LabelVariants.NORMAL,
-  required = false,
   ...props
-}: Props) => (
-  <Inline
-    forwardedAs="label"
-    htmlFor={htmlFor}
-    className={className}
-    variant={variant}
-    css={`
-      font-weight: ${getFontWeight};
-    `}
-    {...getInlineProps(props)}
-  >
-    <Text>{children}</Text>
-  </Inline>
-);
+}: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return isShadcnMigrationEnabled ? (
+    <label
+      htmlFor={htmlFor}
+      className={cn(
+        variant === LabelVariants.BOLD && 'tw:font-bold',
+        className,
+      )}
+    >
+      {children}
+    </label>
+  ) : (
+    <LabelLegacy
+      htmlFor={htmlFor}
+      variant={variant}
+      className={className}
+      {...props}
+    >
+      {children}
+    </LabelLegacy>
+  );
+};
 
 export { Label, LabelPositions, LabelVariants };

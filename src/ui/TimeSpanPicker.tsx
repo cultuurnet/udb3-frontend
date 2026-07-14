@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { Box } from './Box';
-import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
-import { Stack } from './Stack';
-import { colors, getValueFromTheme } from './theme';
+import { cn } from './shadcn/utils';
+import { getValueFromTheme } from './theme';
 import { Typeahead } from './Typeahead';
 
 const TimeSpanPickerLabelPositions = {
@@ -42,6 +41,7 @@ const quarterHours = ['00', '15', '30', '45'];
 
 type Props = {
   id: string;
+  className?: string;
   startTimeLabel?: string;
   endTimeLabel?: string;
   startTime?: string;
@@ -52,7 +52,7 @@ type Props = {
   startDisabled?: boolean;
   endDisabled?: boolean;
   labelPosition?: TimeSpanPickerLabelPosition;
-} & InlineProps;
+};
 
 const isQuarterHour = (time: string) =>
   quarterHours.some((quarterHour) => time.endsWith(quarterHour));
@@ -104,9 +104,8 @@ const TimeSpanPicker = ({
   disabled,
   startDisabled,
   endDisabled,
-  minWidth,
   labelPosition = TimeSpanPickerLabelPositions.TOP,
-  ...props
+  className,
 }: Props) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
@@ -134,7 +133,7 @@ const TimeSpanPicker = ({
   ];
 
   return (
-    <Inline as="div" spacing={3} {...getInlineProps(props)}>
+    <div className={cn('tw:flex tw:gap-2', className)}>
       {fields.map(
         ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
           const typeahead = (
@@ -166,18 +165,7 @@ const TimeSpanPicker = ({
               <Box key={key} position="relative" display="inline-block">
                 <Label
                   htmlFor={`${idPrefix}-${key}`}
-                  css={`
-                    position: absolute;
-                    left: 0.75rem;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    z-index: 1;
-                    font-size: 0.85rem;
-                    color: ${colors.grey5};
-                    font-weight: normal;
-                    margin: 0;
-                  `}
+                  className="tw:absolute tw:left-3 tw:top-1/2 tw:-translate-y-1/2 tw:pointer-events-none tw:z-1 tw:text-[0.85rem] tw:text-muted-foreground tw:font-normal tw:m-0"
                 >
                   {label}
                 </Label>
@@ -187,21 +175,19 @@ const TimeSpanPicker = ({
           }
 
           return (
-            <Stack key={key} spacing={2} as="div">
+            <div key={key} className="tw:flex tw:flex-col tw:gap-y-1">
               <Label
                 variant={LabelVariants.BOLD}
                 htmlFor={`${idPrefix}-${key}`}
-                flex="1 0 auto"
-                alignItems="flex-start"
               >
                 {label}
               </Label>
               {typeahead}
-            </Stack>
+            </div>
           );
         },
       )}
-    </Inline>
+    </div>
   );
 };
 

@@ -126,7 +126,8 @@ export const FixedDays = ({
           <Stack
             paddingBottom={4.5}
             paddingX={4.5}
-            spacing={4}
+            spacing={0}
+            className="tw:gap-4"
             css={`
               border-bottom: 1px solid ${colors.grey1};
             `}
