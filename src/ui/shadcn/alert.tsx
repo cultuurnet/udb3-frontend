@@ -13,7 +13,7 @@ const alertVariants = cva(
         info: 'tw:border-1 tw:border-foreground',
         success: 'tw:border-l-[6px] tw:border-success tw:[&>svg]:text-success',
         warning:
-          'tw:border-l-[6px] tw:border-udb-warning tw:[&>svg]:text-udb-warning',
+          'tw:border-l-[6px] tw:border-warning tw:[&>svg]:text-warning',
         danger:
           'tw:border-l-[6px] tw:border-destructive tw:[&>svg]:text-destructive',
       },
