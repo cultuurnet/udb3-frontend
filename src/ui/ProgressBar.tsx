@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { Progress } from '@/ui/shadcn/progress';
@@ -34,6 +36,7 @@ const ProgressBar = ({
   showPercentage = false,
   className,
 }: Props) => {
+  const { t } = useTranslation();
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
@@ -48,6 +51,7 @@ const ProgressBar = ({
       )}
       <Progress
         value={progress}
+        aria-label={label ?? t('common.progress')}
         indicatorClassName={indicatorClasses[variant]}
       />
     </div>
