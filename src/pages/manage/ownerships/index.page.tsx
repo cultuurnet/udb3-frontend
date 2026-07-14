@@ -214,6 +214,7 @@ const OwnershipsOverviewPage = () => {
                 totalItems={totalItems}
                 perPage={itemsPerPage}
                 onChangePage={handleChangePage}
+                isFetching={getOwnershipRequestsQuery.isFetching}
               />
             </Panel.Footer>
           )}

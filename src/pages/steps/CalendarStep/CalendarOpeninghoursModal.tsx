@@ -11,13 +11,10 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
-import { Label, LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { colors } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -38,6 +35,7 @@ import {
   useIsPeriodic,
 } from '../machines/calendarMachine';
 import { useCalendarHandlers } from '../machines/useCalendarHandlers';
+import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
 import { sortPeriods } from './sortPeriods';
@@ -86,16 +84,12 @@ const CalendarOpeninghoursModal = ({
             opens: '00:00',
             closes: '23:59',
             dayOfWeek: [],
-            childcareEnabled: false,
             childcareStartTime: '',
             childcareEndTime: '',
           },
         ]
       : savedOpeningHours.map((hours) => ({
           ...hours,
-          childcareEnabled: !!(
-            hours.childcareStartTime || hours.childcareEndTime
-          ),
           childcareStartTime: hours.childcareStartTime ?? '',
           childcareEndTime: hours.childcareEndTime ?? '',
         }));
@@ -135,7 +129,6 @@ const CalendarOpeninghoursModal = ({
       opens: '00:00',
       closes: '23:59',
       dayOfWeek: [],
-      childcareEnabled: false,
       childcareStartTime: '',
       childcareEndTime: '',
     });
@@ -165,16 +158,6 @@ const CalendarOpeninghoursModal = ({
             DaysOfWeek.indexOf(a as DayOfWeek) -
             DaysOfWeek.indexOf(b as DayOfWeek),
         ) as DayOfWeek[],
-      });
-  };
-
-  const handleToggleChildcare = (idToChange: string, enabled: boolean) => {
-    const index = findOpeningHourIndex(idToChange);
-    if (index !== -1)
-      update(index, {
-        ...getValues('openingHours')[index],
-        childcareEnabled: enabled,
-        ...(!enabled && { childcareStartTime: '', childcareEndTime: '' }),
       });
   };
 
@@ -247,12 +230,10 @@ const CalendarOpeninghoursModal = ({
     onChangeAdjustedDays(deviatingPeriods);
     onChangeClosingPeriods(closingPeriods);
     handleChangeOpeningHours(
-      openingHours.map(({ childcareEnabled, ...hour }) => ({
+      openingHours.map((hour) => ({
         ...hour,
-        childcareStartTime: childcareEnabled
-          ? hour.childcareStartTime
-          : undefined,
-        childcareEndTime: childcareEnabled ? hour.childcareEndTime : undefined,
+        childcareStartTime: hour.childcareStartTime || undefined,
+        childcareEndTime: hour.childcareEndTime || undefined,
       })),
     );
     setShownErrorIds(new Set());
@@ -348,31 +329,20 @@ const CalendarOpeninghoursModal = ({
           </Alert>
         )}
         {openingHours.map((openingHour) => {
-          const childcareEnabled = openingHour.childcareEnabled ?? false;
-          const timesMissing =
-            childcareEnabled &&
-            !openingHour.childcareStartTime &&
-            !openingHour.childcareEndTime;
-          const startError =
-            childcareEnabled &&
-            !!openingHour.childcareStartTime &&
-            openingHour.childcareStartTime >= openingHour.opens
-              ? t(
-                  'create.calendar.days.childcare.validation_messages.start_too_late',
-                )
-              : undefined;
-          const endError =
-            childcareEnabled &&
-            !!openingHour.childcareEndTime &&
-            openingHour.childcareEndTime <= openingHour.closes
-              ? t(
-                  'create.calendar.days.childcare.validation_messages.end_too_early',
-                )
-              : undefined;
+          const { startError, endError } = getChildcareErrors(t, {
+            childcareStartTime: openingHour.childcareStartTime,
+            childcareEndTime: openingHour.childcareEndTime,
+            activityStart: openingHour.opens,
+            activityEnd: openingHour.closes,
+          });
 
           return (
             <Stack key={openingHour.id} flex={1} spacing={4}>
-              <Inline alignItems="flex-end" spacing={5}>
+              <Inline
+                alignItems="flex-end"
+                spacing={5}
+                marginBottom={showChildcare ? 4 : undefined}
+              >
                 <Stack spacing={3}>
                   <Text className="tw:font-bold">
                     {t('create.calendar.opening_hours_modal.days')}
@@ -421,61 +391,25 @@ const CalendarOpeninghoursModal = ({
                   />
                 </Stack>
                 {showChildcare && (
-                  <Stack spacing={3}>
-                    <Inline
-                      alignItems="center"
-                      css={`
-                        gap: 0.5rem;
-                        .form-switch {
-                          font-size: 0.85rem;
-                        }
-                      `}
-                    >
-                      <RadioButton
-                        id={`openinghours-childcare-toggle-${openingHour.id}`}
-                        type={RadioButtonTypes.SWITCH}
-                        color={colors.udbMainPositiveGreen}
-                        checked={childcareEnabled}
-                        onChange={(e) =>
-                          handleToggleChildcare(
-                            openingHour.id,
-                            e.target.checked,
-                          )
-                        }
-                      />
-                      <Label
-                        variant={LabelVariants.BOLD}
-                        htmlFor={`openinghours-childcare-toggle-${openingHour.id}`}
-                        color={!childcareEnabled ? colors.grey5 : undefined}
-                      >
-                        {t('create.calendar.days.childcare.label')}
-                      </Label>
-                    </Inline>
-                    <TimeSpanPicker
-                      key={`childcare-${openingHour.id}-${childcareEnabled}`}
-                      id={`openinghours-childcare-timespan-${openingHour.id}`}
-                      startTime={openingHour.childcareStartTime}
-                      endTime={openingHour.childcareEndTime}
-                      startTimeLabel={t('create.calendar.days.childcare.from')}
-                      endTimeLabel={t('create.calendar.days.childcare.to')}
-                      onChangeStartTime={(newTime) =>
-                        handleChangeField(
-                          openingHour.id,
-                          'childcareStartTime',
-                          newTime,
-                        )
-                      }
-                      onChangeEndTime={(newTime) =>
-                        handleChangeField(
-                          openingHour.id,
-                          'childcareEndTime',
-                          newTime,
-                        )
-                      }
-                      labelPosition={TimeSpanPickerLabelPositions.INLINE}
-                      disabled={!childcareEnabled}
-                    />
-                  </Stack>
+                  <ChildcareTimeFields
+                    idPrefix={`openinghours-${openingHour.id}`}
+                    startTime={openingHour.childcareStartTime}
+                    endTime={openingHour.childcareEndTime}
+                    onChangeStartTime={(newTime) =>
+                      handleChangeField(
+                        openingHour.id,
+                        'childcareStartTime',
+                        newTime,
+                      )
+                    }
+                    onChangeEndTime={(newTime) =>
+                      handleChangeField(
+                        openingHour.id,
+                        'childcareEndTime',
+                        newTime,
+                      )
+                    }
+                  />
                 )}
                 {openingHours.length > 1 && (
                   <Button
@@ -493,13 +427,6 @@ const CalendarOpeninghoursModal = ({
                     )}
                   </Text>
                 )}
-              {timesMissing && (
-                <Alert fullWidth>
-                  {t(
-                    'create.calendar.days.childcare.validation_messages.set_times_required',
-                  )}
-                </Alert>
-              )}
               {openingHour.closes < openingHour.opens && (
                 <Text variant={TextVariants.ERROR}>
                   {t('create.calendar.days.validation_messages.invalid_hours')}

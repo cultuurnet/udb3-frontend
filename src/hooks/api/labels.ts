@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {
   ExtendQueryOptions,
@@ -81,6 +85,7 @@ const createGetLabelsQueryOptions = ({
       limit: `${paginationOptions.limit}`,
       suggestion: onlySuggestions,
     },
+    placeholderData: onlySuggestions ? undefined : keepPreviousData,
   });
 
 const useGetLabelsByQuery = ({

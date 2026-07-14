@@ -1,22 +1,18 @@
 import { format, isSameDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { useFetchHolidays, useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
-import { Alert } from '@/ui/Alert';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { Label, LabelVariants } from '@/ui/Label';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -27,6 +23,7 @@ import {
 
 import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
+import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 
 type OpeningHour = {
   id: string;
@@ -80,16 +77,6 @@ const DeviatingPeriod = ({
   const { quickLinkRangeError, clearQuickLinkRangeError, filterByEventRange } =
     useQuickLinkRangeFilter(eventStartDate, eventEndDate);
   const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
-  const [childcareEnabledMap, setChildcareEnabledMap] = useState<
-    Record<string, boolean>
-  >(() =>
-    Object.fromEntries(
-      period.openingHours.map((openingHour) => [
-        openingHour.id,
-        !!openingHour.childcare?.start,
-      ]),
-    ),
-  );
   const updateOpeningHour = (idToChange: string, patch: Partial<OpeningHour>) =>
     onChange({
       ...period,
@@ -130,33 +117,6 @@ const DeviatingPeriod = ({
           DaysOfWeek.indexOf(b as DayOfWeek),
       ) as DayOfWeek[],
     });
-
-  const handleToggleChildcare = (idToChange: string, enabled: boolean) => {
-    setChildcareEnabledMap((prev) => ({ ...prev, [idToChange]: enabled }));
-    if (!enabled) updateOpeningHour(idToChange, { childcare: undefined });
-  };
-
-  const getChildcareRowState = (
-    openingHour: OpeningHour,
-    childcareEnabled: boolean,
-  ) => ({
-    timesMissing:
-      childcareEnabled &&
-      !openingHour.childcare?.start &&
-      !openingHour.childcare?.end,
-    startError:
-      childcareEnabled &&
-      !!openingHour.childcare?.start &&
-      openingHour.childcare?.start >= openingHour.opens
-        ? t('create.calendar.days.childcare.validation_messages.start_too_late')
-        : undefined,
-    endError:
-      childcareEnabled &&
-      !!openingHour.childcare?.end &&
-      openingHour.childcare?.end <= openingHour.closes
-        ? t('create.calendar.days.childcare.validation_messages.end_too_early')
-        : undefined,
-  });
 
   return (
     <Stack
@@ -288,16 +248,20 @@ const DeviatingPeriod = ({
         </Text>
         <Stack spacing={4}>
           {period.openingHours.map((openingHour) => {
-            const childcareEnabled =
-              childcareEnabledMap[openingHour.id] ?? false;
-            const { timesMissing, startError, endError } = getChildcareRowState(
-              openingHour,
-              childcareEnabled,
-            );
+            const { startError, endError } = getChildcareErrors(t, {
+              childcareStartTime: openingHour.childcare?.start,
+              childcareEndTime: openingHour.childcare?.end,
+              activityStart: openingHour.opens,
+              activityEnd: openingHour.closes,
+            });
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline alignItems="flex-end" spacing={5}>
+                <Inline
+                  alignItems="flex-end"
+                  spacing={5}
+                  marginBottom={showChildcare ? 4 : undefined}
+                >
                   <Stack spacing={3}>
                     <Text className="tw:font-bold">
                       {t('create.calendar.opening_hours_modal.days')}
@@ -346,65 +310,27 @@ const DeviatingPeriod = ({
                     />
                   </Stack>
                   {showChildcare && (
-                    <Stack spacing={3}>
-                      <Inline
-                        alignItems="center"
-                        css={`
-                          gap: 0.5rem;
-                          .form-switch {
-                            font-size: 0.85rem;
-                          }
-                        `}
-                      >
-                        <RadioButton
-                          id={`deviating-childcare-toggle-${openingHour.id}`}
-                          type={RadioButtonTypes.SWITCH}
-                          color={colors.udbMainPositiveGreen}
-                          checked={childcareEnabled}
-                          onChange={(e) =>
-                            handleToggleChildcare(
-                              openingHour.id,
-                              e.target.checked,
-                            )
-                          }
-                        />
-                        <Label
-                          variant={LabelVariants.BOLD}
-                          htmlFor={`deviating-childcare-toggle-${openingHour.id}`}
-                          color={!childcareEnabled ? colors.grey5 : undefined}
-                        >
-                          {t('create.calendar.days.childcare.label')}
-                        </Label>
-                      </Inline>
-                      <TimeSpanPicker
-                        key={`childcare-${openingHour.id}-${childcareEnabled}`}
-                        id={`deviating-childcare-timespan-${openingHour.id}`}
-                        startTime={openingHour.childcare?.start ?? ''}
-                        endTime={openingHour.childcare?.end ?? ''}
-                        startTimeLabel={t(
-                          'create.calendar.days.childcare.from',
-                        )}
-                        endTimeLabel={t('create.calendar.days.childcare.to')}
-                        onChangeStartTime={(newTime) =>
-                          updateOpeningHour(openingHour.id, {
-                            childcare: {
-                              start: newTime,
-                              end: openingHour.childcare?.end ?? '',
-                            },
-                          })
-                        }
-                        onChangeEndTime={(newTime) =>
-                          updateOpeningHour(openingHour.id, {
-                            childcare: {
-                              start: openingHour.childcare?.start ?? '',
-                              end: newTime,
-                            },
-                          })
-                        }
-                        labelPosition={TimeSpanPickerLabelPositions.INLINE}
-                        disabled={!childcareEnabled}
-                      />
-                    </Stack>
+                    <ChildcareTimeFields
+                      idPrefix={`deviating-${openingHour.id}`}
+                      startTime={openingHour.childcare?.start ?? ''}
+                      endTime={openingHour.childcare?.end ?? ''}
+                      onChangeStartTime={(newTime) =>
+                        updateOpeningHour(openingHour.id, {
+                          childcare: {
+                            ...openingHour.childcare,
+                            start: newTime || undefined,
+                          },
+                        })
+                      }
+                      onChangeEndTime={(newTime) =>
+                        updateOpeningHour(openingHour.id, {
+                          childcare: {
+                            ...openingHour.childcare,
+                            end: newTime || undefined,
+                          },
+                        })
+                      }
+                    />
                   )}
                   {period.openingHours.length > 1 && (
                     <Button
@@ -422,17 +348,6 @@ const DeviatingPeriod = ({
                       )}
                     </Text>
                   )}
-                {timesMissing && (
-                  <Alert
-                    css={`
-                      width: 100%;
-                    `}
-                  >
-                    {t(
-                      'create.calendar.days.childcare.validation_messages.set_times_required',
-                    )}
-                  </Alert>
-                )}
                 {startError && (
                   <Text variant={TextVariants.ERROR}>{startError}</Text>
                 )}

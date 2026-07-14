@@ -27,10 +27,10 @@ const contactColumns = [
 
 type ReservationCardProps = StackProps & {
   title?: string;
-  url: string;
+  url?: string;
   urlLabel?: BookingInfo['urlLabel'];
   capacity?: string;
-  status: Values<typeof BookingAvailabilityType>;
+  status?: Values<typeof BookingAvailabilityType>;
   showAvailability: boolean;
   mainLanguage?: string;
 };
@@ -56,7 +56,7 @@ const ReservationCard = ({
     : undefined;
 
   const statusText =
-    status === BookingAvailabilityType.AVAILABLE
+    status !== BookingAvailabilityType.UNAVAILABLE
       ? t('bookingAvailability.available')
       : t('bookingAvailability.unavailable');
 
@@ -71,78 +71,105 @@ const ReservationCard = ({
       {...getStackProps(boxProps)}
     >
       {title && <Text className="tw:font-bold">{title}</Text>}
-      <Inline spacing={4} flexWrap="wrap">
-        <Stack flex={1} spacing={1}>
-          <Text className="tw:font-bold tw:text-udb-main-grey">
-            {t('create.additionalInformation.booking_info.link')}
-          </Text>
-          <Link href={url}>{url}</Link>
-        </Stack>
-        {showAvailability && capacity && (
+      {url && (
+        <Inline spacing={4} flexWrap="wrap">
           <Stack flex={1} spacing={1}>
             <Text className="tw:font-bold tw:text-udb-main-grey">
-              {t('create.additionalInformation.booking_info.max_capacity')}
+              {t('create.additionalInformation.booking_info.link')}
             </Text>
-            <Text>{capacity}</Text>
+            <Link href={url}>{url}</Link>
           </Stack>
-        )}
-      </Inline>
-      <Inline spacing={4} flexWrap="wrap">
-        {showAvailability && (
+          {urlLabelText && (
+            <Stack flex={1} spacing={1}>
+              <Text className="tw:font-bold tw:text-udb-main-grey">
+                {t(
+                  'create.additionalInformation.booking_info.url_label_dropdown_label',
+                )}
+              </Text>
+              <Link
+                variant={LinkVariants.BUTTON_PRIMARY}
+                href={url}
+                target="_blank"
+                alignSelf="flex-start"
+              >
+                {urlLabelText}
+              </Link>
+            </Stack>
+          )}
+        </Inline>
+      )}
+      {showAvailability && (
+        <Inline spacing={4} flexWrap="wrap">
+          {capacity && (
+            <Stack flex={1} spacing={1}>
+              <Text className="tw:font-bold tw:text-udb-main-grey">
+                {t('create.additionalInformation.booking_info.max_capacity')}
+              </Text>
+              <Text>{capacity}</Text>
+            </Stack>
+          )}
           <Stack flex={1} spacing={1}>
             <Text className="tw:font-bold tw:text-udb-main-grey">
               {t('create.additionalInformation.booking_info.status')}
             </Text>
             <Text>{statusText}</Text>
           </Stack>
-        )}
-        {urlLabelText && (
-          <Stack flex={1} spacing={1}>
-            <Text className="tw:font-bold tw:text-udb-main-grey">
-              {t(
-                'create.additionalInformation.booking_info.url_label_dropdown_label',
-              )}
-            </Text>
-            <Link
-              variant={LinkVariants.BUTTON_PRIMARY}
-              href={url}
-              target="_blank"
-              alignSelf="flex-start"
-            >
-              {urlLabelText}
-            </Link>
-          </Stack>
-        )}
-      </Inline>
+        </Inline>
+      )}
     </Stack>
   );
 };
 
 type Props = {
   bookingInfo?: BookingInfo;
-  bookingAvailability?: BookingAvailability;
   subEvents: SubEvent[];
   mainLanguage?: Offer['mainLanguage'];
   canShowBookingAvailability: boolean;
 };
 
+const hasBookingAvailability = (bookingAvailability?: BookingAvailability) =>
+  bookingAvailability !== undefined &&
+  (bookingAvailability.capacity !== undefined ||
+    bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE);
+
+const getCapacity = (bookingAvailability?: BookingAvailability) =>
+  bookingAvailability?.capacity !== undefined
+    ? String(bookingAvailability.capacity)
+    : undefined;
+
 const ReservationPreview = ({
   bookingInfo,
-  bookingAvailability,
   subEvents,
   mainLanguage,
   canShowBookingAvailability,
 }: Props) => {
   const { t } = useTranslation();
 
-  const subEventsWithUrl = subEvents.filter(
-    (subEvent) => subEvent.bookingInfo?.url,
-  );
   const hasContactInfo = !!(bookingInfo?.phone || bookingInfo?.email);
-  const hasSingleDateUrl = !!bookingInfo?.url;
-  const hasMultipleDateUrls = subEventsWithUrl.length > 0;
+  const hasLink = !!bookingInfo?.url;
+  const isMultiple = subEvents.length > 1;
 
-  if (!hasContactInfo && !hasSingleDateUrl && !hasMultipleDateUrls)
+  const singleBookingAvailability = subEvents[0]?.bookingAvailability;
+
+  const subEventsWithAvailability = subEvents.filter((subEvent) =>
+    hasBookingAvailability(subEvent.bookingAvailability),
+  );
+
+  const showOfferAvailability =
+    canShowBookingAvailability &&
+    !isMultiple &&
+    (hasLink || hasBookingAvailability(singleBookingAvailability));
+  const showSubEventAvailability =
+    canShowBookingAvailability &&
+    isMultiple &&
+    subEventsWithAvailability.length > 0;
+
+  if (
+    !hasContactInfo &&
+    !hasLink &&
+    !showOfferAvailability &&
+    !showSubEventAvailability
+  )
     return <EmptyValue>{t('preview.empty_value.booking')}</EmptyValue>;
 
   const contactRows = [
@@ -182,34 +209,24 @@ const ReservationPreview = ({
           data={contactRows}
         />
       )}
-      {hasSingleDateUrl && (
+      {(hasLink || showOfferAvailability) && (
         <ReservationCard
-          url={bookingInfo!.url!}
-          urlLabel={bookingInfo!.urlLabel}
-          capacity={
-            bookingAvailability?.capacity !== undefined
-              ? String(bookingAvailability.capacity)
-              : undefined
-          }
+          url={bookingInfo?.url}
+          urlLabel={bookingInfo?.urlLabel}
+          capacity={getCapacity(singleBookingAvailability)}
           status={
-            bookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
+            singleBookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
           }
-          showAvailability={canShowBookingAvailability}
+          showAvailability={showOfferAvailability}
           mainLanguage={mainLanguage}
         />
       )}
-      {hasMultipleDateUrls &&
-        subEventsWithUrl.map((subEvent, index) => (
+      {showSubEventAvailability &&
+        subEventsWithAvailability.map((subEvent, index) => (
           <ReservationCard
             key={index}
             title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
-            url={subEvent.bookingInfo!.url!}
-            urlLabel={subEvent.bookingInfo!.urlLabel}
-            capacity={
-              subEvent.bookingAvailability?.capacity !== undefined
-                ? String(subEvent.bookingAvailability.capacity)
-                : undefined
-            }
+            capacity={getCapacity(subEvent.bookingAvailability)}
             status={
               subEvent.bookingAvailability?.type ??
               BookingAvailabilityType.AVAILABLE
