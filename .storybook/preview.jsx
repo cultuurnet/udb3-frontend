@@ -38,6 +38,12 @@ export const parameters = {
   },
 };
 
+export const BACKGROUND_CLASSES = {
+  White: 'tw:bg-background',
+  Grey: 'tw:bg-grey-background',
+  Accent: 'tw:bg-accent',
+};
+
 export const globalTypes = {
   shadcnMigration: {
     name: 'UI',
@@ -51,6 +57,16 @@ export const globalTypes = {
       dynamicTitle: true,
     },
   },
+
+  background: {
+    name: 'Background',
+    defaultValue: 'White',
+    toolbar: {
+      icon: 'paintbrush',
+      items: Object.keys(BACKGROUND_CLASSES),
+      dynamicTitle: true,
+    },
+  },
 };
 
 export const decorators = [
@@ -58,12 +74,16 @@ export const decorators = [
     const isShadcn = context.globals.shadcnMigration;
     document.cookie = `ff_shadcn_migration=${isShadcn}; path=/`;
 
+    const backgroundName = context.globals.background ?? 'White';
+
     return (
       <CookiesProvider>
         <GlobalStyle />
         <ThemeProvider>
           <I18nextProvider i18n={i18n}>
-            <Story />
+            <div className={BACKGROUND_CLASSES[backgroundName]}>
+              <Story />
+            </div>
           </I18nextProvider>
         </ThemeProvider>
       </CookiesProvider>
