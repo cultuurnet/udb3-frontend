@@ -1773,7 +1773,8 @@
   },
   "common": {
     "back_to_overview": "Terug naar de lijst",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "progress": "Voortgang"
   },
   "users": {
     "search": {

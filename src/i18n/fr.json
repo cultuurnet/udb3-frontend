@@ -1715,7 +1715,8 @@
   },
   "common": {
     "back_to_overview": "Retour à la liste",
-    "close": "Fermer"
+    "close": "Fermer",
+    "progress": "Progression"
   },
   "users": {
     "search": {
