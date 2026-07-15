@@ -135,11 +135,9 @@ const SelectionTable = ({
         tableHooks={[selectionHook]}
         onTableReady={handleTableReady}
         css={`
-          &.table th,
-          &.table td {
-            :first-child {
-              width: 100px;
-            }
+          &.table th:first-child,
+          &.table td:first-child {
+            width: 100px;
           }
         `}
         {...props}
