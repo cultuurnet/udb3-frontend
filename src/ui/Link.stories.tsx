@@ -83,7 +83,12 @@ export const CustomChildren: Story = {
     },
   },
   render: (args) => (
-    <Link customChildren={true} href={args.href} variant={args.variant}>
+    <Link
+      customChildren={true}
+      href={args.href}
+      variant={args.variant}
+      aria-label="View profile"
+    >
       <Icon name={args.iconName} />
     </Link>
   ),
