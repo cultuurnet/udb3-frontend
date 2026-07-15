@@ -62,7 +62,7 @@ const ChildcareTimeFields = ({
             variant={LabelVariants.BOLD}
             htmlFor={startToggleId}
             color={!startEnabled ? colors.grey5 : undefined}
-            cursor="pointer"
+            cursor={disabled ? 'not-allowed' : 'pointer'}
           >
             {t('create.calendar.days.childcare.before')}
           </Label>
@@ -78,7 +78,7 @@ const ChildcareTimeFields = ({
             variant={LabelVariants.BOLD}
             htmlFor={endToggleId}
             color={!endEnabled ? colors.grey5 : undefined}
-            cursor="pointer"
+            cursor={disabled ? 'not-allowed' : 'pointer'}
           >
             {t('create.calendar.days.childcare.after')}
           </Label>
