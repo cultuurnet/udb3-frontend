@@ -1,6 +1,7 @@
 import uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRowSelect } from 'react-table';
 
 import { Button, ButtonVariants } from './Button';
@@ -10,24 +11,31 @@ import { Stack } from './Stack';
 import { Table } from './Table';
 import { Text } from './Text';
 
-const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
-  const { checked, onChange } = getToggleAllRowsSelectedProps();
+const CheckBoxHeader = ({
+  getToggleAllRowsSelectedProps,
+  toggleAllRowsSelected,
+}) => {
+  const { t } = useTranslation();
+  const { checked } = getToggleAllRowsSelectedProps();
 
   return (
     <Checkbox
       id={uniqueId('checkbox-')}
       checked={checked}
-      onToggle={onChange}
+      onCheckedChange={toggleAllRowsSelected}
+      aria-label={t('selectionTable.selectAll')}
     />
   );
 };
 
 CheckBoxHeader.propTypes = {
   getToggleAllRowsSelectedProps: PropTypes.func,
+  toggleAllRowsSelected: PropTypes.func,
 };
 
 const CheckBoxCell = ({ row }) => {
-  const { checked, onChange } = row.getToggleRowSelectedProps();
+  const { t } = useTranslation();
+  const { checked } = row.getToggleRowSelectedProps();
 
   const identifier = `checkbox-${row.id}`;
 
@@ -36,7 +44,8 @@ const CheckBoxCell = ({ row }) => {
       id={identifier}
       data-testid={identifier}
       checked={checked}
-      onToggle={onChange}
+      onCheckedChange={row.toggleRowSelected}
+      aria-label={t('selectionTable.selectRow')}
     />
   );
 };
