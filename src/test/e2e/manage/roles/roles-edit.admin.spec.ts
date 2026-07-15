@@ -228,9 +228,7 @@ test.describe('Role Editing - Admin', () => {
 
     await permissionsSection.waitFor();
 
-    const checkboxes = await permissionsSection
-      .locator('input[type="checkbox"]')
-      .all();
+    const checkboxes = await permissionsSection.getByRole('checkbox').all();
 
     expect(checkboxes.length).toBeGreaterThan(0);
 
