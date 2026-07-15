@@ -1,38 +1,65 @@
 import { ChangeEvent } from 'react';
 
-import { Box, BoxProps, getBoxProps } from './Box';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Checkbox as ShadcnCheckbox } from '@/ui/shadcn/checkbox';
 
-type CheckboxProps = BoxProps & {
+import { CheckboxLegacy } from './CheckboxLegacy';
+
+type CheckboxProps = {
   id: string;
   name?: string;
   checked?: boolean;
   disabled?: boolean;
-  onToggle?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onCheckedChange?: (checked: boolean) => void;
   className?: string;
+  'aria-label'?: string;
+  'data-testid'?: string;
 };
 
 const Checkbox = ({
   id,
-  name = '',
-  checked = false,
-  disabled = false,
-  onToggle = () => {},
+  name,
+  checked,
+  disabled,
+  onCheckedChange = () => {},
   className,
-  ...props
-}: CheckboxProps) => (
-  <Box
-    as="input"
-    type="checkbox"
-    id={id}
-    name={name}
-    checked={checked}
-    disabled={disabled}
-    onChange={onToggle}
-    className={className}
-    cursor="pointer"
-    data-testid={props['data-testid']}
-    {...getBoxProps(props)}
-  />
-);
+  'aria-label': ariaLabel,
+  'data-testid': dataTestId,
+}: CheckboxProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <ShadcnCheckbox
+        id={id}
+        name={name}
+        checked={checked}
+        disabled={disabled}
+        onCheckedChange={onCheckedChange}
+        className={className}
+        aria-label={ariaLabel}
+        data-testid={dataTestId}
+      />
+    );
+  }
+
+  return (
+    <CheckboxLegacy
+      id={id}
+      name={name}
+      checked={checked}
+      disabled={disabled}
+      onToggle={(event: ChangeEvent<HTMLInputElement>) =>
+        onCheckedChange(event.target.checked)
+      }
+      className={className}
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
+    />
+  );
+};
 
 export { Checkbox };
+export type { CheckboxProps };
