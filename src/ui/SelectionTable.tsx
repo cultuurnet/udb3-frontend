@@ -19,12 +19,14 @@ const CheckBoxHeader = ({
   const { checked } = getToggleAllRowsSelectedProps();
 
   return (
-    <Checkbox
-      id={uniqueId('checkbox-')}
-      checked={checked}
-      onCheckedChange={toggleAllRowsSelected}
-      aria-label={t('selectionTable.selectAll')}
-    />
+    <span className="tw:flex tw:w-full tw:justify-center">
+      <Checkbox
+        id={uniqueId('checkbox-')}
+        checked={checked}
+        onCheckedChange={toggleAllRowsSelected}
+        aria-label={t('selectionTable.selectAll')}
+      />
+    </span>
   );
 };
 
@@ -40,13 +42,15 @@ const CheckBoxCell = ({ row }) => {
   const identifier = `checkbox-${row.id}`;
 
   return (
-    <Checkbox
-      id={identifier}
-      data-testid={identifier}
-      checked={checked}
-      onCheckedChange={row.toggleRowSelected}
-      aria-label={t('selectionTable.selectRow')}
-    />
+    <span className="tw:flex tw:w-full tw:justify-center">
+      <Checkbox
+        id={identifier}
+        data-testid={identifier}
+        checked={checked}
+        onCheckedChange={row.toggleRowSelected}
+        aria-label={t('selectionTable.selectRow')}
+      />
+    </span>
   );
 };
 
@@ -138,6 +142,7 @@ const SelectionTable = ({
           &.table th:first-child,
           &.table td:first-child {
             width: 100px;
+            vertical-align: middle;
           }
         `}
         {...props}
