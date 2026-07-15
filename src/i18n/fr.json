@@ -1635,7 +1635,9 @@
   },
   "selectionTable": {
     "rowsSelectedCount": "{{count}} ligne sélectionnée",
-    "rowsSelectedCount_plural": "{{count}} lignes sélectionnées"
+    "rowsSelectedCount_plural": "{{count}} lignes sélectionnées",
+    "selectAll": "Tout sélectionner",
+    "selectRow": "Sélectionner la ligne"
   },
   "steps": {
     "offerTypeStep": {
