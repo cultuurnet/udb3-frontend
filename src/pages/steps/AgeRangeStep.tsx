@@ -357,10 +357,12 @@ const ChildrenOnlySection = ({
         items={[
           {
             value: 'children-only',
+            id: 'children-only',
             label: t('create.name_and_age.age.children_only.children_only'),
           },
           {
             value: 'with-family',
+            id: 'with-family',
             label: t('create.name_and_age.age.children_only.with_family'),
           },
         ]}

@@ -14,6 +14,7 @@ type Item = {
   info?: string;
   checked?: boolean;
   content?: ReactNode;
+  id?: string;
 };
 
 type Props = {
@@ -41,7 +42,7 @@ const RadioButtonGroupShadcn = ({
     className={cn('tw:flex tw:flex-col tw:gap-3', className)}
   >
     {items.map((item) => {
-      const itemId = item.value;
+      const itemId = item.id ?? `${name}-${item.value}`;
 
       return (
         <div key={item.value} className="tw:flex tw:flex-col tw:gap-3">

@@ -9,6 +9,7 @@ type Item = {
   info?: string;
   checked?: boolean;
   content?: ReactNode;
+  id?: string;
 };
 
 type Props = {
@@ -33,11 +34,12 @@ const RadioButtonGroupLegacy = ({
     <Stack className={className} as="div" spacing={3} {...getStackProps(props)}>
       <Stack as="ul" spacing={2}>
         {items.flatMap((item: Item) => {
+          const itemId = item.id ?? `${name}-${item.value}`;
           const radioButton = (
             <RadioButtonWithLabelLegacy
               key={item.value}
               value={item.value}
-              id={item.value}
+              id={itemId}
               checked={item.value === selected}
               disabled={disabled}
               name={name}

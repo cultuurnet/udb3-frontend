@@ -47,7 +47,7 @@ const StatusForm = ({
         name="offerStatus"
         items={radioButtonItems}
         selected={statusType}
-        onChange={onChangeStatusType}
+        onValueChange={onChangeStatusType}
       />
       <Stack key="reason" spacing={2}>
         <Stack spacing={3}>
