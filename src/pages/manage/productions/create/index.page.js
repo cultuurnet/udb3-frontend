@@ -236,9 +236,7 @@ const Create = () => {
                             }
                           : undefined,
                       )
-                      .filter(
-                        (productionName) => productionName !== undefined,
-                      )}
+                      .filter((productionName) => productionName !== undefined)}
                     selected={selectedProductionId}
                     onValueChange={setSelectedProductionId}
                   />
