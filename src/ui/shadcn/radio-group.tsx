@@ -25,15 +25,11 @@ const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        'tw:box-border tw:appearance-none tw:bg-transparent tw:p-0 tw:aspect-square tw:h-4 tw:w-4 tw:rounded-full tw:border tw:border-primary tw:text-primary tw:shadow tw:focus-visible:outline-none tw:focus-visible:ring-2 tw:focus-visible:ring-ring tw:focus-visible:ring-offset-2 tw:focus-visible:ring-offset-background tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
+        'tw:box-border tw:appearance-none tw:bg-transparent tw:p-0 tw:aspect-square tw:h-4 tw:w-4 tw:rounded-full tw:border tw:border-primary tw:text-primary tw:shadow tw:flex tw:items-center tw:justify-center tw:after:hidden tw:data-[state=checked]:after:block tw:after:size-2.5 tw:after:rounded-full tw:after:bg-primary tw:focus-visible:outline-none tw:focus-visible:ring-2 tw:focus-visible:ring-ring tw:focus-visible:ring-offset-2 tw:focus-visible:ring-offset-background tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
         className,
       )}
       {...props}
-    >
-      <RadioGroupPrimitive.Indicator className="tw:size-full tw:flex tw:items-center tw:justify-center">
-        <div className="tw:size-2.5 tw:rounded-full tw:bg-primary" />
-      </RadioGroupPrimitive.Indicator>
-    </RadioGroupPrimitive.Item>
+    />
   );
 });
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
