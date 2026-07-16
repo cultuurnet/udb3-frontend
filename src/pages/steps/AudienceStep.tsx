@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -11,8 +11,7 @@ import {
 } from '@/hooks/api/events';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
-import { FormElement } from '@/ui/FormElement';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 
@@ -38,7 +37,7 @@ const AudienceStep = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const { register, control, setValue } = useForm<FormData>({
+  const { control, setValue } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
@@ -75,33 +74,26 @@ const AudienceStep = ({
         <Text fontWeight="bold">
           {t('create.additionalInformation.audience.title')}
         </Text>
-        {Object.values(AudienceTypes)
-          .filter((type) => type !== AudienceTypes.EDUCATION)
-          .map((type, index) => {
-            return (
-              <Fragment key={index}>
-                <FormElement
-                  id={`audience-${type}`}
-                  Component={
-                    <RadioButtonWithLabel
-                      {...register(`audienceType`)}
-                      label={t(`create.additionalInformation.audience.${type}`)}
-                      checked={watchedAudienceType === type}
-                      onChange={() => handleOnChangeAudience(type)}
-                    />
-                  }
-                />
-                {watchedAudienceType === type &&
-                  watchedAudienceType !== AudienceTypes.EVERYONE && (
-                    <Text variant="muted" maxWidth="30%">
-                      {t(
-                        `create.additionalInformation.audience.help.${watchedAudienceType}`,
-                      )}
-                    </Text>
-                  )}
-              </Fragment>
-            );
-          })}
+        <RadioButtonGroup
+          name="audienceType"
+          selected={watchedAudienceType}
+          onValueChange={(value) =>
+            handleOnChangeAudience(value as AudienceType)
+          }
+          items={Object.values(AudienceTypes)
+            .filter((type) => type !== AudienceTypes.EDUCATION)
+            .map((type) => ({
+              value: type,
+              label: t(`create.additionalInformation.audience.${type}`),
+            }))}
+        />
+        {watchedAudienceType !== AudienceTypes.EVERYONE && (
+          <Text variant="muted" maxWidth="30%">
+            {t(
+              `create.additionalInformation.audience.help.${watchedAudienceType}`,
+            )}
+          </Text>
+        )}
       </Stack>
     </Stack>
   );
