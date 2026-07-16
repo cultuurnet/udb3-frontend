@@ -49,7 +49,7 @@ export const Checked: Story = {
 export const Disabled: Story = {
   args: {
     id: 'disabled',
-    checked: false,
+    checked: true,
     disabled: true,
     'aria-label': 'Disabled checkbox',
   },

@@ -24,7 +24,7 @@ type Story = StoryObj<typeof CheckboxWithLabel>;
 export const Default: Story = {
   args: {
     id: 'checkbox-with-label-default',
-    checked: false,
+    checked: true,
     disabled: false,
     children: 'Click me',
   },
