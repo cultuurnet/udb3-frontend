@@ -85,15 +85,13 @@ const AudienceStep = ({
             .map((type) => ({
               value: type,
               label: t(`create.additionalInformation.audience.${type}`),
+              content: type !== AudienceTypes.EVERYONE && (
+                <Text variant="muted" maxWidth="30%">
+                  {t(`create.additionalInformation.audience.help.${type}`)}
+                </Text>
+              ),
             }))}
         />
-        {!!watchedAudienceType && watchedAudienceType !== AudienceTypes.EVERYONE && (
-          <Text variant="muted" maxWidth="30%">
-            {t(
-              `create.additionalInformation.audience.help.${watchedAudienceType}`,
-            )}
-          </Text>
-        )}
       </Stack>
     </Stack>
   );
