@@ -7,7 +7,6 @@ type Item = {
   value: string;
   label?: ReactNode;
   info?: string;
-  checked?: boolean;
   content?: ReactNode;
   id?: string;
   disabled?: boolean;
