@@ -10,6 +10,7 @@ type Item = {
   checked?: boolean;
   content?: ReactNode;
   id?: string;
+  disabled?: boolean;
 };
 
 type Props = {
@@ -41,7 +42,7 @@ const RadioButtonGroupLegacy = ({
               value={item.value}
               id={itemId}
               checked={item.value === selected}
-              disabled={disabled}
+              disabled={item.disabled ?? disabled}
               name={name}
               onChange={onChange}
               label={item.label}

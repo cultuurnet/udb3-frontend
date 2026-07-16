@@ -15,6 +15,7 @@ type Item = {
   checked?: boolean;
   content?: ReactNode;
   id?: string;
+  disabled?: boolean;
 };
 
 type Props = {
@@ -43,6 +44,7 @@ const RadioButtonGroupShadcn = ({
   >
     {items.map((item) => {
       const itemId = item.id ?? `${name}-${item.value}`;
+      const isItemDisabled = item.disabled ?? disabled;
 
       return (
         <div key={item.value} className="tw:flex tw:flex-col tw:gap-3">
@@ -55,11 +57,13 @@ const RadioButtonGroupShadcn = ({
             <RadioGroupItem
               value={item.value}
               id={itemId}
+              disabled={isItemDisabled}
               className={item.info ? 'tw:mt-1' : undefined}
             />
             <div className="tw:flex tw:flex-col">
               <Label
-                cursor={disabled ? 'not-allowed' : 'pointer'}
+                cursor={isItemDisabled ? 'not-allowed' : 'pointer'}
+                opacity={isItemDisabled ? 0.5 : undefined}
                 htmlFor={itemId}
               >
                 {item.label}

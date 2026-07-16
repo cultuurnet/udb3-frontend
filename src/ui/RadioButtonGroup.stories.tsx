@@ -10,13 +10,33 @@ const meta: Meta<typeof RadioButtonGroup> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['items'],
+      include: ['name', 'disabled', 'items'],
     },
+  },
+  argTypes: {
+    items: { control: 'object' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const render: Story['render'] = function RenderComponent(args) {
+  const [selected, setSelected] = useState(args.selected);
+  const selectedItem = args.items?.find((item) => item.value === selected);
+
+  return (
+    <div className="tw:flex tw:flex-col tw:gap-2">
+      <Text fontWeight="bold">Select a city:</Text>
+      <RadioButtonGroup
+        {...args}
+        selected={selected}
+        onValueChange={setSelected}
+      />
+      {selectedItem && <Text>Selected city: {selectedItem.label}</Text>}
+    </div>
+  );
+};
 
 export const Default: Story = {
   args: {
@@ -28,20 +48,18 @@ export const Default: Story = {
       { label: 'Prague', value: 'prague', info: 'Info about Prague' },
     ],
   },
-  render: function RenderComponent(args) {
-    const [selected, setSelected] = useState(args.selected);
-    const selectedItem = args.items?.find((item) => item.value === selected);
+  render,
+};
 
-    return (
-      <div className="tw:flex tw:flex-col tw:gap-2">
-        <Text fontWeight="bold">Select a city:</Text>
-        <RadioButtonGroup
-          {...args}
-          selected={selected}
-          onValueChange={setSelected}
-        />
-        {selectedItem && <Text>Selected city: {selectedItem.label}</Text>}
-      </div>
-    );
+export const WithDisabledItem: Story = {
+  args: {
+    name: 'city-with-disabled',
+    selected: 'rome',
+    items: [
+      { label: 'Rome', value: 'rome' },
+      { label: 'Paris', value: 'paris', disabled: true },
+      { label: 'Prague', value: 'prague' },
+    ],
   },
+  render,
 };
