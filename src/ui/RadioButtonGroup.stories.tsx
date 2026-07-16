@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 
 import { RadioButtonGroup } from './RadioButtonGroup';
-import { Stack } from './Stack';
 import { Text } from './Text';
 
 const meta: Meta<typeof RadioButtonGroup> = {
@@ -11,7 +10,7 @@ const meta: Meta<typeof RadioButtonGroup> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['groupLabel', 'items'],
+      include: ['items'],
     },
   },
 };
@@ -22,7 +21,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     name: 'city',
-    groupLabel: 'Select a city:',
     selected: 'rome',
     items: [
       { label: 'Rome', value: 'rome', info: 'Info about Rome' },
@@ -35,15 +33,15 @@ export const Default: Story = {
     const selectedItem = args.items?.find((item) => item.value === selected);
 
     return (
-      <Stack spacing={3}>
-        {args.groupLabel && <Text fontWeight="bold">{args.groupLabel}</Text>}
+      <div className="tw:flex tw:flex-col tw:gap-2">
+        <Text fontWeight="bold">Select a city:</Text>
         <RadioButtonGroup
           {...args}
           selected={selected}
-          onChange={(e) => setSelected(e.target.value)}
+          onValueChange={setSelected}
         />
         {selectedItem && <Text>Selected city: {selectedItem.label}</Text>}
-      </Stack>
+      </div>
     );
   },
 };
