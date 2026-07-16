@@ -87,7 +87,7 @@ const AudienceStep = ({
               label: t(`create.additionalInformation.audience.${type}`),
             }))}
         />
-        {watchedAudienceType !== AudienceTypes.EVERYONE && (
+        {!!watchedAudienceType && watchedAudienceType !== AudienceTypes.EVERYONE && (
           <Text variant="muted" maxWidth="30%">
             {t(
               `create.additionalInformation.audience.help.${watchedAudienceType}`,
