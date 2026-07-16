@@ -14,6 +14,7 @@ const featureFlagRuntimeConfig = Object.fromEntries(
  * @type {import('next').NextConfig}
  */
 const moduleExports = {
+  output: 'standalone',
   productionBrowserSourceMaps: true,
   compiler: {
     styledComponents: true,
@@ -71,7 +72,8 @@ const SentryWebpackPluginOptions = {
 
 module.exports.withoutSentry = moduleExports;
 
-module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions, {
+module.exports = process.env.SENTRY_AUTH_TOKEN
+  ? withSentryConfig(moduleExports, SentryWebpackPluginOptions, {
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
@@ -89,4 +91,5 @@ module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions, {
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
-});
+    })
+  : moduleExports;
