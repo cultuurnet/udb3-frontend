@@ -5,7 +5,7 @@ import { cloneElement, isValidElement } from 'react';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { Badge, BadgeVariants } from '@/ui/Badge';
-import { Button } from '@/ui/Button';
+import { buttonVariantMap, buttonVariants } from '@/ui/Button';
 
 import { Box, getBoxProps } from './Box';
 import type { Icons } from './Icon';
@@ -33,7 +33,9 @@ const LinkVariants = {
   UNSTYLED: 'unstyled',
 } as const;
 
-const buttonVariants = new Set(Object.values(LinkButtonVariants) as string[]);
+const linkButtonVariantSet = new Set(
+  Object.values(LinkButtonVariants) as string[],
+);
 const badgeVariants = new Set(Object.values(LinkBadgeVariants) as string[]);
 
 const badgeVariantByLinkVariant: Record<
@@ -62,7 +64,7 @@ const BaseLinkShadcn = ({
   as: Component = 'a',
   ...props
 }: BaseLinkProps) => {
-  const isButton = buttonVariants.has(variant ?? '');
+  const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
 
   const variantClass =
@@ -84,14 +86,17 @@ const BaseLinkShadcn = ({
       {...getBoxProps(props)}
     >
       {isButton ? (
-        <Button
-          forwardedAs="span"
-          width="100%"
-          variant={variant as Values<typeof LinkButtonVariants>}
-          customChildren
+        <span
+          className={cn(
+            buttonVariants({
+              variant:
+                buttonVariantMap[variant as Values<typeof LinkButtonVariants>],
+            }),
+            'tw:w-full',
+          )}
         >
           {children}
-        </Button>
+        </span>
       ) : isBadge ? (
         <Badge
           variant={
@@ -138,7 +143,7 @@ const LinkShadcn = ({
 }: LinkProps) => {
   const isInternalLink = href.startsWith('/') || href.startsWith('#');
 
-  const isButton = buttonVariants.has(variant ?? '');
+  const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
 
   const clonedSuffix =
