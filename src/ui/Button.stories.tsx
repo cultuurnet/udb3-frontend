@@ -14,6 +14,7 @@ const meta: Meta<typeof Button> = {
         'active',
         'children',
         'disabled',
+        'iconName',
         'loading',
         'outlineColor',
         'shouldHideText',
@@ -41,6 +42,14 @@ export const Primary: Story = {
   args: {
     variant: ButtonVariants.PRIMARY,
     children: 'Primary',
+    ...commonArgs,
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    variant: ButtonVariants.NEUTRAL,
+    children: 'Neutral',
     ...commonArgs,
   },
 };
@@ -98,7 +107,40 @@ export const Loading: Story = {
 export const CustomChildren: Story = {
   args: {
     ...commonArgs,
-    variant: ButtonVariants.UNSTYLED,
-    children: <Icon name={Icons.TIMES} />,
+    variant: ButtonVariants.NEUTRAL,
+    customChildren: true,
+    children: (
+      <span className="tw:flex tw:items-center tw:gap-2">
+        <Icon name={Icons.BELL} />
+        <span>
+          Notifications <strong>(3)</strong>
+        </span>
+      </span>
+    ),
+  },
+};
+
+export const SecondaryToggle: Story = {
+  args: {
+    variant: ButtonVariants.SECONDARY_TOGGLE,
+    active: true,
+    children: 'Toggle',
+    ...commonArgs,
+  },
+};
+
+export const IconVariant: Story = {
+  args: {
+    variant: ButtonVariants.ICON,
+    iconName: Icons.TRASH,
+    ...commonArgs,
+  },
+};
+
+export const LinkDanger: Story = {
+  args: {
+    variant: ButtonVariants.LINK_DANGER,
+    children: 'Link danger',
+    ...commonArgs,
   },
 };
