@@ -7,6 +7,7 @@ import { CultuurkuurModal } from '@/pages/steps/modals/CultuurkuurModal';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
+import { cn } from '@/ui/shadcn/utils';
 
 type Props = {
   data: HierarchicalData[];
@@ -46,8 +47,10 @@ const CultuurkuurLabelsPicker = ({
       {hasPreselectedValues && (
         <Button
           variant={ButtonVariants.LINK}
-          paddingLeft={0}
-          marginBottom={hasPreselectedValues ? 0 : 4}
+          className={cn(
+            'tw:pl-0',
+            hasPreselectedValues ? 'tw:mb-0' : 'tw:mb-4',
+          )}
           onClick={() => setIsCultuurkuurModalVisible(true)}
         >
           <Inline spacing={2} alignItems="center">
