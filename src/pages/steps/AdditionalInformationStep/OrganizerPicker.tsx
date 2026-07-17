@@ -257,7 +257,7 @@ const OrganizerPicker = ({
                 {!addButtonHasBeenPressed && (
                   <Button
                     alignSelf="flex-start"
-                    variant={ButtonVariants.SECONDARY}
+                    variant={ButtonVariants.NEUTRAL}
                     onClick={() => setAddButtonHasBeenPressed(true)}
                   >
                     {t('create.additionalInformation.organizer.add_new_button')}

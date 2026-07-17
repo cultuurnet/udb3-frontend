@@ -505,7 +505,7 @@ const CalendarOpeninghoursModal = ({
             ))}
             <Button
               iconName={Icons.PLUS}
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               onClick={handleAddDeviatingPeriod}
               alignSelf="flex-start"
             >
@@ -554,7 +554,7 @@ const CalendarOpeninghoursModal = ({
             ))}
             <Button
               iconName={Icons.PLUS}
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               onClick={handleAddClosingPeriod}
               alignSelf="flex-start"
             >

@@ -281,7 +281,7 @@ const ContactInfoStep = ({
       <Inline>
         <Button
           onClick={handleAddNewContactInfo}
-          variant={ButtonVariants.SECONDARY}
+          variant={ButtonVariants.NEUTRAL}
         >
           {contactInfoState.length === 0
             ? t('create.additionalInformation.contact_info.add_more_singular')

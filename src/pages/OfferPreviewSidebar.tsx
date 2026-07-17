@@ -205,7 +205,7 @@ const OfferPreviewSidebar = ({
           return (
             <Button
               key={title}
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               onClick={onClick}
               disabled={disabled}
               iconName={iconName}
@@ -221,7 +221,7 @@ const OfferPreviewSidebar = ({
           return (
             <Button
               key={title}
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               disabled={disabled}
               iconName={iconName}
               spacing={3}

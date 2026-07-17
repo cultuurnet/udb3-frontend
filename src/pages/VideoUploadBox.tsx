@@ -116,7 +116,7 @@ const VideoUploadBox = ({
               </Text>
             </Stack>
           )}
-          <Button variant={ButtonVariants.SECONDARY} onClick={onClickAddVideo}>
+          <Button variant={ButtonVariants.NEUTRAL} onClick={onClickAddVideo}>
             {t('videos.add_button')}
           </Button>
         </Stack>

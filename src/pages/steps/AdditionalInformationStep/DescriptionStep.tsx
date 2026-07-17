@@ -335,7 +335,7 @@ const DescriptionStep = ({
                   action={
                     <Stack spacing={2} alignItems="flex-start">
                       <Button
-                        variant={ButtonVariants.SECONDARY}
+                        variant={ButtonVariants.NEUTRAL}
                         iconName={Icons.PLUS}
                         onClick={() => {
                           if ((entity.faqs?.length ?? 0) >= FAQ_MAX_ITEMS) {
@@ -364,7 +364,7 @@ const DescriptionStep = ({
                 />
               ) : (
                 <Button
-                  variant={ButtonVariants.SECONDARY}
+                  variant={ButtonVariants.NEUTRAL}
                   iconName={Icons.PLUS}
                   onClick={() => setIsFaqModalVisible(true)}
                   spacing={2}

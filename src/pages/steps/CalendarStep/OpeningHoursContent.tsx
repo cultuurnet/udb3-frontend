@@ -250,7 +250,7 @@ const OpeningHoursContent = ({
           <Text fontWeight="bold">
             {t('create.calendar.fixed_days.opening_hours')}
           </Text>
-          <Button variant={ButtonVariants.SECONDARY} onClick={onOpenModal}>
+          <Button variant={ButtonVariants.NEUTRAL} onClick={onOpenModal}>
             {t('create.calendar.fixed_days.button_change_opening_hours')}
           </Button>
         </List.Item>
@@ -283,7 +283,7 @@ const OpeningHoursContent = ({
 
   return (
     <Button
-      variant={ButtonVariants.SECONDARY}
+      variant={ButtonVariants.NEUTRAL}
       onClick={onOpenModal}
       alignSelf="flex-start"
     >

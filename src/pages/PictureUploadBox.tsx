@@ -150,7 +150,7 @@ const PictureUploadBox = ({
                   </Button>
                   {!image.isMain && (
                     <Button
-                      variant={ButtonVariants.SECONDARY}
+                      variant={ButtonVariants.NEUTRAL}
                       onClick={() => onClickSetMainImage(image.parsedId)}
                     >
                       {t('pictures.set_as_main_image')}
@@ -174,7 +174,7 @@ const PictureUploadBox = ({
               </Text>
             </Stack>
           )}
-          <Button variant={ButtonVariants.SECONDARY} onClick={onClickAddImage}>
+          <Button variant={ButtonVariants.NEUTRAL} onClick={onClickAddImage}>
             {t('pictures.add_button')}
           </Button>
         </Stack>

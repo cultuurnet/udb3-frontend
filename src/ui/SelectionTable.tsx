@@ -107,7 +107,7 @@ const SelectionTable = ({
           {actions.map(({ iconName, title, onClick, disabled }) => (
             <Button
               key={title}
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               onClick={onClick}
               disabled={disabled}
               iconName={iconName}

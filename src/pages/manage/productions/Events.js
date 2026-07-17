@@ -203,7 +203,7 @@ const AddAction = ({
         {t('productions.overview.confirm')}
       </Button>
       <Button
-        variant={ButtonVariants.SECONDARY}
+        variant={ButtonVariants.NEUTRAL}
         iconName={Icons.TIMES}
         spacing={3}
         onClick={onCancel}
@@ -263,7 +263,7 @@ const ChangeNameAction = ({
         {t('productions.overview.confirm')}
       </Button>
       <Button
-        variant={ButtonVariants.SECONDARY}
+        variant={ButtonVariants.NEUTRAL}
         iconName={Icons.TIMES}
         spacing={3}
         onClick={onCancel}

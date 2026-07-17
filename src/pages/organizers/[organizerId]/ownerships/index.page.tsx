@@ -287,7 +287,7 @@ const Ownership = () => {
               {t('organizers.ownerships.actions.add')}
             </Button>
             <Button
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               spacing={3}
               iconName={Icons.ARROW_LEFT}
               onClick={() => router.push(`/organizer/${organizerId}/preview`)}

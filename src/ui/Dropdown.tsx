@@ -42,7 +42,7 @@ const Dropdown = ({
     Children.toArray(children).find(isPrimaryActionChild);
 
   const buttonVariant =
-    variant === DropDownVariants.SECONDARY ? ButtonVariants.SECONDARY : variant;
+    variant === DropDownVariants.SECONDARY ? ButtonVariants.NEUTRAL : variant;
 
   const primaryAction = cloneElement(
     // @ts-expect-error
@@ -127,7 +127,7 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
     return (
       <BootstrapDropdown.Item
         forwardedAs={(props) => (
-          <Button variant={ButtonVariants.SECONDARY} {...props} />
+          <Button variant={ButtonVariants.NEUTRAL} {...props} />
         )}
         onClick={onClick}
         css={`

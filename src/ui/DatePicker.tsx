@@ -392,7 +392,7 @@ const DatePicker = ({
         {calendarContent}
       </Box>
       <Button
-        variant={ButtonVariants.SECONDARY}
+        variant={ButtonVariants.NEUTRAL}
         iconName={Icons.CALENDAR_ALT}
         onClick={() => datePickerRef.current?.setOpen(true)}
         disabled={disabled}
