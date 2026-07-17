@@ -4,13 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { parseDimension } from './Box';
 import { Button, ButtonVariants } from './Button';
 import { Icons } from './Icon';
+import { cn } from './shadcn/utils';
 
 type BackButtonProps = {
   onClick?: () => void;
   children?: React.ReactNode;
   translationKey?: string;
-  width?: string;
-  marginTop?: number;
   className?: string;
   disabled?: boolean;
   iconWidth?: number | string;
@@ -21,8 +20,6 @@ const BackButton = ({
   onClick,
   children,
   translationKey = 'common.back_to_overview',
-  width = 'fit-content',
-  marginTop = 4,
   className,
   disabled = false,
   iconWidth = 18,
@@ -37,11 +34,9 @@ const BackButton = ({
 
   return (
     <Button
-      width={width}
-      marginTop={marginTop}
-      variant={ButtonVariants.SECONDARY}
+      variant={ButtonVariants.NEUTRAL}
       onClick={handleClick}
-      className={className}
+      className={cn('tw:w-fit tw:mt-4', className)}
       disabled={disabled}
       title={buttonText.toString()}
       iconName={Icons.ARROW_LEFT}
