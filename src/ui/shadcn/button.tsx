@@ -18,19 +18,19 @@ const buttonVariants = cva(
         secondary:
           'tw:bg-secondary tw:text-secondary-foreground tw:shadow-sm tw:hover:bg-secondary/80',
         neutral:
-          'tw:bg-background tw:text-foreground tw:shadow-md tw:hover:bg-udb-grey-1',
+          'tw:bg-background tw:text-foreground tw:shadow-md tw:hover:bg-muted',
         ghost: 'tw:hover:bg-accent tw:hover:text-accent-foreground',
-        link: 'tw:text-primary tw:underline-offset-4 tw:hover:underline',
+        link: 'tw:text-primary tw:underline tw:hover:text-primary/70',
         success:
           'tw:bg-success tw:text-success-foreground tw:shadow tw:hover:bg-success/90',
         'secondary-toggle':
-          'tw:border tw:border-udb-grey-3 tw:bg-transparent tw:text-[#333333] tw:shadow-none tw:hover:border-udb-main-positive-green tw:hover:text-udb-main-positive-green',
+          'tw:border tw:border-border tw:bg-transparent tw:text-foreground tw:shadow-none tw:hover:border-success tw:hover:text-success',
         unstyled: 'tw:bg-transparent tw:text-inherit tw:shadow-none',
         'link-danger':
-          'tw:text-udb-danger-dark tw:underline-offset-4 tw:hover:text-udb-danger-bright tw:hover:underline',
+          'tw:text-destructive tw:underline tw:hover:text-destructive/70',
         outlined:
           'tw:border tw:border-primary tw:bg-transparent tw:text-primary tw:shadow-none tw:hover:bg-primary/10',
-        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-udb-grey-4 tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
+        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
         default: 'tw:h-10 tw:px-4 tw:py-2',
@@ -47,8 +47,7 @@ const buttonVariants = cva(
       {
         variant: 'secondary-toggle',
         active: true,
-        class:
-          'tw:border-udb-main-positive-green tw:bg-udb-main-light-green tw:text-udb-main-positive-green',
+        class: 'tw:border-success tw:bg-success-muted tw:text-success',
       },
       {
         variant: 'neutral',
