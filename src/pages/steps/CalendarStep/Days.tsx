@@ -208,7 +208,7 @@ export const Days = ({
               )}
               {days.length > 1 && (
                 <Button
-                  alignSelf="flex-end"
+                  className="tw:self-end"
                   size={ButtonSizes.SMALL}
                   variant={ButtonVariants.DANGER}
                   onClick={() => onDeleteDay(day.id)}
