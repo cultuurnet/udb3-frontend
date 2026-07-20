@@ -134,7 +134,8 @@ const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
         active={active}
         style={style}
         className={cn(
-          'tw:flex tw:items-center tw:justify-start',
+          'tw:flex tw:items-center',
+          loading ? 'tw:justify-center' : 'tw:justify-start',
           iconName && getGapClass(2),
           className,
         )}
