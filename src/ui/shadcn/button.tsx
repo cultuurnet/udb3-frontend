@@ -5,11 +5,7 @@ import * as React from 'react';
 import { cn } from '@/ui/shadcn/utils';
 
 const buttonVariants = cva(
-  // No Tailwind preflight in this project, so native button chrome needs an explicit reset.
-  // No default `gap` here on purpose: callers that lay out icon+label via plain children
-  // (Pagination's Previous/Next) set their own gap class; Button.tsx defers gap entirely to
-  // Inline's `spacing` prop so it stays on the same scale as the rest of the app.
-  'tw:appearance-none tw:border-0 tw:bg-transparent tw:p-0 tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:text-sm tw:font-medium tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg]:size-4 tw:[&_svg]:shrink-0',
+  'tw:appearance-none tw:border-0 tw:bg-transparent tw:p-0 tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:text-base tw:font-normal tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -21,9 +17,6 @@ const buttonVariants = cva(
           'tw:border tw:border-input tw:bg-background tw:shadow-sm tw:hover:bg-accent tw:hover:text-accent-foreground',
         secondary:
           'tw:bg-secondary tw:text-secondary-foreground tw:shadow-sm tw:hover:bg-secondary/80',
-        // Button's own "secondary" look (white surface, dark text, heavy shadow) —
-        // deliberately not aliased to the shared `secondary` token above, which Badge
-        // also uses for its distinct grey-fill meaning.
         neutral:
           'tw:bg-background tw:text-foreground tw:shadow-md tw:hover:bg-udb-grey-1',
         ghost: 'tw:hover:bg-accent tw:hover:text-accent-foreground',
@@ -40,7 +33,7 @@ const buttonVariants = cva(
         icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-udb-grey-4 tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
-        default: 'tw:h-9 tw:px-4 tw:py-2',
+        default: 'tw:h-10 tw:px-4 tw:py-2',
         sm: 'tw:h-8 tw:rounded-md tw:px-3 tw:text-xs',
         lg: 'tw:h-10 tw:rounded-md tw:px-8',
         icon: 'tw:h-9 tw:w-9',
