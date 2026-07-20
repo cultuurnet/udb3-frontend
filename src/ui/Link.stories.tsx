@@ -103,6 +103,9 @@ export const AsButton: Story = {
       <Link {...args} variant={LinkVariants.BUTTON_PRIMARY}>
         Primary
       </Link>
+      <Link {...args} variant={LinkVariants.BUTTON_NEUTRAL}>
+        Neutral
+      </Link>
       <Link {...args} variant={LinkVariants.BUTTON_SECONDARY}>
         Secondary
       </Link>

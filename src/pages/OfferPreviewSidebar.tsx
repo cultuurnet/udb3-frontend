@@ -236,7 +236,7 @@ const OfferPreviewSidebar = ({
           return (
             <Link
               key={title}
-              variant={LinkVariants.BUTTON_SECONDARY}
+              variant={LinkVariants.BUTTON_NEUTRAL}
               href={href}
               iconName={iconName}
               spacing={3}

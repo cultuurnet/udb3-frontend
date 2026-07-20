@@ -16,6 +16,7 @@ import { cn } from './shadcn/utils';
 
 const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
+  BUTTON_NEUTRAL: 'neutral',
   BUTTON_SECONDARY: 'secondary',
   BUTTON_DANGER: 'danger',
   BUTTON_SUCCESS: 'success',

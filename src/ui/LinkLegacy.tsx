@@ -23,6 +23,7 @@ const generateCSS = (props: Record<string, any>, allowedProps: string[]) =>
 
 export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
+  BUTTON_NEUTRAL: 'neutral',
   BUTTON_SECONDARY: 'secondary',
   BUTTON_DANGER: 'danger',
   BUTTON_SUCCESS: 'success',

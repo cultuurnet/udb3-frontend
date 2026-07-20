@@ -148,7 +148,7 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
       <BootstrapDropdown.Item
         forwardedAs={(props) => (
           <Link
-            variant={LinkVariants.BUTTON_SECONDARY}
+            variant={LinkVariants.BUTTON_NEUTRAL}
             href={href}
             padding={0}
             {...props}
