@@ -63,7 +63,9 @@ const Dropdown = ({
           box-shadow: ${getGlobalValue('boxShadow.heavy')};
           border-radius: ${getGlobalBorderRadius};
         }
-        .dropdown .primary-action:not(:only-child) > * {
+        .btn-group:has(.dropdown-toggle-split) .primary-action,
+        .btn-group:has(.dropdown-toggle-split) .primary-action > * {
+          box-shadow: none;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
         }
@@ -78,9 +80,6 @@ const Dropdown = ({
         }
 
         .btn-group {
-          .btn-secondary {
-            box-shadow: none;
-          }
           .dropdown-toggle-split {
             box-shadow: none;
             border-left: 1px solid ${grey1};
