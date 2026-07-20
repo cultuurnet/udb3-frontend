@@ -17,9 +17,9 @@ import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { Stack } from '@/ui/Stack';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { Switch, SwitchVariants } from '@/ui/Switch';
+import { getValueFromTheme } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { Tooltip } from '@/ui/Tooltip';
 
@@ -161,14 +161,13 @@ const ScopeStep = ({
                   labelVariant={LabelVariants.NORMAL}
                   labelPosition={LabelPositions.RIGHT}
                   Component={
-                    <RadioButton
-                      type={RadioButtonTypes.SWITCH}
+                    <Switch
+                      variant={SwitchVariants.SUCCESS}
                       checked={isCultuurkuurEvent}
-                      color={colors.udbMainPositiveGreen}
                       disabled={offerId && isCultuurkuurEvent}
-                      onChange={(e) => {
+                      onCheckedChange={(checked) => {
                         handleOnChangeAudience(
-                          e.target.checked
+                          checked
                             ? AudienceTypes.EDUCATION
                             : AudienceTypes.EVERYONE,
                         );
