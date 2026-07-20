@@ -18,7 +18,7 @@ const buttonVariants = cva(
         secondary:
           'tw:bg-secondary tw:text-secondary-foreground tw:shadow-sm tw:hover:bg-secondary/80',
         neutral:
-          'tw:bg-background tw:text-foreground tw:shadow-md tw:hover:bg-muted',
+          'tw:bg-background tw:text-foreground tw:shadow-heavy tw:hover:bg-muted',
         ghost: 'tw:hover:bg-accent tw:hover:text-accent-foreground',
         link: 'tw:text-primary tw:underline tw:hover:text-primary/70',
         success:
