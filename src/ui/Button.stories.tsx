@@ -133,14 +133,25 @@ export const IconVariant: Story = {
   args: {
     variant: ButtonVariants.ICON,
     iconName: Icons.TRASH,
+    'aria-label': 'Delete',
     ...commonArgs,
   },
 };
 
-export const LinkDanger: Story = {
-  args: {
-    variant: ButtonVariants.LINK_DANGER,
-    children: 'Link danger',
-    ...commonArgs,
+export const AsLink: Story = {
+  parameters: {
+    controls: {
+      exclude: ['children', 'iconName', 'variant'],
+    },
   },
+  render: (args) => (
+    <div className="tw:flex tw:gap-3">
+      <Button {...args} variant={ButtonVariants.LINK}>
+        Link
+      </Button>
+      <Button {...args} variant={ButtonVariants.LINK_DANGER}>
+        Link danger
+      </Button>
+    </div>
+  ),
 };
