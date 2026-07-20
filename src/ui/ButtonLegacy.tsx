@@ -320,7 +320,8 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
         iconName && <Icon name={iconName} key="icon" />,
         customChildren
           ? children
-          : !shouldHideText && (
+          : !shouldHideText &&
+            !!children && (
               <Text flex={1} textAlign="left" key="text">
                 {children}
               </Text>
