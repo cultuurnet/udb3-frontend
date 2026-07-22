@@ -270,7 +270,7 @@ const ContactInfoStep = ({
               }
             />
             <Button
-              alignSelf="flex-start"
+               className="tw:self-start"
               onClick={() => handleDeleteContactInfo(index)}
               variant={ButtonVariants.DANGER}
               iconName={Icons.TRASH}

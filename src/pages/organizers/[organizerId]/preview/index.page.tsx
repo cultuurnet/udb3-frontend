@@ -126,7 +126,7 @@ const OrganizersPreview = () => {
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Button
                     variant={ButtonVariants.PRIMARY}
-                    spacing={3}
+                    className="tw:gap-3"
                     iconName={Icons.PLUS_CIRCLE}
                     onClick={() => setIsQuestionModalVisible(true)}
                   >

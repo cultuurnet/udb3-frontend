@@ -285,7 +285,7 @@ const OpeningHoursContent = ({
     <Button
       variant={ButtonVariants.NEUTRAL}
       onClick={onOpenModal}
-      alignSelf="flex-start"
+      className="tw:self-start"
     >
       {t(
         isBoaEnabled

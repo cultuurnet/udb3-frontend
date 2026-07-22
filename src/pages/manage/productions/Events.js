@@ -124,7 +124,7 @@ const Actions = ({
       <Inline as="div" spacing={3}>
         <Button
           iconName={Icons.PENCIL}
-          spacing={3}
+          className="tw:gap-3"
           onClick={onClickChangeName}
           shouldHideText={shouldCollapse}
           disabled={loading}
@@ -134,7 +134,7 @@ const Actions = ({
         <Button
           iconName={Icons.PLUS}
           variant={ButtonVariants.SUCCESS}
-          spacing={3}
+          className="tw:gap-3"
           onClick={onClickAdd}
           shouldHideText={shouldCollapse}
           disabled={loading}
@@ -145,7 +145,7 @@ const Actions = ({
           disabled={shouldDisableDeleteButton || loading}
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
-          spacing={3}
+          className="tw:gap-3"
           onClick={onClickDelete}
           shouldHideText={shouldCollapse}
         >
@@ -195,7 +195,7 @@ const AddAction = ({
       />
       <Button
         iconName={Icons.CHECK}
-        spacing={3}
+        className="tw:gap-3"
         disabled={!toBeAddedEventId}
         onClick={() => onAdd(toBeAddedEventId)}
         shouldHideText={shouldCollapse}
@@ -205,7 +205,7 @@ const AddAction = ({
       <Button
         variant={ButtonVariants.NEUTRAL}
         iconName={Icons.TIMES}
-        spacing={3}
+        className="tw:gap-3"
         onClick={onCancel}
         shouldHideText={shouldCollapse}
       >
@@ -256,7 +256,7 @@ const ChangeNameAction = ({
       />
       <Button
         iconName={Icons.CHECK}
-        spacing={3}
+        className="tw:gap-3"
         onClick={onConfirm}
         shouldHideText={shouldCollapse}
       >
@@ -265,7 +265,7 @@ const ChangeNameAction = ({
       <Button
         variant={ButtonVariants.NEUTRAL}
         iconName={Icons.TIMES}
-        spacing={3}
+        className="tw:gap-3"
         onClick={onCancel}
         shouldHideText={shouldCollapse}
       >

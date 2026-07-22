@@ -209,7 +209,7 @@ const OfferPreviewSidebar = ({
               onClick={onClick}
               disabled={disabled}
               iconName={iconName}
-              spacing={3}
+              className="tw:gap-3"
               suffix={suffix}
             >
               {title}
@@ -224,7 +224,7 @@ const OfferPreviewSidebar = ({
               variant={ButtonVariants.NEUTRAL}
               disabled={disabled}
               iconName={iconName}
-              spacing={3}
+              className="tw:gap-3"
               suffix={suffix}
             >
               {title}
@@ -239,7 +239,7 @@ const OfferPreviewSidebar = ({
               variant={LinkVariants.BUTTON_NEUTRAL}
               href={href}
               iconName={iconName}
-              spacing={3}
+              className="tw:gap-3"
               suffix={suffix}
               width="100%"
             >

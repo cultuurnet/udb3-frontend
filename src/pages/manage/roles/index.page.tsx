@@ -188,7 +188,7 @@ const RolesOverviewPage = () => {
                   onClick={onClick}
                   disabled={disabled}
                   iconName={iconName}
-                  spacing={3}
+                  className="tw:gap-3"
                 >
                   {title}
                 </Button>

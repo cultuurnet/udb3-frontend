@@ -507,7 +507,7 @@ const CalendarOpeninghoursModal = ({
               iconName={Icons.PLUS}
               variant={ButtonVariants.NEUTRAL}
               onClick={handleAddDeviatingPeriod}
-              alignSelf="flex-start"
+              className="tw:self-start"
             >
               {t('create.calendar.opening_hours_modal.deviating.add_period')}
             </Button>
@@ -556,7 +556,7 @@ const CalendarOpeninghoursModal = ({
               iconName={Icons.PLUS}
               variant={ButtonVariants.NEUTRAL}
               onClick={handleAddClosingPeriod}
-              alignSelf="flex-start"
+              className="tw:self-start"
             >
               {t('create.calendar.opening_hours_modal.closing.add_period')}
             </Button>

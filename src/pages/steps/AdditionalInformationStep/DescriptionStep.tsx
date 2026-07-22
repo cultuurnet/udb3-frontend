@@ -346,7 +346,6 @@ const DescriptionStep = ({
                           setEditingFaqIndex(undefined);
                           setIsFaqModalVisible(true);
                         }}
-                        spacing={2}
                       >
                         {t(
                           'create.additionalInformation.faq.add_another_button',
@@ -367,7 +366,6 @@ const DescriptionStep = ({
                   variant={ButtonVariants.NEUTRAL}
                   iconName={Icons.PLUS}
                   onClick={() => setIsFaqModalVisible(true)}
-                  spacing={2}
                 >
                   {t('create.additionalInformation.faq.add_button')}
                 </Button>
