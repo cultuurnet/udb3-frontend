@@ -270,7 +270,7 @@ const ContactInfoStep = ({
               }
             />
             <Button
-               className="tw:self-start"
+              className="tw:self-start"
               onClick={() => handleDeleteContactInfo(index)}
               variant={ButtonVariants.DANGER}
               iconName={Icons.TRASH}

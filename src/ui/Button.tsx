@@ -1,9 +1,4 @@
-import type {
-  ComponentType,
-  MouseEvent,
-  ReactElement,
-  ReactNode,
-} from 'react';
+import type { ComponentType, MouseEvent, ReactElement, ReactNode } from 'react';
 import { cloneElement, forwardRef } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
