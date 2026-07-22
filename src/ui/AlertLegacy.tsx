@@ -192,13 +192,7 @@ const AlertLegacy = ({
         <Button
           variant={ButtonVariants.UNSTYLED}
           iconName={Icons.TIMES_CIRCLE}
-          alignSelf="center"
-          borderRadius="50%"
-          width="30px"
-          height="30px"
-          display="inline-flex"
-          alignItems="center"
-          justifyContent="center"
+          className="tw:self-center tw:rounded-full tw:w-7.5 tw:h-7.5 tw:inline-flex tw:items-center tw:justify-center"
           css={`
             color: ${getValue(`borderColor.${variant}`)};
             cursor: pointer;
