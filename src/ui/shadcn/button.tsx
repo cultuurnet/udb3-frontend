@@ -33,6 +33,7 @@ const buttonVariants = cva(
         icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
+        // h-10 on all three matches legacy's single global button height
         default: 'tw:h-10 tw:px-4 tw:py-2',
         sm: 'tw:h-10 tw:rounded-md tw:px-3 tw:text-xs',
         lg: 'tw:h-10 tw:rounded-md tw:px-8',
