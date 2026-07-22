@@ -549,6 +549,7 @@ const Sidebar = () => {
         justifyContent="center"
         href="/dashboard"
         title={t('menu.home')}
+        aria-label={t('menu.home')}
         customChildren
         paddingBottom={2}
       >

@@ -25,9 +25,9 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { Stack } from '@/ui/Stack';
+import { Switch } from '@/ui/Switch';
 import { Text, TextVariants } from '@/ui/Text';
 import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
@@ -288,10 +288,9 @@ const OrganizerAddModal = ({
                 labelVariant={LabelVariants.NORMAL}
                 labelPosition={LabelPositions.RIGHT}
                 Component={
-                  <RadioButton
-                    type={RadioButtonTypes.SWITCH}
+                  <Switch
                     checked={isContactUrl}
-                    onChange={() => {
+                    onCheckedChange={() => {
                       setIsContactUrl(!isContactUrl);
                       const contactUrl = getValues('url');
                       if (!contactUrl) {
@@ -362,14 +361,14 @@ const OrganizerAddModal = ({
                         selected={
                           field.value as OrganizerData['address']['country']
                         }
-                        onChange={(e) => {
+                        onValueChange={(value) => {
                           setValue('address.city', {
                             name: '',
                             zip: '',
                             label: '',
                           });
                           clearErrors('address');
-                          field.onChange(e.target.value);
+                          field.onChange(value);
                         }}
                       />
                     }

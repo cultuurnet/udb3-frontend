@@ -1,5 +1,5 @@
 import { differenceInDays } from 'date-fns';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
@@ -12,7 +12,7 @@ import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { Inline } from '@/ui/Inline';
 import { LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -77,8 +77,7 @@ export const FixedDays = ({
 
   const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
-  const handleChangeOption = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+  const handleChangeOption = (value: string) => {
     if (value === FixedDayOptions.PERIODIC) {
       onChooseWithStartAndEndDate();
     }
@@ -109,83 +108,84 @@ export const FixedDays = ({
 
   return (
     <Stack spacing={5} alignItems="flex-start">
-      <Stack spacing={4}>
-        <RadioButtonWithLabel
-          id={`fixed-days-radio-${FixedDayOptions.PERIODIC}`}
-          name="fixed-days-options"
-          value={FixedDayOptions.PERIODIC}
-          checked={selectedOption === FixedDayOptions.PERIODIC}
-          onChange={handleChangeOption}
-          label={
-            <Text fontWeight="bold">
-              {t('create.calendar.fixed_days.with_start_and_end_date')}
-            </Text>
-          }
-        />
-        {isPeriodic && (
-          <Stack
-            paddingBottom={4.5}
-            paddingX={4.5}
-            spacing={4}
-            css={`
-              border-bottom: 1px solid ${colors.grey1};
-            `}
-          >
-            <Inline spacing={5}>
-              <DatePeriodPicker
-                id="calendar-step-fixed"
-                dateStart={new Date(startDate)}
-                dateEnd={new Date(endDate)}
-                onDateStartChange={onChangeStartDate}
-                onDateEndChange={onChangeEndDate}
-                showHolidaysToggle={isBoaEnabled}
-                apiHolidays={apiHolidays}
-                onShowHolidaysChange={onShowHolidaysChange}
-                labelVariant={LabelVariants.NORMAL}
-              />
-              {isPeriodShorterThanTwoWeeks && (
-                <Alert
-                  variant={AlertVariants.PRIMARY}
-                  alignSelf="flex-end"
-                  maxWidth="30rem"
-                >
-                  {t('create.calendar.fixed_days.period_too_short')}
-                </Alert>
-              )}
-            </Inline>
-            <Box maxWidth="31rem">
-              <OpeningHoursContent
-                initialAdjustedDays={initialAdjustedDays}
-                initialClosingPeriods={initialClosingPeriods}
-                onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
-                onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
-              />
-            </Box>
-          </Stack>
-        )}
-        <RadioButtonWithLabel
-          id={`fixed-days-radio-${FixedDayOptions.PERMANENT}`}
-          name="fixed-days-options"
-          value={FixedDayOptions.PERMANENT}
-          checked={selectedOption === FixedDayOptions.PERMANENT}
-          onChange={handleChangeOption}
-          label={
-            <Text fontWeight="bold">
-              {t('create.calendar.fixed_days.permanent')}
-            </Text>
-          }
-        />
-        {isPermanent && (
-          <Stack paddingX={4.5}>
-            <OpeningHoursContent
-              initialAdjustedDays={initialAdjustedDays}
-              initialClosingPeriods={initialClosingPeriods}
-              onOpenModal={() => setIsCalendarOpeninghoursModalVisible(true)}
-              onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
-            />
-          </Stack>
-        )}
-      </Stack>
+      <RadioButtonGroup
+        name="fixed-days-options"
+        selected={selectedOption}
+        onValueChange={handleChangeOption}
+        items={[
+          {
+            value: FixedDayOptions.PERIODIC,
+            label: (
+              <Text fontWeight="bold">
+                {t('create.calendar.fixed_days.with_start_and_end_date')}
+              </Text>
+            ),
+            content: isPeriodic && (
+              <Stack
+                paddingBottom={4.5}
+                paddingX={4.5}
+                spacing={4}
+                css={`
+                  border-bottom: 1px solid ${colors.grey1};
+                `}
+              >
+                <Inline spacing={5}>
+                  <DatePeriodPicker
+                    id="calendar-step-fixed"
+                    dateStart={new Date(startDate)}
+                    dateEnd={new Date(endDate)}
+                    onDateStartChange={onChangeStartDate}
+                    onDateEndChange={onChangeEndDate}
+                    showHolidaysToggle={isBoaEnabled}
+                    apiHolidays={apiHolidays}
+                    onShowHolidaysChange={onShowHolidaysChange}
+                    labelVariant={LabelVariants.NORMAL}
+                  />
+                  {isPeriodShorterThanTwoWeeks && (
+                    <Alert
+                      variant={AlertVariants.PRIMARY}
+                      alignSelf="flex-end"
+                      maxWidth="30rem"
+                    >
+                      {t('create.calendar.fixed_days.period_too_short')}
+                    </Alert>
+                  )}
+                </Inline>
+                <Box maxWidth="31rem">
+                  <OpeningHoursContent
+                    initialAdjustedDays={initialAdjustedDays}
+                    initialClosingPeriods={initialClosingPeriods}
+                    onOpenModal={() =>
+                      setIsCalendarOpeninghoursModalVisible(true)
+                    }
+                    onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
+                  />
+                </Box>
+              </Stack>
+            ),
+          },
+          {
+            value: FixedDayOptions.PERMANENT,
+            label: (
+              <Text fontWeight="bold">
+                {t('create.calendar.fixed_days.permanent')}
+              </Text>
+            ),
+            content: isPermanent && (
+              <Stack paddingX={4.5}>
+                <OpeningHoursContent
+                  initialAdjustedDays={initialAdjustedDays}
+                  initialClosingPeriods={initialClosingPeriods}
+                  onOpenModal={() =>
+                    setIsCalendarOpeninghoursModalVisible(true)
+                  }
+                  onRequestDelete={() => setIsDeleteConfirmModalVisible(true)}
+                />
+              </Stack>
+            ),
+          },
+        ]}
+      />
       {!isBoaEnabled && (
         <CalendarOpeninghoursModalLegacy
           visible={isCalendarOpeninghoursModalVisible}

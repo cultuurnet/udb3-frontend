@@ -35,7 +35,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
@@ -348,21 +348,23 @@ const ChildrenOnlySection = ({
       <Text fontWeight="bold">
         {t('create.name_and_age.age.children_only.question')}
       </Text>
-      <RadioButtonWithLabel
-        id="children-only"
+      <RadioButtonGroup
         name="children-only-toggle"
-        checked={childrenOnly === true}
         disabled={isPending}
-        label={t('create.name_and_age.age.children_only.children_only')}
-        onChange={() => onToggle(true)}
-      />
-      <RadioButtonWithLabel
-        id="with-family"
-        name="children-only-toggle"
-        checked={childrenOnly !== true}
-        disabled={isPending}
-        label={t('create.name_and_age.age.children_only.with_family')}
-        onChange={() => onToggle(false)}
+        selected={childrenOnly === true ? 'children-only' : 'with-family'}
+        onValueChange={(value) => onToggle(value === 'children-only')}
+        items={[
+          {
+            value: 'children-only',
+            id: 'children-only',
+            label: t('create.name_and_age.age.children_only.children_only'),
+          },
+          {
+            value: 'with-family',
+            id: 'with-family',
+            label: t('create.name_and_age.age.children_only.with_family'),
+          },
+        ]}
       />
       {error && <Text color="red">{error}</Text>}
     </Stack>

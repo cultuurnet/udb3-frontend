@@ -6,6 +6,12 @@
 @source "../../.storybook/**/*.jsx";
 @config "../../tailwind.config.js";
 
+/* Fix: without these, Tailwind v4 + prefix never emits them, and transition-* utilities silently become instant (0s). */
+:root {
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
   --color-udb-red: #c0120c;

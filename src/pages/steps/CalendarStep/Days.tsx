@@ -13,10 +13,9 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -187,14 +186,13 @@ export const Days = ({
                       }
                     `}
                   >
-                    <RadioButton
+                    <Switch
                       id={`calendar-step-day-${day.id}-overnight-toggle`}
-                      type={RadioButtonTypes.SWITCH}
-                      color={colors.udbMainPositiveGreen}
+                      variant={SwitchVariants.SUCCESS}
                       checked={!!day.hasOvernightStay}
                       disabled={isDisabled}
-                      onChange={(e) =>
-                        onToggleOvernightStay?.(day.id, e.target.checked)
+                      onCheckedChange={(checked) =>
+                        onToggleOvernightStay?.(day.id, checked)
                       }
                     />
                     <Label

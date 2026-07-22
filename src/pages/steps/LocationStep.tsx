@@ -45,10 +45,9 @@ import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Link } from '@/ui/Link';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text, TextVariants } from '@/ui/Text';
-import { colors } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
@@ -324,11 +323,10 @@ export const BlankStreetToggle = ({
       labelVariant={LabelVariants.NORMAL}
       labelPosition={LabelPositions.RIGHT}
       Component={
-        <RadioButton
-          type={RadioButtonTypes.SWITCH}
-          color={colors.udbMainPositiveGreen}
+        <Switch
+          variant={SwitchVariants.SUCCESS}
           checked={isBlankStreet}
-          onChange={() => {
+          onCheckedChange={() => {
             const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
             setIsBlankStreet(!isBlankStreet);
             onChange(streetAndNumber);
