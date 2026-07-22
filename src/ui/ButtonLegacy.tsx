@@ -118,6 +118,15 @@ const customCSS = css`
     }
   }
 
+  &.btn-secondary {
+    color: ${colors.white};
+    background-color: ${colors.udbMainGrey};
+
+    &:hover {
+      background-color: color-mix(in srgb, ${colors.udbMainGrey} 85%, black);
+    }
+  }
+
   &.btn-outline-secondary {
     box-shadow: ${getGlobalValue('boxShadow.heavy')};
 
