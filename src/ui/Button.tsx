@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
+import type {
+  ComponentType,
+  MouseEvent,
+  ReactElement,
+  ReactNode,
+} from 'react';
 import { cloneElement, forwardRef } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -8,10 +13,8 @@ import { cn } from '@/ui/shadcn/utils';
 import { buttonCSS, ButtonLegacy } from './ButtonLegacy';
 import type { Icons } from './Icon';
 import { Icon } from './Icon';
-import type { InlineProps } from './Inline';
 import { Button as ShadcnButton, buttonVariants } from './shadcn/button';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
-import { getGapClass } from './tailwindGap';
 import { Text } from './Text';
 
 const ButtonVariants = {
@@ -37,19 +40,26 @@ const ButtonSizes = {
   LARGE: 'lg',
 } as const;
 
-type ButtonProps = Omit<InlineProps, 'size'> & {
+type ButtonProps = {
+  children?: ReactNode;
+  className?: string;
+  id?: string;
+  'aria-label'?: string;
   iconName?: Values<typeof Icons>;
   suffix?: ReactNode;
   loading?: boolean;
   disabled?: boolean;
   customChildren?: boolean;
   shouldHideText?: boolean;
-  onMouseDown?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onMouseDown?: (e: MouseEvent<HTMLButtonElement>) => void;
   size?: Values<typeof ButtonSizes>;
   variant?: Values<typeof ButtonVariants>;
   type?: 'button' | 'submit' | 'reset';
   active?: boolean;
   outlineColor?: string;
+  title?: string;
+  forwardedAs?: string | ComponentType<any>;
 };
 
 const buttonVariantMap = {
@@ -85,13 +95,13 @@ const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick,
       onMouseDown,
       className,
-      style,
+      id,
+      'aria-label': ariaLabel,
       title,
       size,
       type = 'button',
       active,
       outlineColor: _outlineColor,
-      ...rest
     },
     ref,
   ) => {
@@ -124,6 +134,8 @@ const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <ShadcnButton
         ref={ref}
+        id={id}
+        aria-label={ariaLabel}
         disabled={disabled}
         onClick={onClick}
         onMouseDown={onMouseDown}
@@ -132,14 +144,12 @@ const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
         variant={buttonVariantMap[variant]}
         size={size ? sizeMap[size] : undefined}
         active={active}
-        style={style}
         className={cn(
           'tw:flex tw:items-center',
           loading ? 'tw:justify-center' : 'tw:justify-start',
-          iconName && getGapClass(2),
+          iconName && 'tw:gap-2',
           className,
         )}
-        {...(rest as unknown as ButtonHTMLAttributes<HTMLButtonElement>)}
       >
         {inner}
       </ShadcnButton>

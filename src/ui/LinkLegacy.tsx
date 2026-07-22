@@ -73,7 +73,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           {...getInlineProps(props)}
           textDecoration="none"
         >
-          <Button forwardedAs="span" width="100%" variant={variant}>
+          <Button forwardedAs="span" className="tw:w-full" variant={variant}>
             {children}
           </Button>
         </Inline>

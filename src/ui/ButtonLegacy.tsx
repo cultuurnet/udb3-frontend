@@ -6,8 +6,9 @@ import type { ButtonProps } from './Button';
 import { ButtonVariants } from './Button';
 import { Icon } from './Icon';
 import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
+import { Inline } from './Inline';
 import { Link } from './Link';
+import { cn } from './shadcn/utils';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
 import { Text } from './Text';
 import { colors, getGlobalFormInputHeight, getValueFromTheme } from './theme';
@@ -255,14 +256,14 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick,
       onMouseDown,
       className,
+      id,
+      'aria-label': ariaLabel,
       title,
       size,
       forwardedAs,
       type = 'button',
       active,
       outlineColor = colors.udbMainDarkBlue,
-      textAlign = 'center',
-      ...props
     },
     ref,
   ) => {
@@ -273,7 +274,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       variant === ButtonVariants.LINK || variant === ButtonVariants.LINK_DANGER;
     const isLinkDanger = variant === ButtonVariants.LINK_DANGER;
 
-    const BaseButtonWithForwardedAs = (props) => (
+    const BaseButtonWithForwardedAs = (props: InlineProps) => (
       <BaseButton {...props} forwardedAs={forwardedAs} />
     );
 
@@ -285,18 +286,18 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       : {};
 
     const propsToApply = {
-      spacing: iconName ? 2 : undefined,
       ...bootstrapProps,
       disabled,
       onClick,
       onMouseDown,
-      className,
+      className: cn(iconName && 'tw:gap-2', className),
+      id,
+      'aria-label': ariaLabel,
       title,
       size,
       type,
       active,
       ref,
-      ...getInlineProps(props),
     };
 
     const clonedSuffix = suffix
@@ -343,7 +344,6 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
         <BaseButton
           {...propsToApply}
           alignItems="center"
-          spacing={2}
           css={`
             background: transparent;
             border: 1px solid ${outlineColor};
