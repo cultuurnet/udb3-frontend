@@ -46,6 +46,14 @@ export const Primary: Story = {
   },
 };
 
+export const Disabled: Story = {
+  args: {
+    variant: ButtonVariants.PRIMARY,
+    children: 'Disabled',
+    disabled: true,
+  },
+};
+
 export const Neutral: Story = {
   args: {
     variant: ButtonVariants.NEUTRAL,
