@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Button, ButtonVariants } from './Button';
 import { Icon, Icons } from './Icon';
-import { colors } from './theme';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
@@ -16,7 +15,6 @@ const meta: Meta<typeof Button> = {
         'disabled',
         'iconName',
         'loading',
-        'outlineColor',
         'shouldHideText',
         'variant',
       ],
@@ -89,7 +87,6 @@ export const Danger: Story = {
 export const Outlined: Story = {
   args: {
     variant: ButtonVariants.OUTLINED,
-    outlineColor: colors.udbMainDarkBlue,
     children: 'Outlined',
     ...commonArgs,
   },

@@ -52,7 +52,6 @@ type ButtonProps = {
   variant?: Values<typeof ButtonVariants>;
   type?: 'button' | 'submit' | 'reset';
   active?: boolean;
-  outlineColor?: string;
   title?: string;
   forwardedAs?: string | ComponentType<any>;
 };
@@ -96,7 +95,6 @@ const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       type = 'button',
       active,
-      outlineColor: _outlineColor,
     },
     ref,
   ) => {

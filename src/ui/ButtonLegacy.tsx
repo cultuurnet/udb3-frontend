@@ -263,7 +263,6 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       forwardedAs,
       type = 'button',
       active,
-      outlineColor = colors.udbMainDarkBlue,
     },
     ref,
   ) => {
@@ -346,8 +345,8 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
           alignItems="center"
           css={`
             background: transparent;
-            border: 1px solid ${outlineColor};
-            color: ${outlineColor};
+            border: 1px solid ${colors.udbMainDarkBlue};
+            color: ${colors.udbMainDarkBlue};
             border-radius: ${getValue('borderRadius')};
             padding: ${getValue('paddingY')} ${getValue('paddingX')};
             min-height: ${getGlobalFormInputHeight};
@@ -357,13 +356,13 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
             &:hover {
               background-color: color-mix(
                 in srgb,
-                ${outlineColor} 12%,
+                ${colors.udbMainDarkBlue} 12%,
                 transparent
               );
             }
 
             &:focus {
-              outline: solid ${outlineColor};
+              outline: solid ${colors.udbMainDarkBlue};
             }
 
             &:focus:not(:focus-visible) {
