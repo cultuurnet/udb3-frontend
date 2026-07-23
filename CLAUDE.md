@@ -132,6 +132,8 @@ npx shadcn@latest add <component>
 
 After adding, fix the import order warning by running `yarn lint` or manually reordering imports. The `tw:` prefix is applied automatically via `components.json`.
 
+**Tailwind v4 gotcha**: bare CSS var references must use parentheses, not brackets — `origin-(--radix-foo)` works, `origin-[--radix-foo]` silently compiles to an invalid declaration. Grep new/migrated components with `grep -n -- '-\[--' <file>` (doesn't apply to `[--foo:value]` or normal arbitrary values like `w-[200px]`).
+
 ### UI Component System
 
 The project uses a **custom UI system** built on React Bootstrap with styled-components. See `src/ui/theme.ts` for centralized theme configuration.
