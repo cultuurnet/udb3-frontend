@@ -20,7 +20,7 @@ const RadioButtonTypes = {
   SWITCH: 'switch',
 } as const;
 
-type RadioButtonProps = {
+type RadioButtonLegacyProps = {
   type?: Values<typeof RadioButtonTypes>;
   id?: string;
   value?: string;
@@ -33,9 +33,9 @@ type RadioButtonProps = {
   color?: string;
 };
 
-type Props = Omit<BoxProps, 'onChange'> & RadioButtonProps;
+type Props = Omit<BoxProps, 'onChange'> & RadioButtonLegacyProps;
 
-const RadioButton = forwardRef<HTMLInputElement, Props>(
+const RadioButtonLegacy = forwardRef<HTMLInputElement, Props>(
   (
     {
       type = 'radio',
@@ -115,7 +115,7 @@ const RadioButton = forwardRef<HTMLInputElement, Props>(
   ),
 );
 
-RadioButton.displayName = 'RadioButton';
+RadioButtonLegacy.displayName = 'RadioButtonLegacy';
 
-export { RadioButton, RadioButtonTypes };
-export type { RadioButtonProps };
+export { RadioButtonLegacy, RadioButtonTypes };
+export type { RadioButtonLegacyProps };

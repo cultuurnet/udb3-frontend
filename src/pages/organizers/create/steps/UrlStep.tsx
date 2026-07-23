@@ -13,9 +13,8 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { colors } from '@/ui/theme';
+import { Switch, SwitchVariants } from '@/ui/Switch';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { isValidUrl } from '@/utils/isValidInfo';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -148,7 +147,7 @@ const UrlStep = ({
                         <Controller
                           control={control}
                           name={'nameAndUrl.isContactUrl'}
-                          render={({ field: { value, ...field } }) => (
+                          render={({ field }) => (
                             <FormElement
                               id={field.name}
                               label={t(
@@ -157,11 +156,10 @@ const UrlStep = ({
                               labelVariant={LabelVariants.NORMAL}
                               labelPosition={LabelPositions.RIGHT}
                               Component={
-                                <RadioButton
-                                  type={RadioButtonTypes.SWITCH}
-                                  checked={value}
-                                  color={colors.udbMainPositiveGreen}
-                                  {...field}
+                                <Switch
+                                  checked={field.value}
+                                  variant={SwitchVariants.SUCCESS}
+                                  onCheckedChange={field.onChange}
                                 />
                               }
                             />

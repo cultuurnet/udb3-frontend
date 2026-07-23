@@ -3,7 +3,14 @@
 @import 'tailwindcss/theme';
 @import 'tailwindcss/utilities';
 @source "../**/*.{ts,tsx,js}";
+@source "../../.storybook/**/*.jsx";
 @config "../../tailwind.config.js";
+
+/* Fix: without these, Tailwind v4 + prefix never emits them, and transition-* utilities silently become instant (0s). */
+:root {
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 /* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
@@ -50,20 +57,21 @@
   --radius-udb: 8px;
 
   /* shadcn theme — must be in @theme to generate tw:bg-primary, tw:text-destructive etc. */
-  --color-primary: #009fdf; /* udb-main-blue */
+  --color-primary: #0077a6; /* udb-main-dark-blue */
   --color-primary-foreground: #ffffff; /* udb-white */
   --color-secondary: #6a777b; /* udb-main-grey */
   --color-secondary-foreground: #ffffff;
-  --color-warning: #e69336; /* udb-warning */
-  --color-success: #6bcd69; /* udb-main-positive-green */
+  --color-warning: #a78500;
+  --color-success: #417d40;
   --color-success-foreground: #ffffff;
   --color-success-muted: #f3fcf7; /* udb-main-light-green */
-  --color-destructive: #dd5242; /* udb-danger */
+  --color-destructive: #d23430; /* udb-red-3 */
   --color-destructive-foreground: #ffffff;
   --color-destructive-muted: #fae5e3;
   --color-info: #3868ec;
   --color-info-muted: #d1defa;
   --color-background: #ffffff; /* udb-white */
+  --color-grey-background: #f5f5f5; /* udb-grey-4 */
   --color-foreground: #222222; /* udb-text */
   --color-muted: #f0f0f0; /* udb-grey-1 */
   --color-muted-foreground: #767676; /* udb-grey-5 */
@@ -71,7 +79,7 @@
   --color-accent-foreground: #222222; /* udb-text */
   --color-border: #dddddd; /* udb-grey-3 */
   --color-input: #cccccc; /* udb-grey-2 */
-  --color-ring: #009fdf; /* udb-main-blue */
+  --color-ring: #0077a6; /* udb-main-dark-blue */
   --color-card: #ffffff; /* udb-white */
   --color-card-foreground: #222222; /* udb-text */
   --color-popover: #ffffff; /* udb-white */

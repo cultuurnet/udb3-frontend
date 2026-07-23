@@ -35,7 +35,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
+import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
@@ -233,6 +233,7 @@ type AgeRangeInputsProps = {
   maxAge: string;
   selectedPreset: string | null;
   errorKey: string | null;
+  isPlaceScope: boolean;
   onAgeChange: (min: string, max: string) => void;
   onAgeCommit: (min: string, max: string) => void;
   onPresetClick: (apiLabel: string) => void;
@@ -243,6 +244,7 @@ const AgeRangeInputs = ({
   maxAge,
   selectedPreset,
   errorKey,
+  isPlaceScope,
   onAgeChange,
   onAgeCommit,
   onPresetClick,
@@ -250,8 +252,8 @@ const AgeRangeInputs = ({
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={3} maxWidth="40rem" paddingLeft={5}>
-      <Text fontWeight="bold">
+    <Stack spacing={3} maxWidth="40rem" paddingLeft={isPlaceScope ? 0 : 5}>
+      <Text fontWeight={isPlaceScope ? 'normal' : 'bold'}>
         {t('create.name_and_age.age.input_range_title')}
       </Text>
       <Inline spacing={3}>
@@ -347,21 +349,23 @@ const ChildrenOnlySection = ({
       <Text fontWeight="bold">
         {t('create.name_and_age.age.children_only.question')}
       </Text>
-      <RadioButtonWithLabel
-        id="children-only"
+      <RadioButtonGroup
         name="children-only-toggle"
-        checked={childrenOnly === true}
         disabled={isPending}
-        label={t('create.name_and_age.age.children_only.children_only')}
-        onChange={() => onToggle(true)}
-      />
-      <RadioButtonWithLabel
-        id="with-family"
-        name="children-only-toggle"
-        checked={childrenOnly !== true}
-        disabled={isPending}
-        label={t('create.name_and_age.age.children_only.with_family')}
-        onChange={() => onToggle(false)}
+        selected={childrenOnly === true ? 'children-only' : 'with-family'}
+        onValueChange={(value) => onToggle(value === 'children-only')}
+        items={[
+          {
+            value: 'children-only',
+            id: 'children-only',
+            label: t('create.name_and_age.age.children_only.children_only'),
+          },
+          {
+            value: 'with-family',
+            id: 'with-family',
+            label: t('create.name_and_age.age.children_only.with_family'),
+          },
+        ]}
       />
       {error && <Text color="red">{error}</Text>}
     </Stack>
@@ -621,6 +625,8 @@ const AgeRangeStepBoa = ({
     setActiveModal(null);
   };
 
+  const showBirthdateOption = scope === OfferTypes.EVENTS;
+
   const showChildrenOnlySection =
     scope === OfferTypes.EVENTS &&
     audienceType !== AudienceTypes.EDUCATION &&
@@ -634,32 +640,35 @@ const AgeRangeStepBoa = ({
         <Text fontWeight="bold" paddingBottom={3}>
           {t('create.name_and_age.age.title_boa')}
         </Text>
-        <ToggleGroup
-          name="age-input-mode"
-          value={activeTab}
-          onChange={handleModeChange}
-          options={Object.values(AgeInputModes).map((mode) => ({
-            value: mode,
-            label: t(`create.name_and_age.age.input_mode.${mode}`),
-          }))}
-          maxWidth="40rem"
-          css={`
-            margin-bottom: 2rem;
-          `}
-        />
-        {activeTab === AgeInputModes.DATE_OF_BIRTH && (
+        {showBirthdateOption && (
+          <ToggleGroup
+            name="age-input-mode"
+            value={activeTab}
+            onChange={handleModeChange}
+            options={Object.values(AgeInputModes).map((mode) => ({
+              value: mode,
+              label: t(`create.name_and_age.age.input_mode.${mode}`),
+            }))}
+            maxWidth="40rem"
+            css={`
+              margin-bottom: 2rem;
+            `}
+          />
+        )}
+        {showBirthdateOption && activeTab === AgeInputModes.DATE_OF_BIRTH && (
           <BirthdatePickers
             from={watchedBirthdateRange?.from}
             to={watchedBirthdateRange?.to}
             onCommit={commitBirthdateRange}
           />
         )}
-        {activeTab === AgeInputModes.AGE && (
+        {(!showBirthdateOption || activeTab === AgeInputModes.AGE) && (
           <AgeRangeInputs
             minAge={minAge}
             maxAge={maxAge}
             selectedPreset={findPresetKey(watchedTypicalAgeRange)}
             errorKey={validateAgeRange(minAge, maxAge)}
+            isPlaceScope={scope === OfferTypes.PLACES}
             onAgeChange={updateAgeRange}
             onAgeCommit={commitAgeRange}
             onPresetClick={handlePresetClick}
