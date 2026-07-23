@@ -1,26 +1,28 @@
 import type { ChangeEvent } from 'react';
 import { forwardRef } from 'react';
-import { Form } from 'react-bootstrap';
 
-import type { BoxProps } from './Box';
-import { Box, getBoxProps } from './Box';
-import { getGlobalBorderRadius } from './theme';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Textarea as ShadcnTextarea } from '@/ui/shadcn/textarea';
+
+import { cn } from './shadcn/utils';
+import { TextAreaLegacy } from './TextAreaLegacy';
 
 type TextAreaProps = {
+  id?: string;
   name?: string;
   value?: string;
   rows?: number;
+  disabled?: boolean;
+  placeholder?: string;
+  required?: boolean;
+  className?: string;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onInput?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  'aria-label'?: string;
 };
 
-type Props = Omit<BoxProps, 'onChange'> & TextAreaProps;
-
-const BaseInput = forwardRef<HTMLTextAreaElement, Props>((props, ref) => (
-  <Box as="textarea" {...props} ref={ref} />
-));
-
-BaseInput.displayName = 'BaseInput';
+type Props = TextAreaProps;
 
 const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   (
@@ -31,30 +33,54 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       value,
       disabled = false,
       rows = 3,
+      placeholder,
+      required = false,
       onChange,
       onBlur,
       name,
-      ...props
+      'aria-label': ariaLabel,
     },
     ref,
   ) => {
+    const [isShadcnMigrationEnabled] = useFeatureFlag(
+      FeatureFlags.SHADCN_MIGRATION,
+    );
+
+    if (isShadcnMigrationEnabled) {
+      return (
+        <ShadcnTextarea
+          id={id}
+          className={cn('tw:min-h-16 tw:md:text-base', className)}
+          onInput={onInput}
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+          disabled={disabled}
+          rows={rows}
+          placeholder={placeholder}
+          required={required}
+          ref={ref}
+          name={name}
+          aria-label={ariaLabel}
+        />
+      );
+    }
+
     return (
-      <Form.Control
-        as={BaseInput}
+      <TextAreaLegacy
         id={id}
         className={className}
-        width="100%"
-        minHeight="4rem"
         onInput={onInput}
         onChange={onChange}
         onBlur={onBlur}
         value={value}
         disabled={disabled}
-        borderRadius={getGlobalBorderRadius}
         rows={rows}
+        placeholder={placeholder}
+        required={required}
         ref={ref}
         name={name}
-        {...getBoxProps(props)}
+        aria-label={ariaLabel}
       />
     );
   },
