@@ -459,6 +459,7 @@ const boxProps = css`
 const reactPropTypes = [
   'as',
   'id',
+  'disabled',
   'onClick',
   'onBlur',
   'onInput',

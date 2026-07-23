@@ -12,10 +12,9 @@ import {
 } from '@/hooks/api/cultuurkuur';
 import { useChangeAudienceMutation } from '@/hooks/api/events';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
-import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
+import { Inline, InlineProps } from '@/ui/Inline';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
@@ -105,11 +104,10 @@ const ScopeStep = ({
       render={({ field }) => {
         return (
           <Stack spacing={4.5}>
-            <Inline
-              spacing={5}
-              alignItems="stretch"
-              maxWidth={parseSpacing(9)}
-              {...getInlineProps(props)}
+            <div
+              className={`tw:flex tw:items-stretch tw:gap-8.5 tw:max-w-136.5 ${
+                field.value === OfferTypes.EVENTS ? 'tw:mb-6' : ''
+              }`}
             >
               <ToggleBox
                 onClick={() => handleChangeScope(field, OfferTypes.EVENTS)}
@@ -122,21 +120,19 @@ const ScopeStep = ({
                     width="80"
                   />
                 }
-                text={t('steps.offerTypeStep.types.event')}
-                width="30%"
-                minHeight={parseSpacing(7)}
+                title={t('steps.offerTypeStep.types.event')}
+                className="tw:w-[30%] tw:min-h-34"
                 disabled={!!offerId}
               />
               <ToggleBox
                 onClick={() => handleChangeScope(field, OfferTypes.PLACES)}
                 active={field.value === OfferTypes.PLACES}
                 icon={<CustomIcon name={CustomIconVariants.MAP} width="70" />}
-                text={t('steps.offerTypeStep.types.place')}
-                width="30%"
-                minHeight={parseSpacing(7)}
+                title={t('steps.offerTypeStep.types.place')}
+                className="tw:w-[30%] tw:min-h-34"
                 disabled={!!offerId}
               />
-            </Inline>
+            </div>
             {field.value === OfferTypes.EVENTS && (
               <Stack spacing={4} maxWidth="36.5rem">
                 <FormElement
