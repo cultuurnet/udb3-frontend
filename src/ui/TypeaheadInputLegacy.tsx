@@ -20,7 +20,7 @@ type Props = {
   suggestions?: string[];
 };
 
-const TypeaheadInput = forwardRef<TypeaheadRef, Props>(
+const TypeaheadInputLegacy = forwardRef<TypeaheadRef, Props>(
   ({ id, value, onChange, placeholder, suggestions = [] }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
 
@@ -81,6 +81,6 @@ const TypeaheadInput = forwardRef<TypeaheadRef, Props>(
   },
 );
 
-TypeaheadInput.displayName = 'TypeaheadInput';
+TypeaheadInputLegacy.displayName = 'TypeaheadInputLegacy';
 
-export { TypeaheadInput };
+export { TypeaheadInputLegacy };
