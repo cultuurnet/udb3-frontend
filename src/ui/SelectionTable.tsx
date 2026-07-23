@@ -1,6 +1,7 @@
 import uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRowSelect } from 'react-table';
 
 import { Button, ButtonVariants } from './Button';
@@ -10,34 +11,46 @@ import { Stack } from './Stack';
 import { Table } from './Table';
 import { Text } from './Text';
 
-const CheckBoxHeader = ({ getToggleAllRowsSelectedProps }) => {
-  const { checked, onChange } = getToggleAllRowsSelectedProps();
+const CheckBoxHeader = ({
+  getToggleAllRowsSelectedProps,
+  toggleAllRowsSelected,
+}) => {
+  const { t } = useTranslation();
+  const { checked } = getToggleAllRowsSelectedProps();
 
   return (
-    <Checkbox
-      id={uniqueId('checkbox-')}
-      checked={checked}
-      onToggle={onChange}
-    />
+    <span className="tw:flex tw:w-full tw:justify-center">
+      <Checkbox
+        id={uniqueId('checkbox-')}
+        checked={checked}
+        onCheckedChange={toggleAllRowsSelected}
+        aria-label={t('selectionTable.selectAll')}
+      />
+    </span>
   );
 };
 
 CheckBoxHeader.propTypes = {
   getToggleAllRowsSelectedProps: PropTypes.func,
+  toggleAllRowsSelected: PropTypes.func,
 };
 
 const CheckBoxCell = ({ row }) => {
-  const { checked, onChange } = row.getToggleRowSelectedProps();
+  const { t } = useTranslation();
+  const { checked } = row.getToggleRowSelectedProps();
 
   const identifier = `checkbox-${row.id}`;
 
   return (
-    <Checkbox
-      id={identifier}
-      data-testid={identifier}
-      checked={checked}
-      onToggle={onChange}
-    />
+    <span className="tw:flex tw:w-full tw:justify-center">
+      <Checkbox
+        id={identifier}
+        data-testid={identifier}
+        checked={checked}
+        onCheckedChange={row.toggleRowSelected}
+        aria-label={t('selectionTable.selectRow')}
+      />
+    </span>
   );
 };
 
@@ -126,11 +139,10 @@ const SelectionTable = ({
         tableHooks={[selectionHook]}
         onTableReady={handleTableReady}
         css={`
-          &.table th,
-          &.table td {
-            :first-child {
-              width: 100px;
-            }
+          &.table th:first-child,
+          &.table td:first-child {
+            width: 100px;
+            vertical-align: middle;
           }
         `}
         {...props}

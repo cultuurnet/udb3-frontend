@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useEffect, useState } from 'react';
 
 import { CheckboxWithLabel } from './CheckboxWithLabel';
 
@@ -22,8 +23,24 @@ type Story = StoryObj<typeof CheckboxWithLabel>;
 
 export const Default: Story = {
   args: {
-    checked: false,
+    id: 'checkbox-with-label-default',
+    checked: true,
     disabled: false,
     children: 'Click me',
+  },
+  render: function RenderComponent(args) {
+    const [checked, setChecked] = useState(args.checked);
+
+    useEffect(() => {
+      setChecked(args.checked);
+    }, [args.checked]);
+
+    return (
+      <CheckboxWithLabel
+        {...args}
+        checked={checked}
+        onCheckedChange={setChecked}
+      />
+    );
   },
 };

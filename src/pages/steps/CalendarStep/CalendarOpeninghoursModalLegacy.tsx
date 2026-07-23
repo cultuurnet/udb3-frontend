@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ChangeEvent, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -138,12 +138,10 @@ const CalendarOpeninghoursModalLegacy = ({
   };
 
   const handleToggleDaysOfWeek = (
-    event: ChangeEvent<HTMLInputElement>,
+    checked: boolean,
     dayOfWeek: DayOfWeek,
     idToChange: string,
   ) => {
-    const checked = event.target.checked;
-
     replace(
       openingHours.map((openingHour) => {
         if (openingHour.id === idToChange && checked) {
@@ -202,8 +200,12 @@ const CalendarOpeninghoursModalLegacy = ({
                       name={dayOfWeek}
                       checked={openingHour.dayOfWeek.includes(dayOfWeek)}
                       disabled={false}
-                      onToggle={(e) =>
-                        handleToggleDaysOfWeek(e, dayOfWeek, openingHour.id)
+                      onCheckedChange={(checked) =>
+                        handleToggleDaysOfWeek(
+                          checked,
+                          dayOfWeek,
+                          openingHour.id,
+                        )
                       }
                     >
                       {t(`create.calendar.days.short.${dayOfWeek}`)}

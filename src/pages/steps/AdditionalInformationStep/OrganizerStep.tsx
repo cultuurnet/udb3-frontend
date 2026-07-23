@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { OfferTypes } from '@/constants/OfferType';
@@ -201,11 +201,8 @@ const OrganizerStep = ({
     });
   };
 
-  const handleToggleCardSystem = (
-    offer: ChangeEvent<HTMLInputElement>,
-    cardSystemId: number,
-  ) => {
-    if (offer.target.checked) {
+  const handleToggleCardSystem = (checked: boolean, cardSystemId: number) => {
+    if (checked) {
       handleAddCardSystemToEvent(cardSystemId);
       return;
     }
@@ -404,7 +401,9 @@ const OrganizerStep = ({
                   ({ id }) => cardSystem.id === id,
                 )}
                 disabled={false}
-                onToggle={(e) => handleToggleCardSystem(e, cardSystem.id)}
+                onCheckedChange={(checked) =>
+                  handleToggleCardSystem(checked, cardSystem.id)
+                }
               >
                 {cardSystem.name}
               </CheckboxWithLabel>

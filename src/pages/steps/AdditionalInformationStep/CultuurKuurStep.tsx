@@ -161,7 +161,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
       <CheckboxWithLabel
         id="tailored"
         name={t('create.additionalInformation.cultuurkuur.tailored')}
-        onToggle={() => handleLabelMutation(CULTUURKUUR_TAILORED_LABEL)}
+        onCheckedChange={() => handleLabelMutation(CULTUURKUUR_TAILORED_LABEL)}
         checked={labels.includes(CULTUURKUUR_TAILORED_LABEL)}
       >
         {t('create.additionalInformation.cultuurkuur.tailored')}
@@ -169,7 +169,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
       <CheckboxWithLabel
         id="onSite"
         name={t('create.additionalInformation.cultuurkuur.on_location')}
-        onToggle={() => {
+        onCheckedChange={() => {
           setIsOnSiteActive(!isOnSiteActive);
           if (labels.includes(CULTUURKUUR_ON_SITE_LABEL)) {
             labelsPickerProps.onConfirm([], 'location');

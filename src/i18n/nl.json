@@ -1692,7 +1692,9 @@
   },
   "selectionTable": {
     "rowsSelectedCount": "{{count}} rij geselecteerd",
-    "rowsSelectedCount_plural": "{{count}} rijen geselecteerd"
+    "rowsSelectedCount_plural": "{{count}} rijen geselecteerd",
+    "selectAll": "Alles selecteren",
+    "selectRow": "Rij selecteren"
   },
   "steps": {
     "offerTypeStep": {
