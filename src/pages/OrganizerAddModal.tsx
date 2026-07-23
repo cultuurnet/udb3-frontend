@@ -271,10 +271,7 @@ const OrganizerAddModal = ({
                         <Button
                           variant={ButtonVariants.UNSTYLED}
                           onClick={() => onSetOrganizer(existingOrganizer)}
-                          display={'inline-block'}
-                          fontWeight={'bold'}
-                          textDecoration={'underline'}
-                          padding={0}
+                          className="tw:inline-block tw:font-bold tw:underline tw:p-0"
                         />
                       ),
                     }}

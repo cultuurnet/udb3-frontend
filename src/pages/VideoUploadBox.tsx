@@ -95,7 +95,7 @@ const VideoUploadBox = ({
                   <Button
                     variant={ButtonVariants.DANGER}
                     iconName={Icons.TRASH}
-                    spacing={3}
+                    className="tw:gap-3"
                     onClick={() => onClickDeleteVideo(id)}
                   >
                     {t('videos.delete')}
@@ -116,7 +116,7 @@ const VideoUploadBox = ({
               </Text>
             </Stack>
           )}
-          <Button variant={ButtonVariants.SECONDARY} onClick={onClickAddVideo}>
+          <Button variant={ButtonVariants.NEUTRAL} onClick={onClickAddVideo}>
             {t('videos.add_button')}
           </Button>
         </Stack>

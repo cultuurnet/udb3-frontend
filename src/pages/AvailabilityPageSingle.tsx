@@ -174,7 +174,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
                 {t('offerStatus.actions.save')}
               </Button>
               <Button
-                variant={ButtonVariants.SECONDARY}
+                variant={ButtonVariants.NEUTRAL}
                 onClick={() => router.push(editUrlByOfferType[offerType])}
               >
                 {t('offerStatus.actions.cancel')}

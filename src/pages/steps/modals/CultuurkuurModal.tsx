@@ -225,9 +225,8 @@ const CultuurkuurModal = ({
                               return (
                                 <Button
                                   key={leafName}
-                                  width="auto"
+                                  className="tw:w-auto tw:inline-flex"
                                   active={isSelected(leaf)}
-                                  display="inline-flex"
                                   variant={ButtonVariants.SECONDARY_TOGGLE}
                                   onClick={() => handleSelectionToggle(leaf)}
                                 >

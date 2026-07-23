@@ -1,30 +1,29 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, MouseEvent, ReactElement, ReactNode } from 'react';
 import { cloneElement, forwardRef } from 'react';
-import { Button as BootstrapButton } from 'react-bootstrap';
-import { css } from 'styled-components';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
+import { cn } from '@/ui/shadcn/utils';
 
+import { buttonCSS, ButtonLegacy } from './ButtonLegacy';
 import type { Icons } from './Icon';
 import { Icon } from './Icon';
-import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
-import { Link } from './Link';
+import { Button as ShadcnButton, buttonVariants } from './shadcn/button';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
 import { Text } from './Text';
-import { colors, getGlobalFormInputHeight, getValueFromTheme } from './theme';
 
-const BootStrapVariants = {
+const ButtonVariants = {
   PRIMARY: 'primary',
+  // Legacy's original "secondary" button (white surface, dark text, heavy shadow) —
+  // named NEUTRAL because it doesn't use the shared secondary/grey-fill design token.
+  NEUTRAL: 'neutral',
+  // Grey-fill button matching the shared --color-secondary token (Badge's own
+  // "secondary" variant uses the same token). Not used by any call site yet.
   SECONDARY: 'secondary',
   SECONDARY_TOGGLE: 'secondary-toggle',
   SUCCESS: 'success',
   DANGER: 'danger',
   ICON: 'icon',
-} as const;
-
-const ButtonVariants = {
-  ...BootStrapVariants,
   UNSTYLED: 'unstyled',
   LINK: 'link',
   LINK_DANGER: 'link-danger',
@@ -36,238 +35,47 @@ const ButtonSizes = {
   LARGE: 'lg',
 } as const;
 
-const getValue = getValueFromTheme('button');
-const getGlobalValue = getValueFromTheme('global');
-
-const BaseButton = (props: Omit<InlineProps, 'size'>) => (
-  <Inline as="button" {...props} />
-);
-
-const customCSS = css`
-  &.btn {
-    border-radius: ${getValue('borderRadius')};
-    padding: ${getValue('paddingY')} ${getValue('paddingX')};
-    flex-shrink: 0;
-    align-items: center;
-    min-height: ${getGlobalFormInputHeight};
-
-    border: none;
-    box-shadow: ${getValue('boxShadow.small')};
-
-    &:focus,
-    &.focus {
-      outline: solid black;
-    }
-
-    &:focus:not(:focus-visible),
-    &.focus:not(:focus-visible) {
-      outline: none;
-      box-shadow: none;
-    }
-
-    // active & focus
-    &:not(:disabled):not(.disabled):active:focus,
-    &:not(:disabled):not(.disabled).active:focus {
-      box-shadow: ${getValue('boxShadow.small')};
-    }
-  }
-
-  &.btn-primary {
-    color: ${getValue('primary.color')};
-    background-color: ${getValue('primary.backgroundColor')};
-
-    &.dropdown-toggle.dropdown-toggle-split {
-      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
-      border-left: 1px solid ${getValue('primary.color')};
-    }
-
-    &:hover {
-      background-color: ${getValue('primary.hoverBackgroundColor')};
-    }
-
-    // active
-    &.btn-primary:not(:disabled):not(.disabled):active,
-    .btn-primary:not(:disabled):not(.disabled).active {
-      background-color: ${getValue('primary.activeBackgroundColor')};
-      box-shadow: ${getValue('boxShadow.small')};
-    }
-  }
-
-  &.btn-secondary {
-    color: ${getValue('secondary.color')};
-    background-color: ${getValue('secondary.backgroundColor')};
-    box-shadow: ${getGlobalValue('boxShadow.heavy')};
-
-    &.dropdown-toggle.dropdown-toggle-split {
-      box-shadow: 4px 4px 6px 0px rgb(210 210 210 / 70%);
-      border-left: 1px solid #f0f0f0;
-    }
-
-    &:hover {
-      background-color: ${getValue('secondary.hoverBackgroundColor')};
-    }
-
-    &.btn-secondary:not(:disabled):not(.disabled):focus,
-    .btn-secondary:not(:disabled):not(.disabled).focus {
-      box-shadow: ${getGlobalValue('boxShadow.heavy')};
-    }
-
-    // active
-    &.btn-secondary:not(:disabled):not(.disabled):active,
-    .btn-secondary:not(:disabled):not(.disabled).active {
-      color: ${getValue('secondary.activeColor')};
-      background-color: ${getValue('secondary.activeBackgroundColor')};
-      box-shadow: ${getGlobalValue('boxShadow.heavy')};
-      border: none;
-    }
-
-    &:not(:disabled):not(.disabled).active,
-    &:not(:disabled):not(.disabled):active {
-      color: ${getValue('secondary.activeColor')};
-      background-color: ${getValue('secondary.activeBackgroundColor')};
-    }
-  }
-
-  &.btn-outline-secondary {
-    box-shadow: ${getGlobalValue('boxShadow.heavy')};
-
-    &:hover {
-      background-color: ${getValue('secondary.hoverBackgroundColor')};
-      color: inherit;
-    }
-  }
-
-  &.btn-secondary-toggle {
-    color: ${getValue('secondaryToggle.color')};
-    box-shadow: none !important;
-    border: 1px solid ${getValue('secondaryToggle.borderColor')};
-
-    &:hover {
-      border-color: ${getValue('secondaryToggle.hoverBorderColor')};
-      color: ${getValue('secondaryToggle.activeColor')};
-
-      span {
-        color: ${getValue('secondaryToggle.activeColor')};
-      }
-    }
-
-    &.btn-secondary-toggle:not(:disabled):not(.disabled):active,
-    .btn-secondary-toggle:not(:disabled):not(.disabled).active {
-      color: ${getValue('secondaryToggle.activeColor')};
-      background-color: ${getValue('secondaryToggle.activeBackgroundColor')};
-      border-color: ${getValue('secondaryToggle.activeBorderColor')};
-
-      span {
-        color: ${getValue('secondaryToggle.activeColor')};
-      }
-    }
-
-    &:not(:disabled):not(.disabled).active,
-    &:not(:disabled):not(.disabled):active {
-      background-color: ${getValue('secondaryToggle.activeBackgroundColor')};
-      border-color: ${getValue('secondaryToggle.activeBorderColor')};
-
-      span {
-        color: ${getValue('secondaryToggle.activeColor')};
-      }
-    }
-  }
-
-  &.btn-success {
-    color: ${getValue('success.color')};
-    background-color: ${getValue('success.backgroundColor')};
-
-    &.dropdown-toggle.dropdown-toggle-split {
-      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
-      border-left: 1px solid ${getValue('success.color')};
-    }
-
-    &:hover {
-      background-color: ${getValue('success.hoverBackgroundColor')};
-    }
-  }
-
-  &.btn-danger {
-    color: ${getValue('danger.color')};
-    background-color: ${getValue('danger.backgroundColor')};
-    border: 1px solid ${getValue('danger.backgroundColor')};
-
-    &.dropdown-toggle.dropdown-toggle-split {
-      box-shadow: 2px 2px 3px 0px rgb(210 210 210 / 70%);
-      border: none;
-      border-left: 1px solid ${getValue('danger.color')};
-    }
-
-    &:hover {
-      background-color: ${getValue('danger.hoverBackgroundColor')};
-      border-color: ${getValue('danger.hoverBackgroundColor')};
-    }
-  }
-
-  &.btn-icon {
-    padding: 0.75rem;
-    border-radius: 50%;
-    width: 2.8rem;
-    height: 2.8rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-    transition: background-color 0.2s ease;
-    position: relative;
-
-    svg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    &:hover {
-      background-color: ${getValue('icon.hoverBackgroundColor')};
-    }
-
-    &:active {
-      background-color: ${getValue('icon.focusBackgroundColor')};
-      animation: pulse 0.3s ease-out;
-
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-    }
-  }
-
-  .button-spinner {
-    height: 1.5rem;
-    display: flex;
-    align-items: center;
-  }
-`;
-
-type ButtonProps = Omit<InlineProps, 'size'> & {
+type ButtonProps = {
+  children?: ReactNode;
+  className?: string;
+  id?: string;
+  'aria-label'?: string;
   iconName?: Values<typeof Icons>;
   suffix?: ReactNode;
   loading?: boolean;
   disabled?: boolean;
   customChildren?: boolean;
   shouldHideText?: boolean;
-  onMouseDown?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onMouseDown?: (e: MouseEvent<HTMLButtonElement>) => void;
   size?: Values<typeof ButtonSizes>;
   variant?: Values<typeof ButtonVariants>;
   type?: 'button' | 'submit' | 'reset';
   active?: boolean;
-  outlineColor?: string;
+  title?: string;
+  forwardedAs?: string | ComponentType<any>;
 };
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const buttonVariantMap = {
+  [ButtonVariants.PRIMARY]: 'default',
+  [ButtonVariants.NEUTRAL]: 'neutral',
+  [ButtonVariants.SECONDARY]: 'secondary',
+  [ButtonVariants.SECONDARY_TOGGLE]: 'secondary-toggle',
+  [ButtonVariants.SUCCESS]: 'success',
+  [ButtonVariants.DANGER]: 'destructive',
+  [ButtonVariants.ICON]: 'icon',
+  [ButtonVariants.UNSTYLED]: 'unstyled',
+  [ButtonVariants.LINK]: 'link',
+  [ButtonVariants.LINK_DANGER]: 'link-danger',
+  [ButtonVariants.OUTLINED]: 'outlined',
+} as const;
+
+const sizeMap = {
+  [ButtonSizes.SMALL]: 'sm',
+  [ButtonSizes.LARGE]: 'lg',
+} as const;
+
+const ButtonShadcn = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       iconName,
@@ -281,74 +89,33 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick,
       onMouseDown,
       className,
+      id,
+      'aria-label': ariaLabel,
       title,
       size,
-      forwardedAs,
       type = 'button',
       active,
-      outlineColor = colors.udbMainDarkBlue,
-      textAlign = 'center',
-      ...props
     },
     ref,
   ) => {
-    const isBootstrapVariant = (
-      Object.values(BootStrapVariants) as string[]
-    ).includes(variant);
-    const isLinkVariant =
-      variant === ButtonVariants.LINK || variant === ButtonVariants.LINK_DANGER;
-    const isLinkDanger = variant === ButtonVariants.LINK_DANGER;
-
-    if (variant === ButtonVariants.SECONDARY) variant = 'secondary';
-
-    const BaseButtonWithForwardedAs = (props) => (
-      <BaseButton {...props} forwardedAs={forwardedAs} />
-    );
-
-    const forwardedButton = forwardedAs
-      ? BaseButtonWithForwardedAs
-      : BaseButton;
-    const bootstrapProps = isBootstrapVariant
-      ? { forwardedAs: forwardedButton, variant }
-      : {};
-
-    const propsToApply = {
-      spacing: iconName ? 2 : undefined,
-      ...bootstrapProps,
-      disabled,
-      onClick,
-      onMouseDown,
-      className,
-      title,
-      size,
-      type,
-      active,
-      ref,
-      ...getInlineProps(props),
-    };
-
-    const clonedSuffix = suffix
-      ? // @ts-expect-error
-        cloneElement(suffix, {
-          // @ts-expect-error
-          ...suffix.props,
-          css: `align-self: flex-end`,
+    const suffixElement = suffix as ReactElement<{ className?: string }>;
+    const clonedSuffix = suffixElement
+      ? cloneElement(suffixElement, {
+          ...suffixElement.props,
+          className: cn(suffixElement.props.className, 'tw:self-end'),
           key: 'suffix',
         })
       : undefined;
 
-    const inner = loading ? (
-      <Spinner
-        className="button-spinner"
-        variant={SpinnerVariants.LIGHT}
-        size={SpinnerSizes.SMALL}
-      />
+    const inner: ReactNode = loading ? (
+      <Spinner variant={SpinnerVariants.LIGHT} size={SpinnerSizes.SMALL} />
     ) : (
       [
         iconName && <Icon name={iconName} key="icon" />,
         customChildren
           ? children
-          : !shouldHideText && (
+          : !shouldHideText &&
+            !!children && (
               <Text flex={1} textAlign="left" key="text">
                 {children}
               </Text>
@@ -357,117 +124,54 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ]
     );
 
-    if (isBootstrapVariant) {
-      return (
-        <BootstrapButton {...propsToApply} css={customCSS}>
-          {inner}
-        </BootstrapButton>
-      );
-    }
-
-    if (variant === ButtonVariants.OUTLINED) {
-      return (
-        <BaseButton
-          {...propsToApply}
-          alignItems="center"
-          spacing={2}
-          css={`
-            background: transparent;
-            border: 1px solid ${outlineColor};
-            color: ${outlineColor};
-            border-radius: ${getValue('borderRadius')};
-            padding: ${getValue('paddingY')} ${getValue('paddingX')};
-            min-height: ${getGlobalFormInputHeight};
-            cursor: pointer;
-            box-shadow: none;
-
-            &:hover {
-              background-color: color-mix(
-                in srgb,
-                ${outlineColor} 12%,
-                transparent
-              );
-            }
-
-            &:focus {
-              outline: solid ${outlineColor};
-            }
-
-            &:focus:not(:focus-visible) {
-              outline: none;
-            }
-          `}
-        >
-          {inner}
-        </BaseButton>
-      );
-    }
-
-    if (isLinkVariant) {
-      return (
-        <BaseButton
-          {...propsToApply}
-          color="inherit"
-          cursor="pointer"
-          css={`
-            background: none;
-            border: none;
-
-            :focus {
-              outline: auto;
-            }
-
-            :focus:not(:focus-visible) {
-              outline: none;
-              box-shadow: none;
-            }
-
-            ${isLinkDanger &&
-            `
-              span { color: ${colors.dangerDark}; }
-              &:hover span {
-                color: ${colors.dangerBright};
-                text-decoration-color: ${colors.dangerBright};
-              }
-            `}
-          `}
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <Link as="span" href="">
-            {children}
-          </Link>
-        </BaseButton>
-      );
-    }
-
     return (
-      <BaseButton
-        {...propsToApply}
-        color="inherit"
-        cursor="pointer"
-        css={`
-          background: none;
-          border: none;
-
-          :focus {
-            outline: auto;
-          }
-
-          :focus:not(:focus-visible) {
-            outline: none;
-            box-shadow: none;
-          }
-        `}
-        alignItems="center"
-        justifyContent="flex-start"
+      <ShadcnButton
+        ref={ref}
+        id={id}
+        aria-label={ariaLabel}
+        disabled={disabled}
+        onClick={onClick}
+        onMouseDown={onMouseDown}
+        title={title}
+        type={type}
+        variant={buttonVariantMap[variant]}
+        size={size ? sizeMap[size] : undefined}
+        active={active}
+        className={cn(
+          'tw:flex tw:items-center',
+          loading ? 'tw:justify-center' : 'tw:justify-start',
+          iconName && 'tw:gap-2',
+          className,
+        )}
       >
         {inner}
-      </BaseButton>
+      </ShadcnButton>
     );
   },
 );
 
+ButtonShadcn.displayName = 'ButtonShadcn';
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return <ButtonShadcn {...props} ref={ref} />;
+  }
+
+  return <ButtonLegacy {...props} ref={ref} />;
+});
+
 Button.displayName = 'Button';
 
-export { Button, customCSS as buttonCSS, ButtonSizes, ButtonVariants };
+export {
+  Button,
+  buttonCSS,
+  ButtonSizes,
+  buttonVariantMap,
+  ButtonVariants,
+  buttonVariants,
+};
+export type { ButtonProps };

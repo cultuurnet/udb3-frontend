@@ -78,7 +78,7 @@ const QuestionModal = ({
     </BootstrapModal.Header>
     <BootstrapModal.Body>{children}</BootstrapModal.Body>
     <BootstrapModal.Footer>
-      <Button variant={ButtonVariants.SECONDARY} onClick={onClose}>
+      <Button variant={ButtonVariants.NEUTRAL} onClick={onClose}>
         {cancelTitle}
       </Button>
       <Button

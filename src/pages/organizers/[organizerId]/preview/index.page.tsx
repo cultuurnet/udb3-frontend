@@ -126,7 +126,7 @@ const OrganizersPreview = () => {
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Button
                     variant={ButtonVariants.PRIMARY}
-                    spacing={3}
+                    className="tw:gap-3"
                     iconName={Icons.PLUS_CIRCLE}
                     onClick={() => setIsQuestionModalVisible(true)}
                   >
@@ -135,7 +135,7 @@ const OrganizersPreview = () => {
                 )}
                 {canEdit && (
                   <Link
-                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    variant={LinkButtonVariants.BUTTON_NEUTRAL}
                     spacing={3}
                     iconName={Icons.PENCIL}
                     href={`/organizer/${organizerId}/edit`}
@@ -146,7 +146,7 @@ const OrganizersPreview = () => {
                 )}
                 {canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Link
-                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    variant={LinkButtonVariants.BUTTON_NEUTRAL}
                     spacing={3}
                     iconName={Icons.USERS}
                     href={`/organizer/${organizerId}/ownerships`}
@@ -157,7 +157,7 @@ const OrganizersPreview = () => {
                 )}
                 <Stack spacing={3.5}>
                   <Link
-                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    variant={LinkButtonVariants.BUTTON_NEUTRAL}
                     href={`/search?query=organizer.id:${encodeURIComponent(
                       organizerId,
                     )} AND _type:event`}
@@ -167,7 +167,7 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.events')}
                   </Link>
                   <Link
-                    variant={LinkButtonVariants.BUTTON_SECONDARY}
+                    variant={LinkButtonVariants.BUTTON_NEUTRAL}
                     href={`/search?query=organizer.id:${encodeURIComponent(
                       organizerId,
                     )} AND _type:place`}

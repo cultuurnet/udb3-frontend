@@ -29,7 +29,7 @@ export const OneOrMoreDays = ({
   return (
     <Stack spacing={5} alignItems="flex-start">
       <Days {...handlers} errors={errors} />
-      <Button variant={ButtonVariants.SECONDARY} onClick={onAddDay}>
+      <Button variant={ButtonVariants.NEUTRAL} onClick={onAddDay}>
         {t('create.calendar.one_or_more_days.button_add')}
       </Button>
     </Stack>

@@ -32,14 +32,10 @@ import { Link } from '@/ui/Link';
 import type { ListProps } from '@/ui/List';
 import { List } from '@/ui/List';
 import { Logo, LogoVariants } from '@/ui/Logo';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import {
-  Breakpoints,
-  colors,
-  getGlobalBorderRadius,
-  getValueFromTheme,
-} from '@/ui/theme';
+import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 import { Announcements, AnnouncementStatus } from './Announcements';
@@ -124,23 +120,15 @@ const MenuItem = memo(
         `}
       >
         <Component
-          width="100%"
           variant="unstyled"
           href={href}
           onClick={onClick}
-          backgroundColor={{
-            default: isActive
-              ? getValueForMenuItem('active.backgroundColor')
-              : 'none',
-            hover: getValueForMenuItem('hover.backgroundColor'),
-          }}
           customChildren
           title={label}
-          paddingLeft={{ default: 4, s: 1 }}
-          paddingBottom={{ default: 3, s: 2 }}
-          paddingTop={{ default: 3, s: 2 }}
-          paddingRight={{ default: 3, s: 1 }}
-          borderRadius={getGlobalBorderRadius}
+          className={cn(
+            'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-accent tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
+            isActive && 'tw:bg-accent',
+          )}
         >
           <span className="tw:flex tw:w-full tw:flex-col tw:items-center tw:gap-1 tw:md:flex-row tw:md:gap-4">
             <Icon name={iconName} />
@@ -188,15 +176,7 @@ const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
 
   return (
     <Stack spacing={3} {...props}>
-      <Title
-        opacity={0.5}
-        css={`
-          font-size: 0.625rem;
-          font-weight: 400;
-          text-transform: uppercase;
-        `}
-        textAlign={{ s: 'center' }}
-      >
+      <Title className="tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
         {title}
       </Title>
       <Content />

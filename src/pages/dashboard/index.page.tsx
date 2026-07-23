@@ -179,7 +179,7 @@ const OfferRow = ({ item: offer, onDelete, ...props }: OfferRowProps) => {
       isImageUploading={isImageUploading}
       onModalOpen={() => setIsPictureUploadModalVisible(true)}
       actions={[
-        <Link href={editUrl} variant={LinkVariants.BUTTON_SECONDARY} key="edit">
+        <Link href={editUrl} variant={LinkVariants.BUTTON_NEUTRAL} key="edit">
           {t('dashboard.actions.edit')}
         </Link>,
         <Dropdown.Item href={previewUrl} key="preview">
@@ -264,11 +264,7 @@ const OrganizerRow = ({
       isOwnershipRequested={isOwnershipRequested}
       actions={
         actions || [
-          <Link
-            href={editUrl}
-            variant={LinkVariants.BUTTON_SECONDARY}
-            key="edit"
-          >
+          <Link href={editUrl} variant={LinkVariants.BUTTON_NEUTRAL} key="edit">
             {t('dashboard.actions.edit')}
           </Link>,
           <Dropdown.Item href={previewUrl} key="preview">

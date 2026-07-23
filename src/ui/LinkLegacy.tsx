@@ -23,6 +23,7 @@ const generateCSS = (props: Record<string, any>, allowedProps: string[]) =>
 
 export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
+  BUTTON_NEUTRAL: 'neutral',
   BUTTON_SECONDARY: 'secondary',
   BUTTON_DANGER: 'danger',
   BUTTON_SUCCESS: 'success',
@@ -72,7 +73,7 @@ const BaseLink = forwardRef<HTMLElement, BaseLinkProps>(
           {...getInlineProps(props)}
           textDecoration="none"
         >
-          <Button forwardedAs="span" width="100%" variant={variant}>
+          <Button forwardedAs="span" className="tw:w-full" variant={variant}>
             {children}
           </Button>
         </Inline>

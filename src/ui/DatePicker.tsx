@@ -392,24 +392,23 @@ const DatePicker = ({
         {calendarContent}
       </Box>
       <Button
-        variant={ButtonVariants.SECONDARY}
+        variant={ButtonVariants.NEUTRAL}
         iconName={Icons.CALENDAR_ALT}
         onClick={() => datePickerRef.current?.setOpen(true)}
         disabled={disabled}
         css={`
-          &.btn {
-            box-shadow: none;
-            border: 1px lightgray solid;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            border-left: none;
-            min-height: 0;
+          box-shadow: none !important;
+          border: 1px lightgray solid !important;
+          border-top-left-radius: 0 !important;
+          border-bottom-left-radius: 0 !important;
+          border-left: none !important;
+          height: auto !important;
+          min-height: 0 !important;
 
-            z-index: ${getValue('zIndexButton')};
+          z-index: ${getValue('zIndexButton')};
 
-            &:focus {
-              border-left: inherit;
-            }
+          &:focus {
+            border-left: inherit !important;
           }
         `}
       />

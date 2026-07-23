@@ -163,9 +163,8 @@ const AgeRangeStepLegacy = ({
                   return (
                     <Button
                       key={key}
-                      width="auto"
+                      className="tw:w-auto tw:inline-flex"
                       active={selectedAgeRange === key}
-                      display="inline-flex"
                       variant={ButtonVariants.SECONDARY_TOGGLE}
                       onClick={() => {
                         setIsCustomAgeRange(key === 'CUSTOM');

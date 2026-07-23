@@ -3,6 +3,7 @@ import { css } from 'styled-components';
 
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { cn } from '@/ui/shadcn/utils';
 import { Text } from '@/ui/Text';
 import { getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
@@ -15,6 +16,7 @@ function ButtonCard({
   badge,
   hasEllipsisOnTitle,
   href,
+  className,
   ...props
 }: ComponentProps<typeof Button> & {
   title: string;
@@ -99,13 +101,10 @@ function ButtonCard({
   }
   return (
     <Button
-      padding={4}
-      borderRadius={getGlobalBorderRadius}
       variant={ButtonVariants.UNSTYLED}
       customChildren
-      marginBottom={4}
       title={title}
-      width="20rem"
+      className={cn('tw:w-80 tw:rounded-lg tw:p-4 tw:mb-4', className)}
       css={buttonCardStyling}
       {...props}
     >

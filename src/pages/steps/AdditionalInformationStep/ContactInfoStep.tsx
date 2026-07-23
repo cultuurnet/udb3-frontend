@@ -270,7 +270,7 @@ const ContactInfoStep = ({
               }
             />
             <Button
-              alignSelf="flex-start"
+              className="tw:self-start"
               onClick={() => handleDeleteContactInfo(index)}
               variant={ButtonVariants.DANGER}
               iconName={Icons.TRASH}
@@ -281,7 +281,7 @@ const ContactInfoStep = ({
       <Inline>
         <Button
           onClick={handleAddNewContactInfo}
-          variant={ButtonVariants.SECONDARY}
+          variant={ButtonVariants.NEUTRAL}
         >
           {contactInfoState.length === 0
             ? t('create.additionalInformation.contact_info.add_more_singular')
