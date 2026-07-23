@@ -1,187 +1,125 @@
-import type { ReactNode } from 'react';
-import { Children } from 'react';
 import {
-  Tab as BootstrapTab,
-  Tabs as BootstrapTabs,
-  TabsProps,
-} from 'react-bootstrap';
-import { css } from 'styled-components';
+  Children,
+  CSSProperties,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+} from 'react';
 
-import { Values } from '@/types/Values';
-import type { BoxProps } from '@/ui/Box';
-import { Box, getBoxProps } from '@/ui/Box';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Values } from '@/types/Values';
+import {
+  Tabs as ShadcnTabs,
+  TabsContent as ShadcnTabsContent,
+  TabsList as ShadcnTabsList,
+  TabsTrigger as ShadcnTabsTrigger,
+} from '@/ui/shadcn/tabs';
 
-import { colors, getValueFromTheme } from './theme';
-
-const getValue = getValueFromTheme(`tabs`);
-
-export const TabsVariants = {
-  DEFAULT: 'default',
-  OUTLINED: 'outlined',
-  FLOATING: 'floating',
-} as const;
-
-type Props<T> = BoxProps &
-  Omit<TabsProps, 'variant'> & {
-    activeBackgroundColor?: string;
-    variant?: Values<typeof TabsVariants>;
-  };
-
-const Tabs = <T,>({
-  activeKey,
-  onSelect,
-  activeBackgroundColor = 'white',
-  variant = TabsVariants.DEFAULT,
-  children: rawChildren,
-  className,
-  ...props
-}: Props<T>) => {
-  const children = Children.toArray(rawChildren).filter((child) => {
-    // @ts-expect-error
-    if (child.type !== Tab) {
-      // eslint-disable-next-line no-console
-      console.error(
-        'Child of type',
-        // @ts-expect-error
-        child.type.name,
-        'is not supported in Tabs component',
-      );
-      return false;
-    }
-
-    return true;
-  });
-
-  const { udbMainDarkBlue, grey1, textColor } = colors;
-  const TabStyles = {
-    default: css`
-      border-bottom: none;
-
-      .nav-item .nav-link {
-        background-color: white;
-        color: ${getValue('color')};
-        border: 1px solid ${getValue('borderColor')};
-        border-bottom: 1px solid ${getValue('borderColor')};
-        border-radius: ${getValue('borderRadius')} ${getValue('borderRadius')} 0
-          0;
-      }
-
-      /* remove double borders between tabs */
-      .nav-item:not(:first-child) .nav-link {
-        margin-left: -1px;
-      }
-
-      .nav-item .nav-link:hover {
-        color: ${getValue('hoverColor')};
-        background-color: ${getValue('hoverTabBackgroundColor')};
-      }
-
-      .nav-item .nav-link.active {
-        background-color: ${activeBackgroundColor};
-        color: ${textColor};
-        border-color: ${getValue('borderColor')};
-        border-bottom-color: transparent;
-        cursor: default;
-        position: relative;
-        z-index: 2;
-      }
-    `,
-    outlined: css`
-      border-bottom: none;
-      .nav {
-        margin-left: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-      .nav-link {
-        color: ${getValue('color')};
-        padding: 0.4rem 1rem;
-        border: 1px solid black;
-        margin: 0 !important;
-        background-color: white;
-
-        &:hover {
-          background-color: ${grey1};
-          border: 1px solid black;
-        }
-
-        &.active {
-          color: white;
-          background-color: ${activeBackgroundColor};
-          border: 1px solid black;
-        }
-
-        &.active:hover {
-          background-color: ${activeBackgroundColor};
-        }
-      }
-
-      .nav-item:first-child .nav-link {
-        border-radius: 0.5rem 0 0 0.5rem;
-        border-right: none;
-      }
-
-      .nav-item:last-child .nav-link {
-        border-radius: 0 0.5rem 0.5rem 0;
-      }
-
-      .nav-item:first-child .nav-link.active {
-        border-right: none;
-      }
-    `,
-    floating: css`
-      border-bottom: none;
-
-      .nav-item {
-        &:hover {
-          background-color: #0083b81a;
-          border-radius: ${getValue('borderRadius')} ${getValue('borderRadius')}
-            0 0;
-        }
-      }
-
-      .nav-link {
-        color: #006a96;
-        padding: 0.6rem 2rem;
-        border: none !important;
-        border-bottom: 3px solid transparent !important;
-        background-color: transparent !important;
-
-        &.active {
-          font-weight: 700;
-          border-bottom: 2px solid #006a96 !important;
-          color: #006a96 !important;
-        }
-      }
-    `,
-  };
-
-  return (
-    <Box className={className} {...getBoxProps(props)}>
-      <BootstrapTabs
-        activeKey={activeKey}
-        onSelect={onSelect}
-        css={TabStyles[variant]}
-      >
-        {children}
-      </BootstrapTabs>
-    </Box>
-  );
-};
+import { TabsLegacy, TabsVariants } from './TabsLegacy';
 
 type TabProps = {
   eventKey: string;
   title: ReactNode;
   children?: ReactNode;
+  className?: string;
 };
 
-const Tab = ({ eventKey, title, children }: TabProps) => {
+type Props<T extends string = string> = {
+  activeKey: string;
+  onSelect?: (key: T | null) => void;
+  activeBackgroundColor?: string;
+  variant?: Values<typeof TabsVariants>;
+  compact?: boolean;
+  children?: ReactNode;
+  className?: string;
+};
+
+const getActiveStyle = (
+  shadcnVariant: 'default' | 'line' | 'outlined',
+  color: string,
+): CSSProperties =>
+  shadcnVariant === 'line'
+    ? { color, borderBottomColor: color }
+    : { backgroundColor: color };
+
+const variantMap: Record<
+  Values<typeof TabsVariants>,
+  'default' | 'line' | 'outlined'
+> = {
+  [TabsVariants.DEFAULT]: 'default',
+  [TabsVariants.FLOATING]: 'line',
+  [TabsVariants.OUTLINED]: 'outlined',
+};
+
+function TabsShadcn<T extends string = string>({
+  activeKey,
+  onSelect,
+  activeBackgroundColor,
+  variant = TabsVariants.DEFAULT,
+  compact,
+  children,
+  className,
+}: Props<T>) {
+  const tabs = Children.toArray(children)
+    .filter(
+      (child): child is ReactElement<TabProps> =>
+        isValidElement(child) && child.type === Tabs.Tab,
+    )
+    .map((child) => child.props);
+
+  const shadcnVariant = variantMap[variant];
+
   return (
-    <BootstrapTab eventKey={eventKey} title={title}>
-      {children}
-    </BootstrapTab>
+    <ShadcnTabs
+      value={activeKey}
+      onValueChange={(v) => onSelect?.(v as T)}
+      className={className}
+    >
+      <ShadcnTabsList variant={shadcnVariant}>
+        {tabs.map((tab) => (
+          <ShadcnTabsTrigger
+            key={tab.eventKey}
+            value={tab.eventKey}
+            variant={shadcnVariant}
+            size={compact ? 'sm' : 'md'}
+            {...(activeBackgroundColor &&
+              tab.eventKey === activeKey && {
+                style: getActiveStyle(shadcnVariant, activeBackgroundColor),
+              })}
+          >
+            {tab.title}
+          </ShadcnTabsTrigger>
+        ))}
+      </ShadcnTabsList>
+      {tabs.map((tab) => (
+        <ShadcnTabsContent
+          key={tab.eventKey}
+          value={tab.eventKey}
+          className={tab.className}
+          forceMount
+        >
+          {tab.children}
+        </ShadcnTabsContent>
+      ))}
+    </ShadcnTabs>
   );
-};
+}
 
-Tabs.Tab = Tab;
+TabsShadcn.Tab = TabsLegacy.Tab;
 
-export { Tabs };
+function Tabs<T extends string = string>(props: Props<T>) {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+  return isShadcnMigrationEnabled ? (
+    <TabsShadcn {...props} />
+  ) : (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <TabsLegacy {...(props as any)} />
+  );
+}
+
+Tabs.Tab = TabsLegacy.Tab;
+
+export { Tabs, TabsVariants };
+export type { TabProps };

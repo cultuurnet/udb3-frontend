@@ -38,9 +38,7 @@ const BookingAvailabilityModal = ({
         <Stack padding={4}>
           <BookingAvailabilityForm
             bookingAvailabilityType={bookingAvailabilityType}
-            onChangeBookingAvailability={(e) =>
-              setBookingAvailabilityType(e.target.value)
-            }
+            onChangeBookingAvailability={setBookingAvailabilityType}
           />
         </Stack>
       )}
