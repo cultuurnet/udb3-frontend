@@ -542,7 +542,6 @@ const CalendarStep = ({
         <CalendarOptionToggle
           onChooseOneOrMoreDays={handleChooseOneOrMoreDays}
           onChooseFixedDays={handleChooseFixedDays}
-          width="100%"
           disableChooseFixedDays={hasUnavailableSubEvent}
           isCultuurkuurEvent={isCultuurkuurEvent}
         />

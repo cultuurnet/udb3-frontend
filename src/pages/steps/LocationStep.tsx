@@ -41,7 +41,7 @@ import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
-import { getInlineProps, Inline } from '@/ui/Inline';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Link } from '@/ui/Link';
@@ -578,13 +578,7 @@ const LocationStep = ({
               <FormElement
                 id="online-toggle"
                 Component={
-                  <Inline
-                    spacing={5}
-                    marginBottom={4}
-                    alignItems="stretch"
-                    maxWidth={parseSpacing(9)}
-                    {...getInlineProps(props)}
-                  >
+                  <div className="tw:mb-4.5 tw:flex tw:items-stretch tw:gap-8.5 tw:max-w-136.5">
                     <ToggleBox
                       onClick={() => {
                         onFieldChange({
@@ -602,9 +596,8 @@ const LocationStep = ({
                           width="80"
                         />
                       }
-                      text={t('create.location.is_physical.label')}
-                      width="30%"
-                      minHeight={parseSpacing(7)}
+                      title={t('create.location.is_physical.label')}
+                      className="tw:w-[30%] tw:min-h-34"
                     />
                     <ToggleBox
                       onClick={() => {
@@ -621,9 +614,8 @@ const LocationStep = ({
                           width="80"
                         />
                       }
-                      text={t('create.location.is_online.label')}
-                      width="30%"
-                      minHeight={parseSpacing(7)}
+                      title={t('create.location.is_online.label')}
+                      className="tw:w-[30%] tw:min-h-34"
                     />
                     {isCultuurkuurEvent && (
                       <ToggleBox
@@ -642,12 +634,11 @@ const LocationStep = ({
                             height="80"
                           />
                         }
-                        text={t('create.location.is_cultuurkuur.label')}
-                        width="30%"
-                        minHeight={parseSpacing(7)}
+                        title={t('create.location.is_cultuurkuur.label')}
+                        className="tw:w-[30%] tw:min-h-34"
                       />
                     )}
-                  </Inline>
+                  </div>
                 }
               />
             </Stack>
