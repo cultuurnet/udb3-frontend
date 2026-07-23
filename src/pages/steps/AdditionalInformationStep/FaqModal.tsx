@@ -9,9 +9,10 @@ import RichTextEditor from '@/pages/RichTextEditor';
 import { FaqItem } from '@/types/Offer';
 import { Alert } from '@/ui/Alert';
 import { FormElement } from '@/ui/FormElement';
+import { Icon, Icons } from '@/ui/Icon';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
-import { TypeaheadInput } from '@/ui/TypeaheadInput';
+import { SuggestionInput } from '@/ui/SuggestionInput';
 
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default;
@@ -160,13 +161,14 @@ const FaqModal = ({
           label={t('create.additionalInformation.faq.modal.question')}
           error={questionError}
           Component={
-            <TypeaheadInput
+            <SuggestionInput
               value={question}
               onChange={setQuestion}
               placeholder={t(
                 'create.additionalInformation.faq.modal.question_placeholder',
               )}
               suggestions={suggestions.map((suggestion) => suggestion.question)}
+              icon={<Icon name={Icons.CHEVRON_DOWN} />}
             />
           }
         />
