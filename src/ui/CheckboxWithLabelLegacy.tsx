@@ -39,7 +39,7 @@ const CheckboxWithLabelLegacy = ({
         checked={checked}
         disabled={disabled}
       />
-      <Label cursor="pointer" htmlFor={id}>
+      <Label cursor={disabled ? 'not-allowed' : 'pointer'} htmlFor={id}>
         {children}
       </Label>
     </Inline>
