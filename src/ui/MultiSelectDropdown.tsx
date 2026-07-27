@@ -98,9 +98,9 @@ const MultiSelectDropdown = ({
               id={`${id}-${option.value}`}
               name={option.value}
               checked={selectedValues.includes(option.value)}
-              onToggle={(e) =>
+              onCheckedChange={(checked) =>
                 onChange(
-                  e.target.checked
+                  checked
                     ? [...selectedValues, option.value]
                     : selectedValues.filter((value) => value !== option.value),
                 )

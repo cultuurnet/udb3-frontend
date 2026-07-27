@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, parseSpacing } from '@/ui/Box';
+import { Box } from '@/ui/Box';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
-import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
-import { Text, TextVariants } from '@/ui/Text';
+import { Inline } from '@/ui/Inline';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { Tooltip } from '@/ui/Tooltip';
 
@@ -12,7 +11,7 @@ import {
   useIsOneOrMoreDays,
 } from '../machines/calendarMachine';
 
-type CalendarOptionToggleProps = InlineProps & {
+type CalendarOptionToggleProps = {
   onChooseOneOrMoreDays: () => void;
   onChooseFixedDays: () => void;
   disableChooseFixedDays?: boolean;
@@ -24,7 +23,6 @@ export const CalendarOptionToggle = ({
   onChooseFixedDays,
   disableChooseFixedDays,
   isCultuurkuurEvent,
-  ...props
 }: CalendarOptionToggleProps) => {
   const { t } = useTranslation();
   const isOneOrMoreDays = useIsOneOrMoreDays();
@@ -50,47 +48,29 @@ export const CalendarOptionToggle = ({
       };
 
   return (
-    <Inline spacing={5} alignItems="stretch" {...getInlineProps(props)}>
+    <div className="tw:mb-4.5 tw:flex tw:w-full tw:items-stretch tw:gap-8.5">
       <ToggleBox
         onClick={onChooseOneOrMoreDays}
         active={isOneOrMoreDays}
         icon={
           <CustomIcon name={CustomIconVariants.CALENDAR_SINGLE} width="80" />
         }
-        text={t('create.calendar.types.one_or_more_days')}
-        minHeight={parseSpacing(7)}
-        flex={1}
-      >
-        <Text
-          variant={TextVariants.MUTED}
-          fontSize="14px"
-          css={`
-            margin-top: -0.4rem;
-          `}
-        >
-          {t('create.calendar.types.one_or_more_days_example')}
-        </Text>
-      </ToggleBox>
+        title={t('create.calendar.types.one_or_more_days')}
+        description={t('create.calendar.types.one_or_more_days_example')}
+        className="tw:min-h-34 tw:flex-1"
+      />
 
       <ToggleBox
         onClick={onChooseFixedDays}
         active={isFixedDays}
         icon={<CustomIcon name={fixedDaysToggleProps.iconName} width="80" />}
-        text={fixedDaysToggleProps.text}
-        minHeight={parseSpacing(7)}
-        flex={1}
+        title={fixedDaysToggleProps.text}
+        description={
+          !isCultuurkuurEvent && t('create.calendar.types.fixed_days_example')
+        }
+        className="tw:min-h-34 tw:flex-1"
         disabled={disableChooseFixedDays}
-      >
-        <Text
-          variant={TextVariants.MUTED}
-          fontSize="14px"
-          css={`
-            margin-top: -0.4rem;
-          `}
-        >
-          {!isCultuurkuurEvent && t('create.calendar.types.fixed_days_example')}
-        </Text>
-      </ToggleBox>
-    </Inline>
+      />
+    </div>
   );
 };
