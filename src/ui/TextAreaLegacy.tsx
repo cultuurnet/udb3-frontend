@@ -12,6 +12,7 @@ type TextAreaLegacyProps = {
   rows?: number;
   placeholder?: string;
   required?: boolean;
+  maxLength?: number;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onInput?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLTextAreaElement>) => void;

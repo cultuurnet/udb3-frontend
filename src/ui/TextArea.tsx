@@ -15,6 +15,7 @@ type TextAreaProps = {
   disabled?: boolean;
   placeholder?: string;
   required?: boolean;
+  maxLength?: number;
   className?: string;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onInput?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -35,6 +36,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       rows = 3,
       placeholder,
       required = false,
+      maxLength,
       onChange,
       onBlur,
       name,
@@ -59,6 +61,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           rows={rows}
           placeholder={placeholder}
           required={required}
+          maxLength={maxLength}
           ref={ref}
           name={name}
           aria-label={ariaLabel}
@@ -78,6 +81,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         rows={rows}
         placeholder={placeholder}
         required={required}
+        maxLength={maxLength}
         ref={ref}
         name={name}
         aria-label={ariaLabel}
