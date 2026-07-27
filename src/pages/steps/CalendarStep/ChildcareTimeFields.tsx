@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import type { BoxProps } from '@/ui/Box';
 import { Checkbox } from '@/ui/Checkbox';
-import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -51,38 +50,40 @@ const ChildcareTimeFields = ({
 
   return (
     <Stack position="relative" {...boxProps}>
-      <Inline spacing={3}>
-        <Inline alignItems="center" spacing={2} marginBottom={3}>
+      <div className="tw:flex tw:gap-2">
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
           <Checkbox
             id={startToggleId}
             checked={startEnabled}
             disabled={disabled}
-            onToggle={(event) => handleToggleStart(event.target.checked)}
+            onCheckedChange={handleToggleStart}
           />
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={startToggleId}
             color={!startEnabled ? colors.grey5 : undefined}
+            cursor={disabled ? 'not-allowed' : 'pointer'}
           >
             {t('create.calendar.days.childcare.before')}
           </Label>
-        </Inline>
-        <Inline alignItems="center" spacing={2} marginBottom={3}>
+        </div>
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
           <Checkbox
             id={endToggleId}
             checked={endEnabled}
             disabled={disabled}
-            onToggle={(event) => handleToggleEnd(event.target.checked)}
+            onCheckedChange={handleToggleEnd}
           />
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={endToggleId}
             color={!endEnabled ? colors.grey5 : undefined}
+            cursor={disabled ? 'not-allowed' : 'pointer'}
           >
             {t('create.calendar.days.childcare.after')}
           </Label>
-        </Inline>
-      </Inline>
+        </div>
+      </div>
       <TimeSpanPicker
         id={`${idPrefix}-childcare`}
         labelPosition={TimeSpanPickerLabelPositions.INLINE}
