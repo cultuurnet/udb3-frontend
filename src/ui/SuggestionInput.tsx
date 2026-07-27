@@ -1,11 +1,5 @@
 import type { ReactNode } from 'react';
-import {
-  forwardRef,
-  Fragment,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { forwardRef, Fragment, useRef, useState } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Icon, Icons } from '@/ui/Icon';
@@ -45,9 +39,7 @@ const SuggestionInputShadcn = forwardRef<HTMLInputElement, Props>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
     const anchorRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
     const filteredSuggestions = value
       ? suggestions.filter((suggestion) =>
@@ -83,7 +75,7 @@ const SuggestionInputShadcn = forwardRef<HTMLInputElement, Props>(
           <PopoverAnchor asChild>
             <div ref={anchorRef} className="tw:w-full">
               <CommandInput
-                ref={inputRef}
+                ref={ref}
                 id={id}
                 value={value}
                 onValueChange={(text) => {
