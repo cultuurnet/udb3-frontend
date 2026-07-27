@@ -1,148 +1,140 @@
 import { ReactElement, ReactNode } from 'react';
 
-import { parseSpacing } from './Box';
-import type { StackProps } from './Stack';
-import { getStackProps, Stack } from './Stack';
-import { Text } from './Text';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-const getValue = getValueFromTheme(`toggleBox`);
+import { Icon, Icons } from './Icon';
+import { cn } from './shadcn/utils';
+import { ToggleBoxLegacy } from './ToggleBoxLegacy';
 
-type SuccessIconProps = {
+type Props = {
   active?: boolean;
+  icon?: ReactElement;
+  title: ReactNode;
+  description?: ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+  className?: string;
 };
 
-const SuccessIcon = ({ active }: SuccessIconProps) => {
-  return (
-    <Stack
-      className="success-icon-wrapper"
-      justifyContent="center"
-      alignItems="center"
-      width={30}
-      height={30}
-      position="absolute"
-      top="12px"
-      left="12px"
-      backgroundColor={active ? getValue('activeBorderColor') : 'none'}
-      css={`
-        border: 1.8px solid
-          ${active ? getValue('activeBorderColor') : getValue('borderColor')};
+const ToggleBoxShadcn = ({
+  active = false,
+  icon,
+  title,
+  description,
+  disabled,
+  onClick,
+  className,
+}: Props) => {
+  // Matches the legacy component: hovering only turns the border/icon
+  // green when the box is active or not disabled — a disabled, inactive
+  // box stays grey on hover.
+  const hoverEnabled = !disabled || active;
 
-        &:hover {
-          border-color: ${getValue('activeBorderColor')};
-        }
-      `}
-      borderRadius="5px"
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        'tw:group tw:relative tw:flex tw:min-w-68 tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:rounded-udb tw:border tw:p-6 tw:disabled:opacity-50',
+        active
+          ? 'tw:border-success tw:bg-success-muted'
+          : 'tw:border-secondary tw:bg-white',
+        disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
+        hoverEnabled && 'tw:hover:border-success',
+        className,
+      )}
     >
-      <svg
-        width="21"
-        height="16"
-        viewBox="0 0 21 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+      <span
+        className={cn(
+          'tw:absolute tw:left-3 tw:top-3 tw:flex tw:h-7.5 tw:w-7.5 tw:items-center tw:justify-center tw:rounded-[5px] tw:border-[1.8px]',
+          active ? 'tw:border-success tw:bg-success' : 'tw:border-secondary',
+          hoverEnabled && 'tw:group-hover:border-success',
+        )}
       >
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M1.21465 9.272C0.475754 8.53458 0.475752 7.33743 1.21465 6.60001C1.95145 5.86467 3.1445 5.86467 3.88131 6.60001L7.15291 9.86508C7.56133 10.2727 8.22263 10.2727 8.63104 9.86508L17.2466 1.26667C17.9835 0.531335 19.1765 0.531336 19.9133 1.26667C20.6522 2.00409 20.6522 3.20125 19.9133 3.93867L8.99676 14.8334C8.38625 15.4427 7.39771 15.4427 6.78719 14.8334L1.21465 9.272Z"
-          fill="white"
+        <Icon
+          name={Icons.CHECK}
+          width={22}
+          height={22}
+          className="tw:text-white"
         />
-      </svg>
-    </Stack>
+      </span>
+
+      {icon && (
+        <span
+          className={cn(
+            'tw:flex tw:min-h-20 tw:items-center tw:justify-center',
+            active
+              ? 'tw:text-success tw:[&_.icon-hover-color-stroke]:stroke-success tw:[&_.icon-hover-color-fill]:fill-success'
+              : 'tw:text-secondary tw:[&_.icon-hover-color-stroke]:stroke-secondary tw:[&_.icon-hover-color-fill]:fill-secondary',
+            hoverEnabled &&
+              'tw:group-hover:text-success tw:group-hover:[&_.icon-hover-color-stroke]:stroke-success tw:group-hover:[&_.icon-hover-color-fill]:fill-success',
+          )}
+        >
+          {icon}
+        </span>
+      )}
+
+      {title && (
+        <span
+          className={cn(
+            'tw:text-[16px] tw:font-bold',
+            active ? 'tw:text-success' : 'tw:text-secondary',
+            hoverEnabled && 'tw:group-hover:text-success',
+          )}
+        >
+          {title}
+        </span>
+      )}
+
+      {description && (
+        <span className="tw:-mt-2 tw:text-[14px] tw:text-muted-foreground">
+          {description}
+        </span>
+      )}
+    </button>
   );
 };
 
-type Props = StackProps & {
-  active?: boolean;
-  icon?: ReactElement;
-  text?: ReactNode;
-  disabled?: boolean;
-};
-
 const ToggleBox = ({
-  children,
-  onClick,
-  active = false,
-  icon = undefined,
-  text = '',
+  active,
+  icon,
+  title,
+  description,
   disabled,
-  ...props
+  onClick,
+  className,
 }: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <ToggleBoxShadcn
+        active={active}
+        icon={icon}
+        title={title}
+        description={description}
+        disabled={disabled}
+        onClick={onClick}
+        className={className}
+      />
+    );
+  }
+
   return (
-    <Stack
-      forwardedAs="button"
-      onClick={onClick}
-      padding={4.5}
-      justifyContent="center"
-      alignItems="center"
-      position="relative"
-      spacing={3}
-      backgroundColor={getValue(
-        active ? 'activeBackgroundColor' : 'backgroundColor',
-      )}
-      minWidth={parseSpacing(8)}
-      borderRadius={getGlobalBorderRadius}
+    <ToggleBoxLegacy
+      active={active}
+      icon={icon}
+      title={title}
+      description={description}
       disabled={disabled}
-      css={`
-        border: 1px solid
-          ${active ? getValue('activeBorderColor') : getValue('borderColor')};
-        cursor: ${disabled ? 'not-allowed' : 'pointer'};
-
-        svg path.icon-hover-color-stroke {
-          stroke: ${active
-            ? getValue('activeBorderColor')
-            : getValue('borderColor')};
-        }
-
-        svg path.icon-hover-color-fill {
-          fill: ${active
-            ? getValue('activeBorderColor')
-            : getValue('borderColor')};
-        }
-
-        &:hover {
-          .success-icon-wrapper {
-            border-color: ${disabled && !active
-              ? getValue('borderColor')
-              : getValue('hoverBorderColor')};
-          }
-          border-color: ${disabled && !active
-            ? getValue('borderColor')
-            : getValue('hoverBorderColor')};
-
-          svg path.icon-hover-color-stroke {
-            stroke: ${disabled && !active
-              ? getValue('borderColor')
-              : getValue('activeBorderColor')};
-          }
-
-          svg path.icon-hover-color-fill {
-            fill: ${disabled && !active
-              ? getValue('borderColor')
-              : getValue('activeBorderColor')};
-          }
-        }
-      `}
-      {...getStackProps(props)}
-    >
-      <SuccessIcon active={active} />
-      {icon && (
-        <Stack minHeight="5rem" justifyContent="center">
-          {icon}
-        </Stack>
-      )}
-      {text && (
-        <Text
-          color={getValue(active ? 'activeTextColor' : 'textColor')}
-          fontWeight={700}
-          fontSize="16px"
-        >
-          {text}
-        </Text>
-      )}
-      {children}
-    </Stack>
+      onClick={onClick}
+      className={className}
+    />
   );
 };
 
 export { ToggleBox };
+export type { Props as ToggleBoxProps };

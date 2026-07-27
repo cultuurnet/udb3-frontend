@@ -665,7 +665,6 @@ const Dashboard = (): any => {
           <Tabs<Scope>
             activeKey={tab}
             onSelect={handleSelectTab}
-            activeBackgroundColor="white"
             variant={TabsVariants.FLOATING}
           >
             <Tabs.Tab eventKey="events" title={t('dashboard.tabs.events')}>

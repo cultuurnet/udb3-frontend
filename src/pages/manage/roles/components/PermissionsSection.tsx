@@ -129,7 +129,7 @@ export const PermissionsSection = ({ roleId }: PermissionsSectionProps) => {
               id={`permission-${permission.key}`}
               name={`permission-${permission.key}`}
               checked={isChecked}
-              onToggle={() =>
+              onCheckedChange={() =>
                 handlePermissionChange(permission.key, !isChecked)
               }
             >
