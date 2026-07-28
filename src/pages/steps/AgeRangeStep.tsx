@@ -649,10 +649,7 @@ const AgeRangeStepBoa = ({
               value: mode,
               label: t(`create.name_and_age.age.input_mode.${mode}`),
             }))}
-            maxWidth="40rem"
-            css={`
-              margin-bottom: 2rem;
-            `}
+            className="tw:max-w-160 tw:mb-8"
           />
         )}
         {showBirthdateOption && activeTab === AgeInputModes.DATE_OF_BIRTH && (
