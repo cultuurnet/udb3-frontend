@@ -518,7 +518,11 @@ const Preview = () => {
               variant={TabsVariants.FLOATING}
             >
               {tabOptions.map((tab) => (
-                <Tabs.Tab eventKey={tab} title={t(`preview.tabs.${tab}`)}>
+                <Tabs.Tab
+                  key={tab}
+                  eventKey={tab}
+                  title={t(`preview.tabs.${tab}`)}
+                >
                   {tab === 'details' && (
                     <Stack marginTop={4}>
                       <PublicationPreview />

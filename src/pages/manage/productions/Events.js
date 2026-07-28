@@ -61,7 +61,7 @@ const Event = ({
           <CheckboxWithLabel
             id={id}
             name={name}
-            onToggle={() => onToggle(id)}
+            onCheckedChange={() => onToggle(id)}
             checked={selected}
           >
             {name}

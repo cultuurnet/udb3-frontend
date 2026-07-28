@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 
-import { TypeaheadInput } from './TypeaheadInput';
+import { Icon, Icons } from './Icon';
+import { SuggestionInput } from './SuggestionInput';
 
-const meta: Meta<typeof TypeaheadInput> = {
-  title: 'Components/TypeaheadInput',
-  component: TypeaheadInput,
+const meta: Meta<typeof SuggestionInput> = {
+  title: 'Components/SuggestionInput',
+  component: SuggestionInput,
   parameters: {
     layout: 'padded',
   },
@@ -25,8 +26,8 @@ export const Default: Story = {
     const [value, setValue] = useState('');
 
     return (
-      <TypeaheadInput
-        id="typeahead-input-default"
+      <SuggestionInput
+        id="suggestion-input-default"
         value={value}
         onChange={setValue}
         placeholder="Type to search..."
@@ -41,8 +42,8 @@ export const WithSelectedValue: Story = {
     const [value, setValue] = useState(suggestions[0]);
 
     return (
-      <TypeaheadInput
-        id="typeahead-input-selected"
+      <SuggestionInput
+        id="suggestion-input-selected"
         value={value}
         onChange={setValue}
         placeholder="Type to search..."
@@ -52,16 +53,18 @@ export const WithSelectedValue: Story = {
   },
 };
 
-export const NoSuggestions: Story = {
+export const WithCustomIcon: Story = {
   render: function RenderComponent() {
     const [value, setValue] = useState('');
 
     return (
-      <TypeaheadInput
-        id="typeahead-input-empty"
+      <SuggestionInput
+        id="suggestion-input-custom-icon"
         value={value}
         onChange={setValue}
         placeholder="Type to search..."
+        suggestions={suggestions}
+        icon={<Icon name={Icons.CHEVRON_DOWN} />}
       />
     );
   },
