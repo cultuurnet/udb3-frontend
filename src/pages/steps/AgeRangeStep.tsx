@@ -291,9 +291,8 @@ const AgeRangeInputs = ({
             return (
               <Button
                 key={key}
-                width="auto"
+                className="tw:w-auto tw:inline-flex"
                 active={selectedPreset === key}
-                display="inline-flex"
                 variant={ButtonVariants.SECONDARY_TOGGLE}
                 onClick={() => onPresetClick(apiLabel)}
                 css={`

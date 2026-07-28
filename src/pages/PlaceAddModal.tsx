@@ -244,9 +244,7 @@ const PlaceAddModal = ({
           <Inline spacing={3} flexWrap="wrap" maxWidth="70rem">
             {terms.map(({ id, name, domain }) => (
               <Button
-                width="auto"
-                marginBottom={3}
-                display="inline-flex"
+                className="tw:w-auto tw:inline-flex tw:mb-3"
                 key={id}
                 active={id === selectedTerm?.id}
                 variant={ButtonVariants.SECONDARY_TOGGLE}

@@ -105,8 +105,7 @@ const RecentUsedOrganizers = ({
               onClick={() => onChange(parseOfferId(organizer['@id']))}
               title={name}
               hasEllipsisOnTitle={true}
-              width="40rem"
-              maxWidth="95%"
+              className="tw:w-160 tw:max-w-[95%]"
               badge={
                 <Inline>
                   {isUitpasOrganizer(organizer, uitpasLabels) && (
@@ -220,7 +219,7 @@ const OrganizerPicker = ({
                   )}
                 </Text>
                 <Button
-                  spacing={3}
+                  className="tw:gap-3"
                   variant={ButtonVariants.LINK}
                   onClick={async () => {
                     let removed = organizer;
@@ -256,8 +255,8 @@ const OrganizerPicker = ({
                 </Text>
                 {!addButtonHasBeenPressed && (
                   <Button
-                    alignSelf="flex-start"
-                    variant={ButtonVariants.SECONDARY}
+                    className="tw:self-start"
+                    variant={ButtonVariants.NEUTRAL}
                     onClick={() => setAddButtonHasBeenPressed(true)}
                   >
                     {t('create.additionalInformation.organizer.add_new_button')}

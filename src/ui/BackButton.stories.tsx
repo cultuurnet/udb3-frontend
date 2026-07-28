@@ -10,8 +10,6 @@ const meta: Meta<typeof BackButton> = {
     controls: {
       include: [
         'translationKey',
-        'width',
-        'marginTop',
         'className',
         'disabled',
         'iconWidth',
@@ -20,12 +18,6 @@ const meta: Meta<typeof BackButton> = {
     },
   },
   argTypes: {
-    width: {
-      control: { type: 'text' },
-    },
-    marginTop: {
-      control: { type: 'number' },
-    },
     iconWidth: {
       control: { type: 'number' },
     },
@@ -40,8 +32,6 @@ type Story = StoryObj<typeof meta>;
 
 const commonArgs = {
   disabled: false,
-  width: 'fit-content',
-  marginTop: 4,
   iconWidth: 18,
   iconHeight: 15,
 };

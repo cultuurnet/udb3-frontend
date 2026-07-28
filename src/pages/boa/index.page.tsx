@@ -49,7 +49,7 @@ const Boa = () => {
         <Inline justifyContent="center">
           {isBoaEnabledOnMount ? (
             <Button
-              variant={ButtonVariants.SECONDARY}
+              variant={ButtonVariants.NEUTRAL}
               onClick={handleStopTesting}
             >
               {t('boa.button_stop')}

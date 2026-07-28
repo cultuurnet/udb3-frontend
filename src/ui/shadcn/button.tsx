@@ -5,8 +5,7 @@ import * as React from 'react';
 import { cn } from '@/ui/shadcn/utils';
 
 const buttonVariants = cva(
-  // No Tailwind preflight in this project, so native button chrome needs an explicit reset.
-  'tw:appearance-none tw:border-0 tw:bg-transparent tw:p-0 tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:text-sm tw:font-medium tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg]:size-4 tw:[&_svg]:shrink-0',
+  'tw:appearance-none tw:border-0 tw:bg-transparent tw:p-0 tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:text-base tw:font-normal tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -18,19 +17,61 @@ const buttonVariants = cva(
           'tw:border tw:border-input tw:bg-background tw:shadow-sm tw:hover:bg-accent tw:hover:text-accent-foreground',
         secondary:
           'tw:bg-secondary tw:text-secondary-foreground tw:shadow-sm tw:hover:bg-secondary/80',
+        neutral:
+          'tw:bg-background tw:text-foreground tw:shadow-heavy tw:hover:bg-muted',
         ghost: 'tw:hover:bg-accent tw:hover:text-accent-foreground',
-        link: 'tw:text-primary tw:underline-offset-4 tw:hover:underline',
+        link: 'tw:text-primary tw:underline tw:hover:text-primary/70',
+        success:
+          'tw:bg-success tw:text-success-foreground tw:shadow tw:hover:bg-success/90',
+        'secondary-toggle':
+          'tw:border tw:border-border tw:bg-transparent tw:text-foreground tw:shadow-none tw:hover:border-success tw:hover:text-success',
+        unstyled: 'tw:bg-transparent tw:text-inherit tw:shadow-none',
+        'link-danger':
+          'tw:text-destructive tw:underline tw:hover:text-destructive/70',
+        outlined:
+          'tw:border tw:border-primary tw:bg-transparent tw:text-primary tw:shadow-none tw:hover:bg-primary/10',
+        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
-        default: 'tw:h-9 tw:px-4 tw:py-2',
-        sm: 'tw:h-8 tw:rounded-md tw:px-3 tw:text-xs',
+        // h-10 on all three matches legacy's single global button height
+        default: 'tw:h-10 tw:px-4 tw:py-2',
+        sm: 'tw:h-10 tw:rounded-md tw:px-3 tw:text-xs',
         lg: 'tw:h-10 tw:rounded-md tw:px-8',
         icon: 'tw:h-9 tw:w-9',
       },
+      active: {
+        true: '',
+        false: '',
+      },
     },
+    compoundVariants: [
+      {
+        variant: 'secondary-toggle',
+        active: true,
+        class: 'tw:border-success tw:bg-success-muted tw:text-success',
+      },
+      {
+        variant: 'neutral',
+        active: true,
+        class: 'tw:bg-udb-grey-1',
+      },
+      {
+        variant: 'unstyled',
+        class: 'tw:h-auto tw:w-auto tw:rounded-none tw:p-0',
+      },
+      {
+        variant: ['link', 'link-danger'],
+        class: 'tw:h-auto tw:w-auto tw:p-0',
+      },
+      {
+        variant: 'icon',
+        class: 'tw:h-auto tw:w-auto tw:p-3',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      active: false,
     },
   },
 );
@@ -42,11 +83,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, active, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, active, className }))}
         ref={ref}
         {...props}
       />

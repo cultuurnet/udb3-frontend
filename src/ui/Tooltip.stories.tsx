@@ -60,7 +60,7 @@ export const WithIconButton: Story = {
   },
   render: ({ content, side }) => (
     <Tooltip content={content} side={side}>
-      <Button variant={ButtonVariants.UNSTYLED}>
+      <Button variant={ButtonVariants.UNSTYLED} aria-label="Search">
         <Icon name={Icons.SEARCH} />
       </Button>
     </Tooltip>

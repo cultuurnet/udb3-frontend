@@ -241,7 +241,7 @@ const DatePeriodPicker = ({
             {holidayPresets.map((preset) => (
               <Button
                 key={preset.label}
-                variant={ButtonVariants.SECONDARY}
+                variant={ButtonVariants.NEUTRAL}
                 onClick={async () => {
                   onClose();
                   const holidays =
