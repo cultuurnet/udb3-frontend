@@ -6,8 +6,8 @@ import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 const birthDate = nl.create.name_and_age.age.birth_date;
 
-const ageInputModeAgeToggle = 'label[for="age-input-mode-age"]';
-const ageInputModeDOBToggle = 'label[for="age-input-mode-date_of_birth"]';
+const ageInputModeAgeToggle = '[data-testid="age-input-mode-age"]';
+const ageInputModeDOBToggle = '[data-testid="age-input-mode-date_of_birth"]';
 const birthDateMinInput = '#age-birth-date-min';
 const birthDateMaxInput = '#age-birth-date-max';
 

@@ -81,6 +81,7 @@ const ToggleGroupLegacy = ({
         <BootstrapToggleButton
           key={toggleOption.value}
           id={`${name}-${toggleOption.value}`}
+          data-testid={`${name}-${toggleOption.value}`}
           value={toggleOption.value}
           variant={variant}
         >
