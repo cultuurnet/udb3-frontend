@@ -1,18 +1,18 @@
 import { useTranslation } from 'react-i18next';
 
 import { Countries, Country } from '@/types/Country';
-import { BoxProps, getBoxProps } from '@/ui/Box';
 import { Button } from '@/ui/Button';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
 import { Inline } from '@/ui/Inline';
+import { cn } from '@/ui/shadcn/utils';
 import { Text } from '@/ui/Text';
-import { getGlobalFormInputHeight } from '@/ui/theme';
 
 import { FlagIcon } from '../../ui/FlagIcon';
 
-type Props = BoxProps & {
+type Props = {
   value: Country;
   onChange: (value: Country) => void;
+  className?: string;
   showSchoolLocation?: boolean;
 };
 
@@ -23,7 +23,6 @@ const CountryPicker = ({
   onChange,
   className,
   showSchoolLocation = false,
-  ...props
 }: Props) => {
   const { t } = useTranslation();
 
@@ -31,25 +30,10 @@ const CountryPicker = ({
     <Dropdown
       id="country-picker"
       variant={DropDownVariants.SECONDARY}
-      className={className}
-      css={`
-        .dropdown.btn-group {
-          box-shadow: none;
-        }
-
-        & button.btn {
-          box-shadow: none;
-        }
-
-        & button.btn.dropdown-toggle {
-          height: ${getGlobalFormInputHeight};
-          border: var(--bs-border-width) solid var(--bs-border-color);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-      `}
-      {...getBoxProps(props)}
+      className={cn(
+        'tw:h-10 tw:shadow-none! tw:border tw:border-input tw:inline-flex tw:items-center tw:justify-center',
+        className,
+      )}
     >
       <Button customChildren>
         <FlagIcon country={value} />

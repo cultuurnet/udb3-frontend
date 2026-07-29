@@ -1144,6 +1144,9 @@
     "welcome": "Welkom"
   },
   "description": "UiTdatabank levert informatie aan meer dan 1.000 agenda's, waaronder UiTinvlaanderen, websites van steden en gemeenten, thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw activiteit kan verschijnen op vele agenda's.",
+  "dropdown": {
+    "toggle_label": "Meer opties"
+  },
   "error": {
     "description": "Er ging iets mis. Herlaad de pagina om opnieuw te proberen. Neem contact op met <1>{{email}}</1> als dit probleem zich blijft voordoen",
     "email": "vragen@uitdatabank.be",
