@@ -71,9 +71,11 @@ const BaseLinkShadcn = ({
   const variantClass =
     variant === LinkVariants.UNSTYLED
       ? 'tw:items-center tw:w-full tw:no-underline tw:text-inherit tw:hover:text-inherit'
-      : isButton || isBadge
-        ? 'tw:items-center tw:no-underline'
-        : 'tw:font-normal tw:underline tw:text-udb-main-darkest-blue tw:hover:text-udb-main-blue tw:hover:decoration-udb-main-blue';
+      : isButton
+        ? 'tw:items-center tw:no-underline tw:rounded-md tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring'
+        : isBadge
+          ? 'tw:items-center tw:no-underline'
+          : 'tw:font-normal tw:underline tw:text-udb-main-darkest-blue tw:hover:text-udb-main-blue tw:hover:decoration-udb-main-blue';
 
   // TODO: after legacy drop, replace Box with plain Component and remove getBoxProps — callers will use className instead of Box props
   return (
@@ -94,6 +96,7 @@ const BaseLinkShadcn = ({
                 buttonVariantMap[variant as Values<typeof LinkButtonVariants>],
             }),
             'tw:w-full',
+            className,
           )}
         >
           {children}
