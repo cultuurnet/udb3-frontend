@@ -80,7 +80,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
 
     return (
       <div
-        className="tw:flex tw:flex-1 tw:flex-col tw:h-75 tw:justify-center tw:items-center tw:gap-4 tw:p-4"
+        className="tw:flex tw:flex-1 tw:flex-col tw:h-[300px] tw:justify-center tw:items-center tw:gap-4 tw:p-4"
         css={`
           background-color: ${getValue('backgroundColor')};
           border: 1px solid
