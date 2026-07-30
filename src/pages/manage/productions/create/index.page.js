@@ -267,7 +267,7 @@ const Create = () => {
                   }
                 />
               )}
-              <Inline spacing={3}>
+              <div className="tw:flex tw:gap-2">
                 <Button
                   variant={ButtonVariants.SUCCESS}
                   disabled={
@@ -292,7 +292,7 @@ const Create = () => {
                 >
                   {t('productions.create.skip')}
                 </Button>
-              </Inline>
+              </div>
             </Stack>
           </Stack>
         )}

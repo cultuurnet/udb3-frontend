@@ -10,10 +10,11 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { DetailTable } from '@/ui/DetailTable';
 import { Icon, Icons } from '@/ui/Icon';
-import { getInlineProps, Inline } from '@/ui/Inline';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { List } from '@/ui/List';
 import { Panel } from '@/ui/Panel';
+import { cn } from '@/ui/shadcn/utils';
 import { Spinner } from '@/ui/Spinner';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -121,7 +122,7 @@ const Actions = ({
           productionName: activeProductionName,
         })}
       </Title>
-      <Inline as="div" spacing={3}>
+      <div className="tw:flex tw:gap-2">
         <Button
           iconName={Icons.PENCIL}
           className="tw:gap-3"
@@ -151,7 +152,7 @@ const Actions = ({
         >
           {t('productions.overview.delete')}
         </Button>
-      </Inline>
+      </div>
     </Inline>
   );
 };
@@ -171,19 +172,12 @@ const AddAction = ({
   className,
   toBeAddedEventId,
   onToBeAddedEventIdInput,
-  ...props
 }) => {
   const { t } = useTranslation();
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
   return (
-    <Inline
-      as="div"
-      className={className}
-      spacing={3}
-      alignItems="center"
-      {...getInlineProps(props)}
-    >
+    <div className={cn('tw:flex tw:items-center tw:gap-2', className)}>
       <Input
         id="cdbid"
         placeholder="cdbid"
@@ -211,7 +205,7 @@ const AddAction = ({
       >
         {t('productions.overview.cancel')}
       </Button>
-    </Inline>
+    </div>
   );
 };
 
@@ -228,19 +222,12 @@ const ChangeNameAction = ({
   className,
   changedProductionName,
   onChangedProductionName,
-  ...props
 }) => {
   const { t } = useTranslation();
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
   return (
-    <Inline
-      as="div"
-      className={className}
-      spacing={3}
-      alignItems="center"
-      {...getInlineProps(props)}
-    >
+    <div className={cn('tw:flex tw:items-center tw:gap-2', className)}>
       <Input
         id="name"
         placeholder={t('productions.create.production_name')}
@@ -271,7 +258,7 @@ const ChangeNameAction = ({
       >
         {t('productions.overview.cancel')}
       </Button>
-    </Inline>
+    </div>
   );
 };
 

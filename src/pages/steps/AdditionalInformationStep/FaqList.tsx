@@ -58,7 +58,7 @@ const FaqList = ({
           >
             <Inline justifyContent="space-between" alignItems="center">
               <Text fontWeight="500">{item.question}</Text>
-              <Inline spacing={3}>
+              <div className="tw:flex tw:gap-2">
                 <Button
                   variant={ButtonVariants.LINK}
                   onClick={() => onEdit(index)}
@@ -71,7 +71,7 @@ const FaqList = ({
                 >
                   {t('create.additionalInformation.faq.delete')}
                 </Button>
-              </Inline>
+              </div>
             </Inline>
             <Text
               color={colors.grey5}

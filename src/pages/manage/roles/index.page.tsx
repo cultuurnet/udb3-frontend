@@ -180,7 +180,7 @@ const RolesOverviewPage = () => {
               border-bottom: 2px solid ${getTableValue('borderColor')};
             `}
           >
-            <Inline spacing={3}>
+            <div className="tw:flex tw:gap-2">
               {actions.map(({ iconName, title, onClick, disabled }) => (
                 <Button
                   key={title}
@@ -193,7 +193,7 @@ const RolesOverviewPage = () => {
                   {title}
                 </Button>
               ))}
-            </Inline>
+            </div>
           </Inline>
           {rolesQuery.status === QueryStatus.LOADING && <Spinner />}
           {rolesQuery.status === QueryStatus.SUCCESS && roles.length > 0 && (

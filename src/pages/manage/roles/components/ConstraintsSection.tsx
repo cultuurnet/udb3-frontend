@@ -144,7 +144,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
               />
             }
           />
-          <Inline marginTop={3} spacing={2}>
+          <div className="tw:flex tw:mt-2 tw:gap-1">
             <Button
               variant={ButtonVariants.PRIMARY}
               onClick={handleSave}
@@ -159,7 +159,7 @@ export const ConstraintsSection = ({ roleId }: ConstraintsSectionProps) => {
             <Button variant={ButtonVariants.PRIMARY} onClick={handleCancel}>
               {t('roles.form.cancel')}
             </Button>
-          </Inline>
+          </div>
         </Stack>
       )}
 

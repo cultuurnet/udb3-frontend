@@ -101,7 +101,7 @@ const RoleNameInput = ({
       />
 
       {showButtons && (
-        <Inline marginTop={4} spacing={2}>
+        <div className="tw:flex tw:mt-4 tw:gap-1">
           <Button
             type="submit"
             variant={ButtonVariants.PRIMARY}
@@ -118,7 +118,7 @@ const RoleNameInput = ({
           >
             {t('roles.form.cancel')}
           </Button>
-        </Inline>
+        </div>
       )}
     </Stack>
   );

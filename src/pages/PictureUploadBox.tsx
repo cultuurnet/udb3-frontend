@@ -131,7 +131,7 @@ const PictureUploadBox = ({
                     </Text>
                   </Stack>
                 </Inline>
-                <Inline spacing={3}>
+                <div className="tw:flex tw:gap-2">
                   <Button
                     variant={ButtonVariants.PRIMARY}
                     iconName={Icons.PENCIL}
@@ -156,7 +156,7 @@ const PictureUploadBox = ({
                       {t('pictures.set_as_main_image')}
                     </Button>
                   )}
-                </Inline>
+                </div>
               </Stack>
             );
           })}

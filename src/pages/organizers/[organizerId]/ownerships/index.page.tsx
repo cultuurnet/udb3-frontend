@@ -273,7 +273,7 @@ const Ownership = () => {
               </Stack>
             )}
           </Stack>
-          <Stack spacing={3.5} flex={1}>
+          <div className="tw:flex tw:flex-col tw:flex-1 tw:gap-3">
             <Button
               variant={ButtonVariants.PRIMARY}
               iconName={Icons.PLUS_CIRCLE}
@@ -294,7 +294,7 @@ const Ownership = () => {
             >
               {t('organizers.ownerships.actions.back')}
             </Button>
-          </Stack>
+          </div>
         </Inline>
         <Modal
           visible={isOpen}

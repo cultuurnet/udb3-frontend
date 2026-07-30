@@ -22,7 +22,6 @@ import { Badge, BadgeVariants } from '@/ui/Badge';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
 import { Link, LinkVariants } from '@/ui/Link';
-import { Stack } from '@/ui/Stack';
 import { formatPermission } from '@/utils/formatPermission';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -199,7 +198,7 @@ const OfferPreviewSidebar = ({
   }
 
   return (
-    <Stack spacing={3.5} paddingX={4}>
+    <div className="tw:flex tw:flex-col tw:gap-3 tw:px-4">
       {actions.map(({ iconName, title, onClick, href, disabled, suffix }) => {
         if (onClick) {
           return (
@@ -251,7 +250,7 @@ const OfferPreviewSidebar = ({
         return null;
       })}
       {/* Moderation component can be added here */}
-    </Stack>
+    </div>
   );
 };
 

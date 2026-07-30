@@ -44,7 +44,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
 
   if (request.state === OwnershipState.REQUESTED) {
     return (
-      <Inline spacing={3}>
+      <div className="tw:flex tw:gap-2">
         <Button
           variant={ButtonVariants.SUCCESS}
           iconName={Icons.CHECK_CIRCLE}
@@ -61,7 +61,7 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
         >
           {t('organizers.ownerships.table.actions.reject')}
         </Button>
-      </Inline>
+      </div>
     );
   }
 

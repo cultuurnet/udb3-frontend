@@ -181,7 +181,7 @@ const OpeningHoursContent = ({
       <Stack spacing={3}>
         <Inline justifyContent="space-between" alignItems="center">
           <Text fontWeight="bold">{t('create.calendar.fixed_days.hours')}</Text>
-          <Inline spacing={3}>
+          <div className="tw:flex tw:gap-2">
             <Button variant={ButtonVariants.LINK} onClick={onOpenModal}>
               {t('create.calendar.fixed_days.overview.edit')}
             </Button>
@@ -191,7 +191,7 @@ const OpeningHoursContent = ({
             >
               {t('create.calendar.fixed_days.overview.delete')}
             </Button>
-          </Inline>
+          </div>
         </Inline>
         <OpeningHoursSummary
           openingHours={openingHours.map((openingHour) => ({

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 
@@ -157,7 +156,7 @@ const CustomRichTextEditorLink = ({
               />
             }
           />
-          <Inline justifyContent={'center'} spacing={3}>
+          <div className="tw:flex tw:justify-center tw:gap-2">
             <Button
               variant={ButtonVariants.PRIMARY}
               onClick={() => {
@@ -178,7 +177,7 @@ const CustomRichTextEditorLink = ({
             <Button variant={ButtonVariants.NEUTRAL} onClick={doCollapse}>
               {t('organizer.add_modal.actions.cancel')}
             </Button>
-          </Inline>
+          </div>
         </Stack>
       )}
     </div>

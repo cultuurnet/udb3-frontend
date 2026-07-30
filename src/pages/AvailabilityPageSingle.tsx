@@ -10,7 +10,6 @@ import { BookingAvailabilityForm } from '@/pages/BookingAvailabilityForm';
 import { StatusForm } from '@/pages/StatusForm';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Inline } from '@/ui/Inline';
 import { Page } from '@/ui/Page';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
@@ -163,7 +162,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
                 setReasonInCurrentLanguage(e.target.value)
               }
             />
-            <Inline key="actions" spacing={3}>
+            <div key="actions" className="tw:flex tw:gap-2">
               <Button
                 variant={ButtonVariants.PRIMARY}
                 disabled={!offer || reasonInCurrentLanguage.length > 200}
@@ -179,7 +178,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
               >
                 {t('offerStatus.actions.cancel')}
               </Button>
-            </Inline>
+            </div>
           </Stack>
         )}
       </Page.Content>
