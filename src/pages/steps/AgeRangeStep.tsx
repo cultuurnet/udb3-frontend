@@ -277,13 +277,7 @@ const AgeRangeInputs = ({
         />
       </Inline>
       {errorKey && <Text color="red">{t(errorKey)}</Text>}
-      <Inline
-        spacing={3}
-        flexWrap="wrap"
-        css={`
-          row-gap: 0.5rem;
-        `}
-      >
+      <div className="tw:flex tw:flex-wrap tw:gap-2">
         {Object.keys(AgeRanges)
           .filter((key) => AgeRanges[key].apiLabel)
           .map((key) => {
@@ -315,7 +309,7 @@ const AgeRangeInputs = ({
               </Button>
             );
           })}
-      </Inline>
+      </div>
     </Stack>
   );
 };
