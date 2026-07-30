@@ -149,7 +149,7 @@ const AgeRangeStepLegacy = ({
               <Text fontWeight="bold">
                 {t(`create.name_and_age.age.title`)}
               </Text>
-              <div className="tw:flex tw:flex-wrap tw:max-w-160 tw:gap-x-2 tw:gap-y-3">
+              <div className="tw:flex tw:flex-wrap tw:max-w-[40rem] tw:gap-x-2 tw:gap-y-3">
                 {Object.keys(AgeRanges).map((key: string) => {
                   const apiLabel = AgeRanges[key].apiLabel;
                   return (
