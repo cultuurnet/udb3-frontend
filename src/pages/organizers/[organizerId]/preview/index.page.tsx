@@ -25,7 +25,6 @@ import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icons } from '@/ui/Icon';
-import { Inline } from '@/ui/Inline';
 import { Link, LinkButtonVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Stack } from '@/ui/Stack';
@@ -114,7 +113,7 @@ const OrganizersPreview = () => {
                 )}
               </>
             )}
-            <Inline spacing={5}>
+            <div className="tw:flex tw:gap-8">
               <Stack flex={3}>
                 <OrganizerTable
                   organizer={organizer}
@@ -178,7 +177,7 @@ const OrganizersPreview = () => {
                   </Link>
                 </Stack>
               </div>
-            </Inline>
+            </div>
           </Stack>
         </Stack>
       </Page.Content>

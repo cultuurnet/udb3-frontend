@@ -6,10 +6,8 @@ import { FaqItem } from '@/types/Offer';
 import { Values } from '@/types/Values';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Panel } from '@/ui/Panel';
-import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
@@ -42,10 +40,9 @@ const FaqList = ({
         const item = faq[language];
         if (!item) return null;
         return (
-          <Stack
+          <div
             key={index}
-            spacing={2}
-            padding={4}
+            className="tw:flex tw:flex-col tw:gap-1 tw:p-4"
             css={`
               background-image: linear-gradient(
                 ${getPanelValue('borderColor')},
@@ -56,7 +53,7 @@ const FaqList = ({
               background-repeat: no-repeat;
             `}
           >
-            <Inline justifyContent="space-between" alignItems="center">
+            <div className="tw:flex tw:justify-between tw:items-center">
               <Text fontWeight="500">{item.question}</Text>
               <div className="tw:flex tw:gap-2">
                 <Button
@@ -72,7 +69,7 @@ const FaqList = ({
                   {t('create.additionalInformation.faq.delete')}
                 </Button>
               </div>
-            </Inline>
+            </div>
             <Text
               color={colors.grey5}
               css={`
@@ -89,10 +86,10 @@ const FaqList = ({
                 ),
               }}
             />
-          </Stack>
+          </div>
         );
       })}
-      <Inline padding={4}>{action}</Inline>
+      <div className="tw:p-4">{action}</div>
       <Modal
         variant={ModalVariants.QUESTION}
         size={ModalSizes.MD}

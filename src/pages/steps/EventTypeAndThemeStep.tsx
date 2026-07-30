@@ -347,11 +347,14 @@ const EventTypeAndThemeStep = ({
       control={control}
       render={({ field }) => {
         return (
-          <Stack ref={eventTypeAndThemeContainer} spacing={4}>
+          <div
+            ref={eventTypeAndThemeContainer}
+            className="tw:flex tw:flex-col tw:gap-4"
+          >
             {!shouldHideType && (
               <Stack>
                 {!field.value?.type?.id ? (
-                  <div className="tw:flex tw:flex-wrap tw:max-w-280 tw:gap-x-2 tw:gap-y-3">
+                  <div className="tw:flex tw:flex-wrap tw:max-w-[70rem] tw:gap-x-2 tw:gap-y-3">
                     {types.map(({ id, name }) => (
                       <Button
                         key={id}
@@ -498,7 +501,7 @@ const EventTypeAndThemeStep = ({
                 {t('create.type_and_theme.cultuurkuur.error')}
               </Text>
             )}
-          </Stack>
+          </div>
         );
       }}
     />

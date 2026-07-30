@@ -6,8 +6,6 @@ import { useRowSelect } from 'react-table';
 
 import { Button, ButtonVariants } from './Button';
 import { Checkbox } from './Checkbox';
-import { Inline } from './Inline';
-import { Stack } from './Stack';
 import { Table } from './Table';
 import { Text } from './Text';
 
@@ -106,8 +104,8 @@ const SelectionTable = ({
   );
 
   return (
-    <Stack spacing={3}>
-      <Inline forwardedAs="div" width="100%" alignItems="center" spacing={5}>
+    <div className="tw:flex tw:flex-col tw:gap-2">
+      <div className="tw:flex tw:w-full tw:items-center tw:gap-8">
         <Text
           minWidth="11rem"
           css={`
@@ -130,7 +128,7 @@ const SelectionTable = ({
             </Button>
           ))}
         </div>
-      </Inline>
+      </div>
 
       <Table
         columns={columns}
@@ -147,7 +145,7 @@ const SelectionTable = ({
         `}
         {...props}
       />
-    </Stack>
+    </div>
   );
 };
 

@@ -124,8 +124,7 @@ const MenuItem = memo(
           onClick={onClick}
           customChildren
           title={label}
-          display="flex"
-          width="100%"
+          {...(href ? { display: 'flex', width: '100%' } : {})}
           className={cn(
             'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-accent tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
             isActive && 'tw:bg-accent',
@@ -176,12 +175,12 @@ const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
   if (!title) return <Content {...props} />;
 
   return (
-    <Stack spacing={3} {...props}>
-      <h2 className="tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
+    <div className="tw:flex tw:flex-col tw:gap-2">
+      <h2 className="tw:m-0 tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
         {title}
       </h2>
       <Content />
-    </Stack>
+    </div>
   );
 });
 

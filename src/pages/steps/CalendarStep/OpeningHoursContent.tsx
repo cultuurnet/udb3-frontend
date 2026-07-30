@@ -179,7 +179,7 @@ const OpeningHoursContent = ({
   if (isBoaEnabled && hasBoaContent) {
     return (
       <Stack spacing={3}>
-        <Inline justifyContent="space-between" alignItems="center">
+        <div className="tw:flex tw:justify-between tw:items-center">
           <Text fontWeight="bold">{t('create.calendar.fixed_days.hours')}</Text>
           <div className="tw:flex tw:gap-2">
             <Button variant={ButtonVariants.LINK} onClick={onOpenModal}>
@@ -192,7 +192,7 @@ const OpeningHoursContent = ({
               {t('create.calendar.fixed_days.overview.delete')}
             </Button>
           </div>
-        </Inline>
+        </div>
         <OpeningHoursSummary
           openingHours={openingHours.map((openingHour) => ({
             ...openingHour,

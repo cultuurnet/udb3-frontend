@@ -36,7 +36,6 @@ import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Icons } from '@/ui/Icon';
-import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
@@ -179,7 +178,7 @@ const Ownership = () => {
         })}
       </Page.Title>
       <Page.Content>
-        <Inline spacing={5}>
+        <div className="tw:flex tw:gap-8">
           <Stack spacing={5} flex={3}>
             <Alert variant={AlertVariants.PRIMARY} fullWidth>
               {t('organizers.ownerships.info')}
@@ -295,7 +294,7 @@ const Ownership = () => {
               {t('organizers.ownerships.actions.back')}
             </Button>
           </div>
-        </Inline>
+        </div>
         <Modal
           visible={isOpen}
           variant={ModalVariants.QUESTION}

@@ -7,6 +7,7 @@ import * as yup from 'yup';
 
 import { useAutoFocus } from '@/hooks/useAutoFocus';
 import { ImageIcon } from '@/pages/PictureUploadBox';
+import { parseSpacing } from '@/ui/Box';
 import { Button } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
 import { Image } from '@/ui/Image';
@@ -78,19 +79,16 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
     const imagePreviewUrl = image && URL.createObjectURL(image);
 
     return (
-      <Stack
-        flex={1}
-        spacing={4}
-        height={300}
-        backgroundColor={getValue('backgroundColor')}
-        justifyContent="center"
-        alignItems="center"
+      <div
+        className="tw:flex tw:flex-1 tw:flex-col tw:h-75 tw:justify-center tw:items-center tw:gap-4 tw:p-4"
         css={`
+          background-color: ${getValue('backgroundColor')};
           border: 1px solid
             ${getValue(`${error ? 'errorBorderColor' : 'borderColor'}`)};
+          margin-bottom: ${marginBottom !== undefined
+            ? parseSpacing(marginBottom)()
+            : '0'};
         `}
-        padding={4}
-        marginBottom={marginBottom}
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
@@ -127,7 +125,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
             maxFileSize: MAX_FILE_SIZE / 1_000_000,
           })}
         </Text>
-      </Stack>
+      </div>
     );
   },
 );

@@ -176,9 +176,8 @@ const LabelsOverviewPage = () => {
             box-shadow: ${getGlobalValue('boxShadow.medium')};
           `}
         >
-          <Inline
-            alignItems="center"
-            paddingBottom={4}
+          <div
+            className="tw:flex tw:items-center tw:pb-4"
             css={`
               border-bottom: 2px solid ${getTableValue('borderColor')};
             `}
@@ -197,7 +196,7 @@ const LabelsOverviewPage = () => {
                 </Button>
               ))}
             </div>
-          </Inline>
+          </div>
           {labelsQuery.status === QueryStatus.LOADING && <Spinner />}
           {labelsQuery.status === QueryStatus.SUCCESS && labels.length > 0 && (
             <Inline

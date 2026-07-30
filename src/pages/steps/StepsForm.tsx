@@ -453,14 +453,14 @@ const StepsForm = ({
                 </Text>
               </div>
             )}
+            <PublishLaterModal
+              scope={scope}
+              offerId={offerId}
+              offer={offer}
+              visible={isPublishLaterModalVisible}
+              onClose={() => setIsPublishLaterModalVisible(false)}
+            />
           </div>
-          <PublishLaterModal
-            scope={scope}
-            offerId={offerId}
-            offer={offer}
-            visible={isPublishLaterModalVisible}
-            onClose={() => setIsPublishLaterModalVisible(false)}
-          />
         </Page.Footer>
       )}
     </Page>

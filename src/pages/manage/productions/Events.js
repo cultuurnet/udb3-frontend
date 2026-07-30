@@ -301,7 +301,7 @@ const Events = ({
     <Stack spacing={4} {...getStackProps(props)}>
       <Stack key="title-and-buttons" spacing={3}>
         {isAddActionVisible && (
-          <Stack as="div" spacing={3}>
+          <div className="tw:flex tw:flex-col tw:gap-2">
             <AddAction
               onAdd={onAddEvent}
               onCancel={onCancelAddEvent}
@@ -311,11 +311,11 @@ const Events = ({
             <Alert visible={!!errorMessage} variant={AlertVariants.DANGER}>
               {errorMessage}
             </Alert>
-          </Stack>
+          </div>
         )}
 
         {isChangeNameActionVisible && (
-          <Stack as="div" spacing={3}>
+          <div className="tw:flex tw:flex-col tw:gap-2">
             <ChangeNameAction
               onConfirm={onConfirmChangeProductionName}
               onCancel={onCancelChangeProductionName}
@@ -326,7 +326,7 @@ const Events = ({
             <Alert visible={!!errorMessage} variant={AlertVariants.DANGER}>
               {errorMessage}
             </Alert>
-          </Stack>
+          </div>
         )}
 
         {!isAddActionVisible && !isChangeNameActionVisible && (
