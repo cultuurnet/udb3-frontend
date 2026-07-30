@@ -15,18 +15,18 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ApiHoliday } from '@/hooks/api/holidays';
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 import { SupportedLanguages } from '../i18n';
 import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
-import { DatePeriodPickerLegacy } from './DatePeriodPickerLegacy';
 import { DatePicker } from './DatePicker';
+import { Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
-import { cn } from './shadcn/utils';
+import { Stack } from './Stack';
 import { SwitchVariants } from './Switch';
 import { SwitchWithLabel } from './SwitchWithLabel';
 import { Text, TextVariants } from './Text';
+import { colors } from './theme';
 
 type HolidayPreset = {
   label: string;
@@ -143,7 +143,7 @@ type Props = {
   className?: string;
 };
 
-const DatePeriodPickerShadcn = ({
+const DatePeriodPickerLegacy = ({
   id,
   dateStart,
   dateEnd,
@@ -222,11 +222,29 @@ const DatePeriodPickerShadcn = ({
 
   const calendarQuickLinks = showQuickLinks
     ? (onClose: () => void) => (
-        <div className="tw:flex tw:h-full tw:flex-col tw:text-base">
-          <div className="tw:border-b tw:border-border tw:bg-muted tw:px-4 tw:py-3 tw:text-center tw:font-bold tw:leading-6">
+        <Stack
+          css={`
+            border-left: 1px solid ${colors.grey3};
+            height: 100%;
+            font-size: 1rem;
+          `}
+        >
+          <Stack
+            className="custom-calendar-header"
+            css={`
+              padding: 1.35rem !important;
+            `}
+          >
             <Text>{t('date_period_picker.quick_links.title')}</Text>
-          </div>
-          <div className="tw:flex tw:flex-col tw:gap-2 tw:px-4 tw:py-3">
+          </Stack>
+          <Stack
+            spacing={2}
+            paddingY={3}
+            paddingX={4}
+            css={`
+              gap: 0.2667rem;
+            `}
+          >
             {holidayPresets.map((preset) => (
               <Button
                 key={preset.label}
@@ -251,13 +269,13 @@ const DatePeriodPickerShadcn = ({
                 {preset.label}
               </Button>
             ))}
-          </div>
-        </div>
+          </Stack>
+        </Stack>
       )
     : undefined;
 
   const calendarContent = showHolidayFeatures ? (
-    <div className="tw:flex tw:flex-col tw:gap-3">
+    <Stack spacing={3}>
       <SwitchWithLabel
         id={`${idPrefix}-show-holidays`}
         label={
@@ -271,29 +289,25 @@ const DatePeriodPickerShadcn = ({
         variant={SwitchVariants.SUCCESS}
       />
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
-        <div className="tw:flex tw:flex-col tw:gap-1">
+        <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text
-              key={label}
-              variant={TextVariants.MUTED}
-              fontSize="0.85rem"
-              lineHeight="1.2"
-            >
+            <Text key={label} variant={TextVariants.MUTED} fontSize="0.85rem">
               {label}
             </Text>
           ))}
-        </div>
+        </Stack>
       )}
-    </div>
+    </Stack>
   ) : undefined;
 
   return (
-    <div className={cn('tw:flex tw:gap-8', className)}>
-      <div className="tw:flex tw:flex-col tw:gap-1">
+    <Inline as="div" spacing={5} className={className}>
+      <Stack spacing={2} as="div">
         <Label variant={labelVariant} htmlFor={`${idPrefix}-start`}>
           {t('date_period_picker.start')}
         </Label>
         <DatePicker
+          withHolidays={showHolidayFeatures}
           id={`${idPrefix}-start`}
           selected={dateStart}
           minDate={minDate}
@@ -326,12 +340,13 @@ const DatePeriodPickerShadcn = ({
           calendarContent={calendarContent}
           calendarQuickLinks={calendarQuickLinks}
         />
-      </div>
-      <div className="tw:flex tw:flex-col tw:gap-1">
+      </Stack>
+      <Stack spacing={2} as="div">
         <Label variant={labelVariant} htmlFor={`${idPrefix}-end`}>
           {t('date_period_picker.end')}
         </Label>
         <DatePicker
+          withHolidays={showHolidayFeatures}
           id={`${idPrefix}-end`}
           selected={dateEnd}
           onChange={(newDateEnd) => {
@@ -367,77 +382,10 @@ const DatePeriodPickerShadcn = ({
           }
           calendarContent={calendarContent}
         />
-      </div>
-    </div>
+      </Stack>
+    </Inline>
   );
 };
 
-const DatePeriodPicker = ({
-  id,
-  dateStart,
-  dateEnd,
-  minDate,
-  maxDate,
-  onDateStartChange,
-  onDateEndChange,
-  disabled,
-  showHolidaysToggle,
-  showQuickLinks,
-  apiHolidays,
-  fetchHolidays,
-  onQuickLinkClick,
-  onShowHolidaysChange,
-  labelVariant,
-  className,
-}: Props) => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(
-    FeatureFlags.SHADCN_MIGRATION,
-  );
-
-  if (isShadcnMigrationEnabled) {
-    return (
-      <DatePeriodPickerShadcn
-        id={id}
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        minDate={minDate}
-        maxDate={maxDate}
-        onDateStartChange={onDateStartChange}
-        onDateEndChange={onDateEndChange}
-        disabled={disabled}
-        showHolidaysToggle={showHolidaysToggle}
-        showQuickLinks={showQuickLinks}
-        apiHolidays={apiHolidays}
-        fetchHolidays={fetchHolidays}
-        onQuickLinkClick={onQuickLinkClick}
-        onShowHolidaysChange={onShowHolidaysChange}
-        labelVariant={labelVariant}
-        className={className}
-      />
-    );
-  }
-
-  return (
-    <DatePeriodPickerLegacy
-      id={id}
-      dateStart={dateStart}
-      dateEnd={dateEnd}
-      minDate={minDate}
-      maxDate={maxDate}
-      onDateStartChange={onDateStartChange}
-      onDateEndChange={onDateEndChange}
-      disabled={disabled}
-      showHolidaysToggle={showHolidaysToggle}
-      showQuickLinks={showQuickLinks}
-      apiHolidays={apiHolidays}
-      fetchHolidays={fetchHolidays}
-      onQuickLinkClick={onQuickLinkClick}
-      onShowHolidaysChange={onShowHolidaysChange}
-      labelVariant={labelVariant}
-      className={className}
-    />
-  );
-};
-
-export { DatePeriodPicker };
-export type { QuickLinkPeriod };
+export { DatePeriodPickerLegacy };
+export type { Props as DatePeriodPickerLegacyProps, QuickLinkPeriod };
