@@ -24,7 +24,6 @@ import { Event } from '@/types/Event';
 import { hasLegacyLocation } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
@@ -400,7 +399,7 @@ const StepsForm = ({
       </Page.Content>
       {footerStatus !== FooterStatus.HIDDEN && (
         <Page.Footer>
-          <Inline spacing={3} alignItems="center">
+          <div className="tw:flex tw:items-center tw:gap-2">
             {footerStatus === FooterStatus.DUPLICATE && (
               <Button
                 disabled={isDuplicateButtonDisabled}
@@ -441,7 +440,7 @@ const StepsForm = ({
               </Button>
             )}
             {footerStatus === FooterStatus.AUTO_SAVE && (
-              <Inline spacing={3} alignItems="center">
+              <div className="tw:flex tw:items-center tw:gap-2">
                 <Link
                   href={doneEditingLink}
                   variant={LinkVariants.BUTTON_SUCCESS}
@@ -452,9 +451,9 @@ const StepsForm = ({
                 <Text color={getValue('footer.color')} fontSize="0.9rem">
                   {t('create.footer.auto_save')}
                 </Text>
-              </Inline>
+              </div>
             )}
-          </Inline>
+          </div>
           <PublishLaterModal
             scope={scope}
             offerId={offerId}
