@@ -14,7 +14,6 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { List } from '@/ui/List';
 import { Panel } from '@/ui/Panel';
-import { cn } from '@/ui/shadcn/utils';
 import { Spinner } from '@/ui/Spinner';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -169,7 +168,6 @@ Actions.propTypes = {
 const AddAction = ({
   onAdd,
   onCancel,
-  className,
   toBeAddedEventId,
   onToBeAddedEventIdInput,
 }) => {
@@ -177,7 +175,7 @@ const AddAction = ({
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
   return (
-    <div className={cn('tw:flex tw:items-center tw:gap-2', className)}>
+    <div className="tw:flex tw:items-center tw:gap-2">
       <Input
         id="cdbid"
         placeholder="cdbid"
@@ -219,7 +217,6 @@ AddAction.propTypes = {
 const ChangeNameAction = ({
   onConfirm,
   onCancel,
-  className,
   changedProductionName,
   onChangedProductionName,
 }) => {
@@ -227,7 +224,7 @@ const ChangeNameAction = ({
   const shouldCollapse = useMatchBreakpoint(Breakpoints.S);
 
   return (
-    <div className={cn('tw:flex tw:items-center tw:gap-2', className)}>
+    <div className="tw:flex tw:items-center tw:gap-2">
       <Input
         id="name"
         placeholder={t('productions.create.production_name')}
