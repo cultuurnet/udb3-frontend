@@ -24,10 +24,8 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Event } from '@/types/Event';
 import { Term } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Icon, Icons } from '@/ui/Icon';
-import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
@@ -353,14 +351,7 @@ const EventTypeAndThemeStep = ({
             {!shouldHideType && (
               <Stack>
                 {!field.value?.type?.id ? (
-                  <Inline
-                    spacing={3}
-                    flexWrap="wrap"
-                    maxWidth="70rem"
-                    css={`
-                      row-gap: ${parseSpacing(3.5)()};
-                    `}
-                  >
+                  <div className="tw:flex tw:flex-wrap tw:max-w-280 tw:gap-x-2 tw:gap-y-3">
                     {types.map(({ id, name }) => (
                       <Button
                         key={id}
@@ -386,15 +377,9 @@ const EventTypeAndThemeStep = ({
                         {name[i18n.language]}
                       </Button>
                     ))}
-                  </Inline>
+                  </div>
                 ) : (
-                  <Inline
-                    alignItems="center"
-                    spacing={3}
-                    css={`
-                      row-gap: ${parseSpacing(3.5)()};
-                    `}
-                  >
+                  <div className="tw:flex tw:items-center tw:gap-2">
                     <Icon
                       name={Icons.CHECK_CIRCLE}
                       className="tw:text-success"
@@ -412,7 +397,7 @@ const EventTypeAndThemeStep = ({
                     >
                       {t('create.type_and_theme.change_type')}
                     </Button>
-                  </Inline>
+                  </div>
                 )}
               </Stack>
             )}
@@ -424,13 +409,7 @@ const EventTypeAndThemeStep = ({
             {!field.value?.theme?.id ? (
               <Stack spacing={4} maxWidth="70rem">
                 {!shouldGroupThemes && (
-                  <Inline
-                    spacing={3}
-                    flexWrap="wrap"
-                    css={`
-                      row-gap: ${parseSpacing(3.5)()};
-                    `}
-                  >
+                  <div className="tw:flex tw:flex-wrap tw:gap-x-2 tw:gap-y-3">
                     {themes.map(({ id, name }) => (
                       <Button
                         key={id}
@@ -453,7 +432,7 @@ const EventTypeAndThemeStep = ({
                         {name[i18n.language]}
                       </Button>
                     ))}
-                  </Inline>
+                  </div>
                 )}
                 {shouldGroupThemes &&
                   Object.entries(themeGroups).map(([groupName, themes]) => (
@@ -461,13 +440,7 @@ const EventTypeAndThemeStep = ({
                       <Text variant={TextVariants.MUTED}>
                         {t(`create.type_and_theme.theme_groups.${groupName}`)}
                       </Text>
-                      <Inline
-                        spacing={3}
-                        flexWrap="wrap"
-                        css={`
-                          row-gap: ${parseSpacing(3.5)()};
-                        `}
-                      >
+                      <div className="tw:flex tw:flex-wrap tw:gap-x-2 tw:gap-y-3">
                         {themes.map(({ id, name }) => (
                           <Button
                             key={id}
@@ -490,18 +463,12 @@ const EventTypeAndThemeStep = ({
                             {name[i18n.language]}
                           </Button>
                         ))}
-                      </Inline>
+                      </div>
                     </Stack>
                   ))}
               </Stack>
             ) : (
-              <Inline
-                alignItems="center"
-                spacing={3}
-                css={`
-                  row-gap: ${parseSpacing(3.5)()};
-                `}
-              >
+              <div className="tw:flex tw:items-center tw:gap-2">
                 <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
                 <Text>{field.value?.theme?.label}</Text>
                 <Button
@@ -519,7 +486,7 @@ const EventTypeAndThemeStep = ({
                 >
                   {t('create.type_and_theme.change_theme')}
                 </Button>
-              </Inline>
+              </div>
             )}
             {isCultuurkuurAlertVisible && (
               <Alert variant={AlertVariants.WARNING}>
