@@ -237,7 +237,7 @@ const DatePeriodPicker = ({
           >
             <Text>{t('date_period_picker.quick_links.title')}</Text>
           </Stack>
-          <Stack spacing={2} paddingY={3} paddingX={4}>
+          <div className="tw:flex tw:flex-col tw:gap-1 tw:py-2 tw:px-4">
             {holidayPresets.map((preset) => (
               <Button
                 key={preset.label}
@@ -262,7 +262,7 @@ const DatePeriodPicker = ({
                 {preset.label}
               </Button>
             ))}
-          </Stack>
+          </div>
         </Stack>
       )
     : undefined;

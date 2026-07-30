@@ -333,7 +333,7 @@ const DescriptionStep = ({
                   }}
                   onDelete={handleDeleteFaq}
                   action={
-                    <Stack spacing={2} alignItems="flex-start">
+                    <div className="tw:flex tw:flex-col tw:items-start tw:gap-1">
                       <Button
                         variant={ButtonVariants.NEUTRAL}
                         iconName={Icons.PLUS}
@@ -358,7 +358,7 @@ const DescriptionStep = ({
                           )}
                         </Text>
                       )}
-                    </Stack>
+                    </div>
                   }
                 />
               ) : (

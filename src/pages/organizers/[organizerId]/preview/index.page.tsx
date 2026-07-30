@@ -122,7 +122,7 @@ const OrganizersPreview = () => {
                   isOwner={canEdit}
                 />
               </Stack>
-              <Stack spacing={3.5} flex={1}>
+              <div className="tw:flex tw:flex-col tw:flex-1 tw:gap-3">
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Button
                     variant={ButtonVariants.PRIMARY}
@@ -177,7 +177,7 @@ const OrganizersPreview = () => {
                     {t('organizers.detail.actions.places')}
                   </Link>
                 </Stack>
-              </Stack>
+              </div>
             </Inline>
           </Stack>
         </Stack>

@@ -5,7 +5,6 @@ import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
@@ -150,14 +149,7 @@ const AgeRangeStepLegacy = ({
               <Text fontWeight="bold">
                 {t(`create.name_and_age.age.title`)}
               </Text>
-              <Inline
-                spacing={3}
-                flexWrap="wrap"
-                maxWidth="40rem"
-                css={`
-                  row-gap: ${parseSpacing(3.5)()};
-                `}
-              >
+              <div className="tw:flex tw:flex-wrap tw:max-w-160 tw:gap-2">
                 {Object.keys(AgeRanges).map((key: string) => {
                   const apiLabel = AgeRanges[key].apiLabel;
                   return (
@@ -199,7 +191,7 @@ const AgeRangeStepLegacy = ({
                     </Button>
                   );
                 })}
-              </Inline>
+              </div>
               <Inline>
                 {isCustomAgeRange && (
                   <Stack spacing={3}>

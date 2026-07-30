@@ -183,7 +183,7 @@ const LabelsOverviewPage = () => {
               border-bottom: 2px solid ${getTableValue('borderColor')};
             `}
           >
-            <Inline spacing={3}>
+            <div className="tw:flex tw:gap-2">
               {actions.map(({ iconName, title, onClick, disabled }) => (
                 <Button
                   key={title}
@@ -196,7 +196,7 @@ const LabelsOverviewPage = () => {
                   {title}
                 </Button>
               ))}
-            </Inline>
+            </div>
           </Inline>
           {labelsQuery.status === QueryStatus.LOADING && <Spinner />}
           {labelsQuery.status === QueryStatus.SUCCESS && labels.length > 0 && (

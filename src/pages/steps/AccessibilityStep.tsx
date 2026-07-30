@@ -291,7 +291,7 @@ const AccessibilityStep = ({
         ))}
       </Stack>
 
-      <Stack spacing={2} alignItems="flex-start">
+      <div className="tw:flex tw:flex-col tw:items-start tw:gap-1">
         <Button
           iconName={Icons.PLUS}
           variant={ButtonVariants.NEUTRAL}
@@ -309,7 +309,7 @@ const AccessibilityStep = ({
             )}
           </Text>
         )}
-      </Stack>
+      </div>
     </Stack>
   );
 };

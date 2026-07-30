@@ -13,6 +13,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import {
@@ -121,7 +122,7 @@ const CalendarOpeninghoursModal = ({
   const [shownErrorIds, setShownErrorIds] = useState<ReadonlySet<string>>(
     new Set(),
   );
-  const modalContentRef = useRef<HTMLElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   const handleAddOpeningHours = () =>
     append({
@@ -314,12 +315,12 @@ const CalendarOpeninghoursModal = ({
         </Text>
       </Stack>
 
-      <Stack
+      <div
         ref={modalContentRef}
-        spacing={4}
-        padding={4}
-        alignItems="flex-start"
-        display={isDeleteConfirm ? 'none' : undefined}
+        className={cn(
+          'tw:flex tw:flex-col tw:items-start tw:gap-4 tw:p-4',
+          isDeleteConfirm && 'tw:hidden',
+        )}
       >
         {isConfirmDisabled && (
           <Alert variant={AlertVariants.DANGER}>
@@ -562,7 +563,7 @@ const CalendarOpeninghoursModal = ({
             </Button>
           </Accordion.Item>
         </Accordion>
-      </Stack>
+      </div>
     </Modal>
   );
 };

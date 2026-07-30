@@ -116,7 +116,7 @@ const SelectionTable = ({
         >
           {selectedRowsText}
         </Text>
-        <Inline spacing={3}>
+        <div className="tw:flex tw:gap-2">
           {actions.map(({ iconName, title, onClick, disabled }) => (
             <Button
               key={title}
@@ -129,7 +129,7 @@ const SelectionTable = ({
               {title}
             </Button>
           ))}
-        </Inline>
+        </div>
       </Inline>
 
       <Table

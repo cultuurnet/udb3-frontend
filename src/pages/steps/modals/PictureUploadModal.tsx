@@ -107,7 +107,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
         ) : (
           <ImageIcon width="80" />
         )}
-        <Stack spacing={3} alignItems="center">
+        <div className="tw:flex tw:flex-col tw:items-center tw:gap-2">
           <Text>Sleep een bestand hierheen of</Text>
           <Input
             id="file"
@@ -121,7 +121,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
             {t('pictures.upload_modal.actions.choose_file')}
           </Button>
           <Text variant={TextVariants.ERROR}>{error}</Text>
-        </Stack>
+        </div>
         <Text variant={TextVariants.MUTED} textAlign="center">
           {t('pictures.upload_modal.file_requirements', {
             maxFileSize: MAX_FILE_SIZE / 1_000_000,
