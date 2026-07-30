@@ -248,7 +248,7 @@ const AgeRangeStepLegacy = ({
                 )}
               </Inline>
               {errors.nameAndAgeRange?.typicalAgeRange && (
-                <Text variant={TextVariants.ERROR}>
+                <Text variant={TextVariants.DANGER}>
                   {t(
                     `create.name_and_age.validation_messages.age_range.${errors.nameAndAgeRange?.typicalAgeRange.type}`,
                   )}

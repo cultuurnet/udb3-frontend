@@ -130,12 +130,12 @@ const ClosingPeriod = ({
           />
         </Inline>
         {hasOverlap && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t('create.calendar.opening_hours_modal.closing.errors.overlap')}
           </Text>
         )}
         {hasInvalidDateOrder && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.start_after_end',
             )}
@@ -143,7 +143,7 @@ const ClosingPeriod = ({
         )}
         {eventStartDate &&
           startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.start_before_event',
               )}
@@ -151,14 +151,14 @@ const ClosingPeriod = ({
           )}
         {eventEndDate &&
           startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.end_after_event',
               )}
             </Text>
           )}
         {quickLinkRangeError && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.quick_link_out_of_range',
             )}

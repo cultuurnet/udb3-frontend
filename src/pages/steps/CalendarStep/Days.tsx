@@ -218,15 +218,15 @@ export const Days = ({
               )}
             </List.Item>
             {timesErrors[index] && (
-              <Text variant={TextVariants.ERROR}>
+              <Text variant={TextVariants.DANGER}>
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
             {childcareStartError && (
-              <Text variant={TextVariants.ERROR}>{childcareStartError}</Text>
+              <Text variant={TextVariants.DANGER}>{childcareStartError}</Text>
             )}
             {childcareEndError && (
-              <Text variant={TextVariants.ERROR}>{childcareEndError}</Text>
+              <Text variant={TextVariants.DANGER}>{childcareEndError}</Text>
             )}
             {isDisabled && (
               <Alert

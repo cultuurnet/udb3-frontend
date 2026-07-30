@@ -193,7 +193,7 @@ const NameAndAgeRangeStep = ({
                   ></Trans>
                 </Text>
                 {isEducationLabelErrorVisible && (
-                  <Text variant={TextVariants.ERROR}>
+                  <Text variant={TextVariants.DANGER}>
                     {t('cultuurkuur_modal.overview.error_education_levels')}
                   </Text>
                 )}

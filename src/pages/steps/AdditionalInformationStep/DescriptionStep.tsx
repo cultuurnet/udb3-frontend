@@ -353,7 +353,7 @@ const DescriptionStep = ({
                         )}
                       </Button>
                       {showFaqMaxError && (
-                        <Text variant={TextVariants.ERROR}>
+                        <Text variant={TextVariants.DANGER}>
                           {t(
                             'create.additionalInformation.faq.max_items_error',
                           )}

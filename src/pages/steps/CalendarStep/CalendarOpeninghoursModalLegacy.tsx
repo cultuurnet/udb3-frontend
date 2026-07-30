@@ -235,7 +235,7 @@ const CalendarOpeninghoursModalLegacy = ({
               />
             </Inline>
             {errors.openingHours?.[index]?.dayOfWeek?.type && (
-              <Text variant={TextVariants.ERROR}>
+              <Text variant={TextVariants.DANGER}>
                 {t(
                   'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                 )}

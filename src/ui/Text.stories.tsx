@@ -36,6 +36,6 @@ export const Muted: Story = {
 export const Error: Story = {
   args: {
     children: 'text',
-    variant: TextVariants.ERROR,
+    variant: TextVariants.DANGER,
   },
 };

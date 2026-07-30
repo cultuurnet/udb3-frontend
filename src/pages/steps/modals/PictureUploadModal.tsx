@@ -120,7 +120,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
           <Button onClick={handleClickUpload}>
             {t('pictures.upload_modal.actions.choose_file')}
           </Button>
-          <Text variant={TextVariants.ERROR}>{error}</Text>
+          <Text variant={TextVariants.DANGER}>{error}</Text>
         </Stack>
         <Text variant={TextVariants.MUTED} className="tw:text-center">
           {t('pictures.upload_modal.file_requirements', {

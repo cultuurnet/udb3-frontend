@@ -241,7 +241,7 @@ const PlaceAddModal = ({
             </Paragraph>
           </Box>
           {formState.errors.term?.id && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t('location.add_modal.errors.type')}
             </Text>
           )}

@@ -555,7 +555,7 @@ const PriceInformation = ({
                   </Inline>
                   {validationErrors.map((errorType) => (
                     <Text
-                      variant={TextVariants.ERROR}
+                      variant={TextVariants.DANGER}
                       key={`validation_error_${errorType}`}
                     >
                       {t(

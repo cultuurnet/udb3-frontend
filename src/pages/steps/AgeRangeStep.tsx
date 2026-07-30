@@ -217,7 +217,7 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
         </Stack>
       </Inline>
       {isInvalidRange && (
-        <Text variant={TextVariants.ERROR}>
+        <Text variant={TextVariants.DANGER}>
           {t('create.name_and_age.age.birth_date.error_max_before_min')}
         </Text>
       )}
@@ -271,7 +271,7 @@ const AgeRangeInputs = ({
           onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
         />
       </Inline>
-      {errorKey && <Text variant={TextVariants.ERROR}>{t(errorKey)}</Text>}
+      {errorKey && <Text variant={TextVariants.DANGER}>{t(errorKey)}</Text>}
       <Inline
         spacing={3}
         flexWrap="wrap"
@@ -355,7 +355,7 @@ const ChildrenOnlySection = ({
         label={t('create.name_and_age.age.children_only.with_family')}
         onChange={() => onToggle(false)}
       />
-      {error && <Text variant={TextVariants.ERROR}>{error}</Text>}
+      {error && <Text variant={TextVariants.DANGER}>{error}</Text>}
     </Stack>
   );
 };

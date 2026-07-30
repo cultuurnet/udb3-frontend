@@ -302,7 +302,7 @@ const AccessibilityStep = ({
           {t('create.additionalInformation.accessibility.departure.add')}
         </Button>
         {departureLocations.length >= MAX_DEPARTURE_LOCATIONS && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.additionalInformation.accessibility.departure.max_reached',
               { maxLocations: MAX_DEPARTURE_LOCATIONS },

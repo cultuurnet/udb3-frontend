@@ -932,7 +932,7 @@ const LocationStep = ({
         }}
       />
       {isLocationLabelErrorVisible && (
-        <Text variant={TextVariants.ERROR}>
+        <Text variant={TextVariants.DANGER}>
           {t('cultuurkuur_modal.overview.error_locations')}
         </Text>
       )}

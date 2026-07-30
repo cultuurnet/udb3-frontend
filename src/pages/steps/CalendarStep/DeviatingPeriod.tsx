@@ -206,12 +206,12 @@ const DeviatingPeriod = ({
           />
         </Inline>
         {hasOverlap && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
           </Text>
         )}
         {hasInvalidDateOrder && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
             )}
@@ -219,7 +219,7 @@ const DeviatingPeriod = ({
         )}
         {eventStartDate &&
           startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
               )}
@@ -227,14 +227,14 @@ const DeviatingPeriod = ({
           )}
         {eventEndDate &&
           startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
               )}
             </Text>
           )}
         {quickLinkRangeError && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
             )}
@@ -342,23 +342,23 @@ const DeviatingPeriod = ({
                 </Inline>
                 {shownErrorIds.has(openingHour.id) &&
                   openingHour.dayOfWeek.length === 0 && (
-                    <Text variant={TextVariants.ERROR}>
+                    <Text variant={TextVariants.DANGER}>
                       {t(
                         'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                       )}
                     </Text>
                   )}
                 {startError && (
-                  <Text variant={TextVariants.ERROR}>{startError}</Text>
+                  <Text variant={TextVariants.DANGER}>{startError}</Text>
                 )}
                 {endError && (
-                  <Text variant={TextVariants.ERROR}>{endError}</Text>
+                  <Text variant={TextVariants.DANGER}>{endError}</Text>
                 )}
               </Stack>
             );
           })}
           {daysWithTimeConflict.length > 0 && (
-            <Text variant={TextVariants.ERROR}>
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
                 {

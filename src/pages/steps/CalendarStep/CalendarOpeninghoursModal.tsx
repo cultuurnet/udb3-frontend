@@ -421,26 +421,26 @@ const CalendarOpeninghoursModal = ({
               </Inline>
               {shownErrorIds.has(openingHour.id) &&
                 openingHour.dayOfWeek.length === 0 && (
-                  <Text variant={TextVariants.ERROR}>
+                  <Text variant={TextVariants.DANGER}>
                     {t(
                       'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                     )}
                   </Text>
                 )}
               {openingHour.closes < openingHour.opens && (
-                <Text variant={TextVariants.ERROR}>
+                <Text variant={TextVariants.DANGER}>
                   {t('create.calendar.days.validation_messages.invalid_hours')}
                 </Text>
               )}
               {startError && (
-                <Text variant={TextVariants.ERROR}>{startError}</Text>
+                <Text variant={TextVariants.DANGER}>{startError}</Text>
               )}
-              {endError && <Text variant={TextVariants.ERROR}>{endError}</Text>}
+              {endError && <Text variant={TextVariants.DANGER}>{endError}</Text>}
             </Stack>
           );
         })}
         {daysWithTimeConflict.length > 0 && (
-          <Text variant={TextVariants.ERROR}>
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
               {

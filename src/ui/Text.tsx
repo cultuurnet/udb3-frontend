@@ -7,7 +7,7 @@ import { cn } from '@/ui/shadcn/utils';
 const TextVariants = {
   REGULAR: 'regular',
   MUTED: 'muted',
-  ERROR: 'error',
+  DANGER: 'danger',
 } as const;
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 const variantClasses: Record<Values<typeof TextVariants>, string> = {
   regular: '',
   muted: 'tw:text-muted-foreground',
-  error: 'tw:text-destructive',
+  danger: 'tw:text-destructive',
 };
 
 const Text = forwardRef<HTMLElement, Props>(
