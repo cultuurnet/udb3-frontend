@@ -17,7 +17,7 @@ import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import {
   Breakpoints,
   colors,
@@ -112,7 +112,7 @@ const USPCard = ({
       <div className="tw:flex tw:flex-col tw:items-center tw:gap-3">
         {icon}
         <Text className="tw:text-2xl tw:font-bold tw:text-udb-main-darkest-grey tw:tracking-wider">
-          {quantity} <Text className="tw:text-udb-main-blue">+</Text>
+          {quantity} <Text variant={TextVariants.PRIMARY}>+</Text>
         </Text>
         <Text className="tw:text-center tw:text-lg tw:font-semibold tw:leading-8">
           {title}

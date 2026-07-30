@@ -8,6 +8,7 @@ const TextVariants = {
   REGULAR: 'regular',
   MUTED: 'muted',
   DANGER: 'danger',
+  PRIMARY: 'primary',
 } as const;
 
 type Props = {
@@ -22,6 +23,7 @@ const variantClasses: Record<Values<typeof TextVariants>, string> = {
   regular: '',
   muted: 'tw:text-muted-foreground',
   danger: 'tw:text-destructive',
+  primary: 'tw:text-primary',
 };
 
 const Text = forwardRef<HTMLElement, Props>(
