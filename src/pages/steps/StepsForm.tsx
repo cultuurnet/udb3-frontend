@@ -329,7 +329,7 @@ const StepsForm = ({
 
   const publishLaterButton = (
     <Button
-      variant={ButtonVariants.SECONDARY}
+      variant={ButtonVariants.NEUTRAL}
       onClick={() => setIsPublishLaterModalVisible(true)}
       key="publishLater"
       disabled={isButtonDisabled}

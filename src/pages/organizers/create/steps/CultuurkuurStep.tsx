@@ -7,9 +7,8 @@ import { Alert } from '@/ui/Alert';
 import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { FormElement } from '@/ui/FormElement';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { colors } from '@/ui/theme';
+import { Switch, SwitchVariants } from '@/ui/Switch';
 
 type CultuurkuurStepProps = StackProps & StepProps;
 
@@ -43,17 +42,16 @@ const CultuurkuurStep = ({
               labelVariant={LabelVariants.NORMAL}
               labelPosition={LabelPositions.RIGHT}
               Component={
-                <RadioButton
-                  type={RadioButtonTypes.SWITCH}
+                <Switch
                   checked={field.value}
                   disabled={!!organizerId && field.value}
-                  onChange={() => {
+                  onCheckedChange={() => {
                     field.onChange(!field.value);
                     onChange({
                       isCultuurkuur: !field.value,
                     });
                   }}
-                  color={colors.udbMainPositiveGreen}
+                  variant={SwitchVariants.SUCCESS}
                 />
               }
             />

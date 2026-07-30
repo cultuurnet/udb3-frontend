@@ -141,9 +141,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
               <BookingAvailabilityForm
                 key="booking-availability"
                 bookingAvailabilityType={bookingAvailabilityType}
-                onChangeBookingAvailability={(e) =>
-                  setBookingAvailabilityType(e.target.value)
-                }
+                onChangeBookingAvailability={setBookingAvailabilityType}
               />,
             ]}
             <Title
@@ -160,7 +158,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
               offerType={`${offerType}s`}
               statusType={type}
               statusReason={reasonInCurrentLanguage}
-              onChangeStatusType={(e) => setType(e.target.value)}
+              onChangeStatusType={setType}
               onInputStatusReason={(e) =>
                 setReasonInCurrentLanguage(e.target.value)
               }
@@ -176,7 +174,7 @@ const AvailabilityPageSingle = ({ offer, error, useChangeStatusMutation }) => {
                 {t('offerStatus.actions.save')}
               </Button>
               <Button
-                variant={ButtonVariants.SECONDARY}
+                variant={ButtonVariants.NEUTRAL}
                 onClick={() => router.push(editUrlByOfferType[offerType])}
               >
                 {t('offerStatus.actions.cancel')}

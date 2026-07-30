@@ -294,10 +294,10 @@ const AccessibilityStep = ({
       <Stack spacing={2} alignItems="flex-start">
         <Button
           iconName={Icons.PLUS}
-          variant={ButtonVariants.SECONDARY}
+          variant={ButtonVariants.NEUTRAL}
           onClick={handleAddDepartureLocation}
           disabled={departureLocations.length >= MAX_DEPARTURE_LOCATIONS}
-          width="auto"
+          className="tw:w-auto"
         >
           {t('create.additionalInformation.accessibility.departure.add')}
         </Button>

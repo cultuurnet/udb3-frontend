@@ -606,7 +606,7 @@ const PriceInformation = ({
                   onClick={async (e) => {
                     e.preventDefault();
                   }}
-                  variant={ButtonVariants.SECONDARY}
+                  variant={ButtonVariants.NEUTRAL}
                 >
                   {t('create.additionalInformation.price_info.add')}
                 </Button>

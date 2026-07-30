@@ -16,6 +16,7 @@ function ButtonCard({
   badge,
   hasEllipsisOnTitle,
   href,
+  className,
   ...props
 }: ComponentProps<typeof Button> & {
   title: string;
@@ -82,13 +83,10 @@ function ButtonCard({
   }
   return (
     <Button
-      padding={4}
-      borderRadius={getGlobalBorderRadius}
       variant={ButtonVariants.UNSTYLED}
       customChildren
-      marginBottom={4}
       title={title}
-      width="20rem"
+      className={cn('tw:w-80 tw:rounded-lg tw:p-4 tw:mb-4', className)}
       css={buttonCardStyling}
       {...props}
     >

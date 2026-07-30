@@ -328,7 +328,7 @@ const PictureUploadModal = ({
             <CopyrightLink />
           </Trans>
         </Text>
-        <Button type="submit" display="none" />
+        <Button type="submit" className="tw:hidden" />
       </Stack>
     </Modal>
   );

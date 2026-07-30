@@ -65,11 +65,6 @@ const Search = () => {
               onSelect={handleSelectTab}
               activeBackgroundColor={`${udbMainDarkBlue}`}
               variant={TabsVariants.OUTLINED}
-              css={`
-                .nav-tabs {
-                  margin-left: 1.5rem;
-                }
-              `}
             >
               <Tabs.Tab
                 eventKey="events-places"

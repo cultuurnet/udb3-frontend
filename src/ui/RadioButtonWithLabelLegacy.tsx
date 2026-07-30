@@ -3,19 +3,19 @@ import React, { ReactNode, Ref } from 'react';
 import { BoxProps } from './Box';
 import { getInlineProps, Inline } from './Inline';
 import { Label } from './Label';
-import type { RadioButtonProps } from './RadioButton';
-import { RadioButton } from './RadioButton';
+import type { RadioButtonLegacyProps } from './RadioButtonLegacy';
+import { RadioButtonLegacy } from './RadioButtonLegacy';
 import { Stack } from './Stack';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
 
-type Props = RadioButtonProps &
+type Props = RadioButtonLegacyProps &
   Omit<BoxProps, 'onChange'> & {
     info?: string;
     label?: ReactNode;
   };
 
-const RadioButtonWithLabel = React.forwardRef(
+const RadioButtonWithLabelLegacy = React.forwardRef(
   (
     {
       id,
@@ -42,7 +42,7 @@ const RadioButtonWithLabel = React.forwardRef(
         ref={ref}
         {...getInlineProps(props)}
       >
-        <RadioButton
+        <RadioButtonLegacy
           id={id}
           type={type}
           onChange={onChange}
@@ -67,6 +67,6 @@ const RadioButtonWithLabel = React.forwardRef(
   },
 );
 
-RadioButtonWithLabel.displayName = 'RadioButtonWithLabel';
+RadioButtonWithLabelLegacy.displayName = 'RadioButtonWithLabelLegacy';
 
-export { RadioButtonWithLabel };
+export { RadioButtonWithLabelLegacy };

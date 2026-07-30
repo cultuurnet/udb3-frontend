@@ -221,24 +221,26 @@ const Create = () => {
             </Inline>
             <Stack spacing={4}>
               {availableProductions.length === 2 ? (
-                <RadioButtonGroup
-                  name="production-names"
-                  items={events
-                    .map((event) =>
-                      event.production
-                        ? {
-                            label: event.production.title,
-                            value: event.production.id,
-                          }
-                        : undefined,
-                    )
-                    .filter((productionName) => productionName !== undefined)}
-                  groupLabel={t('productions.create.production_name')}
-                  selected={selectedProductionId}
-                  onChange={(e) => {
-                    setSelectedProductionId(e.target.value.toString());
-                  }}
-                />
+                <Stack spacing={2}>
+                  <Text fontWeight="bold">
+                    {t('productions.create.production_name')}
+                  </Text>
+                  <RadioButtonGroup
+                    name="production-names"
+                    items={events
+                      .map((event) =>
+                        event.production
+                          ? {
+                              label: event.production.title,
+                              value: event.production.id,
+                            }
+                          : undefined,
+                      )
+                      .filter((productionName) => productionName !== undefined)}
+                    selected={selectedProductionId}
+                    onValueChange={setSelectedProductionId}
+                  />
+                </Stack>
               ) : (
                 <FormElement
                   id="typeahead-productionname"

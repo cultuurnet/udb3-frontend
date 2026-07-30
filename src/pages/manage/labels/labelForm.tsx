@@ -340,7 +340,7 @@ const LabelFormFields = ({
             id="label-visible"
             name="isVisible"
             checked={field.value}
-            onToggle={(e) => field.onChange(e.currentTarget.checked)}
+            onCheckedChange={field.onChange}
           >
             {t('labels.form.fields.is_visible')}
           </CheckboxWithLabel>
@@ -354,7 +354,7 @@ const LabelFormFields = ({
             id="label-private"
             name="isPrivate"
             checked={field.value}
-            onToggle={(e) => field.onChange(e.currentTarget.checked)}
+            onCheckedChange={field.onChange}
           >
             {t('labels.form.fields.is_private')}
           </CheckboxWithLabel>
