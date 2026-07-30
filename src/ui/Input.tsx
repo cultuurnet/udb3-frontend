@@ -78,7 +78,7 @@ const Input = forwardRef(
       height={`${getGlobalFormInputHeight}`}
       borderRadius={getGlobalBorderRadius}
       onInput={onChange}
-      {...getInputProps({ type, isInvalid, ...props })}
+      {...getInputProps({ type, isInvalid, className, ...props })}
       {...getBoxProps(props)}
     />
   ),
