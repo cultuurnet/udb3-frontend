@@ -294,48 +294,50 @@ const Ownership = () => {
               {t('organizers.ownerships.actions.back')}
             </Button>
           </div>
+          <Modal
+            visible={isOpen}
+            variant={ModalVariants.QUESTION}
+            size={ModalSizes.MD}
+            title={t('organizers.ownerships.request_modal.title', {
+              name: organizerName,
+            })}
+            confirmTitle={t(
+              'organizers.ownerships.request_modal.actions.confirm',
+            )}
+            cancelTitle={t(
+              'organizers.ownerships.request_modal.actions.cancel',
+            )}
+            onConfirm={handleConfirm}
+            onClose={() => setIsOpen(false)}
+          >
+            <Stack padding={4}>
+              <FormElement
+                id={'email'}
+                Component={<Input type={'email'} {...register('email')} />}
+                label={t('organizers.ownerships.request_modal.email')}
+                error={
+                  formState.errors.email && (
+                    <Trans
+                      i18nKey={`organizers.ownerships.request_modal.${
+                        isNonExistingUserError
+                          ? 'email_not_known_error'
+                          : 'email_error'
+                      }`}
+                      components={[
+                        <Link
+                          key="link"
+                          href={`${publicRuntimeConfig.uitidProfileUrl}/${i18n.language}`}
+                        >
+                          Will be replaced
+                        </Link>,
+                      ]}
+                    />
+                  )
+                }
+              />
+            </Stack>
+          </Modal>
         </div>
-        <Modal
-          visible={isOpen}
-          variant={ModalVariants.QUESTION}
-          size={ModalSizes.MD}
-          title={t('organizers.ownerships.request_modal.title', {
-            name: organizerName,
-          })}
-          confirmTitle={t(
-            'organizers.ownerships.request_modal.actions.confirm',
-          )}
-          cancelTitle={t('organizers.ownerships.request_modal.actions.cancel')}
-          onConfirm={handleConfirm}
-          onClose={() => setIsOpen(false)}
-        >
-          <Stack padding={4}>
-            <FormElement
-              id={'email'}
-              Component={<Input type={'email'} {...register('email')} />}
-              label={t('organizers.ownerships.request_modal.email')}
-              error={
-                formState.errors.email && (
-                  <Trans
-                    i18nKey={`organizers.ownerships.request_modal.${
-                      isNonExistingUserError
-                        ? 'email_not_known_error'
-                        : 'email_error'
-                    }`}
-                    components={[
-                      <Link
-                        key="link"
-                        href={`${publicRuntimeConfig.uitidProfileUrl}/${i18n.language}`}
-                      >
-                        Will be replaced
-                      </Link>,
-                    ]}
-                  />
-                )
-              }
-            />
-          </Stack>
-        </Modal>
       </Page.Content>
     </Page>
   );

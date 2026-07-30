@@ -178,7 +178,7 @@ const OpeningHoursContent = ({
 
   if (isBoaEnabled && hasBoaContent) {
     return (
-      <Stack spacing={3}>
+      <div className="tw:flex tw:flex-col tw:gap-2">
         <div className="tw:flex tw:justify-between tw:items-center">
           <Text fontWeight="bold">{t('create.calendar.fixed_days.hours')}</Text>
           <div className="tw:flex tw:gap-2">
@@ -233,7 +233,7 @@ const OpeningHoursContent = ({
           }
           lang={lang}
         />
-      </Stack>
+      </div>
     );
   }
 
