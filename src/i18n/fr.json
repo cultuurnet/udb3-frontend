@@ -1673,6 +1673,11 @@
       "placeholder_question": "Traduire la question en {{language}}"
     }
   },
+  "date_picker": {
+    "today": "Aujourd'hui",
+    "go_to_selected": "Vers la sélection",
+    "open_calendar": "Ouvrir le calendrier"
+  },
   "date_period_picker": {
     "end": "Fin",
     "quick_links": {
