@@ -435,7 +435,9 @@ const CalendarOpeninghoursModal = ({
               {startError && (
                 <Text variant={TextVariants.DANGER}>{startError}</Text>
               )}
-              {endError && <Text variant={TextVariants.DANGER}>{endError}</Text>}
+              {endError && (
+                <Text variant={TextVariants.DANGER}>{endError}</Text>
+              )}
             </Stack>
           );
         })}

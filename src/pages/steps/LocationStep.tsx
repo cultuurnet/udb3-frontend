@@ -35,7 +35,6 @@ import { AttendanceMode, Event } from '@/types/Event';
 import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';

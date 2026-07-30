@@ -28,8 +28,7 @@ import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { SwitchVariants } from '@/ui/Switch';
 import { SwitchWithLabel } from '@/ui/SwitchWithLabel';
-import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
@@ -405,7 +404,7 @@ const BookingAvailabilitySection = ({
 
   return (
     <Stack spacing={4}>
-      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+      <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
         {t(
           isMultiple
             ? 'create.additionalInformation.booking_info.capacity_title_multiple'
@@ -417,7 +416,7 @@ const BookingAvailabilitySection = ({
           {subEvents.map((subEvent, index) => (
             <Stack key={`${subEvent.startDate}-${index}`} spacing={2}>
               {isMultiple && (
-                <Text fontWeight="bold" color={SUBTITLE_COLOR}>
+                <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
                   {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
                 </Text>
               )}

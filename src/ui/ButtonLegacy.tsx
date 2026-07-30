@@ -331,7 +331,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
           ? children
           : !shouldHideText &&
             !!children && (
-              <Text flex={1} textAlign="left" key="text">
+              <Text className="tw:flex-1 tw:text-left" key="text">
                 {children}
               </Text>
             ),
