@@ -11,7 +11,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { Inline } from '@/ui/Inline';
 import { List } from '@/ui/List';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 
 import type { SupportedLanguage } from '../../../i18n';
@@ -90,7 +90,7 @@ const OpeningHoursSummary = ({
   return (
     <Stack spacing={5}>
       <Stack>
-        <Text className="tw:font-bold tw:text-udb-main-dark-blue">
+        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
           {t('create.calendar.fixed_days.overview.weekly_on')}
         </Text>
         <Stack>
@@ -102,7 +102,7 @@ const OpeningHoursSummary = ({
 
       {adjustedDays && adjustedDays.length > 0 && (
         <Stack>
-          <Text className="tw:font-bold tw:text-udb-main-dark-blue">
+          <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
             {t('create.calendar.fixed_days.overview.deviating_except')}
           </Text>
           <Stack spacing={4}>
@@ -117,7 +117,7 @@ const OpeningHoursSummary = ({
                     ? ` (${adjustedDay.description[lang]})`
                     : ''}
                 </Text>
-                <Text className="tw:text-udb-main-dark-blue">
+                <Text variant={TextVariants.PRIMARY}>
                   {t(
                     'create.calendar.fixed_days.overview.deviating_then_weekly',
                   )}
@@ -133,7 +133,7 @@ const OpeningHoursSummary = ({
 
       {closedDays && closedDays.length > 0 && (
         <Stack spacing={1}>
-          <Text className="tw:font-bold tw:text-udb-main-dark-blue">
+          <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
             {t('create.calendar.fixed_days.overview.closed')}
           </Text>
           {closedDays.map((closedDay) => (

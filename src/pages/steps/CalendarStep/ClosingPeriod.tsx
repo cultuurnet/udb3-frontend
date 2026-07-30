@@ -80,7 +80,7 @@ const ClosingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text className="tw:font-bold tw:text-udb-main-dark-blue">
+        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
         <Inline spacing={5} alignItems="flex-end">
