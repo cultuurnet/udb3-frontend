@@ -10,7 +10,7 @@ import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import {
   openZendeskWidget,
@@ -202,10 +202,11 @@ const Footer = ({
         >
           <Inline as="p" className="tw:items-center tw:gap-2">
             <Text
-              className={cn(
-                variant === FooterVariants.LOGIN &&
-                  'tw:text-udb-main-dark-grey',
-              )}
+              variant={
+                variant === FooterVariants.LOGIN
+                  ? TextVariants.MUTED
+                  : TextVariants.REGULAR
+              }
             >
               {t('footer.by')}
             </Text>

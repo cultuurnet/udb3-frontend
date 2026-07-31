@@ -157,7 +157,10 @@ const UDBCard = ({ onLogin, ...props }: UDBCardProps) => {
             {t('brand')}
           </Box>
         </Stack>
-        <Text className="tw:text-center tw:text-2xl tw:font-bold tw:text-udb-main-dark-grey">
+        <Text
+          variant={TextVariants.MUTED}
+          className="tw:text-center tw:text-2xl tw:font-bold"
+        >
           {t('main.lead')}
         </Text>
         <Text className="tw:text-center">{t('main.lead_sub')}</Text>

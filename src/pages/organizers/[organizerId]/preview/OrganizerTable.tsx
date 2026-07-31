@@ -14,9 +14,8 @@ import { Image } from '@/ui/Image';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import {
   formatEmailAndPhone,
@@ -57,7 +56,9 @@ const OrganizerInfo = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
+      <Text variant={TextVariants.MUTED} className="tw:min-w-60">
+        {t(title)}
+      </Text>
       <Stack>
         {(urls ?? []).map((url) => (
           <Link key={url} href={url}>
@@ -72,11 +73,12 @@ const OrganizerInfo = ({
           />
         ) : (
           <Text
-            className={cn(
-              'tw:whitespace-pre-wrap',
-              content?.startsWith('organizers.detail.no') &&
-                'tw:text-udb-main-dark-grey',
-            )}
+            variant={
+              content?.startsWith('organizers.detail.no')
+                ? TextVariants.MUTED
+                : TextVariants.REGULAR
+            }
+            className="tw:whitespace-pre-wrap"
           >
             {content?.startsWith('organizers.detail.no') ? t(content) : content}
           </Text>
@@ -102,10 +104,10 @@ const OrganizerImages = ({
   if (!images || images.length === 0) {
     return (
       <Inline padding={3}>
-        <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">
+        <Text variant={TextVariants.MUTED} className="tw:min-w-60">
           {t(title)}
         </Text>
-        <Text className="tw:text-udb-main-dark-grey">
+        <Text variant={TextVariants.MUTED}>
           {t('organizers.detail.no_images')}
         </Text>
       </Inline>
@@ -113,7 +115,9 @@ const OrganizerImages = ({
   }
   return (
     <Inline padding={3}>
-      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
+      <Text variant={TextVariants.MUTED} className="tw:min-w-60">
+        {t(title)}
+      </Text>
       <Stack
         spacing={3}
         flex={1}
@@ -149,7 +153,7 @@ const OrganizerImages = ({
                 </Text>
               )}
               <Text>{image.description}</Text>
-              <Text className="tw:text-udb-main-dark-grey">
+              <Text variant={TextVariants.MUTED}>
                 {`© ${image.copyrightHolder}`}
               </Text>
             </Stack>
@@ -176,7 +180,9 @@ const OrganizerLabels = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">{t(title)}</Text>
+      <Text variant={TextVariants.MUTED} className="tw:min-w-60">
+        {t(title)}
+      </Text>
       <LabelsForm
         scope={ScopeTypes.ORGANIZERS}
         id={organizerId}
@@ -262,13 +268,13 @@ const VerenigingsloketPreview = ({
           </Text>
         </Stack>
       </Modal>
-      <Text className="tw:min-w-60 tw:text-udb-main-dark-grey">
+      <Text variant={TextVariants.MUTED} className="tw:min-w-60">
         {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
         {status === 'confirmed' && <Link href={url}>{previewUrl}</Link>}
         {isOwner && (
-          <Text variant="muted">
+          <Text variant={TextVariants.MUTED}>
             {status === 'confirmed' && (
               <Trans i18nKey="organizers.detail.verenigingsloket.description_owner">
                 <Link href={helpdeskUrl}></Link>

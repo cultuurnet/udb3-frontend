@@ -774,7 +774,10 @@ const BookingInfoStep = ({
         }
         ref={formComponent}
       >
-        <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t('create.additionalInformation.booking_info.contact_details')}
         </Text>
         <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
@@ -812,7 +815,10 @@ const BookingInfoStep = ({
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
       <Stack spacing={4}>
-        <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (
