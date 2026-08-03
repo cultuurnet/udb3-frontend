@@ -347,7 +347,7 @@ const DatePickerLegacy = ({
           <Input
             id={id}
             value={selected ? selected.toLocaleDateString() : ''}
-            maxWidth="150px"
+            className="tw:max-w-37.5"
           />
         }
         disabled={disabled}
