@@ -214,7 +214,6 @@ const CalendarOpeninghoursModalLegacy = ({
                 </Inline>
               </Stack>
               <TimeSpanPicker
-                spacing={3}
                 id={`openinghours-row-timespan-${openingHour.id}`}
                 startTime={openingHour.opens}
                 endTime={openingHour.closes}
@@ -228,7 +227,6 @@ const CalendarOpeninghoursModalLegacy = ({
                 onChangeEndTime={(newEndTime) => {
                   handleChangeCloses(openingHour.id, newEndTime);
                 }}
-                minWidth="120px"
               />
               <Button
                 iconName={Icons.TRASH}
