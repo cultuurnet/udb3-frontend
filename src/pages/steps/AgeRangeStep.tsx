@@ -262,7 +262,7 @@ const AgeRangeInputs = ({
           value={minAge}
           placeholder={t('create.name_and_age.age.from')}
           aria-label={t('create.name_and_age.age.from')}
-          maxWidth="8rem"
+          className="tw:max-w-32"
           onChange={(e) => onAgeChange(getInputValue(e), maxAge)}
           onBlur={(e) => onAgeCommit(getInputValue(e), maxAge)}
         />
@@ -271,7 +271,7 @@ const AgeRangeInputs = ({
           value={maxAge}
           placeholder={t('create.name_and_age.age.till')}
           aria-label={t('create.name_and_age.age.till')}
-          maxWidth="8rem"
+          className="tw:max-w-32"
           onChange={(e) => onAgeChange(minAge, getInputValue(e))}
           onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
         />

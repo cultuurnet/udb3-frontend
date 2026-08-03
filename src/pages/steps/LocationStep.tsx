@@ -650,7 +650,7 @@ const LocationStep = ({
                   <FormElement
                     Component={
                       <Input
-                        maxWidth="28rem"
+                        className="tw:max-w-md"
                         value={onlineUrl}
                         onBlur={(e) => {
                           const prefixedUrl =

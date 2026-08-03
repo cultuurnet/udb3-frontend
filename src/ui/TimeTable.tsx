@@ -141,7 +141,7 @@ const Row = ({
   ...props
 }: RowProps): any => {
   const handlePaste = (
-    event: ClipboardEvent<HTMLFormElement>,
+    event: ClipboardEvent<HTMLInputElement>,
     index: number,
     date: string,
   ) => {

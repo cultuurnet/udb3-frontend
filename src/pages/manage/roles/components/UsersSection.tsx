@@ -166,7 +166,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
               Component={
                 <Input
                   {...field}
-                  minWidth="22rem"
+                  className="tw:min-w-88"
                   type="email"
                   placeholder={t('roles.form.users.email_placeholder')}
                 />
