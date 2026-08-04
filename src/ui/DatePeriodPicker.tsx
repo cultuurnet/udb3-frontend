@@ -21,10 +21,10 @@ import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
 import { Label, LabelVariants } from './Label';
-import { RadioButtonTypes } from './RadioButton';
-import { RadioButtonWithLabel } from './RadioButtonWithLabel';
 import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
+import { SwitchVariants } from './Switch';
+import { SwitchWithLabel } from './SwitchWithLabel';
 import { Text, TextVariants } from './Text';
 import { colors } from './theme';
 
@@ -241,7 +241,7 @@ const DatePeriodPicker = ({
             {holidayPresets.map((preset) => (
               <Button
                 key={preset.label}
-                variant={ButtonVariants.SECONDARY}
+                variant={ButtonVariants.NEUTRAL}
                 onClick={async () => {
                   onClose();
                   const holidays =
@@ -269,18 +269,17 @@ const DatePeriodPicker = ({
 
   const calendarContent = showHolidayFeatures ? (
     <Stack spacing={3}>
-      <RadioButtonWithLabel
+      <SwitchWithLabel
         id={`${idPrefix}-show-holidays`}
-        type={RadioButtonTypes.SWITCH}
         label={
           <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
             {t('date_period_picker.show_holidays')}
           </Text>
         }
         checked={isHighlighted}
-        onChange={(e) => handleToggleHolidays(e.target.checked)}
+        onCheckedChange={handleToggleHolidays}
         disabled={disabled}
-        color={colors.udbMainPositiveGreen}
+        variant={SwitchVariants.SUCCESS}
       />
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={2}>

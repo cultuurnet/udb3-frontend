@@ -125,7 +125,7 @@ const CultuurkuurModal = ({
                       className="selectAllLevel1"
                       id={level1Name}
                       name={level1Name}
-                      onToggle={() => handleSelectionToggle(level1)}
+                      onCheckedChange={() => handleSelectionToggle(level1)}
                       checked={isGroupFullySelected(level1)}
                     >
                       {hasChildren ? checkboxTitle : ''}
@@ -186,7 +186,9 @@ const CultuurkuurModal = ({
                           <CheckboxWithLabel
                             id={level2Name}
                             name={level2Name}
-                            onToggle={() => handleSelectionToggle(level2)}
+                            onCheckedChange={() =>
+                              handleSelectionToggle(level2)
+                            }
                             checked={isSelected(level2)}
                           />
                         </Inline>
@@ -225,9 +227,8 @@ const CultuurkuurModal = ({
                               return (
                                 <Button
                                   key={leafName}
-                                  width="auto"
+                                  className="tw:w-auto tw:inline-flex"
                                   active={isSelected(leaf)}
-                                  display="inline-flex"
                                   variant={ButtonVariants.SECONDARY_TOGGLE}
                                   onClick={() => handleSelectionToggle(leaf)}
                                 >

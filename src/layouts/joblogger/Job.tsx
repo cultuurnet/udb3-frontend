@@ -97,7 +97,7 @@ const Job = ({
           </Button>
         </Inline>
         {!!exportUrl && state === JobStates.FINISHED && (
-          <Link href={exportUrl} variant={LinkVariants.BUTTON_SECONDARY}>
+          <Link href={exportUrl} variant={LinkVariants.BUTTON_NEUTRAL}>
             {t('jobs.download')}
           </Link>
         )}

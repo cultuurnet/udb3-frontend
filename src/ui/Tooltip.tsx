@@ -48,7 +48,11 @@ const Tooltip = ({ id, content, side, children }: Props) => {
     <TooltipProvider delayDuration={TOOLTIP_DELAY_MS}>
       <ShadcnTooltip>
         <TooltipTrigger asChild>
-          {children ?? <DefaultTrigger content={content} />}
+          {children ? (
+            <span>{children}</span>
+          ) : (
+            <DefaultTrigger content={content} />
+          )}
         </TooltipTrigger>
         <TooltipContent side={side}>{content}</TooltipContent>
       </ShadcnTooltip>

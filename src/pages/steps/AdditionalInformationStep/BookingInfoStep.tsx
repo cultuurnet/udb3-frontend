@@ -24,10 +24,10 @@ import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
-import { RadioButtonTypes } from '@/ui/RadioButton';
-import { RadioButtonWithLabel } from '@/ui/RadioButtonWithLabel';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { SwitchVariants } from '@/ui/Switch';
+import { SwitchWithLabel } from '@/ui/SwitchWithLabel';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
@@ -210,15 +210,14 @@ const ReservationPeriod = ({
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
       </Text>
-      <RadioButtonWithLabel
+      <SwitchWithLabel
         id="reservation-period-toggle"
-        type={RadioButtonTypes.SWITCH}
         label={t(
           'create.additionalInformation.booking_info.reservation_period.toggle',
         )}
         checked={isDatePickerVisible}
-        onChange={(e) => handleToggle(e.target.checked)}
-        color={colors.udbMainPositiveGreen}
+        onCheckedChange={handleToggle}
+        variant={SwitchVariants.SUCCESS}
       />
       {hasTimeError && (
         <Alert variant="danger">

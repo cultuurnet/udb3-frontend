@@ -10,32 +10,23 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme="light"
       className="tw:toaster tw:group"
       icons={{
-        success: (
-          <Icon
-            name={Icons.CHECK_CIRCLE}
-            className="tw:text-udb-main-positive-green"
-          />
-        ),
+        success: <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />,
         error: (
-          <Icon name={Icons.TIMES_CIRCLE} className="tw:text-udb-danger" />
+          <Icon name={Icons.TIMES_CIRCLE} className="tw:text-destructive" />
         ),
         warning: (
-          <Icon
-            name={Icons.EXCLAMATION_TRIANGLE}
-            className="tw:text-udb-warning"
-          />
+          <Icon name={Icons.EXCLAMATION_TRIANGLE} className="tw:text-warning" />
         ),
-        info: <Icon name={Icons.INFO} className="tw:text-primary" />,
+        info: <Icon name={Icons.INFO} className="tw:text-info" />,
       }}
       toastOptions={{
         classNames: {
           toast:
             'tw:bg-white/85 tw:backdrop-blur-sm tw:border tw:border-border tw:shadow-lg tw:rounded-udb tw:text-foreground',
-          success:
-            'tw:bg-udb-main-light-green/90 tw:border-udb-main-positive-green',
-          error: 'tw:bg-udb-pink-1/90 tw:border-udb-danger',
-          warning: 'tw:bg-udb-orange-1/20 tw:border-udb-warning',
-          info: 'tw:bg-accent/90 tw:border-primary',
+          success: 'tw:bg-success-muted/90 tw:border-success',
+          error: 'tw:bg-destructive-muted/90 tw:border-destructive',
+          warning: 'tw:bg-warning-muted/90 tw:border-warning',
+          info: 'tw:bg-info-muted/90 tw:border-info',
           closeButton: 'tw:bg-white tw:border-border',
         },
       }}

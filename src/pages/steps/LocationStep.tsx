@@ -41,14 +41,13 @@ import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
-import { getInlineProps, Inline } from '@/ui/Inline';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
 import { Link } from '@/ui/Link';
-import { RadioButton, RadioButtonTypes } from '@/ui/RadioButton';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text, TextVariants } from '@/ui/Text';
-import { colors } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
@@ -127,7 +126,6 @@ const LocationSuggestions = ({
           return (
             <ButtonCard
               key={location['@id']}
-              marginBottom={0}
               href={isRecentLocations ? null : `/places/${locationId}`}
               badge={
                 <Inline>
@@ -325,11 +323,10 @@ export const BlankStreetToggle = ({
       labelVariant={LabelVariants.NORMAL}
       labelPosition={LabelPositions.RIGHT}
       Component={
-        <RadioButton
-          type={RadioButtonTypes.SWITCH}
-          color={colors.udbMainPositiveGreen}
+        <Switch
+          variant={SwitchVariants.SUCCESS}
           checked={isBlankStreet}
-          onChange={() => {
+          onCheckedChange={() => {
             const streetAndNumber = isBlankStreet ? '' : BLANK_STREET_NUMBER;
             setIsBlankStreet(!isBlankStreet);
             onChange(streetAndNumber);
@@ -580,13 +577,7 @@ const LocationStep = ({
               <FormElement
                 id="online-toggle"
                 Component={
-                  <Inline
-                    spacing={5}
-                    marginBottom={4}
-                    alignItems="stretch"
-                    maxWidth={parseSpacing(9)}
-                    {...getInlineProps(props)}
-                  >
+                  <div className="tw:mb-4.5 tw:flex tw:items-stretch tw:gap-8.5 tw:max-w-136.5">
                     <ToggleBox
                       onClick={() => {
                         onFieldChange({
@@ -604,9 +595,8 @@ const LocationStep = ({
                           width="80"
                         />
                       }
-                      text={t('create.location.is_physical.label')}
-                      width="30%"
-                      minHeight={parseSpacing(7)}
+                      title={t('create.location.is_physical.label')}
+                      className="tw:w-[30%] tw:min-h-34"
                     />
                     <ToggleBox
                       onClick={() => {
@@ -623,9 +613,8 @@ const LocationStep = ({
                           width="80"
                         />
                       }
-                      text={t('create.location.is_online.label')}
-                      width="30%"
-                      minHeight={parseSpacing(7)}
+                      title={t('create.location.is_online.label')}
+                      className="tw:w-[30%] tw:min-h-34"
                     />
                     {isCultuurkuurEvent && (
                       <ToggleBox
@@ -644,12 +633,11 @@ const LocationStep = ({
                             height="80"
                           />
                         }
-                        text={t('create.location.is_cultuurkuur.label')}
-                        width="30%"
-                        minHeight={parseSpacing(7)}
+                        title={t('create.location.is_cultuurkuur.label')}
+                        className="tw:w-[30%] tw:min-h-34"
                       />
                     )}
-                  </Inline>
+                  </div>
                 }
               />
             </Stack>

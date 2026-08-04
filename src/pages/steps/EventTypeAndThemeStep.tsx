@@ -363,9 +363,8 @@ const EventTypeAndThemeStep = ({
                   >
                     {types.map(({ id, name }) => (
                       <Button
-                        width="auto"
-                        display="inline-flex"
                         key={id}
+                        className="tw:w-auto tw:inline-flex"
                         variant={ButtonVariants.SECONDARY_TOGGLE}
                         onClick={() => {
                           field.onChange({
@@ -434,9 +433,8 @@ const EventTypeAndThemeStep = ({
                   >
                     {themes.map(({ id, name }) => (
                       <Button
-                        width="auto"
-                        display="inline-flex"
                         key={id}
+                        className="tw:w-auto tw:inline-flex"
                         variant={ButtonVariants.SECONDARY_TOGGLE}
                         onClick={() => {
                           field.onChange({
@@ -472,8 +470,6 @@ const EventTypeAndThemeStep = ({
                       >
                         {themes.map(({ id, name }) => (
                           <Button
-                            width="auto"
-                            display="inline-flex"
                             key={id}
                             variant={ButtonVariants.SECONDARY_TOGGLE}
                             onClick={() => {
