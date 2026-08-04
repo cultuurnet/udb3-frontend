@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Keine Wohnungen gefunden"
   },
   "country_picker": {
+    "aria_label": "Land ändern, aktuell ausgewählt: {{country}}",
     "location_school": "Ort in Absprache mit der Schule"
   },
   "copyright": {

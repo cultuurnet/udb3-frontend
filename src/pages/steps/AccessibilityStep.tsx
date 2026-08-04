@@ -15,6 +15,7 @@ import { Countries, Country } from '@/types/Country';
 import type { Event } from '@/types/Event';
 import type { Place } from '@/types/Place';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
+import { CountryPicker } from '@/ui/CountryPicker';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -26,7 +27,6 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { City, CityPicker } from '../CityPicker';
-import { CountryPicker } from './CountryPicker';
 import { PlaceTypeahead } from './PlaceTypeahead';
 
 const MAX_DEPARTURE_LOCATIONS = 20;

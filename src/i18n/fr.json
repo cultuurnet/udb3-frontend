@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Aucune résidence trouvée"
   },
   "country_picker": {
+    "aria_label": "Changer de pays, actuellement sélectionné : {{country}}",
     "location_school": "Emplacement en concertation avec l'école"
   },
   "copyright": {

@@ -36,6 +36,7 @@ type DropdownProps = {
   isSplit?: boolean;
   id?: string;
   className?: string;
+  'aria-label'?: string;
   children?: ReactNode;
 };
 
@@ -93,6 +94,7 @@ const DropdownShadcn = ({
   isSplit = false,
   id,
   className,
+  'aria-label': ariaLabel,
   children,
 }: DropdownProps) => {
   const { t } = useTranslation();
@@ -158,6 +160,7 @@ const DropdownShadcn = ({
     <DropdownMenu>
       <DropdownMenuTrigger
         id={id}
+        aria-label={ariaLabel}
         className={cn(
           buttonVariants({ variant: shadcnVariant }),
           'tw:flex tw:items-center tw:justify-start',

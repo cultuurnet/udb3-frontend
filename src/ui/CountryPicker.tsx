@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Countries, Country } from '@/types/Country';
 import { Button } from '@/ui/Button';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
@@ -7,7 +8,8 @@ import { Inline } from '@/ui/Inline';
 import { cn } from '@/ui/shadcn/utils';
 import { Text } from '@/ui/Text';
 
-import { FlagIcon } from '../../ui/FlagIcon';
+import { CountryPickerLegacy } from './CountryPickerLegacy';
+import { FlagIcon } from './FlagIcon';
 
 type Props = {
   value: Country;
@@ -18,18 +20,20 @@ type Props = {
 
 const countries = [Countries.BE, Countries.NL, Countries.DE];
 
-const CountryPicker = ({
+const CountryPickerShadcn = ({
   value,
   onChange,
   className,
-  showSchoolLocation = false,
-}: Props) => {
+}: Omit<Props, 'showSchoolLocation'>) => {
   const { t } = useTranslation();
 
   return (
     <Dropdown
       id="country-picker"
       variant={DropDownVariants.SECONDARY}
+      aria-label={t('country_picker.aria_label', {
+        country: t(`countries.${value}`),
+      })}
       className={cn(
         'tw:h-10 tw:shadow-none! tw:border tw:border-input tw:inline-flex tw:items-center tw:justify-center',
         className,
@@ -51,6 +55,35 @@ const CountryPicker = ({
         </Dropdown.Item>
       ))}
     </Dropdown>
+  );
+};
+
+const CountryPicker = ({
+  value,
+  onChange,
+  className,
+  showSchoolLocation = false,
+}: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <CountryPickerShadcn
+        value={value}
+        onChange={onChange}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <CountryPickerLegacy
+      value={value}
+      onChange={onChange}
+      className={className}
+    />
   );
 };
 
