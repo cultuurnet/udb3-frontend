@@ -7,7 +7,7 @@ import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
 import { colors, getValueFromTheme } from './theme';
-import type { Props } from './TimeSpanPicker';
+import type { TimeSpanPickerProps } from './TimeSpanPicker';
 import { TimeSpanPickerLabelPositions } from './TimeSpanPicker';
 import { Typeahead } from './Typeahead';
 
@@ -87,7 +87,7 @@ const TimeSpanPickerLegacy = ({
   labelPosition = TimeSpanPickerLabelPositions.TOP,
   className,
   ...props
-}: Props) => {
+}: TimeSpanPickerProps) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
   const isInline = labelPosition === TimeSpanPickerLabelPositions.INLINE;

@@ -23,7 +23,7 @@ const TimeSpanPickerLabelPositions = {
 type TimeSpanPickerLabelPosition =
   (typeof TimeSpanPickerLabelPositions)[keyof typeof TimeSpanPickerLabelPositions];
 
-type Props = {
+type TimeSpanPickerProps = {
   id: string;
   startTimeLabel?: string;
   endTimeLabel?: string;
@@ -181,7 +181,7 @@ const TimeSpanPickerShadcn = ({
   endDisabled,
   labelPosition = TimeSpanPickerLabelPositions.TOP,
   className,
-}: Props) => {
+}: TimeSpanPickerProps) => {
   const { t } = useTranslation();
   const idPrefix = `${id}-time-span-picker`;
   const isInline = labelPosition === TimeSpanPickerLabelPositions.INLINE;
@@ -227,7 +227,7 @@ const TimeSpanPickerShadcn = ({
   );
 };
 
-const TimeSpanPicker = (props: Props) => {
+const TimeSpanPicker = (props: TimeSpanPickerProps) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
@@ -239,5 +239,5 @@ const TimeSpanPicker = (props: Props) => {
   return <TimeSpanPickerLegacy {...props} />;
 };
 
-export type { Props };
+export type { TimeSpanPickerProps };
 export { TimeSpanPicker, TimeSpanPickerLabelPositions };
