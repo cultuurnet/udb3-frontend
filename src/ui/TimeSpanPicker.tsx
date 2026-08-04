@@ -106,8 +106,8 @@ const TimeFieldShadcn = ({
                 onChange(event.target.value)
               }
               className={cn(
-                'tw:h-10 tw:w-24 tw:rounded-md tw:border tw:border-border tw:bg-background tw:px-3 tw:text-center tw:text-base tw:outline-none tw:focus:ring-2 tw:focus:ring-ring tw:disabled:cursor-not-allowed tw:disabled:opacity-50 tw:[&::-webkit-calendar-picker-indicator]:hidden',
-                isInline && 'tw:w-28 tw:pl-8 tw:text-right',
+                'tw:h-10 tw:w-auto tw:min-w-24 tw:rounded-md tw:border tw:border-border tw:bg-background tw:px-3 tw:text-center tw:text-base tw:outline-none tw:focus:ring-2 tw:focus:ring-ring tw:disabled:cursor-not-allowed tw:disabled:opacity-50 tw:[&::-webkit-calendar-picker-indicator]:hidden',
+                isInline && 'tw:w-auto tw:min-w-28 tw:pl-9 tw:text-right',
               )}
             />
           </div>
