@@ -206,19 +206,23 @@ const TimeSpanPickerShadcn = ({
   ];
 
   return (
-    <div className={cn('tw:flex tw:flex-wrap tw:items-end tw:gap-3', className)}>
-      {fields.map(({ key, name, label, value, onChange, disabled: fieldDisabled }) => (
-        <TimeFieldShadcn
-          key={key}
-          id={`${idPrefix}-${key}`}
-          name={name}
-          label={label}
-          value={value}
-          onChange={onChange}
-          disabled={fieldDisabled}
-          isInline={isInline}
-        />
-      ))}
+    <div
+      className={cn('tw:flex tw:flex-wrap tw:items-end tw:gap-3', className)}
+    >
+      {fields.map(
+        ({ key, name, label, value, onChange, disabled: fieldDisabled }) => (
+          <TimeFieldShadcn
+            key={key}
+            id={`${idPrefix}-${key}`}
+            name={name}
+            label={label}
+            value={value}
+            onChange={onChange}
+            disabled={fieldDisabled}
+            isInline={isInline}
+          />
+        ),
+      )}
     </div>
   );
 };

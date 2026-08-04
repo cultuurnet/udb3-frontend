@@ -114,7 +114,12 @@ const TimeSpanPickerLegacy = ({
   ];
 
   return (
-    <Inline as="div" spacing={3} className={className} {...getInlineProps(props)}>
+    <Inline
+      as="div"
+      spacing={3}
+      className={className}
+      {...getInlineProps(props)}
+    >
       {fields.map(
         ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
           const typeahead = (
