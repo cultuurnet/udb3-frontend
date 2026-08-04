@@ -18,6 +18,7 @@ type Props = {
   options: ToggleGroupOption[];
   onChange: (value: string) => void;
   className?: string;
+  ariaLabel?: string;
 };
 
 const ToggleGroupShadcn = ({
@@ -26,6 +27,7 @@ const ToggleGroupShadcn = ({
   options,
   onChange,
   className,
+  ariaLabel,
 }: Props) => (
   <ShadcnToggleGroupRoot
     type="single"
@@ -33,6 +35,7 @@ const ToggleGroupShadcn = ({
     onValueChange={(newValue) => {
       if (newValue) onChange(newValue);
     }}
+    aria-label={ariaLabel}
     className={cn(
       'tw:items-stretch tw:gap-0 tw:rounded tw:bg-grey-background',
       className,
@@ -51,7 +54,14 @@ const ToggleGroupShadcn = ({
   </ShadcnToggleGroupRoot>
 );
 
-const ToggleGroup = ({ name, value, options, onChange, className }: Props) => {
+const ToggleGroup = ({
+  name,
+  value,
+  options,
+  onChange,
+  className,
+  ariaLabel,
+}: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
@@ -64,6 +74,7 @@ const ToggleGroup = ({ name, value, options, onChange, className }: Props) => {
         options={options}
         onChange={onChange}
         className={className}
+        ariaLabel={ariaLabel}
       />
     );
   }
