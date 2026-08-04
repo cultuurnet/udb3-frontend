@@ -62,8 +62,7 @@ const LabelsForm = ({ scope, id, entity }: Props) => {
           id={'labels-picker'}
           label={
             <Text
-              fontSize="0.8rem"
-              fontWeight="normal"
+              className="tw:text-[0.8rem] tw:font-normal"
               variant={TextVariants.MUTED}
             >
               {t('create.additionalInformation.labels.info')}

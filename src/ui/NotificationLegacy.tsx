@@ -60,7 +60,7 @@ const NotificationLegacy = ({ icon, header, body, className }: Props) => {
         {icon && <Stack alignItems="center">{icon}</Stack>}
         <Stack>
           {header}
-          <Text fontSize="1rem">{body}</Text>
+          <Text className="tw:text-base">{body}</Text>
         </Stack>
       </Inline>
     </BootstrapToast>

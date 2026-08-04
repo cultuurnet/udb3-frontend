@@ -1,9 +1,8 @@
+import type { ReactNode } from 'react';
 import { Badge as BootstrapBadge } from 'react-bootstrap';
 
 import type { Values } from '@/types/Values';
 
-import type { BoxProps } from './Box';
-import { getBoxProps } from './Box';
 import { Text } from './Text';
 import { colors } from './theme';
 
@@ -13,7 +12,9 @@ const BadgeVariants = {
   INFO: 'info',
 } as const;
 
-type Props = BoxProps & {
+type Props = {
+  children?: ReactNode;
+  className?: string;
   variant?: Values<typeof BadgeVariants>;
   pill?: boolean;
 };
@@ -21,9 +22,7 @@ type Props = BoxProps & {
 const BadgeLegacy = ({
   children,
   pill,
-  className,
   variant = BadgeVariants.DANGER,
-  ...props
 }: Props) => {
   return (
     <BootstrapBadge
@@ -37,7 +36,7 @@ const BadgeLegacy = ({
         `background-color: ${colors.udbMainBlue} !important;`}
       `}
     >
-      <Text {...getBoxProps(props)}>{children}</Text>
+      <Text>{children}</Text>
     </BootstrapBadge>
   );
 };

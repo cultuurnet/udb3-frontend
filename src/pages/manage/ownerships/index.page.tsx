@@ -164,7 +164,7 @@ const OwnershipsOverviewPage = () => {
             {!getOwnershipRequestsQuery.isFetching && (
               <Inline alignItems="center" spacing={4}>
                 <Text>
-                  <Text fontWeight="bold">{requests.length}</Text>{' '}
+                  <Text className="tw:font-bold">{requests.length}</Text>{' '}
                   {t('ownerships.requests')}
                 </Text>
                 <SelectWithLabel
