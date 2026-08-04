@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 
 import { Box } from './Box';
 import type { InputProps } from './Input';
+import { cn } from './shadcn/utils';
 import { getGlobalBorderRadius, getGlobalFormInputHeight } from './theme';
 
 const BaseInput = forwardRef<HTMLInputElement, any>((props, ref) => (
@@ -12,11 +13,14 @@ const BaseInput = forwardRef<HTMLInputElement, any>((props, ref) => (
 BaseInput.displayName = 'BaseInput';
 
 const InputLegacy = forwardRef<HTMLInputElement, InputProps>(
-  ({ onChange, type = 'text', isInvalid = false, ...props }, ref) => (
+  (
+    { onChange, type = 'text', isInvalid = false, className, ...props },
+    ref,
+  ) => (
     <Form.Control
       ref={ref}
       as={BaseInput}
-      maxWidth="43rem"
+      className={cn('tw:max-w-172', className)}
       height={`${getGlobalFormInputHeight}`}
       borderRadius={getGlobalBorderRadius}
       onInput={onChange}
