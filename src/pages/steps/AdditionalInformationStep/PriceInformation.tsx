@@ -487,7 +487,7 @@ const PriceInformation = ({
                               id={`rate_groupPrice_${rate.id}`}
                               Component={
                                 <Select
-                                  minWidth="max-content"
+                                  className="tw:min-w-max"
                                   {...register(`rates.${index}.groupPrice`)}
                                   onChange={(e) => {
                                     const value = e.target.value === 'true';

@@ -229,9 +229,7 @@ const ContactInfoStep = ({
         return (
           <Inline key={index} spacing={3}>
             <Select
-              alignSelf="flex-start"
-              height="2.38rem"
-              width="30%"
+              className="tw:self-start tw:h-10 tw:w-[30%]"
               value={info.type}
               onChange={(e) => handleChangeContactInfoType(e, index)}
             >
