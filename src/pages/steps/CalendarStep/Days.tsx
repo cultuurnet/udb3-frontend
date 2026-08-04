@@ -123,7 +123,7 @@ export const Days = ({
         return (
           <Stack spacing={4} key={`list-item-${day.id}`}>
             <List.Item
-              alignItems="center"
+              alignItems="flex-end"
               spacing={5}
               marginBottom={isOneOrMoreDays && isBoaEnabled ? 4 : undefined}
             >
@@ -143,14 +143,12 @@ export const Days = ({
               />
               {isOneOrMoreDays && (
                 <TimeSpanPicker
-                  spacing={3}
                   id={`calendar-step-day-${day.id}`}
                   startTime={startTime}
                   endTime={endTime}
                   onChangeStartTime={handleChangeStartTime}
                   onChangeEndTime={handleChangeEndTime}
                   disabled={isDisabled}
-                  minWidth="120px"
                 />
               )}
               {isOneOrMoreDays && isBoaEnabled && (

@@ -269,7 +269,6 @@ const ReservationPeriod = ({
             setEndTime(time);
             setUserHasInteracted(true);
           }}
-          minWidth="120px"
         />
       </Inline>
     </Stack>
