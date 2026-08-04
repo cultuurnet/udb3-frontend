@@ -1,5 +1,5 @@
 import { addYears, format, isValid, parse, subYears } from 'date-fns';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   de as dayPickerDe,
@@ -62,8 +62,10 @@ const DatePickerShadcn = ({
   const { t, i18n } = useTranslation();
   const today = useMemo(() => new Date(), []);
   const anchorRef = useRef<HTMLDivElement>(null);
+  const calendarContainerRef = useRef<HTMLDivElement>(null);
   const lastSelectedTime = useRef(selected?.getTime());
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldFocusCalendar, setShouldFocusCalendar] = useState(false);
   const [month, setMonth] = useState(selected ?? today);
   const [textValue, setTextValue] = useState(
     selected ? format(selected, 'dd/MM/yyyy') : '',
@@ -80,6 +82,30 @@ const DatePickerShadcn = ({
     if (disabled) return;
     setIsOpen(open);
     if (!open) onCalendarClose?.();
+  };
+
+  const focusCalendarDay = () => {
+    calendarContainerRef.current
+      ?.querySelector<HTMLButtonElement>('[data-day][tabindex="0"]')
+      ?.focus();
+  };
+
+  useEffect(() => {
+    if (!isOpen || !shouldFocusCalendar) return;
+    focusCalendarDay();
+    setShouldFocusCalendar(false);
+  }, [isOpen, shouldFocusCalendar]);
+
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    if (isOpen) {
+      focusCalendarDay();
+      return;
+    }
+    setIsOpen(true);
+    setShouldFocusCalendar(true);
   };
 
   const handleSelect = (date: Date | undefined) => {
@@ -143,6 +169,7 @@ const DatePickerShadcn = ({
             }
             onFocus={() => !disabled && setIsOpen(true)}
             onBlur={handleTextBlur}
+            onKeyDown={handleInputKeyDown}
             disabled={disabled}
             className="tw:min-w-0 tw:max-w-37.5! tw:flex-1 tw:rounded-r-none! tw:outline-none! tw:focus:shadow-none! tw:focus-visible:ring-0!"
           />
@@ -170,7 +197,10 @@ const DatePickerShadcn = ({
         className="tw:min-w-(--radix-popper-anchor-width) tw:max-w-[95vw] tw:w-auto tw:overflow-hidden tw:p-0"
       >
         <div className="tw:flex">
-          <div style={calendarWidth ? { minWidth: calendarWidth } : undefined}>
+          <div
+            ref={calendarContainerRef}
+            style={calendarWidth ? { minWidth: calendarWidth } : undefined}
+          >
             {calendarHeader && (
               <div className="tw:border-b tw:border-border tw:bg-muted tw:px-4 tw:py-3 tw:text-center tw:font-bold tw:leading-6">
                 {calendarHeader}
