@@ -1,0 +1,43 @@
+# Dev tooling
+.git/
+.gitignore
+Gemfile
+Gemfile.lock
+Jenkinsfile
+Rakefile
+.bundle/
+docker-compose.prod.yml
+Makefile
+
+# Tests and analysis
+src/test/e2e/
+playwright.config.ts
+jest.config.js
+jest.setup.js
+vitest.config.ts
+vitest.shims.d.ts
+
+# Visual regression
+lostpixel.config.ts
+.lostpixel/
+
+# Storybook
+.storybook/
+
+# Docs
+README.md
+CLAUDE.md
+
+# Build outputs — generated inside the image
+.next/
+node_modules/
+
+# Local config/secrets — passed at runtime
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.ruby-lsp/
+.github/
