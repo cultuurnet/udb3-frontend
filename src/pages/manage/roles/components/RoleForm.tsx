@@ -309,7 +309,7 @@ const RoleFormFields = ({
       )}
 
       <Inline marginTop={4} spacing={3}>
-        <BackButton marginTop={0} onClick={onCancel} />
+        <BackButton className="tw:mt-0" onClick={onCancel} />
       </Inline>
     </Stack>
   );

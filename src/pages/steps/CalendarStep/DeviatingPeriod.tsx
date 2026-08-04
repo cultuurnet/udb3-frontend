@@ -137,7 +137,6 @@ const DeviatingPeriod = ({
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
-          spacing={2}
           onClick={onRemove}
         >
           {t('create.calendar.opening_hours_modal.deviating.remove_period')}
@@ -369,7 +368,7 @@ const DeviatingPeriod = ({
             iconName={Icons.PLUS}
             variant={ButtonVariants.OUTLINED}
             onClick={handleAddOpeningHour}
-            alignSelf="flex-start"
+            className="tw:self-start"
           >
             {t('create.calendar.opening_hours_modal.button_add_hours')}
           </Button>

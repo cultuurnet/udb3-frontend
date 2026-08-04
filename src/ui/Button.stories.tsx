@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Button, ButtonVariants } from './Button';
 import { Icon, Icons } from './Icon';
-import { colors } from './theme';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
@@ -14,8 +13,8 @@ const meta: Meta<typeof Button> = {
         'active',
         'children',
         'disabled',
+        'iconName',
         'loading',
-        'outlineColor',
         'shouldHideText',
         'variant',
       ],
@@ -41,6 +40,22 @@ export const Primary: Story = {
   args: {
     variant: ButtonVariants.PRIMARY,
     children: 'Primary',
+    ...commonArgs,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    variant: ButtonVariants.PRIMARY,
+    children: 'Disabled',
+    disabled: true,
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    variant: ButtonVariants.NEUTRAL,
+    children: 'Neutral',
     ...commonArgs,
   },
 };
@@ -72,7 +87,6 @@ export const Danger: Story = {
 export const Outlined: Story = {
   args: {
     variant: ButtonVariants.OUTLINED,
-    outlineColor: colors.udbMainDarkBlue,
     children: 'Outlined',
     ...commonArgs,
   },
@@ -98,7 +112,51 @@ export const Loading: Story = {
 export const CustomChildren: Story = {
   args: {
     ...commonArgs,
-    variant: ButtonVariants.UNSTYLED,
-    children: <Icon name={Icons.TIMES} />,
+    variant: ButtonVariants.NEUTRAL,
+    customChildren: true,
+    children: (
+      <span className="tw:flex tw:items-center tw:gap-2">
+        <Icon name={Icons.BELL} />
+        <span>
+          Notifications <strong>(3)</strong>
+        </span>
+      </span>
+    ),
   },
+};
+
+export const SecondaryToggle: Story = {
+  args: {
+    variant: ButtonVariants.SECONDARY_TOGGLE,
+    active: true,
+    children: 'Toggle',
+    ...commonArgs,
+  },
+};
+
+export const IconVariant: Story = {
+  args: {
+    variant: ButtonVariants.ICON,
+    iconName: Icons.TRASH,
+    'aria-label': 'Delete',
+    ...commonArgs,
+  },
+};
+
+export const AsLink: Story = {
+  parameters: {
+    controls: {
+      exclude: ['children', 'iconName', 'variant'],
+    },
+  },
+  render: (args) => (
+    <div className="tw:flex tw:gap-3">
+      <Button {...args} variant={ButtonVariants.LINK}>
+        Link
+      </Button>
+      <Button {...args} variant={ButtonVariants.LINK_DANGER}>
+        Link danger
+      </Button>
+    </div>
+  ),
 };

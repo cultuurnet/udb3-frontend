@@ -73,7 +73,6 @@ const ClosingPeriod = ({
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
-          spacing={2}
           onClick={onRemove}
         >
           {t('create.calendar.opening_hours_modal.closing.remove_period')}

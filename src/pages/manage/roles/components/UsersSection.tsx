@@ -175,8 +175,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
           )}
         />
         <Button
-          marginLeft={3}
-          maxHeight="fit-content"
+          className="tw:ml-3 tw:max-h-fit"
           variant={ButtonVariants.PRIMARY}
           onClick={handleSubmit(onSubmit)}
           disabled={addUserMutation.isPending}

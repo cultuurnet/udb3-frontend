@@ -32,7 +32,7 @@ export const WithButton: Story = {
   render: (args) => {
     const buttonVariant =
       args.variant === DropDownVariants.SECONDARY
-        ? ButtonVariants.SECONDARY
+        ? ButtonVariants.NEUTRAL
         : args.variant;
 
     return (
