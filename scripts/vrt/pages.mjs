@@ -77,7 +77,7 @@ const hasValidStoredSession = () => {
 };
 
 const configuredUpstreams = () =>
-  MOCK_UPSTREAMS.flatMap(({ envVar, fixtures }) => {
+  MOCK_UPSTREAMS.map(({ envVar, fixtures }) => {
     const realUrl = process.env[envVar];
     if (!realUrl) {
       throw new Error(
@@ -88,7 +88,7 @@ const configuredUpstreams = () =>
     const { origin, pathname } = new URL(realUrl);
     const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${realUrl.slice(origin.length)}`;
 
-    return [{ envVar, realUrl, mockUrl, pathPrefix: pathname, fixtures }];
+    return { envVar, realUrl, mockUrl, pathPrefix: pathname, fixtures };
   });
 
 const buildMockEnv = (upstreams) =>
