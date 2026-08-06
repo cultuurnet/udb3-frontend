@@ -6,9 +6,20 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: vrt-pages-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   vrt-pages:
+    if: |
+      github.event_name == 'push' ||
+      (github.event.pull_request.draft == false &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+
     runs-on: ubuntu-latest
+
+    timeout-minutes: 30
 
     env:
       NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
