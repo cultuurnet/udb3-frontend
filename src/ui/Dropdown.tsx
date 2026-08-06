@@ -193,3 +193,4 @@ Dropdown.Item = Item;
 Dropdown.Divider = Divider;
 
 export { Divider, Dropdown, DropDownVariants, Item };
+export type { DropdownProps };

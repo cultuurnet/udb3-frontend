@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import { Children, cloneElement } from 'react';
 import {
   ButtonGroup as BootstrapButtonGroup,
@@ -6,21 +6,15 @@ import {
 } from 'react-bootstrap';
 import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
 
-import type { Values } from '@/types/Values';
 import { Box } from '@/ui/Box';
 import { Button, buttonCSS, ButtonVariants } from '@/ui/Button';
 import { Link, LinkVariants } from '@/ui/Link';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 
+import type { DropdownProps } from './Dropdown';
 import { Divider, DropDownVariants, Item } from './Dropdown';
 
-type DropdownLegacyProps = {
-  variant: Values<typeof DropDownVariants>;
-  isSplit?: boolean;
-  id?: string;
-  className?: string;
-  children?: ReactNode;
-};
+type DropdownLegacyProps = DropdownProps;
 
 const getGlobalValue = getValueFromTheme('global');
 const { grey1 } = colors;
