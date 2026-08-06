@@ -43,6 +43,8 @@ type Props = {
   calendarContent?: ReactNode;
   calendarQuickLinks?: (onClose: () => void) => ReactNode;
   calendarWidth?: string;
+  // todo: only affects DatePickerLegacy's react-datepicker styling — DatePickerShadcn
+  // doesn't read it. Delete this prop (and its callers) once Legacy is dropped.
   withHolidays?: boolean;
   className?: string;
   maxWidth?: string;
