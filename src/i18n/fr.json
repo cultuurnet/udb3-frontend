@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Aucune résidence trouvée"
   },
   "country_picker": {
+    "aria_label": "Changer de pays, actuellement sélectionné : {{country}}",
     "location_school": "Emplacement en concertation avec l'école"
   },
   "copyright": {
@@ -1109,6 +1110,9 @@
     "welcome": "Bienvenue"
   },
   "description": "UiTdatabank alimente en outre plus de 1.000 agendas de loisirs imprimés et numériques qui proposent des informations à jour. Ce sont les agendas de chaînes audio-visuelles et de médias locaux ou nationaux, de villes et communes, de services touristiques ou de grandes organisations de coordination.",
+  "dropdown": {
+    "toggle_label": "Plus d'options"
+  },
   "error": {
     "description": "Un problème est survenu. Rechargez la page pour réessayer. Vous pouvez contacter <1>{{email}}</1> si ce problème persiste",
     "email": "vragen@uitdatabank.be",
