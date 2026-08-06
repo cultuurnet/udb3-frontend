@@ -36,7 +36,6 @@ import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
-import { Title } from '@/ui/Title';
 
 import { Announcements, AnnouncementStatus } from './Announcements';
 import { JobLogger, JobLoggerStates } from './joblogger/JobLogger';
@@ -125,6 +124,8 @@ const MenuItem = memo(
           onClick={onClick}
           customChildren
           title={label}
+          display="flex"
+          width="100%"
           className={cn(
             'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-accent tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
             isActive && 'tw:bg-accent',
@@ -176,9 +177,9 @@ const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
 
   return (
     <Stack spacing={3} {...props}>
-      <Title className="tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
+      <h2 className="tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
         {title}
-      </Title>
+      </h2>
       <Content />
     </Stack>
   );
