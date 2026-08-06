@@ -77,6 +77,7 @@ const buildMockEnv = (upstreams) =>
   Object.fromEntries(upstreams.map(({ envVar, mockUrl }) => [envVar, mockUrl]));
 
 const isUpdate = process.argv.includes('update');
+const allowServerReuse = process.argv.includes('--reuse-server');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -153,10 +154,15 @@ const main = async () => {
       mockServer.close();
       process.exit(1);
     }
-  } else {
+  } else if (allowServerReuse) {
     console.log(
       `Reusing app already running at ${BASE_URL} — mock data and feature flags will NOT apply unless that server was itself started with those env vars.`,
     );
+  } else {
+    console.error(
+      `An app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so screenshots would be taken against live acceptance data instead of fixtures. Stop that server, or pass --reuse-server to reuse it anyway.`,
+    );
+    process.exit(1);
   }
 
   try {
