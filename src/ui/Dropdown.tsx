@@ -122,7 +122,8 @@ const DropdownShadcn = ({
       variant: buttonVariant,
       className: cn(
         primaryActionChild.props.className,
-        menuChildren.length > 0 && 'tw:rounded-r-none tw:shadow-none',
+        menuChildren.length > 0 &&
+          'tw:rounded-r-none tw:[&>span]:rounded-r-none tw:[&>span]:shadow-none',
       ),
     });
 

@@ -96,7 +96,6 @@ const BaseLinkShadcn = ({
                 buttonVariantMap[variant as Values<typeof LinkButtonVariants>],
             }),
             'tw:w-full',
-            className,
           )}
         >
           {children}
