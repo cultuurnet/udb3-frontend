@@ -434,6 +434,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
     >
       <DatePeriodPicker
         id={id}
+        className="tw:mb-4"
         dateStart={parseDate(value.dateStart)}
         dateEnd={parseDate(value.dateEnd)}
         onDateStartChange={handleDateStartChange}
