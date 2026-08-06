@@ -138,9 +138,10 @@ const DatePickerShadcn = ({
   };
 
   const handleMonthChange = (newMonth: Date) => {
+    const yearChanged = newMonth.getFullYear() !== month.getFullYear();
     setMonth(newMonth);
     onMonthChange?.(newMonth);
-    onYearChange?.(newMonth);
+    if (yearChanged) onYearChange?.(newMonth);
   };
 
   const handleTodayClick = () => {

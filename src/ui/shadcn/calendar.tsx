@@ -27,7 +27,12 @@ function CalendarRoot({ className, rootRef, ...props }: RootProps) {
   );
 }
 
-function CalendarChevron({ className, orientation, ...props }: ChevronProps) {
+function CalendarChevron({
+  className,
+  orientation,
+  disabled: _disabled,
+  ...props
+}: ChevronProps) {
   if (orientation === 'left') {
     return (
       <ChevronLeftIcon className={cn('tw:size-4', className)} {...props} />
@@ -72,8 +77,8 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn(
         'tw:bg-background tw:group/calendar tw:p-3 tw:[--cell-size:2rem] tw:[[data-slot=card-content]_&]:bg-transparent tw:[[data-slot=popover-content]_&]:bg-transparent',
-        String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
-        String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
+        String.raw`tw:rtl:**:[.rdp-button\_next>svg]:rotate-180`,
+        String.raw`tw:rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
       )}
       captionLayout={captionLayout}
