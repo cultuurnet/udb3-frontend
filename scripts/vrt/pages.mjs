@@ -114,6 +114,27 @@ const isDockerAvailable = async () => {
   }
 };
 
+let server;
+let mockServer;
+
+const cleanup = () => {
+  if (server) {
+    try {
+      process.kill(-server.pid, 'SIGTERM');
+    } catch {}
+  }
+  if (mockServer) {
+    mockServer.close();
+  }
+};
+
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => {
+    cleanup();
+    process.exit(1);
+  });
+}
+
 const main = async () => {
   if (!(await isDockerAvailable())) {
     console.error(
@@ -123,8 +144,6 @@ const main = async () => {
   }
 
   const serverAlreadyRunning = await isServerUp();
-  let server;
-  let mockServer;
 
   if (!serverAlreadyRunning) {
     const upstreams = configuredUpstreams();
@@ -150,8 +169,7 @@ const main = async () => {
     const ready = await waitForServer();
     if (!ready) {
       console.error(`App never became reachable at ${BASE_URL}`);
-      process.kill(-server.pid, 'SIGTERM');
-      mockServer.close();
+      cleanup();
       process.exit(1);
     }
   } else if (allowServerReuse) {
@@ -211,14 +229,7 @@ const main = async () => {
       env: { ...process.env, DOCKER_DEFAULT_PLATFORM: 'linux/amd64' },
     });
   } finally {
-    if (server) {
-      try {
-        process.kill(-server.pid, 'SIGTERM');
-      } catch {}
-    }
-    if (mockServer) {
-      mockServer.close();
-    }
+    cleanup();
   }
 };
 
