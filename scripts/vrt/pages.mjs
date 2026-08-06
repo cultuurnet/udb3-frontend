@@ -117,9 +117,10 @@ const waitForServer = async () => {
   return false;
 };
 
-const run = (command, args, options = {}) =>
+const run = (command, args, options = {}, onSpawn) =>
   new Promise((resolve, reject) => {
     const child = spawn(command, args, { stdio: 'inherit', ...options });
+    onSpawn?.(child);
     child.on('exit', (code) => resolve(code ?? 1));
     child.on('error', reject);
   });
@@ -134,6 +135,7 @@ const isDockerAvailable = async () => {
 
 let server;
 let mockServer;
+let dockerRun;
 
 const cleanup = () => {
   if (server) {
@@ -141,7 +143,9 @@ const cleanup = () => {
       process.kill(-server.pid, 'SIGTERM');
     } catch {}
   }
+  dockerRun?.kill('SIGTERM');
   if (mockServer) {
+    mockServer.closeAllConnections();
     mockServer.close();
   }
 };
@@ -256,9 +260,14 @@ const main = async () => {
       ...(isUpdate ? ['-e', 'LOST_PIXEL_MODE=update'] : []),
       LOST_PIXEL_IMAGE,
     ];
-    process.exitCode = await run('docker', dockerArgs, {
-      env: { ...process.env, DOCKER_DEFAULT_PLATFORM: 'linux/amd64' },
-    });
+    process.exitCode = await run(
+      'docker',
+      dockerArgs,
+      { env: { ...process.env, DOCKER_DEFAULT_PLATFORM: 'linux/amd64' } },
+      (child) => {
+        dockerRun = child;
+      },
+    );
   } finally {
     cleanup();
   }
