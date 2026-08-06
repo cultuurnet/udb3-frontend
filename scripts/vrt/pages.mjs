@@ -166,9 +166,24 @@ const main = async () => {
       },
     });
 
-    const ready = await waitForServer();
+    let exitCode = null;
+    const serverExited = new Promise((resolve) =>
+      server.once('exit', (code) => {
+        exitCode = code ?? 1;
+        resolve(exitCode);
+      }),
+    );
+
+    const ready = await Promise.race([
+      waitForServer(),
+      serverExited.then(() => false),
+    ]);
     if (!ready) {
-      console.error(`App never became reachable at ${BASE_URL}`);
+      console.error(
+        exitCode !== null
+          ? `App process exited with code ${exitCode} before becoming reachable at ${BASE_URL} — see build/start output above.`
+          : `App never became reachable at ${BASE_URL}`,
+      );
       cleanup();
       process.exit(1);
     }
