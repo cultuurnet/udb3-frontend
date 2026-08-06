@@ -221,12 +221,11 @@ const main = async () => {
       console.log('Reusing still-valid authenticated storage state.');
     } else {
       console.log('Stored session missing or expired, logging in...');
-      const authExitCode = await run('npx', [
-        'playwright',
-        'test',
-        '--project=setup-user',
-        '--reporter=list',
-      ]);
+      const authExitCode = await run(
+        'npx',
+        ['playwright', 'test', '--project=setup-user', '--reporter=list'],
+        { env: { ...process.env, VRT_REUSE_SERVER: 'true' } },
+      );
       if (authExitCode !== 0) {
         console.error('Failed to refresh authenticated storage state');
         process.exitCode = authExitCode;
