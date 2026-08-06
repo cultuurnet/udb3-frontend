@@ -58,7 +58,7 @@ if (!isLinux) {
   );
 }
 
-const DOCKER_HOST = isLinux ? 'localhost' : 'host.docker.internal';
+const APP_HOST = isLinux ? 'localhost' : 'host.docker.internal';
 
 const hasValidStoredSession = () => {
   try {
@@ -250,7 +250,7 @@ const main = async () => {
       '-e',
       'DOCKER=1',
       '-e',
-      `DOCKER_HOST=${DOCKER_HOST}`,
+      `VRT_APP_HOST=${APP_HOST}`,
       '-e',
       'LOST_PIXEL_PAGES_ONLY=true',
       ...(isUpdate ? ['-e', 'LOST_PIXEL_MODE=update'] : []),
