@@ -80,9 +80,9 @@ const DatePickerShadcn = ({
   );
 
   useEffect(() => {
-    setTextValue(selected ? format(selected, 'dd/MM/yyyy') : '');
     if (selected?.getTime() === lastSelectedTime.current) return;
     lastSelectedTime.current = selected?.getTime();
+    setTextValue(selected ? format(selected, 'dd/MM/yyyy') : '');
     setMonth(selected ?? new Date());
   }, [selected]);
 
