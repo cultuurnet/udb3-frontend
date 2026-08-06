@@ -63,8 +63,9 @@ const configuredUpstreams = () =>
   MOCK_UPSTREAMS.flatMap(({ envVar, fixtures }) => {
     const realUrl = process.env[envVar];
     if (!realUrl) {
-      console.warn(`${envVar} is not set, skipping mock for it`);
-      return [];
+      throw new Error(
+        `${envVar} is not set — its API calls would hit the real backend and make baselines unreliable.`,
+      );
     }
 
     const { origin, pathname } = new URL(realUrl);
