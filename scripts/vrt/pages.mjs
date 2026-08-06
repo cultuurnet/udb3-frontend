@@ -105,7 +105,20 @@ const run = (command, args, options = {}) =>
     child.on('error', reject);
   });
 
+const isDockerAvailable = async () => {
+  try {
+    return (await run('docker', ['info'], { stdio: 'ignore' })) === 0;
+  } catch {
+    return false;
+  }
+};
+
 const main = async () => {
+  if (!(await isDockerAvailable())) {
+    console.error('Docker is required to run this — is it installed and running?');
+    process.exit(1);
+  }
+
   const serverAlreadyRunning = await isServerUp();
   let server;
   let mockServer;
