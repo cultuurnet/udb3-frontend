@@ -493,6 +493,24 @@ test.describe('My Tests', () => {
 - SSR compatibility: Use `useIsClient()` hook for client-only code
 - Run: `yarn test:unit`
 
+### Visual Regression Testing (Lost Pixel)
+
+Two pipelines:
+
+- **Component-level** (`yarn vrt`): Storybook stories, via `lost-pixel-action`.
+- **Page-level** (`yarn vrt:pages` / `yarn vrt:pages-update`): full pages against a real, authenticated Next.js instance, orchestrated by `scripts/vrt/pages.mjs`.
+
+Page-level VRT runs the real app with API calls intercepted by a local mock server (`scripts/vrt/mock-server.mjs`). Anything not explicitly mocked falls through to the real backend and logs that it did — coverage builds incrementally: screenshot a page first, see what looks live, mock exactly that.
+
+**Adding a new page:**
+
+1. Add an entry to `pageShotsPages` in `lostpixel.config.ts`.
+2. Mock its data: add fixtures in `scripts/vrt/fixtures/<domain>.mjs`, wire them into `MOCK_UPSTREAMS` in `scripts/vrt/mock-upstreams.mjs`.
+3. If the page needs interaction before the screenshot (typing, clicking): add a function in `scripts/vrt/interactions/<domain>.mjs`, keyed by shot name, and spread it into `interactionsByShotName` in `lostpixel.config.ts`. A startup check throws if a key doesn't match a real shot name.
+4. Run `yarn vrt:pages-update` locally, review the generated screenshot, then commit the baseline.
+
+Mocked permissions/roles should reflect the real test account's actual access, not an inflated list — baselines should show what's honestly reachable, not a hypothetical best case.
+
 ## Key Integration Points
 
 - **Authentication**: Auth0 with JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware
