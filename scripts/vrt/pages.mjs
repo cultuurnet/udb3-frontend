@@ -40,7 +40,8 @@ const getHostIp = () => {
   );
 };
 
-const HOST_IP = getHostIp();
+const isLinux = os.platform() === 'linux';
+const HOST_IP = isLinux ? 'localhost' : getHostIp();
 
 const hasValidStoredSession = () => {
   try {
@@ -171,6 +172,7 @@ const main = async () => {
     const dockerArgs = [
       'run',
       '--rm',
+      ...(isLinux ? ['--network', 'host'] : []),
       '-v',
       `${cwd}:${cwd}`,
       '-e',
