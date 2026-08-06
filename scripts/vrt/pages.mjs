@@ -212,7 +212,9 @@ const main = async () => {
     });
   } finally {
     if (server) {
-      process.kill(-server.pid, 'SIGTERM');
+      try {
+        process.kill(-server.pid, 'SIGTERM');
+      } catch {}
     }
     if (mockServer) {
       mockServer.close();
