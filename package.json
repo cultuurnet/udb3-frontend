@@ -159,7 +159,6 @@
     "vitest": "^4.1.10"
   },
   "resolutions": {
-    "@types/react": "^19.0.0",
-    "playwright-core": "1.55.0"
+    "@types/react": "^19.0.0"
   }
 }
