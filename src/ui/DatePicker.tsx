@@ -1,4 +1,12 @@
-import { addYears, format, isValid, parse, subYears } from 'date-fns';
+import {
+  addYears,
+  endOfDay,
+  format,
+  isValid,
+  parse,
+  startOfDay,
+  subYears,
+} from 'date-fns';
 import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -117,11 +125,11 @@ const DatePickerShadcn = ({
 
   const handleTextChange = (value: string) => {
     setTextValue(value);
-    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return;
-    const parsed = parse(value, 'dd/MM/yyyy', today);
+    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value)) return;
+    const parsed = parse(value, 'd/M/yyyy', startOfDay(today));
     if (!isValid(parsed)) return;
-    if (minDate && parsed < minDate) return;
-    if (maxDate && parsed > maxDate) return;
+    if (minDate && parsed < startOfDay(minDate)) return;
+    if (maxDate && parsed > endOfDay(maxDate)) return;
     onChange?.(parsed);
   };
 
