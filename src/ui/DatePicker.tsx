@@ -184,7 +184,7 @@ const DatePickerShadcn = ({
           <Button
             variant={ButtonVariants.NEUTRAL}
             iconName={Icons.CALENDAR_ALT}
-            onClick={() => !disabled && setIsOpen(true)}
+            onClick={() => !disabled && handleOpenChange(!isOpen)}
             disabled={disabled}
             aria-label={t('date_picker.open_calendar')}
             className="tw:rounded-l-none tw:border tw:border-l-0 tw:border-input tw:shadow-none tw:focus-visible:ring-0"
