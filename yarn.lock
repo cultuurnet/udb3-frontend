@@ -9699,7 +9699,7 @@ playwright-core@1.47.2:
 
 playwright-core@1.55.0:
   version "1.55.0"
-  resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.55.0.tgz"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.55.0.tgz#ec8a9f8ef118afb3e86e0f46f1393e3bea32adf4"
   integrity sha512-GvZs4vU3U5ro2nZpeiwyb0zuFaqb9sUiAJuyrWpcGouD8y9/HLgGbNRjIph7zU9D3hnPaisMl9zG9CgFi/biIg==
 
 playwright@1.55.0, playwright@^1.55.0:
