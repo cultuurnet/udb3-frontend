@@ -115,7 +115,9 @@ const isDockerAvailable = async () => {
 
 const main = async () => {
   if (!(await isDockerAvailable())) {
-    console.error('Docker is required to run this — is it installed and running?');
+    console.error(
+      'Docker is required to run this — is it installed and running?',
+    );
     process.exit(1);
   }
 

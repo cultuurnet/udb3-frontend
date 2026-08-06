@@ -10,6 +10,26 @@ const interactionsByShotName: Record<string, (page: any) => Promise<void>> = {
   ...labelsInteractionsByShotName,
 };
 
+const pageShotsPages = [
+  { path: '/manage/labels/create', name: 'pages--labels-create' },
+  { path: '/manage/labels', name: 'pages--labels-overview' },
+  { path: '/manage/labels/vrt-mock-label-1/edit', name: 'pages--labels-edit' },
+  { path: '/manage/labels', name: 'pages--labels-search-results' },
+  { path: '/manage/labels', name: 'pages--labels-no-results' },
+];
+
+if (pagesOnly) {
+  const pageNames = new Set(pageShotsPages.map((page) => page.name));
+  const orphanedInteractions = Object.keys(interactionsByShotName).filter(
+    (shotName) => !pageNames.has(shotName),
+  );
+  if (orphanedInteractions.length > 0) {
+    throw new Error(
+      `interactionsByShotName has entries for shot names that don't exist in pageShots.pages: ${orphanedInteractions.join(', ')}`,
+    );
+  }
+}
+
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const HOST_IP = process.env.HOST_IP ?? 'localhost';
 
@@ -34,22 +54,7 @@ export const config: CustomProjectConfig = {
         imagePathDifference: '.lostpixel-pages/difference/',
         pageShots: {
           baseUrl: `http://${HOST_IP}:3000`,
-          pages: [
-            { path: '/manage/labels/create', name: 'pages--labels-create' },
-            { path: '/manage/labels', name: 'pages--labels-overview' },
-            {
-              path: '/manage/labels/vrt-mock-label-1/edit',
-              name: 'pages--labels-edit',
-            },
-            {
-              path: '/manage/labels',
-              name: 'pages--labels-search-results',
-            },
-            {
-              path: '/manage/labels',
-              name: 'pages--labels-no-results',
-            },
-          ],
+          pages: pageShotsPages,
         },
         configureBrowser: () => ({ storageState: pageShotsStorageState }),
         beforeScreenshot: async (page, { shotName }) => {
