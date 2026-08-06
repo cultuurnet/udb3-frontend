@@ -31,7 +31,7 @@ if (pagesOnly) {
 }
 
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
-const HOST_IP = process.env.HOST_IP ?? 'localhost';
+const DOCKER_HOST = process.env.DOCKER_HOST ?? 'localhost';
 
 const buildPageShotsStorageState = () => {
   const storageState = JSON.parse(
@@ -39,7 +39,9 @@ const buildPageShotsStorageState = () => {
   );
   const cookies = storageState.cookies.map(
     (cookie: Record<string, unknown> & { domain: string }) =>
-      cookie.domain === 'localhost' ? { ...cookie, domain: HOST_IP } : cookie,
+      cookie.domain === 'localhost'
+        ? { ...cookie, domain: DOCKER_HOST }
+        : cookie,
   );
   return { ...storageState, cookies };
 };
@@ -53,7 +55,7 @@ export const config: CustomProjectConfig = {
         imagePathCurrent: '.lostpixel-pages/current/',
         imagePathDifference: '.lostpixel-pages/difference/',
         pageShots: {
-          baseUrl: `http://${HOST_IP}:3000`,
+          baseUrl: `http://${DOCKER_HOST}:3000`,
           pages: pageShotsPages,
         },
         configureBrowser: () => ({ storageState: pageShotsStorageState }),

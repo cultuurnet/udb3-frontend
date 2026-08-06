@@ -27,21 +27,38 @@ const buildFeatureFlagEnv = () =>
     ]),
   );
 
+const PRIVATE_IPV4_RANGES = [
+  /^10\./,
+  /^192\.168\./,
+  /^172\.(1[6-9]|2\d|3[01])\./,
+];
+
 const getHostIp = () => {
   for (const entries of Object.values(os.networkInterfaces())) {
     for (const entry of entries ?? []) {
-      if (entry.family === 'IPv4' && !entry.internal) {
+      if (
+        entry.family === 'IPv4' &&
+        !entry.internal &&
+        PRIVATE_IPV4_RANGES.some((range) => range.test(entry.address))
+      ) {
         return entry.address;
       }
     }
   }
   throw new Error(
-    'Could not determine a non-internal IPv4 address for this host',
+    'Could not determine a private, non-internal IPv4 address for this host',
   );
 };
 
 const isLinux = os.platform() === 'linux';
 const HOST_IP = isLinux ? 'localhost' : getHostIp();
+if (!isLinux) {
+  console.log(
+    `Using ${HOST_IP} as the address the mock server and app bind to for the app <-> mock server connection.`,
+  );
+}
+
+const DOCKER_HOST = isLinux ? 'localhost' : 'host.docker.internal';
 
 const hasValidStoredSession = () => {
   try {
@@ -234,7 +251,7 @@ const main = async () => {
       '-e',
       'DOCKER=1',
       '-e',
-      `HOST_IP=${HOST_IP}`,
+      `DOCKER_HOST=${DOCKER_HOST}`,
       '-e',
       'LOST_PIXEL_PAGES_ONLY=true',
       ...(isUpdate ? ['-e', 'LOST_PIXEL_MODE=update'] : []),
