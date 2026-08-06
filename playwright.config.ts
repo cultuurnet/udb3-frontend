@@ -95,7 +95,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer:
+      !process.env.CI || process.env.VRT_REUSE_SERVER === 'true',
     command: process.env.CI ? 'yarn start' : 'yarn build && yarn start',
     port: 3000,
     timeout: process.env.CI ? 60 * 1000 : 240 * 1000,
