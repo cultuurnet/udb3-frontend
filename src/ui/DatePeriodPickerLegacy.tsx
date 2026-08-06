@@ -20,7 +20,8 @@ import { SupportedLanguages } from '../i18n';
 import type { Values } from '../types/Values';
 import { Button, ButtonVariants } from './Button';
 import { DatePicker } from './DatePicker';
-import { Inline } from './Inline';
+import type { InlineProps } from './Inline';
+import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
 import { SwitchVariants } from './Switch';
@@ -124,7 +125,7 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
 
 type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
 
-type Props = {
+type Props = InlineProps & {
   id: string;
   dateStart: Date;
   dateEnd: Date;
@@ -140,7 +141,6 @@ type Props = {
   onQuickLinkClick?: (periods: QuickLinkPeriod[]) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
   labelVariant?: Values<typeof LabelVariants>;
-  className?: string;
 };
 
 const DatePeriodPickerLegacy = ({
@@ -160,6 +160,7 @@ const DatePeriodPickerLegacy = ({
   onShowHolidaysChange,
   labelVariant = LabelVariants.BOLD,
   className,
+  ...props
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);
@@ -301,7 +302,12 @@ const DatePeriodPickerLegacy = ({
   ) : undefined;
 
   return (
-    <Inline as="div" spacing={5} className={className}>
+    <Inline
+      as="div"
+      spacing={5}
+      className={className}
+      {...getInlineProps(props)}
+    >
       <Stack spacing={2} as="div">
         <Label variant={labelVariant} htmlFor={`${idPrefix}-start`}>
           {t('date_period_picker.start')}
