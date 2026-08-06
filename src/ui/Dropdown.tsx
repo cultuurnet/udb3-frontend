@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import type { ReactElement, ReactNode } from 'react';
-import { Children, cloneElement } from 'react';
+import { Children, cloneElement, createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -24,6 +24,8 @@ const DropDownVariants = {
   ...ButtonVariants,
   SECONDARY: 'outline-secondary',
 } as const;
+
+const ShadcnMigrationContext = createContext(false);
 
 type DropdownItemProps = {
   href?: string;
@@ -66,9 +68,7 @@ const ItemShadcn = ({ href, onClick, children }: DropdownItemProps) => {
 };
 
 const Item = (props: DropdownItemProps) => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(
-    FeatureFlags.SHADCN_MIGRATION,
-  );
+  const isShadcnMigrationEnabled = useContext(ShadcnMigrationContext);
 
   if (isShadcnMigrationEnabled) {
     return <ItemShadcn {...props} />;
@@ -78,9 +78,7 @@ const Item = (props: DropdownItemProps) => {
 };
 
 const Divider = () => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(
-    FeatureFlags.SHADCN_MIGRATION,
-  );
+  const isShadcnMigrationEnabled = useContext(ShadcnMigrationContext);
 
   if (isShadcnMigrationEnabled) {
     return <DropdownMenuSeparator />;
@@ -180,11 +178,15 @@ const Dropdown = (props: DropdownProps) => {
     FeatureFlags.SHADCN_MIGRATION,
   );
 
-  if (isShadcnMigrationEnabled) {
-    return <DropdownShadcn {...props} />;
-  }
-
-  return <DropdownLegacy {...props} />;
+  return (
+    <ShadcnMigrationContext.Provider value={isShadcnMigrationEnabled}>
+      {isShadcnMigrationEnabled ? (
+        <DropdownShadcn {...props} />
+      ) : (
+        <DropdownLegacy {...props} />
+      )}
+    </ShadcnMigrationContext.Provider>
+  );
 };
 
 Dropdown.Item = Item;
