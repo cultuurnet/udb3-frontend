@@ -20,19 +20,19 @@ const meta: Meta<typeof DatePeriodPicker> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const today = new Date();
+const referenceDate = new Date('2025-06-15T12:00:00.000Z');
 const toDateString = (date: Date) => format(date, 'yyyy-MM-dd');
 
 const mockHolidays: ApiHoliday[] = [
   {
-    startDate: toDateString(addDays(today, 6)),
-    endDate: toDateString(addDays(today, 6)),
+    startDate: toDateString(addDays(referenceDate, 6)),
+    endDate: toDateString(addDays(referenceDate, 6)),
     type: 'holidays',
     name: { nl: 'Paasmaandag', fr: 'Lundi de Pâques', de: 'Ostermontag' },
   },
   {
-    startDate: toDateString(addDays(today, 7)),
-    endDate: toDateString(addDays(today, 20)),
+    startDate: toDateString(addDays(referenceDate, 7)),
+    endDate: toDateString(addDays(referenceDate, 20)),
     type: 'schoolHolidays',
     region: 'NL',
     name: {
@@ -42,8 +42,8 @@ const mockHolidays: ApiHoliday[] = [
     },
   },
   {
-    startDate: toDateString(addDays(today, 11)),
-    endDate: toDateString(addDays(today, 11)),
+    startDate: toDateString(addDays(referenceDate, 11)),
+    endDate: toDateString(addDays(referenceDate, 11)),
     type: 'holidays',
     name: {
       nl: 'Dag van de Arbeid',
@@ -52,8 +52,8 @@ const mockHolidays: ApiHoliday[] = [
     },
   },
   {
-    startDate: toDateString(addDays(today, 24)),
-    endDate: toDateString(addDays(today, 24)),
+    startDate: toDateString(addDays(referenceDate, 24)),
+    endDate: toDateString(addDays(referenceDate, 24)),
     type: 'holidays',
     name: {
       nl: 'O.L.H. Hemelvaart',
@@ -62,8 +62,8 @@ const mockHolidays: ApiHoliday[] = [
     },
   },
   {
-    startDate: toDateString(addDays(today, 35)),
-    endDate: toDateString(addDays(today, 35)),
+    startDate: toDateString(addDays(referenceDate, 35)),
+    endDate: toDateString(addDays(referenceDate, 35)),
     type: 'holidays',
     name: {
       nl: 'Pinkstermaandag',
@@ -74,10 +74,10 @@ const mockHolidays: ApiHoliday[] = [
 ];
 
 const commonArgs = {
-  dateStart: addDays(today, 7),
-  dateEnd: addDays(today, 20),
-  minDate: startOfMonth(today),
-  maxDate: endOfMonth(addMonths(today, 2)),
+  dateStart: addDays(referenceDate, 7),
+  dateEnd: addDays(referenceDate, 20),
+  minDate: startOfMonth(referenceDate),
+  maxDate: endOfMonth(addMonths(referenceDate, 2)),
 };
 
 const render: Story['render'] = function RenderComponent(args) {
