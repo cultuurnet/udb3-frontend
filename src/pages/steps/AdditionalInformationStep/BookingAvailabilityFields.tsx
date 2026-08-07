@@ -54,7 +54,7 @@ const BookingAvailabilityFields = ({
         label={t('create.additionalInformation.booking_info.max_capacity')}
         Component={
           <Input
-            maxWidth="8rem"
+            className="tw:max-w-32"
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
             onBlur={handleCapacityBlur}

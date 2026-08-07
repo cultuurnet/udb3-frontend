@@ -112,7 +112,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
           <Input
             id="file"
             type="file"
-            display="none"
+            className="tw:hidden"
             accept={ALLOWED_FILE_TYPES.map((file) => `.${file}`).join(',')}
             ref={ref}
             {...registerFileProps}

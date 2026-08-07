@@ -78,9 +78,7 @@ const NewsletterSignupForm = (props: Props) => {
                       setEmail(e.target.value);
                     }}
                     value={email}
-                    flex={1}
-                    minWidth="20rem"
-                    maxWidth="30rem"
+                    className="tw:flex-1 tw:min-w-80 tw:max-w-120"
                   />
                 }
               />

@@ -192,7 +192,7 @@ const DeviatingPeriod = ({
           />
           <Input
             value={period.description[lang] ?? ''}
-            width="80%"
+            className="tw:w-4/5"
             onChange={(e) =>
               onChange({
                 ...period,
