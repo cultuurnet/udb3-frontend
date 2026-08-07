@@ -60,49 +60,11 @@ type InputProps = {
 };
 
 const InputShadcn = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      onChange,
-      className,
-      type = 'text',
-      isInvalid = false,
-      id,
-      name,
-      accept,
-      placeholder,
-      value,
-      defaultValue,
-      disabled,
-      maxLength,
-      onBlur,
-      onFocus,
-      onKeyDown,
-      onPaste,
-      'aria-label': ariaLabel,
-      'aria-describedby': ariaDescribedBy,
-      'data-testid': dataTestId,
-    },
-    ref,
-  ) => (
+  ({ className, type = 'text', isInvalid = false, ...props }, ref) => (
     <ShadcnInput
       ref={ref}
-      id={id}
-      name={name}
+      {...props}
       type={type}
-      accept={accept}
-      placeholder={placeholder}
-      value={value}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      maxLength={maxLength}
-      onChange={onChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
-      onKeyDown={onKeyDown}
-      onPaste={onPaste}
-      aria-label={ariaLabel}
-      aria-describedby={ariaDescribedBy}
-      data-testid={dataTestId}
       aria-invalid={isInvalid}
       className={cn(
         'tw:max-w-172',
