@@ -1,6 +1,12 @@
 import NextLink from 'next/link';
 import type { ReactElement, ReactNode } from 'react';
-import { Children, cloneElement, createContext, useContext } from 'react';
+import {
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
@@ -100,11 +106,10 @@ const DropdownShadcn = ({
   const isMenuChild = (child) => child.type === Item || child.type === Divider;
   const menuChildren = Children.toArray(children).filter(isMenuChild);
 
-  const isPrimaryActionChild = (child) =>
-    child.type === Button || child.type === Link;
-  const primaryActionChild = Children.toArray(children).find(
-    isPrimaryActionChild,
-  ) as ReactElement<any>;
+  const isPrimaryActionChild = (child: ReactNode): child is ReactElement<any> =>
+    isValidElement(child) && (child.type === Button || child.type === Link);
+  const primaryActionChild =
+    Children.toArray(children).find(isPrimaryActionChild);
 
   if (!primaryActionChild) {
     throw new Error('Dropdown requires a Button or Link child');

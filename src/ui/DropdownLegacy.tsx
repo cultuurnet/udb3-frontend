@@ -35,10 +35,6 @@ const DropdownLegacy = ({
     isPrimaryActionChild,
   ) as ReactElement<any>;
 
-  if (!primaryActionChild) {
-    throw new Error('Dropdown requires a Button or Link child');
-  }
-
   const buttonVariant =
     variant === DropDownVariants.SECONDARY ? ButtonVariants.NEUTRAL : variant;
 
