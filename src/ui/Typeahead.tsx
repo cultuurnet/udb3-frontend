@@ -281,9 +281,16 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
               onSelect={handleSelectNew}
               className="tw:text-base tw:rounded-none tw:cursor-pointer tw:py-4 tw:px-6"
             >
-              {hideNewInputText
-                ? newSelectionPrefix
-                : `${newSelectionPrefix ?? ''} "${text}"`}
+              <span className="tw:min-w-0 tw:truncate">
+                {hideNewInputText ? (
+                  newSelectionPrefix
+                ) : (
+                  <>
+                    {newSelectionPrefix}
+                    <strong className="tw:font-bold">{text}</strong>
+                  </>
+                )}
+              </span>
             </CommandItem>
           )}
         </CommandGroup>
