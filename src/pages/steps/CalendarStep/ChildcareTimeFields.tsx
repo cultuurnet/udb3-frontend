@@ -6,7 +6,7 @@ import type { BoxProps } from '@/ui/Box';
 import { Checkbox } from '@/ui/Checkbox';
 import { Label, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import {
   TimeSpanPicker,
@@ -97,11 +97,8 @@ const ChildcareTimeFields = ({
         endDisabled={disabled || !endEnabled}
       />
       <Text
-        color={colors.grey5}
-        position="absolute"
-        top="100%"
-        left={0}
-        right={0}
+        variant={TextVariants.MUTED}
+        className="tw:absolute tw:top-full tw:left-0 tw:right-0"
       >
         {t('create.calendar.days.childcare.info')}
       </Text>

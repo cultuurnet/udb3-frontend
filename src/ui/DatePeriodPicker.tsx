@@ -23,6 +23,7 @@ import { DatePicker } from './DatePicker';
 import type { InlineProps } from './Inline';
 import { getInlineProps, Inline } from './Inline';
 import { Label, LabelVariants } from './Label';
+import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { SwitchVariants } from './Switch';
 import { SwitchWithLabel } from './SwitchWithLabel';
@@ -272,7 +273,9 @@ const DatePeriodPicker = ({
       <SwitchWithLabel
         id={`${idPrefix}-show-holidays`}
         label={
-          <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
+          <Text
+            className={cn(isHighlighted ? 'tw:font-bold' : 'tw:font-normal')}
+          >
             {t('date_period_picker.show_holidays')}
           </Text>
         }
@@ -284,7 +287,11 @@ const DatePeriodPicker = ({
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text key={label} variant={TextVariants.MUTED} fontSize="0.85rem">
+            <Text
+              key={label}
+              variant={TextVariants.MUTED}
+              className="tw:text-sm"
+            >
               {label}
             </Text>
           ))}

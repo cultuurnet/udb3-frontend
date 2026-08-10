@@ -28,8 +28,7 @@ import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { SwitchVariants } from '@/ui/Switch';
 import { SwitchWithLabel } from '@/ui/SwitchWithLabel';
-import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 import { formatDateToISO } from '@/utils/formatDateToISO';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
@@ -56,8 +55,6 @@ type FormData = yup.InferType<typeof schema>;
 
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
-
-const SUBTITLE_COLOR = colors.udbMainDarkBlue;
 
 const ContactInfoType = {
   EMAIL: 'email',
@@ -205,7 +202,7 @@ const ReservationPeriod = ({
 
   return (
     <Stack spacing={4} {...getStackProps(props)}>
-      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+      <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
         {t(
           'create.additionalInformation.booking_info.reservation_period.title',
         )}
@@ -407,7 +404,7 @@ const BookingAvailabilitySection = ({
 
   return (
     <Stack spacing={4}>
-      <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+      <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
         {t(
           isMultiple
             ? 'create.additionalInformation.booking_info.capacity_title_multiple'
@@ -419,7 +416,7 @@ const BookingAvailabilitySection = ({
           {subEvents.map((subEvent, index) => (
             <Stack key={`${subEvent.startDate}-${index}`} spacing={2}>
               {isMultiple && (
-                <Text fontWeight="bold" color={SUBTITLE_COLOR}>
+                <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
                   {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
                 </Text>
               )}
@@ -766,7 +763,7 @@ const BookingInfoStep = ({
 
   return (
     <Stack maxWidth="75rem" spacing={5} {...getStackProps(props)}>
-      <Text fontWeight="bold" fontSize="1.1rem">
+      <Text className="tw:text-lg tw:font-bold">
         {t('create.additionalInformation.booking_info.section_title')}
       </Text>
       <Stack
@@ -777,7 +774,10 @@ const BookingInfoStep = ({
         }
         ref={formComponent}
       >
-        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t('create.additionalInformation.booking_info.contact_details')}
         </Text>
         <Inline spacing={4} flexWrap="wrap" maxWidth="38rem">
@@ -815,7 +815,10 @@ const BookingInfoStep = ({
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
       <Stack spacing={4}>
-        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t('create.additionalInformation.booking_info.url')}
         </Text>
         {getOfferByIdQuery.data && (

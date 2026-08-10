@@ -28,7 +28,6 @@ import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import { Page } from '@/ui/Page';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
 import {
   getEducationLabels,
   getLocationLabels,
@@ -46,8 +45,6 @@ import { useParseStepConfiguration } from './hooks/useParseStepConfiguration';
 import { usePublishOffer } from './hooks/usePublishOffer';
 import { PublishLaterModal } from './modals/PublishLaterModal';
 import { Steps, StepsConfiguration } from './Steps';
-
-const getValue = getValueFromTheme('createPage');
 
 const useRerenderTriggerStepsForm = () => {
   const router = useRouter();
@@ -381,7 +378,7 @@ const StepsForm = ({
             <Trans
               i18nKey="create.migration.alert"
               components={{
-                boldText: <Text fontWeight="bold" />,
+                boldText: <Text className="tw:font-bold" />,
               }}
             />
           </Alert>
@@ -422,11 +419,7 @@ const StepsForm = ({
                 {t('create.actions.publish')}
               </Button>,
               publishLaterButton,
-              <Text
-                key="info"
-                color={getValue('footer.color')}
-                fontSize="0.9rem"
-              >
+              <Text key="info" className="tw:text-sm tw:text-foreground">
                 {t('create.footer.auto_save')}
               </Text>,
             ]}
@@ -449,7 +442,7 @@ const StepsForm = ({
                   <Text>{t('create.footer.done_editing')}</Text>
                 </Link>
                 {publishLaterButton}
-                <Text color={getValue('footer.color')} fontSize="0.9rem">
+                <Text className="tw:text-sm tw:text-foreground">
                   {t('create.footer.auto_save')}
                 </Text>
               </Inline>

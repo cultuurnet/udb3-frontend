@@ -172,7 +172,7 @@ const NameAndAgeRangeStep = ({
             )}
             {isCultuurkuurEvent && !levels.isLoading && (
               <div className="tw:flex tw:flex-col tw:gap-3">
-                <Text fontWeight="bold">
+                <Text className="tw:font-bold">
                   {t(`create.name_and_age.age.title`)}
                 </Text>
                 <CultuurkuurLabelsPicker
@@ -193,7 +193,7 @@ const NameAndAgeRangeStep = ({
                   ></Trans>
                 </Text>
                 {isEducationLabelErrorVisible && (
-                  <Text variant={TextVariants.ERROR}>
+                  <Text variant={TextVariants.DANGER}>
                     {t('cultuurkuur_modal.overview.error_education_levels')}
                   </Text>
                 )}

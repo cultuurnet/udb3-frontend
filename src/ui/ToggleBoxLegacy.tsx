@@ -1,10 +1,9 @@
 import { ReactElement, ReactNode } from 'react';
 
-import { parseSpacing } from './Box';
+import { Box, parseSpacing } from './Box';
 import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
-import { Text, TextVariants } from './Text';
-import { getGlobalBorderRadius, getValueFromTheme } from './theme';
+import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
 
 const getValue = getValueFromTheme(`toggleBox`);
 
@@ -135,24 +134,26 @@ const ToggleBoxLegacy = ({
         </Stack>
       )}
       {title && (
-        <Text
+        <Box
+          as="span"
           color={getValue(active ? 'activeTextColor' : 'textColor')}
           fontWeight={700}
           fontSize="16px"
         >
           {title}
-        </Text>
+        </Box>
       )}
       {description && (
-        <Text
-          variant={TextVariants.MUTED}
+        <Box
+          as="span"
+          color={colors.grey5}
           fontSize="14px"
           css={`
             margin-top: -0.4rem;
           `}
         >
           {description}
-        </Text>
+        </Box>
       )}
     </Stack>
   );
