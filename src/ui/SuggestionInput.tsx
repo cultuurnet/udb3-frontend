@@ -1,17 +1,16 @@
 import type { ReactNode } from 'react';
-import { forwardRef, Fragment, useRef, useState } from 'react';
+import { forwardRef, Fragment, useState } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { CommandPopover } from '@/ui/CommandPopover';
+import { Highlighter } from '@/ui/Highlighter';
 import { Icon, Icons } from '@/ui/Icon';
 import {
-  Command,
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
   CommandSeparator,
 } from '@/ui/shadcn/command';
-import { Popover, PopoverAnchor, PopoverContent } from '@/ui/shadcn/popover';
 
 import { TypeaheadInputLegacy } from './TypeaheadInputLegacy';
 
@@ -39,7 +38,6 @@ const SuggestionInputShadcn = forwardRef<HTMLInputElement, Props>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const anchorRef = useRef<HTMLDivElement>(null);
 
     const filteredSuggestions = value
       ? suggestions.filter((suggestion) =>
@@ -49,86 +47,45 @@ const SuggestionInputShadcn = forwardRef<HTMLInputElement, Props>(
 
     const hasMatches = filteredSuggestions.length > 0;
 
-    const renderHighlightedSuggestion = (suggestion: string) => {
-      if (!value) return suggestion;
-
-      const matchIndex = suggestion.toLowerCase().indexOf(value.toLowerCase());
-      if (matchIndex === -1) return suggestion;
-
-      return (
-        <span>
-          {suggestion.slice(0, matchIndex)}
-          <strong className="tw:font-bold">
-            {suggestion.slice(matchIndex, matchIndex + value.length)}
-          </strong>
-          {suggestion.slice(matchIndex + value.length)}
-        </span>
-      );
-    };
-
     return (
-      <Popover
+      <CommandPopover
         open={isFocused && hasMatches}
         onOpenChange={(open) => !open && setIsFocused(false)}
-      >
-        <Command shouldFilter={false} className="tw:w-full">
-          <PopoverAnchor asChild>
-            <div ref={anchorRef} className="tw:w-full">
-              <CommandInput
-                ref={ref}
-                id={id}
-                value={value}
-                onValueChange={(text) => {
-                  onChange(text);
-                  setIsFocused(true);
-                }}
-                onFocus={() => setIsFocused(true)}
-                placeholder={placeholder}
-                aria-label={ariaLabel}
-                className="tw:text-base"
-                icon={icon}
-              />
-            </div>
-          </PopoverAnchor>
-
-          <PopoverContent
-            forceMount
-            align="start"
-            onOpenAutoFocus={(event) => event.preventDefault()}
-            onInteractOutside={(event) => {
-              if (
-                event.target instanceof Node &&
-                anchorRef.current?.contains(event.target)
-              ) {
-                event.preventDefault();
-              }
+        input={
+          <CommandInput
+            ref={ref}
+            id={id}
+            value={value}
+            onValueChange={(text) => {
+              onChange(text);
+              setIsFocused(true);
             }}
-            className="tw:w-(--radix-popper-anchor-width) tw:overflow-hidden tw:border-border tw:p-0 tw:data-[state=closed]:pointer-events-none tw:data-[state=closed]:invisible"
-          >
-            <CommandList>
-              <CommandGroup className="tw:p-0">
-                {filteredSuggestions.map((suggestion, index) => (
-                  <Fragment key={suggestion}>
-                    <CommandItem
-                      value={suggestion}
-                      onSelect={() => {
-                        onChange(suggestion);
-                        setIsFocused(false);
-                      }}
-                      className="tw:text-base tw:rounded-none tw:cursor-pointer"
-                    >
-                      {renderHighlightedSuggestion(suggestion)}
-                    </CommandItem>
-                    {index < filteredSuggestions.length - 1 && (
-                      <CommandSeparator />
-                    )}
-                  </Fragment>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </PopoverContent>
-        </Command>
-      </Popover>
+            onFocus={() => setIsFocused(true)}
+            placeholder={placeholder}
+            aria-label={ariaLabel}
+            className="tw:text-base"
+            icon={icon}
+          />
+        }
+      >
+        <CommandGroup className="tw:p-0">
+          {filteredSuggestions.map((suggestion, index) => (
+            <Fragment key={suggestion}>
+              <CommandItem
+                value={suggestion}
+                onSelect={() => {
+                  onChange(suggestion);
+                  setIsFocused(false);
+                }}
+                className="tw:text-base tw:rounded-none tw:cursor-pointer"
+              >
+                <Highlighter search={value}>{suggestion}</Highlighter>
+              </CommandItem>
+              {index < filteredSuggestions.length - 1 && <CommandSeparator />}
+            </Fragment>
+          ))}
+        </CommandGroup>
+      </CommandPopover>
     );
   },
 );
