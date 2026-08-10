@@ -65,6 +65,7 @@ const FormElement = ({
     id,
     ref,
     maxLength,
+    isInvalid: Boolean(error),
   });
 
   const currentLength = clonedComponent.props?.value?.length ?? 0;

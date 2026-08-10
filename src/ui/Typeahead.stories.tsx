@@ -33,3 +33,13 @@ export const Default: Story = {
     labelKey: (city: any) => city.name,
   },
 };
+
+export const AllowNew: Story = {
+  args: {
+    id: 'allow-new',
+    options: cities,
+    labelKey: (city: any) => city.name,
+    allowNew: true,
+    newSelectionPrefix: 'Add new:',
+  },
+};

@@ -1,174 +1,421 @@
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-
-import type { ForwardedRef, Ref } from 'react';
-import { forwardRef } from 'react';
-import { AsyncTypeahead as BootstrapTypeahead } from 'react-bootstrap-typeahead';
-import CoreTypeahead from 'react-bootstrap-typeahead/types/core/Typeahead';
+import { uniqueId } from 'lodash';
+import type { FocusEvent, ForwardedRef, ReactNode } from 'react';
+import {
+  forwardRef,
+  Fragment,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { InputType } from '@/ui/Input';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { CommandPopover } from '@/ui/CommandPopover';
+import { Highlighter } from '@/ui/Highlighter';
+import { Icon, Icons } from '@/ui/Icon';
 
-import type { BoxProps } from './Box';
-import { Box, getBoxProps } from './Box';
 import {
-  getGlobalBorderRadius,
-  getGlobalFormInputHeight,
-  getValueFromTheme,
-} from './theme';
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandSeparator,
+} from './shadcn/command';
+import { cn } from './shadcn/utils';
+import { Spinner, SpinnerSizes } from './Spinner';
+import type { TypeaheadLegacyElement } from './TypeaheadLegacy';
+import { TypeaheadLegacy } from './TypeaheadLegacy';
 
-const getValue = getValueFromTheme('typeahead');
-
-type NewEntry = {
-  customOption: boolean;
-  id: string;
-  label: string;
-};
+const SEARCH_DELAY = 275;
 
 type TypeaheadOption = string | Record<string, any>;
 
-export type TypeaheadElement<T extends TypeaheadOption = TypeaheadOption> =
-  CoreTypeahead;
+type NewEntry = { customOption: boolean; id: string; label: string };
 
-const isNewEntry = (value: any): value is NewEntry => {
-  return !!value?.customOption;
+const isNewEntry = (value: any): value is NewEntry => !!value?.customOption;
+
+const getOptionLabel = <T extends TypeaheadOption>(
+  option: T,
+  labelKey?: string | ((option: T) => string),
+): string => {
+  const stringLabelKey = typeof labelKey === 'string' ? labelKey : 'label';
+
+  if (typeof option !== 'string' && isNewEntry(option)) {
+    return String(option[stringLabelKey] ?? '');
+  }
+  if (typeof labelKey === 'function') return labelKey(option);
+  if (typeof option === 'string') return option;
+  return String(option?.[stringLabelKey] ?? '');
 };
 
-type Props<T extends TypeaheadOption = TypeaheadOption> = BoxProps & {
-  isInvalid?: boolean;
-  inputType?: InputType;
+type TypeaheadElement = { clear: () => void };
+
+type Props<T extends TypeaheadOption = TypeaheadOption> = {
+  id?: string;
+  name?: string;
+  className?: string;
   inputRequired?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  isInvalid?: boolean;
+  isLoading?: boolean;
+  minLength?: number;
+  emptyLabel?: string;
+  options: T[];
+  labelKey?: string | ((option: T) => string);
+  selected?: T[];
+  defaultInputValue?: string;
+  onChange: (selected: T[]) => void;
+  onInputChange?: (text: string) => void;
+  onSearch?: (text: string) => void | Promise<void>;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
+  filterBy?: (option: T, inputValue: string) => boolean;
+  renderMenuItemChildren?: (option: T, inputValue: string) => ReactNode;
+  allowNew?: boolean | ((options: T[], inputValue: string) => boolean);
+  newSelectionPrefix?: string;
   hideNewInputText?: boolean;
 };
+
+const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
+  {
+    id,
+    name,
+    className,
+    inputRequired,
+    disabled = false,
+    placeholder,
+    isInvalid = false,
+    isLoading = false,
+    minLength = 3,
+    emptyLabel,
+    options,
+    labelKey,
+    selected,
+    defaultInputValue,
+    onChange,
+    onInputChange,
+    onSearch = async () => {},
+    onBlur,
+    onFocus,
+    filterBy = () => true,
+    renderMenuItemChildren,
+    allowNew = false,
+    newSelectionPrefix,
+    hideNewInputText = false,
+  }: Props<T>,
+  ref: ForwardedRef<TypeaheadElement>,
+) => {
+  const { t } = useTranslation();
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    return () => clearTimeout(searchTimeoutRef.current);
+  }, []);
+
+  const isMountedRef = useRef(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [text, setText] = useState(
+    () =>
+      defaultInputValue ??
+      (selected?.[0] !== undefined
+        ? getOptionLabel(selected[0], labelKey)
+        : ''),
+  );
+
+  const selectedLabel =
+    selected === undefined
+      ? undefined
+      : selected[0] !== undefined
+        ? getOptionLabel(selected[0], labelKey)
+        : '';
+
+  useEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
+    }
+    if (selectedLabel === undefined) return;
+    setText(selectedLabel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLabel]);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      setText('');
+      setIsFocused(false);
+    },
+  }));
+
+  const visibleOptions =
+    text.length >= minLength
+      ? options.filter((option) => filterBy(option, text))
+      : [];
+
+  const isExactMatch = visibleOptions.some(
+    (option) =>
+      getOptionLabel(option, labelKey).toLowerCase() === text.toLowerCase(),
+  );
+
+  const canAllowNew =
+    !isLoading &&
+    !!text &&
+    text.length >= minLength &&
+    !isExactMatch &&
+    (typeof allowNew === 'function'
+      ? allowNew(visibleOptions, text)
+      : allowNew);
+
+  const hasMatches =
+    visibleOptions.length > 0 ||
+    canAllowNew ||
+    (!isLoading && text.length >= minLength);
+
+  const handleInputChange = (value: string) => {
+    setText(value);
+    onInputChange?.(value);
+    setIsFocused(true);
+
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    if (value.length >= minLength) {
+      searchTimeoutRef.current = setTimeout(
+        () => onSearch(value),
+        SEARCH_DELAY,
+      );
+    }
+  };
+
+  const handleSelect = (option: T) => {
+    setText(getOptionLabel(option, labelKey));
+    setIsFocused(false);
+    onChange([option]);
+  };
+
+  const handleSelectNew = () => {
+    const stringLabelKey = typeof labelKey === 'string' ? labelKey : 'label';
+    const newEntry = {
+      customOption: true,
+      id: uniqueId('new-id-'),
+      [stringLabelKey]: text,
+    } as unknown as T;
+    setIsFocused(false);
+    onChange([newEntry]);
+  };
+
+  return (
+    <CommandPopover
+      open={isFocused && hasMatches}
+      onOpenChange={(open) => !open && setIsFocused(false)}
+      className={className}
+      input={
+        <>
+          <CommandInput
+            id={id}
+            name={name}
+            required={inputRequired}
+            data-testid={name}
+            disabled={disabled}
+            value={text}
+            onValueChange={handleInputChange}
+            onFocus={(event) => {
+              setIsFocused(true);
+              onFocus?.(event);
+            }}
+            onBlur={onBlur}
+            placeholder={placeholder}
+            aria-invalid={isInvalid}
+            className="tw:text-base"
+          />
+          <span
+            className={cn(
+              'tw:absolute tw:right-3 tw:top-1/2 tw:-translate-y-1/2',
+              !isLoading && !isInvalid && 'tw:invisible',
+            )}
+          >
+            {isLoading ? (
+              <Spinner size={SpinnerSizes.SMALL} />
+            ) : (
+              <Icon
+                name={Icons.EXCLAMATION_CIRCLE}
+                width={16}
+                height={16}
+                className="tw:text-destructive"
+              />
+            )}
+          </span>
+        </>
+      }
+    >
+      {!isLoading && visibleOptions.length === 0 && !canAllowNew && (
+        <CommandEmpty>{emptyLabel ?? t('typeahead.no_results')}</CommandEmpty>
+      )}
+      {(visibleOptions.length > 0 || canAllowNew) && (
+        <CommandGroup className="tw:p-0">
+          {visibleOptions.map((option, index) => (
+            <Fragment key={`${index}-${getOptionLabel(option, labelKey)}`}>
+              <CommandItem
+                value={`${index}-${getOptionLabel(option, labelKey)}`}
+                onSelect={() => handleSelect(option)}
+                className="tw:text-base tw:rounded-none tw:cursor-pointer"
+              >
+                {renderMenuItemChildren ? (
+                  renderMenuItemChildren(option, text)
+                ) : (
+                  <Highlighter search={text}>
+                    {getOptionLabel(option, labelKey)}
+                  </Highlighter>
+                )}
+              </CommandItem>
+              {(index < visibleOptions.length - 1 || canAllowNew) && (
+                <CommandSeparator alwaysRender />
+              )}
+            </Fragment>
+          ))}
+          {canAllowNew && (
+            <CommandItem
+              value={`__new__${text}`}
+              data-testid="typeahead-add-new-option"
+              onSelect={handleSelectNew}
+              className="tw:text-base tw:rounded-none tw:cursor-pointer tw:py-4 tw:px-6"
+            >
+              {hideNewInputText
+                ? newSelectionPrefix
+                : `${newSelectionPrefix ?? ''} "${text}"`}
+            </CommandItem>
+          )}
+        </CommandGroup>
+      )}
+    </CommandPopover>
+  );
+};
+
+const TypeaheadShadcn = forwardRef(TypeaheadShadcnInner) as <
+  T extends TypeaheadOption = TypeaheadOption,
+>(
+  props: Props<T> & { ref?: ForwardedRef<TypeaheadElement> },
+) => ReturnType<typeof TypeaheadShadcnInner<T>>;
 
 const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
   {
     id,
     name,
-    inputType = 'text',
+    className,
     inputRequired,
+    disabled,
+    placeholder,
+    isInvalid,
+    isLoading,
+    minLength,
+    emptyLabel,
     options,
     labelKey,
-    renderMenu,
-    renderMenuItemChildren,
-    disabled = false,
-    placeholder,
-    emptyLabel,
-    minLength = 3,
-    className,
-    onInputChange,
+    selected,
     defaultInputValue,
+    onChange,
+    onInputChange,
+    onSearch,
     onBlur,
     onFocus,
-    onSearch = async () => {},
-    onChange,
-    isInvalid,
-    selected,
-    allowNew,
     filterBy,
-    hideNewInputText,
+    renderMenuItemChildren,
+    allowNew,
     newSelectionPrefix,
-    positionFixed,
-    isLoading = false,
-    ...props
+    hideNewInputText,
   }: Props<T>,
-  ref: ForwardedRef<TypeaheadElement<T>>,
+  ref: ForwardedRef<TypeaheadElement>,
 ) => {
-  const { t } = useTranslation();
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+  const shadcnRef = useRef<TypeaheadElement>(null);
+  const legacyRef = useRef<TypeaheadLegacyElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      if (isShadcnMigrationEnabled) {
+        shadcnRef.current?.clear();
+      } else {
+        legacyRef.current?.clear();
+      }
+    },
+  }));
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <TypeaheadShadcn
+        ref={shadcnRef}
+        id={id}
+        name={name}
+        className={className}
+        inputRequired={inputRequired}
+        disabled={disabled}
+        placeholder={placeholder}
+        isInvalid={isInvalid}
+        isLoading={isLoading}
+        minLength={minLength}
+        emptyLabel={emptyLabel}
+        options={options}
+        labelKey={labelKey}
+        selected={selected}
+        defaultInputValue={defaultInputValue}
+        onChange={onChange}
+        onInputChange={onInputChange}
+        onSearch={onSearch}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        filterBy={filterBy}
+        renderMenuItemChildren={renderMenuItemChildren}
+        allowNew={allowNew}
+        newSelectionPrefix={newSelectionPrefix}
+        hideNewInputText={hideNewInputText}
+      />
+    );
+  }
+
+  const legacyFilterBy = filterBy
+    ? (option: T, state: { text: string }) => filterBy(option, state.text)
+    : undefined;
+
+  const legacyRenderMenuItemChildren = renderMenuItemChildren
+    ? (((option: T, menuProps: { text: string }) =>
+        renderMenuItemChildren(option, menuProps.text)) as any)
+    : undefined;
+
+  const legacyAllowNew =
+    typeof allowNew === 'function'
+      ? (options: T[], state: { text: string }) => allowNew(options, state.text)
+      : allowNew;
 
   return (
-    <Box
-      forwardedAs={BootstrapTypeahead}
+    <TypeaheadLegacy
+      ref={legacyRef}
       id={id}
-      allowNew={allowNew && !isLoading}
-      newSelectionPrefix={newSelectionPrefix}
+      name={name}
+      className={className}
+      inputRequired={inputRequired}
+      disabled={disabled}
+      placeholder={placeholder}
+      isInvalid={isInvalid}
+      isLoading={isLoading}
+      minLength={minLength}
+      emptyLabel={emptyLabel}
       options={options}
       labelKey={labelKey}
-      renderMenuItemChildren={renderMenuItemChildren}
-      renderMenu={renderMenu}
-      isLoading={isLoading}
-      disabled={disabled}
-      className={className}
-      flex={1}
-      ref={ref as unknown as Ref<HTMLElement>}
-      css={`
-        input[type='time']::-webkit-calendar-picker-indicator {
-          display: none;
-        }
-
-        .form-control {
-          border-radius: ${getGlobalBorderRadius};
-          height: ${getGlobalFormInputHeight};
-          padding: 0.375rem 0.9rem;
-        }
-
-        .dropdown-item {
-          border-bottom: 1px solid ${({ theme }) => theme.colors.grey1};
-        }
-
-        .dropdown-item > .rbt-highlight-text {
-          display: initial;
-        }
-
-        .rbt-menu-custom-option {
-          padding: 1rem 1.5rem;
-        }
-
-        .dropdown-item.rbt-menu-custom-option > .rbt-highlight-text {
-          display: ${hideNewInputText ? 'none' : 'initial'};
-        }
-
-        .dropdown-item.active,
-        .dropdown-item:active {
-          color: ${getValue('active.color')};
-          background-color: ${getValue('active.backgroundColor')};
-
-          .rbt-highlight-text {
-            color: ${getValue('active.color')};
-          }
-        }
-
-        .dropdown-item.hover,
-        .dropdown-item:hover {
-          color: ${getValue('hover.color')};
-          background-color: ${getValue('hover.backgroundColor')};
-
-          .rbt-highlight-text {
-            color: ${getValue('hover.color')};
-          }
-        }
-
-        .rbt-highlight-text {
-          font-weight: ${getValue('highlight.fontWeight')};
-          background-color: ${getValue('highlight.backgroundColor')};
-        }
-      `}
-      onSearch={onSearch}
-      onInputChange={onInputChange}
-      onChange={onChange}
-      placeholder={placeholder}
-      emptyLabel={emptyLabel ?? t('typeahead.no_results')}
-      searchText={t('typeahead.search_text')}
-      minLength={minLength}
-      delay={275}
-      highlightOnlyResult={!allowNew}
-      isInvalid={isInvalid}
       selected={selected}
       defaultInputValue={defaultInputValue}
+      onChange={onChange}
+      onInputChange={onInputChange}
+      onSearch={onSearch}
       onBlur={onBlur}
       onFocus={onFocus}
-      positionFixed={positionFixed}
-      inputProps={
-        {
-          id,
-          name,
-          type: inputType,
-          required: inputRequired,
-          'data-testid': name,
-        } as React.InputHTMLAttributes<HTMLInputElement>
-      }
-      filterBy={filterBy ?? (() => true)}
-      useCache={false}
-      {...getBoxProps(props)}
+      filterBy={legacyFilterBy}
+      renderMenuItemChildren={legacyRenderMenuItemChildren}
+      allowNew={legacyAllowNew}
+      newSelectionPrefix={newSelectionPrefix}
+      hideNewInputText={hideNewInputText}
     />
   );
 };
@@ -176,8 +423,8 @@ const TypeaheadInner = <T extends TypeaheadOption = TypeaheadOption>(
 const Typeahead = forwardRef(TypeaheadInner) as <
   T extends TypeaheadOption = TypeaheadOption,
 >(
-  props: Props<T> & { ref?: ForwardedRef<TypeaheadElement<T>> },
+  props: Props<T> & { ref?: ForwardedRef<TypeaheadElement> },
 ) => ReturnType<typeof TypeaheadInner<T>>;
 
-export type { NewEntry };
+export type { NewEntry, TypeaheadElement, TypeaheadOption };
 export { isNewEntry, Typeahead };
