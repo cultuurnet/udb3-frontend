@@ -7,7 +7,7 @@ import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelVariants } from './Label';
 import { Stack } from './Stack';
 import { colors, getValueFromTheme } from './theme';
-import { Typeahead } from './Typeahead';
+import { TypeaheadLegacy } from './TypeaheadLegacy';
 
 const TimeSpanPickerLabelPositions = {
   TOP: 'top',
@@ -138,7 +138,7 @@ const TimeSpanPicker = ({
       {fields.map(
         ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
           const typeahead = (
-            <Typeahead<string>
+            <TypeaheadLegacy<string>
               key={`${key}-${fieldDisabled}`}
               inputType="time"
               inputRequired={true}
@@ -155,8 +155,8 @@ const TimeSpanPicker = ({
                 if (!newValue) return;
                 onChange(newValue);
               }}
-              positionFixed
               disabled={fieldDisabled}
+              positionFixed
               css={isInline ? inlineLabelDropDownCss : dropDownCss}
             />
           );
