@@ -40,6 +40,16 @@ export const AllowNew: Story = {
     options: cities,
     labelKey: (city: any) => city.name,
     allowNew: true,
-    newSelectionPrefix: 'Add new:',
+    newSelectionPrefix: 'Add new: ',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    id: 'loading',
+    options: [],
+    labelKey: (city: any) => city.name,
+    isLoading: true,
+    defaultInputValue: 'Rom',
   },
 };
