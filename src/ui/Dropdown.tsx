@@ -45,7 +45,7 @@ type DropdownProps = {
 const ItemShadcn = ({ href, onClick, children }: DropdownItemProps) => {
   if (onClick) {
     return (
-      <DropdownMenuItem onSelect={onClick} className="tw:text-base">
+      <DropdownMenuItem onSelect={() => onClick()} className="tw:text-base">
         {children}
       </DropdownMenuItem>
     );
