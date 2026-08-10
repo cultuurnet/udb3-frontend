@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { useMemo, useState } from 'react';
-import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 
 import { useGetOffersByCreatorQuery } from '@/hooks/api/offers';
@@ -16,6 +15,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { FormElement } from '@/ui/FormElement';
+import { Highlighter } from '@/ui/Highlighter';
 import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -265,42 +265,36 @@ const OrganizerPicker = ({
                 {addButtonHasBeenPressed && (
                   <Typeahead<Organizer>
                     id={'organizer-picker'}
-                    maxWidth="35rem"
+                    className="tw:max-w-140"
                     options={organizers}
                     isLoading={getOrganizersByQueryQuery.isLoading}
                     labelKey={(org: Organizer) =>
                       getOrganizerName(org, i18n.language)
                     }
-                    css={`
-                      .dropdown-item {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                      }
-
-                      .dropdown-item span:first-child {
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                      }
-                    `}
-                    renderMenuItemChildren={(org: Organizer, { text }) => {
+                    renderMenuItemChildren={(org: Organizer, text) => {
                       const name = getOrganizerName(org, i18n.language);
 
                       return (
-                        <>
-                          <Text>
+                        <Inline
+                          width="100%"
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Text className="tw:truncate tw:whitespace-nowrap">
                             <Highlighter search={text}>{name}</Highlighter>
                           </Text>
                           <Inline spacing={2}>
                             {isUitpasOrganizer(org, uitpasLabels) && (
-                              <UitpasIcon width="2rem" />
+                              <UitpasIcon width="2rem" className="tw:size-8!" />
                             )}
                             {isCultuurkuurOrganizer(org) && (
-                              <CultuurKuurIcon width="2rem" />
+                              <CultuurKuurIcon
+                                width="2rem"
+                                className="tw:size-8!"
+                              />
                             )}
                           </Inline>
-                        </>
+                        </Inline>
                       );
                     }}
                     selected={valueToArray(organizer)}
@@ -323,7 +317,6 @@ const OrganizerPicker = ({
                       'create.additionalInformation.organizer.add_new_label',
                     )}
                     allowNew
-                    flex={'initial'}
                   />
                 )}
               </Stack>
