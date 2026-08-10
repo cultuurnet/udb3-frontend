@@ -76,16 +76,13 @@ const DropdownLegacy = ({
         }
       `}
       id={id}
+      className={className}
     >
       <BootstrapDropdown as={BootstrapButtonGroup}>
         {isSplit ? (
           primaryAction
         ) : (
-          <BootstrapDropdown.Toggle
-            variant={variant}
-            className={className}
-            css={buttonCSS}
-          >
+          <BootstrapDropdown.Toggle variant={variant} css={buttonCSS}>
             {primaryActionChild.props.children}
           </BootstrapDropdown.Toggle>
         )}
