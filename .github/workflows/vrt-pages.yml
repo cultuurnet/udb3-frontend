@@ -64,18 +64,18 @@ jobs:
       - name: Run page VRT
         run: yarn vrt:pages
 
-      - name: List failing images
-        if: failure()
-        run: |
-          if [ -d .lostpixel-pages/difference ] && [ "$(ls -A .lostpixel-pages/difference)" ]; then
-            echo "Differences found in:"
-            ls -1 .lostpixel-pages/difference/
-          fi
-
-      - name: Upload difference images
+      - name: Upload VRT report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: vrt-pages-differences
-          path: .lostpixel-pages/difference/
+          name: vrt-pages-report
+          path: playwright-report-vrt-pages/
+          retention-days: 7
+
+      - name: Upload VRT diff images
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vrt-pages-diffs
+          path: test-results-vrt-pages/
           retention-days: 7

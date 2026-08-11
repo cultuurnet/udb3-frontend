@@ -493,21 +493,21 @@ test.describe('My Tests', () => {
 - SSR compatibility: Use `useIsClient()` hook for client-only code
 - Run: `yarn test:unit`
 
-### Visual Regression Testing (Lost Pixel)
+### Visual Regression Testing
 
 Two pipelines:
 
-- **Component-level** (`yarn vrt`): Storybook stories, via `lost-pixel-action`.
-- **Page-level** (`yarn vrt:pages` / `yarn vrt:pages-update`): full pages against a real, authenticated Next.js instance, orchestrated by `scripts/vrt/pages.mjs`.
+- **Component-level** (`yarn vrt`): Storybook stories, via Lost Pixel (`lost-pixel-action`). Lost Pixel is archived/unmaintained upstream — this pipeline stays on it for now, but expect a future migration here too.
+- **Page-level** (`yarn vrt:pages` / `yarn vrt:pages-update`): full pages against a real, authenticated Next.js instance, using Playwright's native `toHaveScreenshot`, orchestrated by `scripts/vrt/pages.mjs`. Screenshot capture/comparison runs via `playwright.vrt-pages.config.ts` inside a pinned `mcr.microsoft.com/playwright` Docker image (matching the installed `@playwright/test` version) for cross-platform pixel consistency; baselines live under `.vrt-pages/baseline/`.
 
 Page-level VRT runs the real app with API calls intercepted by a local mock server (`scripts/vrt/mock-server.mjs`). Anything not explicitly mocked falls through to the real backend and logs that it did — coverage builds incrementally: screenshot a page first, see what looks live, mock exactly that.
 
 **Adding a new page:**
 
-1. Add an entry to `pageShotsPages` in `lostpixel.config.ts`.
+1. Add a `test()` to the relevant `src/test/vrt-pages/<domain>.spec.ts` file (create the file if the domain doesn't have one yet): `await page.goto(path)` then `await expect(page).toHaveScreenshot('<name>.png')`.
 2. Mock its data: add fixtures in `scripts/vrt/fixtures/<domain>.mjs`, wire them into `MOCK_UPSTREAMS` in `scripts/vrt/mock-upstreams.mjs`.
-3. If the page needs interaction before the screenshot (typing, clicking): add a function in `scripts/vrt/interactions/<domain>.mjs`, keyed by shot name, and spread it into `interactionsByShotName` in `lostpixel.config.ts`. A startup check throws if a key doesn't match a real shot name.
-4. Run `yarn vrt:pages-update` locally, review the generated screenshot, then commit the baseline.
+3. If the page needs interaction before the screenshot (typing, clicking), write it inline in the test body before the `toHaveScreenshot` call.
+4. Run `yarn vrt:pages-update` locally, review the generated screenshot, then commit the baseline under `.vrt-pages/baseline/`.
 
 Mocked permissions/roles should reflect the real test account's actual access, not an inflated list — baselines should show what's honestly reachable, not a hypothetical best case.
 

@@ -10,9 +10,15 @@ import { startMockServer } from './mock-server.mjs';
 const BASE_URL = 'http://localhost:3000';
 const READY_TIMEOUT_MS = 180_000;
 const POLL_INTERVAL_MS = 1_000;
-const LOST_PIXEL_IMAGE = 'lostpixel/lost-pixel:v3.22.0';
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const AUTH_EXPIRY_BUFFER_SECONDS = 60;
+
+const getPlaywrightImage = () => {
+  const { version } = JSON.parse(
+    fs.readFileSync('node_modules/@playwright/test/package.json', 'utf-8'),
+  );
+  return `mcr.microsoft.com/playwright:v${version}-jammy`;
+};
 
 const FEATURE_FLAGS = {
   boa: false,
@@ -261,19 +267,28 @@ const main = async () => {
     const dockerArgs = [
       'run',
       '--rm',
-      ...(isLinux ? ['--network', 'host'] : []),
+      '--ipc=host',
+      ...(isLinux
+        ? [
+            '--network',
+            'host',
+            '--user',
+            `${os.userInfo().uid}:${os.userInfo().gid}`,
+          ]
+        : []),
       '-v',
       `${cwd}:${cwd}`,
-      '-e',
-      `WORKSPACE=${cwd}`,
-      '-e',
-      'DOCKER=1',
+      '-w',
+      cwd,
       '-e',
       `VRT_APP_HOST=${APP_HOST}`,
-      '-e',
-      'LOST_PIXEL_PAGES_ONLY=true',
-      ...(isUpdate ? ['-e', 'LOST_PIXEL_MODE=update'] : []),
-      LOST_PIXEL_IMAGE,
+      getPlaywrightImage(),
+      'npx',
+      'playwright',
+      'test',
+      '-c',
+      'playwright.vrt-pages.config.ts',
+      ...(isUpdate ? ['--update-snapshots'] : []),
     ];
     process.exitCode = await run(
       'docker',
