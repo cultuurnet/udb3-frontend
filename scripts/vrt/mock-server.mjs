@@ -1,5 +1,6 @@
 import http from 'node:http';
 import https from 'node:https';
+import zlib from 'node:zlib';
 
 const matchesFixture = (fixture, method, pathname, searchParams) => {
   if (fixture.method && fixture.method !== method) return false;
@@ -11,7 +12,20 @@ const matchesFixture = (fixture, method, pathname, searchParams) => {
   return true;
 };
 
-const proxyRequest = (realUrl, req, res) => {
+const decodeBody = (buffer, contentEncoding) => {
+  switch (contentEncoding) {
+    case 'gzip':
+      return zlib.gunzipSync(buffer);
+    case 'br':
+      return zlib.brotliDecompressSync(buffer);
+    case 'deflate':
+      return zlib.inflateSync(buffer);
+    default:
+      return buffer;
+  }
+};
+
+const proxyRequest = (realUrl, req, res, onBody) => {
   const target = new URL(req.url, realUrl);
   const client = target.protocol === 'https:' ? https : http;
   const proxyReq = client.request(
@@ -20,6 +34,17 @@ const proxyRequest = (realUrl, req, res) => {
     (proxyRes) => {
       res.writeHead(proxyRes.statusCode ?? 502, proxyRes.headers);
       proxyRes.pipe(res);
+      if (onBody) {
+        const chunks = [];
+        proxyRes.on('data', (chunk) => chunks.push(chunk));
+        proxyRes.on('end', () => {
+          const body = decodeBody(
+            Buffer.concat(chunks),
+            proxyRes.headers['content-encoding'],
+          );
+          onBody(body.toString('utf-8'));
+        });
+      }
     },
   );
   proxyReq.on('error', (error) => {
@@ -29,7 +54,7 @@ const proxyRequest = (realUrl, req, res) => {
   req.pipe(proxyReq);
 };
 
-export const startMockServer = ({ port, upstreams }) => {
+export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
   if (upstreams.length === 0) {
     throw new Error(
       '\nstartMockServer requires at least one upstream to route unmatched requests to.\n',
@@ -82,7 +107,21 @@ export const startMockServer = ({ port, upstreams }) => {
     if (!unmockedRequests.has(requestKey)) {
       unmockedRequests.set(requestKey, matchedUpstream.realUrl);
     }
-    proxyRequest(matchedUpstream.realUrl, req, res);
+
+    if (!onUnmockedResponse) {
+      proxyRequest(matchedUpstream.realUrl, req, res);
+      return;
+    }
+
+    proxyRequest(matchedUpstream.realUrl, req, res, (body) => {
+      onUnmockedResponse({
+        method: req.method,
+        pathname,
+        searchParams,
+        realUrl: matchedUpstream.realUrl,
+        body,
+      });
+    });
   });
 
   server.unmockedRequests = unmockedRequests;
