@@ -90,6 +90,7 @@ const DatePickerShadcn = ({
   const handleOpenChange = (open: boolean) => {
     if (disabled) return;
     setIsOpen(open);
+    if (open) setMonth(selected ?? today);
     if (!open) onCalendarClose?.();
   };
 
@@ -113,15 +114,14 @@ const DatePickerShadcn = ({
       focusCalendarDay();
       return;
     }
-    setIsOpen(true);
+    handleOpenChange(true);
     setShouldFocusCalendar(true);
   };
 
   const handleSelect = (date: Date | undefined) => {
     if (!date) return;
     onChange?.(date);
-    setIsOpen(false);
-    onCalendarClose?.();
+    handleOpenChange(false);
   };
 
   const handleTextChange = (value: string) => {
@@ -177,7 +177,7 @@ const DatePickerShadcn = ({
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               handleTextChange(event.target.value)
             }
-            onFocus={() => !disabled && setIsOpen(true)}
+            onFocus={() => handleOpenChange(true)}
             onBlur={handleTextBlur}
             onKeyDown={handleInputKeyDown}
             disabled={disabled}
@@ -186,7 +186,7 @@ const DatePickerShadcn = ({
           <Button
             variant={ButtonVariants.NEUTRAL}
             iconName={Icons.CALENDAR_ALT}
-            onClick={() => !disabled && handleOpenChange(!isOpen)}
+            onClick={() => handleOpenChange(!isOpen)}
             disabled={disabled}
             aria-label={t('date_picker.open_calendar')}
             className="tw:rounded-l-none tw:border tw:border-l-0 tw:border-input tw:shadow-none tw:focus-visible:ring-0"
