@@ -43,7 +43,7 @@ type Props = {
   calendarContent?: ReactNode;
   calendarQuickLinks?: (onClose: () => void) => ReactNode;
   calendarWidth?: string;
-  // todo: only restyles DatePickerLegacy; shadcn already highlights holidays without it. Delete once Legacy is dropped.
+  // TODO SHADCN_MIGRATION CLEANUP: only restyles DatePickerLegacy; shadcn already highlights holidays without it. Delete once Legacy is dropped.
   withHolidays?: boolean;
   className?: string;
   maxWidth?: string;
