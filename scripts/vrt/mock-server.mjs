@@ -32,13 +32,15 @@ const proxyRequest = (realUrl, req, res) => {
 export const startMockServer = ({ port, upstreams }) => {
   if (upstreams.length === 0) {
     throw new Error(
-      'startMockServer requires at least one upstream to route unmatched requests to.',
+      '\nstartMockServer requires at least one upstream to route unmatched requests to.\n',
     );
   }
 
   const byPrefixLengthDesc = [...upstreams].sort(
     (a, b) => b.pathPrefix.length - a.pathPrefix.length,
   );
+
+  const unmockedRequests = new Map();
 
   const server = http.createServer((req, res) => {
     const { pathname, searchParams } = new URL(req.url, 'http://localhost');
@@ -76,11 +78,14 @@ export const startMockServer = ({ port, upstreams }) => {
       );
       return;
     }
-    console.warn(
-      `Mock server: no fixture for ${req.method} ${pathname}, proxying to real backend ${matchedUpstream.realUrl}`,
-    );
+    const requestKey = `${req.method} ${pathname}`;
+    if (!unmockedRequests.has(requestKey)) {
+      unmockedRequests.set(requestKey, matchedUpstream.realUrl);
+    }
     proxyRequest(matchedUpstream.realUrl, req, res);
   });
+
+  server.unmockedRequests = unmockedRequests;
 
   return new Promise((resolve, reject) => {
     server.on('error', reject);

@@ -145,6 +145,19 @@ const cleanup = () => {
   }
   dockerRun?.kill('SIGTERM');
   if (mockServer) {
+    if (mockServer.unmockedRequests?.size) {
+      const lines = [...mockServer.unmockedRequests].map(
+        ([requestKey, realUrl]) =>
+          `  - ${requestKey} using real data from ${realUrl}`,
+      );
+      console.warn(
+        `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n`,
+      );
+    } else {
+      console.log(
+        '\nMock server: all requests were served from fixtures, no real data was used.\n',
+      );
+    }
     mockServer.closeAllConnections();
     mockServer.close();
   }
