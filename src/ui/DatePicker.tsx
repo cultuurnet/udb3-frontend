@@ -37,6 +37,7 @@ type Props = {
   onChange?: (value: Date) => void;
   onCalendarClose?: () => void;
   onMonthChange?: (date: Date) => void;
+  // TODO SHADCN_MIGRATION CLEANUP: only forwarded to DatePickerLegacy's own year picker; onMonthChange already covers it for shadcn. Delete once Legacy is dropped.
   onYearChange?: (date: Date) => void;
   highlightDates?: Date[];
   calendarHeader?: ReactNode;
@@ -56,7 +57,6 @@ const DatePickerShadcn = ({
   onChange,
   onCalendarClose,
   onMonthChange,
-  onYearChange,
   className,
   minDate,
   maxDate,
@@ -139,10 +139,8 @@ const DatePickerShadcn = ({
   };
 
   const handleMonthChange = (newMonth: Date) => {
-    const yearChanged = newMonth.getFullYear() !== month.getFullYear();
     setMonth(newMonth);
     onMonthChange?.(newMonth);
-    if (yearChanged) onYearChange?.(newMonth);
   };
 
   const handleTodayClick = () => {
@@ -302,7 +300,6 @@ const DatePicker = ({
         onChange={onChange}
         onCalendarClose={onCalendarClose}
         onMonthChange={onMonthChange}
-        onYearChange={onYearChange}
         className={className}
         minDate={minDate}
         maxDate={maxDate}
