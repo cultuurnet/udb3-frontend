@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import type { Values } from '@/types/Values';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import type { ListItemProps } from '@/ui/List';
@@ -31,7 +31,7 @@ const JobStates = {
 
 const StatusIcon = memo(({ state }: { state: Values<typeof JobStates> }) => {
   if (state === JobStates.FINISHED) {
-    return <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />;
+    return <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />;
   }
   return <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto" />;
 });
