@@ -30,10 +30,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   snapshotPathTemplate: '.vrt-pages/baseline/{arg}{ext}',
-  outputDir: 'test-results-vrt-pages/',
-  reporter: [
-    ['html', { outputFolder: 'playwright-report-vrt-pages', open: 'never' }],
-  ],
+  outputDir: '.vrt-pages/test-results/',
+  reporter: [['html', { outputFolder: '.vrt-pages/report', open: 'never' }]],
   use: {
     ...devices['Desktop Chrome'],
     baseURL: `http://${APP_HOST}:3000`,
