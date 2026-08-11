@@ -502,6 +502,8 @@ Two pipelines:
 
 Page-level VRT runs the real app with API calls intercepted by a local mock server (`scripts/vrt/mock-server.mjs`). Anything not explicitly mocked falls through to the real backend and logs that it did — coverage builds incrementally: screenshot a page first, see what looks live, mock exactly that.
 
+To target a single page while iterating: `yarn vrt:pages:single "labels overview"` (or `yarn vrt:pages-update:single "labels overview"` to update just that one). Extra arguments after any `vrt:pages*` script pass straight through to the underlying `playwright test` call.
+
 **Adding a new page:**
 
 1. Add a `test()` to the relevant `src/test/vrt-pages/<domain>.spec.ts` file (create the file if the domain doesn't have one yet): `await page.goto(path)` then `await expect(page).toHaveScreenshot('<name>.png')`.

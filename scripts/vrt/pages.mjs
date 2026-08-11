@@ -114,6 +114,9 @@ const buildMockEnv = (upstreams) =>
 
 const isUpdate = process.argv.includes('update');
 const allowServerReuse = process.argv.includes('--reuse-server');
+const playwrightArgs = process.argv
+  .slice(2)
+  .filter((arg) => arg !== 'update' && arg !== '--reuse-server');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -294,6 +297,7 @@ const main = async () => {
       '-c',
       'playwright.vrt-pages.config.ts',
       ...(isUpdate ? ['--update-snapshots'] : []),
+      ...playwrightArgs,
     ];
     process.exitCode = await run(
       'docker',
