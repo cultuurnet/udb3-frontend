@@ -175,7 +175,7 @@ const CustomRichTextEditorLink = ({
             >
               {t('organizer.add_modal.actions.add')}
             </Button>
-            <Button variant={ButtonVariants.SECONDARY} onClick={doCollapse}>
+            <Button variant={ButtonVariants.NEUTRAL} onClick={doCollapse}>
               {t('organizer.add_modal.actions.cancel')}
             </Button>
           </Inline>

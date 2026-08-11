@@ -55,7 +55,7 @@ const StatusModal = ({
             offerType={OfferTypes.EVENTS}
             statusType={type}
             statusReason={reason}
-            onChangeStatusType={(e) => setType(e.target.value)}
+            onChangeStatusType={setType}
             onInputStatusReason={(e) => setReason(e.target.value)}
           />
         </Stack>

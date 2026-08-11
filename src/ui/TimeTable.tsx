@@ -473,8 +473,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
         ))}
       </Stack>
       <Button
-        spacing={3}
-        flex="none"
+        className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
         onClick={handleCopyAll}
       >

@@ -28,7 +28,7 @@ const BookingAvailabilityForm = ({
       name="offerBookingAvailability"
       items={radioButtonItems}
       selected={bookingAvailabilityType}
-      onChange={onChangeBookingAvailability}
+      onValueChange={onChangeBookingAvailability}
       {...props}
     />
   );

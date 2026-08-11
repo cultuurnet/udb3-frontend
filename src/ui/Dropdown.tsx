@@ -42,7 +42,7 @@ const Dropdown = ({
     Children.toArray(children).find(isPrimaryActionChild);
 
   const buttonVariant =
-    variant === DropDownVariants.SECONDARY ? ButtonVariants.SECONDARY : variant;
+    variant === DropDownVariants.SECONDARY ? ButtonVariants.NEUTRAL : variant;
 
   const primaryAction = cloneElement(
     // @ts-expect-error
@@ -63,7 +63,9 @@ const Dropdown = ({
           box-shadow: ${getGlobalValue('boxShadow.heavy')};
           border-radius: ${getGlobalBorderRadius};
         }
-        .dropdown .primary-action:not(:only-child) > * {
+        .btn-group:has(.dropdown-toggle-split) .primary-action,
+        .btn-group:has(.dropdown-toggle-split) .primary-action > * {
+          box-shadow: none;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
         }
@@ -78,9 +80,6 @@ const Dropdown = ({
         }
 
         .btn-group {
-          .btn-secondary {
-            box-shadow: none;
-          }
           .dropdown-toggle-split {
             box-shadow: none;
             border-left: 1px solid ${grey1};
@@ -127,7 +126,7 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
     return (
       <BootstrapDropdown.Item
         forwardedAs={(props) => (
-          <Button variant={ButtonVariants.SECONDARY} {...props} />
+          <Button variant={ButtonVariants.NEUTRAL} {...props} />
         )}
         onClick={onClick}
         css={`
@@ -149,7 +148,7 @@ const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
       <BootstrapDropdown.Item
         forwardedAs={(props) => (
           <Link
-            variant={LinkVariants.BUTTON_SECONDARY}
+            variant={LinkVariants.BUTTON_NEUTRAL}
             href={href}
             padding={0}
             {...props}

@@ -83,7 +83,12 @@ export const CustomChildren: Story = {
     },
   },
   render: (args) => (
-    <Link customChildren={true} href={args.href} variant={args.variant}>
+    <Link
+      customChildren={true}
+      href={args.href}
+      variant={args.variant}
+      aria-label="View profile"
+    >
       <Icon name={args.iconName} />
     </Link>
   ),
@@ -102,6 +107,9 @@ export const AsButton: Story = {
     <Inline spacing={3}>
       <Link {...args} variant={LinkVariants.BUTTON_PRIMARY}>
         Primary
+      </Link>
+      <Link {...args} variant={LinkVariants.BUTTON_NEUTRAL}>
+        Neutral
       </Link>
       <Link {...args} variant={LinkVariants.BUTTON_SECONDARY}>
         Secondary

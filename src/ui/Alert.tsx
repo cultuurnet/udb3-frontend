@@ -35,7 +35,7 @@ const AlertVariantIcon: Partial<
   },
   [AlertVariants.WARNING]: {
     name: Icons.EXCLAMATION_TRIANGLE,
-    className: 'tw:text-udb-warning',
+    className: 'tw:text-warning',
   },
   [AlertVariants.DANGER]: {
     name: Icons.EXCLAMATION_CIRCLE,
