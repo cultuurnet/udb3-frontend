@@ -139,7 +139,11 @@ test('create event with all possible fields filled in', async ({
   await page.getByRole('tab', { name: 'Organisatie' }).click();
   await page.getByRole('button', { name: 'Organisatie toevoegen' }).click();
   await page.locator('#organizer-picker').fill(dummyEvent.organizer.name);
-  await page.locator('.rbt-menu-custom-option').click();
+  await page
+    .locator(
+      '.rbt-menu-custom-option, [data-testid="typeahead-add-new-option"]',
+    )
+    .click();
   await page.locator('#organizer-url').fill(dummyEvent.organizer.url);
   await page
     .getByPlaceholder('Straat en nummer')

@@ -20,7 +20,7 @@ type Props = Omit<StackProps, 'onChange'> & {
   error?: string;
 };
 
-const CityPicker = forwardRef<TypeaheadElement<City>, Props>(
+const CityPicker = forwardRef<TypeaheadElement, Props>(
   (
     {
       offerId,
