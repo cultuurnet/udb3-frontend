@@ -64,6 +64,8 @@ tsconfig.tsbuildinfo
 /pkg
 .bundle
 /test-results/
+/test-results-vrt-pages/
 /playwright-report/
+/playwright-report-vrt-pages/
 /playwright/.cache/
 /playwright/.auth/
