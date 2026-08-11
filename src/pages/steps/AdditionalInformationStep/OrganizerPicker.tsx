@@ -16,7 +16,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -211,7 +211,10 @@ const OrganizerPicker = ({
           organizer ? (
             <Stack>
               <Inline alignItems="center" paddingY={3} spacing={3}>
-                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+                <Icon
+                  name={Icons.CHECK_CIRCLE}
+                  variant={IconVariants.SUCCESS}
+                />
                 <Text>
                   {getOrganizerName(
                     organizer,

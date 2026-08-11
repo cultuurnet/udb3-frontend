@@ -16,7 +16,7 @@ import type { Event } from '@/types/Event';
 import type { Place } from '@/types/Place';
 import { Button, ButtonSizes, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
@@ -55,7 +55,7 @@ const CollapsedSelection = ({
   clearLabel,
 }: CollapsedSelectionProps) => (
   <Inline alignItems="center" spacing={3}>
-    <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+    <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
     <Text>{label}</Text>
     <Button variant={ButtonVariants.LINK} onClick={onClear}>
       {clearLabel}
