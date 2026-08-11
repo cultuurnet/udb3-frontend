@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
+import path from 'node:path';
 
 import 'dotenv/config';
 
@@ -18,6 +19,17 @@ const getPlaywrightImage = () => {
     fs.readFileSync('node_modules/@playwright/test/package.json', 'utf-8'),
   );
   return `mcr.microsoft.com/playwright:v${version}-jammy`;
+};
+
+const VRT_PAGES_OUTPUT_DIR = 'test-results-vrt-pages';
+
+const findDiffImages = (dir) => {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) return findDiffImages(fullPath);
+    return entry.name.endsWith('-diff.png') ? [fullPath] : [];
+  });
 };
 
 const FEATURE_FLAGS = {
@@ -268,14 +280,7 @@ const main = async () => {
       'run',
       '--rm',
       '--ipc=host',
-      ...(isLinux
-        ? [
-            '--network',
-            'host',
-            '--user',
-            `${os.userInfo().uid}:${os.userInfo().gid}`,
-          ]
-        : []),
+      ...(isLinux ? ['--network', 'host'] : []),
       '-v',
       `${cwd}:${cwd}`,
       '-w',
@@ -298,6 +303,23 @@ const main = async () => {
         dockerRun = child;
       },
     );
+
+    if (process.exitCode === 0) {
+      console.log(
+        isUpdate
+          ? '\nBaselines updated.\n'
+          : '\nNo visual differences found — all page shots match their baselines.\n',
+      );
+    } else {
+      const diffImages = findDiffImages(VRT_PAGES_OUTPUT_DIR);
+      if (diffImages.length > 0) {
+        console.log('\nVisual differences found — click to view:');
+        for (const image of diffImages) {
+          console.log(`  file://${path.resolve(image)}`);
+        }
+        console.log();
+      }
+    }
   } finally {
     cleanup();
   }
