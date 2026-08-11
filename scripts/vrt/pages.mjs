@@ -46,7 +46,7 @@ const getHostIp = () => {
     }
   }
   throw new Error(
-    'Could not determine a private, non-internal IPv4 address for this host',
+    '\nCould not determine a private, non-internal IPv4 address for this host\n',
   );
 };
 
@@ -81,7 +81,7 @@ const configuredUpstreams = () =>
     const realUrl = process.env[envVar];
     if (!realUrl) {
       throw new Error(
-        `${envVar} is not set — its API calls would hit the real backend and make baselines unreliable.`,
+        `\n${envVar} is not set — its API calls would hit the real backend and make baselines unreliable.\n`,
       );
     }
 
@@ -160,7 +160,7 @@ for (const signal of ['SIGINT', 'SIGTERM']) {
 const main = async () => {
   if (!(await isDockerAvailable())) {
     console.error(
-      'Docker is required to run this — is it installed and running?',
+      '\nDocker is required to run this — is it installed and running?\n',
     );
     process.exit(1);
   }
@@ -202,9 +202,11 @@ const main = async () => {
     ]);
     if (!ready) {
       console.error(
-        exitCode !== null
-          ? `App process exited with code ${exitCode} before becoming reachable at ${BASE_URL} — see build/start output above.`
-          : `App never became reachable at ${BASE_URL}`,
+        `\n${
+          exitCode !== null
+            ? `App process exited with code ${exitCode} before becoming reachable at ${BASE_URL} — see build/start output above.`
+            : `App never became reachable at ${BASE_URL}`
+        }\n`,
       );
       cleanup();
       process.exit(1);
@@ -215,7 +217,7 @@ const main = async () => {
     );
   } else {
     console.error(
-      `An app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so screenshots would be taken against live acceptance data instead of fixtures. Stop that server, or pass --reuse-server to reuse it anyway.`,
+      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so screenshots would be taken against live acceptance data instead of fixtures. Stop that server, or pass --reuse-server to reuse it anyway.\n`,
     );
     process.exit(1);
   }
@@ -231,7 +233,7 @@ const main = async () => {
         { env: { ...process.env, VRT_REUSE_SERVER: 'true' } },
       );
       if (authExitCode !== 0) {
-        console.error('Failed to refresh authenticated storage state');
+        console.error('\nFailed to refresh authenticated storage state\n');
         process.exitCode = authExitCode;
         return;
       }
