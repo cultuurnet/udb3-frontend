@@ -2,6 +2,7 @@ import { differenceInDays } from 'date-fns';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
@@ -35,6 +36,7 @@ const FixedDayOptions = {
 } as const;
 
 type FixedDaysProps = {
+  scope: Scope;
   onChooseWithStartAndEndDate: () => void;
   onChoosePermanent: () => void;
   onChangeStartDate: (date: Date | null) => void;
@@ -48,6 +50,7 @@ type FixedDaysProps = {
 };
 
 export const FixedDays = ({
+  scope,
   onChooseWithStartAndEndDate,
   onChoosePermanent,
   onChangeStartDate,
@@ -95,6 +98,7 @@ export const FixedDays = ({
   }, [isPermanent]);
 
   const isPeriodShorterThanTwoWeeks =
+    scope === OfferTypes.EVENTS &&
     isPeriodic &&
     startDate &&
     endDate &&
