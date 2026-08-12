@@ -508,7 +508,7 @@ To target a single page while iterating: `yarn vrt:pages:single "labels overview
 
 **Adding a new page:**
 
-1. Add a `test()` to the relevant `src/test/vrt-pages/<domain>.spec.ts` file (create the file if the domain doesn't have one yet): `await page.goto(path)` then `await takeVrtScreenshot(page, '<name>.png')` (the shared helper from `src/test/vrt-pages/support.ts`).
+1. Add a `test()` to the relevant `src/test/vrt-pages/<domain>.spec.ts` file (create the file if the domain doesn't have one yet): `await page.goto(path)` then `await takeVrtScreenshot(page)` (the shared helper from `src/test/vrt-pages/support.ts` — the baseline filename is derived automatically from the test title as `pages--<title with spaces as dashes>.png`, so name the test accordingly).
 2. Mock its data: add fixtures in `scripts/vrt/fixtures/<domain>.mjs`, wire them into `MOCK_UPSTREAMS` in `scripts/vrt/mock-upstreams.mjs`. If the console warns an endpoint has no fixture, run `yarn vrt:pages:fixtures:single "<test name>"` to capture the real response into `.vrt-pages/missing-fixtures/` (gitignored) — review and redact it, then turn it into a fixture. Recording runs the page directly on the host (no Docker, no screenshots — `takeVrtScreenshot` no-ops in this mode) and is a separate, explicit step: an endpoint left unmocked keeps hitting the real backend on every normal run, so it still surfaces genuine backend-driven differences until you deliberately mock it.
 3. If the page needs interaction before the screenshot (typing, clicking), write it inline in the test body before the `takeVrtScreenshot` call.
 4. Run `yarn vrt:pages-update` locally, review the generated screenshot, then commit the baseline under `.vrt-pages/baseline/`.
