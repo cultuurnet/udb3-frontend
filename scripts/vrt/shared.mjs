@@ -166,8 +166,8 @@ export const cleanup = () => {
       );
       console.warn(
         `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
-          'Run `yarn vrt:pages:record` to capture real responses for these.\n' +
-          'Or `yarn vrt:pages:record:single "<test name>"` to record just one test.\n',
+          'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
+          'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
       );
     } else {
       console.log(
