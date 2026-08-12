@@ -1,7 +1,7 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 
-export const takeVrtScreenshot = async (page: Page) => {
+export const takeVrtScreenshot = async (target: Page | Locator) => {
   if (process.env.VRT_RECORD_MODE === 'true') return;
   const name = `pages--${test.info().title.replace(/\s+/g, '-')}.png`;
-  await expect(page).toHaveScreenshot(name);
+  await expect(target).toHaveScreenshot(name);
 };
