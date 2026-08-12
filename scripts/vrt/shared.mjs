@@ -147,10 +147,21 @@ const waitForServer = async () => {
 let server;
 let mockServer;
 let cleanedUp = false;
+const additionalCleanupTasks = [];
+
+export const registerCleanupTask = (task) => {
+  additionalCleanupTasks.push(task);
+};
 
 export const cleanup = () => {
   if (cleanedUp) return;
   cleanedUp = true;
+
+  for (const task of additionalCleanupTasks) {
+    try {
+      task();
+    } catch {}
+  }
 
   if (server) {
     try {

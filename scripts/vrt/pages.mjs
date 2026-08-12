@@ -8,6 +8,7 @@ import {
   ensureAuthSession,
   isDockerAvailable,
   isLinux,
+  registerCleanupTask,
   run,
 } from './shared.mjs';
 
@@ -36,9 +37,7 @@ const playwrightArgs = process.argv
   .filter((arg) => arg !== 'update' && arg !== '--reuse-server');
 
 let dockerRun;
-for (const signal of ['SIGINT', 'SIGTERM']) {
-  process.on(signal, () => dockerRun?.kill('SIGTERM'));
-}
+registerCleanupTask(() => dockerRun?.kill('SIGTERM'));
 
 const main = async () => {
   if (!(await isDockerAvailable())) {
