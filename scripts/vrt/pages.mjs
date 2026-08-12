@@ -93,11 +93,15 @@ const main = async () => {
     );
 
     if (process.exitCode === 0) {
-      console.log(
-        isUpdate
-          ? '\nBaselines updated.\n'
-          : '\nNo visual differences found — all page shots match their baselines.\n',
-      );
+      if (isUpdate) {
+        console.log(
+          '\nUpdate complete — baselines were only rewritten where the capture actually differed.\n',
+        );
+      } else {
+        console.log(
+          '\nNo visual differences found — all page shots match their baselines.\n',
+        );
+      }
     } else {
       const diffImages = findDiffImages(VRT_PAGES_OUTPUT_DIR);
       if (diffImages.length > 0) {
