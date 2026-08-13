@@ -220,7 +220,10 @@ const DatePickerShadcn = ({
                   variant={ButtonVariants.UNSTYLED}
                   onClick={handleGoToSelectedClick}
                   disabled={disabled}
-                  className={cn(badgeVariants({ variant: 'default' }))}
+                  className={cn(
+                    badgeVariants({ variant: 'success' }),
+                    'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
+                  )}
                 >
                   {t('date_picker.go_to_selected')}
                 </Button>
@@ -229,7 +232,10 @@ const DatePickerShadcn = ({
                 variant={ButtonVariants.UNSTYLED}
                 onClick={handleTodayClick}
                 disabled={disabled}
-                className={cn(badgeVariants({ variant: 'secondary' }))}
+                className={cn(
+                  badgeVariants({ variant: 'secondary' }),
+                  'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
+                )}
               >
                 {t('date_picker.today')}
               </Button>
@@ -249,7 +255,7 @@ const DatePickerShadcn = ({
               }
               modifiersClassNames={{
                 highlighted:
-                  'tw:bg-accent tw:text-accent-foreground tw:rounded-md',
+                  'tw:bg-muted tw:text-muted-foreground tw:rounded-md',
               }}
               locale={dayPickerLocales[i18n.language] ?? dayPickerLocales.nl}
               className="tw:mx-auto"
