@@ -58,7 +58,7 @@ const PaginationLink = ({
       'tw:no-underline tw:select-none',
       isActive
         ? 'tw:bg-primary tw:text-primary-foreground tw:border-primary tw:hover:bg-primary tw:hover:text-primary-foreground'
-        : 'tw:hover:bg-udb-grey-1 tw:hover:text-foreground',
+        : 'tw:hover:bg-muted tw:hover:text-foreground',
       className,
     )}
     {...props}
@@ -79,7 +79,7 @@ const PaginationPrevious = ({
         'tw:gap-1 tw:pl-2.5',
         props.disabled
           ? 'tw:cursor-not-allowed! tw:hover:bg-transparent! tw:hover:text-current!'
-          : 'tw:hover:bg-udb-grey-1 tw:hover:text-foreground',
+          : 'tw:hover:bg-muted tw:hover:text-foreground',
         className,
       )}
       {...props}
@@ -104,7 +104,7 @@ const PaginationNext = ({
         'tw:gap-1 tw:pr-2.5',
         props.disabled
           ? 'tw:cursor-not-allowed! tw:hover:bg-transparent! tw:hover:text-current!'
-          : 'tw:hover:bg-udb-grey-1 tw:hover:text-foreground',
+          : 'tw:hover:bg-muted tw:hover:text-foreground',
         className,
       )}
       {...props}
