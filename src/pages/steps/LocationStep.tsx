@@ -40,7 +40,7 @@ import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
@@ -768,7 +768,10 @@ const LocationStep = ({
           return renderFieldWithRecentLocations(
             <>
               <div className="tw:flex tw:items-center tw:gap-2 tw:mb-4">
-                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+                <Icon
+                  name={Icons.CHECK_CIRCLE}
+                  variant={IconVariants.SUCCESS}
+                />
                 <Text>
                   {municipality.name}
                   {municipality.zip ? `, ${municipality.zip}` : ''}
@@ -810,7 +813,7 @@ const LocationStep = ({
                     <div className="tw:flex tw:items-center tw:gap-2">
                       <Icon
                         name={Icons.CHECK_CIRCLE}
-                        className="tw:text-success"
+                        variant={IconVariants.SUCCESS}
                       />
                       <Text>{field.value.streetAndNumber}</Text>
                       <Button
