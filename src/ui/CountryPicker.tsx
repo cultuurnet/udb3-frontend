@@ -4,6 +4,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Countries, Country } from '@/types/Country';
 import { Button } from '@/ui/Button';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
+import { Icon, Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { cn } from '@/ui/shadcn/utils';
 import { Text } from '@/ui/Text';
@@ -40,7 +41,10 @@ const CountryPickerShadcn = ({
       )}
     >
       <Button customChildren>
-        <FlagIcon country={value} />
+        <span className="tw:flex tw:items-center tw:gap-1">
+          <FlagIcon country={value} />
+          <Icon name={Icons.CHEVRON_DOWN} />
+        </span>
       </Button>
 
       {countries.map((countryValue) => (
