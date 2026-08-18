@@ -38,6 +38,7 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
+import { CountryPicker } from '@/ui/CountryPicker';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
 import { Icon, Icons, IconVariants } from '@/ui/Icon';
@@ -60,7 +61,6 @@ import { prefixUrlWithHttps } from '@/utils/url';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
 import { CityPicker } from '../CityPicker';
-import { CountryPicker } from './CountryPicker';
 import { UseEditArguments } from './hooks/useEditField';
 import { useRecentLocations } from './hooks/useRecentLocations';
 import { PlaceStep } from './PlaceStep';
