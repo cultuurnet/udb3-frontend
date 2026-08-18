@@ -207,7 +207,7 @@ const TimeSpanPickerShadcn = ({
 
   return (
     <div
-      className={cn('tw:flex tw:flex-wrap tw:items-end tw:gap-3', className)}
+      className={cn('tw:flex tw:flex-nowrap tw:items-end tw:gap-3', className)}
     >
       {fields.map(
         ({ key, name, label, value, onChange, disabled: fieldDisabled }) => (
