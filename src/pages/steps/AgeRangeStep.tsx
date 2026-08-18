@@ -53,7 +53,8 @@ type AgeInputMode = Values<typeof AgeInputModes>;
 
 type ActiveModal =
   | { kind: 'departurePlaces' }
-  | { kind: 'ageRange'; newValue: string; previousValue: string };
+  | { kind: 'ageRange'; newValue: string; previousValue: string }
+  | { kind: 'inputMode'; newMode: AgeInputMode };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
@@ -174,11 +175,11 @@ type BirthdatePickersProps = {
 const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
   const { t } = useTranslation();
 
-  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(
-    from ? parse(from, 'yyyy-MM-dd', new Date()) : undefined,
+  const [minBirthDate, setMinBirthDate] = useState<Date>(
+    from ? parse(from, 'yyyy-MM-dd', new Date()) : new Date(),
   );
-  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(
-    to ? parse(to, 'yyyy-MM-dd', new Date()) : undefined,
+  const [maxBirthDate, setMaxBirthDate] = useState<Date>(
+    to ? parse(to, 'yyyy-MM-dd', new Date()) : new Date(),
   );
 
   const isInvalidRange =
@@ -408,7 +409,15 @@ const AgeRangeStepBoa = ({
 
   const [minAge = '', maxAge = ''] = (watchedTypicalAgeRange ?? '').split('-');
 
-  const [activeTab, setActiveTab] = useState<AgeInputMode>(AgeInputModes.AGE);
+  const hasAgeRange = !!watchedTypicalAgeRange;
+  const hasBirthdateRange = !!watchedBirthdateRange?.from;
+
+  const defaultMode = hasBirthdateRange
+    ? AgeInputModes.DATE_OF_BIRTH
+    : AgeInputModes.AGE;
+
+  const [selectedMode, setSelectedMode] = useState<AgeInputMode | null>(null);
+  const activeTab = selectedMode ?? defaultMode;
 
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const [childrenOnlyMutationError, setChildrenOnlyMutationError] = useState<
@@ -532,15 +541,37 @@ const AgeRangeStepBoa = ({
     });
   };
 
-  const handleModeChange = (newMode: string) => {
-    setActiveTab(newMode as AgeInputMode);
-    if (
-      newMode === AgeInputModes.DATE_OF_BIRTH &&
-      !watchedBirthdateRange?.from
-    ) {
-      const today = new Date();
-      commitBirthdateRange(today, today);
+  const applyModeChange = (mode: AgeInputMode) => {
+    setSelectedMode(mode);
+
+    if (mode === AgeInputModes.AGE) {
+      setValue('nameAndAgeRange.birthdateRange', undefined, {
+        shouldDirty: true,
+      });
+    } else {
+      setValue('nameAndAgeRange.typicalAgeRange', '', { shouldDirty: true });
     }
+  };
+
+  const handleModeChange = (newMode: string) => {
+    const mode = newMode as AgeInputMode;
+    if (mode === activeTab) return;
+
+    const hasActiveTabValue =
+      activeTab === AgeInputModes.AGE ? hasAgeRange : hasBirthdateRange;
+
+    if (hasActiveTabValue) {
+      setActiveModal({ kind: 'inputMode', newMode: mode });
+      return;
+    }
+
+    applyModeChange(mode);
+  };
+
+  const handleInputModeModalConfirm = () => {
+    if (activeModal?.kind !== 'inputMode') return;
+    applyModeChange(activeModal.newMode);
+    setActiveModal(null);
   };
 
   const applyChildrenOnlyChange = async (value: boolean) => {
@@ -679,6 +710,28 @@ const AgeRangeStepBoa = ({
           />
         )}
       </Stack>
+
+      <Modal
+        variant={ModalVariants.QUESTION}
+        size={ModalSizes.MD}
+        visible={activeModal?.kind === 'inputMode'}
+        title={t('create.name_and_age.age.input_mode_switch_modal.title')}
+        confirmTitle={t(
+          'create.name_and_age.age.input_mode_switch_modal.confirm',
+        )}
+        cancelTitle={t(
+          'create.name_and_age.age.input_mode_switch_modal.cancel',
+        )}
+        confirmButtonVariant={ButtonVariants.DANGER}
+        onClose={() => setActiveModal(null)}
+        onConfirm={handleInputModeModalConfirm}
+      >
+        <Box padding={4}>
+          <Text>
+            {t('create.name_and_age.age.input_mode_switch_modal.body')}
+          </Text>
+        </Box>
+      </Modal>
 
       <Modal
         variant={ModalVariants.QUESTION}
