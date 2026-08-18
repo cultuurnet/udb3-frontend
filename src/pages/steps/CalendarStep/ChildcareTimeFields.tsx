@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { BoxProps } from '@/ui/Box';
 import { Checkbox } from '@/ui/Checkbox';
 import { Label, LabelVariants } from '@/ui/Label';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -61,8 +62,10 @@ const ChildcareTimeFields = ({
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={startToggleId}
-            color={!startEnabled ? colors.grey5 : undefined}
-            cursor={disabled ? 'not-allowed' : 'pointer'}
+            className={cn(
+              !startEnabled && 'tw:text-muted-foreground',
+              disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
+            )}
           >
             {t('create.calendar.days.childcare.before')}
           </Label>
@@ -77,8 +80,10 @@ const ChildcareTimeFields = ({
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={endToggleId}
-            color={!endEnabled ? colors.grey5 : undefined}
-            cursor={disabled ? 'not-allowed' : 'pointer'}
+            className={cn(
+              !endEnabled && 'tw:text-muted-foreground',
+              disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
+            )}
           >
             {t('create.calendar.days.childcare.after')}
           </Label>
