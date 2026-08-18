@@ -123,7 +123,7 @@ const FormElement = ({
     <Wrapper
       as="div"
       className={cn(
-        labelPosition !== LabelPositions.TOP && 'tw:gap-1',
+        labelPosition !== LabelPositions.TOP && 'tw:gap-2',
         className,
       )}
       {...(wrapperProps[labelPosition] ?? {})}
@@ -133,7 +133,6 @@ const FormElement = ({
         as="div"
         spacing={3}
         width={labelPosition === LabelPositions.RIGHT ? 'auto' : '100%'}
-        minWidth={50}
       >
         {((label && labelPosition === LabelPositions.TOP) ||
           typeof maxLength !== 'undefined') && (
