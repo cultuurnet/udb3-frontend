@@ -2,11 +2,11 @@ import type { Values } from '@/types/Values';
 
 import type { BoxProps } from './Box';
 import { getInlineProps, Inline } from './Inline';
-import { LabelVariants } from './Label';
+import type { LabelVariants } from './Label';
 import { Text } from './Text';
 
 const getFontWeight = (props) => {
-  if (props.variant === LabelVariants.BOLD) return 700;
+  if (props.variant === 'bold') return 700;
   return 'normal';
 };
 
@@ -20,7 +20,7 @@ const LabelLegacy = ({
   htmlFor,
   children,
   className,
-  variant = LabelVariants.NORMAL,
+  variant = 'normal',
   required = false,
   ...props
 }: Props) => (
