@@ -149,7 +149,7 @@ const DeviatingPeriod = ({
         </Text>
         <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
-            className="tw:w-full tw:mr-8"
+            className="tw:w-full"
             id={`deviating-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}

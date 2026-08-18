@@ -133,7 +133,7 @@ export const Days = ({
             >
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
-                className="tw:gap-2 tw:mr-8"
+                className="tw:gap-2"
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}
                 dateEnd={new Date(day.endDate)}
