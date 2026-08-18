@@ -2,18 +2,8 @@ import type { Values } from '@/types/Values';
 
 import type { BoxProps } from './Box';
 import { getInlineProps, Inline } from './Inline';
+import { LabelVariants } from './Label';
 import { Text } from './Text';
-
-const LabelVariants = {
-  BOLD: 'bold',
-  NORMAL: 'normal',
-} as const;
-
-const LabelPositions = {
-  LEFT: 'left',
-  TOP: 'top',
-  RIGHT: 'right',
-} as const;
 
 const getFontWeight = (props) => {
   if (props.variant === LabelVariants.BOLD) return 700;
@@ -48,5 +38,5 @@ const LabelLegacy = ({
   </Inline>
 );
 
-export { LabelLegacy, LabelPositions, LabelVariants };
+export { LabelLegacy };
 export type { Props as LabelProps };
