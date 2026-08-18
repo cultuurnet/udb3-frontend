@@ -13,7 +13,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
-import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
