@@ -1,12 +1,13 @@
 import fs from 'node:fs';
 
 import type { CustomProjectConfig } from 'lost-pixel';
+import type { Page } from 'playwright-core';
 
 import { labelsInteractionsByShotName } from './scripts/vrt/interactions/labels.mjs';
 
 const pagesOnly = process.env.LOST_PIXEL_PAGES_ONLY === 'true';
 
-const interactionsByShotName: Record<string, (page: any) => Promise<void>> = {
+const interactionsByShotName: Record<string, (page: Page) => Promise<void>> = {
   ...labelsInteractionsByShotName,
 };
 
