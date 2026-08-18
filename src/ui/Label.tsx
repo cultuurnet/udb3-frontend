@@ -37,6 +37,7 @@ const Label = ({
       htmlFor={htmlFor}
       className={cn(
         variant === LabelVariants.BOLD && 'tw:font-bold',
+        variant === LabelVariants.NORMAL && 'tw:font-normal',
         className,
       )}
     >
