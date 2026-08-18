@@ -30,7 +30,7 @@ const buttonVariants = cva(
           'tw:text-destructive tw:underline tw:hover:text-destructive/70',
         outlined:
           'tw:border tw:border-primary tw:bg-transparent tw:text-primary tw:shadow-none tw:hover:bg-primary/10',
-        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-udb-grey-3 tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
+        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-border tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
         // h-10 on all three matches legacy's single global button height
@@ -53,7 +53,7 @@ const buttonVariants = cva(
       {
         variant: 'neutral',
         active: true,
-        class: 'tw:bg-udb-grey-1',
+        class: 'tw:bg-muted',
       },
       {
         variant: 'unstyled',

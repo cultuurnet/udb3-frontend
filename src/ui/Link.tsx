@@ -75,7 +75,7 @@ const BaseLinkShadcn = ({
         ? 'tw:items-center tw:no-underline tw:rounded-md tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring'
         : isBadge
           ? 'tw:items-center tw:no-underline'
-          : 'tw:font-normal tw:underline tw:text-udb-main-darkest-blue tw:hover:text-udb-main-blue tw:hover:decoration-udb-main-blue';
+          : 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary/70 tw:hover:decoration-primary/70';
 
   // TODO: after legacy drop, replace Box with plain Component and remove getBoxProps — callers will use className instead of Box props
   return (

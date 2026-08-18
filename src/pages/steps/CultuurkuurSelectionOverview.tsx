@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Button } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Text } from '@/ui/Text';
 import { expandLevel1WithChildren } from '@/utils/cultuurkuurLabels';
@@ -30,7 +30,7 @@ const CultuurkuurSelectionOverview = ({
 
   return (
     <Inline spacing={1} alignItems="center">
-      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+      <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
       <Text>
         <Inline alignItems="center">
           <Button variant="link" onClick={onOpenModal}>
