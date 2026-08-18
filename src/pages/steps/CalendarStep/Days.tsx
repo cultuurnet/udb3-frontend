@@ -121,7 +121,10 @@ export const Days = ({
           });
 
         return (
-          <Stack spacing={4} key={`list-item-${day.id}`}>
+          <div
+            className="tw:flex tw:flex-col tw:gap-4 tw:mb-4"
+            key={`list-item-${day.id}`}
+          >
             <List.Item
               alignItems="center"
               spacing={5}
@@ -129,7 +132,7 @@ export const Days = ({
             >
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
-                spacing={3}
+                className="tw:gap-2 tw:mr-8"
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}
                 dateEnd={new Date(day.endDate)}
@@ -247,7 +250,7 @@ export const Days = ({
                 {t(`bookingAvailability.unavailable`)}
               </Alert>
             )}
-          </Stack>
+          </div>
         );
       })}
     </List>

@@ -22,7 +22,7 @@ import type {
 import type { Production } from '@/types/Production';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps } from '@/ui/Stack';
@@ -155,7 +155,7 @@ const ProductionStep = ({
 
         return (
           <Inline alignItems="center" spacing={3} {...getInlineProps(props)}>
-            <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+            <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
             <Text>{selectedProduction.name}</Text>
             <Button
               variant={ButtonVariants.LINK}

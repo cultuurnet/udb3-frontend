@@ -234,6 +234,7 @@ const ReservationPeriod = ({
       >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
+          className="tw:mr-4"
           id="reservation-date-picker"
           dateStart={startDate}
           dateEnd={endDate}
