@@ -68,12 +68,16 @@ const BaseLinkShadcn = ({
   const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
 
-  const variantClass =
-    variant === LinkVariants.UNSTYLED
-      ? 'tw:items-center tw:w-full tw:no-underline tw:text-inherit tw:hover:text-inherit'
-      : isButton || isBadge
-        ? 'tw:items-center tw:no-underline'
-        : 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary/70 tw:hover:decoration-primary/70';
+  const getVariantClass = () => {
+    if (variant === LinkVariants.UNSTYLED)
+      return 'tw:items-center tw:w-full tw:no-underline tw:text-inherit tw:hover:text-inherit';
+    if (isButton)
+      return 'tw:items-center tw:no-underline tw:rounded-md tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring';
+    if (isBadge) return 'tw:items-center tw:no-underline';
+    return 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary/70 tw:hover:decoration-primary/70';
+  };
+
+  const variantClass = getVariantClass();
 
   // TODO: after legacy drop, replace Box with plain Component and remove getBoxProps — callers will use className instead of Box props
   return (
