@@ -142,7 +142,7 @@ const Row = ({
   ...props
 }: RowProps): any => {
   const handlePaste = (
-    event: ClipboardEvent<HTMLFormElement>,
+    event: ClipboardEvent<HTMLInputElement>,
     index: number,
     date: string,
   ) => {
@@ -435,6 +435,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
     >
       <DatePeriodPicker
         id={id}
+        className="tw:mb-4"
         dateStart={parseDate(value.dateStart)}
         dateEnd={parseDate(value.dateEnd)}
         onDateStartChange={handleDateStartChange}

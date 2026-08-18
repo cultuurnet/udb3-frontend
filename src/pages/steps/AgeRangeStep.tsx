@@ -262,7 +262,7 @@ const AgeRangeInputs = ({
           value={minAge}
           placeholder={t('create.name_and_age.age.from')}
           aria-label={t('create.name_and_age.age.from')}
-          maxWidth="8rem"
+          className="tw:max-w-32"
           onChange={(e) => onAgeChange(getInputValue(e), maxAge)}
           onBlur={(e) => onAgeCommit(getInputValue(e), maxAge)}
         />
@@ -271,7 +271,7 @@ const AgeRangeInputs = ({
           value={maxAge}
           placeholder={t('create.name_and_age.age.till')}
           aria-label={t('create.name_and_age.age.till')}
-          maxWidth="8rem"
+          className="tw:max-w-32"
           onChange={(e) => onAgeChange(minAge, getInputValue(e))}
           onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
         />
@@ -648,10 +648,7 @@ const AgeRangeStepBoa = ({
               value: mode,
               label: t(`create.name_and_age.age.input_mode.${mode}`),
             }))}
-            maxWidth="40rem"
-            css={`
-              margin-bottom: 2rem;
-            `}
+            className="tw:max-w-160 tw:mb-8"
           />
         )}
         {showBirthdateOption && activeTab === AgeInputModes.DATE_OF_BIRTH && (

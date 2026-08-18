@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Keine Wohnungen gefunden"
   },
   "country_picker": {
+    "aria_label": "Land ändern, aktuell ausgewählt: {{country}}",
     "location_school": "Ort in Absprache mit der Schule"
   },
   "copyright": {
@@ -1109,6 +1110,9 @@
     "welcome": "Willkommen"
   },
   "description": "UiTdatabank liefert Informationen an mehr als 1.000 Agendas, darunter UiTinvlaanderen, Webseiten von Städten und Gemeinden, Themen-Agendas, Printmedien und mobile Apps. Auch Ihre Aktivität kann auf vielen Agendas erscheinen.",
+  "dropdown": {
+    "toggle_label": "Weitere Optionen"
+  },
   "error": {
     "description": "Etwas ist schief gegangen. Laden Sie die Seite erneut, um es noch einmal zu probieren. Kontaktieren Sie <1>{{email}}</1>, wenn das Problem bestehen bleibt",
     "email": "vragen@uitdatabank.be",
@@ -1691,6 +1695,11 @@
       "title": "FAQ {{index}}",
       "placeholder_question": "Frage in {{language}} übersetzen"
     }
+  },
+  "date_picker": {
+    "today": "Heute",
+    "go_to_selected": "Zur Auswahl",
+    "open_calendar": "Kalender öffnen"
   },
   "date_period_picker": {
     "end": "Ende",

@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Geen woonplaatsen gevonden"
   },
   "country_picker": {
+    "aria_label": "Land wijzigen, huidig geselecteerd: {{country}}",
     "location_school": "Locatie in overleg met de school"
   },
   "copyright": {
@@ -1144,6 +1145,9 @@
     "welcome": "Welkom"
   },
   "description": "UiTdatabank levert informatie aan meer dan 1.000 agenda's, waaronder UiTinvlaanderen, websites van steden en gemeenten, thema-agenda's, gedrukte bladen en mobiele apps. Ook jouw activiteit kan verschijnen op vele agenda's.",
+  "dropdown": {
+    "toggle_label": "Meer opties"
+  },
   "error": {
     "description": "Er ging iets mis. Herlaad de pagina om opnieuw te proberen. Neem contact op met <1>{{email}}</1> als dit probleem zich blijft voordoen",
     "email": "vragen@uitdatabank.be",
@@ -1745,6 +1749,11 @@
       "title": "FAQ {{index}}",
       "placeholder_question": "Vertaal vraag in {{language}}"
     }
+  },
+  "date_picker": {
+    "today": "Vandaag",
+    "go_to_selected": "Naar selectie",
+    "open_calendar": "Kalender openen"
   },
   "date_period_picker": {
     "end": "Einde",

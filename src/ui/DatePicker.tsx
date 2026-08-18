@@ -1,34 +1,35 @@
-import 'react-datepicker/dist/react-datepicker.css';
-
-import de from 'date-fns/locale/de';
-import fr from 'date-fns/locale/fr';
-import nl from 'date-fns/locale/nl';
-import { ComponentType, ReactNode, useRef } from 'react';
-import ReactDatePicker, {
-  registerLocale,
-  setDefaultLocale,
-} from 'react-datepicker';
+import {
+  addYears,
+  endOfDay,
+  format,
+  isValid,
+  parse,
+  startOfDay,
+  subYears,
+} from 'date-fns';
+import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  de as dayPickerDe,
+  fr as dayPickerFr,
+  nl as dayPickerNl,
+} from 'react-day-picker/locale';
 import { useTranslation } from 'react-i18next';
 
-import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-import type { BoxProps } from './Box';
-import { Box } from './Box';
 import { Button, ButtonVariants } from './Button';
+import { DatePickerLegacy } from './DatePickerLegacy';
 import { Icons } from './Icon';
-import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
-import { Stack } from './Stack';
-import { Breakpoints, colors, getValueFromTheme } from './theme';
+import { badgeVariants } from './shadcn/badge';
+import { Calendar } from './shadcn/calendar';
+import { Popover, PopoverAnchor, PopoverContent } from './shadcn/popover';
+import { cn } from './shadcn/utils';
 
-setDefaultLocale('nl');
-registerLocale('nl', nl);
-registerLocale('fr', fr);
-registerLocale('de', de);
+const dayPickerLocales = { nl: dayPickerNl, fr: dayPickerFr, de: dayPickerDe };
 
-const getValue = getValueFromTheme('datePicker');
-
-type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
+type Props = {
   id: string;
   selected?: Date;
   minDate?: Date;
@@ -36,47 +37,243 @@ type Props = Omit<BoxProps, 'selected' | 'onChange'> & {
   onChange?: (value: Date) => void;
   onCalendarClose?: () => void;
   onMonthChange?: (date: Date) => void;
+  // TODO SHADCN_MIGRATION CLEANUP: only forwarded to DatePickerLegacy's own year picker; onMonthChange already covers it for shadcn. Delete once Legacy is dropped.
   onYearChange?: (date: Date) => void;
   highlightDates?: Date[];
   calendarHeader?: ReactNode;
   calendarContent?: ReactNode;
   calendarQuickLinks?: (onClose: () => void) => ReactNode;
   calendarWidth?: string;
+  // TODO SHADCN_MIGRATION CLEANUP: only restyles DatePickerLegacy; shadcn already highlights holidays without it. Delete once Legacy is dropped.
   withHolidays?: boolean;
+  className?: string;
+  maxWidth?: string;
+  disabled?: boolean;
 };
 
-type CalendarWithQuickLinksProps = {
-  className: string;
-  calendarHeader?: ReactNode;
-  calendarQuickLinks: (onClose: () => void) => ReactNode;
-  onClose: () => void;
-  children: ReactNode;
-};
-
-const CalendarWithQuickLinks = ({
+const DatePickerShadcn = ({
+  id,
+  selected,
+  onChange,
+  onCalendarClose,
+  onMonthChange,
   className,
+  minDate,
+  maxDate,
+  disabled,
+  highlightDates,
   calendarHeader,
+  calendarContent,
   calendarQuickLinks,
-  onClose,
-  children,
-}: CalendarWithQuickLinksProps) => (
-  <Inline
-    backgroundColor={colors.white}
-    stackOn={Breakpoints.M}
-    css={`
-      border-radius: 0.5rem;
-      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-    `}
-  >
-    <Box className={className}>
-      {calendarHeader && (
-        <Stack className="custom-calendar-header">{calendarHeader}</Stack>
-      )}
-      {children}
-    </Box>
-    <Stack>{calendarQuickLinks(onClose)}</Stack>
-  </Inline>
-);
+  calendarWidth,
+  maxWidth,
+}: Props) => {
+  const { t, i18n } = useTranslation();
+  const today = useMemo(() => new Date(), []);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const calendarContainerRef = useRef<HTMLDivElement>(null);
+  const lastSelectedTime = useRef(selected?.getTime());
+  const [isOpen, setIsOpen] = useState(false);
+  const [shouldFocusCalendar, setShouldFocusCalendar] = useState(false);
+  const [month, setMonth] = useState(selected ?? today);
+  const [textValue, setTextValue] = useState(
+    selected ? format(selected, 'dd/MM/yyyy') : '',
+  );
+
+  useEffect(() => {
+    if (selected?.getTime() === lastSelectedTime.current) return;
+    lastSelectedTime.current = selected?.getTime();
+    setTextValue(selected ? format(selected, 'dd/MM/yyyy') : '');
+    setMonth(selected ?? new Date());
+  }, [selected]);
+
+  const handleOpenChange = (open: boolean) => {
+    if (disabled) return;
+    setIsOpen(open);
+    if (open) setMonth(selected ?? today);
+    if (!open) onCalendarClose?.();
+  };
+
+  const focusCalendarDay = () => {
+    calendarContainerRef.current
+      ?.querySelector<HTMLButtonElement>('[data-day][tabindex="0"]')
+      ?.focus();
+  };
+
+  useEffect(() => {
+    if (!isOpen || !shouldFocusCalendar) return;
+    focusCalendarDay();
+    setShouldFocusCalendar(false);
+  }, [isOpen, shouldFocusCalendar]);
+
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    if (isOpen) {
+      focusCalendarDay();
+      return;
+    }
+    handleOpenChange(true);
+    setShouldFocusCalendar(true);
+  };
+
+  const handleSelect = (date: Date | undefined) => {
+    if (!date) return;
+    onChange?.(date);
+    handleOpenChange(false);
+  };
+
+  const handleTextChange = (value: string) => {
+    setTextValue(value);
+    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value)) return;
+    const parsed = parse(value, 'd/M/yyyy', startOfDay(today));
+    if (!isValid(parsed)) return;
+    if (minDate && parsed < startOfDay(minDate)) return;
+    if (maxDate && parsed > endOfDay(maxDate)) return;
+    onChange?.(parsed);
+  };
+
+  const handleTextBlur = () => {
+    setTextValue(selected ? format(selected, 'dd/MM/yyyy') : '');
+  };
+
+  const handleMonthChange = (newMonth: Date) => {
+    setMonth(newMonth);
+    onMonthChange?.(newMonth);
+  };
+
+  const handleTodayClick = () => {
+    handleMonthChange(new Date());
+  };
+
+  const handleGoToSelectedClick = () => {
+    if (selected) handleMonthChange(selected);
+  };
+
+  const disabledMatchers = [
+    minDate ? { before: minDate } : undefined,
+    maxDate ? { after: maxDate } : undefined,
+  ].filter((matcher): matcher is { before: Date } | { after: Date } =>
+    Boolean(matcher),
+  );
+
+  return (
+    <Popover open={isOpen} onOpenChange={handleOpenChange}>
+      <PopoverAnchor asChild>
+        <div
+          ref={anchorRef}
+          className={cn(
+            'tw:flex tw:rounded-md tw:outline-none tw:focus-within:ring-1 tw:focus-within:ring-ring',
+            className,
+          )}
+          style={maxWidth ? { maxWidth } : undefined}
+        >
+          <Input
+            id={id}
+            value={textValue}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              handleTextChange(event.target.value)
+            }
+            onFocus={() => handleOpenChange(true)}
+            onBlur={handleTextBlur}
+            onKeyDown={handleInputKeyDown}
+            disabled={disabled}
+            className="tw:min-w-0 tw:max-w-37.5! tw:flex-1 tw:rounded-r-none! tw:outline-none! tw:focus:shadow-none! tw:focus-visible:ring-0!"
+          />
+          <Button
+            variant={ButtonVariants.NEUTRAL}
+            iconName={Icons.CALENDAR_ALT}
+            onClick={() => handleOpenChange(!isOpen)}
+            disabled={disabled}
+            aria-label={t('date_picker.open_calendar')}
+            className="tw:rounded-l-none tw:border tw:border-l-0 tw:border-input tw:shadow-none tw:focus-visible:ring-0"
+          />
+        </div>
+      </PopoverAnchor>
+      <PopoverContent
+        align="center"
+        onOpenAutoFocus={(event) => event.preventDefault()}
+        onInteractOutside={(event) => {
+          if (
+            event.target instanceof Node &&
+            anchorRef.current?.contains(event.target)
+          ) {
+            event.preventDefault();
+          }
+        }}
+        className="tw:min-w-(--radix-popper-anchor-width) tw:max-w-[95vw] tw:w-auto tw:overflow-hidden tw:p-0"
+      >
+        <div className="tw:flex">
+          <div
+            ref={calendarContainerRef}
+            style={calendarWidth ? { minWidth: calendarWidth } : undefined}
+          >
+            {calendarHeader && (
+              <div className="tw:border-b tw:border-border tw:bg-muted tw:px-4 tw:py-3 tw:text-center tw:font-bold tw:leading-6">
+                {calendarHeader}
+              </div>
+            )}
+            <div className="tw:flex tw:justify-center tw:gap-2 tw:px-3 tw:pt-2">
+              {selected && (
+                <Button
+                  variant={ButtonVariants.UNSTYLED}
+                  onClick={handleGoToSelectedClick}
+                  disabled={disabled}
+                  className={cn(
+                    badgeVariants({ variant: 'success' }),
+                    'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
+                  )}
+                >
+                  {t('date_picker.go_to_selected')}
+                </Button>
+              )}
+              <Button
+                variant={ButtonVariants.UNSTYLED}
+                onClick={handleTodayClick}
+                disabled={disabled}
+                className={cn(
+                  badgeVariants({ variant: 'secondary' }),
+                  'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
+                )}
+              >
+                {t('date_picker.today')}
+              </Button>
+            </div>
+            <Calendar
+              mode="single"
+              selected={selected}
+              onSelect={handleSelect}
+              month={month}
+              onMonthChange={handleMonthChange}
+              captionLayout="dropdown"
+              startMonth={minDate ?? subYears(today, 100)}
+              endMonth={maxDate ?? addYears(today, 10)}
+              disabled={disabledMatchers}
+              modifiers={
+                highlightDates?.length ? { highlighted: highlightDates } : {}
+              }
+              modifiersClassNames={{
+                highlighted:
+                  'tw:bg-muted tw:text-muted-foreground tw:rounded-md',
+              }}
+              locale={dayPickerLocales[i18n.language] ?? dayPickerLocales.nl}
+              className="tw:mx-auto"
+            />
+            {calendarContent && (
+              <div className="tw:px-3 tw:pb-3">{calendarContent}</div>
+            )}
+          </div>
+          {calendarQuickLinks && (
+            <div className="tw:border-l tw:border-border">
+              {calendarQuickLinks(() => handleOpenChange(false))}
+            </div>
+          )}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 const DatePicker = ({
   id,
@@ -94,326 +291,57 @@ const DatePicker = ({
   calendarContent,
   calendarQuickLinks,
   calendarWidth,
-  withHolidays = false,
-  ...props
+  withHolidays,
+  maxWidth,
 }: Props) => {
-  const { i18n } = useTranslation();
-  const datePickerRef = useRef(null);
-  const isMobile = useMatchBreakpoint(Breakpoints.M);
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
 
-  return (
-    <Inline
-      {...getInlineProps(props)}
-      css={`
-        .react-datepicker__day--keyboard-selected {
-          background-color: ${withHolidays ? 'transparent' : colors.grey1};
-          color: ${withHolidays ? 'inherit' : '#000'};
-          font-weight: ${withHolidays ? 'normal' : 'bold'};
-          ${!withHolidays ? `&:hover { color: ${colors.white}; }` : ''}
-        }
-
-        .react-datepicker {
-          font-family:
-            ui-sans-serif,
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            'Segoe UI',
-            Roboto,
-            'Helvetica Neue',
-            Arial,
-            'Noto Sans',
-            sans-serif,
-            'Apple Color Emoji',
-            'Segoe UI Emoji',
-            'Segoe UI Symbol',
-            'Noto Color Emoji' !important;
-          font-size: 1rem;
-          border: none;
-          box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-          ${calendarWidth ? `width: ${calendarWidth};` : ''}
-        }
-
-        .react-datepicker__header {
-          background: ${withHolidays ? colors.white : colors.grey1};
-          color: #333;
-          border: none;
-        }
-
-        .react-datepicker__day-names {
-          background-color: ${withHolidays
-            ? colors.white
-            : 'rgba(0, 0, 0, 0.05)'};
-          display: flex;
-          font-weight: bold;
-          justify-content: center;
-        }
-
-        ${withHolidays
-          ? `.react-datepicker__day-name {
-          text-transform: uppercase;
-          color: ${colors.udbMainDarkGrey};
-        }`
-          : ''}
-
-        .react-datepicker__month-read-view,
-        .react-datepicker__year-read-view--selected-year {
-          color: #000;
-          font-weight: bold;
-          ${withHolidays ? `background-color: ${colors.white};` : ''}
-        }
-
-        .react-datepicker-popper[data-placement^='bottom']
-          .react-datepicker__triangle::before {
-          border: none;
-        }
-
-        .react-datepicker-popper[data-placement^='bottom']
-          .react-datepicker__triangle::after {
-          border-bottom-color: ${colors.grey1};
-        }
-
-        .react-datepicker__month-read-view--down-arrow,
-        .react-datepicker__year-read-view--down-arrow {
-          top: 6px;
-          ${withHolidays ? `border-color: ${colors.textColor};` : ''}
-        }
-
-        ${withHolidays
-          ? `.react-datepicker__month-read-view:hover
-            .react-datepicker__month-read-view--down-arrow,
-          .react-datepicker__year-read-view:hover
-            .react-datepicker__year-read-view--down-arrow {
-          border-top-color: ${colors.textColor};
-        }`
-          : ''}
-
-        ${withHolidays
-          ? `.react-datepicker__navigation-icon::before {
-          border-color: ${colors.textColor};
-        }`
-          : ''}
-
-        .react-datepicker-wrapper {
-          width: auto;
-          z-index: ${getValue('zIndexInput')};
-        }
-
-        .react-datepicker-wrapper input {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-
-        .react-datepicker__current-month {
-          display: none;
-        }
-
-        .react-datepicker-popper {
-          z-index: ${getValue('zIndexPopup')};
-        }
-
-        .react-datepicker__year-read-view,
-        .react-datepicker__month-read-view {
-          visibility: visible !important;
-          ${withHolidays ? `background-color: ${colors.white};` : ''}
-        }
-
-        .react-datepicker__month-dropdown,
-        .react-datepicker__year-dropdown {
-          color: #333;
-          background: white;
-          width: 60%;
-          left: 10%;
-        }
-
-        .react-datepicker__month-dropdown-container:hover,
-        .react-datepicker__year-dropdown-container:hover {
-          color: #999;
-        }
-
-        .react-datepicker__month-option,
-        .react-datepicker__year-option {
-          padding: 0.25rem 0.5rem;
-        }
-
-        .react-datepicker__month-dropdown-container--scroll {
-          margin-left: 0;
-        }
-
-        .react-datepicker__day:hover {
-          background-color: ${colors.grey1};
-          color: inherit;
-        }
-
-        .react-datepicker__day--selected {
-          background-color: ${colors.udbMainPositiveGreen};
-          ${withHolidays
-            ? `color: ${colors.white}; font-weight: bold;`
-            : 'border-radius: 10px;'}
-        }
-
-        .react-datepicker__day--selected:hover {
-          background-color: ${colors.udbMainPositiveGreen};
-          ${withHolidays ? `color: ${colors.white};` : ''}
-        }
-
-        .react-datepicker__navigation {
-          top: 0.5rem;
-        }
-
-        .react-datepicker__navigation--years-upcoming,
-        .react-datepicker__navigation--years-previous {
-          display: none;
-        }
-
-        .react-datepicker__year-option:has(
-            .react-datepicker__navigation--years-upcoming
-          )::after {
-          content: '▲';
-          font-size: 0.8rem;
-        }
-
-        .react-datepicker__year-option:has(
-            .react-datepicker__navigation--years-previous
-          )::after {
-          content: '▼';
-          font-size: 0.8rem;
-        }
-
-        .react-datepicker__navigation--previous {
-          left: -0.5rem;
-        }
-        .react-datepicker__navigation--next {
-          right: -0.5rem;
-        }
-
-        ${withHolidays
-          ? `
-        .react-datepicker__day--highlighted {
-          background-color: ${colors.grey1};
-          color: #000;
-
-          &.react-datepicker__day--selected {
-            background-color: ${colors.udbMainPositiveGreen};
-            color: ${colors.white};
-          }
-        }
-
-        .custom-calendar-header {
-          padding: 0.75rem;
-          background-color: ${colors.grey1};
-          border-bottom: 1px solid ${colors.grey3};
-          color: ${colors.udbMainDarkGrey};
-          font-weight: bold;
-          text-align: center;
-        }
-
-        .custom-calendar-header ~ .react-datepicker__navigation {
-          top: 3.2rem;
-        }
-
-        .react-datepicker__children-container {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          padding: 0.5rem 0.75rem;
-        }
-
-        .react-datepicker__month-container {
-          float: none;
-        }
-        `
-          : ''}
-      `}
-    >
-      <Box
-        forwardedAs={ReactDatePicker as unknown as ComponentType<any>}
-        ref={datePickerRef}
-        className={className}
+  if (isShadcnMigrationEnabled) {
+    return (
+      <DatePickerShadcn
         id={id}
         selected={selected}
         onChange={onChange}
         onCalendarClose={onCalendarClose}
         onMonthChange={onMonthChange}
-        onYearChange={onYearChange}
-        dateFormat="dd/MM/yyyy"
-        showMonthDropdown
-        showYearDropdown
+        className={className}
         minDate={minDate}
         maxDate={maxDate}
-        customInput={
-          <Input
-            id={id}
-            value={selected ? selected.toLocaleDateString() : ''}
-            maxWidth="150px"
-          />
-        }
         disabled={disabled}
-        locale={i18n.language}
-        withPortal={isMobile}
-        popperProps={{ strategy: 'fixed' }}
-        // Empty css prop is necessary here
         highlightDates={highlightDates}
-        calendarContainer={
-          calendarHeader || calendarQuickLinks
-            ? ({ className, children }) =>
-                calendarQuickLinks ? (
-                  <CalendarWithQuickLinks
-                    className={className}
-                    calendarHeader={calendarHeader}
-                    calendarQuickLinks={calendarQuickLinks}
-                    onClose={() => datePickerRef.current?.setOpen(false)}
-                  >
-                    {children}
-                  </CalendarWithQuickLinks>
-                ) : (
-                  <Box
-                    backgroundColor={colors.white}
-                    css={`
-                      border-radius: 0.5rem;
-                      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-                    `}
-                  >
-                    <Box className={className}>
-                      {calendarHeader && (
-                        <Stack className="custom-calendar-header">
-                          {calendarHeader}
-                        </Stack>
-                      )}
-                      {children}
-                    </Box>
-                  </Box>
-                )
-            : undefined
-        }
-        css=""
-      >
-        {calendarContent}
-      </Box>
-      <Button
-        variant={ButtonVariants.NEUTRAL}
-        iconName={Icons.CALENDAR_ALT}
-        onClick={() => datePickerRef.current?.setOpen(true)}
-        disabled={disabled}
-        css={`
-          box-shadow: none !important;
-          border: 1px lightgray solid !important;
-          border-top-left-radius: 0 !important;
-          border-bottom-left-radius: 0 !important;
-          border-left: none !important;
-          height: auto !important;
-          min-height: 0 !important;
-
-          z-index: ${getValue('zIndexButton')};
-
-          &:focus {
-            border-left: inherit !important;
-          }
-        `}
+        calendarHeader={calendarHeader}
+        calendarContent={calendarContent}
+        calendarQuickLinks={calendarQuickLinks}
+        calendarWidth={calendarWidth}
+        maxWidth={maxWidth}
       />
-    </Inline>
+    );
+  }
+
+  return (
+    <DatePickerLegacy
+      id={id}
+      selected={selected}
+      onChange={onChange}
+      onCalendarClose={onCalendarClose}
+      onMonthChange={onMonthChange}
+      onYearChange={onYearChange}
+      className={className}
+      minDate={minDate}
+      maxDate={maxDate}
+      disabled={disabled}
+      highlightDates={highlightDates}
+      calendarHeader={calendarHeader}
+      calendarContent={calendarContent}
+      calendarQuickLinks={calendarQuickLinks}
+      calendarWidth={calendarWidth}
+      withHolidays={withHolidays}
+      maxWidth={maxWidth}
+    />
   );
 };
 
 export { DatePicker };
+export type { Props as DatePickerProps };

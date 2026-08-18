@@ -36,7 +36,7 @@ const ToggleBoxShadcn = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'tw:group tw:relative tw:flex tw:min-w-68 tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:rounded-udb tw:border tw:p-6 tw:disabled:opacity-50',
+        'tw:group tw:relative tw:flex tw:min-w-68 tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:rounded tw:border tw:p-6 tw:disabled:opacity-50',
         active
           ? 'tw:border-success tw:bg-success-muted'
           : 'tw:border-secondary tw:bg-white',
