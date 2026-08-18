@@ -347,6 +347,12 @@
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
         },
+        "input_mode_switch_modal": {
+          "title": "Let op, deze actie verwijdert je ingevulde gegevens",
+          "body": "Je moet kiezen tussen ‘Ingeven als leeftijd’ en ‘Ingeven als geboortedatum’. Als je wisselt, gaat je informatie verloren.",
+          "confirm": "Verdergaan",
+          "cancel": "Annuleren"
+        },
         "birth_date": {
           "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
           "from": "van",

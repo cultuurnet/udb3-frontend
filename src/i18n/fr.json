@@ -337,6 +337,12 @@
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
         },
+        "input_mode_switch_modal": {
+          "title": "Attention, cette action supprime les données saisies",
+          "body": "Vous devez choisir entre ‘Saisir comme âge’ et ‘Saisir comme date de naissance’. Si vous changez, vos informations seront perdues.",
+          "confirm": "Continuer",
+          "cancel": "Annuler"
+        },
         "birth_date": {
           "title": "Indiquez les dates de naissance minimum et maximum des participants",
           "from": "du",

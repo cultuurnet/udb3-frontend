@@ -337,6 +337,12 @@
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
         },
+        "input_mode_switch_modal": {
+          "title": "Achtung, diese Aktion löscht Ihre eingegebenen Daten",
+          "body": "Sie müssen zwischen ‘Als Alter eingeben’ und ‘Als Geburtsdatum eingeben’ wählen. Wenn Sie wechseln, gehen Ihre Informationen verloren.",
+          "confirm": "Fortfahren",
+          "cancel": "Abbrechen"
+        },
         "birth_date": {
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
