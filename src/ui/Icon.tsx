@@ -44,6 +44,7 @@ import {
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
+import { cn } from '@/ui/shadcn/utils';
 
 import { IconLegacy } from './IconLegacy';
 
@@ -137,29 +138,61 @@ const LucideIconsMap: Record<Values<typeof Icons>, React.ElementType> = {
   [Icons.LINK]: Link,
 };
 
+const IconVariants = {
+  DEFAULT: 'default',
+  SUCCESS: 'success',
+  DANGER: 'danger',
+  WARNING: 'warning',
+  INFO: 'info',
+} as const;
+
 type Props = {
   name: Values<typeof Icons>;
   width?: number;
   height?: number;
+  variant?: Values<typeof IconVariants>;
   className?: string;
 };
 
-const IconShadcn = ({ name, width = 18, height = 18, className }: Props) => {
-  const LucideIcon = LucideIconsMap[name];
-  return <LucideIcon width={width} height={height} className={className} />;
+const shadcnVariantClassName: Record<
+  Values<typeof IconVariants>,
+  string | undefined
+> = {
+  [IconVariants.DEFAULT]: undefined,
+  [IconVariants.SUCCESS]: 'tw:text-success',
+  [IconVariants.DANGER]: 'tw:text-destructive',
+  [IconVariants.WARNING]: 'tw:text-warning',
+  [IconVariants.INFO]: 'tw:text-info',
 };
 
-const Icon = (props: Props) => {
+const IconShadcn = ({
+  name,
+  width = 18,
+  height = 18,
+  variant = IconVariants.DEFAULT,
+  className,
+}: Props) => {
+  const LucideIcon = LucideIconsMap[name];
+  return (
+    <LucideIcon
+      width={width}
+      height={height}
+      className={cn(shadcnVariantClassName[variant], className)}
+    />
+  );
+};
+
+const Icon = ({ variant = IconVariants.DEFAULT, ...props }: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
 
   return isShadcnMigrationEnabled ? (
-    <IconShadcn {...props} />
+    <IconShadcn {...props} variant={variant} />
   ) : (
-    <IconLegacy {...props} />
+    <IconLegacy {...props} variant={variant} />
   );
 };
 
-export { Icon, Icons };
+export { Icon, Icons, IconVariants };
 export type { Props as IconProps };

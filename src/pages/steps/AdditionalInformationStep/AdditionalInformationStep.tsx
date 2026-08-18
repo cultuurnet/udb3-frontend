@@ -14,7 +14,7 @@ import { PhysicalLocationStep } from '@/pages/steps/AdditionalInformationStep/Ph
 import { isEvent } from '@/types/Event';
 import { Offer } from '@/types/Offer';
 import type { Values } from '@/types/Values';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Tabs, TabsVariants } from '@/ui/Tabs';
@@ -187,10 +187,10 @@ const TabTitle = ({
   return (
     <Inline spacing={2} alignItems="center" {...getInlineProps(props)}>
       {validationStatus === ValidationStatus.SUCCESS && (
-        <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+        <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
       )}
       {validationStatus === ValidationStatus.WARNING && (
-        <Icon name={Icons.EXCLAMATION_CIRCLE} className="tw:text-warning" />
+        <Icon name={Icons.EXCLAMATION_CIRCLE} variant={IconVariants.WARNING} />
       )}
       <Text>
         {scope === ScopeTypes.ORGANIZERS && field === Fields.MEDIA
