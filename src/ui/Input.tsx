@@ -1,16 +1,16 @@
-import { pickBy } from 'lodash';
-import type { ChangeEvent, HTMLProps } from 'react';
+import type {
+  ChangeEvent,
+  ClipboardEvent,
+  FocusEvent,
+  KeyboardEvent,
+} from 'react';
 import { forwardRef } from 'react';
-import { Form } from 'react-bootstrap';
 
-import { Box, BoxProps, getBoxProps } from './Box';
-import { getGlobalBorderRadius, getGlobalFormInputHeight } from './theme';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { cn } from '@/ui/shadcn/utils';
 
-const BaseInput = forwardRef<HTMLInputElement, any>((props, ref) => (
-  <Box as="input" {...props} ref={ref} />
-));
-
-BaseInput.displayName = 'BaseInput';
+import { InputLegacy } from './InputLegacy';
+import { Input as ShadcnInput } from './shadcn/input';
 
 type InputType =
   | 'button'
@@ -37,52 +37,57 @@ type InputType =
   | 'url'
   | 'week';
 
-const getInputProps = (props) =>
-  pickBy(props, (_value, key) =>
-    [
-      'accept',
-      'className',
-      'data-testid',
-      'disabled',
-      'id',
-      'isInvalid',
-      'maxLength',
-      'name',
-      'onBlur',
-      'onFocus',
-      'onKeyDown',
-      'onPaste',
-      'placeholder',
-      'type',
-      'value',
-      'defaultValue',
-    ].includes(key),
-  );
-
-type InputProps = HTMLProps<HTMLInputElement> & {
+type InputProps = {
+  id?: string;
+  name?: string;
+  className?: string;
+  type?: InputType;
   value?: string;
+  defaultValue?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  isInvalid?: boolean;
+  maxLength?: number;
+  accept?: string;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
+  'data-testid'?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onPaste?: (event: ClipboardEvent<HTMLInputElement>) => void;
 };
 
-type Props = Omit<BoxProps, 'onChange' | 'onBlur'> & InputProps;
-
-const Input = forwardRef(
-  (
-    { onChange, className, type = 'text', isInvalid = false, ...props }: Props,
-    ref,
-  ) => (
-    <Form.Control
+const InputShadcn = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type = 'text', isInvalid = false, ...props }, ref) => (
+    <ShadcnInput
       ref={ref}
-      as={BaseInput}
-      maxWidth="43rem"
-      height={`${getGlobalFormInputHeight}`}
-      borderRadius={getGlobalBorderRadius}
-      onInput={onChange}
-      {...getInputProps({ type, isInvalid, ...props })}
-      {...getBoxProps(props)}
+      {...props}
+      type={type}
+      aria-invalid={isInvalid}
+      className={cn(
+        'tw:max-w-172',
+        isInvalid && 'tw:border-destructive tw:focus-visible:ring-destructive',
+        className,
+      )}
     />
   ),
 );
+
+InputShadcn.displayName = 'InputShadcn';
+
+const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return <InputShadcn {...props} ref={ref} />;
+  }
+
+  return <InputLegacy {...props} ref={ref} />;
+});
 
 Input.displayName = 'Input';
 

@@ -1750,6 +1750,11 @@
       "placeholder_question": "Vertaal vraag in {{language}}"
     }
   },
+  "date_picker": {
+    "today": "Vandaag",
+    "go_to_selected": "Naar selectie",
+    "open_calendar": "Kalender openen"
+  },
   "date_period_picker": {
     "end": "Einde",
     "quick_links": {
