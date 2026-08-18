@@ -179,6 +179,7 @@ const TimeSpanPicker = ({
               <Label
                 variant={LabelVariants.BOLD}
                 htmlFor={`${idPrefix}-${key}`}
+                className="tw:grow tw:shrink-0 tw:items-start"
               >
                 {label}
               </Label>
