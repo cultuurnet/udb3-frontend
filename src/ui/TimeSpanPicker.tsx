@@ -133,7 +133,7 @@ const TimeSpanPicker = ({
   ];
 
   return (
-    <div className={cn('tw:flex tw:gap-2', className)}>
+    <div className={cn('tw:flex tw:items-end tw:gap-2', className)}>
       {fields.map(
         ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
           const typeahead = (
@@ -176,11 +176,7 @@ const TimeSpanPicker = ({
 
           return (
             <div key={key} className="tw:flex tw:flex-col tw:gap-y-1">
-              <Label
-                variant={LabelVariants.BOLD}
-                htmlFor={`${idPrefix}-${key}`}
-                className="tw:grow tw:shrink-0 tw:items-start"
-              >
+              <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
                 {label}
               </Label>
               {typeahead}
