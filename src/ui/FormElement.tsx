@@ -77,15 +77,15 @@ const FormElement = ({
     },
     [LabelPositions.LEFT]: {
       alignItems: 'center',
-      ...getInlineProps(props),
       spacing: 0,
+      ...getInlineProps(props),
     },
     [LabelPositions.RIGHT]: {
       alignItems: 'center',
       flexDirection: 'row-reverse',
       justifyContent: 'flex-end',
-      ...getInlineProps(props),
       spacing: 0,
+      ...getInlineProps(props),
     },
   };
 

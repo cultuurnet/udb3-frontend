@@ -430,12 +430,11 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
       as="div"
       className={cn('tw:gap-4', className)}
       alignItems="flex-start"
-      {...getStackProps(props)}
       spacing={0}
+      {...getStackProps(props)}
     >
       <DatePeriodPicker
         id={id}
-        className="tw:mb-4"
         dateStart={parseDate(value.dateStart)}
         dateEnd={parseDate(value.dateEnd)}
         onDateStartChange={handleDateStartChange}
