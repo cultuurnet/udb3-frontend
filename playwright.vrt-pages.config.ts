@@ -30,7 +30,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  snapshotPathTemplate: '.vrt-pages/baseline/{arg}{ext}',
+  snapshotPathTemplate: '.vrt-pages/baseline/{arg}--{testFileName}{ext}',
   outputDir: '.vrt-pages/test-results/',
   reporter: [['html', { outputFolder: '.vrt-pages/report', open: 'never' }]],
   use: {
