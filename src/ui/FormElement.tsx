@@ -77,15 +77,15 @@ const FormElement = ({
     },
     [LabelPositions.LEFT]: {
       alignItems: 'center',
-      spacing: 0,
       ...getInlineProps(props),
+      spacing: 0,
     },
     [LabelPositions.RIGHT]: {
       alignItems: 'center',
       flexDirection: 'row-reverse',
       justifyContent: 'flex-end',
-      spacing: 0,
       ...getInlineProps(props),
+      spacing: 0,
     },
   };
 
@@ -123,7 +123,7 @@ const FormElement = ({
     <Wrapper
       as="div"
       className={cn(
-        labelPosition !== LabelPositions.TOP && 'tw:gap-2',
+        labelPosition !== LabelPositions.TOP && 'tw:gap-1',
         className,
       )}
       {...(wrapperProps[labelPosition] ?? {})}
