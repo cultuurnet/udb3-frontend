@@ -176,7 +176,10 @@ const TimeSpanPicker = ({
 
           return (
             <div key={key} className="tw:flex tw:flex-col tw:gap-y-1">
-              <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
+              <Label
+                variant={LabelVariants.BOLD}
+                htmlFor={`${idPrefix}-${key}`}
+              >
                 {label}
               </Label>
               {typeahead}
