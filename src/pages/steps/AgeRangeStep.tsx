@@ -53,7 +53,8 @@ type AgeInputMode = Values<typeof AgeInputModes>;
 
 type ActiveModal =
   | { kind: 'departurePlaces' }
-  | { kind: 'ageRange'; newValue: string; previousValue: string };
+  | { kind: 'ageRange'; newValue: string; previousValue: string }
+  | { kind: 'inputMode'; newMode: AgeInputMode };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
@@ -174,11 +175,11 @@ type BirthdatePickersProps = {
 const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
   const { t } = useTranslation();
 
-  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(
-    from ? parse(from, 'yyyy-MM-dd', new Date()) : undefined,
+  const [minBirthDate, setMinBirthDate] = useState<Date>(
+    from ? parse(from, 'yyyy-MM-dd', new Date()) : new Date(),
   );
-  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(
-    to ? parse(to, 'yyyy-MM-dd', new Date()) : undefined,
+  const [maxBirthDate, setMaxBirthDate] = useState<Date>(
+    to ? parse(to, 'yyyy-MM-dd', new Date()) : new Date(),
   );
 
   const isInvalidRange =
@@ -371,6 +372,41 @@ const ChildrenOnlySection = ({
   );
 };
 
+type ConfirmModalProps = {
+  name: string;
+  visible: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
+
+const ConfirmModal = ({
+  name,
+  visible,
+  onClose,
+  onConfirm,
+}: ConfirmModalProps) => {
+  const { t } = useTranslation();
+  const key = `create.name_and_age.age.confirm_modal.${name}`;
+
+  return (
+    <Modal
+      variant={ModalVariants.QUESTION}
+      size={ModalSizes.MD}
+      visible={visible}
+      title={t(`${key}.title`)}
+      confirmTitle={t(`${key}.confirm`)}
+      cancelTitle={t(`${key}.cancel`)}
+      confirmButtonVariant={ButtonVariants.DANGER}
+      onClose={onClose}
+      onConfirm={onConfirm}
+    >
+      <Box padding={4}>
+        <Text>{t(`${key}.body`)}</Text>
+      </Box>
+    </Modal>
+  );
+};
+
 const AgeRangeStep = (props: AgeRangeStepProps) => {
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
@@ -408,7 +444,15 @@ const AgeRangeStepBoa = ({
 
   const [minAge = '', maxAge = ''] = (watchedTypicalAgeRange ?? '').split('-');
 
-  const [activeTab, setActiveTab] = useState<AgeInputMode>(AgeInputModes.AGE);
+  const hasAgeRange = !!watchedTypicalAgeRange;
+  const hasBirthdateRange = !!watchedBirthdateRange?.from;
+
+  const defaultMode = hasBirthdateRange
+    ? AgeInputModes.DATE_OF_BIRTH
+    : AgeInputModes.AGE;
+
+  const [selectedMode, setSelectedMode] = useState<AgeInputMode | null>(null);
+  const activeTab = selectedMode ?? defaultMode;
 
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const [childrenOnlyMutationError, setChildrenOnlyMutationError] = useState<
@@ -532,15 +576,39 @@ const AgeRangeStepBoa = ({
     });
   };
 
-  const handleModeChange = (newMode: string) => {
-    setActiveTab(newMode as AgeInputMode);
-    if (
-      newMode === AgeInputModes.DATE_OF_BIRTH &&
-      !watchedBirthdateRange?.from
-    ) {
-      const today = new Date();
-      commitBirthdateRange(today, today);
+  const applyModeChange = (mode: AgeInputMode) => {
+    setSelectedMode(mode);
+
+    if (mode === AgeInputModes.AGE) {
+      setValue('nameAndAgeRange.birthdateRange', undefined, {
+        shouldDirty: true,
+      });
+    } else {
+      setValue('nameAndAgeRange.typicalAgeRange', undefined, {
+        shouldDirty: true,
+      });
     }
+  };
+
+  const handleModeChange = (newMode: string) => {
+    const mode = newMode as AgeInputMode;
+    if (mode === activeTab) return;
+
+    const hasActiveTabValue =
+      activeTab === AgeInputModes.AGE ? hasAgeRange : hasBirthdateRange;
+
+    if (hasActiveTabValue) {
+      setActiveModal({ kind: 'inputMode', newMode: mode });
+      return;
+    }
+
+    applyModeChange(mode);
+  };
+
+  const handleInputModeModalConfirm = () => {
+    if (activeModal?.kind !== 'inputMode') return;
+    applyModeChange(activeModal.newMode);
+    setActiveModal(null);
   };
 
   const applyChildrenOnlyChange = async (value: boolean) => {
@@ -680,57 +748,26 @@ const AgeRangeStepBoa = ({
         )}
       </Stack>
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="input_mode"
+        visible={activeModal?.kind === 'inputMode'}
+        onClose={() => setActiveModal(null)}
+        onConfirm={handleInputModeModalConfirm}
+      />
+
+      <ConfirmModal
+        name="age_range"
         visible={activeModal?.kind === 'ageRange'}
-        title={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={handleAgeRangeModalClose}
         onConfirm={handleAgeRangeModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.age_range_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="departure_places"
         visible={activeModal?.kind === 'departurePlaces'}
-        title={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setActiveModal(null)}
         onConfirm={handleDeparturePlacesModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.departure_places_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
       {toast.component}
     </Stack>
   );
