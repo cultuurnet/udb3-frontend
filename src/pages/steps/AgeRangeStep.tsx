@@ -372,6 +372,41 @@ const ChildrenOnlySection = ({
   );
 };
 
+type ConfirmModalProps = {
+  name: string;
+  visible: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
+
+const ConfirmModal = ({
+  name,
+  visible,
+  onClose,
+  onConfirm,
+}: ConfirmModalProps) => {
+  const { t } = useTranslation();
+  const key = `create.name_and_age.age.confirm_modal.${name}`;
+
+  return (
+    <Modal
+      variant={ModalVariants.QUESTION}
+      size={ModalSizes.MD}
+      visible={visible}
+      title={t(`${key}.title`)}
+      confirmTitle={t(`${key}.confirm`)}
+      cancelTitle={t(`${key}.cancel`)}
+      confirmButtonVariant={ButtonVariants.DANGER}
+      onClose={onClose}
+      onConfirm={onConfirm}
+    >
+      <Box padding={4}>
+        <Text>{t(`${key}.body`)}</Text>
+      </Box>
+    </Modal>
+  );
+};
+
 const AgeRangeStep = (props: AgeRangeStepProps) => {
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
@@ -713,79 +748,26 @@ const AgeRangeStepBoa = ({
         )}
       </Stack>
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="input_mode"
         visible={activeModal?.kind === 'inputMode'}
-        title={t('create.name_and_age.age.input_mode_switch_modal.title')}
-        confirmTitle={t(
-          'create.name_and_age.age.input_mode_switch_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.input_mode_switch_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setActiveModal(null)}
         onConfirm={handleInputModeModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t('create.name_and_age.age.input_mode_switch_modal.body')}
-          </Text>
-        </Box>
-      </Modal>
+      />
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="age_range"
         visible={activeModal?.kind === 'ageRange'}
-        title={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={handleAgeRangeModalClose}
         onConfirm={handleAgeRangeModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.age_range_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="departure_places"
         visible={activeModal?.kind === 'departurePlaces'}
-        title={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setActiveModal(null)}
         onConfirm={handleDeparturePlacesModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.departure_places_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
       {toast.component}
     </Stack>
   );

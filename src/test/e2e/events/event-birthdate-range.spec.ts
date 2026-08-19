@@ -6,7 +6,7 @@ import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 const age = nl.create.name_and_age.age;
 const birthDate = age.birth_date;
-const switchModal = age.input_mode_switch_modal;
+const switchModal = age.confirm_modal.input_mode;
 
 const ageInputModeAgeToggle = '[data-testid="age-input-mode-age"]';
 const ageInputModeDOBToggle = '[data-testid="age-input-mode-date_of_birth"]';

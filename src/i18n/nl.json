@@ -347,11 +347,25 @@
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
         },
-        "input_mode_switch_modal": {
-          "title": "Let op, deze actie verwijdert je ingevulde gegevens",
-          "body": "Je moet kiezen tussen ‘Ingeven als leeftijd’ en ‘Ingeven als geboortedatum’. Als je wisselt, gaat je informatie verloren.",
-          "confirm": "Verdergaan",
-          "cancel": "Annuleren"
+        "confirm_modal": {
+          "input_mode": {
+            "title": "Let op, deze actie verwijdert je ingevulde gegevens",
+            "body": "Je moet kiezen tussen ‘Ingeven als leeftijd’ en ‘Ingeven als geboortedatum’. Als je wisselt, gaat je informatie verloren.",
+            "confirm": "Verdergaan",
+            "cancel": "Annuleren"
+          },
+          "age_range": {
+            "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
+            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen' en eventuele vertreklocaties worden verwijderd.",
+            "confirm": "Verdergaan",
+            "cancel": "Annuleren"
+          },
+          "departure_places": {
+            "title": "Let op, deze actie verwijdert je vertreklocaties",
+            "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
+            "confirm": "Doorgaan",
+            "cancel": "Annuleren"
+          }
         },
         "birth_date": {
           "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
@@ -380,19 +394,7 @@
           "question": "Voor wie is deze activiteit?",
           "children_only": "Voor kinderen alleen",
           "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
-          "mutation_error": "Er ging iets mis bij het opslaan van je keuze. Probeer opnieuw.",
-          "departure_places_warning_modal": {
-            "title": "Let op, deze actie verwijdert je vertreklocaties",
-            "body": "Je kan enkel vertreklocaties invoeren bij activiteiten die gericht zijn op kinderen alleen.",
-            "confirm": "Doorgaan",
-            "cancel": "Annuleren"
-          },
-          "age_range_warning_modal": {
-            "title": "Let op: deze leeftijd valt buiten 'Voor kinderen alleen'",
-            "body": "Door deze wijziging valt de activiteit niet langer onder 'Voor kinderen alleen' en eventuele vertreklocaties worden verwijderd.",
-            "confirm": "Verdergaan",
-            "cancel": "Annuleren"
-          }
+          "mutation_error": "Er ging iets mis bij het opslaan van je keuze. Probeer opnieuw."
         }
       },
       "cultuurkuur": {
