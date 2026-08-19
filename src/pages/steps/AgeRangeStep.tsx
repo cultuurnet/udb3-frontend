@@ -549,7 +549,9 @@ const AgeRangeStepBoa = ({
         shouldDirty: true,
       });
     } else {
-      setValue('nameAndAgeRange.typicalAgeRange', '', { shouldDirty: true });
+      setValue('nameAndAgeRange.typicalAgeRange', undefined, {
+        shouldDirty: true,
+      });
     }
   };
 
