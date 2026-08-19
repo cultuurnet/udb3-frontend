@@ -159,6 +159,7 @@ const NameAndAgeRangeStep = ({
               name={name}
               scope={scope}
               control={control}
+              setValue={setValue}
             />
             {!isCultuurkuurEvent && (
               <AgeRangeStep
@@ -223,7 +224,12 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     name: 'nameAndAgeRange',
     title: ({ t }) => t('create.name_and_age.title'),
     validation: yup.object().shape({
-      name: yup.object().shape({}).required(),
+      name: yup
+        .object()
+        .required()
+        .test('required', '', (name) =>
+          Object.values<string>(name ?? {}).some((value) => !!value?.trim()),
+        ),
       typicalAgeRange: yup
         .string()
         .matches(numberHyphenNumberRegex)
