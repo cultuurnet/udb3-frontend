@@ -1,7 +1,8 @@
 import { FormEvent } from 'react';
-import { Controller } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { SupportedLanguage } from '@/i18n/index';
 import { FormElement } from '@/ui/FormElement';
 import { Input } from '@/ui/Input';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -15,63 +16,50 @@ const NameStep = ({
   control,
   scope,
   onChange,
+  setValue,
   mainLanguage,
   ...props
 }: NameStepProps) => {
   const { t, i18n } = useTranslation();
 
+  const language = (mainLanguage ?? i18n.language) as SupportedLanguage;
+  const name = useWatch({ control, name: 'nameAndAgeRange.name' });
+
+  const updateName = (event: FormEvent<HTMLInputElement>) => {
+    setValue(
+      'nameAndAgeRange.name',
+      {
+        [language]: (event.target as HTMLInputElement).value,
+      } as Record<SupportedLanguage, string>,
+      { shouldDirty: true, shouldValidate: true },
+    );
+  };
+
   return (
     <Stack {...getStackProps(props)}>
-      <Controller
-        name={'nameAndAgeRange'}
-        control={control}
-        render={({ field }) => {
-          const language = mainLanguage ?? i18n.language;
-
-          return (
-            <Stack spacing={2}>
-              <FormElement
-                label={t(`create.name_and_age.name.title_${scope}`)}
-                flex={2}
-                id="event-name"
-                maxLength={90}
-                Component={
-                  <Input
-                    value={field.value?.name?.[language] || ''}
-                    onChange={(event) => {
-                      field.onChange({
-                        ...field.value,
-                        name: {
-                          [language]: (event.target as HTMLInputElement).value,
-                        },
-                      });
-                    }}
-                    onBlur={(event: FormEvent<HTMLInputElement>) => {
-                      field.onChange({
-                        ...field.value,
-                        name: {
-                          [language]: (event.target as HTMLInputElement).value,
-                        },
-                      });
-                      onChange({
-                        ...field.value,
-                        name: {
-                          [language]: (event.target as HTMLInputElement).value,
-                        },
-                      });
-                    }}
-                  />
-                }
-                info={t(`create.name_and_age.name.tip_${scope}`)}
-                error={
-                  errors.nameAndAgeRange?.name &&
-                  t('create.name_and_age.validation_messages.name.required')
-                }
-              />
-            </Stack>
-          );
-        }}
-      />
+      <Stack spacing={2}>
+        <FormElement
+          label={t(`create.name_and_age.name.title_${scope}`)}
+          flex={2}
+          id="event-name"
+          maxLength={90}
+          Component={
+            <Input
+              value={name?.[language] || ''}
+              onChange={updateName}
+              onBlur={(event: FormEvent<HTMLInputElement>) => {
+                updateName(event);
+                onChange(undefined);
+              }}
+            />
+          }
+          info={t(`create.name_and_age.name.tip_${scope}`)}
+          error={
+            errors.nameAndAgeRange?.name &&
+            t('create.name_and_age.validation_messages.name.required')
+          }
+        />
+      </Stack>
     </Stack>
   );
 };
