@@ -23,14 +23,17 @@ const NameStep = ({
   const { t, i18n } = useTranslation();
 
   const language = (mainLanguage ?? i18n.language) as SupportedLanguage;
-  const name = useWatch({ control, name: 'nameAndAgeRange.name' });
+  const nameAndAgeRange = useWatch({ control, name: 'nameAndAgeRange' });
 
   const updateName = (event: FormEvent<HTMLInputElement>) => {
     setValue(
-      'nameAndAgeRange.name',
+      'nameAndAgeRange',
       {
-        [language]: (event.target as HTMLInputElement).value,
-      } as Record<SupportedLanguage, string>,
+        ...nameAndAgeRange,
+        name: {
+          [language]: (event.target as HTMLInputElement).value,
+        } as Record<SupportedLanguage, string>,
+      },
       { shouldDirty: true, shouldValidate: true },
     );
   };
@@ -45,7 +48,7 @@ const NameStep = ({
           maxLength={90}
           Component={
             <Input
-              value={name?.[language] || ''}
+              value={nameAndAgeRange?.name?.[language] || ''}
               onChange={updateName}
               onBlur={(event: FormEvent<HTMLInputElement>) => {
                 updateName(event);
