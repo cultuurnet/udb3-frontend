@@ -155,24 +155,30 @@ const birthdateRangeFitsBoa = (
   return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
 };
 
-const isChildrenOnlyValueMissing = ({
-  scope,
-  audienceType,
-  typicalAgeRange,
-  birthdateRange,
-  childrenOnly,
-}: {
+type ChildrenOnlyContext = {
   scope?: Scope;
   audienceType?: AudienceType;
   typicalAgeRange?: string;
   birthdateRange?: BirthdateRange;
   childrenOnly?: boolean;
-}) =>
+};
+
+const shouldShowChildrenOnlySection = ({
+  scope,
+  audienceType,
+  typicalAgeRange,
+  birthdateRange,
+  childrenOnly,
+}: ChildrenOnlyContext) =>
   scope === OfferTypes.EVENTS &&
   audienceType !== AudienceTypes.EDUCATION &&
-  typeof childrenOnly !== 'boolean' &&
-  (overlapsWithBoaAgeRange(typicalAgeRange) ||
+  (childrenOnly === true ||
+    overlapsWithBoaAgeRange(typicalAgeRange) ||
     birthdateRangeFitsBoa(birthdateRange));
+
+const isChildrenOnlyValueMissing = (context: ChildrenOnlyContext) =>
+  shouldShowChildrenOnlySection(context) &&
+  typeof context.childrenOnly !== 'boolean';
 
 const buildBirthdateRange = (
   min: Date,
@@ -720,12 +726,13 @@ const AgeRangeStepBoa = ({
 
   const showBirthdateOption = scope === OfferTypes.EVENTS;
 
-  const showChildrenOnlySection =
-    scope === OfferTypes.EVENTS &&
-    audienceType !== AudienceTypes.EDUCATION &&
-    (childrenOnly ||
-      overlapsWithBoaAgeRange(watchedTypicalAgeRange) ||
-      birthdateRangeFitsBoa(watchedBirthdateRange));
+  const showChildrenOnlySection = shouldShowChildrenOnlySection({
+    scope,
+    audienceType,
+    typicalAgeRange: watchedTypicalAgeRange,
+    birthdateRange: watchedBirthdateRange,
+    childrenOnly,
+  });
 
   const childrenOnlyValidationError = formState.errors.childrenOnly
     ? t('create.name_and_age.age.children_only.error')
