@@ -8,6 +8,7 @@ import { Select } from './Select';
 import { SelectWithLabelLegacy } from './SelectWithLabelLegacy';
 
 type Props = SelectProps & {
+  id: string;
   label: string;
   labelPosition?: Values<typeof LabelPositions>;
 };

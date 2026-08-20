@@ -6,6 +6,7 @@ import type { SelectProps } from './Select';
 import { SelectLegacy } from './SelectLegacy';
 
 type Props = SelectProps & {
+  id: string;
   label: string;
   labelPosition: Values<typeof LabelPositions>;
 };
