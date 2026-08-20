@@ -241,10 +241,13 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
           .matches(numberHyphenNumberRegex)
           .test('matches', '', (value) => isValidAgeRange(value)),
       })
-      .test('children_only_answered', '', (_, { parent, options, createError }) =>
-        isChildrenOnlyValueMissing(parent, options.context?.isBoaEnabled)
-          ? createError({ path: 'childrenOnly' })
-          : true,
+      .test(
+        'children_only_answered',
+        '',
+        (_, { parent, options, createError }) =>
+          isChildrenOnlyValueMissing(parent, options.context?.isBoaEnabled)
+            ? createError({ path: 'childrenOnly' })
+            : true,
       ),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');
