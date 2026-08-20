@@ -33,6 +33,7 @@ const SelectLegacy = forwardRef<HTMLSelectElement, Props>(
   ) => (
     <Box
       {...getBoxProps(props)}
+      className={className}
       maxWidth={maxWidth}
       borderRadius={getGlobalBorderRadius}
     >
@@ -40,7 +41,6 @@ const SelectLegacy = forwardRef<HTMLSelectElement, Props>(
         ref={ref}
         size={size === 'md' ? undefined : size}
         id={id}
-        className={className}
         onChange={onChange}
         value={value}
         aria-label={ariaLabel}
