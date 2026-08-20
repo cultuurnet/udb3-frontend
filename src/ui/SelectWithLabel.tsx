@@ -46,7 +46,11 @@ const SelectWithLabel = ({
           className,
         )}
       >
-        <Label htmlFor={id} variant={LabelVariants.BOLD}>
+        <Label
+          htmlFor={id}
+          variant={LabelVariants.BOLD}
+          className="tw:shrink-0"
+        >
           {label}
         </Label>
         <Select
