@@ -73,7 +73,7 @@ const SelectShadcn = forwardRef<HTMLSelectElement, SelectProps>(
           disabled && 'tw:opacity-50',
         )}
       >
-        <Icon name={Icons.CHEVRON_DOWN} width={18} height={18} />
+        <Icon name={Icons.CHEVRON_DOWN} />
       </span>
     </div>
   ),
