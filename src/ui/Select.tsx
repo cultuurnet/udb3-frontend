@@ -39,7 +39,7 @@ const SelectShadcn = forwardRef<HTMLSelectElement, SelectProps>(
       name,
       value,
       disabled,
-      size,
+      size = 'md',
       ariaLabel,
       className,
       onChange,
@@ -60,7 +60,7 @@ const SelectShadcn = forwardRef<HTMLSelectElement, SelectProps>(
         onBlur={onBlur}
         className={cn(
           'tw:flex tw:w-full tw:appearance-none tw:rounded-md tw:border tw:border-input tw:bg-transparent tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
-          sizeClassNames[size ?? 'md'],
+          sizeClassNames[size],
         )}
       >
         {children}
@@ -69,7 +69,7 @@ const SelectShadcn = forwardRef<HTMLSelectElement, SelectProps>(
         aria-hidden="true"
         className={cn(
           'tw:pointer-events-none tw:absolute tw:top-1/2 tw:flex tw:-translate-y-1/2 tw:text-muted-foreground',
-          iconOffsetClassNames[size ?? 'md'],
+          iconOffsetClassNames[size],
           disabled && 'tw:opacity-50',
         )}
       >
