@@ -1,0 +1,193 @@
+import type { FocusEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { css } from 'styled-components';
+
+import { Box } from './Box';
+import { getInlineProps, Inline } from './Inline';
+import { Label, LabelVariants } from './Label';
+import { Stack } from './Stack';
+import { colors, getValueFromTheme } from './theme';
+import type { TimeSpanPickerProps } from './TimeSpanPicker';
+import { TimeSpanPickerLabelPositions } from './TimeSpanPicker';
+import { Typeahead } from './Typeahead';
+
+const getValueForTimePicker = getValueFromTheme('timePicker');
+
+const getHourOptions = () => {
+  const hours = Array(24).fill(0);
+  const minutes = Array(60).fill(0);
+  const times = [];
+  hours.forEach((_hour, i) => {
+    minutes.forEach((_minute, minuteIndex) =>
+      times.push(
+        `${i > 9 ? i : `0${i}`}:${
+          minuteIndex > 9 ? minuteIndex : `0${minuteIndex}`
+        }`,
+      ),
+    );
+  });
+
+  return times;
+};
+
+const hourOptions = getHourOptions();
+
+const quarterHours = ['00', '15', '30', '45'];
+
+const isQuarterHour = (time: string) =>
+  quarterHours.some((quarterHour) => time.endsWith(quarterHour));
+
+const dropDownCss = css`
+  width: 6rem;
+  flex: 0 0 auto;
+
+  input {
+    text-align: center;
+  }
+
+  .rbt-menu.dropdown-menu.show {
+    min-width: 0;
+    max-height: 300px !important;
+
+    z-index: ${getValueForTimePicker('zIndexPopup')};
+
+    .dropdown-item {
+      padding: 0.25rem 0;
+      text-align: center;
+    }
+  }
+
+  .rbt-input-hint {
+    display: none;
+  }
+`;
+
+const inlineLabelDropDownCss = css`
+  ${dropDownCss}
+
+  width: 7rem;
+
+  input {
+    padding-left: 2rem;
+    text-align: right;
+  }
+`;
+
+const TimeSpanPickerLegacy = ({
+  id,
+  startTime,
+  endTime,
+  startTimeLabel,
+  endTimeLabel,
+  onChangeStartTime,
+  onChangeEndTime,
+  disabled,
+  startDisabled,
+  endDisabled,
+  labelPosition = TimeSpanPickerLabelPositions.TOP,
+  className,
+  ...props
+}: TimeSpanPickerProps) => {
+  const { t } = useTranslation();
+  const idPrefix = `${id}-time-span-picker`;
+  const isInline = labelPosition === TimeSpanPickerLabelPositions.INLINE;
+
+  const timeSlots = (time: string) => time === '23:59' || isQuarterHour(time);
+
+  const fields = [
+    {
+      key: 'start',
+      label: startTimeLabel ?? t('time_span_picker.start'),
+      value: startTime,
+      onChange: onChangeStartTime,
+      name: 'startTime',
+      disabled: startDisabled ?? disabled,
+    },
+    {
+      key: 'end',
+      label: endTimeLabel ?? t('time_span_picker.end'),
+      value: endTime,
+      onChange: onChangeEndTime,
+      name: 'endTime',
+      disabled: endDisabled ?? disabled,
+    },
+  ];
+
+  return (
+    <Inline
+      as="div"
+      spacing={3}
+      className={className}
+      {...getInlineProps(props)}
+    >
+      {fields.map(
+        ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
+          const typeahead = (
+            <Typeahead<string>
+              key={`${key}-${fieldDisabled}`}
+              inputType="time"
+              inputRequired={true}
+              name={name}
+              id={`${idPrefix}-${key}`}
+              filterBy={timeSlots}
+              defaultInputValue={value}
+              options={hourOptions}
+              minLength={0}
+              onBlur={(event: FocusEvent<HTMLInputElement>) =>
+                onChange(event.target.value)
+              }
+              onChange={([newValue]: string[]) => {
+                if (!newValue) return;
+                onChange(newValue);
+              }}
+              positionFixed
+              disabled={fieldDisabled}
+              css={isInline ? inlineLabelDropDownCss : dropDownCss}
+            />
+          );
+
+          if (isInline) {
+            return (
+              <Box key={key} position="relative" display="inline-block">
+                <Label
+                  htmlFor={`${idPrefix}-${key}`}
+                  css={`
+                    position: absolute;
+                    left: 0.75rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                    z-index: 1;
+                    font-size: 0.85rem;
+                    color: ${colors.grey5};
+                    font-weight: normal;
+                    margin: 0;
+                  `}
+                >
+                  {label}
+                </Label>
+                {typeahead}
+              </Box>
+            );
+          }
+
+          return (
+            <Stack key={key} spacing={2} as="div">
+              <Label
+                variant={LabelVariants.BOLD}
+                htmlFor={`${idPrefix}-${key}`}
+                flex="1 0 auto"
+                alignItems="flex-start"
+              >
+                {label}
+              </Label>
+              {typeahead}
+            </Stack>
+          );
+        },
+      )}
+    </Inline>
+  );
+};
+
+export { TimeSpanPickerLegacy };
