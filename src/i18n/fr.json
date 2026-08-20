@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Aucune résidence trouvée"
   },
   "country_picker": {
+    "aria_label": "Changer de pays, actuellement sélectionné : {{country}}",
     "location_school": "Emplacement en concertation avec l'école"
   },
   "copyright": {
@@ -336,6 +337,26 @@
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
         },
+        "confirm_modal": {
+          "input_mode": {
+            "title": "Attention, cette action supprime les données saisies",
+            "body": "Vous devez choisir entre ‘Saisir comme âge’ et ‘Saisir comme date de naissance’. Si vous changez, vos informations seront perdues.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "age_range": {
+            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "departure_places": {
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          }
+        },
         "birth_date": {
           "title": "Indiquez les dates de naissance minimum et maximum des participants",
           "from": "du",
@@ -363,19 +384,7 @@
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants",
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
-          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer.",
-          "departure_places_warning_modal": {
-            "title": "Attention, cette action supprime vos lieux de départ",
-            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          },
-          "age_range_warning_modal": {
-            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
-            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          }
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer."
         }
       }
     },
@@ -1109,6 +1118,9 @@
     "welcome": "Bienvenue"
   },
   "description": "UiTdatabank alimente en outre plus de 1.000 agendas de loisirs imprimés et numériques qui proposent des informations à jour. Ce sont les agendas de chaînes audio-visuelles et de médias locaux ou nationaux, de villes et communes, de services touristiques ou de grandes organisations de coordination.",
+  "dropdown": {
+    "toggle_label": "Plus d'options"
+  },
   "error": {
     "description": "Un problème est survenu. Rechargez la page pour réessayer. Vous pouvez contacter <1>{{email}}</1> si ce problème persiste",
     "email": "vragen@uitdatabank.be",
@@ -1672,6 +1684,11 @@
       "title": "FAQ {{index}}",
       "placeholder_question": "Traduire la question en {{language}}"
     }
+  },
+  "date_picker": {
+    "today": "Aujourd'hui",
+    "go_to_selected": "Vers la sélection",
+    "open_calendar": "Ouvrir le calendrier"
   },
   "date_period_picker": {
     "end": "Fin",
