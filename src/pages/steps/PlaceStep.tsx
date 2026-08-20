@@ -15,7 +15,7 @@ import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -224,7 +224,7 @@ const PlaceStep = ({
 
           return (
             <div className="tw:flex tw:items-center tw:gap-2">
-              <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+              <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
               <Text>
                 {getLanguageObjectOrFallback(
                   selectedPlace.name,

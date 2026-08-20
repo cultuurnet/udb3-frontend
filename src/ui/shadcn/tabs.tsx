@@ -25,7 +25,7 @@ const tabsTriggerVariants = cva(
     variants: {
       variant: {
         default: cn(
-          'tw:rounded-none tw:rounded-t-lg tw:bg-background tw:text-udb-blue tw:px-4 tw:py-2',
+          'tw:rounded-none tw:rounded-t-lg tw:bg-background tw:text-primary tw:px-4 tw:py-2',
           'tw:border tw:border-border tw:-mb-px tw:[&:not(:first-child)]:-ml-px',
           'tw:hover:bg-muted tw:hover:text-foreground',
           'tw:data-[state=active]:bg-background tw:data-[state=active]:text-foreground',
@@ -39,9 +39,9 @@ const tabsTriggerVariants = cva(
           'tw:data-[state=active]:bg-transparent tw:data-[state=active]:shadow-none tw:data-[state=active]:text-foreground',
         ),
         outlined: cn(
-          'tw:rounded-none tw:border tw:border-black tw:bg-background tw:text-udb-blue tw:px-4 tw:py-[0.4rem]',
+          'tw:rounded-none tw:border tw:border-black tw:bg-background tw:text-primary tw:px-4 tw:py-[0.4rem]',
           'tw:first:rounded-l-lg tw:last:rounded-r-lg tw:[&:not(:first-child)]:-ml-px',
-          'tw:data-[state=active]:bg-udb-main-dark-blue tw:data-[state=active]:text-primary-foreground tw:data-[state=active]:shadow-none',
+          'tw:data-[state=active]:bg-primary tw:data-[state=active]:text-primary-foreground tw:data-[state=active]:shadow-none',
         ),
       },
       size: {

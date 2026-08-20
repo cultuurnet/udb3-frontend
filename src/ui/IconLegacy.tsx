@@ -50,6 +50,7 @@ import type { Values } from '@/types/Values';
 
 import type { BoxProps } from './Box';
 import { Box, getBoxProps, parseDimension } from './Box';
+import { colors } from './theme';
 
 const Icons = {
   HOME: 'home',
@@ -143,16 +144,37 @@ const IconsMap = {
   [Icons.LINK]: faLink,
 };
 
+const IconVariants = {
+  DEFAULT: 'default',
+  SUCCESS: 'success',
+  DANGER: 'danger',
+  WARNING: 'warning',
+  INFO: 'info',
+} as const;
+
+const legacyVariantColor: Record<
+  Values<typeof IconVariants>,
+  string | undefined
+> = {
+  [IconVariants.DEFAULT]: undefined,
+  [IconVariants.SUCCESS]: colors.udbMainPositiveGreen,
+  [IconVariants.DANGER]: colors.danger,
+  [IconVariants.WARNING]: colors.orange1,
+  [IconVariants.INFO]: colors.udbMainBlue,
+};
+
 type Props = Omit<BoxProps, 'width' | 'height'> & {
   name: Values<typeof Icons>;
   width?: number | string;
   height?: number | string;
+  variant?: Values<typeof IconVariants>;
 };
 
 const IconLegacy = ({
   name,
   width = 18,
   height = 18,
+  variant = IconVariants.DEFAULT,
   className,
   ...props
 }: Props) => {
@@ -161,6 +183,7 @@ const IconLegacy = ({
       display="flex"
       alignItems="center"
       className={className}
+      color={legacyVariantColor[variant]}
       css={`
         .svg-inline--fa {
           width: ${parseDimension(width)};

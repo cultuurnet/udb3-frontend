@@ -1,6 +1,6 @@
 import { Toaster as Sonner } from 'sonner';
 
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -10,19 +10,22 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme="light"
       className="tw:toaster tw:group"
       icons={{
-        success: <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />,
-        error: (
-          <Icon name={Icons.TIMES_CIRCLE} className="tw:text-destructive" />
+        success: (
+          <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
         ),
+        error: <Icon name={Icons.TIMES_CIRCLE} variant={IconVariants.DANGER} />,
         warning: (
-          <Icon name={Icons.EXCLAMATION_TRIANGLE} className="tw:text-warning" />
+          <Icon
+            name={Icons.EXCLAMATION_TRIANGLE}
+            variant={IconVariants.WARNING}
+          />
         ),
-        info: <Icon name={Icons.INFO} className="tw:text-info" />,
+        info: <Icon name={Icons.INFO} variant={IconVariants.INFO} />,
       }}
       toastOptions={{
         classNames: {
           toast:
-            'tw:bg-white/85 tw:backdrop-blur-sm tw:border tw:border-border tw:shadow-lg tw:rounded-udb tw:text-foreground',
+            'tw:bg-white/85 tw:backdrop-blur-sm tw:border tw:border-border tw:shadow-lg tw:rounded tw:text-foreground',
           success: 'tw:bg-success-muted/90 tw:border-success',
           error: 'tw:bg-destructive-muted/90 tw:border-destructive',
           warning: 'tw:bg-warning-muted/90 tw:border-warning',

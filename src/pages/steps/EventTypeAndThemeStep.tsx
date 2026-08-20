@@ -26,7 +26,7 @@ import { Term } from '@/types/Offer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
@@ -397,7 +397,7 @@ const EventTypeAndThemeStep = ({
                   >
                     <Icon
                       name={Icons.CHECK_CIRCLE}
-                      className="tw:text-success"
+                      variant={IconVariants.SUCCESS}
                     />
                     <Text>{field.value?.type?.label}</Text>
                     <Button
@@ -502,7 +502,10 @@ const EventTypeAndThemeStep = ({
                   row-gap: ${parseSpacing(3.5)()};
                 `}
               >
-                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+                <Icon
+                  name={Icons.CHECK_CIRCLE}
+                  variant={IconVariants.SUCCESS}
+                />
                 <Text>{field.value?.theme?.label}</Text>
                 <Button
                   variant={ButtonVariants.LINK}
