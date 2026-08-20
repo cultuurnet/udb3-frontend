@@ -10,8 +10,9 @@ import {
 
 const VRT_PAGES_DIR = 'src/test/vrt-pages';
 
+// Matches either a direct test('title', ...) call or a screenshotPages({ title: '...' }) entry.
 const TEST_TITLE_PATTERN =
-  /\btest(?:\.only|\.skip|\.fixme)?\(\s*['"](.+?)['"]/g;
+  /\btest(?:\.only|\.skip|\.fixme)?\(\s*['"](.+?)['"]|\btitle:\s*['"](.+?)['"]/g;
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -25,7 +26,7 @@ const collectPages = () => {
     const content = fs.readFileSync(path.join(VRT_PAGES_DIR, file), 'utf-8');
     return [...content.matchAll(TEST_TITLE_PATTERN)].map((match) => ({
       file,
-      title: match[1],
+      title: match[1] ?? match[2],
     }));
   });
 };
