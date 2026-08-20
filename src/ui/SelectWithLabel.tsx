@@ -72,11 +72,14 @@ const SelectWithLabel = ({
   return (
     <SelectWithLabelLegacy
       id={id}
+      name={name}
       label={label}
       onChange={onChange}
+      onBlur={onBlur}
       className={className}
       value={value}
       size={size}
+      disabled={disabled}
       ariaLabel={ariaLabel}
       labelPosition={labelPosition}
     >

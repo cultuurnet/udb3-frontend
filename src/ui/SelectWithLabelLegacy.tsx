@@ -13,11 +13,14 @@ type Props = SelectProps & {
 
 const SelectWithLabelLegacy = ({
   id,
+  name,
   label,
   onChange,
+  onBlur,
   className,
   value,
   size,
+  disabled,
   children,
   ariaLabel,
   labelPosition,
@@ -27,10 +30,13 @@ const SelectWithLabelLegacy = ({
       className={className}
       Component={
         <SelectLegacy
+          name={name}
           onChange={onChange}
+          onBlur={onBlur}
           value={value}
           ariaLabel={ariaLabel}
           size={size}
+          disabled={disabled}
         >
           {children}
         </SelectLegacy>
