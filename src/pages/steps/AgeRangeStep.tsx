@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceTypes } from '@/constants/AudienceType';
-import { OfferTypes } from '@/constants/OfferType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import {
   useChangeChildrenOnlyMutation,
   useChangeDeparturePlacesMutation,
@@ -37,7 +37,7 @@ import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
@@ -154,6 +154,25 @@ const birthdateRangeFitsBoa = (
   // the children window, not partially adult or partially infant.
   return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
 };
+
+const isChildrenOnlyValueMissing = ({
+  scope,
+  audienceType,
+  typicalAgeRange,
+  birthdateRange,
+  childrenOnly,
+}: {
+  scope?: Scope;
+  audienceType?: AudienceType;
+  typicalAgeRange?: string;
+  birthdateRange?: BirthdateRange;
+  childrenOnly?: boolean;
+}) =>
+  scope === OfferTypes.EVENTS &&
+  audienceType !== AudienceTypes.EDUCATION &&
+  typeof childrenOnly !== 'boolean' &&
+  (overlapsWithBoaAgeRange(typicalAgeRange) ||
+    birthdateRangeFitsBoa(birthdateRange));
 
 const buildBirthdateRange = (
   min: Date,
@@ -322,10 +341,16 @@ const AgeRangeInputs = ({
 };
 
 type ChildrenOnlySectionProps = {
-  childrenOnly: boolean;
+  childrenOnly?: boolean;
   isPending: boolean;
   error: string | null;
   onToggle: (value: boolean) => void;
+};
+
+const getSelectedAudience = (childrenOnly?: boolean) => {
+  if (childrenOnly === true) return 'children-only';
+  if (childrenOnly === false) return 'with-family';
+  return '';
 };
 
 const ChildrenOnlySection = ({
@@ -352,7 +377,7 @@ const ChildrenOnlySection = ({
       <RadioButtonGroup
         name="children-only-toggle"
         disabled={isPending}
-        selected={childrenOnly === true ? 'children-only' : 'with-family'}
+        selected={getSelectedAudience(childrenOnly)}
         onValueChange={(value) => onToggle(value === 'children-only')}
         items={[
           {
@@ -419,6 +444,7 @@ const AgeRangeStep = (props: AgeRangeStepProps) => {
 
 const AgeRangeStepBoa = ({
   control,
+  formState,
   onChange,
   offerId,
   scope,
@@ -614,7 +640,7 @@ const AgeRangeStepBoa = ({
   const applyChildrenOnlyChange = async (value: boolean) => {
     const previousValue = childrenOnly;
     setChildrenOnlyMutationError(null);
-    setValue('childrenOnly', value);
+    setValue('childrenOnly', value, { shouldValidate: true });
     if (!offerId) return;
     try {
       await changeChildrenOnlyMutation.mutateAsync({
@@ -622,7 +648,7 @@ const AgeRangeStepBoa = ({
         childrenOnly: value,
       });
     } catch (error) {
-      setValue('childrenOnly', previousValue);
+      setValue('childrenOnly', previousValue, { shouldValidate: true });
       throw error;
     }
   };
@@ -701,6 +727,13 @@ const AgeRangeStepBoa = ({
       overlapsWithBoaAgeRange(watchedTypicalAgeRange) ||
       birthdateRangeFitsBoa(watchedBirthdateRange));
 
+  const childrenOnlyValidationError = formState.errors.childrenOnly
+    ? t('create.name_and_age.age.children_only.error')
+    : null;
+
+  const childrenOnlyError =
+    childrenOnlyMutationError ?? childrenOnlyValidationError;
+
   return (
     <Stack {...getStackProps(props)}>
       <Stack spacing={2}>
@@ -742,7 +775,7 @@ const AgeRangeStepBoa = ({
           <ChildrenOnlySection
             childrenOnly={childrenOnly}
             isPending={isChildrenOnlyPending}
-            error={childrenOnlyMutationError}
+            error={childrenOnlyError}
             onToggle={handleChildrenOnlyToggle}
           />
         )}
@@ -773,4 +806,4 @@ const AgeRangeStepBoa = ({
   );
 };
 
-export { AgeRangeStep, isValidAgeRange };
+export { AgeRangeStep, isChildrenOnlyValueMissing, isValidAgeRange };
