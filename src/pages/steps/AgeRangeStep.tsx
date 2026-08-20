@@ -42,7 +42,7 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
 import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
-import { StepProps } from './Steps';
+import { FormDataUnion, StepProps } from './Steps';
 
 const AgeInputModes = {
   AGE: 'age',
@@ -176,9 +176,18 @@ const shouldShowChildrenOnlySection = ({
     overlapsWithBoaAgeRange(typicalAgeRange) ||
     birthdateRangeFitsBoa(birthdateRange));
 
-const isChildrenOnlyValueMissing = (context: ChildrenOnlyContext) =>
-  shouldShowChildrenOnlySection(context) &&
-  typeof context.childrenOnly !== 'boolean';
+const isChildrenOnlyValueMissing = (
+  { scope, audience, nameAndAgeRange, childrenOnly }: Partial<FormDataUnion>,
+  isBoaEnabled?: boolean,
+) =>
+  !!isBoaEnabled &&
+  typeof childrenOnly !== 'boolean' &&
+  shouldShowChildrenOnlySection({
+    scope,
+    audienceType: audience?.audienceType,
+    typicalAgeRange: nameAndAgeRange?.typicalAgeRange,
+    birthdateRange: nameAndAgeRange?.birthdateRange,
+  });
 
 const buildBirthdateRange = (
   min: Date,
