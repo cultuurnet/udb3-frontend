@@ -64,4 +64,3 @@ const SelectLegacy = forwardRef<HTMLSelectElement, Props>(
 SelectLegacy.displayName = 'SelectLegacy';
 
 export { SelectLegacy };
-export type { Props as SelectProps };
