@@ -9,7 +9,7 @@ import { SelectWithLabelLegacy } from './SelectWithLabelLegacy';
 
 type Props = SelectProps & {
   label: string;
-  labelPosition: Values<typeof LabelPositions>;
+  labelPosition?: Values<typeof LabelPositions>;
 };
 
 const positionClassNames = {
@@ -30,7 +30,7 @@ const SelectWithLabel = ({
   disabled,
   children,
   ariaLabel,
-  labelPosition,
+  labelPosition = LabelPositions.TOP,
 }: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
