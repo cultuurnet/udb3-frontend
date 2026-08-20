@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import type { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { FormElement } from '@/ui/FormElement';
@@ -49,22 +50,24 @@ const BookingAvailabilityFields = ({
       alignItems="flex-start"
       {...getInlineProps(boxProps)}
     >
-      <FormElement
-        id={`${idPrefix}-max-capacity`}
-        label={t('create.additionalInformation.booking_info.max_capacity')}
-        Component={
-          <Input
-            maxWidth="8rem"
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-            onBlur={handleCapacityBlur}
-          />
-        }
-        error={
-          isCapacityInvalid &&
-          t('create.additionalInformation.booking_info.capacity_error')
-        }
-      />
+      {IS_CAPACITY_VISIBLE && (
+        <FormElement
+          id={`${idPrefix}-max-capacity`}
+          label={t('create.additionalInformation.booking_info.max_capacity')}
+          Component={
+            <Input
+              className="tw:max-w-32"
+              value={capacity}
+              onChange={(e) => setCapacity(e.target.value)}
+              onBlur={handleCapacityBlur}
+            />
+          }
+          error={
+            isCapacityInvalid &&
+            t('create.additionalInformation.booking_info.capacity_error')
+          }
+        />
+      )}
       <FormElement
         id={`${idPrefix}-status`}
         label={t('create.additionalInformation.booking_info.status')}

@@ -2,6 +2,7 @@ import { differenceInDays } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { OpeningHours } from '@/types/Offer';
@@ -9,7 +10,6 @@ import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
-import { Inline } from '@/ui/Inline';
 import { LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
@@ -35,6 +35,7 @@ const FixedDayOptions = {
 } as const;
 
 type FixedDaysProps = {
+  scope: Scope;
   onChooseWithStartAndEndDate: () => void;
   onChoosePermanent: () => void;
   onChangeStartDate: (date: Date | null) => void;
@@ -48,6 +49,7 @@ type FixedDaysProps = {
 };
 
 export const FixedDays = ({
+  scope,
   onChooseWithStartAndEndDate,
   onChoosePermanent,
   onChangeStartDate,
@@ -94,6 +96,7 @@ export const FixedDays = ({
   }, [isPermanent]);
 
   const isPeriodShorterThanTwoWeeks =
+    scope === OfferTypes.EVENTS &&
     isPeriodic &&
     startDate &&
     endDate &&
@@ -129,7 +132,7 @@ export const FixedDays = ({
                   border-bottom: 1px solid ${colors.grey1};
                 `}
               >
-                <Inline spacing={5}>
+                <div className="tw:flex tw:gap-8 tw:mb-4">
                   <DatePeriodPicker
                     id="calendar-step-fixed"
                     dateStart={new Date(startDate)}
@@ -150,7 +153,7 @@ export const FixedDays = ({
                       {t('create.calendar.fixed_days.period_too_short')}
                     </Alert>
                   )}
-                </Inline>
+                </div>
                 <Box maxWidth="31rem">
                   <OpeningHoursContent
                     initialAdjustedDays={initialAdjustedDays}

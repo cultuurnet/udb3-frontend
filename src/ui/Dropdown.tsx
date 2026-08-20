@@ -1,183 +1,205 @@
-import { Children, cloneElement } from 'react';
+import NextLink from 'next/link';
+import type { ReactElement, ReactNode } from 'react';
 import {
-  ButtonGroup as BootstrapButtonGroup,
-  Dropdown as BootstrapDropdown,
-} from 'react-bootstrap';
-import { DropdownItemProps } from 'react-bootstrap/DropdownItem';
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+} from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
-import type { BoxProps } from '@/ui/Box';
-import { Box, getBoxProps } from '@/ui/Box';
-import { Button, buttonCSS, ButtonVariants } from '@/ui/Button';
-import { Link, LinkVariants } from '@/ui/Link';
-import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
+import { Button, buttonVariantMap, ButtonVariants } from '@/ui/Button';
+import { buttonVariants } from '@/ui/shadcn/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/ui/shadcn/dropdown-menu';
+import { cn } from '@/ui/shadcn/utils';
+
+import { DividerLegacy, DropdownLegacy, ItemLegacy } from './DropdownLegacy';
+import { Icon, Icons } from './Icon';
+import { Link } from './Link';
 
 const DropDownVariants = {
   ...ButtonVariants,
   SECONDARY: 'outline-secondary',
 } as const;
 
-type DropdownProps = BoxProps & {
+const ShadcnMigrationContext = createContext(false);
+
+type DropdownItemProps = {
+  href?: string;
+  onClick?: () => void;
+  children?: ReactNode;
+};
+
+type DropdownProps = {
   variant: Values<typeof DropDownVariants>;
   isSplit?: boolean;
+  id?: string;
+  className?: string;
+  'aria-label'?: string;
+  children?: ReactNode;
 };
 
-const getGlobalValue = getValueFromTheme('global');
-const { grey1 } = colors;
-
-const Dropdown = ({
-  variant,
-  isSplit = false,
-  children,
-  className,
-  ...props
-}: DropdownProps) => {
-  const isMenuChild = (child) =>
-    child.type === Dropdown.Item || child.type === Dropdown.Divider;
-  const menuChildren = Children.toArray(children).filter(isMenuChild);
-
-  const isPrimaryActionChild = (child) =>
-    child.type === Button || child.type === Link;
-  const primaryActionChild =
-    Children.toArray(children).find(isPrimaryActionChild);
-
-  const buttonVariant =
-    variant === DropDownVariants.SECONDARY ? ButtonVariants.NEUTRAL : variant;
-
-  const primaryAction = cloneElement(
-    // @ts-expect-error
-    primaryActionChild,
-    {
-      // @ts-expect-error
-      ...primaryActionChild.props,
-      variant: buttonVariant,
-      className: 'primary-action',
-    },
-  );
-
-  return (
-    <Box
-      css={`
-        .dropdown,
-        .btn-group {
-          box-shadow: ${getGlobalValue('boxShadow.heavy')};
-          border-radius: ${getGlobalBorderRadius};
-        }
-        .btn-group:has(.dropdown-toggle-split) .primary-action,
-        .btn-group:has(.dropdown-toggle-split) .primary-action > * {
-          box-shadow: none;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-
-        .dropdown-menu {
-          border-radius: ${getGlobalBorderRadius};
-          overflow: hidden;
-        }
-
-        .dropdown-divider {
-          margin: 0;
-        }
-
-        .btn-group {
-          .dropdown-toggle-split {
-            box-shadow: none;
-            border-left: 1px solid ${grey1};
-          }
-        }
-      `}
-      className={className}
-      {...getBoxProps(props)}
-    >
-      <BootstrapDropdown as={BootstrapButtonGroup}>
-        {isSplit ? (
-          primaryAction
-        ) : (
-          <BootstrapDropdown.Toggle variant={variant} css={buttonCSS}>
-            {/* @ts-expect-error */}
-            {primaryActionChild.props.children}
-          </BootstrapDropdown.Toggle>
-        )}
-        {menuChildren.length > 0 && (
-          <>
-            {isSplit && (
-              <BootstrapDropdown.Toggle
-                split
-                variant={variant}
-                css={`
-                  ${buttonCSS}
-                  &.btn {
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                  }
-                `}
-              />
-            )}
-            <BootstrapDropdown.Menu>{menuChildren}</BootstrapDropdown.Menu>
-          </>
-        )}
-      </BootstrapDropdown>
-    </Box>
-  );
-};
-
-const Item = ({ href, onClick, children }: Partial<DropdownItemProps>) => {
+const ItemShadcn = ({ href, onClick, children }: DropdownItemProps) => {
   if (onClick) {
     return (
-      <BootstrapDropdown.Item
-        forwardedAs={(props) => (
-          <Button variant={ButtonVariants.NEUTRAL} {...props} />
-        )}
-        onClick={onClick}
-        css={`
-          &.btn {
-            flex: 1;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-          }
-        `}
-      >
+      <DropdownMenuItem onSelect={() => onClick()} className="tw:text-base">
         {children}
-      </BootstrapDropdown.Item>
+      </DropdownMenuItem>
     );
   }
 
   if (href) {
     return (
-      <BootstrapDropdown.Item
-        forwardedAs={(props) => (
-          <Link
-            variant={LinkVariants.BUTTON_NEUTRAL}
-            href={href}
-            padding={0}
-            {...props}
-          />
-        )}
-        css={`
-          .btn {
-            flex: 1;
-            border: none;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-
-            &:hover {
-              border-radius: 0 !important;
-            }
-          }
-        `}
-      >
-        {children}
-      </BootstrapDropdown.Item>
+      <DropdownMenuItem asChild className="tw:text-base">
+        <NextLink
+          href={href}
+          className="tw:w-full tw:text-inherit tw:no-underline"
+        >
+          {children}
+        </NextLink>
+      </DropdownMenuItem>
     );
   }
 
   return null;
 };
 
-const Divider = BootstrapDropdown.Divider;
+const Item = (props: DropdownItemProps) => {
+  const isShadcnMigrationEnabled = useContext(ShadcnMigrationContext);
+
+  if (isShadcnMigrationEnabled) {
+    return <ItemShadcn {...props} />;
+  }
+
+  return <ItemLegacy {...props} />;
+};
+
+const Divider = () => {
+  const isShadcnMigrationEnabled = useContext(ShadcnMigrationContext);
+
+  if (isShadcnMigrationEnabled) {
+    return <DropdownMenuSeparator />;
+  }
+
+  return <DividerLegacy />;
+};
+
+const DropdownShadcn = ({
+  variant,
+  isSplit = false,
+  id,
+  className,
+  'aria-label': ariaLabel,
+  children,
+}: DropdownProps) => {
+  const { t } = useTranslation();
+
+  const isMenuChild = (child) => child.type === Item || child.type === Divider;
+  const menuChildren = Children.toArray(children).filter(isMenuChild);
+
+  const isPrimaryActionChild = (child: ReactNode): child is ReactElement<any> =>
+    isValidElement(child) && (child.type === Button || child.type === Link);
+  const primaryActionChild =
+    Children.toArray(children).find(isPrimaryActionChild);
+
+  if (!primaryActionChild) {
+    throw new Error('Dropdown requires a Button or Link child');
+  }
+
+  const buttonVariant =
+    variant === DropDownVariants.SECONDARY ? ButtonVariants.NEUTRAL : variant;
+  const shadcnVariant = buttonVariantMap[buttonVariant];
+
+  const menuContent = menuChildren.length > 0 && (
+    <DropdownMenuContent align="end">{menuChildren}</DropdownMenuContent>
+  );
+
+  if (isSplit) {
+    const primaryAction = cloneElement(primaryActionChild, {
+      ...primaryActionChild.props,
+      variant: buttonVariant,
+      className: cn(
+        primaryActionChild.props.className,
+        menuChildren.length > 0 &&
+          'tw:rounded-r-none tw:[&>span]:rounded-r-none tw:[&>span]:shadow-none',
+      ),
+    });
+
+    return (
+      <DropdownMenu>
+        <div
+          id={id}
+          className={cn(
+            'tw:inline-flex tw:rounded-md tw:shadow-heavy',
+            className,
+          )}
+        >
+          {primaryAction}
+          {menuChildren.length > 0 && (
+            <DropdownMenuTrigger
+              aria-label={t('dropdown.toggle_label')}
+              className={cn(
+                buttonVariants({ variant: shadcnVariant, size: 'icon' }),
+                'tw:h-auto tw:self-stretch tw:rounded-l-none tw:border-l tw:shadow-none',
+                buttonVariant === ButtonVariants.NEUTRAL
+                  ? 'tw:border-border'
+                  : 'tw:border-white',
+              )}
+            >
+              <Icon name={Icons.CHEVRON_DOWN} />
+            </DropdownMenuTrigger>
+          )}
+        </div>
+        {menuContent}
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        id={id}
+        aria-label={ariaLabel}
+        className={cn(
+          buttonVariants({ variant: shadcnVariant }),
+          'tw:flex tw:items-center tw:justify-start',
+          className,
+        )}
+      >
+        {primaryActionChild.props.children}
+      </DropdownMenuTrigger>
+      {menuContent}
+    </DropdownMenu>
+  );
+};
+
+const Dropdown = (props: DropdownProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return (
+    <ShadcnMigrationContext.Provider value={isShadcnMigrationEnabled}>
+      {isShadcnMigrationEnabled ? (
+        <DropdownShadcn {...props} />
+      ) : (
+        <DropdownLegacy {...props} />
+      )}
+    </ShadcnMigrationContext.Provider>
+  );
+};
 
 Dropdown.Item = Item;
 Dropdown.Divider = Divider;
 
-export { Dropdown, DropDownVariants };
+export { Divider, Dropdown, DropDownVariants, Item };
+export type { DropdownProps };

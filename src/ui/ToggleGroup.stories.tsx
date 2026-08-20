@@ -14,6 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 const ToggleGroupExample = () => {
   const [value, setValue] = useState('toggle_1');
+
   return (
     <ToggleGroup
       name="age-input-mode"
@@ -23,7 +24,7 @@ const ToggleGroupExample = () => {
         { value: 'toggle_1', label: 'Toggle 1' },
         { value: 'toggle_2', label: 'Toggle 2' },
       ]}
-      maxWidth="40rem"
+      className="tw:max-w-80 tw:mx-auto"
     />
   );
 };
