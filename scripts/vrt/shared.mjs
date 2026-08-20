@@ -177,7 +177,8 @@ export const cleanup = () => {
       );
       console.warn(
         `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
-          'Add fixtures in scripts/vrt/fixtures/<domain>.mjs and wire them into MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs.\n',
+          'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
+          'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
       );
     } else {
       console.log(
