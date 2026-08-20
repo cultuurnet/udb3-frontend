@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
+import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import type {
@@ -100,7 +101,7 @@ const ReservationCard = ({
       )}
       {showAvailability && (
         <Inline spacing={4} flexWrap="wrap">
-          {capacity && (
+          {IS_CAPACITY_VISIBLE && capacity && (
             <Stack flex={1} spacing={1}>
               <Text color={colors.udbMainGrey} fontWeight="bold">
                 {t('create.additionalInformation.booking_info.max_capacity')}
@@ -129,7 +130,7 @@ type Props = {
 
 const hasBookingAvailability = (bookingAvailability?: BookingAvailability) =>
   bookingAvailability !== undefined &&
-  (bookingAvailability.capacity !== undefined ||
+  ((IS_CAPACITY_VISIBLE && bookingAvailability.capacity !== undefined) ||
     bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE);
 
 const getCapacity = (bookingAvailability?: BookingAvailability) =>

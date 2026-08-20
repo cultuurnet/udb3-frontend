@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
+import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 type TestFixtures = {
@@ -90,6 +91,8 @@ test.describe('Single-date event reservation', () => {
     baseURL,
     singleEventId,
   }) => {
+    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
+
     const capacity = randomCapacity();
 
     await page.goto(`${baseURL}/events/${singleEventId}/edit`);
@@ -113,6 +116,8 @@ test.describe('Multiple-date event reservation', () => {
     baseURL,
     multipleEventId,
   }) => {
+    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
+
     const capacities = [randomCapacity(), randomCapacity()];
 
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
@@ -168,7 +173,9 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
 
-    await setCapacity(page, '#subevent-0-max-capacity', capacity);
+    if (IS_CAPACITY_VISIBLE) {
+      await setCapacity(page, '#subevent-0-max-capacity', capacity);
+    }
 
     const statusPatch = waitForSubEventsPatch(page);
     await page
@@ -189,9 +196,11 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await page.reload();
     await openReservationTab(page);
 
-    await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
-      capacity,
-    );
+    if (IS_CAPACITY_VISIBLE) {
+      await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
+        capacity,
+      );
+    }
     await expect(page.locator('#subevent-0-status')).toHaveValue('Unavailable');
   });
 
@@ -199,6 +208,8 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     page,
     baseURL,
   }) => {
+    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
+
     await createBasicEvent(
       page,
       baseURL!,
@@ -243,6 +254,8 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     baseURL,
     multipleEventId,
   }) => {
+    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
+
     const capacities = [randomCapacity(), randomCapacity()];
 
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
