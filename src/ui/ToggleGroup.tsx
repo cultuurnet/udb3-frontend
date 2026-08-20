@@ -37,7 +37,7 @@ const ToggleGroupShadcn = ({
     }}
     aria-label={ariaLabel}
     className={cn(
-      'tw:items-stretch tw:gap-0 tw:rounded tw:bg-grey-background',
+      'tw:items-stretch tw:gap-0 tw:rounded-md tw:bg-grey-background',
       className,
     )}
   >
@@ -46,7 +46,7 @@ const ToggleGroupShadcn = ({
         key={option.value}
         value={option.value}
         data-testid={`${name}-${option.value}`}
-        className="tw:h-auto tw:min-w-0 tw:flex-1 tw:rounded-none tw:px-4 tw:py-2 tw:text-base tw:text-foreground tw:transition-all tw:hover:bg-background/60 tw:data-[state=on]:z-1 tw:data-[state=on]:rounded tw:data-[state=on]:bg-background tw:data-[state=on]:shadow-heavy"
+        className="tw:h-auto tw:min-w-0 tw:flex-1 tw:rounded-none tw:px-4 tw:py-2 tw:text-base tw:text-foreground tw:transition-all tw:hover:bg-background/60 tw:data-[state=on]:z-1 tw:data-[state=on]:rounded-md tw:data-[state=on]:bg-background tw:data-[state=on]:shadow-heavy"
       >
         {option.label}
       </ToggleGroupItem>

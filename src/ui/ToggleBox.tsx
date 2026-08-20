@@ -36,7 +36,7 @@ const ToggleBoxShadcn = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'tw:group tw:relative tw:flex tw:min-w-68 tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:rounded tw:border tw:p-6 tw:disabled:opacity-50',
+        'tw:group tw:relative tw:flex tw:min-w-68 tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:rounded-lg tw:border tw:p-6 tw:disabled:opacity-50',
         active
           ? 'tw:border-success tw:bg-success-muted'
           : 'tw:border-secondary tw:bg-white',
@@ -47,7 +47,7 @@ const ToggleBoxShadcn = ({
     >
       <span
         className={cn(
-          'tw:absolute tw:left-3 tw:top-3 tw:flex tw:h-7.5 tw:w-7.5 tw:items-center tw:justify-center tw:rounded-[5px] tw:border-[1.8px]',
+          'tw:absolute tw:left-3 tw:top-3 tw:flex tw:h-7.5 tw:w-7.5 tw:items-center tw:justify-center tw:rounded-md tw:border',
           active ? 'tw:border-success tw:bg-success' : 'tw:border-secondary',
           hoverEnabled && 'tw:group-hover:border-success',
         )}
