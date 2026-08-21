@@ -337,6 +337,26 @@
           "age": "Saisir comme âge",
           "date_of_birth": "Saisir comme date de naissance"
         },
+        "confirm_modal": {
+          "input_mode": {
+            "title": "Attention, cette action supprime les données saisies",
+            "body": "Vous devez choisir entre ‘Saisir comme âge’ et ‘Saisir comme date de naissance’. Si vous changez, vos informations seront perdues.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "age_range": {
+            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
+            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          },
+          "departure_places": {
+            "title": "Attention, cette action supprime vos lieux de départ",
+            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
+            "confirm": "Continuer",
+            "cancel": "Annuler"
+          }
+        },
         "birth_date": {
           "title": "Indiquez les dates de naissance minimum et maximum des participants",
           "from": "du",
@@ -364,19 +384,7 @@
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants",
           "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
-          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer.",
-          "departure_places_warning_modal": {
-            "title": "Attention, cette action supprime vos lieux de départ",
-            "body": "Vous ne pouvez saisir des lieux de départ que pour les activités destinées uniquement aux enfants.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          },
-          "age_range_warning_modal": {
-            "title": "Attention : cet âge ne correspond plus à 'Uniquement pour les enfants'",
-            "body": "En modifiant l'âge, cette activité ne sera plus 'Uniquement pour les enfants' et les lieux de départ éventuels seront supprimés.",
-            "confirm": "Continuer",
-            "cancel": "Annuler"
-          }
+          "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer."
         }
       }
     },
@@ -398,7 +406,7 @@
       "title_events": "Faites en sorte que cette activité se démarque",
       "title_places": "Faites en sorte que ce lieu se démarque",
       "accessibility": {
-        "title": "Accessibilité",
+        "title": "Transport accompagné",
         "departure": {
           "title": "Depuis quelle école ou quel autre lieu un transport est-il prévu pour amener les enfants à votre activité ?",
           "info": "Il peut s'agir par exemple d'une corde de promenade, d'un bus ou d'un vélo-taxi qui amène les enfants depuis une école ou une garderie jusqu'au lieu de votre activité.",
@@ -1019,7 +1027,7 @@
         "booking_info": "Les informations de réservation ont été modifiées avec succès",
         "media": "Image/vidéo modifiée avec succès",
         "audience": "Accès modifié avec succès",
-        "accessibility": "L'accessibilité a été modifiée avec succès"
+        "accessibility": "Le transport accompagné a été modifié avec succès"
       }
     }
   },

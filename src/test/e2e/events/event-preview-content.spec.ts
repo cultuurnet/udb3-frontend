@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { addDays, format } from 'date-fns';
 
+import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
 import nl from '../../../i18n/nl.json';
 import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
@@ -406,8 +407,12 @@ test.describe.serial('Event Preview Booking Info - Single Date', () => {
     await page
       .locator('#offer-url-label')
       .selectOption(dummyEvent.bookingUrlLabel);
-    await page.locator('#offer-max-capacity').fill(dummyEvent.bookingCapacity);
-    await page.locator('#offer-max-capacity').blur();
+    if (IS_CAPACITY_VISIBLE) {
+      await page
+        .locator('#offer-max-capacity')
+        .fill(dummyEvent.bookingCapacity);
+      await page.locator('#offer-max-capacity').blur();
+    }
 
     await page.getByRole('button', { name: 'Publiceren', exact: true }).click();
     await page.waitForURL(/\/events\/[a-f0-9-]+/);
@@ -438,11 +443,13 @@ test.describe.serial('Event Preview Booking Info - Single Date', () => {
         .first()
         .getByRole('link', { name: dummyEvent.bookingUrlLabelText }),
     ).toBeVisible();
-    await expect(bookingInfoCell.first()).toContainText(
-      dummyEvent.bookingCapacity,
-    );
-    await expect(bookingInfoCell.first()).toContainText(
-      dummyEvent.bookingAvailabilityStatus,
-    );
+    if (IS_CAPACITY_VISIBLE) {
+      await expect(bookingInfoCell.first()).toContainText(
+        dummyEvent.bookingCapacity,
+      );
+      await expect(bookingInfoCell.first()).toContainText(
+        dummyEvent.bookingAvailabilityStatus,
+      );
+    }
   });
 });

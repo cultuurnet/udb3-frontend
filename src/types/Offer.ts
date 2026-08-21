@@ -182,7 +182,7 @@ type BaseOffer = {
   mediaObject?: MediaObject[];
   videos?: VideoObject[];
   image?: string;
-  typicalAgeRange: string;
+  typicalAgeRange?: string;
   birthdateRange?: BirthdateRange;
   bookingInfo?: BookingInfo;
   bookingAvailability?: BookingAvailability;

@@ -16,7 +16,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 };
 
 type Props = {
-  typicalAgeRange: string;
+  typicalAgeRange?: string;
   childrenOnly?: boolean;
   birthdateRange?: BirthdateRange;
 };

@@ -6,6 +6,7 @@ import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
 const age = nl.create.name_and_age.age;
 const childrenOnly = age.children_only;
+const confirmModal = age.confirm_modal;
 
 const audienceQuestionLocator = childrenOnly.question;
 
@@ -194,11 +195,11 @@ test.describe('Children-only audience section', () => {
     await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
-    // Add a departure place via the Bereikbaarheid tab and explicitly wait
+    // Add a departure place via the Begeleid vervoer tab and explicitly wait
     // for the PUT and the cache-invalidated GET refetch to complete — the
     // modal logic in AgeRangeStep reads departurePlaces from that offer
     // query, so we can't open the modal until the refetch lands.
-    await page.getByRole('tab', { name: 'Bereikbaarheid' }).click();
+    await page.getByRole('tab', { name: 'Begeleid vervoer' }).click();
     await page.getByTestId('departure-city-0').fill('9000');
     await page.getByRole('option', { name: '9000 Gent' }).click();
     await page.getByTestId('departure-place-0').fill('S.M');
@@ -234,16 +235,16 @@ test.describe('Children-only audience section', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
     await expect(
-      modal.getByText(childrenOnly.departure_places_warning_modal.title),
+      modal.getByText(confirmModal.departure_places.title),
     ).toBeVisible();
     await expect(
-      modal.getByText(childrenOnly.departure_places_warning_modal.body),
+      modal.getByText(confirmModal.departure_places.body),
     ).toBeVisible();
 
     // Cancel → modal closes, audience selection stays at "kinderen alleen"
     await modal
       .getByRole('button', {
-        name: childrenOnly.departure_places_warning_modal.cancel,
+        name: confirmModal.departure_places.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
@@ -254,7 +255,7 @@ test.describe('Children-only audience section', () => {
     await expect(modal).toBeVisible();
     await modal
       .getByRole('button', {
-        name: childrenOnly.departure_places_warning_modal.confirm,
+        name: confirmModal.departure_places.confirm,
       })
       .click();
     await expect(modal).toBeHidden();
@@ -265,7 +266,7 @@ test.describe('Children-only audience section', () => {
     // Optional sanity: the accessibility tab should be gone now that we're
     // no longer in "kinderen alleen" mode.
     await expect(
-      page.getByRole('tab', { name: 'Bereikbaarheid' }),
+      page.getByRole('tab', { name: 'Begeleid vervoer' }),
     ).toBeHidden();
   });
 
@@ -299,9 +300,7 @@ test.describe('Children-only audience section', () => {
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
-    await expect(
-      modal.getByText(childrenOnly.age_range_warning_modal.body),
-    ).toBeVisible();
+    await expect(modal.getByText(confirmModal.age_range.body)).toBeVisible();
 
     const confirmChildrenOnlyPut = page.waitForResponse(
       (res) =>
@@ -317,7 +316,7 @@ test.describe('Children-only audience section', () => {
     );
     await modal
       .getByRole('button', {
-        name: childrenOnly.age_range_warning_modal.confirm,
+        name: confirmModal.age_range.confirm,
       })
       .click();
     await confirmChildrenOnlyPut;
@@ -362,7 +361,7 @@ test.describe('Children-only audience section', () => {
     // Cancel → modal closes, previous range + audience preserved.
     await modal
       .getByRole('button', {
-        name: childrenOnly.age_range_warning_modal.cancel,
+        name: confirmModal.age_range.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
