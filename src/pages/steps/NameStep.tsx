@@ -32,7 +32,7 @@ const NameStep = ({
             <Stack spacing={2}>
               <FormElement
                 label={t(`create.name_and_age.name.title_${scope}`)}
-                flex={2}
+                className="tw:flex-2"
                 id="event-name"
                 maxLength={90}
                 Component={

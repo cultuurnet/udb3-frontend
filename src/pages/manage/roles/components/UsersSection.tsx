@@ -161,7 +161,7 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
               id="add-user-email"
               label={t('roles.form.users.add_user_label')}
               labelPosition="left"
-              alignItems="start"
+              className="tw:items-start"
               error={errors.email?.message}
               Component={
                 <Input
