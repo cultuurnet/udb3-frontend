@@ -67,5 +67,6 @@ tsconfig.tsbuildinfo
 /playwright-report/
 /playwright/.cache/
 /playwright/.auth/
+/.vrt-pages/missing-fixtures/
 /.vrt-pages/test-results/
 /.vrt-pages/report/
