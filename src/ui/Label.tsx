@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react';
+
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { cn } from '@/ui/shadcn/utils';
 
-import type { LabelProps as LegacyProps } from './LabelLegacy';
 import { LabelLegacy } from './LabelLegacy';
 
 const LabelVariants = {
@@ -16,8 +17,10 @@ const LabelPositions = {
   RIGHT: 'right',
 } as const;
 
-// TODO: remove LegacyProps once legacy Box system is dropped; Label should only accept variant, htmlFor, and className
-type Props = LegacyProps & {
+type Props = {
+  htmlFor: string;
+  children: ReactNode;
+  className?: string;
   variant?: Values<typeof LabelVariants>;
 };
 
@@ -26,7 +29,6 @@ const Label = ({
   children,
   className,
   variant = LabelVariants.NORMAL,
-  ...props
 }: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
@@ -44,12 +46,7 @@ const Label = ({
       {children}
     </label>
   ) : (
-    <LabelLegacy
-      htmlFor={htmlFor}
-      variant={variant}
-      className={className}
-      {...props}
-    >
+    <LabelLegacy htmlFor={htmlFor} variant={variant} className={className}>
       {children}
     </LabelLegacy>
   );
