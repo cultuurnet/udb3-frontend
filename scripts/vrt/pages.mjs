@@ -79,7 +79,7 @@ const main = async () => {
       'test',
       '-c',
       'playwright.vrt-pages.config.ts',
-      ...(isUpdate ? ['--update-snapshots'] : []),
+      ...(isUpdate ? ['--update-snapshots=changed'] : []),
       ...playwrightArgs,
     ];
     process.exitCode = await run(
