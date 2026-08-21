@@ -238,9 +238,6 @@ const calendarMachineOptions: MachineOptions<CalendarContext, CalendarEvents> =
               status: { type: OfferStatus.AVAILABLE },
               bookingAvailability: { type: BookingAvailabilityType.AVAILABLE },
               bookingInfo: undefined,
-              childcareStartTime: '',
-              childcareEndTime: '',
-              hasOvernightStay: false,
             },
           ];
         },
