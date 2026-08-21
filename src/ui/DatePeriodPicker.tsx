@@ -36,6 +36,7 @@ type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
 
 type Props = {
   id: string;
+  className?: string;
   dateStart: Date;
   dateEnd: Date;
   minDate?: Date;
@@ -50,7 +51,6 @@ type Props = {
   onQuickLinkClick?: (periods: QuickLinkPeriod[]) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
   labelVariant?: Values<typeof LabelVariants>;
-  className?: string;
 };
 
 const DatePeriodPickerShadcn = ({
@@ -68,8 +68,8 @@ const DatePeriodPickerShadcn = ({
   fetchHolidays,
   onQuickLinkClick,
   onShowHolidaysChange,
-  labelVariant = LabelVariants.BOLD,
   className,
+  labelVariant = LabelVariants.BOLD,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);

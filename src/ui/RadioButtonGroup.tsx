@@ -61,8 +61,11 @@ const RadioButtonGroupShadcn = ({
             />
             <div className="tw:flex tw:flex-col">
               <Label
-                cursor={isItemDisabled ? 'not-allowed' : 'pointer'}
-                opacity={isItemDisabled ? 0.5 : undefined}
+                className={cn(
+                  isItemDisabled
+                    ? 'tw:cursor-not-allowed tw:opacity-50'
+                    : 'tw:cursor-pointer',
+                )}
                 htmlFor={itemId}
               >
                 {item.label}
