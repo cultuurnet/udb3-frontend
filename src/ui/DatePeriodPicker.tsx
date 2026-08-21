@@ -19,6 +19,7 @@ import type { Values } from '../types/Values';
 import {
   computeHolidayPresets,
   filterHolidaysForPreset,
+  type HolidayType,
   parseHoliday,
 } from '../utils/holidayPresets';
 import { Button, ButtonVariants } from './Button';
@@ -32,7 +33,12 @@ import { Text, TextVariants } from './Text';
 
 const locales = { nl, fr, de };
 
-type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
+type QuickLinkPeriod = {
+  startDate: Date;
+  endDate: Date;
+  name: string;
+  holidayType: HolidayType;
+};
 
 type Props = {
   id: string;

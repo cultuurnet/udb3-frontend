@@ -20,6 +20,7 @@ import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
+import type { HolidayType } from '@/utils/holidayPresets';
 
 import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
@@ -39,6 +40,7 @@ type DeviatingPeriodData = {
   endDate: Date;
   description: Partial<Record<SupportedLanguage, string>>;
   openingHours: OpeningHour[];
+  holidayType?: HolidayType;
 };
 
 type Props = BoxProps & {
@@ -180,6 +182,7 @@ const DeviatingPeriod = ({
                     startDate: p.startDate,
                     endDate: p.endDate,
                     description: { [lang]: p.name },
+                    holidayType: p.holidayType,
                     openingHours: period.openingHours.map((openingHour) => ({
                       ...openingHour,
                       id: createOpeninghoursId(),

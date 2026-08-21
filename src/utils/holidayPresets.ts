@@ -5,13 +5,22 @@ import type { ApiHoliday } from '@/hooks/api/holidays';
 
 import { SupportedLanguages } from '../i18n';
 import type { Values } from '../types/Values';
+import {
+  hasPeriodOverlap,
+  type PeriodWithDateRange,
+} from './validateOpeningHours';
+
+const HolidayTypes = { PUBLIC: 'public', SCHOOL: 'school' } as const;
+type HolidayType = Values<typeof HolidayTypes>;
+
+const SCHOOL_HOLIDAY_API_TYPE = 'schoolHolidays';
 
 type HolidayPreset = {
   label: string;
   fetchStartDate: string;
   fetchEndDate: string;
   matchesHoliday: (holiday: {
-    type: string;
+    holidayType: HolidayType;
     region?: string;
     startDate: Date;
   }) => boolean;
@@ -24,7 +33,10 @@ const parseHoliday = (holiday: ApiHoliday, language: string, t: TFunction) => {
     ? t(`date_period_picker.region.${holiday.region}`)
     : undefined;
   return {
-    type: holiday.type,
+    holidayType:
+      holiday.type === SCHOOL_HOLIDAY_API_TYPE
+        ? HolidayTypes.SCHOOL
+        : HolidayTypes.PUBLIC,
     region: holiday.region,
     name: regionLabel ? `${name} (${regionLabel})` : name,
     startDate: parse(holiday.startDate, 'yyyy-MM-dd', new Date()),
@@ -43,7 +55,7 @@ const publicHolidayPreset = (year: number, t: TFunction): HolidayPreset => ({
   fetchStartDate: `${year}-01-01`,
   fetchEndDate: `${year}-12-31`,
   matchesHoliday: (holiday) =>
-    holiday.type !== 'schoolHolidays' &&
+    holiday.holidayType === HolidayTypes.PUBLIC &&
     holiday.startDate.getFullYear() === year,
 });
 
@@ -56,7 +68,7 @@ const schoolHolidayPreset = (
   fetchStartDate: `${academicStart}-08-01`,
   fetchEndDate: `${academicStart + 1}-07-31`,
   matchesHoliday: (holiday) =>
-    holiday.type === 'schoolHolidays' &&
+    holiday.holidayType === HolidayTypes.SCHOOL &&
     holiday.region === region &&
     getAcademicYearStart(holiday.startDate) === academicStart,
 });
@@ -98,12 +110,32 @@ const computeHolidayPresets = (today: Date, t: TFunction): HolidayPreset[] => {
   ];
 };
 
-export type { HolidayPreset };
+type HolidayPeriod = PeriodWithDateRange & { holidayType?: HolidayType };
+
+const removeOverlappingPublicHolidays = <T extends HolidayPeriod>(
+  periods: T[],
+): T[] => {
+  const schoolHolidays = periods.filter(
+    (period) => period.holidayType === HolidayTypes.SCHOOL,
+  );
+
+  const remaining = periods.filter(
+    (period) =>
+      period.holidayType !== HolidayTypes.PUBLIC ||
+      !hasPeriodOverlap(period, schoolHolidays),
+  );
+
+  return remaining.length === periods.length ? periods : remaining;
+};
+
+export type { HolidayPreset, HolidayType };
 export {
   computeHolidayPresets,
   filterHolidaysForPreset,
   getAcademicYearStart,
+  HolidayTypes,
   parseHoliday,
   publicHolidayPreset,
+  removeOverlappingPublicHolidays,
   schoolHolidayPreset,
 };
