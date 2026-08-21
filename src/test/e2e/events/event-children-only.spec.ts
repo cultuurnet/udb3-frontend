@@ -196,11 +196,11 @@ test.describe('Children-only audience section', () => {
     await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
-    // Add a departure place via the Bereikbaarheid tab and explicitly wait
+    // Add a departure place via the Begeleid vervoer tab and explicitly wait
     // for the PUT and the cache-invalidated GET refetch to complete — the
     // modal logic in AgeRangeStep reads departurePlaces from that offer
     // query, so we can't open the modal until the refetch lands.
-    await page.getByRole('tab', { name: 'Bereikbaarheid' }).click();
+    await page.getByRole('tab', { name: 'Begeleid vervoer' }).click();
     await page.getByTestId('departure-city-0').fill('9000');
     await page.getByRole('option', { name: '9000 Gent' }).click();
     await page.getByTestId('departure-place-0').fill('S.M');
@@ -267,7 +267,7 @@ test.describe('Children-only audience section', () => {
     // Optional sanity: the accessibility tab should be gone now that we're
     // no longer in "kinderen alleen" mode.
     await expect(
-      page.getByRole('tab', { name: 'Bereikbaarheid' }),
+      page.getByRole('tab', { name: 'Begeleid vervoer' }),
     ).toBeHidden();
   });
 
