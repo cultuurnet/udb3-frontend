@@ -392,8 +392,9 @@
         "error_invalid": "De opgegeven leeftijd is niet geldig.",
         "children_only": {
           "question": "Voor wie is deze activiteit?",
-          "children_only": "Voor kinderen alleen",
-          "with_family": "Voor kinderen samen met hun familie of een andere begeleider",
+          "children_only": "Voor kinderen alleen (buitenschoolse opvang of activiteit)",
+          "with_family": "Voor kinderen samen met hun familie",
+          "error": "Geef aan op wie de activiteit gericht is",
           "mutation_error": "Er ging iets mis bij het opslaan van je keuze. Probeer opnieuw."
         }
       },

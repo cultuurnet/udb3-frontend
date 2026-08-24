@@ -136,6 +136,7 @@ test('create a Kamp of vakantie event with overnight stay', async ({
   await page.getByLabel('Naam van de activiteit').click();
   await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
   await page.getByRole('button', { name: 'Kinderen 6-11' }).click();
+  await page.locator('#with-family').click();
 
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
