@@ -4,6 +4,7 @@ import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 import { Checkbox } from './Checkbox';
 import { CheckboxWithLabelLegacy } from './CheckboxWithLabelLegacy';
+import { getInlineProps } from './Inline';
 import { Label } from './Label';
 import { cn } from './shadcn/utils';
 
@@ -25,6 +26,7 @@ const CheckboxWithLabel = ({
   onCheckedChange = () => {},
   children,
   className = '',
+  ...rest
 }: CheckboxWithLabelProps) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
@@ -40,12 +42,7 @@ const CheckboxWithLabel = ({
           checked={checked}
           disabled={disabled}
         />
-        <Label
-          className={cn(
-            disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
-          )}
-          htmlFor={id}
-        >
+        <Label disabled={disabled} htmlFor={id}>
           {children}
         </Label>
       </div>
@@ -62,6 +59,7 @@ const CheckboxWithLabel = ({
         onCheckedChange(event.target.checked)
       }
       className={className}
+      {...getInlineProps(rest)}
     >
       {children}
     </CheckboxWithLabelLegacy>

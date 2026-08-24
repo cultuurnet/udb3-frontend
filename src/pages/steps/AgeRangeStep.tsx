@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
-import { AudienceTypes } from '@/constants/AudienceType';
-import { OfferTypes } from '@/constants/OfferType';
+import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
+import { OfferTypes, Scope } from '@/constants/OfferType';
 import {
   useChangeChildrenOnlyMutation,
   useChangeDeparturePlacesMutation,
@@ -42,7 +42,7 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
 import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
-import { StepProps } from './Steps';
+import { FormDataUnion, StepProps } from './Steps';
 
 const AgeInputModes = {
   AGE: 'age',
@@ -53,7 +53,8 @@ type AgeInputMode = Values<typeof AgeInputModes>;
 
 type ActiveModal =
   | { kind: 'departurePlaces' }
-  | { kind: 'ageRange'; newValue: string; previousValue: string };
+  | { kind: 'ageRange'; newValue: string; previousValue: string }
+  | { kind: 'inputMode'; newMode: AgeInputMode };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
@@ -154,6 +155,40 @@ const birthdateRangeFitsBoa = (
   return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
 };
 
+type ChildrenOnlyContext = {
+  scope?: Scope;
+  audienceType?: AudienceType;
+  typicalAgeRange?: string;
+  birthdateRange?: BirthdateRange;
+  childrenOnly?: boolean;
+};
+
+const shouldShowChildrenOnlySection = ({
+  scope,
+  audienceType,
+  typicalAgeRange,
+  birthdateRange,
+  childrenOnly,
+}: ChildrenOnlyContext) =>
+  scope === OfferTypes.EVENTS &&
+  audienceType !== AudienceTypes.EDUCATION &&
+  (childrenOnly === true ||
+    overlapsWithBoaAgeRange(typicalAgeRange) ||
+    birthdateRangeFitsBoa(birthdateRange));
+
+const isChildrenOnlyValueMissing = (
+  { scope, audience, nameAndAgeRange, childrenOnly }: Partial<FormDataUnion>,
+  isBoaEnabled?: boolean,
+) =>
+  !!isBoaEnabled &&
+  typeof childrenOnly !== 'boolean' &&
+  shouldShowChildrenOnlySection({
+    scope,
+    audienceType: audience?.audienceType,
+    typicalAgeRange: nameAndAgeRange?.typicalAgeRange,
+    birthdateRange: nameAndAgeRange?.birthdateRange,
+  });
+
 const buildBirthdateRange = (
   min: Date,
   max: Date,
@@ -174,11 +209,11 @@ type BirthdatePickersProps = {
 const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
   const { t } = useTranslation();
 
-  const [minBirthDate, setMinBirthDate] = useState<Date | undefined>(
-    from ? parse(from, 'yyyy-MM-dd', new Date()) : undefined,
+  const [minBirthDate, setMinBirthDate] = useState<Date>(
+    from ? parse(from, 'yyyy-MM-dd', new Date()) : new Date(),
   );
-  const [maxBirthDate, setMaxBirthDate] = useState<Date | undefined>(
-    to ? parse(to, 'yyyy-MM-dd', new Date()) : undefined,
+  const [maxBirthDate, setMaxBirthDate] = useState<Date>(
+    to ? parse(to, 'yyyy-MM-dd', new Date()) : new Date(),
   );
 
   const isInvalidRange =
@@ -321,10 +356,16 @@ const AgeRangeInputs = ({
 };
 
 type ChildrenOnlySectionProps = {
-  childrenOnly: boolean;
+  childrenOnly?: boolean;
   isPending: boolean;
   error: string | null;
   onToggle: (value: boolean) => void;
+};
+
+const getSelectedAudience = (childrenOnly?: boolean) => {
+  if (childrenOnly === true) return 'children-only';
+  if (childrenOnly === false) return 'with-family';
+  return '';
 };
 
 const ChildrenOnlySection = ({
@@ -351,7 +392,7 @@ const ChildrenOnlySection = ({
       <RadioButtonGroup
         name="children-only-toggle"
         disabled={isPending}
-        selected={childrenOnly === true ? 'children-only' : 'with-family'}
+        selected={getSelectedAudience(childrenOnly)}
         onValueChange={(value) => onToggle(value === 'children-only')}
         items={[
           {
@@ -371,6 +412,41 @@ const ChildrenOnlySection = ({
   );
 };
 
+type ConfirmModalProps = {
+  name: string;
+  visible: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
+
+const ConfirmModal = ({
+  name,
+  visible,
+  onClose,
+  onConfirm,
+}: ConfirmModalProps) => {
+  const { t } = useTranslation();
+  const key = `create.name_and_age.age.confirm_modal.${name}`;
+
+  return (
+    <Modal
+      variant={ModalVariants.QUESTION}
+      size={ModalSizes.MD}
+      visible={visible}
+      title={t(`${key}.title`)}
+      confirmTitle={t(`${key}.confirm`)}
+      cancelTitle={t(`${key}.cancel`)}
+      confirmButtonVariant={ButtonVariants.DANGER}
+      onClose={onClose}
+      onConfirm={onConfirm}
+    >
+      <Box padding={4}>
+        <Text>{t(`${key}.body`)}</Text>
+      </Box>
+    </Modal>
+  );
+};
+
 const AgeRangeStep = (props: AgeRangeStepProps) => {
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
 
@@ -383,6 +459,7 @@ const AgeRangeStep = (props: AgeRangeStepProps) => {
 
 const AgeRangeStepBoa = ({
   control,
+  formState,
   onChange,
   offerId,
   scope,
@@ -408,7 +485,15 @@ const AgeRangeStepBoa = ({
 
   const [minAge = '', maxAge = ''] = (watchedTypicalAgeRange ?? '').split('-');
 
-  const [activeTab, setActiveTab] = useState<AgeInputMode>(AgeInputModes.AGE);
+  const hasAgeRange = !!watchedTypicalAgeRange;
+  const hasBirthdateRange = !!watchedBirthdateRange?.from;
+
+  const defaultMode = hasBirthdateRange
+    ? AgeInputModes.DATE_OF_BIRTH
+    : AgeInputModes.AGE;
+
+  const [selectedMode, setSelectedMode] = useState<AgeInputMode | null>(null);
+  const activeTab = selectedMode ?? defaultMode;
 
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const [childrenOnlyMutationError, setChildrenOnlyMutationError] = useState<
@@ -532,21 +617,45 @@ const AgeRangeStepBoa = ({
     });
   };
 
-  const handleModeChange = (newMode: string) => {
-    setActiveTab(newMode as AgeInputMode);
-    if (
-      newMode === AgeInputModes.DATE_OF_BIRTH &&
-      !watchedBirthdateRange?.from
-    ) {
-      const today = new Date();
-      commitBirthdateRange(today, today);
+  const applyModeChange = (mode: AgeInputMode) => {
+    setSelectedMode(mode);
+
+    if (mode === AgeInputModes.AGE) {
+      setValue('nameAndAgeRange.birthdateRange', undefined, {
+        shouldDirty: true,
+      });
+    } else {
+      setValue('nameAndAgeRange.typicalAgeRange', undefined, {
+        shouldDirty: true,
+      });
     }
+  };
+
+  const handleModeChange = (newMode: string) => {
+    const mode = newMode as AgeInputMode;
+    if (mode === activeTab) return;
+
+    const hasActiveTabValue =
+      activeTab === AgeInputModes.AGE ? hasAgeRange : hasBirthdateRange;
+
+    if (hasActiveTabValue) {
+      setActiveModal({ kind: 'inputMode', newMode: mode });
+      return;
+    }
+
+    applyModeChange(mode);
+  };
+
+  const handleInputModeModalConfirm = () => {
+    if (activeModal?.kind !== 'inputMode') return;
+    applyModeChange(activeModal.newMode);
+    setActiveModal(null);
   };
 
   const applyChildrenOnlyChange = async (value: boolean) => {
     const previousValue = childrenOnly;
     setChildrenOnlyMutationError(null);
-    setValue('childrenOnly', value);
+    setValue('childrenOnly', value, { shouldValidate: true });
     if (!offerId) return;
     try {
       await changeChildrenOnlyMutation.mutateAsync({
@@ -554,7 +663,7 @@ const AgeRangeStepBoa = ({
         childrenOnly: value,
       });
     } catch (error) {
-      setValue('childrenOnly', previousValue);
+      setValue('childrenOnly', previousValue, { shouldValidate: true });
       throw error;
     }
   };
@@ -626,12 +735,20 @@ const AgeRangeStepBoa = ({
 
   const showBirthdateOption = scope === OfferTypes.EVENTS;
 
-  const showChildrenOnlySection =
-    scope === OfferTypes.EVENTS &&
-    audienceType !== AudienceTypes.EDUCATION &&
-    (childrenOnly ||
-      overlapsWithBoaAgeRange(watchedTypicalAgeRange) ||
-      birthdateRangeFitsBoa(watchedBirthdateRange));
+  const showChildrenOnlySection = shouldShowChildrenOnlySection({
+    scope,
+    audienceType,
+    typicalAgeRange: watchedTypicalAgeRange,
+    birthdateRange: watchedBirthdateRange,
+    childrenOnly,
+  });
+
+  const childrenOnlyValidationError = formState.errors.childrenOnly
+    ? t('create.name_and_age.age.children_only.error')
+    : null;
+
+  const childrenOnlyError =
+    childrenOnlyMutationError ?? childrenOnlyValidationError;
 
   return (
     <Stack {...getStackProps(props)}>
@@ -674,66 +791,35 @@ const AgeRangeStepBoa = ({
           <ChildrenOnlySection
             childrenOnly={childrenOnly}
             isPending={isChildrenOnlyPending}
-            error={childrenOnlyMutationError}
+            error={childrenOnlyError}
             onToggle={handleChildrenOnlyToggle}
           />
         )}
       </Stack>
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="input_mode"
+        visible={activeModal?.kind === 'inputMode'}
+        onClose={() => setActiveModal(null)}
+        onConfirm={handleInputModeModalConfirm}
+      />
+
+      <ConfirmModal
+        name="age_range"
         visible={activeModal?.kind === 'ageRange'}
-        title={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.age_range_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={handleAgeRangeModalClose}
         onConfirm={handleAgeRangeModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.age_range_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
 
-      <Modal
-        variant={ModalVariants.QUESTION}
-        size={ModalSizes.MD}
+      <ConfirmModal
+        name="departure_places"
         visible={activeModal?.kind === 'departurePlaces'}
-        title={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.title',
-        )}
-        confirmTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.confirm',
-        )}
-        cancelTitle={t(
-          'create.name_and_age.age.children_only.departure_places_warning_modal.cancel',
-        )}
-        confirmButtonVariant={ButtonVariants.DANGER}
         onClose={() => setActiveModal(null)}
         onConfirm={handleDeparturePlacesModalConfirm}
-      >
-        <Box padding={4}>
-          <Text>
-            {t(
-              'create.name_and_age.age.children_only.departure_places_warning_modal.body',
-            )}
-          </Text>
-        </Box>
-      </Modal>
+      />
       {toast.component}
     </Stack>
   );
 };
 
-export { AgeRangeStep, isValidAgeRange };
+export { AgeRangeStep, isChildrenOnlyValueMissing, isValidAgeRange };

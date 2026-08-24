@@ -15,6 +15,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useToast } from '@/hooks/useToast';
 import {
   locationStepConfiguration,
@@ -105,7 +106,10 @@ const StepsForm = ({
   label,
 }: StepsFormProps) => {
   const { t } = useTranslation();
-  const { form } = useParseStepConfiguration(configurations);
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+  const { form } = useParseStepConfiguration(configurations, {
+    formConfiguration: { context: { isBoaEnabled } },
+  });
   const [isDuplicateButtonDisabled, setIsDuplicateButtonDisabled] =
     useState(true);
   const [fetchErrors, setFetchErrors] = useState<Record<string, FetchError>>();

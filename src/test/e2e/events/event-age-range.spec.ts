@@ -235,15 +235,13 @@ test.describe('Age range', () => {
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
-    await expect(modal).toContainText(
-      age.children_only.age_range_warning_modal.body,
-    );
+    await expect(modal).toContainText(age.confirm_modal.age_range.body);
 
     const confirmChildrenOnlyPut = waitForChildrenOnlyPut(page);
     const confirmAgePut = waitForTypicalAgeRangePut(page);
     await modal
       .getByRole('button', {
-        name: age.children_only.age_range_warning_modal.confirm,
+        name: age.confirm_modal.age_range.confirm,
       })
       .click();
     await confirmChildrenOnlyPut;
@@ -279,7 +277,7 @@ test.describe('Age range', () => {
 
     await modal
       .getByRole('button', {
-        name: age.children_only.age_range_warning_modal.cancel,
+        name: age.confirm_modal.age_range.cancel,
       })
       .click();
     await expect(modal).toBeHidden();
