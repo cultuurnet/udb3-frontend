@@ -25,6 +25,7 @@ type TimeSpanPickerLabelPosition =
 
 type TimeSpanPickerProps = {
   id: string;
+  className?: string;
   startTimeLabel?: string;
   endTimeLabel?: string;
   startTime?: string;
@@ -35,7 +36,6 @@ type TimeSpanPickerProps = {
   startDisabled?: boolean;
   endDisabled?: boolean;
   labelPosition?: TimeSpanPickerLabelPosition;
-  className?: string;
 };
 
 const getQuickPickTimes = () => {

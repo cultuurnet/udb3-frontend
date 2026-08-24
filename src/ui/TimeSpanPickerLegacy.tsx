@@ -117,6 +117,7 @@ const TimeSpanPickerLegacy = ({
     <Inline
       as="div"
       spacing={3}
+      alignItems="flex-end"
       className={className}
       {...getInlineProps(props)}
     >
@@ -173,12 +174,7 @@ const TimeSpanPickerLegacy = ({
 
           return (
             <Stack key={key} spacing={2} as="div">
-              <Label
-                variant={LabelVariants.BOLD}
-                htmlFor={`${idPrefix}-${key}`}
-                flex="1 0 auto"
-                alignItems="flex-start"
-              >
+              <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
                 {label}
               </Label>
               {typeahead}
