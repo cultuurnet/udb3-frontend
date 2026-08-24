@@ -20,6 +20,7 @@ import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
+import type { HolidayType } from '@/utils/holidayPresets';
 
 import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
@@ -39,6 +40,7 @@ type DeviatingPeriodData = {
   endDate: Date;
   description: Partial<Record<SupportedLanguage, string>>;
   openingHours: OpeningHour[];
+  holidayType?: HolidayType;
 };
 
 type Props = BoxProps & {
@@ -147,9 +149,9 @@ const DeviatingPeriod = ({
         <Text color={colors.udbMainDarkBlue} fontWeight="bold">
           {t('create.calendar.opening_hours_modal.deviating.select_period')}
         </Text>
-        <Inline spacing={5} alignItems="flex-end">
+        <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
-            className="tw:w-full tw:mr-8"
+            className="tw:w-full"
             id={`deviating-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
@@ -180,6 +182,7 @@ const DeviatingPeriod = ({
                     startDate: p.startDate,
                     endDate: p.endDate,
                     description: { [lang]: p.name },
+                    holidayType: p.holidayType,
                     openingHours: period.openingHours.map((openingHour) => ({
                       ...openingHour,
                       id: createOpeninghoursId(),

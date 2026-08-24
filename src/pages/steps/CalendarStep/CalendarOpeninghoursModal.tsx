@@ -20,6 +20,7 @@ import {
   TimeSpanPickerLabelPositions,
 } from '@/ui/TimeSpanPicker';
 
+import { removeOverlappingPublicHolidays } from '../../../utils/holidayPresets';
 import {
   getOpeningHoursErrorIds,
   getOverlappingDays,
@@ -226,9 +227,12 @@ const CalendarOpeninghoursModal = ({
     closingPeriods,
   });
 
-  const handleSave = () => {
-    onChangeAdjustedDays(deviatingPeriods);
-    onChangeClosingPeriods(closingPeriods);
+  const handleSave = (
+    deviatingPeriodsToSave: DeviatingPeriodData[],
+    closingPeriodsToSave: ClosingPeriodData[],
+  ) => {
+    onChangeAdjustedDays(deviatingPeriodsToSave);
+    onChangeClosingPeriods(closingPeriodsToSave);
     handleChangeOpeningHours(
       openingHours.map((hour) => ({
         ...hour,
@@ -241,12 +245,20 @@ const CalendarOpeninghoursModal = ({
   };
 
   const handleSaveAttempt = () => {
+    const deviatingPeriodsToSave =
+      removeOverlappingPublicHolidays(deviatingPeriods);
+    const closingPeriodsToSave =
+      removeOverlappingPublicHolidays(closingPeriods);
+
+    setDeviatingPeriods(deviatingPeriodsToSave);
+    setClosingPeriods(closingPeriodsToSave);
+
     const errorIds = getOpeningHoursErrorIds({
       regularHours: openingHours,
-      deviatingPeriods,
+      deviatingPeriods: deviatingPeriodsToSave,
       eventStart,
       eventEnd,
-      closingPeriods,
+      closingPeriods: closingPeriodsToSave,
     });
     if (errorIds.size) {
       setShownErrorIds(errorIds);
@@ -255,7 +267,7 @@ const CalendarOpeninghoursModal = ({
         block: 'start',
       });
     } else {
-      handleSave();
+      handleSave(deviatingPeriodsToSave, closingPeriodsToSave);
     }
   };
 
