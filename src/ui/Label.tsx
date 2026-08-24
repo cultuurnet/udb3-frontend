@@ -22,6 +22,7 @@ type Props = {
   children: ReactNode;
   className?: string;
   variant?: Values<typeof LabelVariants>;
+  disabled?: boolean;
 };
 
 const Label = ({
@@ -29,6 +30,7 @@ const Label = ({
   children,
   className,
   variant = LabelVariants.NORMAL,
+  disabled,
 }: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
@@ -40,13 +42,22 @@ const Label = ({
       className={cn(
         variant === LabelVariants.BOLD && 'tw:font-bold',
         variant === LabelVariants.NORMAL && 'tw:font-normal',
+        disabled !== undefined &&
+          (disabled
+            ? 'tw:cursor-not-allowed tw:opacity-50'
+            : 'tw:cursor-pointer'),
         className,
       )}
     >
       {children}
     </label>
   ) : (
-    <LabelLegacy htmlFor={htmlFor} variant={variant} className={className}>
+    <LabelLegacy
+      htmlFor={htmlFor}
+      variant={variant}
+      className={className}
+      disabled={disabled}
+    >
       {children}
     </LabelLegacy>
   );

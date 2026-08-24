@@ -62,10 +62,8 @@ const ChildcareTimeFields = ({
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={startToggleId}
-            className={cn(
-              !startEnabled && 'tw:text-muted-foreground',
-              disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
-            )}
+            disabled={disabled}
+            className={cn(!startEnabled && 'tw:text-muted-foreground')}
           >
             {t('create.calendar.days.childcare.before')}
           </Label>
@@ -80,10 +78,8 @@ const ChildcareTimeFields = ({
           <Label
             variant={LabelVariants.BOLD}
             htmlFor={endToggleId}
-            className={cn(
-              !endEnabled && 'tw:text-muted-foreground',
-              disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
-            )}
+            disabled={disabled}
+            className={cn(!endEnabled && 'tw:text-muted-foreground')}
           >
             {t('create.calendar.days.childcare.after')}
           </Label>

@@ -14,6 +14,7 @@ type Props = BoxProps & {
   htmlFor: string;
   variant?: Values<typeof LabelVariants>;
   required?: boolean;
+  disabled?: boolean;
 };
 
 const LabelLegacy = ({
@@ -22,6 +23,9 @@ const LabelLegacy = ({
   className,
   variant = 'normal',
   required = false,
+  disabled,
+  cursor,
+  opacity,
   ...props
 }: Props) => (
   <Inline
@@ -29,6 +33,10 @@ const LabelLegacy = ({
     htmlFor={htmlFor}
     className={className}
     variant={variant}
+    cursor={
+      disabled === undefined ? cursor : disabled ? 'not-allowed' : 'pointer'
+    }
+    opacity={disabled ? 0.5 : opacity}
     css={`
       font-weight: ${getFontWeight};
     `}

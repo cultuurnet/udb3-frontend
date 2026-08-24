@@ -42,12 +42,7 @@ const CheckboxWithLabel = ({
           checked={checked}
           disabled={disabled}
         />
-        <Label
-          className={cn(
-            disabled ? 'tw:cursor-not-allowed' : 'tw:cursor-pointer',
-          )}
-          htmlFor={id}
-        >
+        <Label disabled={disabled} htmlFor={id}>
           {children}
         </Label>
       </div>
