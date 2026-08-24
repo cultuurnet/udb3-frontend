@@ -28,7 +28,11 @@ import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
-import { AgeRangeStep, isValidAgeRange } from './AgeRangeStep';
+import {
+  AgeRangeStep,
+  isChildrenOnlyValueMissing,
+  isValidAgeRange,
+} from './AgeRangeStep';
 import { UseEditArguments } from './hooks/useEditField';
 import { NameStep } from './NameStep';
 import {
@@ -223,18 +227,28 @@ const nameAndAgeRangeStepConfiguration: StepsConfiguration<'nameAndAgeRange'> =
     Component: NameAndAgeRangeStep,
     name: 'nameAndAgeRange',
     title: ({ t }) => t('create.name_and_age.title'),
-    validation: yup.object().shape({
-      name: yup
-        .object()
-        .required()
-        .test('required', '', (name) =>
-          Object.values<string>(name ?? {}).some((value) => !!value?.trim()),
-        ),
-      typicalAgeRange: yup
-        .string()
-        .matches(numberHyphenNumberRegex)
-        .test('matches', '', (value) => isValidAgeRange(value)),
-    }),
+    validation: yup
+      .object()
+      .shape({
+        name: yup
+          .object()
+          .required()
+          .test('required', '', (name) =>
+            Object.values<string>(name ?? {}).some((value) => !!value?.trim()),
+          ),
+        typicalAgeRange: yup
+          .string()
+          .matches(numberHyphenNumberRegex)
+          .test('matches', '', (value) => isValidAgeRange(value)),
+      })
+      .test(
+        'children_only_answered',
+        '',
+        (_, { parent, options, createError }) =>
+          isChildrenOnlyValueMissing(parent, options.context?.isBoaEnabled)
+            ? createError({ path: 'childrenOnly' })
+            : true,
+      ),
     shouldShowStep: ({ watch, formState }) => {
       const location = watch('location');
       const scope = watch('scope');
