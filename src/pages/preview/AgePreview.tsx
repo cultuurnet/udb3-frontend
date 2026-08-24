@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { BirthdateRange } from '@/types/Offer';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -16,7 +16,7 @@ const formatCustomAgeRange = (ageRange: string) => {
 };
 
 type Props = {
-  typicalAgeRange: string;
+  typicalAgeRange?: string;
   childrenOnly?: boolean;
   birthdateRange?: BirthdateRange;
 };
@@ -26,7 +26,7 @@ const ChildrenOnlyLabel = () => {
 
   return (
     <Inline alignItems="center" spacing={2}>
-      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+      <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
       <Text>{t('preview.children_only')}</Text>
     </Inline>
   );

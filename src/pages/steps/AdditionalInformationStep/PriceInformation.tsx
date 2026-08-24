@@ -383,7 +383,7 @@ const PriceInformation = ({
                             Component={
                               <Input
                                 {...registerNameProps}
-                                width="13rem"
+                                className="tw:w-52"
                                 onBlur={async (e) => {
                                   const trimmedValue = e.target.value.trim();
 
@@ -430,8 +430,7 @@ const PriceInformation = ({
                             Component={
                               <Inline position="relative">
                                 <Input
-                                  width="6rem"
-                                  paddingLeft={4.5}
+                                  className="tw:w-24 tw:pl-6"
                                   {...(rate.category === PriceCategory.BASE && {
                                     'data-testid': 'basic-rate',
                                   })}

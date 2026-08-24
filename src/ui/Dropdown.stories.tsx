@@ -77,3 +77,20 @@ export const WithLink: Story = {
     );
   },
 };
+
+export const OutlineSecondary: Story = {
+  args: {
+    variant: DropDownVariants.SECONDARY,
+    isSplit: true,
+  },
+  render: (args) => (
+    <Dropdown {...args}>
+      <Link href="#edit" variant={LinkVariants.BUTTON_NEUTRAL}>
+        Edit
+      </Link>
+      <Dropdown.Item href="#preview">Preview</Dropdown.Item>
+      <Dropdown.Divider />
+      <Dropdown.Item onClick={() => {}}>Delete</Dropdown.Item>
+    </Dropdown>
+  ),
+};

@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
+
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
@@ -189,9 +191,11 @@ test('create event with all possible fields filled in', async ({
     .locator('#offer-url-label')
     .selectOption({ label: 'Koop tickets' });
 
-  await page
-    .locator('#subevent-0-max-capacity')
-    .fill(String(dummyEvent.bookingInfo.capacity));
+  if (IS_CAPACITY_VISIBLE) {
+    await page
+      .locator('#subevent-0-max-capacity')
+      .fill(String(dummyEvent.bookingInfo.capacity));
+  }
 
   await page.getByLabel('Reservatieperiode').check();
 

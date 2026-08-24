@@ -52,6 +52,7 @@
     "no_cities_netherlands": "Keine Wohnungen gefunden"
   },
   "country_picker": {
+    "aria_label": "Land ändern, aktuell ausgewählt: {{country}}",
     "location_school": "Ort in Absprache mit der Schule"
   },
   "copyright": {
@@ -336,6 +337,26 @@
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
         },
+        "confirm_modal": {
+          "input_mode": {
+            "title": "Achtung, diese Aktion löscht Ihre eingegebenen Daten",
+            "body": "Sie müssen zwischen ‘Als Alter eingeben’ und ‘Als Geburtsdatum eingeben’ wählen. Wenn Sie wechseln, gehen Ihre Informationen verloren.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "age_range": {
+            "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
+            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder' und eventuelle Abfahrtsorte werden gelöscht.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          },
+          "departure_places": {
+            "title": "Achtung, diese Aktion löscht Ihre Abfahrtsorte",
+            "body": "Sie können Abfahrtsorte nur bei Aktivitäten angeben, die sich ausschließlich an Kinder richten.",
+            "confirm": "Fortfahren",
+            "cancel": "Abbrechen"
+          }
+        },
         "birth_date": {
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
@@ -361,21 +382,10 @@
         "error_invalid": "Das angegebene Alter ist ungültig.",
         "children_only": {
           "question": "Für wen ist diese Aktivität?",
-          "children_only": "Nur für Kinder",
-          "with_family": "Für Kinder mit ihrer Familie oder einer anderen Begleitperson",
-          "mutation_error": "Beim Speichern Ihrer Auswahl ist ein Fehler aufgetreten. Bitte erneut versuchen.",
-          "departure_places_warning_modal": {
-            "title": "Achtung, diese Aktion löscht Ihre Abfahrtsorte",
-            "body": "Sie können Abfahrtsorte nur bei Aktivitäten angeben, die sich ausschließlich an Kinder richten.",
-            "confirm": "Fortfahren",
-            "cancel": "Abbrechen"
-          },
-          "age_range_warning_modal": {
-            "title": "Achtung: Dieses Alter passt nicht mehr zu 'Nur für Kinder'",
-            "body": "Durch diese Änderung gilt diese Aktivität nicht mehr als 'Nur für Kinder' und eventuelle Abfahrtsorte werden gelöscht.",
-            "confirm": "Fortfahren",
-            "cancel": "Abbrechen"
-          }
+          "children_only": "Nur für Kinder (außerschulische Betreuung oder Aktivität)",
+          "with_family": "Für Kinder mit ihrer Familie",
+          "error": "Geben Sie an, für wen die Aktivität bestimmt ist",
+          "mutation_error": "Beim Speichern Ihrer Auswahl ist ein Fehler aufgetreten. Bitte erneut versuchen."
         }
       }
     },
@@ -395,7 +405,7 @@
     },
     "additionalInformation": {
       "accessibility": {
-        "title": "Barrierefreiheit",
+        "title": "Begleiteter Transport",
         "departure": {
           "title": "Von welcher Schule oder einem anderen Standort aus ist ein Transport zu Ihrer Aktivität für Kinder vorgesehen?",
           "info": "Das kann zum Beispiel eine Laufschlange, ein Bus oder ein Fahrradtaxi sein, das Kinder von einer Schule oder Betreuungseinrichtung zu Ihrer Aktivität bringt.",
@@ -1018,7 +1028,7 @@
         "booking_info": "Reservierungsinformationen wurden erfolgreich geändert",
         "media": "Medien erfolgreich gewechselt",
         "audience": "Zugang wurde erfolgreich geändert",
-        "accessibility": "Barrierefreiheit wurde erfolgreich geändert"
+        "accessibility": "Begleiteter Transport wurde erfolgreich geändert"
       }
     }
   },
@@ -1109,6 +1119,9 @@
     "welcome": "Willkommen"
   },
   "description": "UiTdatabank liefert Informationen an mehr als 1.000 Agendas, darunter UiTinvlaanderen, Webseiten von Städten und Gemeinden, Themen-Agendas, Printmedien und mobile Apps. Auch Ihre Aktivität kann auf vielen Agendas erscheinen.",
+  "dropdown": {
+    "toggle_label": "Weitere Optionen"
+  },
   "error": {
     "description": "Etwas ist schief gegangen. Laden Sie die Seite erneut, um es noch einmal zu probieren. Kontaktieren Sie <1>{{email}}</1>, wenn das Problem bestehen bleibt",
     "email": "vragen@uitdatabank.be",
@@ -1691,6 +1704,11 @@
       "title": "FAQ {{index}}",
       "placeholder_question": "Frage in {{language}} übersetzen"
     }
+  },
+  "date_picker": {
+    "today": "Heute",
+    "go_to_selected": "Zur Auswahl",
+    "open_calendar": "Kalender öffnen"
   },
   "date_period_picker": {
     "end": "Ende",
