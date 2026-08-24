@@ -87,6 +87,9 @@ const AnnouncementContent = ({
   callToAction,
   callToActionLabel,
 }) => {
+  const hasCallToAction =
+    typeof callToAction === 'string' && callToAction.length > 0;
+
   const image = (
     <Image
       src={imageSrc}
@@ -101,7 +104,7 @@ const AnnouncementContent = ({
   return (
     <Stack as="article" padding={4} spacing={3} width="70%">
       <Title>{title}</Title>
-      {!!imageSrc && callToAction ? (
+      {!!imageSrc && hasCallToAction ? (
         <Link href={callToAction}>{image}</Link>
       ) : (
         image
@@ -142,7 +145,7 @@ const AnnouncementContent = ({
         `}
       />
       <Inline as="div" justifyContent="flex-end">
-        {!!callToAction && (
+        {hasCallToAction && (
           <Link href={callToAction} variant={LinkVariants.BUTTON_PRIMARY}>
             <Text>{callToActionLabel}</Text>
           </Link>
