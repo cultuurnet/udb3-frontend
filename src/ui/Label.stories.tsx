@@ -8,7 +8,7 @@ const meta: Meta<typeof Label> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['children', 'variant'],
+      include: ['children', 'variant', 'disabled'],
     },
   },
 
@@ -34,5 +34,13 @@ export const Bold: Story = {
   args: {
     children: 'A form label',
     variant: LabelVariants.BOLD,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    children: 'A form label',
+    variant: LabelVariants.NORMAL,
+    disabled: true,
   },
 };
