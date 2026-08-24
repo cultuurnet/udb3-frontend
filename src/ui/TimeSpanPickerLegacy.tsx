@@ -174,7 +174,10 @@ const TimeSpanPickerLegacy = ({
 
           return (
             <Stack key={key} spacing={2} as="div">
-              <Label variant={LabelVariants.BOLD} htmlFor={`${idPrefix}-${key}`}>
+              <Label
+                variant={LabelVariants.BOLD}
+                htmlFor={`${idPrefix}-${key}`}
+              >
                 {label}
               </Label>
               {typeahead}
