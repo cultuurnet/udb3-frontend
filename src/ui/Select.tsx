@@ -59,7 +59,7 @@ const SelectShadcn = forwardRef<HTMLSelectElement, SelectProps>(
         onChange={onChange}
         onBlur={onBlur}
         className={cn(
-          'tw:flex tw:w-full tw:appearance-none tw:rounded-md tw:border tw:border-input tw:bg-transparent tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
+          'tw:flex tw:w-full tw:appearance-none tw:rounded-md tw:border tw:border-input tw:bg-transparent tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring tw:disabled:cursor-not-allowed tw:disabled:text-muted-foreground',
           sizeClassNames[size],
         )}
       >
