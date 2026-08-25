@@ -241,8 +241,7 @@ const ContactInfoStep = ({
             </Select>
             <FormElement
               id={`contact-info-value-${index}`}
-              alignSelf="flex-start"
-              width="55%"
+              className="tw:self-start tw:w-[55%]"
               Component={
                 <Input
                   data-testid="contact-info-value"
