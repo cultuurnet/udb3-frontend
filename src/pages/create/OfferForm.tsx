@@ -63,7 +63,7 @@ type FormData = {
   };
   nameAndAgeRange: {
     name: Record<Values<typeof SupportedLanguages>, string>;
-    typicalAgeRange: string;
+    typicalAgeRange?: string;
     birthdateRange?: BirthdateRange;
   };
   mediaObject?: MediaObject[];

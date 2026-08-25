@@ -648,7 +648,6 @@ const Dashboard = (): any => {
               label={`${t('dashboard.sorting.label')}:`}
               value={sort}
               onChange={handleSelectSorting}
-              width="auto"
               labelPosition={LabelPositions.LEFT}
             >
               {filteredSortingOptions.map((sortOption) => (

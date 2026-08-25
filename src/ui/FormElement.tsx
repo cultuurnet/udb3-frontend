@@ -1,15 +1,14 @@
 import type { ReactElement, ReactNode, Ref } from 'react';
 import { cloneElement } from 'react';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
+import { cn } from '@/ui/shadcn/utils';
 
-import { getInlineProps, Inline, InlineProps } from './Inline';
+import { FormElementLegacy } from './FormElementLegacy';
 import { Label, LabelPositions, LabelVariants } from './Label';
-import { cn } from './shadcn/utils';
 import { Spinner, SpinnerSizes } from './Spinner';
-import type { StackProps } from './Stack';
-import { getStackProps, Stack } from './Stack';
-import { Text, TextVariants } from './Text';
+import { Text } from './Text';
 
 type Props = {
   id: string;
@@ -22,9 +21,20 @@ type Props = {
   loading?: boolean;
   maxLength?: number;
   Component: ReactNode;
-} & StackProps;
+  className?: string;
+};
 
-const MaxLengthCounter = ({
+const GAP_CLASS_BY_LABEL_POSITION: Record<
+  Values<typeof LabelPositions>,
+  string
+> = {
+  [LabelPositions.TOP]: 'tw:flex-col tw:items-start tw:gap-1',
+  [LabelPositions.LEFT]: 'tw:flex-row tw:items-center tw:gap-2',
+  [LabelPositions.RIGHT]:
+    'tw:flex-row-reverse tw:justify-end tw:items-center tw:gap-2',
+};
+
+const MaxLengthCounterShadcn = ({
   currentLength,
   maxLength,
 }: {
@@ -33,15 +43,17 @@ const MaxLengthCounter = ({
 }) => (
   <Text
     className={cn(
-      'tw:max-w-172 tw:text-right tw:text-sm',
-      currentLength >= maxLength ? 'tw:text-destructive' : 'tw:text-inherit',
+      'tw:max-w-lg tw:text-right tw:text-sm',
+      currentLength >= maxLength
+        ? 'tw:text-destructive'
+        : 'tw:text-muted-foreground',
     )}
   >
     {currentLength} / {maxLength}
   </Text>
 );
 
-const FormElement = ({
+const FormElementShadcn = ({
   id,
   ref,
   label,
@@ -53,9 +65,9 @@ const FormElement = ({
   Component,
   className,
   maxLength,
-  ...props
 }: Props) => {
-  const Wrapper = labelPosition === LabelPositions.TOP ? Stack : Inline;
+  // @ts-expect-error
+  const isDisabled = Component.props?.disabled;
 
   // @ts-expect-error
   const clonedComponent = cloneElement(Component, {
@@ -64,35 +76,16 @@ const FormElement = ({
     id,
     ref,
     maxLength,
+    ...(error && { isInvalid: true }),
   });
 
   const currentLength = clonedComponent.props?.value?.length ?? 0;
-  const wrapperProps: { [key: string]: InlineProps | StackProps } = {
-    [LabelPositions.TOP]: {
-      alignItems: 'flex-start',
-      spacing: 2,
-      ...getStackProps(props),
-    },
-    [LabelPositions.LEFT]: {
-      alignItems: 'center',
-      spacing: 3,
-      ...getInlineProps(props),
-    },
-    [LabelPositions.RIGHT]: {
-      alignItems: 'center',
-      flexDirection: 'row-reverse',
-      justifyContent: 'flex-end',
-      spacing: 3,
-      ...getInlineProps(props),
-    },
-  };
 
   const infoElement =
     typeof info === 'string' ? (
       <Text
-        variant={TextVariants.MUTED}
+        className="tw:max-w-lg tw:text-muted-foreground tw:[&_strong]:font-bold"
         dangerouslySetInnerHTML={{ __html: info }}
-        className="tw:max-w-[34.1333rem] tw:[&_strong]:font-bold!"
       />
     ) : (
       info
@@ -102,55 +95,72 @@ const FormElement = ({
     <Label
       variant={labelVariant}
       htmlFor={id}
-      {...(labelPosition !== LabelPositions.TOP
-        ? { height: '36px', alignItems: 'center' }
-        : {})}
-      flexShrink={0}
+      disabled={isDisabled}
+      className={cn(
+        'tw:shrink-0',
+        labelPosition !== LabelPositions.TOP &&
+          'tw:flex tw:h-9 tw:items-center',
+      )}
     >
       {label}
     </Label>
   );
 
   return (
-    <Wrapper
-      as="div"
-      className={className}
-      {...(wrapperProps[labelPosition] ?? {})}
+    <div
+      className={cn(
+        'tw:flex',
+        GAP_CLASS_BY_LABEL_POSITION[labelPosition],
+        className,
+      )}
     >
       {label && labelPosition !== LabelPositions.TOP && labelElement}
-      <Stack
-        as="div"
-        spacing={3}
-        width={labelPosition === LabelPositions.RIGHT ? 'auto' : '100%'}
-        minWidth={50}
+      <div
+        className={cn(
+          'tw:flex tw:flex-col tw:gap-2',
+          labelPosition === LabelPositions.RIGHT ? 'tw:w-auto' : 'tw:w-full',
+        )}
       >
         {((label && labelPosition === LabelPositions.TOP) ||
           typeof maxLength !== 'undefined') && (
-          <Inline justifyContent="space-between" maxWidth="43rem">
+          <div className="tw:flex tw:justify-between tw:max-w-172">
             <span>
               {label && labelPosition === LabelPositions.TOP && labelElement}
             </span>
             {typeof maxLength !== 'undefined' && (
-              <MaxLengthCounter
+              <MaxLengthCounterShadcn
                 currentLength={currentLength}
                 maxLength={maxLength}
               />
             )}
-          </Inline>
+          </div>
         )}
-        <Stack as="div">
-          <Inline as="div" alignItems="center">
+        <div className="tw:flex tw:flex-col">
+          <div className="tw:flex tw:items-center">
             {clonedComponent}
             {loading && (
               <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto tw:p-3" />
             )}
-          </Inline>
-          {error && <Text variant={TextVariants.DANGER}>{error}</Text>}
-        </Stack>
+          </div>
+          {error && <Text className="tw:text-destructive">{error}</Text>}
+        </div>
         {info && infoElement}
-      </Stack>
-    </Wrapper>
+      </div>
+    </div>
   );
 };
 
+const FormElement = (props: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return <FormElementShadcn {...props} />;
+  }
+
+  return <FormElementLegacy {...props} />;
+};
+
 export { FormElement };
+export type { Props as FormElementProps };

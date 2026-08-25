@@ -1,33 +1,58 @@
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+
 import {
-  ToggleButton as BootstrapToggleButton,
-  ToggleButtonGroup as BootstrapToggleButtonGroup,
-} from 'react-bootstrap';
-
-import type { Values } from '@/types/Values';
-
-import { getStackProps, Stack, StackProps } from './Stack';
-import { colors, getValueFromTheme } from './theme';
-
-const getGlobalValue = getValueFromTheme('global');
-
-const ToggleGroupVariants = {
-  UNSTYLED: 'unstyled',
-} as const;
-
-type ToggleGroupVariant = Values<typeof ToggleGroupVariants>;
+  ToggleGroup as ShadcnToggleGroupRoot,
+  ToggleGroupItem,
+} from './shadcn/toggle-group';
+import { cn } from './shadcn/utils';
+import { ToggleGroupLegacy } from './ToggleGroupLegacy';
 
 type ToggleGroupOption = {
   value: string;
   label: string;
 };
 
-type Props = Omit<StackProps, 'onChange' | 'options' | 'value' | 'name'> & {
+type Props = {
   name: string;
   value: string;
   options: ToggleGroupOption[];
   onChange: (value: string) => void;
-  variant?: ToggleGroupVariant;
+  className?: string;
+  ariaLabel?: string;
 };
+
+const ToggleGroupShadcn = ({
+  name,
+  value,
+  options,
+  onChange,
+  className,
+  ariaLabel,
+}: Props) => (
+  <ShadcnToggleGroupRoot
+    type="single"
+    value={value}
+    onValueChange={(newValue) => {
+      if (newValue) onChange(newValue);
+    }}
+    aria-label={ariaLabel}
+    className={cn(
+      'tw:items-stretch tw:gap-0 tw:rounded-md tw:bg-grey-background',
+      className,
+    )}
+  >
+    {options.map((option) => (
+      <ToggleGroupItem
+        key={option.value}
+        value={option.value}
+        data-testid={`${name}-${option.value}`}
+        className="tw:h-auto tw:min-w-0 tw:flex-1 tw:rounded-none tw:px-4 tw:py-2 tw:text-base tw:text-foreground tw:transition-all tw:hover:bg-background/60 tw:data-[state=on]:z-1 tw:data-[state=on]:rounded-md tw:data-[state=on]:bg-background tw:data-[state=on]:shadow-heavy"
+      >
+        {option.label}
+      </ToggleGroupItem>
+    ))}
+  </ShadcnToggleGroupRoot>
+);
 
 const ToggleGroup = ({
   name,
@@ -35,61 +60,35 @@ const ToggleGroup = ({
   options,
   onChange,
   className,
-  variant = ToggleGroupVariants.UNSTYLED,
-  ...props
-}: Props) => (
-  <Stack className={className} {...getStackProps(props)}>
-    <BootstrapToggleButtonGroup
-      type="radio"
+  ariaLabel,
+}: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <ToggleGroupShadcn
+        name={name}
+        value={value}
+        options={options}
+        onChange={onChange}
+        className={className}
+        ariaLabel={ariaLabel}
+      />
+    );
+  }
+
+  return (
+    <ToggleGroupLegacy
       name={name}
       value={value}
+      options={options}
       onChange={onChange}
-      css={`
-        background-color: ${colors.grey4};
-        border-radius: 0.625rem;
+      className={className}
+    />
+  );
+};
 
-        > .btn {
-          flex: 1 1 0;
-          background-color: transparent;
-          border-radius: 0 !important;
-          color: ${colors.grey5};
-          box-shadow: none;
-          padding: 0.5rem 1rem;
-          position: relative;
-          transition:
-            background-color 120ms ease,
-            color 120ms ease,
-            box-shadow 120ms ease;
-
-          &:hover {
-            background-color: transparent;
-            color: ${colors.textColor};
-          }
-        }
-
-        > .btn-check:checked + .btn {
-          background-color: ${colors.white};
-          border-color: transparent;
-          border-radius: 0.625rem !important;
-          color: ${colors.textColor};
-          box-shadow: ${getGlobalValue('boxShadow.heavy')};
-          z-index: 1;
-        }
-      `}
-    >
-      {options.map((toggleOption) => (
-        <BootstrapToggleButton
-          key={toggleOption.value}
-          id={`${name}-${toggleOption.value}`}
-          value={toggleOption.value}
-          variant={variant}
-        >
-          {toggleOption.label}
-        </BootstrapToggleButton>
-      ))}
-    </BootstrapToggleButtonGroup>
-  </Stack>
-);
-
+export { ToggleGroup };
 export type { ToggleGroupOption };
-export { ToggleGroup, ToggleGroupVariants };

@@ -161,12 +161,12 @@ export const UsersSection = ({ roleId }: UsersSectionProps) => {
               id="add-user-email"
               label={t('roles.form.users.add_user_label')}
               labelPosition="left"
-              alignItems="start"
+              className="tw:items-start"
               error={errors.email?.message}
               Component={
                 <Input
                   {...field}
-                  minWidth="22rem"
+                  className="tw:min-w-88"
                   type="email"
                   placeholder={t('roles.form.users.email_placeholder')}
                 />

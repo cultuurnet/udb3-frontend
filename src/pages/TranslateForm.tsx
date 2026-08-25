@@ -19,7 +19,7 @@ import type { FaqItem } from '@/types/Offer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Page } from '@/ui/Page';
@@ -71,7 +71,7 @@ type TabTitleProps = {
 const TabTitle = ({ label, hasFilled }: TabTitleProps) => (
   <Inline spacing={3} alignItems="center">
     {hasFilled && (
-      <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+      <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
     )}
     <Text>{label}</Text>
   </Inline>

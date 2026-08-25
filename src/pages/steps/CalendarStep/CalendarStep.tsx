@@ -549,6 +549,7 @@ const CalendarStep = ({
       <Panel backgroundColor="white" padding={5}>
         {isFixedDays && (
           <FixedDays
+            scope={scope}
             onChooseWithStartAndEndDate={handleChooseWithStartAndEndDate}
             onChoosePermanent={handleChoosePermanent}
             onChangeStartDate={handleChangeStartDate}

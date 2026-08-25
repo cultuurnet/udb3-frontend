@@ -13,6 +13,7 @@ import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
+import type { HolidayType } from '@/utils/holidayPresets';
 
 import type { SupportedLanguage } from '../../../i18n';
 
@@ -21,6 +22,7 @@ type ClosingPeriodData = {
   startDate: Date;
   endDate: Date;
   description: Partial<Record<SupportedLanguage, string>>;
+  holidayType?: HolidayType;
 };
 
 type Props = BoxProps & {
@@ -83,9 +85,9 @@ const ClosingPeriod = ({
         <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
-        <Inline spacing={5} alignItems="flex-end">
+        <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
-            width="100%"
+            className="tw:w-full"
             id={`closing-period-${period.id}`}
             dateStart={period.startDate}
             dateEnd={period.endDate}
@@ -111,6 +113,7 @@ const ClosingPeriod = ({
                   startDate: p.startDate,
                   endDate: p.endDate,
                   description: { [lang]: p.name },
+                  holidayType: p.holidayType,
                 })),
               );
             }}

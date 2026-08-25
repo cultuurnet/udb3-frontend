@@ -6,7 +6,7 @@ import type { ButtonProps } from './Button';
 import { ButtonVariants } from './Button';
 import { Icon } from './Icon';
 import type { InlineProps } from './Inline';
-import { Inline } from './Inline';
+import { getInlineProps, Inline } from './Inline';
 import { Link } from './Link';
 import { cn } from './shadcn/utils';
 import { Spinner, SpinnerSizes, SpinnerVariants } from './Spinner';
@@ -272,6 +272,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       forwardedAs,
       type = 'button',
       active,
+      ...rest
     },
     ref,
   ) => {
@@ -306,6 +307,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       type,
       active,
       ref,
+      ...getInlineProps(rest),
     };
 
     const clonedSuffix = suffix

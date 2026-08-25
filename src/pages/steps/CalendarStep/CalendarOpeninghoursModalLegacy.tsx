@@ -186,7 +186,7 @@ const CalendarOpeninghoursModalLegacy = ({
       >
         {openingHours.map((openingHour, index) => (
           <Stack key={openingHour.id} flex={1}>
-            <Inline alignItems="flex-end" spacing={5}>
+            <Inline alignItems="flex-end" spacing={0} className="tw:gap-8">
               <Stack spacing={3}>
                 <Text className="tw:font-bold">
                   {t('create.calendar.opening_hours_modal.days')}
@@ -214,7 +214,6 @@ const CalendarOpeninghoursModalLegacy = ({
                 </Inline>
               </Stack>
               <TimeSpanPicker
-                spacing={3}
                 id={`openinghours-row-timespan-${openingHour.id}`}
                 startTime={openingHour.opens}
                 endTime={openingHour.closes}
@@ -228,7 +227,7 @@ const CalendarOpeninghoursModalLegacy = ({
                 onChangeEndTime={(newEndTime) => {
                   handleChangeCloses(openingHour.id, newEndTime);
                 }}
-                minWidth="120px"
+                className="tw:min-w-30"
               />
               <Button
                 iconName={Icons.TRASH}

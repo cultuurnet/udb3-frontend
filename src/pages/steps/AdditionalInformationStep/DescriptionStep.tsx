@@ -288,7 +288,7 @@ const DescriptionStep = ({
         <FormElement
           id="create-description"
           label={t('create.additionalInformation.description.label')}
-          flex={1}
+          className="tw:flex-1"
           Component={
             <RichTextEditor
               editorState={editorState}

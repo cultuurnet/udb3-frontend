@@ -16,7 +16,7 @@ const meta: Meta<typeof SelectWithLabel> = {
   argTypes: {
     size: {
       control: { type: 'select' },
-      options: ['sm', 'lg'],
+      options: ['sm', 'md', 'lg'],
     },
     labelPosition: {
       control: { type: 'select' },

@@ -21,6 +21,9 @@ const generateCSS = (props: Record<string, any>, allowedProps: string[]) =>
     .map((prop) => `${kebabCase(prop)}: ${props[prop]};`)
     .join(' ');
 
+const isInternalHref = (href: unknown): href is string =>
+  typeof href === 'string' && (href.startsWith('/') || href.startsWith('#'));
+
 export const LinkButtonVariants = {
   BUTTON_PRIMARY: 'primary',
   BUTTON_NEUTRAL: 'neutral',
@@ -133,7 +136,7 @@ const LinkLegacy = ({
   rel,
   ...props
 }: LinkProps) => {
-  const isInternalLink = href.startsWith('/') || href.startsWith('#');
+  const isInternalLink = isInternalHref(href);
 
   const clonedSuffix =
     suffix && isValidElement(suffix)

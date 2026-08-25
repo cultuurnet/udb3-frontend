@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
+import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import { UrlLabelType } from '@/constants/UrlLabelType';
 import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
@@ -224,9 +225,10 @@ const ReservationPeriod = ({
         </Alert>
       )}
       <Inline
-        spacing={4}
+        spacing={0}
         alignItems="flex-end"
         flexWrap="wrap"
+        className="tw:gap-4"
         opacity={isDatePickerVisible ? 1 : 0.5}
       >
         <DatePeriodPicker
@@ -266,7 +268,7 @@ const ReservationPeriod = ({
             setEndTime(time);
             setUserHasInteracted(true);
           }}
-          minWidth="120px"
+          className="tw:min-w-30"
         />
       </Inline>
     </Stack>
@@ -331,7 +333,7 @@ const ReservationLink = ({
   return (
     <Inline spacing={4} flexWrap="wrap" {...getInlineProps(boxProps)}>
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-link`}
         label={t('create.additionalInformation.booking_info.link')}
         Component={
@@ -348,7 +350,7 @@ const ReservationLink = ({
         }
       />
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-url-label`}
         label={t(
           'create.additionalInformation.booking_info.url_label_dropdown_label',
@@ -404,13 +406,15 @@ const BookingAvailabilitySection = ({
 
   return (
     <Stack spacing={4}>
-      <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
-        {t(
-          isMultiple
-            ? 'create.additionalInformation.booking_info.capacity_title_multiple'
-            : 'create.additionalInformation.booking_info.capacity_title_single',
-        )}
-      </Text>
+      {IS_CAPACITY_VISIBLE && (
+        <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
+          {t(
+            isMultiple
+              ? 'create.additionalInformation.booking_info.capacity_title_multiple'
+              : 'create.additionalInformation.booking_info.capacity_title_single',
+          )}
+        </Text>
+      )}
       <Inline stackOn="m" alignItems="flex-start" spacing={4}>
         <Stack spacing={3} minWidth="30rem">
           {subEvents.map((subEvent, index) => (
@@ -434,7 +438,7 @@ const BookingAvailabilitySection = ({
             </Stack>
           ))}
         </Stack>
-        <CapacityInfoAlert />
+        {IS_CAPACITY_VISIBLE && <CapacityInfoAlert />}
       </Inline>
     </Stack>
   );
@@ -538,7 +542,8 @@ const BookingInfoStep = ({
     ).some(
       (subEvent) =>
         !!subEvent.bookingInfo?.url ||
-        subEvent.bookingAvailability?.capacity !== undefined,
+        (IS_CAPACITY_VISIBLE &&
+          subEvent.bookingAvailability?.capacity !== undefined),
     );
 
     onValidationChange(
@@ -787,7 +792,7 @@ const BookingInfoStep = ({
             .map((type) => (
               <FormElement
                 key={type}
-                flex={1}
+                className="tw:flex-1"
                 id={type}
                 label={t(`create.additionalInformation.booking_info.${type}`)}
                 Component={
@@ -814,7 +819,10 @@ const BookingInfoStep = ({
         isDatePickerVisible={isDatePickerVisible}
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
-      <Stack spacing={4}>
+      <Stack
+        spacing={4}
+        className={IS_CAPACITY_VISIBLE ? undefined : 'tw:mb-4!'}
+      >
         <Text
           variant={TextVariants.PRIMARY}
           className="tw:text-lg tw:font-bold"

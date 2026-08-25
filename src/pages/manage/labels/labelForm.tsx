@@ -326,7 +326,7 @@ const LabelFormFields = ({
               label={t('labels.form.fields.name')}
               error={nameError}
               maxLength={LabelValidationInformation.MAX_LENGTH}
-              marginBottom={5}
+              className="tw:mb-8"
               Component={<Input {...field} />}
             />
           )}

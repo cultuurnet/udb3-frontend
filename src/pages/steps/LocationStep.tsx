@@ -37,9 +37,10 @@ import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
+import { CountryPicker } from '@/ui/CountryPicker';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
 import { FormElement } from '@/ui/FormElement';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
@@ -59,7 +60,6 @@ import { prefixUrlWithHttps } from '@/utils/url';
 
 import { AlertDuplicatePlace } from '../AlertDuplicatePlace';
 import { CityPicker } from '../CityPicker';
-import { CountryPicker } from './CountryPicker';
 import { UseEditArguments } from './hooks/useEditField';
 import { useRecentLocations } from './hooks/useRecentLocations';
 import { PlaceStep } from './PlaceStep';
@@ -649,7 +649,7 @@ const LocationStep = ({
                   <FormElement
                     Component={
                       <Input
-                        maxWidth="28rem"
+                        className="tw:max-w-md"
                         value={onlineUrl}
                         onBlur={(e) => {
                           const prefixedUrl =
@@ -766,7 +766,10 @@ const LocationStep = ({
           return renderFieldWithRecentLocations(
             <>
               <div className="tw:flex tw:items-center tw:gap-2 tw:mb-4">
-                <Icon name={Icons.CHECK_CIRCLE} className="tw:text-success" />
+                <Icon
+                  name={Icons.CHECK_CIRCLE}
+                  variant={IconVariants.SUCCESS}
+                />
                 <Text>
                   {municipality.name}
                   {municipality.zip ? `, ${municipality.zip}` : ''}
@@ -808,7 +811,7 @@ const LocationStep = ({
                     <div className="tw:flex tw:items-center tw:gap-2">
                       <Icon
                         name={Icons.CHECK_CIRCLE}
-                        className="tw:text-success"
+                        variant={IconVariants.SUCCESS}
                       />
                       <Text>{field.value.streetAndNumber}</Text>
                       <Button
@@ -831,7 +834,7 @@ const LocationStep = ({
                     <Stack>
                       {['NL', 'DE'].includes(location?.country) && (
                         <FormElement
-                          marginBottom={3}
+                          className="tw:mb-2 tw:max-w-md"
                           Component={
                             <Input
                               value={field.value.postalCode}
@@ -847,7 +850,6 @@ const LocationStep = ({
                           label={t(
                             `location.add_modal.labels.postalCode.${location.country.toLowerCase()}`,
                           )}
-                          maxWidth="28rem"
                           error={
                             formState.errors.location?.postalCode &&
                             t('location.add_modal.errors.postalCode')

@@ -12,7 +12,7 @@ import {
 } from '@/pages/steps/AdditionalInformationStep/FormScore';
 import { Box } from '@/ui/Box';
 import { Dropdown, DropDownVariants } from '@/ui/Dropdown';
-import { Icon, Icons } from '@/ui/Icon';
+import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
 import { Link } from '@/ui/Link';
 import { Spinner } from '@/ui/Spinner';
@@ -225,7 +225,7 @@ export const DashboardRow = ({
             )}
             {!finishedAt && isOwnershipRequested && (
               <Inline spacing={2} alignItems="center">
-                <Icon name={Icons.CHECK} className="tw:text-success" />
+                <Icon name={Icons.CHECK} variant={IconVariants.SUCCESS} />
                 <Text>{t('organizers.ownerships.requested')}</Text>
               </Inline>
             )}

@@ -200,7 +200,7 @@ const AgeRangeStepLegacy = ({
                           {t('create.name_and_age.age.from')}
                         </Text>
                         <Input
-                          marginRight={3}
+                          className="tw:mr-2"
                           type="numeric"
                           value={customMinAgeRange}
                           placeholder={t('create.name_and_age.age.from')}
@@ -221,7 +221,7 @@ const AgeRangeStepLegacy = ({
                           {t('create.name_and_age.age.till')}
                         </Text>
                         <Input
-                          marginRight={3}
+                          className="tw:mr-2"
                           type="numeric"
                           value={customMaxAgeRange}
                           placeholder={t('create.name_and_age.age.till')}

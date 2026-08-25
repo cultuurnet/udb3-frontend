@@ -80,10 +80,10 @@ const FooterLink = ({ footerVariant, ...props }: FooterLinkProps) => (
   <Link
     {...props}
     className={cn(
-      'tw:underline tw:hover:text-udb-text',
+      'tw:underline tw:hover:text-foreground',
       footerVariant === FooterVariants.LOGIN
-        ? 'tw:text-udb-main-grey'
-        : 'tw:text-udb-main-darkest-blue',
+        ? 'tw:text-secondary'
+        : 'tw:text-[#005c7c]',
     )}
   />
 );

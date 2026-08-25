@@ -34,6 +34,9 @@ const LinkVariants = {
   UNSTYLED: 'unstyled',
 } as const;
 
+const isInternalHref = (href: unknown): href is string =>
+  typeof href === 'string' && (href.startsWith('/') || href.startsWith('#'));
+
 const linkButtonVariantSet = new Set(
   Object.values(LinkButtonVariants) as string[],
 );
@@ -68,12 +71,16 @@ const BaseLinkShadcn = ({
   const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
 
-  const variantClass =
-    variant === LinkVariants.UNSTYLED
-      ? 'tw:items-center tw:w-full tw:no-underline tw:text-inherit tw:hover:text-inherit'
-      : isButton || isBadge
-        ? 'tw:items-center tw:no-underline'
-        : 'tw:font-normal tw:underline tw:text-udb-main-darkest-blue tw:hover:text-udb-main-blue tw:hover:decoration-udb-main-blue';
+  const getVariantClass = () => {
+    if (variant === LinkVariants.UNSTYLED)
+      return 'tw:items-center tw:w-full tw:no-underline tw:text-inherit tw:hover:text-inherit';
+    if (isButton)
+      return 'tw:items-center tw:no-underline tw:rounded-md tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring';
+    if (isBadge) return 'tw:items-center tw:no-underline';
+    return 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary/70 tw:hover:decoration-primary/70';
+  };
+
+  const variantClass = getVariantClass();
 
   // TODO: after legacy drop, replace Box with plain Component and remove getBoxProps — callers will use className instead of Box props
   return (
@@ -142,7 +149,7 @@ const LinkShadcn = ({
   rel,
   ...props
 }: LinkProps) => {
-  const isInternalLink = href.startsWith('/') || href.startsWith('#');
+  const isInternalLink = isInternalHref(href);
 
   const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');
