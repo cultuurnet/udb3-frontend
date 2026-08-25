@@ -34,6 +34,9 @@ const LinkVariants = {
   UNSTYLED: 'unstyled',
 } as const;
 
+const isInternalHref = (href: unknown): href is string =>
+  typeof href === 'string' && (href.startsWith('/') || href.startsWith('#'));
+
 const linkButtonVariantSet = new Set(
   Object.values(LinkButtonVariants) as string[],
 );
@@ -146,7 +149,7 @@ const LinkShadcn = ({
   rel,
   ...props
 }: LinkProps) => {
-  const isInternalLink = href.startsWith('/') || href.startsWith('#');
+  const isInternalLink = isInternalHref(href);
 
   const isButton = linkButtonVariantSet.has(variant ?? '');
   const isBadge = badgeVariants.has(variant ?? '');

@@ -36,8 +36,8 @@ const SwitchWithLabelShadcn = ({
       variant={variant}
     />
     <Label
-      cursor={disabled ? 'not-allowed' : 'pointer'}
-      opacity={disabled ? 0.5 : undefined}
+      className={cn(!disabled && 'tw:cursor-pointer')}
+      disabled={disabled}
       htmlFor={id}
     >
       {label}

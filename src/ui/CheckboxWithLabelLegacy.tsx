@@ -2,7 +2,7 @@ import { ChangeEvent, ReactNode } from 'react';
 
 import { CheckboxLegacy } from './CheckboxLegacy';
 import { getInlineProps, Inline, InlineProps } from './Inline';
-import { Label } from './Label';
+import { LabelLegacy } from './LabelLegacy';
 
 type CheckboxWithLabelProps = InlineProps & {
   className?: string;
@@ -39,9 +39,9 @@ const CheckboxWithLabelLegacy = ({
         checked={checked}
         disabled={disabled}
       />
-      <Label cursor={disabled ? 'not-allowed' : 'pointer'} htmlFor={id}>
+      <LabelLegacy disabled={disabled} htmlFor={id}>
         {children}
-      </Label>
+      </LabelLegacy>
     </Inline>
   );
 };

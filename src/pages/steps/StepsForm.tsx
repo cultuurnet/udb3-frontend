@@ -15,6 +15,7 @@ import { OfferType, OfferTypes } from '@/constants/OfferType';
 import { useGetEventByIdQuery } from '@/hooks/api/events';
 import { useGetPlaceByIdQuery } from '@/hooks/api/places';
 import { useGetTypesByScopeQuery } from '@/hooks/api/types';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useToast } from '@/hooks/useToast';
 import {
   locationStepConfiguration,
@@ -105,14 +106,13 @@ const StepsForm = ({
   label,
 }: StepsFormProps) => {
   const { t } = useTranslation();
-  const { form } = useParseStepConfiguration(configurations);
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const [isDuplicateButtonDisabled, setIsDuplicateButtonDisabled] =
     useState(true);
   const [fetchErrors, setFetchErrors] = useState<Record<string, FetchError>>();
   const { publicRuntimeConfig } = getConfig();
   const eventName = publicRuntimeConfig.hotjarEventName;
   const missingFieldName = publicRuntimeConfig.hotjarMissingFieldName;
-  const { handleSubmit, reset } = form;
 
   const { query, push, pathname, reload } = useRouter();
 
@@ -124,6 +124,8 @@ const StepsForm = ({
   );
 
   const isMovieForm = pathname.startsWith('/manage/movies');
+
+  const isOnDuplicateRoute = pathname.endsWith('/duplicate');
 
   const toast = useToast(toastConfiguration);
 
@@ -140,6 +142,22 @@ const StepsForm = ({
   );
 
   const offer = offerQuery?.data;
+
+  const needsLocationMigration = hasLegacyLocation(offer);
+
+  const getStepConfigurations = () => {
+    if (needsLocationMigration) return [locationStepConfiguration];
+
+    if (isOnDuplicateRoute) return [calendarStepConfiguration];
+
+    return configurations;
+  };
+
+  const { form } = useParseStepConfiguration(getStepConfigurations(), {
+    formConfiguration: { context: { isBoaEnabled } },
+  });
+
+  const { handleSubmit, reset } = form;
 
   const stableReset = useCallback(reset, [reset]);
 
@@ -192,9 +210,7 @@ const StepsForm = ({
 
   const footerStatus = useFooterStatus({ offer, form });
 
-  const isOnDuplicatePage = footerStatus === FooterStatus.DUPLICATE;
-
-  const initialOffer = isOnDuplicatePage ? offer : undefined;
+  const initialOffer = isOnDuplicateRoute ? offer : undefined;
 
   const isCultuurkuurEvent =
     offer?.audience?.audienceType === AudienceTypes.EDUCATION;
@@ -341,25 +357,15 @@ const StepsForm = ({
     </Button>
   );
 
-  const pageTitle = isOnDuplicatePage ? t('create.duplicate.title') : title;
+  const pageTitle = isOnDuplicateRoute ? t('create.duplicate.title') : title;
 
   const onDuplicateEditFieldChange = () => {
     setIsDuplicateButtonDisabled(false);
   };
 
-  const onChange = isOnDuplicatePage
+  const onChange = isOnDuplicateRoute
     ? onDuplicateEditFieldChange
     : handleChange;
-
-  const needsLocationMigration = hasLegacyLocation(offer);
-
-  const stepConfigurations = useMemo(() => {
-    if (needsLocationMigration) return [locationStepConfiguration];
-
-    if (isOnDuplicatePage) return [calendarStepConfiguration];
-
-    return configurations;
-  }, [needsLocationMigration, isOnDuplicatePage, configurations]);
 
   return (
     <Page>
@@ -370,7 +376,7 @@ const StepsForm = ({
       )}
 
       <Page.Content spacing={5} alignItems="flex-start">
-        {isOnDuplicatePage && (
+        {isOnDuplicateRoute && (
           <Alert variant={AlertVariants.PRIMARY}>
             {t('create.duplicate.alert')}
           </Alert>
@@ -387,7 +393,7 @@ const StepsForm = ({
           </Alert>
         )}
         <Steps
-          configurations={stepConfigurations}
+          configurations={getStepConfigurations()}
           onChange={onChange}
           fieldLoading={fieldLoading}
           onChangeSuccess={handleChangeSuccess}

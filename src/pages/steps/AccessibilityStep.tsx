@@ -27,6 +27,7 @@ import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { City, CityPicker } from '../CityPicker';
+import { PlaceAddModal } from '../PlaceAddModal';
 import { PlaceTypeahead } from './PlaceTypeahead';
 
 const MAX_DEPARTURE_LOCATIONS = 20;
@@ -62,6 +63,60 @@ const CollapsedSelection = ({
     </Button>
   </Inline>
 );
+
+type PlacePickerProps = {
+  id: string;
+  label: string;
+  placeholder: string;
+  municipality: City;
+  country: Country;
+  onChange: (place: Place) => void;
+};
+
+const PlacePicker = ({
+  id,
+  label,
+  placeholder,
+  municipality,
+  country,
+  onChange,
+}: PlacePickerProps) => {
+  const [prefillPlaceName, setPrefillPlaceName] = useState('');
+  const [isPlaceAddModalVisible, setIsPlaceAddModalVisible] = useState(false);
+
+  return (
+    <Stack>
+      <PlaceAddModal
+        visible={isPlaceAddModalVisible}
+        onClose={() => setIsPlaceAddModalVisible(false)}
+        prefillPlaceName={prefillPlaceName}
+        municipality={municipality}
+        country={country}
+        onConfirmSuccess={(place) => {
+          onChange(place);
+          setIsPlaceAddModalVisible(false);
+        }}
+      />
+      <FormElement
+        id={id}
+        label={label}
+        Component={
+          <PlaceTypeahead
+            name={id}
+            municipality={municipality}
+            country={country}
+            placeholder={placeholder}
+            onChange={onChange}
+            onAddNewPlace={(newPlaceName) => {
+              setPrefillPlaceName(newPlaceName);
+              setIsPlaceAddModalVisible(true);
+            }}
+          />
+        }
+      />
+    </Stack>
+  );
+};
 
 const AccessibilityStep = ({
   offerId,
@@ -253,24 +308,18 @@ const AccessibilityStep = ({
 
               {location.city &&
                 (!location.place ? (
-                  <FormElement
+                  <PlacePicker
                     id={`departure-place-${index}`}
                     label={t(
                       'create.additionalInformation.accessibility.departure.place_label',
                     )}
-                    Component={
-                      <PlaceTypeahead
-                        name={`departure-place-${index}`}
-                        value={location.place}
-                        municipality={location.city}
-                        country={location.country}
-                        placeholder={t(
-                          'create.additionalInformation.accessibility.departure.place_placeholder',
-                        )}
-                        onChange={(place) =>
-                          updateDepartureLocation(index, { place })
-                        }
-                      />
+                    placeholder={t(
+                      'create.additionalInformation.accessibility.departure.place_placeholder',
+                    )}
+                    municipality={location.city}
+                    country={location.country}
+                    onChange={(place) =>
+                      updateDepartureLocation(index, { place })
                     }
                   />
                 ) : (

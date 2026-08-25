@@ -105,7 +105,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
         <Stack flex={1} opacity={isWriting ? 0.5 : 1} spacing={2}>
           <FormElement
             id="labels-picker"
-            width="50%"
+            className="tw:w-1/2 tw:max-w-full"
             label={t('roles.form.labels.label')}
             error={
               isInvalid
@@ -128,7 +128,6 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
                 onChange={onLabelSelect}
               />
             }
-            maxWidth="100%"
             info={
               <Text variant={TextVariants.MUTED}>
                 {t('create.additionalInformation.labels.info')}
