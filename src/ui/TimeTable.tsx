@@ -10,20 +10,17 @@ import type { ClipboardEvent, FormEvent } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 
-import { parseSpacing } from './Box';
 import { Button, ButtonVariants } from './Button';
 import { DatePeriodPicker } from './DatePeriodPicker';
 import { Icon, Icons } from './Icon';
-import type { InlineProps } from './Inline';
-import { getInlineProps, Inline } from './Inline';
 import { Input } from './Input';
 import { Label } from './Label';
 import { cn } from './shadcn/utils';
-import type { StackProps } from './Stack';
-import { getStackProps, Stack } from './Stack';
 import { Text } from './Text';
+import { TimeTableLegacy } from './TimeTableLegacy';
 
 type Time = string;
 type Data = { [index: string]: Time };
@@ -35,13 +32,13 @@ type TimeTableValue = {
   data: TimeTableData;
 };
 
-const isTimeTableEmpty = (timeTableData: TimeTableData) => {
-  if (Object.keys(timeTableData.data).length === 0) {
+const isTimeTableEmpty = (timeTableValue: TimeTableValue) => {
+  if (Object.keys(timeTableValue.data).length === 0) {
     return true;
   }
 
   if (
-    Object.values(timeTableData.data).every(
+    Object.values(timeTableValue.data).every(
       (times) => Object.keys(times).length === 0,
     )
   ) {
@@ -51,16 +48,16 @@ const isTimeTableEmpty = (timeTableData: TimeTableData) => {
   return false;
 };
 
-const areAllTimeSlotsValid = (timeTableData: TimeTableData) => {
-  return Object.values(timeTableData?.data ?? {}).every((times) => {
+const areAllTimeSlotsValid = (timeTableValue: TimeTableValue) => {
+  return Object.values(timeTableValue?.data ?? {}).every((times) => {
     return Object.values(times).every((time) => {
       return isMatch(time, "HH'h'mm'm'");
     });
   });
 };
 
-const isOneTimeSlotValid = (timeTableData: TimeTableData) =>
-  Object.values(timeTableData?.data ?? {}).some((times) => {
+const isOneTimeSlotValid = (timeTableValue: TimeTableValue) =>
+  Object.values(timeTableValue?.data ?? {}).some((times) => {
     return Object.values(times).some((time) => isMatch(time, "HH'h'mm'm'"));
   });
 
@@ -114,119 +111,6 @@ type CopyPayload =
     }
   | { method: 'all'; data: { [key: string]: Data } };
 
-type RowProps = InlineProps & {
-  data: Record<string, unknown>;
-  date: string;
-  onCopy: (date: string) => void;
-  onRowPaste: (payload: CopyPayload, index: number, date: string) => void;
-  onEditCell: (
-    {
-      index,
-      date,
-      value,
-    }: {
-      index: number;
-      date: string;
-      value: string;
-    },
-    mode: 'blur' | 'change',
-  ) => void;
-};
-
-const Row = ({
-  data,
-  date,
-  onEditCell,
-  onCopy,
-  onRowPaste,
-  ...props
-}: RowProps): any => {
-  const handlePaste = (
-    event: ClipboardEvent<HTMLInputElement>,
-    index: number,
-    date: string,
-  ) => {
-    const clipboardData = (event.clipboardData || window.clipboardData).getData(
-      'text',
-    );
-    try {
-      const clipboardValue = JSON.parse(clipboardData);
-      event.preventDefault();
-      onRowPaste(clipboardValue, index, date);
-    } catch (e) {
-      // fallback to normal copy / paste when the data is not JSON
-    }
-  };
-
-  return [
-    <Text key="dateLabel">{date}</Text>,
-    ...Array.from({ length: amountOfColumns }, (_, index) => {
-      return (
-        <Input
-          id={`${date}-${index}`}
-          key={`${date}-${index}`}
-          value={(data?.[index] as string) ?? ''}
-          onChange={(event) => {
-            const value = event.target.value;
-            onEditCell(
-              { index, date, value: value !== '' ? value : null },
-              'change',
-            );
-          }}
-          onBlur={(event: FormEvent<HTMLInputElement>) => {
-            onEditCell(
-              {
-                index,
-                date,
-                value: formatTimeValue(
-                  (event.target as HTMLInputElement).value,
-                ),
-              },
-              'blur',
-            );
-          }}
-          onPaste={(event) => handlePaste(event, index, date)}
-        />
-      );
-    }),
-    <Button
-      key="copyButton"
-      variant={ButtonVariants.UNSTYLED}
-      onClick={() => onCopy(date)}
-      customChildren
-      {...getInlineProps(props)}
-    >
-      <Icon name={Icons.COPY} />
-    </Button>,
-  ];
-};
-
-type HeaderProps = InlineProps & {
-  header: string;
-  index: number;
-};
-
-const Header = ({ header, ...props }: HeaderProps) => {
-  return (
-    <Inline
-      as="div"
-      justifyContent="space-between"
-      paddingLeft={1}
-      paddingRight={1}
-      spacing={3}
-      {...getInlineProps(props)}
-    >
-      <Label htmlFor={header}>{header}</Label>
-    </Inline>
-  );
-};
-
-type Props = {
-  id: string;
-  value: TimeTableValue;
-  onChange: (value: TimeTableValue) => void;
-} & StackProps;
-
 const updateCell = ({
   originalData,
   date,
@@ -278,9 +162,17 @@ const CellEditMode = {
   CHANGE: 'change',
 } as const;
 
-const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
-  const { t } = useTranslation();
+type Props = {
+  id: string;
+  className?: string;
+  value: TimeTableValue;
+  onChange: (value: TimeTableValue) => void;
+};
 
+const useTimeTableState = ({
+  value,
+  onChange,
+}: Pick<Props, 'value' | 'onChange'>) => {
   const dateRange = useMemo(() => {
     if (!value?.dateStart || !value?.dateEnd) return [];
     return getDateRange(value.dateStart, value.dateEnd);
@@ -423,15 +315,128 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
     }
   };
 
+  return {
+    dateRange,
+    handlePaste,
+    handleCopyRow,
+    handleCopyAll,
+    handleDateStartChange,
+    handleDateEndChange,
+    handleEditCell,
+  };
+};
+
+type RowProps = {
+  data: Record<string, unknown>;
+  date: string;
+  onCopy: (date: string) => void;
+  onRowPaste: (payload: CopyPayload, index: number, date: string) => void;
+  onEditCell: (
+    {
+      index,
+      date,
+      value,
+    }: {
+      index: number;
+      date: string;
+      value: string;
+    },
+    mode: 'blur' | 'change',
+  ) => void;
+};
+
+const Row = ({
+  data,
+  date,
+  onEditCell,
+  onCopy,
+  onRowPaste,
+}: RowProps): any => {
+  const handlePaste = (
+    event: ClipboardEvent<HTMLInputElement>,
+    index: number,
+    date: string,
+  ) => {
+    const clipboardData = (event.clipboardData || window.clipboardData).getData(
+      'text',
+    );
+    try {
+      const clipboardValue = JSON.parse(clipboardData);
+      event.preventDefault();
+      onRowPaste(clipboardValue, index, date);
+    } catch (e) {
+      // fallback to normal copy / paste when the data is not JSON
+    }
+  };
+
+  return [
+    <Text key="dateLabel">{date}</Text>,
+    ...Array.from({ length: amountOfColumns }, (_, index) => {
+      return (
+        <Input
+          id={`${date}-${index}`}
+          key={`${date}-${index}`}
+          value={(data?.[index] as string) ?? ''}
+          onChange={(event) => {
+            const value = event.target.value;
+            onEditCell(
+              { index, date, value: value !== '' ? value : null },
+              'change',
+            );
+          }}
+          onBlur={(event: FormEvent<HTMLInputElement>) => {
+            onEditCell(
+              {
+                index,
+                date,
+                value: formatTimeValue(
+                  (event.target as HTMLInputElement).value,
+                ),
+              },
+              'blur',
+            );
+          }}
+          onPaste={(event) => handlePaste(event, index, date)}
+        />
+      );
+    }),
+    <Button
+      key="copyButton"
+      variant={ButtonVariants.UNSTYLED}
+      onClick={() => onCopy(date)}
+      customChildren
+    >
+      <Icon name={Icons.COPY} />
+    </Button>,
+  ];
+};
+
+const Header = ({ header }: { header: string }) => {
+  return (
+    <div className="tw:flex tw:items-center tw:justify-between tw:px-[0.1333rem]">
+      <Label htmlFor={header}>{header}</Label>
+    </div>
+  );
+};
+
+const TimeTable = ({ id, className, value, onChange }: Props) => {
+  const { t } = useTranslation();
+
+  const {
+    dateRange,
+    handlePaste,
+    handleCopyRow,
+    handleCopyAll,
+    handleDateStartChange,
+    handleDateEndChange,
+    handleEditCell,
+  } = useTimeTableState({ value, onChange });
+
   if (!value?.dateStart || !value?.dateEnd) return null;
 
   return (
-    <Stack
-      as="div"
-      className={cn('tw:gap-4', className)}
-      alignItems="flex-start"
-      {...getStackProps(props)}
-      spacing={0}
+    <div
+      className={cn('tw:flex tw:flex-col tw:gap-4 tw:items-start', className)}
     >
       <DatePeriodPicker
         id={id}
@@ -440,25 +445,18 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
         onDateStartChange={handleDateStartChange}
         onDateEndChange={handleDateEndChange}
       />
-      <Stack
+      <div
         id="timetable"
-        forwardedAs="div"
-        css={`
-          display: grid;
-          grid-template-rows: repeat(${(dateRange?.length ?? 0) + 1}, 1fr);
-          grid-template-columns:
-            min-content repeat(7, 1fr)
-            min-content;
-          column-gap: ${parseSpacing(3)};
-          row-gap: ${parseSpacing(3)};
-          align-items: center;
-        `}
+        className="tw:grid tw:grid-cols-[min-content_repeat(7,1fr)_min-content] tw:gap-x-[0.5333rem] tw:gap-y-[0.5333rem] tw:items-center"
+        style={{
+          gridTemplateRows: `repeat(${(dateRange?.length ?? 0) + 1}, 1fr)`,
+        }}
       >
         {[
           <Text key="pre" />,
           ...Array.from({ length: amountOfColumns }, (_, index) => {
             const header = `t${index + 1}`;
-            return <Header key={header} header={header} index={index} />;
+            return <Header key={header} header={header} />;
           }),
           <Text key="post" />,
         ]}
@@ -472,7 +470,7 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
             onEditCell={handleEditCell}
           />
         ))}
-      </Stack>
+      </div>
       <Button
         className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
@@ -480,14 +478,45 @@ const TimeTable = ({ id, className, onChange, value, ...props }: Props) => {
       >
         {t('movies.create.actions.copy_table')}
       </Button>
-    </Stack>
+    </div>
+  );
+};
+
+const TimeTableSwitch = ({ id, className, value, onChange }: Props) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  if (isShadcnMigrationEnabled) {
+    return (
+      <TimeTable
+        id={id}
+        className={className}
+        value={value}
+        onChange={onChange}
+      />
+    );
+  }
+
+  return (
+    <TimeTableLegacy
+      id={id}
+      className={className}
+      value={value}
+      onChange={onChange}
+    />
   );
 };
 
 export {
+  amountOfColumns,
   areAllTimeSlotsValid,
+  formatTimeValue,
   isOneTimeSlotValid,
   isTimeTableEmpty,
-  TimeTable,
+  parseDate,
+  Row,
+  TimeTableSwitch as TimeTable,
+  useTimeTableState,
 };
-export type { TimeTableValue };
+export type { CopyPayload, TimeTableValue };
