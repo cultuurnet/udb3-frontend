@@ -288,13 +288,10 @@ const OrganizerPicker = ({
                           </Text>
                           <Inline spacing={2}>
                             {isUitpasOrganizer(org, uitpasLabels) && (
-                              <UitpasIcon width="2rem" className="tw:size-8!" />
+                              <UitpasIcon className="tw:size-7!" />
                             )}
                             {isCultuurkuurOrganizer(org) && (
-                              <CultuurKuurIcon
-                                width="2rem"
-                                className="tw:size-8!"
-                              />
+                              <CultuurKuurIcon className="tw:size-6!" />
                             )}
                           </Inline>
                         </Inline>
