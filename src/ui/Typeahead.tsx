@@ -1,4 +1,4 @@
-import { uniqueId } from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 import type { FocusEvent, ForwardedRef, ReactNode } from 'react';
 import {
   forwardRef,
