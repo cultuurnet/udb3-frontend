@@ -206,7 +206,11 @@ const DatePeriodPickerShadcn = ({
   return (
     <div className={cn('tw:flex tw:gap-8', className)}>
       <div className="tw:flex tw:flex-col tw:gap-1">
-        <Label variant={labelVariant} htmlFor={`${idPrefix}-start`}>
+        <Label
+          variant={labelVariant}
+          htmlFor={`${idPrefix}-start`}
+          disabled={disabled}
+        >
           {t('date_period_picker.start')}
         </Label>
         <DatePicker
@@ -244,7 +248,11 @@ const DatePeriodPickerShadcn = ({
         />
       </div>
       <div className="tw:flex tw:flex-col tw:gap-1">
-        <Label variant={labelVariant} htmlFor={`${idPrefix}-end`}>
+        <Label
+          variant={labelVariant}
+          htmlFor={`${idPrefix}-end`}
+          disabled={disabled}
+        >
           {t('date_period_picker.end')}
         </Label>
         <DatePicker
