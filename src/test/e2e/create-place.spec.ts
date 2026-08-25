@@ -102,6 +102,7 @@ test('create a place', async ({ baseURL, page }) => {
   await page.getByRole('tab', { name: 'Organisatie' }).click();
   await page.getByRole('button', { name: 'Organisatie toevoegen' }).click();
   await page.locator('#organizer-picker').fill(dummyPlace.organizer.name);
+  // TODO(III-7373): drop .rbt-menu-custom-option once SHADCN_MIGRATION is removed
   await page
     .locator(
       '.rbt-menu-custom-option, [data-testid="typeahead-add-new-option"]',
