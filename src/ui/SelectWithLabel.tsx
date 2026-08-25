@@ -49,6 +49,7 @@ const SelectWithLabel = ({
         <Label
           htmlFor={id}
           variant={LabelVariants.BOLD}
+          disabled={disabled}
           className="tw:shrink-0"
         >
           {label}
