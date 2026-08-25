@@ -1,5 +1,4 @@
 import { Box, BoxProps, getBoxProps } from '@/ui/Box';
-import { cn } from '@/ui/shadcn/utils';
 
 const CultuurKuurIcon = (props: BoxProps) => {
   const { width = '1.4rem', height = '1.4rem', className, ...rest } = props;
@@ -8,7 +7,7 @@ const CultuurKuurIcon = (props: BoxProps) => {
       as="svg"
       viewBox="0 0 264 264"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn(className)}
+      className={className}
       width={width}
       height={height}
       {...getBoxProps(rest)}
