@@ -145,6 +145,7 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
 
   useImperativeHandle(ref, () => ({
     clear: () => {
+      clearTimeout(searchTimeoutRef.current);
       setText('');
       setIsFocused(false);
     },
