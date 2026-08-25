@@ -1288,6 +1288,7 @@
         "choose_cinema": "Kies een bioscoop",
         "choose_name": "Kies een naam",
         "clear": "Leegmaken",
+        "copy_failed": "Kopiëren mislukt",
         "copy_row": "Kopieer rij van {{date}}",
         "copy_table": "Kopieer tabel",
         "description": "Beschrijving",

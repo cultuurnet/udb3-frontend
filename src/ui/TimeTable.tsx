@@ -218,7 +218,7 @@ const useTimeTableState = ({
       method: 'row',
       data: cleanData(value.data?.[date]),
     };
-    copyToClipboard(JSON.stringify(copyAction));
+    return copyToClipboard(JSON.stringify(copyAction));
   };
 
   const handleCopyAll = () => {
@@ -236,7 +236,7 @@ const useTimeTableState = ({
         };
       }, {}),
     };
-    copyToClipboard(JSON.stringify(copyAction));
+    return copyToClipboard(JSON.stringify(copyAction));
   };
 
   const handleDateStartChange = (date: Date) => {
@@ -434,14 +434,30 @@ const TimeTableShadcn = ({ id, className, value, onChange }: Props) => {
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
-  const handleCopyRow = (date: string) => {
-    copyRow(date);
-    toast.success(t('movies.create.actions.row_copied', { date }));
+  const handleCopyRow = async (date: string) => {
+    try {
+      await copyRow(date);
+      toast.success(t('movies.create.actions.row_copied', { date }), {
+        closeButton: true,
+      });
+    } catch {
+      toast.error(t('movies.create.actions.copy_failed'), {
+        closeButton: true,
+      });
+    }
   };
 
-  const handleCopyAll = () => {
-    copyAll();
-    toast.success(t('movies.create.actions.table_copied'));
+  const handleCopyAll = async () => {
+    try {
+      await copyAll();
+      toast.success(t('movies.create.actions.table_copied'), {
+        closeButton: true,
+      });
+    } catch {
+      toast.error(t('movies.create.actions.copy_failed'), {
+        closeButton: true,
+      });
+    }
   };
 
   if (!value?.dateStart || !value?.dateEnd) return null;

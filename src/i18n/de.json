@@ -1253,6 +1253,7 @@
         "choose_cinema": "Wähle ein Kino",
         "choose_name": "Wähle einen Namen",
         "clear": "Leeren",
+        "copy_failed": "Kopieren fehlgeschlagen",
         "copy_row": "Zeile vom {{date}} kopieren",
         "copy_table": "Tabelle kopieren",
         "description": "Beschreibung",

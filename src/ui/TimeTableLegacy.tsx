@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { Values } from '@/types/Values';
+
 import { parseSpacing } from './Box';
 import { Button } from './Button';
 import { DatePeriodPicker } from './DatePeriodPicker';
@@ -55,7 +57,10 @@ const TimeTableLegacy = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    variant: Values<typeof ToastVariants>;
+  } | null>(null);
 
   const {
     dateRange,
@@ -67,14 +72,34 @@ const TimeTableLegacy = ({
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
-  const handleCopyRow = (date: string) => {
-    copyRow(date);
-    setToastMessage(t('movies.create.actions.row_copied', { date }));
+  const handleCopyRow = async (date: string) => {
+    try {
+      await copyRow(date);
+      setToast({
+        message: t('movies.create.actions.row_copied', { date }),
+        variant: ToastVariants.SUCCESS,
+      });
+    } catch {
+      setToast({
+        message: t('movies.create.actions.copy_failed'),
+        variant: ToastVariants.DANGER,
+      });
+    }
   };
 
-  const handleCopyAll = () => {
-    copyAll();
-    setToastMessage(t('movies.create.actions.table_copied'));
+  const handleCopyAll = async () => {
+    try {
+      await copyAll();
+      setToast({
+        message: t('movies.create.actions.table_copied'),
+        variant: ToastVariants.SUCCESS,
+      });
+    } catch {
+      setToast({
+        message: t('movies.create.actions.copy_failed'),
+        variant: ToastVariants.DANGER,
+      });
+    }
   };
 
   if (!value?.dateStart || !value?.dateEnd) return null;
@@ -88,10 +113,10 @@ const TimeTableLegacy = ({
       spacing={0}
     >
       <Toast
-        variant={ToastVariants.SUCCESS}
-        body={toastMessage ?? ''}
-        visible={!!toastMessage}
-        onClose={() => setToastMessage(null)}
+        variant={toast?.variant ?? ToastVariants.SUCCESS}
+        body={toast?.message ?? ''}
+        visible={!!toast}
+        onClose={() => setToast(null)}
       />
       <DatePeriodPicker
         id={id}
