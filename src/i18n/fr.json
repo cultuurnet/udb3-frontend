@@ -382,8 +382,9 @@
         "error_invalid": "L'âge spécifié n'est pas valide.",
         "children_only": {
           "question": "Pour qui cette activité est-elle organisée ?",
-          "children_only": "Uniquement pour les enfants",
-          "with_family": "Pour les enfants accompagnés de leur famille ou d'un autre accompagnateur",
+          "children_only": "Uniquement pour les enfants (accueil ou activité extrascolaire)",
+          "with_family": "Pour les enfants accompagnés de leur famille",
+          "error": "Indiquez à qui l'activité est destinée",
           "mutation_error": "Une erreur est survenue lors de l'enregistrement de votre choix. Veuillez réessayer."
         }
       }
@@ -406,7 +407,7 @@
       "title_events": "Faites en sorte que cette activité se démarque",
       "title_places": "Faites en sorte que ce lieu se démarque",
       "accessibility": {
-        "title": "Accessibilité",
+        "title": "Transport accompagné",
         "departure": {
           "title": "Depuis quelle école ou quel autre lieu un transport est-il prévu pour amener les enfants à votre activité ?",
           "info": "Il peut s'agir par exemple d'une corde de promenade, d'un bus ou d'un vélo-taxi qui amène les enfants depuis une école ou une garderie jusqu'au lieu de votre activité.",
@@ -1027,7 +1028,7 @@
         "booking_info": "Les informations de réservation ont été modifiées avec succès",
         "media": "Image/vidéo modifiée avec succès",
         "audience": "Accès modifié avec succès",
-        "accessibility": "L'accessibilité a été modifiée avec succès"
+        "accessibility": "Le transport accompagné a été modifié avec succès"
       }
     }
   },

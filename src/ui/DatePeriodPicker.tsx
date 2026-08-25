@@ -19,6 +19,7 @@ import type { Values } from '../types/Values';
 import {
   computeHolidayPresets,
   filterHolidaysForPreset,
+  type HolidayType,
   parseHoliday,
 } from '../utils/holidayPresets';
 import { Button, ButtonVariants } from './Button';
@@ -32,10 +33,16 @@ import { Text, TextVariants } from './Text';
 
 const locales = { nl, fr, de };
 
-type QuickLinkPeriod = { startDate: Date; endDate: Date; name: string };
+type QuickLinkPeriod = {
+  startDate: Date;
+  endDate: Date;
+  name: string;
+  holidayType: HolidayType;
+};
 
 type Props = {
   id: string;
+  className?: string;
   dateStart: Date;
   dateEnd: Date;
   minDate?: Date;
@@ -50,7 +57,6 @@ type Props = {
   onQuickLinkClick?: (periods: QuickLinkPeriod[]) => void;
   onShowHolidaysChange?: (shown: boolean, year: number) => void;
   labelVariant?: Values<typeof LabelVariants>;
-  className?: string;
 };
 
 const DatePeriodPickerShadcn = ({
@@ -68,8 +74,8 @@ const DatePeriodPickerShadcn = ({
   fetchHolidays,
   onQuickLinkClick,
   onShowHolidaysChange,
-  labelVariant = LabelVariants.BOLD,
   className,
+  labelVariant = LabelVariants.BOLD,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [isHighlighted, setIsHighlighted] = useState(false);
