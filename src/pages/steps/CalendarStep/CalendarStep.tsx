@@ -10,7 +10,11 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { EventTypes, eventTypesWithNoThemes } from '@/constants/EventTypes';
+import {
+  BoaEventTypes,
+  EventTypes,
+  eventTypesWithNoThemes,
+} from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -319,6 +323,8 @@ const CalendarStep = ({
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
 
+  const showChildcare = type?.id !== BoaEventTypes.Kinderopvang;
+
   const isOneOrMoreDays = useIsOneOrMoreDays();
   const isFixedDays = useIsFixedDays();
   const isIdle = useIsIdle();
@@ -550,6 +556,7 @@ const CalendarStep = ({
         {isFixedDays && (
           <FixedDays
             scope={scope}
+            showChildcare={showChildcare}
             onChooseWithStartAndEndDate={handleChooseWithStartAndEndDate}
             onChoosePermanent={handleChoosePermanent}
             onChangeStartDate={handleChangeStartDate}
@@ -571,6 +578,7 @@ const CalendarStep = ({
             onChangeEndTime={handleChangeEndTime}
             onChangeChildcareStartTime={handleChangeChildcareStartTime}
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
+            showChildcare={showChildcare}
             onToggleOvernightStay={handleToggleOvernightStay}
             showOvernightStay={type?.id === EventTypes['Kamp of vakantie']}
             onAddDay={handleAddDay}

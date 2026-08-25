@@ -16,6 +16,7 @@ type OneOrMoreDaysProps = {
   onChangeEndTime: (id: string, hours: number, minutes: number) => void;
   onChangeChildcareStartTime: (id: string, newTime: string) => void;
   onChangeChildcareEndTime: (id: string, newTime: string) => void;
+  showChildcare?: boolean;
   onToggleOvernightStay: (id: string, enabled: boolean) => void;
   showOvernightStay?: boolean;
   errors: FieldErrors<FormDataUnion>;
