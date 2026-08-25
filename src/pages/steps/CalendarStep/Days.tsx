@@ -126,7 +126,7 @@ export const Days = ({
             key={`list-item-${day.id}`}
           >
             <List.Item
-              alignItems="center"
+              alignItems="flex-end"
               spacing={0}
               className="tw:gap-8"
               marginBottom={isOneOrMoreDays && isBoaEnabled ? 4 : undefined}
