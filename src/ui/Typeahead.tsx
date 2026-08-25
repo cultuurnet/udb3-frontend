@@ -189,6 +189,14 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
     }
   };
 
+  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
+    setIsFocused(false);
+    if (selectedLabel !== undefined && text !== selectedLabel) {
+      setText(selectedLabel);
+    }
+    onBlur?.(event);
+  };
+
   const handleSelect = (option: T) => {
     setText(getOptionLabel(option, labelKey));
     setIsFocused(false);
@@ -225,10 +233,7 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
               setIsFocused(true);
               onFocus?.(event);
             }}
-            onBlur={(event) => {
-              setIsFocused(false);
-              onBlur?.(event);
-            }}
+            onBlur={handleBlur}
             placeholder={placeholder}
             aria-invalid={isInvalid}
             className="tw:text-base"
