@@ -67,6 +67,9 @@ const FormElementShadcn = ({
   maxLength,
 }: Props) => {
   // @ts-expect-error
+  const isDisabled = Component.props?.disabled;
+
+  // @ts-expect-error
   const clonedComponent = cloneElement(Component, {
     // @ts-expect-error
     ...Component.props,
@@ -92,6 +95,7 @@ const FormElementShadcn = ({
     <Label
       variant={labelVariant}
       htmlFor={id}
+      disabled={isDisabled}
       className={cn(
         'tw:shrink-0',
         labelPosition !== LabelPositions.TOP &&
