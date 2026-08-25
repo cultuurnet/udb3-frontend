@@ -70,6 +70,7 @@ const FormElementShadcn = ({
   const componentProps = Component.props;
   const hasError = Boolean(error);
   const hasExplicitIsInvalid = 'isInvalid' in componentProps;
+  const isDisabled = componentProps?.disabled;
 
   // @ts-expect-error
   const clonedComponent = cloneElement(Component, {
@@ -98,6 +99,7 @@ const FormElementShadcn = ({
     <Label
       variant={labelVariant}
       htmlFor={id}
+      disabled={isDisabled}
       className={cn(
         'tw:shrink-0',
         labelPosition !== LabelPositions.TOP &&
