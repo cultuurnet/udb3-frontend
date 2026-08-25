@@ -225,7 +225,10 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
               setIsFocused(true);
               onFocus?.(event);
             }}
-            onBlur={onBlur}
+            onBlur={(event) => {
+              setIsFocused(false);
+              onBlur?.(event);
+            }}
             placeholder={placeholder}
             aria-invalid={isInvalid}
             className="tw:text-base"
