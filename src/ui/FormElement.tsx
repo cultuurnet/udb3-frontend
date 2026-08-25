@@ -59,13 +59,19 @@ const FormElement = ({
   const Wrapper = labelPosition === LabelPositions.TOP ? Stack : Inline;
 
   // @ts-expect-error
+  const componentProps = Component.props;
+  const hasError = Boolean(error);
+  const hasExplicitIsInvalid = 'isInvalid' in componentProps;
+
+  // @ts-expect-error
   const clonedComponent = cloneElement(Component, {
-    // @ts-expect-error
-    ...Component.props,
+    ...componentProps,
     id,
     ref,
     maxLength,
-    isInvalid: Boolean(error),
+    ...(hasError || hasExplicitIsInvalid
+      ? { isInvalid: hasError || Boolean(componentProps.isInvalid) }
+      : {}),
   });
 
   const currentLength = clonedComponent.props?.value?.length ?? 0;
