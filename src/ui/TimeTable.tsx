@@ -346,13 +346,7 @@ type RowProps = {
   ) => void;
 };
 
-const Row = ({
-  data,
-  date,
-  onEditCell,
-  onCopy,
-  onRowPaste,
-}: RowProps): any => {
+const Row = ({ data, date, onEditCell, onCopy, onRowPaste }: RowProps): any => {
   const { t } = useTranslation();
 
   const handlePaste = (
@@ -433,20 +427,20 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
   const {
     dateRange,
     handlePaste,
-    handleCopyRow,
-    handleCopyAll,
+    handleCopyRow: copyRow,
+    handleCopyAll: copyAll,
     handleDateStartChange,
     handleDateEndChange,
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
-  const handleCopyRowWithToast = (date: string) => {
-    handleCopyRow(date);
+  const handleCopyRow = (date: string) => {
+    copyRow(date);
     toast.success(t('movies.create.actions.row_copied', { date }));
   };
 
-  const handleCopyAllWithToast = () => {
-    handleCopyAll();
+  const handleCopyAll = () => {
+    copyAll();
     toast.success(t('movies.create.actions.table_copied'));
   };
 
@@ -483,7 +477,7 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
             key={date}
             date={date}
             data={value?.data?.[date]}
-            onCopy={handleCopyRowWithToast}
+            onCopy={handleCopyRow}
             onRowPaste={handlePaste}
             onEditCell={handleEditCell}
           />
@@ -492,7 +486,7 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
       <Button
         className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
-        onClick={handleCopyAllWithToast}
+        onClick={handleCopyAll}
       >
         {t('movies.create.actions.copy_table')}
       </Button>

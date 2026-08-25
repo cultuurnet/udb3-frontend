@@ -47,27 +47,33 @@ type Props = {
   onChange: (value: TimeTableValue) => void;
 } & StackProps;
 
-const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) => {
+const TimeTableLegacy = ({
+  id,
+  className,
+  onChange,
+  value,
+  ...props
+}: Props) => {
   const { t } = useTranslation();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const {
     dateRange,
     handlePaste,
-    handleCopyRow,
-    handleCopyAll,
+    handleCopyRow: copyRow,
+    handleCopyAll: copyAll,
     handleDateStartChange,
     handleDateEndChange,
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
-  const handleCopyRowWithToast = (date: string) => {
-    handleCopyRow(date);
+  const handleCopyRow = (date: string) => {
+    copyRow(date);
     setToastMessage(t('movies.create.actions.row_copied', { date }));
   };
 
-  const handleCopyAllWithToast = () => {
-    handleCopyAll();
+  const handleCopyAll = () => {
+    copyAll();
     setToastMessage(t('movies.create.actions.table_copied'));
   };
 
@@ -121,7 +127,7 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
             key={date}
             date={date}
             data={value?.data?.[date]}
-            onCopy={handleCopyRowWithToast}
+            onCopy={handleCopyRow}
             onRowPaste={handlePaste}
             onEditCell={handleEditCell}
           />
@@ -130,7 +136,7 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
       <Button
         className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
-        onClick={handleCopyAllWithToast}
+        onClick={handleCopyAll}
       >
         {t('movies.create.actions.copy_table')}
       </Button>
