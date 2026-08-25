@@ -407,7 +407,10 @@ const BookingAvailabilitySection = ({
   return (
     <Stack spacing={4}>
       {IS_CAPACITY_VISIBLE && (
-        <Text variant={TextVariants.PRIMARY} className="tw:text-lg tw:font-bold">
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t(
             isMultiple
               ? 'create.additionalInformation.booking_info.capacity_title_multiple'

@@ -208,7 +208,11 @@ const DatePeriodPickerLegacy = ({
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text key={label} variant={TextVariants.MUTED} className="tw:text-sm">
+            <Text
+              key={label}
+              variant={TextVariants.MUTED}
+              className="tw:text-sm"
+            >
               {label}
             </Text>
           ))}
