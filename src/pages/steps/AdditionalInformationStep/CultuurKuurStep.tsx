@@ -304,7 +304,7 @@ const CultuurKuurStep = ({
         `}
       >
         <FormElement
-          flex="1 0 50%"
+          className="tw:flex-[1_0_50%]"
           id="create-description"
           label={t('create.additionalInformation.description.title')}
           Component={

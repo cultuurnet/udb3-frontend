@@ -134,7 +134,7 @@ function LabelsStep({
               }}
             />
           }
-          maxWidth={'100%'}
+          className="tw:max-w-full"
           info={
             <Text variant={TextVariants.MUTED}>
               {t('create.additionalInformation.labels.info')}

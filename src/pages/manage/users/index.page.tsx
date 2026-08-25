@@ -83,7 +83,7 @@ const UsersOverviewPage = () => {
               id="user-search-input"
               label={t('users.search.email.label')}
               labelPosition="left"
-              alignItems="start"
+              className="tw:items-start"
               Component={
                 <Input
                   {...register('email')}
