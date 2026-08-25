@@ -64,7 +64,7 @@ export const PartOfProduction: Story = {
       footer={
         <Alert variant={AlertVariants.INFO}>
           This event is part of the production{' '}
-          <Text fontWeight="bold">Opera Series Ghent 2025</Text>
+          <Text className="tw:font-bold">Opera Series Ghent 2025</Text>
         </Alert>
       }
     />

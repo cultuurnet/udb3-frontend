@@ -35,7 +35,6 @@ import { AttendanceMode, Event } from '@/types/Event';
 import { Place } from '@/types/Place';
 import { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
-import { parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { ButtonCard } from '@/ui/ButtonCard';
 import { CountryPicker } from '@/ui/CountryPicker';
@@ -102,7 +101,7 @@ const LocationSuggestions = ({
   return (
     <Stack {...props} spacing={5}>
       <Inline>
-        <Text fontWeight={'bold'}>{title}</Text>
+        <Text className="tw:font-bold">{title}</Text>
       </Inline>
       {alertVisible && (
         <Alert variant={AlertVariants.PRIMARY} className="tw:my-4">
@@ -532,7 +531,7 @@ const LocationStep = ({
                   flex={1}
                 >
                   {showRecentLocations && (
-                    <Text fontWeight={'bold'}>
+                    <Text className="tw:font-bold">
                       {hasRecentLocations
                         ? t('create.location.recent_locations.other')
                         : t('create.location.recent_locations.pick')}
@@ -686,7 +685,7 @@ const LocationStep = ({
                     info={
                       <Text
                         variant={TextVariants.MUTED}
-                        maxWidth={parseSpacing(9)}
+                        className="tw:max-w-[34.1333rem]"
                       >
                         {t('create.location.online_url.info')}
                       </Text>
@@ -700,7 +699,7 @@ const LocationStep = ({
           if (!country || municipality?.zip === '0000') {
             return renderFieldWithRecentLocations(
               <>
-                <Text fontWeight="bold" marginBottom={3}>
+                <Text className="tw:mb-[0.5333rem] tw:font-bold">
                   {t('create.location.is_cultuurkuur.title')}
                 </Text>
 
@@ -714,8 +713,7 @@ const LocationStep = ({
                 {isCultuurkuurEvent && (
                   <Text
                     variant={TextVariants.MUTED}
-                    maxWidth={parseSpacing(9)}
-                    marginTop={3}
+                    className="tw:mt-[0.5333rem] tw:max-w-[34.1333rem]"
                   >
                     {t('create.location.is_cultuurkuur.info')}
                   </Text>
@@ -923,7 +921,7 @@ const LocationStep = ({
         }}
       />
       {isLocationLabelErrorVisible && (
-        <Text variant={TextVariants.ERROR}>
+        <Text variant={TextVariants.DANGER}>
           {t('cultuurkuur_modal.overview.error_locations')}
         </Text>
       )}

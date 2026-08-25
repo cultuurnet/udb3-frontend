@@ -16,7 +16,7 @@ import { Inline } from '@/ui/Inline';
 import { Link, LinkVariants } from '@/ui/Link';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Table } from '@/ui/Table';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { formatPeriod } from '@/utils/formatPeriod';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
@@ -71,18 +71,18 @@ const ReservationCard = ({
       `}
       {...getStackProps(boxProps)}
     >
-      {title && <Text fontWeight="bold">{title}</Text>}
+      {title && <Text className="tw:font-bold">{title}</Text>}
       {url && (
         <Inline spacing={4} flexWrap="wrap">
           <Stack flex={1} spacing={1}>
-            <Text color={colors.udbMainGrey} fontWeight="bold">
+            <Text variant={TextVariants.MUTED} className="tw:font-bold">
               {t('create.additionalInformation.booking_info.link')}
             </Text>
             <Link href={url}>{url}</Link>
           </Stack>
           {urlLabelText && (
             <Stack flex={1} spacing={1}>
-              <Text color={colors.udbMainGrey} fontWeight="bold">
+              <Text variant={TextVariants.MUTED} className="tw:font-bold">
                 {t(
                   'create.additionalInformation.booking_info.url_label_dropdown_label',
                 )}
@@ -103,14 +103,14 @@ const ReservationCard = ({
         <Inline spacing={4} flexWrap="wrap">
           {IS_CAPACITY_VISIBLE && capacity && (
             <Stack flex={1} spacing={1}>
-              <Text color={colors.udbMainGrey} fontWeight="bold">
+              <Text variant={TextVariants.MUTED} className="tw:font-bold">
                 {t('create.additionalInformation.booking_info.max_capacity')}
               </Text>
               <Text>{capacity}</Text>
             </Stack>
           )}
           <Stack flex={1} spacing={1}>
-            <Text color={colors.udbMainGrey} fontWeight="bold">
+            <Text variant={TextVariants.MUTED} className="tw:font-bold">
               {t('create.additionalInformation.booking_info.status')}
             </Text>
             <Text>{statusText}</Text>

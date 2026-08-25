@@ -44,7 +44,7 @@ export const Default: Story = {
         className="tw:static!"
         icon={<Icon name={customArgs.iconName} />}
         header={
-          <Text fontSize="1.2rem" fontWeight="bold">
+          <Text className="tw:text-[1.2rem] tw:font-bold">
             {customArgs.headerText}
           </Text>
         }

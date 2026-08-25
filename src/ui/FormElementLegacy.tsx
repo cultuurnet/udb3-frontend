@@ -2,7 +2,6 @@ import type { ReactElement, ReactNode, Ref } from 'react';
 import { cloneElement } from 'react';
 
 import type { Values } from '@/types/Values';
-import { parseSpacing } from '@/ui/Box';
 import { cn } from '@/ui/shadcn/utils';
 
 import { getInlineProps, Inline, InlineProps } from './Inline';
@@ -33,11 +32,10 @@ const MaxLengthCounter = ({
   maxLength: number;
 }) => (
   <Text
-    variant={TextVariants.MUTED}
-    fontSize="0.9rem"
-    className="text-right"
-    maxWidth="43rem"
-    color={currentLength >= maxLength ? 'red' : 'inherit'}
+    className={cn(
+      'tw:max-w-172 tw:text-right tw:text-sm',
+      currentLength >= maxLength ? 'tw:text-[red]' : 'tw:text-inherit',
+    )}
   >
     {currentLength} / {maxLength}
   </Text>
@@ -94,12 +92,7 @@ const FormElementLegacy = ({
       <Text
         variant={TextVariants.MUTED}
         dangerouslySetInnerHTML={{ __html: info }}
-        maxWidth={parseSpacing(9)}
-        css={`
-          strong {
-            font-weight: bold;
-          }
-        `}
+        className="tw:max-w-lg tw:[&_strong]:font-bold!"
       />
     ) : (
       info
@@ -155,7 +148,7 @@ const FormElementLegacy = ({
               <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto tw:p-3" />
             )}
           </Inline>
-          {error && <Text variant={TextVariants.ERROR}>{error}</Text>}
+          {error && <Text variant={TextVariants.DANGER}>{error}</Text>}
         </Stack>
         {info && infoElement}
       </Stack>

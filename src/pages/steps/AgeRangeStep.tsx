@@ -9,7 +9,6 @@ import {
 import { FormEvent, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { css } from 'styled-components';
 
 import { AgeRanges } from '@/constants/AgeRange';
 import { AudienceType, AudienceTypes } from '@/constants/AudienceType';
@@ -37,8 +36,8 @@ import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
 import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
@@ -60,8 +59,6 @@ const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
 const BOA_MAX_AGE = 16;
 const AGE_PATTERN = /^\d+$/;
-
-const getValue = getValueFromTheme('ageRange');
 
 const getInputValue = (e: FormEvent<HTMLInputElement>) =>
   (e.target as HTMLInputElement).value;
@@ -223,7 +220,7 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
 
   return (
     <Stack spacing={3} maxWidth="40rem" paddingLeft={5}>
-      <Text fontWeight="bold">
+      <Text className="tw:font-bold">
         {t('create.name_and_age.age.birth_date.title')}
       </Text>
       <Inline spacing={3} alignItems="flex-end">
@@ -255,7 +252,7 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
         </Stack>
       </Inline>
       {isInvalidRange && (
-        <Text color="red">
+        <Text variant={TextVariants.DANGER}>
           {t('create.name_and_age.age.birth_date.error_max_before_min')}
         </Text>
       )}
@@ -288,7 +285,7 @@ const AgeRangeInputs = ({
 
   return (
     <Stack spacing={3} maxWidth="40rem" paddingLeft={isPlaceScope ? 0 : 5}>
-      <Text fontWeight={isPlaceScope ? 'normal' : 'bold'}>
+      <Text className={isPlaceScope ? 'tw:font-normal' : 'tw:font-bold'}>
         {t('create.name_and_age.age.input_range_title')}
       </Text>
       <Inline spacing={3}>
@@ -311,7 +308,7 @@ const AgeRangeInputs = ({
           onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
         />
       </Inline>
-      {errorKey && <Text color="red">{t(errorKey)}</Text>}
+      {errorKey && <Text variant={TextVariants.DANGER}>{t(errorKey)}</Text>}
       <Inline
         spacing={3}
         flexWrap="wrap"
@@ -339,12 +336,7 @@ const AgeRangeInputs = ({
                 `}
               >
                 {t(`create.name_and_age.age.${key.toLowerCase()}`)}
-                <Text
-                  css={css`
-                    color: ${getValue('rangeTextColor')};
-                    font-size: 0.9rem;
-                  `}
-                >
+                <Text variant={TextVariants.MUTED} className="tw:text-sm">
                   &nbsp; {AgeRanges[key].label ?? ''}
                 </Text>
               </Button>
@@ -386,7 +378,7 @@ const ChildrenOnlySection = ({
         border-top: 1px solid ${colors.grey3};
       `}
     >
-      <Text fontWeight="bold">
+      <Text className="tw:font-bold">
         {t('create.name_and_age.age.children_only.question')}
       </Text>
       <RadioButtonGroup
@@ -407,7 +399,7 @@ const ChildrenOnlySection = ({
           },
         ]}
       />
-      {error && <Text color="red">{error}</Text>}
+      {error && <Text variant={TextVariants.DANGER}>{error}</Text>}
     </Stack>
   );
 };
@@ -753,7 +745,7 @@ const AgeRangeStepBoa = ({
   return (
     <Stack {...getStackProps(props)}>
       <Stack spacing={2}>
-        <Text fontWeight="bold" paddingBottom={3}>
+        <Text className="tw:pb-[0.5333rem] tw:font-bold">
           {t('create.name_and_age.age.title_boa')}
         </Text>
         {showBirthdateOption && (

@@ -18,7 +18,7 @@ import { Link } from '@/ui/Link';
 import { Spinner } from '@/ui/Spinner';
 import { Stack } from '@/ui/Stack';
 import { StatusIndicator } from '@/ui/StatusIndicator';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 
 import { getInlineProps, Inline } from '../../ui/Inline';
@@ -186,13 +186,7 @@ export const DashboardRow = ({
             >
               <Inline spacing={3} alignItems="center">
                 <Icon name={Icons.TAG} />
-                <Text
-                  css={`
-                    line-height: 1.2rem;
-                  `}
-                >
-                  {type}
-                </Text>
+                <Text className="tw:leading-[1.2rem]">{type}</Text>
               </Inline>
               <Inline spacing={3} alignItems="center">
                 <Icon name={Icons.CALENDAR_ALT} />
@@ -213,7 +207,7 @@ export const DashboardRow = ({
               margin={{ top: 0.0, bottom: 0.05, left: 0.4, right: 0.4 }}
               pointerWidth={100}
             />
-            <Text marginLeft={3}>{`${score} / 100`}</Text>
+            <Text className="tw:ml-[0.5333rem]">{`${score} / 100`}</Text>
           </Inline>
           <Inline width="25%" justifyContent="flex-start" alignItems="center">
             <StatusIndicator label={status.label} color={status.color} />
@@ -225,10 +219,7 @@ export const DashboardRow = ({
             data-testid="row-actions"
           >
             {finishedAt && (
-              <Text
-                color={getValue('listItem.passedEvent.color')}
-                textAlign="center"
-              >
+              <Text variant={TextVariants.MUTED} className="tw:text-center">
                 {finishedAt}
               </Text>
             )}

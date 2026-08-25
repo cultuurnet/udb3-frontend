@@ -14,7 +14,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import {
   TimeSpanPicker,
@@ -131,7 +131,7 @@ const DeviatingPeriod = ({
       {...boxProps}
     >
       <Inline justifyContent="space-between" alignItems="center">
-        <Text fontWeight="bold">
+        <Text className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.deviating.period_title', {
             index: index + 1,
           })}
@@ -146,7 +146,7 @@ const DeviatingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.deviating.select_period')}
         </Text>
         <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
@@ -208,12 +208,12 @@ const DeviatingPeriod = ({
           />
         </Inline>
         {hasOverlap && (
-          <Text color="red">
+          <Text variant={TextVariants.DANGER}>
             {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
           </Text>
         )}
         {hasInvalidDateOrder && (
-          <Text color="red">
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
             )}
@@ -221,7 +221,7 @@ const DeviatingPeriod = ({
         )}
         {eventStartDate &&
           startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-            <Text color="red">
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
               )}
@@ -229,14 +229,14 @@ const DeviatingPeriod = ({
           )}
         {eventEndDate &&
           startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-            <Text color="red">
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
               )}
             </Text>
           )}
         {quickLinkRangeError && (
-          <Text color="red">
+          <Text variant={TextVariants.DANGER}>
             {t(
               'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
             )}
@@ -245,7 +245,7 @@ const DeviatingPeriod = ({
       </Stack>
 
       <Stack spacing={2} marginTop={3}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>
@@ -265,7 +265,7 @@ const DeviatingPeriod = ({
                   marginBottom={showChildcare ? 4 : undefined}
                 >
                   <Stack spacing={3}>
-                    <Text fontWeight="bold">
+                    <Text className="tw:font-bold">
                       {t('create.calendar.opening_hours_modal.days')}
                     </Text>
                     <MultiSelectDropdown
@@ -289,7 +289,7 @@ const DeviatingPeriod = ({
                     />
                   </Stack>
                   <Stack spacing={3}>
-                    <Text fontWeight="bold">
+                    <Text className="tw:font-bold">
                       {t('create.calendar.opening_hours_modal.hours')}
                     </Text>
                     <TimeSpanPicker
@@ -344,19 +344,23 @@ const DeviatingPeriod = ({
                 </Inline>
                 {shownErrorIds.has(openingHour.id) &&
                   openingHour.dayOfWeek.length === 0 && (
-                    <Text color="red">
+                    <Text variant={TextVariants.DANGER}>
                       {t(
                         'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                       )}
                     </Text>
                   )}
-                {startError && <Text color="red">{startError}</Text>}
-                {endError && <Text color="red">{endError}</Text>}
+                {startError && (
+                  <Text variant={TextVariants.DANGER}>{startError}</Text>
+                )}
+                {endError && (
+                  <Text variant={TextVariants.DANGER}>{endError}</Text>
+                )}
               </Stack>
             );
           })}
           {daysWithTimeConflict.length > 0 && (
-            <Text color="red">
+            <Text variant={TextVariants.DANGER}>
               {t(
                 'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
                 {

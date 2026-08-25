@@ -304,17 +304,9 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
     <Notification
       header={
         <Inline id="offer-score" alignItems="center" spacing={2}>
-          <Text
-            display="inline-flex"
-            alignItems="flex-end"
-            fontSize="1.5rem"
-            lineHeight="initial"
-            fontWeight="bold"
-          >
+          <Text className="tw:inline-flex tw:items-end tw:text-2xl tw:leading-[initial] tw:font-bold">
             <span id="current-score">{score}</span>
-            <Text fontSize="1.2rem" fontWeight="bold">
-              /100
-            </Text>
+            <Text className="tw:text-[1.2rem] tw:font-bold">/100</Text>
           </Text>
         </Inline>
       }
