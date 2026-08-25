@@ -21,6 +21,7 @@ import { Label } from './Label';
 import { cn } from './shadcn/utils';
 import { Text } from './Text';
 import { TimeTableLegacy } from './TimeTableLegacy';
+import { toast } from './Toast';
 
 type Time = string;
 type Data = { [index: string]: Time };
@@ -439,6 +440,16 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
+  const handleCopyRowWithToast = (date: string) => {
+    handleCopyRow(date);
+    toast.success(t('movies.create.actions.row_copied', { date }));
+  };
+
+  const handleCopyAllWithToast = () => {
+    handleCopyAll();
+    toast.success(t('movies.create.actions.table_copied'));
+  };
+
   if (!value?.dateStart || !value?.dateEnd) return null;
 
   return (
@@ -472,7 +483,7 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
             key={date}
             date={date}
             data={value?.data?.[date]}
-            onCopy={handleCopyRow}
+            onCopy={handleCopyRowWithToast}
             onRowPaste={handlePaste}
             onEditCell={handleEditCell}
           />
@@ -481,7 +492,7 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
       <Button
         className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
-        onClick={handleCopyAll}
+        onClick={handleCopyAllWithToast}
       >
         {t('movies.create.actions.copy_table')}
       </Button>

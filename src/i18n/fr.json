@@ -1256,6 +1256,8 @@
         "copy_row": "Copier la ligne du {{date}}",
         "copy_table": "Copier le tableau",
         "description": "Description",
+        "row_copied": "Ligne du {{date}} copiée",
+        "table_copied": "Tableau copié",
         "time_slot": "Créneau {{column}} du {{date}}"
       },
       "cinema": {

@@ -1256,6 +1256,8 @@
         "copy_row": "Zeile vom {{date}} kopieren",
         "copy_table": "Tabelle kopieren",
         "description": "Beschreibung",
+        "row_copied": "Zeile vom {{date}} kopiert",
+        "table_copied": "Tabelle kopiert",
         "time_slot": "Uhrzeit {{column}} am {{date}}"
       },
       "cinema": {

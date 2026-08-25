@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { parseSpacing } from './Box';
@@ -18,6 +19,7 @@ import {
   Row,
   useTimeTableState,
 } from './TimeTable';
+import { Toast, ToastVariants } from './Toast';
 
 type HeaderProps = InlineProps & {
   header: string;
@@ -47,6 +49,7 @@ type Props = {
 
 const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) => {
   const { t } = useTranslation();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const {
     dateRange,
@@ -58,6 +61,16 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
     handleEditCell,
   } = useTimeTableState({ value, onChange });
 
+  const handleCopyRowWithToast = (date: string) => {
+    handleCopyRow(date);
+    setToastMessage(t('movies.create.actions.row_copied', { date }));
+  };
+
+  const handleCopyAllWithToast = () => {
+    handleCopyAll();
+    setToastMessage(t('movies.create.actions.table_copied'));
+  };
+
   if (!value?.dateStart || !value?.dateEnd) return null;
 
   return (
@@ -68,6 +81,12 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
       {...getStackProps(props)}
       spacing={0}
     >
+      <Toast
+        variant={ToastVariants.SUCCESS}
+        body={toastMessage ?? ''}
+        visible={!!toastMessage}
+        onClose={() => setToastMessage(null)}
+      />
       <DatePeriodPicker
         id={id}
         dateStart={parseDate(value.dateStart)}
@@ -102,7 +121,7 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
             key={date}
             date={date}
             data={value?.data?.[date]}
-            onCopy={handleCopyRow}
+            onCopy={handleCopyRowWithToast}
             onRowPaste={handlePaste}
             onEditCell={handleEditCell}
           />
@@ -111,7 +130,7 @@ const TimeTableLegacy = ({ id, className, onChange, value, ...props }: Props) =>
       <Button
         className="tw:flex-none tw:gap-3"
         iconName={Icons.COPY}
-        onClick={handleCopyAll}
+        onClick={handleCopyAllWithToast}
       >
         {t('movies.create.actions.copy_table')}
       </Button>
