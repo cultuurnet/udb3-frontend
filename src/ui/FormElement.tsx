@@ -73,6 +73,7 @@ const FormElementShadcn = ({
     id,
     ref,
     maxLength,
+    ...(error && { isInvalid: true }),
   });
 
   const currentLength = clonedComponent.props?.value?.length ?? 0;
