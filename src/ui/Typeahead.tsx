@@ -49,6 +49,20 @@ const getOptionLabel = <T extends TypeaheadOption>(
   return String(option?.[stringLabelKey] ?? '');
 };
 
+const getOptionKey = <T extends TypeaheadOption>(
+  option: T,
+  index: number,
+  labelKey?: string | ((option: T) => string),
+): string => {
+  if (typeof option === 'string') return option;
+
+  const identifier = option['@id'] ?? option.id;
+  if (typeof identifier === 'string') return identifier;
+  if (typeof option.name === 'string') return option.name;
+
+  return `${index}-${getOptionLabel(option, labelKey)}`;
+};
+
 type TypeaheadElement = { clear: () => void };
 
 type Props<T extends TypeaheadOption = TypeaheadOption> = {
@@ -264,9 +278,9 @@ const TypeaheadShadcnInner = <T extends TypeaheadOption = TypeaheadOption>(
       {(visibleOptions.length > 0 || canAllowNew) && (
         <CommandGroup className="tw:p-0">
           {visibleOptions.map((option, index) => (
-            <Fragment key={`${index}-${getOptionLabel(option, labelKey)}`}>
+            <Fragment key={getOptionKey(option, index, labelKey)}>
               <CommandItem
-                value={`${index}-${getOptionLabel(option, labelKey)}`}
+                value={getOptionKey(option, index, labelKey)}
                 onSelect={() => handleSelect(option)}
                 className="tw:text-base tw:rounded-none tw:cursor-pointer"
               >
