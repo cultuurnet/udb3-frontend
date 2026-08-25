@@ -3,6 +3,7 @@ import { cloneElement } from 'react';
 
 import type { Values } from '@/types/Values';
 import { parseSpacing } from '@/ui/Box';
+import { cn } from '@/ui/shadcn/utils';
 
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { Label, LabelPositions, LabelVariants } from './Label';
@@ -83,15 +84,15 @@ const FormElement = ({
     },
     [LabelPositions.LEFT]: {
       alignItems: 'center',
-      spacing: 3,
       ...getInlineProps(props),
+      spacing: 0,
     },
     [LabelPositions.RIGHT]: {
       alignItems: 'center',
       flexDirection: 'row-reverse',
       justifyContent: 'flex-end',
-      spacing: 3,
       ...getInlineProps(props),
+      spacing: 0,
     },
   };
 
@@ -115,10 +116,11 @@ const FormElement = ({
     <Label
       variant={labelVariant}
       htmlFor={id}
-      {...(labelPosition !== LabelPositions.TOP
-        ? { height: '36px', alignItems: 'center' }
-        : {})}
-      flexShrink={0}
+      className={cn(
+        'tw:shrink-0',
+        labelPosition !== LabelPositions.TOP &&
+          'tw:flex tw:h-9 tw:items-center',
+      )}
     >
       {label}
     </Label>
@@ -127,7 +129,10 @@ const FormElement = ({
   return (
     <Wrapper
       as="div"
-      className={className}
+      className={cn(
+        labelPosition !== LabelPositions.TOP && 'tw:gap-2',
+        className,
+      )}
       {...(wrapperProps[labelPosition] ?? {})}
     >
       {label && labelPosition !== LabelPositions.TOP && labelElement}
@@ -135,7 +140,6 @@ const FormElement = ({
         as="div"
         spacing={3}
         width={labelPosition === LabelPositions.RIGHT ? 'auto' : '100%'}
-        minWidth={50}
       >
         {((label && labelPosition === LabelPositions.TOP) ||
           typeof maxLength !== 'undefined') && (

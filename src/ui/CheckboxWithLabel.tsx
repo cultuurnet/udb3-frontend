@@ -42,7 +42,7 @@ const CheckboxWithLabel = ({
           checked={checked}
           disabled={disabled}
         />
-        <Label cursor={disabled ? 'not-allowed' : 'pointer'} htmlFor={id}>
+        <Label disabled={disabled} htmlFor={id}>
           {children}
         </Label>
       </div>

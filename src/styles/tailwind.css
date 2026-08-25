@@ -50,5 +50,8 @@
   --color-card-foreground: #222222; /* udb-text */
   --color-popover: #ffffff; /* udb-white */
   --color-popover-foreground: #222222; /* udb-text */
-  --radius: 8px;
+  --radius: 6px;
+  --radius-lg: calc(var(--tw-radius) + 2px); /* 8px */
+  --radius-md: var(--tw-radius); /* 6px */
+  --radius-sm: calc(var(--tw-radius) - 2px); /* 4px */
 }
