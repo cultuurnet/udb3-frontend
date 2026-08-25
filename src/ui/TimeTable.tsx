@@ -421,7 +421,7 @@ const Header = ({ header }: { header: string }) => {
   );
 };
 
-const TimeTable = ({ id, className, value, onChange }: Props) => {
+const TimeTableShadcn = ({ id, className, value, onChange }: Props) => {
   const { t } = useTranslation();
 
   const {
@@ -494,14 +494,14 @@ const TimeTable = ({ id, className, value, onChange }: Props) => {
   );
 };
 
-const TimeTableSwitch = ({ id, className, value, onChange }: Props) => {
+const TimeTable = ({ id, className, value, onChange }: Props) => {
   const [isShadcnMigrationEnabled] = useFeatureFlag(
     FeatureFlags.SHADCN_MIGRATION,
   );
 
   if (isShadcnMigrationEnabled) {
     return (
-      <TimeTable
+      <TimeTableShadcn
         id={id}
         className={className}
         value={value}
@@ -528,7 +528,7 @@ export {
   isTimeTableEmpty,
   parseDate,
   Row,
-  TimeTableSwitch as TimeTable,
+  TimeTable,
   useTimeTableState,
 };
 export type { CopyPayload, TimeTableValue };
