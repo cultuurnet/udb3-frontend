@@ -336,7 +336,7 @@ const ReservationLink = ({
   return (
     <Inline spacing={4} flexWrap="wrap" {...getInlineProps(boxProps)}>
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-link`}
         label={t('create.additionalInformation.booking_info.link')}
         Component={
@@ -353,7 +353,7 @@ const ReservationLink = ({
         }
       />
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-url-label`}
         label={t(
           'create.additionalInformation.booking_info.url_label_dropdown_label',
@@ -792,7 +792,7 @@ const BookingInfoStep = ({
             .map((type) => (
               <FormElement
                 key={type}
-                flex={1}
+                className="tw:flex-1"
                 id={type}
                 label={t(`create.additionalInformation.booking_info.${type}`)}
                 Component={

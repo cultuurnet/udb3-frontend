@@ -31,7 +31,7 @@ const NameStep = ({
               <FormElement
                 label="Naam"
                 id="organizer-name"
-                flex={2}
+                className="tw:flex-2"
                 Component={
                   <Input
                     value={field.value?.name || ''}

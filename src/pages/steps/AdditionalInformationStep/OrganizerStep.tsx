@@ -409,7 +409,7 @@ const OrganizerStep = ({
               </CheckboxWithLabel>
               {Object.values(cardSystem.distributionKeys).length > 0 && (
                 <Select
-                  maxWidth="20%"
+                  className="tw:max-w-[20%]"
                   onChange={(e) =>
                     handleChangeDistributionKey({
                       distributionKeyId: parseInt(e.target.value),
