@@ -1253,8 +1253,10 @@
         "choose_cinema": "Choisissez un cinéma",
         "choose_name": "Choisissez un nom",
         "clear": "À vider",
+        "copy_row": "Copier la ligne du {{date}}",
         "copy_table": "Copier le tableau",
-        "description": "Description"
+        "description": "Description",
+        "time_slot": "Créneau {{column}} du {{date}}"
       },
       "cinema": {
         "placeholder": "Nom du cinéma"

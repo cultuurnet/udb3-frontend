@@ -352,6 +352,8 @@ const Row = ({
   onCopy,
   onRowPaste,
 }: RowProps): any => {
+  const { t } = useTranslation();
+
   const handlePaste = (
     event: ClipboardEvent<HTMLInputElement>,
     index: number,
@@ -376,6 +378,10 @@ const Row = ({
         <Input
           id={`${date}-${index}`}
           key={`${date}-${index}`}
+          aria-label={t('movies.create.actions.time_slot', {
+            date,
+            column: index + 1,
+          })}
           value={(data?.[index] as string) ?? ''}
           onChange={(event) => {
             const value = event.target.value;
@@ -405,6 +411,7 @@ const Row = ({
       variant={ButtonVariants.UNSTYLED}
       onClick={() => onCopy(date)}
       customChildren
+      aria-label={t('movies.create.actions.copy_row', { date })}
     >
       <Icon name={Icons.COPY} />
     </Button>,
