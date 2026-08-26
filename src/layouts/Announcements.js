@@ -102,10 +102,7 @@ const AnnouncementContent = ({
     <Image
       src={imageSrc}
       alt={callToActionLabel ?? ''}
-      width="100%"
-      maxHeight="30vh"
-      objectFit="contain"
-      opacity={{ hover: 0.85 }}
+      className="tw:w-full tw:max-h-[30vh] tw:object-contain tw:hover:opacity-85"
     />
   );
 
