@@ -57,6 +57,8 @@ type ActiveModal =
   | { kind: 'ageRange'; newValue: string; previousValue: string }
   | { kind: 'inputMode'; newMode: AgeInputMode };
 
+type AgeFields = { min: string; max: string };
+
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
 const BOA_MAX_AGE = 16;
@@ -70,6 +72,11 @@ const getInputValue = (e: FormEvent<HTMLInputElement>) =>
 
 const buildAgeRangeString = (min: string, max: string) =>
   !min && !max ? '' : `${min}-${max}`;
+
+const splitAgeRange = (typicalAgeRange: string | undefined): AgeFields => {
+  const [min = '', max = ''] = (typicalAgeRange ?? '').split('-');
+  return { min, max };
+};
 
 type AgeRangeStepProps = StackProps & StepProps;
 
@@ -379,9 +386,9 @@ const AgeRangeInputs = ({
         </Text>
         <Inline spacing={3}>
           <Input
-            // The key resets the field when the stored value changes elsewhere
+            // Resets the field when the displayed range changes
             key={`min-${minAge}`}
-            type="numeric"
+            type="text"
             defaultValue={minAge}
             placeholder={t('create.name_and_age.age.from')}
             aria-label={t('create.name_and_age.age.from')}
@@ -390,7 +397,7 @@ const AgeRangeInputs = ({
           />
           <Input
             key={`max-${maxAge}`}
-            type="numeric"
+            type="text"
             defaultValue={maxAge}
             placeholder={t('create.name_and_age.age.till')}
             aria-label={t('create.name_and_age.age.till')}
@@ -539,8 +546,6 @@ const AgeRangeStepBoa = ({
     name: 'nameAndAgeRange.birthdateRange',
   });
 
-  const [minAge = '', maxAge = ''] = (watchedTypicalAgeRange ?? '').split('-');
-
   const hasAgeRange = !!watchedTypicalAgeRange;
   const hasBirthdateRange = !!watchedBirthdateRange?.from;
 
@@ -552,13 +557,18 @@ const AgeRangeStepBoa = ({
   const activeTab = selectedMode ?? defaultMode;
 
   const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
-  // "Wijzig leeftijd" empties the fields without touching the saved age.
-  const [isAgeCleared, setIsAgeCleared] = useState(false);
   // A manually entered age keeps the fields open, even when it matches a category.
   const [isAgeManuallyEntered, setIsAgeManuallyEntered] = useState(false);
+  const [enteredAgeRange, setEnteredAgeRange] = useState<AgeFields | null>(
+    null,
+  );
   const [childrenOnlyMutationError, setChildrenOnlyMutationError] = useState<
     string | null
   >(null);
+
+  const { min: minAge, max: maxAge } =
+    enteredAgeRange ?? splitAgeRange(watchedTypicalAgeRange);
+  const ageError = enteredAgeRange && validateAgeRange(minAge, maxAge);
 
   const getEventByIdQuery = useGetEventByIdQuery(
     { id: offerId ?? '' },
@@ -600,13 +610,7 @@ const AgeRangeStepBoa = ({
 
   const commitTypicalAgeRange = (value: string) => {
     const previousValue = watchedTypicalAgeRange ?? '';
-    const [min = '', max = ''] = value.split('-');
     setValue('nameAndAgeRange.typicalAgeRange', value, { shouldDirty: true });
-
-    // An empty range is never sent: clearing the fields only updates the form.
-    if (!value) return;
-
-    if (validateAgeRange(min, max)) return;
 
     if (childrenOnly && !overlapsWithBoaAgeRange(value)) {
       setActiveModal({ kind: 'ageRange', newValue: value, previousValue });
@@ -625,20 +629,28 @@ const AgeRangeStepBoa = ({
     });
   };
 
+  // Empties the form without touching the saved age.
   const handleAgeClear = () => {
-    setIsAgeCleared(true);
+    setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
+    setValue('nameAndAgeRange.typicalAgeRange', '', { shouldDirty: true });
   };
 
-  const commitAgeRange = (newMin: string, newMax: string) => {
-    if (isAgeCleared && !newMin && !newMax) return;
-    setIsAgeCleared(false);
+  const commitAgeRange = (min: string, max: string) => {
+    if (!min && !max && !watchedTypicalAgeRange) return;
+
+    if (validateAgeRange(min, max)) {
+      setEnteredAgeRange({ min, max });
+      return;
+    }
+
+    setEnteredAgeRange(null);
     setIsAgeManuallyEntered(true);
-    commitTypicalAgeRange(buildAgeRangeString(newMin, newMax));
+    commitTypicalAgeRange(buildAgeRangeString(min, max));
   };
 
   const handlePresetClick = (apiLabel: string) => {
-    setIsAgeCleared(false);
+    setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
     commitTypicalAgeRange(apiLabel);
   };
@@ -670,7 +682,7 @@ const AgeRangeStepBoa = ({
 
   const applyModeChange = (mode: AgeInputMode) => {
     setSelectedMode(mode);
-    setIsAgeCleared(false);
+    setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
 
     if (mode === AgeInputModes.AGE) {
@@ -786,15 +798,13 @@ const AgeRangeStepBoa = ({
 
   const showBirthdateOption = scope === OfferTypes.EVENTS;
 
-  const showChildrenOnlySection =
-    !isAgeCleared &&
-    shouldShowChildrenOnlySection({
-      scope,
-      audienceType,
-      typicalAgeRange: watchedTypicalAgeRange,
-      birthdateRange: watchedBirthdateRange,
-      childrenOnly,
-    });
+  const showChildrenOnlySection = shouldShowChildrenOnlySection({
+    scope,
+    audienceType,
+    typicalAgeRange: watchedTypicalAgeRange,
+    birthdateRange: watchedBirthdateRange,
+    childrenOnly,
+  });
 
   const childrenOnlyValidationError = formState.errors.childrenOnly
     ? t('create.name_and_age.age.children_only.error')
@@ -806,17 +816,13 @@ const AgeRangeStepBoa = ({
   const selectedPreset = findPresetKey(watchedTypicalAgeRange);
   const isAgeInputMode =
     !showBirthdateOption || activeTab === AgeInputModes.AGE;
-  const showSelectedCategory =
-    !!selectedPreset && !isAgeCleared && !isAgeManuallyEntered;
+  const showSelectedCategory = !!selectedPreset && !isAgeManuallyEntered;
 
   const selectedCategoryLabel = selectedPreset
     ? `${t(`create.name_and_age.age.${selectedPreset.toLowerCase()}`)} ${
         AgeRanges[selectedPreset].label ?? ''
       }`.trim()
     : '';
-
-  const displayedMinAge = isAgeCleared ? '' : minAge;
-  const displayedMaxAge = isAgeCleared ? '' : maxAge;
 
   const childrenOnlySection = showChildrenOnlySection ? (
     <ChildrenOnlySection
@@ -847,10 +853,10 @@ const AgeRangeStepBoa = ({
         )}
         {isAgeInputMode ? (
           <AgeRangeInputs
-            minAge={displayedMinAge}
-            maxAge={displayedMaxAge}
+            minAge={minAge}
+            maxAge={maxAge}
             selectedCategoryLabel={selectedCategoryLabel}
-            errorKey={isAgeCleared ? null : validateAgeRange(minAge, maxAge)}
+            errorKey={ageError}
             isPlaceScope={scope === OfferTypes.PLACES}
             showSelectedCategory={showSelectedCategory}
             childrenOnlySection={childrenOnlySection}

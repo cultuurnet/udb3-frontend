@@ -34,6 +34,7 @@ export const expectAgeRange = async (page: Page, min: string, max: string) => {
 
 export const openAgeRangeForm = async (page: Page) => {
   const changeButton = changeAgeRangeButton(page);
+  await changeButton.or(minAgeInput(page)).first().waitFor();
   if (await changeButton.isVisible()) {
     await changeButton.click();
   }

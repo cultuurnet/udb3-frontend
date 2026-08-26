@@ -119,12 +119,17 @@ test.describe('Age range', () => {
     await expectAgeRange(page, '7', '');
 
     // Emptying the fields brings the categories back, without a warning.
+    const cleared = waitForTypicalAgeRangePut(page);
     await minAgeInput(page).fill('');
     await minAgeInput(page).blur();
+    await cleared;
 
     await expectAgeRange(page, '', '');
     await expect(page.getByRole('dialog')).toBeHidden();
     await expect(presetButton(page, age.kids)).toBeVisible();
+
+    await page.goto(eventEditUrl);
+    await expectAgeRange(page, '', '');
   });
 
   test('shows an error and does not persist when "tot" is lower than "van"', async ({
