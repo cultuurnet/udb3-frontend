@@ -44,7 +44,7 @@ const Label = ({
         variant === LabelVariants.NORMAL && 'tw:font-normal',
         disabled !== undefined &&
           (disabled
-            ? 'tw:cursor-not-allowed tw:opacity-50'
+            ? 'tw:cursor-not-allowed tw:text-muted-foreground'
             : 'tw:cursor-pointer'),
         className,
       )}

@@ -3,7 +3,7 @@ import type { Values } from '@/types/Values';
 import type { BoxProps } from './Box';
 import { getInlineProps, Inline } from './Inline';
 import type { LabelVariants } from './Label';
-import { Text } from './Text';
+import { Text, TextVariants } from './Text';
 
 const getFontWeight = (props) => {
   if (props.variant === 'bold') return 700;
@@ -36,13 +36,13 @@ const LabelLegacy = ({
     cursor={
       disabled === undefined ? cursor : disabled ? 'not-allowed' : 'pointer'
     }
-    opacity={disabled ? 0.5 : opacity}
+    opacity={opacity}
     css={`
       font-weight: ${getFontWeight};
     `}
     {...getInlineProps(props)}
   >
-    <Text>{children}</Text>
+    <Text variant={disabled ? TextVariants.MUTED : undefined}>{children}</Text>
   </Inline>
 );
 
