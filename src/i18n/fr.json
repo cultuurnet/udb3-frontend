@@ -382,6 +382,7 @@
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
         "error_no_min_age": "Veuillez entrer un âge minimum",
         "error_invalid": "L'âge spécifié n'est pas valide.",
+        "error_decimal": "Vous ne pouvez pas saisir un nombre décimal",
         "children_only": {
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants (accueil ou activité extrascolaire)",

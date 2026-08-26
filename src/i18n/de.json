@@ -382,6 +382,7 @@
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
+        "error_decimal": "Sie können keine Dezimalzahl eingeben",
         "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder (außerschulische Betreuung oder Aktivität)",

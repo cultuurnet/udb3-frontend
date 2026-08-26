@@ -186,10 +186,17 @@ test.describe('Age range', () => {
     await expect(page.getByText(age.error_invalid)).toBeVisible();
     await expect(childrenOnlyRadio(page)).toBeHidden();
 
+    // A decimal age gets its own message.
+    await minAgeInput(page).fill('1,5');
+    await minAgeInput(page).blur();
+
+    await expect(page.getByText(age.error_decimal)).toBeVisible();
+
     await page.goto(eventEditUrl);
 
-    // The invalid value was never saved, so the previous range is untouched.
+    // Neither value was saved, so the previous range is untouched.
     await expect(page.getByText(age.error_invalid)).toBeHidden();
+    await expect(page.getByText(age.error_decimal)).toBeHidden();
     await expectSelectedAgeRange(page, ageRangeLabels.adults);
   });
 

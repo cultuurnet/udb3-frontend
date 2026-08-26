@@ -61,6 +61,7 @@ const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
 const BOA_MAX_AGE = 16;
 const AGE_PATTERN = /^\d+$/;
+const DECIMAL_SEPARATOR_PATTERN = /[.,]/;
 
 const getValue = getValueFromTheme('ageRange');
 
@@ -76,6 +77,13 @@ const parseAge = (value: string): number | undefined =>
   value === '' ? undefined : Number(value);
 
 const validateAgeRange = (min: string, max: string): string | null => {
+  if (
+    DECIMAL_SEPARATOR_PATTERN.test(min) ||
+    DECIMAL_SEPARATOR_PATTERN.test(max)
+  ) {
+    return 'create.name_and_age.age.error_decimal';
+  }
+
   if (
     (min !== '' && !AGE_PATTERN.test(min)) ||
     (max !== '' && !AGE_PATTERN.test(max))
