@@ -1,6 +1,17 @@
 import { expect, Page, test as base } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
+import {
+  ageRangeLabels,
+  changeAgeRangeButton,
+  expectAgeRange,
+  expectSelectedAgeRange,
+  maxAgeInput,
+  minAgeInput,
+  openAgeRangeForm,
+  pickAgePreset,
+  presetButton,
+} from '../helpers/age-range';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
@@ -32,11 +43,6 @@ test.beforeEach(async ({ context }) => {
   ]);
 });
 
-const minAgeInput = (page: Page) =>
-  page.getByPlaceholder(age.from, { exact: true });
-const maxAgeInput = (page: Page) =>
-  page.getByPlaceholder(age.till, { exact: true });
-
 const childrenOnlyRadio = (page: Page) => page.locator('#children-only');
 const withFamilyRadio = (page: Page) => page.locator('#with-family');
 
@@ -48,6 +54,12 @@ const waitForTypicalAgeRangePut = (page: Page) =>
       response.ok(),
   );
 
+const pickAgePresetAndSave = async (page: Page, name: string) => {
+  const saved = waitForTypicalAgeRangePut(page);
+  await pickAgePreset(page, name);
+  await saved;
+};
+
 const waitForChildrenOnlyPut = (page: Page) =>
   page.waitForResponse(
     (response) =>
@@ -57,65 +69,75 @@ const waitForChildrenOnlyPut = (page: Page) =>
   );
 
 test.describe('Age range', () => {
-  test('persists a custom age range after a page reload', async ({
+  test('picks a category and swaps it through "Wijzig leeftijd"', async ({
     page,
     eventEditUrl,
   }) => {
     await page.goto(eventEditUrl);
+
+    await pickAgePresetAndSave(page, age.kids);
+
+    // A picked category replaces the fields with a single confirmed line.
+    await expectSelectedAgeRange(page, ageRangeLabels.kids);
+    await expect(minAgeInput(page)).toBeHidden();
+    await expect(presetButton(page, age.kids)).toBeHidden();
+
+    // Reopening offers the categories again with nothing selected.
+    await changeAgeRangeButton(page).click();
+    await expectAgeRange(page, '', '');
+    await expect(presetButton(page, age.toddlers)).toBeVisible();
+
+    await pickAgePresetAndSave(page, age.toddlers);
+
+    await expectSelectedAgeRange(page, ageRangeLabels.toddlers);
+
+    await page.goto(eventEditUrl);
+
+    await expectSelectedAgeRange(page, ageRangeLabels.toddlers);
+  });
+
+  test('hides the categories while an age is entered manually', async ({
+    page,
+    eventEditUrl,
+  }) => {
+    await page.goto(eventEditUrl);
+    await openAgeRangeForm(page);
     await expect(page.getByText(age.input_range_title)).toBeVisible();
-    // Wait for the initial "Volwassenen 18+" range to hydrate before editing.
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expect(presetButton(page, age.kids)).toBeVisible();
+
+    const saved = waitForTypicalAgeRangePut(page);
+    await minAgeInput(page).fill('7');
+    await minAgeInput(page).blur();
+    await saved;
+
+    // An entered age keeps the fields open and takes the categories away.
+    await expectAgeRange(page, '7', '');
+    await expect(presetButton(page, age.kids)).toBeHidden();
+    await expect(changeAgeRangeButton(page)).toBeHidden();
+
+    await page.goto(eventEditUrl);
+    await expectAgeRange(page, '7', '');
+
+    // Emptying the fields brings the categories back, without a warning.
+    await minAgeInput(page).fill('');
+    await minAgeInput(page).blur();
+
+    await expectAgeRange(page, '', '');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(presetButton(page, age.kids)).toBeVisible();
+  });
+
+  test('shows an error and does not persist when "tot" is lower than "van"', async ({
+    page,
+    eventEditUrl,
+  }) => {
+    await page.goto(eventEditUrl);
+    await openAgeRangeForm(page);
 
     const minPut = waitForTypicalAgeRangePut(page);
     await minAgeInput(page).fill('6');
     await minAgeInput(page).blur();
     await minPut;
-
-    const maxPut = waitForTypicalAgeRangePut(page);
-    await maxAgeInput(page).fill('12');
-    await maxAgeInput(page).blur();
-    await maxPut;
-
-    await page.goto(eventEditUrl);
-
-    await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('12');
-  });
-
-  test('fills the inputs when a preset is selected and persists it', async ({
-    page,
-    eventEditUrl,
-  }) => {
-    await page.goto(eventEditUrl);
-
-    const kidsButton = page.getByRole('button', { name: new RegExp(age.kids) });
-
-    const put = waitForTypicalAgeRangePut(page);
-    await kidsButton.click();
-    await put;
-
-    await expect(kidsButton).toHaveClass(/(?:^|\s)active(?:\s|$)/);
-    await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('11');
-
-    await page.goto(eventEditUrl);
-
-    await expect(
-      page.getByRole('button', { name: new RegExp(age.kids) }),
-    ).toHaveClass(/(?:^|\s)active(?:\s|$)/);
-    await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('11');
-  });
-
-  test('shows an error and does not persist when "from" is lower than "to"', async ({
-    page,
-    eventEditUrl,
-  }) => {
-    await page.goto(eventEditUrl);
-
-    const put = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
-    await put;
 
     await maxAgeInput(page).fill('5');
     await maxAgeInput(page).blur();
@@ -126,7 +148,7 @@ test.describe('Age range', () => {
 
     await expect(page.getByText(age.error_max_lower_than_min)).toBeHidden();
     await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('11');
+    await expect(maxAgeInput(page)).toHaveValue('');
   });
 
   test('shows an error and does not persist an age above the maximum', async ({
@@ -134,9 +156,9 @@ test.describe('Age range', () => {
     eventEditUrl,
   }) => {
     await page.goto(eventEditUrl);
-
     // A freshly created event starts at the "Volwassenen 18+" preset (18-).
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
+    await openAgeRangeForm(page);
 
     await minAgeInput(page).fill('200');
     await minAgeInput(page).blur();
@@ -147,8 +169,7 @@ test.describe('Age range', () => {
 
     // The invalid value was never saved, so the previous range is untouched.
     await expect(page.getByText(age.error_max_age)).toBeHidden();
-    await expect(minAgeInput(page)).toHaveValue('18');
-    await expect(maxAgeInput(page)).toHaveValue('');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
   });
 
   test('shows an error and does not persist non-numeric input', async ({
@@ -156,21 +177,20 @@ test.describe('Age range', () => {
     eventEditUrl,
   }) => {
     await page.goto(eventEditUrl);
-
-    // A freshly created event starts at the "Volwassenen 18+" preset (18-).
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
+    await openAgeRangeForm(page);
 
     await minAgeInput(page).fill('abc');
     await minAgeInput(page).blur();
 
     await expect(page.getByText(age.error_invalid)).toBeVisible();
+    await expect(childrenOnlyRadio(page)).toBeHidden();
 
     await page.goto(eventEditUrl);
 
     // The invalid value was never saved, so the previous range is untouched.
     await expect(page.getByText(age.error_invalid)).toBeHidden();
-    await expect(minAgeInput(page)).toHaveValue('18');
-    await expect(maxAgeInput(page)).toHaveValue('');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
   });
 
   test('shows the children-only radios only when the age overlaps 2–16', async ({
@@ -180,17 +200,21 @@ test.describe('Age range', () => {
     await page.goto(eventEditUrl);
 
     // Initial "Volwassenen 18+" range does not overlap BOA → section hidden.
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
     await expect(childrenOnlyRadio(page)).toBeHidden();
 
     // Switch to "Kinderen 6-11" → overlaps BOA → section appears.
     const put = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
+    await pickAgePreset(page, age.kids);
     await put;
 
     await expect(childrenOnlyRadio(page)).toBeVisible();
     await expect(withFamilyRadio(page)).toBeVisible();
     await expect(withFamilyRadio(page)).toBeChecked();
+
+    // Reopening the buttons hides the question until a new age is picked.
+    await changeAgeRangeButton(page).click();
+    await expect(childrenOnlyRadio(page)).toBeHidden();
   });
 
   test('persists the "for children only" audience across a reload', async ({
@@ -200,7 +224,7 @@ test.describe('Age range', () => {
     await page.goto(eventEditUrl);
 
     const ageRangePut = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
+    await pickAgePreset(page, age.kids);
     await ageRangePut;
 
     const childrenOnlyPut = waitForChildrenOnlyPut(page);
@@ -222,7 +246,7 @@ test.describe('Age range', () => {
 
     // Setup: 6-11 + children only.
     const ageRangePut = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
+    await pickAgePreset(page, age.kids);
     await ageRangePut;
 
     const childrenOnlyPut = waitForChildrenOnlyPut(page);
@@ -231,7 +255,7 @@ test.describe('Age range', () => {
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
-    await page.getByRole('button', { name: new RegExp(age.adults) }).click();
+    await pickAgePreset(page, age.adults);
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
@@ -250,8 +274,7 @@ test.describe('Age range', () => {
     await page.goto(eventEditUrl);
 
     // Age now "Volwassenen 18+" (no longer overlaps BOA) → section hidden.
-    await expect(minAgeInput(page)).toHaveValue('18');
-    await expect(maxAgeInput(page)).toHaveValue('');
+    await expectSelectedAgeRange(page, ageRangeLabels.adults);
     await expect(childrenOnlyRadio(page)).toBeHidden();
   });
 
@@ -262,7 +285,7 @@ test.describe('Age range', () => {
     await page.goto(eventEditUrl);
 
     const ageRangePut = waitForTypicalAgeRangePut(page);
-    await page.getByRole('button', { name: new RegExp(age.kids) }).click();
+    await pickAgePreset(page, age.kids);
     await ageRangePut;
 
     const childrenOnlyPut = waitForChildrenOnlyPut(page);
@@ -270,7 +293,7 @@ test.describe('Age range', () => {
     await childrenOnlyPut;
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
-    await page.getByRole('button', { name: new RegExp(age.adults) }).click();
+    await pickAgePreset(page, age.adults);
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
@@ -282,12 +305,8 @@ test.describe('Age range', () => {
       .click();
     await expect(modal).toBeHidden();
 
-    // Previous "Kinderen 6-11" range survives + the preset stays active.
-    await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('11');
-    await expect(
-      page.getByRole('button', { name: new RegExp(age.kids) }),
-    ).toHaveClass(/(?:^|\s)active(?:\s|$)/);
+    // Previous "Kinderen 6-11" range survives.
+    await expectSelectedAgeRange(page, ageRangeLabels.kids);
 
     // childrenOnly flag stayed true.
     await expect(childrenOnlyRadio(page)).toBeChecked();
