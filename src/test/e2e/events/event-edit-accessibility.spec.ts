@@ -26,7 +26,7 @@ test.describe('Event Edit - Accessibility', () => {
     await page.getByRole('tab', { name: 'Begeleid vervoer' }).click();
 
     await expect(
-      page.getByRole('heading', { name: 'Vertreklocatie 1' }),
+      page.getByRole('heading', { name: 'Vertreklocatie 1', exact: true }),
     ).toBeVisible();
     await expect(page.getByText('E2E Place Preview Test')).toBeVisible();
 
@@ -42,6 +42,7 @@ test.describe('Event Edit - Accessibility', () => {
     await expect(
       page.getByRole('heading', {
         name: `Vertreklocatie ${existingLocationCount}`,
+        exact: true,
       }),
     ).toBeVisible();
     await page
@@ -62,6 +63,7 @@ test.describe('Event Edit - Accessibility', () => {
     await expect(
       page.getByRole('heading', {
         name: `Vertreklocatie ${existingLocationCount + 1}`,
+        exact: true,
       }),
     ).toBeHidden();
 
@@ -88,29 +90,36 @@ test.describe('Event Edit - Accessibility', () => {
       .getByRole('button', { name: 'Voeg nog een locatie toe' })
       .click();
 
-    await page.getByTestId(`departure-city-${newIndex}`).fill('9000');
-    await page.getByRole('option', { name: '9000 Gent' }).click();
+    try {
+      await page.getByTestId(`departure-city-${newIndex}`).fill('9000');
+      await page.getByRole('option', { name: '9000 Gent' }).click();
 
-    await page.getByTestId(`departure-place-${newIndex}`).fill(newPlaceName);
+      await page.getByTestId(`departure-place-${newIndex}`).fill(newPlaceName);
 
-    const addNewOption = page.locator('.rbt-menu-custom-option');
-    await expect(addNewOption).toContainText(
-      'Locatie niet gevonden? Nieuwe locatie toevoegen',
-    );
-    await addNewOption.click();
+      const addNewOption = page.locator('.rbt-menu-custom-option');
+      await expect(addNewOption).toContainText(
+        'Locatie niet gevonden? Nieuwe locatie toevoegen',
+      );
+      await addNewOption.click();
 
-    const modal = page.getByRole('dialog');
-    await expect(modal.getByLabel('Naam locatie')).toHaveValue(newPlaceName);
-    await expect(modal.getByLabel('Postcode')).toHaveValue('9000');
-    await expect(modal.getByLabel('Gemeente')).toHaveValue('Gent');
+      const modal = page.getByRole('dialog');
+      await expect(modal.getByLabel('Naam locatie')).toHaveValue(newPlaceName);
+      await expect(modal.getByLabel('Postcode')).toHaveValue('9000');
+      await expect(modal.getByLabel('Gemeente')).toHaveValue('Gent');
 
-    await modal.getByLabel('Straat en nummer').fill('E2E test street 1');
-    await modal.getByRole('button', { name: 'Bioscoop', exact: true }).click();
-    await modal.getByRole('button', { name: 'Toevoegen', exact: true }).click();
+      await modal.getByLabel('Straat en nummer').fill('E2E test street 1');
+      await modal
+        .getByRole('button', { name: 'Bioscoop', exact: true })
+        .click();
+      await modal
+        .getByRole('button', { name: 'Toevoegen', exact: true })
+        .click();
 
-    await expect(page.getByText(newPlaceName)).toBeVisible();
+      await expect(page.getByText(newPlaceName)).toBeVisible();
+    } finally {
+      await page.locator(`#departure-delete-${newIndex}`).click();
+    }
 
-    await page.locator(`#departure-delete-${newIndex}`).click();
     await expect(page.getByText(newPlaceName)).toBeHidden();
 
     await page
