@@ -385,11 +385,14 @@
         "from": "Van",
         "till": "Tot",
         "age": "jaar",
+        "change_age": "Wijzig leeftijd",
         "input_range_title": "Geef een minimum en maximum leeftijd in",
+        "or_choose_category": "Of kies een leeftijdscategorie",
         "error_max_lower_than_min": "De maximumleeftijd kan niet lager zijn dan de minimumleeftijd.",
         "error_max_age": "De ingevoerde leeftijd kan maximum 120 jaar zijn.",
         "error_no_min_age": "Gelieve een minimum leeftijd in te vullen",
         "error_invalid": "De opgegeven leeftijd is niet geldig.",
+        "error_decimal": "Je kan geen kommagetal invoeren",
         "children_only": {
           "question": "Voor wie is deze activiteit?",
           "children_only": "Voor kinderen alleen (buitenschoolse opvang of activiteit)",
@@ -1760,8 +1763,6 @@
     }
   },
   "date_picker": {
-    "today": "Vandaag",
-    "go_to_selected": "Naar selectie",
     "open_calendar": "Kalender openen"
   },
   "date_period_picker": {

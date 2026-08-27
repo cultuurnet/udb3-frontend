@@ -375,11 +375,14 @@
         "from": "De",
         "till": "à",
         "age": "ans",
+        "change_age": "Modifier l'âge",
         "input_range_title": "Indiquez un âge minimum et maximum",
+        "or_choose_category": "Ou choisissez une catégorie d'âge",
         "error_max_lower_than_min": "L'âge maximum ne peut être inférieur à l'âge minimum.",
         "error_max_age": "L'âge saisi peut être au maximum de 120 ans.",
         "error_no_min_age": "Veuillez entrer un âge minimum",
         "error_invalid": "L'âge spécifié n'est pas valide.",
+        "error_decimal": "Vous ne pouvez pas saisir un nombre décimal",
         "children_only": {
           "question": "Pour qui cette activité est-elle organisée ?",
           "children_only": "Uniquement pour les enfants (accueil ou activité extrascolaire)",
@@ -1687,8 +1690,6 @@
     }
   },
   "date_picker": {
-    "today": "Aujourd'hui",
-    "go_to_selected": "Vers la sélection",
     "open_calendar": "Ouvrir le calendrier"
   },
   "date_period_picker": {

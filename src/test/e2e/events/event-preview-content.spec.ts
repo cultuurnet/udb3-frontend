@@ -193,6 +193,11 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByLabel('Verfijn met labels').fill(dummyEvent.label);
     await page.getByRole('option', { name: dummyEvent.label }).click();
 
+    // The saved "Volwassenen 18+" category has to be cleared before another
+    // category can be picked.
+    await page
+      .getByRole('button', { name: age.change_age, exact: true })
+      .click();
     await page
       .getByRole('button', { name: new RegExp(`^${age.kids}`) })
       .click();
