@@ -637,7 +637,10 @@ const AgeRangeStepBoa = ({
   };
 
   const commitAgeRange = (min: string, max: string) => {
-    if (!min && !max && !watchedTypicalAgeRange) return;
+    if (!min && !max) {
+      handleAgeClear();
+      return;
+    }
 
     if (validateAgeRange(min, max)) {
       setEnteredAgeRange({ min, max });
