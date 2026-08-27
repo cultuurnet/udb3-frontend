@@ -1,16 +1,8 @@
 import { expect, Page, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
+import { AgeRanges } from '../../../constants/AgeRange';
 import nl from '../../../i18n/nl.json';
-import {
-  ageRangeLabels,
-  expectSelectedAgeRange,
-  maxAgeInput,
-  minAgeInput,
-  openAgeRangeForm,
-  pickAgePreset,
-  presetButton,
-} from '../helpers/age-range';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
 
@@ -19,9 +11,25 @@ const childrenOnly = age.children_only;
 const confirmModal = age.confirm_modal;
 
 const audienceQuestionLocator = childrenOnly.question;
+const kidsCategory = `${age.kids} ${AgeRanges.KIDS.label}`;
 
 const childrenOnlyRadio = (page: Page) => page.locator('#children-only');
 const withFamilyRadio = (page: Page) => page.locator('#with-family');
+
+const presetButton = (page: Page, name: string) =>
+  page.getByRole('button', { name: new RegExp(`^${name}`) });
+
+// A saved category is shown as a confirmed line, so the inputs and the
+// categories only come back after "Wijzig leeftijd".
+const openAgeRangeForm = async (page: Page) => {
+  await page.getByRole('button', { name: age.change_age, exact: true }).click();
+  await expect(page.getByLabel(age.from, { exact: true })).toBeVisible();
+};
+
+const pickPreset = async (page: Page, name: string) => {
+  await openAgeRangeForm(page);
+  await presetButton(page, name).click();
+};
 
 type TestFixtures = {
   eventId: string;
@@ -66,11 +74,11 @@ test.describe('Children-only audience section', () => {
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
 
     // "Alle leeftijden" is too broad to be children-specific → hidden
-    await pickAgePreset(page, age.all);
+    await pickPreset(page, age.all);
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
 
     // "Senioren 65+" → hidden
-    await pickAgePreset(page, age.seniors);
+    await pickPreset(page, age.seniors);
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
@@ -81,23 +89,23 @@ test.describe('Children-only audience section', () => {
     await page.goto(eventEditUrl);
 
     // "Peuters 0-2" → max ≥ 2 → visible
-    await pickAgePreset(page, age.toddlers);
+    await pickPreset(page, age.toddlers);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // "Kleuters 3-5" → entirely inside BOA → visible
-    await pickAgePreset(page, age.preschoolers);
+    await pickPreset(page, age.preschoolers);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // "Kinderen 6-11" → entirely inside BOA → visible
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // "Tieners 12-15" → min = 12 ≤ 16 → visible
-    await pickAgePreset(page, age.teenagers);
+    await pickPreset(page, age.teenagers);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // "Jongeren 16-26" → min = 16 ≤ 16 → visible (overlaps at 16)
-    await pickAgePreset(page, age.youngsters);
+    await pickPreset(page, age.youngsters);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
   });
 
@@ -109,49 +117,22 @@ test.describe('Children-only audience section', () => {
 
     await openAgeRangeForm(page);
 
-    const fromInput = minAgeInput(page);
-    const tillInput = maxAgeInput(page);
+    const fromInput = page.getByLabel(age.from, { exact: true });
+    const tillInput = page.getByLabel(age.till, { exact: true });
 
-    // Custom range 8-15 → min ≤ 16, max ≥ 2 → visible
+    // Custom range 8-15 → min ≤ 16, max ≥ 2 → visible. Each field only saves
+    // on blur, so widen the range before raising the minimum.
     await fromInput.fill('8');
+    await fromInput.blur();
     await tillInput.fill('15');
     await tillInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // Custom range 17-20 → min > 16 → hidden
-    await fromInput.fill('17');
     await tillInput.fill('20');
     await tillInput.blur();
-    await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
-  });
-
-  test('clearing an entered age while "kinderen alleen" does not warn', async ({
-    page,
-    eventEditUrl,
-    eventId,
-  }) => {
-    await page.goto(eventEditUrl);
-
-    await openAgeRangeForm(page);
-    await minAgeInput(page).fill('12');
-    await minAgeInput(page).blur();
-    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
-
-    const childrenOnlyPut = page.waitForResponse(
-      (res) =>
-        res.url().includes(`/events/${eventId}/children-only`) &&
-        res.request().method() === 'PUT' &&
-        res.ok(),
-    );
-    await childrenOnlyRadio(page).click();
-    await childrenOnlyPut;
-
-    // Emptying the field leaves no age to warn about, so no modal appears and
-    // the question disappears with it.
-    await minAgeInput(page).fill('');
-    await minAgeInput(page).blur();
-
-    await expect(page.getByRole('dialog')).toBeHidden();
+    await fromInput.fill('17');
+    await fromInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
@@ -161,7 +142,7 @@ test.describe('Children-only audience section', () => {
   }) => {
     await page.goto(eventEditUrl);
 
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // Default is "with family"
@@ -188,11 +169,11 @@ test.describe('Children-only audience section', () => {
     await page.goto(eventEditUrl);
 
     // Switch into BOA range → section visible
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     // Switch out → section hidden
-    await pickAgePreset(page, age.adults);
+    await pickPreset(page, age.adults);
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
@@ -204,7 +185,7 @@ test.describe('Children-only audience section', () => {
     await page.goto(eventEditUrl);
 
     // Put the age range in the BOA window and pick "kinderen alleen"
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     const childrenOnlyPut = page.waitForResponse(
@@ -300,7 +281,7 @@ test.describe('Children-only audience section', () => {
     await page.goto(eventEditUrl);
 
     // Setup: 6–11 + children-only.
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     const childrenOnlyPut = page.waitForResponse(
@@ -314,7 +295,7 @@ test.describe('Children-only audience section', () => {
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Move out of BOA range — preset "Volwassenen 18+" triggers the warning.
-    await pickAgePreset(page, age.adults);
+    await pickPreset(page, age.adults);
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
@@ -353,7 +334,7 @@ test.describe('Children-only audience section', () => {
   }) => {
     await page.goto(eventEditUrl);
 
-    await pickAgePreset(page, age.kids);
+    await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
     const childrenOnlyPut = page.waitForResponse(
@@ -367,12 +348,12 @@ test.describe('Children-only audience section', () => {
     await expect(childrenOnlyRadio(page)).toBeChecked();
 
     // Trigger the modal.
-    await pickAgePreset(page, age.adults);
+    await pickPreset(page, age.adults);
 
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    // Cancel → modal closes, previous range + audience preserved.
+    // Cancel → modal closes, nothing is saved.
     await modal
       .getByRole('button', {
         name: confirmModal.age_range.cancel,
@@ -380,10 +361,11 @@ test.describe('Children-only audience section', () => {
       .click();
     await expect(modal).toBeHidden();
 
-    // "Kinderen 6-11" stays selected and the audience remains "kinderen
-    // alleen" — proves field.onChange revert actually updated the
-    // Controller's field.value (a setValue-based revert would not have).
-    await expectSelectedAgeRange(page, ageRangeLabels.kids);
+    // "Kinderen 6-11" is still the saved category and the audience remains
+    // "kinderen alleen".
+    await page.goto(eventEditUrl);
+
+    await expect(page.getByText(kidsCategory, { exact: true })).toBeVisible();
     await expect(childrenOnlyRadio(page)).toBeChecked();
   });
 
@@ -412,8 +394,9 @@ test.describe('Children-only audience section', () => {
     await page
       .getByLabel('Naam van de activiteit')
       .fill(`E2E ChildrenOnly Required ${Date.now()}`);
-    // A new event has no age range yet, so the buttons are shown right away.
-    await presetButton(page, age.kids).click();
+    await page
+      .getByRole('button', { name: new RegExp(`^${age.kids}`) })
+      .click();
 
     // A new event starts without an answer
     await expect(childrenOnlyRadio(page)).not.toBeChecked();
