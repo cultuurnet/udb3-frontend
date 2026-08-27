@@ -836,7 +836,7 @@ const LocationStep = ({
                     <Stack>
                       {['NL', 'DE'].includes(location?.country) && (
                         <FormElement
-                          marginBottom={3}
+                          className="tw:mb-2 tw:max-w-md"
                           Component={
                             <Input
                               value={field.value.postalCode}
@@ -852,7 +852,6 @@ const LocationStep = ({
                           label={t(
                             `location.add_modal.labels.postalCode.${location.country.toLowerCase()}`,
                           )}
-                          maxWidth="28rem"
                           error={
                             formState.errors.location?.postalCode &&
                             t('location.add_modal.errors.postalCode')

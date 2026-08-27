@@ -13,7 +13,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
-import { getStackProps, Stack, StackProps } from '@/ui/Stack';
+import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
@@ -126,13 +126,14 @@ export const Days = ({
             key={`list-item-${day.id}`}
           >
             <List.Item
-              alignItems="center"
-              spacing={5}
+              alignItems="flex-end"
+              spacing={0}
+              className="tw:gap-8"
               marginBottom={isOneOrMoreDays && isBoaEnabled ? 4 : undefined}
             >
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
-                className="tw:gap-2 tw:mr-8"
+                className="tw:gap-2"
                 id={`calendar-step-day-${day.id}`}
                 dateStart={new Date(day.startDate)}
                 dateEnd={new Date(day.endDate)}
@@ -146,14 +147,13 @@ export const Days = ({
               />
               {isOneOrMoreDays && (
                 <TimeSpanPicker
-                  spacing={3}
                   id={`calendar-step-day-${day.id}`}
                   startTime={startTime}
                   endTime={endTime}
                   onChangeStartTime={handleChangeStartTime}
                   onChangeEndTime={handleChangeEndTime}
                   disabled={isDisabled}
-                  minWidth="120px"
+                  className="tw:min-w-30"
                 />
               )}
               {isOneOrMoreDays && isBoaEnabled && (
@@ -171,7 +171,7 @@ export const Days = ({
                 />
               )}
               {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
-                <Stack spacing={2}>
+                <div className="tw:flex tw:flex-col tw:gap-y-1">
                   <Label
                     variant={LabelVariants.BOLD}
                     htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
@@ -205,7 +205,7 @@ export const Days = ({
                       {t('create.calendar.days.overnight_stay.with')}
                     </Label>
                   </Inline>
-                </Stack>
+                </div>
               )}
               {days.length > 1 && (
                 <Button

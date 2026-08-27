@@ -228,14 +228,14 @@ const ReservationPeriod = ({
         </Alert>
       )}
       <Inline
-        spacing={4}
+        spacing={0}
         alignItems="flex-end"
         flexWrap="wrap"
+        className="tw:gap-4"
         opacity={isDatePickerVisible ? 1 : 0.5}
       >
         <DatePeriodPicker
           showHolidaysToggle={isBoaEnabled}
-          className="tw:mr-4"
           id="reservation-date-picker"
           dateStart={startDate}
           dateEnd={endDate}
@@ -271,7 +271,7 @@ const ReservationPeriod = ({
             setEndTime(time);
             setUserHasInteracted(true);
           }}
-          minWidth="120px"
+          className="tw:min-w-30"
         />
       </Inline>
     </Stack>
@@ -336,7 +336,7 @@ const ReservationLink = ({
   return (
     <Inline spacing={4} flexWrap="wrap" {...getInlineProps(boxProps)}>
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-link`}
         label={t('create.additionalInformation.booking_info.link')}
         Component={
@@ -353,7 +353,7 @@ const ReservationLink = ({
         }
       />
       <FormElement
-        flex={1}
+        className="tw:flex-1"
         id={`${idPrefix}-url-label`}
         label={t(
           'create.additionalInformation.booking_info.url_label_dropdown_label',
@@ -792,7 +792,7 @@ const BookingInfoStep = ({
             .map((type) => (
               <FormElement
                 key={type}
-                flex={1}
+                className="tw:flex-1"
                 id={type}
                 label={t(`create.additionalInformation.booking_info.${type}`)}
                 Component={

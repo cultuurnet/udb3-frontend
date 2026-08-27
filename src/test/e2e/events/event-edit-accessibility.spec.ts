@@ -1,8 +1,11 @@
+import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 const EVENT_ID = 'a0b6534b-3a64-4dfe-9875-968414cc26be';
 
 test.describe('Event Edit - Accessibility', () => {
+  test.describe.configure({ mode: 'serial' });
+
   test.beforeEach(async ({ context }) => {
     await context.addCookies([
       {
@@ -20,7 +23,7 @@ test.describe('Event Edit - Accessibility', () => {
   }) => {
     await page.goto(`${baseURL}/events/${EVENT_ID}/edit`);
 
-    await page.getByRole('tab', { name: 'Bereikbaarheid' }).click();
+    await page.getByRole('tab', { name: 'Begeleid vervoer' }).click();
 
     await expect(
       page.getByRole('heading', { name: 'Vertreklocatie 1' }),
@@ -61,6 +64,54 @@ test.describe('Event Edit - Accessibility', () => {
         name: `Vertreklocatie ${existingLocationCount + 1}`,
       }),
     ).toBeHidden();
+
+    await page
+      .getByRole('button', { name: 'Klaar met bewerken' })
+      .click({ force: true });
+  });
+
+  test('creates a new departure place when it is not found', async ({
+    page,
+    baseURL,
+  }) => {
+    const newPlaceName = `E2E Vertreklocatie ${faker.number.int()}`;
+
+    await page.goto(`${baseURL}/events/${EVENT_ID}/edit`);
+
+    await page.getByRole('tab', { name: 'Begeleid vervoer' }).click();
+
+    const newIndex = await page
+      .getByRole('heading', { name: /Vertreklocatie \d+/ })
+      .count();
+
+    await page
+      .getByRole('button', { name: 'Voeg nog een locatie toe' })
+      .click();
+
+    await page.getByTestId(`departure-city-${newIndex}`).fill('9000');
+    await page.getByRole('option', { name: '9000 Gent' }).click();
+
+    await page.getByTestId(`departure-place-${newIndex}`).fill(newPlaceName);
+
+    const addNewOption = page.locator('.rbt-menu-custom-option');
+    await expect(addNewOption).toContainText(
+      'Locatie niet gevonden? Nieuwe locatie toevoegen',
+    );
+    await addNewOption.click();
+
+    const modal = page.getByRole('dialog');
+    await expect(modal.getByLabel('Naam locatie')).toHaveValue(newPlaceName);
+    await expect(modal.getByLabel('Postcode')).toHaveValue('9000');
+    await expect(modal.getByLabel('Gemeente')).toHaveValue('Gent');
+
+    await modal.getByLabel('Straat en nummer').fill('E2E test street 1');
+    await modal.getByRole('button', { name: 'Bioscoop', exact: true }).click();
+    await modal.getByRole('button', { name: 'Toevoegen', exact: true }).click();
+
+    await expect(page.getByText(newPlaceName)).toBeVisible();
+
+    await page.locator(`#departure-delete-${newIndex}`).click();
+    await expect(page.getByText(newPlaceName)).toBeHidden();
 
     await page
       .getByRole('button', { name: 'Klaar met bewerken' })

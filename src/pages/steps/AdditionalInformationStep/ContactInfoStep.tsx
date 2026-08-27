@@ -229,9 +229,7 @@ const ContactInfoStep = ({
         return (
           <Inline key={index} spacing={3}>
             <Select
-              alignSelf="flex-start"
-              height="2.38rem"
-              width="30%"
+              className="tw:self-start tw:w-[30%]"
               value={info.type}
               onChange={(e) => handleChangeContactInfoType(e, index)}
             >
@@ -243,8 +241,7 @@ const ContactInfoStep = ({
             </Select>
             <FormElement
               id={`contact-info-value-${index}`}
-              alignSelf="flex-start"
-              width="55%"
+              className="tw:self-start tw:w-[55%]"
               Component={
                 <Input
                   data-testid="contact-info-value"

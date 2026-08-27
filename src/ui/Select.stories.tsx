@@ -8,14 +8,14 @@ const meta: Meta<typeof Select> = {
   parameters: {
     layout: 'centered',
     controls: {
-      include: ['size'],
+      include: ['size', 'disabled'],
     },
   },
 
   argTypes: {
     size: {
       control: { type: 'select' },
-      options: ['sm', 'lg'],
+      options: ['sm', 'md', 'lg'],
     },
   },
 };

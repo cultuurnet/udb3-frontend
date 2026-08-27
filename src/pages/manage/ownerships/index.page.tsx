@@ -19,7 +19,6 @@ import { useShallowRouter } from '@/hooks/useShallowRouter';
 import { OrganizerPicker } from '@/pages/manage/ownerships/OrganizerPicker';
 import { OwnershipsTable } from '@/pages/organizers/[organizerId]/ownerships/OwnershipsTable';
 import { Organizer } from '@/types/Organizer';
-import { parseSpacing } from '@/ui/Box';
 import { Inline } from '@/ui/Inline';
 import { LabelPositions } from '@/ui/Label';
 import { Page } from '@/ui/Page';
@@ -143,7 +142,7 @@ const OwnershipsOverviewPage = () => {
             onChange={async (event) => {
               await handleChangeState(event.target.value);
             }}
-            maxWidth={parseSpacing(8)}
+            className="tw:max-w-64"
           >
             {Object.values(OwnershipState).map((state) => (
               <option key={state} value={state}>
@@ -173,7 +172,6 @@ const OwnershipsOverviewPage = () => {
                   label={`${t('dashboard.sorting.label')}:`}
                   value={sortOrder}
                   onChange={handleSelectSorting}
-                  width="auto"
                   labelPosition={LabelPositions.LEFT}
                 >
                   <option value="desc">

@@ -106,7 +106,7 @@ const LabelsForm = ({ scope, id, entity }: Props) => {
               }}
             />
           }
-          maxWidth={'100%'}
+          className="tw:max-w-full"
         />
         <Inline spacing={3} flexWrap="wrap">
           {labelsToShow.map((label) => (
