@@ -1710,8 +1710,6 @@
     }
   },
   "date_picker": {
-    "today": "Heute",
-    "go_to_selected": "Zur Auswahl",
     "open_calendar": "Kalender öffnen"
   },
   "date_period_picker": {
