@@ -242,7 +242,7 @@ const UserEditPage = () => {
               <FormElement
                 id="role-typeahead-form-input"
                 label={t('users.edit.add_role')}
-                width="40%"
+                className="tw:w-2/5"
                 Component={
                   <Typeahead
                     key={typeaheadKey}

@@ -80,6 +80,14 @@ Announcement.propTypes = {
   onClick: PropTypes.func,
 };
 
+const getCallToActionHref = (callToAction) => {
+  if (typeof callToAction === 'string' && callToAction) return callToAction;
+  if (callToAction && typeof callToAction.urlSuffix === 'string') {
+    return callToAction.urlSuffix || null;
+  }
+  return null;
+};
+
 const AnnouncementContent = ({
   title,
   imageSrc,
@@ -87,22 +95,22 @@ const AnnouncementContent = ({
   callToAction,
   callToActionLabel,
 }) => {
+  const callToActionHref = getCallToActionHref(callToAction);
+  const hasCallToAction = !!callToActionHref;
+
   const image = (
     <Image
       src={imageSrc}
       alt={callToActionLabel ?? ''}
-      width="100%"
-      maxHeight="30vh"
-      objectFit="contain"
-      opacity={{ hover: 0.85 }}
+      className="tw:w-full tw:max-h-[30vh] tw:object-contain tw:hover:opacity-85"
     />
   );
 
   return (
     <Stack as="article" padding={4} spacing={3} width="70%">
       <Title>{title}</Title>
-      {!!imageSrc && callToAction ? (
-        <Link href={callToAction}>{image}</Link>
+      {!!imageSrc && hasCallToAction ? (
+        <Link href={callToActionHref}>{image}</Link>
       ) : (
         image
       )}
@@ -142,8 +150,8 @@ const AnnouncementContent = ({
         `}
       />
       <Inline as="div" justifyContent="flex-end">
-        {!!callToAction && (
-          <Link href={callToAction} variant={LinkVariants.BUTTON_PRIMARY}>
+        {hasCallToAction && (
+          <Link href={callToActionHref} variant={LinkVariants.BUTTON_PRIMARY}>
             <Text>{callToActionLabel}</Text>
           </Link>
         )}
@@ -156,7 +164,10 @@ AnnouncementContent.propTypes = {
   title: PropTypes.string,
   imageSrc: PropTypes.string,
   body: PropTypes.node,
-  callToAction: PropTypes.string,
+  callToAction: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({ urlSuffix: PropTypes.string }),
+  ]),
   callToActionLabel: PropTypes.string,
 };
 

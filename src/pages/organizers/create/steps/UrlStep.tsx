@@ -92,7 +92,7 @@ const UrlStep = ({
               <FormElement
                 label={t('organizers.create.step1.url')}
                 id="organizer-url"
-                flex={2}
+                className="tw:flex-2"
                 Component={
                   <Input
                     value={field.value?.url || ''}

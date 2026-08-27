@@ -112,7 +112,7 @@ const AlertShadcn = ({
           aria-label={t('common.close')}
           onClick={onClose}
           className={cn(
-            'tw:absolute tw:right-2 tw:flex tw:items-center tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/10',
+            'tw:absolute tw:right-2 tw:flex tw:items-center tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-1 tw:rounded-sm tw:opacity-60 tw:transition-opacity tw:hover:opacity-100 tw:hover:bg-black/2',
             title ? 'tw:top-2' : 'tw:top-1/2 tw:-translate-y-1/2',
             icon?.className,
           )}
