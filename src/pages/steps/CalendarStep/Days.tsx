@@ -57,6 +57,7 @@ type DaysProps = {
   onChangeEndTime?: (id: string, hours: number, minutes: number) => void;
   onChangeChildcareStartTime?: (id: string, newTime: string) => void;
   onChangeChildcareEndTime?: (id: string, newTime: string) => void;
+  showChildcare?: boolean;
   onToggleOvernightStay?: (id: string, enabled: boolean) => void;
   showOvernightStay?: boolean;
   errors: FieldErrors<FormDataUnion>;
@@ -70,6 +71,7 @@ export const Days = ({
   onChangeEndTime,
   onChangeChildcareStartTime,
   onChangeChildcareEndTime,
+  showChildcare = true,
   onToggleOvernightStay,
   showOvernightStay = false,
   errors,
@@ -156,7 +158,7 @@ export const Days = ({
                   className="tw:min-w-30"
                 />
               )}
-              {isOneOrMoreDays && isBoaEnabled && (
+              {isOneOrMoreDays && isBoaEnabled && showChildcare && (
                 <ChildcareTimeFields
                   idPrefix={`calendar-step-day-${day.id}`}
                   startTime={day.childcareStartTime ?? ''}
@@ -223,10 +225,12 @@ export const Days = ({
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
-            {childcareStartError && (
+            {showChildcare && childcareStartError && (
               <Text color="red">{childcareStartError}</Text>
             )}
-            {childcareEndError && <Text color="red">{childcareEndError}</Text>}
+            {showChildcare && childcareEndError && (
+              <Text color="red">{childcareEndError}</Text>
+            )}
             {isDisabled && (
               <Alert
                 variant={AlertVariants.PRIMARY}
