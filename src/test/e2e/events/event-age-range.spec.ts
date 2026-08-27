@@ -318,7 +318,7 @@ test.describe('Age range', () => {
     await page.goto(eventEditUrl);
 
     // The last saved range and audience are untouched.
-    await expect(minAgeInput(page)).toHaveValue('');
+    await expect(minAgeInput(page)).toHaveValue('0');
     await expect(maxAgeInput(page)).toHaveValue('11');
     await expect(childrenOnlyRadio(page)).toBeChecked();
   });
