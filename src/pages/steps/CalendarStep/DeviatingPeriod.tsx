@@ -1,4 +1,4 @@
-import { format, isSameDay, startOfDay } from 'date-fns';
+import { endOfDay, format, isSameDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
@@ -157,7 +157,7 @@ const DeviatingPeriod = ({
             dateEnd={period.endDate}
             onDateStartChange={(date) => {
               clearQuickLinkRangeError();
-              onChange({ ...period, startDate: date });
+              onChange({ ...period, startDate: date, endDate: endOfDay(date) });
             }}
             onDateEndChange={(date) => {
               clearQuickLinkRangeError();
