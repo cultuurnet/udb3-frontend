@@ -280,6 +280,49 @@ test.describe('Age range', () => {
     await expect(childrenOnlyRadio(page)).toBeHidden();
   });
 
+  test('emptying both age fields while "children only" keeps the saved age', async ({
+    page,
+    eventEditUrl,
+  }) => {
+    await page.goto(eventEditUrl);
+    await openAgeRangeForm(page);
+
+    const minPut = waitForTypicalAgeRangePut(page);
+    await minAgeInput(page).fill('6');
+    await minAgeInput(page).blur();
+    await minPut;
+
+    const maxPut = waitForTypicalAgeRangePut(page);
+    await maxAgeInput(page).fill('11');
+    await maxAgeInput(page).blur();
+    await maxPut;
+
+    const childrenOnlyPut = waitForChildrenOnlyPut(page);
+    await childrenOnlyRadio(page).click();
+    await childrenOnlyPut;
+    await expect(childrenOnlyRadio(page)).toBeChecked();
+
+    const clearedMinPut = waitForTypicalAgeRangePut(page);
+    await minAgeInput(page).fill('');
+    await minAgeInput(page).blur();
+    await clearedMinPut;
+
+    await maxAgeInput(page).fill('');
+    await maxAgeInput(page).blur();
+
+    // An empty range is only cleared in the form, so the audience question
+    // disappears instead of asking for a confirmation.
+    await expect(childrenOnlyRadio(page)).toBeHidden();
+    await expect(page.getByRole('dialog')).toBeHidden();
+
+    await page.goto(eventEditUrl);
+
+    // The last saved range and audience are untouched.
+    await expect(minAgeInput(page)).toHaveValue('0');
+    await expect(maxAgeInput(page)).toHaveValue('11');
+    await expect(childrenOnlyRadio(page)).toBeChecked();
+  });
+
   test('age outside 2–12 while "children only": cancel keeps the previous age and audience', async ({
     page,
     eventEditUrl,
