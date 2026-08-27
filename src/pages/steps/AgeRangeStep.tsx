@@ -61,7 +61,7 @@ type AgeFields = { min: string; max: string };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
-const BOA_MAX_AGE = 16;
+const BOA_MAX_AGE = 12;
 const AGE_PATTERN = /^\d+$/;
 const DECIMAL_SEPARATOR_PATTERN = /[.,]/;
 
