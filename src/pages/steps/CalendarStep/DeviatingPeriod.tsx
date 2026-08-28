@@ -326,7 +326,7 @@ const DeviatingPeriod = ({
                   {period.openingHours.length > 1 && (
                     <Button
                       iconName={Icons.TRASH}
-                      variant={ButtonVariants.DANGER}
+                      variant={ButtonVariants.OUTLINED_DANGER}
                       onClick={() => handleRemoveOpeningHour(openingHour.id)}
                     />
                   )}

@@ -26,6 +26,11 @@ const BootStrapVariants = {
   ICON: 'icon',
 } as const;
 
+const outlinedVariantColors: Record<string, string> = {
+  outlined: colors.udbMainDarkBlue,
+  'outlined-danger': colors.red3,
+};
+
 const getValue = getValueFromTheme('button');
 const getGlobalValue = getValueFromTheme('global');
 
@@ -281,6 +286,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
     ).includes(variant);
     const isLinkVariant =
       variant === ButtonVariants.LINK || variant === ButtonVariants.LINK_DANGER;
+    const outlineColor = outlinedVariantColors[variant];
     const isLinkDanger = variant === ButtonVariants.LINK_DANGER;
 
     const BaseButtonWithForwardedAs = (props: InlineProps) => (
@@ -349,15 +355,15 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    if (variant === ButtonVariants.OUTLINED) {
+    if (outlineColor) {
       return (
         <BaseButton
           {...propsToApply}
           alignItems="center"
           css={`
             background: transparent;
-            border: 1px solid ${colors.udbMainDarkBlue};
-            color: ${colors.udbMainDarkBlue};
+            border: 1px solid ${outlineColor};
+            color: ${outlineColor};
             border-radius: ${getValue('borderRadius')};
             padding: ${getValue('paddingY')} ${getValue('paddingX')};
             min-height: ${getGlobalFormInputHeight};
@@ -367,13 +373,13 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
             &:hover {
               background-color: color-mix(
                 in srgb,
-                ${colors.udbMainDarkBlue} 12%,
+                ${outlineColor} 12%,
                 transparent
               );
             }
 
             &:focus {
-              outline: solid ${colors.udbMainDarkBlue};
+              outline: solid ${outlineColor};
             }
 
             &:focus:not(:focus-visible) {
