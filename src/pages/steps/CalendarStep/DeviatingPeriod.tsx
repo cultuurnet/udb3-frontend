@@ -126,6 +126,7 @@ const DeviatingPeriod = ({
       css={`
         border: 1px solid ${colors.grey3};
         border-radius: 0.5rem;
+        background-color: ${colors.greylight};
       `}
       {...boxProps}
     >
