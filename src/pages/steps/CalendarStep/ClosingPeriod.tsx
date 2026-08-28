@@ -69,9 +69,10 @@ const ClosingPeriod = ({
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
           onClick={onRemove}
-        >
-          {t('create.calendar.opening_hours_modal.closing.remove_period')}
-        </Button>
+          aria-label={t(
+            'create.calendar.opening_hours_modal.closing.remove_period',
+          )}
+        />
       </Inline>
 
       <Stack spacing={2}>
