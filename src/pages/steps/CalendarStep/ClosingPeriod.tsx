@@ -57,7 +57,7 @@ const ClosingPeriod = ({
 
   return (
     <Stack
-      spacing={4}
+      spacing={0}
       padding={4}
       css={`
         border: 1px solid ${colors.grey3};
