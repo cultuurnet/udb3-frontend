@@ -25,6 +25,7 @@ import type { HolidayType } from '@/utils/holidayPresets';
 import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
 import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
+import { HoursModalTextSizes } from './typography';
 
 type OpeningHour = {
   id: string;
@@ -128,7 +129,14 @@ const DeviatingPeriod = ({
       `}
       {...boxProps}
     >
-      <Inline justifyContent="flex-end" alignItems="center">
+      <Inline justifyContent="space-between" alignItems="center">
+        <Text
+          color={colors.udbMainDarkBlue}
+          fontWeight="bold"
+          fontSize={HoursModalTextSizes.SECTION_TITLE}
+        >
+          {t('create.calendar.opening_hours_modal.deviating.select_period')}
+        </Text>
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
@@ -140,9 +148,6 @@ const DeviatingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.deviating.select_period')}
-        </Text>
         <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
             className="tw:w-full"
@@ -239,7 +244,11 @@ const DeviatingPeriod = ({
       </Stack>
 
       <Stack spacing={2} marginTop={3}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text
+          color={colors.udbMainDarkBlue}
+          fontWeight="bold"
+          fontSize={HoursModalTextSizes.SECTION_TITLE}
+        >
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>

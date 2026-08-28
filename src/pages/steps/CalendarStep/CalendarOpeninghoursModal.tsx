@@ -40,6 +40,7 @@ import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
 import { sortPeriods } from './sortPeriods';
+import { HoursModalTextSizes } from './typography';
 
 type CalendarOpeninghoursModalProps = {
   visible: boolean;
@@ -311,6 +312,12 @@ const CalendarOpeninghoursModal = ({
       css={`
         .modal-dialog {
           max-width: 58rem;
+        }
+        .modal-header .modal-title {
+          font-size: ${HoursModalTextSizes.MODAL_TITLE};
+        }
+        .accordion-button h3 {
+          font-size: ${HoursModalTextSizes.ACCORDION_TITLE};
         }
       `}
     >

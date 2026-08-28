@@ -16,6 +16,7 @@ import { colors } from '@/ui/theme';
 import type { HolidayType } from '@/utils/holidayPresets';
 
 import type { SupportedLanguage } from '../../../i18n';
+import { HoursModalTextSizes } from './typography';
 
 type ClosingPeriodData = {
   id: string;
@@ -64,7 +65,14 @@ const ClosingPeriod = ({
       `}
       {...boxProps}
     >
-      <Inline justifyContent="flex-end" alignItems="center">
+      <Inline justifyContent="space-between" alignItems="center">
+        <Text
+          color={colors.udbMainDarkBlue}
+          fontWeight="bold"
+          fontSize={HoursModalTextSizes.SECTION_TITLE}
+        >
+          {t('create.calendar.opening_hours_modal.closing.select_period')}
+        </Text>
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
@@ -76,9 +84,6 @@ const ClosingPeriod = ({
       </Inline>
 
       <Stack spacing={2}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.closing.select_period')}
-        </Text>
         <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
             className="tw:w-full"
