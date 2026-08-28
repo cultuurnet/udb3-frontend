@@ -216,7 +216,6 @@
         "select_days": "Tag(e) auswählen",
         "deviating": {
           "title": "Abweichende Stunden hinzufügen",
-          "period_title": "Abweichende Periode {{index}}",
           "remove_period": "Periode entfernen",
           "select_period": "Zeitraum auswählen",
           "fill_hours": "Stunden für diesen Zeitraum eingeben",
@@ -237,7 +236,6 @@
         },
         "closing": {
           "title": "Schließtage oder -perioden hinzufügen",
-          "period_title": "Schließperiode {{index}}",
           "remove_period": "Periode entfernen",
           "select_period": "Zeitraum auswählen",
           "add_period": "Schließperiode hinzufügen",

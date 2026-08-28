@@ -26,7 +26,6 @@ type ClosingPeriodData = {
 };
 
 type Props = BoxProps & {
-  index: number;
   period: ClosingPeriodData;
   onChange: (period: ClosingPeriodData) => void;
   onRemove: () => void;
@@ -38,7 +37,6 @@ type Props = BoxProps & {
 };
 
 const ClosingPeriod = ({
-  index,
   period,
   onChange,
   onRemove,
@@ -66,12 +64,7 @@ const ClosingPeriod = ({
       `}
       {...boxProps}
     >
-      <Inline justifyContent="space-between" alignItems="center">
-        <Text fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.closing.period_title', {
-            index: index + 1,
-          })}
-        </Text>
+      <Inline justifyContent="flex-end" alignItems="center">
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}

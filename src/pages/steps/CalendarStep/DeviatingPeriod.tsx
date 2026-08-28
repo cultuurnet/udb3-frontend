@@ -44,7 +44,6 @@ type DeviatingPeriodData = {
 };
 
 type Props = BoxProps & {
-  index: number;
   period: DeviatingPeriodData;
   onChange: (period: DeviatingPeriodData) => void;
   onRemove: () => void;
@@ -59,7 +58,6 @@ type Props = BoxProps & {
 };
 
 const DeviatingPeriod = ({
-  index,
   period,
   onChange,
   onRemove,
@@ -130,12 +128,7 @@ const DeviatingPeriod = ({
       `}
       {...boxProps}
     >
-      <Inline justifyContent="space-between" alignItems="center">
-        <Text fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.deviating.period_title', {
-            index: index + 1,
-          })}
-        </Text>
+      <Inline justifyContent="flex-end" alignItems="center">
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}

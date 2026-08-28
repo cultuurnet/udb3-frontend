@@ -479,7 +479,6 @@ const CalendarOpeninghoursModal = ({
             {deviatingPeriods.map((period, index) => (
               <DeviatingPeriod
                 key={period.id}
-                index={index}
                 period={period}
                 onChange={(updated: DeviatingPeriodData) => {
                   setDeviatingPeriods((prev) =>
@@ -534,7 +533,6 @@ const CalendarOpeninghoursModal = ({
             {closingPeriods.map((period, index) => (
               <ClosingPeriod
                 key={period.id}
-                index={index}
                 period={period}
                 onChange={(updated: ClosingPeriodData) => {
                   setClosingPeriods((prev) =>
