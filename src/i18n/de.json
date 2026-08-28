@@ -217,7 +217,7 @@
         "deviating": {
           "title": "Abweichende Stunden hinzufügen",
           "remove_period": "Periode entfernen",
-          "select_period": "Zeitraum auswählen",
+          "select_period": "Wann gelten die abweichenden Stunden?",
           "fill_hours": "Stunden für diesen Zeitraum eingeben",
           "add_period": "Abweichende Periode hinzufügen",
           "description_placeholder": "Beschreibung",

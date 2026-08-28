@@ -217,8 +217,8 @@
         "deviating": {
           "title": "Ajouter des heures dérogatoires",
           "remove_period": "Supprimer la période",
-          "select_period": "Sélectionner la période",
-          "fill_hours": " les heures pour cette période",
+          "select_period": "Quand les heures dérogatoires s'appliquent-elles ?",
+          "fill_hours": "Remplissez les heures pour cette période",
           "add_period": "Ajouter une période dérogatoire",
           "description_placeholder": "Description",
           "errors": {
