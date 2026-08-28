@@ -259,11 +259,7 @@ const DeviatingPeriod = ({
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline
-                  alignItems="flex-end"
-                  spacing={5}
-                  marginBottom={showChildcare ? 4 : undefined}
-                >
+                <Inline alignItems="flex-end" spacing={5}>
                   <Stack spacing={3}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.days')}

@@ -131,7 +131,9 @@ export const Days = ({
               alignItems="flex-end"
               spacing={0}
               className="tw:gap-8"
-              marginBottom={isOneOrMoreDays && isBoaEnabled ? 4 : undefined}
+              marginBottom={
+                isOneOrMoreDays && isBoaEnabled && index === 0 ? 4 : undefined
+              }
             >
               <DatePeriodPicker
                 showHolidaysToggle={isBoaEnabled}
@@ -170,6 +172,7 @@ export const Days = ({
                     onChangeChildcareEndTime?.(day.id, newTime)
                   }
                   disabled={isDisabled}
+                  showInfo={index === 0}
                 />
               )}
               {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (

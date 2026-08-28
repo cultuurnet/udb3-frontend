@@ -340,7 +340,7 @@ const CalendarOpeninghoursModal = ({
             )}
           </Alert>
         )}
-        {openingHours.map((openingHour) => {
+        {openingHours.map((openingHour, index) => {
           const { startError, endError } = getChildcareErrors(t, {
             childcareStartTime: openingHour.childcareStartTime,
             childcareEndTime: openingHour.childcareEndTime,
@@ -353,7 +353,7 @@ const CalendarOpeninghoursModal = ({
               <Inline
                 alignItems="flex-end"
                 spacing={5}
-                marginBottom={showChildcare ? 4 : undefined}
+                marginBottom={showChildcare && index === 0 ? 4 : undefined}
               >
                 <Stack spacing={3}>
                   <Text fontWeight="bold">
@@ -421,6 +421,7 @@ const CalendarOpeninghoursModal = ({
                         newTime,
                       )
                     }
+                    showInfo={index === 0}
                   />
                 )}
                 {openingHours.length > 1 && (
