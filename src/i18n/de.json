@@ -361,6 +361,7 @@
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
           "to": "bis",
+          "tip": "Kennen Sie nur die Geburtsjahre Ihrer Teilnehmer? Geben Sie dann bei 'von' den 01.01. gefolgt vom frühesten Geburtsjahr ein. Geben Sie bei 'bis' den 31.12. gefolgt vom spätesten Geburtsjahr ein.",
           "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
         },
         "all": "Alle Altersgruppen",
