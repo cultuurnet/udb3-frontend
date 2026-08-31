@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
-import { ManIllustrationSvg } from '@/pages/login/illustrations/ManIllustration';
-import { WomanIllustrationSvg } from '@/pages/login/illustrations/WomanIllustration';
+import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
+import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';

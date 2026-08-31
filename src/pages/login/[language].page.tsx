@@ -14,6 +14,8 @@ import { Footer, FooterVariants } from '@/pages/Footer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonSizes } from '@/ui/Button';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
+import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
+import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -24,9 +26,6 @@ import {
   getGlobalBorderRadius,
   getValueFromTheme,
 } from '@/ui/theme';
-
-import { ManIllustrationSvg } from './illustrations/ManIllustration';
-import { WomanIllustrationSvg } from './illustrations/WomanIllustration';
 
 const getValueForPage = getValueFromTheme('loginPage');
 
