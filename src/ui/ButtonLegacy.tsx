@@ -2,6 +2,8 @@ import { cloneElement, forwardRef } from 'react';
 import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 
+import type { Values } from '@/types/Values';
+
 import type { ButtonProps } from './Button';
 import { ButtonVariants } from './Button';
 import { Icon } from './Icon';
@@ -26,7 +28,9 @@ const BootStrapVariants = {
   ICON: 'icon',
 } as const;
 
-const outlinedVariantColors: Record<string, string> = {
+const outlinedVariantColors: Partial<
+  Record<Values<typeof ButtonVariants>, string>
+> = {
   outlined: colors.udbMainDarkBlue,
   'outlined-danger': colors.red3,
 };
