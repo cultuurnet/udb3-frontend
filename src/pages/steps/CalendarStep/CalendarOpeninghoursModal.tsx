@@ -317,7 +317,8 @@ const CalendarOpeninghoursModal = ({
           font-size: ${theme.components.openingHoursModal.fontSize.modalTitle};
         }
         .accordion-button h3 {
-          font-size: ${theme.components.openingHoursModal.fontSize.accordionTitle};
+          font-size: ${theme.components.openingHoursModal.fontSize
+            .accordionTitle};
         }
       `}
     >
