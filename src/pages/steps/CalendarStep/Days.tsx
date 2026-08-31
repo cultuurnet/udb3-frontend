@@ -132,7 +132,9 @@ export const Days = ({
               spacing={0}
               className="tw:gap-8"
               marginBottom={
-                isOneOrMoreDays && isBoaEnabled && index === 0 ? 4 : undefined
+                isOneOrMoreDays && isBoaEnabled && showChildcare && index === 0
+                  ? 4
+                  : undefined
               }
             >
               <DatePeriodPicker
