@@ -12,11 +12,10 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { colors, theme } from '@/ui/theme';
 import type { HolidayType } from '@/utils/holidayPresets';
 
 import type { SupportedLanguage } from '../../../i18n';
-import { HoursModalTextSizes } from './typography';
 
 type ClosingPeriodData = {
   id: string;
@@ -70,7 +69,7 @@ const ClosingPeriod = ({
         <Text
           color={colors.udbMainDarkBlue}
           fontWeight="bold"
-          fontSize={HoursModalTextSizes.SECTION_TITLE}
+          fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
         >
           {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>

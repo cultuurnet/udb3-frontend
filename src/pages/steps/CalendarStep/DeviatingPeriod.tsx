@@ -15,7 +15,7 @@ import { Input } from '@/ui/Input';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { colors, theme } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -25,7 +25,6 @@ import type { HolidayType } from '@/utils/holidayPresets';
 import type { SupportedLanguage } from '../../../i18n';
 import { createOpeninghoursId } from '../machines/calendarMachine';
 import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
-import { HoursModalTextSizes } from './typography';
 
 type OpeningHour = {
   id: string;
@@ -169,7 +168,7 @@ const DeviatingPeriod = ({
           <Text
             color={colors.udbMainDarkBlue}
             fontWeight="bold"
-            fontSize={HoursModalTextSizes.SECTION_TITLE}
+            fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
           >
             {t('create.calendar.opening_hours_modal.deviating.select_period')}
           </Text>
@@ -269,7 +268,7 @@ const DeviatingPeriod = ({
         <Text
           color={colors.udbMainDarkBlue}
           fontWeight="bold"
-          fontSize={HoursModalTextSizes.SECTION_TITLE}
+          fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
         >
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>

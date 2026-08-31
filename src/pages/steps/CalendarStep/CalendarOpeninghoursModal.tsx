@@ -15,6 +15,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { theme } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -40,7 +41,6 @@ import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 import { ClosingPeriod, type ClosingPeriodData } from './ClosingPeriod';
 import { DeviatingPeriod, type DeviatingPeriodData } from './DeviatingPeriod';
 import { sortPeriods } from './sortPeriods';
-import { HoursModalTextSizes } from './typography';
 
 type CalendarOpeninghoursModalProps = {
   visible: boolean;
@@ -314,10 +314,10 @@ const CalendarOpeninghoursModal = ({
           max-width: 58rem;
         }
         .modal-header .modal-title {
-          font-size: ${HoursModalTextSizes.MODAL_TITLE};
+          font-size: ${theme.components.openingHoursModal.fontSize.modalTitle};
         }
         .accordion-button h3 {
-          font-size: ${HoursModalTextSizes.ACCORDION_TITLE};
+          font-size: ${theme.components.openingHoursModal.fontSize.accordionTitle};
         }
       `}
     >
