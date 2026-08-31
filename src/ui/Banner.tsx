@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
 
-import { useMatchBreakpoint } from '@/hooks/useMatchBreakpoint';
 import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
 import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
-import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 const getGlobalValue = getValueFromTheme('global');
@@ -16,8 +15,6 @@ type Props = InlineProps & {
 };
 
 const Banner = ({ title, description, ...props }: Props) => {
-  const isSmallView = useMatchBreakpoint(Breakpoints.S);
-
   return (
     <Inline
       forwardedAs="div"
@@ -33,16 +30,24 @@ const Banner = ({ title, description, ...props }: Props) => {
       `}
       {...getInlineProps(props)}
     >
-      {!isSmallView && (
-        <ManIllustrationSvg width="16rem" height="6.5rem" flexShrink={0} />
-      )}
+      <ManIllustrationSvg
+        width="16rem"
+        height="6.5rem"
+        flexShrink={0}
+        display={{ default: 'flex', s: 'none' }}
+        aria-hidden="true"
+      />
       <Stack spacing={3} alignItems="center" textAlign="center">
         <Title size={2}>{title}</Title>
         {description}
       </Stack>
-      {!isSmallView && (
-        <WomanIllustrationSvg width="14rem" height="6.5rem" flexShrink={0} />
-      )}
+      <WomanIllustrationSvg
+        width="14rem"
+        height="6.5rem"
+        flexShrink={0}
+        display={{ default: 'flex', s: 'none' }}
+        aria-hidden="true"
+      />
     </Inline>
   );
 };
