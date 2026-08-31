@@ -324,7 +324,9 @@ const Index = () => {
             top={isMediumView ? '20%' : isXLargeView ? '-35%' : '-10%'}
             left={0}
           />
-          {!isSmallView && <ManIllustrationSvg zIndex={3} width={'35%'} />}
+          {!isSmallView && (
+            <ManIllustrationSvg zIndex={3} width={'35%'} showArrow />
+          )}
 
           <UDBCard
             zIndex={1}
@@ -333,8 +335,9 @@ const Index = () => {
             onLogin={handleClickLogin}
             width={isSmallView ? '100%' : '30%'}
           />
-          {!isSmallView && <WomanIllustrationSvg zIndex={3} width={'35%'} />}
-
+          {!isSmallView && (
+            <WomanIllustrationSvg zIndex={3} width={'35%'} showArrow />
+          )}
           <Inline
             width="100%"
             justifyContent="center"
