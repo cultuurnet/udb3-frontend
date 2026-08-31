@@ -371,6 +371,7 @@
           "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
           "from": "van",
           "to": "tot",
+          "tip": "Ken je enkel de geboortejaren van je deelnemers? Vul dan bij 'van' 01/01 in, gevolgd door het vroegste geboortejaar. Vul bij 'tot' 31/12 in, gevolgd door het laatste geboortejaar.",
           "error_max_before_min": "De 'tot'-datum mag niet vroeger vallen dan de 'van'-datum."
         },
         "all": "Alle leeftijden",
