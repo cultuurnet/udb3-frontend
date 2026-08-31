@@ -8,6 +8,7 @@ import Cookies from 'universal-cookie';
 
 import { Scope, ScopeTypes } from '@/constants/OfferType';
 import { SortField, SortOrder } from '@/constants/SortOptions';
+import { useAnnouncementModalContext } from '@/context/AnnouncementModalContext';
 import { QueryStatus } from '@/hooks/api/authenticated-query';
 import {
   prefetchGetEventsByCreatorQuery,
@@ -38,6 +39,7 @@ import {
   useGetUserQuery,
   User,
 } from '@/hooks/api/user';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
 import { SupportedLanguage } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
@@ -49,6 +51,7 @@ import type { Organizer } from '@/types/Organizer';
 import type { Place } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
 import { Alert, AlertVariants } from '@/ui/Alert';
+import { Banner } from '@/ui/Banner';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { Dropdown } from '@/ui/Dropdown';
@@ -404,6 +407,10 @@ const Dashboard = (): any => {
 
   const queryClient = useQueryClient();
 
+  const [, setAnnouncementModalContext] = useAnnouncementModalContext();
+
+  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [toBeDeletedItem, setToBeDeletedItem] = useState<Item>();
 
@@ -605,13 +612,43 @@ const Dashboard = (): any => {
   );
 
   return (
-    <Page backgroundColor="white" key="page">
+    <Page backgroundColor="white" spacing={4} key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
           ? `${t('dashboard.welcome')}, ${user['https://publiq.be/first_name']}`
           : `${t('dashboard.welcome')},`}
       </Page.Title>
       <Page.Content spacing={5}>
+        {isBoaEnabled && i18n.language === 'nl' && (
+          <Banner
+            title={t('dashboard.banner.title')}
+            description={
+              <Stack as="span" alignItems="center" lineHeight="1.3">
+                <Text>{t('dashboard.banner.description')}</Text>
+                <Text
+                  css={`
+                    button {
+                      display: inline;
+                      padding: 0;
+                    }
+                  `}
+                >
+                  <Trans i18nKey="dashboard.banner.read_more">
+                    <Button
+                      variant={ButtonVariants.LINK}
+                      onClick={() =>
+                        setAnnouncementModalContext((prevModalContext) => ({
+                          ...prevModalContext,
+                          visible: true,
+                        }))
+                      }
+                    />
+                  </Trans>
+                </Text>
+              </Stack>
+            }
+          />
+        )}
         {globalAlertMessages && (
           <Inline>
             <Alert variant={globalAlertVariant}>
