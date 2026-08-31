@@ -41,7 +41,7 @@ import {
 } from '@/hooks/api/user';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePublicationStatus } from '@/hooks/usePublicationStatus';
-import { SupportedLanguage } from '@/i18n/index';
+import { SupportedLanguage, SupportedLanguages } from '@/i18n/index';
 import { PermissionTypes } from '@/layouts/Sidebar';
 import { Footer } from '@/pages/Footer';
 import { RequestOwnershipModal } from '@/pages/organizers/[organizerId]/preview/RequestOwnershipModal';
@@ -619,7 +619,7 @@ const Dashboard = (): any => {
           : `${t('dashboard.welcome')},`}
       </Page.Title>
       <Page.Content spacing={5}>
-        {isBoaEnabled && i18n.language === 'nl' && (
+        {isBoaEnabled && i18n.language === SupportedLanguages.NL && (
           <Banner
             title={t('dashboard.banner.title')}
             description={
