@@ -437,6 +437,9 @@ const CalendarOpeninghoursModal = ({
                     iconName={Icons.TRASH}
                     variant={ButtonVariants.DANGER}
                     onClick={() => handleRemoveOpeningHours(openingHour.id)}
+                    aria-label={t(
+                      'create.calendar.fixed_days.overview.delete_modal.title',
+                    )}
                   />
                 )}
               </Inline>

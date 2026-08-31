@@ -359,6 +359,9 @@ const DeviatingPeriod = ({
                       iconName={Icons.TRASH}
                       variant={ButtonVariants.OUTLINED_DANGER}
                       onClick={() => handleRemoveOpeningHour(openingHour.id)}
+                      aria-label={t(
+                        'create.calendar.fixed_days.overview.delete_modal.title',
+                      )}
                     />
                   )}
                 </Inline>
