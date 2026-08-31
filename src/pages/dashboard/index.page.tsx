@@ -625,16 +625,10 @@ const Dashboard = (): any => {
             description={
               <Stack as="span" alignItems="center" lineHeight="1.3">
                 <Text>{t('dashboard.banner.description')}</Text>
-                <Text
-                  css={`
-                    button {
-                      display: inline;
-                      padding: 0;
-                    }
-                  `}
-                >
+                <Text>
                   <Trans i18nKey="dashboard.banner.read_more">
                     <Button
+                      className="tw:inline! tw:p-0"
                       variant={ButtonVariants.LINK}
                       onClick={() =>
                         setAnnouncementModalContext((prevModalContext) => ({
