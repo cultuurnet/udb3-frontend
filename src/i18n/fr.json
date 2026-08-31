@@ -361,6 +361,7 @@
           "title": "Indiquez les dates de naissance minimum et maximum des participants",
           "from": "du",
           "to": "au",
+          "tip": "Vous ne connaissez que les années de naissance de vos participants ? Indiquez alors 01/01 dans le champ 'du', suivi de l'année de naissance la plus ancienne. Indiquez 31/12 dans le champ 'au', suivi de l'année de naissance la plus récente.",
           "error_max_before_min": "La date 'au' ne peut pas être antérieure à la date 'du'."
         },
         "all": "De tous âges",
