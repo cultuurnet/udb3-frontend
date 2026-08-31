@@ -8,7 +8,7 @@ import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker, QuickLinkPeriod } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
@@ -119,6 +119,40 @@ const DeviatingPeriod = ({
       ) as DayOfWeek[],
     });
 
+  const createDeviatingPeriodFromQuickLink = (
+    quickLinkPeriod: QuickLinkPeriod,
+  ): DeviatingPeriodData => {
+    const isSingleDay = isSameDay(
+      quickLinkPeriod.startDate,
+      quickLinkPeriod.endDate,
+    );
+    const dayOfWeek = isSingleDay
+      ? (format(quickLinkPeriod.startDate, 'iiii').toLowerCase() as DayOfWeek)
+      : null;
+
+    return {
+      id: uniqueId('deviating-period-'),
+      startDate: quickLinkPeriod.startDate,
+      endDate: quickLinkPeriod.endDate,
+      description: { [lang]: quickLinkPeriod.name },
+      holidayType: quickLinkPeriod.holidayType,
+      openingHours: period.openingHours.map((openingHour) => ({
+        ...openingHour,
+        id: createOpeninghoursId(),
+        dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
+      })),
+    };
+  };
+
+  const handleQuickLinkClick = (periods: QuickLinkPeriod[]) => {
+    if (!onQuickLinkExpand || periods.length === 0) return;
+
+    const filtered = filterByEventRange(periods);
+    if (filtered.length === 0) return;
+
+    onQuickLinkExpand(filtered.map(createDeviatingPeriodFromQuickLink));
+  };
+
   return (
     <Stack
       spacing={4}
@@ -172,31 +206,7 @@ const DeviatingPeriod = ({
               fetchHolidays={fetchHolidays}
               apiHolidays={apiHolidays}
               onShowHolidaysChange={onShowHolidaysChange}
-              onQuickLinkClick={(periods) => {
-                if (!onQuickLinkExpand || periods.length === 0) return;
-                const filtered = filterByEventRange(periods);
-                if (filtered.length === 0) return;
-                onQuickLinkExpand(
-                  filtered.map((p) => {
-                    const isSingleDay = isSameDay(p.startDate, p.endDate);
-                    const dayOfWeek = isSingleDay
-                      ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
-                      : null;
-                    return {
-                      id: uniqueId('deviating-period-'),
-                      startDate: p.startDate,
-                      endDate: p.endDate,
-                      description: { [lang]: p.name },
-                      holidayType: p.holidayType,
-                      openingHours: period.openingHours.map((openingHour) => ({
-                        ...openingHour,
-                        id: createOpeninghoursId(),
-                        dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
-                      })),
-                    };
-                  }),
-                );
-              }}
+              onQuickLinkClick={handleQuickLinkClick}
             />
             <Input
               value={period.description[lang] ?? ''}
