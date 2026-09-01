@@ -2,12 +2,10 @@ import { faker } from '@faker-js/faker';
 import { test } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
-import { isBoaEnabled } from '../setup/feature-flags';
+import { addWeeklyOpeningHours } from '../helpers/add-weekly-opening-hours';
 
 const calendar = nl.create.calendar;
-const fixedDays = calendar.fixed_days;
 const shortDays = calendar.days.short;
-const openingHoursModal = calendar.opening_hours_modal;
 
 const dummyEvent = {
   name: 'E2E test event with calendarType permanent and openinghours',
@@ -46,37 +44,12 @@ test('create an event with calendarType permanent and openinghours', async ({
     .locator('#calendar-step-fixeddate-period-picker-end')
     .fill(endDate.toLocaleDateString('nl-BE'));
 
-  await page
-    .getByRole('button', {
-      name: isBoaEnabled
-        ? fixedDays.button_add_hours
-        : fixedDays.button_add_opening_hours,
-    })
-    .click();
   // // openinghours
-  const selectedDays = [
+  await addWeeklyOpeningHours(page, [
     shortDays.monday,
     shortDays.wednesday,
     shortDays.friday,
-  ];
-
-  if (isBoaEnabled) {
-    const modal = page.getByRole('dialog');
-    await modal
-      .getByRole('button', { name: openingHoursModal.select_days })
-      .click();
-    for (const day of selectedDays) {
-      await modal.getByRole('checkbox', { name: day }).click();
-    }
-    await modal
-      .getByRole('button', { name: openingHoursModal.button_confirm })
-      .click();
-  } else {
-    for (const day of selectedDays) {
-      await page.getByText(day, { exact: true }).click();
-    }
-    await page.getByRole('button', { name: 'Opslaan' }).click();
-  }
+  ]);
 
   // 4. Address
   await page.getByLabel('Gemeente').click();
