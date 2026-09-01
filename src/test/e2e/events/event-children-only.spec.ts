@@ -80,9 +80,13 @@ test.describe('Children-only audience section', () => {
     // "Senioren 65+" → hidden
     await pickPreset(page, age.seniors);
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
+
+    // "Jongeren 16-26" → starts above 12 and ends above 16 → hidden
+    await pickPreset(page, age.youngsters);
+    await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
-  test('appears when the age range overlaps with the BOA range (2-16)', async ({
+  test('appears when the age range stays inside the BOA range', async ({
     page,
     eventEditUrl,
   }) => {
@@ -100,12 +104,8 @@ test.describe('Children-only audience section', () => {
     await pickPreset(page, age.kids);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // "Tieners 12-15" → min = 12 ≤ 16 → visible
+    // "Tieners 12-15" → starts at 12 and ends below 16 → visible
     await pickPreset(page, age.teenagers);
-    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
-
-    // "Jongeren 16-26" → min = 16 ≤ 16 → visible (overlaps at 16)
-    await pickPreset(page, age.youngsters);
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
   });
 
@@ -120,18 +120,30 @@ test.describe('Children-only audience section', () => {
     const fromInput = page.getByLabel(age.from, { exact: true });
     const tillInput = page.getByLabel(age.till, { exact: true });
 
-    // Custom range 8-15 → min ≤ 16, max ≥ 2 → visible. Each field only saves
-    // on blur, so widen the range before raising the minimum.
+    // Custom range 8-15 → starts below 12, ends below 16 → visible. Each field
+    // only saves on blur, so widen the range before raising the minimum.
     await fromInput.fill('8');
     await fromInput.blur();
     await tillInput.fill('15');
     await tillInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
 
-    // Custom range 17-20 → min > 16 → hidden
-    await tillInput.fill('20');
+    // Custom range 4-16 → ends exactly on the limit → visible
+    await fromInput.fill('4');
+    await fromInput.blur();
+    await tillInput.fill('16');
     await tillInput.blur();
-    await fromInput.fill('17');
+    await expect(page.getByText(audienceQuestionLocator)).toBeVisible();
+
+    // Custom range 4-17 → ends above 16 → hidden
+    await tillInput.fill('17');
+    await tillInput.blur();
+    await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
+
+    // Custom range 13-16 → starts above 12 → hidden
+    await tillInput.fill('16');
+    await tillInput.blur();
+    await fromInput.fill('13');
     await fromInput.blur();
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
@@ -273,7 +285,7 @@ test.describe('Children-only audience section', () => {
     ).toBeHidden();
   });
 
-  test('age outside 2–16 while "kinderen alleen": confirm resets audience and saves the new age', async ({
+  test('age outside the BOA range while "kinderen alleen": confirm resets audience and saves the new age', async ({
     page,
     eventEditUrl,
     eventId,
@@ -327,7 +339,7 @@ test.describe('Children-only audience section', () => {
     await expect(page.getByText(audienceQuestionLocator)).toBeHidden();
   });
 
-  test('age outside 2–16 while "kinderen alleen": cancel keeps the previous age and audience', async ({
+  test('age outside the BOA range while "kinderen alleen": cancel keeps the previous age and audience', async ({
     page,
     eventEditUrl,
     eventId,
