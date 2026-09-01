@@ -1070,6 +1070,11 @@
     }
   },
   "dashboard": {
+    "banner": {
+      "title": "Nieuw in UiT-databank",
+      "description": "We hebben het invoerformulier uitgebreid.",
+      "read_more": "Lees meer over de wijzigingen bij <0>Nieuwigheden</0>"
+    },
     "actions": {
       "cancel": "Annuleren",
       "delete": "Verwijderen",
