@@ -1,7 +1,23 @@
+import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+import { isBoaEnabled } from '../setup/feature-flags';
+
+const age = nl.create.name_and_age.age;
+
+const revealAgeOptions = async (page: Page) => {
+  if (!isBoaEnabled) return;
+
+  await expect(page.getByText(age.title_boa)).toBeVisible();
+
+  const changeAge = page.getByRole('button', { name: age.change_age });
+  if (await changeAge.isVisible()) {
+    await changeAge.click();
+  }
+};
 
 type TestFixtures = {
   eventId: string;
@@ -43,6 +59,7 @@ test.describe('Event Preview - Age Display Options', () => {
   }) => {
     // Case 1: All ages
     await page.goto(eventEditUrl);
+    await revealAgeOptions(page);
     await page.getByRole('button', { name: /Alle leeftijden/ }).click();
     await page.waitForLoadState('networkidle');
 
@@ -51,6 +68,7 @@ test.describe('Event Preview - Age Display Options', () => {
 
     // Case 2: Specific predefined age range (Kinderen 6-11)
     await page.goto(eventEditUrl);
+    await revealAgeOptions(page);
     await page.getByRole('button', { name: /Kinderen 6-11/ }).click();
     await page.waitForLoadState('networkidle');
 
@@ -59,7 +77,10 @@ test.describe('Event Preview - Age Display Options', () => {
 
     // Case 3: Custom age range (6-12)
     await page.goto(eventEditUrl);
-    await page.getByRole('button', { name: /Andere/ }).click();
+    await revealAgeOptions(page);
+    if (!isBoaEnabled) {
+      await page.getByRole('button', { name: /Andere/ }).click();
+    }
     await page.getByPlaceholder('Van').fill('6');
     await page.getByPlaceholder('Van').blur();
     await page.getByPlaceholder('Tot').fill('12');
@@ -71,8 +92,13 @@ test.describe('Event Preview - Age Display Options', () => {
 
     // Case 4: Custom age from (25+)
     await page.goto(eventEditUrl);
-    await page.getByRole('button', { name: /Andere/ }).click();
+    await revealAgeOptions(page);
+    if (!isBoaEnabled) {
+      await page.getByRole('button', { name: /Andere/ }).click();
+    }
     await page.getByPlaceholder('Tot').clear();
+    await page.getByPlaceholder('Tot').blur();
+    await page.waitForLoadState('networkidle');
     await page.getByPlaceholder('Van').fill('25');
     await page.getByPlaceholder('Van').blur();
     await page.waitForLoadState('networkidle');

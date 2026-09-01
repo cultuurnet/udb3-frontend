@@ -199,7 +199,7 @@ test.describe('Age range', () => {
     await expect(selectedCategory(page, adultsCategory)).toBeVisible();
   });
 
-  test('shows the children-only radios only when the age overlaps 2–16', async ({
+  test('shows the children-only radios only when the age is inside the BOA range', async ({
     page,
     eventEditUrl,
   }) => {
