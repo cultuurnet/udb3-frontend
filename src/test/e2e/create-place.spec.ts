@@ -1,6 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+import nl from '../../i18n/nl.json';
+import { addWeeklyOpeningHours } from './helpers/add-weekly-opening-hours';
+
+const calendar = nl.create.calendar;
+const shortDays = calendar.days.short;
+
 const dummyPlace = {
   name: 'E2E test location',
   description:
@@ -39,12 +45,11 @@ test('create a place', async ({ baseURL, page }) => {
   // // 2. Type
   await page.getByRole('button', { name: 'Bioscoop' }).click();
   // // 3. Date
-  await page.getByRole('button', { name: 'Openingsuren toevoegen' }).click();
-  // // openinghours
-  await page.getByText('Ma', { exact: true }).click();
-  await page.getByText('Wo', { exact: true }).click();
-  await page.getByText('Vr', { exact: true }).click();
-  await page.getByRole('button', { name: 'Opslaan' }).click();
+  await addWeeklyOpeningHours(page, [
+    shortDays.monday,
+    shortDays.wednesday,
+    shortDays.friday,
+  ]);
   // // 4. Address
   await page.getByLabel('Gemeente').click();
   await page.getByLabel('Gemeente').fill(dummyPlace.address.zip);

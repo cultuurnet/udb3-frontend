@@ -1,6 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { test } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
+import { addWeeklyOpeningHours } from '../helpers/add-weekly-opening-hours';
+
+const calendar = nl.create.calendar;
+const shortDays = calendar.days.short;
+
 const dummyEvent = {
   name: 'E2E test event with calendarType permanent and openinghours',
   address: {
@@ -38,12 +44,12 @@ test('create an event with calendarType permanent and openinghours', async ({
     .locator('#calendar-step-fixeddate-period-picker-end')
     .fill(endDate.toLocaleDateString('nl-BE'));
 
-  await page.getByRole('button', { name: 'Openingsuren toevoegen' }).click();
   // // openinghours
-  await page.getByText('Ma', { exact: true }).click();
-  await page.getByText('Wo', { exact: true }).click();
-  await page.getByText('Vr', { exact: true }).click();
-  await page.getByRole('button', { name: 'Opslaan' }).click();
+  await addWeeklyOpeningHours(page, [
+    shortDays.monday,
+    shortDays.wednesday,
+    shortDays.friday,
+  ]);
 
   // 4. Address
   await page.getByLabel('Gemeente').click();
