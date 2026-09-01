@@ -14,6 +14,8 @@ import { Footer, FooterVariants } from '@/pages/Footer';
 import { Box } from '@/ui/Box';
 import { Button, ButtonSizes } from '@/ui/Button';
 import { CustomIcon, CustomIconVariants } from '@/ui/CustomIcon';
+import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
+import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
@@ -24,9 +26,6 @@ import {
   getGlobalBorderRadius,
   getValueFromTheme,
 } from '@/ui/theme';
-
-import { ManIllustrationSvg } from './illustrations/ManIllustration';
-import { WomanIllustrationSvg } from './illustrations/WomanIllustration';
 
 const getValueForPage = getValueFromTheme('loginPage');
 
@@ -324,7 +323,9 @@ const Index = () => {
             top={isMediumView ? '20%' : isXLargeView ? '-35%' : '-10%'}
             left={0}
           />
-          {!isSmallView && <ManIllustrationSvg zIndex={3} width={'35%'} />}
+          {!isSmallView && (
+            <ManIllustrationSvg zIndex={3} width={'35%'} showArrow />
+          )}
 
           <UDBCard
             zIndex={1}
@@ -333,8 +334,9 @@ const Index = () => {
             onLogin={handleClickLogin}
             width={isSmallView ? '100%' : '30%'}
           />
-          {!isSmallView && <WomanIllustrationSvg zIndex={3} width={'35%'} />}
-
+          {!isSmallView && (
+            <WomanIllustrationSvg zIndex={3} width={'35%'} showArrow />
+          )}
           <Inline
             width="100%"
             justifyContent="center"

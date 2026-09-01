@@ -62,7 +62,8 @@ type AgeFields = { min: string; max: string };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
-const BOA_MAX_AGE = 16;
+const BOA_MAX_AGE = 12;
+const BOA_AGE_LIMIT = 16;
 const AGE_PATTERN = /^\d+$/;
 const DECIMAL_SEPARATOR_PATTERN = /[.,]/;
 
@@ -148,6 +149,7 @@ const overlapsWithBoaAgeRange = (
 
   if (min !== undefined && min > BOA_MAX_AGE) return false;
   if (max !== undefined && max < BOA_MIN_AGE) return false;
+  if (max === undefined || max > BOA_AGE_LIMIT) return false;
   return true;
 };
 
@@ -169,10 +171,11 @@ const birthdateRangeFitsBoa = (
   );
 
   if (Number.isNaN(minAge) || Number.isNaN(maxAge)) return false;
-  // Both ages must sit entirely inside [BOA_MIN_AGE, BOA_MAX_AGE] — not just
-  // touch it. An audience marked "kinderen alleen" must be uniformly within
-  // the children window, not partially adult or partially infant.
-  return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
+  // Same bounds as overlapsWithBoaAgeRange: youngest between BOA_MIN_AGE and
+  // BOA_MAX_AGE, oldest no older than BOA_AGE_LIMIT.
+  return (
+    minAge >= BOA_MIN_AGE && minAge <= BOA_MAX_AGE && maxAge <= BOA_AGE_LIMIT
+  );
 };
 
 type ChildrenOnlyContext = {
