@@ -473,7 +473,7 @@ const CalendarOpeninghoursModal = ({
           <Accordion.Item
             eventKey="deviating"
             title={t('create.calendar.opening_hours_modal.deviating.title')}
-            spacing={4}
+            className="tw:flex tw:flex-col tw:gap-4 tw:px-1"
           >
             {deviatingPeriods.map((period, index) => (
               <DeviatingPeriod
@@ -528,7 +528,7 @@ const CalendarOpeninghoursModal = ({
           <Accordion.Item
             eventKey="closing"
             title={t('create.calendar.opening_hours_modal.closing.title')}
-            spacing={4}
+            className="tw:flex tw:flex-col tw:gap-4 tw:px-1"
           >
             {closingPeriods.map((period, index) => (
               <ClosingPeriod

@@ -361,6 +361,7 @@
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
           "to": "bis",
+          "tip": "Kennen Sie nur die Geburtsjahre Ihrer Teilnehmer? Geben Sie dann bei 'von' den 01.01. gefolgt vom frühesten Geburtsjahr ein. Geben Sie bei 'bis' den 31.12. gefolgt vom spätesten Geburtsjahr ein.",
           "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
         },
         "all": "Alle Altersgruppen",
@@ -375,11 +376,14 @@
         "from": "Von",
         "till": "Bis",
         "age": "Jahre",
+        "change_age": "Alter ändern",
         "input_range_title": "Geben Sie ein Mindest- und Höchstalter ein",
+        "or_choose_category": "Oder wählen Sie eine Alterskategorie",
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
+        "error_decimal": "Sie können keine Dezimalzahl eingeben",
         "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder (außerschulische Betreuung oder Aktivität)",
@@ -1711,8 +1715,6 @@
     }
   },
   "date_picker": {
-    "today": "Heute",
-    "go_to_selected": "Zur Auswahl",
     "open_calendar": "Kalender öffnen"
   },
   "date_period_picker": {

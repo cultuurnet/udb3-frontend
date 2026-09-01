@@ -80,13 +80,8 @@ Announcement.propTypes = {
   onClick: PropTypes.func,
 };
 
-const getCallToActionHref = (callToAction) => {
-  if (typeof callToAction === 'string' && callToAction) return callToAction;
-  if (callToAction && typeof callToAction.urlSuffix === 'string') {
-    return callToAction.urlSuffix || null;
-  }
-  return null;
-};
+const getCallToActionHref = (callToAction) =>
+  typeof callToAction === 'string' && callToAction ? callToAction : null;
 
 const AnnouncementContent = ({
   title,
@@ -102,10 +97,7 @@ const AnnouncementContent = ({
     <Image
       src={imageSrc}
       alt={callToActionLabel ?? ''}
-      width="100%"
-      maxHeight="30vh"
-      objectFit="contain"
-      opacity={{ hover: 0.85 }}
+      className="tw:w-full tw:max-h-[30vh] tw:object-contain tw:hover:opacity-85"
     />
   );
 
@@ -167,10 +159,7 @@ AnnouncementContent.propTypes = {
   title: PropTypes.string,
   imageSrc: PropTypes.string,
   body: PropTypes.node,
-  callToAction: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ urlSuffix: PropTypes.string }),
-  ]),
+  callToAction: PropTypes.string,
   callToActionLabel: PropTypes.string,
 };
 

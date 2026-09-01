@@ -12,7 +12,10 @@ import { ErrorCodes } from '@/constants/ErrorCodes';
 import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
-import { useAddOfferLabelMutation } from '@/hooks/api/offers';
+import {
+  useAddOfferLabelMutation,
+  useUpdateOfferFaqMutation,
+} from '@/hooks/api/offers';
 import { getPlacesByQuery, useAddPlaceMutation } from '@/hooks/api/places';
 import {
   useAddEventByIdMutation as useAddEventToProductionByIdMutation,
@@ -48,6 +51,7 @@ const useAddOffer = ({
   const addPlaceMutation = useAddPlaceMutation();
   const headers = useHeaders();
   const addLabelMutation = useAddOfferLabelMutation();
+  const updateFaqMutation = useUpdateOfferFaqMutation();
 
   const createProductionWithEventsMutation =
     useCreateProductionWithEventsMutation();
@@ -140,6 +144,14 @@ const useAddOffer = ({
           id: offerId,
           label,
           scope,
+        });
+      }
+
+      if (initialOffer?.faqs?.length) {
+        await updateFaqMutation.mutateAsync({
+          id: offerId,
+          scope,
+          faq: initialOffer.faqs,
         });
       }
 
