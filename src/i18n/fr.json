@@ -216,10 +216,9 @@
         "select_days": "Sélectionner jour(s)",
         "deviating": {
           "title": "Ajouter des heures dérogatoires",
-          "period_title": "Période dérogatoire {{index}}",
           "remove_period": "Supprimer la période",
-          "select_period": "Sélectionner la période",
-          "fill_hours": " les heures pour cette période",
+          "select_period": "Quand les heures dérogatoires s'appliquent-elles ?",
+          "fill_hours": "Remplissez les heures pour cette période",
           "add_period": "Ajouter une période dérogatoire",
           "description_placeholder": "Description",
           "errors": {
@@ -237,7 +236,6 @@
         },
         "closing": {
           "title": "Ajouter des jours ou périodes de fermeture",
-          "period_title": "Période de fermeture {{index}}",
           "remove_period": "Supprimer la période",
           "select_period": "Sélectionner la période",
           "add_period": "Ajouter une période de fermeture",

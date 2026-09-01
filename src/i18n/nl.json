@@ -218,9 +218,8 @@
         "select_days": "Selecteer dag(en)",
         "deviating": {
           "title": "Voeg afwijkende uren toe",
-          "period_title": "Afwijkende periode {{index}}",
           "remove_period": "Verwijder periode",
-          "select_period": "Selecteer de periode",
+          "select_period": "Wanneer gelden de afwijkende uren?",
           "fill_hours": "Vul de uren in voor deze periode",
           "add_period": "Afwijkende periode toevoegen",
           "description_placeholder": "Beschrijving",
@@ -239,7 +238,6 @@
         },
         "closing": {
           "title": "Voeg sluitingsdagen of -periodes toe",
-          "period_title": "Sluitingsperiode {{index}}",
           "remove_period": "Verwijder periode",
           "select_period": "Selecteer de periode",
           "add_period": "Sluitingsperiode toevoegen",
