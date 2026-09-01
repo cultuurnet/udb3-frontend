@@ -1,12 +1,14 @@
-import { Dropdown as BootstrapDropdown } from 'react-bootstrap';
-
-import { Box } from '@/ui/Box';
-import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { Icon, Icons } from '@/ui/Icon';
 import {
-  colors,
-  getGlobalBorderRadius,
-  getGlobalFormInputHeight,
-} from '@/ui/theme';
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/ui/shadcn/dropdown-menu';
+import { cn } from '@/ui/shadcn/utils';
+
+import { MultiSelectDropdownLegacy } from './MultiSelectDropdownLegacy';
 
 type MultiSelectOption = {
   value: string;
@@ -19,101 +21,85 @@ type MultiSelectDropdownProps = {
   selectedValues: string[];
   placeholder: string;
   onChange: (selectedValues: string[]) => void;
-  width?: string;
   hasError?: boolean;
+  className?: string;
 };
 
-const MultiSelectDropdown = ({
+const getMultiSelectLabel = (
+  options: MultiSelectOption[],
+  selectedValues: string[],
+  placeholder: string,
+) =>
+  selectedValues.length === 0
+    ? placeholder
+    : options
+        .filter((opt) => selectedValues.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+
+const MultiSelectDropdownShadcn = ({
   id,
   options,
   selectedValues,
   placeholder,
   onChange,
-  width = '175px',
   hasError = false,
+  className,
 }: MultiSelectDropdownProps) => {
-  const label =
-    selectedValues.length === 0
-      ? placeholder
-      : options
-          .filter((opt) => selectedValues.includes(opt.value))
-          .map((opt) => opt.label)
-          .join(', ');
+  const label = getMultiSelectLabel(options, selectedValues, placeholder);
 
   return (
-    <BootstrapDropdown autoClose="outside">
-      <BootstrapDropdown.Toggle
-        css={`
-          display: flex;
-          align-items: center;
-          width: ${width};
-          background-color: ${colors.white} !important;
-          border: 1px solid ${hasError ? 'red' : colors.grey2} !important;
-          border-radius: ${getGlobalBorderRadius} !important;
-          height: ${getGlobalFormInputHeight};
-          color: ${colors.textColor} !important;
-          font-size: 1rem;
-          padding: 0 0.75rem !important;
-          box-shadow: none !important;
-          gap: 0.5rem;
-
-          &:hover,
-          &:focus,
-          &:active {
-            background-color: ${colors.white} !important;
-            border-color: ${hasError ? 'red' : colors.grey2} !important;
-            color: ${colors.textColor} !important;
-          }
-
-          &::after {
-            flex-shrink: 0;
-            margin-left: auto;
-          }
-        `}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        id={id}
+        className={cn(
+          'tw:flex tw:h-10 tw:w-45 tw:select-none tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-input tw:bg-transparent tw:px-3 tw:text-base tw:transition-colors tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
+          hasError && 'tw:border-destructive',
+          className,
+        )}
       >
-        <span
-          css={`
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            min-width: 0;
-            flex: 1;
-            text-align: left;
-          `}
-        >
+        <span className="tw:min-w-0 tw:flex-1 tw:truncate tw:text-left">
           {label}
         </span>
-      </BootstrapDropdown.Toggle>
-      <BootstrapDropdown.Menu
-        renderOnMount
-        popperConfig={{ strategy: 'fixed' }}
-        css={`
-          min-width: ${width};
-          padding: 0.25rem 0;
-        `}
+        <Icon name={Icons.CHEVRON_DOWN} className="tw:shrink-0" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="tw:w-(--radix-dropdown-menu-trigger-width)"
+        align="start"
       >
         {options.map((option) => (
-          <Box key={option.value} paddingX={3} paddingY={2}>
-            <CheckboxWithLabel
-              id={`${id}-${option.value}`}
-              name={option.value}
-              checked={selectedValues.includes(option.value)}
-              onCheckedChange={(checked) =>
-                onChange(
-                  checked
-                    ? [...selectedValues, option.value]
-                    : selectedValues.filter((value) => value !== option.value),
-                )
-              }
-            >
-              {option.label}
-            </CheckboxWithLabel>
-          </Box>
+          <DropdownMenuCheckboxItem
+            key={option.value}
+            className="tw:cursor-pointer tw:text-base"
+            checked={selectedValues.includes(option.value)}
+            onSelect={(event) => event.preventDefault()}
+            onCheckedChange={(checked) =>
+              onChange(
+                checked
+                  ? [...selectedValues, option.value]
+                  : selectedValues.filter((value) => value !== option.value),
+              )
+            }
+          >
+            {option.label}
+          </DropdownMenuCheckboxItem>
         ))}
-      </BootstrapDropdown.Menu>
-    </BootstrapDropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
-export { MultiSelectDropdown };
+const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+
+  return isShadcnMigrationEnabled ? (
+    <MultiSelectDropdownShadcn {...props} />
+  ) : (
+    <MultiSelectDropdownLegacy {...props} />
+  );
+};
+
+export { getMultiSelectLabel, MultiSelectDropdown };
 export type { MultiSelectDropdownProps, MultiSelectOption };
