@@ -415,7 +415,7 @@ const Row = ({ data, date, onEditCell, onCopy, onRowPaste }: RowProps): any => {
 
 const Header = ({ header }: { header: string }) => {
   return (
-    <div className="tw:flex tw:items-center tw:justify-between tw:px-[0.1333rem]">
+    <div className="tw:flex tw:items-center tw:justify-between tw:px-0.5">
       <Label htmlFor={header}>{header}</Label>
     </div>
   );
@@ -475,7 +475,7 @@ const TimeTableShadcn = ({ id, className, value, onChange }: Props) => {
       />
       <div
         id="timetable"
-        className="tw:grid tw:grid-cols-[min-content_repeat(7,1fr)_min-content] tw:gap-x-[0.5333rem] tw:gap-y-[0.5333rem] tw:items-center"
+        className="tw:grid tw:grid-cols-[min-content_repeat(7,1fr)_min-content] tw:gap-2 tw:items-center"
         style={{
           gridTemplateRows: `repeat(${(dateRange?.length ?? 0) + 1}, 1fr)`,
         }}
