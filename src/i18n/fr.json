@@ -216,10 +216,9 @@
         "select_days": "Sélectionner jour(s)",
         "deviating": {
           "title": "Ajouter des heures dérogatoires",
-          "period_title": "Période dérogatoire {{index}}",
           "remove_period": "Supprimer la période",
-          "select_period": "Sélectionner la période",
-          "fill_hours": " les heures pour cette période",
+          "select_period": "Quand les heures dérogatoires s'appliquent-elles ?",
+          "fill_hours": "Remplissez les heures pour cette période",
           "add_period": "Ajouter une période dérogatoire",
           "description_placeholder": "Description",
           "errors": {
@@ -237,7 +236,6 @@
         },
         "closing": {
           "title": "Ajouter des jours ou périodes de fermeture",
-          "period_title": "Période de fermeture {{index}}",
           "remove_period": "Supprimer la période",
           "select_period": "Sélectionner la période",
           "add_period": "Ajouter une période de fermeture",
@@ -361,6 +359,7 @@
           "title": "Indiquez les dates de naissance minimum et maximum des participants",
           "from": "du",
           "to": "au",
+          "tip": "Vous ne connaissez que les années de naissance de vos participants ? Indiquez alors 01/01 dans le champ 'du', suivi de l'année de naissance la plus ancienne. Indiquez 31/12 dans le champ 'au', suivi de l'année de naissance la plus récente.",
           "error_max_before_min": "La date 'au' ne peut pas être antérieure à la date 'du'."
         },
         "all": "De tous âges",
@@ -1256,8 +1255,13 @@
         "choose_cinema": "Choisissez un cinéma",
         "choose_name": "Choisissez un nom",
         "clear": "À vider",
+        "copy_failed": "Échec de la copie",
+        "copy_row": "Copier la ligne du {{date}}",
         "copy_table": "Copier le tableau",
-        "description": "Description"
+        "description": "Description",
+        "row_copied": "Ligne du {{date}} copiée",
+        "table_copied": "Tableau copié",
+        "time_slot": "Créneau {{column}} du {{date}}"
       },
       "cinema": {
         "placeholder": "Nom du cinéma"

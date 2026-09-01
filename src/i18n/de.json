@@ -216,9 +216,8 @@
         "select_days": "Tag(e) auswählen",
         "deviating": {
           "title": "Abweichende Stunden hinzufügen",
-          "period_title": "Abweichende Periode {{index}}",
           "remove_period": "Periode entfernen",
-          "select_period": "Zeitraum auswählen",
+          "select_period": "Wann gelten die abweichenden Stunden?",
           "fill_hours": "Stunden für diesen Zeitraum eingeben",
           "add_period": "Abweichende Periode hinzufügen",
           "description_placeholder": "Beschreibung",
@@ -237,7 +236,6 @@
         },
         "closing": {
           "title": "Schließtage oder -perioden hinzufügen",
-          "period_title": "Schließperiode {{index}}",
           "remove_period": "Periode entfernen",
           "select_period": "Zeitraum auswählen",
           "add_period": "Schließperiode hinzufügen",
@@ -361,6 +359,7 @@
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
           "to": "bis",
+          "tip": "Kennen Sie nur die Geburtsjahre Ihrer Teilnehmer? Geben Sie dann bei 'von' den 01.01. gefolgt vom frühesten Geburtsjahr ein. Geben Sie bei 'bis' den 31.12. gefolgt vom spätesten Geburtsjahr ein.",
           "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
         },
         "all": "Alle Altersgruppen",
@@ -1256,8 +1255,13 @@
         "choose_cinema": "Wähle ein Kino",
         "choose_name": "Wähle einen Namen",
         "clear": "Leeren",
+        "copy_failed": "Kopieren fehlgeschlagen",
+        "copy_row": "Zeile vom {{date}} kopieren",
         "copy_table": "Tabelle kopieren",
-        "description": "Beschreibung"
+        "description": "Beschreibung",
+        "row_copied": "Zeile vom {{date}} kopiert",
+        "table_copied": "Tabelle kopiert",
+        "time_slot": "Uhrzeit {{column}} am {{date}}"
       },
       "cinema": {
         "placeholder": "Kinoname"

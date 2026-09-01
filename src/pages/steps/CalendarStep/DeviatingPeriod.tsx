@@ -8,14 +8,14 @@ import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker, QuickLinkPeriod } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { colors, theme } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -44,7 +44,6 @@ type DeviatingPeriodData = {
 };
 
 type Props = BoxProps & {
-  index: number;
   period: DeviatingPeriodData;
   onChange: (period: DeviatingPeriodData) => void;
   onRemove: () => void;
@@ -59,7 +58,6 @@ type Props = BoxProps & {
 };
 
 const DeviatingPeriod = ({
-  index,
   period,
   onChange,
   onRemove,
@@ -120,6 +118,40 @@ const DeviatingPeriod = ({
       ) as DayOfWeek[],
     });
 
+  const createDeviatingPeriodFromQuickLink = (
+    quickLinkPeriod: QuickLinkPeriod,
+  ): DeviatingPeriodData => {
+    const isSingleDay = isSameDay(
+      quickLinkPeriod.startDate,
+      quickLinkPeriod.endDate,
+    );
+    const dayOfWeek = isSingleDay
+      ? (format(quickLinkPeriod.startDate, 'iiii').toLowerCase() as DayOfWeek)
+      : null;
+
+    return {
+      id: uniqueId('deviating-period-'),
+      startDate: quickLinkPeriod.startDate,
+      endDate: quickLinkPeriod.endDate,
+      description: { [lang]: quickLinkPeriod.name },
+      holidayType: quickLinkPeriod.holidayType,
+      openingHours: period.openingHours.map((openingHour) => ({
+        ...openingHour,
+        id: createOpeninghoursId(),
+        dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
+      })),
+    };
+  };
+
+  const handleQuickLinkClick = (periods: QuickLinkPeriod[]) => {
+    if (!onQuickLinkExpand || periods.length === 0) return;
+
+    const filtered = filterByEventRange(periods);
+    if (filtered.length === 0) return;
+
+    onQuickLinkExpand(filtered.map(createDeviatingPeriodFromQuickLink));
+  };
+
   return (
     <Stack
       spacing={4}
@@ -127,125 +159,117 @@ const DeviatingPeriod = ({
       css={`
         border: 1px solid ${colors.grey3};
         border-radius: 0.5rem;
+        background-color: ${colors.greylight};
       `}
       {...boxProps}
     >
-      <Inline justifyContent="space-between" alignItems="center">
-        <Text fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.deviating.period_title', {
-            index: index + 1,
-          })}
-        </Text>
-        <Button
-          variant={ButtonVariants.DANGER}
-          iconName={Icons.TRASH}
-          onClick={onRemove}
-        >
-          {t('create.calendar.opening_hours_modal.deviating.remove_period')}
-        </Button>
-      </Inline>
-
-      <Stack spacing={2}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
-          {t('create.calendar.opening_hours_modal.deviating.select_period')}
-        </Text>
-        <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
-          <DatePeriodPicker
-            className="tw:w-full"
-            id={`deviating-period-${period.id}`}
-            dateStart={period.startDate}
-            dateEnd={period.endDate}
-            onDateStartChange={(date) => {
-              clearQuickLinkRangeError();
-              onChange({ ...period, startDate: date, endDate: endOfDay(date) });
-            }}
-            onDateEndChange={(date) => {
-              clearQuickLinkRangeError();
-              onChange({ ...period, endDate: date });
-            }}
-            showQuickLinks
-            fetchHolidays={fetchHolidays}
-            apiHolidays={apiHolidays}
-            onShowHolidaysChange={onShowHolidaysChange}
-            onQuickLinkClick={(periods) => {
-              if (!onQuickLinkExpand || periods.length === 0) return;
-              const filtered = filterByEventRange(periods);
-              if (filtered.length === 0) return;
-              onQuickLinkExpand(
-                filtered.map((p) => {
-                  const isSingleDay = isSameDay(p.startDate, p.endDate);
-                  const dayOfWeek = isSingleDay
-                    ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
-                    : null;
-                  return {
-                    id: uniqueId('deviating-period-'),
-                    startDate: p.startDate,
-                    endDate: p.endDate,
-                    description: { [lang]: p.name },
-                    holidayType: p.holidayType,
-                    openingHours: period.openingHours.map((openingHour) => ({
-                      ...openingHour,
-                      id: createOpeninghoursId(),
-                      dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
-                    })),
-                  };
-                }),
-              );
-            }}
-          />
-          <Input
-            value={period.description[lang] ?? ''}
-            className="tw:w-4/5"
-            onChange={(e) =>
-              onChange({
-                ...period,
-                description: { ...period.description, [lang]: e.target.value },
-              })
-            }
-            placeholder={t(
-              'create.calendar.opening_hours_modal.deviating.description_placeholder',
+      <Stack spacing={0}>
+        <Inline justifyContent="space-between" alignItems="center">
+          <Text
+            color={colors.udbMainDarkBlue}
+            fontWeight="bold"
+            fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
+          >
+            {t('create.calendar.opening_hours_modal.deviating.select_period')}
+          </Text>
+          <Button
+            variant={ButtonVariants.DANGER}
+            iconName={Icons.TRASH}
+            onClick={onRemove}
+            aria-label={t(
+              'create.calendar.opening_hours_modal.deviating.remove_period',
             )}
           />
         </Inline>
-        {hasOverlap && (
-          <Text color="red">
-            {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
-          </Text>
-        )}
-        {hasInvalidDateOrder && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
-            )}
-          </Text>
-        )}
-        {eventStartDate &&
-          startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+
+        <Stack spacing={2}>
+          <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
+            <DatePeriodPicker
+              className="tw:w-full"
+              id={`deviating-period-${period.id}`}
+              dateStart={period.startDate}
+              dateEnd={period.endDate}
+              onDateStartChange={(date) => {
+                clearQuickLinkRangeError();
+                onChange({
+                  ...period,
+                  startDate: date,
+                  endDate: endOfDay(date),
+                });
+              }}
+              onDateEndChange={(date) => {
+                clearQuickLinkRangeError();
+                onChange({ ...period, endDate: date });
+              }}
+              showQuickLinks
+              fetchHolidays={fetchHolidays}
+              apiHolidays={apiHolidays}
+              onShowHolidaysChange={onShowHolidaysChange}
+              onQuickLinkClick={handleQuickLinkClick}
+            />
+            <Input
+              value={period.description[lang] ?? ''}
+              className="tw:w-4/5"
+              onChange={(e) =>
+                onChange({
+                  ...period,
+                  description: {
+                    ...period.description,
+                    [lang]: e.target.value,
+                  },
+                })
+              }
+              placeholder={t(
+                'create.calendar.opening_hours_modal.deviating.description_placeholder',
+              )}
+            />
+          </Inline>
+          {hasOverlap && (
             <Text color="red">
               {t(
-                'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+                'create.calendar.opening_hours_modal.deviating.errors.overlap',
               )}
             </Text>
           )}
-        {eventEndDate &&
-          startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+          {hasInvalidDateOrder && (
             <Text color="red">
               {t(
-                'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+                'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
               )}
             </Text>
           )}
-        {quickLinkRangeError && (
-          <Text color="red">
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
+          {eventStartDate &&
+            startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+              <Text color="red">
+                {t(
+                  'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+                )}
+              </Text>
             )}
-          </Text>
-        )}
+          {eventEndDate &&
+            startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+              <Text color="red">
+                {t(
+                  'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+                )}
+              </Text>
+            )}
+          {quickLinkRangeError && (
+            <Text color="red">
+              {t(
+                'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
+              )}
+            </Text>
+          )}
+        </Stack>
       </Stack>
 
       <Stack spacing={2} marginTop={3}>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text
+          color={colors.udbMainDarkBlue}
+          fontWeight="bold"
+          fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
+        >
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>
@@ -259,11 +283,7 @@ const DeviatingPeriod = ({
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline
-                  alignItems="flex-end"
-                  spacing={5}
-                  marginBottom={showChildcare ? 4 : undefined}
-                >
+                <Inline alignItems="flex-end" spacing={5}>
                   <Stack spacing={3}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.days')}
@@ -337,8 +357,11 @@ const DeviatingPeriod = ({
                   {period.openingHours.length > 1 && (
                     <Button
                       iconName={Icons.TRASH}
-                      variant={ButtonVariants.DANGER}
+                      variant={ButtonVariants.OUTLINED_DANGER}
                       onClick={() => handleRemoveOpeningHour(openingHour.id)}
+                      aria-label={t(
+                        'create.calendar.fixed_days.overview.delete_modal.title',
+                      )}
                     />
                   )}
                 </Inline>

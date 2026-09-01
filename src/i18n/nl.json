@@ -218,9 +218,8 @@
         "select_days": "Selecteer dag(en)",
         "deviating": {
           "title": "Voeg afwijkende uren toe",
-          "period_title": "Afwijkende periode {{index}}",
           "remove_period": "Verwijder periode",
-          "select_period": "Selecteer de periode",
+          "select_period": "Wanneer gelden de afwijkende uren?",
           "fill_hours": "Vul de uren in voor deze periode",
           "add_period": "Afwijkende periode toevoegen",
           "description_placeholder": "Beschrijving",
@@ -239,7 +238,6 @@
         },
         "closing": {
           "title": "Voeg sluitingsdagen of -periodes toe",
-          "period_title": "Sluitingsperiode {{index}}",
           "remove_period": "Verwijder periode",
           "select_period": "Selecteer de periode",
           "add_period": "Sluitingsperiode toevoegen",
@@ -371,6 +369,7 @@
           "title": "Geef de minimum en maximum geboortedata van de deelnemers in",
           "from": "van",
           "to": "tot",
+          "tip": "Ken je enkel de geboortejaren van je deelnemers? Vul dan bij 'van' 01/01 in, gevolgd door het vroegste geboortejaar. Vul bij 'tot' 31/12 in, gevolgd door het laatste geboortejaar.",
           "error_max_before_min": "De 'tot'-datum mag niet vroeger vallen dan de 'van'-datum."
         },
         "all": "Alle leeftijden",
@@ -1071,6 +1070,11 @@
     }
   },
   "dashboard": {
+    "banner": {
+      "title": "Nieuw in UiT-databank",
+      "description": "We hebben het invoerformulier uitgebreid.",
+      "read_more": "Lees meer over de wijzigingen bij <0>Nieuwigheden</0>"
+    },
     "actions": {
       "cancel": "Annuleren",
       "delete": "Verwijderen",
@@ -1291,8 +1295,13 @@
         "choose_cinema": "Kies een bioscoop",
         "choose_name": "Kies een naam",
         "clear": "Leegmaken",
+        "copy_failed": "Kopiëren mislukt",
+        "copy_row": "Kopieer rij van {{date}}",
         "copy_table": "Kopieer tabel",
-        "description": "Beschrijving"
+        "description": "Beschrijving",
+        "row_copied": "Rij van {{date}} gekopieerd",
+        "table_copied": "Tabel gekopieerd",
+        "time_slot": "Tijdstip {{column}} op {{date}}"
       },
       "cinema": {
         "placeholder": "Naam van bioscoop"
