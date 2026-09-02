@@ -22,7 +22,6 @@ import { Button, ButtonVariants } from './Button';
 import { DatePickerLegacy } from './DatePickerLegacy';
 import { Icons } from './Icon';
 import { Input } from './Input';
-import { badgeVariants } from './shadcn/badge';
 import { Calendar } from './shadcn/calendar';
 import { Popover, PopoverAnchor, PopoverContent } from './shadcn/popover';
 import { cn } from './shadcn/utils';
@@ -143,14 +142,6 @@ const DatePickerShadcn = ({
     onMonthChange?.(newMonth);
   };
 
-  const handleTodayClick = () => {
-    handleMonthChange(new Date());
-  };
-
-  const handleGoToSelectedClick = () => {
-    if (selected) handleMonthChange(selected);
-  };
-
   const disabledMatchers = [
     minDate ? { before: minDate } : undefined,
     maxDate ? { after: maxDate } : undefined,
@@ -214,32 +205,6 @@ const DatePickerShadcn = ({
                 {calendarHeader}
               </div>
             )}
-            <div className="tw:flex tw:justify-center tw:gap-2 tw:px-3 tw:pt-2">
-              {selected && (
-                <Button
-                  variant={ButtonVariants.UNSTYLED}
-                  onClick={handleGoToSelectedClick}
-                  disabled={disabled}
-                  className={cn(
-                    badgeVariants({ variant: 'success' }),
-                    'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
-                  )}
-                >
-                  {t('date_picker.go_to_selected')}
-                </Button>
-              )}
-              <Button
-                variant={ButtonVariants.UNSTYLED}
-                onClick={handleTodayClick}
-                disabled={disabled}
-                className={cn(
-                  badgeVariants({ variant: 'secondary' }),
-                  'tw:focus:outline-none tw:focus:ring-0 tw:focus:ring-offset-0 tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring',
-                )}
-              >
-                {t('date_picker.today')}
-              </Button>
-            </div>
             <Calendar
               mode="single"
               selected={selected}
