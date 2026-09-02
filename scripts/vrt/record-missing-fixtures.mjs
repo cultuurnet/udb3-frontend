@@ -76,13 +76,17 @@ const onUnmockedResponse = ({
   }
 };
 
-const allowServerReuse = process.argv.includes('--reuse-server');
-const playwrightArgs = process.argv
-  .slice(2)
-  .filter((arg) => arg !== '--reuse-server');
+if (process.argv.includes('--reuse-server')) {
+  console.error(
+    '\n--reuse-server cannot be used while recording: responses are recorded by the mock server this script starts, so a reused app would record nothing. Stop the running app and re-run.\n',
+  );
+  process.exit(1);
+}
+
+const playwrightArgs = process.argv.slice(2);
 
 const main = async () => {
-  await ensureAppAndMockServer({ onUnmockedResponse, allowServerReuse });
+  await ensureAppAndMockServer({ onUnmockedResponse });
 
   try {
     if (!(await ensureAuthSession())) {

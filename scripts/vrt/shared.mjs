@@ -217,7 +217,7 @@ export const ensureAppAndMockServer = async ({
       return;
     }
     console.error(
-      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so screenshots would be taken against live acceptance data instead of fixtures. Stop that server, or pass --reuse-server to reuse it anyway.\n`,
+      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so this run would use live acceptance data instead of fixtures. Stop that server and re-run — screenshot runs can pass --reuse-server to reuse it anyway.\n`,
     );
     process.exit(1);
   }
