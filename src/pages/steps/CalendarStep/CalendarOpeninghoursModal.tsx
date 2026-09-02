@@ -311,7 +311,7 @@ const CalendarOpeninghoursModal = ({
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: 58rem;
+          max-width: 60rem;
         }
         .modal-header .modal-title {
           font-size: ${theme.components.openingHoursModal.fontSize.modalTitle};
