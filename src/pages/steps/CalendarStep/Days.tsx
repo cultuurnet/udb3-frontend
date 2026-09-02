@@ -181,7 +181,7 @@ export const Days = ({
                   showInfo={index === 0}
                 />
               )}
-              <Inline alignItems="flex-end" className="tw:gap-6">
+              <div className="tw:flex tw:items-end tw:gap-6">
                 {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
                   <div className="tw:flex tw:flex-col tw:gap-y-1">
                     <Label
@@ -229,7 +229,7 @@ export const Days = ({
                     disabled={isDisabled}
                   />
                 )}
-              </Inline>
+              </div>
             </List.Item>
             {timesErrors[index] && (
               <Text color="red">
