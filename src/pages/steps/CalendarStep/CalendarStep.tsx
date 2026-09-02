@@ -487,6 +487,8 @@ const CalendarStep = ({
     }
     setIsCalendarInitialized(true);
     handleLoadInitialContext({ newContext, calendarType });
+    if (isOnDuplicatePage) return;
+
     if (offer.openingHoursAdjustedDays?.length) {
       const converted = convertAdjustedDays(offer.openingHoursAdjustedDays);
       adjustedDaysRef.current = converted;
