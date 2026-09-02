@@ -1,4 +1,4 @@
-import { startOfDay } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
@@ -93,7 +93,7 @@ const ClosingPeriod = ({
             dateEnd={period.endDate}
             onDateStartChange={(date) => {
               clearQuickLinkRangeError();
-              onChange({ ...period, startDate: date });
+              onChange({ ...period, startDate: date, endDate: endOfDay(date) });
             }}
             onDateEndChange={(date) => {
               clearQuickLinkRangeError();
