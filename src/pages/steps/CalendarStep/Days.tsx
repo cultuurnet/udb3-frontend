@@ -13,6 +13,7 @@ import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
+import { cn } from '@/ui/shadcn/utils';
 import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
@@ -130,7 +131,10 @@ export const Days = ({
             <List.Item
               alignItems="flex-end"
               spacing={0}
-              className="tw:gap-8"
+              className={cn(
+                'tw:flex-wrap tw:gap-y-6',
+                showOvernightStay ? 'tw:gap-x-5' : 'tw:gap-x-8',
+              )}
               marginBottom={
                 isOneOrMoreDays && isBoaEnabled && showChildcare && index === 0
                   ? 4
@@ -177,53 +181,55 @@ export const Days = ({
                   showInfo={index === 0}
                 />
               )}
-              {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
-                <div className="tw:flex tw:flex-col tw:gap-y-1">
-                  <Label
-                    variant={LabelVariants.BOLD}
-                    htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
-                  >
-                    {t('create.calendar.days.overnight_stay.label')}
-                  </Label>
-                  <Inline
-                    alignItems="center"
-                    css={`
-                      gap: 0.5rem;
-                      flex-wrap: nowrap;
-                      white-space: nowrap;
-                      .form-switch {
-                        font-size: 0.85rem;
-                      }
-                    `}
-                  >
-                    <Switch
-                      id={`calendar-step-day-${day.id}-overnight-toggle`}
-                      variant={SwitchVariants.SUCCESS}
-                      checked={!!day.hasOvernightStay}
-                      disabled={isDisabled}
-                      onCheckedChange={(checked) =>
-                        onToggleOvernightStay?.(day.id, checked)
-                      }
-                    />
+              <Inline alignItems="flex-end" className="tw:gap-6">
+                {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
+                  <div className="tw:flex tw:flex-col tw:gap-y-1">
                     <Label
-                      variant={LabelVariants.NORMAL}
+                      variant={LabelVariants.BOLD}
                       htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
                     >
-                      {t('create.calendar.days.overnight_stay.with')}
+                      {t('create.calendar.days.overnight_stay.label')}
                     </Label>
-                  </Inline>
-                </div>
-              )}
-              {days.length > 1 && (
-                <Button
-                  className="tw:self-end"
-                  size={ButtonSizes.SMALL}
-                  variant={ButtonVariants.DANGER}
-                  onClick={() => onDeleteDay(day.id)}
-                  iconName={Icons.TRASH}
-                  disabled={isDisabled}
-                />
-              )}
+                    <Inline
+                      alignItems="center"
+                      css={`
+                        gap: 0.5rem;
+                        flex-wrap: nowrap;
+                        white-space: nowrap;
+                        .form-switch {
+                          font-size: 0.85rem;
+                        }
+                      `}
+                    >
+                      <Switch
+                        id={`calendar-step-day-${day.id}-overnight-toggle`}
+                        variant={SwitchVariants.SUCCESS}
+                        checked={!!day.hasOvernightStay}
+                        disabled={isDisabled}
+                        onCheckedChange={(checked) =>
+                          onToggleOvernightStay?.(day.id, checked)
+                        }
+                      />
+                      <Label
+                        variant={LabelVariants.NORMAL}
+                        htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                      >
+                        {t('create.calendar.days.overnight_stay.with')}
+                      </Label>
+                    </Inline>
+                  </div>
+                )}
+                {days.length > 1 && (
+                  <Button
+                    className="tw:self-end"
+                    size={ButtonSizes.SMALL}
+                    variant={ButtonVariants.DANGER}
+                    onClick={() => onDeleteDay(day.id)}
+                    iconName={Icons.TRASH}
+                    disabled={isDisabled}
+                  />
+                )}
+              </Inline>
             </List.Item>
             {timesErrors[index] && (
               <Text color="red">
