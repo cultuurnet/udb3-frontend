@@ -162,7 +162,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     bookingInfo: subEvent.bookingInfo,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
-    hasOvernightStay: !!subEvent.overnight,
+    hasOvernightStay: !!subEvent.hasOvernightStay,
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -219,7 +219,7 @@ const convertStateToFormData = (
         ...(day.childcareEndTime && { end: day.childcareEndTime }),
       },
     }),
-    ...(day.hasOvernightStay && { overnight: true }),
+    ...(day.hasOvernightStay && { hasOvernightStay: true }),
   }));
 
   const newOpeningHours = openingHours.map((openingHour) => ({

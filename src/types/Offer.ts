@@ -105,7 +105,7 @@ type SubEvent = {
     start?: string;
     end?: string;
   };
-  overnight?: boolean;
+  hasOvernightStay?: boolean;
 };
 
 type OpeningHours = {
