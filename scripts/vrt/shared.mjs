@@ -146,6 +146,7 @@ const waitForServer = async () => {
 
 let server;
 let mockServer;
+let isRecordingMissingFixtures = false;
 let cleanedUp = false;
 const additionalCleanupTasks = [];
 
@@ -171,15 +172,17 @@ export const cleanup = () => {
   }
   if (mockServer) {
     if (mockServer.unmockedRequests?.size) {
-      const lines = [...mockServer.unmockedRequests].map(
-        ([requestKey, realUrl]) =>
-          `  - ${requestKey} using real data from ${realUrl}`,
-      );
-      console.warn(
-        `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
-          'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
-          'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
-      );
+      if (!isRecordingMissingFixtures) {
+        const lines = [...mockServer.unmockedRequests].map(
+          ([requestKey, realUrl]) =>
+            `  - ${requestKey} using real data from ${realUrl}`,
+        );
+        console.warn(
+          `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
+            'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
+            'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
+        );
+      }
     } else {
       console.log(
         '\nMock server: all requests were served from fixtures, no real data was used.\n',
@@ -202,6 +205,8 @@ export const ensureAppAndMockServer = async ({
   onUnmockedResponse,
   allowServerReuse,
 } = {}) => {
+  isRecordingMissingFixtures = !!onUnmockedResponse;
+
   const serverAlreadyRunning = await isServerUp();
 
   if (serverAlreadyRunning) {

@@ -111,13 +111,15 @@ const main = async () => {
     }
 
     if (recordedFixtures.size) {
-      console.log(
-        '\nRecorded real responses — review, redact, and wire into MOCK_UPSTREAMS:',
+      const lines = [...recordedFixtures].map(
+        ([recordKey, filePath]) =>
+          `  - ${recordKey} recorded to file://${path.resolve(filePath)}`,
       );
-      for (const filePath of recordedFixtures.values()) {
-        console.log(`  file://${path.resolve(filePath)}`);
-      }
-      console.log();
+      console.log(
+        `\nMock server: recorded real responses for:\n${lines.join('\n')}\n\n` +
+          'Review and redact each one, copy it into scripts/vrt/fixtures/<domain>.mjs,\n' +
+          'then wire it into MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs.\n',
+      );
     }
   } finally {
     cleanup();
