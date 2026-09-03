@@ -194,13 +194,15 @@ const shouldShowChildrenOnlySection = ({
   scope,
   audienceType,
   childrenOnly,
-  ...age
+  typicalAgeRange,
+  birthdateRange,
 }: ChildrenOnlyContext) =>
   scope === OfferTypes.EVENTS &&
   audienceType !== AudienceTypes.EDUCATION &&
-  (!!age.typicalAgeRange || !!age.birthdateRange?.from) &&
-  isValidAgeRange(age.typicalAgeRange) &&
-  (childrenOnly === true || fitsChildrenOnly(age));
+  (!!typicalAgeRange || !!birthdateRange?.from) &&
+  isValidAgeRange(typicalAgeRange) &&
+  (childrenOnly === true ||
+    fitsChildrenOnly({ typicalAgeRange, birthdateRange }));
 
 const isChildrenOnlyValueMissing = (
   { scope, audience, nameAndAgeRange, childrenOnly }: Partial<FormDataUnion>,
