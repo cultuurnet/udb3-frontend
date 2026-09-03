@@ -180,7 +180,7 @@ const birthdateRangeFitsBoa = (
 };
 
 const fitsChildrenOnly = ({ typicalAgeRange, birthdateRange }: AgeValue) =>
-  birthdateRange
+  birthdateRange?.from
     ? birthdateRangeFitsBoa(birthdateRange)
     : overlapsWithBoaAgeRange(typicalAgeRange);
 
