@@ -570,7 +570,7 @@ const AgeRangeStepBoa = ({
   const [enteredAgeRange, setEnteredAgeRange] = useState<AgeFields | null>(
     null,
   );
-  // Holds a birthdate range that is not saved because it runs backwards.
+  // Shown with an error instead of saved, when "to" comes before "from".
   const [enteredBirthdateRange, setEnteredBirthdateRange] = useState<{
     from: Date;
     to: Date;
