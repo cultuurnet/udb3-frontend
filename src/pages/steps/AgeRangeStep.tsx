@@ -584,7 +584,7 @@ const AgeRangeStepBoa = ({
   const ageError = enteredAgeRange && validateAgeRange(minAge, maxAge);
 
   const parseBirthdate = (value: string | undefined) =>
-    value ? parse(value, 'yyyy-MM-dd', new Date()) : new Date();
+    value ? parse(value, 'yyyy-MM-dd', new Date()) : startOfDay(new Date());
 
   const displayedBirthdateRange = enteredBirthdateRange ?? {
     from: parseBirthdate(watchedBirthdateRange?.from),
