@@ -294,8 +294,6 @@ const Sidebar = () => {
   const [announcementModalContext, setAnnouncementModalContext] =
     useAnnouncementModalContext();
 
-  const [activeAnnouncementId, setActiveAnnouncementId] = useState();
-
   const [searchQuery, setSearchQuery] = useState('');
 
   const getAnnouncementsQuery = useGetAnnouncementsQuery({
@@ -313,9 +311,18 @@ const Sidebar = () => {
 
   const isSmallView = useMatchBreakpoint(Breakpoints.S);
 
+  const activeAnnouncementId = announcementModalContext.visible
+    ? (announcementModalContext.visibleAnnouncementUid ??
+      rawAnnouncements[0]?.uid)
+    : undefined;
+
   const handleClickAnnouncement = useCallback(
-    (activeAnnouncement) => setActiveAnnouncementId(activeAnnouncement.uid),
-    [],
+    (activeAnnouncement) =>
+      setAnnouncementModalContext((prevModalContext) => ({
+        ...prevModalContext,
+        visibleAnnouncementUid: activeAnnouncement.uid,
+      })),
+    [setAnnouncementModalContext],
   );
 
   const toggleIsAnnouncementsModalVisible = useCallback(
@@ -323,6 +330,7 @@ const Sidebar = () => {
       setAnnouncementModalContext((prevModalContext) => ({
         ...prevModalContext,
         visible: !prevModalContext.visible,
+        visibleAnnouncementUid: undefined,
       })),
     [setAnnouncementModalContext],
   );
@@ -418,19 +426,6 @@ const Sidebar = () => {
       }),
     [rawAnnouncements, activeAnnouncementId, storage],
   );
-
-  useEffect(() => {
-    if (announcementModalContext.visible) {
-      setActiveAnnouncementId(
-        announcementModalContext.visibleAnnouncementUid ??
-          announcements[0]?.uid,
-      );
-    }
-  }, [
-    announcementModalContext.visible,
-    announcementModalContext.visibleAnnouncementUid,
-    announcements,
-  ]);
 
   const countUnseenAnnouncements = useMemo(
     () =>

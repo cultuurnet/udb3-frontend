@@ -171,11 +171,8 @@ const birthdateRangeFitsBoa = (
   );
 
   if (Number.isNaN(minAge) || Number.isNaN(maxAge)) return false;
-  // Same bounds as overlapsWithBoaAgeRange: youngest between BOA_MIN_AGE and
-  // BOA_MAX_AGE, oldest no older than BOA_AGE_LIMIT.
-  return (
-    minAge >= BOA_MIN_AGE && minAge <= BOA_MAX_AGE && maxAge <= BOA_AGE_LIMIT
-  );
+
+  return overlapsWithBoaAgeRange(`${minAge}-${maxAge}`);
 };
 
 type ChildrenOnlyContext = {
