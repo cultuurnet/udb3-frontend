@@ -422,7 +422,8 @@ const Sidebar = () => {
   useEffect(() => {
     if (announcementModalContext.visible) {
       setActiveAnnouncementId(
-        announcementModalContext.visibleAnnouncementUid ?? announcements[0].uid,
+        announcementModalContext.visibleAnnouncementUid ??
+          announcements[0]?.uid,
       );
     }
   }, [

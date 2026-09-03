@@ -28,6 +28,7 @@ import { useToast } from '@/hooks/useToast';
 import { Event } from '@/types/Event';
 import { BirthdateRange } from '@/types/Offer';
 import { Values } from '@/types/Values';
+import { Alert, AlertVariants } from '@/ui/Alert';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { DatePicker } from '@/ui/DatePicker';
@@ -39,7 +40,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
 import { ToggleGroup } from '@/ui/ToggleGroup';
 
 import { AgeRangeStepLegacy } from './AgeRangeStepLegacy';
@@ -61,7 +62,8 @@ type AgeFields = { min: string; max: string };
 
 const MAX_AGE = 120;
 const BOA_MIN_AGE = 2;
-const BOA_MAX_AGE = 16;
+const BOA_MAX_AGE = 12;
+const BOA_AGE_LIMIT = 16;
 const AGE_PATTERN = /^\d+$/;
 const DECIMAL_SEPARATOR_PATTERN = /[.,]/;
 
@@ -147,6 +149,7 @@ const overlapsWithBoaAgeRange = (
 
   if (min !== undefined && min > BOA_MAX_AGE) return false;
   if (max !== undefined && max < BOA_MIN_AGE) return false;
+  if (max === undefined || max > BOA_AGE_LIMIT) return false;
   return true;
 };
 
@@ -168,10 +171,11 @@ const birthdateRangeFitsBoa = (
   );
 
   if (Number.isNaN(minAge) || Number.isNaN(maxAge)) return false;
-  // Both ages must sit entirely inside [BOA_MIN_AGE, BOA_MAX_AGE] — not just
-  // touch it. An audience marked "kinderen alleen" must be uniformly within
-  // the children window, not partially adult or partially infant.
-  return minAge >= BOA_MIN_AGE && maxAge <= BOA_MAX_AGE;
+  // Same bounds as overlapsWithBoaAgeRange: youngest between BOA_MIN_AGE and
+  // BOA_MAX_AGE, oldest no older than BOA_AGE_LIMIT.
+  return (
+    minAge >= BOA_MIN_AGE && minAge <= BOA_MAX_AGE && maxAge <= BOA_AGE_LIMIT
+  );
 };
 
 type ChildrenOnlyContext = {
@@ -243,43 +247,60 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
     isBefore(startOfDay(maxBirthDate), startOfDay(minBirthDate));
 
   return (
-    <Stack spacing={3} maxWidth="40rem" paddingLeft={5}>
+    <Stack spacing={3} paddingLeft={5} maxWidth="70rem">
       <Text fontWeight="bold">
         {t('create.name_and_age.age.birth_date.title')}
       </Text>
-      <Inline spacing={3} alignItems="flex-end">
-        <Stack spacing={2}>
-          <Label htmlFor="age-birth-date-min">
-            {t('create.name_and_age.age.birth_date.from')}
-          </Label>
-          <DatePicker
-            id="age-birth-date-min"
-            selected={minBirthDate}
-            onChange={(date: Date) => {
-              setMinBirthDate(date);
-              onCommit(date, maxBirthDate);
-            }}
-          />
+      <Inline
+        stackOn={Breakpoints.L}
+        alignItems="flex-start"
+        css={`
+          gap: 3rem;
+        `}
+      >
+        <Stack spacing={3} maxWidth="40rem">
+          <Inline spacing={3} alignItems="flex-end">
+            <Stack spacing={2}>
+              <Label htmlFor="age-birth-date-min">
+                {t('create.name_and_age.age.birth_date.from')}
+              </Label>
+              <DatePicker
+                id="age-birth-date-min"
+                selected={minBirthDate}
+                onChange={(date: Date) => {
+                  setMinBirthDate(date);
+                  onCommit(date, maxBirthDate);
+                }}
+              />
+            </Stack>
+            <Stack spacing={2}>
+              <Label htmlFor="age-birth-date-max">
+                {t('create.name_and_age.age.birth_date.to')}
+              </Label>
+              <DatePicker
+                id="age-birth-date-max"
+                selected={maxBirthDate}
+                onChange={(date: Date) => {
+                  setMaxBirthDate(date);
+                  onCommit(minBirthDate, date);
+                }}
+              />
+            </Stack>
+          </Inline>
+          {isInvalidRange && (
+            <Text color="red">
+              {t('create.name_and_age.age.birth_date.error_max_before_min')}
+            </Text>
+          )}
         </Stack>
-        <Stack spacing={2}>
-          <Label htmlFor="age-birth-date-max">
-            {t('create.name_and_age.age.birth_date.to')}
-          </Label>
-          <DatePicker
-            id="age-birth-date-max"
-            selected={maxBirthDate}
-            onChange={(date: Date) => {
-              setMaxBirthDate(date);
-              onCommit(minBirthDate, date);
-            }}
-          />
-        </Stack>
+        <Alert
+          variant={AlertVariants.PRIMARY}
+          fullWidth
+          className="tw:flex-1 tw:max-w-120"
+        >
+          {t('create.name_and_age.age.birth_date.tip')}
+        </Alert>
       </Inline>
-      {isInvalidRange && (
-        <Text color="red">
-          {t('create.name_and_age.age.birth_date.error_max_before_min')}
-        </Text>
-      )}
     </Stack>
   );
 };

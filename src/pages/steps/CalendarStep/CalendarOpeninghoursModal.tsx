@@ -15,6 +15,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { theme } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -310,7 +311,14 @@ const CalendarOpeninghoursModal = ({
       onClose={handleModalClose}
       css={`
         .modal-dialog {
-          max-width: 58rem;
+          max-width: 60rem;
+        }
+        .modal-header .modal-title {
+          font-size: ${theme.components.openingHoursModal.fontSize.modalTitle};
+        }
+        .accordion-button h3 {
+          font-size: ${theme.components.openingHoursModal.fontSize
+            .accordionTitle};
         }
       `}
     >
@@ -340,7 +348,7 @@ const CalendarOpeninghoursModal = ({
             )}
           </Alert>
         )}
-        {openingHours.map((openingHour) => {
+        {openingHours.map((openingHour, index) => {
           const { startError, endError } = getChildcareErrors(t, {
             childcareStartTime: openingHour.childcareStartTime,
             childcareEndTime: openingHour.childcareEndTime,
@@ -353,7 +361,7 @@ const CalendarOpeninghoursModal = ({
               <Inline
                 alignItems="flex-end"
                 spacing={5}
-                marginBottom={showChildcare ? 4 : undefined}
+                marginBottom={showChildcare && index === 0 ? 4 : undefined}
               >
                 <Stack spacing={3}>
                   <Text fontWeight="bold">
@@ -372,7 +380,7 @@ const CalendarOpeninghoursModal = ({
                     onChange={(newDays) =>
                       handleToggleDaysOfWeek(newDays, openingHour.id)
                     }
-                    width="15rem"
+                    className="tw:w-60"
                     hasError={
                       shownErrorIds.has(openingHour.id) &&
                       openingHour.dayOfWeek.length === 0
@@ -421,6 +429,7 @@ const CalendarOpeninghoursModal = ({
                         newTime,
                       )
                     }
+                    showInfo={index === 0}
                   />
                 )}
                 {openingHours.length > 1 && (
@@ -428,6 +437,9 @@ const CalendarOpeninghoursModal = ({
                     iconName={Icons.TRASH}
                     variant={ButtonVariants.DANGER}
                     onClick={() => handleRemoveOpeningHours(openingHour.id)}
+                    aria-label={t(
+                      'create.calendar.fixed_days.overview.delete_modal.title',
+                    )}
                   />
                 )}
               </Inline>
@@ -473,12 +485,11 @@ const CalendarOpeninghoursModal = ({
           <Accordion.Item
             eventKey="deviating"
             title={t('create.calendar.opening_hours_modal.deviating.title')}
-            spacing={4}
+            className="tw:flex tw:flex-col tw:gap-4 tw:px-1"
           >
             {deviatingPeriods.map((period, index) => (
               <DeviatingPeriod
                 key={period.id}
-                index={index}
                 period={period}
                 onChange={(updated: DeviatingPeriodData) => {
                   setDeviatingPeriods((prev) =>
@@ -528,12 +539,11 @@ const CalendarOpeninghoursModal = ({
           <Accordion.Item
             eventKey="closing"
             title={t('create.calendar.opening_hours_modal.closing.title')}
-            spacing={4}
+            className="tw:flex tw:flex-col tw:gap-4 tw:px-1"
           >
             {closingPeriods.map((period, index) => (
               <ClosingPeriod
                 key={period.id}
-                index={index}
                 period={period}
                 onChange={(updated: ClosingPeriodData) => {
                   setClosingPeriods((prev) =>
