@@ -53,9 +53,13 @@ const AgeInputModes = {
 
 type AgeInputMode = Values<typeof AgeInputModes>;
 
+// An offer has either a typicalAgeRange or a birthdateRange, never both:
+// saving one clears the other.
+type AgeValue = { typicalAgeRange?: string; birthdateRange?: BirthdateRange };
+
 type ActiveModal =
   | { kind: 'departurePlaces' }
-  | { kind: 'ageRange'; newValue: string; previousValue: string }
+  | { kind: 'ageRange'; newValue: AgeValue; previousValue: AgeValue }
   | { kind: 'inputMode'; newMode: AgeInputMode };
 
 type AgeFields = { min: string; max: string };
@@ -175,28 +179,28 @@ const birthdateRangeFitsBoa = (
   return overlapsWithBoaAgeRange(`${minAge}-${maxAge}`);
 };
 
-type ChildrenOnlyContext = {
+const fitsChildrenOnly = ({ typicalAgeRange, birthdateRange }: AgeValue) =>
+  birthdateRange
+    ? birthdateRangeFitsBoa(birthdateRange)
+    : overlapsWithBoaAgeRange(typicalAgeRange);
+
+type ChildrenOnlyContext = AgeValue & {
   scope?: Scope;
   audienceType?: AudienceType;
-  typicalAgeRange?: string;
-  birthdateRange?: BirthdateRange;
   childrenOnly?: boolean;
 };
 
 const shouldShowChildrenOnlySection = ({
   scope,
   audienceType,
-  typicalAgeRange,
-  birthdateRange,
   childrenOnly,
+  ...age
 }: ChildrenOnlyContext) =>
   scope === OfferTypes.EVENTS &&
   audienceType !== AudienceTypes.EDUCATION &&
-  (!!typicalAgeRange || !!birthdateRange?.from) &&
-  isValidAgeRange(typicalAgeRange) &&
-  (childrenOnly === true ||
-    overlapsWithBoaAgeRange(typicalAgeRange) ||
-    birthdateRangeFitsBoa(birthdateRange));
+  (!!age.typicalAgeRange || !!age.birthdateRange?.from) &&
+  isValidAgeRange(age.typicalAgeRange) &&
+  (childrenOnly === true || fitsChildrenOnly(age));
 
 const isChildrenOnlyValueMissing = (
   { scope, audience, nameAndAgeRange, childrenOnly }: Partial<FormDataUnion>,
@@ -626,32 +630,62 @@ const AgeRangeStepBoa = ({
     changeChildrenOnlyMutation.isPending ||
     changeDeparturePlacesMutation.isPending;
 
-  const commitTypicalAgeRange = (value: string) => {
-    const previousValue = watchedTypicalAgeRange ?? '';
-    setValue('nameAndAgeRange.typicalAgeRange', value, { shouldDirty: true });
+  const setAge = ({ typicalAgeRange, birthdateRange }: AgeValue) => {
+    setValue('nameAndAgeRange.typicalAgeRange', typicalAgeRange, {
+      shouldDirty: true,
+    });
+    setValue('nameAndAgeRange.birthdateRange', birthdateRange, {
+      shouldDirty: true,
+    });
+  };
 
-    if (childrenOnly && !overlapsWithBoaAgeRange(value)) {
-      setActiveModal({ kind: 'ageRange', newValue: value, previousValue });
-      return;
-    }
-
+  const saveAge = async ({ typicalAgeRange, birthdateRange }: AgeValue) => {
     if (!offerId) {
       onChange(undefined);
       return;
     }
 
-    changeTypicalAgeRangeMutation.mutate({
+    if (birthdateRange) {
+      await changeBirthdateRangeMutation.mutateAsync({
+        eventId: offerId,
+        birthdateRange,
+        scope,
+      });
+      return;
+    }
+
+    await changeTypicalAgeRangeMutation.mutateAsync({
       eventId: offerId,
-      typicalAgeRange: value,
+      typicalAgeRange,
       scope,
     });
+  };
+
+  // Saves right away, unless the new age breaks children-only: then the user
+  // confirms first and the modal saves it.
+  const commitAge = (value: AgeValue) => {
+    setAge(value);
+
+    if (childrenOnly && !fitsChildrenOnly(value)) {
+      setActiveModal({
+        kind: 'ageRange',
+        newValue: value,
+        previousValue: {
+          typicalAgeRange: watchedTypicalAgeRange,
+          birthdateRange: watchedBirthdateRange,
+        },
+      });
+      return;
+    }
+
+    saveAge(value).catch(() => undefined);
   };
 
   // Empties the form without touching the saved age.
   const handleAgeClear = () => {
     setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
-    setValue('nameAndAgeRange.typicalAgeRange', '', { shouldDirty: true });
+    setAge({});
   };
 
   const commitAgeRange = (min: string, max: string) => {
@@ -667,13 +701,13 @@ const AgeRangeStepBoa = ({
 
     setEnteredAgeRange(null);
     setIsAgeManuallyEntered(true);
-    commitTypicalAgeRange(buildAgeRangeString(min, max));
+    commitAge({ typicalAgeRange: buildAgeRangeString(min, max) });
   };
 
   const handlePresetClick = (apiLabel: string) => {
     setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
-    commitTypicalAgeRange(apiLabel);
+    commitAge({ typicalAgeRange: apiLabel });
   };
 
   const commitBirthdateRange = (
@@ -685,36 +719,14 @@ const AgeRangeStepBoa = ({
     const birthdateRange = buildBirthdateRange(newMin, newMax);
     if (!birthdateRange) return;
 
-    setValue('nameAndAgeRange.birthdateRange', birthdateRange, {
-      shouldDirty: true,
-    });
-
-    if (!offerId) {
-      onChange(undefined);
-      return;
-    }
-
-    changeBirthdateRangeMutation.mutate({
-      eventId: offerId,
-      birthdateRange,
-      scope,
-    });
+    commitAge({ birthdateRange });
   };
 
   const applyModeChange = (mode: AgeInputMode) => {
     setSelectedMode(mode);
     setEnteredAgeRange(null);
     setIsAgeManuallyEntered(false);
-
-    if (mode === AgeInputModes.AGE) {
-      setValue('nameAndAgeRange.birthdateRange', undefined, {
-        shouldDirty: true,
-      });
-    } else {
-      setValue('nameAndAgeRange.typicalAgeRange', undefined, {
-        shouldDirty: true,
-      });
-    }
+    setAge({});
   };
 
   const handleModeChange = (newMode: string) => {
@@ -766,9 +778,7 @@ const AgeRangeStepBoa = ({
 
   const handleAgeRangeModalClose = () => {
     if (activeModal?.kind !== 'ageRange') return;
-    setValue('nameAndAgeRange.typicalAgeRange', activeModal.previousValue, {
-      shouldDirty: true,
-    });
+    setAge(activeModal.previousValue);
     setActiveModal(null);
   };
 
@@ -785,21 +795,9 @@ const AgeRangeStepBoa = ({
   const handleAgeRangeModalConfirm = async () => {
     if (isChildrenOnlyPending) return;
     if (activeModal?.kind !== 'ageRange') return;
-    const { newValue } = activeModal;
     try {
       await resetChildrenOnlyAudience();
-      setValue('nameAndAgeRange.typicalAgeRange', newValue, {
-        shouldDirty: true,
-      });
-      if (offerId) {
-        await changeTypicalAgeRangeMutation.mutateAsync({
-          eventId: offerId,
-          typicalAgeRange: newValue,
-          scope,
-        });
-      } else {
-        onChange(undefined);
-      }
+      await saveAge(activeModal.newValue);
     } catch {
       return;
     }
@@ -888,6 +886,8 @@ const AgeRangeStepBoa = ({
         ) : (
           <>
             <BirthdatePickers
+              // Resets the pickers when the displayed range changes
+              key={`${watchedBirthdateRange?.from}-${watchedBirthdateRange?.to}`}
               from={watchedBirthdateRange?.from}
               to={watchedBirthdateRange?.to}
               onCommit={commitBirthdateRange}
