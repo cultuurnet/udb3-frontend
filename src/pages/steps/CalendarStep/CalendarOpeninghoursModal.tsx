@@ -363,7 +363,7 @@ const CalendarOpeninghoursModal = ({
                 spacing={5}
                 marginBottom={showChildcare && index === 0 ? 4 : undefined}
               >
-                <Stack spacing={3}>
+                <Stack spacing={1}>
                   <Text fontWeight="bold">
                     {t('create.calendar.opening_hours_modal.days')}
                   </Text>
@@ -387,7 +387,7 @@ const CalendarOpeninghoursModal = ({
                     }
                   />
                 </Stack>
-                <Stack spacing={3}>
+                <Stack spacing={1}>
                   <Text fontWeight="bold">
                     {t('create.calendar.opening_hours_modal.hours')}
                   </Text>
