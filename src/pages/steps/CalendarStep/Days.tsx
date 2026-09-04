@@ -134,7 +134,7 @@ export const Days = ({
 
         return (
           <div
-            className="tw:mb-4 tw:flex tw:flex-col tw:gap-4 tw:rounded-lg tw:border tw:border-border tw:bg-grey-light tw:p-3"
+            className="tw:mb-4 tw:flex tw:flex-col tw:gap-4 tw:rounded-lg tw:border tw:border-border tw:bg-grey-light tw:p-3 tw:pb-5"
             key={`list-item-${day.id}`}
           >
             <List.Item
