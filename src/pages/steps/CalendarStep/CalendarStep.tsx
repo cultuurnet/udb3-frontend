@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -295,6 +297,30 @@ const formatClosingDays = (closingPeriods: ClosingPeriodData[]) =>
   }));
 
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
+
+const getCalendarInfo = (calendar: CalendarInForm) =>
+  calendar && {
+    ...calendar,
+    ...(calendar.subEvent && {
+      subEvent: calendar.subEvent.map((subEvent) =>
+        pick(subEvent, [
+          'startDate',
+          'endDate',
+          'childcare',
+          'hasOvernightStay',
+        ]),
+      ),
+    }),
+  };
+
+const hasChangedCalendar = (offer: Offer, calendar: CalendarInForm) => {
+  const { newContext, calendarType } = convertOfferToCalendarContext(offer);
+
+  return !isEqual(
+    getCalendarInfo(convertStateToFormData(newContext, calendarType)),
+    getCalendarInfo(calendar),
+  );
+};
 
 type CalendarStepProps = StepProps & { offerId?: string };
 
@@ -717,5 +743,6 @@ export {
   CalendarStep,
   calendarStepConfiguration,
   convertStateToFormData,
+  hasChangedCalendar,
   useEditCalendar,
 };

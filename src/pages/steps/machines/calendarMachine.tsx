@@ -592,9 +592,15 @@ const calendarMachineConfig: MachineConfig<
         },
       },
       on: {
-        CHOOSE_ONE_OR_MORE_DAYS: {
-          target: 'single',
-        },
+        CHOOSE_ONE_OR_MORE_DAYS: [
+          {
+            target: 'single',
+            cond: 'has1Day',
+          },
+          {
+            target: 'multiple',
+          },
+        ],
         CHOOSE_WITH_START_AND_END_DATE: {
           target: 'periodic',
         },
