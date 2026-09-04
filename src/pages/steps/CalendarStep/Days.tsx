@@ -25,6 +25,9 @@ import {
 import { FormDataUnion } from '../Steps';
 import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 
+const fieldsGroup =
+  'tw:flex tw:items-end tw:gap-x-4 tw:@max-4xl:flex-wrap tw:@max-4xl:gap-y-6';
+
 type ChangeTimeHandler = (id: string, hours: number, minutes: number) => void;
 
 const createChangeTimeHandler =
@@ -84,6 +87,9 @@ export const Days = ({
   const { apiHolidays, onShowHolidaysChange } = useHolidaysWithToggle();
 
   const isOneOrMoreDays = useIsOneOrMoreDays();
+  const isOvernightStayVisible =
+    isOneOrMoreDays && showOvernightStay && isBoaEnabled;
+  const isChildcareVisible = isOneOrMoreDays && isBoaEnabled && showChildcare;
 
   const subEventErrors = errors.calendar?.subEvent ?? [];
   const timesErrors = subEventErrors.map((error) => {
@@ -95,7 +101,11 @@ export const Days = ({
   });
 
   return (
-    <List spacing={4} {...getStackProps(props)}>
+    <List
+      spacing={4}
+      className="tw:w-fit tw:max-w-full"
+      {...getStackProps(props)}
+    >
       {days.map((day, index) => {
         const startTime = getStartTime(day);
         const endTime = getEndTime(day);
@@ -124,99 +134,103 @@ export const Days = ({
 
         return (
           <div
-            className="tw:flex tw:flex-col tw:gap-4 tw:mb-4"
+            className="tw:mb-4 tw:flex tw:flex-col tw:gap-4 tw:rounded-lg tw:border tw:border-border tw:bg-grey-light tw:p-3 tw:pb-5"
             key={`list-item-${day.id}`}
           >
             <List.Item
-              alignItems="flex-end"
-              spacing={0}
-              className="tw:gap-8"
-              marginBottom={
-                isOneOrMoreDays && isBoaEnabled && showChildcare && index === 0
-                  ? 4
-                  : undefined
-              }
+              className="tw:flex-nowrap tw:gap-x-4"
+              marginBottom={isChildcareVisible && index === 0 ? 4 : undefined}
             >
-              <DatePeriodPicker
-                showHolidaysToggle={isBoaEnabled}
-                className="tw:gap-2"
-                id={`calendar-step-day-${day.id}`}
-                dateStart={new Date(day.startDate)}
-                dateEnd={new Date(day.endDate)}
-                onDateStartChange={(newDate) =>
-                  onChangeStartDate(day.id, newDate)
-                }
-                onDateEndChange={(newDate) => onChangeEndDate(day.id, newDate)}
-                disabled={isDisabled}
-                apiHolidays={apiHolidays}
-                onShowHolidaysChange={onShowHolidaysChange}
-              />
-              {isOneOrMoreDays && (
-                <TimeSpanPicker
-                  id={`calendar-step-day-${day.id}`}
-                  startTime={startTime}
-                  endTime={endTime}
-                  onChangeStartTime={handleChangeStartTime}
-                  onChangeEndTime={handleChangeEndTime}
-                  disabled={isDisabled}
-                  className="tw:min-w-30"
-                />
-              )}
-              {isOneOrMoreDays && isBoaEnabled && showChildcare && (
-                <ChildcareTimeFields
-                  idPrefix={`calendar-step-day-${day.id}`}
-                  startTime={day.childcareStartTime ?? ''}
-                  endTime={day.childcareEndTime ?? ''}
-                  onChangeStartTime={(newTime) =>
-                    onChangeChildcareStartTime?.(day.id, newTime)
-                  }
-                  onChangeEndTime={(newTime) =>
-                    onChangeChildcareEndTime?.(day.id, newTime)
-                  }
-                  disabled={isDisabled}
-                  showInfo={index === 0}
-                />
-              )}
-              {isOneOrMoreDays && showOvernightStay && isBoaEnabled && (
-                <div className="tw:flex tw:flex-col tw:gap-y-1">
-                  <Label
-                    variant={LabelVariants.BOLD}
-                    htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
-                  >
-                    {t('create.calendar.days.overnight_stay.label')}
-                  </Label>
-                  <Inline
-                    alignItems="center"
-                    css={`
-                      gap: 0.5rem;
-                      flex-wrap: nowrap;
-                      white-space: nowrap;
-                      .form-switch {
-                        font-size: 0.85rem;
-                      }
-                    `}
-                  >
-                    <Switch
-                      id={`calendar-step-day-${day.id}-overnight-toggle`}
-                      variant={SwitchVariants.SUCCESS}
-                      checked={!!day.hasOvernightStay}
+              <div className="tw:flex tw:flex-col tw:items-start tw:gap-y-6 tw:@6xl:flex-row tw:@6xl:items-end tw:@6xl:gap-x-6">
+                <div className={fieldsGroup}>
+                  <DatePeriodPicker
+                    showHolidaysToggle={isBoaEnabled}
+                    className="tw:@max-lg:flex-wrap tw:@max-lg:gap-y-6"
+                    id={`calendar-step-day-${day.id}`}
+                    dateStart={new Date(day.startDate)}
+                    dateEnd={new Date(day.endDate)}
+                    onDateStartChange={(newDate) =>
+                      onChangeStartDate(day.id, newDate)
+                    }
+                    onDateEndChange={(newDate) =>
+                      onChangeEndDate(day.id, newDate)
+                    }
+                    disabled={isDisabled}
+                    apiHolidays={apiHolidays}
+                    onShowHolidaysChange={onShowHolidaysChange}
+                  />
+                  {isOneOrMoreDays && (
+                    <TimeSpanPicker
+                      id={`calendar-step-day-${day.id}`}
+                      startTime={startTime}
+                      endTime={endTime}
+                      onChangeStartTime={handleChangeStartTime}
+                      onChangeEndTime={handleChangeEndTime}
                       disabled={isDisabled}
-                      onCheckedChange={(checked) =>
-                        onToggleOvernightStay?.(day.id, checked)
-                      }
+                      className="tw:min-w-30"
                     />
-                    <Label
-                      variant={LabelVariants.NORMAL}
-                      htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
-                    >
-                      {t('create.calendar.days.overnight_stay.with')}
-                    </Label>
-                  </Inline>
+                  )}
                 </div>
-              )}
+                {(isChildcareVisible || isOvernightStayVisible) && (
+                  <div className={fieldsGroup}>
+                    {isChildcareVisible && (
+                      <ChildcareTimeFields
+                        idPrefix={`calendar-step-day-${day.id}`}
+                        startTime={day.childcareStartTime ?? ''}
+                        endTime={day.childcareEndTime ?? ''}
+                        onChangeStartTime={(newTime) =>
+                          onChangeChildcareStartTime?.(day.id, newTime)
+                        }
+                        onChangeEndTime={(newTime) =>
+                          onChangeChildcareEndTime?.(day.id, newTime)
+                        }
+                        disabled={isDisabled}
+                        showInfo={index === 0}
+                      />
+                    )}
+                    {isOvernightStayVisible && (
+                      <div className="tw:flex tw:flex-col tw:gap-y-1">
+                        <Label
+                          variant={LabelVariants.BOLD}
+                          htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                        >
+                          {t('create.calendar.days.overnight_stay.label')}
+                        </Label>
+                        <Inline
+                          alignItems="center"
+                          css={`
+                            gap: 0.5rem;
+                            flex-wrap: nowrap;
+                            white-space: nowrap;
+                            .form-switch {
+                              font-size: 0.85rem;
+                            }
+                          `}
+                        >
+                          <Switch
+                            id={`calendar-step-day-${day.id}-overnight-toggle`}
+                            variant={SwitchVariants.SUCCESS}
+                            checked={!!day.hasOvernightStay}
+                            disabled={isDisabled}
+                            onCheckedChange={(checked) =>
+                              onToggleOvernightStay?.(day.id, checked)
+                            }
+                          />
+                          <Label
+                            variant={LabelVariants.NORMAL}
+                            htmlFor={`calendar-step-day-${day.id}-overnight-toggle`}
+                          >
+                            {t('create.calendar.days.overnight_stay.with')}
+                          </Label>
+                        </Inline>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               {days.length > 1 && (
                 <Button
-                  className="tw:self-end"
+                  className="tw:shrink-0 tw:self-start"
                   size={ButtonSizes.SMALL}
                   variant={ButtonVariants.DANGER}
                   onClick={() => onDeleteDay(day.id)}
