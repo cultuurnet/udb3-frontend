@@ -225,6 +225,8 @@ const DatePickerLegacy = ({
           background: white;
           width: 60%;
           left: 10%;
+          max-height: 12.5rem;
+          overflow-y: auto;
         }
 
         .react-datepicker__month-dropdown-container:hover,
