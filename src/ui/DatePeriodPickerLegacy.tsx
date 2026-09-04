@@ -224,7 +224,7 @@ const DatePeriodPickerLegacy = ({
       className={className}
       {...getInlineProps(props)}
     >
-      <Stack spacing={2} as="div">
+      <Stack as="div" className="tw:gap-1">
         <Label variant={labelVariant} htmlFor={`${idPrefix}-start`}>
           {t('date_period_picker.start')}
         </Label>
@@ -263,7 +263,7 @@ const DatePeriodPickerLegacy = ({
           calendarQuickLinks={calendarQuickLinks}
         />
       </Stack>
-      <Stack spacing={2} as="div">
+      <Stack as="div" className="tw:gap-1">
         <Label variant={labelVariant} htmlFor={`${idPrefix}-end`}>
           {t('date_period_picker.end')}
         </Label>

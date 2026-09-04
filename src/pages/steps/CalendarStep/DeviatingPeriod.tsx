@@ -182,7 +182,7 @@ const DeviatingPeriod = ({
           />
         </Inline>
 
-        <Stack spacing={2}>
+        <Stack spacing={1}>
           <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
             <DatePeriodPicker
               className="tw:w-full"
@@ -264,7 +264,7 @@ const DeviatingPeriod = ({
         </Stack>
       </Stack>
 
-      <Stack spacing={2} marginTop={3}>
+      <Stack spacing={1} marginTop={3}>
         <Text
           color={colors.udbMainDarkBlue}
           fontWeight="bold"
@@ -284,7 +284,7 @@ const DeviatingPeriod = ({
             return (
               <Stack key={openingHour.id} spacing={4}>
                 <Inline alignItems="flex-end" spacing={5}>
-                  <Stack spacing={3}>
+                  <Stack spacing={1}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.days')}
                     </Text>
@@ -308,7 +308,7 @@ const DeviatingPeriod = ({
                       }
                     />
                   </Stack>
-                  <Stack spacing={3}>
+                  <Stack spacing={1}>
                     <Text fontWeight="bold">
                       {t('create.calendar.opening_hours_modal.hours')}
                     </Text>

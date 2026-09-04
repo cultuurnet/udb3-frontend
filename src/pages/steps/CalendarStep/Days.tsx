@@ -16,6 +16,7 @@ import { List } from '@/ui/List';
 import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
+import { getGlobalFormInputHeight } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -199,6 +200,7 @@ export const Days = ({
                         <Inline
                           alignItems="center"
                           css={`
+                            height: ${getGlobalFormInputHeight};
                             gap: 0.5rem;
                             flex-wrap: nowrap;
                             white-space: nowrap;
