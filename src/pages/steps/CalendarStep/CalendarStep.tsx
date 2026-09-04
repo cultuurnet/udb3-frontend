@@ -568,6 +568,8 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
+      className="tw:@container tw:contain-layout"
+      zIndex={4}
       minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
@@ -580,7 +582,11 @@ const CalendarStep = ({
           isCultuurkuurEvent={isCultuurkuurEvent}
         />
       )}
-      <Panel backgroundColor="white" padding={5}>
+      <Panel
+        backgroundColor="white"
+        padding={4.5}
+        className={isOneOrMoreDays ? 'tw:w-fit tw:max-w-full' : undefined}
+      >
         {isFixedDays && (
           <FixedDays
             scope={scope}
