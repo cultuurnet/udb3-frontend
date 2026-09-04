@@ -542,7 +542,7 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
-      className="tw:@container"
+      className="tw:@container tw:contain-layout"
       minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
