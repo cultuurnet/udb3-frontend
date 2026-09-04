@@ -543,6 +543,7 @@ const CalendarStep = ({
       ref={calendarStepContainer}
       spacing={4}
       className="tw:@container tw:contain-layout"
+      zIndex={4}
       minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
