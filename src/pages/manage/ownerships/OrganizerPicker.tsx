@@ -13,21 +13,15 @@ import {
 import { getOrganizerName } from '@/pages/steps/AdditionalInformationStep/OrganizerPicker';
 import { Organizer } from '@/types/Organizer';
 import { FormElement } from '@/ui/FormElement';
-import { getInlineProps, InlineProps } from '@/ui/Inline';
 import { Typeahead } from '@/ui/Typeahead';
 import { valueToArray } from '@/utils/valueToArray';
 
 type Props = {
   selected?: Organizer;
   onChange: (value: Organizer[]) => void;
-} & Omit<InlineProps, 'onChange'>;
+};
 
-export const OrganizerPicker = ({
-  selected,
-  onChange,
-  defaultInputValue,
-  ...props
-}: Props) => {
+export const OrganizerPicker = ({ selected, onChange }: Props) => {
   const { t, i18n } = useTranslation();
 
   const [query, setQuery] = useState('');
@@ -66,7 +60,7 @@ export const OrganizerPicker = ({
       label={t('ownerships.organizer_picker.label')}
       Component={
         <Typeahead
-          maxWidth="25rem"
+          className="tw:max-w-100"
           isLoading={
             getOrganizersByQueryQuery.isLoading ||
             getOrganizerByIdQuery.isLoading
@@ -84,7 +78,6 @@ export const OrganizerPicker = ({
             }
           }, 275)}
           labelKey={(org) => getOrganizerName(org as Organizer, i18n.language)}
-          {...getInlineProps(props)}
         />
       }
     />

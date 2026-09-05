@@ -9,7 +9,7 @@ import { Stack } from './Stack';
 import { colors, getValueFromTheme } from './theme';
 import type { TimeSpanPickerProps } from './TimeSpanPicker';
 import { TimeSpanPickerLabelPositions } from './TimeSpanPicker';
-import { Typeahead } from './Typeahead';
+import { TypeaheadLegacy } from './TypeaheadLegacy';
 
 const getValueForTimePicker = getValueFromTheme('timePicker');
 
@@ -124,7 +124,7 @@ const TimeSpanPickerLegacy = ({
       {fields.map(
         ({ key, label, value, onChange, name, disabled: fieldDisabled }) => {
           const typeahead = (
-            <Typeahead<string>
+            <TypeaheadLegacy<string>
               key={`${key}-${fieldDisabled}`}
               inputType="time"
               inputRequired={true}

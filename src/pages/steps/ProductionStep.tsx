@@ -138,7 +138,7 @@ const ProductionStep = ({
                   options={productions}
                   onInputChange={debounce(setSearchInput, 275)}
                   labelKey="name"
-                  maxWidth="43rem"
+                  className="tw:max-w-172"
                   selected={valueToArray(field.value as Production)}
                   onChange={(productions) => {
                     const production = productions[0];
