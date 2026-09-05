@@ -493,6 +493,28 @@ test.describe('My Tests', () => {
 - SSR compatibility: Use `useIsClient()` hook for client-only code
 - Run: `yarn test:unit`
 
+### Visual Regression Testing
+
+Two pipelines:
+
+- **Component-level** (`yarn vrt`): Storybook stories, via Lost Pixel (`lost-pixel-action`). Lost Pixel is archived/unmaintained upstream — this pipeline stays on it for now, but expect a future migration here too.
+- **Page-level** (`yarn vrt:pages` / `yarn vrt:pages-update`): full pages against a real, authenticated Next.js instance, using Playwright's native `toHaveScreenshot`, orchestrated by `scripts/vrt/pages.mjs`. Screenshot capture/comparison runs via `playwright.vrt-pages.config.ts` inside a pinned `mcr.microsoft.com/playwright` Docker image (matching the installed `@playwright/test` version) for cross-platform pixel consistency; baselines live under `.vrt-pages/baseline/`.
+
+`scripts/vrt/shared.mjs` holds the orchestration for the screenshot pipeline (mock server + app startup, auth session, cleanup). `scripts/vrt/pages.mjs` (screenshots, via Docker) is a thin entry point on top of it.
+
+Page-level VRT runs the real app with API calls intercepted by a local mock server (`scripts/vrt/mock-server.mjs`). Anything not explicitly mocked falls through to the real backend and logs that it did — coverage builds incrementally: screenshot a page first, see what looks live, mock exactly that.
+
+To target a single page while iterating: `yarn vrt:pages:single "labels overview"` (or `yarn vrt:pages-update:single "labels overview"` to update just that one). Extra arguments after any `vrt:pages*` script pass straight through to the underlying `playwright test` call.
+
+**Adding a new page:**
+
+1. Add an entry to the `screenshotPages([...])` call in the relevant `src/test/vrt-pages/<domain>.spec.ts` file (create the file if the domain doesn't have one yet, calling `screenshotPages` from `src/test/vrt-pages/support.ts`) with a `title` and `path` — this declares the test, navigates, and screenshots in one go. The baseline filename is derived automatically from the title and the spec file as `pages--<title with spaces as dashes>--<spec file>.png` (e.g. `pages--labels-overview--labels.spec.ts.png`), so name entries accordingly. `screenshotPages` screenshots `page.locator('main')` by default; pass a `locator: (page) => ...` on the entry if a page needs something else (see `sidebar.spec.ts`).
+2. Mock its data: add fixtures in `scripts/vrt/fixtures/<domain>.mjs`, wire them into `MOCK_UPSTREAMS` in `scripts/vrt/mock-upstreams.mjs`. If the console warns an endpoint has no fixture, inspect the real response (e.g. via the browser network tab) and construct the fixture from it by hand — redact anything sensitive. An endpoint left unmocked keeps hitting the real backend on every normal run, so it still surfaces genuine backend-driven differences until you deliberately mock it.
+3. If the page needs interaction before the screenshot (typing, clicking, waiting for a result), pass a `beforeScreenshot: async (page) => ...` on the entry. If that interaction is likely to repeat across pages (e.g. "search and wait for a result"), write it as a reusable function in `src/test/vrt-pages/interactions.ts` instead of inlining it (see `fillAndWaitForText`).
+4. Run `yarn vrt:pages-update` locally, review the generated screenshot, then commit the baseline under `.vrt-pages/baseline/`.
+
+Mocked permissions/roles should reflect the real test account's actual access, not an inflated list — baselines should show what's honestly reachable, not a hypothetical best case.
+
 ## Key Integration Points
 
 - **Authentication**: Auth0 with JWT tokens in cookies, `useHeaders()` for API auth, automatic 401/403 redirect via middleware

@@ -522,6 +522,7 @@ const Sidebar = () => {
     <Stack
       key="sidebar"
       forwardedAs="nav"
+      aria-label={t('menu.sidebar')}
       height="100%"
       overflow="auto"
       width={{ default: '240px', s: '65px' }}
