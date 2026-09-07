@@ -1012,7 +1012,7 @@
     },
     "duplicate": {
       "title": "Copier et modifier",
-      "alert": "Vous êtes sur le point de copier une activité. Choisissez une date pour cette activité."
+      "alert": "Vous êtes sur le point de copier une activité. Choisissez de nouvelles heures pour cette activité."
     },
     "migration": {
       "alert": "<boldText>Cette activité a été saisie dans la version précédente d'UiTdatabank.</boldText><br/>Pour la modifier, il est nécessaire de sélectionner à nouveau ou de saisir une fois l'emplacement et l'adresse précédemment sélectionnés.",

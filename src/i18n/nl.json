@@ -1047,7 +1047,7 @@
     },
     "duplicate": {
       "title": "Kopiëren en aanpassen",
-      "alert": "Je staat op het punt een activiteit te kopiëren. Kies een tijdstip voor deze activiteit."
+      "alert": "Je staat op het punt een activiteit te kopiëren. Kies nieuwe uren voor deze activiteit."
     },
     "migration": {
       "alert": "<boldText>Deze activiteit werd ingevoerd in de vorige versie van UiTdatabank.</boldText><br/>Om deze te kunnen bewerken, is het nodig om de eerder gekozen locatie en adres éénmalig opnieuw te selecteren of in te voeren.",

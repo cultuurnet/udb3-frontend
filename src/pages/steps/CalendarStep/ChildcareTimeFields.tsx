@@ -54,7 +54,7 @@ const ChildcareTimeFields = ({
   return (
     <Stack position="relative" {...boxProps}>
       <div className="tw:flex tw:gap-2">
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
           <Checkbox
             id={startToggleId}
             checked={startEnabled}
@@ -70,7 +70,7 @@ const ChildcareTimeFields = ({
             {t('create.calendar.days.childcare.before')}
           </Label>
         </div>
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
           <Checkbox
             id={endToggleId}
             checked={endEnabled}

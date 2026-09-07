@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -296,6 +298,30 @@ const formatClosingDays = (closingPeriods: ClosingPeriodData[]) =>
 
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
 
+const getCalendarInfo = (calendar: CalendarInForm) =>
+  calendar && {
+    ...calendar,
+    ...(calendar.subEvent && {
+      subEvent: calendar.subEvent.map((subEvent) =>
+        pick(subEvent, [
+          'startDate',
+          'endDate',
+          'childcare',
+          'hasOvernightStay',
+        ]),
+      ),
+    }),
+  };
+
+const hasChangedCalendar = (offer: Offer, calendar: CalendarInForm) => {
+  const { newContext, calendarType } = convertOfferToCalendarContext(offer);
+
+  return !isEqual(
+    getCalendarInfo(convertStateToFormData(newContext, calendarType)),
+    getCalendarInfo(calendar),
+  );
+};
+
 type CalendarStepProps = StepProps & { offerId?: string };
 
 const CalendarStep = ({
@@ -542,6 +568,8 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
+      className="tw:@container tw:contain-layout"
+      zIndex={4}
       minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
@@ -554,7 +582,11 @@ const CalendarStep = ({
           isCultuurkuurEvent={isCultuurkuurEvent}
         />
       )}
-      <Panel backgroundColor="white" padding={5}>
+      <Panel
+        backgroundColor="white"
+        padding={4.5}
+        className={isOneOrMoreDays ? 'tw:w-fit tw:max-w-full' : undefined}
+      >
         {isFixedDays && (
           <FixedDays
             scope={scope}
@@ -711,5 +743,6 @@ export {
   CalendarStep,
   calendarStepConfiguration,
   convertStateToFormData,
+  hasChangedCalendar,
   useEditCalendar,
 };
