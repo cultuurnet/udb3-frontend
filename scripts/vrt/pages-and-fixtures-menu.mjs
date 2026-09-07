@@ -2,11 +2,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import {
-  BACK,
-  selectFromList,
-  selectFromSearchableList,
-} from './interactive-picker.mjs';
+import { BACK, selectFromList } from './interactive-picker.mjs';
 
 const VRT_PAGES_DIR = 'src/test/vrt-pages';
 
@@ -68,10 +64,9 @@ const FIXTURES_RECORD_SPECIFIC = 'Record fixtures for specific tests...';
 
 const searchAndSelectPages = async (pages) => {
   const entries = pages.map(({ file, title }) => `${file} › ${title}`);
-  const selection = await selectFromSearchableList(
-    'Search VRT page tests:',
-    entries,
-  );
+  const selection = await selectFromList('Search VRT page tests:', entries, {
+    isSearchable: true,
+  });
   if (selection === null) return null;
   if (selection === BACK) return BACK;
   return selection.map((entry) => pages[entries.indexOf(entry)]);
@@ -113,8 +108,9 @@ const pickPages = async (pages) => {
     if (choice === null) return null;
     if (choice === BACK) return BACK;
 
-    if (choice === PAGES_COMPARE_ALL) return { command: 'pages', args: [] };
-    if (choice === PAGES_UPDATE_ALL) {
+    const [action] = choice;
+    if (action === PAGES_COMPARE_ALL) return { command: 'pages', args: [] };
+    if (action === PAGES_UPDATE_ALL) {
       return { command: 'pages', args: ['update'] };
     }
 
@@ -126,7 +122,7 @@ const pickPages = async (pages) => {
     return {
       command: 'pages',
       args:
-        choice === PAGES_UPDATE_SPECIFIC ? ['update', ...scopeArgs] : scopeArgs,
+        action === PAGES_UPDATE_SPECIFIC ? ['update', ...scopeArgs] : scopeArgs,
     };
   }
 };
@@ -148,7 +144,8 @@ const pickFixtures = async (pages) => {
     if (choice === null) return null;
     if (choice === BACK) return BACK;
 
-    if (choice === FIXTURES_RECORD_ALL) {
+    const [action] = choice;
+    if (action === FIXTURES_RECORD_ALL) {
       return { command: 'fixtures', args: [] };
     }
 
@@ -190,13 +187,14 @@ const main = async () => {
       { canGoBack: false },
     );
 
-    if (choice === null || choice === MENU_EXIT) {
+    if (choice === null || choice[0] === MENU_EXIT) {
       console.clear();
       return;
     }
 
+    const [action] = choice;
     const result =
-      choice === MENU_PAGES
+      action === MENU_PAGES
         ? await pickPages(pages)
         : await pickFixtures(pages);
     if (result === BACK) continue;
