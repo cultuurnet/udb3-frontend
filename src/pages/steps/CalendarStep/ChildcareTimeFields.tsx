@@ -2,20 +2,15 @@ import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { BoxProps } from '@/ui/Box';
 import { Checkbox } from '@/ui/Checkbox';
 import { Label, LabelVariants } from '@/ui/Label';
 import { cn } from '@/ui/shadcn/utils';
-import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
-import {
-  TimeSpanPicker,
-  TimeSpanPickerLabelPositions,
-} from '@/ui/TimeSpanPicker';
+import { TimeField, TimeFieldLabelPositions } from '@/ui/TimeField';
 import { getChildcareTimeErrors } from '@/utils/validateOpeningHours';
 
-type ChildcareTimeFieldsProps = BoxProps & {
+type ChildcareTimeFieldsProps = {
   idPrefix: string;
   startTime: string;
   endTime: string;
@@ -33,13 +28,14 @@ const ChildcareTimeFields = ({
   onChangeEndTime,
   disabled = false,
   showInfo = false,
-  ...boxProps
 }: ChildcareTimeFieldsProps) => {
   const { t } = useTranslation();
   const [startEnabled, setStartEnabled] = useState(() => !!startTime);
   const [endEnabled, setEndEnabled] = useState(() => !!endTime);
   const startToggleId = `${idPrefix}-childcare-before-toggle`;
   const endToggleId = `${idPrefix}-childcare-after-toggle`;
+  const fieldId = (suffix: 'start' | 'end') =>
+    `${idPrefix}-childcare-time-span-picker-${suffix}`;
 
   const handleToggleStart = (checked: boolean) => {
     setStartEnabled(checked);
@@ -52,9 +48,9 @@ const ChildcareTimeFields = ({
   };
 
   return (
-    <Stack position="relative" {...boxProps}>
-      <div className="tw:flex tw:gap-2">
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
+    <div className="tw:relative tw:flex tw:items-end tw:gap-3">
+      <div className="tw:flex tw:flex-col tw:gap-1">
+        <div className="tw:flex tw:items-center tw:gap-1">
           <Checkbox
             id={startToggleId}
             checked={startEnabled}
@@ -70,7 +66,18 @@ const ChildcareTimeFields = ({
             {t('create.calendar.days.childcare.before')}
           </Label>
         </div>
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
+        <TimeField
+          id={fieldId('start')}
+          name="startTime"
+          label={t('create.calendar.days.childcare.from')}
+          labelPosition={TimeFieldLabelPositions.INLINE}
+          value={startTime}
+          onChange={onChangeStartTime}
+          disabled={disabled || !startEnabled}
+        />
+      </div>
+      <div className="tw:flex tw:flex-col tw:gap-1">
+        <div className="tw:flex tw:items-center tw:gap-1">
           <Checkbox
             id={endToggleId}
             checked={endEnabled}
@@ -86,19 +93,16 @@ const ChildcareTimeFields = ({
             {t('create.calendar.days.childcare.after')}
           </Label>
         </div>
+        <TimeField
+          id={fieldId('end')}
+          name="endTime"
+          label={t('create.calendar.days.childcare.to')}
+          labelPosition={TimeFieldLabelPositions.INLINE}
+          value={endTime}
+          onChange={onChangeEndTime}
+          disabled={disabled || !endEnabled}
+        />
       </div>
-      <TimeSpanPicker
-        id={`${idPrefix}-childcare`}
-        labelPosition={TimeSpanPickerLabelPositions.INLINE}
-        startTimeLabel={t('create.calendar.days.childcare.from')}
-        endTimeLabel={t('create.calendar.days.childcare.to')}
-        startTime={startTime}
-        endTime={endTime}
-        onChangeStartTime={onChangeStartTime}
-        onChangeEndTime={onChangeEndTime}
-        startDisabled={disabled || !startEnabled}
-        endDisabled={disabled || !endEnabled}
-      />
       {showInfo && (
         <Text
           color={colors.grey5}
@@ -110,7 +114,7 @@ const ChildcareTimeFields = ({
           {t('create.calendar.days.childcare.info')}
         </Text>
       )}
-    </Stack>
+    </div>
   );
 };
 
