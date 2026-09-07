@@ -2,12 +2,25 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 
 type Props = {
   width: string;
+  showArrow?: boolean;
 } & StackProps;
 
-const ManIllustrationSvg = ({ width, ...props }: Props) => {
+const ManIllustrationSvg = ({ width, height, showArrow, ...props }: Props) => {
   return (
-    <Stack {...getStackProps(props)} width={width}>
-      <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 314">
+    <Stack
+      {...getStackProps(props)}
+      width={width}
+      height={height}
+      overflow="hidden"
+    >
+      <svg
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 488 314"
+        preserveAspectRatio="xMidYMin slice"
+        width="100%"
+        height="100%"
+      >
         <path
           d="m297.207 51.24-28.911 37.275c-2.852 3.645-7.249 5.87-11.88 5.96l-30.014.773 3.182-28.73 25.358.52 31.275-35.188c3.694-4.09 9.731-4.985 14.392-2.02l8.867 5.552"
           stroke="#009FDF"
@@ -210,18 +223,22 @@ const ManIllustrationSvg = ({ width, ...props }: Props) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path
-          d="m468.313 170.398 4.613-10.81-10.809-4.613"
-          stroke="#009FDF"
-          strokeWidth="1.77"
-          strokeLinecap="round"
-        />
-        <path
-          d="M369.5 135.5c34 39 74.75 36.047 101.997 24.932"
-          stroke="#009FDF"
-          strokeWidth="1.77"
-          strokeLinecap="round"
-        />
+        {showArrow && (
+          <>
+            <path
+              d="m468.313 170.398 4.613-10.81-10.809-4.613"
+              stroke="#009FDF"
+              strokeWidth="1.77"
+              strokeLinecap="round"
+            />
+            <path
+              d="M369.5 135.5c34 39 74.75 36.047 101.997 24.932"
+              stroke="#009FDF"
+              strokeWidth="1.77"
+              strokeLinecap="round"
+            />
+          </>
+        )}
       </svg>
     </Stack>
   );

@@ -265,7 +265,7 @@ const Preview = () => {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
-    ...(isBoaEnabled && offer.openingHours?.length > 0
+    ...(isBoaEnabled && offer?.openingHours?.length > 0
       ? [
           {
             field: t('preview.labels.calendar'),

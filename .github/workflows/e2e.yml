@@ -61,6 +61,7 @@ jobs:
           NEXT_PUBLIC_UIV_URL: ${{ secrets.NEXT_PUBLIC_UIV_URL }}
           NEXT_PUBLIC_CK_URL: ${{ secrets.NEXT_PUBLIC_CK_URL }}
           NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL: ${{ secrets.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL }}
+          NEXT_PUBLIC_FF_BOA: ${{ secrets.NEXT_PUBLIC_FF_BOA }}
           E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_ADMIN_EMAIL: ${{ secrets.E2E_TEST_ADMIN_EMAIL }}

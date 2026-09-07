@@ -48,7 +48,7 @@ export const CalendarOptionToggle = ({
       };
 
   return (
-    <div className="tw:mb-4.5 tw:flex tw:w-full tw:items-stretch tw:gap-8.5">
+    <div className="tw:mb-4.5 tw:grid tw:w-fit tw:max-w-full tw:grid-cols-2 tw:gap-8.5">
       <ToggleBox
         onClick={onChooseOneOrMoreDays}
         active={isOneOrMoreDays}
@@ -57,7 +57,7 @@ export const CalendarOptionToggle = ({
         }
         title={t('create.calendar.types.one_or_more_days')}
         description={t('create.calendar.types.one_or_more_days_example')}
-        className="tw:min-h-34 tw:flex-1"
+        className="tw:min-h-34"
       />
 
       <ToggleBox
@@ -68,7 +68,7 @@ export const CalendarOptionToggle = ({
         description={
           !isCultuurkuurEvent && t('create.calendar.types.fixed_days_example')
         }
-        className="tw:min-h-34 tw:flex-1"
+        className="tw:min-h-34"
         disabled={disableChooseFixedDays}
       />
     </div>

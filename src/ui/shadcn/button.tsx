@@ -30,6 +30,8 @@ const buttonVariants = cva(
           'tw:text-destructive tw:underline tw:hover:text-destructive/70',
         outlined:
           'tw:border tw:border-primary tw:bg-transparent tw:text-primary tw:shadow-none tw:hover:bg-primary/10',
+        'outlined-danger':
+          'tw:border tw:border-destructive tw:bg-transparent tw:text-destructive tw:shadow-none tw:hover:bg-destructive/10',
         icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-border tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {

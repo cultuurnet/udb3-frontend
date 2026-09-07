@@ -98,15 +98,15 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'tw:relative tw:flex tw:cursor-default tw:select-none tw:items-center tw:rounded-sm tw:py-1.5 tw:pl-8 tw:pr-2 tw:text-sm tw:outline-none tw:transition-colors tw:focus:bg-accent tw:focus:text-accent-foreground tw:data-disabled:pointer-events-none tw:data-disabled:opacity-50',
+      'tw:group tw:relative tw:flex tw:cursor-default tw:select-none tw:items-center tw:gap-2 tw:rounded-sm tw:py-1.5 tw:pl-2 tw:pr-2 tw:text-sm tw:outline-none tw:transition-colors tw:focus:bg-accent tw:focus:text-accent-foreground tw:data-disabled:pointer-events-none tw:data-disabled:opacity-50',
       className,
     )}
     checked={checked}
     {...props}
   >
-    <span className="tw:absolute tw:left-2 tw:flex tw:h-3.5 tw:w-3.5 tw:items-center tw:justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="tw:h-4 tw:w-4" />
+    <span className="tw:flex tw:h-4 tw:w-4 tw:shrink-0 tw:items-center tw:justify-center tw:rounded-sm tw:border tw:border-primary tw:shadow tw:group-data-[state=checked]:bg-primary tw:group-data-[state=checked]:text-primary-foreground">
+      <DropdownMenuPrimitive.ItemIndicator className="tw:grid tw:place-content-center">
+        <Check className="tw:h-3.5 tw:w-3.5" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

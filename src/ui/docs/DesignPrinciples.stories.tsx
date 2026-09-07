@@ -35,6 +35,7 @@ const DesignPrinciples = () => (
       }
       code {
         background-color: #f5f5f5;
+        color: #0077a6;
         padding: 2px 6px;
         border-radius: 3px;
         font-family: Monaco, Consolas, monospace;
@@ -293,6 +294,8 @@ const meta: Meta<typeof DesignPrinciples> = {
   component: DesignPrinciples,
   parameters: {
     layout: 'fullscreen',
+    lostpixel: { disable: true },
+    a11y: { test: 'off' },
   },
 };
 

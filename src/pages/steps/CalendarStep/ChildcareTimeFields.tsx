@@ -22,6 +22,7 @@ type ChildcareTimeFieldsProps = BoxProps & {
   onChangeStartTime: (newTime: string) => void;
   onChangeEndTime: (newTime: string) => void;
   disabled?: boolean;
+  showInfo?: boolean;
 };
 
 const ChildcareTimeFields = ({
@@ -31,6 +32,7 @@ const ChildcareTimeFields = ({
   onChangeStartTime,
   onChangeEndTime,
   disabled = false,
+  showInfo = false,
   ...boxProps
 }: ChildcareTimeFieldsProps) => {
   const { t } = useTranslation();
@@ -52,7 +54,7 @@ const ChildcareTimeFields = ({
   return (
     <Stack position="relative" {...boxProps}>
       <div className="tw:flex tw:gap-2">
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
           <Checkbox
             id={startToggleId}
             checked={startEnabled}
@@ -68,7 +70,7 @@ const ChildcareTimeFields = ({
             {t('create.calendar.days.childcare.before')}
           </Label>
         </div>
-        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-2">
+        <div className="tw:flex tw:items-center tw:gap-1 tw:mb-1">
           <Checkbox
             id={endToggleId}
             checked={endEnabled}
@@ -97,15 +99,17 @@ const ChildcareTimeFields = ({
         startDisabled={disabled || !startEnabled}
         endDisabled={disabled || !endEnabled}
       />
-      <Text
-        color={colors.grey5}
-        position="absolute"
-        top="100%"
-        left={0}
-        right={0}
-      >
-        {t('create.calendar.days.childcare.info')}
-      </Text>
+      {showInfo && (
+        <Text
+          color={colors.grey5}
+          position="absolute"
+          top="100%"
+          left={0}
+          right={0}
+        >
+          {t('create.calendar.days.childcare.info')}
+        </Text>
+      )}
     </Stack>
   );
 };

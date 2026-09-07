@@ -2,12 +2,30 @@ import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 
 type Props = {
   width: string;
+  showArrow?: boolean;
 } & StackProps;
 
-const WomanIllustrationSvg = ({ width, ...props }: Props) => {
+const WomanIllustrationSvg = ({
+  width,
+  height,
+  showArrow,
+  ...props
+}: Props) => {
   return (
-    <Stack width={width} {...getStackProps(props)}>
-      <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 461 321">
+    <Stack
+      {...getStackProps(props)}
+      width={width}
+      height={height}
+      overflow="hidden"
+    >
+      <svg
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 461 321"
+        preserveAspectRatio="xMidYMin slice"
+        width="100%"
+        height="100%"
+      >
         <path
           d="m214.915 91.025-.038.27c-.164 1.176.227 2.336 1.017 3.275l2.739 4.805-4.427 31.722-93.63-13.067 13.055-93.54 93.539 13.055-7.063 50.61c-2.106-.754-4.671.455-5.192 2.87Z"
           fill="#9EC7DB"
@@ -314,17 +332,21 @@ const WomanIllustrationSvg = ({ width, ...props }: Props) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path
-          d="m8.174 57.493-6.312 9.914 9.914 6.312"
-          stroke="#009FDF"
-          strokeWidth="1.77"
-          strokeLinecap="round"
-        />
-        <path
-          d="M106.5 67.186C74 53 49.104 66.953 43.142 74.48c-9.762 12.947-1.524 19.669 3.35 18.8 7.52-1.34 5.887-11.107 3.127-16.721-7.664-15.59-35.412-12.63-47.643-9.373"
-          stroke="#009FDF"
-          strokeWidth="1.77"
-        />
+        {showArrow && (
+          <>
+            <path
+              d="m8.174 57.493-6.312 9.914 9.914 6.312"
+              stroke="#009FDF"
+              strokeWidth="1.77"
+              strokeLinecap="round"
+            />
+            <path
+              d="M106.5 67.186C74 53 49.104 66.953 43.142 74.48c-9.762 12.947-1.524 19.669 3.35 18.8 7.52-1.34 5.887-11.107 3.127-16.721-7.664-15.59-35.412-12.63-47.643-9.373"
+              stroke="#009FDF"
+              strokeWidth="1.77"
+            />
+          </>
+        )}
       </svg>
     </Stack>
   );
