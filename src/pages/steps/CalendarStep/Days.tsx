@@ -26,8 +26,7 @@ import {
 import { FormDataUnion } from '../Steps';
 import { ChildcareTimeFields, getChildcareErrors } from './ChildcareTimeFields';
 
-const fieldsGroup =
-  'tw:flex tw:items-end tw:gap-x-4 tw:@max-4xl:flex-wrap tw:@max-4xl:gap-y-6';
+const fieldsGroup = 'tw:flex tw:flex-wrap tw:items-end tw:gap-x-4 tw:gap-y-6';
 
 type ChangeTimeHandler = (id: string, hours: number, minutes: number) => void;
 
@@ -142,11 +141,11 @@ export const Days = ({
               className="tw:flex-nowrap tw:gap-x-4"
               marginBottom={isChildcareVisible && index === 0 ? 4 : undefined}
             >
-              <div className="tw:flex tw:flex-col tw:items-start tw:gap-y-6 tw:@6xl:flex-row tw:@6xl:items-end tw:@6xl:gap-x-6">
+              <div className="tw:flex tw:flex-col tw:items-start tw:gap-y-6 tw:@6xl:flex-row tw:@6xl:flex-wrap tw:@6xl:items-end tw:@6xl:gap-x-6">
                 <div className={fieldsGroup}>
                   <DatePeriodPicker
                     showHolidaysToggle={isBoaEnabled}
-                    className="tw:@max-lg:flex-wrap tw:@max-lg:gap-y-6"
+                    className="tw:flex-wrap tw:gap-y-6"
                     id={`calendar-step-day-${day.id}`}
                     dateStart={new Date(day.startDate)}
                     dateEnd={new Date(day.endDate)}
