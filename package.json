@@ -27,7 +27,9 @@
     "vrt:pages": "node scripts/vrt/pages.mjs",
     "vrt:pages-update": "node scripts/vrt/pages.mjs update",
     "vrt:pages:single": "node scripts/vrt/pages.mjs -g",
-    "vrt:pages-update:single": "node scripts/vrt/pages.mjs update -g"
+    "vrt:pages-update:single": "node scripts/vrt/pages.mjs update -g",
+    "vrt:pages:fixtures": "node scripts/vrt/record-missing-fixtures.mjs",
+    "vrt:pages:fixtures:single": "node scripts/vrt/record-missing-fixtures.mjs -g"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",

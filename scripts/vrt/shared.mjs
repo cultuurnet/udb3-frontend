@@ -146,6 +146,7 @@ const waitForServer = async () => {
 
 let server;
 let mockServer;
+let isRecordingMissingFixtures = false;
 let cleanedUp = false;
 const additionalCleanupTasks = [];
 
@@ -171,14 +172,17 @@ export const cleanup = () => {
   }
   if (mockServer) {
     if (mockServer.unmockedRequests?.size) {
-      const lines = [...mockServer.unmockedRequests].map(
-        ([requestKey, realUrl]) =>
-          `  - ${requestKey} using real data from ${realUrl}`,
-      );
-      console.warn(
-        `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
-          'Add fixtures in scripts/vrt/fixtures/<domain>.mjs and wire them into MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs.\n',
-      );
+      if (!isRecordingMissingFixtures) {
+        const lines = [...mockServer.unmockedRequests].map(
+          ([requestKey, realUrl]) =>
+            `  - ${requestKey} using real data from ${realUrl}`,
+        );
+        console.warn(
+          `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
+            'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
+            'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
+        );
+      }
     } else {
       console.log(
         '\nMock server: all requests were served from fixtures, no real data was used.\n',
@@ -201,6 +205,8 @@ export const ensureAppAndMockServer = async ({
   onUnmockedResponse,
   allowServerReuse,
 } = {}) => {
+  isRecordingMissingFixtures = !!onUnmockedResponse;
+
   const serverAlreadyRunning = await isServerUp();
 
   if (serverAlreadyRunning) {
@@ -211,7 +217,7 @@ export const ensureAppAndMockServer = async ({
       return;
     }
     console.error(
-      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so screenshots would be taken against live acceptance data instead of fixtures. Stop that server, or pass --reuse-server to reuse it anyway.\n`,
+      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so this run would use live acceptance data instead of fixtures. Stop that server and re-run — screenshot runs can pass --reuse-server to reuse it anyway.\n`,
     );
     process.exit(1);
   }
