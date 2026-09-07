@@ -74,7 +74,7 @@ const searchAndSelectPages = async (pages) => {
   );
   if (selection === null) return null;
   if (selection === BACK) return BACK;
-  return selection.all.map((entry) => pages[entries.indexOf(entry)]);
+  return selection.map((entry) => pages[entries.indexOf(entry)]);
 };
 
 const buildScopeArgs = (selected) => {

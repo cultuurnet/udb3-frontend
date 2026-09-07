@@ -112,7 +112,7 @@ export const selectFromSearchableList = (heading, items) =>
         if (options.length > 0) {
           cleanup();
           const isRunAll = matches.length > 1 && index === matches.length;
-          resolve(isRunAll ? { all: matches } : { all: [options[index]] });
+          resolve(isRunAll ? matches : [options[index]]);
           return;
         }
       } else if (key?.name === 'backspace') {
