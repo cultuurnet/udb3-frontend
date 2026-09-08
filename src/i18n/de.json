@@ -2001,7 +2001,7 @@
       "image": "Abbildungen",
       "video": "Videos",
       "event_id": "ID",
-      "accessibility": "Erreichbarkeit"
+      "accessibility": "Begleiteter Transport"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
     "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",
