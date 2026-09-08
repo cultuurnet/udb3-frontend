@@ -20,9 +20,19 @@ describe('isSameOriginUrl', () => {
     expect(isSameOriginUrl(`${baseUrl}@evil.example.net`, baseUrl)).toBe(false);
   });
 
+  it('rejects a scheme downgrade', () => {
+    expect(isSameOriginUrl('http://example.com/dashboard', baseUrl)).toBe(
+      false,
+    );
+  });
+
   it('rejects a non-string value, such as a repeated query parameter', () => {
     expect(
       isSameOriginUrl([`${baseUrl}/a`, 'https://evil.example.net'], baseUrl),
     ).toBe(false);
+  });
+
+  it('rejects when there is no base url', () => {
+    expect(isSameOriginUrl(`${baseUrl}/dashboard`, undefined)).toBe(false);
   });
 });
