@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
+import { VRT_NOW } from '../../../scripts/vrt/clock.mjs';
+
 // Screenshots against a baseline named after the test title.
 export const takeVrtScreenshot = async (target: Page | Locator) => {
   if (process.env.VRT_RECORD_MODE === 'true') return;
@@ -16,6 +18,11 @@ type ScreenshotPage = {
 
 // Declares one test per page: navigate, optionally interact, then screenshot (defaults to `main`).
 export const screenshotPages = (pages: ScreenshotPage[]) => {
+  test.beforeEach(async ({ page }) => {
+    await page.clock.install({ time: VRT_NOW });
+    await page.clock.resume();
+  });
+
   for (const {
     title,
     path,
