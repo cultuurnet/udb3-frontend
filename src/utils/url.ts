@@ -6,8 +6,12 @@ const isSameOriginUrl = (
   url: unknown,
   baseUrl: string | undefined,
 ): url is string => {
+  if (typeof url !== 'string' || typeof baseUrl !== 'string') {
+    return false;
+  }
+
   try {
-    return new URL(String(url)).origin === new URL(String(baseUrl)).origin;
+    return new URL(url).origin === new URL(baseUrl).origin;
   } catch {
     return false;
   }
