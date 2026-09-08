@@ -340,7 +340,7 @@
       },
       "age": {
         "title": "Geschikt voor",
-        "title_boa": "Geef aan op welke leeftijden deze activiteit geschikt is",
+        "title_boa": "Geef aan op welke leeftijden deze activiteit gericht is",
         "input_mode": {
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
