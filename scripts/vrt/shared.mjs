@@ -15,7 +15,8 @@ const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const AUTH_EXPIRY_BUFFER_SECONDS = 60;
 
 const FEATURE_FLAGS = {
-  boa: false,
+  // BOA cleanup: drop this entry once no FeatureFlags.BOA gates are left in src/.
+  boa: true,
   shadcn_migration: false,
 };
 
