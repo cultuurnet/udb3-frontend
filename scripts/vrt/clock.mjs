@@ -6,3 +6,25 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export const vrtDaysFromNow = (days) =>
   new Date(VRT_NOW.getTime() + days * MS_PER_DAY);
+
+const pinDate = (target) => {
+  const RealDate = Date;
+  const offset = RealDate.now() - target;
+
+  class PinnedDate extends RealDate {
+    constructor(...args) {
+      if (args.length === 0) super(RealDate.now() - offset);
+      else super(...args);
+    }
+
+    static now() {
+      return RealDate.now() - offset;
+    }
+  }
+
+  window.Date = PinnedDate;
+};
+
+// Shifts Date only. Faking timers too costs ~5s per screenshot that settles.
+export const pinClockToVrtNow = (page) =>
+  page.addInitScript(pinDate, VRT_NOW.getTime());
