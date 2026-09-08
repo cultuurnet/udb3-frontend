@@ -19,4 +19,10 @@ describe('isSameOriginUrl', () => {
     expect(isSameOriginUrl(`${baseUrl}.evil.example.net`, baseUrl)).toBe(false);
     expect(isSameOriginUrl(`${baseUrl}@evil.example.net`, baseUrl)).toBe(false);
   });
+
+  it('rejects a non-string value, such as a repeated query parameter', () => {
+    expect(
+      isSameOriginUrl([`${baseUrl}/a`, 'https://evil.example.net'], baseUrl),
+    ).toBe(false);
+  });
 });
