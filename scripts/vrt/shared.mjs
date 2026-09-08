@@ -2,10 +2,17 @@ import { execSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
+import {
+  assertRequiredEnv,
+  buildFeatureFlagEnv,
+  buildPinnedEnv,
+} from './env.mjs';
 import { MOCK_PORT, MOCK_UPSTREAMS } from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
+
+dotenv.config({ path: ['.env.local', '.env'] });
 
 export const BASE_URL = 'http://localhost:3000';
 const APP_PORT = new URL(BASE_URL).port;
@@ -13,20 +20,6 @@ const READY_TIMEOUT_MS = 180_000;
 const POLL_INTERVAL_MS = 1_000;
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const AUTH_EXPIRY_BUFFER_SECONDS = 60;
-
-const FEATURE_FLAGS = {
-  // BOA cleanup: drop this entry once no FeatureFlags.BOA gates are left in src/.
-  boa: true,
-  shadcn_migration: false,
-};
-
-const buildFeatureFlagEnv = () =>
-  Object.fromEntries(
-    Object.entries(FEATURE_FLAGS).map(([flag, enabled]) => [
-      `NEXT_PUBLIC_FF_${flag.toUpperCase()}`,
-      String(enabled),
-    ]),
-  );
 
 const PRIVATE_IPV4_RANGES = [
   /^10\./,
@@ -186,7 +179,8 @@ export const cleanup = () => {
       }
     } else {
       console.log(
-        '\nMock server: all requests were served from fixtures, no real data was used.\n',
+        '\nMock server: every request routed through it was served from a fixture.\n' +
+          'Endpoints outside MOCK_UPSTREAMS bypass it and are not counted.\n',
       );
     }
     mockServer.closeAllConnections();
@@ -207,6 +201,8 @@ export const ensureAppAndMockServer = async ({
   allowServerReuse,
 } = {}) => {
   isRecordingMissingFixtures = !!onUnmockedResponse;
+
+  assertRequiredEnv();
 
   const serverAlreadyRunning = await isServerUp();
 
@@ -242,8 +238,9 @@ export const ensureAppAndMockServer = async ({
     detached: true,
     env: {
       ...process.env,
-      ...buildMockEnv(upstreams),
+      ...buildPinnedEnv(),
       ...buildFeatureFlagEnv(),
+      ...buildMockEnv(upstreams),
     },
   });
 
