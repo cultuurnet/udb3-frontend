@@ -2,13 +2,9 @@ import { execSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 
-import dotenv from 'dotenv';
-
 import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
 import { MOCK_PORT, MOCK_UPSTREAMS } from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
-
-dotenv.config({ path: ['.env.local', '.env'] });
 
 export const BASE_URL = 'http://localhost:3000';
 const APP_PORT = new URL(BASE_URL).port;

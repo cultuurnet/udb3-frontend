@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config({ path: ['.env.local', '.env'] });
+
 const FEATURE_FLAGS = {
   // BOA cleanup: drop this entry once no FeatureFlags.BOA gates are left in src/.
   boa: true,
