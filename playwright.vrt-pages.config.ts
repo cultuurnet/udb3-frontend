@@ -2,6 +2,8 @@ import fs from 'node:fs';
 
 import { defineConfig, devices } from '@playwright/test';
 
+import { pinLanguage } from './scripts/vrt/language.mjs';
+
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const APP_HOST = process.env.VRT_APP_HOST ?? 'localhost';
 
@@ -13,7 +15,7 @@ const buildStorageState = () => {
     (cookie: Record<string, unknown> & { domain: string }) =>
       cookie.domain === 'localhost' ? { ...cookie, domain: APP_HOST } : cookie,
   );
-  return { ...storageState, cookies };
+  return { ...storageState, cookies: pinLanguage(cookies, APP_HOST) };
 };
 
 export default defineConfig({
