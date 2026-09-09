@@ -4,11 +4,7 @@ import os from 'node:os';
 
 import dotenv from 'dotenv';
 
-import {
-  assertRequiredEnv,
-  buildFeatureFlagEnv,
-  buildPinnedEnv,
-} from './env.mjs';
+import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
 import { MOCK_PORT, MOCK_UPSTREAMS } from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
 
@@ -238,7 +234,7 @@ export const ensureAppAndMockServer = async ({
     detached: true,
     env: {
       ...process.env,
-      ...buildPinnedEnv(),
+      ...PINNED_ENV,
       ...buildFeatureFlagEnv(),
       ...buildMockEnv(upstreams),
     },

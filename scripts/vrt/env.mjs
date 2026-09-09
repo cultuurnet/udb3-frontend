@@ -12,12 +12,12 @@ export const buildFeatureFlagEnv = () =>
     ]),
   );
 
-export const buildPinnedEnv = () => ({
+export const PINNED_ENV = {
   NEXT_PUBLIC_OWNERSHIP_ENABLED: 'true',
   NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL:
     'https://www.publiq.be/uitdatabank/publicatieregels',
   NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE: 'null',
-});
+};
 
 const REQUIRED_ENV = [
   'NEXT_PUBLIC_API_KEY',
