@@ -36,7 +36,7 @@ export const assertRequiredEnv = () => {
   if (missing.length === 0) return;
 
   console.error(
-    `\nNot set:\n${missing.map((envVar) => `  - ${envVar}`).join('\n')}\n\nA VRT run cannot log in and render the way CI does without these.\n`,
+    `\nNot set in the environment, .env.local or .env:\n${missing.map((envVar) => `  - ${envVar}`).join('\n')}\n\nA VRT run cannot log in and render the way CI does without these.\n`,
   );
   process.exit(1);
 };
