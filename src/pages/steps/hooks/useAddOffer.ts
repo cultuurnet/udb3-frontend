@@ -93,13 +93,13 @@ const useAddOffer = ({
       const hasTypeNoThemes =
         selectedTypeId && eventTypesWithNoThemes.includes(selectedTypeId);
 
-      if (!educationLabels || educationLabels.length === 0) {
+      if (educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
       }
 
       if (
         payload.location?.id === CULTUURKUUR_LOCATION_ID &&
-        (!locationLabels || locationLabels.length === 0)
+        locationLabels.length === 0
       ) {
         errors.push(CULTUURKUUR_LOCATION_LABELS_ERROR);
       }
