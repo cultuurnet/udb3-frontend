@@ -32,6 +32,8 @@ const CheckboxLegacy = ({
     cursor="pointer"
     data-testid={props['data-testid']}
     {...getBoxProps(props)}
+      accent-color: var(--success);
+    `}
   />
 );
 
