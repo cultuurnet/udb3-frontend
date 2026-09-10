@@ -15,7 +15,7 @@ import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
 import { Notification } from '@/ui/Notification';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 
 import { Field } from './AdditionalInformationStep';
 
@@ -181,10 +181,10 @@ export const DynamicBarometerIcon = ({
         cornerRadius: 0,
         width: 0.4,
         subArcs: [
-          { limit: 75, color: '#F19E49' },
-          { limit: 89, color: '#F9DE58' },
-          { limit: 94, color: '#C2DF6B' },
-          { limit: 100, color: '#90CC4F' },
+          { limit: 75, color: colors.orange },
+          { limit: 89, color: colors.warning },
+          { limit: 94, color: '#73b876' },
+          { limit: 100, color: colors.udbMainPositiveGreen },
         ],
       }}
       labels={{
