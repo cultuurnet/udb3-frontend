@@ -29,6 +29,7 @@ import {
   getLocationLabels,
 } from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type UseAddOfferArgument = {
   onSuccess: (scope: FormDataUnion['scope'], offerId: string) => void;
@@ -78,9 +79,11 @@ const useAddOffer = ({
     const errors = [];
 
     if (isCultuurkuurEvent) {
-      const educationLabels = getEducationLabels(payload.labels);
+      const allLabels = getUniqueLabels(payload);
 
-      const locationLabels = getLocationLabels(payload.labels);
+      const educationLabels = getEducationLabels(allLabels);
+
+      const locationLabels = getLocationLabels(allLabels);
 
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
