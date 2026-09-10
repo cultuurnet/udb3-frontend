@@ -2064,7 +2064,7 @@
       "image": "Afbeeldingen",
       "video": "Video's",
       "event_id": "ID",
-      "accessibility": "Bereikbaarheid"
+      "accessibility": "Begeleid vervoer"
     },
     "public_url": "Bekijk op {{publicationBrand}}",
     "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",
