@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        heavy: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+        heavy: 'var(--elevation-heavy)',
       },
       keyframes: {
         'accordion-down': {

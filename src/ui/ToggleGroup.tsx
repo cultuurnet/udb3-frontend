@@ -37,7 +37,7 @@ const ToggleGroupShadcn = ({
     }}
     aria-label={ariaLabel}
     className={cn(
-      'tw:items-stretch tw:gap-0 tw:rounded-md tw:bg-grey-background',
+      'tw:items-stretch tw:gap-0 tw:rounded-md tw:bg-fill-hover',
       className,
     )}
   >

@@ -12,36 +12,126 @@
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Semantic palette — the single source of truth. The @theme block below maps
+   Tailwind's --color-* tokens onto these, and src/ui/theme.ts references the
+   same custom properties, so the shadcn and styled-components layers cannot
+   drift apart. Change a colour here and it changes everywhere. */
+:root {
+  --primary: #006a96;
+  --primary-hover: #005c83;
+  --primary-active: #005071;
+  --primary-subtle: #e6f0f5;
+
+  --info: #0077c8;
+  --info-hover: #006bbc;
+  --info-active: #005fa8;
+  --info-muted: #ebf4fb;
+
+  --success: #007e26;
+  --success-hover: #006e21;
+  --success-active: #005f1d;
+  --success-muted: #ebf5ef;
+
+  --warning: #ffc400;
+  --warning-hover: #f0b800;
+  --warning-active: #d9a600;
+  --warning-muted: #fffaeb;
+  --warning-icon: #b38900;
+
+  --danger: #d8323a;
+  --danger-hover: #c52b33;
+  --danger-active: #b3232b;
+  --danger-muted: #fdefee;
+
+  --orange: #f58a1f;
+
+  --sidebar-bg: #f8fcfe;
+  --sidebar-border: #eaf4f8;
+  --sidebar-text: #263746;
+  --sidebar-text-muted: #4f7292;
+
+  --sidebar-hover: var(--primary-subtle);
+  --sidebar-hover-text: var(--primary-active);
+
+  --sidebar-active: var(--primary-active);
+  --sidebar-active-bg: #e6f3f9;
+
+  --sidebar-indicator: var(--brand-accessible);
+
+  --white: #ffffff;
+  --background: var(--white);
+
+  --brand: #009fdf;
+  --brand-accessible: #009ccc;
+  --accent: var(--primary-subtle);
+  --accent-subtle: #f8fdff;
+
+  --text: #222222;
+  --text-muted: #6b6b6b;
+  --neutral: #6a777b;
+
+  --border: #dddddd;
+  --border-input: #cccccc;
+  --border-strong: #bcc3c6;
+  --border-emphasis: #8f9699;
+
+  --page-bg: #f5f5f5;
+  --fill-hover: var(--page-bg);
+  --fill: #f0f0f0;
+  --fill-active: #e6e6e6;
+  --panel-bg: #fcfcfc;
+
+  --danger-subtle: #fcd1cf;
+
+  --elevation-sm: 0px 2px 3px 0px rgba(210, 210, 210, 0.5);
+  --elevation-md: 0px 4px 16px 0px #00000012;
+  --elevation-lg: 0px 4px 6px 0px rgba(210, 210, 210, 0.7);
+  --elevation-heavy: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 @theme {
-  --color-primary: #0077a6; /* udb-main-dark-blue */
-  --color-primary-foreground: #ffffff; /* udb-white */
-  --color-secondary: #6a777b; /* udb-main-grey */
-  --color-secondary-foreground: #ffffff;
-  --color-warning: #a78500;
-  --color-warning-muted: #fcf0cb;
-  --color-success: #417d40;
-  --color-success-foreground: #ffffff;
-  --color-success-muted: #f3fcf7; /* udb-main-light-green */
-  --color-destructive: #d23430; /* udb-red-3 */
-  --color-destructive-foreground: #ffffff;
-  --color-destructive-muted: #fae5e3;
-  --color-info: #3868ec;
-  --color-info-muted: #d1defa;
-  --color-background: #ffffff; /* udb-white */
-  --color-grey-background: #f5f5f5; /* udb-grey-4 */
-  --color-grey-light: #fcfcfc; /* udb-grey-light */
-  --color-foreground: #222222; /* udb-text */
-  --color-muted: #f0f0f0; /* udb-grey-1 */
-  --color-muted-foreground: #767676; /* udb-grey-5 */
-  --color-accent: #dff8ff; /* udb-main-medium-blue */
-  --color-accent-foreground: #222222; /* udb-text */
-  --color-border: #dddddd; /* udb-grey-3 */
-  --color-input: #cccccc; /* udb-grey-2 */
-  --color-ring: #0077a6; /* udb-main-dark-blue */
-  --color-card: #ffffff; /* udb-white */
-  --color-card-foreground: #222222; /* udb-text */
-  --color-popover: #ffffff; /* udb-white */
-  --color-popover-foreground: #222222; /* udb-text */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-foreground: var(--white);
+  --color-secondary: var(--neutral);
+  --color-secondary-foreground: var(--white);
+  --color-warning: var(--warning);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-active: var(--warning-active);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning-icon: var(--warning-icon);
+  --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
+  --color-success-active: var(--success-active);
+  --color-success-foreground: var(--white);
+  --color-success-muted: var(--success-muted);
+  --color-destructive: var(--danger);
+  --color-destructive-hover: var(--danger-hover);
+  --color-destructive-active: var(--danger-active);
+  --color-destructive-foreground: var(--white);
+  --color-destructive-muted: var(--danger-muted);
+  --color-orange: var(--orange);
+  --color-info: var(--info);
+  --color-info-hover: var(--info-hover);
+  --color-info-active: var(--info-active);
+  --color-info-muted: var(--info-muted);
+  --color-background: var(--background);
+  --color-fill-hover: var(--fill-hover);
+  --color-panel: var(--panel-bg);
+  --color-foreground: var(--text);
+  --color-muted: var(--fill);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--text);
+  --color-border: var(--border);
+  --color-input: var(--border-input);
+  --color-ring: var(--primary);
+  --color-card: var(--white);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--white);
+  --color-popover-foreground: var(--text);
   --radius: 6px;
   --radius-lg: calc(var(--tw-radius) + 2px); /* 8px */
   --radius-md: var(--tw-radius); /* 6px */

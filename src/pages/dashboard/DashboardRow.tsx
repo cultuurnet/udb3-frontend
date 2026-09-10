@@ -68,8 +68,7 @@ export const DashboardRow = ({
   const { t } = useTranslation();
   const getValue = getValueFromTheme('dashboardPage');
   const { publicRuntimeConfig } = getConfig();
-  const { udbMainPositiveGreen, udbMainLightGreen, udbMainGrey, grey3 } =
-    colors;
+  const { udbMainPositiveGreen, successMuted, neutral, grey3 } = colors;
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
@@ -101,12 +100,12 @@ export const DashboardRow = ({
             <Box
               css={`
                 ${!isImageUploading &&
-                `border: 1px solid ${udbMainGrey}; border-radius: 0.5rem 0 0 0.5rem;
+                `border: 1px solid ${neutral}; border-radius: 0.5rem 0 0 0.5rem;
               :hover {
                 border: 1px dashed ${udbMainPositiveGreen}; cursor: pointer; 
               }
               :active {
-                background-color: ${udbMainLightGreen}; box-shadow: ${getValue(
+                background-color: ${successMuted}; box-shadow: ${getValue(
                   'boxShadow.small',
                 )};
               }  
@@ -124,7 +123,7 @@ export const DashboardRow = ({
               ) : (
                 <ImageIcon
                   width="50"
-                  color={isImageHovered ? udbMainPositiveGreen : udbMainGrey}
+                  color={isImageHovered ? udbMainPositiveGreen : neutral}
                 />
               )}
             </Box>
@@ -163,7 +162,7 @@ export const DashboardRow = ({
           href={url}
           color={getValue('listItem.color')}
           fontWeight="bold"
-          className="tw:block tw:overflow-hidden tw:whitespace-nowrap tw:text-ellipsis tw:max-w-152 tw:text-[18px] tw:no-underline"
+          className="tw:block tw:overflow-hidden tw:whitespace-nowrap tw:text-ellipsis tw:max-w-152 tw:text-[18px] tw:no-underline tw:hover:underline"
         >
           {title}
         </Link>

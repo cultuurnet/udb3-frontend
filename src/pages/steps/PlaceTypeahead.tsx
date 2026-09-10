@@ -131,7 +131,7 @@ const PlaceTypeahead = ({
             <Text
               className={'address'}
               css={`
-                color: ${({ theme }) => theme.colors.grey6};
+                color: ${({ theme }) => theme.colors.textMuted};
               `}
             >
               <Highlighter search={text}>{streetAddress}</Highlighter>
