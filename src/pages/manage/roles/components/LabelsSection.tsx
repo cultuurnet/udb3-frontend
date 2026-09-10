@@ -27,7 +27,7 @@ export const LabelsSection = ({ roleId }: LabelsSectionProps) => {
   const { t } = useTranslation();
   const getGlobalValue = getValueFromTheme('global');
   const getTabsValue = getValueFromTheme('tabs');
-  const typeaheadElement = useRef<TypeaheadElement<Label>>(null);
+  const typeaheadElement = useRef<TypeaheadElement>(null);
 
   const [name, setName] = useState('');
   const [isInvalid, setIsInvalid] = useState(false);
