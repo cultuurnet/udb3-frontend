@@ -275,7 +275,7 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
             </Stack>
           </Inline>
           {isInvalidRange && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t('create.name_and_age.age.birth_date.error_max_before_min')}
             </Text>
           )}
@@ -413,7 +413,7 @@ const AgeRangeInputs = ({
             onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
           />
         </Inline>
-        {errorKey && <Text color="red">{t(errorKey)}</Text>}
+        {errorKey && <Text color={colors.danger}>{t(errorKey)}</Text>}
       </Stack>
       {childrenOnlySection}
       {!hasAgeValue && (
@@ -478,7 +478,7 @@ const ChildrenOnlySection = ({
           },
         ]}
       />
-      {error && <Text color="red">{error}</Text>}
+      {error && <Text color={colors.danger}>{error}</Text>}
     </Stack>
   );
 };

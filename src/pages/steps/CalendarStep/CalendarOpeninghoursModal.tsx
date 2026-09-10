@@ -15,7 +15,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { MultiSelectDropdown } from '@/ui/MultiSelectDropdown';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { theme } from '@/ui/theme';
+import { colors, theme } from '@/ui/theme';
 import {
   TimeSpanPicker,
   TimeSpanPickerLabelPositions,
@@ -445,24 +445,24 @@ const CalendarOpeninghoursModal = ({
               </Inline>
               {shownErrorIds.has(openingHour.id) &&
                 openingHour.dayOfWeek.length === 0 && (
-                  <Text color="red">
+                  <Text color={colors.danger}>
                     {t(
                       'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                     )}
                   </Text>
                 )}
               {openingHour.closes < openingHour.opens && (
-                <Text color="red">
+                <Text color={colors.danger}>
                   {t('create.calendar.days.validation_messages.invalid_hours')}
                 </Text>
               )}
-              {startError && <Text color="red">{startError}</Text>}
-              {endError && <Text color="red">{endError}</Text>}
+              {startError && <Text color={colors.danger}>{startError}</Text>}
+              {endError && <Text color={colors.danger}>{endError}</Text>}
             </Stack>
           );
         })}
         {daysWithTimeConflict.length > 0 && (
-          <Text color="red">
+          <Text color={colors.danger}>
             {t(
               'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
               {

@@ -11,6 +11,7 @@ import { Spinner, SpinnerSizes } from './Spinner';
 import type { StackProps } from './Stack';
 import { getStackProps, Stack } from './Stack';
 import { Text, TextVariants } from './Text';
+import { colors } from './theme';
 
 type FormElementLegacyProps = {
   id: string;
@@ -37,7 +38,7 @@ const MaxLengthCounter = ({
     fontSize="0.9rem"
     className="text-right"
     maxWidth="43rem"
-    color={currentLength >= maxLength ? 'red' : 'inherit'}
+    color={currentLength >= maxLength ? colors.danger : 'inherit'}
   >
     {currentLength} / {maxLength}
   </Text>

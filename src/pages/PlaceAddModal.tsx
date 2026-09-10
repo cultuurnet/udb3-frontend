@@ -21,6 +21,7 @@ import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Paragraph, ParagraphVariants } from '@/ui/Paragraph';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -239,7 +240,7 @@ const PlaceAddModal = ({
             </Paragraph>
           </Box>
           {formState.errors.term?.id && (
-            <Text color="red">{t('location.add_modal.errors.type')}</Text>
+            <Text color={colors.danger}>{t('location.add_modal.errors.type')}</Text>
           )}
           <Inline spacing={3} flexWrap="wrap" maxWidth="70rem">
             {terms.map(({ id, name, domain }) => (
