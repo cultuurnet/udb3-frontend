@@ -502,6 +502,8 @@ Two pipelines:
 
 `scripts/vrt/shared.mjs` holds the orchestration common to both the screenshot pipeline and fixture recording (mock server + app startup, auth session, cleanup). `scripts/vrt/pages.mjs` (screenshots, via Docker) and `scripts/vrt/record-missing-fixtures.mjs` (recording, host-direct, no Docker — see below) are thin entry points on top of it.
 
+`scripts/vrt/env.mjs` holds what a run assumes about its environment — the feature flags, the values it pins so a baseline renders the same locally and in CI, the required-variable check, and the `dotenv` load. Open it to change any of that.
+
 Page-level VRT runs the real app with API calls intercepted by a local mock server (`scripts/vrt/mock-server.mjs`). Anything not explicitly mocked falls through to the real backend and logs that it did — coverage builds incrementally: screenshot a page first, see what looks live, mock exactly that.
 
 To target a single page while iterating: `yarn vrt:pages:single "labels overview"` (or `yarn vrt:pages-update:single "labels overview"` to update just that one). Extra arguments after any `vrt:pages*` script pass straight through to the underlying `playwright test` call.
