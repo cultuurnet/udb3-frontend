@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'tw:bg-primary tw:text-primary-foreground tw:shadow tw:hover:bg-primary/90',
+          'tw:bg-primary tw:text-primary-foreground tw:shadow tw:hover:bg-primary-hover tw:active:bg-primary-active',
         destructive:
-          'tw:bg-destructive tw:text-destructive-foreground tw:shadow-sm tw:hover:bg-destructive/90',
+          'tw:bg-destructive tw:text-destructive-foreground tw:shadow-sm tw:hover:bg-destructive-hover tw:active:bg-destructive-active',
         outline:
           'tw:border tw:border-input tw:bg-background tw:shadow-sm tw:hover:bg-accent tw:hover:text-accent-foreground',
         secondary:
@@ -20,19 +20,19 @@ const buttonVariants = cva(
         neutral:
           'tw:bg-background tw:text-foreground tw:shadow-heavy tw:hover:bg-muted',
         ghost: 'tw:hover:bg-accent tw:hover:text-accent-foreground',
-        link: 'tw:text-primary tw:underline tw:hover:text-primary/70',
+        link: 'tw:text-primary tw:underline tw:hover:text-primary-hover',
         success:
-          'tw:bg-success tw:text-success-foreground tw:shadow tw:hover:bg-success/90',
+          'tw:bg-success tw:text-success-foreground tw:shadow tw:hover:bg-success-hover tw:active:bg-success-active',
         'secondary-toggle':
           'tw:border tw:border-border tw:bg-transparent tw:text-foreground tw:shadow-none tw:hover:border-success tw:hover:text-success',
         unstyled: 'tw:bg-transparent tw:text-inherit tw:shadow-none',
         'link-danger':
-          'tw:text-destructive tw:underline tw:hover:text-destructive/70',
+          'tw:text-destructive tw:underline tw:hover:text-destructive-hover',
         outlined:
           'tw:border tw:border-primary tw:bg-transparent tw:text-primary tw:shadow-none tw:hover:bg-primary/10',
         'outlined-danger':
           'tw:border tw:border-destructive tw:bg-transparent tw:text-destructive tw:shadow-none tw:hover:bg-destructive/10',
-        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-grey-background tw:active:bg-border tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
+        icon: 'tw:relative tw:rounded-full tw:bg-transparent tw:shadow-none tw:hover:bg-fill-hover tw:active:bg-border tw:[&_svg]:absolute tw:[&_svg]:top-1/2 tw:[&_svg]:left-1/2 tw:[&_svg]:-translate-x-1/2 tw:[&_svg]:-translate-y-1/2',
       },
       size: {
         // h-10 on all three matches legacy's single global button height

@@ -214,7 +214,7 @@ const Footer = ({
               publiq vzw
             </FooterLink>
           </Inline>
-          <FlandersLogo color={colors.udbMainDarkestGrey} width="150" />
+          <FlandersLogo color={colors.text} width="150" />
           <Inline>
             {Object.values(SupportedLanguages).map(
               (supportedLanguage, index) => {

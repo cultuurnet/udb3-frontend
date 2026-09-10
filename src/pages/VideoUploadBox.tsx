@@ -15,11 +15,11 @@ const THUMBNAIL_SIZE = 80;
 
 const getValue = getValueFromTheme('videoUploadBox');
 
-const { grey5 } = colors;
+const { textMuted } = colors;
 
 const VideoIcon = ({ width }: { width: string }) => {
   return (
-    <CustomIcon color={grey5} name={CustomIconVariants.VIDEO} width={width} />
+    <CustomIcon color={textMuted} name={CustomIconVariants.VIDEO} width={width} />
   );
 };
 

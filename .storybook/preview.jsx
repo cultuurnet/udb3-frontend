@@ -40,7 +40,7 @@ export const parameters = {
 
 export const BACKGROUND_CLASSES = {
   White: 'tw:bg-background',
-  Grey: 'tw:bg-grey-background',
+  Grey: 'tw:bg-fill-hover',
   Accent: 'tw:bg-accent',
 };
 
