@@ -11,6 +11,7 @@ const Unauthorized = () => {
 
   return (
     <Stack
+      as="main"
       textAlign="center"
       alignItems="center"
       justifyContent="center"
