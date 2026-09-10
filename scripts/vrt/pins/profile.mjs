@@ -7,7 +7,7 @@ const PINNED_CLAIMS = {
   picture: '/assets/storybook-image-placeholder.png',
 };
 
-const unpinnable = (reason) =>
+const unpinnableError = (reason) =>
   new Error(
     `\nThe ${ID_TOKEN_COOKIE_NAME} cookie ${reason}, so baselines would show the real account's name and email.\n`,
   );
@@ -16,7 +16,7 @@ const decodeClaims = (payload) => {
   try {
     return JSON.parse(Buffer.from(payload, 'base64url').toString('utf-8'));
   } catch {
-    throw unpinnable('does not carry decodable JWT claims');
+    throw unpinnableError('does not carry decodable JWT claims');
   }
 };
 
@@ -30,7 +30,7 @@ const pinClaims = (idToken) => {
 
 export const pinProfileClaims = (cookies) => {
   if (!cookies.some((cookie) => cookie.name === ID_TOKEN_COOKIE_NAME)) {
-    throw unpinnable('is missing from the authenticated session');
+    throw unpinnableError('is missing from the authenticated session');
   }
 
   return cookies.map((cookie) =>
