@@ -90,6 +90,7 @@ const MenuItem = memo(
           position: relative;
 
           color: ${isActive ? getValueForMenuItem('active.color') : 'inherit'};
+          font-weight: ${isActive ? 700 : 'inherit'};
 
           :hover {
             background-color: ${getValueForMenuItem('hover.backgroundColor')};
@@ -100,7 +101,7 @@ const MenuItem = memo(
             content: '';
             width: 4px;
             background-color: ${isActive
-              ? getValueForMenuItem('active.color')
+              ? getValueForMenuItem('active.indicatorColor')
               : 'inherit'};
             position: absolute;
             top: 0;
@@ -113,7 +114,7 @@ const MenuItem = memo(
             color: ${getValueForMenuItem('hover.color')};
 
             :before {
-              background-color: ${getValueForMenuItem('active.color')};
+              background-color: ${getValueForMenuItem('active.indicatorColor')};
             }
           }
         `}
@@ -127,8 +128,8 @@ const MenuItem = memo(
           display="flex"
           width="100%"
           className={cn(
-            'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-accent tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
-            isActive && 'tw:bg-accent',
+            'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-[var(--sidebar-hover)] tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
+            isActive && 'tw:bg-[var(--sidebar-active-bg)]',
           )}
         >
           <span className="tw:flex tw:w-full tw:flex-col tw:items-center tw:gap-1 tw:md:flex-row tw:md:gap-4">
@@ -177,7 +178,7 @@ const Menu = memo(({ items = [], title, ...props }: MenuProps) => {
 
   return (
     <Stack spacing={3} {...props}>
-      <h2 className="tw:text-xs tw:font-normal tw:uppercase tw:opacity-50 tw:max-md:text-center">
+      <h2 className="tw:text-xs tw:font-normal tw:uppercase tw:text-[var(--sidebar-text-muted)] tw:max-md:text-center">
         {title}
       </h2>
       <Content />
@@ -531,6 +532,9 @@ const Sidebar = () => {
       zIndex={getValueForSidebar('zIndex')}
       padding={{ default: 4.5, s: 1 }}
       spacing={3}
+      css={`
+        border-right: 0.1rem solid ${getValueForSidebar('borderColor')};
+      `}
       ref={sidebarComponent}
       onMouseOver={() => {
         if (!sidebarComponent?.current) return;
