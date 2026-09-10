@@ -77,7 +77,7 @@ const BaseLinkShadcn = ({
     if (isButton)
       return 'tw:items-center tw:no-underline tw:rounded-md tw:focus-visible:outline-none tw:focus-visible:ring-1 tw:focus-visible:ring-ring';
     if (isBadge) return 'tw:items-center tw:no-underline';
-    return 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary/70 tw:hover:decoration-primary/70';
+    return 'tw:font-normal tw:underline tw:text-primary tw:hover:text-primary-hover tw:hover:decoration-primary-hover';
   };
 
   const variantClass = getVariantClass();
