@@ -9,12 +9,15 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: '',
-        primary: 'tw:border-l-[6px] tw:border-info tw:[&>svg]:text-info',
+        primary:
+          'tw:border-l-[6px] tw:border-info tw:bg-info-muted tw:[&>svg]:text-info',
         info: 'tw:border-1 tw:border-foreground',
-        success: 'tw:border-l-[6px] tw:border-success tw:[&>svg]:text-success',
-        warning: 'tw:border-l-[6px] tw:border-warning tw:[&>svg]:text-warning',
+        success:
+          'tw:border-l-[6px] tw:border-success tw:bg-success-muted tw:[&>svg]:text-success',
+        warning:
+          'tw:border-l-[6px] tw:border-warning-icon tw:bg-warning-muted tw:[&>svg]:text-warning-icon',
         danger:
-          'tw:border-l-[6px] tw:border-destructive tw:[&>svg]:text-destructive',
+          'tw:border-l-[6px] tw:border-destructive tw:bg-destructive-muted tw:[&>svg]:text-destructive',
       },
     },
     defaultVariants: {
