@@ -13,7 +13,7 @@ const SwitchVariants = {
 
 // TODO: after legacy drop, delete this map — BG_CLASS_BY_VARIANT below will be the only color source needed.
 const LEGACY_COLOR_BY_VARIANT: Record<Values<typeof SwitchVariants>, string> = {
-  [SwitchVariants.DEFAULT]: colors.udbMainBlue,
+  [SwitchVariants.DEFAULT]: colors.brandAccessible,
   [SwitchVariants.SUCCESS]: colors.udbMainPositiveGreen,
 };
 
