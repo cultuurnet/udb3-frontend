@@ -240,7 +240,9 @@ const PlaceAddModal = ({
             </Paragraph>
           </Box>
           {formState.errors.term?.id && (
-            <Text color={colors.danger}>{t('location.add_modal.errors.type')}</Text>
+            <Text color={colors.danger}>
+              {t('location.add_modal.errors.type')}
+            </Text>
           )}
           <Inline spacing={3} flexWrap="wrap" maxWidth="70rem">
             {terms.map(({ id, name, domain }) => (
