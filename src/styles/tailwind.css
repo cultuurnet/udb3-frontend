@@ -12,6 +12,15 @@
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Fix: Radix's Popper wraps PopoverContent in a div we can't reach via className, so a
+   "closed" forceMount popover still catches clicks below it. Scoped to cmdk combos (Typeahead,
+   SuggestionInput) via [cmdk-list] so plain Popover/Tooltip keep their normal exit animation. */
+[data-radix-popper-content-wrapper]:has([data-state='closed'] [cmdk-list]) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
   --color-primary: #0077a6; /* udb-main-dark-blue */
   --color-primary-foreground: #ffffff; /* udb-white */

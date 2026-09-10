@@ -17,7 +17,7 @@ import { Popover, PopoverAnchor, PopoverContent } from './shadcn/popover';
 import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { colors, getValueFromTheme } from './theme';
-import { Typeahead } from './Typeahead';
+import { TypeaheadLegacy } from './TypeaheadLegacy';
 
 const getValueForTimePicker = getValueFromTheme('timePicker');
 
@@ -233,7 +233,7 @@ const TimeFieldLegacy = ({
   const isInline = labelPosition === TimeFieldLabelPositions.INLINE;
 
   const typeahead = (
-    <Typeahead<string>
+    <TypeaheadLegacy<string>
       key={`${id}-${disabled}`}
       inputType="time"
       inputRequired={true}
