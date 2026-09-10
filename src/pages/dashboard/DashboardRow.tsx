@@ -68,8 +68,7 @@ export const DashboardRow = ({
   const { t } = useTranslation();
   const getValue = getValueFromTheme('dashboardPage');
   const { publicRuntimeConfig } = getConfig();
-  const { udbMainPositiveGreen, successMuted, neutral, grey3 } =
-    colors;
+  const { udbMainPositiveGreen, successMuted, neutral, grey3 } = colors;
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);

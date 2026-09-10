@@ -19,7 +19,11 @@ const { textMuted } = colors;
 
 const VideoIcon = ({ width }: { width: string }) => {
   return (
-    <CustomIcon color={textMuted} name={CustomIconVariants.VIDEO} width={width} />
+    <CustomIcon
+      color={textMuted}
+      name={CustomIconVariants.VIDEO}
+      width={width}
+    />
   );
 };
 

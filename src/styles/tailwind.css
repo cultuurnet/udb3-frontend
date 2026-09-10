@@ -45,8 +45,8 @@
 
   --orange: #f58a1f;
 
-  --sidebar-bg:  #F8FCFE;
-  --sidebar-border:    #EAF4F8;
+  --sidebar-bg: #f8fcfe;
+  --sidebar-border: #eaf4f8;
   --sidebar-text: #263746;
   --sidebar-text-muted: #4f7292;
 
@@ -54,7 +54,7 @@
   --sidebar-hover-text: var(--primary-active);
 
   --sidebar-active: var(--primary-active);
-  --sidebar-active-bg: #E6F3F9;
+  --sidebar-active-bg: #e6f3f9;
 
   --sidebar-indicator: var(--brand-accessible);
 

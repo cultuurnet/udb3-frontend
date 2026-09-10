@@ -76,9 +76,7 @@ const OrganizerInfo = ({
             css={`
               white-space: pre-wrap;
             `}
-            color={
-              content?.startsWith('organizers.detail.no') && neutral
-            }
+            color={content?.startsWith('organizers.detail.no') && neutral}
           >
             {content?.startsWith('organizers.detail.no') ? t(content) : content}
           </Text>
@@ -160,9 +158,7 @@ const OrganizerImages = ({
                 </Text>
               )}
               <Text>{image.description}</Text>
-              <Text color={neutral}>
-                {`© ${image.copyrightHolder}`}
-              </Text>
+              <Text color={neutral}>{`© ${image.copyrightHolder}`}</Text>
             </Stack>
           </Inline>
         ))}
