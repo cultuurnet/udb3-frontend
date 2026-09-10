@@ -4,7 +4,7 @@ import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
 import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 const getGlobalValue = getValueFromTheme('global');
@@ -24,7 +24,7 @@ const Banner = ({ title, description, ...props }: Props) => {
       alignItems="center"
       justifyContent="space-evenly"
       borderRadius="0.5rem"
-      backgroundColor={colors.udbMainLightBlue}
+      backgroundColor="var(--sidebar-bg)"
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
