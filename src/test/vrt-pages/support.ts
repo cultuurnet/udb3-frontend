@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-import { pinClockToVrtNow } from '../../../scripts/vrt/clock.mjs';
+import { pinClockToVrtNow } from '../../../scripts/vrt/pins/clock.mjs';
 
 // Screenshots against a baseline named after the test title.
 export const takeVrtScreenshot = async (target: Page | Locator) => {

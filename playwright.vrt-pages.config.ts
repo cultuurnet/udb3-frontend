@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 import { defineConfig, devices } from '@playwright/test';
 
-import { pinLanguage } from './scripts/vrt/language.mjs';
+import { pinLanguage } from './scripts/vrt/pins/language.mjs';
 
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const APP_HOST = process.env.VRT_APP_HOST ?? 'localhost';
