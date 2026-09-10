@@ -15,13 +15,13 @@ import { Title } from '@/ui/Title';
 
 const THUMBNAIL_SIZE = 80;
 
-const { grey5 } = colors;
+const { textMuted } = colors;
 
 const getValue = getValueFromTheme('pictureUploadBox');
 
 const ImageIcon = ({
   width,
-  color = grey5,
+  color = textMuted,
 }: {
   width: string;
   color?: string;

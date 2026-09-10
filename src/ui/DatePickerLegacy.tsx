@@ -153,7 +153,7 @@ const DatePickerLegacy = ({
         ${withHolidays
           ? `.react-datepicker__day-name {
           text-transform: uppercase;
-          color: ${colors.udbMainDarkGrey};
+          color: ${colors.neutral};
         }`
           : ''}
 
@@ -177,7 +177,7 @@ const DatePickerLegacy = ({
         .react-datepicker__month-read-view--down-arrow,
         .react-datepicker__year-read-view--down-arrow {
           top: 6px;
-          ${withHolidays ? `border-color: ${colors.textColor};` : ''}
+          ${withHolidays ? `border-color: ${colors.text};` : ''}
         }
 
         ${withHolidays
@@ -185,13 +185,13 @@ const DatePickerLegacy = ({
             .react-datepicker__month-read-view--down-arrow,
           .react-datepicker__year-read-view:hover
             .react-datepicker__year-read-view--down-arrow {
-          border-top-color: ${colors.textColor};
+          border-top-color: ${colors.text};
         }`
           : ''}
 
         ${withHolidays
           ? `.react-datepicker__navigation-icon::before {
-          border-color: ${colors.textColor};
+          border-color: ${colors.text};
         }`
           : ''}
 
@@ -306,7 +306,7 @@ const DatePickerLegacy = ({
           padding: 0.75rem;
           background-color: ${colors.grey1};
           border-bottom: 1px solid ${colors.grey3};
-          color: ${colors.udbMainDarkGrey};
+          color: ${colors.neutral};
           font-weight: bold;
           text-align: center;
         }

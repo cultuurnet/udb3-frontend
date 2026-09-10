@@ -44,7 +44,7 @@ const Table = ({
           padding-top: 0;
         }
         &.table td:first-child {
-          color: ${colors.grey5};
+          color: ${colors.textMuted};
         }
         &.table tr:last-child td {
           border-bottom: none;

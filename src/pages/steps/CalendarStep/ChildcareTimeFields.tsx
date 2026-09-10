@@ -105,7 +105,7 @@ const ChildcareTimeFields = ({
       </div>
       {showInfo && (
         <Text
-          color={colors.grey5}
+          color={colors.textMuted}
           position="absolute"
           top="100%"
           left={0}
