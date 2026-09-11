@@ -47,7 +47,7 @@ function LabelsStep({
   const getEntityByIdQuery = useGetEntityByIdAndScope({ id: offerId, scope });
   const entity: Offer | Organizer | undefined = getEntityByIdQuery.data;
 
-  const ref = useRef<TypeaheadElement<Label>>(null);
+  const ref = useRef<TypeaheadElement>(null);
 
   const [name, setName] = useState('');
   const labelsQuery: UseQueryResult<{ member: Label[] }> = useGetLabelsByQuery({
