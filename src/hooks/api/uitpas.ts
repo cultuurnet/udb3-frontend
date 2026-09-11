@@ -10,6 +10,7 @@ import {
 type CardSystem = {
   id: number;
   name: string;
+  enabled?: boolean;
   distributionKeys?: any[];
 };
 
