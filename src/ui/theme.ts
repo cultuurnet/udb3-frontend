@@ -295,7 +295,6 @@ const theme = {
         indicatorColor: 'var(--sidebar-indicator)',
       },
       hover: {
-        backgroundColor: 'var(--sidebar-hover)',
         color: 'var(--sidebar-hover-text)',
       },
     },
