@@ -92,11 +92,6 @@ const MenuItem = memo(
           color: ${isActive ? getValueForMenuItem('active.color') : 'inherit'};
           font-weight: ${isActive ? 700 : 'inherit'};
 
-          :hover {
-            background-color: ${getValueForMenuItem('hover.backgroundColor')};
-            border-radius: 8px;
-          }
-
           :before {
             content: '';
             width: 4px;
