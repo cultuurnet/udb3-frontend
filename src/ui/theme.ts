@@ -208,7 +208,6 @@ const theme = {
     },
     global: {
       successColor: colors.udbMainPositiveGreen,
-      warningIcon: colors.orange,
       boxShadow: {
         medium: 'var(--elevation-md)',
         heavy: 'var(--elevation-heavy)',
