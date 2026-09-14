@@ -89,6 +89,15 @@
   --elevation-heavy: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+/* Fix: Radix's Popper wraps PopoverContent in a div we can't reach via className, so a
+   "closed" forceMount popover still catches clicks below it. Scoped to cmdk combos (Typeahead,
+   SuggestionInput) via [cmdk-list] so plain Popover/Tooltip keep their normal exit animation. */
+[data-radix-popper-content-wrapper]:has([data-state='closed'] [cmdk-list]) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
