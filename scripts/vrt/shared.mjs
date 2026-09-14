@@ -121,14 +121,15 @@ const configuredUpstreams = () => {
     return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
   });
 
-  const prefixes = new Set();
+  const prefixes = new Map();
   for (const { envVar, mockPathPrefix } of upstreams) {
-    if (prefixes.has(mockPathPrefix)) {
+    const claimedBy = prefixes.get(mockPathPrefix);
+    if (claimedBy) {
       throw new Error(
-        `\n${envVar} derives the same mock path prefix (${mockPathPrefix}) as an earlier upstream — its fixtures could never be reached.\n`,
+        `\n${envVar} and ${claimedBy} both derive the mock path prefix ${mockPathPrefix} — the fixtures of whichever comes second could never be reached.\n`,
       );
     }
-    prefixes.add(mockPathPrefix);
+    prefixes.set(mockPathPrefix, envVar);
   }
 
   return upstreams;
