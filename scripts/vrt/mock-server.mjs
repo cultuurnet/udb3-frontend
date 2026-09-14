@@ -101,7 +101,7 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
       return;
     }
 
-    const requestKey = `${req.method} ${upstreamPathname}`;
+    const requestKey = `${req.method} ${upstreamPathname} (${upstream.envVar})`;
     if (!unmockedRequests.has(requestKey)) {
       unmockedRequests.set(requestKey, upstream.realUrl);
     }
@@ -120,6 +120,7 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
         method: req.method,
         pathname: upstreamPathname,
         searchParams,
+        envVar: upstream.envVar,
         realUrl: upstream.realUrl,
         body,
       });
