@@ -106,7 +106,7 @@ const toMockPathPrefix = (envVar) =>
 const configuredUpstreams = () => {
   assertFixturesAreReachable();
 
-  return MOCK_UPSTREAMS.map(({ envVar, pinnedUrl, fixtures }) => {
+  const upstreams = MOCK_UPSTREAMS.map(({ envVar, pinnedUrl, fixtures }) => {
     const realUrl = pinnedUrl ?? process.env[envVar];
     if (!realUrl) {
       throw new Error(
@@ -120,6 +120,18 @@ const configuredUpstreams = () => {
 
     return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
   });
+
+  const prefixes = new Set();
+  for (const { envVar, mockPathPrefix } of upstreams) {
+    if (prefixes.has(mockPathPrefix)) {
+      throw new Error(
+        `\n${envVar} derives the same mock path prefix (${mockPathPrefix}) as an earlier upstream — its fixtures could never be reached.\n`,
+      );
+    }
+    prefixes.add(mockPathPrefix);
+  }
+
+  return upstreams;
 };
 
 const buildMockEnv = (upstreams) =>
