@@ -123,8 +123,10 @@ const MenuItem = memo(
           display="flex"
           width="100%"
           className={cn(
-            'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:hover:bg-[var(--sidebar-hover)] tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
-            isActive && 'tw:bg-[var(--sidebar-active-bg)]',
+            'tw:w-full tw:rounded-lg tw:pt-[0.5333rem] tw:pb-[0.5333rem] tw:pl-[1.0667rem] tw:pr-[0.5333rem] tw:max-md:pt-[0.2667rem] tw:max-md:pb-[0.2667rem] tw:max-md:pl-[0.1333rem] tw:max-md:pr-[0.1333rem]',
+            isActive
+              ? 'tw:bg-(--sidebar-active-bg)'
+              : 'tw:hover:bg-(--sidebar-hover)',
           )}
         >
           <span className="tw:flex tw:w-full tw:flex-col tw:items-center tw:gap-1 tw:md:flex-row tw:md:gap-4">
