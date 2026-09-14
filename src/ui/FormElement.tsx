@@ -67,16 +67,20 @@ const FormElementShadcn = ({
   maxLength,
 }: Props) => {
   // @ts-expect-error
-  const isDisabled = Component.props?.disabled;
+  const componentProps = Component.props;
+  const hasError = Boolean(error);
+  const hasExplicitIsInvalid = 'isInvalid' in componentProps;
+  const isDisabled = componentProps?.disabled;
 
   // @ts-expect-error
   const clonedComponent = cloneElement(Component, {
-    // @ts-expect-error
-    ...Component.props,
+    ...componentProps,
     id,
     ref,
     maxLength,
-    ...(error && { isInvalid: true }),
+    ...(hasError || hasExplicitIsInvalid
+      ? { isInvalid: hasError || Boolean(componentProps.isInvalid) }
+      : {}),
   });
 
   const currentLength = clonedComponent.props?.value?.length ?? 0;

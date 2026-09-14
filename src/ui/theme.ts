@@ -15,11 +15,11 @@ const colors = {
   udbMainLightGrey: 'var(--border-strong)',
   udbMainPositiveGreen: 'var(--success)',
   white: 'var(--white)',
-  greylight: 'var(--panel-bg)',
-  grey1: 'var(--fill)',
+  greylight: 'var(--surface-raised)',
+  grey1: 'var(--surface-muted)',
   grey2: 'var(--border-input)',
   grey3: 'var(--border)',
-  grey4: 'var(--fill-hover)',
+  grey4: 'var(--surface-canvas)',
   pink1: 'var(--danger-subtle)',
   red4: 'var(--danger-active)',
   orange: 'var(--orange)',
@@ -156,10 +156,10 @@ const theme = {
       secondary: {
         color: 'var(--text)',
         backgroundColor: colors.white,
-        hoverBackgroundColor: 'var(--fill-active)',
+        hoverBackgroundColor: 'var(--surface-strong)',
         hoverBorderColor: 'var(--border-strong)',
         activeColor: 'var(--text)',
-        activeBackgroundColor: 'var(--fill-active)',
+        activeBackgroundColor: 'var(--surface-strong)',
         activeBorderColor: 'var(--border-strong)',
       },
       secondaryToggle: {
@@ -177,7 +177,7 @@ const theme = {
         hoverBackgroundColor: 'var(--accent)',
         hoverBorderColor: 'var(--primary-hover)',
         activeColor: 'var(--text)',
-        activeBackgroundColor: 'var(--fill-active)',
+        activeBackgroundColor: 'var(--surface-strong)',
         activeBorderColor: 'var(--border-strong)',
       },
       success: {
@@ -208,7 +208,6 @@ const theme = {
     },
     global: {
       successColor: colors.udbMainPositiveGreen,
-      warningIcon: colors.orange,
       boxShadow: {
         medium: 'var(--elevation-md)',
         heavy: 'var(--elevation-heavy)',
@@ -245,7 +244,7 @@ const theme = {
       },
     },
     page: {
-      backgroundColor: 'var(--page-bg)',
+      backgroundColor: 'var(--surface-canvas)',
       borderColor: colors.grey3,
     },
     pageTitle: {
@@ -296,7 +295,6 @@ const theme = {
         indicatorColor: 'var(--sidebar-indicator)',
       },
       hover: {
-        backgroundColor: 'var(--sidebar-hover)',
         color: 'var(--sidebar-hover-text)',
       },
     },
@@ -389,7 +387,7 @@ const theme = {
       borderColor: colors.grey3,
       activeTabColor: colors.textMuted,
       activeTabBackgroundColor: colors.grey1,
-      hoverTabBackgroundColor: 'var(--fill-active)',
+      hoverTabBackgroundColor: 'var(--surface-strong)',
       borderRadius: '8px',
     },
     pictureUploadBox: {

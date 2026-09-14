@@ -24,7 +24,7 @@ const Banner = ({ title, description, ...props }: Props) => {
       alignItems="center"
       justifyContent="space-evenly"
       borderRadius="0.5rem"
-      backgroundColor="var(--sidebar-bg)"
+      backgroundColor="var(--surface-subtle)"
       css={`
         box-shadow: ${getGlobalValue('boxShadow.medium')};
       `}
