@@ -21,11 +21,11 @@ export const MOCK_UPSTREAMS = [
   },
   {
     envVar: 'NEXT_PUBLIC_NEW_ANNOUNCEMENTS_URL',
-    fixtures: [...globalAnnouncementsFixtures],
+    fixtures: globalAnnouncementsFixtures,
   },
   {
     envVar: 'NEXT_PUBLIC_TAXONOMY_URL',
-    fixtures: [...termsTaxonomyFixtures],
+    fixtures: termsTaxonomyFixtures,
   },
 ];
 
