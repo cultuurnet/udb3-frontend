@@ -15,7 +15,7 @@ import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 
 type FormData = {
   description: string;
@@ -120,7 +120,7 @@ const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
           <Button onClick={handleClickUpload}>
             {t('pictures.upload_modal.actions.choose_file')}
           </Button>
-          <Text variant={TextVariants.ERROR}>{error}</Text>
+          <Text color={colors.danger}>{error}</Text>
         </Stack>
         <Text variant={TextVariants.MUTED} textAlign="center">
           {t('pictures.upload_modal.file_requirements', {

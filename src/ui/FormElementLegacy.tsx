@@ -156,7 +156,7 @@ const FormElementLegacy = ({
               <Spinner size={SpinnerSizes.SMALL} className="tw:w-auto tw:p-3" />
             )}
           </Inline>
-          {error && <Text variant={TextVariants.ERROR}>{error}</Text>}
+          {error && <Text color={colors.danger}>{error}</Text>}
         </Stack>
         {info && infoElement}
       </Stack>
