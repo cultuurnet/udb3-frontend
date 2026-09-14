@@ -37,8 +37,8 @@ const answersEverything = (earlier, later) => {
     : earlier.path.test(later.path);
 };
 
-const describeFixture = (fixture, index) =>
-  `#${index + 1} ${fixture.method ?? 'ANY'} ${fixture.path}`;
+const describeFixture = ({ method, path, query }) =>
+  `${method ?? 'ANY'} ${path}${query ? ' (narrowed by query)' : ''}`;
 
 export const assertFixturesAreReachable = () => {
   for (const { envVar, fixtures } of MOCK_UPSTREAMS) {
@@ -49,7 +49,7 @@ export const assertFixturesAreReachable = () => {
       if (shadowIndex === -1) return;
 
       throw new Error(
-        `\n${envVar} fixture ${describeFixture(fixture, index)} can never match: ${describeFixture(fixtures[shadowIndex], shadowIndex)} already answers every request it would.\nMove the narrower entry above it in its fixture module.\n`,
+        `\n${envVar} fixture ${describeFixture(fixture)} can never match: an earlier ${describeFixture(fixtures[shadowIndex])} already answers every request it would.\nMove the narrower entry above it — within its fixture module, or by reordering the lists spread into this upstream.\n`,
       );
     });
   }
