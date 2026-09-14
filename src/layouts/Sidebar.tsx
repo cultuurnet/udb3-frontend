@@ -533,7 +533,7 @@ const Sidebar = () => {
       padding={{ default: 4.5, s: 1 }}
       spacing={3}
       css={`
-        border-right: 0.1rem solid ${getValueForSidebar('borderColor')};
+        border-right: 1px solid ${getValueForSidebar('borderColor')};
       `}
       ref={sidebarComponent}
       onMouseOver={() => {
