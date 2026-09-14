@@ -45,7 +45,7 @@
 
   --orange: #f58a1f;
 
-  --sidebar-bg: #f8fcfe;
+  --sidebar-bg: var(--surface-subtle);
   --sidebar-border: #eaf4f8;
   --sidebar-text: #263746;
   --sidebar-text-muted: #4f7292;
@@ -75,11 +75,11 @@
   --border-strong: #bcc3c6;
   --border-emphasis: #8f9699;
 
-  --page-bg: #f5f5f5;
-  --fill-hover: var(--page-bg);
-  --fill: #f0f0f0;
-  --fill-active: #e6e6e6;
-  --panel-bg: #fcfcfc;
+  --surface-raised: #fcfcfc;
+  --surface-canvas: #f5f5f5;
+  --surface-muted: #f0f0f0;
+  --surface-strong: #e6e6e6;
+  --surface-subtle: #f8fcfe;
 
   --danger-subtle: #fcd1cf;
 
@@ -89,6 +89,15 @@
   --elevation-heavy: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+/* Fix: Radix's Popper wraps PopoverContent in a div we can't reach via className, so a
+   "closed" forceMount popover still catches clicks below it. Scoped to cmdk combos (Typeahead,
+   SuggestionInput) via [cmdk-list] so plain Popover/Tooltip keep their normal exit animation. */
+[data-radix-popper-content-wrapper]:has([data-state='closed'] [cmdk-list]) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Values mirrored from src/ui/theme.ts — source of truth until fully migrated to Tailwind. */
 @theme {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -118,10 +127,10 @@
   --color-info-active: var(--info-active);
   --color-info-muted: var(--info-muted);
   --color-background: var(--background);
-  --color-fill-hover: var(--fill-hover);
-  --color-panel: var(--panel-bg);
+  --color-canvas: var(--surface-canvas);
+  --color-panel: var(--surface-raised);
   --color-foreground: var(--text);
-  --color-muted: var(--fill);
+  --color-muted: var(--surface-muted);
   --color-muted-foreground: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--text);
