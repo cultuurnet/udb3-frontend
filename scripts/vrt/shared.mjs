@@ -3,7 +3,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 
 import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
-import { MOCK_PORT, MOCK_UPSTREAMS } from './mock-upstreams.mjs';
+import {
+  assertFixturesAreReachable,
+  MOCK_PORT,
+  MOCK_UPSTREAMS,
+} from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
 
 export const BASE_URL = 'http://localhost:3000';
@@ -92,20 +96,31 @@ const hasValidStoredSession = () => {
   }
 };
 
-const configuredUpstreams = () =>
-  MOCK_UPSTREAMS.map(({ envVar, fixtures }) => {
-    const realUrl = process.env[envVar];
+const toMockPathPrefix = (envVar) =>
+  `/__vrt/${envVar
+    .replace(/^NEXT_PUBLIC_/, '')
+    .replace(/_URL$/, '')
+    .toLowerCase()
+    .replace(/_/g, '-')}`;
+
+const configuredUpstreams = () => {
+  assertFixturesAreReachable();
+
+  return MOCK_UPSTREAMS.map(({ envVar, pinnedUrl, fixtures }) => {
+    const realUrl = pinnedUrl ?? process.env[envVar];
     if (!realUrl) {
       throw new Error(
-        `\n${envVar} is not set — its API calls would hit the real backend and make baselines unreliable.\n`,
+        `\n${envVar} is not set — the app would boot without it and render pages that fail to load their data.\n`,
       );
     }
 
-    const { origin, pathname } = new URL(realUrl);
-    const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${realUrl.slice(origin.length)}`;
+    const { origin: realOrigin } = new URL(realUrl);
+    const mockPathPrefix = toMockPathPrefix(envVar);
+    const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${mockPathPrefix}${realUrl.slice(realOrigin.length)}`;
 
-    return { envVar, realUrl, mockUrl, pathPrefix: pathname, fixtures };
+    return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
   });
+};
 
 const buildMockEnv = (upstreams) =>
   Object.fromEntries(upstreams.map(({ envVar, mockUrl }) => [envVar, mockUrl]));

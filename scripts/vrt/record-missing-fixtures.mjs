@@ -43,8 +43,8 @@ const writeRecordedFixture = ({
 // Method: ${method}  Path: ${pathname}${query ? `  Query: ${query}` : ''}
 //
 // Review and redact this before using it — copy the object into
-// scripts/vrt/fixtures/<domain>.mjs under a real name, then wire it into
-// MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs:
+// scripts/vrt/fixtures/<domain>.mjs under a real name, then add an entry to
+// that module's exported fixture list:
 //   { method: '${method}', path: '${pathname}', response: <name> }
 
 export const recordedFixture = ${formattedBody};
@@ -122,7 +122,7 @@ const main = async () => {
       console.log(
         `\nMock server: recorded real responses for:\n${lines.join('\n')}\n\n` +
           'Review and redact each one, copy it into scripts/vrt/fixtures/<domain>.mjs,\n' +
-          'then wire it into MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs.\n',
+          "then add an entry to that module's exported fixture list.\n",
       );
     }
   } finally {
