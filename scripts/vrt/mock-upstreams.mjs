@@ -29,6 +29,9 @@ export const MOCK_UPSTREAMS = [
   },
 ];
 
+// Deliberately conservative: only flags what matchesFixture would definitely
+// swallow. String paths compare exactly, so /labels/ leaves /labels/<uuid>
+// alone, and a later RegExp is never flagged.
 const answersEverything = (earlier, later) => {
   if (earlier.query) return false;
   if (earlier.method && earlier.method !== later.method) return false;
