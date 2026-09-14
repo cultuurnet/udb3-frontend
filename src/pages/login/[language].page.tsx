@@ -26,6 +26,7 @@ import {
   getGlobalBorderRadius,
   getValueFromTheme,
 } from '@/ui/theme';
+import { isSameOriginUrl } from '@/utils/url';
 
 const getValueForPage = getValueFromTheme('loginPage');
 
@@ -263,7 +264,9 @@ const Index = () => {
     const fallbackUri = new URL(`${publicRuntimeConfig.baseUrl}/dashboard`);
     fallbackUri.searchParams.set('tab', 'events');
 
-    const redirectUri = referer ?? fallbackUri.toString();
+    const redirectUri = isSameOriginUrl(referer, publicRuntimeConfig.baseUrl)
+      ? referer
+      : fallbackUri.toString();
 
     setCookie('auth0.redirect_uri', redirectUri);
 
