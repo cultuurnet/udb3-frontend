@@ -110,7 +110,7 @@ const configuredUpstreams = () => {
     const realUrl = pinnedUrl ?? process.env[envVar];
     if (!realUrl) {
       throw new Error(
-        `\n${envVar} is not set — the app would boot without it and render pages that fail to load their data.\n`,
+        `\nNo URL for ${envVar} — set it in the environment, or give its upstream a pinnedUrl. Otherwise the app boots without it and renders pages that fail to load their data.\n`,
       );
     }
 

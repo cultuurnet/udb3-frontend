@@ -11,8 +11,9 @@ export const MOCK_PORT = 4010;
 // match wins, so narrowed entries go above the catch-all they share a path
 // with, and a RegExp `path` below everything it would swallow. Order within a
 // domain lives in its fixture module; assertFixturesAreReachable() enforces
-// it. An upstream reads its real URL from `envVar`, or from a `pinnedUrl` the
-// pipeline supplies instead.
+// it. An upstream always needs `envVar` — it names the route prefix and the
+// variable the app is given — and takes its real URL from that variable, or
+// from a `pinnedUrl` overriding it when the pipeline supplies the host itself.
 export const MOCK_UPSTREAMS = [
   {
     envVar: 'NEXT_PUBLIC_API_URL',
