@@ -1,7 +1,8 @@
 import { ChangeEvent } from 'react';
 
 import { Box, BoxProps, getBoxProps } from './Box';
-import { colors } from './theme';
+import { CheckboxVariants } from './Checkbox';
+import { cn } from './shadcn/utils';
 
 type CheckboxProps = BoxProps & {
   id: string;
@@ -10,6 +11,7 @@ type CheckboxProps = BoxProps & {
   disabled?: boolean;
   onToggle?: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  variant?: CheckboxVariants;
 };
 
 const CheckboxLegacy = ({
@@ -19,6 +21,7 @@ const CheckboxLegacy = ({
   disabled = false,
   onToggle = () => {},
   className,
+  variant = CheckboxVariants.PRIMARY,
   ...props
 }: CheckboxProps) => (
   <Box
@@ -29,13 +32,15 @@ const CheckboxLegacy = ({
     checked={checked}
     disabled={disabled}
     onChange={onToggle}
-    className={className}
+    className={cn(
+      variant === CheckboxVariants.SUCCESS
+        ? 'tw:accent-success'
+        : 'tw:accent-primary',
+      className,
+    )}
     cursor="pointer"
     data-testid={props['data-testid']}
     {...getBoxProps(props)}
-    css={`
-      accent-color: ${colors.udbMainPositiveGreen};
-    `}
   />
 );
 
