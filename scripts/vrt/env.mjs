@@ -26,7 +26,7 @@ export const PINNED_ENV = {
 // Allowed because the app reaches them today, not because they belong here.
 const UNMOCKED_HOSTS = [
   'cdn.jsdelivr.net', // Bootstrap CSS, moves pixels
-  'fonts.googleapis.com', // unused, GlobalStyle forces a system font stack
+  'fonts.googleapis.com', // Open Sans stylesheet from _document; GlobalStyle overrides the face
   'fonts.gstatic.com', // the font files that stylesheet pulls
   'static.hotjar.com', // analytics, site id hardcoded in the app
 ];
