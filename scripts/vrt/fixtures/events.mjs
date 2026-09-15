@@ -316,6 +316,12 @@ const eventListMembers = [
     workflowStatus: 'DRAFT',
     completeness: 40,
   }),
+  eventListMember({
+    id: 'vrt-mock-event-6',
+    nameNl: 'VRT mock evenement — afgewezen',
+    subEvents: availableSubEventsOn([45]),
+    workflowStatus: 'REJECTED',
+  }),
 ];
 
 const eventsByCreatorFixture = {
