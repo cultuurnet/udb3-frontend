@@ -7,14 +7,12 @@ const getValue = getValueFromTheme('text');
 const TextVariants = {
   REGULAR: 'regular',
   MUTED: 'muted',
-  ERROR: 'error',
 };
 
 type Props = BoxProps;
 
 const getColor = (variant) => {
   if (variant === TextVariants.MUTED) return getValue('muted.color');
-  if (variant === TextVariants.ERROR) return getValue('error.color');
 };
 
 const Text = ({

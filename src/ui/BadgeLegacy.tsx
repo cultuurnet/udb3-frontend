@@ -5,6 +5,7 @@ import type { Values } from '@/types/Values';
 import type { BoxProps } from './Box';
 import { getBoxProps } from './Box';
 import { Text } from './Text';
+import { colors } from './theme';
 
 const BadgeVariants = {
   DANGER: 'danger',
@@ -33,7 +34,7 @@ const BadgeLegacy = ({
           align-self: center;
         }
         ${variant === BadgeVariants.INFO &&
-        `background-color: var(--primary) !important;`}
+        `background-color: ${colors.primary} !important;`}
       `}
     >
       <Text {...getBoxProps(props)}>{children}</Text>

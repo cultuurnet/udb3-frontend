@@ -1,0 +1,173 @@
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+
+import type { ForwardedRef, Ref } from 'react';
+import { forwardRef } from 'react';
+import { AsyncTypeahead as BootstrapTypeahead } from 'react-bootstrap-typeahead';
+import CoreTypeahead from 'react-bootstrap-typeahead/types/core/Typeahead';
+import { useTranslation } from 'react-i18next';
+
+import { InputType } from '@/ui/Input';
+
+import type { BoxProps } from './Box';
+import { Box, getBoxProps } from './Box';
+import {
+  getGlobalBorderRadius,
+  getGlobalFormInputHeight,
+  getValueFromTheme,
+} from './theme';
+
+const getValue = getValueFromTheme('typeahead');
+
+type TypeaheadOption = string | Record<string, any>;
+
+export type TypeaheadLegacyElement<
+  T extends TypeaheadOption = TypeaheadOption,
+> = CoreTypeahead;
+
+type Props<T extends TypeaheadOption = TypeaheadOption> = BoxProps & {
+  isInvalid?: boolean;
+  inputType?: InputType;
+  inputRequired?: boolean;
+  hideNewInputText?: boolean;
+};
+
+const TypeaheadLegacyInner = <T extends TypeaheadOption = TypeaheadOption>(
+  {
+    id,
+    name,
+    inputType = 'text',
+    inputRequired,
+    options,
+    labelKey,
+    renderMenu,
+    renderMenuItemChildren,
+    disabled = false,
+    placeholder,
+    emptyLabel,
+    minLength = 3,
+    className,
+    onInputChange,
+    defaultInputValue,
+    onBlur,
+    onFocus,
+    onSearch = async () => {},
+    onChange,
+    isInvalid,
+    selected,
+    allowNew,
+    filterBy,
+    hideNewInputText,
+    newSelectionPrefix,
+    positionFixed,
+    isLoading = false,
+    ...props
+  }: Props<T>,
+  ref: ForwardedRef<TypeaheadLegacyElement<T>>,
+) => {
+  const { t } = useTranslation();
+
+  return (
+    <Box
+      forwardedAs={BootstrapTypeahead}
+      id={id}
+      allowNew={allowNew && !isLoading}
+      newSelectionPrefix={newSelectionPrefix}
+      options={options}
+      labelKey={labelKey}
+      renderMenuItemChildren={renderMenuItemChildren}
+      renderMenu={renderMenu}
+      isLoading={isLoading}
+      disabled={disabled}
+      className={className}
+      flex={1}
+      ref={ref as unknown as Ref<HTMLElement>}
+      css={`
+        input[type='time']::-webkit-calendar-picker-indicator {
+          display: none;
+        }
+
+        .form-control {
+          border-radius: ${getGlobalBorderRadius};
+          height: ${getGlobalFormInputHeight};
+          padding: 0.375rem 0.9rem;
+        }
+
+        .dropdown-item {
+          border-bottom: 1px solid ${({ theme }) => theme.colors.grey1};
+        }
+
+        .dropdown-item > .rbt-highlight-text {
+          display: initial;
+        }
+
+        .rbt-menu-custom-option {
+          padding: 1rem 1.5rem;
+        }
+
+        .dropdown-item.rbt-menu-custom-option > .rbt-highlight-text {
+          display: ${hideNewInputText ? 'none' : 'initial'};
+        }
+
+        .dropdown-item.active,
+        .dropdown-item:active {
+          color: ${getValue('active.color')};
+          background-color: ${getValue('active.backgroundColor')};
+
+          .rbt-highlight-text {
+            color: ${getValue('active.color')};
+          }
+        }
+
+        .dropdown-item.hover,
+        .dropdown-item:hover {
+          color: ${getValue('hover.color')};
+          background-color: ${getValue('hover.backgroundColor')};
+
+          .rbt-highlight-text {
+            color: ${getValue('hover.color')};
+          }
+        }
+
+        .rbt-highlight-text {
+          font-weight: ${getValue('highlight.fontWeight')};
+          background-color: ${getValue('highlight.backgroundColor')};
+        }
+      `}
+      onSearch={onSearch}
+      onInputChange={onInputChange}
+      onChange={onChange}
+      placeholder={placeholder}
+      emptyLabel={emptyLabel ?? t('typeahead.no_results')}
+      searchText={t('typeahead.search_text')}
+      minLength={minLength}
+      delay={275}
+      highlightOnlyResult={!allowNew}
+      isInvalid={isInvalid}
+      selected={selected}
+      defaultInputValue={defaultInputValue}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      positionFixed={positionFixed}
+      inputProps={
+        {
+          id,
+          name,
+          type: inputType,
+          required: inputRequired,
+          'data-testid': name,
+        } as React.InputHTMLAttributes<HTMLInputElement>
+      }
+      filterBy={filterBy ?? (() => true)}
+      useCache={false}
+      {...getBoxProps(props)}
+    />
+  );
+};
+
+const TypeaheadLegacy = forwardRef(TypeaheadLegacyInner) as <
+  T extends TypeaheadOption = TypeaheadOption,
+>(
+  props: Props<T> & { ref?: ForwardedRef<TypeaheadLegacyElement<T>> },
+) => ReturnType<typeof TypeaheadLegacyInner<T>>;
+
+export { TypeaheadLegacy };

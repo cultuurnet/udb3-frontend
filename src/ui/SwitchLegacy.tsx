@@ -18,7 +18,7 @@ const SwitchLegacy = ({
   checked = false,
   disabled = false,
   onCheckedChange = () => {},
-  color = colors.brandAccessible,
+  color = colors.primary,
   className,
   'aria-label': ariaLabel,
 }: SwitchLegacyProps) => (

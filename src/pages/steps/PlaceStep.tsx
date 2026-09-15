@@ -1,6 +1,5 @@
 import { TFunction } from 'i18next';
 import { useState } from 'react';
-import { Highlighter, TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -15,6 +14,7 @@ import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Highlighter } from '@/ui/Highlighter';
 import { Icon, Icons, IconVariants } from '@/ui/Icon';
 import type { StackProps } from '@/ui/Stack';
 import { getStackProps, Stack } from '@/ui/Stack';
@@ -109,19 +109,7 @@ const PlaceStep = ({
                       );
                     }}
                     labelKey={(option: string) => option}
-                    renderMenu={(results, menuProps, { text }) => {
-                      if (!results || results.length === 0) return null;
-
-                      return (
-                        <TypeaheadMenu
-                          {...menuProps}
-                          options={results}
-                          labelKey={(option: string) => option}
-                          text={text}
-                        />
-                      );
-                    }}
-                    renderMenuItemChildren={(address: string, { text }) => (
+                    renderMenuItemChildren={(address: string, text) => (
                       <Highlighter search={text}>{address}</Highlighter>
                     )}
                     selected={
@@ -129,7 +117,7 @@ const PlaceStep = ({
                         ? [streetAddressTypeahead.currentInputValue]
                         : []
                     }
-                    maxWidth="28rem"
+                    className="tw:max-w-md"
                     onChange={(selected) => {
                       const selectedAddress = selected[0];
                       if (selectedAddress) {
