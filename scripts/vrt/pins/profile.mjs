@@ -5,6 +5,7 @@ const ID_TOKEN_COOKIE_NAME = 'idToken';
 const PINNED_CLAIMS = {
   email: 'vrt-mock@example.com',
   'https://publiq.be/first_name': 'VRT Mock User',
+  // Data URI: loaded in the container, where vrtMockImageUrls can't be derived.
   picture: vrtMockImageDataUri('square'),
 };
 
