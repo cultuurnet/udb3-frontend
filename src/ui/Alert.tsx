@@ -35,7 +35,7 @@ const AlertVariantIcon: Partial<
   },
   [AlertVariants.WARNING]: {
     name: Icons.EXCLAMATION_TRIANGLE,
-    className: 'tw:text-warning-icon',
+    className: 'tw:text-foreground',
   },
   [AlertVariants.DANGER]: {
     name: Icons.EXCLAMATION_CIRCLE,

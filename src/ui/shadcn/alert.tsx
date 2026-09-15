@@ -15,7 +15,7 @@ const alertVariants = cva(
         success:
           'tw:border-l-[6px] tw:border-success tw:bg-success-muted tw:[&>svg]:text-success',
         warning:
-          'tw:border-l-[6px] tw:border-warning-icon tw:bg-warning-muted tw:[&>svg]:text-warning-icon',
+          'tw:border-l-[6px] tw:border-warning tw:bg-warning-surface tw:[&>svg]:text-foreground',
         danger:
           'tw:border-l-[6px] tw:border-destructive tw:bg-destructive-muted tw:[&>svg]:text-destructive',
       },
