@@ -159,7 +159,7 @@ const legacyVariantColor: Record<
   [IconVariants.DEFAULT]: undefined,
   [IconVariants.SUCCESS]: colors.udbMainPositiveGreen,
   [IconVariants.DANGER]: colors.danger,
-  [IconVariants.WARNING]: colors.warningIcon,
+  [IconVariants.WARNING]: colors.text,
   [IconVariants.INFO]: colors.info,
 };
 
