@@ -56,6 +56,8 @@ const availableSubEventsOn = (dayOffsets) =>
   }));
 
 const SUMMARY_LOCALE = 'nl-BE';
+// UTC, and the app agrees only because the run pins no timezoneId. Pinning one
+// desyncs this, formatPeriod's HH:mm and usePublicationStatus — see the ticket.
 const HOST_INDEPENDENT_TIME_ZONE = 'UTC';
 
 const summaryFormat = (options) =>
