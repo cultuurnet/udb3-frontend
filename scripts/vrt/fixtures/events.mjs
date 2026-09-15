@@ -109,6 +109,9 @@ const calendarSummaryTextFor = (subEvents) => {
 
 const eventCalendarSummaryText = calendarSummaryTextFor(eventSubEvents);
 
+// Only the calsum endpoint serves md; the list request asks for lg/sm/xs.
+const withoutMediumFormat = ({ md, ...text }) => text;
+
 const eventLocationFixture = {
   '@id': `${MOCK_API_ORIGIN}/places/${LOCATION_ID}`,
   '@context': '/contexts/place',
@@ -281,14 +284,18 @@ const eventListMember = ({ id, nameNl, subEvents, ...overrides }) => ({
   startDate: subEvents[0].startDate,
   endDate: subEvents.at(-1).endDate,
   availableTo: subEvents.at(-1).endDate,
-  calendarSummary: { nl: { text: calendarSummaryTextFor(subEvents) } },
+  calendarSummary: {
+    nl: { text: withoutMediumFormat(calendarSummaryTextFor(subEvents)) },
+  },
   ...overrides,
 });
 
 const eventListMembers = [
   {
     ...vrtMockEvent,
-    calendarSummary: { nl: { text: eventCalendarSummaryText } },
+    calendarSummary: {
+      nl: { text: withoutMediumFormat(eventCalendarSummaryText) },
+    },
   },
   eventListMember({
     id: 'vrt-mock-event-2',
@@ -369,7 +376,7 @@ const eventCalendarSummaryFixtures = eventListMembers.map((member) => ({
   method: 'GET',
   path: `/events/${idOf(member)}/calsum`,
   contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-  response: calendarSummaryResponse(member.calendarSummary.nl.text),
+  response: calendarSummaryResponse(calendarSummaryTextFor(member.subEvent)),
 }));
 
 export const eventsApiFixtures = [
