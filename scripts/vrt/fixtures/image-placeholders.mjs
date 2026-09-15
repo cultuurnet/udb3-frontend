@@ -32,6 +32,7 @@ const VRT_MOCK_IMAGES = {
   portrait: { width: 270, height: 360, background: '#7c3aed', shape: triangle },
 };
 
+// .jpg because the app accepts no SVG uploads; browsers honour content-type.
 export const vrtMockImages = Object.fromEntries(
   Object.entries(VRT_MOCK_IMAGES).map(([name, image]) => [
     name,
