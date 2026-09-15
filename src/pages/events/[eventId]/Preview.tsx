@@ -281,7 +281,7 @@ const Preview = () => {
         borderRadius={getGlobalBorderRadius}
         css={`
           box-shadow: ${getGlobalValue('boxShadow.medium')};
-          border: ${showEventId ? `none` : `2px solid ${colors.red3}`};
+          border: ${showEventId ? `none` : `2px solid ${colors.danger}`};
         `}
       >
         <Table
@@ -483,7 +483,7 @@ const Preview = () => {
   });
 
   return (
-    <Page>
+    <Page backgroundColor="var(--background)">
       <Page.Title>{title}</Page.Title>
       <Page.Content>
         <Inline>

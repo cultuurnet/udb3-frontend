@@ -31,8 +31,8 @@ const BootStrapVariants = {
 const outlinedVariantColors: Partial<
   Record<Values<typeof ButtonVariants>, string>
 > = {
-  outlined: colors.udbMainDarkBlue,
-  'outlined-danger': colors.red3,
+  outlined: colors.primary,
+  'outlined-danger': colors.danger,
 };
 
 const getValue = getValueFromTheme('button');
@@ -129,10 +129,10 @@ const customCSS = css`
 
   &.btn-secondary {
     color: ${colors.white};
-    background-color: ${colors.udbMainGrey};
+    background-color: ${colors.neutral};
 
     &:hover {
-      background-color: color-mix(in srgb, ${colors.udbMainGrey} 85%, black);
+      background-color: color-mix(in srgb, ${colors.neutral} 85%, black);
     }
   }
 
@@ -419,8 +419,8 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
             `
               span { color: ${colors.dangerDark}; }
               &:hover span {
-                color: ${colors.dangerBright};
-                text-decoration-color: ${colors.dangerBright};
+                color: ${colors.danger};
+                text-decoration-color: ${colors.danger};
               }
             `}
           `}

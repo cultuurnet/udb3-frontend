@@ -52,7 +52,7 @@ const ToggleGroupLegacy = ({
           flex: 1 1 0;
           background-color: transparent;
           border-radius: 0 !important;
-          color: ${colors.grey5};
+          color: ${colors.textMuted};
           box-shadow: none;
           padding: 0.5rem 1rem;
           position: relative;
@@ -63,7 +63,7 @@ const ToggleGroupLegacy = ({
 
           &:hover {
             background-color: transparent;
-            color: ${colors.textColor};
+            color: ${colors.text};
           }
         }
 
@@ -71,7 +71,7 @@ const ToggleGroupLegacy = ({
           background-color: ${colors.white};
           border-color: transparent;
           border-radius: 0.625rem !important;
-          color: ${colors.textColor};
+          color: ${colors.text};
           box-shadow: ${getGlobalValue('boxShadow.heavy')};
           z-index: 1;
         }

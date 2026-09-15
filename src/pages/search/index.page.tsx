@@ -25,7 +25,7 @@ const Search = () => {
   const legacyPath = useLegacyPath();
   const { query, ...router } = useRouter();
   const tab = (query?.tab as Scope) ?? 'events-places';
-  const { udbMainDarkBlue } = colors;
+  const { primary } = colors;
   const isClientSide = useIsClient();
   const { publicRuntimeConfig } = getConfig();
   const isOwnershipEnabled = publicRuntimeConfig.ownershipEnabled === 'true';
@@ -63,7 +63,7 @@ const Search = () => {
             <Tabs<Scope>
               activeKey={tab}
               onSelect={handleSelectTab}
-              activeBackgroundColor={`${udbMainDarkBlue}`}
+              activeBackgroundColor={`${primary}`}
               variant={TabsVariants.OUTLINED}
             >
               <Tabs.Tab

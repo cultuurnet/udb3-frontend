@@ -17,8 +17,8 @@ const PublicationStatusToColor: Record<PublicationStatusType, string> = {
   REJECTED: colors.danger,
   APPROVED: colors.udbMainPositiveGreen,
   PUBLISHED: colors.udbMainPositiveGreen,
-  PLANNED: colors.udbMainDarkBlue,
-  DELETED: colors.udbMainGrey,
+  PLANNED: colors.primary,
+  DELETED: colors.neutral,
 };
 
 export { PublicationStatus, PublicationStatusToColor };

@@ -54,7 +54,7 @@ const TabsLegacy = <T,>({
     return true;
   });
 
-  const { udbMainDarkBlue, grey1, textColor } = colors;
+  const { primary, grey1, text } = colors;
   const TabStyles = {
     default: css`
       border-bottom: none;
@@ -80,7 +80,7 @@ const TabsLegacy = <T,>({
 
       .nav-item .nav-link.active {
         background-color: ${activeBackgroundColor};
-        color: ${textColor};
+        color: ${text};
         border-color: ${getValue('borderColor')};
         border-bottom-color: transparent;
         cursor: default;
@@ -135,14 +135,14 @@ const TabsLegacy = <T,>({
 
       .nav-item {
         &:hover {
-          background-color: #0083b81a;
+          background-color: var(--primary-subtle);
           border-radius: ${getValue('borderRadius')} ${getValue('borderRadius')}
             0 0;
         }
       }
 
       .nav-link {
-        color: #006a96;
+        color: ${getValue('color')};
         padding: 0.6rem 2rem;
         border: none !important;
         border-bottom: 3px solid transparent !important;
@@ -150,8 +150,8 @@ const TabsLegacy = <T,>({
 
         &.active {
           font-weight: 700;
-          border-bottom: 2px solid #006a96 !important;
-          color: #006a96 !important;
+          border-bottom: 2px solid ${getValue('color')} !important;
+          color: ${getValue('color')} !important;
         }
       }
     `,

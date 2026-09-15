@@ -90,7 +90,7 @@ const OpeningHoursSummary = ({
   return (
     <Stack spacing={5}>
       <Stack>
-        <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+        <Text color={colors.primary} fontWeight="bold">
           {t('create.calendar.fixed_days.overview.weekly_on')}
         </Text>
         <Stack>
@@ -102,7 +102,7 @@ const OpeningHoursSummary = ({
 
       {adjustedDays && adjustedDays.length > 0 && (
         <Stack>
-          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          <Text color={colors.primary} fontWeight="bold">
             {t('create.calendar.fixed_days.overview.deviating_except')}
           </Text>
           <Stack spacing={4}>
@@ -117,7 +117,7 @@ const OpeningHoursSummary = ({
                     ? ` (${adjustedDay.description[lang]})`
                     : ''}
                 </Text>
-                <Text color={colors.udbMainDarkBlue}>
+                <Text color={colors.primary}>
                   {t(
                     'create.calendar.fixed_days.overview.deviating_then_weekly',
                   )}
@@ -133,7 +133,7 @@ const OpeningHoursSummary = ({
 
       {closedDays && closedDays.length > 0 && (
         <Stack spacing={1}>
-          <Text color={colors.udbMainDarkBlue} fontWeight="bold">
+          <Text color={colors.primary} fontWeight="bold">
             {t('create.calendar.fixed_days.overview.closed')}
           </Text>
           {closedDays.map((closedDay) => (
