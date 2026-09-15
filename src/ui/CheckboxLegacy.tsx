@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 
 import { Box, BoxProps, getBoxProps } from './Box';
+import { colors } from './theme';
 
 type CheckboxProps = BoxProps & {
   id: string;
@@ -33,7 +34,7 @@ const CheckboxLegacy = ({
     data-testid={props['data-testid']}
     {...getBoxProps(props)}
     css={`
-      accent-color: var(--success);
+      accent-color: ${colors.udbMainPositiveGreen};
     `}
   />
 );
