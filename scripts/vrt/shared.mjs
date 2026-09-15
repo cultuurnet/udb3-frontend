@@ -2,9 +2,12 @@ import { execSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 
-import 'dotenv/config';
-
-import { MOCK_PORT, MOCK_UPSTREAMS } from './mock-upstreams.mjs';
+import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
+import {
+  assertFixturesAreReachable,
+  MOCK_PORT,
+  MOCK_UPSTREAMS,
+} from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
 
 export const BASE_URL = 'http://localhost:3000';
@@ -13,20 +16,6 @@ const READY_TIMEOUT_MS = 180_000;
 const POLL_INTERVAL_MS = 1_000;
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const AUTH_EXPIRY_BUFFER_SECONDS = 60;
-
-const FEATURE_FLAGS = {
-  // BOA cleanup: drop this entry once no FeatureFlags.BOA gates are left in src/.
-  boa: true,
-  shadcn_migration: false,
-};
-
-const buildFeatureFlagEnv = () =>
-  Object.fromEntries(
-    Object.entries(FEATURE_FLAGS).map(([flag, enabled]) => [
-      `NEXT_PUBLIC_FF_${flag.toUpperCase()}`,
-      String(enabled),
-    ]),
-  );
 
 const PRIVATE_IPV4_RANGES = [
   /^10\./,
@@ -107,20 +96,44 @@ const hasValidStoredSession = () => {
   }
 };
 
-const configuredUpstreams = () =>
-  MOCK_UPSTREAMS.map(({ envVar, fixtures }) => {
-    const realUrl = process.env[envVar];
+const toMockPathPrefix = (envVar) =>
+  `/__vrt/${envVar
+    .replace(/^NEXT_PUBLIC_/, '')
+    .replace(/_URL$/, '')
+    .toLowerCase()
+    .replace(/_/g, '-')}`;
+
+const configuredUpstreams = () => {
+  assertFixturesAreReachable();
+
+  const upstreams = MOCK_UPSTREAMS.map(({ envVar, pinnedUrl, fixtures }) => {
+    const realUrl = pinnedUrl ?? process.env[envVar];
     if (!realUrl) {
       throw new Error(
-        `\n${envVar} is not set — its API calls would hit the real backend and make baselines unreliable.\n`,
+        `\nNo URL for ${envVar} — set it in the environment, or give its upstream a pinnedUrl. Otherwise the app boots without it and renders pages that fail to load their data.\n`,
       );
     }
 
-    const { origin, pathname } = new URL(realUrl);
-    const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${realUrl.slice(origin.length)}`;
+    const { origin: realOrigin } = new URL(realUrl);
+    const mockPathPrefix = toMockPathPrefix(envVar);
+    const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${mockPathPrefix}${realUrl.slice(realOrigin.length)}`;
 
-    return { envVar, realUrl, mockUrl, pathPrefix: pathname, fixtures };
+    return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
   });
+
+  const prefixes = new Map();
+  for (const { envVar, mockPathPrefix } of upstreams) {
+    const claimedBy = prefixes.get(mockPathPrefix);
+    if (claimedBy) {
+      throw new Error(
+        `\n${envVar} and ${claimedBy} both derive the mock path prefix ${mockPathPrefix} — the fixtures of whichever comes second could never be reached.\n`,
+      );
+    }
+    prefixes.set(mockPathPrefix, envVar);
+  }
+
+  return upstreams;
+};
 
 const buildMockEnv = (upstreams) =>
   Object.fromEntries(upstreams.map(({ envVar, mockUrl }) => [envVar, mockUrl]));
@@ -186,7 +199,8 @@ export const cleanup = () => {
       }
     } else {
       console.log(
-        '\nMock server: all requests were served from fixtures, no real data was used.\n',
+        '\nMock server: every request routed through it was served from a fixture.\n' +
+          'Endpoints outside MOCK_UPSTREAMS bypass it and are not counted.\n',
       );
     }
     mockServer.closeAllConnections();
@@ -207,6 +221,8 @@ export const ensureAppAndMockServer = async ({
   allowServerReuse,
 } = {}) => {
   isRecordingMissingFixtures = !!onUnmockedResponse;
+
+  assertRequiredEnv();
 
   const serverAlreadyRunning = await isServerUp();
 
@@ -242,8 +258,9 @@ export const ensureAppAndMockServer = async ({
     detached: true,
     env: {
       ...process.env,
-      ...buildMockEnv(upstreams),
+      ...PINNED_ENV,
       ...buildFeatureFlagEnv(),
+      ...buildMockEnv(upstreams),
     },
   });
 
