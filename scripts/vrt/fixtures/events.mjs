@@ -210,7 +210,7 @@ const vrtMockEvent = {
   audience: { audienceType: 'everyone' },
   typicalAgeRange: '12-15',
   childrenOnly: false,
-  labels: ['vrt-mock-label-evenement'],
+  labels: ['vrt-mock-label-evenement', 'vrt-mock-moderatie'],
   hiddenLabels: [],
   languages: ['nl', 'fr'],
   completedLanguages: ['nl'],
@@ -330,12 +330,12 @@ const idOf = (event) => event['@id'].split('/').at(-1);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// The app compares against formatPermission(X), so a raw constant here reads
-// as no permission and sends the edit route to /unauthorized.
+// Display-formatted or the edit route redirects to /unauthorized; the set is
+// what global.mjs's role constraints grant on this event.
 const OFFER_PERMISSION_LABELS = {
   AANBOD_BEWERKEN: 'Aanbod bewerken',
   AANBOD_MODEREREN: 'Aanbod modereren',
-  AANBOD_VERWIJDEREN: 'Aanbod verwijderen',
+  AANBOD_HISTORIEK: 'Aanbod historiek',
 };
 
 const eventPermissionsFixture = {
