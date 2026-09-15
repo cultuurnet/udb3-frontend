@@ -1,11 +1,10 @@
 import { execSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 
 import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
+import { MOCK_ORIGIN, MOCK_PORT, toMockPathPrefix } from './hosts.mjs';
 import {
   assertFixturesAreReachable,
-  MOCK_PORT,
   MOCK_UPSTREAMS,
 } from './mock-upstreams.mjs';
 import { startMockServer } from './mock-server.mjs';
@@ -16,39 +15,6 @@ const READY_TIMEOUT_MS = 180_000;
 const POLL_INTERVAL_MS = 1_000;
 const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const AUTH_EXPIRY_BUFFER_SECONDS = 60;
-
-const PRIVATE_IPV4_RANGES = [
-  /^10\./,
-  /^192\.168\./,
-  /^172\.(1[6-9]|2\d|3[01])\./,
-];
-
-const getHostIp = () => {
-  for (const entries of Object.values(os.networkInterfaces())) {
-    for (const entry of entries ?? []) {
-      if (
-        entry.family === 'IPv4' &&
-        !entry.internal &&
-        PRIVATE_IPV4_RANGES.some((range) => range.test(entry.address))
-      ) {
-        return entry.address;
-      }
-    }
-  }
-  throw new Error(
-    '\nCould not determine a private, non-internal IPv4 address for this host\n',
-  );
-};
-
-export const isLinux = os.platform() === 'linux';
-const HOST_IP = isLinux ? 'localhost' : getHostIp();
-if (!isLinux) {
-  console.log(
-    `Using ${HOST_IP} as the address the mock server and app bind to for the app <-> mock server connection.`,
-  );
-}
-
-export const APP_HOST = isLinux ? 'localhost' : 'host.docker.internal';
 
 const killPortListener = (port) => {
   try {
@@ -96,13 +62,6 @@ const hasValidStoredSession = () => {
   }
 };
 
-const toMockPathPrefix = (envVar) =>
-  `/__vrt/${envVar
-    .replace(/^NEXT_PUBLIC_/, '')
-    .replace(/_URL$/, '')
-    .toLowerCase()
-    .replace(/_/g, '-')}`;
-
 const configuredUpstreams = () => {
   assertFixturesAreReachable();
 
@@ -116,7 +75,7 @@ const configuredUpstreams = () => {
 
     const { origin: realOrigin } = new URL(realUrl);
     const mockPathPrefix = toMockPathPrefix(envVar);
-    const mockUrl = `http://${HOST_IP}:${MOCK_PORT}${mockPathPrefix}${realUrl.slice(realOrigin.length)}`;
+    const mockUrl = `${MOCK_ORIGIN}${mockPathPrefix}${realUrl.slice(realOrigin.length)}`;
 
     return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
   });
@@ -189,11 +148,11 @@ export const cleanup = () => {
       if (!isRecordingMissingFixtures) {
         const lines = [...mockServer.unmockedRequests].map(
           ([requestKey, realUrl]) =>
-            `  - ${requestKey} using real data from ${realUrl}`,
+            `  - ${requestKey} fell through to ${realUrl}`,
         );
         console.warn(
           `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
-            'Run `yarn vrt:pages:fixtures` to capture real responses for these.\n' +
+            'Run `yarn vrt:pages:fixtures` to capture a real response where one exists.\n' +
             'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
         );
       }

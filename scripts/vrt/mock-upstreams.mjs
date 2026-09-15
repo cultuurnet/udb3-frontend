@@ -2,10 +2,13 @@ import {
   globalAnnouncementsFixtures,
   globalApiFixtures,
 } from './fixtures/global.mjs';
+import {
+  IMAGE_ENV_VAR,
+  IMAGE_PINNED_URL,
+  imagesFixtures,
+} from './fixtures/images.mjs';
 import { labelsApiFixtures } from './fixtures/labels.mjs';
 import { termsTaxonomyFixtures } from './fixtures/terms.mjs';
-
-export const MOCK_PORT = 4010;
 
 // Only its own upstream's fixtures can answer a request; within one, first
 // match wins, so narrowed entries go above the catch-all they share a path
@@ -29,6 +32,11 @@ export const MOCK_UPSTREAMS = [
   {
     envVar: 'NEXT_PUBLIC_TAXONOMY_URL',
     fixtures: termsTaxonomyFixtures,
+  },
+  {
+    envVar: IMAGE_ENV_VAR,
+    pinnedUrl: IMAGE_PINNED_URL,
+    fixtures: imagesFixtures,
   },
 ];
 

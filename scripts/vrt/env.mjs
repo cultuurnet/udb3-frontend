@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 
+import { APP_HOST, MOCK_ORIGIN } from './hosts.mjs';
+
 dotenv.config({ path: ['.env.local', '.env'] });
 
 const FEATURE_FLAGS = {
@@ -20,6 +22,24 @@ export const PINNED_ENV = {
   NEXT_PUBLIC_OWNERSHIP_ENABLED: 'true',
   NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE: 'null',
 };
+
+const UNMOCKED_HOSTS = [
+  'cdn.jsdelivr.net',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com',
+  'static.hotjar.com',
+];
+
+const UNMOCKED_HOST_ENV_VARS = ['NEXT_PUBLIC_SOCKET_URL'];
+
+export const buildAllowedHosts = () => [
+  APP_HOST,
+  new URL(MOCK_ORIGIN).hostname,
+  ...UNMOCKED_HOSTS,
+  ...UNMOCKED_HOST_ENV_VARS.filter((envVar) => process.env[envVar]).map(
+    (envVar) => new URL(process.env[envVar]).hostname,
+  ),
+];
 
 const REQUIRED_ENV = [
   'NEXT_PUBLIC_API_KEY',

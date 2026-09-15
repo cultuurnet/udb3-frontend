@@ -95,9 +95,13 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
     );
     if (fixture) {
       res.writeHead(fixture.status ?? 200, {
-        'content-type': 'application/json',
+        'content-type': fixture.contentType ?? 'application/json',
       });
-      res.end(JSON.stringify(fixture.response));
+      res.end(
+        typeof fixture.response === 'string'
+          ? fixture.response
+          : JSON.stringify(fixture.response),
+      );
       return;
     }
 
