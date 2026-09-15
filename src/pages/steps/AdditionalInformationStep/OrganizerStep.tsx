@@ -74,14 +74,13 @@ const OrganizerStep = ({
     isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
   });
 
-  useEffect(() => {
-    if (
-      getCardSystemForEventQuery.isSuccess &&
-      getCardSystemForEventQuery.data
-    ) {
-      setSelectedCardSystems(Object.values(getCardSystemForEventQuery.data));
-    }
-  }, [getCardSystemForEventQuery.isSuccess, getCardSystemForEventQuery.data]);
+  const getCardSystemsForOrganizerQuery = useGetCardSystemsForOrganizerQuery({
+    scope,
+    organizerId: organizer?.['@id']
+      ? parseOfferId(organizer['@id'])
+      : undefined,
+    isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
+  });
 
   const uitpasAlertData = useMemo(() => {
     if (!hasUitpasLabel) {
@@ -118,21 +117,43 @@ const OrganizerStep = ({
     hasUitpasTicketSales,
   ]);
 
-  const getCardSystemsForOrganizerQuery = useGetCardSystemsForOrganizerQuery({
-    scope,
-    organizerId: organizer?.['@id']
-      ? parseOfferId(organizer['@id'])
-      : undefined,
-    isUitpasOrganizer: hasUitpasLabel && hasPriceInfo,
-  });
-
-  const cardSystemForEvent = getCardSystemForEventQuery.data ?? {};
-
-  const [selectedCardSystems, setSelectedCardSystems] = useState<CardSystem[]>(
-    [],
+  const eventCardSystems = useMemo(
+    () => Object.values(getCardSystemForEventQuery.data ?? {}) as CardSystem[],
+    [getCardSystemForEventQuery.data],
   );
 
-  const cardSystems = getCardSystemsForOrganizerQuery.data ?? {};
+  const organizerCardSystems = useMemo(
+    () =>
+      Object.values(getCardSystemsForOrganizerQuery.data ?? {}) as CardSystem[],
+    [getCardSystemsForOrganizerQuery.data],
+  );
+
+  // On the UiTPAS REST API the event answers with every card system of its organizer, each one
+  // saying whether it is active for this event, so that call alone holds the options and the
+  // selection. On the legacy API it answers with the active ones only and the organizer call is
+  // the one that holds the options. Merging both lists gives the right options on either, and it
+  // keeps working once the organizer endpoint goes away.
+  const cardSystems = useMemo(() => {
+    const merged = new Map<number, CardSystem>(
+      organizerCardSystems.map((cardSystem) => [cardSystem.id, cardSystem]),
+    );
+
+    eventCardSystems.forEach((cardSystem) =>
+      merged.set(cardSystem.id, cardSystem),
+    );
+
+    return [...merged.values()];
+  }, [organizerCardSystems, eventCardSystems]);
+
+  // A missing flag means active: the legacy API only ever returns the card systems that are
+  // active for the event.
+  const selectedCardSystems = useMemo(
+    () => eventCardSystems.filter(({ enabled }) => enabled ?? true),
+    [eventCardSystems],
+  );
+
+  const isSelected = (cardSystem: CardSystem) =>
+    selectedCardSystems.some(({ id }) => id === cardSystem.id);
 
   const [isOrganizerAddModalVisible, setIsOrganizerAddModalVisible] =
     useState(false);
@@ -185,16 +206,10 @@ const OrganizerStep = ({
     });
 
   const handleAddCardSystemToEvent = (cardSystemId: number) => {
-    setSelectedCardSystems([...selectedCardSystems, cardSystems[cardSystemId]]);
     addCardSystemToEventMutation.mutate({ cardSystemId, eventId: offerId });
   };
 
   const handleDeleteCardSystemFromEvent = (cardSystemId: number) => {
-    setSelectedCardSystems(
-      selectedCardSystems.filter(
-        (cardSystem) => cardSystem.id !== cardSystemId,
-      ),
-    );
     deleteCardSystemFromEventMutation.mutate({
       cardSystemId,
       eventId: offerId,
@@ -277,7 +292,7 @@ const OrganizerStep = ({
     setIsOrganizerAddModalVisible(false);
   };
 
-  const hasUitpasCardSystems = Object.values(cardSystems).length > 0;
+  const hasUitpasCardSystems = cardSystems.length > 0;
 
   const shouldShowCardSystems =
     hasUitpasLabel && hasUitpasCardSystems && hasPriceInfo;
@@ -298,7 +313,8 @@ const OrganizerStep = ({
   };
 
   const hasSelectedDistributionKey = selectedCardSystems.some(
-    (selectedCardSystem) => selectedCardSystem.distributionKeys.length > 0,
+    (selectedCardSystem) =>
+      Object.values(selectedCardSystem.distributionKeys ?? []).length > 0,
   );
 
   return (
@@ -391,15 +407,13 @@ const OrganizerStep = ({
           <Text fontWeight="bold">
             {t('create.additionalInformation.organizer.uitpas_cardsystems')}
           </Text>
-          {Object.values(cardSystems).map((cardSystem: CardSystem) => (
+          {cardSystems.map((cardSystem: CardSystem) => (
             <Inline key={cardSystem.id} spacing={5}>
               <CheckboxWithLabel
                 className="cardsystem-checkbox"
                 id={String(cardSystem.id)}
                 name={cardSystem.name}
-                checked={selectedCardSystems.some(
-                  ({ id }) => cardSystem.id === id,
-                )}
+                checked={isSelected(cardSystem)}
                 disabled={false}
                 onCheckedChange={(checked) =>
                   handleToggleCardSystem(checked, cardSystem.id)
@@ -407,7 +421,7 @@ const OrganizerStep = ({
               >
                 {cardSystem.name}
               </CheckboxWithLabel>
-              {Object.values(cardSystem.distributionKeys).length > 0 && (
+              {Object.values(cardSystem.distributionKeys ?? []).length > 0 && (
                 <Select
                   className="tw:max-w-[20%]"
                   onChange={(e) =>
@@ -422,13 +436,13 @@ const OrganizerStep = ({
                       'create.additionalInformation.organizer.uitpas_select_distribution_key',
                     )}
                   </option>
-                  {Object.values(cardSystem.distributionKeys).map(
+                  {Object.values(cardSystem.distributionKeys ?? []).map(
                     (distributionKey) => (
                       <option
                         selected={selectedCardSystems.some(
                           (selectedCardSystem) =>
                             Object.values(
-                              selectedCardSystem.distributionKeys,
+                              selectedCardSystem.distributionKeys ?? [],
                             ).some(({ id }) => id === distributionKey.id),
                         )}
                         value={distributionKey.id}

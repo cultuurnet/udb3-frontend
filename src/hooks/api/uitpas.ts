@@ -10,6 +10,7 @@ import {
 type CardSystem = {
   id: number;
   name: string;
+  enabled?: boolean;
   distributionKeys?: any[];
 };
 
@@ -40,13 +41,24 @@ const useGetCardSystemForEventQuery = (
   });
 
 const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
-  const res = await fetchFromApi({
-    path: `/uitpas/organizers/${organizerId.toString()}/cardSystems/`,
-    options: {
-      headers,
-    },
-  });
-  return (await res.json()) as CardSystem[];
+  try {
+    const res = await fetchFromApi({
+      path: `/uitpas/organizers/${organizerId.toString()}/cardSystems/`,
+      options: {
+        headers,
+      },
+    });
+    return (await res.json()) as CardSystem[];
+  } catch (error) {
+    // This endpoint goes away with the switch to the UiTPAS REST API, and from then on the event
+    // call carries the full list of card systems on its own. A 404 is that removal, not an error
+    // worth reporting or retrying.
+    if (error?.status === 404) {
+      return [] as CardSystem[];
+    }
+
+    throw error;
+  }
 };
 
 const useGetCardSystemsForOrganizerQuery = (
