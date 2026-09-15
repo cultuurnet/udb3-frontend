@@ -1,3 +1,4 @@
+import { eventsApiFixtures } from './fixtures/events.mjs';
 import {
   globalAnnouncementsFixtures,
   globalApiFixtures,
@@ -23,7 +24,11 @@ import { termsTaxonomyFixtures } from './fixtures/terms.mjs';
 export const MOCK_UPSTREAMS = [
   {
     envVar: 'NEXT_PUBLIC_API_URL',
-    fixtures: [...globalApiFixtures, ...labelsApiFixtures],
+    fixtures: [
+      ...globalApiFixtures,
+      ...labelsApiFixtures,
+      ...eventsApiFixtures,
+    ],
   },
   {
     envVar: 'NEXT_PUBLIC_NEW_ANNOUNCEMENTS_URL',
