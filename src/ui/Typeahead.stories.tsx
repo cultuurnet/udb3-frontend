@@ -33,3 +33,23 @@ export const Default: Story = {
     labelKey: (city: any) => city.name,
   },
 };
+
+export const AllowNew: Story = {
+  args: {
+    id: 'allow-new',
+    options: cities,
+    labelKey: (city: any) => city.name,
+    allowNew: true,
+    newSelectionPrefix: 'Add new: ',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    id: 'loading',
+    options: [],
+    labelKey: (city: any) => city.name,
+    isLoading: true,
+    defaultInputValue: 'Rom',
+  },
+};
