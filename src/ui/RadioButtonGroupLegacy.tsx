@@ -18,6 +18,7 @@ type Props = {
   selected: string;
   disabled?: boolean;
   className?: string;
+  color?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -27,6 +28,7 @@ const RadioButtonGroupLegacy = ({
   selected,
   disabled,
   className,
+  color,
   onChange,
   ...props
 }: Props) => {
@@ -46,6 +48,7 @@ const RadioButtonGroupLegacy = ({
               onChange={onChange}
               label={item.label}
               info={item.info}
+              color={color}
             />
           );
 
