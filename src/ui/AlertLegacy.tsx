@@ -22,7 +22,7 @@ const IconWarning = () => {
         <g clipPath="url(#b)">
           <path
             d="M1 21h22L12 2 1 21Zm12-3h-2v-2h2v2Zm0-4h-2v-4h2v4Z"
-            fill={colors.warningIcon}
+            fill={colors.text}
           />
         </g>
       </g>
