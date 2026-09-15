@@ -98,7 +98,7 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
         'content-type': fixture.contentType ?? 'application/json',
       });
       res.end(
-        typeof fixture.response === 'string'
+        fixture.contentType && typeof fixture.response === 'string'
           ? fixture.response
           : JSON.stringify(fixture.response),
       );
