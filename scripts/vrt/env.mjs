@@ -33,12 +33,22 @@ const UNMOCKED_HOSTS = [
 
 const UNMOCKED_HOST_ENV_VARS = ['NEXT_PUBLIC_SOCKET_URL'];
 
+const toHostname = (envVar) => {
+  const value = process.env[envVar];
+  const hostname = URL.canParse(value) ? new URL(value).hostname : '';
+  if (hostname) return hostname;
+
+  throw new Error(
+    `\n${envVar} is not a full URL (${value}), so the host it points at cannot be allowed for this run. Give it a scheme, or drop it from UNMOCKED_HOST_ENV_VARS.\n`,
+  );
+};
+
 export const buildAllowedHosts = () => [
   APP_HOST,
   new URL(MOCK_ORIGIN).hostname,
   ...UNMOCKED_HOSTS,
   ...UNMOCKED_HOST_ENV_VARS.filter((envVar) => process.env[envVar]).map(
-    (envVar) => new URL(process.env[envVar]).hostname,
+    toHostname,
   ),
 ];
 
