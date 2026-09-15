@@ -13,13 +13,14 @@ const MISSING_FIXTURES_DIR = '.vrt-pages/missing-fixtures';
 const sanitizeForFilename = (value) =>
   value.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
-const buildRecordedFixtureFilename = (method, pathname) =>
-  `${method}__${sanitizeForFilename(pathname)}.mjs`;
+const buildRecordedFixtureFilename = (method, pathname, envVar) =>
+  `${method}__${sanitizeForFilename(envVar)}__${sanitizeForFilename(pathname)}.mjs`;
 
 const writeRecordedFixture = ({
   method,
   pathname,
   searchParams,
+  envVar,
   realUrl,
   body,
 }) => {
@@ -27,7 +28,7 @@ const writeRecordedFixture = ({
   const query = searchParams.toString();
   const filePath = path.join(
     MISSING_FIXTURES_DIR,
-    buildRecordedFixtureFilename(method, pathname),
+    buildRecordedFixtureFilename(method, pathname, envVar),
   );
 
   let formattedBody;
@@ -40,11 +41,12 @@ const writeRecordedFixture = ({
   fs.writeFileSync(
     filePath,
     `// Recorded from ${realUrl} on ${new Date().toISOString()}
+// Upstream: ${envVar}
 // Method: ${method}  Path: ${pathname}${query ? `  Query: ${query}` : ''}
 //
 // Review and redact this before using it — copy the object into
-// scripts/vrt/fixtures/<domain>.mjs under a real name, then wire it into
-// MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs:
+// scripts/vrt/fixtures/<domain>.mjs under a real name, then add an entry to
+// that module's exported fixture list for the upstream above:
 //   { method: '${method}', path: '${pathname}', response: <name> }
 
 export const recordedFixture = ${formattedBody};
@@ -59,15 +61,23 @@ const onUnmockedResponse = ({
   method,
   pathname,
   searchParams,
+  envVar,
   realUrl,
   body,
 }) => {
-  const recordKey = `${method} ${pathname}`;
+  const recordKey = `${method} ${pathname} (${envVar})`;
   if (recordedFixtures.has(recordKey)) return;
   try {
     recordedFixtures.set(
       recordKey,
-      writeRecordedFixture({ method, pathname, searchParams, realUrl, body }),
+      writeRecordedFixture({
+        method,
+        pathname,
+        searchParams,
+        envVar,
+        realUrl,
+        body,
+      }),
     );
   } catch (error) {
     console.warn(
@@ -122,7 +132,7 @@ const main = async () => {
       console.log(
         `\nMock server: recorded real responses for:\n${lines.join('\n')}\n\n` +
           'Review and redact each one, copy it into scripts/vrt/fixtures/<domain>.mjs,\n' +
-          'then wire it into MOCK_UPSTREAMS in scripts/vrt/mock-upstreams.mjs.\n',
+          "then add an entry to that module's exported fixture list.\n",
       );
     }
   } finally {
