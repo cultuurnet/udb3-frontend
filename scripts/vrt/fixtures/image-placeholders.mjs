@@ -24,8 +24,6 @@ const svgPlaceholder = ({ width, height, background, shape }) =>
     '</svg>',
   ].join('');
 
-// The resize query consumers append is ignored by the mock server, so these
-// intrinsic sizes are what renders wherever the consumer sets none.
 const VRT_MOCK_IMAGES = {
   landscape: { width: 480, height: 270, background: '#1f6feb', shape: circle },
   square: { width: 360, height: 360, background: '#d97706', shape: square },
@@ -36,7 +34,12 @@ const VRT_MOCK_IMAGES = {
 export const vrtMockImages = Object.fromEntries(
   Object.entries(VRT_MOCK_IMAGES).map(([name, image]) => [
     name,
-    { filename: `vrt-mock-image-${name}.jpg`, svg: svgPlaceholder(image) },
+    {
+      filename: `vrt-mock-image-${name}.jpg`,
+      intrinsic: { width: image.width, height: image.height },
+      svg: svgPlaceholder(image),
+      svgAt: ({ width, height }) => svgPlaceholder({ ...image, width, height }),
+    },
   ]),
 );
 

@@ -14,11 +14,31 @@ export const vrtMockImageUrls = Object.fromEntries(
   ]),
 );
 
+const scaled = ({ width, height }, scale) => ({
+  width: Math.round(width * scale),
+  height: Math.round(height * scale),
+});
+
+const resolveSize = (intrinsic, params) => {
+  const width = Number(params.get('width') ?? params.get('w')) || 0;
+  const height = Number(params.get('height') ?? params.get('h')) || 0;
+
+  if (!width && !height) return intrinsic;
+  if (!height) return scaled(intrinsic, width / intrinsic.width);
+  if (!width) return scaled(intrinsic, height / intrinsic.height);
+  if (params.get('fit') === 'crop') return { width, height };
+
+  return scaled(
+    intrinsic,
+    Math.min(width / intrinsic.width, height / intrinsic.height),
+  );
+};
+
 export const imagesFixtures = Object.values(vrtMockImages).map(
-  ({ filename, svg }) => ({
+  ({ filename, intrinsic, svgAt }) => ({
     method: 'GET',
     path: `/${filename}`,
     contentType: 'image/svg+xml',
-    response: svg,
+    response: (params) => svgAt(resolveSize(intrinsic, params)),
   }),
 );
