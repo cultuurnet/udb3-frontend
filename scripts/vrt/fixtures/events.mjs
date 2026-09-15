@@ -81,10 +81,12 @@ const clockTime = summaryFormat({
   hourCycle: 'h23',
 });
 
-const summarizeSubEvent = ({ startDate, endDate }) =>
-  `${weekdayAndDate.format(new Date(startDate))} van ${clockTime.format(
-    new Date(startDate),
-  )} tot ${clockTime.format(new Date(endDate))}`;
+const summarizeSubEvent =
+  (dateFormat) =>
+  ({ startDate, endDate }) =>
+    `${dateFormat.format(new Date(startDate))} van ${clockTime.format(
+      new Date(startDate),
+    )} tot ${clockTime.format(new Date(endDate))}`;
 
 const calendarSummaryTextFor = (subEvents) => {
   const start = new Date(subEvents[0].startDate);
@@ -92,7 +94,8 @@ const calendarSummaryTextFor = (subEvents) => {
   const isSingleDay = subEvents.length === 1;
 
   return {
-    lg: subEvents.map(summarizeSubEvent).join('\n'),
+    lg: subEvents.map(summarizeSubEvent(weekdayAndDate)).join('\n'),
+    md: subEvents.map(summarizeSubEvent(dayAndMonth)).join('\n'),
     sm: isSingleDay
       ? dayAndMonth.format(start)
       : `van ${dayAndMonth.format(start)} tot ${dayAndMonth.format(end)}`,
@@ -351,11 +354,14 @@ const eventByIdFixtures = eventListMembers.map((member) => ({
   response: withoutCalendarSummary(member),
 }));
 
+const calendarSummaryResponse = (text) => (params) =>
+  text[params.get('format')] ?? text.lg;
+
 const eventCalendarSummaryFixtures = eventListMembers.map((member) => ({
   method: 'GET',
   path: `/events/${idOf(member)}/calsum`,
   contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-  response: member.calendarSummary.nl.text.lg,
+  response: calendarSummaryResponse(member.calendarSummary.nl.text),
 }));
 
 export const eventsApiFixtures = [
@@ -369,7 +375,7 @@ export const eventsApiFixtures = [
     method: 'GET',
     path: ANY_EVENT_CALENDAR_SUMMARY_PATH,
     contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-    response: eventCalendarSummaryText.lg,
+    response: calendarSummaryResponse(eventCalendarSummaryText),
   },
   {
     method: 'GET',
