@@ -22,6 +22,7 @@ import { useUitpasLabels } from '@/hooks/useUitpasLabels';
 import { Event } from '@/types/Event';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Inline } from '@/ui/Inline';
 import { Link } from '@/ui/Link';
@@ -404,6 +405,7 @@ const OrganizerStep = ({
                 onCheckedChange={(checked) =>
                   handleToggleCardSystem(checked, cardSystem.id)
                 }
+                variant={CheckboxVariants.SUCCESS}
               >
                 {cardSystem.name}
               </CheckboxWithLabel>

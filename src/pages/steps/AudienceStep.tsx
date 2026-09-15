@@ -11,7 +11,7 @@ import {
 } from '@/hooks/api/events';
 import { ValidationStatus } from '@/pages/steps/AdditionalInformationStep/AdditionalInformationStep';
 import { Event } from '@/types/Event';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonGroup, RadioButtonVariants } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 
@@ -77,6 +77,7 @@ const AudienceStep = ({
         <RadioButtonGroup
           name="audienceType"
           selected={watchedAudienceType}
+          variant={RadioButtonVariants.SUCCESS}
           onValueChange={(value) =>
             handleOnChangeAudience(value as AudienceType)
           }

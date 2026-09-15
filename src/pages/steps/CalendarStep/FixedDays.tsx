@@ -12,7 +12,7 @@ import { ButtonVariants } from '@/ui/Button';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { LabelVariants } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonGroup, RadioButtonVariants } from '@/ui/RadioButtonGroup';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
@@ -116,6 +116,7 @@ export const FixedDays = ({
       <RadioButtonGroup
         name="fixed-days-options"
         selected={selectedOption}
+        variant={RadioButtonVariants.SUCCESS}
         onValueChange={handleChangeOption}
         items={[
           {
