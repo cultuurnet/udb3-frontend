@@ -31,5 +31,5 @@ export const trackUnexpectedHosts = (page: Page) => {
 export const expectNoUnexpectedHosts = (unexpectedHosts: Set<string>) =>
   expect(
     [...unexpectedHosts],
-    'This run reached hosts it does not expect, so their responses are invisible to the mock server. Give each one a MOCK_UPSTREAMS entry, or add it to buildAllowedHosts() in scripts/vrt/env.mjs',
+    'Unexpected hosts were reached, so any baseline this run wrote is not trustworthy. Give each a MOCK_UPSTREAMS entry, or add it to buildAllowedHosts() in scripts/vrt/env.mjs',
   ).toEqual([]);
