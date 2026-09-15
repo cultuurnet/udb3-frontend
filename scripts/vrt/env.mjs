@@ -23,11 +23,12 @@ export const PINNED_ENV = {
   NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE: 'null',
 };
 
+// Allowed because the app reaches them today, not because they belong here.
 const UNMOCKED_HOSTS = [
-  'cdn.jsdelivr.net',
-  'fonts.googleapis.com',
-  'fonts.gstatic.com',
-  'static.hotjar.com',
+  'cdn.jsdelivr.net', // Bootstrap CSS, moves pixels
+  'fonts.googleapis.com', // unused, GlobalStyle forces a system font stack
+  'fonts.gstatic.com', // the font files that stylesheet pulls
+  'static.hotjar.com', // analytics, site id hardcoded in the app
 ];
 
 const UNMOCKED_HOST_ENV_VARS = ['NEXT_PUBLIC_SOCKET_URL'];
