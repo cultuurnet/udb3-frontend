@@ -1,4 +1,4 @@
-export const termsFixture = {
+const termsFixture = {
   terms: [
     {
       id: 'vrt-mock-term-1',
@@ -46,3 +46,11 @@ export const termsFixture = {
     },
   ],
 };
+
+export const termsTaxonomyFixtures = [
+  {
+    method: 'GET',
+    path: /^\/+terms$/,
+    response: termsFixture,
+  },
+];
