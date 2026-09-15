@@ -22,7 +22,7 @@ type ScreenshotPage = {
 
 // Declares one test per page: navigate, optionally interact, then screenshot (defaults to `main`).
 export const screenshotPages = (pages: ScreenshotPage[]) => {
-  let unexpectedHosts: Set<string>;
+  let unexpectedHosts = new Set<string>();
 
   test.beforeEach(async ({ page }) => {
     await pinClockToVrtNow(page);
