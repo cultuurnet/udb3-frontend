@@ -131,6 +131,11 @@ const suggestedOrganizersFixture = pagedCollection([suggestedOrganizer]);
 // any other input would fall through to the real backend unnoticed.
 const organizerSearchFixture = pagedCollection(allOrganizers);
 
+// Both create flows read member[0] of a website search as "this url is already
+// taken" and put the form in an error state. Empty keeps the url free; a taken
+// one belongs on a fixed url, the way labels.mjs narrows its no-results query.
+const organizerWebsiteFixture = pagedCollection([]);
+
 // Display-formatted, like the offer permissions in events.mjs, and derived per
 // id because global.mjs's role constraints name the organizer.
 const ORGANISATIES_BEWERKEN = 'Organisaties bewerken';
@@ -212,13 +217,19 @@ export const organizersApiFixtures = [
   {
     method: 'GET',
     path: '/organizers',
+    query: (params) => params.has('website'),
+    response: organizerWebsiteFixture,
+  },
+  {
+    method: 'GET',
+    path: '/organizers',
     response: organizerSearchFixture,
   },
   ...organizerPermissionsFixtures,
   {
     method: 'GET',
     path: ANY_ORGANIZER_PERMISSIONS_PATH,
-    response: permissionsFor(SUGGESTED_ORGANIZER_ID),
+    response: { permissions: [] },
   },
   {
     method: 'GET',
