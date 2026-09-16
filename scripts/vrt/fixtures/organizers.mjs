@@ -13,6 +13,10 @@ const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
 const organizerUri = (id) => `${MOCK_API_ORIGIN}/organizers/${id}`;
 
+// Derived per id, never shared: a repeated url is what both create flows flag
+// as a duplicate, so two organizers carrying one is data the API cannot return.
+const siteOf = (id) => `https://${id}.example.com`;
+
 const organizerImages = [
   {
     '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-3`,
@@ -50,7 +54,7 @@ const vrtMockOrganizer = {
   description: {
     nl: 'VRT mock beschrijving van de organisatie, lang genoeg om over meer dan één regel te lopen.',
   },
-  url: 'https://vrt-mock-organisatie.example.com',
+  url: siteOf(OWNED_ORGANIZER_IDS[0]),
   address: {
     nl: {
       addressCountry: 'BE',
@@ -62,7 +66,7 @@ const vrtMockOrganizer = {
   contactPoint: {
     phone: ['+32 2 000 00 04'],
     email: ['vrt-mock-organisatie@example.com'],
-    url: ['https://vrt-mock-organisatie.example.com/contact'],
+    url: [`${siteOf(OWNED_ORGANIZER_IDS[0])}/contact`],
   },
   labels: ['vrt-mock-label-organisatie'],
   hiddenLabels: [],
@@ -78,6 +82,11 @@ const organizerVariant = ({ id, nameNl, ...overrides }) => ({
   ...vrtMockOrganizer,
   '@id': organizerUri(id),
   name: { nl: nameNl },
+  url: siteOf(id),
+  contactPoint: {
+    ...vrtMockOrganizer.contactPoint,
+    url: [`${siteOf(id)}/contact`],
+  },
   ...overrides,
 });
 
@@ -144,44 +153,65 @@ const permissionsFor = (id) => ({
   permissions: OWNED_ORGANIZER_IDS.includes(id) ? [ORGANISATIES_BEWERKEN] : [],
 });
 
-const organizerCreatorFixture = {
-  userId: 'vrt-mock-user-1',
-  email: 'vrt-mock@example.com',
-};
-
-const approvedOwnership = (itemId) => ({
-  id: `vrt-mock-ownership-${itemId}-eigenaar`,
-  itemId,
-  itemType: 'organizer',
+// The pinned account, so the creator row reads as the signed-in user's own.
+const SIGNED_IN_PARTY = {
   ownerId: 'vrt-mock-user-1',
   ownerEmail: 'vrt-mock@example.com',
-  requesterId: 'vrt-mock-user-1',
+};
+const CO_OWNER_PARTY = {
+  ownerId: 'vrt-mock-user-2',
+  ownerEmail: 'vrt-mock-mede-beheerder@example.com',
+};
+const APPLICANT_PARTY = {
+  ownerId: 'vrt-mock-user-3',
+  ownerEmail: 'vrt-mock-aanvrager@example.com',
+};
+
+const organizerCreatorFixture = {
+  userId: SIGNED_IN_PARTY.ownerId,
+  email: SIGNED_IN_PARTY.ownerEmail,
+};
+
+const approvedOwnership = (itemId, { ownerId, ownerEmail }) => ({
+  id: `vrt-mock-ownership-${itemId}-${ownerId}`,
+  itemId,
+  itemType: 'organizer',
+  ownerId,
+  ownerEmail,
+  requesterId: ownerId,
   state: 'approved',
   created: vrtDaysFromNow(-60).toISOString(),
   approvedDate: vrtDaysFromNow(-59).toISOString(),
-  approvedByEmail: 'vrt-mock-beheerder@example.com',
+  approvedByEmail: SIGNED_IN_PARTY.ownerEmail,
 });
 
-const requestedOwnership = (itemId) => ({
-  id: `vrt-mock-ownership-${itemId}-aanvraag`,
+const requestedOwnership = (itemId, { ownerId, ownerEmail }) => ({
+  id: `vrt-mock-ownership-${itemId}-${ownerId}`,
   itemId,
   itemType: 'organizer',
-  ownerId: 'vrt-mock-user-3',
-  ownerEmail: 'vrt-mock-aanvrager@example.com',
-  requesterId: 'vrt-mock-user-3',
+  ownerId,
+  ownerEmail,
+  requesterId: ownerId,
   state: 'requested',
   created: vrtDaysFromNow(-3).toISOString(),
 });
 
-// The ownerships page groups on state and renders an approved table and a
-// pending one, so one organizer has to carry both.
+// The page groups on state and renders an approved table and a pending one, so
+// one organizer carries both. The approved owner is somebody else because the
+// creator row above it comes from /creator and is already the signed-in user.
 const ownershipsForOrganizer = (itemId) =>
-  pagedCollection([approvedOwnership(itemId), requestedOwnership(itemId)]);
+  pagedCollection([
+    approvedOwnership(itemId, CO_OWNER_PARTY),
+    requestedOwnership(itemId, APPLICANT_PARTY),
+  ]);
 
 // The dashboard turns the approved rows into the `OR id:…` half of its list
-// query, so only the organizers it should list belong here.
+// query, so only the organizers it should list belong here — owned by the
+// signed-in user, since the request narrows on their own id.
 const ownedOrganizerOwnershipsFixture = pagedCollection(
-  ownedOrganizers.map((organizer) => approvedOwnership(idOf(organizer))),
+  ownedOrganizers.map((organizer) =>
+    approvedOwnership(idOf(organizer), SIGNED_IN_PARTY),
+  ),
 );
 
 const ANY_ORGANIZER_PATH = /^\/organizers\/[^/]+$/;
