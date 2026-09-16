@@ -12,11 +12,21 @@ const square = (width, height, size) =>
 const triangle = (width, height, size) =>
   `<polygon points="${width / 2},${(height - size) / 2} ${(width + size) / 2},${(height + size) / 2} ${(width - size) / 2},${(height + size) / 2}" fill="${INK}" />`;
 
+// The frame is always drawn at the image's own size; `output` is how big the
+// result is and `view` is the part of that drawing it shows, so a crop clips
+// the frame and a resize scales it, strokes included.
 // No <text>: it would resolve a font from the container and make the bytes
 // depend on what is installed there.
-const svgPlaceholder = ({ width, height, background, shape }) =>
+const svgPlaceholder = ({
+  width,
+  height,
+  background,
+  shape,
+  output = { width, height },
+  view = { x: 0, y: 0, width, height },
+}) =>
   [
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${output.width}" height="${output.height}" viewBox="${view.x} ${view.y} ${view.width} ${view.height}">`,
     `<rect width="${width}" height="${height}" fill="${background}" />`,
     `<path d="M0 0 L${width} ${height} M${width} 0 L0 ${height}" stroke="${INK}" stroke-width="${STROKE_WIDTH}" />`,
     `<rect x="${BORDER_INSET}" y="${BORDER_INSET}" width="${width - BORDER_INSET * 2}" height="${height - BORDER_INSET * 2}" fill="none" stroke="${INK}" stroke-width="${STROKE_WIDTH}" />`,
@@ -38,7 +48,7 @@ export const vrtMockImages = Object.fromEntries(
       filename: `vrt-mock-image-${name}.jpg`,
       intrinsic: { width: image.width, height: image.height },
       svg: svgPlaceholder(image),
-      svgAt: ({ width, height }) => svgPlaceholder({ ...image, width, height }),
+      svgAt: (rendering) => svgPlaceholder({ ...image, ...rendering }),
     },
   ]),
 );
