@@ -1,12 +1,10 @@
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
+import { idOf, MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
+import { vrtMockOrganizers } from './organizers.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
 const LOCATION_ID = 'vrt-mock-place-1';
-const ORGANIZER_ID = 'vrt-mock-organizer-1';
-
-// Never resolves (RFC 2606); an @id is only ever split for its last segment.
-const MOCK_API_ORIGIN = 'https://vrt-mock-api.invalid';
 
 // Real, unlike every other id here: the dashboard runs the type through
 // t('eventTypes*<id>') and the picker groups themes by id. Labels stay mock.
@@ -135,23 +133,6 @@ const eventLocationFixture = {
   workflowStatus: 'APPROVED',
 };
 
-const eventOrganizerFixture = {
-  '@id': `${MOCK_API_ORIGIN}/organizers/${ORGANIZER_ID}`,
-  '@context': '/contexts/organizer',
-  mainLanguage: 'nl',
-  name: { nl: 'VRT mock organisatie' },
-  address: {
-    nl: {
-      addressCountry: 'BE',
-      addressLocality: 'VRT mock gemeente',
-      postalCode: '1000',
-      streetAddress: 'VRT mock straat 2',
-    },
-  },
-  labels: [],
-  hiddenLabels: [],
-};
-
 const eventMediaObjects = [
   {
     '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-1`,
@@ -210,7 +191,7 @@ const vrtMockEvent = {
   subEvent: eventSubEvents,
   openingHours: [],
   location: eventLocationFixture,
-  organizer: eventOrganizerFixture,
+  organizer: vrtMockOrganizers.owned,
   attendanceMode: 'offline',
   audience: { audienceType: 'everyone' },
   typicalAgeRange: '12-15',
@@ -302,6 +283,10 @@ const eventListMembers = [
     nameNl: 'VRT mock evenement — afgelopen zonder afbeelding',
     subEvents: availableSubEventsOn([-40, -38]),
     availableFrom: vrtDaysFromNow(-60).toISOString(),
+    // The one offer pointing at an organizer the user does not own, which is
+    // what gives the dashboard a suggestion to make. Its own permissions still
+    // come from the moderation label, not from this organizer.
+    organizer: vrtMockOrganizers.suggested,
     ...NO_IMAGE,
   }),
   eventListMember({
@@ -333,15 +318,7 @@ const eventListMembers = [
   }),
 ];
 
-const eventsByCreatorFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 14,
-  totalItems: eventListMembers.length,
-  member: eventListMembers,
-};
-
-const idOf = (event) => event['@id'].split('/').at(-1);
+const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
@@ -383,6 +360,14 @@ export const eventsApiFixtures = [
   {
     method: 'GET',
     path: '/events/',
+    response: eventsByCreatorFixture,
+  },
+  // The combined offers search, asked only for the organizers embedded on the
+  // results — by the dashboard's suggestions block and by the picker's
+  // recently-used cards. Same members, since this account creates events.
+  {
+    method: 'GET',
+    path: '/offers/',
     response: eventsByCreatorFixture,
   },
   ...eventCalendarSummaryFixtures,
