@@ -230,6 +230,14 @@ const ownedOrganizerOwnershipsFixture = pagedCollection(
 const ANY_ORGANIZER_PATH = /^\/organizers\/[^/]+$/;
 const ANY_ORGANIZER_PERMISSIONS_PATH = /^\/organizers\/[^/]+\/permissions$/;
 const ANY_ORGANIZER_CREATOR_PATH = /^\/organizers\/[^/]+\/creator$/;
+const ANY_ORGANIZER_VERENIGINGSLOKET_PATH =
+  /^\/organizers\/[^/]+\/verenigingsloket$/;
+
+const organizerNotInVerenigingsloketFixture = {
+  type: 'https://api.publiq.be/probs/url/not-found',
+  title: 'Organizer not found in verenigingsloket.',
+  status: 404,
+};
 
 const organizerPermissionsFixtures = allOrganizers.map((organizer) => ({
   method: 'GET',
@@ -278,6 +286,12 @@ export const organizersApiFixtures = [
     method: 'GET',
     path: ANY_ORGANIZER_CREATOR_PATH,
     response: organizerCreatorFixture,
+  },
+  {
+    method: 'GET',
+    path: ANY_ORGANIZER_VERENIGINGSLOKET_PATH,
+    status: 404,
+    response: organizerNotInVerenigingsloketFixture,
   },
   ...organizerByIdFixtures,
   {
