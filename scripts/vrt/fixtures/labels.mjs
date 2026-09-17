@@ -1,5 +1,5 @@
 const labelsOverviewPageFixture = {
-  '@context': '/contexts/PagedCollection',
+  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
   totalItems: 5,
@@ -45,7 +45,7 @@ const labelsOverviewPageFixture = {
 const labelsEditPageFixture = labelsOverviewPageFixture.member[0];
 
 const labelsSearchResultsFixture = {
-  '@context': '/contexts/PagedCollection',
+  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
   totalItems: 1,
@@ -53,7 +53,7 @@ const labelsSearchResultsFixture = {
 };
 
 const labelsSuggestionsFixture = {
-  '@context': '/contexts/PagedCollection',
+  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
   itemsPerPage: 6,
   totalItems: 3,
@@ -88,7 +88,7 @@ const uitpasLabelsFixture = {
 };
 
 const labelsNoResultsFixture = {
-  '@context': '/contexts/PagedCollection',
+  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
   totalItems: 0,
