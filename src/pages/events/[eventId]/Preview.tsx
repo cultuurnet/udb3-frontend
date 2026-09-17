@@ -10,10 +10,10 @@ import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import {
   useDeleteEventByIdMutation,
-  useGetCalendarSummaryQuery,
   useGetOfferPermissionsQuery,
 } from '@/hooks/api/events';
 import {
+  useGetCalendarSummaryQuery,
   useGetOfferByIdQuery,
   useGetOfferHistoryQuery,
 } from '@/hooks/api/offers';
@@ -40,7 +40,6 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
-import { OpeningHoursSummary } from '@/pages/steps/CalendarStep/OpeningHoursContent';
 import { BookingAvailability, isCultuurkuur, isEvent } from '@/types/Event';
 import { hasOnlineLocation, Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
@@ -92,8 +91,9 @@ const Preview = () => {
 
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id: eventId as string,
+    scope: OfferTypes.EVENTS,
     locale: i18n.language,
-    format: isBoaEnabled ? 'md' : 'lg',
+    format: isBoaEnabled ? 'xl' : 'lg',
   });
 
   const calendarSummary = getCalendarSummaryQuery.data;
@@ -404,14 +404,6 @@ const Preview = () => {
             {calendarSummary}
           </Text>
 
-          {isBoaEnabled && offer.openingHours?.length > 0 && (
-            <OpeningHoursSummary
-              openingHours={offer.openingHours}
-              adjustedDays={offer.openingHoursAdjustedDays}
-              closedDays={offer.openingHoursClosedDays}
-              lang={i18n.language as SupportedLanguage}
-            />
-          )}
           {isLessonSeries && (
             <Alert fullWidth className="tw:mt-8 tw:mb-4">
               <Text>{t('preview.info_lesson_series')}</Text>
