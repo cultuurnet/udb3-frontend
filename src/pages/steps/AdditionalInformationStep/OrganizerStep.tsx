@@ -117,39 +117,33 @@ const OrganizerStep = ({
     hasUitpasTicketSales,
   ]);
 
-  const eventCardSystems = useMemo(
-    () => Object.values(getCardSystemForEventQuery.data ?? {}) as CardSystem[],
-    [getCardSystemForEventQuery.data],
-  );
+  const eventCardSystems = Object.values(
+    getCardSystemForEventQuery.data ?? {},
+  ) as CardSystem[];
 
-  const organizerCardSystems = useMemo(
-    () =>
-      Object.values(getCardSystemsForOrganizerQuery.data ?? {}) as CardSystem[],
-    [getCardSystemsForOrganizerQuery.data],
-  );
+  const organizerCardSystems = Object.values(
+    getCardSystemsForOrganizerQuery.data ?? {},
+  ) as CardSystem[];
 
   // On the UiTPAS REST API the event answers with every card system of its organizer, each one
   // saying whether it is active for this event, so that call alone holds the options and the
   // selection. On the legacy API it answers with the active ones only and the organizer call is
   // the one that holds the options. Merging both lists gives the right options on either, and it
   // keeps working once the organizer endpoint goes away.
-  const cardSystems = useMemo(() => {
-    const merged = new Map<number, CardSystem>(
-      organizerCardSystems.map((cardSystem) => [cardSystem.id, cardSystem]),
-    );
+  const mergedCardSystems = new Map<number, CardSystem>(
+    organizerCardSystems.map((cardSystem) => [cardSystem.id, cardSystem]),
+  );
 
-    eventCardSystems.forEach((cardSystem) =>
-      merged.set(cardSystem.id, cardSystem),
-    );
+  eventCardSystems.forEach((cardSystem) =>
+    mergedCardSystems.set(cardSystem.id, cardSystem),
+  );
 
-    return [...merged.values()];
-  }, [organizerCardSystems, eventCardSystems]);
+  const cardSystems = [...mergedCardSystems.values()];
 
   // A missing flag means active: the legacy API only ever returns the card systems that are
   // active for the event.
-  const selectedCardSystems = useMemo(
-    () => eventCardSystems.filter(({ enabled }) => enabled ?? true),
-    [eventCardSystems],
+  const selectedCardSystems = eventCardSystems.filter(
+    ({ enabled }) => enabled ?? true,
   );
 
   const isSelected = (cardSystem: CardSystem) =>
