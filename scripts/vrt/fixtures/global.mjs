@@ -1,4 +1,4 @@
-export const globalUserPermissionsFixture = [
+const globalUserPermissionsFixture = [
   'AANBOD_BEWERKEN',
   'AANBOD_MODEREREN',
   'AANBOD_VERWIJDEREN',
@@ -12,7 +12,7 @@ export const globalUserPermissionsFixture = [
   'MEDIA_UPLOADEN',
 ];
 
-export const globalUserRolesFixture = [
+const globalUserRolesFixture = [
   {
     uuid: 'vrt-mock-role-1',
     name: 'VRT mock rol — zonder constraint',
@@ -42,7 +42,7 @@ export const globalUserRolesFixture = [
   },
 ];
 
-export const globalEventsToModerateFixture = {
+const globalEventsToModerateFixture = {
   '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
   itemsPerPage: 1,
@@ -50,9 +50,36 @@ export const globalEventsToModerateFixture = {
   member: [],
 };
 
-export const globalAnnouncementsFixture = {
+const globalAnnouncementsFixture = {
   data: [
     { uid: 'vrt-mock-announcement-1', title: 'VRT mock announcement 1' },
     { uid: 'vrt-mock-announcement-2', title: 'VRT mock announcement 2' },
   ],
 };
+
+export const globalApiFixtures = [
+  {
+    method: 'GET',
+    path: '/user/permissions/',
+    response: globalUserPermissionsFixture,
+  },
+  {
+    method: 'GET',
+    path: '/user/roles/',
+    response: globalUserRolesFixture,
+  },
+  {
+    method: 'GET',
+    path: '/events/',
+    query: (params) => params.get('workflowStatus') === 'READY_FOR_VALIDATION',
+    response: globalEventsToModerateFixture,
+  },
+];
+
+export const globalAnnouncementsFixtures = [
+  {
+    method: 'GET',
+    path: '/uitdatabank/articles.json',
+    response: globalAnnouncementsFixture,
+  },
+];
