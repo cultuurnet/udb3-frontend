@@ -6,6 +6,11 @@ import { idOf, MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 // organizer renders the preview without its edit button.
 const OWNED_ORGANIZER_IDS = ['vrt-mock-organizer-1', 'vrt-mock-organizer-2'];
 const SUGGESTED_ORGANIZER_ID = 'vrt-mock-organizer-3';
+const UITPAS_ORGANIZER_ID = 'vrt-mock-organizer-4';
+
+// Matches a value in the /uitpas/labels fixture, which is how an organizer
+// counts as a UiTPAS one.
+const UITPAS_ORGANIZER_LABEL = 'vrt-mock-uitpas-gent';
 
 // Real, unlike every other label here: the picker badges the organizer by
 // looking for this exact string in hiddenLabels.
@@ -120,13 +125,21 @@ const suggestedOrganizer = organizerVariant({
   completeness: 65,
 });
 
-const allOrganizers = [...ownedOrganizers, suggestedOrganizer];
+const uitpasOrganizer = organizerVariant({
+  id: UITPAS_ORGANIZER_ID,
+  nameNl: 'VRT mock organisatie — UiTPAS',
+  creator: 'vrt-mock-user-2',
+  labels: [UITPAS_ORGANIZER_LABEL],
+});
+
+const allOrganizers = [...ownedOrganizers, suggestedOrganizer, uitpasOrganizer];
 
 // The event fixture embeds these, which is what puts them in front of the
 // dashboard suggestions and the picker's recently-used cards.
 export const vrtMockOrganizers = {
   owned: vrtMockOrganizer,
   suggested: suggestedOrganizer,
+  uitpas: uitpasOrganizer,
 };
 
 const organizersByCreatorFixture = pagedCollection(ownedOrganizers, 14);
