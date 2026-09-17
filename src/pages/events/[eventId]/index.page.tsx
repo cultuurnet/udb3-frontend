@@ -32,7 +32,7 @@ export const getServerSideProps = getApplicationServerSideProps(
       id: eventId as string,
       scope: OfferTypes.EVENTS,
       locale: i18n.language,
-      format: CalsumFormats.LG,
+      format: CalsumFormats.XL,
     });
 
     const permissions = await prefetchGetPermissionsQuery({
