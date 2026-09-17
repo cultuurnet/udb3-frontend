@@ -330,7 +330,7 @@
       },
       "age": {
         "title": "Geeignet für",
-        "title_boa": "Geben Sie an, für welche Altersgruppen diese Aktivität geeignet ist",
+        "title_boa": "Geben Sie an, an welche Altersgruppen sich diese Aktivität richtet",
         "input_mode": {
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
@@ -2001,7 +2001,7 @@
       "image": "Abbildungen",
       "video": "Videos",
       "event_id": "ID",
-      "accessibility": "Erreichbarkeit"
+      "accessibility": "Begleiteter Transport"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
     "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",

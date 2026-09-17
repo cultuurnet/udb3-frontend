@@ -25,8 +25,7 @@ const decodeBody = (buffer, contentEncoding) => {
   }
 };
 
-const proxyRequest = (realUrl, req, res, onBody) => {
-  const target = new URL(req.url, realUrl);
+const proxyRequest = (target, req, res, onBody) => {
   const client = target.protocol === 'https:' ? https : http;
   const proxyReq = client.request(
     target,
@@ -61,10 +60,6 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
     );
   }
 
-  const byPrefixLengthDesc = [...upstreams].sort(
-    (a, b) => b.pathPrefix.length - a.pathPrefix.length,
-  );
-
   const unmockedRequests = new Map();
 
   const server = http.createServer((req, res) => {
@@ -80,45 +75,53 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
       return;
     }
 
-    for (const upstream of upstreams) {
-      const fixture = upstream.fixtures.find((candidate) =>
-        matchesFixture(candidate, req.method, pathname, searchParams),
-      );
-      if (fixture) {
-        res.writeHead(fixture.status ?? 200, {
-          'content-type': 'application/json',
-        });
-        res.end(JSON.stringify(fixture.response));
-        return;
-      }
-    }
-
-    const matchedUpstream = byPrefixLengthDesc.find((upstream) =>
-      pathname.startsWith(upstream.pathPrefix),
+    const upstream = upstreams.find(
+      ({ mockPathPrefix }) =>
+        pathname === mockPathPrefix ||
+        pathname.startsWith(`${mockPathPrefix}/`),
     );
-    if (!matchedUpstream) {
+    if (!upstream) {
       res.writeHead(502, { 'content-type': 'text/plain' });
       res.end(
-        `Mock server: no upstream configured for ${pathname} — add it to MOCK_UPSTREAMS.`,
+        `Mock server: ${pathname} was not rewritten from any upstream in MOCK_UPSTREAMS.`,
       );
       return;
     }
-    const requestKey = `${req.method} ${pathname}`;
-    if (!unmockedRequests.has(requestKey)) {
-      unmockedRequests.set(requestKey, matchedUpstream.realUrl);
-    }
 
-    if (!onUnmockedResponse) {
-      proxyRequest(matchedUpstream.realUrl, req, res);
+    const upstreamPathname = pathname.slice(upstream.mockPathPrefix.length);
+
+    const fixture = upstream.fixtures.find((candidate) =>
+      matchesFixture(candidate, req.method, upstreamPathname, searchParams),
+    );
+    if (fixture) {
+      res.writeHead(fixture.status ?? 200, {
+        'content-type': 'application/json',
+      });
+      res.end(JSON.stringify(fixture.response));
       return;
     }
 
-    proxyRequest(matchedUpstream.realUrl, req, res, (body) => {
+    const requestKey = `${req.method} ${upstreamPathname} (${upstream.envVar})`;
+    if (!unmockedRequests.has(requestKey)) {
+      unmockedRequests.set(requestKey, upstream.realUrl);
+    }
+
+    const target = new URL(
+      `${upstream.realOrigin}${req.url.slice(upstream.mockPathPrefix.length)}`,
+    );
+
+    if (!onUnmockedResponse) {
+      proxyRequest(target, req, res);
+      return;
+    }
+
+    proxyRequest(target, req, res, (body) => {
       onUnmockedResponse({
         method: req.method,
-        pathname,
+        pathname: upstreamPathname,
         searchParams,
-        realUrl: matchedUpstream.realUrl,
+        envVar: upstream.envVar,
+        realUrl: upstream.realUrl,
         body,
       });
     });
