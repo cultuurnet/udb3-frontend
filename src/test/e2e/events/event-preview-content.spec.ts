@@ -309,7 +309,11 @@ test.describe.serial('Event Preview Content', () => {
   });
 
   test('shows calendar summary', async ({ page }) => {
-    await expect(page.getByText('Maandag van 9:00 tot 17:00')).toBeVisible();
+    await expect(
+      getRowByLabel(page, detailsTable, nl.preview.labels.calendar).locator(
+        'td:nth-child(2)',
+      ),
+    ).toContainText('Maandag van 9:00 tot 17:00');
   });
 
   test('shows organizer', async ({ page }) => {
