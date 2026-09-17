@@ -240,8 +240,8 @@ const useGetCalendarSummaryQuery = (
       locale,
       format,
     },
-    enabled: !!id && !!locale,
     ...configuration,
+    enabled: !!id && !!locale && (configuration.enabled ?? true),
   });
 
 export const prefetchGetCalendarSummaryQuery = ({
