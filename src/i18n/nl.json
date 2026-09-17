@@ -340,7 +340,7 @@
       },
       "age": {
         "title": "Geschikt voor",
-        "title_boa": "Geef aan op welke leeftijden deze activiteit geschikt is",
+        "title_boa": "Geef aan op welke leeftijden deze activiteit gericht is",
         "input_mode": {
           "age": "Ingeven als leeftijd",
           "date_of_birth": "Ingeven als geboortedatum"
@@ -2064,7 +2064,7 @@
       "image": "Afbeeldingen",
       "video": "Video's",
       "event_id": "ID",
-      "accessibility": "Bereikbaarheid"
+      "accessibility": "Begeleid vervoer"
     },
     "public_url": "Bekijk op {{publicationBrand}}",
     "rejected_explanation": "Dit item werd afgewezen voor publicatie. <publication_rules_link>Bekijk de regels</publication_rules_link>",
