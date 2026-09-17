@@ -338,9 +338,9 @@ const CalendarStep = ({
 
   const calendarStepContainer = useRef(null);
 
-  const [scope, type, theme] = useWatch({
+  const [scope, typeId, themeId] = useWatch({
     control,
-    name: ['scope', 'typeAndTheme.type', 'typeAndTheme.theme'],
+    name: ['scope', 'typeAndTheme.type.id', 'typeAndTheme.theme.id'],
   });
 
   const calendarService = useCalendarContext();
@@ -551,18 +551,18 @@ const CalendarStep = ({
   }, [scope, isIdle, handleChooseFixedDays]);
 
   const hasNoPossibleThemes =
-    type?.id && eventTypesWithNoThemes.includes(type.id);
+    !!typeId && eventTypesWithNoThemes.includes(typeId);
 
   // scroll to calendar step after theme has been selected
   useEffect(() => {
-    if (!scope || !type?.id) return;
-    if (!theme?.id && !hasNoPossibleThemes && scope === OfferTypes.EVENTS) {
+    if (!scope || !typeId) return;
+    if (!themeId && !hasNoPossibleThemes && scope === OfferTypes.EVENTS) {
       return;
     }
     if (offerId) return;
 
     scrollToCalendarContainer();
-  }, [scope, offerId, type, theme, hasNoPossibleThemes]);
+  }, [scope, offerId, typeId, themeId, hasNoPossibleThemes]);
 
   return (
     <Stack
@@ -614,7 +614,7 @@ const CalendarStep = ({
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
             showChildcare={showChildcare}
             onToggleOvernightStay={handleToggleOvernightStay}
-            showOvernightStay={type?.id === EventTypes['Kamp of vakantie']}
+            showOvernightStay={typeId === EventTypes['Kamp of vakantie']}
             onAddDay={handleAddDay}
             errors={errors}
           />
