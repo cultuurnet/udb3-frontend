@@ -1,5 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 
+import { CalsumFormat, CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   prefetchGetEventByIdQuery,
@@ -194,6 +195,70 @@ export const useGetOfferHistoryQuery = (
     ...configuration,
   });
 };
+
+const getCalendarSummary = async ({
+  headers,
+  id,
+  scope,
+  format,
+  locale,
+}: {
+  headers: Headers;
+  id: string;
+  scope: Scope;
+  format: CalsumFormat;
+  locale: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/${scope}/${id}/calsum`,
+    searchParams: {
+      format,
+      langCode: `${locale}_BE`,
+    },
+    options: {
+      headers,
+    },
+  });
+  return res.text();
+};
+
+const useGetCalendarSummaryQuery = (
+  {
+    id,
+    scope,
+    locale,
+    format = CalsumFormats.LG,
+  }: { id: string; scope: Scope; locale: string; format?: CalsumFormat },
+  configuration: ExtendQueryOptions<typeof getCalendarSummary> = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: [scope],
+    queryFn: getCalendarSummary,
+    queryArguments: {
+      id,
+      scope,
+      locale,
+      format,
+    },
+    ...configuration,
+    enabled: !!id && !!locale && (configuration.enabled ?? true),
+  });
+
+export const prefetchGetCalendarSummaryQuery = ({
+  req,
+  queryClient,
+  id,
+  scope,
+  locale,
+  format,
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: [scope],
+    queryFn: getCalendarSummary,
+    queryArguments: { id, scope, locale, format },
+  });
 
 export const prefetchOfferHistoryQuery = async ({
   req,
@@ -780,6 +845,7 @@ export {
   useDeleteOfferImageMutation,
   useDeleteOfferOrganizerMutation,
   useDeleteOfferVideoMutation,
+  useGetCalendarSummaryQuery,
   useGetOfferByIdQuery,
   useGetOffersByCreatorQuery,
   useRemoveOfferLabelMutation,
