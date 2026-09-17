@@ -176,7 +176,7 @@ const vrtMockEvent = {
   hiddenLabels: [],
   languages: ['nl', 'fr'],
   completedLanguages: ['nl'],
-  completeness: 85,
+  completeness: 96,
   contactPoint: {
     phone: ['+32 2 000 00 02'],
     email: ['vrt-mock-contact@example.com'],
@@ -257,6 +257,7 @@ const eventListVariants = [
       xs: '6 mei - 8 mei',
     },
     availableFrom: vrtDaysFromNow(-60).toISOString(),
+    completeness: 89,
     ...NO_IMAGE,
   },
   {
@@ -270,6 +271,7 @@ const eventListVariants = [
       sm: 'Vr 14 aug',
       xs: '14 aug',
     },
+    completeness: 89,
     ...NO_IMAGE,
   },
   {
@@ -283,7 +285,6 @@ const eventListVariants = [
       xs: '13 sep',
     },
     availableFrom: vrtDaysFromNow(20).toISOString(),
-    completeness: 100,
   },
   {
     id: 'vrt-mock-event-5',
@@ -296,7 +297,6 @@ const eventListVariants = [
       xs: '29 aug',
     },
     workflowStatus: 'DRAFT',
-    completeness: 40,
   },
   {
     id: 'vrt-mock-event-6',
