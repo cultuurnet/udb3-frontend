@@ -1,4 +1,4 @@
-export const labelsOverviewPageFixture = {
+const labelsOverviewPageFixture = {
   '@context': '/contexts/PagedCollection',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
@@ -42,9 +42,9 @@ export const labelsOverviewPageFixture = {
   ],
 };
 
-export const labelsEditPageFixture = labelsOverviewPageFixture.member[0];
+const labelsEditPageFixture = labelsOverviewPageFixture.member[0];
 
-export const labelsSearchResultsFixture = {
+const labelsSearchResultsFixture = {
   '@context': '/contexts/PagedCollection',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
@@ -52,10 +52,35 @@ export const labelsSearchResultsFixture = {
   member: [labelsOverviewPageFixture.member[1]],
 };
 
-export const labelsNoResultsFixture = {
+const labelsNoResultsFixture = {
   '@context': '/contexts/PagedCollection',
   '@type': 'PagedCollection',
   itemsPerPage: 10,
   totalItems: 0,
   member: [],
 };
+
+export const labelsApiFixtures = [
+  {
+    method: 'GET',
+    path: '/labels/',
+    query: (params) => params.get('query') === 'verborgen',
+    response: labelsSearchResultsFixture,
+  },
+  {
+    method: 'GET',
+    path: '/labels/',
+    query: (params) => params.get('query') === 'geen-resultaten-mock',
+    response: labelsNoResultsFixture,
+  },
+  {
+    method: 'GET',
+    path: '/labels/',
+    response: labelsOverviewPageFixture,
+  },
+  {
+    method: 'GET',
+    path: `/labels/${labelsEditPageFixture.uuid}`,
+    response: labelsEditPageFixture,
+  },
+];

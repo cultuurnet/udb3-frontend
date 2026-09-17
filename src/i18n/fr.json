@@ -2001,7 +2001,7 @@
       "image": "Images",
       "video": "Videos",
       "event_id": "ID",
-      "accessibility": "Accessibilité"
+      "accessibility": "Transport accompagné"
     },
     "public_url": "Voir sur {{publicationBrand}}",
     "rejected_explanation": "Cet article a été refusé pour publication. <publication_rules_link>Consultez les instructions</publication_rules_link>",

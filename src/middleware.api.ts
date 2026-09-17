@@ -5,6 +5,7 @@ import { getAuthEdgeServer } from '@/auth/edge';
 
 import { DEFAULT_COOKIE_OPTIONS } from './constants/Cookies';
 import { isTokenValid } from './utils/isTokenValid';
+import { isSameOriginUrl } from './utils/url';
 
 const authEdgeServer = getAuthEdgeServer();
 
@@ -24,8 +25,12 @@ export const middleware = async (request: NextRequest) => {
       return;
     }
 
+    const redirectUrl = isSameOriginUrl(referer, baseUrl)
+      ? referer
+      : new URL('/dashboard', baseUrl);
+
     try {
-      const response = NextResponse.redirect(referer);
+      const response = NextResponse.redirect(redirectUrl);
       const { accessToken, idToken } = await authEdgeServer.getSession(
         request,
         response,

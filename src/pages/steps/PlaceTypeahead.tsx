@@ -1,6 +1,5 @@
 import debounce from 'lodash/debounce';
 import { useState } from 'react';
-import { Highlighter } from 'react-bootstrap-typeahead';
 import { useTranslation } from 'react-i18next';
 
 import { EventTypes } from '@/constants/EventTypes';
@@ -11,6 +10,7 @@ import { Address, AddressInternal } from '@/types/Address';
 import { Country } from '@/types/Country';
 import type { Place } from '@/types/Place';
 import type { Values } from '@/types/Values';
+import { Highlighter } from '@/ui/Highlighter';
 import { Inline } from '@/ui/Inline';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
@@ -32,7 +32,6 @@ type Props = {
   municipality?: City;
   country?: Country;
   placeholder?: string;
-  maxWidth?: string;
 };
 
 const PlaceTypeahead = ({
@@ -45,7 +44,6 @@ const PlaceTypeahead = ({
   municipality,
   country,
   placeholder,
-  maxWidth = '28rem',
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
@@ -86,15 +84,15 @@ const PlaceTypeahead = ({
       mainLanguage,
     );
 
-  const filterByCallback = (place: Place, props) => {
+  const filterByCallback = (place: Place, inputValue: string) => {
     const name = getPlaceName(place.name, place.mainLanguage);
     const address = getAddress(place.address, place.mainLanguage);
 
     return (
       address?.streetAddress
         ?.toLowerCase()
-        .includes(props.text.toLowerCase()) ||
-      name?.toLowerCase().includes(props.text.toLowerCase())
+        .includes(inputValue.toLowerCase()) ||
+      name?.toLowerCase().includes(inputValue.toLowerCase())
     );
   };
 
@@ -107,7 +105,7 @@ const PlaceTypeahead = ({
       onInputChange={debounce(setSearchInput, 275)}
       filterBy={filterByCallback}
       labelKey={(place: Place) => getPlaceName(place.name, place.mainLanguage)}
-      renderMenuItemChildren={(place: Place, { text }) => {
+      renderMenuItemChildren={(place: Place, text) => {
         const { mainLanguage, name, address } = place;
         const placeName = getPlaceName(name, mainLanguage);
         const { streetAddress } = getAddress(address, mainLanguage);
@@ -140,7 +138,7 @@ const PlaceTypeahead = ({
         );
       }}
       selected={valueToArray(value as Place)}
-      maxWidth={maxWidth}
+      className="tw:max-w-md"
       onChange={(selected) => {
         const place = selected[0];
 
