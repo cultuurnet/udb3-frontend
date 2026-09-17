@@ -195,6 +195,70 @@ export const useGetOfferHistoryQuery = (
   });
 };
 
+const getCalendarSummary = async ({
+  headers,
+  id,
+  scope,
+  format,
+  locale,
+}: {
+  headers: Headers;
+  id: string;
+  scope: Scope;
+  format: string;
+  locale: string;
+}) => {
+  const res = await fetchFromApi({
+    path: `/${scope}/${id}/calsum`,
+    searchParams: {
+      format,
+      langCode: `${locale}_BE`,
+    },
+    options: {
+      headers,
+    },
+  });
+  return res.text();
+};
+
+const useGetCalendarSummaryQuery = (
+  {
+    id,
+    scope,
+    locale,
+    format = 'lg',
+  }: { id: string; scope: Scope; locale: string; format?: string },
+  configuration: ExtendQueryOptions<typeof getCalendarSummary> = {},
+) =>
+  useAuthenticatedQuery({
+    queryKey: [scope],
+    queryFn: getCalendarSummary,
+    queryArguments: {
+      id,
+      scope,
+      locale,
+      format,
+    },
+    enabled: !!id && !!locale,
+    ...configuration,
+  });
+
+export const prefetchGetCalendarSummaryQuery = ({
+  req,
+  queryClient,
+  id,
+  scope,
+  locale,
+  format,
+}) =>
+  prefetchAuthenticatedQuery({
+    req,
+    queryClient,
+    queryKey: [scope],
+    queryFn: getCalendarSummary,
+    queryArguments: { id, scope, locale, format },
+  });
+
 export const prefetchOfferHistoryQuery = async ({
   req,
   queryClient,
@@ -780,6 +844,7 @@ export {
   useDeleteOfferImageMutation,
   useDeleteOfferOrganizerMutation,
   useDeleteOfferVideoMutation,
+  useGetCalendarSummaryQuery,
   useGetOfferByIdQuery,
   useGetOffersByCreatorQuery,
   useRemoveOfferLabelMutation,

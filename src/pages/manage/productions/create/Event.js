@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import stripHTML from 'string-strip-html';
 
 import { CalendarType } from '@/constants/CalendarType';
-import { useGetCalendarSummaryQuery } from '@/hooks/api/events';
+import { OfferTypes } from '@/constants/OfferType';
+import { useGetCalendarSummaryQuery } from '@/hooks/api/offers';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { EventCard } from '@/ui/EventCard';
 import { Text } from '@/ui/Text';
@@ -33,6 +34,7 @@ const Event = ({
 
   const getCalendarSummaryQuery = useGetCalendarSummaryQuery({
     id,
+    scope: OfferTypes.EVENTS,
     locale: i18n.language,
     format: calendarType === CalendarType.SINGLE ? 'lg' : 'sm',
   });
