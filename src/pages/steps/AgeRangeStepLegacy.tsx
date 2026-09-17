@@ -11,7 +11,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 
 import { Field, StepProps } from './Steps';
 
@@ -256,7 +256,7 @@ const AgeRangeStepLegacy = ({
                 )}
               </Inline>
               {errors.nameAndAgeRange?.typicalAgeRange && (
-                <Text color="red">
+                <Text color={colors.danger}>
                   {t(
                     `create.name_and_age.validation_messages.age_range.${errors.nameAndAgeRange?.typicalAgeRange.type}`,
                   )}
