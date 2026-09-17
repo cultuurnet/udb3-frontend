@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { CalendarType } from '@/constants/CalendarType';
+import { CalsumFormats } from '@/constants/CalsumFormat';
 import { EventTypes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
@@ -93,7 +94,7 @@ const Preview = () => {
     id: eventId as string,
     scope: OfferTypes.EVENTS,
     locale: i18n.language,
-    format: isBoaEnabled ? 'xl' : 'lg',
+    format: isBoaEnabled ? CalsumFormats.XL : CalsumFormats.LG,
   });
 
   const calendarSummary = getCalendarSummaryQuery.data;

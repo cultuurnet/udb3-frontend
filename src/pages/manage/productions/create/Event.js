@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import stripHTML from 'string-strip-html';
 
 import { CalendarType } from '@/constants/CalendarType';
+import { CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes } from '@/constants/OfferType';
 import { useGetCalendarSummaryQuery } from '@/hooks/api/offers';
 import { Alert, AlertVariants } from '@/ui/Alert';
@@ -36,7 +37,10 @@ const Event = ({
     id,
     scope: OfferTypes.EVENTS,
     locale: i18n.language,
-    format: calendarType === CalendarType.SINGLE ? 'lg' : 'sm',
+    format:
+      calendarType === CalendarType.SINGLE
+        ? CalsumFormats.LG
+        : CalsumFormats.SM,
   });
 
   const description = useMemo(() => {

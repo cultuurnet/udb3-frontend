@@ -1,5 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 
+import { CalsumFormat, CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes, Scope, ScopeTypes } from '@/constants/OfferType';
 import {
   prefetchGetEventByIdQuery,
@@ -205,7 +206,7 @@ const getCalendarSummary = async ({
   headers: Headers;
   id: string;
   scope: Scope;
-  format: string;
+  format: CalsumFormat;
   locale: string;
 }) => {
   const res = await fetchFromApi({
@@ -226,8 +227,8 @@ const useGetCalendarSummaryQuery = (
     id,
     scope,
     locale,
-    format = 'lg',
-  }: { id: string; scope: Scope; locale: string; format?: string },
+    format = CalsumFormats.LG,
+  }: { id: string; scope: Scope; locale: string; format?: CalsumFormat },
   configuration: ExtendQueryOptions<typeof getCalendarSummary> = {},
 ) =>
   useAuthenticatedQuery({

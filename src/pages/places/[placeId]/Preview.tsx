@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useGetOfferPermissionsQuery } from '@/hooks/api/events';
@@ -89,7 +90,7 @@ const Preview = () => {
       id: placeId as string,
       scope: OfferTypes.PLACES,
       locale: i18n.language,
-      format: 'xl',
+      format: CalsumFormats.XL,
     },
     { enabled: isBoaEnabled },
   );
