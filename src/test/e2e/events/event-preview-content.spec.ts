@@ -308,14 +308,8 @@ test.describe.serial('Event Preview Content', () => {
     await expect(ageCell).toContainText(nl.preview.children_only);
   });
 
-  test('shows opening hours summary in calendar row', async ({ page }) => {
-    await expect(
-      page.getByText(calendar.fixed_days.overview.weekly_on),
-    ).toBeVisible();
-    await expect(
-      page.getByText(calendar.days.short.monday, { exact: true }),
-    ).toBeVisible();
-    await expect(page.getByText('09:00 - 17:00')).toBeVisible();
+  test('shows calendar summary', async ({ page }) => {
+    await expect(page.getByText('Maandag van 9:00 tot 17:00')).toBeVisible();
   });
 
   test('shows organizer', async ({ page }) => {
