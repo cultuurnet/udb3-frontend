@@ -1,3 +1,4 @@
+import { EventTypes } from '../../../src/constants/EventTypes.ts';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 
@@ -8,11 +9,8 @@ const ORGANIZER_ID = 'vrt-mock-organizer-1';
 // Never resolves (RFC 2606); an @id is only ever split for its last segment.
 const MOCK_API_ORIGIN = 'https://vrt-mock-api.invalid';
 
-// Real, unlike every other id here: the dashboard runs the type through
-// t('eventTypes*<id>') and the picker groups themes by id. Labels stay mock.
-const CONCERT_EVENT_TYPE_ID = '0.50.4.0.0';
+// A real id, unlike the rest here; themes have no constant of their own.
 const CLASSICAL_MUSIC_THEME_ID = '1.8.1.0.0';
-const EXPO_HALL_EVENT_TYPE_ID = 'OyaPaf64AEmEAYXHeLMAtA';
 
 const vrtDayAtUtcTime = (days, utcHours, utcMinutes = 0) => {
   const moment = vrtDaysFromNow(days);
@@ -75,7 +73,7 @@ const eventLocationFixture = {
   name: { nl: 'VRT mock locatie — zaal' },
   terms: [
     {
-      id: EXPO_HALL_EVENT_TYPE_ID,
+      id: EventTypes['Zaal of expohal'],
       domain: 'eventtype',
       label: 'VRT mock type — zaal',
     },
@@ -143,7 +141,7 @@ const vrtMockEvent = {
   },
   terms: [
     {
-      id: CONCERT_EVENT_TYPE_ID,
+      id: EventTypes.Concert,
       domain: 'eventtype',
       label: 'VRT mock type — concert',
     },
