@@ -1,4 +1,6 @@
 import { EventTypes } from '../../../src/constants/EventTypes.ts';
+import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
+import { formatPermission } from '../../../src/utils/formatPermission.ts';
 import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
@@ -337,16 +339,13 @@ const eventsByCreatorFixture = {
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// Display-formatted or the edit route redirects to /unauthorized; the set is
-// what global.mjs's role constraints grant on this event.
-const OFFER_PERMISSION_LABELS = {
-  AANBOD_BEWERKEN: 'Aanbod bewerken',
-  AANBOD_MODEREREN: 'Aanbod modereren',
-  AANBOD_HISTORIEK: 'Aanbod historiek',
-};
-
+// What global.mjs's role constraints grant on this event.
 const eventPermissionsFixture = {
-  permissions: Object.values(OFFER_PERMISSION_LABELS),
+  permissions: [
+    PermissionTypes.AANBOD_BEWERKEN,
+    PermissionTypes.AANBOD_MODEREREN,
+    PermissionTypes.AANBOD_HISTORIEK,
+  ].map(formatPermission),
 };
 
 const CALENDAR_SUMMARY_CONTENT_TYPE = 'text/plain; charset=utf-8';
