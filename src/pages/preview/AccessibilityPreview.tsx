@@ -61,7 +61,9 @@ const AccessibilityPreview = ({
 
   return (
     <Stack spacing={2}>
-      <Text color={colors.grey5}>{t('preview.accessibility.description')}</Text>
+      <Text color={colors.textMuted}>
+        {t('preview.accessibility.description')}
+      </Text>
       <Stack spacing={1}>
         {departurePlaces.map((uri) => (
           <DeparturePlace key={uri} placeUri={uri} />

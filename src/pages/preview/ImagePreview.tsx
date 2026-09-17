@@ -18,7 +18,7 @@ const ImagePreview = ({ mediaObject }: Props) => {
   const { t } = useTranslation();
   const HEIGHT = 100;
   const hasImages = (mediaObject ?? []).length > 0;
-  const { udbMainLightGrey, udbMainDarkGrey } = colors;
+  const { udbMainLightGrey, neutral } = colors;
 
   if (!hasImages)
     return <EmptyValue>{t('preview.empty_value.images')}</EmptyValue>;
@@ -47,7 +47,7 @@ const ImagePreview = ({ mediaObject }: Props) => {
         <Stack spacing={1}>
           {index === 0 && (
             <Text
-              backgroundColor={udbMainDarkGrey}
+              backgroundColor={neutral}
               color={colors.white}
               alignSelf="flex-start"
               borderRadius="3px"

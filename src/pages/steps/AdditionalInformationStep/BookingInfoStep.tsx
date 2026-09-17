@@ -58,7 +58,7 @@ type FormData = yup.InferType<typeof schema>;
 const urlLabelTranslationString =
   'create.additionalInformation.booking_info.url_type_labels';
 
-const SUBTITLE_COLOR = colors.udbMainDarkBlue;
+const SUBTITLE_COLOR = colors.primary;
 
 const ContactInfoType = {
   EMAIL: 'email',

@@ -67,7 +67,7 @@ const ClosingPeriod = ({
     >
       <Inline justifyContent="space-between" alignItems="center">
         <Text
-          color={colors.udbMainDarkBlue}
+          color={colors.primary}
           fontWeight="bold"
           fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
         >
@@ -131,12 +131,12 @@ const ClosingPeriod = ({
           />
         </Inline>
         {hasOverlap && (
-          <Text color="red">
+          <Text color={colors.danger}>
             {t('create.calendar.opening_hours_modal.closing.errors.overlap')}
           </Text>
         )}
         {hasInvalidDateOrder && (
-          <Text color="red">
+          <Text color={colors.danger}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.start_after_end',
             )}
@@ -144,7 +144,7 @@ const ClosingPeriod = ({
         )}
         {eventStartDate &&
           startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.start_before_event',
               )}
@@ -152,14 +152,14 @@ const ClosingPeriod = ({
           )}
         {eventEndDate &&
           startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.closing.errors.end_after_event',
               )}
             </Text>
           )}
         {quickLinkRangeError && (
-          <Text color="red">
+          <Text color={colors.danger}>
             {t(
               'create.calendar.opening_hours_modal.closing.errors.quick_link_out_of_range',
             )}
