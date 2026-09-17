@@ -296,4 +296,4 @@ const OpeningHoursContent = ({
   );
 };
 
-export { OpeningHoursContent, OpeningHoursSummary };
+export { OpeningHoursContent };
