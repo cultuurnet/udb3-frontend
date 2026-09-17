@@ -1,3 +1,6 @@
+import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
+import { formatPermission } from '../../../src/utils/formatPermission.ts';
+import { CULTUURKUUR_ORGANIZER_LABEL } from '../../../src/utils/hasCultuurkuurOrganizerLabel.ts';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 import { idOf, MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
@@ -11,10 +14,6 @@ const UITPAS_ORGANIZER_ID = 'vrt-mock-organizer-4';
 // Matches a value in the /uitpas/labels fixture, which is how an organizer
 // counts as a UiTPAS one.
 const UITPAS_ORGANIZER_LABEL = 'vrt-mock-uitpas-gent';
-
-// Real, unlike every other label here: the picker badges the organizer by
-// looking for this exact string in hiddenLabels.
-const CULTUURKUUR_ORGANIZER_LABEL = 'cultuurkuur_organizer';
 
 const organizerUri = (id) => `${MOCK_API_ORIGIN}/organizers/${id}`;
 
@@ -158,9 +157,10 @@ const organizerSearchFixture = pagedCollection(allOrganizers);
 // one belongs on a fixed url, the way labels.mjs narrows its no-results query.
 const organizerWebsiteFixture = pagedCollection([]);
 
-// Display-formatted, like the offer permissions in events.mjs, and derived per
-// id because global.mjs's role constraints name the organizer.
-const ORGANISATIES_BEWERKEN = 'Organisaties bewerken';
+// Derived per id because global.mjs's role constraints name the organizer.
+const ORGANISATIES_BEWERKEN = formatPermission(
+  PermissionTypes.ORGANISATIES_BEWERKEN,
+);
 
 const permissionsFor = (id) => ({
   permissions: OWNED_ORGANIZER_IDS.includes(id) ? [ORGANISATIES_BEWERKEN] : [],
