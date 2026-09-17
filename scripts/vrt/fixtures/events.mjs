@@ -1,4 +1,5 @@
 import { EventTypes } from '../../../src/constants/EventTypes.ts';
+import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 
@@ -334,8 +335,6 @@ const eventsByCreatorFixture = {
   member: eventListMembers,
 };
 
-const idOf = (event) => event['@id'].split('/').at(-1);
-
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
 // Display-formatted or the edit route redirects to /unauthorized; the set is
@@ -358,7 +357,7 @@ const ANY_EVENT_PERMISSIONS_PATH = /^\/events\/[^/]+\/permissions$/;
 
 const eventByIdFixtures = eventListMembers.map((member) => ({
   method: 'GET',
-  path: `/events/${idOf(member)}`,
+  path: `/events/${parseOfferId(member['@id'])}`,
   response: withoutCalendarSummary(member),
 }));
 
@@ -367,9 +366,11 @@ const calendarSummaryResponse = (text) => (params) =>
 
 const eventCalendarSummaryFixtures = eventListMembers.map((member) => ({
   method: 'GET',
-  path: `/events/${idOf(member)}/calsum`,
+  path: `/events/${parseOfferId(member['@id'])}/calsum`,
   contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-  response: calendarSummaryResponse(calendarSummaryById[idOf(member)]),
+  response: calendarSummaryResponse(
+    calendarSummaryById[parseOfferId(member['@id'])],
+  ),
 }));
 
 export const eventsApiFixtures = [
