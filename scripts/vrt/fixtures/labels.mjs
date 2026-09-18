@@ -82,11 +82,6 @@ const labelsSuggestionsFixture = {
   ],
 };
 
-const uitpasLabelsFixture = {
-  'vrt-mock-uitpas-1': 'vrt-mock-uitpas-gent',
-  'vrt-mock-uitpas-2': 'vrt-mock-uitpas-regio',
-};
-
 const labelsNoResultsFixture = {
   '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
   '@type': 'PagedCollection',
@@ -123,10 +118,5 @@ export const labelsApiFixtures = [
     method: 'GET',
     path: `/labels/${labelsEditPageFixture.uuid}`,
     response: labelsEditPageFixture,
-  },
-  {
-    method: 'GET',
-    path: '/uitpas/labels',
-    response: uitpasLabelsFixture,
   },
 ];
