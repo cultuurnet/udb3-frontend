@@ -1,9 +1,10 @@
 import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
 import { formatPermission } from '../../../src/utils/formatPermission.ts';
 import { CULTUURKUUR_ORGANIZER_LABEL } from '../../../src/utils/hasCultuurkuurOrganizerLabel.ts';
+import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
-import { idOf, MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
+import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 
 // global.mjs constrains ORGANISATIES_BEWERKEN to these two ids, so a third
 // organizer renders the preview without its edit button.
@@ -223,7 +224,7 @@ const ownershipsForOrganizer = (itemId) =>
 // signed-in user, since the request narrows on their own id.
 const ownedOrganizerOwnershipsFixture = pagedCollection(
   ownedOrganizers.map((organizer) =>
-    approvedOwnership(idOf(organizer), SIGNED_IN_PARTY),
+    approvedOwnership(parseOfferId(organizer['@id']), SIGNED_IN_PARTY),
   ),
 );
 
@@ -241,13 +242,13 @@ const organizerNotInVerenigingsloketFixture = {
 
 const organizerPermissionsFixtures = allOrganizers.map((organizer) => ({
   method: 'GET',
-  path: `/organizers/${idOf(organizer)}/permissions`,
-  response: permissionsFor(idOf(organizer)),
+  path: `/organizers/${parseOfferId(organizer['@id'])}/permissions`,
+  response: permissionsFor(parseOfferId(organizer['@id'])),
 }));
 
 const organizerByIdFixtures = allOrganizers.map((organizer) => ({
   method: 'GET',
-  path: `/organizers/${idOf(organizer)}`,
+  path: `/organizers/${parseOfferId(organizer['@id'])}`,
   response: organizer,
 }));
 

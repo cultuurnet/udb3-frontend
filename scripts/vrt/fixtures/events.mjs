@@ -1,16 +1,17 @@
+import { EventTypes } from '../../../src/constants/EventTypes.ts';
+import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
+import { formatPermission } from '../../../src/utils/formatPermission.ts';
+import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
-import { idOf, MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
+import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 import { vrtMockOrganizers } from './organizers.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
 const LOCATION_ID = 'vrt-mock-place-1';
 
-// Real, unlike every other id here: the dashboard runs the type through
-// t('eventTypes*<id>') and the picker groups themes by id. Labels stay mock.
-const CONCERT_EVENT_TYPE_ID = '0.50.4.0.0';
+// A real id, unlike the rest here; themes have no constant of their own.
 const CLASSICAL_MUSIC_THEME_ID = '1.8.1.0.0';
-const EXPO_HALL_EVENT_TYPE_ID = 'OyaPaf64AEmEAYXHeLMAtA';
 
 const vrtDayAtUtcTime = (days, utcHours, utcMinutes = 0) => {
   const moment = vrtDaysFromNow(days);
@@ -24,7 +25,7 @@ const eventSubEvents = [
     startDate: vrtDayAtUtcTime(30, 20),
     endDate: vrtDayAtUtcTime(30, 22, 30),
     status: { type: 'Available' },
-    bookingAvailability: { type: 'Available' },
+    bookingAvailability: { type: 'Unavailable' },
   },
   {
     '@type': 'Event',
@@ -34,9 +35,19 @@ const eventSubEvents = [
       type: 'TemporarilyUnavailable',
       reason: { nl: 'VRT mock reden — tweede datum uitgesteld' },
     },
-    bookingAvailability: { type: 'Unavailable' },
+    bookingAvailability: { type: 'Available' },
   },
 ];
+
+// Every summary in this file is copied from a real response, never generated:
+// the API writes them server side, down to the notes above, and Intl
+// reproduces none of that.
+const eventCalendarSummary = {
+  lg: 'Woensdag 15 juli 2026 (Volzet of uitverkocht)\nVrijdag 17 juli 2026 (uitgesteld)',
+  md: 'Wo 15 juli 2026 (Volzet of uitverkocht)\nVr 17 juli 2026 (uitgesteld)',
+  sm: 'Wo 15 jul - vr 17 jul',
+  xs: '15 jul - 17 jul',
+};
 
 const firstSubEvent = eventSubEvents[0];
 const lastSubEvent = eventSubEvents.at(-1);
@@ -53,60 +64,6 @@ const availableSubEventsOn = (dayOffsets) =>
     bookingAvailability: { type: 'Available' },
   }));
 
-const SUMMARY_LOCALE = 'nl-BE';
-// UTC, and the app agrees only because the run pins no timezoneId. Pinning one
-// desyncs this, formatPeriod's HH:mm and usePublicationStatus — see the ticket.
-const HOST_INDEPENDENT_TIME_ZONE = 'UTC';
-
-const summaryFormat = (options) =>
-  new Intl.DateTimeFormat(SUMMARY_LOCALE, {
-    ...options,
-    timeZone: HOST_INDEPENDENT_TIME_ZONE,
-  });
-
-const weekdayAndDate = summaryFormat({
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
-const dayAndMonth = summaryFormat({ day: 'numeric', month: 'long' });
-const abbreviatedDayAndMonth = summaryFormat({
-  day: 'numeric',
-  month: 'short',
-});
-const clockTime = summaryFormat({
-  hour: '2-digit',
-  minute: '2-digit',
-  hourCycle: 'h23',
-});
-
-const summarizeSubEvent =
-  (dateFormat) =>
-  ({ startDate, endDate }) =>
-    `${dateFormat.format(new Date(startDate))} van ${clockTime.format(
-      new Date(startDate),
-    )} tot ${clockTime.format(new Date(endDate))}`;
-
-const calendarSummaryTextFor = (subEvents) => {
-  const start = new Date(subEvents[0].startDate);
-  const end = new Date(subEvents.at(-1).endDate);
-  const isSingleDay = subEvents.length === 1;
-
-  return {
-    lg: subEvents.map(summarizeSubEvent(weekdayAndDate)).join('\n'),
-    md: subEvents.map(summarizeSubEvent(dayAndMonth)).join('\n'),
-    sm: isSingleDay
-      ? dayAndMonth.format(start)
-      : `van ${dayAndMonth.format(start)} tot ${dayAndMonth.format(end)}`,
-    xs: isSingleDay
-      ? abbreviatedDayAndMonth.format(start)
-      : `${abbreviatedDayAndMonth.format(start)} - ${abbreviatedDayAndMonth.format(end)}`,
-  };
-};
-
-const eventCalendarSummaryText = calendarSummaryTextFor(eventSubEvents);
-
 // Only the calsum endpoint serves md; the list request asks for lg/sm/xs.
 const withoutMediumFormat = ({ md, ...text }) => text;
 
@@ -117,7 +74,7 @@ const eventLocationFixture = {
   name: { nl: 'VRT mock locatie — zaal' },
   terms: [
     {
-      id: EXPO_HALL_EVENT_TYPE_ID,
+      id: EventTypes['Zaal of expohal'],
       domain: 'eventtype',
       label: 'VRT mock type — zaal',
     },
@@ -168,7 +125,7 @@ const vrtMockEvent = {
   },
   terms: [
     {
-      id: CONCERT_EVENT_TYPE_ID,
+      id: EventTypes.Concert,
       domain: 'eventtype',
       label: 'VRT mock type — concert',
     },
@@ -200,7 +157,7 @@ const vrtMockEvent = {
   hiddenLabels: [],
   languages: ['nl', 'fr'],
   completedLanguages: ['nl'],
-  completeness: 85,
+  completeness: 96,
   contactPoint: {
     phone: ['+32 2 000 00 02'],
     email: ['vrt-mock-contact@example.com'],
@@ -256,7 +213,7 @@ const vrtMockEvent = {
 
 const NO_IMAGE = { image: undefined, mediaObject: [] };
 
-const eventListMember = ({ id, nameNl, subEvents, ...overrides }) => ({
+const eventListMember = ({ id, nameNl, subEvents, summary, ...overrides }) => ({
   ...vrtMockEvent,
   '@id': `${MOCK_API_ORIGIN}/events/${id}`,
   name: { nl: nameNl },
@@ -265,73 +222,109 @@ const eventListMember = ({ id, nameNl, subEvents, ...overrides }) => ({
   startDate: subEvents[0].startDate,
   endDate: subEvents.at(-1).endDate,
   availableTo: subEvents.at(-1).endDate,
-  calendarSummary: {
-    nl: { text: withoutMediumFormat(calendarSummaryTextFor(subEvents)) },
-  },
+  calendarSummary: { nl: { text: withoutMediumFormat(summary) } },
   ...overrides,
 });
 
-const eventListMembers = [
+const eventListVariants = [
   {
-    ...vrtMockEvent,
-    calendarSummary: {
-      nl: { text: withoutMediumFormat(eventCalendarSummaryText) },
-    },
-  },
-  eventListMember({
     id: 'vrt-mock-event-2',
     nameNl: 'VRT mock evenement — afgelopen zonder afbeelding',
     subEvents: availableSubEventsOn([-40, -38]),
+    summary: {
+      lg: 'Woensdag 6 mei 2026\nVrijdag 8 mei 2026',
+      md: 'Wo 6 mei 2026\nVr 8 mei 2026',
+      sm: 'Wo 6 mei - vr 8 mei',
+      xs: '6 mei - 8 mei',
+    },
     availableFrom: vrtDaysFromNow(-60).toISOString(),
+    completeness: 89,
     // The one offer pointing at an organizer the user does not own, which is
     // what gives the dashboard a suggestion to make. Its own permissions still
     // come from the moderation label, not from this organizer.
     organizer: vrtMockOrganizers.suggested,
     ...NO_IMAGE,
-  }),
-  eventListMember({
+  },
+  {
     id: 'vrt-mock-event-3',
     nameNl:
       'VRT mock evenement — zonder afbeelding en met een titel die lang genoeg is om afgekapt te worden',
     subEvents: availableSubEventsOn([60]),
+    summary: {
+      lg: 'Vrijdag 14 augustus 2026',
+      md: 'Vr 14 augustus 2026',
+      sm: 'Vr 14 aug',
+      xs: '14 aug',
+    },
+    completeness: 89,
     ...NO_IMAGE,
-  }),
-  eventListMember({
+  },
+  {
     id: 'vrt-mock-event-4',
     nameNl: 'VRT mock evenement — gepland en volledig',
     subEvents: availableSubEventsOn([90]),
+    summary: {
+      lg: 'Zondag 13 september 2026',
+      md: 'Zo 13 september 2026',
+      sm: 'Zo 13 sep',
+      xs: '13 sep',
+    },
     availableFrom: vrtDaysFromNow(20).toISOString(),
-    completeness: 100,
-  }),
-  eventListMember({
+  },
+  {
     id: 'vrt-mock-event-5',
     nameNl: 'VRT mock evenement — concept',
     subEvents: availableSubEventsOn([75]),
+    summary: {
+      lg: 'Zaterdag 29 augustus 2026',
+      md: 'Za 29 augustus 2026',
+      sm: 'Za 29 aug',
+      xs: '29 aug',
+    },
     workflowStatus: 'DRAFT',
-    completeness: 40,
-  }),
-  eventListMember({
+  },
+  {
     id: 'vrt-mock-event-6',
     nameNl: 'VRT mock evenement — afgewezen',
     subEvents: availableSubEventsOn([45]),
+    summary: {
+      lg: 'Donderdag 30 juli 2026',
+      md: 'Do 30 juli 2026',
+      sm: 'Do 30 jul',
+      xs: '30 jul',
+    },
     workflowStatus: 'REJECTED',
-  }),
+  },
 ];
+
+const eventListMembers = [
+  {
+    ...vrtMockEvent,
+    calendarSummary: {
+      nl: { text: withoutMediumFormat(eventCalendarSummary) },
+    },
+  },
+  ...eventListVariants.map(eventListMember),
+];
+
+const calendarSummaryById = {
+  [EVENT_ID]: eventCalendarSummary,
+  ...Object.fromEntries(
+    eventListVariants.map(({ id, summary }) => [id, summary]),
+  ),
+};
 
 const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// Display-formatted or the edit route redirects to /unauthorized; the set is
-// what global.mjs's role constraints grant on this event.
-const OFFER_PERMISSION_LABELS = {
-  AANBOD_BEWERKEN: 'Aanbod bewerken',
-  AANBOD_MODEREREN: 'Aanbod modereren',
-  AANBOD_HISTORIEK: 'Aanbod historiek',
-};
-
+// What global.mjs's role constraints grant on this event.
 const eventPermissionsFixture = {
-  permissions: Object.values(OFFER_PERMISSION_LABELS),
+  permissions: [
+    PermissionTypes.AANBOD_BEWERKEN,
+    PermissionTypes.AANBOD_MODEREREN,
+    PermissionTypes.AANBOD_HISTORIEK,
+  ].map(formatPermission),
 };
 
 const CALENDAR_SUMMARY_CONTENT_TYPE = 'text/plain; charset=utf-8';
@@ -342,7 +335,7 @@ const ANY_EVENT_PERMISSIONS_PATH = /^\/events\/[^/]+\/permissions$/;
 
 const eventByIdFixtures = eventListMembers.map((member) => ({
   method: 'GET',
-  path: `/events/${idOf(member)}`,
+  path: `/events/${parseOfferId(member['@id'])}`,
   response: withoutCalendarSummary(member),
 }));
 
@@ -351,9 +344,11 @@ const calendarSummaryResponse = (text) => (params) =>
 
 const eventCalendarSummaryFixtures = eventListMembers.map((member) => ({
   method: 'GET',
-  path: `/events/${idOf(member)}/calsum`,
+  path: `/events/${parseOfferId(member['@id'])}/calsum`,
   contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-  response: calendarSummaryResponse(calendarSummaryTextFor(member.subEvent)),
+  response: calendarSummaryResponse(
+    calendarSummaryById[parseOfferId(member['@id'])],
+  ),
 }));
 
 export const eventsApiFixtures = [
@@ -375,7 +370,7 @@ export const eventsApiFixtures = [
     method: 'GET',
     path: ANY_EVENT_CALENDAR_SUMMARY_PATH,
     contentType: CALENDAR_SUMMARY_CONTENT_TYPE,
-    response: calendarSummaryResponse(eventCalendarSummaryText),
+    response: calendarSummaryResponse(eventCalendarSummary),
   },
   {
     method: 'GET',
