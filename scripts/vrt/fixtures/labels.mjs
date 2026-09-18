@@ -1,63 +1,54 @@
-const labelsOverviewPageFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 10,
-  totalItems: 5,
-  member: [
-    {
-      uuid: 'vrt-mock-label-1',
-      name: 'VRT mock label — normaal',
-      visibility: 'visible',
-      privacy: 'public',
-      excluded: false,
-    },
-    {
-      uuid: 'vrt-mock-label-2',
-      name: 'VRT mock label — verborgen',
-      visibility: 'invisible',
-      privacy: 'public',
-      excluded: false,
-    },
-    {
-      uuid: 'vrt-mock-label-3',
-      name: 'VRT mock label — voorbehouden',
-      visibility: 'visible',
-      privacy: 'private',
-      excluded: false,
-    },
-    {
-      uuid: 'vrt-mock-label-4',
-      name: 'VRT mock label — uitgesloten',
-      visibility: 'visible',
-      privacy: 'public',
-      excluded: true,
-    },
-    {
-      uuid: 'vrt-mock-label-5',
-      name: 'VRT mock label — alle statussen',
-      visibility: 'invisible',
-      privacy: 'private',
-      excluded: true,
-    },
-  ],
-};
+import { pagedCollection } from './mock-api.mjs';
 
-const labelsEditPageFixture = labelsOverviewPageFixture.member[0];
+const labelsOverviewMembers = [
+  {
+    uuid: 'vrt-mock-label-1',
+    name: 'VRT mock label — normaal',
+    visibility: 'visible',
+    privacy: 'public',
+    excluded: false,
+  },
+  {
+    uuid: 'vrt-mock-label-2',
+    name: 'VRT mock label — verborgen',
+    visibility: 'invisible',
+    privacy: 'public',
+    excluded: false,
+  },
+  {
+    uuid: 'vrt-mock-label-3',
+    name: 'VRT mock label — voorbehouden',
+    visibility: 'visible',
+    privacy: 'private',
+    excluded: false,
+  },
+  {
+    uuid: 'vrt-mock-label-4',
+    name: 'VRT mock label — uitgesloten',
+    visibility: 'visible',
+    privacy: 'public',
+    excluded: true,
+  },
+  {
+    uuid: 'vrt-mock-label-5',
+    name: 'VRT mock label — alle statussen',
+    visibility: 'invisible',
+    privacy: 'private',
+    excluded: true,
+  },
+];
 
-const labelsSearchResultsFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 10,
-  totalItems: 1,
-  member: [labelsOverviewPageFixture.member[1]],
-};
+const labelsOverviewPageFixture = pagedCollection(labelsOverviewMembers, 10);
 
-const labelsSuggestionsFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 6,
-  totalItems: 3,
-  member: [
+const labelsEditPageFixture = labelsOverviewMembers[0];
+
+const labelsSearchResultsFixture = pagedCollection(
+  [labelsOverviewMembers[1]],
+  10,
+);
+
+const labelsSuggestionsFixture = pagedCollection(
+  [
     {
       uuid: 'vrt-mock-suggestie-1',
       name: 'vrt-mock-suggestie-cultuur',
@@ -80,15 +71,10 @@ const labelsSuggestionsFixture = {
       excluded: false,
     },
   ],
-};
+  6,
+);
 
-const labelsNoResultsFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 10,
-  totalItems: 0,
-  member: [],
-};
+const labelsNoResultsFixture = pagedCollection([], 10);
 
 export const labelsApiFixtures = [
   {
