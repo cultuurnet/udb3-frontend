@@ -104,8 +104,7 @@ const ownedOrganizers = [
   }),
 ];
 
-// The only organizer the picker renders as a card alongside the canonical one,
-// so it carries the Cultuurkuur badge and the second address.
+// Carries the Cultuurkuur badge and the second address for the picker's cards.
 const suggestedOrganizer = organizerVariant({
   id: SUGGESTED_ORGANIZER_ID,
   nameNl: 'VRT mock organisatie — van een andere gebruiker',
@@ -133,8 +132,8 @@ const uitpasOrganizer = organizerVariant({
 
 const allOrganizers = [...ownedOrganizers, suggestedOrganizer, uitpasOrganizer];
 
-// The event fixture embeds these, which is what puts them in front of the
-// dashboard suggestions and the picker's recently-used cards.
+// offers.mjs embeds these, which is what puts them in front of the dashboard
+// suggestions and the picker's recently-used cards.
 export const vrtMockOrganizers = {
   owned: vrtMockOrganizer,
   suggested: suggestedOrganizer,
@@ -143,10 +142,12 @@ export const vrtMockOrganizers = {
 
 const organizersByCreatorFixture = pagedCollection(ownedOrganizers, 14);
 
-// Answers the query the dashboard builds from the organizers on its recent
-// offers: `id:… NOT creator:"<the user>"`. Returning only the organizer
-// somebody else created honours that clause without parsing it.
-const suggestedOrganizersFixture = pagedCollection([suggestedOrganizer]);
+// The dashboard asks `id:… NOT creator:"<the user>"` for the organizers on its
+// recent offers. These are the two in offers.mjs that somebody else created.
+const suggestedOrganizersFixture = pagedCollection([
+  suggestedOrganizer,
+  uitpasOrganizer,
+]);
 
 // Every typeahead keystroke lands here. Keyed on one search string instead,
 // any other input would fall through to the real backend unnoticed.
