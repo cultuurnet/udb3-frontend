@@ -40,7 +40,20 @@ const organizerImages = [
     copyrightHolder: 'VRT mock rechthebbende',
     inLanguage: 'nl',
   },
+  {
+    '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-5`,
+    '@type': 'schema:ImageObject',
+    contentUrl: vrtMockImageUrls.square,
+    thumbnailUrl: vrtMockImageUrls.square,
+    description: 'VRT mock afbeelding — derde afbeelding van de organisatie',
+    copyrightHolder: 'VRT mock rechthebbende',
+    inLanguage: 'nl',
+  },
 ];
+
+// One ratio each, so a row or card rendering the wrong organizer's image is
+// visible. Three identical thumbnails would hide it.
+const [landscapeImage, portraitImage, squareImage] = organizerImages;
 
 // The preview badges the main image by comparing mainImage against
 // thumbnailUrl, never against contentUrl.
@@ -121,6 +134,7 @@ const suggestedOrganizer = organizerVariant({
   description: undefined,
   contactPoint: NO_CONTACT,
   completeness: 65,
+  ...withImages([portraitImage, landscapeImage]),
 });
 
 const uitpasOrganizer = organizerVariant({
@@ -128,6 +142,7 @@ const uitpasOrganizer = organizerVariant({
   nameNl: 'VRT mock organisatie — UiTPAS',
   creator: 'vrt-mock-user-2',
   labels: [UITPAS_ORGANIZER_LABEL],
+  ...withImages([squareImage]),
 });
 
 const allOrganizers = [...ownedOrganizers, suggestedOrganizer, uitpasOrganizer];
