@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
 import { useGetOfferPermissionsQuery } from '@/hooks/api/events';
 import {
+  useGetCalendarSummaryQuery,
   useGetOfferByIdQuery,
   useGetOfferHistoryQuery,
 } from '@/hooks/api/offers';
@@ -33,7 +35,6 @@ import {
 } from '@/pages/preview/Tabs/DetailsTabContent';
 import { HistoryTabContent } from '@/pages/preview/Tabs/HistoryTabContent';
 import { VideoPreview } from '@/pages/preview/VideoPreview';
-import { OpeningHoursSummary } from '@/pages/steps/CalendarStep/OpeningHoursContent';
 import { Offer } from '@/types/Offer';
 import { isPlace } from '@/types/Place';
 import { WorkflowStatus } from '@/types/WorkflowStatus';
@@ -83,6 +84,18 @@ const Preview = () => {
   const isEdited = router.query.edited === 'true';
 
   const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
+
+  const getCalendarSummaryQuery = useGetCalendarSummaryQuery(
+    {
+      id: placeId as string,
+      scope: OfferTypes.PLACES,
+      locale: i18n.language,
+      format: CalsumFormats.XL,
+    },
+    { enabled: isBoaEnabled },
+  );
+
+  const calendarSummary = getCalendarSummaryQuery.data;
 
   const userPermissionsQuery = useGetPermissionsQuery();
   const userPermissions = userPermissionsQuery?.data ?? [];
@@ -265,17 +278,18 @@ const Preview = () => {
       field: t('preview.labels.location'),
       value: <LocationPreview offer={offer} />,
     },
-    ...(isBoaEnabled && offer?.openingHours?.length > 0
+    ...(isBoaEnabled && calendarSummary
       ? [
           {
             field: t('preview.labels.calendar'),
             value: (
-              <OpeningHoursSummary
-                openingHours={offer.openingHours}
-                adjustedDays={offer.openingHoursAdjustedDays}
-                closedDays={offer.openingHoursClosedDays}
-                lang={i18n.language as SupportedLanguage}
-              />
+              <Text
+                css={`
+                  white-space: pre-wrap;
+                `}
+              >
+                {calendarSummary}
+              </Text>
             ),
           },
         ]

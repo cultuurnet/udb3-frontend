@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { buildAllowedHosts } from './env.mjs';
+import { APP_HOST, isLinux } from './hosts.mjs';
 import {
-  APP_HOST,
   cleanup,
   ensureAppAndMockServer,
   ensureAuthSession,
   isDockerAvailable,
-  isLinux,
   registerCleanupTask,
   run,
 } from './shared.mjs';
@@ -73,6 +73,8 @@ const main = async () => {
       cwd,
       '-e',
       `VRT_APP_HOST=${APP_HOST}`,
+      '-e',
+      `VRT_ALLOWED_HOSTS=${buildAllowedHosts().join(',')}`,
       getPlaywrightImage(),
       'npx',
       'playwright',
