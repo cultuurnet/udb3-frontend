@@ -4,13 +4,12 @@ import { formatPermission } from '../../../src/utils/formatPermission.ts';
 import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
+import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
+import { vrtMockOrganizers } from './organizers.mjs';
+import { UITPAS_EVENT_ID, uitpasPriceInfo } from './uitpas.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
 const LOCATION_ID = 'vrt-mock-place-1';
-const ORGANIZER_ID = 'vrt-mock-organizer-1';
-
-// Never resolves (RFC 2606); an @id is only ever split for its last segment.
-const MOCK_API_ORIGIN = 'https://vrt-mock-api.invalid';
 
 // A real id, unlike the rest here; themes have no constant of their own.
 const CLASSICAL_MUSIC_THEME_ID = '1.8.1.0.0';
@@ -92,23 +91,6 @@ const eventLocationFixture = {
   workflowStatus: 'APPROVED',
 };
 
-const eventOrganizerFixture = {
-  '@id': `${MOCK_API_ORIGIN}/organizers/${ORGANIZER_ID}`,
-  '@context': '/contexts/organizer',
-  mainLanguage: 'nl',
-  name: { nl: 'VRT mock organisatie' },
-  address: {
-    nl: {
-      addressCountry: 'BE',
-      addressLocality: 'VRT mock gemeente',
-      postalCode: '1000',
-      streetAddress: 'VRT mock straat 2',
-    },
-  },
-  labels: [],
-  hiddenLabels: [],
-};
-
 const eventMediaObjects = [
   {
     '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-1`,
@@ -167,7 +149,7 @@ const vrtMockEvent = {
   subEvent: eventSubEvents,
   openingHours: [],
   location: eventLocationFixture,
-  organizer: eventOrganizerFixture,
+  organizer: vrtMockOrganizers.owned,
   attendanceMode: 'offline',
   audience: { audienceType: 'everyone' },
   typicalAgeRange: '12-15',
@@ -258,6 +240,10 @@ const eventListVariants = [
     },
     availableFrom: vrtDaysFromNow(-60).toISOString(),
     completeness: 89,
+    // The one offer pointing at an organizer the user does not own, which is
+    // what gives the dashboard a suggestion to make. Its own permissions still
+    // come from the moderation label, not from this organizer.
+    organizer: vrtMockOrganizers.suggested,
     ...NO_IMAGE,
   },
   {
@@ -322,6 +308,21 @@ const eventListMembers = [
   ...eventListVariants.map(eventListMember),
 ];
 
+// Somebody else's event, so the by-creator collection stays complete without
+// it. Only ever opened by id.
+const vrtMockUitpasEvent = {
+  ...vrtMockEvent,
+  '@id': `${MOCK_API_ORIGIN}/events/${UITPAS_EVENT_ID}`,
+  name: { nl: 'VRT mock evenement — UiTPAS' },
+  creator: 'vrt-mock-user-2',
+  organizer: vrtMockOrganizers.uitpas,
+  // Base and UiTPAS, no tariff, and the amounts are one real UiTPAS event's.
+  priceInfo: [{ ...vrtMockEvent.priceInfo[0], price: 15 }, uitpasPriceInfo],
+};
+
+// Same dates, so the calsum catch-all below already answers for it.
+const eventsServedById = [...eventListMembers, vrtMockUitpasEvent];
+
 const calendarSummaryById = {
   [EVENT_ID]: eventCalendarSummary,
   ...Object.fromEntries(
@@ -329,13 +330,7 @@ const calendarSummaryById = {
   ),
 };
 
-const eventsByCreatorFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 14,
-  totalItems: eventListMembers.length,
-  member: eventListMembers,
-};
+const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
@@ -354,7 +349,7 @@ const ANY_EVENT_PATH = /^\/events\/[^/]+$/;
 const ANY_EVENT_CALENDAR_SUMMARY_PATH = /^\/events\/[^/]+\/calsum$/;
 const ANY_EVENT_PERMISSIONS_PATH = /^\/events\/[^/]+\/permissions$/;
 
-const eventByIdFixtures = eventListMembers.map((member) => ({
+const eventByIdFixtures = eventsServedById.map((member) => ({
   method: 'GET',
   path: `/events/${parseOfferId(member['@id'])}`,
   response: withoutCalendarSummary(member),
