@@ -201,11 +201,19 @@ export const ensureAppAndMockServer = async ({
   const upstreams = configuredUpstreams();
 
   console.log(`Starting mock server on port ${MOCK_PORT}...`);
-  mockServer = await startMockServer({
-    port: MOCK_PORT,
-    upstreams,
-    onUnmockedResponse,
-  });
+  try {
+    mockServer = await startMockServer({
+      port: MOCK_PORT,
+      upstreams,
+      onUnmockedResponse,
+    });
+  } catch (error) {
+    if (error.code !== 'EADDRINUSE') throw error;
+    console.error(
+      `\nPort ${MOCK_PORT} is taken, most likely by a mock server an earlier run left behind. Stop it and re-run:\n  lsof -ti tcp:${MOCK_PORT} | xargs kill\n`,
+    );
+    process.exit(1);
+  }
 
   console.log(`No app detected at ${BASE_URL}, starting one now...`);
   const startCommand = process.env.CI
