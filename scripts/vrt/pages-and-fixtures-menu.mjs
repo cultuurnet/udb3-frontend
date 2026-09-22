@@ -36,6 +36,7 @@ const runScript = (scriptPath, args) =>
 const SCRIPTS = {
   pages: 'scripts/vrt/pages.mjs',
   fixtures: 'scripts/vrt/record-missing-fixtures.mjs',
+  browse: 'scripts/vrt/browse.mjs',
 };
 
 const printPlainList = (pages) => {
@@ -52,6 +53,7 @@ const printPlainList = (pages) => {
 
 const MENU_PAGES = 'Pages...';
 const MENU_FIXTURES = 'Fixtures...';
+const MENU_BROWSE = 'Browse the mocked app';
 const MENU_EXIT = 'Exit';
 
 const PAGES_COMPARE_ALL = 'Compare all pages';
@@ -182,6 +184,11 @@ const main = async () => {
           description:
             'Record real backend responses for endpoints that are not mocked yet.',
         },
+        {
+          label: MENU_BROWSE,
+          description:
+            'Open the mocked app in a browser to click around. No screenshots.',
+        },
         MENU_EXIT,
       ],
       { canGoBack: false },
@@ -193,6 +200,12 @@ const main = async () => {
     }
 
     const [action] = choice;
+
+    if (action === MENU_BROWSE) {
+      await runScript(SCRIPTS.browse, []);
+      continue;
+    }
+
     const result =
       action === MENU_PAGES
         ? await pickPages(pages)
