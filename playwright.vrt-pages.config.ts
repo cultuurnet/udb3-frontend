@@ -1,26 +1,8 @@
-import fs from 'node:fs';
-
 import { defineConfig, devices } from '@playwright/test';
 
-import { pinLanguage } from './scripts/vrt/pins/language.mjs';
-import { pinProfileClaims } from './scripts/vrt/pins/profile.mjs';
+import { buildStorageState } from './scripts/vrt/storage-state.mjs';
 
-const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
 const APP_HOST = process.env.VRT_APP_HOST ?? 'localhost';
-
-const buildStorageState = () => {
-  const storageState = JSON.parse(
-    fs.readFileSync(AUTH_STORAGE_STATE_PATH, 'utf-8'),
-  );
-  const cookies = storageState.cookies.map(
-    (cookie: Record<string, unknown> & { domain: string }) =>
-      cookie.domain === 'localhost' ? { ...cookie, domain: APP_HOST } : cookie,
-  );
-  return {
-    ...storageState,
-    cookies: pinProfileClaims(pinLanguage(cookies, APP_HOST)),
-  };
-};
 
 export default defineConfig({
   testDir: 'src/test/vrt-pages',
@@ -42,6 +24,6 @@ export default defineConfig({
   use: {
     ...devices['Desktop Chrome'],
     baseURL: `http://${APP_HOST}:3000`,
-    storageState: buildStorageState(),
+    storageState: buildStorageState(APP_HOST),
   },
 });
