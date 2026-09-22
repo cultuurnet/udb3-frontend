@@ -1,3 +1,4 @@
+import { AgeRanges } from '../../../src/constants/AgeRange.ts';
 import { EventTypes } from '../../../src/constants/EventTypes.ts';
 import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
 import { formatPermission } from '../../../src/utils/formatPermission.ts';
@@ -308,20 +309,55 @@ const eventListMembers = [
   ...eventListVariants.map(eventListMember),
 ];
 
-// Somebody else's event, so the by-creator collection stays complete without
-// it. Only ever opened by id.
-const vrtMockUitpasEvent = {
+// Opened by id, never listed, and keeping the canonical dates so the calsum
+// catch-all answers for them.
+const editRouteVariant = ({ id, nameNl, ...overrides }) => ({
   ...vrtMockEvent,
-  '@id': `${MOCK_API_ORIGIN}/events/${UITPAS_EVENT_ID}`,
-  name: { nl: 'VRT mock evenement — UiTPAS' },
+  '@id': `${MOCK_API_ORIGIN}/events/${id}`,
+  name: { nl: nameNl },
+  ...overrides,
+});
+
+const vrtMockUitpasEvent = editRouteVariant({
+  id: UITPAS_EVENT_ID,
+  nameNl: 'VRT mock evenement — UiTPAS',
   creator: 'vrt-mock-user-2',
   organizer: vrtMockOrganizers.uitpas,
   // Base and UiTPAS, no tariff, and the amounts are one real UiTPAS event's.
   priceInfo: [{ ...vrtMockEvent.priceInfo[0], price: 15 }, uitpasPriceInfo],
-};
+});
 
-// Same dates, so the calsum catch-all below already answers for it.
-const eventsServedById = [...eventListMembers, vrtMockUitpasEvent];
+// Scores 98, not 100: the last two points are a video, and one would send
+// MediaStep to img.youtube.com for a thumbnail.
+const vrtMockCompleteEvent = editRouteVariant({
+  id: 'vrt-mock-event-8',
+  nameNl: 'VRT mock evenement — volledig ingevuld',
+  description: {
+    nl: 'VRT mock beschrijving die lang genoeg is om als volledig te tellen. Ze loopt over meerdere zinnen, want de teller kijkt enkel naar het aantal tekens van de platte tekst en niet naar de inhoud die erin staat.',
+  },
+});
+
+const vrtMockChildrenOnlyEvent = editRouteVariant({
+  id: 'vrt-mock-event-9',
+  nameNl: 'VRT mock evenement — enkel voor kinderen',
+  childrenOnly: true,
+  typicalAgeRange: AgeRanges.KIDS.apiLabel,
+});
+
+// The picker only offers its recently-used cards when the offer has none.
+const vrtMockWithoutOrganizerEvent = editRouteVariant({
+  id: 'vrt-mock-event-10',
+  nameNl: 'VRT mock evenement — zonder organisatie',
+  organizer: undefined,
+});
+
+const eventsServedById = [
+  ...eventListMembers,
+  vrtMockUitpasEvent,
+  vrtMockCompleteEvent,
+  vrtMockChildrenOnlyEvent,
+  vrtMockWithoutOrganizerEvent,
+];
 
 const calendarSummaryById = {
   [EVENT_ID]: eventCalendarSummary,
