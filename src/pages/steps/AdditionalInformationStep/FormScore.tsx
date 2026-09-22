@@ -25,6 +25,12 @@ const GaugeComponent = dynamic(() => import('react-gauge-component'), {
 
 const getValue = getValueFromTheme('colors');
 
+// The needle animates in JS, which Playwright cannot stop, so VRT relies on
+// this to screenshot any page with a gauge.
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 type Weights = { [key: string]: { weight: number; mandatory: boolean } };
 
 const scoreWeightMapping: Weights = {
@@ -195,6 +201,7 @@ export const DynamicBarometerIcon = ({
         color: '#B3ADB5',
         width: pointerWidth,
         length: 0.8,
+        animate: !prefersReducedMotion(),
       }}
     />
   </Box>
