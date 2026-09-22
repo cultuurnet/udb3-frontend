@@ -2,6 +2,8 @@ import http from 'node:http';
 import https from 'node:https';
 import zlib from 'node:zlib';
 
+const READ_METHODS = new Set(['GET', 'HEAD']);
+
 const matchesFixture = (fixture, method, pathname, searchParams) => {
   if (fixture.method && fixture.method !== method) return false;
   if (typeof fixture.path === 'string' && fixture.path !== pathname)
@@ -61,6 +63,7 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
   }
 
   const unmockedRequests = new Map();
+  const absorbedWrites = new Set();
 
   const server = http.createServer((req, res) => {
     const { pathname, searchParams } = new URL(req.url, 'http://localhost');
@@ -113,6 +116,25 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
     }
 
     const requestKey = `${req.method} ${upstreamPathname} (${upstream.envVar})`;
+
+    // Browsing by hand is one save button away from writing to the real
+    // backend. Answer as if it worked, write nothing. A fixture still wins.
+    if (!READ_METHODS.has(req.method)) {
+      if (!absorbedWrites.has(requestKey)) {
+        console.warn(
+          `\nMock server: answered ${requestKey} with 200 and wrote nothing. The page will act saved; a reload shows the fixture again.\n`,
+        );
+      }
+      absorbedWrites.add(requestKey);
+      res.writeHead(200, {
+        'content-type': 'application/json',
+        // So a suspicious save explains itself in the network tab.
+        'x-vrt-absorbed-write': 'true',
+      });
+      res.end(JSON.stringify({}));
+      return;
+    }
+
     if (!unmockedRequests.has(requestKey)) {
       unmockedRequests.set(requestKey, upstream.realUrl);
     }
