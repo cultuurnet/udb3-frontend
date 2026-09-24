@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
 import { pinClockToVrtNow } from '../../../scripts/vrt/pins/clock.mjs';
+import { pinReducedMotion } from '../../../scripts/vrt/pins/motion.mjs';
 import {
   expectNoUnexpectedHosts,
   trackUnexpectedHosts,
@@ -26,6 +27,7 @@ export const screenshotPages = (pages: ScreenshotPage[]) => {
 
   test.beforeEach(async ({ page }) => {
     await pinClockToVrtNow(page);
+    await pinReducedMotion(page);
     unexpectedHosts = trackUnexpectedHosts(page);
   });
 
