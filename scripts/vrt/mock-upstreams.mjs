@@ -9,6 +9,7 @@ import {
   imagesFixtures,
 } from './fixtures/images.mjs';
 import { labelsApiFixtures } from './fixtures/labels.mjs';
+import { organizersApiFixtures } from './fixtures/organizers.mjs';
 import { termsTaxonomyFixtures } from './fixtures/terms.mjs';
 
 // Only its own upstream's fixtures can answer a request; within one, first
@@ -28,6 +29,7 @@ export const MOCK_UPSTREAMS = [
       ...globalApiFixtures,
       ...labelsApiFixtures,
       ...eventsApiFixtures,
+      ...organizersApiFixtures,
     ],
   },
   {
