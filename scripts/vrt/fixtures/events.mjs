@@ -6,6 +6,7 @@ import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 import { vrtMockOrganizers } from './organizers.mjs';
+import { UITPAS_EVENT_ID, uitpasPriceInfo } from './uitpas.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
 const LOCATION_ID = 'vrt-mock-place-1';
@@ -307,6 +308,21 @@ const eventListMembers = [
   ...eventListVariants.map(eventListMember),
 ];
 
+// Somebody else's event, so the by-creator collection stays complete without
+// it. Only ever opened by id.
+const vrtMockUitpasEvent = {
+  ...vrtMockEvent,
+  '@id': `${MOCK_API_ORIGIN}/events/${UITPAS_EVENT_ID}`,
+  name: { nl: 'VRT mock evenement — UiTPAS' },
+  creator: 'vrt-mock-user-2',
+  organizer: vrtMockOrganizers.uitpas,
+  // Base and UiTPAS, no tariff, and the amounts are one real UiTPAS event's.
+  priceInfo: [{ ...vrtMockEvent.priceInfo[0], price: 15 }, uitpasPriceInfo],
+};
+
+// Same dates, so the calsum catch-all below already answers for it.
+const eventsServedById = [...eventListMembers, vrtMockUitpasEvent];
+
 const calendarSummaryById = {
   [EVENT_ID]: eventCalendarSummary,
   ...Object.fromEntries(
@@ -333,7 +349,7 @@ const ANY_EVENT_PATH = /^\/events\/[^/]+$/;
 const ANY_EVENT_CALENDAR_SUMMARY_PATH = /^\/events\/[^/]+\/calsum$/;
 const ANY_EVENT_PERMISSIONS_PATH = /^\/events\/[^/]+\/permissions$/;
 
-const eventByIdFixtures = eventListMembers.map((member) => ({
+const eventByIdFixtures = eventsServedById.map((member) => ({
   method: 'GET',
   path: `/events/${parseOfferId(member['@id'])}`,
   response: withoutCalendarSummary(member),
