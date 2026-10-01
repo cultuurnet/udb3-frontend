@@ -19,20 +19,46 @@ pipeline {
         }
 
         stage('Setup and build') {
-            agent { label 'ubuntu && 20.04 && nodejs22' }
-            environment {
-                GIT_SHORT_COMMIT = util.shortCommitRef()
-                ARTIFACT_VERSION = "${env.PIPELINE_VERSION}" + '+sha.' + "${env.GIT_SHORT_COMMIT}"
-            }
-            steps {
-                sh label: 'Install rubygems', script: 'bundle install --deployment'
-                sh label: 'Build binaries', script: 'bundle exec rake build'
-                sh label: 'Build artifact', script: "bundle exec rake build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
-                archiveArtifacts artifacts: "pkg/*${env.ARTIFACT_VERSION}*.deb", onlyIfSuccessful: true
-            }
-            post {
-                cleanup {
-                    cleanWs()
+            stages {
+                stage('Build project') {
+                    agent {
+                        docker {
+                            image 'base_images/node/22:22.23.3-bookworm'
+                            label 'docker'
+                            args  '-e HOME=/tmp'
+                        }
+                    }
+                    steps {
+                        sh label: 'Install node modules', script: 'yarn install --frozen-lockfile'
+                        sh label: 'Build project', script: 'yarn build'
+                        sh label: 'Remove node modules', script: 'rm -rf node_modules'
+                        sh label: 'Install production node modules', script: 'yarn install --frozen-lockfile --production'
+                        stash name: 'build', includes: '.next/**, node_modules/**'
+                    }
+                    post {
+                        cleanup {
+                            cleanWs()
+                        }
+                    }
+                }
+
+                stage('Build artifact') {
+                    agent { label 'ubuntu && 20.04' }
+                    environment {
+                        GIT_SHORT_COMMIT = util.shortCommitRef()
+                        ARTIFACT_VERSION = "${env.PIPELINE_VERSION}" + '+sha.' + "${env.GIT_SHORT_COMMIT}"
+                    }
+                    steps {
+                        sh label: 'Install rubygems', script: 'bundle install --deployment'
+                        unstash 'build'
+                        sh label: 'Build artifact', script: "bundle exec rake build_artifact ARTIFACT_VERSION=${env.ARTIFACT_VERSION}"
+                        archiveArtifacts artifacts: "pkg/*${env.ARTIFACT_VERSION}*.deb", onlyIfSuccessful: true
+                    }
+                    post {
+                        cleanup {
+                            cleanWs()
+                        }
+                    }
                 }
             }
         }
