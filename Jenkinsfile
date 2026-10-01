@@ -28,7 +28,7 @@ pipeline {
                         }
                     }
                     environment {
-                        HOME = '/tmp'
+                        YARN_CACHE_FOLDER = '/tmp/.yarn-cache'
                     }
                     steps {
                         sh label: 'Install node modules', script: 'yarn install --frozen-lockfile'
