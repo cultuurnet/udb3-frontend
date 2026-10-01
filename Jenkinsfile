@@ -25,8 +25,10 @@ pipeline {
                         docker {
                             image 'base_images/node/22:22.23.3-bookworm'
                             label 'docker'
-                            args  '-e HOME=/tmp'
                         }
+                    }
+                    environment {
+                        HOME = '/tmp'
                     }
                     steps {
                         sh label: 'Install node modules', script: 'yarn install --frozen-lockfile'
