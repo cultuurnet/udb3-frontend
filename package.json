@@ -167,6 +167,8 @@
     "vitest": "^4.1.10"
   },
   "resolutions": {
-    "@types/react": "^19.0.0"
+    "@types/react": "^19.0.0",
+    "lodash": "^4.18.1",
+    "lodash-es": "^4.18.1"
   }
 }
