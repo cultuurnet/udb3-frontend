@@ -42,11 +42,10 @@ import {
   XCircle,
 } from 'lucide-react';
 
-import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { Values } from '@/types/Values';
 import { cn } from '@/ui/shadcn/utils';
 
-import { IconLegacy } from './IconLegacy';
+import { parseSpacing } from './Box';
 
 const Icons = {
   HOME: 'home',
@@ -152,9 +151,13 @@ type Props = {
   height?: number;
   variant?: Values<typeof IconVariants>;
   className?: string;
+  // TODO SHADCN_MIGRATION CLEANUP: InlineLegacy/StackLegacy space children by cloning
+  // them with a margin prop, which only Box-based components honour. Drop with them.
+  marginRight?: number;
+  marginBottom?: number;
 };
 
-const shadcnVariantClassName: Record<
+const variantClassName: Record<
   Values<typeof IconVariants>,
   string | undefined
 > = {
@@ -165,32 +168,29 @@ const shadcnVariantClassName: Record<
   [IconVariants.INFO]: 'tw:text-info',
 };
 
-const IconShadcn = ({
+const legacyMargin = (spacing?: number) =>
+  typeof spacing === 'number' ? parseSpacing(spacing)().trim() : undefined;
+
+const Icon = ({
   name,
   width = 18,
   height = 18,
   variant = IconVariants.DEFAULT,
   className,
+  marginRight,
+  marginBottom,
 }: Props) => {
   const LucideIcon = LucideIconsMap[name];
   return (
     <LucideIcon
       width={width}
       height={height}
-      className={cn(shadcnVariantClassName[variant], className)}
+      className={cn(variantClassName[variant], className)}
+      style={{
+        marginRight: legacyMargin(marginRight),
+        marginBottom: legacyMargin(marginBottom),
+      }}
     />
-  );
-};
-
-const Icon = ({ variant = IconVariants.DEFAULT, ...props }: Props) => {
-  const [isShadcnMigrationEnabled] = useFeatureFlag(
-    FeatureFlags.SHADCN_MIGRATION,
-  );
-
-  return isShadcnMigrationEnabled ? (
-    <IconShadcn {...props} variant={variant} />
-  ) : (
-    <IconLegacy {...props} variant={variant} />
   );
 };
 

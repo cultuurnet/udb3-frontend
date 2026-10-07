@@ -66,12 +66,14 @@ test.describe.serial('Event translation', () => {
       await expect(
         page.getByText(`Titel (${lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await page.locator('.toast svg.lucide-x').first().click();
       await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
-      page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
+      page
+        .getByRole('tab', { name: 'Titel' })
+        .locator('.lucide-circle-check-big'),
     ).toBeVisible();
   });
 
@@ -93,14 +95,14 @@ test.describe.serial('Event translation', () => {
       await expect(
         page.getByText(`Beschrijving (${lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await page.locator('.toast svg.lucide-x').first().click();
       await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
       page
         .getByRole('tab', { name: 'Beschrijving' })
-        .locator('.fa-circle-check'),
+        .locator('.lucide-circle-check-big'),
     ).toBeVisible();
   });
 
@@ -120,12 +122,14 @@ test.describe.serial('Event translation', () => {
       await faqContainer.getByRole('textbox', { name: 'rdw-editor' }).blur();
 
       await expect(page.getByText('FAQ succesvol bijgewerkt')).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await page.locator('.toast svg.lucide-x').first().click();
       await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
-      page.getByRole('tab', { name: 'FAQ' }).locator('.fa-circle-check'),
+      page
+        .getByRole('tab', { name: 'FAQ' })
+        .locator('.lucide-circle-check-big'),
     ).toBeVisible();
 
     await page.getByRole('button', { name: 'Klaar met vertalen' }).click();
