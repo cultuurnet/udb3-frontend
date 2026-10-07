@@ -10,6 +10,7 @@ import {
 type CardSystem = {
   id: number;
   name: string;
+  enabled?: boolean;
   distributionKeys?: any[];
 };
 
@@ -40,13 +41,21 @@ const useGetCardSystemForEventQuery = (
   });
 
 const getCardSystemsForOrganizer = async ({ headers, organizerId }) => {
-  const res = await fetchFromApi({
-    path: `/uitpas/organizers/${organizerId.toString()}/cardSystems/`,
-    options: {
-      headers,
-    },
-  });
-  return (await res.json()) as CardSystem[];
+  try {
+    const res = await fetchFromApi({
+      path: `/uitpas/organizers/${organizerId.toString()}/cardSystems/`,
+      options: {
+        headers,
+      },
+    });
+    return (await res.json()) as CardSystem[];
+  } catch (error) {
+    if (error?.status === 404) {
+      return [] as CardSystem[];
+    }
+
+    throw error;
+  }
 };
 
 const useGetCardSystemsForOrganizerQuery = (
