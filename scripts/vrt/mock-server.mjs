@@ -117,8 +117,8 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
 
     const requestKey = `${req.method} ${upstreamPathname} (${upstream.envVar})`;
 
-    // Browsing by hand is one save button away from writing to the real
-    // backend. Answer as if it worked, write nothing. A fixture still wins.
+    // Every mode is one save button away from writing to the real backend.
+    // Answer as if it worked, write nothing. A fixture still wins.
     if (!READ_METHODS.has(req.method)) {
       if (!absorbedWrites.has(requestKey)) {
         console.warn(
