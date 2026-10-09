@@ -1,7 +1,6 @@
 import { chromium } from '@playwright/test';
 
 import { pinClockToVrtNow } from './pins/clock.mjs';
-import { pinReducedMotion } from './pins/motion.mjs';
 import {
   BASE_URL,
   cleanup,
@@ -43,13 +42,9 @@ const main = async () => {
       baseURL: BASE_URL,
       storageState,
       viewport: null,
+      reducedMotion: 'reduce',
     });
-
-    // Best effort: a handler cannot hold the page back, so a pin can land late.
-    context.on('page', (page) => {
-      pinClockToVrtNow(page).catch(() => {});
-      pinReducedMotion(page).catch(() => {});
-    });
+    await pinClockToVrtNow(context);
 
     // The terminal is behind the window, so say it in the page too.
     context.on('response', async (response) => {
@@ -66,8 +61,6 @@ const main = async () => {
     });
 
     const page = await context.newPage();
-    await pinClockToVrtNow(page);
-    await pinReducedMotion(page);
     await page.goto(startPath);
 
     console.log(
