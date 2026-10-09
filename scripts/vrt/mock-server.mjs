@@ -161,6 +161,7 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
   });
 
   server.unmockedRequests = unmockedRequests;
+  server.absorbedWrites = absorbedWrites;
 
   return new Promise((resolve, reject) => {
     server.on('error', reject);
