@@ -309,19 +309,20 @@ const eventListMembers = [
   ...eventListVariants.map(eventListMember),
 ];
 
-// Opened by id, never listed, and keeping the canonical dates so the calsum
-// catch-all answers for them.
+// Opened by id, and somebody else's, so the by-creator collection stays
+// complete without them. Keeps the canonical dates so the calsum catch-all
+// answers for them.
 const editRouteVariant = ({ id, nameNl, ...overrides }) => ({
   ...vrtMockEvent,
   '@id': `${MOCK_API_ORIGIN}/events/${id}`,
   name: { nl: nameNl },
+  creator: 'vrt-mock-user-2',
   ...overrides,
 });
 
 const vrtMockUitpasEvent = editRouteVariant({
   id: UITPAS_EVENT_ID,
   nameNl: 'VRT mock evenement — UiTPAS',
-  creator: 'vrt-mock-user-2',
   organizer: vrtMockOrganizers.uitpas,
   // Base and UiTPAS, no tariff, and the amounts are one real UiTPAS event's.
   priceInfo: [{ ...vrtMockEvent.priceInfo[0], price: 15 }, uitpasPriceInfo],
