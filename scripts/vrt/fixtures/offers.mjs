@@ -139,6 +139,8 @@ const offerMembers = [
 const offersByCreatorFixture = pagedCollection(offerMembers, 20);
 
 // Path only: all three callers interpolate the signed-in user's id into q.
+// They filter on organizer.id or location.id, so every offer needs both to
+// belong in the one response they share.
 export const offersApiFixtures = [
   {
     method: 'GET',
