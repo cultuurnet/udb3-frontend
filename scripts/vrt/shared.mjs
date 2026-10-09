@@ -144,6 +144,8 @@ export const cleanup = () => {
     killPortListener(APP_PORT);
   }
   if (mockServer) {
+    const absorbedWrites = mockServer.absorbedWrites ?? new Set();
+
     if (mockServer.unmockedRequests?.size) {
       if (!isRecordingMissingFixtures) {
         const lines = [...mockServer.unmockedRequests].map(
@@ -156,12 +158,20 @@ export const cleanup = () => {
             'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
         );
       }
-    } else {
+    } else if (!absorbedWrites.size) {
       console.log(
         '\nMock server: every request routed through it was served from a fixture.\n' +
           'Endpoints outside MOCK_UPSTREAMS bypass it and are not counted.\n',
       );
     }
+
+    if (absorbedWrites.size) {
+      const lines = [...absorbedWrites].map((requestKey) => `  - ${requestKey}`);
+      console.warn(
+        `\nMock server: answered these with 200 and wrote nothing:\n${lines.join('\n')}\n`,
+      );
+    }
+
     mockServer.closeAllConnections();
     mockServer.close();
   }
