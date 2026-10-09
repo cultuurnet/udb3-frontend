@@ -76,7 +76,7 @@ const filteredOutLocations = [
   }),
 ];
 
-const vrtMockOffer = ({ id, nameNl, location, organizer, daysAgo }) => ({
+const vrtMockOffer = ({ id, nameNl, location, organizer, daysFromNow }) => ({
   '@id': `${MOCK_API_ORIGIN}/events/${id}`,
   '@context': '/contexts/event',
   mainLanguage: 'nl',
@@ -84,18 +84,19 @@ const vrtMockOffer = ({ id, nameNl, location, organizer, daysAgo }) => ({
   location,
   organizer,
   workflowStatus: 'APPROVED',
-  created: vrtDaysFromNow(daysAgo - 30).toISOString(),
-  modified: vrtDaysFromNow(daysAgo).toISOString(),
+  created: vrtDaysFromNow(daysFromNow - 30).toISOString(),
+  modified: vrtDaysFromNow(daysFromNow).toISOString(),
 });
 
-// Order is behaviour: both readers keep the first few distinct entries.
+// Order is behaviour: all three callers keep the first few distinct entries,
+// and modified descending is the sort they all request.
 const offerMembers = [
   vrtMockOffer({
     id: 'vrt-mock-offer-1',
     nameNl: 'VRT mock aanbod — eerste',
     location: recentLocations[0],
     organizer: vrtMockOrganizers.owned,
-    daysAgo: -1,
+    daysFromNow: -1,
   }),
   // Same organizer again, so the dedupe is exercised rather than assumed.
   vrtMockOffer({
@@ -103,41 +104,43 @@ const offerMembers = [
     nameNl: 'VRT mock aanbod — tweede',
     location: recentLocations[1],
     organizer: vrtMockOrganizers.owned,
-    daysAgo: -3,
+    daysFromNow: -3,
   }),
   vrtMockOffer({
     id: 'vrt-mock-offer-3',
     nameNl: 'VRT mock aanbod — van een andere gebruiker',
     location: recentLocations[2],
     organizer: vrtMockOrganizers.suggested,
-    daysAgo: -5,
+    daysFromNow: -5,
   }),
   vrtMockOffer({
     id: 'vrt-mock-offer-4',
     nameNl: 'VRT mock aanbod — UiTPAS',
     location: recentLocations[3],
     organizer: vrtMockOrganizers.uitpas,
-    daysAgo: -8,
+    daysFromNow: -8,
   }),
   vrtMockOffer({
     id: 'vrt-mock-offer-5',
     nameNl: 'VRT mock aanbod — online',
     location: filteredOutLocations[0],
     organizer: vrtMockOrganizers.owned,
-    daysAgo: -13,
+    daysFromNow: -13,
   }),
   vrtMockOffer({
     id: 'vrt-mock-offer-6',
     nameNl: 'VRT mock aanbod — afgewezen locatie',
     location: filteredOutLocations[1],
     organizer: vrtMockOrganizers.owned,
-    daysAgo: -21,
+    daysFromNow: -21,
   }),
 ];
 
 const offersByCreatorFixture = pagedCollection(offerMembers, 20);
 
 // Path only: all three callers interpolate the signed-in user's id into q.
+// They filter on organizer.id or location.id, so every offer needs both to
+// belong in the one response they share.
 export const offersApiFixtures = [
   {
     method: 'GET',

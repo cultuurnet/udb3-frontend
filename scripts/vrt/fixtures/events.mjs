@@ -370,7 +370,8 @@ const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// What global.mjs's role constraints grant on this event.
+// What global.mjs's role constraints grant via the moderation label, so every
+// event served here has to keep it.
 const eventPermissionsFixture = {
   permissions: [
     PermissionTypes.AANBOD_BEWERKEN,

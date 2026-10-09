@@ -380,7 +380,7 @@ const CalendarOpeninghoursModal = ({
                     onChange={(newDays) =>
                       handleToggleDaysOfWeek(newDays, openingHour.id)
                     }
-                    className="tw:w-60"
+                    className="tw:w-61"
                     hasError={
                       shownErrorIds.has(openingHour.id) &&
                       openingHour.dayOfWeek.length === 0

@@ -221,7 +221,7 @@ const convertStateToFormData = (
         ...(day.childcareEndTime && { end: day.childcareEndTime }),
       },
     }),
-    ...(day.hasOvernightStay && { hasOvernightStay: true }),
+    hasOvernightStay: day.hasOvernightStay,
   }));
 
   const newOpeningHours = openingHours.map((openingHour) => ({

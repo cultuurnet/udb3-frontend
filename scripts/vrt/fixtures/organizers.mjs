@@ -182,7 +182,7 @@ const permissionsFor = (id) => ({
   permissions: OWNED_ORGANIZER_IDS.includes(id) ? [ORGANISATIES_BEWERKEN] : [],
 });
 
-// The pinned account, so the creator row reads as the signed-in user's own.
+// Only the email is pinned; the real account's sub never matches these ids.
 const SIGNED_IN_PARTY = {
   ownerId: 'vrt-mock-user-1',
   ownerEmail: 'vrt-mock@example.com',
@@ -228,11 +228,13 @@ const requestedOwnership = (itemId, { ownerId, ownerEmail }) => ({
 // The page groups on state and renders an approved table and a pending one, so
 // one organizer carries both. The approved owner is somebody else because the
 // creator row above it comes from /creator and is already the signed-in user.
-const ownershipsForOrganizer = (itemId) =>
-  pagedCollection([
-    approvedOwnership(itemId, CO_OWNER_PARTY),
-    requestedOwnership(itemId, APPLICANT_PARTY),
-  ]);
+const ownershipsForOrganizer = (itemId, ownerId) =>
+  pagedCollection(
+    [
+      approvedOwnership(itemId, CO_OWNER_PARTY),
+      requestedOwnership(itemId, APPLICANT_PARTY),
+    ].filter((ownership) => !ownerId || ownership.ownerId === ownerId),
+  );
 
 // The dashboard turns the approved rows into the `OR id:…` half of its list
 // query, so only the organizers it should list belong here — owned by the
@@ -319,7 +321,8 @@ export const organizersApiFixtures = [
     method: 'GET',
     path: '/ownerships/',
     query: (params) => params.has('itemId'),
-    response: (params) => ownershipsForOrganizer(params.get('itemId')),
+    response: (params) =>
+      ownershipsForOrganizer(params.get('itemId'), params.get('ownerId')),
   },
   {
     method: 'GET',
