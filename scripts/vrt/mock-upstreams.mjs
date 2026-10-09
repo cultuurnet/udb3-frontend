@@ -11,6 +11,7 @@ import {
 import { labelsApiFixtures } from './fixtures/labels.mjs';
 import { organizersApiFixtures } from './fixtures/organizers.mjs';
 import { termsTaxonomyFixtures } from './fixtures/terms.mjs';
+import { uitpasApiFixtures } from './fixtures/uitpas.mjs';
 
 // Only its own upstream's fixtures can answer a request; within one, first
 // match wins, so narrowed entries go above the catch-all they share a path
@@ -30,6 +31,7 @@ export const MOCK_UPSTREAMS = [
       ...labelsApiFixtures,
       ...eventsApiFixtures,
       ...organizersApiFixtures,
+      ...uitpasApiFixtures,
     ],
   },
   {
