@@ -88,7 +88,8 @@ const vrtMockOffer = ({ id, nameNl, location, organizer, daysFromNow }) => ({
   modified: vrtDaysFromNow(daysFromNow).toISOString(),
 });
 
-// Order is behaviour: both readers keep the first few distinct entries.
+// Order is behaviour: all three callers keep the first few distinct entries,
+// and modified descending is the sort they all request.
 const offerMembers = [
   vrtMockOffer({
     id: 'vrt-mock-offer-1',
