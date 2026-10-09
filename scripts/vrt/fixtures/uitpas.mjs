@@ -12,7 +12,8 @@ const uitpasLabelsFixture = {
 };
 
 // Both endpoints answer with a map keyed by card system id, which is what the
-// app indexes when it toggles one. The ids come from a real response.
+// app indexes when it toggles one. Recorded from the legacy proxy, which sends
+// no enabled — OrganizerStep reads a missing one as checked.
 const UITPAS_CARD_SYSTEM = {
   id: 5,
   name: 'VRT mock kaartsysteem',
