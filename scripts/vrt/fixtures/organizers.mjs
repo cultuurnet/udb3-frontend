@@ -213,11 +213,18 @@ const requestedOwnership = (itemId, { ownerId, ownerEmail }) => ({
 // The page groups on state and renders an approved table and a pending one, so
 // one organizer carries both. The approved owner is somebody else because the
 // creator row above it comes from /creator and is already the signed-in user.
-const ownershipsForOrganizer = (itemId) =>
-  pagedCollection([
+const ownershipsForOrganizer = (itemId, ownerId) => {
+  const ownerships = [
     approvedOwnership(itemId, CO_OWNER_PARTY),
     requestedOwnership(itemId, APPLICANT_PARTY),
-  ]);
+  ];
+
+  return pagedCollection(
+    ownerId
+      ? ownerships.filter((ownership) => ownership.ownerId === ownerId)
+      : ownerships,
+  );
+};
 
 // The dashboard turns the approved rows into the `OR id:…` half of its list
 // query, so only the organizers it should list belong here — owned by the
@@ -304,7 +311,8 @@ export const organizersApiFixtures = [
     method: 'GET',
     path: '/ownerships/',
     query: (params) => params.has('itemId'),
-    response: (params) => ownershipsForOrganizer(params.get('itemId')),
+    response: (params) =>
+      ownershipsForOrganizer(params.get('itemId'), params.get('ownerId')),
   },
   {
     method: 'GET',
