@@ -21,7 +21,8 @@ const storedSession = async () => {
     console.error(
       '\nCould not get an authenticated session, and you cannot sign in by hand here. Check E2E_TEST_EMAIL and E2E_TEST_PASSWORD.\n',
     );
-    process.exit(1);
+    process.exitCode = 1;
+    return null;
   }
   return buildStorageState(APP_HOST);
 };
@@ -29,14 +30,18 @@ const storedSession = async () => {
 const main = async () => {
   await ensureAppAndMockServer();
 
-  const browser = await chromium.launch({ headless: false });
-  // cleanup() exits, so Ctrl-C would otherwise leave the window behind.
-  registerCleanupTask(() => browser.close().catch(() => {}));
-
+  let browser;
   try {
+    const storageState = await storedSession();
+    if (!storageState) return;
+
+    browser = await chromium.launch({ headless: false });
+    // cleanup() exits, so Ctrl-C would otherwise leave the window behind.
+    registerCleanupTask(() => browser.close().catch(() => {}));
+
     const context = await browser.newContext({
       baseURL: BASE_URL,
-      storageState: await storedSession(),
+      storageState,
       viewport: null,
     });
 
@@ -82,7 +87,7 @@ const main = async () => {
       browser.on('disconnected', resolve);
     });
   } finally {
-    await browser.close().catch(() => {});
+    await browser?.close().catch(() => {});
     cleanup();
   }
 };
