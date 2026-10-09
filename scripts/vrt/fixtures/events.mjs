@@ -335,6 +335,7 @@ const vrtMockCompleteEvent = editRouteVariant({
   description: {
     nl: 'VRT mock beschrijving die lang genoeg is om als volledig te tellen. Ze loopt over meerdere zinnen, want de teller kijkt enkel naar het aantal tekens van de platte tekst en niet naar de inhoud die erin staat.',
   },
+  completeness: 98,
 });
 
 const vrtMockChildrenOnlyEvent = editRouteVariant({
