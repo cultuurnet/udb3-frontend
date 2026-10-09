@@ -309,7 +309,8 @@ const eventListMembers = [
 ];
 
 // Somebody else's event, so the by-creator collection stays complete without
-// it. Only ever opened by id.
+// it. Only ever opened by id, and the spread keeps the moderation label that
+// earns the edit permission.
 const vrtMockUitpasEvent = {
   ...vrtMockEvent,
   '@id': `${MOCK_API_ORIGIN}/events/${UITPAS_EVENT_ID}`,
@@ -334,7 +335,8 @@ const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// What global.mjs's role constraints grant on this event.
+// What global.mjs's role constraints grant via the moderation label, so every
+// event served here has to keep it.
 const eventPermissionsFixture = {
   permissions: [
     PermissionTypes.AANBOD_BEWERKEN,
