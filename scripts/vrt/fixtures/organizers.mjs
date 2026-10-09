@@ -167,7 +167,7 @@ const permissionsFor = (id) => ({
   permissions: OWNED_ORGANIZER_IDS.includes(id) ? [ORGANISATIES_BEWERKEN] : [],
 });
 
-// The pinned account, so the creator row reads as the signed-in user's own.
+// Only the email is pinned; the real account's sub never matches these ids.
 const SIGNED_IN_PARTY = {
   ownerId: 'vrt-mock-user-1',
   ownerEmail: 'vrt-mock@example.com',
