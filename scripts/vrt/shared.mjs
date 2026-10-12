@@ -166,7 +166,9 @@ export const cleanup = () => {
     }
 
     if (absorbedWrites.size) {
-      const lines = [...absorbedWrites].map((requestKey) => `  - ${requestKey}`);
+      const lines = [...absorbedWrites].map(
+        (requestKey) => `  - ${requestKey}`,
+      );
       console.warn(
         `\nMock server: answered these with 200 and wrote nothing:\n${lines.join('\n')}\n`,
       );
