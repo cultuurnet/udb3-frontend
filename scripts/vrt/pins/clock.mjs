@@ -26,5 +26,5 @@ const pinDate = (target) => {
 };
 
 // Shifts Date only. Faking timers too costs ~5s per screenshot that settles.
-export const pinClockToVrtNow = (page) =>
-  page.addInitScript(pinDate, VRT_NOW.getTime());
+export const pinClockToVrtNow = (pageOrContext) =>
+  pageOrContext.addInitScript(pinDate, VRT_NOW.getTime());
