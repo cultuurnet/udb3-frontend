@@ -94,10 +94,21 @@ export const startMockServer = ({ port, upstreams, onUnmockedResponse }) => {
       matchesFixture(candidate, req.method, upstreamPathname, searchParams),
     );
     if (fixture) {
+      // A function response sees the query. Resolved before the check below,
+      // which picks the raw-vs-JSON branch on the body's own type.
+      const body =
+        typeof fixture.response === 'function'
+          ? fixture.response(searchParams)
+          : fixture.response;
+
       res.writeHead(fixture.status ?? 200, {
-        'content-type': 'application/json',
+        'content-type': fixture.contentType ?? 'application/json',
       });
-      res.end(JSON.stringify(fixture.response));
+      res.end(
+        fixture.contentType && typeof body === 'string'
+          ? body
+          : JSON.stringify(body),
+      );
       return;
     }
 
