@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 
+import { APP_HOST, MOCK_ORIGIN } from './hosts.mjs';
+
 dotenv.config({ path: ['.env.local', '.env'] });
 
 const FEATURE_FLAGS = {
@@ -20,6 +22,35 @@ export const PINNED_ENV = {
   NEXT_PUBLIC_OWNERSHIP_ENABLED: 'true',
   NEXT_PUBLIC_GLOBAL_ALERT_MESSAGE: 'null',
 };
+
+// Allowed because the app reaches them today, not because they belong here.
+const UNMOCKED_HOSTS = [
+  'cdn.jsdelivr.net', // Bootstrap CSS, moves pixels
+  'fonts.googleapis.com', // Open Sans stylesheet from _document; GlobalStyle overrides the face
+  'fonts.gstatic.com', // the font files that stylesheet pulls
+  'static.hotjar.com', // analytics, site id hardcoded in the app
+];
+
+const UNMOCKED_HOST_ENV_VARS = ['NEXT_PUBLIC_SOCKET_URL'];
+
+const toHostname = (envVar) => {
+  const value = process.env[envVar];
+  const hostname = URL.canParse(value) ? new URL(value).hostname : '';
+  if (hostname) return hostname;
+
+  throw new Error(
+    `\n${envVar} is not a full URL (${value}), so the host it points at cannot be allowed for this run. Give it a scheme, or drop it from UNMOCKED_HOST_ENV_VARS.\n`,
+  );
+};
+
+export const buildAllowedHosts = () => [
+  APP_HOST,
+  new URL(MOCK_ORIGIN).hostname,
+  ...UNMOCKED_HOSTS,
+  ...UNMOCKED_HOST_ENV_VARS.filter((envVar) => process.env[envVar]).map(
+    toHostname,
+  ),
+];
 
 const REQUIRED_ENV = [
   'NEXT_PUBLIC_API_KEY',

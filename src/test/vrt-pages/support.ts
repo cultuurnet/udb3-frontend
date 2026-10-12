@@ -1,6 +1,11 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
 import { pinClockToVrtNow } from '../../../scripts/vrt/pins/clock.mjs';
+import { pinReducedMotion } from '../../../scripts/vrt/pins/motion.mjs';
+import {
+  expectNoUnexpectedHosts,
+  trackUnexpectedHosts,
+} from './unexpected-hosts';
 
 // Screenshots against a baseline named after the test title.
 export const takeVrtScreenshot = async (target: Page | Locator) => {
@@ -18,9 +23,15 @@ type ScreenshotPage = {
 
 // Declares one test per page: navigate, optionally interact, then screenshot (defaults to `main`).
 export const screenshotPages = (pages: ScreenshotPage[]) => {
+  let unexpectedHosts = new Set<string>();
+
   test.beforeEach(async ({ page }) => {
     await pinClockToVrtNow(page);
+    await pinReducedMotion(page);
+    unexpectedHosts = trackUnexpectedHosts(page);
   });
+
+  test.afterEach(() => expectNoUnexpectedHosts(unexpectedHosts));
 
   for (const {
     title,
