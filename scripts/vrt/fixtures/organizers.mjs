@@ -12,9 +12,8 @@ const OWNED_ORGANIZER_IDS = ['vrt-mock-organizer-1', 'vrt-mock-organizer-2'];
 const SUGGESTED_ORGANIZER_ID = 'vrt-mock-organizer-3';
 const UITPAS_ORGANIZER_ID = 'vrt-mock-organizer-4';
 
-// Matches a value in the /uitpas/labels fixture, which is how an organizer
-// counts as a UiTPAS one.
-const UITPAS_ORGANIZER_LABEL = 'vrt-mock-uitpas-gent';
+// What makes an organizer a UiTPAS one: uitpas.mjs seeds /uitpas/labels with it.
+export const UITPAS_ORGANIZER_LABEL = 'vrt-mock-uitpas-gent';
 
 const organizerUri = (id) => `${MOCK_API_ORIGIN}/organizers/${id}`;
 
