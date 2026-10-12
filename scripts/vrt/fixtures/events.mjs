@@ -375,15 +375,6 @@ export const eventsApiFixtures = [
     path: '/events/',
     response: eventsByCreatorFixture,
   },
-  // The combined offers search, read for the organizers and locations embedded
-  // on its results — the dashboard's suggestions block, the picker's
-  // recently-used organizer cards and the recent-location cards. Same members,
-  // since this account creates events.
-  {
-    method: 'GET',
-    path: '/offers/',
-    response: eventsByCreatorFixture,
-  },
   ...eventCalendarSummaryFixtures,
   {
     method: 'GET',

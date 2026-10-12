@@ -40,7 +40,20 @@ const organizerImages = [
     copyrightHolder: 'VRT mock rechthebbende',
     inLanguage: 'nl',
   },
+  {
+    '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-5`,
+    '@type': 'schema:ImageObject',
+    contentUrl: vrtMockImageUrls.square,
+    thumbnailUrl: vrtMockImageUrls.square,
+    description: 'VRT mock afbeelding — derde afbeelding van de organisatie',
+    copyrightHolder: 'VRT mock rechthebbende',
+    inLanguage: 'nl',
+  },
 ];
+
+// One ratio each, so a row or card rendering the wrong organizer's image is
+// visible. Three identical thumbnails would hide it.
+const [landscapeImage, portraitImage, squareImage] = organizerImages;
 
 // The preview badges the main image by comparing mainImage against
 // thumbnailUrl, never against contentUrl.
@@ -104,8 +117,7 @@ const ownedOrganizers = [
   }),
 ];
 
-// The only organizer the picker renders as a card alongside the canonical one,
-// so it carries the Cultuurkuur badge and the second address.
+// Carries the Cultuurkuur badge and the second address for the picker's cards.
 const suggestedOrganizer = organizerVariant({
   id: SUGGESTED_ORGANIZER_ID,
   nameNl: 'VRT mock organisatie — van een andere gebruiker',
@@ -122,6 +134,7 @@ const suggestedOrganizer = organizerVariant({
   description: undefined,
   contactPoint: NO_CONTACT,
   completeness: 65,
+  ...withImages([portraitImage, landscapeImage]),
 });
 
 const uitpasOrganizer = organizerVariant({
@@ -129,12 +142,13 @@ const uitpasOrganizer = organizerVariant({
   nameNl: 'VRT mock organisatie — UiTPAS',
   creator: 'vrt-mock-user-2',
   labels: [UITPAS_ORGANIZER_LABEL],
+  ...withImages([squareImage]),
 });
 
 const allOrganizers = [...ownedOrganizers, suggestedOrganizer, uitpasOrganizer];
 
-// The event fixture embeds these, which is what puts them in front of the
-// dashboard suggestions and the picker's recently-used cards.
+// offers.mjs embeds these, which is what puts them in front of the dashboard
+// suggestions and the picker's recently-used cards.
 export const vrtMockOrganizers = {
   owned: vrtMockOrganizer,
   suggested: suggestedOrganizer,
@@ -143,10 +157,12 @@ export const vrtMockOrganizers = {
 
 const organizersByCreatorFixture = pagedCollection(ownedOrganizers, 14);
 
-// Answers the query the dashboard builds from the organizers on its recent
-// offers: `id:… NOT creator:"<the user>"`. Returning only the organizer
-// somebody else created honours that clause without parsing it.
-const suggestedOrganizersFixture = pagedCollection([suggestedOrganizer]);
+// The dashboard asks `id:… NOT creator:"<the user>"` for the organizers on its
+// recent offers. These are the two in offers.mjs that somebody else created.
+const suggestedOrganizersFixture = pagedCollection([
+  suggestedOrganizer,
+  uitpasOrganizer,
+]);
 
 // Every typeahead keystroke lands here. Keyed on one search string instead,
 // any other input would fall through to the real backend unnoticed.
