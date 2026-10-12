@@ -30,6 +30,7 @@
     "vrt:pages-update:single": "node scripts/vrt/pages.mjs update -g",
     "vrt:pages:fixtures": "node scripts/vrt/record-missing-fixtures.mjs",
     "vrt:pages:fixtures:single": "node scripts/vrt/record-missing-fixtures.mjs -g",
+    "vrt:pages:browse": "node scripts/vrt/browse.mjs",
     "vrt:pages:menu": "node scripts/vrt/pages-and-fixtures-menu.mjs"
   },
   "dependencies": {
@@ -167,6 +168,8 @@
     "vitest": "^4.1.10"
   },
   "resolutions": {
-    "@types/react": "^19.0.0"
+    "@types/react": "^19.0.0",
+    "lodash": "^4.18.1",
+    "lodash-es": "^4.18.1"
   }
 }
