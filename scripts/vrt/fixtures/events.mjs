@@ -1,16 +1,16 @@
+import { AgeRanges } from '../../../src/constants/AgeRange.ts';
 import { EventTypes } from '../../../src/constants/EventTypes.ts';
 import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
 import { formatPermission } from '../../../src/utils/formatPermission.ts';
 import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
 import { vrtMockImageUrls } from './images.mjs';
+import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
+import { vrtMockOrganizers } from './organizers.mjs';
+import { UITPAS_EVENT_ID, uitpasPriceInfo } from './uitpas.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
 const LOCATION_ID = 'vrt-mock-place-1';
-const ORGANIZER_ID = 'vrt-mock-organizer-1';
-
-// Never resolves (RFC 2606); an @id is only ever split for its last segment.
-const MOCK_API_ORIGIN = 'https://vrt-mock-api.invalid';
 
 // A real id, unlike the rest here; themes have no constant of their own.
 const CLASSICAL_MUSIC_THEME_ID = '1.8.1.0.0';
@@ -92,23 +92,6 @@ const eventLocationFixture = {
   workflowStatus: 'APPROVED',
 };
 
-const eventOrganizerFixture = {
-  '@id': `${MOCK_API_ORIGIN}/organizers/${ORGANIZER_ID}`,
-  '@context': '/contexts/organizer',
-  mainLanguage: 'nl',
-  name: { nl: 'VRT mock organisatie' },
-  address: {
-    nl: {
-      addressCountry: 'BE',
-      addressLocality: 'VRT mock gemeente',
-      postalCode: '1000',
-      streetAddress: 'VRT mock straat 2',
-    },
-  },
-  labels: [],
-  hiddenLabels: [],
-};
-
 const eventMediaObjects = [
   {
     '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-1`,
@@ -167,7 +150,7 @@ const vrtMockEvent = {
   subEvent: eventSubEvents,
   openingHours: [],
   location: eventLocationFixture,
-  organizer: eventOrganizerFixture,
+  organizer: vrtMockOrganizers.owned,
   attendanceMode: 'offline',
   audience: { audienceType: 'everyone' },
   typicalAgeRange: '12-15',
@@ -258,6 +241,10 @@ const eventListVariants = [
     },
     availableFrom: vrtDaysFromNow(-60).toISOString(),
     completeness: 89,
+    // The one offer pointing at an organizer the user does not own, which is
+    // what gives the dashboard a suggestion to make. Its own permissions still
+    // come from the moderation label, not from this organizer.
+    organizer: vrtMockOrganizers.suggested,
     ...NO_IMAGE,
   },
   {
@@ -322,6 +309,58 @@ const eventListMembers = [
   ...eventListVariants.map(eventListMember),
 ];
 
+// Opened by id, and somebody else's, so the by-creator collection stays
+// complete without them. Keeps the canonical dates so the calsum catch-all
+// answers for them.
+const editRouteVariant = ({ id, nameNl, ...overrides }) => ({
+  ...vrtMockEvent,
+  '@id': `${MOCK_API_ORIGIN}/events/${id}`,
+  name: { nl: nameNl },
+  creator: 'vrt-mock-user-2',
+  ...overrides,
+});
+
+const vrtMockUitpasEvent = editRouteVariant({
+  id: UITPAS_EVENT_ID,
+  nameNl: 'VRT mock evenement — UiTPAS',
+  organizer: vrtMockOrganizers.uitpas,
+  // Base and UiTPAS, no tariff, and the amounts are one real UiTPAS event's.
+  priceInfo: [{ ...vrtMockEvent.priceInfo[0], price: 15 }, uitpasPriceInfo],
+});
+
+// Scores 98, not 100: the last two points are a video, and one would send
+// MediaStep to img.youtube.com for a thumbnail.
+const vrtMockCompleteEvent = editRouteVariant({
+  id: 'vrt-mock-event-8',
+  nameNl: 'VRT mock evenement — volledig ingevuld',
+  description: {
+    nl: 'VRT mock beschrijving die lang genoeg is om als volledig te tellen. Ze loopt over meerdere zinnen, want de teller kijkt enkel naar het aantal tekens van de platte tekst en niet naar de inhoud die erin staat.',
+  },
+  completeness: 98,
+});
+
+const vrtMockChildrenOnlyEvent = editRouteVariant({
+  id: 'vrt-mock-event-9',
+  nameNl: 'VRT mock evenement — enkel voor kinderen',
+  childrenOnly: true,
+  typicalAgeRange: AgeRanges.KIDS.apiLabel,
+});
+
+// The picker only offers its recently-used cards when the offer has none.
+const vrtMockWithoutOrganizerEvent = editRouteVariant({
+  id: 'vrt-mock-event-10',
+  nameNl: 'VRT mock evenement — zonder organisatie',
+  organizer: undefined,
+});
+
+const eventsServedById = [
+  ...eventListMembers,
+  vrtMockUitpasEvent,
+  vrtMockCompleteEvent,
+  vrtMockChildrenOnlyEvent,
+  vrtMockWithoutOrganizerEvent,
+];
+
 const calendarSummaryById = {
   [EVENT_ID]: eventCalendarSummary,
   ...Object.fromEntries(
@@ -329,17 +368,12 @@ const calendarSummaryById = {
   ),
 };
 
-const eventsByCreatorFixture = {
-  '@context': 'http://www.w3.org/ns/hydra/context.jsonld',
-  '@type': 'PagedCollection',
-  itemsPerPage: 14,
-  totalItems: eventListMembers.length,
-  member: eventListMembers,
-};
+const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// What global.mjs's role constraints grant on this event.
+// What global.mjs's role constraints grant via the moderation label, so every
+// event served here has to keep it.
 const eventPermissionsFixture = {
   permissions: [
     PermissionTypes.AANBOD_BEWERKEN,
@@ -354,7 +388,7 @@ const ANY_EVENT_PATH = /^\/events\/[^/]+$/;
 const ANY_EVENT_CALENDAR_SUMMARY_PATH = /^\/events\/[^/]+\/calsum$/;
 const ANY_EVENT_PERMISSIONS_PATH = /^\/events\/[^/]+\/permissions$/;
 
-const eventByIdFixtures = eventListMembers.map((member) => ({
+const eventByIdFixtures = eventsServedById.map((member) => ({
   method: 'GET',
   path: `/events/${parseOfferId(member['@id'])}`,
   response: withoutCalendarSummary(member),
