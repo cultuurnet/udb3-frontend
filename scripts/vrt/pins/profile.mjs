@@ -1,10 +1,12 @@
+import { vrtMockImageDataUri } from '../fixtures/image-placeholders.mjs';
+
 const ID_TOKEN_COOKIE_NAME = 'idToken';
 
 const PINNED_CLAIMS = {
   email: 'vrt-mock@example.com',
   'https://publiq.be/first_name': 'VRT Mock User',
-  // Temporary — swap for a real avatar placeholder when VRT-DATA-IMAGES lands.
-  picture: '/assets/storybook-image-placeholder.png',
+  // Data URI: loaded in the container, where vrtMockImageUrls can't be derived.
+  picture: vrtMockImageDataUri('square'),
 };
 
 const unpinnableError = (reason) =>
