@@ -15,9 +15,10 @@ export const takeVrtScreenshot = async (target: Page | Locator) => {
 };
 
 const fitViewportToContent = async (page: Page) => {
-  const main = page.locator('main');
-  if ((await main.count()) === 0) return;
-  const height = await main.evaluate((element) => element.scrollHeight);
+  await page.waitForLoadState('networkidle');
+  const height = await page
+    .locator('main')
+    .evaluate((element) => element.scrollHeight);
   await page.setViewportSize({ width: page.viewportSize().width, height });
 };
 
