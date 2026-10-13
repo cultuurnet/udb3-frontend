@@ -4,7 +4,10 @@ import { screenshotPages } from './support';
 
 const EVENT_EDIT_PATH = '/events/vrt-mock-event-1/edit';
 
-const additionalInformationStep = (page: Page) => page.getByTestId('step-6');
+const ADDITIONAL_INFORMATION_STEP_NUMBER = 6;
+
+const additionalInformationStep = (page: Page) =>
+  page.getByTestId(`step-${ADDITIONAL_INFORMATION_STEP_NUMBER}`);
 
 const additionalInformationTab = {
   locator: additionalInformationStep,
