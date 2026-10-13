@@ -14,11 +14,19 @@ export const takeVrtScreenshot = async (target: Page | Locator) => {
   await expect(target).toHaveScreenshot(name);
 };
 
+const fitViewportToContent = async (page: Page) => {
+  const main = page.locator('main');
+  if ((await main.count()) === 0) return;
+  const height = await main.evaluate((element) => element.scrollHeight);
+  await page.setViewportSize({ width: page.viewportSize().width, height });
+};
+
 type ScreenshotPage = {
   title: string;
   path: string;
   locator?: (page: Page) => Page | Locator;
   beforeScreenshot?: (page: Page) => Promise<void>;
+  fitContent?: boolean;
 };
 
 // Declares one test per page: navigate, optionally interact, then screenshot (defaults to `main`).
@@ -38,10 +46,12 @@ export const screenshotPages = (pages: ScreenshotPage[]) => {
     path,
     locator = (page: Page) => page.locator('main'),
     beforeScreenshot,
+    fitContent,
   } of pages) {
     test(title, async ({ page }) => {
       await page.goto(path);
       await beforeScreenshot?.(page);
+      if (fitContent) await fitViewportToContent(page);
       await takeVrtScreenshot(locator(page));
     });
   }
