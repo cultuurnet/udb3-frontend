@@ -283,13 +283,7 @@ const Preview = () => {
           {
             field: t('preview.labels.calendar'),
             value: (
-              <Text
-                css={`
-                  white-space: pre-wrap;
-                `}
-              >
-                {calendarSummary}
-              </Text>
+              <Text className="tw:whitespace-pre-wrap">{calendarSummary}</Text>
             ),
           },
         ]

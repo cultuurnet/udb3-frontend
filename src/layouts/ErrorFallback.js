@@ -39,7 +39,7 @@ const ErrorFallback = ({ error }) => {
         height="auto"
         color={getValue('iconColor')}
       />
-      <Text maxWidth={550}>
+      <Text className="tw:max-w-xl">
         <Trans
           i18nKey={'error.description'}
           components={{
