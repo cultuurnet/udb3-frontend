@@ -36,6 +36,7 @@ const FixedDayOptions = {
 
 type FixedDaysProps = {
   scope: Scope;
+  showChildcare?: boolean;
   onChooseWithStartAndEndDate: () => void;
   onChoosePermanent: () => void;
   onChangeStartDate: (date: Date | null) => void;
@@ -50,6 +51,7 @@ type FixedDaysProps = {
 
 export const FixedDays = ({
   scope,
+  showChildcare = true,
   onChooseWithStartAndEndDate,
   onChoosePermanent,
   onChangeStartDate,
@@ -202,6 +204,7 @@ export const FixedDays = ({
           visible={isCalendarOpeninghoursModalVisible}
           onClose={() => setIsCalendarOpeninghoursModalVisible(false)}
           onChangeCalendarState={onChangeCalendarState}
+          showChildcare={showChildcare}
           onChangeAdjustedDays={onChangeAdjustedDays}
           initialDeviatingPeriods={initialAdjustedDays}
           onChangeClosingPeriods={onChangeClosingPeriods}

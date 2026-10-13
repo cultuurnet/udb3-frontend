@@ -251,7 +251,7 @@ const Create = () => {
                       labelKey={(production) => production.name}
                       disabled={!!selectedProduction}
                       placeholder={selectedProduction?.title}
-                      maxWidth="43rem"
+                      className="tw:max-w-172"
                       emptyLabel={t('productions.create.no_productions')}
                       minLength={minSearchLength}
                       onInputChange={debounce(handleInputSearch, 275)}

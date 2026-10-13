@@ -5,7 +5,7 @@ export const config: CustomProjectConfig = {
     storybookUrl: './storybook-static',
     elementLocator: '#storybook-root',
   },
+  threshold: 20,
   generateOnly: true,
   failOnDifference: true,
-  threshold: 20,
 };

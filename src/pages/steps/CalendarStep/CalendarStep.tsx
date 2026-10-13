@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import uniqueId from 'lodash/uniqueId';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -10,7 +12,11 @@ import * as yup from 'yup';
 import { AudienceTypes } from '@/constants/AudienceType';
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { EventTypes, eventTypesWithNoThemes } from '@/constants/EventTypes';
+import {
+  BoaEventTypes,
+  EventTypes,
+  eventTypesWithNoThemes,
+} from '@/constants/EventTypes';
 import { OfferStatus } from '@/constants/OfferStatus';
 import { OfferTypes } from '@/constants/OfferType';
 import {
@@ -158,7 +164,7 @@ const convertOfferToCalendarContext = (offer: Offer) => {
     bookingInfo: subEvent.bookingInfo,
     childcareStartTime: subEvent.childcare?.start ?? '',
     childcareEndTime: subEvent.childcare?.end ?? '',
-    hasOvernightStay: !!subEvent.overnight,
+    hasOvernightStay: !!subEvent.hasOvernightStay,
   }));
 
   const openingHours = (offer.openingHours ?? []).map((openingHour) => ({
@@ -215,7 +221,7 @@ const convertStateToFormData = (
         ...(day.childcareEndTime && { end: day.childcareEndTime }),
       },
     }),
-    ...(day.hasOvernightStay && { overnight: true }),
+    hasOvernightStay: day.hasOvernightStay,
   }));
 
   const newOpeningHours = openingHours.map((openingHour) => ({
@@ -292,6 +298,30 @@ const formatClosingDays = (closingPeriods: ClosingPeriodData[]) =>
 
 type CalendarInForm = ReturnType<typeof convertStateToFormData>;
 
+const getCalendarInfo = (calendar: CalendarInForm) =>
+  calendar && {
+    ...calendar,
+    ...(calendar.subEvent && {
+      subEvent: calendar.subEvent.map((subEvent) =>
+        pick(subEvent, [
+          'startDate',
+          'endDate',
+          'childcare',
+          'hasOvernightStay',
+        ]),
+      ),
+    }),
+  };
+
+const hasChangedCalendar = (offer: Offer, calendar: CalendarInForm) => {
+  const { newContext, calendarType } = convertOfferToCalendarContext(offer);
+
+  return !isEqual(
+    getCalendarInfo(convertStateToFormData(newContext, calendarType)),
+    getCalendarInfo(calendar),
+  );
+};
+
 type CalendarStepProps = StepProps & { offerId?: string };
 
 const CalendarStep = ({
@@ -318,6 +348,8 @@ const CalendarStep = ({
   const isCultuurkuurEvent =
     scope === OfferTypes.EVENTS &&
     watch('audience.audienceType') === AudienceTypes.EDUCATION;
+
+  const showChildcare = type?.id !== BoaEventTypes.Kinderopvang;
 
   const isOneOrMoreDays = useIsOneOrMoreDays();
   const isFixedDays = useIsFixedDays();
@@ -481,6 +513,8 @@ const CalendarStep = ({
     }
     setIsCalendarInitialized(true);
     handleLoadInitialContext({ newContext, calendarType });
+    if (isOnDuplicatePage) return;
+
     if (offer.openingHoursAdjustedDays?.length) {
       const converted = convertAdjustedDays(offer.openingHoursAdjustedDays);
       adjustedDaysRef.current = converted;
@@ -534,6 +568,8 @@ const CalendarStep = ({
     <Stack
       ref={calendarStepContainer}
       spacing={4}
+      className="tw:@container tw:contain-layout"
+      zIndex={4}
       minWidth={{ l: 'auto', default: '100%' }}
       width={{ l: '100%', default: 'min-content' }}
       {...getStackProps(props)}
@@ -546,10 +582,15 @@ const CalendarStep = ({
           isCultuurkuurEvent={isCultuurkuurEvent}
         />
       )}
-      <Panel backgroundColor="white" padding={5}>
+      <Panel
+        backgroundColor="white"
+        padding={4.5}
+        className={isOneOrMoreDays ? 'tw:w-fit tw:max-w-full' : undefined}
+      >
         {isFixedDays && (
           <FixedDays
             scope={scope}
+            showChildcare={showChildcare}
             onChooseWithStartAndEndDate={handleChooseWithStartAndEndDate}
             onChoosePermanent={handleChoosePermanent}
             onChangeStartDate={handleChangeStartDate}
@@ -571,6 +612,7 @@ const CalendarStep = ({
             onChangeEndTime={handleChangeEndTime}
             onChangeChildcareStartTime={handleChangeChildcareStartTime}
             onChangeChildcareEndTime={handleChangeChildcareEndTime}
+            showChildcare={showChildcare}
             onToggleOvernightStay={handleToggleOvernightStay}
             showOvernightStay={type?.id === EventTypes['Kamp of vakantie']}
             onAddDay={handleAddDay}
@@ -701,5 +743,6 @@ export {
   CalendarStep,
   calendarStepConfiguration,
   convertStateToFormData,
+  hasChangedCalendar,
   useEditCalendar,
 };

@@ -193,6 +193,11 @@ test.describe.serial('Event Preview Content', () => {
     await page.getByLabel('Verfijn met labels').fill(dummyEvent.label);
     await page.getByRole('option', { name: dummyEvent.label }).click();
 
+    // The saved "Volwassenen 18+" category has to be cleared before another
+    // category can be picked.
+    await page
+      .getByRole('button', { name: age.change_age, exact: true })
+      .click();
     await page
       .getByRole('button', { name: new RegExp(`^${age.kids}`) })
       .click();
@@ -303,14 +308,12 @@ test.describe.serial('Event Preview Content', () => {
     await expect(ageCell).toContainText(nl.preview.children_only);
   });
 
-  test('shows opening hours summary in calendar row', async ({ page }) => {
+  test('shows calendar summary', async ({ page }) => {
     await expect(
-      page.getByText(calendar.fixed_days.overview.weekly_on),
-    ).toBeVisible();
-    await expect(
-      page.getByText(calendar.days.short.monday, { exact: true }),
-    ).toBeVisible();
-    await expect(page.getByText('09:00 - 17:00')).toBeVisible();
+      getRowByLabel(page, detailsTable, nl.preview.labels.calendar).locator(
+        'td:nth-child(2)',
+      ),
+    ).toContainText('Maandag van 9:00 tot 17:00');
   });
 
   test('shows organizer', async ({ page }) => {

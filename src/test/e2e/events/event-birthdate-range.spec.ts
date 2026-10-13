@@ -1,5 +1,6 @@
 import { expect, Page, test as base } from '@playwright/test';
 
+import { AgeRanges } from '../../../constants/AgeRange';
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
@@ -13,10 +14,16 @@ const ageInputModeDOBToggle = '[data-testid="age-input-mode-date_of_birth"]';
 const birthDateMinInput = '#age-birth-date-min';
 const birthDateMaxInput = '#age-birth-date-max';
 
+const adultsCategory = `${age.adults} ${AgeRanges.ADULTS.label}`;
+const kidsCategory = `${age.kids} ${AgeRanges.KIDS.label}`;
+
 const minAgeInput = (page: Page) =>
   page.getByPlaceholder(age.from, { exact: true });
 const maxAgeInput = (page: Page) =>
   page.getByPlaceholder(age.till, { exact: true });
+
+const selectedCategory = (page: Page, label: string) =>
+  page.getByText(label, { exact: true });
 
 const waitForBirthdateRangePut = (page: Page) =>
   page.waitForResponse(
@@ -42,7 +49,7 @@ const confirmSwitch = async (page: Page) => {
 };
 
 const switchToBirthdateInput = async (page: Page) => {
-  await expect(minAgeInput(page)).toHaveValue('18');
+  await expect(selectedCategory(page, adultsCategory)).toBeVisible();
   await page.locator(ageInputModeDOBToggle).click();
   await confirmSwitch(page);
   await expect(page.getByText(birthDate.title)).toBeVisible();
@@ -186,14 +193,13 @@ test.describe('Birthdate range', () => {
 
     await page.goto(eventEditUrl);
 
-    await expect(minAgeInput(page)).toHaveValue('6');
-    await expect(maxAgeInput(page)).toHaveValue('11');
+    await expect(selectedCategory(page, kidsCategory)).toBeVisible();
     await expect(page.getByText(birthDate.title)).toBeHidden();
   });
 
   test('cancel keeps the age range', async ({ page, eventEditUrl }) => {
     await page.goto(eventEditUrl);
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expect(selectedCategory(page, adultsCategory)).toBeVisible();
 
     await page.locator(ageInputModeDOBToggle).click();
 
@@ -205,7 +211,7 @@ test.describe('Birthdate range', () => {
     await expect(modal).toBeHidden();
 
     await expect(page.getByText(birthDate.title)).toBeHidden();
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expect(selectedCategory(page, adultsCategory)).toBeVisible();
   });
 
   test('saves only after a date changes', async ({ page, eventEditUrl }) => {
@@ -228,7 +234,7 @@ test.describe('Birthdate range', () => {
 
     await page.goto(eventEditUrl);
     await expect(page.getByText(birthDate.title)).toBeHidden();
-    await expect(minAgeInput(page)).toHaveValue('18');
+    await expect(selectedCategory(page, adultsCategory)).toBeVisible();
   });
 
   test('cancel keeps the birthdate range', async ({ page, eventEditUrl }) => {

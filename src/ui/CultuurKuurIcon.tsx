@@ -1,12 +1,13 @@
 import { Box, BoxProps, getBoxProps } from '@/ui/Box';
 
 const CultuurKuurIcon = (props: BoxProps) => {
-  const { width = '1.4rem', height = '1.4rem', ...rest } = props;
+  const { width = '1.4rem', height = '1.4rem', className, ...rest } = props;
   return (
     <Box
       as="svg"
       viewBox="0 0 264 264"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
       width={width}
       height={height}
       {...getBoxProps(rest)}

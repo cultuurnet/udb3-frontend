@@ -28,6 +28,7 @@ const ButtonVariants = {
   LINK: 'link',
   LINK_DANGER: 'link-danger',
   OUTLINED: 'outlined',
+  OUTLINED_DANGER: 'outlined-danger',
 } as const;
 
 const ButtonSizes = {
@@ -68,6 +69,7 @@ const buttonVariantMap = {
   [ButtonVariants.LINK]: 'link',
   [ButtonVariants.LINK_DANGER]: 'link-danger',
   [ButtonVariants.OUTLINED]: 'outlined',
+  [ButtonVariants.OUTLINED_DANGER]: 'outlined-danger',
 } as const;
 
 const sizeMap = {

@@ -1,6 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
+import nl from '../../../i18n/nl.json';
+import { isBoaEnabled } from '../setup/feature-flags';
+
+const previewLabels = nl.preview.labels;
+const descriptionLabel = isBoaEnabled
+  ? previewLabels.description_and_faq
+  : previewLabels.description;
+
 const dummyEvent = {
   name: 'E2E test event with calendarType multiple',
   address: {
@@ -59,7 +67,7 @@ test('create an event with calendarType multiple', async ({
   // 5. Name and Age
   await page.getByLabel('Naam van de activiteit').click();
   await page.getByLabel('Naam van de activiteit').fill(dummyEvent.name);
-  await page.getByRole('button', { name: 'Jongeren' }).click();
+  await page.getByRole('button', { name: 'Volwassenen 18+' }).click();
   await page.getByRole('button', { name: 'Opslaan' }).click();
 
   // 6. Publish
@@ -75,7 +83,7 @@ test('create an event with calendarType multiple', async ({
     'Type',
     'Thema',
     'Labels',
-    'Beschrijving',
+    descriptionLabel,
     'Waar',
     'Wanneer',
     'Organisatie',
@@ -104,7 +112,7 @@ test('create an event with calendarType multiple', async ({
 
   const expectedEmptyFields = [
     'Thema',
-    'Beschrijving',
+    descriptionLabel,
     'Organisatie',
     'Prijsinfo',
     'Reservatie',

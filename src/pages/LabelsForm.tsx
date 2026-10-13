@@ -34,7 +34,7 @@ type Props = {
 const LabelsForm = ({ scope, id, entity }: Props) => {
   const { t } = useTranslation();
 
-  const ref = useRef<TypeaheadElement<Label>>(null);
+  const ref = useRef<TypeaheadElement>(null);
   const [name, setName] = useState('');
   const labelsQuery = useGetLabelsByQuery({
     name,

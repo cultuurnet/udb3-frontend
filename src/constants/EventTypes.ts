@@ -65,10 +65,18 @@ const cultuurkuurTypes: string[] = [
 ];
 
 // Types only available when the BOA feature flag is enabled.
-const boaTypes: string[] = [
-  'K7mPx3nQrT9bWfH2zL5cYv', // Kinderopvang
-  '8aRjN4dGsXuE6tBkM1pVwQ', // Activiteit met de jeugdbeweging
-  'hZ5fCyL9nKqW3xDvTrJ2gP', // Speelpleinwerking
-];
+const BoaEventTypes = {
+  Kinderopvang: 'K7mPx3nQrT9bWfH2zL5cYv',
+  'Activiteit met de jeugdbeweging': '8aRjN4dGsXuE6tBkM1pVwQ',
+  Speelpleinwerking: 'hZ5fCyL9nKqW3xDvTrJ2gP',
+} as const;
 
-export { boaTypes, cultuurkuurTypes, EventTypes, eventTypesWithNoThemes };
+const boaTypes: string[] = Object.values(BoaEventTypes);
+
+export {
+  BoaEventTypes,
+  boaTypes,
+  cultuurkuurTypes,
+  EventTypes,
+  eventTypesWithNoThemes,
+};

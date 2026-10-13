@@ -1,12 +1,11 @@
 import { dehydrate } from '@tanstack/react-query';
 
+import { CalsumFormats } from '@/constants/CalsumFormat';
 import { OfferTypes } from '@/constants/OfferType';
 import { PermissionTypes } from '@/constants/PermissionTypes';
+import { prefetchGetOfferPermissionsQuery } from '@/hooks/api/events';
 import {
   prefetchGetCalendarSummaryQuery,
-  prefetchGetOfferPermissionsQuery,
-} from '@/hooks/api/events';
-import {
   prefetchGetOfferByIdQuery,
   prefetchOfferHistoryQuery,
 } from '@/hooks/api/offers';
@@ -31,8 +30,9 @@ export const getServerSideProps = getApplicationServerSideProps(
       req,
       queryClient,
       id: eventId as string,
+      scope: OfferTypes.EVENTS,
       locale: i18n.language,
-      format: 'lg',
+      format: CalsumFormats.XL,
     });
 
     const permissions = await prefetchGetPermissionsQuery({

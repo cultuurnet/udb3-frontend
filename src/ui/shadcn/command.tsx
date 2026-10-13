@@ -45,7 +45,7 @@ const CommandInput = React.forwardRef<
 
   return (
     <div
-      className="tw:flex tw:items-center tw:border-b tw:px-3"
+      className="tw:flex tw:items-center tw:border-b tw:px-3 tw:has-[input[aria-invalid=true]]:border-destructive tw:has-[input:disabled]:opacity-50"
       cmdk-input-wrapper=""
     >
       <span
@@ -57,7 +57,7 @@ const CommandInput = React.forwardRef<
       <CommandPrimitive.Input
         ref={inputRef}
         className={cn(
-          'tw:flex tw:h-10 tw:w-full tw:rounded-md tw:bg-transparent tw:py-3 tw:text-sm tw:outline-none tw:placeholder:text-muted-foreground tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
+          'tw:flex tw:h-10 tw:w-full tw:rounded-md tw:bg-transparent tw:py-3 tw:text-sm tw:outline-none tw:placeholder:text-muted-foreground tw:disabled:cursor-not-allowed',
           className,
         )}
         {...props}

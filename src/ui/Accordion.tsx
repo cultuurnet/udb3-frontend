@@ -1,66 +1,106 @@
-import type { ReactNode } from 'react';
-import { Accordion as BootstrapAccordion } from 'react-bootstrap';
+import {
+  Children,
+  Fragment,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 
-import { Stack, type StackProps } from './Stack';
-import { colors } from './theme';
-import { Title } from './Title';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import {
+  Accordion as ShadcnAccordion,
+  AccordionContent as ShadcnAccordionContent,
+  AccordionItem as ShadcnAccordionItem,
+  AccordionTrigger as ShadcnAccordionTrigger,
+} from '@/ui/shadcn/accordion';
 
-type ItemProps = {
-  title: string;
-  children: ReactNode;
-  eventKey: string;
-} & StackProps;
+import { type AccordionItemProps, AccordionLegacy } from './AccordionLegacy';
 
-type Props = {
-  children: ReactNode;
-};
+type Props = { children: ReactNode } & (
+  | { multiple: true; defaultActiveKey?: string[] }
+  | { multiple?: false; defaultActiveKey?: string }
+);
 
-function AccordionItem({
-  title,
-  eventKey,
-  children,
-  ...stackProps
-}: ItemProps) {
-  return (
-    <BootstrapAccordion.Item eventKey={eventKey}>
-      <BootstrapAccordion.Header>
-        <Title size={3}>{title}</Title>
-      </BootstrapAccordion.Header>
-      <BootstrapAccordion.Body>
-        <Stack {...stackProps}>{children}</Stack>
-      </BootstrapAccordion.Body>
-    </BootstrapAccordion.Item>
+const flattenFragments = (children: ReactNode): ReactNode[] =>
+  Children.toArray(children).flatMap((child) =>
+    isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+      ? flattenFragments(child.props.children)
+      : [child],
   );
-}
 
-function Accordion({ children }: Props) {
+function AccordionShadcn(props: Props) {
+  const { children } = props;
+  const itemsJsx = flattenFragments(children)
+    .filter(
+      (child): child is ReactElement<AccordionItemProps> =>
+        isValidElement(child) && child.type === Accordion.Item,
+    )
+    .map(
+      ({ props: { eventKey, title, children: itemChildren, className } }) => (
+        <ShadcnAccordionItem key={eventKey} value={eventKey}>
+          <ShadcnAccordionTrigger className="tw:text-base tw:font-bold">
+            {title}
+          </ShadcnAccordionTrigger>
+          <ShadcnAccordionContent className={className}>
+            {itemChildren}
+          </ShadcnAccordionContent>
+        </ShadcnAccordionItem>
+      ),
+    );
+
+  if (props.multiple === true) {
+    return (
+      <ShadcnAccordion
+        type="multiple"
+        defaultValue={props.defaultActiveKey}
+        className="tw:w-full"
+      >
+        {itemsJsx}
+      </ShadcnAccordion>
+    );
+  }
+
   return (
-    <Stack
-      css={`
-        width: 100%;
-        .accordion-item {
-          border: none;
-          border-bottom: 1px solid ${colors.grey3};
-          border-radius: 0;
-        }
-        .accordion-button,
-        .accordion-body {
-          padding-left: 0;
-          padding-right: 0;
-        }
-        .accordion-button:not(.collapsed) {
-          background-color: transparent;
-          color: inherit;
-          box-shadow: none;
-        }
-      `}
-      as={BootstrapAccordion}
+    <ShadcnAccordion
+      type="single"
+      collapsible
+      defaultValue={props.defaultActiveKey}
+      className="tw:w-full"
     >
-      {children}
-    </Stack>
+      {itemsJsx}
+    </ShadcnAccordion>
   );
 }
 
-Accordion.Item = AccordionItem;
+function Accordion(props: Props) {
+  const [isShadcnMigrationEnabled] = useFeatureFlag(
+    FeatureFlags.SHADCN_MIGRATION,
+  );
+  const { children } = props;
+
+  if (props.multiple === true) {
+    return isShadcnMigrationEnabled ? (
+      <AccordionShadcn multiple defaultActiveKey={props.defaultActiveKey}>
+        {children}
+      </AccordionShadcn>
+    ) : (
+      <AccordionLegacy multiple defaultActiveKey={props.defaultActiveKey}>
+        {children}
+      </AccordionLegacy>
+    );
+  }
+
+  return isShadcnMigrationEnabled ? (
+    <AccordionShadcn defaultActiveKey={props.defaultActiveKey}>
+      {children}
+    </AccordionShadcn>
+  ) : (
+    <AccordionLegacy defaultActiveKey={props.defaultActiveKey}>
+      {children}
+    </AccordionLegacy>
+  );
+}
+
+Accordion.Item = AccordionLegacy.Item;
 
 export { Accordion };

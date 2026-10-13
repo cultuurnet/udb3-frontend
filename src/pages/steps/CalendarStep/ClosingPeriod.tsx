@@ -1,4 +1,4 @@
-import { startOfDay } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +26,6 @@ type ClosingPeriodData = {
 };
 
 type Props = BoxProps & {
-  index: number;
   period: ClosingPeriodData;
   onChange: (period: ClosingPeriodData) => void;
   onRemove: () => void;
@@ -38,7 +37,6 @@ type Props = BoxProps & {
 };
 
 const ClosingPeriod = ({
-  index,
   period,
   onChange,
   onRemove,
@@ -58,33 +56,33 @@ const ClosingPeriod = ({
 
   return (
     <Stack
-      spacing={4}
+      spacing={0}
       padding={4}
       css={`
         border: 1px solid ${colors.grey3};
         border-radius: 0.5rem;
+        background-color: ${colors.greylight};
       `}
       {...boxProps}
     >
       <Inline justifyContent="space-between" alignItems="center">
-        <Text className="tw:font-bold">
-          {t('create.calendar.opening_hours_modal.closing.period_title', {
-            index: index + 1,
-          })}
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
+          {t('create.calendar.opening_hours_modal.closing.select_period')}
         </Text>
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TRASH}
           onClick={onRemove}
-        >
-          {t('create.calendar.opening_hours_modal.closing.remove_period')}
-        </Button>
+          aria-label={t(
+            'create.calendar.opening_hours_modal.closing.remove_period',
+          )}
+        />
       </Inline>
 
       <Stack spacing={2}>
-        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
-          {t('create.calendar.opening_hours_modal.closing.select_period')}
-        </Text>
         <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
           <DatePeriodPicker
             className="tw:w-full"
@@ -93,7 +91,7 @@ const ClosingPeriod = ({
             dateEnd={period.endDate}
             onDateStartChange={(date) => {
               clearQuickLinkRangeError();
-              onChange({ ...period, startDate: date });
+              onChange({ ...period, startDate: date, endDate: endOfDay(date) });
             }}
             onDateEndChange={(date) => {
               clearQuickLinkRangeError();

@@ -2,6 +2,8 @@ import { cloneElement, forwardRef } from 'react';
 import { Button as BootstrapButton } from 'react-bootstrap';
 import { css } from 'styled-components';
 
+import type { Values } from '@/types/Values';
+
 import type { ButtonProps } from './Button';
 import { ButtonVariants } from './Button';
 import { Icon } from './Icon';
@@ -25,6 +27,13 @@ const BootStrapVariants = {
   DANGER: 'danger',
   ICON: 'icon',
 } as const;
+
+const outlinedVariantColors: Partial<
+  Record<Values<typeof ButtonVariants>, string>
+> = {
+  outlined: colors.udbMainDarkBlue,
+  'outlined-danger': colors.red3,
+};
 
 const getValue = getValueFromTheme('button');
 const getGlobalValue = getValueFromTheme('global');
@@ -281,6 +290,7 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
     ).includes(variant);
     const isLinkVariant =
       variant === ButtonVariants.LINK || variant === ButtonVariants.LINK_DANGER;
+    const outlineColor = outlinedVariantColors[variant];
     const isLinkDanger = variant === ButtonVariants.LINK_DANGER;
 
     const BaseButtonWithForwardedAs = (props: InlineProps) => (
@@ -349,15 +359,15 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    if (variant === ButtonVariants.OUTLINED) {
+    if (outlineColor) {
       return (
         <BaseButton
           {...propsToApply}
           alignItems="center"
           css={`
             background: transparent;
-            border: 1px solid ${colors.udbMainDarkBlue};
-            color: ${colors.udbMainDarkBlue};
+            border: 1px solid ${outlineColor};
+            color: ${outlineColor};
             border-radius: ${getValue('borderRadius')};
             padding: ${getValue('paddingY')} ${getValue('paddingX')};
             min-height: ${getGlobalFormInputHeight};
@@ -367,13 +377,13 @@ const ButtonLegacy = forwardRef<HTMLButtonElement, ButtonProps>(
             &:hover {
               background-color: color-mix(
                 in srgb,
-                ${colors.udbMainDarkBlue} 12%,
+                ${outlineColor} 12%,
                 transparent
               );
             }
 
             &:focus {
-              outline: solid ${colors.udbMainDarkBlue};
+              outline: solid ${outlineColor};
             }
 
             &:focus:not(:focus-visible) {

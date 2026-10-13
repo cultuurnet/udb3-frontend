@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 import { Box } from './Box';
 import type { InputProps } from './Input';
 import { cn } from './shadcn/utils';
-import { getGlobalBorderRadius, getGlobalFormInputHeight } from './theme';
+import { getGlobalBorderRadius, theme } from './theme';
 
 const BaseInput = forwardRef<HTMLInputElement, any>((props, ref) => (
   <Box as="input" {...props} ref={ref} />
@@ -21,7 +21,7 @@ const InputLegacy = forwardRef<HTMLInputElement, InputProps>(
       ref={ref}
       as={BaseInput}
       className={cn('tw:max-w-172', className)}
-      height={`${getGlobalFormInputHeight}`}
+      height={theme.formInputHeight}
       borderRadius={getGlobalBorderRadius}
       onInput={onChange}
       type={type}

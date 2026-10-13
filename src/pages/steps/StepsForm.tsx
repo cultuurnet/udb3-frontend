@@ -38,7 +38,7 @@ import { getUniqueLabels } from '@/utils/getUniqueLabels';
 import { parseOfferId } from '@/utils/parseOfferId';
 
 import { DUPLICATE_STATUS_CODE } from '../PlaceAddModal';
-import { calendarStepConfiguration } from './CalendarStep';
+import { calendarStepConfiguration, hasChangedCalendar } from './CalendarStep';
 import { useAddOffer } from './hooks/useAddOffer';
 import { useEditField } from './hooks/useEditField';
 import { FooterStatus, useFooterStatus } from './hooks/useFooterStatus';
@@ -357,7 +357,9 @@ const StepsForm = ({
   const pageTitle = isOnDuplicateRoute ? t('create.duplicate.title') : title;
 
   const onDuplicateEditFieldChange = () => {
-    setIsDuplicateButtonDisabled(false);
+    setIsDuplicateButtonDisabled(
+      !offer || !hasChangedCalendar(offer, form.getValues('calendar')),
+    );
   };
 
   const onChange = isOnDuplicateRoute

@@ -474,6 +474,13 @@ const theme = {
         borderColor: colors.grey3,
       },
     },
+    openingHoursModal: {
+      fontSize: {
+        modalTitle: '1.25rem',
+        accordionTitle: '1.125rem',
+        sectionTitle: '1.067rem',
+      },
+    },
     offerScore: {
       link: colors.textColor,
     },

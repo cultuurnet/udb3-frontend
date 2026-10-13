@@ -1,0 +1,288 @@
+import { execSync, spawn } from 'node:child_process';
+import fs from 'node:fs';
+
+import { assertRequiredEnv, buildFeatureFlagEnv, PINNED_ENV } from './env.mjs';
+import { MOCK_ORIGIN, MOCK_PORT, toMockPathPrefix } from './hosts.mjs';
+import {
+  assertFixturesAreReachable,
+  MOCK_UPSTREAMS,
+} from './mock-upstreams.mjs';
+import { startMockServer } from './mock-server.mjs';
+
+export const BASE_URL = 'http://localhost:3000';
+const APP_PORT = new URL(BASE_URL).port;
+const READY_TIMEOUT_MS = 180_000;
+const POLL_INTERVAL_MS = 1_000;
+const AUTH_STORAGE_STATE_PATH = 'playwright/.auth/user.json';
+const AUTH_EXPIRY_BUFFER_SECONDS = 60;
+
+const killPortListener = (port) => {
+  try {
+    const pids = execSync(`lsof -ti tcp:${port}`, { encoding: 'utf-8' })
+      .trim()
+      .split('\n')
+      .filter(Boolean);
+    for (const pid of pids) {
+      try {
+        process.kill(Number(pid), 'SIGTERM');
+      } catch {}
+    }
+  } catch {}
+};
+
+export const run = (command, args, options = {}, onSpawn) =>
+  new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: 'inherit', ...options });
+    onSpawn?.(child);
+    child.on('exit', (code) => resolve(code ?? 1));
+    child.on('error', reject);
+  });
+
+export const isDockerAvailable = async () => {
+  try {
+    return (await run('docker', ['info'], { stdio: 'ignore' })) === 0;
+  } catch {
+    return false;
+  }
+};
+
+const hasValidStoredSession = () => {
+  try {
+    const storageState = JSON.parse(
+      fs.readFileSync(AUTH_STORAGE_STATE_PATH, 'utf-8'),
+    );
+    const tokenCookie = storageState.cookies.find((c) => c.name === 'token');
+    if (!tokenCookie) return false;
+
+    const payload = tokenCookie.value.split('.')[1];
+    const { exp } = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    return Date.now() / 1000 < exp - AUTH_EXPIRY_BUFFER_SECONDS;
+  } catch {
+    return false;
+  }
+};
+
+const configuredUpstreams = () => {
+  assertFixturesAreReachable();
+
+  const upstreams = MOCK_UPSTREAMS.map(({ envVar, pinnedUrl, fixtures }) => {
+    const realUrl = pinnedUrl ?? process.env[envVar];
+    if (!realUrl) {
+      throw new Error(
+        `\nNo URL for ${envVar} — set it in the environment, or give its upstream a pinnedUrl. Otherwise the app boots without it and renders pages that fail to load their data.\n`,
+      );
+    }
+
+    const { origin: realOrigin } = new URL(realUrl);
+    const mockPathPrefix = toMockPathPrefix(envVar);
+    const mockUrl = `${MOCK_ORIGIN}${mockPathPrefix}${realUrl.slice(realOrigin.length)}`;
+
+    return { envVar, realUrl, realOrigin, mockUrl, mockPathPrefix, fixtures };
+  });
+
+  const prefixes = new Map();
+  for (const { envVar, mockPathPrefix } of upstreams) {
+    const claimedBy = prefixes.get(mockPathPrefix);
+    if (claimedBy) {
+      throw new Error(
+        `\n${envVar} and ${claimedBy} both derive the mock path prefix ${mockPathPrefix} — the fixtures of whichever comes second could never be reached.\n`,
+      );
+    }
+    prefixes.set(mockPathPrefix, envVar);
+  }
+
+  return upstreams;
+};
+
+const buildMockEnv = (upstreams) =>
+  Object.fromEntries(upstreams.map(({ envVar, mockUrl }) => [envVar, mockUrl]));
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isServerUp = async () => {
+  try {
+    const response = await fetch(BASE_URL);
+    return response.status < 500;
+  } catch {
+    return false;
+  }
+};
+
+const waitForServer = async () => {
+  const deadline = Date.now() + READY_TIMEOUT_MS;
+  while (Date.now() < deadline) {
+    if (await isServerUp()) return true;
+    await sleep(POLL_INTERVAL_MS);
+  }
+  return false;
+};
+
+let server;
+let mockServer;
+let isRecordingMissingFixtures = false;
+let cleanedUp = false;
+const additionalCleanupTasks = [];
+
+export const registerCleanupTask = (task) => {
+  additionalCleanupTasks.push(task);
+};
+
+export const cleanup = () => {
+  if (cleanedUp) return;
+  cleanedUp = true;
+
+  for (const task of additionalCleanupTasks) {
+    try {
+      task();
+    } catch {}
+  }
+
+  if (server) {
+    try {
+      process.kill(-server.pid, 'SIGTERM');
+    } catch {}
+    killPortListener(APP_PORT);
+  }
+  if (mockServer) {
+    const absorbedWrites = mockServer.absorbedWrites ?? new Set();
+
+    if (mockServer.unmockedRequests?.size) {
+      if (!isRecordingMissingFixtures) {
+        const lines = [...mockServer.unmockedRequests].map(
+          ([requestKey, realUrl]) =>
+            `  - ${requestKey} fell through to ${realUrl}`,
+        );
+        console.warn(
+          `\nMock server: no fixtures were set for:\n${lines.join('\n')}\n\n` +
+            'Run `yarn vrt:pages:fixtures` to capture a real response where one exists.\n' +
+            'Or `yarn vrt:pages:fixtures:single "<test name>"` to record just one test.\n',
+        );
+      }
+    } else if (!absorbedWrites.size) {
+      console.log(
+        '\nMock server: every request routed through it was served from a fixture.\n' +
+          'Endpoints outside MOCK_UPSTREAMS bypass it and are not counted.\n',
+      );
+    }
+
+    if (absorbedWrites.size) {
+      const lines = [...absorbedWrites].map(
+        (requestKey) => `  - ${requestKey}`,
+      );
+      console.warn(
+        `\nMock server: answered these with 200 and wrote nothing:\n${lines.join('\n')}\n`,
+      );
+    }
+
+    mockServer.closeAllConnections();
+    mockServer.close();
+  }
+};
+
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => {
+    const wasAlreadyDone = cleanedUp;
+    cleanup();
+    if (!wasAlreadyDone) process.exit(1);
+  });
+}
+
+export const ensureAppAndMockServer = async ({
+  onUnmockedResponse,
+  allowServerReuse,
+} = {}) => {
+  isRecordingMissingFixtures = !!onUnmockedResponse;
+
+  assertRequiredEnv();
+
+  const serverAlreadyRunning = await isServerUp();
+
+  if (serverAlreadyRunning) {
+    if (allowServerReuse) {
+      console.log(
+        `Reusing app already running at ${BASE_URL} — mock data and feature flags will NOT apply unless that server was itself started with those env vars.`,
+      );
+      return;
+    }
+    console.error(
+      `\nAn app is already running at ${BASE_URL}. Refusing to reuse it: mock data and feature flags would NOT apply, so this run would use live acceptance data instead of fixtures. Stop that server and re-run — screenshot runs can pass --reuse-server to reuse it anyway.\n`,
+    );
+    process.exit(1);
+  }
+
+  const upstreams = configuredUpstreams();
+
+  console.log(`Starting mock server on port ${MOCK_PORT}...`);
+  try {
+    mockServer = await startMockServer({
+      port: MOCK_PORT,
+      upstreams,
+      onUnmockedResponse,
+    });
+  } catch (error) {
+    if (error.code !== 'EADDRINUSE') throw error;
+    console.error(
+      `\nPort ${MOCK_PORT} is taken, most likely by a mock server an earlier run left behind. Stop it and re-run:\n  lsof -ti tcp:${MOCK_PORT} | xargs kill\n`,
+    );
+    process.exit(1);
+  }
+
+  console.log(`No app detected at ${BASE_URL}, starting one now...`);
+  const startCommand = process.env.CI
+    ? 'yarn start'
+    : 'yarn build && yarn start';
+  server = spawn(startCommand, {
+    stdio: 'inherit',
+    shell: true,
+    detached: true,
+    env: {
+      ...process.env,
+      ...PINNED_ENV,
+      ...buildFeatureFlagEnv(),
+      ...buildMockEnv(upstreams),
+    },
+  });
+
+  let exitCode = null;
+  const serverExited = new Promise((resolve) =>
+    server.once('exit', (code) => {
+      exitCode = code ?? 1;
+      resolve(exitCode);
+    }),
+  );
+
+  const ready = await Promise.race([
+    waitForServer(),
+    serverExited.then(() => false),
+  ]);
+  if (!ready) {
+    console.error(
+      `\n${
+        exitCode !== null
+          ? `App process exited with code ${exitCode} before becoming reachable at ${BASE_URL} — see build/start output above.`
+          : `App never became reachable at ${BASE_URL}`
+      }\n`,
+    );
+    cleanup();
+    process.exit(1);
+  }
+};
+
+export const ensureAuthSession = async () => {
+  if (hasValidStoredSession()) {
+    console.log('Reusing still-valid authenticated storage state.');
+    return true;
+  }
+
+  console.log('Stored session missing or expired, logging in...');
+  const authExitCode = await run(
+    'npx',
+    ['playwright', 'test', '--project=setup-user', '--reporter=list'],
+    { env: { ...process.env, VRT_REUSE_SERVER: 'true' } },
+  );
+  if (authExitCode !== 0) {
+    console.error('\nFailed to refresh authenticated storage state\n');
+    return false;
+  }
+  return true;
+};

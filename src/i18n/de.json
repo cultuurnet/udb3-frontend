@@ -216,9 +216,8 @@
         "select_days": "Tag(e) auswählen",
         "deviating": {
           "title": "Abweichende Stunden hinzufügen",
-          "period_title": "Abweichende Periode {{index}}",
           "remove_period": "Periode entfernen",
-          "select_period": "Zeitraum auswählen",
+          "select_period": "Wann gelten die abweichenden Stunden?",
           "fill_hours": "Stunden für diesen Zeitraum eingeben",
           "add_period": "Abweichende Periode hinzufügen",
           "description_placeholder": "Beschreibung",
@@ -237,7 +236,6 @@
         },
         "closing": {
           "title": "Schließtage oder -perioden hinzufügen",
-          "period_title": "Schließperiode {{index}}",
           "remove_period": "Periode entfernen",
           "select_period": "Zeitraum auswählen",
           "add_period": "Schließperiode hinzufügen",
@@ -332,7 +330,7 @@
       },
       "age": {
         "title": "Geeignet für",
-        "title_boa": "Geben Sie an, für welche Altersgruppen diese Aktivität geeignet ist",
+        "title_boa": "Geben Sie an, an welche Altersgruppen sich diese Aktivität richtet",
         "input_mode": {
           "age": "Als Alter eingeben",
           "date_of_birth": "Als Geburtsdatum eingeben"
@@ -361,6 +359,7 @@
           "title": "Geben Sie das minimale und maximale Geburtsdatum der Teilnehmer an",
           "from": "von",
           "to": "bis",
+          "tip": "Kennen Sie nur die Geburtsjahre Ihrer Teilnehmer? Geben Sie dann bei 'von' den 01.01. gefolgt vom frühesten Geburtsjahr ein. Geben Sie bei 'bis' den 31.12. gefolgt vom spätesten Geburtsjahr ein.",
           "error_max_before_min": "Das 'bis'-Datum darf nicht vor dem 'von'-Datum liegen."
         },
         "all": "Alle Altersgruppen",
@@ -375,11 +374,14 @@
         "from": "Von",
         "till": "Bis",
         "age": "Jahre",
+        "change_age": "Alter ändern",
         "input_range_title": "Geben Sie ein Mindest- und Höchstalter ein",
+        "or_choose_category": "Oder wählen Sie eine Alterskategorie",
         "error_max_lower_than_min": "Das Höchstalter kann nicht unter dem Mindestalter liegen.",
         "error_max_age": "Das eingegebene Alter darf höchstens 120 Jahre betragen.",
         "error_no_min_age": "Bitte geben Sie ein Mindestalter ein",
         "error_invalid": "Das angegebene Alter ist ungültig.",
+        "error_decimal": "Sie können keine Dezimalzahl eingeben",
         "children_only": {
           "question": "Für wen ist diese Aktivität?",
           "children_only": "Nur für Kinder (außerschulische Betreuung oder Aktivität)",
@@ -1010,7 +1012,7 @@
     },
     "duplicate": {
       "title": "Kopieren und ändern",
-      "alert": "Sie sind dabei, eine Aktivität zu kopieren. Wählen Sie einen Zeitpunkt für diese Aktivität."
+      "alert": "Sie sind dabei, eine Aktivität zu kopieren. Wählen Sie neue Uhrzeiten für diese Aktivität."
     },
     "migration": {
       "alert": "<boldText>Diese Aktivität wurde in der vorherigen Version von UiTdatabank eingegeben.</boldText><br/>Um sie zu bearbeiten, müssen Sie den zuvor ausgewählten Ort und die Adresse erneut auswählen oder einmal eingeben.",
@@ -1227,6 +1229,7 @@
     "productions": "Produktionen",
     "roles": "Rollen",
     "search": "Suchen",
+    "sidebar": "Seitenleiste",
     "users": "Benutzer",
     "validate": "Validieren"
   },
@@ -1253,8 +1256,13 @@
         "choose_cinema": "Wähle ein Kino",
         "choose_name": "Wähle einen Namen",
         "clear": "Leeren",
+        "copy_failed": "Kopieren fehlgeschlagen",
+        "copy_row": "Zeile vom {{date}} kopieren",
         "copy_table": "Tabelle kopieren",
-        "description": "Beschreibung"
+        "description": "Beschreibung",
+        "row_copied": "Zeile vom {{date}} kopiert",
+        "table_copied": "Tabelle kopiert",
+        "time_slot": "Uhrzeit {{column}} am {{date}}"
       },
       "cinema": {
         "placeholder": "Kinoname"
@@ -1706,8 +1714,6 @@
     }
   },
   "date_picker": {
-    "today": "Heute",
-    "go_to_selected": "Zur Auswahl",
     "open_calendar": "Kalender öffnen"
   },
   "date_period_picker": {
@@ -1995,7 +2001,7 @@
       "image": "Abbildungen",
       "video": "Videos",
       "event_id": "ID",
-      "accessibility": "Erreichbarkeit"
+      "accessibility": "Begleiteter Transport"
     },
     "public_url": "Ansicht auf {{publicationBrand}}",
     "rejected_explanation": "Dieser Beitrag wurde zur Veröffentlichung abgelehnt. <publication_rules_link>Siehe die Richtlinien</publication_rules_link>",

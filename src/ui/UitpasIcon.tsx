@@ -1,13 +1,14 @@
 import { Box, BoxProps, getBoxProps } from '@/ui/Box';
+import { cn } from '@/ui/shadcn/utils';
 
 const UitpasIcon = (props: BoxProps) => {
-  const { width = '1.4rem', height = '1.4rem', ...rest } = props;
+  const { width = '1.4rem', height = '1.4rem', className, ...rest } = props;
   return (
     <Box
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 191 138"
-      className="uitpas-icon"
+      className={cn('uitpas-icon', className)}
       width={width}
       height={height}
       {...getBoxProps(rest)}

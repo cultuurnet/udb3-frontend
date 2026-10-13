@@ -28,6 +28,7 @@ module.exports = {
   modulePathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/src/test/e2e',
+    '<rootDir>/src/test/vrt-pages',
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',

@@ -1,7 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 
 import { Box, parseSpacing } from './Box';
-import { cn } from './shadcn/utils';
 import { Stack } from './Stack';
 import { colors, getGlobalBorderRadius, getValueFromTheme } from './theme';
 
@@ -73,7 +72,7 @@ const ToggleBoxLegacy = ({
   return (
     <Stack
       forwardedAs="button"
-      className={cn(className)}
+      className={className}
       onClick={onClick}
       padding={4.5}
       justifyContent="center"

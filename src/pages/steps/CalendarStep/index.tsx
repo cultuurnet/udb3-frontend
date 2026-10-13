@@ -1,1 +1,5 @@
-export { CalendarStep, calendarStepConfiguration } from './CalendarStep';
+export {
+  CalendarStep,
+  calendarStepConfiguration,
+  hasChangedCalendar,
+} from './CalendarStep';

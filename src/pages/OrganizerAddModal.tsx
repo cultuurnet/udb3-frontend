@@ -1,7 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Highlighter } from 'react-bootstrap-typeahead';
-import { TypeaheadMenu } from 'react-bootstrap-typeahead';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -21,6 +19,7 @@ import { Organizer } from '@/types/Organizer';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Highlighter } from '@/ui/Highlighter';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { LabelPositions, LabelVariants } from '@/ui/Label';
@@ -436,19 +435,7 @@ const OrganizerAddModal = ({
                         });
                       }}
                       labelKey={(option: string) => option}
-                      renderMenu={(results, menuProps, { text }) => {
-                        if (!results || results.length === 0) return null;
-
-                        return (
-                          <TypeaheadMenu
-                            {...menuProps}
-                            options={results}
-                            labelKey={(option: string) => option}
-                            text={text}
-                          />
-                        );
-                      }}
-                      renderMenuItemChildren={(address: string, { text }) => (
+                      renderMenuItemChildren={(address: string, text) => (
                         <Highlighter search={text}>{address}</Highlighter>
                       )}
                       selected={
@@ -456,7 +443,7 @@ const OrganizerAddModal = ({
                           ? [streetAddressTypeahead.currentInputValue]
                           : []
                       }
-                      maxWidth="28rem"
+                      className="tw:max-w-md"
                       onChange={(selected) => {
                         const selectedAddress = selected[0];
                         if (selectedAddress) {

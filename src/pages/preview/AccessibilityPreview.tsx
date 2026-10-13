@@ -11,11 +11,11 @@ import { Text, TextVariants } from '@/ui/Text';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
-type DeparturePlaceAddressProps = {
+type DeparturePlaceProps = {
   placeUri: string;
 };
 
-const DeparturePlaceAddress = ({ placeUri }: DeparturePlaceAddressProps) => {
+const DeparturePlace = ({ placeUri }: DeparturePlaceProps) => {
   const { data: place } = useGetOfferByIdQuery({
     id: parseOfferId(placeUri),
     scope: OfferTypes.PLACES,
@@ -23,18 +23,27 @@ const DeparturePlaceAddress = ({ placeUri }: DeparturePlaceAddressProps) => {
 
   if (!isPlace(place)) return null;
 
+  const name = getLanguageObjectOrFallback<string>(
+    place.name,
+    i18n.language as SupportedLanguage,
+    place.mainLanguage,
+  );
+
   const address = getLanguageObjectOrFallback<AddressInternal>(
     place.address,
     i18n.language as SupportedLanguage,
     place.mainLanguage,
   );
 
-  if (!address) return null;
+  if (!name && !address) return null;
 
   return (
-    <Text>
-      {address.streetAddress}, {address.postalCode} {address.addressLocality}
-    </Text>
+    <Stack>
+      {name && <Text className="tw:font-bold">{name}</Text>}
+      {address && (
+        <Text>{`${address.streetAddress}, ${address.postalCode} ${address.addressLocality}`}</Text>
+      )}
+    </Stack>
   );
 };
 
@@ -56,7 +65,7 @@ const AccessibilityPreview = ({
       </Text>
       <Stack spacing={1}>
         {departurePlaces.map((uri) => (
-          <DeparturePlaceAddress key={uri} placeUri={uri} />
+          <DeparturePlace key={uri} placeUri={uri} />
         ))}
       </Stack>
     </Stack>

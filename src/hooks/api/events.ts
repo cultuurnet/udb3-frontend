@@ -501,51 +501,6 @@ export const prefetchGetEventsByCreatorQuery = ({
     }),
   });
 
-const getCalendarSummary = async ({ headers, id, format, locale }) => {
-  const res = await fetchFromApi({
-    path: `/events/${id.toString()}/calsum`,
-    searchParams: {
-      format,
-      langCode: `${locale}_BE`,
-    },
-    options: {
-      headers,
-    },
-  });
-  return res.text();
-};
-
-const useGetCalendarSummaryQuery = (
-  { id, locale, format = 'lg' },
-  configuration: ExtendQueryOptions<typeof getCalendarSummary> = {},
-) =>
-  useAuthenticatedQuery({
-    queryKey: ['events'],
-    queryFn: getCalendarSummary,
-    queryArguments: {
-      id,
-      locale,
-      format,
-    },
-    enabled: !!id && !!locale,
-    ...configuration,
-  });
-
-export const prefetchGetCalendarSummaryQuery = ({
-  req,
-  queryClient,
-  id,
-  locale,
-  format,
-}) =>
-  prefetchAuthenticatedQuery({
-    req,
-    queryClient,
-    queryKey: ['events'],
-    queryFn: getCalendarSummary,
-    queryArguments: { id, locale, format },
-  });
-
 const getOfferPermissions = async ({ headers, offerId, scope }) => {
   const res = await fetchFromApi({
     path: `/${scope}/${offerId}/permissions`,
@@ -978,7 +933,6 @@ export {
   useDeleteEventByIdMutation,
   useDeleteOnlineUrlMutation,
   useDuplicateEventMutation,
-  useGetCalendarSummaryQuery,
   useGetEventByIdQuery,
   useGetEventsByCreatorQuery,
   useGetEventsByIdsQuery,

@@ -1,4 +1,4 @@
-import { format, isSameDay, startOfDay } from 'date-fns';
+import { endOfDay, format, isSameDay, startOfDay } from 'date-fns';
 import uniqueId from 'lodash/uniqueId';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +8,7 @@ import { useQuickLinkRangeFilter } from '@/hooks/useQuickLinkRangeFilter';
 import { DayOfWeek } from '@/types/Offer';
 import { BoxProps } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
-import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
+import { DatePeriodPicker, QuickLinkPeriod } from '@/ui/DatePeriodPicker';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
@@ -44,7 +44,6 @@ type DeviatingPeriodData = {
 };
 
 type Props = BoxProps & {
-  index: number;
   period: DeviatingPeriodData;
   onChange: (period: DeviatingPeriodData) => void;
   onRemove: () => void;
@@ -59,7 +58,6 @@ type Props = BoxProps & {
 };
 
 const DeviatingPeriod = ({
-  index,
   period,
   onChange,
   onRemove,
@@ -120,6 +118,40 @@ const DeviatingPeriod = ({
       ) as DayOfWeek[],
     });
 
+  const createDeviatingPeriodFromQuickLink = (
+    quickLinkPeriod: QuickLinkPeriod,
+  ): DeviatingPeriodData => {
+    const isSingleDay = isSameDay(
+      quickLinkPeriod.startDate,
+      quickLinkPeriod.endDate,
+    );
+    const dayOfWeek = isSingleDay
+      ? (format(quickLinkPeriod.startDate, 'iiii').toLowerCase() as DayOfWeek)
+      : null;
+
+    return {
+      id: uniqueId('deviating-period-'),
+      startDate: quickLinkPeriod.startDate,
+      endDate: quickLinkPeriod.endDate,
+      description: { [lang]: quickLinkPeriod.name },
+      holidayType: quickLinkPeriod.holidayType,
+      openingHours: period.openingHours.map((openingHour) => ({
+        ...openingHour,
+        id: createOpeninghoursId(),
+        dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
+      })),
+    };
+  };
+
+  const handleQuickLinkClick = (periods: QuickLinkPeriod[]) => {
+    if (!onQuickLinkExpand || periods.length === 0) return;
+
+    const filtered = filterByEventRange(periods);
+    if (filtered.length === 0) return;
+
+    onQuickLinkExpand(filtered.map(createDeviatingPeriodFromQuickLink));
+  };
+
   return (
     <Stack
       spacing={4}
@@ -127,125 +159,115 @@ const DeviatingPeriod = ({
       css={`
         border: 1px solid ${colors.grey3};
         border-radius: 0.5rem;
+        background-color: ${colors.greylight};
       `}
       {...boxProps}
     >
-      <Inline justifyContent="space-between" alignItems="center">
-        <Text className="tw:font-bold">
-          {t('create.calendar.opening_hours_modal.deviating.period_title', {
-            index: index + 1,
-          })}
-        </Text>
-        <Button
-          variant={ButtonVariants.DANGER}
-          iconName={Icons.TRASH}
-          onClick={onRemove}
-        >
-          {t('create.calendar.opening_hours_modal.deviating.remove_period')}
-        </Button>
-      </Inline>
-
-      <Stack spacing={2}>
-        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
-          {t('create.calendar.opening_hours_modal.deviating.select_period')}
-        </Text>
-        <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
-          <DatePeriodPicker
-            className="tw:w-full"
-            id={`deviating-period-${period.id}`}
-            dateStart={period.startDate}
-            dateEnd={period.endDate}
-            onDateStartChange={(date) => {
-              clearQuickLinkRangeError();
-              onChange({ ...period, startDate: date });
-            }}
-            onDateEndChange={(date) => {
-              clearQuickLinkRangeError();
-              onChange({ ...period, endDate: date });
-            }}
-            showQuickLinks
-            fetchHolidays={fetchHolidays}
-            apiHolidays={apiHolidays}
-            onShowHolidaysChange={onShowHolidaysChange}
-            onQuickLinkClick={(periods) => {
-              if (!onQuickLinkExpand || periods.length === 0) return;
-              const filtered = filterByEventRange(periods);
-              if (filtered.length === 0) return;
-              onQuickLinkExpand(
-                filtered.map((p) => {
-                  const isSingleDay = isSameDay(p.startDate, p.endDate);
-                  const dayOfWeek = isSingleDay
-                    ? (format(p.startDate, 'iiii').toLowerCase() as DayOfWeek)
-                    : null;
-                  return {
-                    id: uniqueId('deviating-period-'),
-                    startDate: p.startDate,
-                    endDate: p.endDate,
-                    description: { [lang]: p.name },
-                    holidayType: p.holidayType,
-                    openingHours: period.openingHours.map((openingHour) => ({
-                      ...openingHour,
-                      id: createOpeninghoursId(),
-                      dayOfWeek: dayOfWeek ? [dayOfWeek] : [],
-                    })),
-                  };
-                }),
-              );
-            }}
-          />
-          <Input
-            value={period.description[lang] ?? ''}
-            className="tw:w-4/5"
-            onChange={(e) =>
-              onChange({
-                ...period,
-                description: { ...period.description, [lang]: e.target.value },
-              })
-            }
-            placeholder={t(
-              'create.calendar.opening_hours_modal.deviating.description_placeholder',
+      <Stack spacing={0}>
+        <Inline justifyContent="space-between" alignItems="center">
+          <Text
+            variant={TextVariants.PRIMARY}
+            className="tw:text-lg tw:font-bold"
+          >
+            {t('create.calendar.opening_hours_modal.deviating.select_period')}
+          </Text>
+          <Button
+            variant={ButtonVariants.DANGER}
+            iconName={Icons.TRASH}
+            onClick={onRemove}
+            aria-label={t(
+              'create.calendar.opening_hours_modal.deviating.remove_period',
             )}
           />
         </Inline>
-        {hasOverlap && (
-          <Text variant={TextVariants.DANGER}>
-            {t('create.calendar.opening_hours_modal.deviating.errors.overlap')}
-          </Text>
-        )}
-        {hasInvalidDateOrder && (
-          <Text variant={TextVariants.DANGER}>
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
-            )}
-          </Text>
-        )}
-        {eventStartDate &&
-          startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+
+        <Stack spacing={1}>
+          <Inline spacing={0} alignItems="flex-end" className="tw:gap-8">
+            <DatePeriodPicker
+              className="tw:w-full"
+              id={`deviating-period-${period.id}`}
+              dateStart={period.startDate}
+              dateEnd={period.endDate}
+              onDateStartChange={(date) => {
+                clearQuickLinkRangeError();
+                onChange({
+                  ...period,
+                  startDate: date,
+                  endDate: endOfDay(date),
+                });
+              }}
+              onDateEndChange={(date) => {
+                clearQuickLinkRangeError();
+                onChange({ ...period, endDate: date });
+              }}
+              showQuickLinks
+              fetchHolidays={fetchHolidays}
+              apiHolidays={apiHolidays}
+              onShowHolidaysChange={onShowHolidaysChange}
+              onQuickLinkClick={handleQuickLinkClick}
+            />
+            <Input
+              value={period.description[lang] ?? ''}
+              className="tw:w-4/5"
+              onChange={(e) =>
+                onChange({
+                  ...period,
+                  description: {
+                    ...period.description,
+                    [lang]: e.target.value,
+                  },
+                })
+              }
+              placeholder={t(
+                'create.calendar.opening_hours_modal.deviating.description_placeholder',
+              )}
+            />
+          </Inline>
+          {hasOverlap && (
             <Text variant={TextVariants.DANGER}>
               {t(
-                'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+                'create.calendar.opening_hours_modal.deviating.errors.overlap',
               )}
             </Text>
           )}
-        {eventEndDate &&
-          startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+          {hasInvalidDateOrder && (
             <Text variant={TextVariants.DANGER}>
               {t(
-                'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+                'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
               )}
             </Text>
           )}
-        {quickLinkRangeError && (
-          <Text variant={TextVariants.DANGER}>
-            {t(
-              'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
+          {eventStartDate &&
+            startOfDay(period.startDate) < startOfDay(eventStartDate) && (
+              <Text variant={TextVariants.DANGER}>
+                {t(
+                  'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
+                )}
+              </Text>
             )}
-          </Text>
-        )}
+          {eventEndDate &&
+            startOfDay(period.endDate) > startOfDay(eventEndDate) && (
+              <Text variant={TextVariants.DANGER}>
+                {t(
+                  'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
+                )}
+              </Text>
+            )}
+          {quickLinkRangeError && (
+            <Text variant={TextVariants.DANGER}>
+              {t(
+                'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
+              )}
+            </Text>
+          )}
+        </Stack>
       </Stack>
 
-      <Stack spacing={2} marginTop={3}>
-        <Text variant={TextVariants.PRIMARY} className="tw:font-bold">
+      <Stack spacing={1} marginTop={3}>
+        <Text
+          variant={TextVariants.PRIMARY}
+          className="tw:text-lg tw:font-bold"
+        >
           {t('create.calendar.opening_hours_modal.deviating.fill_hours')}
         </Text>
         <Stack spacing={4}>
@@ -259,12 +281,8 @@ const DeviatingPeriod = ({
 
             return (
               <Stack key={openingHour.id} spacing={4}>
-                <Inline
-                  alignItems="flex-end"
-                  spacing={5}
-                  marginBottom={showChildcare ? 4 : undefined}
-                >
-                  <Stack spacing={3}>
+                <Inline alignItems="flex-end" spacing={5}>
+                  <Stack spacing={1}>
                     <Text className="tw:font-bold">
                       {t('create.calendar.opening_hours_modal.days')}
                     </Text>
@@ -281,14 +299,14 @@ const DeviatingPeriod = ({
                       onChange={(newDays) =>
                         handleToggleDaysOfWeek(newDays, openingHour.id)
                       }
-                      width="15rem"
+                      className="tw:w-61"
                       hasError={
                         shownErrorIds.has(openingHour.id) &&
                         openingHour.dayOfWeek.length === 0
                       }
                     />
                   </Stack>
-                  <Stack spacing={3}>
+                  <Stack spacing={1}>
                     <Text className="tw:font-bold">
                       {t('create.calendar.opening_hours_modal.hours')}
                     </Text>
@@ -337,8 +355,11 @@ const DeviatingPeriod = ({
                   {period.openingHours.length > 1 && (
                     <Button
                       iconName={Icons.TRASH}
-                      variant={ButtonVariants.DANGER}
+                      variant={ButtonVariants.OUTLINED_DANGER}
                       onClick={() => handleRemoveOpeningHour(openingHour.id)}
+                      aria-label={t(
+                        'create.calendar.fixed_days.overview.delete_modal.title',
+                      )}
                     />
                   )}
                 </Inline>

@@ -6,7 +6,9 @@ test.describe.configure({ mode: 'serial' });
 
 const childcareStartInput = 'input[id$="-childcare-time-span-picker-start"]';
 const childcareEndInput = 'input[id$="-childcare-time-span-picker-end"]';
-const childcare = nl.create.calendar.days.childcare;
+const calendar = nl.create.calendar;
+const childcare = calendar.days.childcare;
+const kinderopvangType = nl.eventTypes['K7mPx3nQrT9bWfH2zL5cYv'];
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
@@ -162,6 +164,65 @@ test('does not show Overnachting column for a non-Kamp event type', async ({
   await page.getByRole('button', { name: 'Concert' }).click();
 
   await expect(page.getByText('Overnachting')).toBeHidden();
+});
+
+test('does not show childcare fields for a Kinderopvang event', async ({
+  baseURL,
+  page,
+}) => {
+  await page.goto(`${baseURL}/create`);
+
+  await page.getByRole('button', { name: 'Activiteit' }).click();
+  await page
+    .getByRole('button', { name: kinderopvangType, exact: true })
+    .click();
+
+  // The activity hours are still there, only the childcare block is gone
+  await expect(page.getByLabel('Beginuur')).toBeVisible();
+  await expect(page.getByText(childcare.info)).toBeHidden();
+  await expect(
+    page.getByRole('checkbox', { name: childcare.before }),
+  ).toBeHidden();
+  await expect(
+    page.getByRole('checkbox', { name: childcare.after }),
+  ).toBeHidden();
+  await expect(page.locator(childcareStartInput)).toBeHidden();
+  await expect(page.locator(childcareEndInput)).toBeHidden();
+});
+
+test('does not show childcare fields in the opening hours modal for a Kinderopvang event', async ({
+  baseURL,
+  page,
+}) => {
+  await page.goto(`${baseURL}/create`);
+
+  await page.getByRole('button', { name: 'Activiteit' }).click();
+  await page
+    .getByRole('button', { name: kinderopvangType, exact: true })
+    .click();
+  await page.getByRole('button', { name: calendar.types.fixed_days }).click();
+  await page
+    .getByRole('radio', { name: calendar.fixed_days.permanent })
+    .click();
+  await page
+    .getByRole('button', { name: calendar.fixed_days.button_add_hours })
+    .click();
+
+  const modal = page.getByRole('dialog');
+  await expect(modal).toBeVisible();
+
+  await expect(
+    modal.getByRole('button', {
+      name: calendar.opening_hours_modal.select_days,
+    }),
+  ).toBeVisible();
+  await expect(modal.getByText(childcare.info)).toBeHidden();
+  await expect(
+    modal.getByRole('checkbox', { name: childcare.before }),
+  ).toBeHidden();
+  await expect(
+    modal.getByRole('checkbox', { name: childcare.after }),
+  ).toBeHidden();
 });
 
 test('shows childcare validation errors when times overlap activity hours', async ({

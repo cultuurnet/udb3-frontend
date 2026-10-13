@@ -12,7 +12,10 @@ import { ErrorCodes } from '@/constants/ErrorCodes';
 import { eventTypesWithNoThemes } from '@/constants/EventTypes';
 import { OfferTypes, ScopeTypes } from '@/constants/OfferType';
 import { useAddEventMutation } from '@/hooks/api/events';
-import { useAddOfferLabelMutation } from '@/hooks/api/offers';
+import {
+  useAddOfferLabelMutation,
+  useUpdateOfferFaqMutation,
+} from '@/hooks/api/offers';
 import { getPlacesByQuery, useAddPlaceMutation } from '@/hooks/api/places';
 import {
   useAddEventByIdMutation as useAddEventToProductionByIdMutation,
@@ -26,6 +29,7 @@ import {
   getLocationLabels,
 } from '@/utils/cultuurkuurLabels';
 import { FetchError } from '@/utils/fetchFromApi';
+import { getUniqueLabels } from '@/utils/getUniqueLabels';
 
 type UseAddOfferArgument = {
   onSuccess: (scope: FormDataUnion['scope'], offerId: string) => void;
@@ -48,6 +52,7 @@ const useAddOffer = ({
   const addPlaceMutation = useAddPlaceMutation();
   const headers = useHeaders();
   const addLabelMutation = useAddOfferLabelMutation();
+  const updateFaqMutation = useUpdateOfferFaqMutation();
 
   const createProductionWithEventsMutation =
     useCreateProductionWithEventsMutation();
@@ -74,9 +79,11 @@ const useAddOffer = ({
     const errors = [];
 
     if (isCultuurkuurEvent) {
-      const educationLabels = getEducationLabels(payload.labels);
+      const allLabels = getUniqueLabels(payload);
 
-      const locationLabels = getLocationLabels(payload.labels);
+      const educationLabels = getEducationLabels(allLabels);
+
+      const locationLabels = getLocationLabels(allLabels);
 
       const isThemeSelected = !!fullOffer?.typeAndTheme?.theme;
 
@@ -86,13 +93,13 @@ const useAddOffer = ({
       const hasTypeNoThemes =
         selectedTypeId && eventTypesWithNoThemes.includes(selectedTypeId);
 
-      if (!educationLabels || educationLabels.length === 0) {
+      if (educationLabels.length === 0) {
         errors.push(CULTUURKUUR_EDUCATION_LABELS_ERROR);
       }
 
       if (
         payload.location?.id === CULTUURKUUR_LOCATION_ID &&
-        (!locationLabels || locationLabels.length === 0)
+        locationLabels.length === 0
       ) {
         errors.push(CULTUURKUUR_LOCATION_LABELS_ERROR);
       }
@@ -140,6 +147,14 @@ const useAddOffer = ({
           id: offerId,
           label,
           scope,
+        });
+      }
+
+      if (initialOffer?.faqs?.length) {
+        await updateFaqMutation.mutateAsync({
+          id: offerId,
+          scope,
+          faq: initialOffer.faqs,
         });
       }
 
