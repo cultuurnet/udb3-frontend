@@ -88,7 +88,7 @@ const OrganizersPreview = () => {
   );
 
   return (
-    <Page backgroundColor="var(--background)">
+    <Page>
       <Page.Title>{organizerName}</Page.Title>
       <Page.Content>
         <Stack>
