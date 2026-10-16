@@ -612,7 +612,7 @@ const Dashboard = (): any => {
   );
 
   return (
-    <Page backgroundColor="var(--background)" spacing={4} key="page">
+    <Page spacing={4} key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
           ? `${t('dashboard.welcome')}, ${user['https://publiq.be/first_name']}`
