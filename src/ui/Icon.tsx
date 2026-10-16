@@ -161,7 +161,7 @@ const shadcnVariantClassName: Record<
   [IconVariants.DEFAULT]: undefined,
   [IconVariants.SUCCESS]: 'tw:text-success',
   [IconVariants.DANGER]: 'tw:text-destructive',
-  [IconVariants.WARNING]: 'tw:text-warning',
+  [IconVariants.WARNING]: 'tw:text-warning-icon',
   [IconVariants.INFO]: 'tw:text-info',
 };
 
