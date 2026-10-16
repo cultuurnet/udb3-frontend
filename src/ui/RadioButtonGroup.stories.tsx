@@ -27,7 +27,7 @@ const render: Story['render'] = function RenderComponent(args) {
 
   return (
     <div className="tw:flex tw:flex-col tw:gap-2">
-      <Text fontWeight="bold">Select a city:</Text>
+      <Text className="tw:font-bold">Select a city:</Text>
       <RadioButtonGroup
         {...args}
         selected={selected}

@@ -49,31 +49,13 @@ function ButtonCard({
         textAlign="left"
         minHeight="1.9rem"
       >
-        <Text
-          width={hasEllipsisOnTitle && `80%`}
-          css={
-            hasEllipsisOnTitle &&
-            `
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          `
-          }
-        >
+        <Text className={cn(hasEllipsisOnTitle && 'tw:w-[80%] tw:truncate')}>
           {title}
         </Text>
         {badge}
       </Box>
       {description && (
-        <Text
-          textAlign="left"
-          width="100%"
-          css={`
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          `}
-        >
+        <Text className="tw:w-full tw:truncate tw:text-left">
           {description}
         </Text>
       )}

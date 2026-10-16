@@ -10,8 +10,8 @@ import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Panel } from '@/ui/Panel';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
-import { colors, getValueFromTheme } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
+import { getValueFromTheme } from '@/ui/theme';
 import { sanitizationPresets, sanitizeDom } from '@/utils/sanitizeDom';
 
 const getPanelValue = getValueFromTheme('panel');
@@ -57,7 +57,7 @@ const FaqList = ({
             `}
           >
             <Inline justifyContent="space-between" alignItems="center">
-              <Text fontWeight="500">{item.question}</Text>
+              <Text className="tw:font-medium">{item.question}</Text>
               <Inline spacing={3}>
                 <Button
                   variant={ButtonVariants.LINK}
@@ -74,14 +74,8 @@ const FaqList = ({
               </Inline>
             </Inline>
             <Text
-              color={colors.grey5}
-              css={`
-                line-height: 1.5;
-                display: -webkit-box;
-                -webkit-line-clamp: 4;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              `}
+              variant={TextVariants.MUTED}
+              className="tw:line-clamp-4 tw:leading-normal"
               dangerouslySetInnerHTML={{
                 __html: sanitizeDom(
                   item.answer,

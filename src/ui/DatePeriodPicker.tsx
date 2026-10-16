@@ -177,7 +177,9 @@ const DatePeriodPickerShadcn = ({
       <SwitchWithLabel
         id={`${idPrefix}-show-holidays`}
         label={
-          <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
+          <Text
+            className={cn(isHighlighted ? 'tw:font-bold' : 'tw:font-normal')}
+          >
             {t('date_period_picker.show_holidays')}
           </Text>
         }
@@ -192,8 +194,7 @@ const DatePeriodPickerShadcn = ({
             <Text
               key={label}
               variant={TextVariants.MUTED}
-              fontSize="0.85rem"
-              lineHeight="1.2"
+              className="tw:text-sm"
             >
               {label}
             </Text>
