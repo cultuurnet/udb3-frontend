@@ -48,7 +48,6 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
         <Button
           variant={ButtonVariants.SUCCESS}
           iconName={Icons.CHECK_CIRCLE}
-          className="tw:gap-3"
           onClick={() => onApprove?.(request)}
         >
           {t('organizers.ownerships.table.actions.approve')}
@@ -56,7 +55,6 @@ const Actions = ({ request, onDelete, onApprove, onReject }: ActionProps) => {
         <Button
           variant={ButtonVariants.DANGER}
           iconName={Icons.TIMES_CIRCLE}
-          className="tw:gap-3"
           onClick={() => onReject?.(request)}
         >
           {t('organizers.ownerships.table.actions.reject')}
