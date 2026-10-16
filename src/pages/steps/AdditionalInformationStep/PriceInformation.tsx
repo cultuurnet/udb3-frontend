@@ -30,7 +30,7 @@ import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { Breakpoints, getValueFromTheme } from '@/ui/theme';
+import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
 import { FetchError } from '@/utils/fetchFromApi';
 import { reconcileRates } from '@/utils/reconcileRates';
 
@@ -549,7 +549,10 @@ const PriceInformation = ({
                     </Inline>
                   </Inline>
                   {validationErrors.map((errorType) => (
-                    <Text color="red" key={`validation_error_${errorType}`}>
+                    <Text
+                      color={colors.danger}
+                      key={`validation_error_${errorType}`}
+                    >
                       {t(
                         `create.additionalInformation.price_info.validation_messages.${errorType}`,
                       )}

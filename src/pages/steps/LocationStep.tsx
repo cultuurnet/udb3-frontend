@@ -49,6 +49,7 @@ import { Link } from '@/ui/Link';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text, TextVariants } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { ToggleBox } from '@/ui/ToggleBox';
 import { UitpasIcon } from '@/ui/UitpasIcon';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
@@ -923,7 +924,7 @@ const LocationStep = ({
         }}
       />
       {isLocationLabelErrorVisible && (
-        <Text variant={TextVariants.ERROR}>
+        <Text color={colors.danger}>
           {t('cultuurkuur_modal.overview.error_locations')}
         </Text>
       )}

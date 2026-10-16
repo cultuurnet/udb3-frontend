@@ -440,9 +440,6 @@ const theme = {
       muted: {
         color: colors.textMuted,
       },
-      error: {
-        color: colors.danger,
-      },
     },
     organizerAddModal: {
       address: {
