@@ -24,7 +24,6 @@ const colors = {
   red4: 'var(--danger-active)',
   orange: 'var(--orange)',
   warning: 'var(--warning)',
-  warningIcon: 'var(--warning-icon)',
   info: 'var(--info)',
   danger: 'var(--danger)',
   dangerDark: 'var(--danger-hover)',
@@ -86,13 +85,13 @@ const theme = {
       backgroundColor: {
         primary: 'var(--info-muted)',
         success: 'var(--success-muted)',
-        warning: 'var(--warning-muted)',
+        warning: 'var(--warning-surface)',
         danger: 'var(--danger-muted)',
       },
       borderColor: {
         primary: colors.info,
         success: colors.udbMainPositiveGreen,
-        warning: colors.warningIcon,
+        warning: colors.warning,
         danger: colors.danger,
       },
     },
