@@ -530,7 +530,7 @@ const EventTypeAndThemeStep = ({
               </Alert>
             )}
             {isCultuurkuurThemeErrorVisible && (
-              <Text variant={TextVariants.ERROR}>
+              <Text variant={TextVariants.DANGER}>
                 {t('create.type_and_theme.cultuurkuur.error')}
               </Text>
             )}

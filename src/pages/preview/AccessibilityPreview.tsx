@@ -7,8 +7,7 @@ import i18n from '@/i18n/index';
 import type { AddressInternal } from '@/types/Address';
 import { isPlace } from '@/types/Place';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
-import { colors } from '@/ui/theme';
+import { Text, TextVariants } from '@/ui/Text';
 import { getLanguageObjectOrFallback } from '@/utils/getLanguageObjectOrFallback';
 import { parseOfferId } from '@/utils/parseOfferId';
 
@@ -40,7 +39,7 @@ const DeparturePlace = ({ placeUri }: DeparturePlaceProps) => {
 
   return (
     <Stack>
-      {name && <Text fontWeight="bold">{name}</Text>}
+      {name && <Text className="tw:font-bold">{name}</Text>}
       {address && (
         <Text>{`${address.streetAddress}, ${address.postalCode} ${address.addressLocality}`}</Text>
       )}
@@ -61,7 +60,9 @@ const AccessibilityPreview = ({
 
   return (
     <Stack spacing={2}>
-      <Text color={colors.grey5}>{t('preview.accessibility.description')}</Text>
+      <Text variant={TextVariants.MUTED}>
+        {t('preview.accessibility.description')}
+      </Text>
       <Stack spacing={1}>
         {departurePlaces.map((uri) => (
           <DeparturePlace key={uri} placeUri={uri} />

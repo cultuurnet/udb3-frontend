@@ -233,7 +233,7 @@ const OrganizerForm = () => {
             >
               <Text>{t('create.footer.done_editing')}</Text>
             </Link>
-            <Text color={getValue('footer.color')} fontSize="0.9rem">
+            <Text className="tw:text-sm tw:text-foreground">
               {t('create.footer.auto_save')}
             </Text>
           </Inline>
