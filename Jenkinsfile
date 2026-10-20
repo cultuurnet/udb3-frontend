@@ -23,7 +23,7 @@ pipeline {
                 stage('Build project') {
                     agent {
                         docker {
-                            image 'base_images/node/22:22.23.3-bookworm'
+                            image 'base_images/node:22'
                             label 'docker'
                         }
                     }
