@@ -37,12 +37,20 @@ type Props = {
   header?: ReactElement;
   body: ReactElement;
   className?: string;
+  'data-testid'?: string;
 };
 
-const NotificationLegacy = ({ icon, header, body, className }: Props) => {
+const NotificationLegacy = ({
+  icon,
+  header,
+  body,
+  className,
+  'data-testid': dataTestId,
+}: Props) => {
   return (
     <BootstrapToast
       className={className}
+      data-testid={dataTestId}
       css={css`
         ${commonCss}
       `}
