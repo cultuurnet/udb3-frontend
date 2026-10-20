@@ -11,7 +11,9 @@ const COMPLETE_SCORE = '98';
 const completionWidget = (page: Page) => page.getByTestId('form-score');
 
 const waitForScore = (score: string) => async (page: Page) => {
-  await expect(page.locator('#current-score')).toHaveText(score);
+  await expect(completionWidget(page).locator('#current-score')).toHaveText(
+    score,
+  );
 };
 
 screenshotPages([
