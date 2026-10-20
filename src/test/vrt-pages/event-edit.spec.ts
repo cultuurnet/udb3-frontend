@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 import { screenshotPages } from './support';
 
@@ -100,5 +100,10 @@ screenshotPages([
     path: EVENT_EDIT_PATH,
     locator: scopeStep,
     fitContent: true,
+    beforeScreenshot: async (page) => {
+      await expect(
+        scopeStep(page).getByRole('button', { name: 'Locatie', exact: true }),
+      ).toBeDisabled();
+    },
   },
 ]);
