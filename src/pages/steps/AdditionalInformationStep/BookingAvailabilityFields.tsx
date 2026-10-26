@@ -52,8 +52,8 @@ const BookingAvailabilityFields = ({
   };
 
   const handleWaitingListUrlBlur = () => {
-    const prefixedUrl =
-      waitingListUrl === '' ? '' : prefixUrlWithHttps(waitingListUrl);
+    const trimmedUrl = waitingListUrl.trim();
+    const prefixedUrl = trimmedUrl === '' ? '' : prefixUrlWithHttps(trimmedUrl);
 
     if (prefixedUrl !== '' && !isValidUrl(prefixedUrl)) {
       setHasInvalidWaitingListUrl(true);
