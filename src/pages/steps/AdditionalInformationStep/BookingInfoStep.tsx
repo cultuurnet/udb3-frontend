@@ -17,7 +17,7 @@ import {
   useGetOfferByIdQuery,
 } from '@/hooks/api/offers';
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
-import type { Offer, SubEvent } from '@/types/Offer';
+import type { BookingAvailability, Offer, SubEvent } from '@/types/Offer';
 import type { Values } from '@/types/Values';
 import { Alert, AlertVariants } from '@/ui/Alert';
 import type { BoxProps } from '@/ui/Box';
@@ -285,7 +285,7 @@ type BookingAvailabilitySectionProps = {
     index: number,
     type: Values<typeof BookingAvailabilityType>,
     capacity: string,
-    waitingListUrl: string,
+    waitingListUrl?: string,
   ) => void;
 };
 
@@ -458,6 +458,19 @@ const BookingAvailabilitySection = ({
       </Inline>
     </Stack>
   );
+};
+
+const toCachedBookingAvailability = (
+  { waitingListUrl, ...bookingAvailability }: BookingAvailability,
+  previous: BookingAvailability | undefined,
+): BookingAvailability => {
+  const cachedWaitingListUrl =
+    waitingListUrl === undefined ? previous?.waitingListUrl : waitingListUrl;
+
+  return {
+    ...bookingAvailability,
+    ...(cachedWaitingListUrl && { waitingListUrl: cachedWaitingListUrl }),
+  };
 };
 
 type Props = StackProps & TabContentProps;
@@ -691,11 +704,6 @@ const BookingInfoStep = ({
         await queryClient.cancelQueries({ queryKey });
         const previousOffer = queryClient.getQueryData<Offer>(queryKey);
 
-        const cachedBookingAvailability = bookingAvailability && {
-          ...bookingAvailability,
-          waitingListUrl: bookingAvailability.waitingListUrl || undefined,
-        };
-
         queryClient.setQueryData<Offer>(queryKey, (offer) => {
           if (!offer?.subEvent) return offer;
           return {
@@ -705,8 +713,11 @@ const BookingInfoStep = ({
                 ? {
                     ...subEvent,
                     ...(bookingInfo !== undefined && { bookingInfo }),
-                    ...(cachedBookingAvailability && {
-                      bookingAvailability: cachedBookingAvailability,
+                    ...(bookingAvailability && {
+                      bookingAvailability: toCachedBookingAvailability(
+                        bookingAvailability,
+                        subEvent.bookingAvailability,
+                      ),
                     }),
                   }
                 : subEvent,
@@ -735,7 +746,7 @@ const BookingInfoStep = ({
     subEventIndex: number,
     type: Values<typeof BookingAvailabilityType>,
     capacityValue: string,
-    waitingListUrl: string,
+    waitingListUrl?: string,
   ) => {
     changeSubEventReservationMutation.mutate({
       eventId,
@@ -743,7 +754,7 @@ const BookingInfoStep = ({
       bookingAvailability: {
         type,
         ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
-        waitingListUrl,
+        ...(waitingListUrl !== undefined && { waitingListUrl }),
       },
     });
   };

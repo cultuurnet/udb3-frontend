@@ -22,7 +22,7 @@ type BookingAvailabilityFieldsProps = BoxProps & {
   onChangeBookingAvailability: (
     status: BookingAvailabilityValue,
     capacity: string,
-    waitingListUrl: string,
+    waitingListUrl?: string,
   ) => void;
 };
 
@@ -46,11 +46,9 @@ const BookingAvailabilityFields = ({
     capacity !== '' &&
     (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
 
-  const isInvalid = isCapacityInvalid || hasInvalidWaitingListUrl;
-
   const handleCapacityBlur = () => {
-    if (isInvalid) return;
-    onChangeBookingAvailability(status, capacity, waitingListUrl);
+    if (isCapacityInvalid) return;
+    onChangeBookingAvailability(status, capacity);
   };
 
   const handleWaitingListUrlBlur = () => {
@@ -102,8 +100,8 @@ const BookingAvailabilityFields = ({
             onChange={(e) => {
               const newStatus = e.target.value as BookingAvailabilityValue;
               setStatus(newStatus);
-              if (isInvalid) return;
-              onChangeBookingAvailability(newStatus, capacity, waitingListUrl);
+              if (isCapacityInvalid) return;
+              onChangeBookingAvailability(newStatus, capacity);
             }}
           >
             <option value={BookingAvailabilityType.AVAILABLE}>
