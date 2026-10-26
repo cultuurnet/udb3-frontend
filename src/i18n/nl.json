@@ -473,6 +473,7 @@
         "url_error": "Geen geldige url",
         "link": "Link",
         "max_capacity": "Maximum capaciteit",
+        "waiting_list_url": "Link naar wachtlijst",
         "capacity_error": "Voer een geldig aantal in (0 of meer).",
         "max_capacity_info": "Met maximum capaciteit bedoelen we het maximum aantal mensen dat kan deelnemen aan jouw activiteit.",
         "status": "Status",

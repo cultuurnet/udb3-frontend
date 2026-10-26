@@ -285,6 +285,7 @@ type BookingAvailabilitySectionProps = {
     index: number,
     type: Values<typeof BookingAvailabilityType>,
     capacity: string,
+    waitingListUrl: string,
   ) => void;
 };
 
@@ -434,8 +435,20 @@ const BookingAvailabilitySection = ({
                   subEvent.bookingAvailability?.type ??
                   BookingAvailabilityType.AVAILABLE
                 }
-                onChangeBookingAvailability={(type, capacityValue) =>
-                  onChangeSubEventAvailability(index, type, capacityValue)
+                waitingListUrl={
+                  subEvent.bookingAvailability?.waitingListUrl ?? ''
+                }
+                onChangeBookingAvailability={(
+                  type,
+                  capacityValue,
+                  waitingListUrl,
+                ) =>
+                  onChangeSubEventAvailability(
+                    index,
+                    type,
+                    capacityValue,
+                    waitingListUrl,
+                  )
                 }
               />
             </Stack>
@@ -678,6 +691,11 @@ const BookingInfoStep = ({
         await queryClient.cancelQueries({ queryKey });
         const previousOffer = queryClient.getQueryData<Offer>(queryKey);
 
+        const cachedBookingAvailability = bookingAvailability && {
+          ...bookingAvailability,
+          waitingListUrl: bookingAvailability.waitingListUrl || undefined,
+        };
+
         queryClient.setQueryData<Offer>(queryKey, (offer) => {
           if (!offer?.subEvent) return offer;
           return {
@@ -687,7 +705,9 @@ const BookingInfoStep = ({
                 ? {
                     ...subEvent,
                     ...(bookingInfo !== undefined && { bookingInfo }),
-                    ...(bookingAvailability && { bookingAvailability }),
+                    ...(cachedBookingAvailability && {
+                      bookingAvailability: cachedBookingAvailability,
+                    }),
                   }
                 : subEvent,
             ),
@@ -715,6 +735,7 @@ const BookingInfoStep = ({
     subEventIndex: number,
     type: Values<typeof BookingAvailabilityType>,
     capacityValue: string,
+    waitingListUrl: string,
   ) => {
     changeSubEventReservationMutation.mutate({
       eventId,
@@ -722,6 +743,7 @@ const BookingInfoStep = ({
       bookingAvailability: {
         type,
         ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
+        waitingListUrl,
       },
     });
   };

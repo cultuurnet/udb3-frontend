@@ -9,6 +9,8 @@ import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Select } from '@/ui/Select';
+import { isValidUrl } from '@/utils/isValidInfo';
+import { prefixUrlWithHttps } from '@/utils/url';
 
 type BookingAvailabilityValue = Values<typeof BookingAvailabilityType>;
 
@@ -16,9 +18,11 @@ type BookingAvailabilityFieldsProps = BoxProps & {
   idPrefix: string;
   capacity: string;
   status: BookingAvailabilityValue;
+  waitingListUrl: string;
   onChangeBookingAvailability: (
     status: BookingAvailabilityValue,
     capacity: string,
+    waitingListUrl: string,
   ) => void;
 };
 
@@ -26,6 +30,7 @@ const BookingAvailabilityFields = ({
   idPrefix,
   capacity: initialCapacity,
   status: initialStatus,
+  waitingListUrl: initialWaitingListUrl,
   onChangeBookingAvailability,
   ...boxProps
 }: BookingAvailabilityFieldsProps) => {
@@ -33,14 +38,34 @@ const BookingAvailabilityFields = ({
 
   const [capacity, setCapacity] = useState(initialCapacity);
   const [status, setStatus] = useState(initialStatus);
+  const [waitingListUrl, setWaitingListUrl] = useState(initialWaitingListUrl);
+  const [hasInvalidWaitingListUrl, setHasInvalidWaitingListUrl] =
+    useState(false);
 
   const isCapacityInvalid =
     capacity !== '' &&
     (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
 
+  const isInvalid = isCapacityInvalid || hasInvalidWaitingListUrl;
+
   const handleCapacityBlur = () => {
+    if (isInvalid) return;
+    onChangeBookingAvailability(status, capacity, waitingListUrl);
+  };
+
+  const handleWaitingListUrlBlur = () => {
+    const prefixedUrl =
+      waitingListUrl === '' ? '' : prefixUrlWithHttps(waitingListUrl);
+
+    if (prefixedUrl !== '' && !isValidUrl(prefixedUrl)) {
+      setHasInvalidWaitingListUrl(true);
+      return;
+    }
+
+    setHasInvalidWaitingListUrl(false);
+    setWaitingListUrl(prefixedUrl);
     if (isCapacityInvalid) return;
-    onChangeBookingAvailability(status, capacity);
+    onChangeBookingAvailability(status, capacity, prefixedUrl);
   };
 
   return (
@@ -77,8 +102,8 @@ const BookingAvailabilityFields = ({
             onChange={(e) => {
               const newStatus = e.target.value as BookingAvailabilityValue;
               setStatus(newStatus);
-              if (isCapacityInvalid) return;
-              onChangeBookingAvailability(newStatus, capacity);
+              if (isInvalid) return;
+              onChangeBookingAvailability(newStatus, capacity, waitingListUrl);
             }}
           >
             <option value={BookingAvailabilityType.AVAILABLE}>
@@ -88,6 +113,23 @@ const BookingAvailabilityFields = ({
               {t('bookingAvailability.unavailable')}
             </option>
           </Select>
+        }
+      />
+      <FormElement
+        className="tw:flex-1"
+        id={`${idPrefix}-waiting-list-url`}
+        label={t('create.additionalInformation.booking_info.waiting_list_url')}
+        Component={
+          <Input
+            type="url"
+            value={waitingListUrl}
+            onChange={(e) => setWaitingListUrl(e.target.value)}
+            onBlur={handleWaitingListUrlBlur}
+          />
+        }
+        error={
+          hasInvalidWaitingListUrl &&
+          t('create.additionalInformation.booking_info.url_error')
         }
       />
     </Inline>
