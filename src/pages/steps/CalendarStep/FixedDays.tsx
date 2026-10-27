@@ -121,7 +121,7 @@ export const FixedDays = ({
           {
             value: FixedDayOptions.PERIODIC,
             label: (
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {t('create.calendar.fixed_days.with_start_and_end_date')}
               </Text>
             ),
@@ -173,7 +173,7 @@ export const FixedDays = ({
           {
             value: FixedDayOptions.PERMANENT,
             label: (
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {t('create.calendar.fixed_days.permanent')}
               </Text>
             ),

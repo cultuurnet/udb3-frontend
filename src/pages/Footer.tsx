@@ -10,7 +10,7 @@ import { Link } from '@/ui/Link';
 import { List } from '@/ui/List';
 import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { colors, getValueFromTheme } from '@/ui/theme';
 import {
   openZendeskWidget,
@@ -200,13 +200,13 @@ const Footer = ({
           alignItems={{ default: 'flex-end', xs: 'center' }}
           justifyContent="flex-start"
         >
-          <Inline as="p" spacing={2}>
+          <Inline as="p" className="tw:items-center tw:gap-2">
             <Text
-              css={`
-                color: ${variant === FooterVariants.LOGIN
-                  ? getValueForPage('footer.linkColor')
-                  : 'inherit'};
-              `}
+              variant={
+                variant === FooterVariants.LOGIN
+                  ? TextVariants.MUTED
+                  : TextVariants.REGULAR
+              }
             >
               {t('footer.by')}
             </Text>

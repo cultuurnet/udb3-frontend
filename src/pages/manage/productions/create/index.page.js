@@ -176,7 +176,7 @@ const Create = () => {
         ) : (
           <Stack spacing={5}>
             <Text>
-              <Text fontWeight="bold">
+              <Text className="tw:font-bold">
                 {t('productions.create.suggested_events')}
               </Text>{' '}
               {Math.round(similarity * 100)}%
@@ -222,7 +222,7 @@ const Create = () => {
             <Stack spacing={4}>
               {availableProductions.length === 2 ? (
                 <Stack spacing={2}>
-                  <Text fontWeight="bold">
+                  <Text className="tw:font-bold">
                     {t('productions.create.production_name')}
                   </Text>
                   <RadioButtonGroup

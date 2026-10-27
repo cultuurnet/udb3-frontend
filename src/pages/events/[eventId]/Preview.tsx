@@ -396,14 +396,8 @@ const Preview = () => {
     {
       field: t('preview.labels.calendar'),
       value: (
-        <Stack spacing={4}>
-          <Text
-            css={`
-              white-space: pre-wrap;
-            `}
-          >
-            {calendarSummary}
-          </Text>
+        <div className="tw:flex tw:flex-col tw:gap-4">
+          <Text className="tw:whitespace-pre-wrap">{calendarSummary}</Text>
 
           {isLessonSeries && (
             <Alert fullWidth className="tw:mt-8 tw:mb-4">
@@ -415,7 +409,7 @@ const Preview = () => {
               <Text>{t('preview.info_holiday_camp')}</Text>
             </Alert>
           )}
-        </Stack>
+        </div>
       ),
     },
     { field: t('preview.labels.organizer'), value: <OrganizerPreview /> },
@@ -483,13 +477,7 @@ const Preview = () => {
           <Stack flex={3}>
             {isEdited && (
               <Alert fullWidth className="tw:mb-4">
-                <Text
-                  css={`
-                    b {
-                      font-weight: 600;
-                    }
-                  `}
-                >
+                <Text className="tw:[&_b]:font-semibold!">
                   <Trans
                     i18nKey="preview.publication_alert"
                     values={{

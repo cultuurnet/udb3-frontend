@@ -196,7 +196,7 @@ const DatePeriodPickerLegacy = ({
       <SwitchWithLabel
         id={`${idPrefix}-show-holidays`}
         label={
-          <Text fontWeight={isHighlighted ? 'bold' : 'normal'}>
+          <Text className={isHighlighted ? 'tw:font-bold' : 'tw:font-normal'}>
             {t('date_period_picker.show_holidays')}
           </Text>
         }
@@ -208,7 +208,11 @@ const DatePeriodPickerLegacy = ({
       {isHighlighted && formattedHolidaysForViewedMonth.length > 0 && (
         <Stack spacing={2}>
           {formattedHolidaysForViewedMonth.map((label) => (
-            <Text key={label} variant={TextVariants.MUTED} fontSize="0.85rem">
+            <Text
+              key={label}
+              variant={TextVariants.MUTED}
+              className="tw:text-sm"
+            >
               {label}
             </Text>
           ))}

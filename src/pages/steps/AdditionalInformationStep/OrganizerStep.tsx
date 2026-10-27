@@ -398,7 +398,7 @@ const OrganizerStep = ({
 
       {shouldShowCardSystems && (
         <Stack spacing={3}>
-          <Text fontWeight="bold">
+          <Text className="tw:font-bold">
             {t('create.additionalInformation.organizer.uitpas_cardsystems')}
           </Text>
           {cardSystems.map((cardSystem: CardSystem) => (

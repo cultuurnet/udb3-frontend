@@ -15,7 +15,7 @@ import { Label, LabelVariants } from '@/ui/Label';
 import { List } from '@/ui/List';
 import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
-import { Text } from '@/ui/Text';
+import { Text, TextVariants } from '@/ui/Text';
 import { getGlobalFormInputHeight } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
@@ -241,15 +241,15 @@ export const Days = ({
               )}
             </List.Item>
             {timesErrors[index] && (
-              <Text color="red">
+              <Text variant={TextVariants.DANGER}>
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
             {showChildcare && childcareStartError && (
-              <Text color="red">{childcareStartError}</Text>
+              <Text variant={TextVariants.DANGER}>{childcareStartError}</Text>
             )}
             {showChildcare && childcareEndError && (
-              <Text color="red">{childcareEndError}</Text>
+              <Text variant={TextVariants.DANGER}>{childcareEndError}</Text>
             )}
             {isDisabled && (
               <Alert

@@ -65,7 +65,7 @@ const Event = ({
         productionName && (
           <Alert variant={AlertVariants.PRIMARY}>
             {t('productions.event.part_of_production')}{' '}
-            <Text fontWeight="bold">{productionName}</Text>
+            <Text className="tw:font-bold">{productionName}</Text>
           </Alert>
         )
       }
