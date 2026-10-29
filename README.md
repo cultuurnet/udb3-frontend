@@ -23,6 +23,12 @@ $ yarn start
 
 For detailed explanation on how things work, check out [Next.js docs](https://nextjs.org/docs/getting-started).
 
+## Worktrees (optional)
+
+A [worktrunk](https://worktrunk.dev) config is included in `.config/wt.toml`.
+
+Only one worktree can run `yarn dev` at a time: Auth0 login only works on `localhost:3000`, so each worktree can't get its own port.
+
 ## Storybook
 
 ```bash
