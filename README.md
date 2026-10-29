@@ -27,7 +27,7 @@ For detailed explanation on how things work, check out [Next.js docs](https://ne
 
 A [worktrunk](https://worktrunk.dev) config is included in `.config/wt.toml`.
 
-Only one worktree can run `yarn dev` at a time: Auth0 login only works on `localhost:3000`, so each worktree can't get its own port.
+A [worktrunk](https://worktrunk.dev) config is included in `.config/wt.toml`. When a worktree is created, it copies gitignored files (e.g. `.env.local`, `node_modules`) from the main worktree and runs `yarn install`.
 
 ## Storybook
 
