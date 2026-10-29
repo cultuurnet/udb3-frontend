@@ -30,7 +30,7 @@ const BookingAvailabilityFields = ({
   idPrefix,
   capacity: initialCapacity,
   status: initialStatus,
-  waitingListUrl: initialWaitingListUrl,
+  waitingListUrl: savedWaitingListUrl,
   onChangeBookingAvailability,
   ...boxProps
 }: BookingAvailabilityFieldsProps) => {
@@ -38,7 +38,7 @@ const BookingAvailabilityFields = ({
 
   const [capacity, setCapacity] = useState(initialCapacity);
   const [status, setStatus] = useState(initialStatus);
-  const [waitingListUrl, setWaitingListUrl] = useState(initialWaitingListUrl);
+  const [waitingListUrl, setWaitingListUrl] = useState(savedWaitingListUrl);
   const [hasInvalidWaitingListUrl, setHasInvalidWaitingListUrl] =
     useState(false);
 
@@ -62,7 +62,7 @@ const BookingAvailabilityFields = ({
 
     setHasInvalidWaitingListUrl(false);
     setWaitingListUrl(prefixedUrl);
-    if (isCapacityInvalid) return;
+    if (prefixedUrl === savedWaitingListUrl || isCapacityInvalid) return;
     onChangeBookingAvailability(status, capacity, prefixedUrl);
   };
 
