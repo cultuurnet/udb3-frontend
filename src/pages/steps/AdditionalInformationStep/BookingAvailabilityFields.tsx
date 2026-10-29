@@ -23,6 +23,7 @@ type BookingAvailabilityFieldsProps = BoxProps & {
     status: BookingAvailabilityValue,
     capacity: string,
     waitingListUrl?: string,
+    onError?: () => void,
   ) => void;
 };
 
@@ -63,7 +64,9 @@ const BookingAvailabilityFields = ({
     setHasInvalidWaitingListUrl(false);
     setWaitingListUrl(prefixedUrl);
     if (prefixedUrl === savedWaitingListUrl || isCapacityInvalid) return;
-    onChangeBookingAvailability(status, capacity, prefixedUrl);
+    onChangeBookingAvailability(status, capacity, prefixedUrl, () =>
+      setHasInvalidWaitingListUrl(true),
+    );
   };
 
   return (

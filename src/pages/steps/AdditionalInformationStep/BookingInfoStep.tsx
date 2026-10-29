@@ -286,6 +286,7 @@ type BookingAvailabilitySectionProps = {
     type: Values<typeof BookingAvailabilityType>,
     capacity: string,
     waitingListUrl?: string,
+    onError?: () => void,
   ) => void;
 };
 
@@ -438,17 +439,8 @@ const BookingAvailabilitySection = ({
                 waitingListUrl={
                   subEvent.bookingAvailability?.waitingListUrl ?? ''
                 }
-                onChangeBookingAvailability={(
-                  type,
-                  capacityValue,
-                  waitingListUrl,
-                ) =>
-                  onChangeSubEventAvailability(
-                    index,
-                    type,
-                    capacityValue,
-                    waitingListUrl,
-                  )
+                onChangeBookingAvailability={(...args) =>
+                  onChangeSubEventAvailability(index, ...args)
                 }
               />
             </Stack>
@@ -747,16 +739,20 @@ const BookingInfoStep = ({
     type: Values<typeof BookingAvailabilityType>,
     capacityValue: string,
     waitingListUrl?: string,
+    onError?: () => void,
   ) => {
-    changeSubEventReservationMutation.mutate({
-      eventId,
-      subEventIndex,
-      bookingAvailability: {
-        type,
-        ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
-        ...(waitingListUrl !== undefined && { waitingListUrl }),
+    changeSubEventReservationMutation.mutate(
+      {
+        eventId,
+        subEventIndex,
+        bookingAvailability: {
+          type,
+          ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
+          ...(waitingListUrl !== undefined && { waitingListUrl }),
+        },
       },
-    });
+      { onError },
+    );
   };
 
   const handleChangeOfferBookingInfo = (url: string, urlLabelType: string) => {
