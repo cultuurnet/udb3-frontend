@@ -15,10 +15,15 @@ const locationHeading = (page: Page, number: number) =>
     exact: true,
   });
 
-const waitForSave = (page: Page) =>
-  page.waitForResponse(
-    (res) => res.url().includes('/departurePlaces') && res.ok(),
+// Match the request rather than the response: picking a city already sends a
+// save that can still be in flight, and its response would match too.
+const waitForSave = async (page: Page) => {
+  const request = await page.waitForRequest(
+    (req) => req.url().includes('/departurePlaces') && req.method() === 'PUT',
   );
+  const response = await request.response();
+  expect(response?.ok()).toBe(true);
+};
 
 const pickDeparturePlace = async (
   page: Page,
