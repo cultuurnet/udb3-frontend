@@ -1,5 +1,8 @@
 import { ReactNode } from 'react';
 
+import type { Values } from '@/types/Values';
+import { Box, getBoxProps } from '@/ui/Box';
+import { Icon, Icons } from '@/ui/Icon';
 import { ManIllustrationSvg } from '@/ui/illustrations/ManIllustration';
 import { WomanIllustrationSvg } from '@/ui/illustrations/WomanIllustration';
 import { getInlineProps, Inline, InlineProps } from '@/ui/Inline';
@@ -9,25 +12,67 @@ import { Title } from '@/ui/Title';
 
 const getGlobalValue = getValueFromTheme('global');
 
+const BannerVariants = {
+  DEFAULT: 'default',
+  SMALL: 'small',
+} as const;
+
+const sharedStyles = {
+  forwardedAs: 'div',
+  width: '100%',
+  borderRadius: '0.5rem',
+  backgroundColor: colors.udbMainLightBlue,
+  css: `
+    box-shadow: ${getGlobalValue('boxShadow.medium')};
+  `,
+} as const;
+
 type Props = InlineProps & {
-  title: string;
+  variant?: Values<typeof BannerVariants>;
+  title?: string;
   description: ReactNode;
+  iconName?: Values<typeof Icons>;
 };
 
-const Banner = ({ title, description, ...props }: Props) => {
+const Banner = ({
+  variant = BannerVariants.DEFAULT,
+  title,
+  description,
+  iconName = Icons.INFO,
+  ...props
+}: Props) => {
+  if (variant === BannerVariants.SMALL) {
+    return (
+      <Box
+        {...sharedStyles}
+        paddingY={3}
+        paddingX={{ default: 7, s: 4 }}
+        textAlign="center"
+        {...getBoxProps(props)}
+      >
+        <Box
+          forwardedAs="span"
+          display="inline-flex"
+          marginRight={3}
+          color={colors.udbMainDarkBlue}
+          css={`
+            vertical-align: middle;
+          `}
+        >
+          <Icon name={iconName} />
+        </Box>
+        {description}
+      </Box>
+    );
+  }
+
   return (
     <Inline
-      forwardedAs="div"
-      width="100%"
+      {...sharedStyles}
       spacing={4}
       padding={4}
       alignItems="center"
       justifyContent="space-evenly"
-      borderRadius="0.5rem"
-      backgroundColor={colors.udbMainLightBlue}
-      css={`
-        box-shadow: ${getGlobalValue('boxShadow.medium')};
-      `}
       {...getInlineProps(props)}
     >
       <ManIllustrationSvg
@@ -52,4 +97,4 @@ const Banner = ({ title, description, ...props }: Props) => {
   );
 };
 
-export { Banner };
+export { Banner, BannerVariants };
