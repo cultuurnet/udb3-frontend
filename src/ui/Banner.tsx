@@ -83,7 +83,7 @@ const Banner = ({
         aria-hidden="true"
       />
       <Stack spacing={3} alignItems="center" textAlign="center">
-        <Title size={2}>{title}</Title>
+        {title && <Title size={2}>{title}</Title>}
         {description}
       </Stack>
       <WomanIllustrationSvg
