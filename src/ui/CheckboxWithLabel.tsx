@@ -2,7 +2,7 @@ import { ChangeEvent, ReactNode } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-import { Checkbox } from './Checkbox';
+import { Checkbox, CheckboxVariants } from './Checkbox';
 import { CheckboxWithLabelLegacy } from './CheckboxWithLabelLegacy';
 import { getInlineProps } from './Inline';
 import { Label } from './Label';
@@ -15,6 +15,7 @@ type CheckboxWithLabelProps = {
   checked?: boolean;
   disabled?: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  variant?: CheckboxVariants;
   children?: ReactNode;
 };
 
@@ -24,6 +25,7 @@ const CheckboxWithLabel = ({
   checked = false,
   disabled = false,
   onCheckedChange = () => {},
+  variant = CheckboxVariants.PRIMARY,
   children,
   className = '',
   ...rest
@@ -41,6 +43,7 @@ const CheckboxWithLabel = ({
           name={name}
           checked={checked}
           disabled={disabled}
+          variant={variant}
         />
         <Label disabled={disabled} htmlFor={id}>
           {children}
@@ -59,6 +62,7 @@ const CheckboxWithLabel = ({
         onCheckedChange(event.target.checked)
       }
       className={className}
+      variant={variant}
       {...getInlineProps(rest)}
     >
       {children}

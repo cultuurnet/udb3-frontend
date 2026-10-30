@@ -1,5 +1,6 @@
 import { ChangeEvent, ReactNode } from 'react';
 
+import { CheckboxVariants } from './Checkbox';
 import { CheckboxLegacy } from './CheckboxLegacy';
 import { getInlineProps, Inline, InlineProps } from './Inline';
 import { LabelLegacy } from './LabelLegacy';
@@ -11,6 +12,7 @@ type CheckboxWithLabelProps = InlineProps & {
   checked?: boolean;
   disabled?: boolean;
   onToggle?: (event: ChangeEvent<HTMLInputElement>) => void;
+  variant?: CheckboxVariants;
   children?: ReactNode;
 };
 
@@ -20,6 +22,7 @@ const CheckboxWithLabelLegacy = ({
   checked = false,
   disabled = false,
   onToggle = () => {},
+  variant = CheckboxVariants.PRIMARY,
   children,
   className = '',
   ...props
@@ -38,6 +41,7 @@ const CheckboxWithLabelLegacy = ({
         name={name}
         checked={checked}
         disabled={disabled}
+        variant={variant}
       />
       <LabelLegacy disabled={disabled} htmlFor={id}>
         {children}

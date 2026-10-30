@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
@@ -208,6 +209,7 @@ const CalendarOpeninghoursModalLegacy = ({
                           openingHour.id,
                         )
                       }
+                      variant={CheckboxVariants.SUCCESS}
                     >
                       {t(`create.calendar.days.short.${dayOfWeek}`)}
                     </CheckboxWithLabel>

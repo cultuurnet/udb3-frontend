@@ -1,12 +1,27 @@
 import type { ReactNode } from 'react';
 
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
+import type { Values } from '@/types/Values';
 import { RadioGroup, RadioGroupItem } from '@/ui/shadcn/radio-group';
 
 import { Label } from './Label';
 import { RadioButtonGroupLegacy } from './RadioButtonGroupLegacy';
 import { cn } from './shadcn/utils';
 import { Text, TextVariants } from './Text';
+import { colors } from './theme';
+
+const RadioButtonVariants = {
+  PRIMARY: 'primary',
+  SUCCESS: 'success',
+} as const;
+
+type RadioButtonVariants = Values<typeof RadioButtonVariants>;
+
+// TODO: after legacy drop, delete this map — the shadcn variants are the only color source needed.
+const LEGACY_COLOR_BY_VARIANT: Record<RadioButtonVariants, string> = {
+  [RadioButtonVariants.PRIMARY]: colors.primary,
+  [RadioButtonVariants.SUCCESS]: colors.udbMainPositiveGreen,
+};
 
 type Item = {
   value: string;
@@ -23,6 +38,7 @@ type Props = {
   selected: string;
   disabled?: boolean;
   className?: string;
+  variant?: RadioButtonVariants;
   onValueChange: (value: string) => void;
 };
 
@@ -32,6 +48,7 @@ const RadioButtonGroupShadcn = ({
   selected,
   disabled,
   className,
+  variant = RadioButtonVariants.PRIMARY,
   onValueChange,
 }: Props) => (
   <RadioGroup
@@ -57,6 +74,9 @@ const RadioButtonGroupShadcn = ({
               value={item.value}
               id={itemId}
               disabled={isItemDisabled}
+              variant={
+                variant === RadioButtonVariants.SUCCESS ? 'success' : 'default'
+              }
               className={item.info ? 'tw:mt-1' : undefined}
             />
             <div className="tw:flex tw:flex-col">
@@ -91,10 +111,13 @@ const RadioButtonGroup = (props: Props) => {
       selected={props.selected}
       disabled={props.disabled}
       className={props.className}
+      color={
+        LEGACY_COLOR_BY_VARIANT[props.variant ?? RadioButtonVariants.PRIMARY]
+      }
       onChange={(event) => props.onValueChange(event.target.value)}
     />
   );
 };
 
-export { RadioButtonGroup };
+export { RadioButtonGroup, RadioButtonVariants };
 export type { Item as RadioButtonGroupItem };

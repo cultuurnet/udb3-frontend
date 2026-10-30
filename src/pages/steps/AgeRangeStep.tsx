@@ -37,7 +37,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonGroup, RadioButtonVariants } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
@@ -464,6 +464,7 @@ const ChildrenOnlySection = ({
         name="children-only-toggle"
         disabled={isPending}
         selected={getSelectedAudience(childrenOnly)}
+        variant={RadioButtonVariants.SUCCESS}
         onValueChange={(value) => onToggle(value === 'children-only')}
         items={[
           {

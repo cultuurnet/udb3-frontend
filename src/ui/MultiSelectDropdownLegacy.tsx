@@ -1,6 +1,7 @@
 import { Dropdown as BootstrapDropdown } from 'react-bootstrap';
 
 import { Box } from '@/ui/Box';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { cn } from '@/ui/shadcn/utils';
 import {
@@ -88,6 +89,7 @@ const MultiSelectDropdownLegacy = ({
                     : selectedValues.filter((value) => value !== option.value),
                 )
               }
+              variant={CheckboxVariants.SUCCESS}
             >
               {option.label}
             </CheckboxWithLabel>
