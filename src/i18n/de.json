@@ -1034,6 +1034,9 @@
       }
     }
   },
+  "banner": {
+    "maintenance": "Am Montagabend, dem 2. November, können Sie die UiTdatabank zwischen 22:00 und 22:30 Uhr wegen kleiner Wartungsarbeiten kurzzeitig nicht nutzen. Wir rechnen mit etwa einer Viertelstunde. Vielen Dank für Ihr Verständnis."
+  },
   "dashboard": {
     "actions": {
       "cancel": "Abbrechen",
