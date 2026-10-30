@@ -36,7 +36,7 @@
   --warning-hover: #f0b800;
   --warning-active: #d9a600;
   --warning-muted: #fffaeb;
-  --warning-icon: #b38900;
+  --warning-surface: #fffaec;
 
   --danger: #d8323a;
   --danger-hover: #c52b33;
@@ -110,7 +110,7 @@
   --color-warning-hover: var(--warning-hover);
   --color-warning-active: var(--warning-active);
   --color-warning-muted: var(--warning-muted);
-  --color-warning-icon: var(--warning-icon);
+  --color-warning-surface: var(--warning-surface);
   --color-success: var(--success);
   --color-success-hover: var(--success-hover);
   --color-success-active: var(--success-active);
