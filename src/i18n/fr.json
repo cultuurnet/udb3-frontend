@@ -452,6 +452,7 @@
         "url_error": "Pas d'URL valide",
         "link": "Lien",
         "max_capacity": "Capacité maximale",
+        "waiting_list_url": "Lien vers la liste d'attente",
         "capacity_error": "Saisissez un nombre valide (0 ou plus).",
         "max_capacity_info": "Par capacité maximale, nous entendons le nombre maximum de personnes pouvant participer à votre activité.",
         "status": "Statut",

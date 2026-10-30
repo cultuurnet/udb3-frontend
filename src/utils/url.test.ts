@@ -1,4 +1,4 @@
-import { isSameOriginUrl } from './url';
+import { isSameOriginUrl, prefixUrlWithHttps } from './url';
 
 const baseUrl = 'https://example.com';
 
@@ -34,5 +34,23 @@ describe('isSameOriginUrl', () => {
 
   it('rejects when there is no base url', () => {
     expect(isSameOriginUrl(`${baseUrl}/dashboard`, undefined)).toBe(false);
+  });
+});
+
+describe('prefixUrlWithHttps', () => {
+  it('adds https to a url without a protocol', () => {
+    expect(prefixUrlWithHttps('example.com/agenda?page=2')).toBe(
+      'https://example.com/agenda?page=2',
+    );
+  });
+
+  it('keeps a url that already uses https', () => {
+    expect(prefixUrlWithHttps(`${baseUrl}/agenda`)).toBe(`${baseUrl}/agenda`);
+  });
+
+  it('upgrades http to https', () => {
+    expect(prefixUrlWithHttps('http://example.com/agenda')).toBe(
+      `${baseUrl}/agenda`,
+    );
   });
 });
