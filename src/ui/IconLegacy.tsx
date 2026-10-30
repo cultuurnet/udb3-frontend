@@ -159,8 +159,8 @@ const legacyVariantColor: Record<
   [IconVariants.DEFAULT]: undefined,
   [IconVariants.SUCCESS]: colors.udbMainPositiveGreen,
   [IconVariants.DANGER]: colors.danger,
-  [IconVariants.WARNING]: colors.orange1,
-  [IconVariants.INFO]: colors.udbMainBlue,
+  [IconVariants.WARNING]: colors.warningIcon,
+  [IconVariants.INFO]: colors.info,
 };
 
 type Props = Omit<BoxProps, 'width' | 'height'> & {

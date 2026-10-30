@@ -166,7 +166,7 @@ const DeviatingPeriod = ({
       <Stack spacing={0}>
         <Inline justifyContent="space-between" alignItems="center">
           <Text
-            color={colors.udbMainDarkBlue}
+            color={colors.primary}
             fontWeight="bold"
             fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
           >
@@ -225,14 +225,14 @@ const DeviatingPeriod = ({
             />
           </Inline>
           {hasOverlap && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.overlap',
               )}
             </Text>
           )}
           {hasInvalidDateOrder && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.start_after_end',
               )}
@@ -240,7 +240,7 @@ const DeviatingPeriod = ({
           )}
           {eventStartDate &&
             startOfDay(period.startDate) < startOfDay(eventStartDate) && (
-              <Text color="red">
+              <Text color={colors.danger}>
                 {t(
                   'create.calendar.opening_hours_modal.deviating.errors.start_before_event',
                 )}
@@ -248,14 +248,14 @@ const DeviatingPeriod = ({
             )}
           {eventEndDate &&
             startOfDay(period.endDate) > startOfDay(eventEndDate) && (
-              <Text color="red">
+              <Text color={colors.danger}>
                 {t(
                   'create.calendar.opening_hours_modal.deviating.errors.end_after_event',
                 )}
               </Text>
             )}
           {quickLinkRangeError && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.deviating.errors.quick_link_out_of_range',
               )}
@@ -266,7 +266,7 @@ const DeviatingPeriod = ({
 
       <Stack spacing={1} marginTop={3}>
         <Text
-          color={colors.udbMainDarkBlue}
+          color={colors.primary}
           fontWeight="bold"
           fontSize={theme.components.openingHoursModal.fontSize.sectionTitle}
         >
@@ -367,19 +367,19 @@ const DeviatingPeriod = ({
                 </Inline>
                 {shownErrorIds.has(openingHour.id) &&
                   openingHour.dayOfWeek.length === 0 && (
-                    <Text color="red">
+                    <Text color={colors.danger}>
                       {t(
                         'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                       )}
                     </Text>
                   )}
-                {startError && <Text color="red">{startError}</Text>}
-                {endError && <Text color="red">{endError}</Text>}
+                {startError && <Text color={colors.danger}>{startError}</Text>}
+                {endError && <Text color={colors.danger}>{endError}</Text>}
               </Stack>
             );
           })}
           {daysWithTimeConflict.length > 0 && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t(
                 'create.calendar.opening_hours_modal.validation_messages.overlapping_days',
                 {

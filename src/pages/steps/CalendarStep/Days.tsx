@@ -16,7 +16,7 @@ import { List } from '@/ui/List';
 import { getStackProps, StackProps } from '@/ui/Stack';
 import { Switch, SwitchVariants } from '@/ui/Switch';
 import { Text } from '@/ui/Text';
-import { getGlobalFormInputHeight } from '@/ui/theme';
+import { colors, getGlobalFormInputHeight } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -134,7 +134,7 @@ export const Days = ({
 
         return (
           <div
-            className="tw:mb-4 tw:flex tw:flex-col tw:gap-4 tw:rounded-lg tw:border tw:border-border tw:bg-grey-light tw:p-3 tw:pb-5"
+            className="tw:mb-4 tw:flex tw:flex-col tw:gap-4 tw:rounded-lg tw:border tw:border-border tw:bg-panel tw:p-3 tw:pb-5"
             key={`list-item-${day.id}`}
           >
             <List.Item
@@ -241,15 +241,15 @@ export const Days = ({
               )}
             </List.Item>
             {timesErrors[index] && (
-              <Text color="red">
+              <Text color={colors.danger}>
                 {t('create.calendar.days.validation_messages.invalid_hours')}
               </Text>
             )}
             {showChildcare && childcareStartError && (
-              <Text color="red">{childcareStartError}</Text>
+              <Text color={colors.danger}>{childcareStartError}</Text>
             )}
             {showChildcare && childcareEndError && (
-              <Text color="red">{childcareEndError}</Text>
+              <Text color={colors.danger}>{childcareEndError}</Text>
             )}
             {isDisabled && (
               <Alert

@@ -74,7 +74,7 @@ const FaqList = ({
               </Inline>
             </Inline>
             <Text
-              color={colors.grey5}
+              color={colors.textMuted}
               css={`
                 line-height: 1.5;
                 display: -webkit-box;

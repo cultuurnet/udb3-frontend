@@ -269,7 +269,7 @@ const TimeFieldLegacy = ({
             pointer-events: none;
             z-index: 1;
             font-size: 0.85rem;
-            color: ${colors.grey5};
+            color: ${colors.textMuted};
             font-weight: normal;
             margin: 0;
           `}

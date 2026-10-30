@@ -34,7 +34,7 @@ type Props = {
 
 const getGlobalValue = getValueFromTheme('global');
 
-const { grey2, udbMainDarkGrey } = colors;
+const { grey2, neutral } = colors;
 
 const OrganizerInfo = ({
   title,
@@ -56,7 +56,7 @@ const OrganizerInfo = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text minWidth="15rem" color={udbMainDarkGrey} size={3}>
+      <Text minWidth="15rem" color={neutral} size={3}>
         {t(title)}
       </Text>
       <Stack>
@@ -76,9 +76,7 @@ const OrganizerInfo = ({
             css={`
               white-space: pre-wrap;
             `}
-            color={
-              content?.startsWith('organizers.detail.no') && udbMainDarkGrey
-            }
+            color={content?.startsWith('organizers.detail.no') && neutral}
           >
             {content?.startsWith('organizers.detail.no') ? t(content) : content}
           </Text>
@@ -104,16 +102,16 @@ const OrganizerImages = ({
   if (!images || images.length === 0) {
     return (
       <Inline padding={3}>
-        <Text minWidth="15rem" color={udbMainDarkGrey}>
+        <Text minWidth="15rem" color={neutral}>
           {t(title)}
         </Text>
-        <Text color={udbMainDarkGrey}>{t('organizers.detail.no_images')}</Text>
+        <Text color={neutral}>{t('organizers.detail.no_images')}</Text>
       </Inline>
     );
   }
   return (
     <Inline padding={3}>
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
+      <Text minWidth="15rem" color={neutral}>
         {t(title)}
       </Text>
       <Stack
@@ -147,7 +145,7 @@ const OrganizerImages = ({
             <Stack>
               {isMainImage(image.thumbnailUrl) && (
                 <Text
-                  backgroundColor={udbMainDarkGrey}
+                  backgroundColor={neutral}
                   color="white"
                   alignSelf="flex-start"
                   borderRadius="3px"
@@ -160,9 +158,7 @@ const OrganizerImages = ({
                 </Text>
               )}
               <Text>{image.description}</Text>
-              <Text color={udbMainDarkGrey}>
-                {`© ${image.copyrightHolder}`}
-              </Text>
+              <Text color={neutral}>{`© ${image.copyrightHolder}`}</Text>
             </Stack>
           </Inline>
         ))}
@@ -187,7 +183,7 @@ const OrganizerLabels = ({
         border-bottom: 1px solid ${grey2};
       `}
     >
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
+      <Text minWidth="15rem" color={neutral}>
         {t(title)}
       </Text>
       <LabelsForm
@@ -275,7 +271,7 @@ const VerenigingsloketPreview = ({
           </Text>
         </Stack>
       </Modal>
-      <Text minWidth="15rem" color={udbMainDarkGrey}>
+      <Text minWidth="15rem" color={neutral}>
         {t('organizers.detail.verenigingsloket.title')}
       </Text>
       <Stack spacing={3}>
