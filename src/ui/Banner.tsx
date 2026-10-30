@@ -50,6 +50,7 @@ const Banner = (props: Props) => {
         paddingY={3}
         paddingX={{ default: 7, s: 4 }}
         textAlign="center"
+        role="status"
         {...getBoxProps(rest)}
       >
         <Box
