@@ -27,28 +27,30 @@ const sharedStyles = {
   `,
 } as const;
 
-type Props = InlineProps & {
-  variant?: Values<typeof BannerVariants>;
-  title?: string;
+type DefaultBannerProps = InlineProps & {
+  variant?: typeof BannerVariants.DEFAULT;
+  title: string;
+  description: ReactNode;
+};
+
+type SmallBannerProps = InlineProps & {
+  variant: typeof BannerVariants.SMALL;
   description: ReactNode;
   iconName?: Values<typeof Icons>;
 };
 
-const Banner = ({
-  variant = BannerVariants.DEFAULT,
-  title,
-  description,
-  iconName = Icons.INFO,
-  ...props
-}: Props) => {
-  if (variant === BannerVariants.SMALL) {
+type Props = DefaultBannerProps | SmallBannerProps;
+
+const Banner = (props: Props) => {
+  if (props.variant === BannerVariants.SMALL) {
+    const { variant, description, iconName = Icons.INFO, ...rest } = props;
     return (
       <Box
         {...sharedStyles}
         paddingY={3}
         paddingX={{ default: 7, s: 4 }}
         textAlign="center"
-        {...getBoxProps(props)}
+        {...getBoxProps(rest)}
       >
         <Box
           forwardedAs="span"
@@ -66,6 +68,8 @@ const Banner = ({
     );
   }
 
+  const { variant, title, description, ...rest } = props;
+
   return (
     <Inline
       {...sharedStyles}
@@ -73,7 +77,7 @@ const Banner = ({
       padding={4}
       alignItems="center"
       justifyContent="space-evenly"
-      {...getInlineProps(props)}
+      {...getInlineProps(rest)}
     >
       <ManIllustrationSvg
         width="16rem"
@@ -83,7 +87,7 @@ const Banner = ({
         aria-hidden="true"
       />
       <Stack spacing={3} alignItems="center" textAlign="center">
-        {title && <Title size={2}>{title}</Title>}
+        <Title size={2}>{title}</Title>
         {description}
       </Stack>
       <WomanIllustrationSvg

@@ -17,7 +17,7 @@ const meta: Meta<typeof Banner> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Banner>;
 
 export const Default: Story = {
   args: {
