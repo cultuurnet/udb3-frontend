@@ -23,6 +23,7 @@ import { parseSpacing } from '@/ui/Box';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { checkDuplicatePlace } from '@/utils/checkDuplicatePlace';
 import { DuplicatePlaceErrorBody } from '@/utils/fetchFromApi';
 import { parseOfferId } from '@/utils/parseOfferId';
@@ -198,7 +199,7 @@ const NameAndAgeRangeStep = ({
                   ></Trans>
                 </Text>
                 {isEducationLabelErrorVisible && (
-                  <Text variant={TextVariants.ERROR}>
+                  <Text color={colors.danger}>
                     {t('cultuurkuur_modal.overview.error_education_levels')}
                   </Text>
                 )}

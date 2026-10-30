@@ -31,7 +31,7 @@ import { Inline } from '@/ui/Inline';
 import { Label, LabelVariants } from '@/ui/Label';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
-import { getValueFromTheme } from '@/ui/theme';
+import { colors, getValueFromTheme } from '@/ui/theme';
 
 import { UseEditArguments } from './hooks/useEditField';
 import { FormDataUnion, StepProps, StepsConfiguration } from './Steps';
@@ -530,7 +530,7 @@ const EventTypeAndThemeStep = ({
               </Alert>
             )}
             {isCultuurkuurThemeErrorVisible && (
-              <Text variant={TextVariants.ERROR}>
+              <Text color={colors.danger}>
                 {t('create.type_and_theme.cultuurkuur.error')}
               </Text>
             )}
