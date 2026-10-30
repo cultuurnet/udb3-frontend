@@ -243,7 +243,7 @@ const theme = {
       },
     },
     page: {
-      backgroundColor: 'var(--surface-canvas)',
+      backgroundColor: 'var(--background)',
       borderColor: colors.grey3,
     },
     pageTitle: {
