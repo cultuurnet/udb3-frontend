@@ -219,17 +219,20 @@ test.describe('Children-only audience section', () => {
     await page.getByRole('option', { name: '9000 Gent' }).click();
     await page.getByTestId('departure-place-0').fill('S.M');
 
-    const departurePut = page.waitForResponse(
-      (res) =>
-        res.url().includes(`/events/${eventId}/departurePlaces`) &&
-        res.request().method() === 'PUT' &&
-        res.ok(),
+    // Match the request rather than the response: picking the city already
+    // sends a save that can still be in flight, and its response would match
+    // too.
+    const departurePut = page.waitForRequest(
+      (req) =>
+        req.url().includes(`/events/${eventId}/departurePlaces`) &&
+        req.method() === 'PUT',
     );
     await page
       .getByRole('option', { name: 'S.M.A.K.', exact: true })
       .first()
       .click();
-    await departurePut;
+    const departureResponse = await (await departurePut).response();
+    expect(departureResponse?.ok()).toBe(true);
 
     // Wait for the cache-invalidated GET so the AgeRangeStep observer sees
     // the new departurePlaces on the offer.
