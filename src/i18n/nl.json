@@ -1069,12 +1069,10 @@
       }
     }
   },
+  "banner": {
+    "maintenance": "Op maandagavond 2 november zal je ergens tussen 22u en 22u30 de UiT-databank even niet kunnen gebruiken door een klein onderhoud. We schatten een kwartiertje werk in. Bedankt voor je begrip."
+  },
   "dashboard": {
-    "banner": {
-      "title": "Nieuw in UiT-databank",
-      "description": "We hebben het invoerformulier uitgebreid.",
-      "read_more": "Lees meer over de wijzigingen bij <0>Nieuwigheden</0>"
-    },
     "actions": {
       "cancel": "Annuleren",
       "delete": "Verwijderen",
