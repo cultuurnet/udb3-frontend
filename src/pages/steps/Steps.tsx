@@ -99,6 +99,7 @@ const StepWrapper = ({
 }: StepWrapperProps) => {
   return (
     <Stack
+      data-testid={`step-${stepNumber}`}
       paddingX={5}
       paddingY={4.5}
       borderRadius={getGlobalBorderRadius}
