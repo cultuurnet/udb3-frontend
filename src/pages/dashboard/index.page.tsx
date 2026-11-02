@@ -103,7 +103,7 @@ const getValue = getValueFromTheme('dashboardPage');
 
 const itemsPerPage = 14;
 
-const maintenanceBannerEndDate = new Date('2026-11-02T23:00:00+01:00');
+const maintenanceBannerEndDate = new Date('2026-11-02T22:30:00+01:00');
 
 const getGlobalValue = getValueFromTheme('global');
 
