@@ -38,6 +38,7 @@ import {
   User,
   Users,
   Video,
+  Wrench,
   X,
   XCircle,
 } from 'lucide-react';
@@ -91,6 +92,7 @@ const Icons = {
   SORT: 'sort',
   GLOBE: 'globe',
   LINK: 'link',
+  WRENCH: 'wrench',
 } as const;
 
 const LucideIconsMap: Record<Values<typeof Icons>, React.ElementType> = {
@@ -136,6 +138,7 @@ const LucideIconsMap: Record<Values<typeof Icons>, React.ElementType> = {
   [Icons.SORT]: ArrowUpDown,
   [Icons.GLOBE]: Globe,
   [Icons.LINK]: Link,
+  [Icons.WRENCH]: Wrench,
 };
 
 const IconVariants = {
