@@ -43,6 +43,7 @@ import {
   faUser,
   faUsers,
   faVideo,
+  faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -96,6 +97,7 @@ const Icons = {
   SORT: 'sort',
   GLOBE: 'globe',
   LINK: 'link',
+  WRENCH: 'wrench',
 } as const;
 
 const IconsMap = {
@@ -142,6 +144,7 @@ const IconsMap = {
   [Icons.SORT]: faSort,
   [Icons.GLOBE]: faGlobe,
   [Icons.LINK]: faLink,
+  [Icons.WRENCH]: faWrench,
 };
 
 const IconVariants = {
