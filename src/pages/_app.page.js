@@ -1,6 +1,8 @@
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/tailwind.css';
 
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { config } from '@fortawesome/fontawesome-svg-core';
 import Hotjar from '@hotjar/browser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HydrationBoundary } from '@tanstack/react-query';
@@ -89,6 +91,8 @@ ContextProvider.propTypes = {
   providers: PropTypes.array,
   children: PropTypes.node,
 };
+
+config.autoAddCss = false;
 
 const Head = () => {
   const { t } = useTranslation();

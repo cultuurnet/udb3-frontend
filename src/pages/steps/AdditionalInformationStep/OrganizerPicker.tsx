@@ -222,6 +222,7 @@ const OrganizerPicker = ({
                   )}
                 </Text>
                 <Button
+                  className="tw:gap-3"
                   variant={ButtonVariants.LINK}
                   onClick={async () => {
                     let removed = organizer;

@@ -135,6 +135,7 @@ const PictureUploadBox = ({
                   <Button
                     variant={ButtonVariants.PRIMARY}
                     iconName={Icons.PENCIL}
+                    className="tw:gap-3"
                     onClick={() => onClickEditImage(image.parsedId)}
                   >
                     {t('pictures.change')}
@@ -142,6 +143,7 @@ const PictureUploadBox = ({
                   <Button
                     variant={ButtonVariants.DANGER}
                     iconName={Icons.TRASH}
+                    className="tw:gap-3"
                     onClick={() => onClickDeleteImage(image.parsedId)}
                   >
                     {t('pictures.delete')}

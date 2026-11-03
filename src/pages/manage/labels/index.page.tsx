@@ -191,6 +191,7 @@ const LabelsOverviewPage = () => {
                   onClick={onClick}
                   disabled={disabled}
                   iconName={iconName}
+                  className="tw:gap-3"
                 >
                   {title}
                 </Button>

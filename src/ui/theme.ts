@@ -351,6 +351,9 @@ const theme = {
     pageNotFound: {
       iconColor: colors.grey2,
     },
+    pageError: {
+      iconColor: colors.danger,
+    },
     selectionTable: {
       color: colors.textMuted,
       borderColor: colors.grey3,

@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Icon, Icons, IconVariants } from '@/ui/Icon';
+import { Icon, Icons } from '@/ui/Icon';
 import { Link } from '@/ui/Link';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { getValueFromTheme } from '@/ui/theme';
+
+const getValue = getValueFromTheme('pageError');
 
 const MailToSupportLink = () => {
   const { t } = useTranslation();
@@ -32,9 +35,9 @@ const ErrorFallback = ({ error }) => {
     >
       <Icon
         name={Icons.EXCLAMATION_TRIANGLE}
-        width={160}
-        height={160}
-        variant={IconVariants.DANGER}
+        width="10rem"
+        height="auto"
+        color={getValue('iconColor')}
       />
       <Text maxWidth={550}>
         <Trans
