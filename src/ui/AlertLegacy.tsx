@@ -20,31 +20,16 @@ const AlertVariants = {
 
 const AlertVariantIconsMap = {
   [AlertVariants.PRIMARY]: (
-    <Icon name={Icons.INFO} width={24} height={24} variant={IconVariants.INFO} />
+    <Icon name={Icons.INFO} variant={IconVariants.INFO} />
   ),
   [AlertVariants.SUCCESS]: (
-    <Icon
-      name={Icons.CHECK_CIRCLE}
-      width={24}
-      height={24}
-      variant={IconVariants.SUCCESS}
-    />
+    <Icon name={Icons.CHECK_CIRCLE} variant={IconVariants.SUCCESS} />
   ),
   [AlertVariants.WARNING]: (
-    <Icon
-      name={Icons.EXCLAMATION_TRIANGLE}
-      width={24}
-      height={24}
-      variant={IconVariants.WARNING}
-    />
+    <Icon name={Icons.EXCLAMATION_TRIANGLE} variant={IconVariants.WARNING} />
   ),
   [AlertVariants.DANGER]: (
-    <Icon
-      name={Icons.EXCLAMATION_CIRCLE}
-      width={24}
-      height={24}
-      variant={IconVariants.DANGER}
-    />
+    <Icon name={Icons.EXCLAMATION_CIRCLE} variant={IconVariants.DANGER} />
   ),
 };
 
