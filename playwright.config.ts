@@ -9,6 +9,10 @@ export default defineConfig({
   testDir: './src/test/e2e',
   /* Maximum time one test can run for. */
   timeout: 60 * 1000,
+  /* Stop before the CI job's 30 min timeout cancels it, so reports and traces still get uploaded. */
+  globalTimeout: process.env.CI ? 25 * 60 * 1000 : undefined,
+  /* Stop early on CI when many tests fail, e.g. when a backend is down. */
+  maxFailures: process.env.CI ? 10 : undefined,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.

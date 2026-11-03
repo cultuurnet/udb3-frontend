@@ -3,10 +3,12 @@ name: E2E
 on:
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize]
+  push:
+    branches: [debug/e2e-timeout]
 
 jobs:
   test-e2e:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
 
     timeout-minutes: 30
 
@@ -73,7 +75,12 @@ jobs:
           AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
           AUTH_CLIENT_SECRET: ${{ secrets.AUTH_CLIENT_SECRET }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: npx playwright test
+        # TEMP: only the currently failing tests, without retries
+        run: >-
+          npx playwright test --retries=0
+          src/test/e2e/create-organizer.spec.ts
+          src/test/e2e/cultuurkuur/create-cultuurkuur-event.spec.ts
+          src/test/e2e/events/create-calendar-permanent.spec.ts
 
       - name: Upload Playwright HTML report
         uses: actions/upload-artifact@v4
