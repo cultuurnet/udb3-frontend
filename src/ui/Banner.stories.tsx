@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Banner } from './Banner';
+import { Banner, BannerVariants } from './Banner';
 
 const meta: Meta<typeof Banner> = {
   title: 'Components/Banner',
@@ -17,11 +17,18 @@ const meta: Meta<typeof Banner> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Banner>;
 
 export const Default: Story = {
   args: {
     title: 'Banner title',
+    description: 'Banner description',
+  },
+};
+
+export const Small: Story = {
+  args: {
+    variant: BannerVariants.SMALL,
     description: 'Banner description',
   },
 };
