@@ -301,7 +301,6 @@ const VerenigingsloketPreview = ({
           <Inline>
             <Button
               iconName={Icons.TRASH}
-              className="tw:gap-3"
               variant={ButtonVariants.DANGER}
               size="sm"
               onClick={() => setIsDeleteModalVisible(true)}
