@@ -538,8 +538,8 @@ const StyledBox = styled.div.withConfig(withoutDisallowedPropsConfig)`
 
 const getBoxProps = (props: Record<string, any>) =>
   pickBy(props, (_value, key) => {
-    // pass aria attributes to the DOM element
-    if (key.startsWith('aria-')) {
+    // pass aria and data attributes to the DOM element
+    if (key.startsWith('aria-') || key.startsWith('data-')) {
       return true;
     }
 
