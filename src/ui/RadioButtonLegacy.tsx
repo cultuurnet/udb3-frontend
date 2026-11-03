@@ -48,7 +48,7 @@ const RadioButtonLegacy = forwardRef<HTMLInputElement, Props>(
       isInvalid = false,
       isValid,
       checked = false,
-      color = colors.udbMainBlue,
+      color = colors.udbMainPositiveGreen,
       ...props
     },
     ref,
@@ -67,9 +67,14 @@ const RadioButtonLegacy = forwardRef<HTMLInputElement, Props>(
       disabled={disabled}
       checked={checked}
       css={`
+        .form-check-input:checked {
+          background-color: ${color};
+          border-color: ${color};
+        }
+
         .form-check-input:disabled {
           opacity: 1;
-          border-color: ${colors.grey5};
+          border-color: ${colors.textMuted};
           cursor: not-allowed;
         }
 
