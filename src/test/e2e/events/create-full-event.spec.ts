@@ -103,7 +103,9 @@ test('create event with all possible fields filled in', async ({
   await page.getByText('Geef een enthousiaste').click();
 
   await expect(
-    page.getByRole('tab', { name: 'Beschrijving' }).locator('.fa-circle-check'),
+    page
+      .getByRole('tab', { name: 'Beschrijving' })
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // // Add image & video url
@@ -124,7 +126,7 @@ test('create event with all possible fields filled in', async ({
   await expect(
     page
       .getByRole('tab', { name: 'Afbeelding & video' })
-      .locator('.fa-circle-check'),
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // // Prices
@@ -134,7 +136,9 @@ test('create event with all possible fields filled in', async ({
 
   await page.getByRole('button', { name: 'Gratis' }).click();
   await expect(
-    page.getByRole('tab', { name: 'Prijzen' }).locator('.fa-circle-check'),
+    page
+      .getByRole('tab', { name: 'Prijzen' })
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // Organizer
@@ -158,7 +162,9 @@ test('create event with all possible fields filled in', async ({
     .click();
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
   await expect(
-    page.getByRole('tab', { name: 'Organisatie' }).locator('.fa-circle-check'),
+    page
+      .getByRole('tab', { name: 'Organisatie' })
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // Contact
@@ -172,7 +178,9 @@ test('create event with all possible fields filled in', async ({
     .getByRole('button', { name: 'Meer contactgegevens toevoegen' })
     .click();
   await expect(
-    page.getByRole('tab', { name: 'Contact' }).locator('.fa-circle-check'),
+    page
+      .getByRole('tab', { name: 'Contact' })
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // BookingInfo
@@ -214,7 +222,9 @@ test('create event with all possible fields filled in', async ({
     .fill(endReservationDate.toLocaleDateString());
 
   await expect(
-    page.getByRole('tab', { name: 'Reservatie' }).locator('.fa-circle-check'),
+    page
+      .getByRole('tab', { name: 'Reservatie' })
+      .locator('.lucide-circle-check-big'),
   ).toBeVisible();
 
   // Add labels
