@@ -2,7 +2,7 @@ import type { TFunction } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Checkbox } from '@/ui/Checkbox';
+import { Checkbox, CheckboxVariants } from '@/ui/Checkbox';
 import { Label, LabelVariants } from '@/ui/Label';
 import { cn } from '@/ui/shadcn/utils';
 import { Text } from '@/ui/Text';
@@ -56,6 +56,7 @@ const ChildcareTimeFields = ({
             checked={startEnabled}
             disabled={disabled}
             onCheckedChange={handleToggleStart}
+            variant={CheckboxVariants.SUCCESS}
           />
           <Label
             variant={LabelVariants.BOLD}
@@ -83,6 +84,7 @@ const ChildcareTimeFields = ({
             checked={endEnabled}
             disabled={disabled}
             onCheckedChange={handleToggleEnd}
+            variant={CheckboxVariants.SUCCESS}
           />
           <Label
             variant={LabelVariants.BOLD}

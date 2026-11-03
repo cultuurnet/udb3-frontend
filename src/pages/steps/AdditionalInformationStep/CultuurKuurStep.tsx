@@ -29,6 +29,7 @@ import { Organizer } from '@/types/Organizer';
 import { Alert } from '@/ui/Alert';
 import { Box, parseSpacing } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
 import { Inline } from '@/ui/Inline';
@@ -163,6 +164,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
         name={t('create.additionalInformation.cultuurkuur.tailored')}
         onCheckedChange={() => handleLabelMutation(CULTUURKUUR_TAILORED_LABEL)}
         checked={labels.includes(CULTUURKUUR_TAILORED_LABEL)}
+        variant={CheckboxVariants.SUCCESS}
       >
         {t('create.additionalInformation.cultuurkuur.tailored')}
       </CheckboxWithLabel>
@@ -176,6 +178,7 @@ const CultuurkuurLabels = ({ offerId, scope }: CultuurLabelsProps) => {
           }
         }}
         checked={isOnSiteActive}
+        variant={CheckboxVariants.SUCCESS}
       >
         {t('create.additionalInformation.cultuurkuur.on_location')}
       </CheckboxWithLabel>

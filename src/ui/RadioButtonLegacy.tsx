@@ -48,7 +48,7 @@ const RadioButtonLegacy = forwardRef<HTMLInputElement, Props>(
       isInvalid = false,
       isValid,
       checked = false,
-      color = colors.udbMainPositiveGreen,
+      color = colors.primary,
       ...props
     },
     ref,
