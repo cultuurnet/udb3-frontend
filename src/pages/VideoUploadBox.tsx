@@ -95,7 +95,6 @@ const VideoUploadBox = ({
                   <Button
                     variant={ButtonVariants.DANGER}
                     iconName={Icons.TRASH}
-                    className="tw:gap-3"
                     onClick={() => onClickDeleteVideo(id)}
                   >
                     {t('videos.delete')}
