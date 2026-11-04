@@ -47,7 +47,12 @@ const NewsletterSignupForm = (props: Props) => {
       maxWidth="64rem"
       {...props}
     >
-      <Inline as="div" spacing={4} flexWrap="wrap">
+      <Inline
+        as="div"
+        spacing={4}
+        alignItems="center"
+        justifyContent="space-between"
+      >
         {addNewsletterSubscriberMutation.status === QueryStatus.SUCCESS ? (
           <Stack spacing={4}>
             <Title>{t('dashboard.newsletter.success.title')}</Title>
@@ -95,7 +100,7 @@ const NewsletterSignupForm = (props: Props) => {
           </Stack>
         )}
 
-        <div className="tw:pl-8">
+        <div className="tw:shrink-0 tw:pl-8">
           <Image
             src={`/assets/${t('dashboard.newsletter.logo')}`}
             alt={t('dashboard.newsletter.logo_alt')}

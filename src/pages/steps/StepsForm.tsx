@@ -370,7 +370,7 @@ const StepsForm = ({
     : handleChange;
 
   return (
-    <Page backgroundColor="var(--background)">
+    <Page>
       {!needsLocationMigration && (
         <Page.Title spacing={3} alignItems="center">
           {pageTitle}

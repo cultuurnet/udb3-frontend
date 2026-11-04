@@ -476,7 +476,7 @@ const Preview = () => {
   });
 
   return (
-    <Page backgroundColor="var(--background)">
+    <Page>
       <Page.Title>{title}</Page.Title>
       <Page.Content>
         <Inline>
