@@ -1034,6 +1034,9 @@
       }
     }
   },
+  "banner": {
+    "maintenance": "Le lundi soir 2 novembre, entre 22h et 22h30, vous ne pourrez temporairement pas utiliser l'UiT-databank en raison d'une petite maintenance. Nous estimons l'intervention à environ un quart d'heure. Merci de votre compréhension."
+  },
   "dashboard": {
     "actions": {
       "cancel": "Annuler",

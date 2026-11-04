@@ -44,7 +44,6 @@ const BackButton = ({
         svg {
           width: ${parseDimension(iconWidth)};
           height: ${parseDimension(iconHeight)};
-          margin-right: 1rem;
         }
       `}
     >

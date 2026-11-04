@@ -353,12 +353,19 @@ const vrtMockWithoutOrganizerEvent = editRouteVariant({
   organizer: undefined,
 });
 
+const vrtMockWithoutFaqEvent = editRouteVariant({
+  id: 'vrt-mock-event-11',
+  nameNl: 'VRT mock evenement — zonder veelgestelde vragen',
+  faqs: [],
+});
+
 const eventsServedById = [
   ...eventListMembers,
   vrtMockUitpasEvent,
   vrtMockCompleteEvent,
   vrtMockChildrenOnlyEvent,
   vrtMockWithoutOrganizerEvent,
+  vrtMockWithoutFaqEvent,
 ];
 
 const calendarSummaryById = {
