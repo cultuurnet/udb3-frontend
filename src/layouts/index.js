@@ -10,6 +10,7 @@ import Cookies from 'universal-cookie';
 import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
+import { SupportedLanguages } from '@/i18n/index';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
@@ -24,7 +25,7 @@ const useChangeLanguage = (language) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    if (language) {
+    if (Object.values(SupportedLanguages).includes(language)) {
       i18n.changeLanguage(language);
     }
   }, [language, i18n]);
