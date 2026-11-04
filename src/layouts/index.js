@@ -10,11 +10,11 @@ import Cookies from 'universal-cookie';
 import { useGetTermsQuery } from '@/hooks/api/terms';
 import { useGetUserQuery } from '@/hooks/api/user';
 import { useCookiesWithOptions } from '@/hooks/useCookiesWithOptions';
-import { SupportedLanguages } from '@/i18n/index';
 import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
+import { SupportedLanguages } from '@/i18n/index';
 import { Inline } from '@/ui/Inline';
 import { isTokenValid } from '@/utils/isTokenValid';
 
