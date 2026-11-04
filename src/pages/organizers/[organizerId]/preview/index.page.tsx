@@ -88,7 +88,7 @@ const OrganizersPreview = () => {
   );
 
   return (
-    <Page>
+    <Page backgroundColor="var(--background)">
       <Page.Title>{organizerName}</Page.Title>
       <Page.Content>
         <Stack>
@@ -126,7 +126,6 @@ const OrganizersPreview = () => {
                 {!canEdit && isOwnershipEnabled && !isOwnershipRequested && (
                   <Button
                     variant={ButtonVariants.PRIMARY}
-                    className="tw:gap-3"
                     iconName={Icons.PLUS_CIRCLE}
                     onClick={() => setIsQuestionModalVisible(true)}
                   >

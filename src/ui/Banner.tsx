@@ -21,7 +21,7 @@ const sharedStyles = {
   forwardedAs: 'div',
   width: '100%',
   borderRadius: '0.5rem',
-  backgroundColor: colors.udbMainLightBlue,
+  backgroundColor: 'var(--surface-subtle)',
   css: `
     box-shadow: ${getGlobalValue('boxShadow.medium')};
   `,
@@ -57,7 +57,7 @@ const Banner = (props: Props) => {
           forwardedAs="span"
           display="inline-flex"
           marginRight={3}
-          color={colors.udbMainDarkBlue}
+          color={colors.primary}
           css={`
             vertical-align: middle;
           `}

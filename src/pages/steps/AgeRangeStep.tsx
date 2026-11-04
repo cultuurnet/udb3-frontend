@@ -37,7 +37,7 @@ import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Label } from '@/ui/Label';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
-import { RadioButtonGroup } from '@/ui/RadioButtonGroup';
+import { RadioButtonGroup, RadioButtonVariants } from '@/ui/RadioButtonGroup';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { Breakpoints, colors, getValueFromTheme } from '@/ui/theme';
@@ -275,7 +275,7 @@ const BirthdatePickers = ({ from, to, onCommit }: BirthdatePickersProps) => {
             </Stack>
           </Inline>
           {isInvalidRange && (
-            <Text color="red">
+            <Text color={colors.danger}>
               {t('create.name_and_age.age.birth_date.error_max_before_min')}
             </Text>
           )}
@@ -413,7 +413,7 @@ const AgeRangeInputs = ({
             onBlur={(e) => onAgeCommit(minAge, getInputValue(e))}
           />
         </Inline>
-        {errorKey && <Text color="red">{t(errorKey)}</Text>}
+        {errorKey && <Text color={colors.danger}>{t(errorKey)}</Text>}
       </Stack>
       {childrenOnlySection}
       {!hasAgeValue && (
@@ -464,6 +464,7 @@ const ChildrenOnlySection = ({
         name="children-only-toggle"
         disabled={isPending}
         selected={getSelectedAudience(childrenOnly)}
+        variant={RadioButtonVariants.SUCCESS}
         onValueChange={(value) => onToggle(value === 'children-only')}
         items={[
           {
@@ -478,7 +479,7 @@ const ChildrenOnlySection = ({
           },
         ]}
       />
-      {error && <Text color="red">{error}</Text>}
+      {error && <Text color={colors.danger}>{error}</Text>}
     </Stack>
   );
 };

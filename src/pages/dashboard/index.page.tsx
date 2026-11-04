@@ -571,7 +571,7 @@ const Dashboard = (): any => {
       : SORTING_OPTIONS;
 
   const createOfferUrl = CreateMap[tab];
-  const { udbMainDarkBlue, textColor } = colors;
+  const { primary, text } = colors;
 
   const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
   const [currentOrganizer, setCurrentOrganizer] = useState<Organizer | null>(
@@ -609,7 +609,7 @@ const Dashboard = (): any => {
   );
 
   return (
-    <Page backgroundColor="white" spacing={4} key="page">
+    <Page backgroundColor="var(--background)" spacing={4} key="page">
       <Page.Title>
         {user?.['https://publiq.be/first_name']
           ? `${t('dashboard.welcome')}, ${user['https://publiq.be/first_name']}`
