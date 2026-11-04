@@ -368,7 +368,10 @@ const Events = ({
                 }
                 calendarType={event.calendarType}
                 calendarSummary={
-                  event.calendarSummary[i18n.language].text[
+                  (
+                    event.calendarSummary?.[i18n.language] ??
+                    event.calendarSummary?.[event.mainLanguage]
+                  )?.text?.[
                     event.calendarType === CalendarType.SINGLE ? 'lg' : 'sm'
                   ]
                 }
