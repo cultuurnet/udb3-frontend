@@ -389,7 +389,7 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     const calendarPut = waitForCalendarPut(page);
     await dayRows(page)
       .nth(1)
-      .locator('button:has(svg[data-icon="trash"])')
+      .locator('button:has(svg.lucide-trash-2)')
       .click();
     await calendarPut;
 
@@ -425,7 +425,7 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     const calendarPut = waitForCalendarPut(page);
     await dayRows(page)
       .last()
-      .locator('button:has(svg[data-icon="trash"])')
+      .locator('button:has(svg.lucide-trash-2)')
       .click();
     await calendarPut;
 

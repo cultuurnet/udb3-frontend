@@ -151,7 +151,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .badge-secondary {
-    background-color: ${globalColors.grey5};
+    background-color: ${globalColors.textMuted};
   }
   
   .progress-bar.bg-success {

@@ -1,8 +1,6 @@
-import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/styles/tailwind.css';
 
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import Hotjar from '@hotjar/browser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HydrationBoundary } from '@tanstack/react-query';
@@ -21,7 +19,7 @@ import {
   FeatureFlags,
   isFeatureFlagEnabledInEnv,
 } from '@/hooks/useFeatureFlag';
-import i18n from '@/i18n/index';
+import i18n, { SupportedLanguages } from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
@@ -91,8 +89,6 @@ ContextProvider.propTypes = {
   providers: PropTypes.array,
   children: PropTypes.node,
 };
-
-config.autoAddCss = false;
 
 const Head = () => {
   const { t } = useTranslation();
@@ -165,7 +161,10 @@ App.propTypes = {
 
 App.getInitialProps = async ({ ctx }) => {
   const serverCookies = new Cookies(ctx?.req?.headers?.cookie);
-  const language = serverCookies.get('udb-language') || 'nl';
+  const cookieLanguage = serverCookies.get('udb-language');
+  const language = Object.values(SupportedLanguages).includes(cookieLanguage)
+    ? cookieLanguage
+    : SupportedLanguages.NL;
 
   if (isServer()) await i18n.changeLanguage(language);
 

@@ -52,12 +52,14 @@ test.describe('Places translation', () => {
       await expect(
         page.getByText(`Titel (${translation.lang}) succesvol bijgewerkt`),
       ).toBeVisible();
-      await page.locator('.toast svg[data-icon="xmark"]').first().click();
+      await page.locator('.toast svg.lucide-x').first().click();
       await expect(page.locator('.toast')).not.toBeVisible();
     }
 
     await expect(
-      page.getByRole('tab', { name: 'Titel' }).locator('.fa-circle-check'),
+      page
+        .getByRole('tab', { name: 'Titel' })
+        .locator('.lucide-circle-check-big'),
     ).toBeVisible();
 
     const descriptionTab = page.getByRole('tab', { name: 'Beschrijving' });
@@ -82,14 +84,14 @@ test.describe('Places translation', () => {
             `Beschrijving (${translation.lang}) succesvol bijgewerkt`,
           ),
         ).toBeVisible();
-        await page.locator('.toast svg[data-icon="xmark"]').first().click();
+        await page.locator('.toast svg.lucide-x').first().click();
         await expect(page.locator('.toast')).not.toBeVisible();
       }
 
       await expect(
         page
           .getByRole('tab', { name: 'Beschrijving' })
-          .locator('.fa-circle-check'),
+          .locator('.lucide-circle-check-big'),
       ).toBeVisible();
     }
 

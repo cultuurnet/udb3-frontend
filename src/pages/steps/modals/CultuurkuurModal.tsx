@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { HierarchicalData } from '@/hooks/api/cultuurkuur';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { CultuurKuurIcon } from '@/ui/CultuurKuurIcon';
 import { Icon, Icons } from '@/ui/Icon';
@@ -127,6 +128,7 @@ const CultuurkuurModal = ({
                       name={level1Name}
                       onCheckedChange={() => handleSelectionToggle(level1)}
                       checked={isGroupFullySelected(level1)}
+                      variant={CheckboxVariants.SUCCESS}
                     >
                       {hasChildren ? checkboxTitle : ''}
                     </CheckboxWithLabel>
@@ -190,6 +192,7 @@ const CultuurkuurModal = ({
                               handleSelectionToggle(level2)
                             }
                             checked={isSelected(level2)}
+                            variant={CheckboxVariants.SUCCESS}
                           />
                         </Inline>
                       )}
