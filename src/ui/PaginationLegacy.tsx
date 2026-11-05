@@ -111,12 +111,9 @@ const PaginationLegacy = ({
           color: white;
         }
 
-        .prev-btn > .page-link {
-          padding: 0.5rem;
-        }
-
+        .prev-btn > .page-link,
         .next-btn > .page-link {
-          padding: 0.5rem;
+          padding: ${getValue('paddingY')} 0.5rem;
         }
 
         .prev-btn > a > span {

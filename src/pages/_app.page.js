@@ -19,7 +19,7 @@ import {
   FeatureFlags,
   isFeatureFlagEnabledInEnv,
 } from '@/hooks/useFeatureFlag';
-import i18n from '@/i18n/index';
+import i18n, { SupportedLanguages } from '@/i18n/index';
 import Layout from '@/layouts/index';
 import { GlobalStyle } from '@/styles/GlobalStyle';
 import { ThemeProvider } from '@/ui/ThemeProvider';
@@ -161,7 +161,10 @@ App.propTypes = {
 
 App.getInitialProps = async ({ ctx }) => {
   const serverCookies = new Cookies(ctx?.req?.headers?.cookie);
-  const language = serverCookies.get('udb-language') || 'nl';
+  const cookieLanguage = serverCookies.get('udb-language');
+  const language = Object.values(SupportedLanguages).includes(cookieLanguage)
+    ? cookieLanguage
+    : SupportedLanguages.NL;
 
   if (isServer()) await i18n.changeLanguage(language);
 

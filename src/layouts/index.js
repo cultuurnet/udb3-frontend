@@ -14,6 +14,7 @@ import {
   useHandleWindowMessage,
   WindowMessageTypes,
 } from '@/hooks/useHandleWindowMessage';
+import { SupportedLanguages } from '@/i18n/index';
 import { Inline } from '@/ui/Inline';
 import { isTokenValid } from '@/utils/isTokenValid';
 
@@ -24,7 +25,7 @@ const useChangeLanguage = (language) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    if (language) {
+    if (Object.values(SupportedLanguages).includes(language)) {
       i18n.changeLanguage(language);
     }
   }, [language, i18n]);
