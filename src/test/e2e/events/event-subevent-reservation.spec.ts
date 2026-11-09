@@ -77,6 +77,13 @@ const setCapacity = async (page: Page, id: string, capacity: string) => {
   await patch;
 };
 
+const setWaitingListUrl = async (page: Page, id: string, url: string) => {
+  await page.locator(id).fill(url);
+  const patch = waitForSubEventsPatch(page);
+  await page.locator(id).blur();
+  return (await patch).request();
+};
+
 const randomCapacity = () => String(faker.number.int({ min: 1, max: 500 }));
 
 test.beforeEach(async ({ context }) => {
@@ -107,6 +114,24 @@ test.describe('Single-date event reservation', () => {
     await openReservationTab(page);
 
     await expect(page.locator('#offer-max-capacity')).toHaveValue(capacity);
+  });
+
+  test('stores a waiting list url on the subEvent level', async ({
+    page,
+    baseURL,
+    singleEventId,
+  }) => {
+    const url = faker.internet.url();
+
+    await page.goto(`${baseURL}/events/${singleEventId}/edit`);
+    await openReservationTab(page);
+
+    await setWaitingListUrl(page, '#offer-waiting-list-url', url);
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#offer-waiting-list-url')).toHaveValue(url);
   });
 });
 
@@ -160,6 +185,78 @@ test.describe('Multiple-date event reservation', () => {
 
     await expect(page.locator('#offer-link')).toHaveValue(url);
   });
+
+  test('sets a waiting list url per subEvent', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    const urls = [faker.internet.url(), faker.internet.url()];
+
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    for (const [index, url] of urls.entries()) {
+      await setWaitingListUrl(page, `#subevent-${index}-waiting-list-url`, url);
+    }
+
+    await page.reload();
+    await openReservationTab(page);
+
+    for (const [index, url] of urls.entries()) {
+      await expect(
+        page.locator(`#subevent-${index}-waiting-list-url`),
+      ).toHaveValue(url);
+    }
+  });
+
+  test('removes a waiting list url when it is cleared', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await setWaitingListUrl(
+      page,
+      '#subevent-0-waiting-list-url',
+      faker.internet.url(),
+    );
+
+    const request = await setWaitingListUrl(
+      page,
+      '#subevent-0-waiting-list-url',
+      '',
+    );
+    expect(request.postDataJSON()[0].bookingAvailability.waitingListUrl).toBe(
+      '',
+    );
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
+  });
+
+  test('does not save an invalid waiting list url', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await page.locator('#subevent-0-waiting-list-url').fill('not-a-url');
+    await page.locator('#subevent-0-waiting-list-url').blur();
+
+    await expect(page.getByText('Geen geldige url')).toBeVisible();
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
+  });
 });
 
 test.describe('Calendar edits preserve subEvent capacity', () => {
@@ -202,6 +299,65 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
       );
     }
     await expect(page.locator('#subevent-0-status')).toHaveValue('Unavailable');
+  });
+
+  test("preserves a subEvent's waiting list url when its date changes", async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    const url = faker.internet.url();
+
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await setWaitingListUrl(page, '#subevent-0-waiting-list-url', url);
+
+    const startDateInput = page
+      .locator('[id^="calendar-step-day-day-"][id$="date-period-picker-start"]')
+      .first();
+    const calendarPut = waitForCalendarPut(page);
+    await startDateInput.fill(
+      addDays(new Date(), 5).toLocaleDateString('nl-BE'),
+    );
+    await startDateInput.press('Enter');
+    await calendarPut;
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue(url);
+  });
+
+  test('saves the calendar after a waiting list url was cleared', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+
+    await setWaitingListUrl(
+      page,
+      '#subevent-0-waiting-list-url',
+      faker.internet.url(),
+    );
+    await setWaitingListUrl(page, '#subevent-0-waiting-list-url', '');
+
+    const startDateInput = page
+      .locator('[id^="calendar-step-day-day-"][id$="date-period-picker-start"]')
+      .first();
+    const calendarPut = waitForCalendarPut(page);
+    await startDateInput.fill(
+      addDays(new Date(), 5).toLocaleDateString('nl-BE'),
+    );
+    await startDateInput.press('Enter');
+    expect((await calendarPut).ok()).toBe(true);
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
   });
 
   test("keeps the survivors' capacities when a middle subEvent is deleted", async ({
