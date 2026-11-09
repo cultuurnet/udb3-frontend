@@ -34,7 +34,7 @@ const BadgeLegacy = ({
           align-self: center;
         }
         ${variant === BadgeVariants.INFO &&
-        `background-color: ${colors.udbMainBlue} !important;`}
+        `background-color: ${colors.primary} !important;`}
       `}
     >
       <Text {...getBoxProps(props)}>{children}</Text>

@@ -452,6 +452,7 @@
         "url_error": "Pas d'URL valide",
         "link": "Lien",
         "max_capacity": "Capacité maximale",
+        "waiting_list_url": "Lien vers la liste d'attente",
         "capacity_error": "Saisissez un nombre valide (0 ou plus).",
         "max_capacity_info": "Par capacité maximale, nous entendons le nombre maximum de personnes pouvant participer à votre activité.",
         "status": "Statut",
@@ -1033,6 +1034,9 @@
         "accessibility": "Le transport accompagné a été modifié avec succès"
       }
     }
+  },
+  "banner": {
+    "maintenance": "Le lundi soir 2 novembre, entre 22h et 22h30, vous ne pourrez temporairement pas utiliser l'UiT-databank en raison d'une petite maintenance. Nous estimons l'intervention à environ un quart d'heure. Merci de votre compréhension."
   },
   "dashboard": {
     "actions": {

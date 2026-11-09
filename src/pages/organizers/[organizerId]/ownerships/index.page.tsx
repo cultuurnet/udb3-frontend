@@ -277,7 +277,6 @@ const Ownership = () => {
             <Button
               variant={ButtonVariants.PRIMARY}
               iconName={Icons.PLUS_CIRCLE}
-              className="tw:gap-3"
               onClick={() => {
                 setIsSuccessAlertVisible(false);
                 setActionType(ActionType.REQUEST);
@@ -288,7 +287,6 @@ const Ownership = () => {
             </Button>
             <Button
               variant={ButtonVariants.NEUTRAL}
-              className="tw:gap-3"
               iconName={Icons.ARROW_LEFT}
               onClick={() => router.push(`/organizer/${organizerId}/preview`)}
             >

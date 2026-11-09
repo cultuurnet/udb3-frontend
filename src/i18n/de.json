@@ -450,6 +450,7 @@
         "url_error": "Keine gültige URL",
         "link": "Link",
         "max_capacity": "Maximale Kapazität",
+        "waiting_list_url": "Link zur Warteliste",
         "capacity_error": "Geben Sie eine gültige Anzahl ein (0 oder mehr).",
         "max_capacity_info": "Mit maximaler Kapazität meinen wir die maximale Anzahl von Personen, die an deiner Aktivität teilnehmen können.",
         "status": "Status",
@@ -1033,6 +1034,9 @@
         "accessibility": "Begleiteter Transport wurde erfolgreich geändert"
       }
     }
+  },
+  "banner": {
+    "maintenance": "Am Montagabend, dem 2. November, können Sie die UiT-databank zwischen 22:00 und 22:30 Uhr wegen kleiner Wartungsarbeiten kurzzeitig nicht nutzen. Wir rechnen mit etwa einer Viertelstunde. Vielen Dank für Ihr Verständnis."
   },
   "dashboard": {
     "actions": {

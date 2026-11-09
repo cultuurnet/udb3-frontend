@@ -282,7 +282,7 @@ const Preview = () => {
         borderRadius={getGlobalBorderRadius}
         css={`
           box-shadow: ${getGlobalValue('boxShadow.medium')};
-          border: ${showEventId ? `none` : `2px solid ${colors.red3}`};
+          border: ${showEventId ? `none` : `2px solid ${colors.danger}`};
         `}
       >
         <Table
