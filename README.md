@@ -23,6 +23,12 @@ $ yarn start
 
 For detailed explanation on how things work, check out [Next.js docs](https://nextjs.org/docs/getting-started).
 
+## Worktrees (optional)
+
+A [worktrunk](https://worktrunk.dev) config is included in `.config/wt.toml`.
+
+A [worktrunk](https://worktrunk.dev) config is included in `.config/wt.toml`. When a worktree is created, it copies gitignored files (e.g. `.env.local`, `node_modules`) from the main worktree and runs `yarn install`.
+
 ## Storybook
 
 ```bash
