@@ -47,9 +47,11 @@ export const getServerSideProps = getApplicationServerSideProps(
       scope: OfferTypes.PLACES,
     });
 
-    const isGodUser = permissions?.includes(PermissionTypes.GEBRUIKERS_BEHEREN);
+    const canViewHistory = permissions?.includes(
+      PermissionTypes.AANBOD_HISTORIEK,
+    );
 
-    if (query.tab === 'history' && isGodUser) {
+    if (query.tab === 'history' && canViewHistory) {
       await prefetchOfferHistoryQuery({
         req,
         queryClient,
