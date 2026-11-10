@@ -29,7 +29,7 @@ const UNMOCKED_HOSTS = [
   'fonts.googleapis.com', // Open Sans stylesheet from _document; GlobalStyle overrides the face
   'fonts.gstatic.com', // the font files that stylesheet pulls
   'static.hotjar.com', // analytics, site id hardcoded in the app
-  'content.hotjar.io', // what that script fetches once the site's Hotjar settings ask for it
+  'content.hotjar.io', // loaded by the Hotjar script, controlled from the Hotjar dashboard rather than this repo
 ];
 
 const UNMOCKED_HOST_ENV_VARS = ['NEXT_PUBLIC_SOCKET_URL'];
