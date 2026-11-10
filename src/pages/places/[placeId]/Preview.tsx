@@ -109,14 +109,14 @@ const Preview = () => {
     (placePermissionQuery?.data as { permissions?: string[] } | undefined)
       ?.permissions ?? [];
 
-  const isGodUser = userPermissions?.includes(
-    PermissionTypes.GEBRUIKERS_BEHEREN,
+  const canViewHistory = userPermissions?.includes(
+    PermissionTypes.AANBOD_HISTORIEK,
   );
 
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     placeId as string,
     offerType,
-    { enabled: isGodUser },
+    { enabled: canViewHistory && tab === 'history' },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
   const {
@@ -147,7 +147,7 @@ const Preview = () => {
   const isDeleted = offer?.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  if (isGodUser) {
+  if (canViewHistory) {
     tabOptions.push('history');
   }
 
