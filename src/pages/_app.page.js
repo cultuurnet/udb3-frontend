@@ -111,7 +111,7 @@ const queryClient = new QueryClient();
 const App = ({ Component, pageProps, children }) => {
   const { publicRuntimeConfig } = getConfig();
   useEffect(() => {
-    if (isServer()) return;
+    if (isServer() || window.location.protocol !== 'https:') return;
     Hotjar.init(181435, 6);
   }, []);
 
