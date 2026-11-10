@@ -5,6 +5,7 @@ import { EventTypes } from '../../../constants/EventTypes';
 import nl from '../../../i18n/nl.json';
 import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
+import { cookieDomain } from '../setup/base-url';
 
 const { question: suggestionQuestion, answer: suggestionAnswer } =
   nl.create.additionalInformation.faq.modal.suggestions[
@@ -26,7 +27,7 @@ test.describe('FAQ', () => {
       {
         name: 'ff_boa',
         value: 'true',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);

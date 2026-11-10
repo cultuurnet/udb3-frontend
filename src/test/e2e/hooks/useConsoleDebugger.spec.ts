@@ -1,5 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 
+import { cookieDomain } from '../setup/base-url';
+
 test.describe('useConsoleDebugger', () => {
   /* eslint-disable no-console */
   let consoleLogs: string[] = [];
@@ -100,7 +102,7 @@ test.describe('useConsoleDebugger', () => {
       {
         name: 'ff_show_console_debugging',
         value: 'true',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);
@@ -151,7 +153,7 @@ test.describe('useConsoleDebugger', () => {
       {
         name: 'ff_show_console_debugging',
         value: 'true',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);
@@ -186,7 +188,7 @@ test.describe('useConsoleDebugger', () => {
       {
         name: 'ff_show_console_debugging',
         value: 'false',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);
@@ -245,7 +247,7 @@ test.describe('useConsoleDebugger', () => {
       {
         name: 'ff_show_console_debugging',
         value: 'true',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);
@@ -291,7 +293,7 @@ test.describe('useConsoleDebugger', () => {
       {
         name: 'ff_show_console_debugging',
         value: 'true',
-        domain: 'localhost',
+        domain: cookieDomain,
         path: '/',
       },
     ]);

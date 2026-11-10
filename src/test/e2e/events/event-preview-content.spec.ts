@@ -6,12 +6,13 @@ import nl from '../../../i18n/nl.json';
 import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+import { cookieDomain } from '../setup/base-url';
 
 const calendar = nl.create.calendar;
 const age = nl.create.name_and_age.age;
 
 const cookies = [
-  { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+  { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
 ];
 
 const timestamp = Date.now();

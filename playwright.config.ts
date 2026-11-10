@@ -2,6 +2,8 @@ import 'dotenv/config';
 
 import { defineConfig, devices } from '@playwright/test';
 
+import { baseURL } from './src/test/e2e/setup/base-url';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -46,7 +48,7 @@ export default defineConfig({
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
+    baseURL,
 
     /* Collect trace for every attempt; keep only when the test ends up failing. */
     trace: 'retain-on-failure',
@@ -93,15 +95,17 @@ export default defineConfig({
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   outputDir: 'test-results/',
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    reuseExistingServer:
-      !process.env.CI || process.env.VRT_REUSE_SERVER === 'true',
-    command: process.env.CI ? 'yarn start' : 'yarn build && yarn start',
-    port: 3000,
-    timeout: process.env.CI ? 60 * 1000 : 240 * 1000,
-    env: {
-      NEXT_PUBLIC_ENVIRONMENT: 'e2e',
-    },
-  },
+  /* Run your local dev server before starting the tests, unless targeting a deployed environment */
+  webServer: process.env.E2E_TEST_BASE_URL
+    ? undefined
+    : {
+        reuseExistingServer:
+          !process.env.CI || process.env.VRT_REUSE_SERVER === 'true',
+        command: process.env.CI ? 'yarn start' : 'yarn build && yarn start',
+        port: 3000,
+        timeout: process.env.CI ? 60 * 1000 : 240 * 1000,
+        env: {
+          NEXT_PUBLIC_ENVIRONMENT: 'e2e',
+        },
+      },
 });

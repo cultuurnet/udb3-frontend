@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
+import { cookieDomain } from '../setup/base-url';
 
 test.describe.configure({ mode: 'serial' });
 
@@ -15,7 +16,7 @@ test.beforeEach(async ({ context }) => {
     {
       name: 'ff_boa',
       value: 'true',
-      domain: 'localhost',
+      domain: cookieDomain,
       path: '/',
     },
   ]);

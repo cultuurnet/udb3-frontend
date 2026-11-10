@@ -5,6 +5,7 @@ import { addDays } from 'date-fns';
 
 import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
 import { createBasicEvent } from '../helpers/create-basic-event';
+import { cookieDomain } from '../setup/base-url';
 
 type TestFixtures = {
   singleEventId: string;
@@ -88,7 +89,7 @@ const randomCapacity = () => String(faker.number.int({ min: 1, max: 500 }));
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
-    { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+    { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
   ]);
 });
 
