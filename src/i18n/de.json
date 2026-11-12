@@ -1441,6 +1441,7 @@
         "choose_file": "Datei wählen",
         "upload": "Hochladen"
       },
+      "ai_generated": "Dieses Bild wurde mit KI generiert oder bearbeitet",
       "disclaimer": {
         "copyright": "Geben Sie den Namen des urheberrechtlich geschützten Fotografen an. Geben Sie den Namen Ihres eigenen Vereins oder Ihrer Organisation nur ein, wenn Sie die Rechte besitzen (mindestens 2 Zeichen).",
         "terms_and_conditions": {

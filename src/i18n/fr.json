@@ -1441,6 +1441,7 @@
         "choose_file": "Choisir le fichier",
         "upload": "Télécharger"
       },
+      "ai_generated": "Cette image a été générée ou modifiée par IA",
       "disclaimer": {
         "copyright": "Inclure le nom du photographe détenteur des droits d'auteur. Ne saisissez le nom de votre propre association ou organisation que si vous en détenez les droits (minimum 2 caractères).",
         "terms_and_conditions": {
