@@ -32,6 +32,10 @@ pipeline {
                     }
                     steps {
                         sh label: 'Install node modules', script: 'yarn install --frozen-lockfile'
+                        script {
+                            // Pins the acceptance tests' Playwright image to the version in the lockfile
+                            env.PLAYWRIGHT_VERSION = sh(label: 'Read Playwright version', returnStdout: true, script: "node -p \"require('@playwright/test/package.json').version\"").trim()
+                        }
                         sh label: 'Build project', script: 'yarn build'
                         sh label: 'Remove node modules', script: 'rm -rf node_modules'
                         sh label: 'Install production node modules', script: 'yarn install --frozen-lockfile --production'
@@ -114,6 +118,55 @@ pipeline {
             post {
                 always {
                     sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${util.getJobDisplayName()} [${currentBuild.displayName}]>: deployed to *${env.APPLICATION_ENVIRONMENT}*"
+                }
+            }
+        }
+
+        stage('Run acceptance tests') {
+            agent {
+                docker {
+                    image "playwright:v${env.PLAYWRIGHT_VERSION}-noble"
+                    registryUrl 'https://mcr.microsoft.com'
+                    label 'container'
+                    args  '-e HOME=/tmp'
+                }
+            }
+            environment {
+                E2E_TEST_BASE_URL                     = 'https://acc.uitdatabank.be'
+                TZ                                    = 'Europe/Brussels'
+                LANG                                  = 'nl_BE.UTF-8'
+                NEXT_PUBLIC_UIV_URL                   = 'https://acc.uitinvlaanderen.be'
+                NEXT_PUBLIC_CK_URL                    = 'https://test.cultuurkuur.be'
+                NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL = 'https://helpdesk.publiq.be/hc/nl/articles/360008702459-Welke-activiteiten-mag-ik-invoeren-in-UiTdatabank'
+                NEXT_PUBLIC_FF_BOA                    = 'true'
+                YARN_CACHE_FOLDER                     = '/tmp/.yarn-cache'
+                PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD      = '1'
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    timeout(time: 45, unit: 'MINUTES') {
+                        sh label: 'Install node modules', script: 'npx --yes yarn@1 install --frozen-lockfile'
+                        withCredentials([usernamePassword(credentialsId: 'uitdatabank-frontend_e2etest_user',
+                                                          usernameVariable: 'E2E_TEST_EMAIL',
+                                                          passwordVariable: 'E2E_TEST_PASSWORD'),
+                                         usernamePassword(credentialsId: 'uitdatabank-frontend_e2etest_admin',
+                                                          usernameVariable: 'E2E_TEST_ADMIN_EMAIL',
+                                                          passwordVariable: 'E2E_TEST_ADMIN_PASSWORD'),
+                                         string(credentialsId: 'uitdatabank-frontend_e2etest_admin_id',
+                                                variable: 'E2E_TEST_ADMIN_ID')]
+                        ) {
+                            sh label: 'Run acceptance tests', script: 'npx playwright test'
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'playwright-report/**/*, test-results/**/*', allowEmptyArchive: true
+                    sendBuildNotification to: '#upw-ops', message: "Pipeline <${env.RUN_DISPLAY_URL}|${util.getJobDisplayName()} [${currentBuild.displayName}]>: automated acceptance tests finished"
+                }
+                cleanup {
+                    cleanWs()
                 }
             }
         }

@@ -2,10 +2,11 @@ import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
+import { cookieDomain } from '../setup/base-url';
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
-    { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+    { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
   ]);
 });
 
