@@ -1,3 +1,21 @@
+import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
+import { formatPermission } from '../../../src/utils/formatPermission.ts';
+
+export const MODERATION_LABEL = 'vrt-mock-moderatie';
+
+const moderationRolePermissions = [
+  PermissionTypes.AANBOD_MODEREREN,
+  PermissionTypes.AANBOD_BEWERKEN,
+  PermissionTypes.AANBOD_HISTORIEK,
+  PermissionTypes.AANBOD_VERWIJDEREN,
+];
+
+// What an offer carrying MODERATION_LABEL earns, in the display format the
+// offer-permissions endpoint answers with.
+export const moderatedOfferPermissionsFixture = {
+  permissions: moderationRolePermissions.map(formatPermission),
+};
+
 const globalUserPermissionsFixture = [
   'AANBOD_BEWERKEN',
   'AANBOD_MODEREREN',
@@ -37,8 +55,8 @@ const globalUserRolesFixture = [
   {
     uuid: 'vrt-mock-role-4',
     name: 'VRT mock rol — moderatie',
-    permissions: ['AANBOD_MODEREREN', 'AANBOD_BEWERKEN', 'AANBOD_HISTORIEK'],
-    constraints: { v3: 'label:vrt-mock-moderatie' },
+    permissions: moderationRolePermissions,
+    constraints: { v3: `label:${MODERATION_LABEL}` },
   },
 ];
 

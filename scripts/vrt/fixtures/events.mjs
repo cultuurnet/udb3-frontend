@@ -1,9 +1,11 @@
 import { AgeRanges } from '../../../src/constants/AgeRange.ts';
 import { EventTypes } from '../../../src/constants/EventTypes.ts';
-import { PermissionTypes } from '../../../src/constants/PermissionTypes.ts';
-import { formatPermission } from '../../../src/utils/formatPermission.ts';
 import { parseOfferId } from '../../../src/utils/parseOfferId.js';
 import { vrtDaysFromNow } from '../pins/clock.mjs';
+import {
+  MODERATION_LABEL,
+  moderatedOfferPermissionsFixture,
+} from './global.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 import { vrtMockOrganizers } from './organizers.mjs';
@@ -155,7 +157,7 @@ const vrtMockEvent = {
   audience: { audienceType: 'everyone' },
   typicalAgeRange: '12-15',
   childrenOnly: false,
-  labels: ['vrt-mock-label-evenement', 'vrt-mock-moderatie'],
+  labels: ['vrt-mock-label-evenement', MODERATION_LABEL],
   hiddenLabels: [],
   languages: ['nl', 'fr'],
   completedLanguages: ['nl'],
@@ -379,16 +381,6 @@ const eventsByCreatorFixture = pagedCollection(eventListMembers, 14);
 
 const withoutCalendarSummary = ({ calendarSummary, ...event }) => event;
 
-// What global.mjs's role constraints grant via the moderation label, so every
-// event served here has to keep it.
-const eventPermissionsFixture = {
-  permissions: [
-    PermissionTypes.AANBOD_BEWERKEN,
-    PermissionTypes.AANBOD_MODEREREN,
-    PermissionTypes.AANBOD_HISTORIEK,
-  ].map(formatPermission),
-};
-
 const CALENDAR_SUMMARY_CONTENT_TYPE = 'text/plain; charset=utf-8';
 
 const ANY_EVENT_PATH = /^\/events\/[^/]+$/;
@@ -429,7 +421,7 @@ export const eventsApiFixtures = [
   {
     method: 'GET',
     path: ANY_EVENT_PERMISSIONS_PATH,
-    response: eventPermissionsFixture,
+    response: moderatedOfferPermissionsFixture,
   },
   ...eventByIdFixtures,
   {
