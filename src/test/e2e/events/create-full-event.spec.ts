@@ -2,10 +2,17 @@ import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
+import nl from '../../../i18n/nl.json';
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+    {
+      name: 'ff_ai_label',
+      value: 'true',
+      domain: 'localhost',
+      path: '/',
+    },
   ]);
 });
 
@@ -116,6 +123,11 @@ test('create event with all possible fields filled in', async ({
     .getByRole('textbox', { name: 'Beschrijving' })
     .fill(dummyEvent.image.description);
   await page.getByLabel('Copyright').fill(dummyEvent.image.copyright);
+  const aiGeneratedCheckbox = page.getByRole('checkbox', {
+    name: nl.pictures.upload_modal.ai_generated,
+  });
+  await aiGeneratedCheckbox.click();
+  await expect(aiGeneratedCheckbox).toBeChecked();
   await page.getByRole('button', { name: 'Uploaden' }).click();
   await expect(page.getByText(dummyEvent.image.description)).toBeVisible();
   await page.getByRole('button', { name: 'Videolink toevoegen' }).click();
