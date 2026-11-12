@@ -23,6 +23,16 @@ const vrtMockLocation = ({ id, nameNl, street, zip, city, ...overrides }) => ({
   ...overrides,
 });
 
+// Location cards carry the UiTPAS badge too, not just organizer ones.
+export const vrtMockUitpasLocation = vrtMockLocation({
+  id: 'vrt-mock-place-4',
+  nameNl: 'VRT mock locatie — UiTPAS',
+  street: 'VRT mock straat 6',
+  zip: '9000',
+  city: 'VRT mock tweede gemeente',
+  labels: [UITPAS_ORGANIZER_LABEL],
+});
+
 // useRecentLocations keeps the first four that survive its filter.
 const recentLocations = [
   vrtMockLocation({
@@ -39,15 +49,7 @@ const recentLocations = [
     zip: '9000',
     city: 'VRT mock tweede gemeente',
   }),
-  // Location cards carry the UiTPAS badge too, not just organizer ones.
-  vrtMockLocation({
-    id: 'vrt-mock-place-4',
-    nameNl: 'VRT mock locatie — UiTPAS',
-    street: 'VRT mock straat 6',
-    zip: '9000',
-    city: 'VRT mock tweede gemeente',
-    labels: [UITPAS_ORGANIZER_LABEL],
-  }),
+  vrtMockUitpasLocation,
   vrtMockLocation({
     id: 'vrt-mock-place-5',
     nameNl:

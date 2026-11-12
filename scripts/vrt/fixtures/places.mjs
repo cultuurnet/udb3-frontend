@@ -7,7 +7,8 @@ import {
 } from './global.mjs';
 import { vrtMockImageUrls } from './images.mjs';
 import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
-import { UITPAS_ORGANIZER_LABEL, vrtMockOrganizers } from './organizers.mjs';
+import { vrtMockUitpasLocation } from './offers.mjs';
+import { vrtMockOrganizers } from './organizers.mjs';
 
 const PLACE_ID = 'vrt-mock-place-1';
 
@@ -153,28 +154,11 @@ const placeListMembers = [
 ].map(withCalendarSummary);
 
 // Names contain PLACE_TYPEAHEAD_SEARCH: the Typeahead filters its options
-// client side on the input too.
-const placeTypeaheadMembers = [
-  vrtMockPlace,
-  placeVariant({
-    id: 'vrt-mock-place-10',
-    nameNl: 'VRT mock locatie — UiTPAS',
-    address: {
-      nl: {
-        addressCountry: 'BE',
-        addressLocality: 'VRT mock gemeente',
-        postalCode: '1000',
-        streetAddress: 'VRT mock straat 2',
-      },
-    },
-    labels: [MODERATION_LABEL, UITPAS_ORGANIZER_LABEL],
-  }),
-];
+// client side on the input too. The UiTPAS one is also a recent-location card
+// on the same step, so it has to be the same place.
+const placeTypeaheadMembers = [vrtMockPlace, vrtMockUitpasLocation];
 
-const placesServedById = [
-  ...placeListMembers,
-  ...placeTypeaheadMembers.slice(1),
-];
+const placesServedById = [...placeListMembers, vrtMockUitpasLocation];
 
 const withoutCalendarSummary = ({ calendarSummary, ...place }) => place;
 
