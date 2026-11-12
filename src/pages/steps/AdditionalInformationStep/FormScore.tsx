@@ -309,6 +309,7 @@ const FormScore = ({ completedFields, offerId, scope }: Props) => {
 
   return (
     <Notification
+      data-testid="form-score"
       header={
         <Inline id="offer-score" alignItems="center" spacing={2}>
           <Text
