@@ -11,6 +11,7 @@ import {
 import { labelsApiFixtures } from './fixtures/labels.mjs';
 import { offersApiFixtures } from './fixtures/offers.mjs';
 import { organizersApiFixtures } from './fixtures/organizers.mjs';
+import { placesApiFixtures } from './fixtures/places.mjs';
 import { termsTaxonomyFixtures } from './fixtures/terms.mjs';
 import { uitpasApiFixtures } from './fixtures/uitpas.mjs';
 
@@ -31,6 +32,7 @@ export const MOCK_UPSTREAMS = [
       ...globalApiFixtures,
       ...labelsApiFixtures,
       ...eventsApiFixtures,
+      ...placesApiFixtures,
       ...offersApiFixtures,
       ...organizersApiFixtures,
       ...uitpasApiFixtures,

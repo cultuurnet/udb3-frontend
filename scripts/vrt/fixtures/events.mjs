@@ -9,10 +9,10 @@ import {
 import { vrtMockImageUrls } from './images.mjs';
 import { MOCK_API_ORIGIN, pagedCollection } from './mock-api.mjs';
 import { vrtMockOrganizers } from './organizers.mjs';
+import { vrtMockPlace } from './places.mjs';
 import { UITPAS_EVENT_ID, uitpasPriceInfo } from './uitpas.mjs';
 
 const EVENT_ID = 'vrt-mock-event-1';
-const LOCATION_ID = 'vrt-mock-place-1';
 
 // A real id, unlike the rest here; themes have no constant of their own.
 const CLASSICAL_MUSIC_THEME_ID = '1.8.1.0.0';
@@ -71,29 +71,6 @@ const availableSubEventsOn = (dayOffsets) =>
 // Only the calsum endpoint serves md; the list request asks for lg/sm/xs.
 const withoutMediumFormat = ({ md, ...text }) => text;
 
-const eventLocationFixture = {
-  '@id': `${MOCK_API_ORIGIN}/places/${LOCATION_ID}`,
-  '@context': '/contexts/place',
-  mainLanguage: 'nl',
-  name: { nl: 'VRT mock locatie — zaal' },
-  terms: [
-    {
-      id: EventTypes['Zaal of expohal'],
-      domain: 'eventtype',
-      label: 'VRT mock type — zaal',
-    },
-  ],
-  address: {
-    nl: {
-      addressCountry: 'BE',
-      addressLocality: 'VRT mock gemeente',
-      postalCode: '1000',
-      streetAddress: 'VRT mock straat 1',
-    },
-  },
-  workflowStatus: 'APPROVED',
-};
-
 const eventMediaObjects = [
   {
     '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-1`,
@@ -151,7 +128,7 @@ const vrtMockEvent = {
   endDate: lastSubEvent.endDate,
   subEvent: eventSubEvents,
   openingHours: [],
-  location: eventLocationFixture,
+  location: vrtMockPlace,
   organizer: vrtMockOrganizers.owned,
   attendanceMode: 'offline',
   audience: { audienceType: 'everyone' },
