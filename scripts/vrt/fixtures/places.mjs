@@ -174,8 +174,11 @@ const placeByIdFixtures = placesServedById.map((place) => ({
   response: withoutCalendarSummary(place),
 }));
 
-// The by-creator list puts the signed-in user's id in q, so it matches on
-// path alone; the typeahead is the only caller sending this text.
+// Every /places/ search shares one path, so each entry narrows on what only
+// its caller sends: the typeahead's text, and the by-creator q's prefix — never
+// the rest of q, which holds the signed-in user's id. The duplicate checks and
+// the existing-places lookup match neither and fall through, rather than being
+// told three places already exist.
 export const placesApiFixtures = [
   {
     method: 'GET',
@@ -186,6 +189,7 @@ export const placesApiFixtures = [
   {
     method: 'GET',
     path: '/places/',
+    query: (params) => params.get('q')?.startsWith('creator:') ?? false,
     response: pagedCollection(placeListMembers, 14),
   },
   {
