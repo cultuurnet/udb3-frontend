@@ -40,7 +40,7 @@ const placeCalsumText = {
 
 const placeMediaObjects = [
   {
-    '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-3`,
+    '@id': `${MOCK_API_ORIGIN}/images/vrt-mock-image-6`,
     '@type': 'schema:ImageObject',
     contentUrl: vrtMockImageUrls.landscape,
     thumbnailUrl: vrtMockImageUrls.landscape,
