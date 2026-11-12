@@ -622,6 +622,7 @@ const updateOfferImage = async ({
   imageId,
   description,
   copyrightHolder,
+  isAiGenerated,
   scope,
 }) => {
   const isPatch = scope === ScopeTypes.ORGANIZERS;
@@ -629,6 +630,7 @@ const updateOfferImage = async ({
     id: imageId.toString(),
     description,
     copyrightHolder,
+    isAiGenerated,
   };
 
   const request = {

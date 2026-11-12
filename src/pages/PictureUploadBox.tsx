@@ -35,6 +35,7 @@ type ImageType = {
   parsedId: string;
   description: string;
   copyrightHolder: string;
+  isAiGenerated?: boolean;
   thumbnailUrl: string;
   isMain: boolean;
   file?: File;
