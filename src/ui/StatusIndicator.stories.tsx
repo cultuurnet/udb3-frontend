@@ -34,7 +34,7 @@ export const Published: Story = {
 
 export const Planned: Story = {
   args: {
-    color: colors.udbMainDarkBlue,
+    color: colors.primary,
     label: 'Publicatie vanaf 01/01/2024',
   },
 };
@@ -55,7 +55,7 @@ export const Rejected: Story = {
 
 export const Deleted: Story = {
   args: {
-    color: colors.udbMainGrey,
+    color: colors.neutral,
     label: 'Verwijderd',
   },
 };

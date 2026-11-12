@@ -1,6 +1,7 @@
 import { Dropdown as BootstrapDropdown } from 'react-bootstrap';
 
 import { Box } from '@/ui/Box';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { cn } from '@/ui/shadcn/utils';
 import {
@@ -31,10 +32,10 @@ const MultiSelectDropdownLegacy = ({
           display: flex;
           align-items: center;
           background-color: ${colors.white} !important;
-          border: 1px solid ${hasError ? 'red' : colors.grey2} !important;
+          border: 1px solid ${hasError ? colors.danger : colors.grey2} !important;
           border-radius: ${getGlobalBorderRadius} !important;
           height: ${getGlobalFormInputHeight};
-          color: ${colors.textColor} !important;
+          color: ${colors.text} !important;
           font-size: 1rem;
           padding: 0 0.75rem !important;
           box-shadow: none !important;
@@ -44,8 +45,8 @@ const MultiSelectDropdownLegacy = ({
           &:focus,
           &:active {
             background-color: ${colors.white} !important;
-            border-color: ${hasError ? 'red' : colors.grey2} !important;
-            color: ${colors.textColor} !important;
+            border-color: ${hasError ? colors.danger : colors.grey2} !important;
+            color: ${colors.text} !important;
           }
 
           &::after {
@@ -88,6 +89,7 @@ const MultiSelectDropdownLegacy = ({
                     : selectedValues.filter((value) => value !== option.value),
                 )
               }
+              variant={CheckboxVariants.SUCCESS}
             >
               {option.label}
             </CheckboxWithLabel>

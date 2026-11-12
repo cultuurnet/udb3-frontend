@@ -7,12 +7,14 @@ import * as yup from 'yup';
 import { DaysOfWeek } from '@/constants/DaysOfWeek';
 import { DayOfWeek } from '@/types/Offer';
 import { Button, ButtonVariants } from '@/ui/Button';
+import { CheckboxVariants } from '@/ui/Checkbox';
 import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { Icons } from '@/ui/Icon';
 import { Inline } from '@/ui/Inline';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
+import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 
 import {
@@ -207,6 +209,7 @@ const CalendarOpeninghoursModalLegacy = ({
                           openingHour.id,
                         )
                       }
+                      variant={CheckboxVariants.SUCCESS}
                     >
                       {t(`create.calendar.days.short.${dayOfWeek}`)}
                     </CheckboxWithLabel>
@@ -236,7 +239,7 @@ const CalendarOpeninghoursModalLegacy = ({
               />
             </Inline>
             {errors.openingHours?.[index]?.dayOfWeek?.type && (
-              <Text color="red">
+              <Text color={colors.danger}>
                 {t(
                   'create.calendar.opening_hours_modal.validation_messages.day_of_week.min',
                 )}

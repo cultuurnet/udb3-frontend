@@ -132,14 +132,14 @@ const Preview = () => {
     mainLanguage,
   );
 
-  const isGodUser = userPermissions?.includes(
-    PermissionTypes.GEBRUIKERS_BEHEREN,
+  const canViewHistory = userPermissions?.includes(
+    PermissionTypes.AANBOD_HISTORIEK,
   );
 
   const getOfferHistoryQuery = useGetOfferHistoryQuery(
     eventId as string,
     offerType,
-    { enabled: isGodUser },
+    { enabled: canViewHistory && tab === 'history' },
   );
   const offerHistory = getOfferHistoryQuery?.data ?? [];
 
@@ -148,7 +148,7 @@ const Preview = () => {
   const isDeleted = offer.workflowStatus === WorkflowStatus.DELETED;
   const showEventId = !isRejected && !isDeleted;
 
-  if (isGodUser) {
+  if (canViewHistory) {
     tabOptions.push('history');
   }
 
@@ -282,7 +282,7 @@ const Preview = () => {
         borderRadius={getGlobalBorderRadius}
         css={`
           box-shadow: ${getGlobalValue('boxShadow.medium')};
-          border: ${showEventId ? `none` : `2px solid ${colors.red3}`};
+          border: ${showEventId ? `none` : `2px solid ${colors.danger}`};
         `}
       >
         <Table
