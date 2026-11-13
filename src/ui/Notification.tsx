@@ -10,10 +10,18 @@ type Props = {
   header?: ReactElement;
   body: ReactElement;
   className?: string;
+  'data-testid'?: string;
 };
 
-const NotificationShadcn = ({ icon, header, body, className }: Props) => (
+const NotificationShadcn = ({
+  icon,
+  header,
+  body,
+  className,
+  'data-testid': dataTestId,
+}: Props) => (
   <div
+    data-testid={dataTestId}
     className={cn(
       'tw:fixed tw:right-4 tw:bottom-24 tw:min-w-85 tw:rounded-lg tw:bg-white tw:z-5 tw:shadow-heavy',
       className,
