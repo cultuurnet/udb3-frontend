@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { DragEvent, FormEvent } from 'react';
 import { forwardRef, useEffect, useRef } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useController, useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useAutoFocus } from '@/hooks/useAutoFocus';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { ImageIcon } from '@/pages/PictureUploadBox';
 import { Button } from '@/ui/Button';
+import { CheckboxWithLabel } from '@/ui/CheckboxWithLabel';
 import { FormElement } from '@/ui/FormElement';
 import { Image } from '@/ui/Image';
 import { Input } from '@/ui/Input';
@@ -20,6 +22,7 @@ import { colors, getValueFromTheme } from '@/ui/theme';
 type FormData = {
   description: string;
   copyrightHolder: string;
+  isAiGenerated?: boolean;
   file: FileList;
 };
 
@@ -27,7 +30,11 @@ type PictureUploadModalProps = {
   visible: boolean;
   onClose: () => void;
   draggedImageFile?: FileList;
-  imageToEdit?: { description: string; copyrightHolder: string };
+  imageToEdit?: {
+    description: string;
+    copyrightHolder: string;
+    isAiGenerated?: boolean;
+  };
   onSubmitValid: (data: FormData) => Promise<void>;
   loading: boolean;
 };
@@ -176,12 +183,14 @@ const PictureUploadModal = ({
 }: PictureUploadModalProps) => {
   const { t } = useTranslation();
   const formComponent = useRef<HTMLFormElement>(null);
+  const [isAiLabelEnabled] = useFeatureFlag(FeatureFlags.AI_LABEL);
 
   const schema = yup
     .object()
     .shape({
       description: yup.string().required().max(250),
       copyrightHolder: yup.string().required(),
+      isAiGenerated: yup.boolean(),
       ...(!imageToEdit && {
         file: yup
           .mixed()
@@ -210,15 +219,20 @@ const PictureUploadModal = ({
 
   const [descriptionInputComponent] = useAutoFocus({ retriggerOn: visible });
 
+  const { field: isAiGeneratedField } = useController({
+    name: 'isAiGenerated',
+    control,
+  });
+
   const watchedFile = useWatch({ control, name: 'file' });
   const image = watchedFile?.[0];
 
   useEffect(() => {
-    const resetData = imageToEdit ?? {
-      description: '',
-      copyrightHolder: '',
-    };
-    reset(resetData);
+    reset({
+      description: imageToEdit?.description ?? '',
+      copyrightHolder: imageToEdit?.copyrightHolder ?? '',
+      isAiGenerated: imageToEdit?.isAiGenerated ?? false,
+    });
   }, [imageToEdit, reset, visible]);
 
   useEffect(() => {
@@ -269,8 +283,11 @@ const PictureUploadModal = ({
         ref={formComponent}
         spacing={4}
         padding={4}
-        onSubmit={handleSubmit(async (data) => {
-          await onSubmitValid(data);
+        onSubmit={handleSubmit(async ({ isAiGenerated, ...data }) => {
+          await onSubmitValid({
+            ...data,
+            ...(isAiLabelEnabled && { isAiGenerated }),
+          });
           reset({});
         })}
       >
@@ -321,6 +338,16 @@ const PictureUploadModal = ({
           }
           Component={<Input {...register('copyrightHolder')} />}
         />
+        {isAiLabelEnabled && (
+          <CheckboxWithLabel
+            id="isAiGenerated"
+            name={isAiGeneratedField.name}
+            checked={isAiGeneratedField.value}
+            onCheckedChange={isAiGeneratedField.onChange}
+          >
+            {t('pictures.upload_modal.ai_generated')}
+          </CheckboxWithLabel>
+        )}
 
         <Text variant={TextVariants.MUTED} fontSize="0.8rem">
           <Trans i18nKey="pictures.upload_modal.disclaimer.terms_and_conditions.text">
@@ -328,7 +355,7 @@ const PictureUploadModal = ({
             <CopyrightLink />
           </Trans>
         </Text>
-        <Button type="submit" className="tw:hidden" />
+        <Button type="submit" className="tw:hidden!" />
       </Stack>
     </Modal>
   );
