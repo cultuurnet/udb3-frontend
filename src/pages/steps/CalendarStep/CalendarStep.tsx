@@ -423,7 +423,7 @@ const CalendarStep = ({
           ...preservedFormData,
           subEvent: preservedFormData.subEvent.map((subEvent) => ({
             ...subEvent,
-            bookingInfo: {},
+            bookingInfo: undefined,
           })),
         }
       : preservedFormData;
