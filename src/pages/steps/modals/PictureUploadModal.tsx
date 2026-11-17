@@ -11,7 +11,9 @@ import { ImageIcon } from '@/pages/PictureUploadBox';
 import { Box } from '@/ui/Box';
 import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
@@ -21,6 +23,7 @@ import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
 import { TextArea } from '@/ui/TextArea';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import { Tooltip } from '@/ui/Tooltip';
 
 type FormData = {
   description: string;
@@ -115,25 +118,22 @@ const SelectedImage = ({ image }: SelectedImageProps) => {
   }, [image]);
 
   return (
-    <div className="tw:flex tw:min-w-0 tw:flex-col tw:gap-2">
+    <div className="tw:relative tw:h-48 tw:min-w-0">
       {previewUrl && (
         <Image
           src={previewUrl}
           alt={image.name}
-          className="tw:h-56 tw:w-full tw:rounded-md tw:object-cover tw:object-center"
+          className="tw:h-full tw:w-full tw:rounded-md tw:object-cover tw:object-center"
         />
       )}
-      <div className="tw:flex tw:min-w-0 tw:flex-col">
-        <Text variant={TextVariants.MUTED} className="tw:truncate">
-          {image.name}
-        </Text>
+      <div className="tw:absolute tw:top-2 tw:right-2 tw:rounded-full tw:bg-white/85">
         <Button
-          variant={ButtonVariants.LINK}
-          className="tw:h-auto tw:self-start tw:p-0"
+          variant={ButtonVariants.ICON}
+          iconName={Icons.PENCIL}
+          aria-label={t('pictures.upload_modal.actions.change_file')}
+          title={t('pictures.upload_modal.actions.change_file')}
           onClick={handleClickUpload}
-        >
-          {t('pictures.upload_modal.actions.change_file')}
-        </Button>
+        />
       </div>
     </div>
   );
@@ -396,7 +396,7 @@ const PictureUploadModal = ({
           <Input
             id="file"
             type="file"
-            className="tw:hidden"
+            className="tw:hidden!"
             accept={ALLOWED_FILE_TYPES.map((file) => `.${file}`).join(',')}
             {...register('file')}
           />
@@ -426,10 +426,10 @@ const PictureUploadModal = ({
               {image && <SelectedImage image={image} />}
               {imageToEdit?.thumbnailUrl && (
                 <Image
-                  src={`${imageToEdit.thumbnailUrl}?height=420`}
+                  src={`${imageToEdit.thumbnailUrl}?height=360`}
                   alt=""
                   className={cn(
-                    'tw:h-56 tw:w-full tw:rounded-md tw:object-cover',
+                    'tw:h-48 tw:w-full tw:rounded-md tw:object-cover',
                     imageToEdit.isAiGenerated && 'tw:object-left-top',
                   )}
                 />
@@ -459,11 +459,16 @@ const PictureUploadModal = ({
                 />
                 <FormElement
                   id="copyrightHolder"
-                  label={t('pictures.upload_modal.copyright_label')}
-                  info={
-                    <Text variant={TextVariants.MUTED}>
-                      {t('pictures.upload_modal.disclaimer.copyright')}
-                    </Text>
+                  label={
+                    <Inline alignItems="center" spacing={2}>
+                      <Text>{t('pictures.upload_modal.copyright_label')}</Text>
+                      <Tooltip
+                        id="copyright-tooltip"
+                        content={t(
+                          'pictures.upload_modal.disclaimer.copyright',
+                        )}
+                      />
+                    </Inline>
                   }
                   error={
                     errors?.copyrightHolder &&
