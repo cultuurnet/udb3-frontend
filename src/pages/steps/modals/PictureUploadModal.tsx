@@ -37,6 +37,7 @@ type PictureUploadModalProps = {
     description: string;
     copyrightHolder: string;
     isAiGenerated?: boolean;
+    thumbnailUrl?: string;
   };
   onSubmitValid: (data: FormData) => Promise<void>;
   loading: boolean;
@@ -418,10 +419,21 @@ const PictureUploadModal = ({
             <Box
               className={cn(
                 'tw:grid tw:gap-4',
-                image && 'tw:sm:grid-cols-[14rem_1fr]',
+                (image || imageToEdit?.thumbnailUrl) &&
+                  'tw:sm:grid-cols-[14rem_1fr]',
               )}
             >
               {image && <SelectedImage image={image} />}
+              {imageToEdit?.thumbnailUrl && (
+                <Image
+                  src={`${imageToEdit.thumbnailUrl}?height=420`}
+                  alt=""
+                  className={cn(
+                    'tw:h-56 tw:w-full tw:rounded-md tw:object-cover',
+                    imageToEdit.isAiGenerated && 'tw:object-left-top',
+                  )}
+                />
+              )}
               <Stack spacing={4}>
                 <FormElement
                   id="description"
