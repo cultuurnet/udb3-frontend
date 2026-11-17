@@ -206,7 +206,7 @@ const AiGeneratedField = ({
   ];
 
   return (
-    <Stack spacing={3} paddingBottom={4}>
+    <Stack spacing={3} paddingBottom={5}>
       <Text fontWeight="bold">
         {t('pictures.upload_modal.ai_generated.title')}
       </Text>
