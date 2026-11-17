@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 
 import { addFaqItem } from '../helpers/add-faq-item';
 import { createBasicEvent } from '../helpers/create-basic-event';
+import { cookieDomain } from '../setup/base-url';
 
 const translations = [
   { lang: 'fr', placeholder: 'Vertaal titel in fr' },
@@ -16,7 +17,7 @@ test.describe.serial('Event translation', () => {
   test.beforeAll(async ({ browser, baseURL }) => {
     const context = await browser.newContext();
     await context.addCookies([
-      { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+      { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
     ]);
     const page = await context.newPage();
 
@@ -51,7 +52,7 @@ test.describe.serial('Event translation', () => {
     await page
       .context()
       .addCookies([
-        { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+        { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
       ]);
     await page.goto(translateUrl);
     await page.waitForLoadState('networkidle');

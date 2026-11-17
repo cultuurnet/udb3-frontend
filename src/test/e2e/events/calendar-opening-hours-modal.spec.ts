@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { addDays, format } from 'date-fns';
 
 import nl from '../../../i18n/nl.json';
+import { cookieDomain } from '../setup/base-url';
 
 const formatDate = (date: Date) => format(date, 'dd/MM/yyyy');
 const today = new Date();
@@ -11,7 +12,7 @@ const calendar = nl.create.calendar;
 const dp = nl.date_period_picker;
 
 const cookies = [
-  { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+  { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
 ];
 
 const createPermanentEvent = async (page: Page, baseURL: string) => {

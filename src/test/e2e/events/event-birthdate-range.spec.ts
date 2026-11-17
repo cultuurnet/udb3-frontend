@@ -4,6 +4,7 @@ import { AgeRanges } from '../../../constants/AgeRange';
 import nl from '../../../i18n/nl.json';
 import { createBasicEvent } from '../helpers/create-basic-event';
 import { suppressHydrationErrors } from '../helpers/suppress-hydration-errors';
+import { cookieDomain } from '../setup/base-url';
 
 const age = nl.create.name_and_age.age;
 const birthDate = age.birth_date;
@@ -103,7 +104,7 @@ test.beforeEach(async ({ context }) => {
     {
       name: 'ff_boa',
       value: 'true',
-      domain: 'localhost',
+      domain: cookieDomain,
       path: '/',
     },
   ]);

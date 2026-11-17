@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 import nl from '../../../i18n/nl.json';
+import { cookieDomain } from '../setup/base-url';
 
 const EVENT_ID = 'a0b6534b-3a64-4dfe-9875-968414cc26be';
 
@@ -68,7 +69,7 @@ test.describe('Event Edit - Accessibility', () => {
 
   test.beforeEach(async ({ context, page, baseURL }) => {
     await context.addCookies([
-      { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+      { name: 'ff_boa', value: 'true', domain: cookieDomain, path: '/' },
     ]);
     await openAccessibilityTab(page, baseURL);
     await removeDepartureLocations(page);
