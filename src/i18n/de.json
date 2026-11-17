@@ -1444,7 +1444,7 @@
       },
       "ai_generated": {
         "title": "Wurde dieses Bild mit KI erstellt oder bearbeitet?",
-        "description": "Kreuzen Sie an, wenn das Bild vollständig oder größtenteils von einem KI-Tool erstellt wurde. So sehen Besucher, dass es sich nicht um ein echtes Foto handelt.",
+        "description": "Wählen Sie „Ja“, wenn ein KI-Tool das Bild vollständig oder größtenteils erstellt oder bearbeitet hat. So sehen Besucher, dass es sich nicht um ein echtes Foto handelt.",
         "yes": "Ja",
         "no": "Nein",
         "label_notice": "Wir fügen Ihrem Bild ein KI-Label hinzu",

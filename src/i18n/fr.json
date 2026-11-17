@@ -1444,7 +1444,7 @@
       },
       "ai_generated": {
         "title": "Cette image a-t-elle été créée ou modifiée avec l'IA ?",
-        "description": "Cochez si l'image a été entièrement ou en grande partie créée par un outil d'IA. Ainsi, les visiteurs savent qu'il ne s'agit pas d'une vraie photo.",
+        "description": "Choisissez « Oui » si un outil d'IA a créé ou modifié l'image entièrement ou en grande partie. Ainsi, les visiteurs voient qu'il ne s'agit pas d'une vraie photo.",
         "yes": "Oui",
         "no": "Non",
         "label_notice": "Nous ajoutons un label IA à votre image",
