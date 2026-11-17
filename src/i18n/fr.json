@@ -1438,10 +1438,19 @@
       "actions": {
         "adjust": "Editer",
         "cancel": "Annuler",
+        "change_file": "Changer de photo",
         "choose_file": "Choisir le fichier",
         "upload": "Télécharger"
       },
-      "ai_generated": "Cette image a été générée ou modifiée par IA",
+      "ai_generated": {
+        "title": "Cette image a-t-elle été créée ou modifiée avec l'IA ?",
+        "description": "Cochez si l'image a été entièrement ou en grande partie créée par un outil d'IA. Ainsi, les visiteurs savent qu'il ne s'agit pas d'une vraie photo.",
+        "yes": "Oui",
+        "no": "Non",
+        "label_notice": "Nous ajoutons un label IA à votre image",
+        "label_hint": "Si vous utilisez l'IA, nous ajoutons un label IA à votre image",
+        "label_none": "Votre image ne recevra pas de label IA"
+      },
       "disclaimer": {
         "copyright": "Inclure le nom du photographe détenteur des droits d'auteur. Ne saisissez le nom de votre propre association ou organisation que si vous en détenez les droits (minimum 2 caractères).",
         "terms_and_conditions": {
@@ -1466,8 +1475,15 @@
           "required": "Veuillez sélectionner un fichier",
           "size": "Le fichier que vous avez sélectionné fait plus de {{maxFileSize}} Mo.",
           "type": "Le fichier que vous avez sélectionné n'est pas un type de fichier valide"
+        },
+        "isAiGenerated": {
+          "required": "Indiquez si cette image a été créée ou modifiée avec l'IA."
         }
-      }
+      },
+      "select_photo": "Sélectionnez votre photo",
+      "drag_file": "Faites glisser un fichier ici ou",
+      "description_label": "Description",
+      "copyright_label": "Copyright"
     }
   },
   "productions": {

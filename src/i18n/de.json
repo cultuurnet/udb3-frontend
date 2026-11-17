@@ -1438,10 +1438,19 @@
       "actions": {
         "adjust": "Anpassen",
         "cancel": "Abbrechen",
+        "change_file": "Foto wechseln",
         "choose_file": "Datei wählen",
         "upload": "Hochladen"
       },
-      "ai_generated": "Dieses Bild wurde mit KI generiert oder bearbeitet",
+      "ai_generated": {
+        "title": "Wurde dieses Bild mit KI erstellt oder bearbeitet?",
+        "description": "Kreuzen Sie an, wenn das Bild vollständig oder größtenteils von einem KI-Tool erstellt wurde. So sehen Besucher, dass es sich nicht um ein echtes Foto handelt.",
+        "yes": "Ja",
+        "no": "Nein",
+        "label_notice": "Wir fügen Ihrem Bild ein KI-Label hinzu",
+        "label_hint": "Wenn Sie KI verwenden, fügen wir Ihrem Bild ein KI-Label hinzu",
+        "label_none": "Ihr Bild erhält kein KI-Label"
+      },
       "disclaimer": {
         "copyright": "Geben Sie den Namen des urheberrechtlich geschützten Fotografen an. Geben Sie den Namen Ihres eigenen Vereins oder Ihrer Organisation nur ein, wenn Sie die Rechte besitzen (mindestens 2 Zeichen).",
         "terms_and_conditions": {
@@ -1466,8 +1475,15 @@
           "required": "Bitte wählen Sie eine Datei aus",
           "size": "Die ausgewählte Datei ist größer als {{maxFileSize}} MB.",
           "type": "Die ausgewählte Datei hat keinen gültigen Dateityp"
+        },
+        "isAiGenerated": {
+          "required": "Geben Sie an, ob dieses Bild mit KI erstellt oder bearbeitet wurde."
         }
-      }
+      },
+      "select_photo": "Wählen Sie Ihr Foto",
+      "drag_file": "Ziehen Sie eine Datei hierher oder",
+      "description_label": "Beschreibung",
+      "copyright_label": "Urheberrecht"
     }
   },
   "productions": {
