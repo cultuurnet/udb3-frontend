@@ -334,6 +334,7 @@ const PictureUploadModal = ({
   useEffect(() => {
     setValue('file', draggedImageFile, {
       shouldValidate: !!draggedImageFile,
+      shouldDirty: !!draggedImageFile,
     });
   }, [draggedImageFile, setValue]);
 
@@ -346,7 +347,7 @@ const PictureUploadModal = ({
 
     if (files.length === 0) return;
 
-    setValue('file', files, { shouldValidate: true });
+    setValue('file', files, { shouldValidate: true, shouldDirty: true });
   };
 
   return (
@@ -364,7 +365,10 @@ const PictureUploadModal = ({
       cancelTitle={t('pictures.upload_modal.actions.cancel')}
       size={ModalSizes.LG}
       onConfirm={() => {
-        if (!Object.keys(dirtyFields).length) {
+        const isAiAnswerMissing =
+          isAiLabelEnabled && isAiGeneratedField.value === undefined;
+
+        if (!Object.keys(dirtyFields).length && !isAiAnswerMissing) {
           onClose();
         }
 
