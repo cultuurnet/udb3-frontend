@@ -184,14 +184,6 @@ const getAiGeneratedOption = (isAiGenerated?: boolean) => {
   return '';
 };
 
-const getAiLabelMessageKey = (isAiGenerated?: boolean) => {
-  if (isAiGenerated === true)
-    return 'pictures.upload_modal.ai_generated.label_notice';
-  if (isAiGenerated === false)
-    return 'pictures.upload_modal.ai_generated.label_none';
-  return 'pictures.upload_modal.ai_generated.label_hint';
-};
-
 const AiGeneratedField = ({
   name,
   value,
@@ -206,55 +198,53 @@ const AiGeneratedField = ({
   ];
 
   return (
-    <Stack spacing={3} paddingBottom={5}>
-      <Text fontWeight="bold">
-        {t('pictures.upload_modal.ai_generated.title')}
-      </Text>
-      <Text variant={TextVariants.MUTED}>
-        {t('pictures.upload_modal.ai_generated.description')}
-      </Text>
-      <Box className="tw:grid tw:grid-cols-1 tw:gap-3 tw:sm:grid-cols-[16rem_1fr]">
-        <RadioGroup
-          name={name}
-          value={getAiGeneratedOption(value)}
-          onValueChange={(selected) => onChange(selected === 'yes')}
-          aria-label={t('pictures.upload_modal.ai_generated.title')}
-          className="tw:grid-rows-2 tw:gap-3"
-        >
-          {options.map((option) => (
-            <label
-              key={option.value}
-              htmlFor={`${name}-${option.value}`}
-              className="tw:m-0 tw:flex tw:cursor-pointer tw:items-center tw:gap-3 tw:rounded-md tw:border tw:border-input tw:px-4 tw:py-2.5 tw:has-data-[state=checked]:border-primary tw:has-data-[state=checked]:bg-info-muted"
-            >
-              <RadioGroupItem
-                id={`${name}-${option.value}`}
-                value={option.value}
-              />
-              <span className="tw:font-semibold">{option.label}</span>
-            </label>
-          ))}
-        </RadioGroup>
-        <div
-          className={cn(
-            'tw:flex tw:items-center tw:gap-3 tw:rounded-md tw:p-2',
-            value ? 'tw:bg-info-muted' : 'tw:bg-muted',
-          )}
-        >
+    <Stack spacing={3}>
+      <FormElement
+        id={name}
+        label={
+          <Inline alignItems="center" spacing={2}>
+            <Text>{t('pictures.upload_modal.ai_generated.title')}</Text>
+            <Tooltip
+              id="ai-generated-tooltip"
+              content={t('pictures.upload_modal.ai_generated.description')}
+            />
+          </Inline>
+        }
+        error={error}
+        Component={
+          <RadioGroup
+            name={name}
+            value={getAiGeneratedOption(value)}
+            onValueChange={(selected) => onChange(selected === 'yes')}
+            aria-label={t('pictures.upload_modal.ai_generated.title')}
+            className="tw:flex tw:gap-6"
+          >
+            {options.map((option) => (
+              <label
+                key={option.value}
+                htmlFor={`${name}-${option.value}`}
+                className="tw:m-0 tw:flex tw:cursor-pointer tw:items-center tw:gap-2"
+              >
+                <RadioGroupItem
+                  id={`${name}-${option.value}`}
+                  value={option.value}
+                />
+                {option.label}
+              </label>
+            ))}
+          </RadioGroup>
+        }
+      />
+      {value && (
+        <div className="tw:flex tw:w-fit tw:items-center tw:gap-4 tw:rounded-lg tw:bg-info-muted tw:p-2 tw:pr-4">
           <Image
             src="/assets/ai-label-illustration.svg"
             alt=""
-            className={cn(
-              'tw:h-16 tw:w-24 tw:shrink-0 tw:object-contain',
-              !value && 'tw:opacity-40',
-            )}
+            className="tw:h-16 tw:w-24 tw:shrink-0 tw:rounded-lg tw:object-cover"
           />
-          <Text variant={value ? undefined : TextVariants.MUTED}>
-            {t(getAiLabelMessageKey(value))}
-          </Text>
+          <Text>{t('pictures.upload_modal.ai_generated.label_notice')}</Text>
         </div>
-      </Box>
-      {error && <Text color={colors.danger}>{error}</Text>}
+      )}
     </Stack>
   );
 };
@@ -420,20 +410,9 @@ const PictureUploadModal = ({
               className={cn(
                 'tw:grid tw:gap-4',
                 (image || imageToEdit?.thumbnailUrl) &&
-                  'tw:sm:grid-cols-[14rem_1fr]',
+                  'tw:sm:grid-cols-[1fr_14rem]',
               )}
             >
-              {image && <SelectedImage image={image} />}
-              {imageToEdit?.thumbnailUrl && (
-                <Image
-                  src={`${imageToEdit.thumbnailUrl}?width=420&height=360&crop=auto`}
-                  alt=""
-                  className={cn(
-                    'tw:h-48 tw:w-full tw:rounded-md tw:object-cover',
-                    imageToEdit.isAiGenerated && 'tw:object-left-top',
-                  )}
-                />
-              )}
               <Stack spacing={4}>
                 <FormElement
                   id="description"
@@ -479,6 +458,17 @@ const PictureUploadModal = ({
                   Component={<Input {...register('copyrightHolder')} />}
                 />
               </Stack>
+              {image && <SelectedImage image={image} />}
+              {imageToEdit?.thumbnailUrl && (
+                <Image
+                  src={`${imageToEdit.thumbnailUrl}?width=420&height=360&crop=auto`}
+                  alt=""
+                  className={cn(
+                    'tw:h-48 tw:w-full tw:rounded-md tw:object-cover',
+                    imageToEdit.isAiGenerated && 'tw:object-left-top',
+                  )}
+                />
+              )}
             </Box>
             {isAiLabelEnabled && (
               <AiGeneratedField
@@ -494,7 +484,7 @@ const PictureUploadModal = ({
               />
             )}
 
-            <Text variant={TextVariants.MUTED} fontSize="0.8rem">
+            <Text variant={TextVariants.MUTED} fontSize="0.8rem" paddingTop={4}>
               <Trans i18nKey="pictures.upload_modal.disclaimer.terms_and_conditions.text">
                 <TermsAndConditionsLink />
                 <CopyrightLink />

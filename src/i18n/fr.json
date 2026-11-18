@@ -1447,9 +1447,7 @@
         "description": "Choisissez « Oui » si un outil d'IA a créé ou modifié l'image entièrement ou en grande partie. Ainsi, les visiteurs voient qu'il ne s'agit pas d'une vraie photo.",
         "yes": "Oui",
         "no": "Non",
-        "label_notice": "Nous ajoutons un label IA à votre image",
-        "label_hint": "Si vous utilisez l'IA, nous ajoutons un label IA à votre image",
-        "label_none": "Votre image ne recevra pas de label IA"
+        "label_notice": "Nous ajoutons un label IA à votre image"
       },
       "disclaimer": {
         "copyright": "Inclure le nom du photographe détenteur des droits d'auteur. Ne saisissez le nom de votre propre association ou organisation que si vous en détenez les droits (minimum 2 caractères).",
