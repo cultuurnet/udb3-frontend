@@ -17,6 +17,7 @@ type Props = {
 const ImagePreview = ({ mediaObject }: Props) => {
   const { t } = useTranslation();
   const HEIGHT = 100;
+  const REQUEST_HEIGHT = 300;
   const hasImages = (mediaObject ?? []).length > 0;
   const { udbMainLightGrey, neutral } = colors;
 
@@ -40,8 +41,9 @@ const ImagePreview = ({ mediaObject }: Props) => {
       >
         <Link href={media.contentUrl} target="_blank">
           <Image
-            src={`${media.thumbnailUrl}?height=${HEIGHT}`}
+            src={`${media.thumbnailUrl}?height=${REQUEST_HEIGHT}`}
             alt={media.description}
+            height={HEIGHT}
           />
         </Link>
         <Stack spacing={1}>

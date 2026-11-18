@@ -426,7 +426,7 @@ const PictureUploadModal = ({
               {image && <SelectedImage image={image} />}
               {imageToEdit?.thumbnailUrl && (
                 <Image
-                  src={`${imageToEdit.thumbnailUrl}?height=360`}
+                  src={`${imageToEdit.thumbnailUrl}?width=420&height=360&crop=auto`}
                   alt=""
                   className={cn(
                     'tw:h-48 tw:w-full tw:rounded-md tw:object-cover',
