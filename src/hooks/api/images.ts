@@ -8,6 +8,7 @@ const addImage = async ({
   copyrightHolder,
   description,
   file,
+  isAiGenerated,
 }) => {
   const formData = new FormData();
 
@@ -16,7 +17,10 @@ const addImage = async ({
     copyrightHolder,
     language,
     file,
-  }).forEach(([key, value]) => formData.append(key, value));
+    isAiGenerated,
+  })
+    .filter(([, value]) => value !== undefined)
+    .forEach(([key, value]) => formData.append(key, value));
 
   return fetchFromApi({
     path: `/images/`,

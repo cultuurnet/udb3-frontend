@@ -72,11 +72,13 @@ export const DashboardRow = ({
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
+
   const croppedImageBaseUrl = publicRuntimeConfig.imgixUrl;
   const imageIdAndFormat = imageUrl?.split('/').at(-1);
-  const croppedImageUrl = imageUrl
-    ? `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`
-    : undefined;
+  const isAiGeneratedImage = imageIdAndFormat?.includes('.ai.');
+  const croppedImageUrl = isAiGeneratedImage
+    ? `${imageUrl}?width=300&height=300&crop=auto`
+    : `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`;
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
       {children}

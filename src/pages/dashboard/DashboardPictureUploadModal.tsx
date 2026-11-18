@@ -78,6 +78,7 @@ export const DashboardPictureUploadModal = ({
     file,
     description,
     copyrightHolder,
+    isAiGenerated,
   }: FormData) => {
     try {
       onImageUploadStart();
@@ -87,6 +88,7 @@ export const DashboardPictureUploadModal = ({
           imageId: imageToEdit.parsedId,
           description,
           copyrightHolder,
+          isAiGenerated,
           scope,
         });
         return;
@@ -95,6 +97,7 @@ export const DashboardPictureUploadModal = ({
       await addImageMutation.mutateAsync({
         description,
         copyrightHolder,
+        isAiGenerated,
         file: file?.[0],
         language: i18n.language,
       });

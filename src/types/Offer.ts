@@ -54,6 +54,7 @@ type MediaObject = {
   description: string;
   copyrightHolder: string;
   inLanguage: string;
+  isAiGenerated?: boolean;
 };
 
 export type VideoObject = {
