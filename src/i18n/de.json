@@ -2041,7 +2041,8 @@
       "duplicate": "Kopieren und bearbeiten",
       "duplicate_as_movie": "Kopieren und bearbeiten als Film",
       "change_availability": "Verfügbarkeit ändern",
-      "linked_events": "Verknüpfte Aktivitäten anzeigen",
+      "events_at_location": "Aktivitäten hier",
+      "accompanied_transport": "Begleiteter Transport nach",
       "delete": "Löschen",
       "delete_modal": {
         "title_event": "Aktivität löschen",
