@@ -192,7 +192,7 @@ const OfferPreviewSidebar = ({
   if (isPlaceOffer && isBoaEnabled) {
     actions.push({
       iconName: Icons.LINK,
-      title: t('preview.actions.linked_events'),
+      title: t('preview.actions.accompanied_transport'),
       href: `/search?query=${encodeURIComponent(`departurePlaces:${offerId}`)}`,
       disabled: false,
     });
