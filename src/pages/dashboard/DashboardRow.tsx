@@ -1,4 +1,3 @@
-import getConfig from 'next/config';
 import { ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -67,30 +66,27 @@ export const DashboardRow = ({
 }: DashboardRowProps) => {
   const { t } = useTranslation();
   const getValue = getValueFromTheme('dashboardPage');
-  const { publicRuntimeConfig } = getConfig();
   const { udbMainPositiveGreen, successMuted, neutral, grey3 } = colors;
   const [isImageHovered, setIsImageHovered] = useState(false);
   const weights = getScopeWeights(scope);
   const minimumScore = useMemo(() => getMinimumScore(weights), [weights]);
 
-  const croppedImageBaseUrl = publicRuntimeConfig.imgixUrl;
-  const imageIdAndFormat = imageUrl?.split('/').at(-1);
-  const isAiGeneratedImage = imageIdAndFormat?.includes('.ai.');
-  const croppedImageUrl = isAiGeneratedImage
-    ? `${imageUrl}?width=300&height=300&crop=auto`
-    : `${croppedImageBaseUrl}${imageIdAndFormat}?fit=crop&crop=auto&w=500&h=500`;
+  const isAiGeneratedImage = imageUrl?.split('/').at(-1)?.includes('.ai.');
+
   return (
     <Inline spacing={5} {...getInlineProps(props)} flex={1}>
       {children}
       <Inline alignItems="center">
         {imageUrl && (
           <Image
-            src={croppedImageUrl}
+            src={`${imageUrl}?height=300`}
             alt={title}
             width={150}
             height={150}
             css={`
               border-radius: 0.5rem 0 0 0.5rem;
+              object-fit: cover;
+              object-position: ${isAiGeneratedImage ? 'left top' : 'center'};
             `}
           />
         )}
