@@ -1,10 +1,9 @@
 import { MOCK_ORIGIN, toMockPathPrefix } from '../hosts.mjs';
 import { vrtMockImages } from './image-placeholders.mjs';
 
-export const IMAGE_ENV_VAR = 'NEXT_PUBLIC_IMGIX_URL';
+export const IMAGE_ENV_VAR = 'VRT_MOCK_IMAGES';
 
-// Never resolves (RFC 2606), and the trailing slash is load-bearing:
-// DashboardRow concatenates this base and a filename directly.
+// Never resolves (RFC 2606).
 export const IMAGE_PINNED_URL = 'https://vrt-mock-images.invalid/';
 
 export const vrtMockImageUrls = Object.fromEntries(
