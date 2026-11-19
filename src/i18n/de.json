@@ -1447,7 +1447,8 @@
         "description": "Wählen Sie „Ja“, wenn ein KI-Tool das Bild vollständig oder größtenteils erstellt oder bearbeitet hat. So sehen Besucher, dass es sich nicht um ein echtes Foto handelt.",
         "yes": "Ja",
         "no": "Nein",
-        "label_notice": "Wir fügen Ihrem Bild ein KI-Label hinzu"
+        "label_notice": "Wir fügen Ihrem Bild ein KI-Label hinzu",
+        "description_suffix": "(Mit KI generiert)"
       },
       "disclaimer": {
         "copyright": "Geben Sie den Namen des urheberrechtlich geschützten Fotografen an. Geben Sie den Namen Ihres eigenen Vereins oder Ihrer Organisation nur ein, wenn Sie die Rechte besitzen (mindestens 2 Zeichen).",
