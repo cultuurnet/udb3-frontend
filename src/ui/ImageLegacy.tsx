@@ -4,6 +4,7 @@ import { Box, getBoxProps } from './Box';
 type Props = BoxProps & {
   src: string;
   alt: string;
+  loading?: 'lazy' | 'eager';
 };
 
 const ImageLegacy = ({
@@ -12,6 +13,7 @@ const ImageLegacy = ({
   className,
   width,
   height,
+  loading,
   ...props
 }: Props) => (
   <Box
@@ -21,6 +23,7 @@ const ImageLegacy = ({
     className={className}
     width={width}
     height={height}
+    loading={loading}
     {...getBoxProps(props)}
   />
 );

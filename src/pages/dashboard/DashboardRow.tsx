@@ -81,6 +81,7 @@ export const DashboardRow = ({
           <Image
             src={`${imageUrl}?height=300`}
             alt={title}
+            loading="lazy"
             width={150}
             height={150}
             css={`
