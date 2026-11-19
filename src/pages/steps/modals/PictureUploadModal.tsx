@@ -41,6 +41,7 @@ type PictureUploadModalProps = {
     copyrightHolder: string;
     isAiGenerated?: boolean;
     thumbnailUrl?: string;
+    inLanguage?: string;
   };
   onSubmitValid: (data: FormData) => Promise<void>;
   loading: boolean;
@@ -320,7 +321,9 @@ const PictureUploadModal = ({
           ...imageToEdit,
           description: imageToEdit.description
             .replace(
-              t('pictures.upload_modal.ai_generated.description_suffix'),
+              t('pictures.upload_modal.ai_generated.description_suffix', {
+                lng: imageToEdit.inLanguage,
+              }),
               '',
             )
             .trim(),
