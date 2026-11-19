@@ -316,18 +316,17 @@ const PictureUploadModal = ({
   });
 
   useEffect(() => {
+    const descriptionWithoutAiSuffix = (imageToEdit?.description ?? '')
+      .replace(
+        t('pictures.upload_modal.ai_generated.description_suffix', {
+          lng: imageToEdit?.inLanguage,
+        }),
+        '',
+      )
+      .trim();
+
     const resetData = imageToEdit
-      ? {
-          ...imageToEdit,
-          description: (imageToEdit.description ?? '')
-            .replace(
-              t('pictures.upload_modal.ai_generated.description_suffix', {
-                lng: imageToEdit.inLanguage,
-              }),
-              '',
-            )
-            .trim(),
-        }
+      ? { ...imageToEdit, description: descriptionWithoutAiSuffix }
       : { description: '', copyrightHolder: '' };
     reset(resetData);
   }, [imageToEdit, reset, visible, t]);
