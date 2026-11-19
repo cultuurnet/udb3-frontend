@@ -15,17 +15,21 @@ const ImageLegacy = ({
   height,
   loading,
   ...props
-}: Props) => (
-  <Box
-    as="img"
-    src={src}
-    alt={alt}
-    className={className}
-    width={width}
-    height={height}
-    loading={loading}
-    {...getBoxProps(props)}
-  />
-);
+}: Props) => {
+  const imageAttributes = { loading };
+
+  return (
+    <Box
+      as="img"
+      src={src}
+      alt={alt}
+      className={className}
+      width={width}
+      height={height}
+      {...imageAttributes}
+      {...getBoxProps(props)}
+    />
+  );
+};
 
 export { ImageLegacy };
