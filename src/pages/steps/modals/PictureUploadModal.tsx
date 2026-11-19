@@ -41,6 +41,7 @@ type PictureUploadModalProps = {
     copyrightHolder: string;
     isAiGenerated?: boolean;
     thumbnailUrl?: string;
+    inLanguage?: string;
   };
   onSubmitValid: (data: FormData) => Promise<void>;
   loading: boolean;
@@ -315,12 +316,20 @@ const PictureUploadModal = ({
   });
 
   useEffect(() => {
-    const resetData = imageToEdit ?? {
-      description: '',
-      copyrightHolder: '',
-    };
+    const descriptionWithoutAiSuffix = (imageToEdit?.description ?? '')
+      .replace(
+        t('pictures.upload_modal.ai_generated.description_suffix', {
+          lng: imageToEdit?.inLanguage,
+        }),
+        '',
+      )
+      .trim();
+
+    const resetData = imageToEdit
+      ? { ...imageToEdit, description: descriptionWithoutAiSuffix }
+      : { description: '', copyrightHolder: '' };
     reset(resetData);
-  }, [imageToEdit, reset, visible]);
+  }, [imageToEdit, reset, visible, t]);
 
   useEffect(() => {
     setValue('file', draggedImageFile, {

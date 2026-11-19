@@ -38,6 +38,7 @@ type ImageType = {
   copyrightHolder: string;
   isAiGenerated?: boolean;
   thumbnailUrl: string;
+  inLanguage?: string;
   isMain: boolean;
   file?: File;
 };
