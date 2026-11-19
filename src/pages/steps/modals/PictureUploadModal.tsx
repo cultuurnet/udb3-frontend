@@ -315,12 +315,19 @@ const PictureUploadModal = ({
   });
 
   useEffect(() => {
-    const resetData = imageToEdit ?? {
-      description: '',
-      copyrightHolder: '',
-    };
+    const resetData = imageToEdit
+      ? {
+          ...imageToEdit,
+          description: imageToEdit.description
+            .replace(
+              t('pictures.upload_modal.ai_generated.description_suffix'),
+              '',
+            )
+            .trim(),
+        }
+      : { description: '', copyrightHolder: '' };
     reset(resetData);
-  }, [imageToEdit, reset, visible]);
+  }, [imageToEdit, reset, visible, t]);
 
   useEffect(() => {
     setValue('file', draggedImageFile, {
