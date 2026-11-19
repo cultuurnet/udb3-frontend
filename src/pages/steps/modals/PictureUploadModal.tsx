@@ -319,7 +319,7 @@ const PictureUploadModal = ({
     const resetData = imageToEdit
       ? {
           ...imageToEdit,
-          description: imageToEdit.description
+          description: (imageToEdit.description ?? '')
             .replace(
               t('pictures.upload_modal.ai_generated.description_suffix', {
                 lng: imageToEdit.inLanguage,
