@@ -391,7 +391,6 @@ const changeOfferCalendar = async ({
   opens,
   closes,
   scope,
-  bookingAvailability,
 }) => {
   return fetchFromApi({
     path: `/${scope}/${id.toString()}/calendar`,
@@ -415,9 +414,6 @@ const changeOfferCalendar = async ({
         dayOfWeek,
         opens,
         closes,
-        ...(bookingAvailability?.capacity !== undefined && {
-          bookingAvailability,
-        }),
       }),
       headers,
     },
@@ -747,22 +743,13 @@ const useAddOfferBookingInfoMutation = (configuration = {}) =>
     ...configuration,
   });
 
-const changeOfferBookingAvailability = async ({
-  headers,
-  id,
-  scope,
-  type,
-  capacity,
-}) =>
+const changeOfferBookingAvailability = async ({ headers, id, scope, type }) =>
   fetchFromApi({
     path: `/${scope}/${id}/booking-availability`,
     options: {
       method: 'PUT',
       headers,
-      body: JSON.stringify({
-        type,
-        ...(capacity !== undefined && { capacity }),
-      }),
+      body: JSON.stringify({ type }),
     },
   });
 
