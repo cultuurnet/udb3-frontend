@@ -384,8 +384,6 @@ const BookingAvailabilitySection = ({
   subEvents,
   onChangeSubEventAvailability,
 }: BookingAvailabilitySectionProps) => {
-  const { t } = useTranslation();
-
   const isMultiple = calendarType === CalendarType.MULTIPLE;
 
   return (
