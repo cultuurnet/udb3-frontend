@@ -36,7 +36,6 @@ type Status = {
 
 type BookingAvailability = {
   type: Values<typeof BookingAvailabilityType>;
-  capacity?: number;
   waitingListUrl?: string;
 };
 
