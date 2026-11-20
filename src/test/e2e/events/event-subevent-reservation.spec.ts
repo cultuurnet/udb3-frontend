@@ -3,7 +3,6 @@ import type { Page } from '@playwright/test';
 import { expect, test as base } from '@playwright/test';
 import { addDays } from 'date-fns';
 
-import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
 import { createBasicEvent } from '../helpers/create-basic-event';
 
 type TestFixtures = {
@@ -70,21 +69,12 @@ const dayRows = (page: Page) =>
     ),
   });
 
-const setCapacity = async (page: Page, id: string, capacity: string) => {
-  await page.locator(id).fill(capacity);
-  const patch = waitForSubEventsPatch(page);
-  await page.locator(id).blur();
-  await patch;
-};
-
 const setWaitingListUrl = async (page: Page, id: string, url: string) => {
   await page.locator(id).fill(url);
   const patch = waitForSubEventsPatch(page);
   await page.locator(id).blur();
   return (await patch).request();
 };
-
-const randomCapacity = () => String(faker.number.int({ min: 1, max: 500 }));
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
@@ -93,29 +83,6 @@ test.beforeEach(async ({ context }) => {
 });
 
 test.describe('Single-date event reservation', () => {
-  test('stores capacity on the subEvent level', async ({
-    page,
-    baseURL,
-    singleEventId,
-  }) => {
-    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
-
-    const capacity = randomCapacity();
-
-    await page.goto(`${baseURL}/events/${singleEventId}/edit`);
-    await openReservationTab(page);
-
-    await expect(page.locator('#offer-max-capacity')).toBeVisible();
-    await expect(page.locator('#subevent-0-max-capacity')).toHaveCount(0);
-
-    await setCapacity(page, '#offer-max-capacity', capacity);
-
-    await page.reload();
-    await openReservationTab(page);
-
-    await expect(page.locator('#offer-max-capacity')).toHaveValue(capacity);
-  });
-
   test('stores a waiting list url on the subEvent level', async ({
     page,
     baseURL,
@@ -136,35 +103,6 @@ test.describe('Single-date event reservation', () => {
 });
 
 test.describe('Multiple-date event reservation', () => {
-  test('sets capacity and status per subEvent', async ({
-    page,
-    baseURL,
-    multipleEventId,
-  }) => {
-    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
-
-    const capacities = [randomCapacity(), randomCapacity()];
-
-    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
-    await openReservationTab(page);
-
-    await expect(page.locator('#subevent-0-max-capacity')).toBeVisible();
-    await expect(page.locator('#subevent-1-max-capacity')).toBeVisible();
-
-    for (const [index, capacity] of capacities.entries()) {
-      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
-    }
-
-    await page.reload();
-    await openReservationTab(page);
-
-    for (const [index, capacity] of capacities.entries()) {
-      await expect(page.locator(`#subevent-${index}-max-capacity`)).toHaveValue(
-        capacity,
-      );
-    }
-  });
-
   test('saves an offer-level reservation link', async ({
     page,
     baseURL,
@@ -259,20 +197,14 @@ test.describe('Multiple-date event reservation', () => {
   });
 });
 
-test.describe('Calendar edits preserve subEvent capacity', () => {
-  test("preserves a subEvent's capacity and status when its date changes", async ({
+test.describe('Calendar edits preserve subEvent reservation', () => {
+  test("preserves a subEvent's status when its date changes", async ({
     page,
     baseURL,
     multipleEventId,
   }) => {
-    const capacity = randomCapacity();
-
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
-
-    if (IS_CAPACITY_VISIBLE) {
-      await setCapacity(page, '#subevent-0-max-capacity', capacity);
-    }
 
     const statusPatch = waitForSubEventsPatch(page);
     await page
@@ -293,11 +225,6 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await page.reload();
     await openReservationTab(page);
 
-    if (IS_CAPACITY_VISIBLE) {
-      await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
-        capacity,
-      );
-    }
     await expect(page.locator('#subevent-0-status')).toHaveValue('Unavailable');
   });
 
@@ -360,12 +287,10 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
   });
 
-  test("keeps the survivors' capacities when a middle subEvent is deleted", async ({
+  test("keeps the survivors' waiting list urls when a middle subEvent is deleted", async ({
     page,
     baseURL,
   }) => {
-    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
-
     await createBasicEvent(
       page,
       baseURL!,
@@ -375,17 +300,21 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     );
     const eventId = await publishAndGetId(page);
 
-    const capacities = [randomCapacity(), randomCapacity(), randomCapacity()];
+    const urls = [
+      faker.internet.url(),
+      faker.internet.url(),
+      faker.internet.url(),
+    ];
 
     await page.goto(`${baseURL}/events/${eventId}/edit`);
     await openReservationTab(page);
 
-    for (const [index, capacity] of capacities.entries()) {
-      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
+    for (const [index, url] of urls.entries()) {
+      await setWaitingListUrl(page, `#subevent-${index}-waiting-list-url`, url);
     }
 
     // Delete the middle subEvent without reloading, so the PUT must preserve
-    // the survivors' capacities by matching each on its start date.
+    // the survivors' waiting list urls by matching each on its start date.
     const calendarPut = waitForCalendarPut(page);
     await dayRows(page)
       .nth(1)
@@ -396,29 +325,27 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await page.reload();
     await openReservationTab(page);
 
-    await expect(page.locator('#subevent-2-max-capacity')).toHaveCount(0);
-    await expect(page.locator('#subevent-0-max-capacity')).toHaveValue(
-      capacities[0],
+    await expect(page.locator('#subevent-2-waiting-list-url')).toHaveCount(0);
+    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue(
+      urls[0],
     );
-    await expect(page.locator('#subevent-1-max-capacity')).toHaveValue(
-      capacities[2],
+    await expect(page.locator('#subevent-1-waiting-list-url')).toHaveValue(
+      urls[2],
     );
   });
 
-  test('keeps the surviving capacity when reduced to a single date', async ({
+  test('keeps the surviving waiting list url when reduced to a single date', async ({
     page,
     baseURL,
     multipleEventId,
   }) => {
-    test.skip(!IS_CAPACITY_VISIBLE, 'Capacity fields are hidden');
-
-    const capacities = [randomCapacity(), randomCapacity()];
+    const urls = [faker.internet.url(), faker.internet.url()];
 
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
 
-    for (const [index, capacity] of capacities.entries()) {
-      await setCapacity(page, `#subevent-${index}-max-capacity`, capacity);
+    for (const [index, url] of urls.entries()) {
+      await setWaitingListUrl(page, `#subevent-${index}-waiting-list-url`, url);
     }
 
     // Delete the last date, collapsing to a single-date event.
@@ -432,10 +359,7 @@ test.describe('Calendar edits preserve subEvent capacity', () => {
     await page.reload();
     await openReservationTab(page);
 
-    await expect(page.locator('#subevent-1-max-capacity')).toHaveCount(0);
-    await expect(page.locator('#offer-max-capacity')).toBeVisible();
-    await expect(page.locator('#offer-max-capacity')).toHaveValue(
-      capacities[0],
-    );
+    await expect(page.locator('#subevent-1-waiting-list-url')).toHaveCount(0);
+    await expect(page.locator('#offer-waiting-list-url')).toHaveValue(urls[0]);
   });
 });

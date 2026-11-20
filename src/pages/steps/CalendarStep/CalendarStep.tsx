@@ -64,7 +64,7 @@ const preserveBookingAvailability = <
   existingSubEvents: SubEvent[],
 ) => {
   // Match each subEvent to one existing entry by date, so shared dates don't
-  // collapse and survivors keep their capacity.
+  // collapse and survivors keep their booking availability.
   const unmatched = [...existingSubEvents];
 
   return subEvents.map((subEvent) => {
@@ -138,8 +138,8 @@ const useEditCalendar = ({ offerId, onSuccess }: UseEditArguments) => {
     const existingSubEvents =
       queryClient.getQueryData<Offer>([scope, { id: offerId }])?.subEvent ?? [];
 
-    // Keep each surviving subEvent's capacity across removals (matched on start
-    // date), so deleting a date never wipes the others.
+    // Keep each surviving subEvent's booking availability across removals
+    // (matched on start date), so deleting a date never wipes the others.
     const subEvent = Array.isArray(calendar?.subEvent)
       ? preserveBookingAvailability(calendar.subEvent, existingSubEvents)
       : calendar?.subEvent;

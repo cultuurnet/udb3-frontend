@@ -2,7 +2,6 @@ import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
-import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import i18n, { SupportedLanguage } from '@/i18n/index';
 import { EmptyValue } from '@/pages/preview/EmptyValue';
 import type {
@@ -30,7 +29,6 @@ type ReservationCardProps = StackProps & {
   title?: string;
   url?: string;
   urlLabel?: BookingInfo['urlLabel'];
-  capacity?: string;
   status?: Values<typeof BookingAvailabilityType>;
   showAvailability: boolean;
   mainLanguage?: string;
@@ -40,7 +38,6 @@ const ReservationCard = ({
   title,
   url,
   urlLabel,
-  capacity,
   status,
   showAvailability,
   mainLanguage,
@@ -101,14 +98,6 @@ const ReservationCard = ({
       )}
       {showAvailability && (
         <Inline spacing={4} flexWrap="wrap">
-          {IS_CAPACITY_VISIBLE && capacity && (
-            <Stack flex={1} spacing={1}>
-              <Text color={colors.neutral} fontWeight="bold">
-                {t('create.additionalInformation.booking_info.max_capacity')}
-              </Text>
-              <Text>{capacity}</Text>
-            </Stack>
-          )}
           <Stack flex={1} spacing={1}>
             <Text color={colors.neutral} fontWeight="bold">
               {t('create.additionalInformation.booking_info.status')}
@@ -129,14 +118,7 @@ type Props = {
 };
 
 const hasBookingAvailability = (bookingAvailability?: BookingAvailability) =>
-  bookingAvailability !== undefined &&
-  ((IS_CAPACITY_VISIBLE && bookingAvailability.capacity !== undefined) ||
-    bookingAvailability.type === BookingAvailabilityType.UNAVAILABLE);
-
-const getCapacity = (bookingAvailability?: BookingAvailability) =>
-  bookingAvailability?.capacity !== undefined
-    ? String(bookingAvailability.capacity)
-    : undefined;
+  bookingAvailability?.type === BookingAvailabilityType.UNAVAILABLE;
 
 const ReservationPreview = ({
   bookingInfo,
@@ -214,7 +196,6 @@ const ReservationPreview = ({
         <ReservationCard
           url={bookingInfo?.url}
           urlLabel={bookingInfo?.urlLabel}
-          capacity={getCapacity(singleBookingAvailability)}
           status={
             singleBookingAvailability?.type ?? BookingAvailabilityType.AVAILABLE
           }
@@ -227,7 +208,6 @@ const ReservationPreview = ({
           <ReservationCard
             key={index}
             title={`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
-            capacity={getCapacity(subEvent.bookingAvailability)}
             status={
               subEvent.bookingAvailability?.type ??
               BookingAvailabilityType.AVAILABLE
