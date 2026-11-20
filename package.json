@@ -160,7 +160,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.18.1",
-    "vite": "^7.3.6",
+    "vite": "^7.3.8",
     "vitest": "^4.1.10"
   },
   "resolutions": {
