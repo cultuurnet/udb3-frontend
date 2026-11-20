@@ -446,13 +446,14 @@
         "email": "E-mailadres",
         "phone": "Telefoonnummer",
         "phone_error": "Keine gültige Telefonnummer",
-        "url": "Website oder Reservierungsseite",
+        "url": "Online-Reservierung & Verfügbarkeit",
         "url_error": "Keine gültige URL",
         "link": "Link",
+        "reservation_link": "Link zur Reservierungsseite",
         "waiting_list_url": "Link zur Warteliste",
         "status": "Status",
         "section_title": "Erkläre, wie Menschen einen Platz reservieren können",
-        "contact_details": "Kontaktdaten",
+        "contact_details": "Reservierung per E-Mail oder Telefon",
         "url_label_dropdown_label": "Text auf der Reservierungsschaltfläche",
         "url_type_labels": {
           "subscribe": "Melden Sie sich an",
@@ -461,8 +462,8 @@
           "reserve": "Plätze reservieren"
         },
         "reservation_period": {
-          "title": "Wann können sich die Leute anmelden?",
-          "toggle": "Reservierungszeitraum",
+          "title": "Wann können die Leute reservieren?",
+          "toggle": "Es gibt einen festen Reservierungszeitraum",
           "startHour": "Startuhrzeit",
           "endHour": "Enduhrzeit",
           "error": {

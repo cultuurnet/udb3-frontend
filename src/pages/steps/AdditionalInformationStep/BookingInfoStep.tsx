@@ -338,7 +338,7 @@ const ReservationLink = ({
       <FormElement
         className="tw:flex-1"
         id={`${idPrefix}-link`}
-        label={t('create.additionalInformation.booking_info.link')}
+        label={t('create.additionalInformation.booking_info.reservation_link')}
         Component={
           <Input
             type="url"

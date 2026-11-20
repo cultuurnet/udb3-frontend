@@ -228,7 +228,7 @@ test('create event with all possible fields filled in', async ({
     .locator('#offer-url-label')
     .selectOption({ label: 'Koop tickets' });
 
-  await page.getByLabel('Reservatieperiode').check();
+  await page.getByLabel('Er is een vaste reservatieperiode').check();
 
   const startReservationDate = faker.date.future();
   const endReservationDate = faker.date.future({
