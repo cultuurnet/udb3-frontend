@@ -2,10 +2,17 @@ import { faker } from '@faker-js/faker';
 import { expect, test } from '@playwright/test';
 
 import { IS_CAPACITY_VISIBLE } from '../../../constants/Capacity';
+import nl from '../../../i18n/nl.json';
 
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     { name: 'ff_boa', value: 'true', domain: 'localhost', path: '/' },
+    {
+      name: 'ff_ai_label',
+      value: 'true',
+      domain: 'localhost',
+      path: '/',
+    },
   ]);
 });
 
@@ -112,12 +119,35 @@ test('create event with all possible fields filled in', async ({
   await page.getByRole('tab', { name: 'Afbeelding & video' }).click();
   await page.getByRole('button', { name: 'Afbeelding toevoegen' }).click();
   await page.setInputFiles('input[type="file"]', 'upload/e2e-image.jpg');
+  await expect(
+    page.getByRole('button', {
+      name: nl.pictures.upload_modal.actions.change_file,
+    }),
+  ).toBeVisible();
   await page
     .getByRole('textbox', { name: 'Beschrijving' })
     .fill(dummyEvent.image.description);
   await page.getByLabel('Copyright').fill(dummyEvent.image.copyright);
+  const aiGeneratedRadio = page.getByRole('radio', {
+    name: nl.pictures.upload_modal.ai_generated.yes,
+    exact: true,
+  });
+  await aiGeneratedRadio.click();
+  await expect(aiGeneratedRadio).toBeChecked();
+  await expect(
+    page.getByText(nl.pictures.upload_modal.ai_generated.label_notice),
+  ).toBeVisible();
   await page.getByRole('button', { name: 'Uploaden' }).click();
   await expect(page.getByText(dummyEvent.image.description)).toBeVisible();
+  await page
+    .getByRole('button', { name: nl.pictures.change, exact: true })
+    .click();
+  await expect(aiGeneratedRadio).toBeChecked();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: nl.pictures.upload_modal.actions.cancel })
+    .click();
+  await expect(page.getByRole('dialog')).toBeHidden();
   await page.getByRole('button', { name: 'Videolink toevoegen' }).click();
   await page.getByLabel('Link').locator('visible=true').fill(dummyEvent.video);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();

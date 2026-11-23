@@ -189,10 +189,19 @@ const OfferPreviewSidebar = ({
     });
   }
 
+  if (isPlaceOffer) {
+    actions.push({
+      iconName: Icons.CALENDAR_ALT,
+      title: t('preview.actions.events_at_location'),
+      href: `/search?query=${encodeURIComponent(`location.id:${offerId}`)}`,
+      disabled: false,
+    });
+  }
+
   if (isPlaceOffer && isBoaEnabled) {
     actions.push({
       iconName: Icons.LINK,
-      title: t('preview.actions.linked_events'),
+      title: t('preview.actions.accompanied_transport'),
       href: `/search?query=${encodeURIComponent(`departurePlaces:${offerId}`)}`,
       disabled: false,
     });

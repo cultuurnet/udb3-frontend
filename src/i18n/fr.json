@@ -1438,8 +1438,17 @@
       "actions": {
         "adjust": "Editer",
         "cancel": "Annuler",
+        "change_file": "Changer de photo",
         "choose_file": "Choisir le fichier",
         "upload": "Télécharger"
+      },
+      "ai_generated": {
+        "title": "Cette image a-t-elle été créée ou modifiée avec l'IA ?",
+        "description": "Choisissez « Oui » si un outil d'IA a créé ou modifié l'image entièrement ou en grande partie. Ainsi, les visiteurs voient qu'il ne s'agit pas d'une vraie photo.",
+        "yes": "Oui",
+        "no": "Non",
+        "label_notice": "Nous ajoutons un label IA à votre image",
+        "description_suffix": "(Généré par l'IA)"
       },
       "disclaimer": {
         "copyright": "Inclure le nom du photographe détenteur des droits d'auteur. Ne saisissez le nom de votre propre association ou organisation que si vous en détenez les droits (minimum 2 caractères).",
@@ -1465,8 +1474,15 @@
           "required": "Veuillez sélectionner un fichier",
           "size": "Le fichier que vous avez sélectionné fait plus de {{maxFileSize}} Mo.",
           "type": "Le fichier que vous avez sélectionné n'est pas un type de fichier valide"
+        },
+        "isAiGenerated": {
+          "required": "Indiquez si cette image a été créée ou modifiée avec l'IA."
         }
-      }
+      },
+      "select_photo": "Sélectionnez votre photo",
+      "drag_file": "Faites glisser un fichier ici ou",
+      "description_label": "Description",
+      "copyright_label": "Copyright"
     }
   },
   "productions": {
@@ -2026,7 +2042,8 @@
       "duplicate": "Copier et modifier",
       "duplicate_as_movie": "Copier et modifier comme film",
       "change_availability": "Modifier la disponibilité",
-      "linked_events": "Voir les activités liées",
+      "events_at_location": "Activités ici",
+      "accompanied_transport": "Transport accompagné vers",
       "delete": "Supprimer",
       "delete_modal": {
         "title_event": "Supprimer l'activité",

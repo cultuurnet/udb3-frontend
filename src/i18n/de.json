@@ -1438,8 +1438,17 @@
       "actions": {
         "adjust": "Anpassen",
         "cancel": "Abbrechen",
+        "change_file": "Foto wechseln",
         "choose_file": "Datei wählen",
         "upload": "Hochladen"
+      },
+      "ai_generated": {
+        "title": "Wurde dieses Bild mit KI erstellt oder bearbeitet?",
+        "description": "Wählen Sie „Ja“, wenn ein KI-Tool das Bild vollständig oder größtenteils erstellt oder bearbeitet hat. So sehen Besucher, dass es sich nicht um ein echtes Foto handelt.",
+        "yes": "Ja",
+        "no": "Nein",
+        "label_notice": "Wir fügen Ihrem Bild ein KI-Label hinzu",
+        "description_suffix": "(Mit KI generiert)"
       },
       "disclaimer": {
         "copyright": "Geben Sie den Namen des urheberrechtlich geschützten Fotografen an. Geben Sie den Namen Ihres eigenen Vereins oder Ihrer Organisation nur ein, wenn Sie die Rechte besitzen (mindestens 2 Zeichen).",
@@ -1465,8 +1474,15 @@
           "required": "Bitte wählen Sie eine Datei aus",
           "size": "Die ausgewählte Datei ist größer als {{maxFileSize}} MB.",
           "type": "Die ausgewählte Datei hat keinen gültigen Dateityp"
+        },
+        "isAiGenerated": {
+          "required": "Geben Sie an, ob dieses Bild mit KI erstellt oder bearbeitet wurde."
         }
-      }
+      },
+      "select_photo": "Wählen Sie Ihr Foto",
+      "drag_file": "Ziehen Sie eine Datei hierher oder",
+      "description_label": "Beschreibung",
+      "copyright_label": "Urheberrecht"
     }
   },
   "productions": {
@@ -2026,7 +2042,8 @@
       "duplicate": "Kopieren und bearbeiten",
       "duplicate_as_movie": "Kopieren und bearbeiten als Film",
       "change_availability": "Verfügbarkeit ändern",
-      "linked_events": "Verknüpfte Aktivitäten anzeigen",
+      "events_at_location": "Aktivitäten hier",
+      "accompanied_transport": "Begleiteter Transport nach",
       "delete": "Löschen",
       "delete_modal": {
         "title_event": "Aktivität löschen",

@@ -12,6 +12,7 @@ const FeatureFlags = {
   SHOW_IFRAME_BORDER: 'show_iframe_border',
   BOA: 'boa',
   SHADCN_MIGRATION: 'shadcn_migration',
+  AI_LABEL: 'ai_label',
 } as const;
 
 const createCookieName = (identifier: string) => `ff_${identifier}`;

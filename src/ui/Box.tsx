@@ -466,6 +466,8 @@ const reactPropTypes = [
   'onSubmit',
   'onChange',
   'onMouseDown',
+  'onDragOver',
+  'onDrop',
   'dangerouslySetInnerHTML',
 ];
 

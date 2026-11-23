@@ -14,6 +14,7 @@ import { colors, getGlobalBorderRadius, getValueFromTheme } from '@/ui/theme';
 import { Title } from '@/ui/Title';
 
 const THUMBNAIL_SIZE = 80;
+const THUMBNAIL_REQUEST_SIZE = 240;
 
 const { textMuted } = colors;
 
@@ -35,7 +36,9 @@ type ImageType = {
   parsedId: string;
   description: string;
   copyrightHolder: string;
+  isAiGenerated?: boolean;
   thumbnailUrl: string;
+  inLanguage?: string;
   isMain: boolean;
   file?: File;
 };
@@ -119,10 +122,11 @@ const PictureUploadBox = ({
               >
                 <Inline spacing={4} alignItems="center" paddingX={4}>
                   <Image
-                    src={`${image.thumbnailUrl}?width=${THUMBNAIL_SIZE}&height=${THUMBNAIL_SIZE}`}
+                    src={`${image.thumbnailUrl}?height=${THUMBNAIL_REQUEST_SIZE}`}
                     alt={image.description}
                     width={THUMBNAIL_SIZE}
                     height={THUMBNAIL_SIZE}
+                    className="tw:object-contain"
                   />
                   <Stack spacing={2}>
                     <Text>{image.description}</Text>

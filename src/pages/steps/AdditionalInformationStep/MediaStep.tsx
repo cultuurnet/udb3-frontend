@@ -321,6 +321,7 @@ const MediaStep = ({
     file,
     description,
     copyrightHolder,
+    isAiGenerated,
   }: FormData) => {
     try {
       setIsImageUploading(true);
@@ -330,6 +331,7 @@ const MediaStep = ({
           imageId: imageToEdit.parsedId,
           description,
           copyrightHolder,
+          isAiGenerated,
           scope,
         });
 
@@ -339,6 +341,7 @@ const MediaStep = ({
       await addImageMutation.mutateAsync({
         description,
         copyrightHolder,
+        isAiGenerated,
         file: file?.[0],
         language: i18n.language,
       });

@@ -1,25 +1,34 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import type { DragEvent, FormEvent } from 'react';
-import { forwardRef, useEffect, useRef } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import type { DragEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useController, useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { useAutoFocus } from '@/hooks/useAutoFocus';
+import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { ImageIcon } from '@/pages/PictureUploadBox';
-import { Button } from '@/ui/Button';
+import { Box } from '@/ui/Box';
+import { Button, ButtonVariants } from '@/ui/Button';
 import { FormElement } from '@/ui/FormElement';
+import { Icons } from '@/ui/Icon';
 import { Image } from '@/ui/Image';
+import { Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
 import { Link } from '@/ui/Link';
 import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
+import { RadioGroup, RadioGroupItem } from '@/ui/shadcn/radio-group';
+import { cn } from '@/ui/shadcn/utils';
 import { Stack } from '@/ui/Stack';
 import { Text, TextVariants } from '@/ui/Text';
+import { TextArea } from '@/ui/TextArea';
 import { colors, getValueFromTheme } from '@/ui/theme';
+import { Tooltip } from '@/ui/Tooltip';
 
 type FormData = {
   description: string;
   copyrightHolder: string;
+  isAiGenerated?: boolean;
   file: FileList;
 };
 
@@ -27,112 +36,109 @@ type PictureUploadModalProps = {
   visible: boolean;
   onClose: () => void;
   draggedImageFile?: FileList;
-  imageToEdit?: { description: string; copyrightHolder: string };
+  imageToEdit?: {
+    description: string;
+    copyrightHolder: string;
+    isAiGenerated?: boolean;
+    thumbnailUrl?: string;
+    inLanguage?: string;
+  };
   onSubmitValid: (data: FormData) => Promise<void>;
   loading: boolean;
 };
 
 const MAX_FILE_SIZE = 20_000_000;
+const MAX_DESCRIPTION_LENGTH = 250;
 const ALLOWED_FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif'];
 
 const getValue = getValueFromTheme('pictureUploadBox');
 
-type RegisterProps = {
-  onChange: (event: FormEvent<HTMLInputElement>) => void;
-  onBlur: (event: FormEvent<HTMLInputElement>) => void;
-  name: string;
+const handleClickUpload = () => {
+  document.getElementById('file').click();
 };
 
-type DragAndDropProps = {
+type PictureUploadBoxProps = {
+  error?: string;
   onDrop: (e: DragEvent) => void;
   onDragOver: (e: DragEvent) => void;
 };
 
-type Props = {
-  error: any;
-  image: any;
-  marginBottom?: number;
-  children?: React.ReactNode;
-} & RegisterProps &
-  DragAndDropProps;
+const PictureUploadBox = ({
+  error,
+  onDrop,
+  onDragOver,
+}: PictureUploadBoxProps) => {
+  const { t } = useTranslation();
 
-const PictureUploadBox = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      error,
-      image,
-      marginBottom,
-      children,
-      onDrop,
-      onDragOver,
-      ...registerFileProps
-    },
-    ref,
-  ) => {
-    const handleClickUpload = () => {
-      document.getElementById('file').click();
-    };
-
-    const { t } = useTranslation();
-
-    const imagePreviewUrl = image && URL.createObjectURL(image);
-
-    return (
-      <Stack
-        flex={1}
-        spacing={4}
-        height={300}
-        backgroundColor={getValue('backgroundColor')}
-        justifyContent="center"
-        alignItems="center"
-        css={`
-          border: 1px solid
-            ${getValue(`${error ? 'errorBorderColor' : 'borderColor'}`)};
-        `}
-        padding={4}
-        marginBottom={marginBottom}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-      >
-        <Text fontWeight={700}>Selecteer je foto</Text>
-        {imagePreviewUrl ? (
-          <Stack spacing={2}>
-            <Image
-              src={imagePreviewUrl}
-              alt="preview"
-              className="tw:max-h-40 tw:max-w-full tw:object-contain"
-            />
-            <Text>{image.name}</Text>
-          </Stack>
-        ) : (
-          <ImageIcon width="80" />
-        )}
-        <Stack spacing={3} alignItems="center">
-          <Text>Sleep een bestand hierheen of</Text>
-          <Input
-            id="file"
-            type="file"
-            className="tw:hidden"
-            accept={ALLOWED_FILE_TYPES.map((file) => `.${file}`).join(',')}
-            ref={ref}
-            {...registerFileProps}
-          />
-          <Button onClick={handleClickUpload}>
-            {t('pictures.upload_modal.actions.choose_file')}
-          </Button>
-          <Text color={colors.danger}>{error}</Text>
-        </Stack>
-        <Text variant={TextVariants.MUTED} textAlign="center">
-          {t('pictures.upload_modal.file_requirements', {
-            maxFileSize: MAX_FILE_SIZE / 1_000_000,
-          })}
-        </Text>
+  return (
+    <Stack
+      flex={1}
+      spacing={4}
+      height={300}
+      backgroundColor={getValue('backgroundColor')}
+      justifyContent="center"
+      alignItems="center"
+      css={`
+        border: 1px solid
+          ${getValue(`${error ? 'errorBorderColor' : 'borderColor'}`)};
+      `}
+      padding={4}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+    >
+      <Text fontWeight={700}>{t('pictures.upload_modal.select_photo')}</Text>
+      <ImageIcon width="80" />
+      <Stack spacing={3} alignItems="center">
+        <Text>{t('pictures.upload_modal.drag_file')}</Text>
+        <Button onClick={handleClickUpload}>
+          {t('pictures.upload_modal.actions.choose_file')}
+        </Button>
+        <Text color={colors.danger}>{error}</Text>
       </Stack>
-    );
-  },
-);
+      <Text variant={TextVariants.MUTED} textAlign="center">
+        {t('pictures.upload_modal.file_requirements', {
+          maxFileSize: MAX_FILE_SIZE / 1_000_000,
+        })}
+      </Text>
+    </Stack>
+  );
+};
 
-PictureUploadBox.displayName = 'PictureUploadBox';
+type SelectedImageProps = {
+  image: File;
+};
+
+const SelectedImage = ({ image }: SelectedImageProps) => {
+  const { t } = useTranslation();
+  const [previewUrl, setPreviewUrl] = useState<string>();
+
+  useEffect(() => {
+    const url = URL.createObjectURL(image);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [image]);
+
+  return (
+    <div className="tw:relative tw:h-48 tw:min-w-0">
+      {previewUrl && (
+        <Image
+          src={previewUrl}
+          alt={image.name}
+          className="tw:h-full tw:w-full tw:rounded-md tw:object-cover tw:object-center"
+        />
+      )}
+      <div className="tw:absolute tw:top-2 tw:right-2 tw:rounded-full tw:bg-white/85">
+        <Button
+          variant={ButtonVariants.ICON}
+          iconName={Icons.PENCIL}
+          aria-label={t('pictures.upload_modal.actions.change_file')}
+          title={t('pictures.upload_modal.actions.change_file')}
+          onClick={handleClickUpload}
+        />
+      </div>
+    </div>
+  );
+};
 
 const TermsAndConditionsLink = () => {
   const { t, i18n } = useTranslation();
@@ -166,6 +172,84 @@ const CopyrightLink = () => {
   );
 };
 
+type AiGeneratedFieldProps = {
+  name: string;
+  value?: boolean;
+  error?: string;
+  onChange: (value: boolean) => void;
+};
+
+const getAiGeneratedOption = (isAiGenerated?: boolean) => {
+  if (isAiGenerated === true) return 'yes';
+  if (isAiGenerated === false) return 'no';
+  return '';
+};
+
+const AiGeneratedField = ({
+  name,
+  value,
+  error,
+  onChange,
+}: AiGeneratedFieldProps) => {
+  const { t } = useTranslation();
+
+  const options = [
+    { value: 'yes', label: t('pictures.upload_modal.ai_generated.yes') },
+    { value: 'no', label: t('pictures.upload_modal.ai_generated.no') },
+  ];
+
+  return (
+    <Stack spacing={3}>
+      <FormElement
+        id={name}
+        label={
+          <Inline alignItems="center" spacing={2}>
+            <Text>{t('pictures.upload_modal.ai_generated.title')}</Text>
+            <Tooltip
+              id="ai-generated-tooltip"
+              content={t('pictures.upload_modal.ai_generated.description')}
+            />
+          </Inline>
+        }
+        error={error}
+        Component={
+          <RadioGroup
+            name={name}
+            value={getAiGeneratedOption(value)}
+            onValueChange={(selected) => onChange(selected === 'yes')}
+            aria-label={t('pictures.upload_modal.ai_generated.title')}
+            className="tw:flex tw:gap-6"
+          >
+            {options.map((option) => (
+              <label
+                key={option.value}
+                htmlFor={`${name}-${option.value}`}
+                className="tw:m-0 tw:flex tw:cursor-pointer tw:items-center tw:gap-2"
+              >
+                <RadioGroupItem
+                  id={`${name}-${option.value}`}
+                  value={option.value}
+                />
+                {option.label}
+              </label>
+            ))}
+          </RadioGroup>
+        }
+      />
+      {value && (
+        <div className="tw:flex tw:w-fit tw:items-center tw:gap-4 tw:rounded-lg tw:bg-info-muted tw:p-2 tw:pr-4">
+          <Image
+            src="/assets/ai-label-illustration.svg"
+            alt=""
+            className="tw:h-16 tw:w-24 tw:shrink-0 tw:rounded-lg tw:object-cover"
+          />
+          <Text>{t('pictures.upload_modal.ai_generated.label_notice')}</Text>
+        </div>
+      )}
+    </Stack>
+  );
+};
+
 const PictureUploadModal = ({
   visible,
   onClose,
@@ -176,12 +260,16 @@ const PictureUploadModal = ({
 }: PictureUploadModalProps) => {
   const { t } = useTranslation();
   const formComponent = useRef<HTMLFormElement>(null);
+  const [isAiLabelEnabled] = useFeatureFlag(FeatureFlags.AI_LABEL);
 
   const schema = yup
     .object()
     .shape({
-      description: yup.string().required().max(250),
+      description: yup.string().required().max(MAX_DESCRIPTION_LENGTH),
       copyrightHolder: yup.string().required(),
+      isAiGenerated: isAiLabelEnabled
+        ? yup.boolean().required()
+        : yup.boolean(),
       ...(!imageToEdit && {
         file: yup
           .mixed()
@@ -206,23 +294,48 @@ const PictureUploadModal = ({
     setValue,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   });
 
-  const [descriptionInputComponent] = useAutoFocus({ retriggerOn: visible });
+  const { field: descriptionField } = useController({
+    name: 'description',
+    control,
+  });
+
+  const { field: isAiGeneratedField } = useController({
+    name: 'isAiGenerated',
+    control,
+  });
 
   const watchedFile = useWatch({ control, name: 'file' });
   const image = watchedFile?.[0];
+  const isSelectingFile = !imageToEdit && (!image || !!errors.file);
+
+  const [descriptionInputComponent] = useAutoFocus({
+    retriggerOn: visible && !isSelectingFile,
+  });
 
   useEffect(() => {
-    const resetData = imageToEdit ?? {
-      description: '',
-      copyrightHolder: '',
-    };
+    const descriptionWithoutAiSuffix = (imageToEdit?.description ?? '')
+      .replace(
+        t('pictures.upload_modal.ai_generated.description_suffix', {
+          lng: imageToEdit?.inLanguage,
+        }),
+        '',
+      )
+      .trim();
+
+    const resetData = imageToEdit
+      ? { ...imageToEdit, description: descriptionWithoutAiSuffix }
+      : { description: '', copyrightHolder: '' };
     reset(resetData);
-  }, [imageToEdit, reset, visible]);
+  }, [imageToEdit, reset, visible, t]);
 
   useEffect(() => {
-    setValue('file', draggedImageFile);
+    setValue('file', draggedImageFile, {
+      shouldValidate: !!draggedImageFile,
+      shouldDirty: !!draggedImageFile,
+    });
   }, [draggedImageFile, setValue]);
 
   const handleInternalOnDrop = (e: DragEvent<HTMLElement>) => {
@@ -234,10 +347,8 @@ const PictureUploadModal = ({
 
     if (files.length === 0) return;
 
-    setValue('file', files);
+    setValue('file', files, { shouldValidate: true, shouldDirty: true });
   };
-
-  const registerDescriptionProps = register('description');
 
   return (
     <Modal
@@ -252,9 +363,12 @@ const PictureUploadModal = ({
       }
       confirmLoading={loading}
       cancelTitle={t('pictures.upload_modal.actions.cancel')}
-      size={ModalSizes.MD}
+      size={ModalSizes.LG}
       onConfirm={() => {
-        if (!Object.keys(dirtyFields).length) {
+        const isAiAnswerMissing =
+          isAiLabelEnabled && isAiGeneratedField.value === undefined;
+
+        if (!Object.keys(dirtyFields).length && !isAiAnswerMissing) {
           onClose();
         }
 
@@ -262,21 +376,32 @@ const PictureUploadModal = ({
           new Event('submit', { cancelable: true, bubbles: true }),
         );
       }}
-      confirmButtonDisabled={Object.keys(errors).length > 0}
+      confirmButtonDisabled={isSelectingFile || Object.keys(errors).length > 0}
     >
       <Stack
         as="form"
         ref={formComponent}
         spacing={4}
         padding={4}
-        onSubmit={handleSubmit(async (data) => {
-          await onSubmitValid(data);
+        onSubmit={handleSubmit(async ({ isAiGenerated, ...data }) => {
+          await onSubmitValid({
+            ...data,
+            ...(isAiLabelEnabled && { isAiGenerated }),
+          });
           reset({});
         })}
       >
         {!imageToEdit && (
+          <Input
+            id="file"
+            type="file"
+            className="tw:hidden!"
+            accept={ALLOWED_FILE_TYPES.map((file) => `.${file}`).join(',')}
+            {...register('file')}
+          />
+        )}
+        {isSelectingFile && (
           <PictureUploadBox
-            image={image}
             error={
               errors?.file &&
               t(
@@ -286,49 +411,97 @@ const PictureUploadModal = ({
             }
             onDrop={handleInternalOnDrop}
             onDragOver={(e) => e.preventDefault()}
-            {...register('file')}
           />
         )}
-        <FormElement
-          id="description"
-          label="Beschrijving"
-          info="Maximum 250 karakters"
-          error={
-            errors?.description &&
-            t(
-              `pictures.upload_modal.validation_messages.description.${errors.description.type}`,
-            )
-          }
-          Component={
-            <Input
-              {...registerDescriptionProps}
-              ref={(element: HTMLInputElement) => {
-                registerDescriptionProps.ref(element);
-                descriptionInputComponent.current = element;
-              }}
-            />
-          }
-        />
-        <FormElement
-          id="copyrightHolder"
-          label="Copyright"
-          info={t('pictures.upload_modal.disclaimer.copyright')}
-          error={
-            errors?.copyrightHolder &&
-            t(
-              `pictures.upload_modal.validation_messages.copyrightHolder.${errors.copyrightHolder.type}`,
-            )
-          }
-          Component={<Input {...register('copyrightHolder')} />}
-        />
+        {!isSelectingFile && (
+          <Stack spacing={4}>
+            <Box
+              className={cn(
+                'tw:grid tw:gap-4',
+                (image || imageToEdit?.thumbnailUrl) &&
+                  'tw:sm:grid-cols-[1fr_14rem]',
+              )}
+            >
+              <Stack spacing={4}>
+                <FormElement
+                  id="description"
+                  label={t('pictures.upload_modal.description_label')}
+                  maxLength={MAX_DESCRIPTION_LENGTH}
+                  error={
+                    errors?.description &&
+                    t(
+                      `pictures.upload_modal.validation_messages.description.${errors.description.type}`,
+                    )
+                  }
+                  Component={
+                    <TextArea
+                      rows={2}
+                      {...descriptionField}
+                      value={descriptionField.value ?? ''}
+                      ref={(element: HTMLTextAreaElement) => {
+                        descriptionField.ref(element);
+                        descriptionInputComponent.current = element;
+                      }}
+                    />
+                  }
+                />
+                <FormElement
+                  id="copyrightHolder"
+                  label={
+                    <Inline alignItems="center" spacing={2}>
+                      <Text>{t('pictures.upload_modal.copyright_label')}</Text>
+                      <Tooltip
+                        id="copyright-tooltip"
+                        content={t(
+                          'pictures.upload_modal.disclaimer.copyright',
+                        )}
+                      />
+                    </Inline>
+                  }
+                  error={
+                    errors?.copyrightHolder &&
+                    t(
+                      `pictures.upload_modal.validation_messages.copyrightHolder.${errors.copyrightHolder.type}`,
+                    )
+                  }
+                  Component={<Input {...register('copyrightHolder')} />}
+                />
+              </Stack>
+              {image && <SelectedImage image={image} />}
+              {imageToEdit?.thumbnailUrl && (
+                <Image
+                  src={`${imageToEdit.thumbnailUrl}?width=420&height=360&crop=auto`}
+                  alt=""
+                  className={cn(
+                    'tw:h-48 tw:w-full tw:rounded-md tw:object-cover',
+                    imageToEdit.isAiGenerated && 'tw:object-left-top',
+                  )}
+                />
+              )}
+            </Box>
+            {isAiLabelEnabled && (
+              <AiGeneratedField
+                name={isAiGeneratedField.name}
+                value={isAiGeneratedField.value}
+                error={
+                  errors?.isAiGenerated &&
+                  t(
+                    `pictures.upload_modal.validation_messages.isAiGenerated.${errors.isAiGenerated.type}`,
+                  )
+                }
+                onChange={isAiGeneratedField.onChange}
+              />
+            )}
 
-        <Text variant={TextVariants.MUTED} fontSize="0.8rem">
-          <Trans i18nKey="pictures.upload_modal.disclaimer.terms_and_conditions.text">
-            <TermsAndConditionsLink />
-            <CopyrightLink />
-          </Trans>
-        </Text>
-        <Button type="submit" className="tw:hidden" />
+            <Text variant={TextVariants.MUTED} fontSize="0.8rem" paddingTop={4}>
+              <Trans i18nKey="pictures.upload_modal.disclaimer.terms_and_conditions.text">
+                <TermsAndConditionsLink />
+                <CopyrightLink />
+              </Trans>
+            </Text>
+          </Stack>
+        )}
+        <Button type="submit" className="tw:hidden!" />
       </Stack>
     </Modal>
   );

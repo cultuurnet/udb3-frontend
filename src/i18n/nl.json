@@ -1492,8 +1492,17 @@
       "actions": {
         "adjust": "Aanpassen",
         "cancel": "Annuleren",
+        "change_file": "Wijzig foto",
         "choose_file": "Kies bestand",
         "upload": "Uploaden"
+      },
+      "ai_generated": {
+        "title": "Is deze afbeelding met AI gemaakt of aangepast?",
+        "description": "Kies 'Ja' als een AI-tool de afbeelding volledig of grotendeels gemaakt of aangepast heeft. Zo zien bezoekers dat het geen echte foto is.",
+        "yes": "Ja",
+        "no": "Nee",
+        "label_notice": "We voegen een AI-label toe aan je afbeelding",
+        "description_suffix": "(Gegenereerd met AI)"
       },
       "disclaimer": {
         "copyright": "Vermeld de naam van de rechtenhoudende fotograaf. Vul alleen de naam van je eigen vereniging of organisatie in als je zelf de rechten bezit (minimum 2 karakters).",
@@ -1519,8 +1528,15 @@
           "required": "Gelieve een bestand te selecteren",
           "size": "Het bestand dat je selecteerde is groter dan {{maxFileSize}} MB.",
           "type": "Het bestand dat je selecteerde is geen geldig bestandstype"
+        },
+        "isAiGenerated": {
+          "required": "Geef aan of deze afbeelding met AI gemaakt of aangepast is."
         }
-      }
+      },
+      "select_photo": "Selecteer je foto",
+      "drag_file": "Sleep een bestand hierheen of",
+      "description_label": "Beschrijving",
+      "copyright_label": "Copyright"
     }
   },
   "productions": {
@@ -2084,7 +2100,8 @@
       "duplicate": "Kopiëren en aanpassen",
       "duplicate_as_movie": "Kopiëren en aanpassen als film",
       "change_availability": "Beschikbaarheid wijzigen",
-      "linked_events": "Bekijk gekoppelde activiteiten",
+      "events_at_location": "Activiteiten hier",
+      "accompanied_transport": "Begeleid vervoer naar",
       "delete": "Verwijderen",
       "delete_modal": {
         "title_event": "Activiteit verwijderen",
