@@ -752,6 +752,7 @@ const BookingInfoStep = ({
             context.previousOffer,
           );
         }
+        setLinkResetKey((key) => key + 1);
       },
       onSuccess: onSuccessfulChange,
     });
