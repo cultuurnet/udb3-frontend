@@ -451,6 +451,7 @@
         "link": "Link",
         "reservation_link": "Link zur Reservierungsseite",
         "waiting_list_url": "Link zur Warteliste",
+        "managed_by_ticketmatic": "Verfügbarkeit und Warteliste werden von Ticketmatic verwaltet.",
         "status": "Status",
         "section_title": "Erkläre, wie Menschen einen Platz reservieren können",
         "contact_details": "Reservierung per E-Mail oder Telefon",

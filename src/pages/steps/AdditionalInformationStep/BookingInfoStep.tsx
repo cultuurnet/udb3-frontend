@@ -32,6 +32,7 @@ import { Text } from '@/ui/Text';
 import { colors } from '@/ui/theme';
 import { TimeSpanPicker } from '@/ui/TimeSpanPicker';
 import { formatDateToISO } from '@/utils/formatDateToISO';
+import { isTicketmaticUrl } from '@/utils/isTicketmaticUrl';
 import { isValidEmail, isValidPhone, isValidUrl } from '@/utils/isValidInfo';
 import { prefixUrlWithHttps } from '@/utils/url';
 
@@ -392,6 +393,7 @@ const BookingAvailabilitySection = ({
   onChangeSubEventBookingInfo,
   onChangeSubEventAvailability,
 }: BookingAvailabilitySectionProps) => {
+  const { t } = useTranslation();
   const isMultiple = calendarType === CalendarType.MULTIPLE;
 
   return (
@@ -406,6 +408,13 @@ const BookingAvailabilitySection = ({
               BookingAvailabilityType.AVAILABLE
             }
             waitingListUrl={subEvent.bookingAvailability?.waitingListUrl ?? ''}
+            disabledReason={
+              isMultiple && isTicketmaticUrl(subEvent.bookingInfo?.url)
+                ? t(
+                    'create.additionalInformation.booking_info.managed_by_ticketmatic',
+                  )
+                : undefined
+            }
             onChangeBookingAvailability={(...args) =>
               onChangeSubEventAvailability(index, ...args)
             }

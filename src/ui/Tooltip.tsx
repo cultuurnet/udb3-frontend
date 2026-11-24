@@ -18,6 +18,7 @@ type Props = {
   content: string;
   side?: Side;
   children?: ReactNode;
+  className?: string;
 };
 
 const TOOLTIP_DELAY_MS = 100;
@@ -37,10 +38,11 @@ const DefaultTrigger = forwardRef<HTMLButtonElement, { content: string }>(
 );
 DefaultTrigger.displayName = 'DefaultTrigger';
 
-const Tooltip = ({ id, content, side, children }: Props) => {
+const Tooltip = ({ id, content, side, children, className }: Props) => {
   const [isShadcnMigration] = useFeatureFlag(FeatureFlags.SHADCN_MIGRATION);
 
   if (!isShadcnMigration) {
+    if (children) return <>{children}</>;
     return <TooltipLegacy id={id} content={content} placement={side} />;
   }
 
@@ -49,7 +51,7 @@ const Tooltip = ({ id, content, side, children }: Props) => {
       <ShadcnTooltip>
         <TooltipTrigger asChild>
           {children ? (
-            <span>{children}</span>
+            <span className={className}>{children}</span>
           ) : (
             <DefaultTrigger content={content} />
           )}

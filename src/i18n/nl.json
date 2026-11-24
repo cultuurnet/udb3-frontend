@@ -474,6 +474,7 @@
         "link": "Link",
         "reservation_link": "Link naar reservatiepagina",
         "waiting_list_url": "Link naar wachtlijst",
+        "managed_by_ticketmatic": "De beschikbaarheid en wachtlijst worden beheerd door Ticketmatic.",
         "status": "Status",
         "section_title": "Vertel hoe mensen een plaats kunnen reserveren",
         "contact_details": "Reserveren via e-mail of telefoon",

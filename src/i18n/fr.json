@@ -453,6 +453,7 @@
         "link": "Lien",
         "reservation_link": "Lien vers la page de réservation",
         "waiting_list_url": "Lien vers la liste d'attente",
+        "managed_by_ticketmatic": "La disponibilité et la liste d'attente sont gérées par Ticketmatic.",
         "status": "Statut",
         "section_title": "Indiquez comment les gens peuvent réserver une place",
         "contact_details": "Réserver par e-mail ou par téléphone",

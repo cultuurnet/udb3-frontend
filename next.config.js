@@ -49,6 +49,8 @@ const moduleExports = {
     ckUrl: process.env.NEXT_PUBLIC_CK_URL,
     udbPublicationRulesUrl: process.env.NEXT_PUBLIC_UDB_PUBLICATION_RULES_URL,
     uitidProfileUrl: process.env.NEXT_PUBLIC_UITID_PROFILE_URL,
+    ticketmaticReservationLinkHosts:
+      process.env.NEXT_PUBLIC_TICKETMATIC_RESERVATION_LINK_HOSTS,
     ...featureFlagRuntimeConfig,
   },
   pageExtensions: ['page.tsx', 'page.js', 'api.ts'],
