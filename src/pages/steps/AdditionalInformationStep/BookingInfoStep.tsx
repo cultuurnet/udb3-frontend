@@ -373,6 +373,7 @@ const ReservationLink = ({
             onChange={(e) => {
               const newUrlLabel = e.target.value as UrlLabelValue;
               setUrlLabel(newUrlLabel);
+              if (hasInvalidUrl) return;
               onChangeBookingInfo(url, newUrlLabel);
             }}
           >

@@ -215,6 +215,32 @@ test.describe('Multiple-date event reservation', () => {
 
     await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
   });
+
+  test('does not save an invalid reservation link when the button text changes', async ({
+    page,
+    baseURL,
+    multipleEventId,
+  }) => {
+    await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
+    await openReservationTab(page);
+    const patches = recordSubEventsPatches(page);
+
+    await page.locator('#subevent-0-link').fill('not-a-url');
+    await page.locator('#subevent-0-link').blur();
+
+    await expect(page.getByText('Geen geldige url')).toBeVisible();
+
+    await page
+      .locator('#subevent-0-url-label')
+      .selectOption({ label: 'Koop tickets' });
+
+    expect(patches).toHaveLength(0);
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-link')).toHaveValue('');
+  });
 });
 
 test.describe('Calendar edits preserve subEvent reservation', () => {
