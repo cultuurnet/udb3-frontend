@@ -74,25 +74,14 @@ const ticketmaticHost =
     ',',
   )[0]?.trim();
 
-type SubEventPatch = {
-  id: number;
-  bookingInfo?: { url?: string };
-  bookingAvailability?: { type: string; waitingListUrl?: string };
-};
-
-const interceptSubEventsPatch = async (page: Page) => {
-  const patches: SubEventPatch[] = [];
-
-  await page.route(
-    (url) => url.pathname.endsWith('/sub-events'),
-    async (route) => {
-      if (route.request().method() !== 'PATCH') return route.fallback();
-      patches.push(...route.request().postDataJSON());
-      await route.fulfill({ status: 204 });
-    },
-  );
-
-  return patches;
+const recordSubEventsPatches = (page: Page) => {
+  const bodies: unknown[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('/sub-events') && request.method() === 'PATCH') {
+      bodies.push(request.postDataJSON());
+    }
+  });
+  return bodies;
 };
 
 const setReservationLink = async (page: Page, index: number, url: string) => {
@@ -403,17 +392,32 @@ test.describe('Ticketmatic reservation link', () => {
 
   const ticketmaticUrl = () => `https://${ticketmaticHost}/event/${Date.now()}`;
 
-  test('disables status and waiting list of that date only', async ({
+  const clearedAvailabilityPatch = (url: string) => [
+    expect.objectContaining({
+      id: 0,
+      bookingInfo: expect.objectContaining({ url }),
+      bookingAvailability: { type: 'Available', waitingListUrl: '' },
+    }),
+  ];
+
+  test('stores the link and disables status and waiting list of that date only', async ({
     page,
     baseURL,
     multipleEventId,
   }) => {
+    const url = ticketmaticUrl();
+
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
-    await interceptSubEventsPatch(page);
 
-    await setReservationLink(page, 0, ticketmaticUrl());
+    const patch = waitForSubEventsPatch(page);
+    await setReservationLink(page, 0, url);
+    await patch;
 
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-link')).toHaveValue(url);
     await expect(page.locator('#subevent-0-status')).toBeDisabled();
     await expect(page.locator('#subevent-0-waiting-list-url')).toBeDisabled();
     await expect(page.locator('#subevent-1-status')).toBeEnabled();
@@ -429,19 +433,13 @@ test.describe('Ticketmatic reservation link', () => {
 
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
-    const patches = await interceptSubEventsPatch(page);
 
+    const patch = waitForSubEventsPatch(page);
     await setReservationLink(page, 0, url);
+    const request = (await patch).request();
 
-    await expect(page.locator('#subevent-0-status')).toBeDisabled();
     await expect(page.getByRole('dialog')).toBeHidden();
-    expect(patches).toEqual([
-      expect.objectContaining({
-        id: 0,
-        bookingInfo: expect.objectContaining({ url }),
-        bookingAvailability: { type: 'Available', waitingListUrl: '' },
-      }),
-    ]);
+    expect(request.postDataJSON()).toEqual(clearedAvailabilityPatch(url));
   });
 
   test('asks confirmation before clearing a filled in waiting list url', async ({
@@ -458,7 +456,7 @@ test.describe('Ticketmatic reservation link', () => {
       '#subevent-0-waiting-list-url',
       faker.internet.url(),
     );
-    const patches = await interceptSubEventsPatch(page);
+    const patches = recordSubEventsPatches(page);
 
     await setReservationLink(page, 0, url);
 
@@ -466,19 +464,18 @@ test.describe('Ticketmatic reservation link', () => {
     await expect(dialog).toBeVisible();
     expect(patches).toHaveLength(0);
 
+    const patch = waitForSubEventsPatch(page);
     await dialog.getByRole('button', { name: 'Opslaan' }).click();
+    const request = (await patch).request();
 
     await expect(dialog).toBeHidden();
-    await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue('');
+    expect(request.postDataJSON()).toEqual(clearedAvailabilityPatch(url));
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-link')).toHaveValue(url);
     await expect(page.locator('#subevent-0-waiting-list-url')).toBeDisabled();
-    await expect(page.locator('#subevent-0-status')).toHaveValue('Available');
-    expect(patches).toEqual([
-      expect.objectContaining({
-        id: 0,
-        bookingInfo: expect.objectContaining({ url }),
-        bookingAvailability: { type: 'Available', waitingListUrl: '' },
-      }),
-    ]);
   });
 
   test('keeps everything as it was when the confirmation is cancelled', async ({
@@ -495,7 +492,7 @@ test.describe('Ticketmatic reservation link', () => {
       '#subevent-0-waiting-list-url',
       waitingListUrl,
     );
-    const patches = await interceptSubEventsPatch(page);
+    const patches = recordSubEventsPatches(page);
 
     await setReservationLink(page, 0, ticketmaticUrl());
 
@@ -504,11 +501,16 @@ test.describe('Ticketmatic reservation link', () => {
 
     await expect(dialog).toBeHidden();
     await expect(page.locator('#subevent-0-link')).toHaveValue('');
+    expect(patches).toHaveLength(0);
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-link')).toHaveValue('');
     await expect(page.locator('#subevent-0-waiting-list-url')).toHaveValue(
       waitingListUrl,
     );
     await expect(page.locator('#subevent-0-waiting-list-url')).toBeEnabled();
-    expect(patches).toHaveLength(0);
   });
 
   test('does not clear availability for other links', async ({
@@ -516,16 +518,21 @@ test.describe('Ticketmatic reservation link', () => {
     baseURL,
     multipleEventId,
   }) => {
+    const url = faker.internet.url();
+
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
-    const patches = await interceptSubEventsPatch(page);
 
     const patch = waitForSubEventsPatch(page);
-    await setReservationLink(page, 0, faker.internet.url());
-    await patch;
+    await setReservationLink(page, 0, url);
+    const request = (await patch).request();
 
+    expect(request.postDataJSON()[0].bookingAvailability).toBeUndefined();
+
+    await page.reload();
+    await openReservationTab(page);
+
+    await expect(page.locator('#subevent-0-link')).toHaveValue(url);
     await expect(page.locator('#subevent-0-status')).toBeEnabled();
-    expect(patches).toHaveLength(1);
-    expect(patches[0].bookingAvailability).toBeUndefined();
   });
 });
