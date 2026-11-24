@@ -475,6 +475,12 @@
         "reservation_link": "Link naar reservatiepagina",
         "waiting_list_url": "Link naar wachtlijst",
         "managed_by_ticketmatic": "De beschikbaarheid en wachtlijst worden beheerd door Ticketmatic.",
+        "ticketmatic_confirm": {
+          "title": "Ticketmatic-link opslaan?",
+          "body": "De status en de link naar de wachtlijst van deze datum worden gewist. Ticketmatic beheert ze vanaf nu.",
+          "confirm": "Opslaan",
+          "cancel": "Annuleren"
+        },
         "status": "Status",
         "section_title": "Vertel hoe mensen een plaats kunnen reserveren",
         "contact_details": "Reserveren via e-mail of telefoon",

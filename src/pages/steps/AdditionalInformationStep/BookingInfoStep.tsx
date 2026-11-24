@@ -24,6 +24,7 @@ import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
 import { getInlineProps, Inline } from '@/ui/Inline';
 import { Input } from '@/ui/Input';
+import { Modal, ModalSizes, ModalVariants } from '@/ui/Modal';
 import { Select } from '@/ui/Select';
 import { getStackProps, Stack, StackProps } from '@/ui/Stack';
 import { SwitchVariants } from '@/ui/Switch';
@@ -286,6 +287,7 @@ type BookingAvailabilitySectionProps = {
   calendarType: Offer['calendarType'] | undefined;
   subEvents: SubEvent[];
   urlLabelOptions: UrlLabelOption[];
+  linkResetKey: number;
   onChangeSubEventBookingInfo: (
     index: number,
     url: string,
@@ -390,6 +392,7 @@ const BookingAvailabilitySection = ({
   calendarType,
   subEvents,
   urlLabelOptions,
+  linkResetKey,
   onChangeSubEventBookingInfo,
   onChangeSubEventAvailability,
 }: BookingAvailabilitySectionProps) => {
@@ -402,6 +405,7 @@ const BookingAvailabilitySection = ({
         const idPrefix = isMultiple ? `subevent-${index}` : 'offer';
         const availabilityFields = (
           <BookingAvailabilityFields
+            key={subEvent.bookingInfo?.url ?? ''}
             idPrefix={idPrefix}
             status={
               subEvent.bookingAvailability?.type ??
@@ -443,6 +447,7 @@ const BookingAvailabilitySection = ({
               {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
             </Text>
             <ReservationLink
+              key={linkResetKey}
               idPrefix={idPrefix}
               url={subEvent.bookingInfo?.url ?? ''}
               urlLabel={
@@ -476,6 +481,13 @@ const toCachedBookingAvailability = (
   };
 };
 
+type SubEventBookingInfoChange = {
+  subEventIndex: number;
+  url: string;
+  urlLabelType: UrlLabelValue;
+  clearsAvailability: boolean;
+};
+
 type Props = StackProps & TabContentProps;
 
 const BookingInfoStep = ({
@@ -490,6 +502,9 @@ const BookingInfoStep = ({
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
   const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [pendingTicketmaticChange, setPendingTicketmaticChange] =
+    useState<SubEventBookingInfoChange>();
+  const [linkResetKey, setLinkResetKey] = useState(0);
   const queryClient = useQueryClient();
 
   const eventId = offerId;
@@ -740,11 +755,12 @@ const BookingInfoStep = ({
       onSuccess: onSuccessfulChange,
     });
 
-  const handleChangeSubEventBookingInfo = (
-    subEventIndex: number,
-    url: string,
-    urlLabelType: UrlLabelValue,
-  ) => {
+  const saveSubEventBookingInfo = ({
+    subEventIndex,
+    url,
+    urlLabelType,
+    clearsAvailability,
+  }: SubEventBookingInfoChange) => {
     const urlLabel =
       URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve;
 
@@ -752,7 +768,47 @@ const BookingInfoStep = ({
       eventId,
       subEventIndex,
       bookingInfo: url ? { url, urlLabel } : {},
+      ...(clearsAvailability && {
+        bookingAvailability: {
+          type: BookingAvailabilityType.AVAILABLE,
+          waitingListUrl: '',
+        },
+      }),
     });
+  };
+
+  const handleChangeSubEventBookingInfo = (
+    subEventIndex: number,
+    url: string,
+    urlLabelType: UrlLabelValue,
+  ) => {
+    const subEvent = subEvents[subEventIndex];
+    const clearsAvailability =
+      isTicketmaticUrl(url) && url !== subEvent?.bookingInfo?.url;
+    const change = { subEventIndex, url, urlLabelType, clearsAvailability };
+
+    const hasAvailabilityToClear =
+      !!subEvent?.bookingAvailability?.waitingListUrl ||
+      (subEvent?.bookingAvailability?.type ??
+        BookingAvailabilityType.AVAILABLE) !==
+        BookingAvailabilityType.AVAILABLE;
+
+    if (clearsAvailability && hasAvailabilityToClear) {
+      setPendingTicketmaticChange(change);
+      return;
+    }
+
+    saveSubEventBookingInfo(change);
+  };
+
+  const handleConfirmTicketmaticChange = () => {
+    saveSubEventBookingInfo(pendingTicketmaticChange);
+    setPendingTicketmaticChange(undefined);
+  };
+
+  const handleCancelTicketmaticChange = () => {
+    setPendingTicketmaticChange(undefined);
+    setLinkResetKey((key) => key + 1);
   };
 
   const handleChangeSubEventAvailability = (
@@ -890,11 +946,36 @@ const BookingInfoStep = ({
             calendarType={calendarType}
             subEvents={subEvents}
             urlLabelOptions={URL_LABELS}
+            linkResetKey={linkResetKey}
             onChangeSubEventBookingInfo={handleChangeSubEventBookingInfo}
             onChangeSubEventAvailability={handleChangeSubEventAvailability}
           />
         )}
       </Stack>
+      <Modal
+        visible={!!pendingTicketmaticChange}
+        variant={ModalVariants.QUESTION}
+        size={ModalSizes.MD}
+        title={t(
+          'create.additionalInformation.booking_info.ticketmatic_confirm.title',
+        )}
+        confirmTitle={t(
+          'create.additionalInformation.booking_info.ticketmatic_confirm.confirm',
+        )}
+        cancelTitle={t(
+          'create.additionalInformation.booking_info.ticketmatic_confirm.cancel',
+        )}
+        onConfirm={handleConfirmTicketmaticChange}
+        onClose={handleCancelTicketmaticChange}
+      >
+        <Stack padding={4}>
+          <Text>
+            {t(
+              'create.additionalInformation.booking_info.ticketmatic_confirm.body',
+            )}
+          </Text>
+        </Stack>
+      </Modal>
     </Stack>
   );
 };

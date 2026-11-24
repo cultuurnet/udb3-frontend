@@ -454,6 +454,12 @@
         "reservation_link": "Lien vers la page de réservation",
         "waiting_list_url": "Lien vers la liste d'attente",
         "managed_by_ticketmatic": "La disponibilité et la liste d'attente sont gérées par Ticketmatic.",
+        "ticketmatic_confirm": {
+          "title": "Enregistrer le lien Ticketmatic ?",
+          "body": "Le statut et le lien vers la liste d'attente de cette date seront effacés. Ticketmatic les gère désormais.",
+          "confirm": "Enregistrer",
+          "cancel": "Annuler"
+        },
         "status": "Statut",
         "section_title": "Indiquez comment les gens peuvent réserver une place",
         "contact_details": "Réserver par e-mail ou par téléphone",
