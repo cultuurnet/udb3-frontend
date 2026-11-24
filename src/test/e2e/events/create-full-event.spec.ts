@@ -221,14 +221,14 @@ test('create event with all possible fields filled in', async ({
     .getByPlaceholder('Telefoonnummer')
     .fill(dummyEvent.bookingInfo.phone);
 
-  await page.locator('#offer-link').click();
-  await page.locator('#offer-link').fill(dummyEvent.bookingInfo.url);
+  await page.locator('#subevent-0-link').click();
+  await page.locator('#subevent-0-link').fill(dummyEvent.bookingInfo.url);
 
   await page
-    .locator('#offer-url-label')
+    .locator('#subevent-0-url-label')
     .selectOption({ label: 'Koop tickets' });
 
-  await page.getByLabel('Reservatieperiode').check();
+  await page.getByLabel('Er is een vaste reservatieperiode').check();
 
   const startReservationDate = faker.date.future();
   const endReservationDate = faker.date.future({
