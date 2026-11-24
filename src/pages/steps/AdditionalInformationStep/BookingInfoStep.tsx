@@ -277,9 +277,19 @@ const ReservationPeriod = ({
   );
 };
 
+type UrlLabelValue = Values<typeof UrlLabelType> | '';
+
+type UrlLabelOption = { label: string; value: UrlLabelValue };
+
 type BookingAvailabilitySectionProps = {
   calendarType: Offer['calendarType'] | undefined;
   subEvents: SubEvent[];
+  urlLabelOptions: UrlLabelOption[];
+  onChangeSubEventBookingInfo: (
+    index: number,
+    url: string,
+    urlLabel: UrlLabelValue,
+  ) => void;
   onChangeSubEventAvailability: (
     index: number,
     type: Values<typeof BookingAvailabilityType>,
@@ -287,10 +297,6 @@ type BookingAvailabilitySectionProps = {
     onError?: () => void,
   ) => void;
 };
-
-type UrlLabelValue = Values<typeof UrlLabelType> | '';
-
-type UrlLabelOption = { label: string; value: UrlLabelValue };
 
 type ReservationLinkProps = BoxProps & {
   idPrefix: string;
@@ -382,38 +388,68 @@ const ReservationLink = ({
 const BookingAvailabilitySection = ({
   calendarType,
   subEvents,
+  urlLabelOptions,
+  onChangeSubEventBookingInfo,
   onChangeSubEventAvailability,
 }: BookingAvailabilitySectionProps) => {
   const isMultiple = calendarType === CalendarType.MULTIPLE;
 
   return (
-    <Stack spacing={4}>
-      <Inline stackOn="m" alignItems="flex-start" spacing={4}>
-        <Stack spacing={3} minWidth="30rem">
-          {subEvents.map((subEvent, index) => (
-            <Stack key={`${subEvent.startDate}-${index}`} spacing={2}>
-              {isMultiple && (
-                <Text fontWeight="bold" color={SUBTITLE_COLOR}>
-                  {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
-                </Text>
-              )}
-              <BookingAvailabilityFields
-                idPrefix={isMultiple ? `subevent-${index}` : 'offer'}
-                status={
-                  subEvent.bookingAvailability?.type ??
-                  BookingAvailabilityType.AVAILABLE
-                }
-                waitingListUrl={
-                  subEvent.bookingAvailability?.waitingListUrl ?? ''
-                }
-                onChangeBookingAvailability={(...args) =>
-                  onChangeSubEventAvailability(index, ...args)
-                }
-              />
+    <Stack spacing={4} maxWidth="46rem">
+      {subEvents.map((subEvent, index) => {
+        const idPrefix = isMultiple ? `subevent-${index}` : 'offer';
+        const availabilityFields = (
+          <BookingAvailabilityFields
+            idPrefix={idPrefix}
+            status={
+              subEvent.bookingAvailability?.type ??
+              BookingAvailabilityType.AVAILABLE
+            }
+            waitingListUrl={subEvent.bookingAvailability?.waitingListUrl ?? ''}
+            onChangeBookingAvailability={(...args) =>
+              onChangeSubEventAvailability(index, ...args)
+            }
+          />
+        );
+
+        if (!isMultiple) {
+          return (
+            <Stack key={`${subEvent.startDate}-${index}`}>
+              {availabilityFields}
             </Stack>
-          ))}
-        </Stack>
-      </Inline>
+          );
+        }
+
+        return (
+          <Stack
+            key={`${subEvent.startDate}-${index}`}
+            spacing={4}
+            padding={4}
+            css={`
+              border: 1px solid ${colors.grey3};
+              border-radius: 0.5rem;
+            `}
+          >
+            <Text fontWeight="bold" color={SUBTITLE_COLOR}>
+              {`${format(new Date(subEvent.startDate), 'dd/MM/yyyy')} - ${format(new Date(subEvent.endDate), 'dd/MM/yyyy')}`}
+            </Text>
+            <ReservationLink
+              idPrefix={idPrefix}
+              url={subEvent.bookingInfo?.url ?? ''}
+              urlLabel={
+                subEvent.bookingInfo?.urlLabel?.en
+                  ? getUrlLabelType(subEvent.bookingInfo.urlLabel.en)
+                  : ''
+              }
+              urlLabelOptions={urlLabelOptions}
+              onChangeBookingInfo={(url, urlLabel) =>
+                onChangeSubEventBookingInfo(index, url, urlLabel)
+              }
+            />
+            {availabilityFields}
+          </Stack>
+        );
+      })}
     </Stack>
   );
 };
@@ -442,7 +478,6 @@ const BookingInfoStep = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
-  const [isBoaEnabled] = useFeatureFlag(FeatureFlags.BOA);
   const [selectedUrlLabel, setSelectedUrlLabel] = useState('');
   const [offerUrl, setOfferUrl] = useState('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -512,6 +547,7 @@ const BookingInfoStep = ({
   const canEditBookingAvailability =
     calendarType === CalendarType.SINGLE ||
     calendarType === CalendarType.MULTIPLE;
+  const hasReservationPerDate = calendarType === CalendarType.MULTIPLE;
 
   const { register, handleSubmit, formState, control, setValue, getValues } =
     useForm<FormData>({
@@ -695,6 +731,21 @@ const BookingInfoStep = ({
       onSuccess: onSuccessfulChange,
     });
 
+  const handleChangeSubEventBookingInfo = (
+    subEventIndex: number,
+    url: string,
+    urlLabelType: UrlLabelValue,
+  ) => {
+    const urlLabel =
+      URL_LABEL_TRANSLATIONS[urlLabelType] ?? URL_LABEL_TRANSLATIONS.reserve;
+
+    changeSubEventReservationMutation.mutate({
+      eventId,
+      subEventIndex,
+      bookingInfo: url ? { url, urlLabel } : {},
+    });
+  };
+
   const handleChangeSubEventAvailability = (
     subEventIndex: number,
     type: Values<typeof BookingAvailabilityType>,
@@ -811,7 +862,7 @@ const BookingInfoStep = ({
         <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.url')}
         </Text>
-        {getOfferByIdQuery.data && (
+        {getOfferByIdQuery.data && !hasReservationPerDate && (
           <ReservationLink
             idPrefix="offer"
             maxWidth="46rem"
@@ -825,14 +876,16 @@ const BookingInfoStep = ({
             onChangeBookingInfo={handleChangeOfferBookingInfo}
           />
         )}
+        {canEditBookingAvailability && getOfferByIdQuery.data && (
+          <BookingAvailabilitySection
+            calendarType={calendarType}
+            subEvents={subEvents}
+            urlLabelOptions={URL_LABELS}
+            onChangeSubEventBookingInfo={handleChangeSubEventBookingInfo}
+            onChangeSubEventAvailability={handleChangeSubEventAvailability}
+          />
+        )}
       </Stack>
-      {isBoaEnabled && canEditBookingAvailability && getOfferByIdQuery.data && (
-        <BookingAvailabilitySection
-          calendarType={calendarType}
-          subEvents={subEvents}
-          onChangeSubEventAvailability={handleChangeSubEventAvailability}
-        />
-      )}
     </Stack>
   );
 };

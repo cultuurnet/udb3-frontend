@@ -55,13 +55,6 @@ const waitForCalendarPut = (page: Page) =>
       response.request().method() === 'PUT',
   );
 
-const waitForBookingInfoPut = (page: Page) =>
-  page.waitForResponse(
-    (response) =>
-      response.url().includes('/bookingInfo') &&
-      response.request().method() === 'PUT',
-  );
-
 const dayRows = (page: Page) =>
   page.locator('li').filter({
     has: page.locator(
@@ -103,25 +96,32 @@ test.describe('Single-date event reservation', () => {
 });
 
 test.describe('Multiple-date event reservation', () => {
-  test('saves an offer-level reservation link', async ({
+  test('sets a reservation link per subEvent', async ({
     page,
     baseURL,
     multipleEventId,
   }) => {
-    const url = faker.internet.url();
+    const urls = [faker.internet.url(), faker.internet.url()];
 
     await page.goto(`${baseURL}/events/${multipleEventId}/edit`);
     await openReservationTab(page);
 
-    const bookingInfoPut = waitForBookingInfoPut(page);
-    await page.locator('#offer-link').fill(url);
-    await page.locator('#offer-link').blur();
-    await bookingInfoPut;
+    await expect(page.locator('#offer-link')).toHaveCount(0);
+
+    for (const [index, url] of urls.entries()) {
+      const id = `#subevent-${index}-link`;
+      await page.locator(id).fill(url);
+      const patch = waitForSubEventsPatch(page);
+      await page.locator(id).blur();
+      await patch;
+    }
 
     await page.reload();
     await openReservationTab(page);
 
-    await expect(page.locator('#offer-link')).toHaveValue(url);
+    for (const [index, url] of urls.entries()) {
+      await expect(page.locator(`#subevent-${index}-link`)).toHaveValue(url);
+    }
   });
 
   test('sets a waiting list url per subEvent', async ({
