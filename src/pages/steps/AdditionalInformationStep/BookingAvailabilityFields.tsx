@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
-import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import type { Values } from '@/types/Values';
 import type { BoxProps } from '@/ui/Box';
 import { FormElement } from '@/ui/FormElement';
@@ -16,12 +15,10 @@ type BookingAvailabilityValue = Values<typeof BookingAvailabilityType>;
 
 type BookingAvailabilityFieldsProps = BoxProps & {
   idPrefix: string;
-  capacity: string;
   status: BookingAvailabilityValue;
   waitingListUrl: string;
   onChangeBookingAvailability: (
     status: BookingAvailabilityValue,
-    capacity: string,
     waitingListUrl?: string,
     onError?: () => void,
   ) => void;
@@ -29,7 +26,6 @@ type BookingAvailabilityFieldsProps = BoxProps & {
 
 const BookingAvailabilityFields = ({
   idPrefix,
-  capacity: initialCapacity,
   status: initialStatus,
   waitingListUrl: savedWaitingListUrl,
   onChangeBookingAvailability,
@@ -37,20 +33,10 @@ const BookingAvailabilityFields = ({
 }: BookingAvailabilityFieldsProps) => {
   const { t } = useTranslation();
 
-  const [capacity, setCapacity] = useState(initialCapacity);
   const [status, setStatus] = useState(initialStatus);
   const [waitingListUrl, setWaitingListUrl] = useState(savedWaitingListUrl);
   const [hasInvalidWaitingListUrl, setHasInvalidWaitingListUrl] =
     useState(false);
-
-  const isCapacityInvalid =
-    capacity !== '' &&
-    (!Number.isInteger(Number(capacity)) || Number(capacity) < 0);
-
-  const handleCapacityBlur = () => {
-    if (isCapacityInvalid) return;
-    onChangeBookingAvailability(status, capacity);
-  };
 
   const handleWaitingListUrlBlur = () => {
     const trimmedUrl = waitingListUrl.trim();
@@ -63,8 +49,8 @@ const BookingAvailabilityFields = ({
 
     setHasInvalidWaitingListUrl(false);
     setWaitingListUrl(prefixedUrl);
-    if (prefixedUrl === savedWaitingListUrl || isCapacityInvalid) return;
-    onChangeBookingAvailability(status, capacity, prefixedUrl, () =>
+    if (prefixedUrl === savedWaitingListUrl) return;
+    onChangeBookingAvailability(status, prefixedUrl, () =>
       setHasInvalidWaitingListUrl(true),
     );
   };
@@ -76,24 +62,6 @@ const BookingAvailabilityFields = ({
       alignItems="flex-start"
       {...getInlineProps(boxProps)}
     >
-      {IS_CAPACITY_VISIBLE && (
-        <FormElement
-          id={`${idPrefix}-max-capacity`}
-          label={t('create.additionalInformation.booking_info.max_capacity')}
-          Component={
-            <Input
-              className="tw:max-w-32"
-              value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
-              onBlur={handleCapacityBlur}
-            />
-          }
-          error={
-            isCapacityInvalid &&
-            t('create.additionalInformation.booking_info.capacity_error')
-          }
-        />
-      )}
       <FormElement
         id={`${idPrefix}-status`}
         label={t('create.additionalInformation.booking_info.status')}
@@ -103,8 +71,7 @@ const BookingAvailabilityFields = ({
             onChange={(e) => {
               const newStatus = e.target.value as BookingAvailabilityValue;
               setStatus(newStatus);
-              if (isCapacityInvalid) return;
-              onChangeBookingAvailability(newStatus, capacity);
+              onChangeBookingAvailability(newStatus);
             }}
           >
             <option value={BookingAvailabilityType.AVAILABLE}>

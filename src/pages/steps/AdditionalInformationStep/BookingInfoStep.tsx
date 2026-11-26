@@ -8,7 +8,6 @@ import * as yup from 'yup';
 
 import { BookingAvailabilityType } from '@/constants/BookingAvailabilityType';
 import { CalendarType } from '@/constants/CalendarType';
-import { IS_CAPACITY_VISIBLE } from '@/constants/Capacity';
 import { UrlLabelType } from '@/constants/UrlLabelType';
 import { useChangeSubEventReservationMutation } from '@/hooks/api/events';
 import { useHolidaysWithToggle } from '@/hooks/api/holidays';
@@ -19,7 +18,7 @@ import {
 import { FeatureFlags, useFeatureFlag } from '@/hooks/useFeatureFlag';
 import type { BookingAvailability, Offer, SubEvent } from '@/types/Offer';
 import type { Values } from '@/types/Values';
-import { Alert, AlertVariants } from '@/ui/Alert';
+import { Alert } from '@/ui/Alert';
 import type { BoxProps } from '@/ui/Box';
 import { DatePeriodPicker } from '@/ui/DatePeriodPicker';
 import { FormElement } from '@/ui/FormElement';
@@ -284,7 +283,6 @@ type BookingAvailabilitySectionProps = {
   onChangeSubEventAvailability: (
     index: number,
     type: Values<typeof BookingAvailabilityType>,
-    capacity: string,
     waitingListUrl?: string,
     onError?: () => void,
   ) => void;
@@ -381,45 +379,15 @@ const ReservationLink = ({
   );
 };
 
-const CapacityInfoAlert = () => {
-  const { t } = useTranslation();
-
-  return (
-    <Stack spacing={3} maxWidth="27rem">
-      <Alert variant={AlertVariants.PRIMARY} fullWidth>
-        {t('create.additionalInformation.booking_info.max_capacity_info')}
-      </Alert>
-    </Stack>
-  );
-};
-
-const getCapacityValue = (
-  bookingAvailability: SubEvent['bookingAvailability'],
-) =>
-  bookingAvailability?.capacity !== undefined
-    ? String(bookingAvailability.capacity)
-    : '';
-
 const BookingAvailabilitySection = ({
   calendarType,
   subEvents,
   onChangeSubEventAvailability,
 }: BookingAvailabilitySectionProps) => {
-  const { t } = useTranslation();
-
   const isMultiple = calendarType === CalendarType.MULTIPLE;
 
   return (
     <Stack spacing={4}>
-      {IS_CAPACITY_VISIBLE && (
-        <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
-          {t(
-            isMultiple
-              ? 'create.additionalInformation.booking_info.capacity_title_multiple'
-              : 'create.additionalInformation.booking_info.capacity_title_single',
-          )}
-        </Text>
-      )}
       <Inline stackOn="m" alignItems="flex-start" spacing={4}>
         <Stack spacing={3} minWidth="30rem">
           {subEvents.map((subEvent, index) => (
@@ -431,7 +399,6 @@ const BookingAvailabilitySection = ({
               )}
               <BookingAvailabilityFields
                 idPrefix={isMultiple ? `subevent-${index}` : 'offer'}
-                capacity={getCapacityValue(subEvent.bookingAvailability)}
                 status={
                   subEvent.bookingAvailability?.type ??
                   BookingAvailabilityType.AVAILABLE
@@ -446,7 +413,6 @@ const BookingAvailabilitySection = ({
             </Stack>
           ))}
         </Stack>
-        {IS_CAPACITY_VISIBLE && <CapacityInfoAlert />}
       </Inline>
     </Stack>
   );
@@ -560,12 +526,7 @@ const BookingInfoStep = ({
       !!bookingInfo && Object.keys(bookingInfo).length > 0;
     const hasSubEventReservation = (
       getOfferByIdQuery.data?.subEvent ?? []
-    ).some(
-      (subEvent) =>
-        !!subEvent.bookingInfo?.url ||
-        (IS_CAPACITY_VISIBLE &&
-          subEvent.bookingAvailability?.capacity !== undefined),
-    );
+    ).some((subEvent) => !!subEvent.bookingInfo?.url);
 
     onValidationChange(
       hasOfferBookingInfo || hasSubEventReservation
@@ -737,7 +698,6 @@ const BookingInfoStep = ({
   const handleChangeSubEventAvailability = (
     subEventIndex: number,
     type: Values<typeof BookingAvailabilityType>,
-    capacityValue: string,
     waitingListUrl?: string,
     onError?: () => void,
   ) => {
@@ -747,7 +707,6 @@ const BookingInfoStep = ({
         subEventIndex,
         bookingAvailability: {
           type,
-          ...(capacityValue !== '' && { capacity: Number(capacityValue) }),
           ...(waitingListUrl !== undefined && { waitingListUrl }),
         },
       },
@@ -848,10 +807,7 @@ const BookingInfoStep = ({
         isDatePickerVisible={isDatePickerVisible}
         setIsDatePickerVisible={setIsDatePickerVisible}
       />
-      <Stack
-        spacing={4}
-        className={IS_CAPACITY_VISIBLE ? undefined : 'tw:mb-4!'}
-      >
+      <Stack spacing={4} className="tw:mb-4!">
         <Text fontWeight="bold" fontSize="1.1rem" color={SUBTITLE_COLOR}>
           {t('create.additionalInformation.booking_info.url')}
         </Text>
